@@ -25,12 +25,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss",
+              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css"
             ],
             "scripts": []
           },
@@ -92,12 +90,10 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss",
+              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css"
             ],
             "scripts": []
           }
@@ -105,5 +101,11 @@
       }
     }
   },
-  "defaultProject": "mj-cais"
+  "defaultProject": "mj-cais",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "style": "scss"
+    }
+  }
 }
