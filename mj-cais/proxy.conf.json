@@ -1,0 +1,8 @@
+{
+  "/is/*": {
+    "target": "https://client-regix.tlogica.com:8090",
+    "secure": false,
+    "logLevel": "debug",
+    "debug": true
+  }
+}

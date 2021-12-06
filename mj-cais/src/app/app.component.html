@@ -1,2 +1,4 @@
-<igx-navbar title="Ignite UI for Angular">
+<app-header></app-header>
+<igx-navbar [title]="'title' | translate">
 </igx-navbar>
+<button igxButton [routerLink]="['private']">Login</button>

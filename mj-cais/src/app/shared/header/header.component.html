@@ -1,0 +1,26 @@
+<div id="app-header">
+  <div class="egov-identity" igxLayout igxLayoutDir="row">
+    <div igxFlex [igxFlexGrow]="10" igxLayout igxLayoutDir="row">
+        <img [alt]=" 'header.gerb' | translate " class="gerb" src="assets/logo-gerb.png">
+        <div class="gerb-text" igxLayout igxLayoutDir="col" igxLayoutJustify="center">
+            <h5>{{ 'header.republicOfBulgaria' | translate }}</h5>
+            <h5>{{ 'header.organisation' | translate }}</h5>
+        </div>
+    </div>
+    <div class="eu-text">
+      <span>
+        {{ 'header.info-text' | translate }}
+      </span>
+    </div>
+    <img [alt]=" 'header.flag' |  translate " class="eu-logo" [src]="'assets/eu_' + translateService.currentLang + '.png'" [title]=" 'header.info-text' | translate ">
+  </div>
+  <div class="egov-identity-small" igxLayout igxLayoutDir="row">
+    <div igxFlex [igxFlexGrow]="10" igxLayout igxLayoutDir="row">
+        <img [alt]=" 'header.gerb' | translate " class="gerb" src="assets/logo-small.gif">
+        <div class="gerb-text" igxLayout igxLayoutDir="col" igxLayoutJustify="center">
+        <h3>{{ 'header.organisation' | translate }}</h3>
+        </div>
+    </div>
+    <img alt=" 'header.flag' |  translate " class="eu-logo" [src]="'assets/eu_' + translateService.currentLang + '.png'" [title]=" 'header.info-text' | translate ">
+  </div>
+</div>
