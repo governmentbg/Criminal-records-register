@@ -11,14 +11,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Common\MJ_CAIS.Common.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj" />
   </ItemGroup>
 

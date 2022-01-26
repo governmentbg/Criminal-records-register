@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
+﻿using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Services.Contracts;
 
 namespace MJ_CAIS.Web.Controllers.Common

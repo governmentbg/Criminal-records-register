@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.Services\MJ_CAIS.Services.csproj" />
+  </ItemGroup>
+
 </Project>

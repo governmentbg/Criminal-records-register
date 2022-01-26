@@ -1,4 +1,5 @@
-﻿using MJ_CAIS.DataAccess;
+﻿using AutoMapper;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.Entities;
 using MJ_CAIS.Repositories.Contracts;
@@ -10,7 +11,8 @@ namespace MJ_CAIS.Services
 	{
 		private readonly IBulletinRepository _bulletinRepository;
 
-		public BulletinService(IBulletinRepository bulletinRepository) : base(bulletinRepository)
+		public BulletinService(IMapper mapper, IBulletinRepository bulletinRepository) 
+			: base(mapper, bulletinRepository)
 		{
 			_bulletinRepository = bulletinRepository;
 		}

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Query.Validator;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
@@ -7,11 +7,12 @@ using MJ_CAIS.Entities;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNet.OData.Query.Validators;
+using Microsoft.AspNet.OData.Query;
 
 namespace MJ_CAIS.Services
 {
@@ -30,26 +31,21 @@ namespace MJ_CAIS.Services
         private const string QUERY_OPTIONS_TOP = "$top";
 
         protected IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository;
+        protected IMapper mapper;
+        protected IConfigurationProvider mapperConfiguration => mapper.ConfigurationProvider;
 
         /// <summary>
         /// Dictionary, в което се описва mapping-а между имената на полетата в dto-to и entity-то
         /// </summary>
         protected Dictionary<string, string> dtoFieldsToEntityFields;
 
-        /// <summary>
-        /// Defines the queryValidator
-        /// </summary>
         protected FilterQueryValidator queryValidator;
 
         protected ODataValidationSettings validationSettings;
 
-        /// <summary>
-        /// Initializes a new instance of BaseAsyncService
-        /// </summary>
-        /// <param name="baseAsyncRepository"></param>
-        /// <param name="queryValidator"></param>
-        protected BaseAsyncService(IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository, FilterQueryValidator queryValidator = null)
+        protected BaseAsyncService(IMapper mapper, IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository, FilterQueryValidator queryValidator = null)
         {
+            this.mapper = mapper;
             this.baseAsyncRepository = baseAsyncRepository;
             this.queryValidator = queryValidator ?? new CustomQueryValidator<TGridDTO>();
             this.validationSettings = new ODataValidationSettings();
@@ -99,27 +95,21 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<List<TGridDTO>> SelectAllAsync(ODataQueryOptions<TGridDTO> aQueryOptions)
         {
-            //var query = this.GetSelectAllQueriable();
-            //var baseQuery = query.ProjectTo<TGridDTO>();
-            //var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
-            //var repoList = resultQuery.ToList();
-            //return repoList;
-
-            // TODO:
-            throw new NotImplementedException();
+            var query = this.GetSelectAllQueriable();
+            var baseQuery = query.ProjectTo<TGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var repoList = resultQuery.ToList();
+            return repoList;
         }
 
         public virtual async Task<IgPageResult<TGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<TGridDTO> aQueryOptions)
         {
-            //var entityQuery = this.GetSelectAllQueriable();
-            //var baseQuery = entityQuery.ProjectTo<TGridDTO>();
-            //var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
-            //var pageResult = new IgPageResult<TGridDTO>();
-            //this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
-            //return pageResult;
-
-            // TODO:
-            throw new NotImplementedException();
+            var entityQuery = this.GetSelectAllQueriable();
+            var baseQuery = entityQuery.ProjectTo<TGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<TGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
         }
 
         protected void PopulatePageResultAsync<T, TGrid>(
@@ -149,7 +139,7 @@ namespace MJ_CAIS.Services
             }
 
             // TODO:
-            // pageResult.Data = CaisMapper.MapToList<T, TGrid>(data);
+            //pageResult.Data = CaisMapper.MapToList<T, TGrid>(data);
         }
 
         /// <summary>
@@ -287,22 +277,21 @@ namespace MJ_CAIS.Services
 
         protected ODataQueryOptions RemoveTopSkip<T>(ODataQueryOptions<T> aQueryOptions)
         {
-            // TODO:
-            //var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
-            //var queryParameters = uri.Query
-            //    .TrimStart(new char[] { QUERY_OPTIONS_DELIMITER, QUESTION_MARK })
-            //    .Split(QUERY_OPTIONS_SEPARATOR)
-            //    .ToDictionary(e => e.Split(QUERY_OPTIONS_DELIMITER).FirstOrDefault(),
-            //                  e => e.Split(QUERY_OPTIONS_DELIMITER).LastOrDefault());
+            var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
+            var queryParameters = uri.Query
+                .TrimStart(new char[] { QUERY_OPTIONS_DELIMITER, QUESTION_MARK })
+                .Split(QUERY_OPTIONS_SEPARATOR)
+                .ToDictionary(e => e.Split(QUERY_OPTIONS_DELIMITER).FirstOrDefault(),
+                              e => e.Split(QUERY_OPTIONS_DELIMITER).LastOrDefault());
             var newQueryOptions = new StringBuilder();
-            //foreach (string key in queryParameters.Keys)
-            //{
+            foreach (string key in queryParameters.Keys)
+            {
 
-            //    if (key != QUERY_OPTIONS_SKIP && key != QUERY_OPTIONS_TOP)
-            //    {
-            //        AppendKeyValue(newQueryOptions, key, queryParameters[key]);
-            //    }
-            //}
+                if (key != QUERY_OPTIONS_SKIP && key != QUERY_OPTIONS_TOP)
+                {
+                    AppendKeyValue(newQueryOptions, key, queryParameters[key]);
+                }
+            }
 
             return this.CreateNewOdataQueryOptions(aQueryOptions, newQueryOptions.ToString());
         }
@@ -349,9 +338,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         protected ODataQueryOptions MapDtoToEntityFields<T>(ODataQueryOptions<T> aQueryOptions)
         {
-            var uri = new Uri(""); // TODO: remove
-
-            //var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
+            var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
             string newQueryOptions = uri.Query;
             foreach (var key in dtoFieldsToEntityFields.Keys)
             {
@@ -404,19 +391,16 @@ namespace MJ_CAIS.Services
 
         private void AssignNewUri<T>(Uri resultUri, ODataQueryOptions<T> aQueryOptions)
         {
-            // TODO: 
-            //aQueryOptions.Request.Scheme = resultUri.Scheme;
-            //aQueryOptions.Request.Host = HostString.FromUriComponent(resultUri.Host);
-            //aQueryOptions.Request.Path = PathString.FromUriComponent(resultUri.AbsolutePath);
-            //aQueryOptions.Request.QueryString = QueryString.FromUriComponent(resultUri.Query);
+            aQueryOptions.Request.Scheme = resultUri.Scheme;
+            aQueryOptions.Request.Host = HostString.FromUriComponent(resultUri.Host);
+            aQueryOptions.Request.Path = PathString.FromUriComponent(resultUri.AbsolutePath);
+            aQueryOptions.Request.QueryString = QueryString.FromUriComponent(resultUri.Query);
         }
 
         // Създава новият обект ODataQueryOptions, който се получава след съответната обработка
         private ODataQueryOptions<T> CreateNewOdataQueryOptions<T>(ODataQueryOptions<T> aQueryOptions, string newQueryOptions)
         {
-            var uri = new Uri(""); // TODO: remove
-
-            //var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
+            var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
             Uri baseResultUri = new Uri($"{uri.Scheme}://{uri.Authority}{uri.AbsolutePath}");
             Uri resultUri;
             if (newQueryOptions.StartsWith("?"))
@@ -429,10 +413,8 @@ namespace MJ_CAIS.Services
             }
 
             this.AssignNewUri(resultUri, aQueryOptions);
-            //var newOdataQueryOptions = (ODataQueryOptions<T>)Activator.CreateInstance(aQueryOptions.GetType(), aQueryOptions.Context, aQueryOptions.Request);
-            //return newOdataQueryOptions;
-
-            return null; // TODO: remove
+            var newOdataQueryOptions = (ODataQueryOptions<T>)Activator.CreateInstance(aQueryOptions.GetType(), aQueryOptions.Context, aQueryOptions.Request);
+            return newOdataQueryOptions;
         }
 
         private void AppendKeyValue(StringBuilder aNewQueryOptions, string aKey, object aValue)
@@ -445,9 +427,7 @@ namespace MJ_CAIS.Services
 
         private ODataQueryOptions SetSkip<T>(ODataQueryOptions<T> aQueryOptions, int skip)
         {
-            var uri = new Uri(""); // TODO: remove
-
-            //var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
+            var uri = new Uri(aQueryOptions.Request.GetDisplayUrl());
             var queryParameters = uri.Query
                 .TrimStart(new char[] { QUERY_OPTIONS_DELIMITER, QUESTION_MARK })
                 .Split(QUERY_OPTIONS_SEPARATOR)

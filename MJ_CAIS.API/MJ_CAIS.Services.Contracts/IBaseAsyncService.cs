@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.OData.Query;
+﻿using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.Entities;
 using MJ_CAIS.Services.Contracts.Utils;
 

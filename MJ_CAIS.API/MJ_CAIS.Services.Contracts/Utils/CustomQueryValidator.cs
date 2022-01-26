@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.OData.Query.Validator;
+﻿using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Query.Validators;
 using Microsoft.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.UriParser;
@@ -7,7 +8,11 @@ namespace MJ_CAIS.Services.Contracts.Utils
 {
     public class CustomQueryValidator<V> : FilterQueryValidator
     {
-        protected override void ValidateNavigationPropertyNode(QueryNode sourceNode, IEdmNavigationProperty navigationProperty, ODataValidationSettings settings)
+        public CustomQueryValidator() : base(new DefaultQuerySettings())
+        {
+        }
+
+        public override void ValidateNavigationPropertyNode(QueryNode sourceNode, IEdmNavigationProperty navigationProperty, ODataValidationSettings settings)
         {
             // Source:
             // https://github.com/OData/WebApi/blob/0338075c9940fe29c6fd18cd3f9e0433fd82d745/src/Microsoft.AspNet.OData.Shared/Query/Validators/FilterQueryValidator.cs#L379
@@ -28,7 +33,7 @@ namespace MJ_CAIS.Services.Contracts.Utils
             }
         }
 
-        protected override void ValidateSingleValuePropertyAccessNode(SingleValuePropertyAccessNode accessNode, ODataValidationSettings settings)
+        public override void ValidateSingleValuePropertyAccessNode(SingleValuePropertyAccessNode accessNode, ODataValidationSettings settings)
         {
             string propertyName = null;
             if (accessNode != null)

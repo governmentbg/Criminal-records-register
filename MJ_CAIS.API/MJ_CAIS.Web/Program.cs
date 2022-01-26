@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Web.Setup;
+using MJ_CAIS.AutoMapperContainer.MappingProfiles;
+using Microsoft.AspNet.OData.Extensions;
 
 namespace MJ_CAIS.Web
 {
@@ -8,11 +10,16 @@ namespace MJ_CAIS.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var configuration= builder.Configuration;
 
             builder.Services.AddRazorPages();
 
+            builder.Services.AddAutoMapper(typeof(BulletinProfile).Assembly);
             builder.Services.ConfigureSwagger();
             builder.Services.ConfigureCors();
+            builder.Services.ConfigureDependencies(configuration);
+            builder.Services.ConfigureOData();
+            builder.Services.AddMvc(opt => opt.EnableEndpointRouting = false);
 
             builder.Services.AddControllers(opt =>
             {
@@ -42,11 +49,14 @@ namespace MJ_CAIS.Web
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            // app.UseAuthentication(); // TODO:
             app.UseAuthorization();
 
             app.MapRazorPages();
             app.MapControllers();
+
+            // Make OData work with normal paths
+            app.UseMvc(routeBuilder => routeBuilder.EnableDependencyInjection());
 
             app.Run();
         }
