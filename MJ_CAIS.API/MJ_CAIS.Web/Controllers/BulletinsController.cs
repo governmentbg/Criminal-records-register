@@ -7,15 +7,18 @@ using MJ_CAIS.Web.Controllers.Common;
 
 namespace MJ_CAIS.Web.Controllers
 {
-    [Route("bulletins")]
-    public class BulletinsController : BaseApiCrudController<BulletinDTO, BulletinDTO, BulletinGridDTO, Bulletin, string>
+    //[Route("bulletins")]
+    [Route("[controller]")]
+    [ApiController]
+    public class BulletinsController : ControllerBase // : BaseApiCrudController<BulletinDTO, BulletinDTO, BulletinGridDTO, Bulletin, string>
     {
         private readonly IBulletinService _bulletinService;
 
-        public BulletinsController(IBulletinService bulletinService)
-            : base(bulletinService)
+        public BulletinsController(/*IBulletinService bulletinService*/)
+            //: base(bulletinService)
+        
         {
-            _bulletinService = bulletinService;
+            //_bulletinService = bulletinService;
         }
 
         [HttpGet("")]
