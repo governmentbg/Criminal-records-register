@@ -14,7 +14,7 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<TOutDTO> SelectAsync(TPk aId);
 
-        Task<TPk> InsertAsync(TInDTO aInDto);
+        Task<string> InsertAsync(TInDTO aInDto);
 
         Task UpdateAsync(TPk aId, TInDTO aInDto);
 

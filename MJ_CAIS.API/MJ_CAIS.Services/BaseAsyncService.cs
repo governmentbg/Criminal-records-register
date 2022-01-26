@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Query.Validators;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
@@ -8,11 +12,7 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
-//using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNet.OData.Query.Validators;
-using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.AutoMapperContainer;
 
 namespace MJ_CAIS.Services
 {
@@ -138,8 +138,7 @@ namespace MJ_CAIS.Services
                 data = resultQuery.ToList();
             }
 
-            // TODO:
-            //pageResult.Data = CaisMapper.MapToList<T, TGrid>(data);
+            pageResult.Data = mapper.MapToList<T, TGrid>(data);
         }
 
         /// <summary>
@@ -166,12 +165,9 @@ namespace MJ_CAIS.Services
         /// <returns>The <see cref="U"/></returns>
         public virtual async Task<TOutDTO> SelectAsync(TPk aId)
         {
-            //TEntity repoObj = await this.baseAsyncRepository.SelectAsync(aId);
-            //TOutDTO result = CaisMapper.MapTo<TOutDTO>(repoObj);
-            //return result;
-
-            // TODO:
-            throw new NotImplementedException();
+            TEntity repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            TOutDTO result = mapper.Map<TOutDTO>(repoObj);
+            return result;
         }
 
         /// <summary>
@@ -179,16 +175,13 @@ namespace MJ_CAIS.Services
         /// </summary>
         /// <param name="aInDto">The aInDto<see cref="S"/></param>
         /// <returns>The <see cref="U"/></returns>
-        public virtual async Task<TPk> InsertAsync(TInDTO aInDto)
+        public virtual async Task<string> InsertAsync(TInDTO aInDto)
         {
-            //this.ValidateData(aInDto);
-            //TEntity entity = CaisMapper.MapToEntity<TInDTO, TEntity>(aInDto, isAdded: true);
-            //this.TransformDataOnInsert(entity);
-            //await this.SaveEntityAsync(entity);
-            //return entity.Id;
-
-            // TODO:
-            throw new NotImplementedException();
+            this.ValidateData(aInDto);
+            TEntity entity = mapper.MapToEntity<TInDTO, TEntity>(aInDto, isAdded: true);
+            this.TransformDataOnInsert(entity);
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
         }
 
         /// <summary>
