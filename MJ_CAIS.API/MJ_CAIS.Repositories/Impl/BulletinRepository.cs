@@ -9,17 +9,5 @@ namespace MJ_CAIS.Repositories.Impl
         public BulletinRepository(CaisDbContext context) : base(context)
         {
         }
-
-        public override IQueryable<Bulletin> SelectAllAsync()
-        {
-            // TODO: 
-            var data = new Bulletin[]
-            {
-                new Bulletin() { Id = "1", FirstName = "Ivan", FamilyName = "Ivanov" },
-                new Bulletin() { Id = "2", FirstName = "Petar", FamilyName = "Petrov" },
-            };
-
-            return data.AsQueryable();
-        }
     }
 }

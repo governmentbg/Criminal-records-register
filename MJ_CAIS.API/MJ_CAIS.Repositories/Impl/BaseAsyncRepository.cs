@@ -31,33 +31,33 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
-        public virtual async Task<TEntity> SelectAsync(string aId)
+        public virtual async Task<TEntity> SelectAsync(string id)
         {
             var result = await this._dbContext.Set<TEntity>().AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == aId);
+                .FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }
 
         // TODO: change with new tracker
-        public virtual async Task<TEntity> InsertAsync(TEntity aEntity)
+        public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
-            _dbContext.Entry(aEntity).State = EntityState.Added;
+            _dbContext.Entry(entity).State = EntityState.Added;
             await _dbContext.SaveChangesAsync();
-            return aEntity;
+            return entity;
         }
 
         // TODO: change with new tracker
-        public virtual async Task<TEntity> UpdateAsync(TEntity aEntity)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            _dbContext.Entry(aEntity).State = EntityState.Modified;
+            _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
-            return aEntity;
+            return entity;
         }
 
         // TODO: change with new tracker
-        public virtual async Task<TEntity> DeleteAsync(string aId)
+        public virtual async Task<TEntity> DeleteAsync(string id)
         {
-            TEntity repoObj = await this.SelectAsync(aId);
+            TEntity repoObj = await this.SelectAsync(id);
             _dbContext.Entry(repoObj).State = EntityState.Deleted;
             await _dbContext.SaveChangesAsync();
             return repoObj;

@@ -192,17 +192,17 @@ namespace MJ_CAIS.Services
         /// <returns>The <see cref="U"/></returns>
         public virtual async Task UpdateAsync(TPk aId, TInDTO aInDto)
         {
+            // TODO: should not select from db, but it must check if the saveChanges has returned true (or 1)
             TEntity repoObj = await this.baseAsyncRepository.SelectAsync(aId);
             if (repoObj == null)
             {
-                throw new Exception("Object with id [" + aId + "] not found!");
+                throw new Exception("Object with id [" + aId + "] was not found!");
             }
 
             this.ValidateData(aInDto);
 
-            // TODO:
-            //TEntity entity = CaisMapper.MapToEntity<TInDTO, TEntity>(aInDto, isAdded: false);
-            //await this.SaveEntityAsync(entity);
+            TEntity entity = mapper.MapToEntity<TInDTO, TEntity>(aInDto, isAdded: false);
+            await this.SaveEntityAsync(entity);
         }
 
         /// <summary>

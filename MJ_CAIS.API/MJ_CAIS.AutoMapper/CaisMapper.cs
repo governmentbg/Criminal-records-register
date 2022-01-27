@@ -5,11 +5,14 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.Common;
 using MJ_CAIS.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MJ_CAIS.AutoMapperContainer
 {
     public static class CaisMapper
     {
+        private const string CollectionNamespace = "System.Collections.Generic";
+
         public static List<TDestination> MapToList<TSource, TDestination>(this IMapper mapper, ICollection<TSource> aSourceList)
         {
             if (aSourceList == null)
@@ -104,26 +107,23 @@ namespace MJ_CAIS.AutoMapperContainer
 
         public static List<string> GetDestMappedProperties(this IMapper mapper, Type srcType, Type destType)
         {
-            //TypeMap map = mapper.ConfigurationProvider.GetAllTypeMaps()
-            //            .Where(m => m.SourceType.Equals(srcType) && m.DestinationType.Equals(destType))
-            //            .FirstOrDefault();
+            var map = mapper.ConfigurationProvider.FindTypeMapFor(srcType, destType);
 
-            //if (map == null) return null;
+            if (map == null) return null;
 
-            //List<PropertyMap> properties = map.GetPropertyMaps()
-            //    .Where(x => x.SourceType != null &&
-            //            x.SourceType.Namespace != "System.Collections.Generic" &&
-            //            !x.DestinationPropertyType.IsSubclassOf(typeof(BaseEntity)) &&
-            //            !x.Ignored).ToList();
+            var properties = map.PropertyMaps
+                .Where(x => x.SourceType != null &&
+                    x.SourceType.Namespace != CollectionNamespace &&
+                    x.DestinationType.Namespace != CollectionNamespace &&
+                    !x.DestinationType.IsSubclassOf(typeof(BaseEntity)) &&
+                    !HasMappedAttribute(x) &&
+                    !x.Ignored).ToList();
 
-            //if (properties == null) return null;
-
-            //List<string> destProps = properties.Select(x => x.DestinationProperty.Name)
-            //    .Where(x => x != nameof(BaseEntity.Id))
-            //    .Where(x => x != nameof(BaseEntity.EntityState))
-            //    .Where(x => x != nameof(BaseEntity.PrimaryKeyName))
-            //    .ToList();
-            List<string> destProps = new List<string>(); // TODO: remove
+            var destProps = properties.Select(x => x.DestinationMember.Name)
+                .Where(x => x != nameof(BaseEntity.Id))
+                .Where(x => x != nameof(BaseEntity.EntityState))
+                .Where(x => x != nameof(BaseEntity.PrimaryKeyName))
+                .ToList();
 
             return destProps;
         }
@@ -218,6 +218,15 @@ namespace MJ_CAIS.AutoMapperContainer
                 var currentEntity = entity as BaseEntity;
                 currentEntity.Id = Guid.NewGuid().ToString();
             }
+        }
+
+        private static bool HasMappedAttribute(PropertyMap propMap)
+        {
+            // get custom attributes of the current property
+            var attributes = propMap?.DestinationMember?.CustomAttributes;
+            var hasMappedAttr = attributes?.Any(a => a.AttributeType == typeof(NotMappedAttribute));
+            var result = hasMappedAttr ?? false;
+            return result;
         }
     }
 }

@@ -8,13 +8,13 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         IQueryable<TEntity> SelectAllAsync();
 
-        Task<TEntity> SelectAsync(TPk aId);
+        Task<TEntity> SelectAsync(TPk id);
 
-        Task<TEntity> InsertAsync(TEntity aEntity);
+        Task<TEntity> InsertAsync(TEntity entity);
 
-        Task<TEntity> UpdateAsync(TEntity aEntity);
+        Task<TEntity> UpdateAsync(TEntity entity);
 
-        Task<TEntity> DeleteAsync(TPk aId);
+        Task<TEntity> DeleteAsync(TPk id);
 
         TContext GetDbContext();
     }
