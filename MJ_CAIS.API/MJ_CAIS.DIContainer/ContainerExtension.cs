@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Repositories.Impl;
@@ -10,11 +12,12 @@ namespace MJ_CAIS.DIContainer
 {
     public static class ContainerExtension
     {
-        public static void Initialize(IServiceCollection services, string connectionString)
+        public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
-            // TODO:
-            // services.AddDbContext<CaisDbContext>(options => options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
-            services.AddDbContext<CaisDbContext>();
+            var connectionString = configuration.GetConnectionString("CaisConnectionString");
+            var oracleCompatibility = configuration.GetValue<string>("OracleSQLCompatibility");
+
+            services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
             var servicesTypes = typeof(BulletinService).Assembly.GetClassTypes("Service");
             var interfaceTypes = typeof(IBulletinService).Assembly.GetInterfaceTypes("Service");

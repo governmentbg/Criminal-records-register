@@ -10,13 +10,9 @@ namespace MJ_CAIS.Repositories.Impl
     {
         protected readonly TContext _dbContext;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseAsyncRepository{T}"/> class.
-        /// </summary>
-        /// <param name="aDbContext"></param>
-        protected BaseAsyncRepository(TContext aDbContext)
+        protected BaseAsyncRepository(TContext dbContext)
         {
-            this._dbContext = aDbContext;
+            this._dbContext = dbContext;
         }
 
         public TContext GetDbContext()
@@ -37,7 +33,6 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
-        // TODO: change with new tracker
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Added;
@@ -45,7 +40,6 @@ namespace MJ_CAIS.Repositories.Impl
             return entity;
         }
 
-        // TODO: change with new tracker
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -53,7 +47,6 @@ namespace MJ_CAIS.Repositories.Impl
             return entity;
         }
 
-        // TODO: change with new tracker
         public virtual async Task<TEntity> DeleteAsync(string id)
         {
             TEntity repoObj = await this.SelectAsync(id);

@@ -36,13 +36,12 @@ namespace MJ_CAIS.Web.Setup
 
         public static void ConfigureDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("caisConnectionString");
 
             services.AddHttpContextAccessor();
 
             // services.AddSingleton<JwtManager>(); // TODO: 
 
-            ContainerExtension.Initialize(services, connectionString);
+            ContainerExtension.Initialize(services, configuration);
 
             // services.AddTransient<IAuthenticationService, AuthenticationService<User>>(); // TODO: 
         }

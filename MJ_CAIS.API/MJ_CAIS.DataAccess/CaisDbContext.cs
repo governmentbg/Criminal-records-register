@@ -43,15 +43,6 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GCsAuthority> GCsAuthorities { get; set; } = null!;
         public virtual DbSet<GDecidingAuthority> GDecidingAuthorities { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseOracle("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mjcais)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=MJCAISD)));User ID=MJ_CAIS;Password=***REMOVED***;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("MJ_CAIS");

@@ -309,8 +309,7 @@ namespace MJ_CAIS.Services
             // Ако в url, няма top option за странициране или заявения top е повече от разрешения се прилага default-ния paging
             if (aQueryOptions.Top == null || aQueryOptions.Top.Value > MAX_PAGE_SIZE)
             {
-                //resultQuery = aQueryOptions.ApplyTo(query, querySetting); // TODO: ORA exception
-                resultQuery = aQueryOptions.ApplyTo(query);
+                resultQuery = aQueryOptions.ApplyTo(query, querySetting);
             }
             else
             {
