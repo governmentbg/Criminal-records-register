@@ -1,9 +1,9 @@
 ﻿using MJ_CAIS.DataAccess;
-using MJ_CAIS.Entities;
+using MJ_CAIS.DataAccess.Entities;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
-    public interface IBulletinRepository : IBaseAsyncRepository<Bulletin, string, CaisDbContext>
+    public interface IBulletinRepository : IBaseAsyncRepository<BBulletin, string, CaisDbContext>
     {
     }
 }

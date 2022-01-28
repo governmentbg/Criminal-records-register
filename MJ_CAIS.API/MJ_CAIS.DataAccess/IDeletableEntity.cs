@@ -1,4 +1,4 @@
-﻿namespace MJ_CAIS.Entities.Common
+﻿namespace MJ_CAIS.DataAccess
 {
     public interface IDeletableEntity
     {

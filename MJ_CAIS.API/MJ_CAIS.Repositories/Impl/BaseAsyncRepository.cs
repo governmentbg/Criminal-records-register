@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
-using MJ_CAIS.Entities;
 using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl

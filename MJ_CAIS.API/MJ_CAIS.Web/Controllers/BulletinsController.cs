@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.Entities;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
@@ -10,7 +10,7 @@ namespace MJ_CAIS.Web.Controllers
 {
     [Route("bulletins")]
     [AllowAnonymous] // TODO: remove
-    public class BulletinsController : BaseApiCrudController<BulletinDTO, BulletinDTO, BulletinGridDTO, Bulletin, string>
+    public class BulletinsController : BaseApiCrudController<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string>
     {
         private readonly IBulletinService _bulletinService;
 

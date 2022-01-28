@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
-using MJ_CAIS.Entities;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -310,7 +309,8 @@ namespace MJ_CAIS.Services
             // Ако в url, няма top option за странициране или заявения top е повече от разрешения се прилага default-ния paging
             if (aQueryOptions.Top == null || aQueryOptions.Top.Value > MAX_PAGE_SIZE)
             {
-                resultQuery = aQueryOptions.ApplyTo(query, querySetting);
+                //resultQuery = aQueryOptions.ApplyTo(query, querySetting); // TODO: ORA exception
+                resultQuery = aQueryOptions.ApplyTo(query);
             }
             else
             {

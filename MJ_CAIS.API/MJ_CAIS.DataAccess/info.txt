@@ -1,0 +1,3 @@
+﻿# All Db items are created with command:
+
+Scaffold-DbContext "ConnString" Oracle.EntityFrameworkCore -Context CaisDbContext -Namespace MJ_CAIS.DataAccess.Entities -ContextNamespace MJ_CAIS.DataAccess -ContextDir .\ -OutputDir Entities -Force

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.OData.Query;
-using MJ_CAIS.Entities;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services.Contracts

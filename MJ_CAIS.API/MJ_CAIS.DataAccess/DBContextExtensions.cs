@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MJ_CAIS.Common.Enums;
-using MJ_CAIS.Entities;
-using MJ_CAIS.Entities.Common;
 using System.Collections;
 using System.Linq.Expressions;
 

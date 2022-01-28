@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
     <ProjectReference Include="..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj" />
-    <ProjectReference Include="..\MJ_CAIS.Entities\MJ_CAIS.Entities.csproj" />
   </ItemGroup>
 
 </Project>

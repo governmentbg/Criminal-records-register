@@ -1,7 +1,7 @@
 ﻿using MJ_CAIS.Common.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MJ_CAIS.Entities
+namespace MJ_CAIS.DataAccess
 {
     public abstract class BaseEntity
     {

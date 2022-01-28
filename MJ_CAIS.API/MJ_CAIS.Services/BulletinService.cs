@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.Entities;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 
 namespace MJ_CAIS.Services
 {
-	public class BulletinService : BaseAsyncService<BulletinDTO, BulletinDTO, BulletinGridDTO, Bulletin, string, CaisDbContext>, IBulletinService
+	public class BulletinService : BaseAsyncService<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string, CaisDbContext>, IBulletinService
 	{
 		private readonly IBulletinRepository _bulletinRepository;
 

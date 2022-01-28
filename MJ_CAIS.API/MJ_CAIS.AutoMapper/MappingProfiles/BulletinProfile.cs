@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.Entities;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -8,10 +8,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public BulletinProfile()
         {
-            CreateMap<Bulletin, BulletinGridDTO>();
+            CreateMap<BBulletin, BulletinGridDTO>();
 
-            CreateMap<BulletinDTO, Bulletin>();
-            CreateMap<Bulletin, BulletinDTO>();
+            CreateMap<BulletinDTO, BBulletin>();
+            CreateMap<BBulletin, BulletinDTO>();
         }
     }
 }

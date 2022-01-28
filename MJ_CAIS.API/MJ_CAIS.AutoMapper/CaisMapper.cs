@@ -4,7 +4,6 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.Common;
-using MJ_CAIS.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MJ_CAIS.AutoMapperContainer
