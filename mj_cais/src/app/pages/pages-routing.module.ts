@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
+import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
 
 const routes: Routes = [
   {
@@ -14,6 +15,28 @@ const routes: Routes = [
         path: "iot-dashboard",
         component: DashboardComponent,
       },
+      {
+        path: "bulletins",
+        component: BulletinOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      // {
+      //   path: "bulletins/create",
+      //   component: BulletinFormComponent,
+      //   canActivate: [AuthGuard],
+      // },
+      // {
+      //   path: "bulletins/edit/:ID",
+      //   component: BulletinFormComponent,
+      //   data: { edit: true },
+      //   canActivate: [AuthGuard],
+      // },
+      // {
+      //   path: "bulletins/preview/:ID",
+      //   component: BulletinFormComponent,
+      //   data: { edit: true, preview: true },
+      //   canActivate: [AuthGuard],
+      // },
       {
         path: "layout",
         loadChildren: () =>
@@ -46,16 +69,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: "editors",
-        loadChildren: () =>
-          import("./editors/editors.module").then((m) => m.EditorsModule),
-      },
-      {
-        path: "tables",
-        loadChildren: () =>
-          import("./tables/tables.module").then((m) => m.TablesModule),
-      },
-      {
         path: "miscellaneous",
         loadChildren: () =>
           import("./miscellaneous/miscellaneous.module").then(
@@ -64,7 +77,7 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "dashboard",
+        redirectTo: "iot-dashboard",
         pathMatch: "full",
       },
       {

@@ -37,9 +37,13 @@
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "node_modules/leaflet/dist/leaflet.css",
-              "src/app/@theme/styles/styles.scss"
+              "src/app/@theme/styles/styles.scss",
+              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css"
             ],
-            "scripts": ["node_modules/pace-js/pace.min.js"],
+            "scripts": [
+              "node_modules/pace-js/pace.min.js",
+              "./node_modules/hammerjs/hammer.min.js"
+            ],
             "allowedCommonJsDependencies": [
               "lodash",
               "zrender/lib/svg/svg",
@@ -101,7 +105,10 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": ["node_modules/pace-js/pace.min.js"],
+            "scripts": [
+              "node_modules/pace-js/pace.min.js",
+              "./node_modules/hammerjs/hammer.min.js"
+            ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/typeface-exo/index.css",
@@ -111,7 +118,8 @@
               "node_modules/socicon/css/socicon.css",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
-              "src/app/@theme/styles/styles.scss"
+              "src/app/@theme/styles/styles.scss",
+              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css"
             ],
             "assets": [
               "src/assets",

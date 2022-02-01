@@ -1,0 +1,106 @@
+<!-- <tl-linear-progress
+  [visible]="this.remoteService.isLoading"
+></tl-linear-progress> -->
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [sortStrategy]="noopSortStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  [allowFiltering]="true"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+>
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>Бюлетини</igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <a
+          nbButton
+          matRipple
+          [status]="'success'"
+          [routerLink]="['/pages/bulletins/create']"
+        >
+          Добавяне &nbsp;
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </a>
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+
+  <igx-column
+    field="id"
+    header="Номер"
+    width="10%"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="name"
+    header="Име/Име на фирма"
+    width="20%"
+    [sortable]="false"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="identifier"
+    header="ЕГН/ЕИК"
+    width="10%"
+    [sortable]="false"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    width="150px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/bulletins/preview', 'cell.rowData.id']"
+        ><nb-icon pack="fa" icon="eye"></nb-icon
+      ></a>
+      <a
+        [title]="'Редактиране'"
+        [routerLink]="['/pages/clients/edit', 'cell.rowData.id']"
+      >
+        <nb-icon pack="fa" icon="pen"></nb-icon>
+      </a>
+    </ng-template>
+  </igx-column>
+
+  <!-- <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <sevlievo-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        [excelReference]="excelExportAll"
+        (pagerChange)="pagerChange($event)"
+      ></sevlievo-grid-pager>
+    </div>
+  </ng-template> -->
+</igx-grid>
