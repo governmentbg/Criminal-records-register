@@ -3,6 +3,23 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#npmrc config
+.npmrc
+
+# angular package-lock
+package-lock.json
+
+# angular dist
+frontend/dist
+
+#sql-lite temp files
+*.db-wal
+*.db-shm
+
+# cache files
+.angular
+.vscode
+
 # User-specific files
 *.suo
 *.user
