@@ -1,8 +1,7 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
+const serviceUrl = "https://172.31.12.87:443";
+
 export const environment = {
   production: true,
+  serviceUrl: serviceUrl,
+  apiUrl: serviceUrl + "/api",
 };

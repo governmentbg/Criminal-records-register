@@ -21,7 +21,7 @@ import {
 } from "@nebular/theme";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-// import { TlCommonModule } from "@tl/tl-common";
+import { TlCommonModule } from "@tl/tl-common";
 import { NgxPermissionsModule } from "ngx-permissions";
 
 // AoT requires an exported function for factories
@@ -32,7 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [],
   imports: [
-    // TlCommonModule,
+    TlCommonModule,
     NbSelectModule,
     NbButtonModule,
     IgxGridModule,
@@ -60,7 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   exports: [
     TranslateModule,
-    // TlCommonModule,
+    TlCommonModule,
     NbSelectModule,
     NbButtonModule,
     IgxGridModule,

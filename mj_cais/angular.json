@@ -165,14 +165,14 @@
       }
     }
   },
-  "defaultProject": "ngx-admin-demo",
+  "defaultProject": "mj_cais",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "ngx",
+      "prefix": "cais",
       "style": "scss"
     },
     "@schematics/angular:directive": {
-      "prefix": "ngx"
+      "prefix": "cais"
     }
   }
 }

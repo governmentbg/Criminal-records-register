@@ -8,10 +8,13 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public BulletinProfile()
         {
-            CreateMap<BBulletin, BulletinGridDTO>();
+            CreateMap<BBulletin, BulletinGridDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => Convert.ToInt32(src.Id)));
 
-            CreateMap<BulletinDTO, BBulletin>();
-            CreateMap<BBulletin, BulletinDTO>();
+            CreateMap<BulletinDTO, BBulletin>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            CreateMap<BBulletin, BulletinDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => Convert.ToInt32(src.Id)));
         }
     }
 }
