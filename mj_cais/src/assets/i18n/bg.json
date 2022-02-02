@@ -1,0 +1,38 @@
+{
+  "BULLETIN": {
+    "GRID-TITLE": "Бюлетини"
+  },
+  "COMMON": {
+    "ADD": "Добавяне",
+    "SEARCH": "Търсене",
+    "CLEAR-FIELD": "Изчистване на стойност",
+    "EDIT": "Редактиране",
+    "DELETE": "Изтриване",
+    "DOWNLOAD": "Изтегляне",
+    "DETAILS": "Детайли",
+    "REMOVE": "Премахване",
+    "ACTIVATE": "Активиране",
+    "SAVE": "Запази",
+    "CANCEL": "Отказ",
+    "SELECT": "Избери",
+    "CLOSE": "Затвори",
+    "OPERATIONS": "Операции",
+    "NUMBER": "№",
+    "IDCARD": "Лична карта",
+    "EMAIL": "Електронна поща",
+    "TELEPHONE": "Телефон",
+    "ADDRESS": {
+      "COUNTRY": "Държава",
+      "PROVINCE": "Област",
+      "MUNICIPALITY": "Община",
+      "SETTLEMENT": "Населено място",
+      "AREA": "Район",
+      "STREET": "Улица",
+      "BUILDING": "Блок",
+      "ENTRANCE": "Вход",
+      "FLOOR": "Етаж",
+      "APARTMENT": "Апартамент",
+      "ADDRESS": "Адрес"
+    }
+  }
+}

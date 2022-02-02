@@ -16,6 +16,7 @@
   (onSelection)="cellSelection($event)"
   [allowFiltering]="true"
   [primaryKey]="'id'"
+  [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
@@ -51,8 +52,8 @@
   <igx-column
     field="registrationNumber"
     header="Номер"
-    width="20%"
-    [sortable]="false"
+    width="25%"
+    [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
@@ -64,7 +65,7 @@
     field="firstName"
     header="Име"
     width="20%"
-    [sortable]="false"
+    [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
@@ -73,10 +74,10 @@
   </igx-column>
 
   <igx-column
-    field="SurName"
+    field="surName"
     header="Презиме"
     width="20%"
-    [sortable]="false"
+    [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
@@ -88,7 +89,7 @@
     field="familyName"
     header="Фамилия"
     width="20%"
-    [sortable]="false"
+    [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">

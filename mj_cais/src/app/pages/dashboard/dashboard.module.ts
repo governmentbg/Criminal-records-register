@@ -22,7 +22,6 @@ import { TemperatureDraggerComponent } from "./temperature/temperature-dragger/t
 import { KittenComponent } from "./kitten/kitten.component";
 import { SecurityCamerasComponent } from "./security-cameras/security-cameras.component";
 import { WeatherComponent } from "./weather/weather.component";
-import { SolarComponent } from "./solar/solar.component";
 import { PlayerComponent } from "./rooms/player/player.component";
 import { FormsModule } from "@angular/forms";
 
@@ -53,7 +52,6 @@ import { FormsModule } from "@angular/forms";
     SecurityCamerasComponent,
     WeatherComponent,
     PlayerComponent,
-    SolarComponent,
   ],
 })
 export class DashboardModule {}

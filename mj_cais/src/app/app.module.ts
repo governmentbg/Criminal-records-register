@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { CoreModule } from "./@core/core.module";
 import { LoggerModule, NgxLoggerLevel } from "ngx-logger";
 import { AppComponent } from "./app.component";
@@ -16,18 +16,18 @@ import {
   NbMenuModule,
   NbSidebarModule,
   NbToastrModule,
-  NbChatModule,
-  NbWindowModule,
 } from "@nebular/theme";
 import { IgxExcelExporterService } from "@infragistics/igniteui-angular";
 import { ConfigurationService } from "@tl/tl-common";
 import { forkJoin } from "rxjs";
 // import { CustomToastrService } from "./@core/services/common/custom-toastr.service";
-import { TranslateModule } from "@ngx-translate/core";
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { Observable } from "rxjs";
 import { of } from "rxjs";
 import { environment } from "../environments/environment";
 import { ServiceWorkerModule } from "@angular/service-worker";
+import { EditorModule } from "@tinymce/tinymce-angular";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -43,6 +43,11 @@ export function configureApp(configurationService: ConfigurationService) {
   return () => forkJoin([setupConfiguration$]).toPromise();
 }
 
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, "assets/i18n/", ".json");
+}
+
 registerLocaleData(localeBg);
 
 @NgModule({
@@ -52,23 +57,28 @@ registerLocaleData(localeBg);
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
+    EditorModule,
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
     }),
+
+    // AuthModule.forRoot(),
 
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
-    NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
-    NbChatModule.forRoot({
-      messageGoogleMapKey: "AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY",
-    }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
-
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      defaultLanguage: "bg",
+    }),
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
@@ -80,6 +90,7 @@ registerLocaleData(localeBg);
   bootstrap: [AppComponent],
   providers: [
     IgxExcelExporterService,
+    // CustomToastrService,
     {
       provide: APP_INITIALIZER,
       useFactory: configureApp,

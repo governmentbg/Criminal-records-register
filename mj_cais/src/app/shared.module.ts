@@ -24,11 +24,6 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TlCommonModule } from "@tl/tl-common";
 import { NgxPermissionsModule } from "ngx-permissions";
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, "assets/i18n/", ".json");
-}
-
 @NgModule({
   declarations: [],
   imports: [
@@ -47,19 +42,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     NbAutocompleteModule,
     NbCheckboxModule,
     NgxPermissionsModule.forRoot(),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-      defaultLanguage: "bg",
-    }),
     IgxActionStripModule,
     IgxComboModule,
   ],
   exports: [
-    TranslateModule,
     TlCommonModule,
     NbSelectModule,
     NbButtonModule,
