@@ -19,8 +19,8 @@ import { map } from "rxjs/operators";
 
 @Directive()
 export class RemoteGridWithStatePersistance<
-  T extends { id: number },
-  CS extends CrudService<T, number>
+  T extends { id: any },
+  CS extends CrudService<T, any>
 > extends RemoteComponentWithForm<T, CS> {
   @ViewChild(IgxGridStateDirective, { static: true })
   public state: IgxGridStateDirective;

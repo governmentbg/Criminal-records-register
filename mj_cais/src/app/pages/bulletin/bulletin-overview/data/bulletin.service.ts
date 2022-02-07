@@ -7,7 +7,7 @@ import { BulletinGridModel } from "./bulletin-grid.model";
 })
 export class BulletinService extends CaisCrudService<
   BulletinGridModel,
-  number
+  string
 > {
   constructor(injector: Injector) {
     super(BulletinGridModel, injector, "bulletins");

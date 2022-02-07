@@ -1,5 +1,5 @@
 export class BulletinGridModel {
-  public id: number = null;
+  public id: string = null;
   public registrationNumber: string = null;
   public firstName: string = null;
   public surName: string = null;

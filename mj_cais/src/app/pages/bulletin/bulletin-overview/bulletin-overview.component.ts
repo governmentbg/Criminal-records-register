@@ -1,5 +1,13 @@
-import { Component, Injector, OnInit } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  Injector,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { IgxGridComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
+import { debounceTime, Subject, takeUntil } from "rxjs";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { BulletinGridModel } from "./data/bulletin-grid.model";
 import { BulletinService } from "./data/bulletin.service";
@@ -16,7 +24,8 @@ export class BulletinOverviewComponent extends RemoteGridWithStatePersistance<
   constructor(
     private dialogService: NbDialogService,
     service: BulletinService,
-    injector: Injector
+    injector: Injector,
+    public cdr: ChangeDetectorRef
   ) {
     super("bulletins-search", service, injector);
   }
