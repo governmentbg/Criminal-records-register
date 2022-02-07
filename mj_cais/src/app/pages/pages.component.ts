@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-
-import { MENU_ITEMS } from './pages-menu';
+import { NbTokenService } from '@nebular/auth';
+import { NbMenuItem } from '@nebular/theme';
+import { takeWhile } from 'rxjs';
+import { PagesMenu } from './pages-menu';
 
 @Component({
   selector: 'ngx-pages',
@@ -13,6 +15,24 @@ import { MENU_ITEMS } from './pages-menu';
   `,
 })
 export class PagesComponent {
+  menu: NbMenuItem[];
+  loggedIn: boolean = true;
 
-  menu = MENU_ITEMS;
+  constructor(
+    private pagesMenu: PagesMenu,
+    private tokenService: NbTokenService
+  ) {
+    this.initMenu();
+
+    this.tokenService
+      .tokenChange()
+      .pipe(takeWhile(() => this.loggedIn))
+      .subscribe(() => {
+        this.initMenu();
+      });
+  }
+
+  initMenu() {
+    this.menu = this.pagesMenu.getMenuItems();
+  }
 }

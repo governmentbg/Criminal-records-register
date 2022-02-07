@@ -23,6 +23,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TlCommonModule } from "@tl/tl-common";
 import { NgxPermissionsModule } from "ngx-permissions";
+import { ThemeModule } from "./@theme/theme.module";
 
 @NgModule({
   declarations: [],
@@ -44,6 +45,7 @@ import { NgxPermissionsModule } from "ngx-permissions";
     NgxPermissionsModule.forRoot(),
     IgxActionStripModule,
     IgxComboModule,
+    ThemeModule.forRoot(),
   ],
   exports: [
     TlCommonModule,
@@ -63,6 +65,7 @@ import { NgxPermissionsModule } from "ngx-permissions";
     NgxPermissionsModule,
     IgxActionStripModule,
     IgxComboModule,
+    ThemeModule,
   ],
 })
 export class SharedModule {}

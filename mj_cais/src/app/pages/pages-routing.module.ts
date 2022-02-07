@@ -5,6 +5,7 @@ import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
+import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 
 const routes: Routes = [
   {
@@ -20,23 +21,23 @@ const routes: Routes = [
         component: BulletinOverviewComponent,
         // canActivate: [AuthGuard],
       },
-      // {
-      //   path: "bulletins/create",
-      //   component: BulletinFormComponent,
-      //   canActivate: [AuthGuard],
-      // },
-      // {
-      //   path: "bulletins/edit/:ID",
-      //   component: BulletinFormComponent,
-      //   data: { edit: true },
-      //   canActivate: [AuthGuard],
-      // },
-      // {
-      //   path: "bulletins/preview/:ID",
-      //   component: BulletinFormComponent,
-      //   data: { edit: true, preview: true },
-      //   canActivate: [AuthGuard],
-      // },
+      {
+        path: "bulletins/create",
+        component: BulletinFormComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins/edit/:ID",
+        component: BulletinFormComponent,
+        data: { edit: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins/preview/:ID",
+        component: BulletinFormComponent,
+        data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
       {
         path: "layout",
         loadChildren: () =>

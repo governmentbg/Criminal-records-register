@@ -8,16 +8,19 @@ import { PagesRoutingModule } from "./pages-routing.module";
 import { MiscellaneousModule } from "./miscellaneous/miscellaneous.module";
 import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
 import { SharedModule } from "../shared.module";
+import { PagesMenu } from "./pages-menu";
+import { BulletinFormComponent } from './bulletin/bulletin-form/bulletin-form.component';
 
 @NgModule({
   imports: [
     PagesRoutingModule,
-    ThemeModule,
+    ThemeModule.forRoot(),
     NbMenuModule,
     DashboardModule,
     MiscellaneousModule,
     SharedModule,
   ],
-  declarations: [PagesComponent, BulletinOverviewComponent],
+  declarations: [PagesComponent, BulletinOverviewComponent, BulletinFormComponent],
+  providers: [PagesMenu]
 })
 export class PagesModule {}

@@ -97,7 +97,7 @@
     </ng-template>
   </igx-column>
 
-  <!-- <igx-column
+  <igx-column
     width="150px"
     header=""
     [sortable]="false"
@@ -108,8 +108,9 @@
       <a
         [title]="'Преглед'"
         [routerLink]="['/pages/bulletins/preview', 'cell.rowData.id']"
-        ><nb-icon pack="fa" icon="eye"></nb-icon
-      ></a>
+        >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+    </a>
       <a
         [title]="'Редактиране'"
         [routerLink]="['/pages/clients/edit', 'cell.rowData.id']"
@@ -117,7 +118,7 @@
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>
     </ng-template>
-  </igx-column> -->
+  </igx-column>
 
   <!-- <ng-template #pager let-grid>
     <div class="tl-paginator">

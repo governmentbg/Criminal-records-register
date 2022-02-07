@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-admin-demo": {
+    "mj_cais": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",

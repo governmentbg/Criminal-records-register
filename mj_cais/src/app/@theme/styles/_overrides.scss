@@ -8,4 +8,434 @@
       right: 0.41rem !important;
     }
   }
+
+  nb-card nb-list {
+    @include nb-scrollbars(
+      nb-theme(card-scrollbar-color),
+      nb-theme(card-scrollbar-background-color),
+      nb-theme(card-scrollbar-width)
+    );
+  }
+
+  .table {
+    color: nb-theme(text-basic-color) !important;
+  }
+}
+
+.nb-theme-default {
+  .mat-icon-button.mat-button-disabled {
+    background-color: #eee !important;
+    border-color: transparent !important;
+  }
+
+  .cdk-overlay-container {
+    z-index: 10060 !important;
+  }
+
+  .igx-grid__th-title {
+    color: black;
+  }
+  .mat-datepicker-content {
+    background-color: white;
+    border: 1px solid #edf1f7;
+    border-radius: 10px;
+    padding-bottom: 10px;
+  }
+
+  .mat-focus-indicator.mat-icon-button.mat-button-base:hover {
+    background-color: #edf1f7;
+    border-color: transparent;
+  }
+
+  .mat-focus-indicator.mat-icon-button.mat-button-base {
+    background-color: #f7f9fc;
+    border: 1px solid #edf1f7;
+    border-left: 0;
+    color: #8f9bb3;
+    transition-duration: 0.15s;
+    transition-property: background-color, border-color, box-shadow, color;
+    transition-timing-function: ease-in;
+    outline: none;
+  }
+  .mat-calendar-body-cell-content:hover {
+    background-color: #efefef;
+  }
+
+  .ng-select {
+    .ng-select-container {
+      background-color: #f7f9fc;
+      border-color: #e4e9f2;
+    }
+  }
+}
+
+.nb-theme-dark {
+  #logo-img {
+    filter: invert(94%) sepia(5%) saturate(264%) hue-rotate(168deg)
+      brightness(115%) contrast(100%);
+  }
+
+  .igx-grid__th-title {
+    color: white;
+  }
+  .mat-datepicker-content {
+    background-color: #222b45;
+    border: 1px solid #192038;
+    border-radius: 10px;
+    padding-bottom: 10px;
+  }
+  .mat-calendar-body-cell,
+  .mat-calendar-table-header,
+  .mat-calendar-body-label {
+    color: white;
+  }
+  .mat-focus-indicator.mat-icon-button.mat-button-base {
+    background-color: #192038;
+    border: 1px solid #101426;
+    border-left: 0;
+    color: #8f9bb3;
+    transition-duration: 0.15s;
+    transition-property: background-color, border-color, box-shadow, color;
+    transition-timing-function: ease-in;
+  }
+
+  .cdk-focused {
+    outline: none;
+  }
+
+  .mat-focus-indicator.mat-icon-button.mat-button-base:hover {
+    background-color: rgba(143, 155, 179, 0.08);
+    border-color: transparent;
+  }
+
+  .mat-datepicker-toggle-active
+    > .mat-focus-indicator.mat-icon-button.mat-button-base {
+    background-color: rgba(143, 155, 179, 0.08);
+    border-color: transparent;
+  }
+
+  .mat-calendar-body-cell-content:hover {
+    background-color: rgba(143, 155, 179, 0.08);
+    border-color: transparent;
+  }
+
+  .mat-focus-indicator.mat-calendar-period-button {
+    background-color: #192038;
+    color: white;
+  }
+
+  pre.display-formatted {
+    background-color: #192038;
+    color: white;
+    border-color: #101426;
+
+    &:hover {
+      background-color: #151a30;
+    }
+  }
+
+  .ng-select {
+    .ng-select-container {
+      background-color: #192038;
+      color: white;
+      border-color: #101426;
+
+      &:hover {
+        background-color: #151a30;
+      }
+    }
+
+    .ng-option {
+      background-color: #192038 !important;
+      color: white;
+      border-color: #101426;
+
+      &:hover {
+        background-color: #151a30;
+      }
+    }
+
+    ng-dropdown-panel {
+      border-color: #101426;
+    }
+  }
+
+  .ng-option-marked {
+    color: white !important;
+  }
+
+  .ng-option-marked:hover {
+    background-color: #444e67 !important;
+  }
+
+  .ng-option-selected {
+    color: white !important;
+  }
+
+  .igx-button--raised:hover {
+    color: #313950 !important;
+  }
+}
+
+.mat-calendar-body-cell-content {
+  transition-duration: 0.15s;
+  transition-property: background-color, border-color, box-shadow, color;
+  transition-timing-function: ease-in;
+}
+
+.mat-focus-indicator.mat-calendar-previous-button.mat-icon-button.mat-button-base {
+  margin-right: 5px;
+}
+
+.nb-theme-dark app-grid-with-transactions .igx-grid-toolbar,
+app-grid-with-transactions .igx-grid-toolbar {
+  justify-content: end;
+}
+
+.igx-grid__tbody {
+  display: block !important;
+  overflow-y: auto !important;
+  max-height: 410px;
+}
+
+igx-grid-cell,
+igx-grid-cell span {
+  word-break: break-word;
+}
+
+.igx-grid__tr--drag,
+.igx-grid__th-title {
+  opacity: 1 !important;
+}
+
+igx-grid .igx-grid__filtering-row igx-input-group {
+  max-width: 20rem;
+}
+
+.nb-theme-dark igx-grid .igx-grid__filtering-row igx-input-group {
+  max-width: 20rem;
+}
+
+.nb-theme-dark hr {
+  border-color: gray;
+}
+
+body.nb-theme-default nb-menu .menu-item > .menu-items > .menu-item a,
+body.nb-theme-dark nb-menu .menu-item > .menu-items > .menu-item a {
+  padding: 0.5rem;
+}
+
+nb-sidebar.menu-sidebar .scrollable {
+  padding-top: 0.5rem !important;
+}
+
+.layout-container nb-sidebar nb-menu {
+  .menu-group,
+  .menu-item a {
+    font-size: 14px;
+    line-height: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  ul.menu-items ul.menu-items .menu-title {
+    font-weight: 100;
+  }
+}
+
+.igx-overlay div.igx-dialog__window-content {
+  padding: 0;
+
+  nb-card {
+    max-height: 90vh;
+    border: 0;
+  }
+}
+
+nb-layout .layout .layout-container .content .columns {
+  nb-layout-column {
+    padding: 1.2rem !important;
+  }
+
+  @media (max-width: 768px) {
+    nb-layout-column {
+      padding: 1rem 1rem 0 1rem !important;
+    }
+  }
+}
+
+.nb-theme-default input[nbInput].size-medium,
+.nb-theme-dark input[nbInput].size-medium {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+body .igx-grid__th--number,
+body .igx-grid__td--number {
+  text-align: left;
+}
+
+body.nb-theme-dark,
+body.nb-theme-default {
+  .igx-grid__thead-title,
+  .igx-grid__thead-title,
+  .igx-grid__th,
+  .igx-grid__th,
+  .igx-grid__td,
+  .igx-grid--cosy .igx-grid__th,
+  .igx-grid--cosy .igx-grid__td,
+  .igx-grid__filtering-cell--cosy {
+    padding: 0 6px;
+  }
+
+  // In edit mode, when there is a scrollbar he hides the values on the right
+  app-grid-with-transactions .igx-grid__td.igx-grid__td--number:last-child {
+    padding-right: 25px;
+  }
+}
+
+nb-card.card-single-page-height {
+  max-height: calc(100vh - 115px);
+  margin-bottom: 0;
+}
+
+nb-card-header.card-header-shadow {
+  box-shadow: 0px 20px 15px -15px #989898;
+  z-index: 2;
+}
+
+igx-grid-cell {
+  a {
+    margin-right: 10px;
+  }
+
+  i.fa {
+    font-size: 1.5em;
+  }
+}
+
+ng-select.ng-invalid.ng-touched .ng-select-container {
+  border-color: #dc3545;
+}
+
+.ng-select-container {
+  font-family: Open Sans, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+igx-grid-toolbar-title {
+  font-weight: bold;
+}
+
+// Grid button column
+igx-grid,
+igx-tree-grid {
+  igx-grid-cell.igx-grid__td--pinned {
+    a {
+      color: var(--igx-button-icon-color);
+      text-decoration: none;
+      height: 2.25rem;
+      width: 2.25rem;
+      font-size: 1rem;
+      padding: 0;
+      border-radius: var(--igx-button-icon-border-radius);
+
+      display: inline-flex;
+      position: relative;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    a:hover {
+      transition: color 1ms ease-in-out, background-color 1ms ease-in-out,
+        border-color 1ms ease-in-out, box-shadow 1ms ease-in-out;
+      color: var(--igx-button-icon-hover-color);
+      background: var(--igx-button-icon-hover-background);
+    }
+  }
+}
+
+// File styles
+.file-drop-zone {
+  border: dotted 3px lightgray;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.file-over-class {
+  border: dotted 3px green;
+}
+
+.cais-lookup {
+  width: calc(100vw - 10%);
+  height: 90vh;
+}
+
+// Edit dialog styles
+.cais-edit-dialog {
+  height: 90vh;
+  width: calc(100vw - 20px);
+}
+
+@media (min-width: 768px) {
+  .cais-edit-dialog {
+    width: 90vw;
+  }
+}
+
+@media (min-width: 992px) {
+  .cais-edit-dialog {
+    width: 80vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cais-edit-dialog {
+    width: 60vw;
+  }
+}
+
+ng-select.disable-arrow .ng-arrow-wrapper .ng-arrow {
+  display: none;
+}
+
+.disabled-background {
+  .ng-select-container {
+    background-color: #eee !important;
+  }
+
+  .ng-value-label {
+    color: rgba(143, 155, 179, 0.48);
+  }
+}
+
+.nb-theme-default [nbInput].status-basic.lookup-read-only {
+  background-color: #eee;
+  border-color: #e4e9f2;
+  color: rgba(143, 155, 179, 0.48);
+}
+
+.cais-pager-container tl-reference-button button {
+  border: 1px solid #3366ff;
+  line-height: 1.2rem;
+}
+
+.nb-theme-dark .cais-pager-container tl-reference-button button {
+  border: 1px solid #3366ff;
+  border-radius: 4px;
+  color: white;
+}
+
+.nb-theme-default .cais-pager-container tl-reference-button button {
+  background-color: #f7f9fc;
+  color: #222b45;
+}
+
+hr {
+  margin: 6px 0;
 }
