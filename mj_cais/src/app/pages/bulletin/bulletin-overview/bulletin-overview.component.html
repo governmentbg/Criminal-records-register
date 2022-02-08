@@ -107,13 +107,13 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', 'cell.rowData.id']"
-        >
+        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+      >
         <nb-icon pack="fa" icon="eye"></nb-icon>
-    </a>
+      </a>
       <a
         [title]="'Редактиране'"
-        [routerLink]="['/pages/clients/edit', 'cell.rowData.id']"
+        [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>

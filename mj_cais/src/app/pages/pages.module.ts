@@ -9,7 +9,8 @@ import { MiscellaneousModule } from "./miscellaneous/miscellaneous.module";
 import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
 import { SharedModule } from "../shared.module";
 import { PagesMenu } from "./pages-menu";
-import { BulletinFormComponent } from './bulletin/bulletin-form/bulletin-form.component';
+import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
+import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 
 @NgModule({
   imports: [
@@ -20,7 +21,11 @@ import { BulletinFormComponent } from './bulletin/bulletin-form/bulletin-form.co
     MiscellaneousModule,
     SharedModule,
   ],
-  declarations: [PagesComponent, BulletinOverviewComponent, BulletinFormComponent],
-  providers: [PagesMenu]
+  declarations: [
+    PagesComponent,
+    BulletinOverviewComponent,
+    BulletinFormComponent,
+  ],
+  providers: [PagesMenu, BulletinResolver],
 })
 export class PagesModule {}

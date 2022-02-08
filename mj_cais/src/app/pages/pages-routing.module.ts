@@ -6,6 +6,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
+import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 
 const routes: Routes = [
   {
@@ -24,17 +25,20 @@ const routes: Routes = [
       {
         path: "bulletins/create",
         component: BulletinFormComponent,
+        resolve: { dbData: BulletinResolver },
         // canActivate: [AuthGuard],
       },
       {
         path: "bulletins/edit/:ID",
         component: BulletinFormComponent,
+        resolve: { dbData: BulletinResolver },
         data: { edit: true },
         // canActivate: [AuthGuard],
       },
       {
         path: "bulletins/preview/:ID",
         component: BulletinFormComponent,
+        resolve: { dbData: BulletinResolver },
         data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },

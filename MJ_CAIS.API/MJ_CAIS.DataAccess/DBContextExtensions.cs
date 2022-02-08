@@ -19,8 +19,6 @@ namespace MJ_CAIS.DataAccess
 
         public static void ApplyChanges<T>(this DbContext dbContext, ICollection<T> listEntries, List<BaseEntity> passedNavigationProperties, bool applyToAllLevels = false) where T : BaseEntity
         {
-
-
             for (int i = listEntries.Count - 1; i >= 0; i--)
             {
                 T entity = listEntries.ElementAt(i);
