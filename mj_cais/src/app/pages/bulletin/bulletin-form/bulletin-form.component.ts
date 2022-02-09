@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { BulletinForm } from "./data/bulletin.form";
 import { BulletinModel } from "./data/bulletin.model";
+import { BulletinResolverData } from "./data/bulletin.resolver";
 import { BulletinService } from "./data/bulletin.service";
 
 @Component({
@@ -14,14 +15,16 @@ export class BulletinFormComponent
   extends CrudForm<BulletinModel, BulletinForm, BulletinService>
   implements OnInit
 {
+  public dbData: BulletinResolverData;
+
   constructor(
     service: BulletinService,
     public injector: Injector //public toastr: CustomToastrService,
   ) {
     super(service, injector /*, toastr*/);
-    debugger;
     this.overrideDefaultBehaviour = true;
     this.backUrl = "pages/bulletins";
+    this.setDisplayTitle("бюлетин");
   }
 
   buildFormImpl(): FormGroup {
@@ -33,30 +36,11 @@ export class BulletinFormComponent
   }
 
   ngOnInit(): void {
-    debugger;
-    let dbData = this.activatedRoute.snapshot.data["dbData"];
-    super.ngOnInit();
+    this.dbData = this.activatedRoute.snapshot.data["dbData"];
 
-    // forkJoin([
-    //   this.nomenclatureService.GetGasDeviceTypes(),
-    //   this.getElementData(),
-    // ]).subscribe(
-    //   async ([gasDeviceTypes, accessionApplication]: [
-    //     BaseNomenclatureModel[],
-    //     AccessionApplicationModel
-    //   ]) => {
-    //     this.accessionApplicationForm = new AccessionForm();
-
-    //     if (this.isEdit()) {
-    //       this.onIsPersonalChanged(accessionApplication.isPersonal);
-
-    //       this.formFinishedLoading.emit();
-    //       this.formIsLoading = false;
-    //     } else {
-    //       this.formIsLoading = false;
-    //     }
-    //   }
-    // );
+    this.fullForm = new BulletinForm();
+    this.fullForm.group.patchValue(this.dbData.element);
+    this.formFinishedLoading.emit();
   }
 
   submitFunction = () => {

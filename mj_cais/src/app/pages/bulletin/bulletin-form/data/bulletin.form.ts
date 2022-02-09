@@ -4,21 +4,21 @@ export class BulletinForm {
   public group: FormGroup;
 
   public id: FormControl;
-  public applicationNumber: FormControl;
-  public applicationDate: FormControl;
-  public customerTypeId: FormControl;
+  public version: FormControl;
+  public csAuthorityId: FormControl;
+  public registrationNumber: FormControl;
 
   constructor() {
-    this.id = new FormControl(null, [Validators.required]);
-    this.applicationNumber = new FormControl(null, [Validators.required]);
-    this.applicationDate = new FormControl(null, [Validators.required]);
-    this.customerTypeId = new FormControl(null, [Validators.required]);
+    this.id = new FormControl(null);
+    this.version = new FormControl(null);
+    this.csAuthorityId = new FormControl(null);
+    this.registrationNumber = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
-      applicationNumber: this.applicationNumber,
-      applicationDate: this.applicationDate,
-      customerTypeId: this.customerTypeId,
+      version: this.version,
+      csAuthorityId: this.csAuthorityId,
+      registrationNumber: this.registrationNumber,
     });
   }
 }

@@ -11,6 +11,7 @@ import { SharedModule } from "../shared.module";
 import { PagesMenu } from "./pages-menu";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
+import { CoreModule } from "../@core/core.module";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolve
     DashboardModule,
     MiscellaneousModule,
     SharedModule,
+    CoreModule.forRoot(),
   ],
   declarations: [
     PagesComponent,

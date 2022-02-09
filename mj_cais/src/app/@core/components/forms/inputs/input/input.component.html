@@ -1,0 +1,84 @@
+<div [formGroup]="parentGroup" [ngClass]="setInvalidContainer()">
+  <label for="{{ inputName }}" class="label"
+    >{{ label }}
+    <ng-container *ngIf="formUtils.hasRequiredField(inputFormControl)"
+      ><span style="color: red">*</span></ng-container
+    ></label
+  >
+
+  <ng-container *ngIf="formatter">
+    <input
+      type="text"
+      nbInput
+      fullWidth
+      value="{{ formatter(inputFormControl.value) }}"
+      [ngClass]="validationCss()"
+      (blur)="onBlur($event)"
+      (keyup)="onKeyUp($event)"
+      (change)="onChange($event)"
+      [readonly]="isReadOnly"
+    />
+  </ng-container>
+
+  <ng-container *ngIf="!formatter">
+    <ng-container *ngIf="type === 'text'">
+      <input
+        *ngIf="inputType === InputTypeConstants.InputElement"
+        type="{{ type }}"
+        nbInput
+        fullWidth
+        [formControl]="inputFormControl"
+        [ngClass]="validationCss()"
+        (blur)="onBlur($event)"
+        (keyup)="onKeyUp($event)"
+        (change)="onChange($event)"
+        [readonly]="isReadOnly"
+      />
+      <textarea
+        *ngIf="inputType === InputTypeConstants.TextArea"
+        nbInput
+        fullWidth
+        formControlName="{{ inputName }}"
+        [ngClass]="validationCss()"
+        rows="5"
+        name="{{ inputName }}"
+      ></textarea>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'date'">
+      <nb-form-field>
+        <input
+          nbInput
+          fullWidth
+          [matDatepicker]="formpicker"
+          [formControl]="inputFormControl"
+          (blur)="onBlur($event)"
+          (keyup)="onKeyUp($event)"
+          (ngModelChange)="onChange($event)"
+          [readonly]="isReadOnly"
+        />
+
+        <mat-datepicker-toggle
+          nbSuffix
+          nbButton
+          ghost
+          [for]="formpicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker
+          #formpicker
+          [disabled]="isReadOnly || inputFormControl.disabled"
+        ></mat-datepicker>
+      </nb-form-field>
+    </ng-container>
+  </ng-container>
+
+  <cais-validation-message
+    label="{{ inputName }}"
+    [showRequired]="
+      inputFormControl?.errors?.required && inputHasBeenInteracted()
+    "
+    [showEgn]="inputFormControl?.errors?.egn && inputHasBeenInteracted()"
+    [showLnch]="inputFormControl?.errors?.lnch && inputHasBeenInteracted()"
+    [showEmail]="inputFormControl?.errors?.email && inputHasBeenInteracted()"
+  ></cais-validation-message>
+</div>

@@ -14,7 +14,6 @@ namespace MJ_CAIS.DataAccess.Entities
             BSanctions = new HashSet<BSanction>();
         }
 
-        public string Id { get; set; } = null!;
         public decimal? Version { get; set; }
         public string? CsAuthorityId { get; set; }
         public string? RegistrationNumber { get; set; }

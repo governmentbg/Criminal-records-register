@@ -67,7 +67,7 @@ export abstract class CrudForm<
     changeDetector.detectChanges();
   }
 
-  protected getDisplayTitle(): string {
+  protected setDisplayTitle(objectName: string) {
     let prefix = "";
     if (this.isForPreview) {
       prefix = "Преглед на";
@@ -77,8 +77,7 @@ export abstract class CrudForm<
       prefix = "Редактиране на";
     }
 
-    let result = prefix + " " + this.objectName;
-    return result;
+    this.displayTitle = prefix + " " + objectName;
   }
 
   public globalCancelFunction = () => {
@@ -208,6 +207,7 @@ export abstract class CrudForm<
     return this.currentAction == EActions.EDIT;
   }
 
+  // TODO: not used for now
   public getElementData(): Observable<T> {
     if (this.isEdit()) {
       const id = this.activatedRoute.snapshot.paramMap.get("ID");
@@ -248,7 +248,5 @@ export abstract class CrudForm<
         this.currentAction = EActions.EDIT;
       }
     }
-
-    this.displayTitle = this.getDisplayTitle();
   }
 }

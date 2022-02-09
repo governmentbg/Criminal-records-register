@@ -242,6 +242,7 @@ namespace MJ_CAIS.Services
         /// <param name="entity"></param>
         protected virtual void TransformDataOnInsert(TEntity entity)
         {
+            entity.Id = Guid.NewGuid().ToString();
         }
 
         /// <summary>

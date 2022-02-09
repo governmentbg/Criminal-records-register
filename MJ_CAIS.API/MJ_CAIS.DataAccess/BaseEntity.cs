@@ -15,7 +15,7 @@ namespace MJ_CAIS.DataAccess
             this.PrimaryKeyName = primaryKeyName;
         }
 
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
 
         //[Comment("Потребител който е insert-нал записа")]
         //[CustomStringLength(MaxLengthEnum.Name)]

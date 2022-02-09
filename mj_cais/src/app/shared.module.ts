@@ -1,4 +1,3 @@
-import { HttpClient } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
@@ -19,8 +18,6 @@ import {
   NbRadioModule,
   NbSelectModule,
 } from "@nebular/theme";
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TlCommonModule } from "@tl/tl-common";
 import { NgxPermissionsModule } from "ngx-permissions";
 import { ThemeModule } from "./@theme/theme.module";

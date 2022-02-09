@@ -1,1 +1,37 @@
-<p>bulletin-form works!</p>
+<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onSaveFunction]="submitFunction"
+      [onCancelFunction]="globalCancelFunction"
+    ></cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form>
+      <div class="mt-2">
+        <nb-icon nbPrefix icon="info-circle" pack="fa" class="mr-1"></nb-icon>
+        <span>Основни данни</span>
+        <hr />
+      </div>
+
+      <div class="row mt-2">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Authority'"
+            [inputFormControl]="fullForm.csAuthorityId"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Регистрационен номер'"
+            [inputFormControl]="fullForm.registrationNumber"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

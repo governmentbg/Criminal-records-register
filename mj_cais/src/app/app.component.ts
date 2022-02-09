@@ -5,20 +5,13 @@ import {
   getCurrentResourceStrings,
 } from "@infragistics/igniteui-angular";
 import { TranslateService } from "@ngx-translate/core";
-import { AnalyticsService } from "./@core/utils/analytics.service";
-import { SeoService } from "./@core/utils/seo.service";
 
 @Component({
   selector: "ngx-app",
   template: "<router-outlet></router-outlet>",
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private http: HttpClient,
-    private analytics: AnalyticsService,
-    private seoService: SeoService,
-    translate: TranslateService
-  ) {
+  constructor(private http: HttpClient, translate: TranslateService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang("bg");
 
@@ -37,8 +30,5 @@ export class AppComponent implements OnInit {
         }
         changei18n(currentRS);
       });
-
-    this.analytics.trackPageViews();
-    this.seoService.trackCanonicalChanges();
   }
 }

@@ -69,7 +69,6 @@ registerLocaleData(localeBg);
     NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
-    CoreModule.forRoot(),
     ThemeModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
