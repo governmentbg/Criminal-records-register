@@ -11,6 +11,9 @@
         public const string EntitiesPath = "MJ_CAIS.DataAccess";
         public const string DTOPath = "MJ_CAIS.DTO";
 
+        public const string PkType = "string";
+        public const EditorTypeEnum EditorType = EditorTypeEnum.Spaces;
+
         public static readonly string ControllersNamespace = $"{WebPath}.Controllers";
         public static readonly string InterfacesNamespace = $"{InterfacesPath}";
         public static readonly string ServicesNamespace = $"{ServicesPath}";

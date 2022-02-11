@@ -1,5 +1,5 @@
-﻿using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.DataAccess.Entities;
 
 namespace MJ_CAIS.Services.Contracts
 {

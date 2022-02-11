@@ -6,8 +6,8 @@ namespace MJ_CAIS.CodeGenerator.Utils
     {
         public Parameters()
         {
-            this.PkType = "string";
-            this.EditorType = EditorTypeEnum.Spaces;
+            this.PkType = Constants.PkType;
+            this.EditorType = Constants.EditorType;
         }
 
         public string EntityName { get; set; }

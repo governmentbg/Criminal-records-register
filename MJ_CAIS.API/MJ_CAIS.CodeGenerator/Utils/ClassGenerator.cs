@@ -14,6 +14,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string pkType = parameters.PkType;
             string routeName = parameters.GetRouteName();
             string dtoName = parameters.GetDTOName();
+            string gridDtoName = parameters.GetGridDTOName();
             string interfaceName = parameters.GetInterfaceName();
             string serviceField = parameters.GetServiceInstanceFieldName("_");
             string service = parameters.GetServiceInstanceFieldName();
@@ -30,7 +31,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             sb.AppendLine("{");
             sb.AppendLine($"\t[Route(\"{routeName}\")]");
 
-            var genericParameters = new List<string> { dtoName, dtoName, dtoName, entityName, pkType };
+            var genericParameters = new List<string> { dtoName, dtoName, gridDtoName, entityName, pkType };
             var genericParamsText = string.Join(", ", genericParameters);
             sb.AppendLine($"\tpublic class {controllerName} : BaseApiCrudController<{genericParamsText}>");
             sb.AppendLine("\t{");
@@ -102,17 +103,19 @@ namespace MJ_CAIS.CodeGenerator.Utils
             var sb = new StringBuilder();
 
             string entityName = parameters.EntityName;
+            string pkType = parameters.PkType;
             string dtoName = parameters.GetDTOName();
+            string gridDtoName = parameters.GetGridDTOName();
             string interfaceName = parameters.GetInterfaceName();
             string interfacesPath = Path.Combine(rootPath, Constants.InterfacesPath, interfaceName + ".cs");
 
-            sb.AppendLine($"using {Constants.DTOPath}.{parameters.EntityName};");
+            sb.AppendLine($"using {Constants.DTOPath}.{parameters.SingleName};");
             sb.AppendLine($"using {Constants.EntityNamespace};");
             sb.AppendLine();
             sb.AppendLine($"namespace {Constants.InterfacesNamespace}");
             sb.AppendLine("{");
 
-            var genericParameters = new List<string> { dtoName, dtoName, dtoName, entityName, "int" };
+            var genericParameters = new List<string> { dtoName, dtoName, gridDtoName, entityName, pkType };
             var genericParamsText = string.Join(", ", genericParameters);
             sb.AppendLine($"\tpublic interface {interfaceName} : IBaseAsyncService<{genericParamsText}>");
             sb.AppendLine("\t{");
@@ -127,10 +130,12 @@ namespace MJ_CAIS.CodeGenerator.Utils
         {
             var sb = new StringBuilder();
 
+            string pkType = parameters.PkType;
             string entityName = parameters.EntityName;
             string multipleName = parameters.MultipleName;
             string routeName = parameters.GetRouteName();
             string dtoName = parameters.GetDTOName();
+            string gridDtoName = parameters.GetGridDTOName();
             string interfaceName = parameters.GetInterfaceName();
             string repositoryInterfaceName = parameters.GetRepositoryInterfaceName();
             string repositoryFieldName = parameters.GetRepositoryFieldName("_");
@@ -138,9 +143,10 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string serviceName = parameters.GetServiceName();
             string servicePath = Path.Combine(rootPath, Constants.ServicesPath, serviceName + ".cs");
 
+            sb.AppendLine($"using AutoMapper;");
             sb.AppendLine($"using {Constants.DbContextNamespace};");
             sb.AppendLine($"using {Constants.RepositoryInterfaceNamespace};");
-            sb.AppendLine($"using {Constants.DTOPath}.{parameters.EntityName};");
+            sb.AppendLine($"using {Constants.DTOPath}.{parameters.SingleName};");
             sb.AppendLine($"using {Constants.EntityNamespace};");
             sb.AppendLine($"using {Constants.InterfacesNamespace};");
             sb.AppendLine("using System.Collections.Generic;");
@@ -148,18 +154,19 @@ namespace MJ_CAIS.CodeGenerator.Utils
             sb.AppendLine($"namespace {Constants.ServicesNamespace}");
             sb.AppendLine("{");
 
-            var genericParameters = new List<string> { dtoName, dtoName, dtoName, entityName, "int", Constants.DbContextName };
+            var genericParameters = new List<string> { dtoName, dtoName, gridDtoName, entityName, pkType, Constants.DbContextName };
             var genericParamsText = string.Join(", ", genericParameters);
             sb.AppendLine($"\tpublic class {serviceName} : BaseAsyncService<{genericParamsText}>, {interfaceName}");
             sb.AppendLine("\t{");
             sb.AppendLine($"\t\tprivate readonly {repositoryInterfaceName} {repositoryFieldName};");
             sb.AppendLine();
-            sb.AppendLine($"\t\tpublic {serviceName}({repositoryInterfaceName} {repositoryParameter}) : base({repositoryParameter})");
+            sb.AppendLine($"\t\tpublic {serviceName}(IMapper mapper, {repositoryInterfaceName} {repositoryParameter})");
+            sb.AppendLine($"\t\t\t: base(mapper, {repositoryParameter})");
             sb.AppendLine("\t\t{");
             sb.AppendLine($"\t\t\t{repositoryFieldName} = {repositoryParameter};");
             sb.AppendLine("\t\t}");
             sb.AppendLine();
-            sb.AppendLine("\t\tprotected override bool IsChildRecord(int aId, List<string> aParentsList)");
+            sb.AppendLine($"\t\tprotected override bool IsChildRecord({pkType} aId, List<string> aParentsList)");
             sb.AppendLine("\t\t{");
             sb.AppendLine("\t\t\treturn false;");
             sb.AppendLine("\t\t}");
@@ -212,6 +219,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string reposiroryPath = Path.Combine(rootPath, Constants.RepositoryPath, repositoryName + ".cs");
 
             sb.AppendLine($"using {Constants.RepositoryInterfaceNamespace};");
+            sb.AppendLine($"using {Constants.DbContextNamespace};");
             sb.AppendLine($"using {Constants.EntityNamespace};");
             sb.AppendLine();
             sb.AppendLine($"namespace {Constants.RepositoryNamespace}");
