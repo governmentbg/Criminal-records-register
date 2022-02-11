@@ -16,7 +16,7 @@ import { CoreModule } from "../@core/core.module";
 @NgModule({
   imports: [
     PagesRoutingModule,
-    ThemeModule.forRoot(),
+    ThemeModule,
     NbMenuModule,
     DashboardModule,
     MiscellaneousModule,

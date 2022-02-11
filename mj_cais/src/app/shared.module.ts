@@ -42,7 +42,6 @@ import { ThemeModule } from "./@theme/theme.module";
     NgxPermissionsModule.forRoot(),
     IgxActionStripModule,
     IgxComboModule,
-    ThemeModule.forRoot(),
   ],
   exports: [
     TlCommonModule,
@@ -62,7 +61,6 @@ import { ThemeModule } from "./@theme/theme.module";
     NgxPermissionsModule,
     IgxActionStripModule,
     IgxComboModule,
-    ThemeModule,
   ],
 })
 export class SharedModule {}
