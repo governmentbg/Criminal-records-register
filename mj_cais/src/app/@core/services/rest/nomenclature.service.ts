@@ -1,6 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { BaseNomenclatureModel } from "../models/nomenclature/base-nomenclature.model";
+import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "./cais-crud.service";
 
 @Injectable({

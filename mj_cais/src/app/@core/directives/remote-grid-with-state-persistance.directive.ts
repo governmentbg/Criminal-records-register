@@ -16,6 +16,7 @@ import {
   RemoteComponentWithForm,
 } from "@tl/tl-common";
 import { map } from "rxjs/operators";
+import { CustomToastrService } from "../services/common/custom-toastr.service";
 
 @Directive()
 export class RemoteGridWithStatePersistance<
@@ -44,6 +45,10 @@ export class RemoteGridWithStatePersistance<
     this.gridId = gridId;
     this.isForPreview = this.activatedRoute.snapshot.data["preview"];
     this.stateKey = this.gridId + "-state";
+  }
+
+  get toastr() {
+    return this.injector.get<CustomToastrService>(CustomToastrService);
   }
 
   public ngAfterViewInit() {
@@ -146,13 +151,19 @@ export class RemoteGridWithStatePersistance<
     };
   }
 
-  //   protected errorHandler = (error, toastr: CustomToastrService) => {
-  //     // TODO: injector.get<CustomToastrService>
-  //     // TODO: change message to extract info from exception: customMessage ??
-  //     var errorObj = error.error;
-  //     var errorText = error.status + ": " + errorObj.error;
-  //     toastr.showBodyToast("danger", this.dangerMessage, errorText);
-  //   };
+  protected errorHandler = (errorResponse) => {
+    debugger;
+    let toastr = this.injector.get<CustomToastrService>(CustomToastrService);
+
+    let title = this.dangerMessage;
+    let errorText = errorResponse.status + " " + errorResponse.statusText;
+    if (errorResponse.error && errorResponse.error.customMessage) {
+      title = errorResponse.error.customMessage;
+      errorText = "";
+    }
+
+    toastr.showBodyToast("danger", title, errorText);
+  };
 
   public getIDField(): string {
     // DO NOT REMOVE, if it has value it applies filter in ODATA that can break queries

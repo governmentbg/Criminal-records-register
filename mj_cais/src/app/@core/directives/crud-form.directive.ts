@@ -16,7 +16,7 @@ import {
 } from "@tl/tl-common";
 import { IgxResourceStringsBG } from "igniteui-angular-i18n";
 import { Observable, of } from "rxjs";
-// import { CustomToastrService } from "../services/common/custom-toastr.service";
+import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
 
 @Directive()
@@ -28,11 +28,7 @@ export abstract class CrudForm<
   extends FormComponent<T, CS>
   implements AfterViewChecked
 {
-  constructor(
-    service: CS,
-    injector: Injector
-    //public toastr: CustomToastrService
-  ) {
+  constructor(service: CS, injector: Injector) {
     super(service, injector);
     this.setRouteParameters();
     this.formFinishedLoading.subscribe(() => {
@@ -67,6 +63,10 @@ export abstract class CrudForm<
     changeDetector.detectChanges();
   }
 
+  get toastr() {
+    return this.injector.get<CustomToastrService>(CustomToastrService);
+  }
+
   protected setDisplayTitle(objectName: string) {
     let prefix = "";
     if (this.isForPreview) {
@@ -88,7 +88,7 @@ export abstract class CrudForm<
     console.log(form.group);
     if (!form.group.valid) {
       form.group.markAllAsTouched();
-      // this.toastr.showToast("danger", "Грешка при валидациите!");
+      this.toastr.showToast("danger", "Грешка при валидациите!");
 
       this.scrollToValidationError();
     } else {
@@ -108,7 +108,7 @@ export abstract class CrudForm<
 
     submitAction.subscribe({
       next: (data) => {
-        // this.toastr.showToast("success", this.successMessage);
+        this.toastr.showToast("success", this.successMessage);
 
         setTimeout(() => {
           this.onSubmitSuccess(data);
@@ -123,7 +123,7 @@ export abstract class CrudForm<
           errorText = "";
         }
 
-        // this.toastr.showBodyToast("danger", title, errorText);
+        this.toastr.showBodyToast("danger", title, errorText);
       },
     });
   }

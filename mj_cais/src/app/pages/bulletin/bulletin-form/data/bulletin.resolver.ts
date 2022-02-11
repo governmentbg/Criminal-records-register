@@ -7,7 +7,7 @@ import {
 } from "@angular/router";
 import { forkJoin, Observable, ObservableInput, of } from "rxjs";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
-import { NomenclatureService } from "../../../../@core/services/nomenclature.service";
+import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { BulletinModel } from "./bulletin.model";
 import { BulletinService } from "./bulletin.service";
 

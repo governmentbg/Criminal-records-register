@@ -1,1 +1,32 @@
-<p>validation-message works!</p>
+<div class="warning">
+  <span class="caption status-danger" *ngIf="showMinLength">
+    Очакват се най-малко {{ minLength }} символа
+  </span>
+  <span class="caption status-danger" *ngIf="showMaxLength">
+    Очакват се най-много {{ maxLength }} символа
+  </span>
+  <span class="caption status-danger" *ngIf="showPattern">
+    Невалидни данни
+  </span>
+  <span class="caption status-danger" *ngIf="showRequired">
+    Полето е задължително</span
+  >
+  <span class="caption status-danger" *ngIf="showMin"
+    >Очаква се най-малко {{ min }} като число</span
+  >
+  <span class="caption status-danger" *ngIf="showMax"
+    >Очаква се най-много {{ max }} като число</span
+  >
+  <span class="caption status-danger" *ngIf="showEgn">Невалидно ЕГН</span>
+
+  <span class="caption status-danger" *ngIf="showLnch">Невалидно ЛНЧ</span>
+
+  <span class="caption status-danger" *ngIf="showAcceptedValues"
+    >Невалидна стойност</span
+  >
+  <span class="caption status-danger" *ngIf="showEmail">Невалидна поща</span>
+
+  <span class="caption status-danger" *ngIf="showGridMessage"
+    >Въведете поне един запис</span
+  >
+</div>

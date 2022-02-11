@@ -20,7 +20,7 @@ import {
 import { IgxExcelExporterService } from "@infragistics/igniteui-angular";
 import { ConfigurationService } from "@tl/tl-common";
 import { forkJoin } from "rxjs";
-// import { CustomToastrService } from "./@core/services/common/custom-toastr.service";
+import { CustomToastrService } from "./@core/services/common/custom-toastr.service";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { Observable } from "rxjs";
 import { of } from "rxjs";
@@ -89,7 +89,7 @@ registerLocaleData(localeBg);
   bootstrap: [AppComponent],
   providers: [
     IgxExcelExporterService,
-    // CustomToastrService,
+    CustomToastrService,
     {
       provide: APP_INITIALIZER,
       useFactory: configureApp,

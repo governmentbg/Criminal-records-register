@@ -54,6 +54,7 @@ import { CardHeaderComponent } from "./components/forms/card-header/card-header.
 import { InputComponent } from "./components/forms/inputs/input/input.component";
 import { ValidationMessageComponent } from "./components/validation-message/validation-message.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { SharedModule } from "../shared.module";
 
 const socialLinks = [
   {
@@ -146,7 +147,7 @@ export const NB_CORE_PROVIDERS = [
 ];
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, SharedModule],
   declarations: [
     CardHeaderComponent,
     InputComponent,
@@ -154,6 +155,7 @@ export const NB_CORE_PROVIDERS = [
   ],
   exports: [
     NbAuthModule,
+    SharedModule,
     CardHeaderComponent,
     InputComponent,
     ValidationMessageComponent,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import {
   NbComponentStatus,
   NbGlobalLogicalPosition,
@@ -6,12 +6,12 @@ import {
   NbGlobalPosition,
   NbToastrService,
   NbToastrConfig,
-} from '@nebular/theme';
+} from "@nebular/theme";
 
 @Component({
-  selector: 'ngx-toastr',
-  styleUrls: ['./toastr.component.scss'],
-  templateUrl: './toastr.component.html',
+  selector: "ngx-toastr",
+  styleUrls: ["./toastr.component.scss"],
+  templateUrl: "./toastr.component.html",
 })
 export class ToastrComponent {
   constructor(private toastrService: NbToastrService) {}
@@ -24,17 +24,17 @@ export class ToastrComponent {
   hasIcon = true;
   position: NbGlobalPosition = NbGlobalPhysicalPosition.TOP_RIGHT;
   preventDuplicates = false;
-  status: NbComponentStatus = 'primary';
+  status: NbComponentStatus = "primary";
 
-  title = 'HI there!';
+  title = "HI there!";
   content = `I'm cool toaster!`;
 
   types: NbComponentStatus[] = [
-    'primary',
-    'success',
-    'info',
-    'warning',
-    'danger',
+    "primary",
+    "success",
+    "info",
+    "warning",
+    "danger",
   ];
   positions: string[] = [
     NbGlobalPhysicalPosition.TOP_RIGHT,
@@ -48,16 +48,16 @@ export class ToastrComponent {
   ];
 
   quotes = [
-    { title: null, body: 'We rock at Angular' },
-    { title: null, body: 'Titles are not always needed' },
-    { title: null, body: 'Toastr rock!' },
+    { title: null, body: "We rock at Angular" },
+    { title: null, body: "Titles are not always needed" },
+    { title: null, body: "Toastr rock!" },
   ];
 
   makeToast() {
     this.showToast(this.status, this.title, this.content);
   }
 
-  openRandomToast () {
+  openRandomToast() {
     const typeIndex = Math.floor(Math.random() * this.types.length);
     const quoteIndex = Math.floor(Math.random() * this.quotes.length);
     const type = this.types[typeIndex];
@@ -75,12 +75,10 @@ export class ToastrComponent {
       position: this.position,
       preventDuplicates: this.preventDuplicates,
     };
-    const titleContent = title ? `. ${title}` : '';
+    const titleContent = title ? `. ${title}` : "";
 
     this.index += 1;
-    this.toastrService.show(
-      body,
-      `Toast ${this.index}${titleContent}`,
-      config);
+    debugger;
+    this.toastrService.show(body, `Toast ${this.index}${titleContent}`, config);
   }
 }
