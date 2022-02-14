@@ -86,7 +86,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             return result;
         }
 
-        public string GetAngularFormControlModelName()
+        public string GetAngularFileModelName()
         {
             var result = StringUtils.ConvertToLowerCaseWithDash(this.SingleName);
             return result;

@@ -1,7 +1,7 @@
 export class BulletinModel {
   public id: string = null;
-  public version: string = null;
-  public csAuthorityId: number = null;
+  public version: number = null;
+  public csAuthorityId: string = null;
   public registrationNumber: string = null;
   public sequentialIndex: number = null;
   public decisionNumber: string = null;
@@ -71,7 +71,59 @@ export class BulletinModel {
       this.decisionNumber = init.decisionNumber ?? null;
       this.decisionDate = init.decisionDate ?? null;
       this.decisionFinalDate = init.decisionFinalDate ?? null;
-      // TODO: add other fields
+      this.decidingAuthId = init.decidingAuthId ?? null;
+      this.decisionTypeId = init.decisionTypeId ?? null;
+      this.caseTypeId = init.caseTypeId ?? null;
+      this.caseNumber = init.caseNumber ?? null;
+      this.caseYear = init.caseYear ?? null;
+      this.convRemarks = init.convRemarks ?? null;
+      this.alphabeticalIndex = init.alphabeticalIndex ?? null;
+      this.decisionEcli = init.decisionEcli ?? null;
+      this.bulletinCreateDate = init.bulletinCreateDate ?? null;
+      this.bulletinReceivedDate = init.bulletinReceivedDate ?? null;
+      this.bulletinAuthorityId = init.bulletinAuthorityId ?? null;
+      this.createdByNames = init.createdByNames ?? null;
+      this.approvedByNames = init.approvedByNames ?? null;
+      this.approvedByPosition = init.approvedByPosition ?? null;
+      this.statusId = init.statusId ?? null;
+      this.firstname = init.firstname ?? null;
+      this.surname = init.surname ?? null;
+      this.familyname = init.familyname ?? null;
+      this.fullname = init.fullname ?? null;
+      this.firstnameLat = init.firstnameLat ?? null;
+      this.surnameLat = init.surnameLat ?? null;
+      this.familynameLat = init.familynameLat ?? null;
+      this.sex = init.sex ?? null;
+      this.egn = init.egn ?? null;
+      this.ln = init.ln ?? null;
+      this.lnch = init.lnch ?? null;
+      this.birthDate = init.birthDate ?? null;
+      this.birthDatePrecision = init.birthDatePrecision ?? null;
+      this.birthCityId = init.birthCityId ?? null;
+      this.birthCountryId = init.birthCountryId ?? null;
+      this.birthPlaceOther = init.birthPlaceOther ?? null;
+      this.fullnameLat = init.fullnameLat ?? null;
+      this.idDocNumber = init.idDocNumber ?? null;
+      this.idDocCategoryId = init.idDocCategoryId ?? null;
+      this.idDocTypeDescr = init.idDocTypeDescr ?? null;
+      this.idDocIssuingAuthority = init.idDocIssuingAuthority ?? null;
+      this.idDocIssuingDate = init.idDocIssuingDate ?? null;
+      this.idDocIssuingDatePrec = init.idDocIssuingDatePrec ?? null;
+      this.idDocValidDate = init.idDocValidDate ?? null;
+      this.idDocValidDatePrec = init.idDocValidDatePrec ?? null;
+      this.motherFirstname = init.motherFirstname ?? null;
+      this.motherFamilyname = init.motherFamilyname ?? null;
+      this.motherFullname = init.motherFullname ?? null;
+      this.fatherFirstname = init.fatherFirstname ?? null;
+      this.fatherSurname = init.fatherSurname ?? null;
+      this.fatherFamilyname = init.fatherFamilyname ?? null;
+      this.fatherFullname = init.fatherFullname ?? null;
+      this.motherSurname = init.motherSurname ?? null;
+      this.afisNumber = init.afisNumber ?? null;
+      this.convIsTransmittable = init.convIsTransmittable ?? null;
+      this.convRetPeriodEndDate = init.convRetPeriodEndDate ?? null;
+      this.createdByPosition = init.createdByPosition ?? null;
+      this.bulletinType = init.bulletinType ?? null;
     }
   }
 }

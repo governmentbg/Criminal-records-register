@@ -245,7 +245,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string singleName = parameters.SingleName;
             string pkType = parameters.PkType;
             string entityFilePath = parameters.GetEntityPath(rootPath, entityName);
-            string formControlModelName = parameters.GetAngularFormControlModelName();
+            string formControlModelName = parameters.GetAngularFileModelName();
             string dashName = StringUtils.ConvertToLowerCaseWithDash(singleName);
             string forlderName = dashName + "-form";
             string fileName = formControlModelName + ".form.ts";
@@ -284,6 +284,51 @@ namespace MJ_CAIS.CodeGenerator.Utils
             }
 
             sb.AppendLine("    });");
+            sb.AppendLine("  }");
+            sb.AppendLine("}");
+
+            var result = parameters.ToStringFormattedText(sb);
+            File.WriteAllText(formControlModelPath, result);
+        }
+
+        public static void GenerateAngularFormModel(string rootPath, Parameters parameters)
+        {
+            var sb = new StringBuilder();
+
+            string entityName = parameters.EntityName;
+            string multipleName = parameters.MultipleName;
+            string singleName = parameters.SingleName;
+            string pkType = parameters.PkType;
+            string entityFilePath = parameters.GetEntityPath(rootPath, entityName);
+            string formModelName = parameters.GetAngularFileModelName();
+            string dashName = StringUtils.ConvertToLowerCaseWithDash(singleName);
+            string forlderName = dashName + "-form";
+            string fileName = formModelName + ".model.ts";
+            string className = singleName + "Model";
+
+            string modulePath = Path.Combine(rootPath, Constants.AngularPagesPath, parameters.AngularModuleName);
+            string formControlModelPath = Path.Combine(modulePath, forlderName, "data", fileName);
+
+            sb.AppendLine($"export class {className} {{");
+
+            var properties = GetPropertyTypesFromFile(entityFilePath, entityName, pkType);
+            foreach (var property in properties)
+            {
+                var camelCaseField = StringUtils.ConvertToCamelCase(property.PropertyName);
+                var typescriptType = StringUtils.ConvertCSharpPropertyToTypescript(property.Type);
+                sb.AppendLine($"  public {camelCaseField}: {typescriptType} = null;");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"  constructor(init?: Partial<{className}>) {{");
+            sb.AppendLine("    if (init) {");
+            foreach (var property in properties)
+            {
+                var camelCaseField = StringUtils.ConvertToCamelCase(property.PropertyName);
+                sb.AppendLine($"      this.{camelCaseField} = init.{camelCaseField} ?? null;");
+            }
+
+            sb.AppendLine("    }");
             sb.AppendLine("  }");
             sb.AppendLine("}");
 
@@ -332,7 +377,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             return propertyLines;
         }
 
-        public static List<(string PropertyName, string type)> GetPropertyTypesFromFile(string path, string entityName, string pkType, bool removeVirtualProperty = true)
+        public static List<(string PropertyName, string Type)> GetPropertyTypesFromFile(string path, string entityName, string pkType, bool removeVirtualProperty = true)
         {
             var result = new List<(string PropertyName, string type)>();
             result.Add(("Id", pkType)); // Added because its defined in base class and not visible in child file.cs
