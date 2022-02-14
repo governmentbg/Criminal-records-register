@@ -4,6 +4,7 @@
     {
         public const string DbContextName = "CaisDbContext";
 
+        public const string AngularRootPath = @"..\mj_cais\src\app";
         public const string WebPath = "MJ_CAIS.Web";
         public const string ServicesPath = "MJ_CAIS.Services";
         public const string InterfacesPath = "MJ_CAIS.Services.Contracts";
@@ -27,10 +28,17 @@
         public static readonly string ControllersPath = @$"{WebPath}\Controllers";
         public static readonly string RepositoryPath = @$"{RepositoriesPath}\Impl";
         public static readonly string RepositoryInterfacePath = @$"{RepositoriesPath}\Contracts";
+        public static readonly string AngularPagesPath = @$"{AngularRootPath}\pages";
+
 
         public static readonly List<string> SystemProperties = new List<string>()
         {
             "CreatedOn", "CreatedBy", "UpdatedOn", "UpdatedBy"
+        };
+
+        public static readonly List<string> NumericTypes = new List<string>()
+        {
+            "int", "long", "float", "double", "decimal"
         };
     }
 }

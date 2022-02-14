@@ -16,37 +16,11 @@ namespace MJ_CAIS.CodeGenerator.Utils
 
         public string MultipleName { get; set; }
 
+        public string AngularModuleName { get; set; }
+
         public string PkType { get; set; }
 
         public EditorTypeEnum EditorType { get; set; }
-
-        public string GetRouteName()
-        {
-            var name = this.MultipleName;
-
-            var indexes = new List<int>();
-            for (int i = 0; i < name.Length; i++)
-            {
-                if (char.IsUpper(name[i]))
-                {
-                    indexes.Add(i);
-                }
-            }
-
-            indexes.Add(name.Length);
-
-            var parts = new List<string>();
-            for (int i = 0; i < indexes.Count - 1; i++)
-            {
-                var startIndex = indexes[i];
-                var endIndex = indexes[i + 1];
-                var part = name.Substring(startIndex, endIndex - startIndex);
-                parts.Add(part.ToLower());
-            }
-
-            var result = string.Join("-", parts);
-            return result;
-        }
 
         public string GetDTOName()
         {
@@ -103,6 +77,18 @@ namespace MJ_CAIS.CodeGenerator.Utils
             var serviceName = this.GetRepositoryName();
             var firstChar = char.ToLower(serviceName[0]);
             var result = prefix + firstChar + serviceName.Substring(1);
+            return result;
+        }
+
+        public string GetEntityPath(string rootPath, string entityName)
+        {
+            var result = Path.Combine(rootPath, Constants.EntityPath, entityName + ".cs");
+            return result;
+        }
+
+        public string GetAngularFormControlModelName()
+        {
+            var result = StringUtils.ConvertToLowerCaseWithDash(this.SingleName);
             return result;
         }
 

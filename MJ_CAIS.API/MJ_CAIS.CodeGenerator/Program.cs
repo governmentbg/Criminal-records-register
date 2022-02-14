@@ -14,6 +14,7 @@ namespace MJ_CAIS.CodeGenerator
                 EntityName = "BBulletin",
                 SingleName = "Bulletin",
                 MultipleName = "Bulletins",
+                AngularModuleName = "bulletin",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
@@ -24,6 +25,8 @@ namespace MJ_CAIS.CodeGenerator
             //ClassGenerator.GenerateInterface(projectPath, parameters);
             //ClassGenerator.GenerateService(projectPath, parameters);
             //ClassGenerator.GenerateController(projectPath, parameters);
+
+            ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
         }
     }
 }

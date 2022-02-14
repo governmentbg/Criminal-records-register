@@ -12,7 +12,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string entityName = parameters.EntityName;
             string multipleName = parameters.MultipleName;
             string pkType = parameters.PkType;
-            string routeName = parameters.GetRouteName();
+            string routeName = StringUtils.ConvertToLowerCaseWithDash(parameters.MultipleName);
             string dtoName = parameters.GetDTOName();
             string gridDtoName = parameters.GetGridDTOName();
             string interfaceName = parameters.GetInterfaceName();
@@ -55,7 +55,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string entityName = parameters.EntityName;
             string singleName = parameters.SingleName;
             string dtoName = parameters.GetDTOName();
-            string entityFilePath = Path.Combine(rootPath, Constants.EntityPath, entityName + ".cs");
+            string entityFilePath = parameters.GetEntityPath(rootPath, entityName);
             string folderPath = Path.Combine(rootPath, Constants.DTOPath, singleName);
             string dtoPath = Path.Combine(folderPath, dtoName + ".cs");
             Directory.CreateDirectory(folderPath);
@@ -133,7 +133,6 @@ namespace MJ_CAIS.CodeGenerator.Utils
             string pkType = parameters.PkType;
             string entityName = parameters.EntityName;
             string multipleName = parameters.MultipleName;
-            string routeName = parameters.GetRouteName();
             string dtoName = parameters.GetDTOName();
             string gridDtoName = parameters.GetGridDTOName();
             string interfaceName = parameters.GetInterfaceName();
@@ -237,6 +236,61 @@ namespace MJ_CAIS.CodeGenerator.Utils
             File.WriteAllText(reposiroryPath, result);
         }
 
+        public static void GenerateAngularFormControlModel(string rootPath, Parameters parameters)
+        {
+            var sb = new StringBuilder();
+
+            string entityName = parameters.EntityName;
+            string multipleName = parameters.MultipleName;
+            string singleName = parameters.SingleName;
+            string pkType = parameters.PkType;
+            string entityFilePath = parameters.GetEntityPath(rootPath, entityName);
+            string formControlModelName = parameters.GetAngularFormControlModelName();
+            string dashName = StringUtils.ConvertToLowerCaseWithDash(singleName);
+            string forlderName = dashName + "-form";
+            string fileName = formControlModelName + ".form.ts";
+            string className = singleName + "Form";
+
+            string modulePath = Path.Combine(rootPath, Constants.AngularPagesPath, parameters.AngularModuleName);
+            string formControlModelPath = Path.Combine(modulePath, forlderName, "data", fileName);
+
+            sb.AppendLine("import { FormControl, FormGroup, Validators } from \"@angular/forms\";");
+            sb.AppendLine();
+            sb.AppendLine($"export class {className} {{");
+            sb.AppendLine("  public group: FormGroup;");
+            sb.AppendLine();
+
+            var properties = GetPropertyTypesFromFile(entityFilePath, entityName, pkType);
+            foreach (var property in properties)
+            {
+                var camelCaseField = StringUtils.ConvertToCamelCase(property.PropertyName);
+                sb.AppendLine($"  public {camelCaseField}: FormControl;");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("  constructor() {");
+            foreach (var property in properties)
+            {
+                var camelCaseField = StringUtils.ConvertToCamelCase(property.PropertyName);
+                sb.AppendLine($"    this.{camelCaseField} = new FormControl(null);");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("    this.group = new FormGroup({");
+            foreach (var property in properties)
+            {
+                var camelCaseField = StringUtils.ConvertToCamelCase(property.PropertyName);
+                sb.AppendLine($"      {camelCaseField}: this.{camelCaseField},");
+            }
+
+            sb.AppendLine("    });");
+            sb.AppendLine("  }");
+            sb.AppendLine("}");
+
+            var result = parameters.ToStringFormattedText(sb);
+            File.WriteAllText(formControlModelPath, result);
+        }
+
         public static string GetCurrentProjectPath()
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
@@ -276,6 +330,22 @@ namespace MJ_CAIS.CodeGenerator.Utils
             }
 
             return propertyLines;
+        }
+
+        public static List<(string PropertyName, string type)> GetPropertyTypesFromFile(string path, string entityName, string pkType, bool removeVirtualProperty = true)
+        {
+            var result = new List<(string PropertyName, string type)>();
+            result.Add(("Id", pkType)); // Added because its defined in base class and not visible in child file.cs
+
+            var properties = GetPropertiesFromFile(path, entityName, removeVirtualProperty);
+            foreach (var property in properties)
+            {
+                var parts = property.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                var element = (parts[2], parts[1]);
+                result.Add(element);
+            }
+
+            return result;
         }
 
         private static int GetIndexOfLine(List<string> lines, string searchPattern, int startIndex = 0)
