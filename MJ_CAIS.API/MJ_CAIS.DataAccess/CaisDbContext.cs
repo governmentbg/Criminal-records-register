@@ -42,6 +42,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GCountrySubdivision> GCountrySubdivisions { get; set; } = null!;
         public virtual DbSet<GCsAuthority> GCsAuthorities { get; set; } = null!;
         public virtual DbSet<GDecidingAuthority> GDecidingAuthorities { get; set; } = null!;
+        public virtual DbSet<GNomenclature> GNomenclatures { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -888,8 +889,6 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("B_OFFENCE_CATEGORIES");
 
-                entity.HasIndex(e => e.ParentCatGroupId, "XIF1B_OFFENCE_CATEGORIES");
-
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -907,10 +906,9 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("OFF_LEVEL");
 
-                entity.Property(e => e.ParentCatGroupId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("PARENT_CAT_GROUP_ID");
+                entity.Property(e => e.OrderNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ORDER_NUMBER");
 
                 entity.Property(e => e.ValidFrom)
                     .HasColumnType("DATE")
@@ -919,11 +917,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.ValidTo)
                     .HasColumnType("DATE")
                     .HasColumnName("VALID_TO");
-
-                entity.HasOne(d => d.ParentCatGroup)
-                    .WithMany(p => p.InverseParentCatGroup)
-                    .HasForeignKey(d => d.ParentCatGroupId)
-                    .HasConstraintName("FK_B_OFFENCE_CATEGORIES_B_OFFE");
             });
 
             modelBuilder.Entity<BOffenceLvlCompletion>(entity =>
@@ -1420,18 +1413,35 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("G_CS_AUTHORITIES");
 
+                entity.HasIndex(e => e.DecidingAuthId, "XIF1G_CS_AUTHORITIES");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
-                entity.Property(e => e.Code)
-                    .HasMaxLength(200)
-                    .HasColumnName("CODE");
+                entity.Property(e => e.DecidingAuthId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DECIDING_AUTH_ID");
+
+                entity.Property(e => e.IsCentral)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("IS_CENTRAL");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
+
+                entity.Property(e => e.OldId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("OLD_ID");
+
+                entity.HasOne(d => d.DecidingAuth)
+                    .WithMany(p => p.GCsAuthorities)
+                    .HasForeignKey(d => d.DecidingAuthId)
+                    .HasConstraintName("FK_G_CS_AUTHORITIES_G_DECIDING");
             });
 
             modelBuilder.Entity<GDecidingAuthority>(entity =>
@@ -1443,13 +1453,17 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
-                entity.Property(e => e.Active)
+                entity.Property(e => e.ActiveForBulletins)
                     .HasColumnType("NUMBER(38)")
-                    .HasColumnName("ACTIVE");
+                    .HasColumnName("ACTIVE_FOR_BULLETINS");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(200)
                     .HasColumnName("CODE");
+
+                entity.Property(e => e.DisplayName)
+                    .HasMaxLength(500)
+                    .HasColumnName("DISPLAY_NAME");
 
                 entity.Property(e => e.EisppCode)
                     .HasMaxLength(200)
@@ -1459,6 +1473,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("EISPP_ID");
 
+                entity.Property(e => e.IsGroup)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("IS_GROUP");
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
@@ -1467,6 +1485,20 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME_EN");
 
+                entity.Property(e => e.OldId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("OLD_ID");
+
+                entity.Property(e => e.OrderNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ORDER_NUMBER");
+
+                entity.Property(e => e.ParentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PARENT_ID");
+
                 entity.Property(e => e.ValidFrom)
                     .HasColumnType("DATE")
                     .HasColumnName("VALID_FROM");
@@ -1474,6 +1506,26 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.ValidTo)
                     .HasColumnType("DATE")
                     .HasColumnName("VALID_TO");
+
+                entity.Property(e => e.Visible)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VISIBLE");
+            });
+
+            modelBuilder.Entity<GNomenclature>(entity =>
+            {
+                entity.ToTable("G_NOMENCLATURES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.TableName)
+                    .HasMaxLength(200)
+                    .HasColumnName("TABLE_NAME");
             });
 
             OnModelCreatingPartial(modelBuilder);

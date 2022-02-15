@@ -30,12 +30,12 @@ export class BulletinResolver implements Resolve<any> {
 
     let result: BulletinResolverData = {
       element: element,
-      countries: this.nomenclatureService.getCountries(),
+      caseTypes: this.nomenclatureService.getCaseTypes(),
     };
     return forkJoin(result);
   }
 }
 
 export class BulletinResolverData extends BaseResolverData<BulletinModel> {
-  public countries: Observable<BaseNomenclatureModel[]>;
+  public caseTypes: Observable<BaseNomenclatureModel[]>;
 }

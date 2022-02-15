@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj" />
   </ItemGroup>
 
 </Project>

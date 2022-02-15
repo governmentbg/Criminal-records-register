@@ -17,4 +17,8 @@ export class NomenclatureService extends CaisCrudService<
   public getCountries(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_countries`);
   }
+
+  public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/b_case_types`);
+  }
 }
