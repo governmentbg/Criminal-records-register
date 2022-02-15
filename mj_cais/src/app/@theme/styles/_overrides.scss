@@ -1,4 +1,4 @@
-@import './themes';
+@import "./themes";
 
 @mixin nb-overrides() {
   nb-select.size-medium button {
@@ -438,4 +438,10 @@ ng-select.disable-arrow .ng-arrow-wrapper .ng-arrow {
 
 hr {
   margin: 6px 0;
+}
+
+.label-front {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
 }
