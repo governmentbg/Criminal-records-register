@@ -18,11 +18,13 @@ import { IgxResourceStringsBG } from "igniteui-angular-i18n";
 import { Observable, of } from "rxjs";
 import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
+import { BaseResolverData } from "../models/common/base-resolver.data";
 
 @Directive()
 export abstract class CrudForm<
     T extends ABaseModel,
     TForm extends { group: FormGroup },
+    TResolverData extends BaseResolverData<T>,
     CS extends CrudService<T, string>
   >
   extends FormComponent<T, CS>
@@ -31,6 +33,7 @@ export abstract class CrudForm<
   constructor(service: CS, injector: Injector) {
     super(service, injector);
     this.setRouteParameters();
+
     this.formFinishedLoading.subscribe(() => {
       if (this.isForPreview) {
         this.fullForm.group.disable({ onlySelf: false });
@@ -47,6 +50,7 @@ export abstract class CrudForm<
 
   public isForPreview: boolean;
   public fullForm: TForm;
+  public dbData: TResolverData;
   public displayTitle: string;
 
   protected navigateTimeout = 500;
@@ -207,16 +211,6 @@ export abstract class CrudForm<
     return this.currentAction == EActions.EDIT;
   }
 
-  // TODO: not used for now
-  public getElementData(): Observable<T> {
-    if (this.isEdit()) {
-      const id = this.activatedRoute.snapshot.paramMap.get("ID");
-      return this.service.find(id);
-    } else {
-      return of(null);
-    }
-  }
-
   prepareForEdit(object: T): void {
     if (this.overrideDefaultBehaviour) {
       return;
@@ -248,5 +242,7 @@ export abstract class CrudForm<
         this.currentAction = EActions.EDIT;
       }
     }
+
+    this.dbData = this.activatedRoute.snapshot.data["dbData"];
   }
 }

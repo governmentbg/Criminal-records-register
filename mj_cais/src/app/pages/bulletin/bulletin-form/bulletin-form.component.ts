@@ -12,17 +12,16 @@ import { BulletinService } from "./data/bulletin.service";
   styleUrls: ["./bulletin-form.component.scss"],
 })
 export class BulletinFormComponent
-  extends CrudForm<BulletinModel, BulletinForm, BulletinService>
+  extends CrudForm<
+    BulletinModel,
+    BulletinForm,
+    BulletinResolverData,
+    BulletinService
+  >
   implements OnInit
 {
-  public dbData: BulletinResolverData;
-
-  constructor(
-    service: BulletinService,
-    public injector: Injector //public toastr: CustomToastrService,
-  ) {
-    super(service, injector /*, toastr*/);
-    this.overrideDefaultBehaviour = true;
+  constructor(service: BulletinService, public injector: Injector) {
+    super(service, injector);
     this.backUrl = "pages/bulletins";
     this.setDisplayTitle("бюлетин");
   }
@@ -36,8 +35,6 @@ export class BulletinFormComponent
   }
 
   ngOnInit(): void {
-    this.dbData = this.activatedRoute.snapshot.data["dbData"];
-
     this.fullForm = new BulletinForm();
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();

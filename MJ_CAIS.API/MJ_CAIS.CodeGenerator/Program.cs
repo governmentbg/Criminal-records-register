@@ -27,7 +27,8 @@ namespace MJ_CAIS.CodeGenerator
             //ClassGenerator.GenerateController(projectPath, parameters);
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
-            ClassGenerator.GenerateAngularFormModel(projectPath, parameters);
+            //ClassGenerator.GenerateAngularFormModel(projectPath, parameters);
+            ClassGenerator.GenerateAngularService(projectPath, parameters);
         }
     }
 }

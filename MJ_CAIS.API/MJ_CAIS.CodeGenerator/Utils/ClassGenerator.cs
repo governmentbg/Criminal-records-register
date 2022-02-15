@@ -336,6 +336,43 @@ namespace MJ_CAIS.CodeGenerator.Utils
             File.WriteAllText(formControlModelPath, result);
         }
 
+        public static void GenerateAngularService(string rootPath, Parameters parameters)
+        {
+            var sb = new StringBuilder();
+
+            string entityName = parameters.EntityName;
+            string multipleName = parameters.MultipleName;
+            string singleName = parameters.SingleName;
+            string pkType = parameters.PkType;
+            string entityFilePath = parameters.GetEntityPath(rootPath, entityName);
+            string formModelName = parameters.GetAngularFileModelName();
+            string dashName = StringUtils.ConvertToLowerCaseWithDash(singleName);
+            string routeName = StringUtils.ConvertToLowerCaseWithDash(parameters.MultipleName);
+            string forlderName = dashName + "-form";
+            string modelFileName = formModelName + ".model";
+            string modelName = singleName + "Model";
+            string fileName = formModelName + ".service.ts";
+            string className = singleName + "Service";
+
+            string modulePath = Path.Combine(rootPath, Constants.AngularPagesPath, parameters.AngularModuleName);
+            string formControlModelPath = Path.Combine(modulePath, forlderName, "data", fileName);
+
+            sb.AppendLine("import { Injectable, Injector } from \"@angular/core\";");
+            sb.AppendLine("import { CaisCrudService } from \"../../../../@core/services/rest/cais-crud.service\";");
+            sb.AppendLine($"import {{ {modelName} }} from \"./{modelFileName}\";");
+            sb.AppendLine();
+            sb.AppendLine("@Injectable({ providedIn: \"root\" })");
+            sb.AppendLine($"export class {className} extends CaisCrudService<{modelName}, {pkType}> {{");
+            sb.AppendLine($"  constructor(injector: Injector) {{");
+            sb.AppendLine($"    super({modelName}, injector, \"{routeName}\");");
+
+            sb.AppendLine("  }");
+            sb.AppendLine("}");
+
+            var result = parameters.ToStringFormattedText(sb);
+            File.WriteAllText(formControlModelPath, result);
+        }
+
         public static string GetCurrentProjectPath()
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;

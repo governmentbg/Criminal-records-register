@@ -6,6 +6,7 @@ import {
   ActivatedRouteSnapshot,
 } from "@angular/router";
 import { forkJoin, Observable, ObservableInput, of } from "rxjs";
+import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { BulletinModel } from "./bulletin.model";
@@ -35,10 +36,6 @@ export class BulletinResolver implements Resolve<any> {
   }
 }
 
-export class BulletinResolverData
-  implements Record<string, ObservableInput<any>>
-{
-  [x: string]: ObservableInput<any>;
-  public element: Observable<BulletinModel>;
+export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public countries: Observable<BaseNomenclatureModel[]>;
 }
