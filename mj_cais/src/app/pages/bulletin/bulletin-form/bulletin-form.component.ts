@@ -35,8 +35,6 @@ export class BulletinFormComponent
   }
 
   ngOnInit(): void {
-    console.log(this.dbData.caseTypes); // TODO: remove
-
     this.fullForm = new BulletinForm();
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();

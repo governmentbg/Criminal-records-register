@@ -1,0 +1,34 @@
+<div [formGroup]="inputFormGroup" [ngClass]="setInvalidContainer()">
+  <label class="label d-block"
+    >{{ label }}
+    <ng-container
+      *ngIf="
+        formUtils.hasRequiredField(inputFormControl) && inputFormControl.enabled
+      "
+      ><span style="color: red">*</span></ng-container
+    ></label
+  >
+  <div>
+    <nb-radio-group
+      class="mb-2"
+      [formControl]="inputFormControl"
+      name="{{ inputFormName }}"
+      (valueChange)="onValueChanged($event)"
+    >
+      <nb-radio
+        [value]="item.id"
+        [disabled]="inputFormControl.disabled"
+        *ngFor="let item of items"
+        style="display: inline-block"
+        >{{ item.name }}</nb-radio
+      >
+    </nb-radio-group>
+  </div>
+  <cais-validation-message
+    label="{{ inputFormName }}"
+    [showRequired]="
+      inputFormControl?.errors?.required &&
+      (inputFormControl.touched || inputFormControl.dirty)
+    "
+  ></cais-validation-message>
+</div>

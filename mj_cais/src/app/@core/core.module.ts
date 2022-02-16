@@ -55,6 +55,10 @@ import { InputComponent } from "./components/forms/inputs/input/input.component"
 import { ValidationMessageComponent } from "./components/validation-message/validation-message.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../shared.module";
+import { AutocompleteComponent } from "./components/forms/inputs/autocomplete/autocomplete.component";
+import { CheckboxGroupComponent } from "./components/forms/inputs/checkbox-group/checkbox-group.component";
+import { RadioGroupComponent } from "./components/forms/inputs/radio-group/radio-group.component";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 const socialLinks = [
   {
@@ -146,20 +150,19 @@ export const NB_CORE_PROVIDERS = [
   },
 ];
 
+const COMPONENTS = [
+  CardHeaderComponent,
+  InputComponent,
+  ValidationMessageComponent,
+  AutocompleteComponent,
+  CheckboxGroupComponent,
+  RadioGroupComponent,
+];
+
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule, SharedModule],
-  declarations: [
-    CardHeaderComponent,
-    InputComponent,
-    ValidationMessageComponent,
-  ],
-  exports: [
-    NbAuthModule,
-    SharedModule,
-    CardHeaderComponent,
-    InputComponent,
-    ValidationMessageComponent,
-  ],
+  imports: [ReactiveFormsModule, CommonModule, SharedModule, NgSelectModule],
+  declarations: [...COMPONENTS],
+  exports: [NbAuthModule, SharedModule, NgSelectModule, ...COMPONENTS],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

@@ -1,0 +1,51 @@
+<div [formGroup]="parentGroup">
+  <label for="{{ inputName }}" class="label"
+    >{{ label }}
+    <ng-container
+      *ngIf="
+        formUtils.hasRequiredField(inputFormControl) && inputFormControl.enabled
+      "
+      ><span style="color: red">*</span></ng-container
+    ></label
+  >
+
+  <ng-select
+    *ngIf="!allowCustomValues"
+    #autoControl
+    formControlName="{{ inputName }}"
+    (change)="onSelectionChange($event)"
+    (clear)="onSelectionChange(undefined)"
+    [class.disable-arrow]="inputFormControl.disabled"
+    [class.disabled-background]="inputFormControl.disabled"
+  >
+    <ng-option *ngFor="let item of items" [value]="item.id">{{
+      item.name
+    }}</ng-option>
+  </ng-select>
+
+  <ng-select
+    *ngIf="allowCustomValues"
+    #autoControl
+    formControlName="{{ inputName }}"
+    (change)="onSelectionChange($event)"
+    (clear)="onSelectionChange(undefined)"
+    [class.disable-arrow]="inputFormControl.disabled"
+    [class.disabled-background]="inputFormControl.disabled"
+    [addTag]="addTagFn"
+  >
+    <ng-option *ngFor="let item of items" [value]="item.id">{{
+      item.name
+    }}</ng-option>
+  </ng-select>
+  <cais-validation-message
+    label="{{ inputName }}"
+    [showRequired]="
+      inputFormControl?.errors?.required &&
+      (inputHasBeenInteracted || inputFormControl.touched)
+    "
+    [showAcceptedValues]="
+      inputFormControl?.errors?.acceptedValues &&
+      (inputHasBeenInteracted || inputFormControl.touched)
+    "
+  ></cais-validation-message>
+</div>

@@ -445,3 +445,19 @@ hr {
   align-items: center;
   font-weight: bold;
 }
+
+.nb-theme-default,
+.nb-theme-dark {
+  nb-card-body.overflow-scroll nb-tabset {
+    ul.tabset a.tab-link {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    nb-tab {
+      padding-left: 0;
+      padding-right: 0;
+      overflow-x: hidden;
+    }
+  }
+}

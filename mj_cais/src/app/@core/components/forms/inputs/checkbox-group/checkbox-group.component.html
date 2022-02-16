@@ -1,0 +1,31 @@
+<div [formGroup]="inputFormGroup">
+  <label class="label"
+    >{{ label }}
+    <ng-container
+      *ngIf="
+        formUtils.hasRequiredField(inputFormControl) && inputFormControl.enabled
+      "
+      ><span style="color: red">*</span></ng-container
+    ></label
+  >
+  <div>
+    <ng-container *ngFor="let item of items">
+      <span style="padding-right: 1.5rem">
+        <nb-checkbox
+          class="mr-2"
+          [disabled]="isForPreview"
+          (change)="onValueChanged($event, item.id)"
+          [checked]="isChecked(item.id)"
+          >{{ item.name }}</nb-checkbox
+        >
+      </span>
+    </ng-container>
+  </div>
+  <cais-validation-message
+    label="{{ inputFormName }}"
+    [showRequired]="
+      inputFormControl?.errors?.required &&
+      (inputFormControl.touched || inputFormControl.dirty)
+    "
+  ></cais-validation-message>
+</div>

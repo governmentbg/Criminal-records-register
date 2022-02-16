@@ -8,196 +8,206 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <nb-card size="small">
-        <nb-tabset>
-          <nb-tab tabTitle="Данни за лицето">
-            <div class="row">
-              <label class="label-front col-md-2">Имена на кирилица</label>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.firstname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.surname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.familyname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
+      <nb-tabset>
+        <nb-tab tabTitle="Данни за лицето">
+          <div class="row">
+            <label class="label label-front col-md-2">Имена на кирилица</label>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.firstname"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.surname"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.familyname"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="label label-front col-md-2">Имена на латиница</label>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.firstnameLat"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.surnameLat"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.familynameLat"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="font-weight-bold">
+            Псевдоним или други използвани имена на осъденото лице
+          </div>
+          <hr />
+
+          <div class="row">
+            <label class="label label-front col-md-2">Псевдоним</label>
+            <div class="form-group col-md-3">
+              <input type="text" nbInput fullWidth value="N/A" />
+            </div>
+            <div class="form-group col-md-3">
+              <input type="text" nbInput fullWidth value="N/A" />
+            </div>
+            <div class="form-group col-md-3">
+              <input type="text" nbInput fullWidth value="N/A" />
             </div>
 
-            <div class="row">
-              <label class="label-front col-md-2">Имена на латиница</label>
-              <div class="form-group col-md-3">
+            <!-- <div class="form-group col-md-3">
                 <cais-input
                   [type]="'text'"
-                  [inputFormControl]="fullForm.firstnameLat"
+                  [inputFormControl]="fullForm.noData"
                   [parentGroup]="fullForm.group"
                 ></cais-input>
               </div>
               <div class="form-group col-md-3">
                 <cais-input
                   [type]="'text'"
-                  [inputFormControl]="fullForm.surnameLat"
+                  [inputFormControl]="fullForm.noData"
                   [parentGroup]="fullForm.group"
                 ></cais-input>
               </div>
               <div class="form-group col-md-3">
                 <cais-input
                   [type]="'text'"
-                  [inputFormControl]="fullForm.familynameLat"
+                  [inputFormControl]="fullForm.noData"
                   [parentGroup]="fullForm.group"
                 ></cais-input>
-              </div>
+              </div> -->
+          </div>
+
+          <div class="row">
+            <label class="label label-front col-md-2">Моминско име</label>
+            <div class="form-group col-md-3">
+              <input type="text" nbInput fullWidth value="N/A" />
+            </div>
+            <div class="form-group col-md-3">
+              <input type="text" nbInput fullWidth value="N/A" />
+            </div>
+            <div class="form-group col-md-3">
+              <input type="text" nbInput fullWidth value="N/A" />
             </div>
 
-            <div class="label-front">
-              Псевдоним или други използвани имена на осъденото лице
+            <!-- <div class="form-group col-md-3">
+                <cais-input
+                  [type]="'text'"
+                  [inputFormControl]="fullForm.noData"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
+              <div class="form-group col-md-3">
+                <cais-input
+                  [type]="'text'"
+                  [inputFormControl]="fullForm.noData"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
+              <div class="form-group col-md-3">
+                <cais-input
+                  [type]="'text'"
+                  [inputFormControl]="fullForm.noData"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div> -->
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [label]="'Бюро съдимост'"
+                [inputFormControl]="fullForm.caseTypeId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'caseTypeId'"
+                [items]="dbData.caseTypes"
+              ></cais-autocomplete>
             </div>
+          </div>
+        </nb-tab>
+
+        <nb-tab tabTitle="Simple Tab #2">
+          <div class="mt-2">
+            <span>Основни данни</span>
             <hr />
+          </div>
 
-            <div class="row">
-              <label class="label-front col-md-2">Псевдоним</label>
-              <div class="form-group col-md-3">
-                <input type="text" nbInput fullWidth value="N/A" />
-              </div>
-              <div class="form-group col-md-3">
-                <input type="text" nbInput fullWidth value="N/A" />
-              </div>
-              <div class="form-group col-md-3">
-                <input type="text" nbInput fullWidth value="N/A" />
-              </div>
-
-              <!-- <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.noData"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.noData"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.noData"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div> -->
+          <div class="row mt-2">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Authority'"
+                [inputFormControl]="fullForm.csAuthorityId"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
             </div>
-
-            <div class="row">
-              <label class="label-front col-md-2">Моминско име</label>
-              <div class="form-group col-md-3">
-                <input type="text" nbInput fullWidth value="N/A" />
-              </div>
-              <div class="form-group col-md-3">
-                <input type="text" nbInput fullWidth value="N/A" />
-              </div>
-              <div class="form-group col-md-3">
-                <input type="text" nbInput fullWidth value="N/A" />
-              </div>
-
-              <!-- <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.noData"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.noData"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [inputFormControl]="fullForm.noData"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div> -->
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Регистрационен номер'"
+                [inputFormControl]="fullForm.registrationNumber"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
             </div>
-          </nb-tab>
+          </div>
 
-          <nb-tab tabTitle="Simple Tab #2">
-            <div class="mt-2">
-              <span>Основни данни</span>
-              <hr />
+          <div class="mt-2">
+            <nb-icon
+              nbPrefix
+              icon="info-circle"
+              pack="fa"
+              class="mr-1"
+            ></nb-icon>
+            <span>Test</span>
+            <hr />
+          </div>
+
+          <div class="row mt-2">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'SequentialIndex'"
+                [inputFormControl]="fullForm.sequentialIndex"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
             </div>
-
-            <div class="row mt-2">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Authority'"
-                  [inputFormControl]="fullForm.csAuthorityId"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'date'"
-                  [label]="'Регистрационен номер'"
-                  [inputFormControl]="fullForm.registrationNumber"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'DecisionNumber'"
+                [inputFormControl]="fullForm.decisionNumber"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
             </div>
+          </div>
+        </nb-tab>
 
-            <div class="mt-2">
-              <nb-icon
-                nbPrefix
-                icon="info-circle"
-                pack="fa"
-                class="mr-1"
-              ></nb-icon>
-              <span>Test</span>
-              <hr />
-            </div>
-
-            <div class="row mt-2">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'SequentialIndex'"
-                  [inputFormControl]="fullForm.sequentialIndex"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'date'"
-                  [label]="'DecisionNumber'"
-                  [inputFormControl]="fullForm.decisionNumber"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-          </nb-tab>
-
-          <nb-tab tabTitle="Simple Tab #3">
-            <span>Content #3</span>
-          </nb-tab>
-        </nb-tabset>
-      </nb-card>
+        <nb-tab tabTitle="Simple Tab #3">
+          <span>Content #3</span>
+        </nb-tab>
+      </nb-tabset>
     </form>
   </nb-card-body>
 </nb-card>

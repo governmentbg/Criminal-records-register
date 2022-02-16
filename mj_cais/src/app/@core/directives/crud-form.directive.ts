@@ -150,7 +150,7 @@ export abstract class CrudForm<
       let el = this.injector.get<ElementRef>(ElementRef);
 
       var validationSpan = el.nativeElement.querySelector(
-        "ngx-validation-message:not([type=hidden]) div span"
+        "cais-validation-message:not([type=hidden]) div span"
       );
 
       if (validationSpan) {
