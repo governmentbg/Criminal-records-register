@@ -8,6 +8,12 @@ import { CommonModule } from "@angular/common";
 import { NbAuthModule, NbDummyAuthStrategy } from "@nebular/auth";
 import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
 import { of as observableOf } from "rxjs";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import {
+  MatMomentDateModule,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from "@angular/material-moment-adapter";
+import { MatInputModule } from "@angular/material/input";
 
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { UserData } from "./data/users";
@@ -160,8 +166,19 @@ const COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [ReactiveFormsModule, CommonModule, SharedModule, NgSelectModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    SharedModule,
+    NgSelectModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+  ],
   declarations: [...COMPONENTS],
+  providers: [
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
+  ],
   exports: [NbAuthModule, SharedModule, NgSelectModule, ...COMPONENTS],
 })
 export class CoreModule {

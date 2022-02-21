@@ -38,10 +38,9 @@
         *ngIf="inputType === InputTypeConstants.TextArea"
         nbInput
         fullWidth
-        formControlName="{{ inputName }}"
+        [formControl]="inputFormControl"
         [ngClass]="validationCss()"
         rows="5"
-        name="{{ inputName }}"
       ></textarea>
     </ng-container>
 

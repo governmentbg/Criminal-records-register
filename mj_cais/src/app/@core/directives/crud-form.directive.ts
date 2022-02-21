@@ -19,6 +19,7 @@ import { Observable, of } from "rxjs";
 import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
 import { BaseResolverData } from "../models/common/base-resolver.data";
+import { InputTypeConstants } from "../constants/input-type.constants";
 
 @Directive()
 export abstract class CrudForm<
@@ -40,6 +41,8 @@ export abstract class CrudForm<
       }
     });
   }
+
+  public InputTypeConstants = InputTypeConstants;
 
   public readonly CREATE_ACTION = "create";
   public readonly EDIT_ACTION = "edit";

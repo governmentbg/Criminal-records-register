@@ -1,5 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { GenderConstants } from "../../constants/gender.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "./cais-crud.service";
 
@@ -20,5 +21,33 @@ export class NomenclatureService extends CaisCrudService<
 
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/b_case_types`);
+  }
+
+  public getGenderTypes(): Observable<BaseNomenclatureModel[]> {
+    return of(GenderConstants.allData);
+  }
+
+  public getNationalities(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+  }
+
+  public getIdDocumentCategoryTypes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_id_doc_categories`
+    );
+  }
+
+  public getIdDocIssuingAuthorities(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+  }
+
+  public getDecisionTypes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_decision_types`
+    );
+  }
+
+  public getDecidingAuthorities(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
   }
 }
