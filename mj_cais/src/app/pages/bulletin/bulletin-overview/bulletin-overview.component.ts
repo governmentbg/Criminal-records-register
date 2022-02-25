@@ -1,7 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
-import { BulletinGridModel } from "./data/bulletin-grid.model";
+import { BulletinGridModel } from "./models/bulletin-grid.model";
 import { BulletinGridService } from "./data/bulletin-grid.service";
 
 @Component({

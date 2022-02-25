@@ -1,6 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { BulletinModel } from "./bulletin.model";
+import { BulletinModel } from "../models/bulletin.model";
 
 @Injectable({ providedIn: "root" })
 export class BulletinService extends CaisCrudService<BulletinModel, string> {

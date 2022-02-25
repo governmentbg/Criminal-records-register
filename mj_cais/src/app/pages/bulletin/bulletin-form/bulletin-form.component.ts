@@ -1,8 +1,8 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
-import { BulletinForm } from "./data/bulletin.form";
-import { BulletinModel } from "./data/bulletin.model";
+import { BulletinForm } from "./models/bulletin.form";
+import { BulletinModel } from "./models/bulletin.model";
 import { BulletinResolverData } from "./data/bulletin.resolver";
 import { BulletinService } from "./data/bulletin.service";
 

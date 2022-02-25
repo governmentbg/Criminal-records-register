@@ -9,7 +9,7 @@ import { forkJoin, Observable, ObservableInput, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { BulletinModel } from "./bulletin.model";
+import { BulletinModel } from "../models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
 @Injectable({
