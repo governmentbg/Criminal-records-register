@@ -8,6 +8,7 @@
         public string? Remarks { get; set; }
         public string? EcrisOffCatId { get; set; }
         public string? EcrisOffCatName { get; set; }
+        public string? LegalProvisions { get; set; }
         public DateTime? OffStartDate { get; set; }
         public DateTime? OffEndDate { get; set; }
         public string? OffPlaceCountryId { get; set; }
