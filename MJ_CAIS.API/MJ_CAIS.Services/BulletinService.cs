@@ -52,6 +52,13 @@ namespace MJ_CAIS.Services
 
             var result = dbContext.BOffences
                 .AsNoTracking()
+                .Include(x => x.OffenceCat)
+                .Include(x => x.EcrisOffCat)
+                .Include(x => x.OffPlaceCountry)
+                .Include(x => x.OffPlaceSubdiv)
+                .Include(x => x.OffPlaceCity)
+                .Include(x => x.OffLvlCompl)
+                .Include(x => x.OffLvlPart)
                 .Where(x => x.BulletinId == aId)
                 .ProjectTo<BOffenceDTO>(mapper.ConfigurationProvider);
 

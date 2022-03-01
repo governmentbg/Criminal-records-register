@@ -82,10 +82,20 @@ export class BulletinFormComponent
       return;
     }
 
+    let offenceCatName = (this.dbData.offencesCategories as any).find(
+      (x) => x.id === this.bulletinOffenceForm.offenceCatId.value
+    ).name;
+
+    let ecrisOffCatName = (this.dbData.ecrisOffCategories as any).find(
+      (x) => x.id === this.bulletinOffenceForm.ecrisOffCatId.value
+    ).name;
+
+    this.bulletinOffenceForm.offenceCatName.patchValue(offenceCatName);
+    this.bulletinOffenceForm.ecrisOffCatName.patchValue(ecrisOffCatName);
     let currentRow = this.offencesGrid.getRowByKey(
       this.bulletinOffenceForm.id.value
     );
-
+    
     if (currentRow) {
       currentRow.update(this.bulletinOffenceForm.group.value);
     } else {
@@ -101,20 +111,4 @@ export class BulletinFormComponent
     this.bulletinOffenceForm = new BulletinOffenceForm();
     this.dialog.close();
   }
-
-  getOffenceCategoryNameByValue(id: string) {
-    var offencesCategories = this.dbData.offencesCategories as any;
-    
-    return offencesCategories.find(
-      (d) => d.id?.toString() === id
-    )?.name;
-  }
-
-  getEcrisOffCatNameByValue(id: string): string {
-    var ecrisOffCategories = this.dbData.ecrisOffCategories as any;
-    return ecrisOffCategories.find(
-      (d) => d.id?.toString() === id
-    )?.name;
-  }
-  
 }

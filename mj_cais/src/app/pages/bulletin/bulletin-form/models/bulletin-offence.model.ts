@@ -1,18 +1,25 @@
 export class BulletinOffenceModel {
     public id: string = null;
     public offenceCatId: string = null;
+    public offenceCatName : string = null;
     public remarks: string = null;
     public ecrisOffCatId: string = null;
+    public ecrisOffCatName: string = null;
     public offStartDate: Date = null;
     public offEndDate: Date = null;
     public offPlaceCountryId: string = null;
+    public offPlaceCountryName: string = null;
     public offPlaceSubdivId: string = null;
+    public offPlaceSubdivName : string = null;
     public offPlaceCityId: string = null;
+    public offPlaceCityName: string = null;
     public offPlaceDescr: string = null;
     public occurrences: number = null;
     public isContiniuous: number = null;
     public offLvlComplId: string = null;
+    public offLvlComplName: string = null;
     public offLvlPartId: string = null;
+    public offLvlPartName: string = null;
     public respExemption: number = null;
     public recidivism: number = null;
     public formOfGuilt: string = null;
@@ -36,6 +43,13 @@ export class BulletinOffenceModel {
         this.respExemption = init.respExemption ?? null;
         this.recidivism = init.recidivism ?? null;
         this.formOfGuilt = init.formOfGuilt ?? null;
+        this.offenceCatName = init.offenceCatName ?? null;
+        this.ecrisOffCatName = init.ecrisOffCatName ?? null;
+        this.offPlaceCountryName = init.offPlaceCountryName ?? null;
+        this.offPlaceSubdivName = init.offPlaceSubdivName ?? null;
+        this.offPlaceCityName = init.offPlaceCityName ?? null;
+        this.offLvlComplName = init.offLvlComplName ?? null;
+        this.offLvlPartName = init.offLvlPartName ?? null;
       }
     }
   }
