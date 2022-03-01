@@ -10,7 +10,7 @@
 package-lock.json
 
 # angular dist
-frontend/dist
+mj_cais/dist
 
 #sql-lite temp files
 *.db-wal

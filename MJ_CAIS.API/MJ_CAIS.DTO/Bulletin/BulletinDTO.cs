@@ -1,4 +1,6 @@
-﻿namespace MJ_CAIS.DTO.Bulletin
+﻿using MJ_CAIS.DTO.Common;
+
+namespace MJ_CAIS.DTO.Bulletin
 {
     public class BulletinDTO : BaseDTO
     {
@@ -62,5 +64,7 @@
         public DateTime? ConvRetPeriodEndDate { get; set; }
         public string? CreatedByPosition { get; set; }
         public string? BulletinType { get; set; }
+
+        public List<TransactionDTO<BOffenceDTO>> OffancesTransactions { get; set; }
     }
 }

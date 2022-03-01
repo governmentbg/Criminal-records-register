@@ -55,5 +55,12 @@ namespace MJ_CAIS.Web.Controllers
         {
             return await base.Delete(aId);
         }
+
+        [HttpGet("{aId}/offences")]
+        public async Task<IActionResult> GetOffences(string aId)
+        {
+            var result = await this._bulletinService.GetOffencesByBulletinIdAsync(aId);
+            return Ok(result);
+        }
     }
 }

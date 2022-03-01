@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Guid } from "guid-typescript";
 
 export class BulletinForm {
   public group: FormGroup;
@@ -64,9 +65,11 @@ export class BulletinForm {
   public convRetPeriodEndDate: FormControl;
   public createdByPosition: FormControl;
   public bulletinType: FormControl;
+  public offancesTransactions: FormControl;
 
   constructor() {
-    this.id = new FormControl(null);
+    var guid = Guid.create().toString();
+    this.id = new FormControl(guid);
     this.version = new FormControl(null);
     this.csAuthorityId = new FormControl(null);
     this.registrationNumber = new FormControl(null);
@@ -127,6 +130,7 @@ export class BulletinForm {
     this.convRetPeriodEndDate = new FormControl(null);
     this.createdByPosition = new FormControl(null);
     this.bulletinType = new FormControl(null);
+    this.offancesTransactions = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -190,6 +194,7 @@ export class BulletinForm {
       convRetPeriodEndDate: this.convRetPeriodEndDate,
       createdByPosition: this.createdByPosition,
       bulletinType: this.bulletinType,
+      offancesTransactions: this.offancesTransactions
     });
   }
 }

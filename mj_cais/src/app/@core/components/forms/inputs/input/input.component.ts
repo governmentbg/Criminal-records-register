@@ -19,6 +19,7 @@ export class InputComponent implements OnInit {
   @Input() inputType: string = InputTypeConstants.InputElement;
   @Input() isReadOnly: boolean;
   @Input() formatter: (item) => string;
+  @Input() rows: string = "5";
   @Output() blur: EventEmitter<FocusEvent> = new EventEmitter();
   @Output() change: EventEmitter<any> = new EventEmitter<any>();
   @Output() keyUp: EventEmitter<KeyboardEvent> = new EventEmitter();

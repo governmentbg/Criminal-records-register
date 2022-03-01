@@ -65,6 +65,7 @@ import { AutocompleteComponent } from "./components/forms/inputs/autocomplete/au
 import { CheckboxGroupComponent } from "./components/forms/inputs/checkbox-group/checkbox-group.component";
 import { RadioGroupComponent } from "./components/forms/inputs/radio-group/radio-group.component";
 import { NgSelectModule } from "@ng-select/ng-select";
+import { GridWithTransactionsComponent } from "./components/grid/grid-with-transactions.component";
 
 const socialLinks = [
   {
@@ -163,6 +164,7 @@ const COMPONENTS = [
   AutocompleteComponent,
   CheckboxGroupComponent,
   RadioGroupComponent,
+  GridWithTransactionsComponent
 ];
 
 @NgModule({

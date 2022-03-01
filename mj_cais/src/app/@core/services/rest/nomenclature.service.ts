@@ -8,8 +8,8 @@ import { CaisCrudService } from "./cais-crud.service";
   providedIn: "root",
 })
 export class NomenclatureService extends CaisCrudService<
-  BaseNomenclatureModel,
-  string
+BaseNomenclatureModel,
+string
 > {
   constructor(injector: Injector) {
     super(BaseNomenclatureModel, injector, "nomenclature-details");
@@ -17,6 +17,20 @@ export class NomenclatureService extends CaisCrudService<
 
   public getCountries(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_countries`);
+  }
+
+  public getCountriesSubdivisions(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/g_country_subdivisions`
+    );
+  }
+
+  public getCities(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    // todo:
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/g_cities`
+    );
   }
 
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
@@ -49,5 +63,29 @@ export class NomenclatureService extends CaisCrudService<
 
   public getDecidingAuthorities(): Observable<BaseNomenclatureModel[]> {
     return of([]);
+  }
+
+  public getOffenceCategories(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_offence_categories`
+    );
+  }
+
+  public getEcrisOffCategories(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_ecris_off_categories`
+    );
+  }
+
+  public getLvlCompletions(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_offence_lvl_completions`
+    );
+  }
+
+  public getExrisOffLevelParts(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_ecris_off_lvl_parts`
+    );
   }
 }

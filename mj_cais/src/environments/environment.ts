@@ -1,4 +1,4 @@
-const serviceUrl = "https://localhost:7275";
+const serviceUrl = "http://localhost:7275";
 
 export const environment = {
   production: false,

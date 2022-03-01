@@ -12,6 +12,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<BulletinDTO, BBulletin>();
             CreateMap<BBulletin, BulletinDTO>();
+
+            CreateMap<BOffenceDTO, BOffence>().ReverseMap();
         }
     }
 }

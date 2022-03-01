@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import {
   IgxActionStripModule,
   IgxComboModule,
+  IgxDialogModule,
   IgxGridModule,
   IgxTreeGridModule,
 } from "@infragistics/igniteui-angular";
@@ -42,6 +43,7 @@ import { ThemeModule } from "./@theme/theme.module";
     NgxPermissionsModule.forRoot(),
     IgxActionStripModule,
     IgxComboModule,
+    IgxDialogModule,
   ],
   exports: [
     TlCommonModule,
@@ -61,6 +63,7 @@ import { ThemeModule } from "./@theme/theme.module";
     NgxPermissionsModule,
     IgxActionStripModule,
     IgxComboModule,
+    IgxDialogModule
   ],
 })
 export class SharedModule {}

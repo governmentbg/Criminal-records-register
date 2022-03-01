@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BEcrisOffCategory
+    public partial class BEcrisOffCategory : IBaseNomenclature
     {
         public BEcrisOffCategory()
         {
