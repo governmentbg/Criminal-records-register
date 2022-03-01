@@ -5,6 +5,8 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IBulletinService : IBaseAsyncService<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string>
     {
-        Task<IQueryable<BOffenceDTO>> GetOffencesByBulletinIdAsync(string aId);
+        Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId);
+
+        Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId);
     }
 }

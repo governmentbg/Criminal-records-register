@@ -12,7 +12,7 @@ import { PagesMenu } from "./pages-menu";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 import { CoreModule } from "../@core/core.module";
-import { BulletinOffenceFormComponent } from './bulletin/bulletin-form/tabs/bulletin-offence-form/bulletin-offence-form.component';
+import { BulletinOffencesFormComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/bulletin-offences-form.component';
 
 @NgModule({
   imports: [
@@ -29,7 +29,7 @@ import { BulletinOffenceFormComponent } from './bulletin/bulletin-form/tabs/bull
     PagesComponent,
     BulletinOverviewComponent,
     BulletinFormComponent,
-    BulletinOffenceFormComponent,
+    BulletinOffencesFormComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

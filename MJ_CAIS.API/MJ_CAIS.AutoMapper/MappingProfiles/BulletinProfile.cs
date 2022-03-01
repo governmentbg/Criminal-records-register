@@ -13,7 +13,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BulletinDTO, BBulletin>();
             CreateMap<BBulletin, BulletinDTO>();
 
-            CreateMap<BOffenceDTO, BOffence>()
+            CreateMap<OffenceDTO, BOffence>()
                 .ForPath(d => d.OffenceCat.Name, opt => opt.MapFrom(src => src.OffenceCatName))
                 .ForPath(d => d.EcrisOffCat.Name, opt => opt.MapFrom(src => src.EcrisOffCatName))
                 .ForPath(d => d.OffPlaceCountry.Name, opt => opt.MapFrom(src => src.OffPlaceCountryId))
@@ -22,6 +22,14 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.OffLvlCompl.Name, opt => opt.MapFrom(src => src.OffLvlComplName))
                 .ForPath(d => d.OffLvlPart.Name, opt => opt.MapFrom(src => src.OffLvlPartName))
                 .ReverseMap();
+
+            CreateMap<SanctionDTO, BSanction>()
+               .ForPath(d => d.SanctCategory.Name, opt => opt.MapFrom(src => src.SanctCategoryName))
+               .ForPath(d => d.SanctProbCateg.Name, opt => opt.MapFrom(src => src.SanctProbCategName))
+               .ForPath(d => d.EcrisSanctCateg.Name, opt => opt.MapFrom(src => src.EcrisSanctCategName))
+               .ForPath(d => d.SanctProbMeasure.Name, opt => opt.MapFrom(src => src.SanctProbMeasureName))
+               .ForPath(d => d.SanctActivity.Name, opt => opt.MapFrom(src => src.SanctActivityName))
+               .ReverseMap();
         }
     }
 }

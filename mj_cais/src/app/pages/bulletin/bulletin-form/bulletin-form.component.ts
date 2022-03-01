@@ -5,7 +5,7 @@ import { BulletinForm } from "./models/bulletin.form";
 import { BulletinModel } from "./models/bulletin.model";
 import { BulletinResolverData } from "./data/bulletin.resolver";
 import { BulletinService } from "./data/bulletin.service";
-import { BulletinOffenceFormComponent } from "./tabs/bulletin-offence-form/bulletin-offence-form.component";
+import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bulletin-offences-form.component";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -22,10 +22,10 @@ export class BulletinFormComponent
   implements OnInit
 {
   @ViewChild("bulletineOffence", {
-    read: BulletinOffenceFormComponent,
+    read: BulletinOffencesFormComponent,
   })
   
-  public bulletineOffenceForm: BulletinOffenceFormComponent;
+  public bulletineOffenceForm: BulletinOffencesFormComponent;
 
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);

@@ -26,27 +26,12 @@ namespace MJ_CAIS.Services
         }
 
         public override async Task<string> InsertAsync(BulletinDTO aInDto)
-        {
-            var isAdded = true;
-            var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
-
-            entity.BOffences = mapper.MapTransactions<BOffenceDTO, BOffence>(aInDto.OffancesTransactions);
-
-            await SaveEntityAsync(entity);
-            return entity.Id;
-        }
+            => await UpdateBulletinAsync(aInDto, true);
 
         public override async Task UpdateAsync(string aId, BulletinDTO aInDto)
-        {
-            var isAdded = false;
-            var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
+            => await UpdateBulletinAsync(aInDto, false);
 
-            entity.BOffences = mapper.MapTransactions<BOffenceDTO, BOffence>(aInDto.OffancesTransactions);
-
-            await SaveEntityAsync(entity);
-        }
-
-        public async Task<IQueryable<BOffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
+        public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
             var dbContext = _bulletinRepository.GetDbContext();
 
@@ -60,9 +45,37 @@ namespace MJ_CAIS.Services
                 .Include(x => x.OffLvlCompl)
                 .Include(x => x.OffLvlPart)
                 .Where(x => x.BulletinId == aId)
-                .ProjectTo<BOffenceDTO>(mapper.ConfigurationProvider);
+                .ProjectTo<OffenceDTO>(mapper.ConfigurationProvider);
 
             return await Task.FromResult(result);
+        }
+
+        public async Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId)
+        {
+            var dbContext = _bulletinRepository.GetDbContext();
+
+            var result = dbContext.BSanctions
+                .AsNoTracking()
+                .Include(x => x.EcrisSanctCateg)
+                .Include(x => x.SanctActivity)
+                .Include(x => x.SanctCategory)
+                .Include(x => x.SanctProbCateg)
+                .Include(x => x.SanctProbMeasure)
+                .Where(x => x.BulletinId == aId)
+                .ProjectTo<SanctionDTO>(mapper.ConfigurationProvider);
+
+            return await Task.FromResult(result);
+        }
+
+        private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
+        {
+            var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
+
+            entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
+            //entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
+
+            await SaveEntityAsync(entity);
+            return entity.Id;
         }
     }
 }

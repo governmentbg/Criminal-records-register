@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Bulletin
 {
-    public class BOffenceDTO
+    public class OffenceDTO
     {
         public string Id { get; set; }
         public string? OffenceCatId { get; set; }

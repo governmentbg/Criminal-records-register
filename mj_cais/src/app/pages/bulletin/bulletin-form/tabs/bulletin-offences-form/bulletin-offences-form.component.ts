@@ -8,11 +8,11 @@ import { BulletinOffenceForm } from "../../models/bulletin-offance.form";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 
 @Component({
-  selector: "cais-bulletin-offence-form",
-  templateUrl: "./bulletin-offence-form.component.html",
-  styleUrls: ["./bulletin-offence-form.component.scss"],
+  selector: "cais-bulletin-offences-form",
+  templateUrl: "./bulletin-offences-form.component.html",
+  styleUrls: ["./bulletin-offences-form.component.scss"],
 })
-export class BulletinOffenceFormComponent implements OnInit {
+export class BulletinOffencesFormComponent implements OnInit {
   @Input() bulletinOffenceTransactions: string;
   @Input() dbData: any;
   @Input() isForPreview: boolean;
