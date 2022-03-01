@@ -10,8 +10,11 @@ namespace MJ_CAIS.DataAccess.Entities
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
+            FbbcBirthCountries = new HashSet<Fbbc>();
+            FbbcCountries = new HashSet<Fbbc>();
             GCities = new HashSet<GCity>();
             GCountrySubdivisions = new HashSet<GCountrySubdivision>();
+            PPeople = new HashSet<PPerson>();
         }
 
         public string Id { get; set; } = null!;
@@ -28,7 +31,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
+        public virtual ICollection<Fbbc> FbbcBirthCountries { get; set; }
+        public virtual ICollection<Fbbc> FbbcCountries { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<GCountrySubdivision> GCountrySubdivisions { get; set; }
+        public virtual ICollection<PPerson> PPeople { get; set; }
     }
 }

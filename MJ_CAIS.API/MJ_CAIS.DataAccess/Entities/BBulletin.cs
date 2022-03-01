@@ -12,6 +12,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
             BSanctions = new HashSet<BSanction>();
+            DDocuments = new HashSet<DDocument>();
         }
 
         public decimal? Version { get; set; }
@@ -78,6 +79,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public DateTime? DeleteDate { get; set; }
+        public DateTime? RehabilitationDate { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -93,5 +96,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
         public virtual ICollection<BSanction> BSanctions { get; set; }
+        public virtual ICollection<DDocument> DDocuments { get; set; }
     }
 }
