@@ -66,7 +66,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/sanctions")]
         public async Task<IActionResult> GetSanctions(string aId)
         {
-            var result = await this._bulletinService.GetOffencesByBulletinIdAsync(aId);
+            var result = await this._bulletinService.GetSanctionsByBulletinIdAsync(aId);
             return Ok(result);
         }
     }

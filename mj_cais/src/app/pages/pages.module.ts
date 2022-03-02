@@ -13,6 +13,7 @@ import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.co
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 import { CoreModule } from "../@core/core.module";
 import { BulletinOffencesFormComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/bulletin-offences-form.component';
+import { BulletinSanctionsFormComponent } from './bulletin/bulletin-form/tabs/bulletin-sanctions-form/bulletin-sanctions-form.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { BulletinOffencesFormComponent } from './bulletin/bulletin-form/tabs/bul
     BulletinOverviewComponent,
     BulletinFormComponent,
     BulletinOffencesFormComponent,
+    BulletinSanctionsFormComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

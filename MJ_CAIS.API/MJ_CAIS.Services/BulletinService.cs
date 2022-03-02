@@ -72,7 +72,7 @@ namespace MJ_CAIS.Services
             var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
 
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
-            //entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
+            entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
 
             await SaveEntityAsync(entity);
             return entity.Id;

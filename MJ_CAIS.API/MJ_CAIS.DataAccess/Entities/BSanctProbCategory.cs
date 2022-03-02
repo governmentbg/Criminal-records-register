@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BSanctProbCategory
+    public partial class BSanctProbCategory : IBaseNomenclature
     {
         public BSanctProbCategory()
         {

@@ -6,6 +6,7 @@ import { BulletinModel } from "./models/bulletin.model";
 import { BulletinResolverData } from "./data/bulletin.resolver";
 import { BulletinService } from "./data/bulletin.service";
 import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bulletin-offences-form.component";
+import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -21,11 +22,17 @@ export class BulletinFormComponent
   >
   implements OnInit
 {
-  @ViewChild("bulletineOffence", {
+  @ViewChild("bulletineOffences", {
     read: BulletinOffencesFormComponent,
   })
   
-  public bulletineOffenceForm: BulletinOffencesFormComponent;
+  public bulletineOffencesForm: BulletinOffencesFormComponent;
+
+  @ViewChild("bulletineSanctions", {
+    read: BulletinSanctionsFormComponent,
+  })
+  
+  public bulletineSanctionsForm: BulletinSanctionsFormComponent;
 
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
@@ -48,9 +55,15 @@ export class BulletinFormComponent
   }
 
   submitFunction = () => { 
-    let aggregatedTransactions =
-    this.bulletineOffenceForm.offencesGrid.transactions.getAggregatedChanges(true);
-    this.fullForm.offancesTransactions.setValue(aggregatedTransactions);
+    let offancesTransactions =
+    this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(true);
+
+    this.fullForm.offancesTransactions.setValue(offancesTransactions);
+
+    let sanctionsTransactions =
+    this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(true);
+
+    this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
 
     this.validateAndSave(this.fullForm);
   };

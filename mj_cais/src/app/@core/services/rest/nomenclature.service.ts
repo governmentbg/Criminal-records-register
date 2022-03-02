@@ -88,4 +88,34 @@ string
       `${this.url}/b_ecris_off_lvl_parts`
     );
   }
+
+  public getSanctionCategories(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_sanction_categories`
+    );
+  }
+
+  public getSanctionPobCategories(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_sanct_prob_categories`
+    );
+  }
+
+  public getEcrisSanctionCategories(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_ecris_stanct_categs`
+    );
+  }
+  
+  public getSanctionProbMeasures(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_sanct_prob_measures`
+    );
+  }
+
+  public getSanctionActivities(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_sanction_activities`
+    );
+  }
 }

@@ -1,15 +1,15 @@
 import { Injectable } from "@angular/core";
 import {
-  Router,
   Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
 } from "@angular/router";
-import { forkJoin, Observable, ObservableInput, of } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { BulletinOffenceModel } from "../models/bulletin-offence.model";
+import { BulletinSanctionModel } from "../models/bulletin-sanction.model";
 import { BulletinModel } from "../models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
@@ -48,13 +48,22 @@ export class BulletinResolver implements Resolve<any> {
       countriesSubdivisions: this.nomenclatureService.getCountriesSubdivisions(),
       cities: this.nomenclatureService.getCities(),
       completions: this.nomenclatureService.getLvlCompletions(),
-      parts: this.nomenclatureService.getExrisOffLevelParts()
+      parts: this.nomenclatureService.getExrisOffLevelParts(),
+      sanctions: this.service.getSanctions(bulletineId),
+      sanctionCategories: this.nomenclatureService.getSanctionCategories(),
+      sanctionProbCategories: this.nomenclatureService.getSanctionPobCategories(),
+      ecrisSanctionCategories: this.nomenclatureService.getEcrisSanctionCategories(),
+      sanctionProbMeasures: this.nomenclatureService.getSanctionProbMeasures(),
+      sanctionActivities: this.nomenclatureService.getSanctionActivities()
     };
     return forkJoin(result);
   }
 }
 
 export class BulletinResolverData extends BaseResolverData<BulletinModel> {
+  public sanctions: Observable<BulletinSanctionModel[]>;
+  public offences: Observable<BulletinOffenceModel[]>;
+
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalities: Observable<BaseNomenclatureModel[]>;
   public idDocumentCategoryTypes: Observable<BaseNomenclatureModel[]>;
@@ -62,7 +71,6 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public decisionTypes: Observable<BaseNomenclatureModel[]>;
   public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
   public caseTypes: Observable<BaseNomenclatureModel[]>;
-  public offences: Observable<BulletinOffenceModel[]>;
   public offencesCategories: Observable<BaseNomenclatureModel[]>;
   public ecrisOffCategories: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
@@ -70,4 +78,9 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public cities: Observable<BaseNomenclatureModel[]>;
   public completions: Observable<BaseNomenclatureModel[]>;
   public parts: Observable<BaseNomenclatureModel[]>;
+  public sanctionCategories: Observable<BaseNomenclatureModel[]>;
+  public sanctionProbCategories: Observable<BaseNomenclatureModel[]>;
+  public ecrisSanctionCategories:  Observable<BaseNomenclatureModel[]>;
+  public sanctionProbMeasures: Observable<BaseNomenclatureModel[]>;
+  public sanctionActivities: Observable<BaseNomenclatureModel[]>;
 }
