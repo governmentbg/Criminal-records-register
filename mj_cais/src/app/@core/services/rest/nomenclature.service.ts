@@ -62,7 +62,9 @@ string
   }
 
   public getDecidingAuthorities(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/g_deciding_authorities`
+    );
   }
 
   public getOffenceCategories(): Observable<BaseNomenclatureModel[]> {
@@ -116,6 +118,12 @@ string
   public getSanctionActivities(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_sanction_activities`
+    );
+  }
+
+  public getDecisionChTypes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_decision_ch_types`
     );
   }
 }

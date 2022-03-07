@@ -69,5 +69,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._bulletinService.GetSanctionsByBulletinIdAsync(aId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/decisions")]
+        public async Task<IActionResult> GetDecisions(string aId)
+        {
+            var result = await this._bulletinService.GetDecisionsByBulletinIdAsync(aId);
+            return Ok(result);
+        }
     }
 }

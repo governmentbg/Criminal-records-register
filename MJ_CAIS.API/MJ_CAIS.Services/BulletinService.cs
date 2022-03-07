@@ -67,12 +67,28 @@ namespace MJ_CAIS.Services
             return await Task.FromResult(result);
         }
 
+        public async Task<IQueryable<DecisionDTO>> GetDecisionsByBulletinIdAsync(string aId)
+        {
+            var dbContext = _bulletinRepository.GetDbContext();
+
+            var result = dbContext.BDecisions
+                .AsNoTracking()
+                .Include(x => x.DecisionAuth)
+                .Include(x => x.DecisionChType)
+                .Include(x => x.DecisionType)
+                .Where(x => x.BulletinId == aId)
+                .ProjectTo<DecisionDTO>(mapper.ConfigurationProvider);
+
+            return await Task.FromResult(result);
+        }
+
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
         {
             var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
 
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
+            entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
 
             await SaveEntityAsync(entity);
             return entity.Id;

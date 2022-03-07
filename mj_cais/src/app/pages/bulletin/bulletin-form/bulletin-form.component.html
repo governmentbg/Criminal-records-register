@@ -409,7 +409,13 @@
         </nb-tab>
 
         <nb-tab tabTitle="Доп. сведения">
-          <span>Content #5</span>
+          <cais-bulletin-decision-form
+            #bulletineDecisions
+            [bulletinDecisionsTransactions]="fullForm.decisionsTransactions"
+            [dbData]="dbData"
+            [isForPreview]="isForPreview"
+          >
+          </cais-bulletin-decision-form>
         </nb-tab>
 
         <nb-tab tabTitle="Служ. информация">

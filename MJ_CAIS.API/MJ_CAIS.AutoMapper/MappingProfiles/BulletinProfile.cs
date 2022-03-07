@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MJ_CAIS.AutoMapperContainer.CustomResolvers;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 
@@ -30,6 +31,16 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForPath(d => d.SanctProbMeasure.Name, opt => opt.MapFrom(src => src.SanctProbMeasureName))
                .ForPath(d => d.SanctActivity.Name, opt => opt.MapFrom(src => src.SanctActivityName))
                .ReverseMap();
+
+            CreateMap<DecisionDTO, BDecision>()
+              .ForPath(d => d.DecisionAuth.Name, opt => opt.MapFrom(src => src.DecisionAuthName))
+              .ForPath(d => d.DecisionChType.Name, opt => opt.MapFrom(src => src.DecisionChTypeName))
+              .ForPath(d => d.DecisionType.Name, opt => opt.MapFrom(src => src.DecisionTypeName))
+              .ForMember(d => d.DecisionAuth, opt => opt.Ignore())
+              .ForMember(d => d.DecisionChType, opt => opt.Ignore())
+              .ForMember(d => d.DecisionType, opt => opt.Ignore())
+              .ReverseMap()
+              .ForMember(d => d.DecisionDecrition, opt => opt.MapFrom(src => BulletinResolver.GetDecisionDecrition(src)));
         }
     }
 }

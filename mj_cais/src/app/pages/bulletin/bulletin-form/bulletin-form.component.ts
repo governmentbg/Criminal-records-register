@@ -7,6 +7,7 @@ import { BulletinResolverData } from "./data/bulletin.resolver";
 import { BulletinService } from "./data/bulletin.service";
 import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bulletin-offences-form.component";
 import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
+import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bulletin-decision-form.component";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -33,6 +34,12 @@ export class BulletinFormComponent
   })
   
   public bulletineSanctionsForm: BulletinSanctionsFormComponent;
+
+  @ViewChild("bulletineDecisions", {
+    read: BulletinDecisionFormComponent,
+  })
+  
+  public bulletineDescitionForm: BulletinDecisionFormComponent;
 
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
@@ -65,6 +72,11 @@ export class BulletinFormComponent
 
     this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
 
+    let decisionsTransactions =
+    this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(true);
+
+    this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
+    
     this.validateAndSave(this.fullForm);
   };
 }
