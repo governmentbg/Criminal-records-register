@@ -9,6 +9,116 @@
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
       <nb-tabset>
+        <nb-tab tabTitle="Основна информация">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Номер на бюлетин'"
+                [inputFormControl]="fullForm.registrationNumber"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Бюро съдимост, в което се съхранява бюлетина'"
+                [inputFormControl]="fullForm.csAuthorityId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'csAuthorityId'"
+                [items]="dbData.csAuthorities"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пореден номер на бюлетина за лицето '"
+                [inputFormControl]="fullForm.sequentialIndex"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'date'"
+                [label]="'Датата на постъпване на хартиения бюлетин'"
+                [inputFormControl]="fullForm.bulletinReceivedDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'date'"
+                [label]="'Дата на съставяне на бюлетина'"
+                [inputFormControl]="fullForm.bulletinCreateDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Входящ номер на бюлетина към азбучния указател '"
+                [inputFormControl]="fullForm.alphabeticalIndex"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="font-weight-bold">Съставил</div>
+          <hr />
+          <div class="row">
+            <label class="label label-front col-md-2">Имена</label>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.createdByNames"
+                [parentGroup]="fullForm.group"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <label class="label label-front col-md-2">Длъжност</label>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.createdByPosition"
+                [parentGroup]="fullForm.group"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="font-weight-bold">Проверил</div>
+          <hr />
+          <div class="row">
+            <label class="label label-front col-md-2">Имена</label>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.approvedByNames"
+                [parentGroup]="fullForm.group"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <label class="label label-front col-md-2">Длъжност</label>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.approvedByPosition"
+                [parentGroup]="fullForm.group"
+              >
+              </cais-input>
+            </div>
+          </div>
+        </nb-tab>
+
         <nb-tab tabTitle="Данни за лицето">
           <div class="row">
             <label class="label label-front col-md-2">Имена на кирилица</label>
@@ -416,10 +526,6 @@
             [isForPreview]="isForPreview"
           >
           </cais-bulletin-decision-form>
-        </nb-tab>
-
-        <nb-tab tabTitle="Служ. информация">
-          <span>Content #6</span>
         </nb-tab>
 
         <nb-tab tabTitle="Уведомления">

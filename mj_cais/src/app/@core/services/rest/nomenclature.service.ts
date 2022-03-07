@@ -126,4 +126,12 @@ string
       `${this.url}/b_decision_ch_types`
     );
   }
+
+  public getCsAuthorities(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    // todo: 
+    // return this.http.get<BaseNomenclatureModel[]>(
+    //   `${this.url}/g_cs_authorities`
+    // );
+  }
 }

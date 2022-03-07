@@ -61,6 +61,7 @@ export class BulletinResolver implements Resolve<any> {
       sanctionActivities: this.nomenclatureService.getSanctionActivities(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
       decisions: this.service.getDecisions(bulletineId),
+      csAuthorities:  this.nomenclatureService.getCsAuthorities()
     };
     return forkJoin(result);
   }
@@ -91,4 +92,5 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctionProbMeasures: Observable<BaseNomenclatureModel[]>;
   public sanctionActivities: Observable<BaseNomenclatureModel[]>;
   public decisionChTypes: Observable<BaseNomenclatureModel[]>;
+  public csAuthorities: Observable<BaseNomenclatureModel[]>;
 }
