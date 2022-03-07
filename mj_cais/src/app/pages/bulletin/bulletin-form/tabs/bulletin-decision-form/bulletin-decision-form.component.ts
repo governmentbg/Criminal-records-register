@@ -1,11 +1,4 @@
-import {
-  Component,
-  Inject,
-  Input,
-  LOCALE_ID,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, Injector, Input, ViewChild } from "@angular/core";
 import {
   IgxDialogComponent,
   IgxGridComponent,
@@ -13,7 +6,6 @@ import {
 } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { BulletinDecisionForm } from "../../models/bulletin-decision.form";
-import { formatDate } from "@angular/common";
 
 @Component({
   selector: "cais-bulletin-decision-form",
@@ -37,7 +29,7 @@ export class BulletinDecisionFormComponent {
 
   constructor(
     public dateFormatService: DateFormatService,
-    @Inject(LOCALE_ID) private locale: string
+    public injector: Injector
   ) {}
 
   public onOpenEditBulletinDecision(event: IgxGridRowComponent) {
@@ -58,8 +50,29 @@ export class BulletinDecisionFormComponent {
       return;
     }
 
-    this.updateDecisionValues();
+    if (this.bulletinDecisionForm.decisionChTypeId.value) {
+      let decisionChTypeName = (this.dbData.decisionChTypes as any).find(
+        (x) => x.id === this.bulletinDecisionForm.decisionChTypeId.value
+      )?.name;
+      this.bulletinDecisionForm.decisionChTypeName.patchValue(
+        decisionChTypeName
+      );
+    }
 
+    if (this.bulletinDecisionForm.decisionTypeId.value) {
+      let decisionTypeName = (this.dbData.decisionTypes as any).find(
+        (x) => x.id === this.bulletinDecisionForm.decisionTypeId.value
+      )?.name;
+      this.bulletinDecisionForm.decisionTypeName.patchValue(decisionTypeName);
+    }
+
+    if (this.bulletinDecisionForm.decisionAuthId.value) {
+      let decisionAuthName = (this.dbData.decidingAuthorities as any).find(
+        (x) => x.id === this.bulletinDecisionForm.decisionAuthId.value
+      )?.name;
+      this.bulletinDecisionForm.decisionAuthName.patchValue(decisionAuthName);
+    }
+    
     let currentRow = this.decisionsGrid.getRowByKey(
       this.bulletinDecisionForm.id.value
     );
@@ -76,65 +89,5 @@ export class BulletinDecisionFormComponent {
   onCloseBulletinDecisionDilog() {
     this.bulletinDecisionForm = new BulletinDecisionForm();
     this.dialog.close();
-  }
-
-  private updateDecisionValues() {
-    let decisionDescr = [];
-
-    if (this.bulletinDecisionForm.decisionChTypeId.value) {
-      let decisionChTypeName = (this.dbData.decisionChTypes as any).find(
-        (x) => x.id === this.bulletinDecisionForm.decisionChTypeId.value
-      )?.name;
-      this.bulletinDecisionForm.decisionChTypeName.patchValue(
-        decisionChTypeName
-      );
-    }
-
-    if (this.bulletinDecisionForm.decisionTypeId.value) {
-      let decisionTypeName = (this.dbData.decisionTypes as any).find(
-        (x) => x.id === this.bulletinDecisionForm.decisionTypeId.value
-      )?.name;
-      this.bulletinDecisionForm.decisionTypeName.patchValue(decisionTypeName);
-      decisionDescr.push(decisionTypeName);
-    }
-
-    if (this.bulletinDecisionForm.decisionNumber.value) {
-      decisionDescr.push(this.bulletinDecisionForm.decisionNumber.value);
-    }
-
-    if (this.bulletinDecisionForm.decisionDate.value) {
-      var decisionDateStr = formatDate(
-        this.bulletinDecisionForm.decisionDate.value,
-        "dd.MM.yyyy HH:mm",
-        this.locale
-      );
-      decisionDescr.push(decisionDateStr);
-    }
-
-    if (this.bulletinDecisionForm.decisionFinalDate.value) {
-      var decisionFinalDateStr = formatDate(
-        this.bulletinDecisionForm.decisionFinalDate.value,
-        "dd.MM.yyyy HH:mm",
-        this.locale
-      );
-      decisionDescr.push(decisionFinalDateStr);
-    }
-
-    if (this.bulletinDecisionForm.decisionAuthId.value) {
-      let decisionAuthName = (this.dbData.decidingAuthorities as any).find(
-        (x) => x.id === this.bulletinDecisionForm.decisionAuthId.value
-      )?.name;
-      this.bulletinDecisionForm.decisionAuthName.patchValue(decisionAuthName);
-      decisionDescr.push(decisionAuthName);
-    }
-
-    if (this.bulletinDecisionForm.decisionEcli.value) {
-      decisionDescr.push(this.bulletinDecisionForm.decisionEcli.value);
-    }
-
-    if (decisionDescr.length > 0) {
-      var decisionDescVal = decisionDescr.join("/");
-      this.bulletinDecisionForm.decisionDecrition.patchValue(decisionDescVal);
-    }
   }
 }

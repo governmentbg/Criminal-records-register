@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MJ_CAIS.AutoMapperContainer.CustomResolvers;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 
@@ -39,8 +38,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.DecisionAuth, opt => opt.Ignore())
               .ForMember(d => d.DecisionChType, opt => opt.Ignore())
               .ForMember(d => d.DecisionType, opt => opt.Ignore())
-              .ReverseMap()
-              .ForMember(d => d.DecisionDecrition, opt => opt.MapFrom(src => BulletinResolver.GetDecisionDecrition(src)));
+              .ReverseMap();
         }
     }
 }

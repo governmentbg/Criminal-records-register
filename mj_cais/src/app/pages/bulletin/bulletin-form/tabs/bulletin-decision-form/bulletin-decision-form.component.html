@@ -26,9 +26,44 @@
     </igx-column>
 
     <igx-column
+      field="decisionChTypeId"
+      header="Идентификатор на категория допълнителни сведения"
+      dataType="number"
+      [hidden]="true"
+    >
+    </igx-column>
+    <igx-column
+      field="decisionChTypeName"
+      header="Категория допълнителни сведения"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
+      field="decisionTypeId"
+      header="Идентификатор на вид съдебен акт"
+      dataType="number"
+      [hidden]="true"
+    >
+    </igx-column>
+    <igx-column
+      field="decisionTypeName"
+      header="Вид съдебен акт"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
+      field="decisionNumber"
+      header="Номер на акта"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
       field="decisionDate"
       [sortable]="true"
-      header="Дата"
+      header="Дата на акта"
       dataType="Date"
       [formatter]="this.dateFormatService.formatDate"
     >
@@ -40,8 +75,36 @@
     </igx-column>
 
     <igx-column
-      field="decisionDecrition"
-      header="Данни за съдебен акт"
+      field="decisionFinalDate"
+      [sortable]="true"
+      header="Дата на вилизане в сила на акта"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+          {{ this.dateFormatService.displayDateTime(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="decisionAuthId"
+      header="Идентификатор на съд, издал акта"
+      dataType="number"
+      [hidden]="true"
+    >
+    </igx-column>
+    <igx-column
+      field="decisionAuthName"
+      header="Съд, издал акта"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
+      field="decisionEcli"
+      header="ECLI номер"
       dataType="string"
       [sortable]="true"
     >
@@ -49,7 +112,7 @@
 
     <igx-column
       field="descr"
-      header="Забележки"
+      header="Описание"
       dataType="string"
       [sortable]="true"
     >

@@ -15,7 +15,6 @@ export class BulletinDecisionForm {
   public decisionTypeId: FormControl;
   public decisionTypeName: FormControl;
   public descr: FormControl;
-  public decisionDecrition: FormControl;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -31,7 +30,6 @@ export class BulletinDecisionForm {
     this.decisionTypeId = new FormControl(null);
     this.decisionTypeName = new FormControl(null);
     this.descr = new FormControl(null);
-    this.decisionDecrition = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -46,7 +44,6 @@ export class BulletinDecisionForm {
       decisionTypeId: this.decisionTypeId,
       decisionTypeName: this.decisionTypeName,
       descr: this.descr,
-      decisionDecrition: this.decisionDecrition
     });
   }
 }
