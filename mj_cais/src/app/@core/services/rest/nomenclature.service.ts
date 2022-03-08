@@ -134,4 +134,11 @@ string
     //   `${this.url}/g_cs_authorities`
     // );
   }
+
+  public getDocumentTypes(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/d_doc_types`
+    );
+  }
 }

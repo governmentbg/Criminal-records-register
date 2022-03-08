@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class DDocument
+    public partial class DDocument : BaseEntity
     {
-        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? DocTypeId { get; set; }
         public string? PersonId { get; set; }

@@ -499,7 +499,7 @@
           </div>
         </nb-tab>
 
-        <nb-tab tabTitle="Престъпление">
+        <nb-tab tabTitle="Престъпления">
           <cais-bulletin-offences-form
             #bulletineOffences
             [bulletinOffenceTransactions]="fullForm.offancesTransactions"
@@ -508,7 +508,7 @@
           ></cais-bulletin-offences-form>
         </nb-tab>
 
-        <nb-tab tabTitle="Наказание">
+        <nb-tab tabTitle="Наказания">
           <cais-bulletin-sanctions-form
             #bulletineSanctions
             [bulletinSanctionsTransactions]="fullForm.sanctionsTransactions"
@@ -533,7 +533,13 @@
         </nb-tab>
 
         <nb-tab tabTitle="Документи">
-          <span>Content #8</span>
+          <cais-bulletin-document-form
+          #bulletineDocuments
+          [bulletinDocumentsTransactions]="fullForm.documentsTransactions"
+          [dbData]="dbData"
+          [isForPreview]="isForPreview"
+        >
+        </cais-bulletin-document-form>
         </nb-tab>
 
         <nb-tab tabTitle="Одит">

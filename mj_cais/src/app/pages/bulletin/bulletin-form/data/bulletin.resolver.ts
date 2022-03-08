@@ -9,6 +9,7 @@ import { BaseResolverData } from "../../../../@core/models/common/base-resolver.
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { BulletinDecisionModel } from "../models/bulletin-decision.model";
+import { BulletinDocumentModel } from "../models/bulletin-document.model";
 import { BulletinOffenceModel } from "../models/bulletin-offence.model";
 import { BulletinSanctionModel } from "../models/bulletin-sanction.model";
 import { BulletinModel } from "../models/bulletin.model";
@@ -61,7 +62,9 @@ export class BulletinResolver implements Resolve<any> {
       sanctionActivities: this.nomenclatureService.getSanctionActivities(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
       decisions: this.service.getDecisions(bulletineId),
-      csAuthorities:  this.nomenclatureService.getCsAuthorities()
+      csAuthorities:  this.nomenclatureService.getCsAuthorities(),
+      documents:  this.service.getDocuments(bulletineId),
+      documentTypes:  this.nomenclatureService.getDocumentTypes()
     };
     return forkJoin(result);
   }
@@ -71,6 +74,7 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctions: Observable<BulletinSanctionModel[]>;
   public offences: Observable<BulletinOffenceModel[]>;
   public decisions: Observable<BulletinDecisionModel[]>;
+  public documents: Observable<BulletinDocumentModel[]>;
 
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalities: Observable<BaseNomenclatureModel[]>;
@@ -93,4 +97,5 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctionActivities: Observable<BaseNomenclatureModel[]>;
   public decisionChTypes: Observable<BaseNomenclatureModel[]>;
   public csAuthorities: Observable<BaseNomenclatureModel[]>;
+  public documentTypes: Observable<BaseNomenclatureModel[]>;
 }

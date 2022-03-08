@@ -10,5 +10,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId);
 
         Task<IQueryable<DecisionDTO>> GetDecisionsByBulletinIdAsync(string aId);
+
+        Task<IQueryable<DocumentDTO>> GetDocumentsByBulletinIdAsync(string aId);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, Injector, Input, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import {
   IgxDialogComponent,
   IgxGridComponent,
@@ -27,10 +27,7 @@ export class BulletinDecisionFormComponent {
 
   public bulletinDecisionForm = new BulletinDecisionForm();
 
-  constructor(
-    public dateFormatService: DateFormatService,
-    public injector: Injector
-  ) {}
+  constructor(public dateFormatService: DateFormatService) {}
 
   public onOpenEditBulletinDecision(event: IgxGridRowComponent) {
     this.bulletinDecisionForm.group.patchValue(event.rowData);
@@ -72,7 +69,7 @@ export class BulletinDecisionFormComponent {
       )?.name;
       this.bulletinDecisionForm.decisionAuthName.patchValue(decisionAuthName);
     }
-    
+
     let currentRow = this.decisionsGrid.getRowByKey(
       this.bulletinDecisionForm.id.value
     );

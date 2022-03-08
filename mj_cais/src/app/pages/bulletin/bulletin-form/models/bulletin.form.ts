@@ -68,6 +68,7 @@ export class BulletinForm {
   public offancesTransactions: FormControl;
   public sanctionsTransactions: FormControl;
   public decisionsTransactions: FormControl;
+  public documentsTransactions: FormControl;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -135,6 +136,7 @@ export class BulletinForm {
     this.offancesTransactions = new FormControl(null);
     this.sanctionsTransactions = new FormControl(null);
     this.decisionsTransactions = new FormControl(null);
+    this.documentsTransactions = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -200,7 +202,8 @@ export class BulletinForm {
       bulletinType: this.bulletinType,
       offancesTransactions: this.offancesTransactions,
       sanctionsTransactions: this.sanctionsTransactions,
-      decisionsTransactions: this.decisionsTransactions
+      decisionsTransactions: this.decisionsTransactions,
+      documentsTransactions: this.documentsTransactions
     });
   }
 }

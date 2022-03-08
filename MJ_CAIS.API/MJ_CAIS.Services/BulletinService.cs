@@ -2,6 +2,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
@@ -82,6 +84,20 @@ namespace MJ_CAIS.Services
             return await Task.FromResult(result);
         }
 
+        public async Task<IQueryable<DocumentDTO>> GetDocumentsByBulletinIdAsync(string aId)
+        {
+            var dbContext = _bulletinRepository.GetDbContext();
+
+            var result = dbContext.DDocuments
+                .AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.DocContent)
+                .Where(x => x.BulletinId == aId)
+                .ProjectTo<DocumentDTO>(mapper.ConfigurationProvider);
+
+            return await Task.FromResult(result);
+        }
+
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
         {
             var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
@@ -89,6 +105,31 @@ namespace MJ_CAIS.Services
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
+            entity.DDocuments = mapper.MapTransactions<DocumentDTO, DDocument>(aInDto.DocumentsTransactions);
+
+            var context = _bulletinRepository.GetDbContext();
+
+            // todo: add hash functions
+            foreach (var documentTr in aInDto.DocumentsTransactions)
+            {
+                var state = documentTr.Type == TransactionTypesEnum.ADD ? EntityStateEnum.Added : EntityStateEnum.Deleted;
+                var docContent = new DDocContent()
+                {
+                    Id = documentTr.NewValue.DocumentContentId,
+                    Content = documentTr.NewValue.DocumentContent,
+                    EntityState = state,
+                    MimeType = documentTr.NewValue.MimeType
+                };
+
+                if (state == EntityStateEnum.Added)
+                {
+                    context.Add(docContent);
+                }
+                else if (state == EntityStateEnum.Deleted)
+                {
+                    context.Remove(docContent);
+                }
+            }
 
             await SaveEntityAsync(entity);
             return entity.Id;

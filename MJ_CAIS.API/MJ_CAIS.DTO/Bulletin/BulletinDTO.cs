@@ -68,5 +68,6 @@ namespace MJ_CAIS.DTO.Bulletin
         public List<TransactionDTO<OffenceDTO>> OffancesTransactions { get; set; }
         public List<TransactionDTO<SanctionDTO>> SanctionsTransactions { get; set; }
         public List<TransactionDTO<DecisionDTO>> DecisionsTransactions { get; set; }
+        public List<TransactionDTO<DocumentDTO>> DocumentsTransactions { get; set; }
     }
 }

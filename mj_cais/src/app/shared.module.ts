@@ -22,6 +22,7 @@ import {
 import { TlCommonModule } from "@tl/tl-common";
 import { NgxPermissionsModule } from "ngx-permissions";
 import { ThemeModule } from "./@theme/theme.module";
+import { FileUploadModule } from "ng2-file-upload";
 
 @NgModule({
   declarations: [],
@@ -44,6 +45,7 @@ import { ThemeModule } from "./@theme/theme.module";
     IgxActionStripModule,
     IgxComboModule,
     IgxDialogModule,
+    FileUploadModule
   ],
   exports: [
     TlCommonModule,
@@ -63,7 +65,8 @@ import { ThemeModule } from "./@theme/theme.module";
     NgxPermissionsModule,
     IgxActionStripModule,
     IgxComboModule,
-    IgxDialogModule
+    IgxDialogModule,
+    FileUploadModule
   ],
 })
 export class SharedModule {}
