@@ -17,7 +17,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? EisppId { get; set; }
         public string? DocContentId { get; set; }
         public string? BulletinId { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual DDocContent? DocContent { get; set; }
