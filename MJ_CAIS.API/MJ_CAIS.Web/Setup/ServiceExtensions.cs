@@ -20,7 +20,9 @@ namespace MJ_CAIS.Web.Setup
                 options.AddPolicy("DevCorsPolicy",
                     builder =>
                     {
-                        builder.AllowAnyMethod().AllowAnyHeader();
+                        builder.AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .WithExposedHeaders("Content-Disposition");
 
                         if (string.IsNullOrEmpty(origin))
                         {

@@ -3,11 +3,11 @@
     <igx-grid-toolbar-actions>
       <div class="ml-auto">
         <button
+          *ngIf="showAddDeleteButton"
           nbButton
           matRipple
           [status]="'success'"
           (click)="onOpenDialog(); dialogAdd.open()"
-          *ngIf="!isForPreview"
         >
           Добави &nbsp;
           <i class="fa fa-plus" aria-hidden="true"></i>
@@ -66,6 +66,7 @@
       </button>
 
       <button
+        *ngIf="showAddDeleteButton"
         igxButton="icon"
         [title]="'Изтриване'"
         (click)="openDeleteConfirmationDialog(cell.rowData.id)"

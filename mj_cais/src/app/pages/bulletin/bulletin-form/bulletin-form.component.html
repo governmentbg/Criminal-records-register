@@ -536,7 +536,7 @@
           <cais-bulletin-document-form
           #bulletineDocuments
           [bulletinForm]="fullForm"
-          [isForPreview]="isForPreview"
+          [showAddDeleteButton]="(isEdit() && !isForPreview) || (!isEdit() && isForPreview)"
           [documents]="dbData.documents"
           [documentTypes]="dbData.documentTypes"
         >

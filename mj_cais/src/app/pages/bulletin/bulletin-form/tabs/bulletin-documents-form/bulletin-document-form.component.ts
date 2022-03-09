@@ -25,7 +25,8 @@ export class BulletinDocumentFormComponent {
   @Input() documents: any;
   @Input() documentTypes: any;
   @Input() isForPreview: boolean;
-
+  @Input() showAddDeleteButton: boolean;
+  
   @ViewChild("documentsGrid", {
     read: IgxGridComponent,
   })
