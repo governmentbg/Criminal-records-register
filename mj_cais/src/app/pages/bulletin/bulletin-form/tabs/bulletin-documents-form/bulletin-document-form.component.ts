@@ -1,29 +1,29 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import {
   IgxDialogComponent,
   IgxGridComponent,
-  IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
-import { FileItem, FileLikeObject } from "ng2-file-upload";
+import { NbDialogService } from "@nebular/theme";
+import * as fileSaver from "file-saver";
+import { FileItem } from "ng2-file-upload";
 import { Observable, ReplaySubject } from "rxjs";
+import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { CommonConstants } from "../../../../../@core/constants/common.constants";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
+import { BulletinService } from "../../data/bulletin.service";
 import { BulletinDocumentForm } from "../../models/bulletin-document.form";
+import { BulletinForm } from "../../models/bulletin.form";
 
 @Component({
   selector: "cais-bulletin-document-form",
   templateUrl: "./bulletin-document-form.component.html",
   styleUrls: ["./bulletin-document-form.component.scss"],
 })
-export class BulletinDocumentFormComponent implements OnInit {
-  @Input() bulletinDocumentsTransactions: string;
-  @Input() dbData: any;
+export class BulletinDocumentFormComponent {
+  @Input() bulletinForm: BulletinForm;
+  @Input() documents: any;
+  @Input() documentTypes: any;
   @Input() isForPreview: boolean;
 
   @ViewChild("documentsGrid", {
@@ -36,39 +36,56 @@ export class BulletinDocumentFormComponent implements OnInit {
 
   public bulletinDocumentForm = new BulletinDocumentForm();
   public uploader: CustomFileUploader;
-  constructor(public toastr: CustomToastrService) {
+  protected validationMessage = "Грешка при валидациите!";
+
+  constructor(
+    public toastr: CustomToastrService,
+    public bulletinService: BulletinService,
+    private dialogService: NbDialogService
+  ) {
     this.initializeUploader();
   }
 
-  ngOnInit(): void {}
+  onOpenDialog() {
+    this.initializeUploader();
+  }
 
-  onAddOrUpdateBulletineDocumentRow() {
+  onSubmitBulletineDocument() {
+    debugger;
     if (!this.bulletinDocumentForm.group.valid) {
+      this.toastr.showToast("danger", this.validationMessage);
+
       this.bulletinDocumentForm.group.markAllAsTouched();
       return;
     }
 
+    let model = this.bulletinDocumentForm.group.value;
+    this.bulletinService
+      .saveDocument(this.bulletinForm.id.value, model)
+      .subscribe(
+        (res) => {
+          this.toastr.showToast("success", "Успешно добавен документ");
+          this.onAddDocumentRow();
+        },
+
+        (error) => {
+          this.showErrorMessage(
+            error,
+            "Възникна грешка при запис на данните: "
+          );
+        }
+      );
+  }
+
+  onAddDocumentRow() {
     if (this.bulletinDocumentForm.docTypeId.value) {
-      let docTypeName = (this.dbData.getDocumentTypes as any).find(
+      let docTypeName = (this.documentTypes as any).find(
         (x) => x.id === this.bulletinDocumentForm.docTypeId.value
       )?.name;
       this.bulletinDocumentForm.docTypeName.patchValue(docTypeName);
     }
 
-    debugger;
-    if (this.bulletinDocumentForm.documentContent) {
-      this.bulletinDocumentForm.documentContent.value;
-    }
-
-    let currentRow = this.documentsGrid.getRowByKey(
-      this.bulletinDocumentForm.id.value
-    );
-
-    if (currentRow) {
-      currentRow.update(this.bulletinDocumentForm.group.value);
-    } else {
-      this.documentsGrid.addRow(this.bulletinDocumentForm.group.value);
-    }
+    this.documentsGrid.addRow(this.bulletinDocumentForm.group.value);
 
     this.onCloseBulletinDocumentDilog();
   }
@@ -76,10 +93,65 @@ export class BulletinDocumentFormComponent implements OnInit {
   onCloseBulletinDocumentDilog() {
     this.bulletinDocumentForm = new BulletinDocumentForm();
     this.dialog.close();
-    this.uploader = CustomFileUploader.createUploader();
   }
 
-  initializeUploader() {
+  onRmoveDocument(item: FileItem) {
+    this.bulletinDocumentForm.documentContent.setValue(null);
+    item.remove();
+  }
+
+  openDeleteConfirmationDialog(documentId: string) {
+    this.dialogService
+      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((result) => {
+        if (result) {
+          debugger;
+          this.bulletinService
+            .deleteDocument(this.bulletinForm.id.value, documentId)
+            .subscribe(
+              (res) => {
+                this.toastr.showToast("success", "Успешно изтрит документ");
+
+                this.documentsGrid.deleteRow(documentId);
+                this.documentsGrid.data = this.documentsGrid.data.filter(
+                  (d) => d.id != documentId
+                );
+              },
+              (error) => {
+                this.showErrorMessage(
+                  error,
+                  "Възникна грешка по време на изтриване на файл"
+                );
+              }
+            );
+        }
+      });
+  }
+
+  download(id: string) {
+    this.bulletinService.downloadDocument(this.bulletinForm.id.value,id).subscribe((response: any) => {
+      debugger;
+      let blob = new Blob([response.body]);
+      window.URL.createObjectURL(blob);
+
+      let header = response.headers.get("Content-Disposition");
+      let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+      let fileName = "download";
+
+      var matches = filenameRegex.exec(header);
+      if (matches != null && matches[1]) {
+        fileName = matches[1].replace(/['"]/g, "");
+      }
+
+      fileSaver.saveAs(blob, fileName);
+    }),
+      (error) => {
+        this.showErrorMessage(error, "Грешка при изтегляне на файла: ");
+      };
+  }
+
+  private initializeUploader() {
     this.uploader = CustomFileUploader.createUploader();
 
     this.uploader.onWhenAddingFileFailed = (fileItem, response, status) => {
@@ -94,33 +166,28 @@ export class BulletinDocumentFormComponent implements OnInit {
       debugger;
       if (fileItem) {
         let file = fileItem.file;
-        const blob = new Blob([file.rawFile], { type: file.type }) ;
+        const blob = new Blob([file.rawFile], { type: file.type });
 
-        this.convertFile(blob).subscribe(base64 => {
+        this.convertFile(blob).subscribe((base64) => {
           this.bulletinDocumentForm.documentContent.setValue(base64);
           this.bulletinDocumentForm.mimeType.setValue(file.type);
+          this.bulletinDocumentForm.name.setValue(file.name);
         });
       }
     };
   }
 
-  convertFile(file : Blob) : Observable<string> {
+  private convertFile(file: Blob): Observable<string> {
     const result = new ReplaySubject<string>(1);
     const reader = new FileReader();
     reader.readAsBinaryString(file);
-    reader.onload = (event) => result.next(btoa(event.target.result.toString()));
+    reader.onload = (event) =>
+      result.next(btoa(event.target.result.toString()));
     return result;
   }
-  
-  onRmoveDocument(item: FileItem) {
-    this.bulletinDocumentForm.documentContent.setValue(null);
-    item.remove();
-  }
-  
-  public onDeleteBulletinDocument(event: IgxGridRowComponent) {
-    this.documentsGrid.deleteRow(event.rowData.id);
-    this.documentsGrid.data = this.documentsGrid.data.filter(
-      (d) => d.id != event.rowData.id
-    );
+
+  private showErrorMessage(error, message: string) {
+    var errorText = error.status + " " + error.statusText;
+    this.toastr.showBodyToast("danger", message, errorText);
   }
 }

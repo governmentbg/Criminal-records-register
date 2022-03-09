@@ -37,4 +37,16 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
       environment.apiUrl + `/bulletins/${id}/documents`
     );
   }
+
+  public saveDocument(bulletinId: string ,model: BulletinDocumentModel): Observable<any> {
+    return this.http.post<BulletinDocumentModel>(
+      environment.apiUrl + `/bulletins/${bulletinId}/documents`,
+      model
+    );
+  }
+
+  public downloadDocument(bulletinId: string ,documentId: string){
+    let url = environment.apiUrl + `/bulletins/${bulletinId}/documents-download/` + documentId;
+		return this.http.get(url, { responseType: 'blob', observe: 'response' });
+  }
 }

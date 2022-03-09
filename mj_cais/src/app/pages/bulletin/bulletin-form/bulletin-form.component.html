@@ -535,9 +535,10 @@
         <nb-tab tabTitle="Документи">
           <cais-bulletin-document-form
           #bulletineDocuments
-          [bulletinDocumentsTransactions]="fullForm.documentsTransactions"
-          [dbData]="dbData"
+          [bulletinForm]="fullForm"
           [isForPreview]="isForPreview"
+          [documents]="dbData.documents"
+          [documentTypes]="dbData.documentTypes"
         >
         </cais-bulletin-document-form>
         </nb-tab>

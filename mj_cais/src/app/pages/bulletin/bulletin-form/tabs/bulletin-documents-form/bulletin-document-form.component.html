@@ -1,68 +1,80 @@
-<app-grid-with-transactions [gridTransactions]="bulletinDocumentsTransactions">
-  <igx-grid
-    #documentsGrid
-    [height]="null"
-    [data]="dbData.documents"
-    [primaryKey]="'id'"
+<igx-grid #documentsGrid [height]="null" [data]="documents" [primaryKey]="'id'">
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <button
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="onOpenDialog(); dialogAdd.open()"
+          *ngIf="!isForPreview"
+        >
+          Добави &nbsp;
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="false"
+    [dataType]="'string'"
+    [hidden]="true"
   >
-    <igx-grid-toolbar>
+  </igx-column>
+  <igx-column
+    field="name"
+    header="Наименование"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    field="descr"
+    header="Описание"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+
+  <igx-column
+    field="docTypeId"
+    header="Идентификатор на вид документ"
+    dataType="number"
+    [hidden]="true"
+  >
+  </igx-column>
+  <igx-column
+    field="docTypeName"
+    header="Вид документ"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+
+  <igx-column
+    width="100px"
+    header="Действия"
+    [sortable]="false"
+    [filterable]="false"
+  >
+    <ng-template igxCell let-cell="cell">
       <button
-        igxButton="flat"
-        (click)="dialogAdd.open()"
-        *ngIf="!isForPreview"
-        class="addProdBtn"
-      >
-        <igx-icon>add</igx-icon> Добави
-      </button>
-    </igx-grid-toolbar>
-
-    <igx-column
-      field="id"
-      header="Идентификатор"
-      [sortable]="false"
-      [dataType]="'string'"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="name"
-      header="Наименование"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-    <igx-column
-      field="descr"
-      header="Описание"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="docTypeId"
-      header="Идентификатор на вид документ"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="docTypeName"
-      header="Вид документ"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-action-strip #actionstrip>
-      <button
-        title="Изтрии"
         igxButton="icon"
-        (click)="onDeleteBulletinDocument(actionstrip.context)"
-        igxRipple
+        [title]="'Изтегляне'"
+        (click)="download(cell.rowData.id)"
       >
-        <igx-icon>delete</igx-icon>
+        <nb-icon pack="fa" icon="download"></nb-icon>
       </button>
-    </igx-action-strip>
-  </igx-grid>
-</app-grid-with-transactions>
+
+      <button
+        igxButton="icon"
+        [title]="'Изтриване'"
+        (click)="openDeleteConfirmationDialog(cell.rowData.id)"
+      >
+        <nb-icon pack="fa" icon="trash"></nb-icon>
+      </button>
+    </ng-template>
+  </igx-column>
+</igx-grid>
 <igx-dialog #dialogAdd>
   <div class="dialogNewRecord" style="min-width: 1000px">
     <nb-card>
@@ -71,26 +83,22 @@
           <div class="d-flex align-items-center">
             <h5 style="font-weight: bold">Документ</h5>
           </div>
+
           <div class="d-flex">
             <div>
               <button
                 nbButton
                 matRipple
-                [status]="'success'"
-                (click)="onAddOrUpdateBulletineDocumentRow()"
-                type="button"
-                class="ml-2"
+                status="success"
+                (click)="onSubmitBulletineDocument()"
               >
                 Потвърди
               </button>
-            </div>
-            <div>
               <button
                 nbButton
                 matRipple
                 (click)="onCloseBulletinDocumentDilog()"
-                type="button"
-                class="ml-2"
+                class="ml-3"
               >
                 Откажи
               </button>
@@ -165,23 +173,12 @@
         </div>
 
         <div class="row mt-2">
-          <div class="form-group col-md-4">
-            <cais-input
-              [type]="'text'"
-              [label]="'Наименование'"
-              [inputFormControl]="bulletinDocumentForm.name"
-              [parentGroup]="bulletinDocumentForm.group"
-              [inputName]="'name'"
-            >
-            </cais-input>
-          </div>
-
           <div class="form-group col-md-8">
             <cais-autocomplete
               [label]="'Вид документ'"
               [inputFormControl]="bulletinDocumentForm.docTypeId"
               [parentGroup]="bulletinDocumentForm.group"
-              [items]="dbData.documentTypes"
+              [items]="documentTypes"
               [inputName]="'docTypeId'"
             >
             </cais-autocomplete>

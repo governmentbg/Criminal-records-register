@@ -66,6 +66,8 @@ import { CheckboxGroupComponent } from "./components/forms/inputs/checkbox-group
 import { RadioGroupComponent } from "./components/forms/inputs/radio-group/radio-group.component";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { GridWithTransactionsComponent } from "./components/grid/grid-with-transactions.component";
+import { NbCardModule } from "@nebular/theme";
+import { ConfirmDialogComponent } from "./components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 
 const socialLinks = [
   {
@@ -164,7 +166,8 @@ const COMPONENTS = [
   AutocompleteComponent,
   CheckboxGroupComponent,
   RadioGroupComponent,
-  GridWithTransactionsComponent
+  GridWithTransactionsComponent,
+  ConfirmDialogComponent
 ];
 
 @NgModule({
@@ -176,6 +179,7 @@ const COMPONENTS = [
     MatInputModule,
     MatDatepickerModule,
     MatMomentDateModule,
+    NbCardModule
   ],
   declarations: [...COMPONENTS],
   providers: [
