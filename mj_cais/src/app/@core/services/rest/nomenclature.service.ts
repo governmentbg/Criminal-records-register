@@ -33,6 +33,14 @@ string
     );
   }
 
+  public getBulletinStatuses(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    // todo:
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_bulletin_statuses`
+    );
+  }
+ 
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/b_case_types`);
   }

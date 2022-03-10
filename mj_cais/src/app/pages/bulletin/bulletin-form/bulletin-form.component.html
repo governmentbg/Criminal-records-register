@@ -39,7 +39,36 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Статус'"
+                [inputFormControl]="fullForm.statusId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'statusId'"
+                [items]="dbData.bulletinStatuses"
+              ></cais-autocomplete>
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Входящ номер на бюлетина към азбучния указател'"
+                [inputFormControl]="fullForm.alphabeticalIndex"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'ID на осъждане в ECRIS'"
+                [inputFormControl]="fullForm.ecrisConvictionId"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'date'"
@@ -52,6 +81,15 @@
 
           <div class="row">
             <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Съд изготвил бюлетината'"
+                [inputFormControl]="fullForm.bulletinAuthorityId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'bulletinAuthorityId'"
+                [items]="dbData.getIdDocIssuingAuthorities"
+              ></cais-autocomplete>
+            </div>
+            <div class="form-group col-md-6">
               <cais-input
                 [type]="'date'"
                 [label]="'Дата на съставяне на бюлетина'"
@@ -59,16 +97,8 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
-
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Входящ номер на бюлетина към азбучния указател '"
-                [inputFormControl]="fullForm.alphabeticalIndex"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
-            </div>
           </div>
+
           <div class="font-weight-bold">Съставил</div>
           <hr />
           <div class="row">
@@ -534,13 +564,15 @@
 
         <nb-tab tabTitle="Документи">
           <cais-bulletin-document-form
-          #bulletineDocuments
-          [bulletinForm]="fullForm"
-          [showAddDeleteButton]="(isEdit() && !isForPreview) || (!isEdit() && isForPreview)"
-          [documents]="dbData.documents"
-          [dbData]="dbData"
-        >
-        </cais-bulletin-document-form>
+            #bulletineDocuments
+            [bulletinForm]="fullForm"
+            [showAddDeleteButton]="
+              (isEdit() && !isForPreview) || (!isEdit() && isForPreview)
+            "
+            [documents]="dbData.documents"
+            [dbData]="dbData"
+          >
+          </cais-bulletin-document-form>
         </nb-tab>
 
         <nb-tab tabTitle="Одит">
