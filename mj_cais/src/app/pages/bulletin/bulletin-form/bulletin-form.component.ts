@@ -86,7 +86,6 @@ export class BulletinFormComponent
 
     this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
 
-    debugger;
     let docsTransactions =
       this.bulletineDocumentsForm.documentsGrid.transactions.getAggregatedChanges(
         true

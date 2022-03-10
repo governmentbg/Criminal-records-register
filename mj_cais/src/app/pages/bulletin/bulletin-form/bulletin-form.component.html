@@ -101,60 +101,53 @@
 
           <div class="font-weight-bold">Съставил</div>
           <hr />
+
           <div class="row">
-            <label class="label label-front col-md-2">Имена</label>
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
+                [label]="'Имена'"
                 [inputFormControl]="fullForm.createdByNames"
                 [parentGroup]="fullForm.group"
-              >
-              </cais-input>
+              ></cais-input>
             </div>
-          </div>
-          <div class="row">
-            <label class="label label-front col-md-2">Длъжност</label>
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
+                [label]="'Длъжност'"
                 [inputFormControl]="fullForm.createdByPosition"
                 [parentGroup]="fullForm.group"
-              >
-              </cais-input>
+              ></cais-input>
             </div>
           </div>
           <div class="font-weight-bold">Проверил</div>
           <hr />
           <div class="row">
-            <label class="label label-front col-md-2">Имена</label>
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
+                [label]="'Имена'"
                 [inputFormControl]="fullForm.approvedByNames"
                 [parentGroup]="fullForm.group"
-              >
-              </cais-input>
+              ></cais-input>
             </div>
-          </div>
-          <div class="row">
-            <label class="label label-front col-md-2">Длъжност</label>
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
+                [label]="'Длъжност'"
                 [inputFormControl]="fullForm.approvedByPosition"
                 [parentGroup]="fullForm.group"
-              >
-              </cais-input>
+              ></cais-input>
             </div>
           </div>
         </nb-tab>
 
         <nb-tab tabTitle="Данни за лицето">
           <div class="row">
-            <label class="label label-front col-md-2">Имена на кирилица</label>
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
+                [label]="'Име на кирилица'"
                 [inputFormControl]="fullForm.firstname"
                 [parentGroup]="fullForm.group"
               >
@@ -163,6 +156,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
+                [label]="'Презиме на кирилица'"
                 [inputFormControl]="fullForm.surname"
                 [parentGroup]="fullForm.group"
               >
@@ -171,18 +165,18 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
+                [label]="'Фамилия на кирилица'"
                 [inputFormControl]="fullForm.familyname"
                 [parentGroup]="fullForm.group"
               >
               </cais-input>
             </div>
           </div>
-
           <div class="row">
-            <label class="label label-front col-md-2">Имена на латиница</label>
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
+                [label]="'Име на латиница'"
                 [inputFormControl]="fullForm.firstnameLat"
                 [parentGroup]="fullForm.group"
               >
@@ -191,6 +185,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
+                [label]="'Презиме на латиница'"
                 [inputFormControl]="fullForm.surnameLat"
                 [parentGroup]="fullForm.group"
               >
@@ -199,6 +194,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
+                [label]="'Фамилия на латиница'"
                 [inputFormControl]="fullForm.familynameLat"
                 [parentGroup]="fullForm.group"
               >
@@ -283,7 +279,46 @@
               ></cais-input>
             </div>
           </div>
-
+          <div class="font-weight-bold">
+            Място на раждане
+          </div>
+          <hr />
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [label]="'Държава'"
+                [inputFormControl]="fullForm.birthCountryId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'birthCountryId'"
+                [items]="dbData.countries"
+              ></cais-autocomplete>
+            </div>
+            <div class="form-group col-md-3">
+              <label class="label">Област</label>
+              <input type="text" nbInput fullWidth value="N/A" />
+            </div>
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [label]="'Населено място'"
+                [inputFormControl]="fullForm.birthCityId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'birthCityId'"
+                [items]="dbData.cities"
+              ></cais-autocomplete>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-9">
+              <cais-input
+                [type]="'text'"
+                [label]="'Място на раждане - описание в случай на друго'"
+                [inputFormControl]="fullForm.birthPlaceOther"
+                [parentGroup]="fullForm.group"
+                [inputType]="InputTypeConstants.TextArea"
+                [rows]="3"
+              ></cais-input>
+            </div>
+          </div>
           <div class="row">
             <div class="form-group col-md-3">
               <label class="label">Националност</label>

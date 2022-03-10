@@ -34,13 +34,13 @@ export class BulletinOffenceForm {
     this.id = new FormControl(guid, [Validators.required]);
     this.offenceCatId = new FormControl(null, [Validators.required]);
     this.offenceCatName = new FormControl(null);
-    this.formOfGuilt = new FormControl(null);
-    this.remarks = new FormControl(null);
+    this.formOfGuilt = new FormControl(null, [Validators.required]);
+    this.remarks = new FormControl(null, [Validators.required]);
     this.ecrisOffCatId = new FormControl(null);
     this.ecrisOffCatName = new FormControl(null);
     this.legalProvisions = new FormControl(null);
-    this.offStartDate = new FormControl(null);
-    this.offEndDate = new FormControl(null);
+    this.offStartDate = new FormControl(null, [Validators.required]);
+    this.offEndDate = new FormControl(null, [Validators.required]);// тодо: крайна дата, ако е период
     this.offPlaceCountryId = new FormControl(null);
     this.offPlaceCountryName = new FormControl(null);
     this.offPlaceSubdivId = new FormControl(null);

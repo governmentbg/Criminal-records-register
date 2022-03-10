@@ -77,40 +77,40 @@ export class BulletinForm {
     this.version = new FormControl(null);
     this.csAuthorityId = new FormControl(null);
     this.registrationNumber = new FormControl(null);
-    this.sequentialIndex = new FormControl(null);
-    this.decisionNumber = new FormControl(null);
-    this.decisionDate = new FormControl(null);
-    this.decisionFinalDate = new FormControl(null);
-    this.decidingAuthId = new FormControl(null);
+    this.sequentialIndex = new FormControl(null, [Validators.required]);
+    this.decisionNumber = new FormControl(null, [Validators.required]);
+    this.decisionDate = new FormControl(null, [Validators.required]);
+    this.decisionFinalDate = new FormControl(null, [Validators.required]);
+    this.decidingAuthId = new FormControl(null, [Validators.required]);
     this.decisionTypeId = new FormControl(null);
     this.caseTypeId = new FormControl(null);
-    this.caseNumber = new FormControl(null);
-    this.caseYear = new FormControl(null);
+    this.caseNumber = new FormControl(null, [Validators.required]);
+    this.caseYear = new FormControl(null, [Validators.required]);
     this.convRemarks = new FormControl(null);
-    this.alphabeticalIndex = new FormControl(null);
+    this.alphabeticalIndex = new FormControl(null, [Validators.required]);
     this.decisionEcli = new FormControl(null);
-    this.bulletinCreateDate = new FormControl(null);
+    this.bulletinCreateDate = new FormControl(null, [Validators.required]);
     this.bulletinReceivedDate = new FormControl(null);
     this.bulletinAuthorityId = new FormControl(null);
-    this.createdByNames = new FormControl(null);
-    this.approvedByNames = new FormControl(null);
-    this.approvedByPosition = new FormControl(null);
-    this.statusId = new FormControl(null);
-    this.firstname = new FormControl(null);
-    this.surname = new FormControl(null);
-    this.familyname = new FormControl(null);
+    this.createdByNames = new FormControl(null, [Validators.required]);
+    this.approvedByNames = new FormControl(null, [Validators.required]);
+    this.approvedByPosition = new FormControl(null, [Validators.required]);
+    this.statusId = new FormControl(null, [Validators.required]);
+    this.firstname = new FormControl(null, [Validators.required]);
+    this.surname = new FormControl(null, [Validators.required]);
+    this.familyname = new FormControl(null, [Validators.required]);
     this.fullname = new FormControl(null);
-    this.firstnameLat = new FormControl(null);
-    this.surnameLat = new FormControl(null);
-    this.familynameLat = new FormControl(null);
-    this.sex = new FormControl(null);
-    this.egn = new FormControl(null);
-    this.ln = new FormControl(null);
-    this.lnch = new FormControl(null);
-    this.birthDate = new FormControl(null);
+    this.firstnameLat = new FormControl(null, [Validators.required]);
+    this.surnameLat = new FormControl(null, [Validators.required]);
+    this.familynameLat = new FormControl(null, [Validators.required]);
+    this.sex = new FormControl(null, [Validators.required]);
+    this.egn = new FormControl(null, [Validators.required]);
+    this.ln = new FormControl(null, [Validators.required]);
+    this.lnch = new FormControl(null, [Validators.required]);
+    this.birthDate = new FormControl(null, [Validators.required]);
     this.birthDatePrecision = new FormControl(null);
-    this.birthCityId = new FormControl(null);
-    this.birthCountryId = new FormControl(null);
+    this.birthCityId = new FormControl(null, [Validators.required]);
+    this.birthCountryId = new FormControl(null, [Validators.required]);
     this.birthPlaceOther = new FormControl(null);
     this.fullnameLat = new FormControl(null);
     this.idDocNumber = new FormControl(null);
@@ -206,7 +206,7 @@ export class BulletinForm {
       sanctionsTransactions: this.sanctionsTransactions,
       decisionsTransactions: this.decisionsTransactions,
       documentsTransactions: this.documentsTransactions,
-      ecrisConvictionId: this.ecrisConvictionId
+      ecrisConvictionId: this.ecrisConvictionId,
     });
   }
 }

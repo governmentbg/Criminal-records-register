@@ -62,7 +62,6 @@ export class BulletinDocumentFormComponent implements OnInit {
   }
 
   onSubmitBulletineDocument() {
-    debugger;
     if (!this.bulletinDocumentForm.group.valid) {
       this.toastr.showToast("danger", this.validationMessage);
 
@@ -116,7 +115,6 @@ export class BulletinDocumentFormComponent implements OnInit {
       .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
       .onClose.subscribe((result) => {
         if (result) {
-          debugger;
           this.bulletinService
             .deleteDocument(this.bulletinForm.id.value, documentId)
             .subscribe(
@@ -143,7 +141,6 @@ export class BulletinDocumentFormComponent implements OnInit {
     this.bulletinService
       .downloadDocument(this.bulletinForm.id.value, id)
       .subscribe((response: any) => {
-        debugger;
         let blob = new Blob([response.body]);
         window.URL.createObjectURL(blob);
 
@@ -176,7 +173,6 @@ export class BulletinDocumentFormComponent implements OnInit {
     };
 
     this.uploader.onAfterAddingFile = (fileItem) => {
-      debugger;
       if (fileItem) {
         let file = fileItem.file;
         const blob = new Blob([file.rawFile], { type: file.type });
@@ -205,7 +201,6 @@ export class BulletinDocumentFormComponent implements OnInit {
   }
 
   private initDocumentInfoModel() {
-    debugger;
     this.bulletinInfo.firstname = this.bulletinForm.firstname.value;
     this.bulletinInfo.surname = this.bulletinForm.surname.value;
     this.bulletinInfo.familyname = this.bulletinForm.familyname.value;

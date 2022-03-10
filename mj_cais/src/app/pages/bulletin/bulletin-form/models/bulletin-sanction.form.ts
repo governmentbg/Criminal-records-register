@@ -41,7 +41,7 @@ export class BulletinSanctionForm {
   constructor() {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.sanctCategoryId = new FormControl(null);
+    this.sanctCategoryId = new FormControl(null, [Validators.required]);
     this.sanctCategoryName = new FormControl(null);
     this.sanctProbCategId = new FormControl(null);
     this.sanctProbCategName = new FormControl(null);
@@ -64,13 +64,13 @@ export class BulletinSanctionForm {
     this.executionDurationMonths = new FormControl(null);
     this.executionDurationDays = new FormControl(null);
     this.executionDurationHours = new FormControl(null);
-    this.fineAmount = new FormControl(null);
+    this.fineAmount = new FormControl(null, [Validators.required]);
     this.detenctionDescr = new FormControl(null);
     this.suspentionDurationYears = new FormControl(null);
     this.suspentionDurationMonths = new FormControl(null);
     this.suspentionDurationDays = new FormControl(null);
     this.suspentionDurationHours = new FormControl(null);
-    this.probationDescr = new FormControl(null);
+    this.probationDescr = new FormControl(null, [Validators.required]);
     this.sanctActivityId = new FormControl(null);
     this.sanctActivityName = new FormControl(null);
     this.sanctActivityDescr = new FormControl(null);
