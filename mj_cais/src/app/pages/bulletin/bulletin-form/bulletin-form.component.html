@@ -538,7 +538,7 @@
           [bulletinForm]="fullForm"
           [showAddDeleteButton]="(isEdit() && !isForPreview) || (!isEdit() && isForPreview)"
           [documents]="dbData.documents"
-          [documentTypes]="dbData.documentTypes"
+          [dbData]="dbData"
         >
         </cais-bulletin-document-form>
         </nb-tab>
