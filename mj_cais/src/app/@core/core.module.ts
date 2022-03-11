@@ -14,6 +14,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from "@angular/material-moment-adapter";
 import { MatInputModule } from "@angular/material/input";
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { UserData } from "./data/users";
@@ -179,7 +180,9 @@ const COMPONENTS = [
     MatInputModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    NbCardModule
+    NbCardModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule
   ],
   declarations: [...COMPONENTS],
   providers: [
