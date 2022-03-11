@@ -44,6 +44,20 @@
       ></textarea>
     </ng-container>
 
+    <ng-container *ngIf="type === 'number'">
+      <input
+        type="{{ type }}"
+        nbInput
+        fullWidth
+        [formControl]="inputFormControl"
+        [ngClass]="validationCss()"
+        (blur)="onBlur($event)"
+        (keyup)="onKeyUp($event)"
+        (change)="onChange($event)"
+        [readonly]="isReadOnly"
+      />    
+    </ng-container>
+
     <ng-container *ngIf="type === 'date'">
       <nb-form-field>
         <input

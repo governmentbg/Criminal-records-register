@@ -40,7 +40,7 @@ export class BulletinOffenceForm {
     this.ecrisOffCatName = new FormControl(null);
     this.legalProvisions = new FormControl(null);
     this.offStartDate = new FormControl(null, [Validators.required]);
-    this.offEndDate = new FormControl(null, [Validators.required]);// тодо: крайна дата, ако е период
+    this.offEndDate = new FormControl(null, [Validators.required]); // тодо: крайна дата, ако е период
     this.offPlaceCountryId = new FormControl(null);
     this.offPlaceCountryName = new FormControl(null);
     this.offPlaceSubdivId = new FormControl(null);
@@ -48,7 +48,9 @@ export class BulletinOffenceForm {
     this.offPlaceCityId = new FormControl(null);
     this.offPlaceCityName = new FormControl(null);
     this.offPlaceDescr = new FormControl(null);
-    this.occurrences = new FormControl(null);
+     this.occurrences = new FormControl(null),//,  [     
+    //   numberValidator(/^[0-9]*$/i) // <-- Here's how you pass in the custom validator.
+    // ]);
     this.isContiniuous = new FormControl(null);
     this.respExemption = new FormControl(null);
     this.recidivism = new FormControl(null);
