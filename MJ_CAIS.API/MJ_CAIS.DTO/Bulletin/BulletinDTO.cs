@@ -64,7 +64,7 @@ namespace MJ_CAIS.DTO.Bulletin
         public DateTime? ConvRetPeriodEndDate { get; set; }
         public string? CreatedByPosition { get; set; }
         public string? BulletinType { get; set; }
-        public string EcrisConvictionId { get; set; }
+        public string? EcrisConvictionId { get; set; }
         
         public List<TransactionDTO<OffenceDTO>> OffancesTransactions { get; set; }
         public List<TransactionDTO<SanctionDTO>> SanctionsTransactions { get; set; }

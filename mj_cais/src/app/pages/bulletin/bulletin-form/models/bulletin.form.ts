@@ -95,7 +95,8 @@ export class BulletinForm {
     this.createdByNames = new FormControl(null, [Validators.required]);
     this.approvedByNames = new FormControl(null, [Validators.required]);
     this.approvedByPosition = new FormControl(null, [Validators.required]);
-    this.statusId = new FormControl(null, [Validators.required]);
+    //this.statusId = new FormControl(null, [Validators.required]); // todo:
+    this.statusId = new FormControl(null);
     this.firstname = new FormControl(null, [Validators.required]);
     this.surname = new FormControl(null, [Validators.required]);
     this.familyname = new FormControl(null, [Validators.required]);
@@ -109,8 +110,10 @@ export class BulletinForm {
     this.lnch = new FormControl(null, [Validators.required]);
     this.birthDate = new FormControl(null, [Validators.required]);
     this.birthDatePrecision = new FormControl(null);
-    this.birthCityId = new FormControl(null, [Validators.required]);
-    this.birthCountryId = new FormControl(null, [Validators.required]);
+    //this.birthCityId = new FormControl(null, [Validators.required]); // todo:
+    this.birthCityId = new FormControl(null);
+    //this.birthCountryId = new FormControl(null, [Validators.required]); // todo:
+    this.birthCountryId = new FormControl(null);
     this.birthPlaceOther = new FormControl(null);
     this.fullnameLat = new FormControl(null);
     this.idDocNumber = new FormControl(null);

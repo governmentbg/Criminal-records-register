@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using MJ_CAIS.DTO.Bulletin;
 
 namespace MJ_CAIS.FluentValidators.Bulletin
