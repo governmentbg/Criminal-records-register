@@ -33,6 +33,12 @@ export class PagesMenu {
         home: true,
       },
       {
+        title: "Осъдени в чужбина",
+        icon: "home-outline",
+        link: "/pages/fbbcs",
+        home: true,
+      },
+      {
         title: "FEATURES",
         group: true,
       },

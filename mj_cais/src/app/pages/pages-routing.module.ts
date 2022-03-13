@@ -7,6 +7,8 @@ import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component
 import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
+import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
+import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
 
 const routes: Routes = [
   {
@@ -40,6 +42,17 @@ const routes: Routes = [
         component: BulletinFormComponent,
         resolve: { dbData: BulletinResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "fbbcs",
+        component: FbbcOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "fbbcs/create",
+        component: FbbcFormComponent,
+        //resolve: { dbData: FbbcResolver },
         // canActivate: [AuthGuard],
       },
       {

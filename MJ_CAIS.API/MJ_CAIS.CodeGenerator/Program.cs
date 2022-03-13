@@ -11,10 +11,10 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "BBulletin",
-                SingleName = "Bulletin",
-                MultipleName = "Bulletins",
-                AngularModuleName = "bulletin",
+                EntityName = "Fbbc",
+                SingleName = "Fbbc",
+                MultipleName = "Fbbcs",
+                AngularModuleName = "fbbc",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
@@ -28,7 +28,7 @@ namespace MJ_CAIS.CodeGenerator
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
             //ClassGenerator.GenerateAngularFormModel(projectPath, parameters);
-            ClassGenerator.GenerateAngularService(projectPath, parameters);
+            //ClassGenerator.GenerateAngularService(projectPath, parameters);
         }
     }
 }
