@@ -1,7 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.Web.Setup;
-using MJ_CAIS.AutoMapperContainer.MappingProfiles;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.AutoMapperContainer.MappingProfiles;
+using MJ_CAIS.FluentValidators;
+using MJ_CAIS.FluentValidators.Bulletin;
+using MJ_CAIS.Web.Setup;
 
 namespace MJ_CAIS.Web
 {
@@ -24,6 +27,12 @@ namespace MJ_CAIS.Web
             builder.Services.AddControllers(opt =>
             {
                 opt.UseCentralRoutePrefix(new RouteAttribute("api"));
+            });
+
+            builder.Services.AddFluentValidation(conf =>
+            {
+                conf.RegisterValidatorsFromAssembly(typeof(DocumentValidator).Assembly);
+                conf.ImplicitlyValidateChildProperties = true;
             });
 
             var app = builder.Build();

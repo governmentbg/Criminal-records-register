@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
@@ -80,6 +81,89 @@ namespace MJ_CAIS.Services
                 .ProjectTo<DecisionDTO>(mapper.ConfigurationProvider);
 
             return await Task.FromResult(result);
+        }
+
+        public async Task<IQueryable<DocumentDTO>> GetDocumentsByBulletinIdAsync(string aId)
+        {
+            var dbContext = _bulletinRepository.GetDbContext();
+
+            var result = dbContext.DDocuments
+                .AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.DocContent)
+                .Where(x => x.BulletinId == aId)
+                .ProjectTo<DocumentDTO>(mapper.ConfigurationProvider);
+
+            return await Task.FromResult(result);
+        }
+
+        public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
+        {
+            if (aInDto == null)
+                throw new ArgumentNullException(nameof(aInDto));
+
+            if (aInDto.DocumentContent?.Length == 0)
+                throw new ArgumentNullException("Documetn is empty");
+
+            var context = _bulletinRepository.GetDbContext();
+            var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
+                Guid.NewGuid().ToString() :
+                aInDto.DocumentContentId;
+
+            var document = mapper.Map<DocumentDTO, DDocument>(aInDto);
+            document.BulletinId = bulletinId;
+            document.DocContentId = docContentId;
+
+            var documentContent = new DDocContent()
+            {
+                Id = docContentId,
+                Content = aInDto.DocumentContent,
+                MimeType = aInDto.MimeType
+            };
+
+            context.Add(document);
+            context.Add(documentContent);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteComplaintDocumentAsync(string documentId)
+        {
+            var context = _bulletinRepository.GetDbContext();
+
+            var document = await context.Set<DDocument>().AsNoTracking()
+                .Include(x => x.DocContent)
+                .FirstOrDefaultAsync(x => x.Id == documentId);
+
+            if (document == null)
+            {
+                throw new ArgumentException($"Document with id: {documentId} is missing");
+            }
+
+            document.EntityState = EntityStateEnum.Deleted;
+            if (document.DocContent != null)
+            {
+                document.DocContent.EntityState = EntityStateEnum.Deleted;
+            }
+
+            await context.SaveEntityAsync(document, true);
+        }
+
+        public async Task<DocumentDTO> GetDocumentContentAsync(string documentId)
+        {
+            var context = _bulletinRepository.GetDbContext();
+
+            var document = await context.Set<DDocument>().AsNoTracking()
+                .Include(x => x.DocContent)
+                .FirstOrDefaultAsync(x => x.Id == documentId);
+
+            if (document == null || document.DocContent == null) return null;
+
+            return new DocumentDTO
+            {
+                Name = document.Name,
+                DocumentContent = document.DocContent.Content,
+                MimeType = document.DocContent.MimeType
+            };           
         }
 
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)

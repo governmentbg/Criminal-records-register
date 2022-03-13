@@ -152,7 +152,6 @@ export class RemoteGridWithStatePersistance<
   }
 
   protected errorHandler = (errorResponse) => {
-    debugger;
     let toastr = this.injector.get<CustomToastrService>(CustomToastrService);
 
     let title = this.dangerMessage;

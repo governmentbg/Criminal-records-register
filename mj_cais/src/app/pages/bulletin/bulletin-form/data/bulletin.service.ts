@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { environment } from "../../../../../environments/environment";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { BulletinDecisionModel } from "../models/bulletin-decision.model";
+import { BulletinDocumentModel } from "../models/bulletin-document.model";
 import { BulletinOffenceModel } from "../models/bulletin-offence.model";
 import { BulletinSanctionModel } from "../models/bulletin-sanction.model";
 import { BulletinModel } from "../models/bulletin.model";
@@ -29,5 +30,23 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     return this.http.get<BulletinDecisionModel[]>(
       environment.apiUrl + `/bulletins/${id}/decisions`
     );
+  }
+
+  public getDocuments(id: string): Observable<BulletinDocumentModel[]> {
+    return this.http.get<BulletinDocumentModel[]>(
+      environment.apiUrl + `/bulletins/${id}/documents`
+    );
+  }
+
+  public saveDocument(bulletinId: string ,model: BulletinDocumentModel): Observable<any> {
+    return this.http.post<BulletinDocumentModel>(
+      environment.apiUrl + `/bulletins/${bulletinId}/documents`,
+      model
+    );
+  }
+
+  public downloadDocument(bulletinId: string ,documentId: string){
+    let url = environment.apiUrl + `/bulletins/${bulletinId}/documents-download/` + documentId;
+		return this.http.get(url, { responseType: 'blob', observe: 'response' });
   }
 }

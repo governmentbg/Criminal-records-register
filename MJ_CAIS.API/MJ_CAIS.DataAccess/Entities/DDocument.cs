@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class DDocument
+    public partial class DDocument : BaseEntity
     {
-        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? DocTypeId { get; set; }
         public string? PersonId { get; set; }
@@ -18,7 +17,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? EisppId { get; set; }
         public string? DocContentId { get; set; }
         public string? BulletinId { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual DDocContent? DocContent { get; set; }

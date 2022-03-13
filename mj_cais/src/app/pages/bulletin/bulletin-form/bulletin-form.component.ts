@@ -8,6 +8,7 @@ import { BulletinService } from "./data/bulletin.service";
 import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bulletin-offences-form.component";
 import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bulletin-decision-form.component";
+import { BulletinDocumentFormComponent } from "./tabs/bulletin-documents-form/bulletin-document-form.component";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -26,20 +27,22 @@ export class BulletinFormComponent
   @ViewChild("bulletineOffences", {
     read: BulletinOffencesFormComponent,
   })
-  
   public bulletineOffencesForm: BulletinOffencesFormComponent;
 
   @ViewChild("bulletineSanctions", {
     read: BulletinSanctionsFormComponent,
   })
-  
   public bulletineSanctionsForm: BulletinSanctionsFormComponent;
 
   @ViewChild("bulletineDecisions", {
     read: BulletinDecisionFormComponent,
   })
-  
   public bulletineDescitionForm: BulletinDecisionFormComponent;
+
+  @ViewChild("bulletineDocuments", {
+    read: BulletinDocumentFormComponent,
+  })
+  public bulletineDocumentsForm: BulletinDocumentFormComponent;
 
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
@@ -61,22 +64,35 @@ export class BulletinFormComponent
     this.formFinishedLoading.emit();
   }
 
-  submitFunction = () => { 
+  submitFunction = () => {
     let offancesTransactions =
-    this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(true);
+      this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
+        true
+      );
 
     this.fullForm.offancesTransactions.setValue(offancesTransactions);
 
     let sanctionsTransactions =
-    this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(true);
+      this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
+        true
+      );
 
     this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
 
     let decisionsTransactions =
-    this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(true);
+      this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
+        true
+      );
 
     this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
-    
+
+    let docsTransactions =
+      this.bulletineDocumentsForm.documentsGrid.transactions.getAggregatedChanges(
+        true
+      );
+
+    this.fullForm.documentsTransactions.setValue(docsTransactions);
+
     this.validateAndSave(this.fullForm);
   };
 }

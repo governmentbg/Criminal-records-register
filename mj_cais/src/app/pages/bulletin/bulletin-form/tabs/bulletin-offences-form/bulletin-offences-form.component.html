@@ -34,7 +34,7 @@
     </igx-column>
     <igx-column
       field="offenceCatName"
-      header="Код-националносто правот"
+      header="Код-националното право"
       [sortable]="true"
       [dataType]="'string'"
     ></igx-column>
@@ -270,7 +270,7 @@
         <div class="row mt-2">
           <div class="form-group col-md-4">
             <cais-input
-              [type]="'date'"
+              [type]="'datetime'"
               [label]="'Начална дата на извършване на деянието'"
               [inputFormControl]="bulletinOffenceForm.offStartDate"
               [parentGroup]="bulletinOffenceForm.group"
@@ -279,7 +279,7 @@
           </div>
           <div class="form-group col-md-4">
             <cais-input
-              [type]="'date'"
+              [type]="'datetime'"
               [label]="'Крайна дата на извършване на деянието'"
               [inputFormControl]="bulletinOffenceForm.offEndDate"
               [parentGroup]="bulletinOffenceForm.group"
@@ -334,7 +334,7 @@
               [inputFormControl]="bulletinOffenceForm.offPlaceDescr"
               [parentGroup]="bulletinOffenceForm.group"
               [inputName]="'offPlaceDescr'"
-              [inputType]="'TextArea'"
+              [inputType]="InputTypeConstants.TextArea"
             >
             </cais-input>
           </div>
@@ -342,7 +342,7 @@
         <div class="row">
           <div class="form-group col-md-8">
             <cais-input
-              [type]="'text'"
+              [type]="'number'"
               [label]="'Колко пъти е извършено'"
               [inputFormControl]="bulletinOffenceForm.occurrences"
               [parentGroup]="bulletinOffenceForm.group"
@@ -409,8 +409,6 @@
             >
             </cais-autocomplete>
           </div>
-        </div>
-        <div class="row mt-2">
           <div class="form-group col-md-4">
             <cais-autocomplete
               [label]="'Степен на участие'"

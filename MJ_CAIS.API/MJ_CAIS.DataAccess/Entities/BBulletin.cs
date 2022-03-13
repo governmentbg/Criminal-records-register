@@ -81,6 +81,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
         public DateTime? DeleteDate { get; set; }
         public DateTime? RehabilitationDate { get; set; }
+        public string? EcrisConvictionId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

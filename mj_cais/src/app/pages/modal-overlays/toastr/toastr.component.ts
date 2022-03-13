@@ -78,7 +78,6 @@ export class ToastrComponent {
     const titleContent = title ? `. ${title}` : "";
 
     this.index += 1;
-    debugger;
     this.toastrService.show(body, `Toast ${this.index}${titleContent}`, config);
   }
 }

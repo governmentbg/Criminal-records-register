@@ -6,6 +6,7 @@ import {
 } from "@infragistics/igniteui-angular";
 import { BulletinOffenceForm } from "../../models/bulletin-offance.form";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { InputTypeConstants } from "../../../../../@core/constants/input-type.constants";
 
 @Component({
   selector: "cais-bulletin-offences-form",
@@ -16,6 +17,7 @@ export class BulletinOffencesFormComponent implements OnInit {
   @Input() bulletinOffenceTransactions: string;
   @Input() dbData: any;
   @Input() isForPreview: boolean;
+  public InputTypeConstants = InputTypeConstants;
 
   @ViewChild("offencesGrid", {
     read: IgxGridComponent,

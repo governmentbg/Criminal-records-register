@@ -13,9 +13,9 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
     this.url = this.baseUrl + "/api/" + this.endpoint;
   }
 
-  public deleteDocument(aId: number, uId: string): Observable<any> {
+  public deleteDocument(aId: number, documentId: string): Observable<any> {
     return this.http.delete(
-      this.baseUrl + `/api/${this.endpoint}/${aId}/documents/${uId}`
+      this.baseUrl + `/api/${this.endpoint}/${aId}/documents/${documentId}`
     );
   }
 }

@@ -1,0 +1,25 @@
+<nb-card>
+    <nb-card-header>Сигурни ли сте?</nb-card-header>
+    <nb-card-body>
+      <h5 class="mt-0">Тази операция е необратима!</h5>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button
+            nbButton
+            matRipple
+            fullWidth
+            status="danger"
+            (click)="success()"
+          >
+            Продължи
+          </button>
+        </div>
+        <div class="col-6">
+          <button nbButton matRipple fullWidth (click)="dismiss()">Отказ</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+  

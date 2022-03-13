@@ -253,6 +253,11 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("DELETE_DATE");
 
+                entity.Property(e => e.EcrisConvictionId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ECRIS_CONVICTION_ID");
+
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
@@ -1347,6 +1352,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.Visible)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VISIBLE");
+
                 entity.Property(e => e.Xslt)
                     .HasMaxLength(18)
                     .IsUnicode(false)
@@ -1439,10 +1448,6 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("PERSON_ID");
 
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.DDocuments)
                     .HasForeignKey(d => d.BulletinId)
@@ -1526,6 +1531,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ID");
+
+                entity.Property(e => e.Approved)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("APPROVED");
 
                 entity.Property(e => e.EcrisMsgId)
                     .HasMaxLength(50)
@@ -1782,21 +1791,17 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("BIRTH_COUNTRY_ID");
 
-                entity.Property(e => e.BirthDay)
+                entity.Property(e => e.BirthDate)
                     .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_DAY");
+                    .HasColumnName("BIRTH_DATE");
 
-                entity.Property(e => e.BirthMonth)
+                entity.Property(e => e.BirthDatePrec)
                     .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_MONTH");
+                    .HasColumnName("BIRTH_DATE_PREC");
 
                 entity.Property(e => e.BirthPlace)
                     .HasMaxLength(200)
                     .HasColumnName("BIRTH_PLACE");
-
-                entity.Property(e => e.BirthYear)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_YEAR");
 
                 entity.Property(e => e.BirtyCountryDescr).HasColumnName("BIRTY_COUNTRY_DESCR");
 

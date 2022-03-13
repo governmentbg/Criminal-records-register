@@ -25,9 +25,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? BirthCityId { get; set; }
         public string? BirtyCountryDescr { get; set; }
         public string? BirthCountryId { get; set; }
-        public decimal? BirthYear { get; set; }
-        public decimal? BirthMonth { get; set; }
-        public decimal? BirthDay { get; set; }
+        public decimal? BirthDate { get; set; }
+        public decimal? BirthDatePrec { get; set; }
         public DateTime? OffenceStartDate { get; set; }
         public DateTime? OffenceEndDate { get; set; }
         public string? Annotation { get; set; }

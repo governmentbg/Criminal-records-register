@@ -40,8 +40,22 @@
         fullWidth
         [formControl]="inputFormControl"
         [ngClass]="validationCss()"
-        rows="{{rows}}"
+        rows="{{ rows }}"
       ></textarea>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'number'">
+      <input
+        type="{{ type }}"
+        nbInput
+        fullWidth
+        [formControl]="inputFormControl"
+        [ngClass]="validationCss()"
+        (blur)="onBlur($event)"
+        (keyup)="onKeyUp($event)"
+        (change)="onChange($event)"
+        [readonly]="isReadOnly"
+      />
     </ng-container>
 
     <ng-container *ngIf="type === 'date'">
@@ -68,6 +82,28 @@
           [disabled]="isReadOnly || inputFormControl.disabled"
         ></mat-datepicker>
       </nb-form-field>
+    </ng-container>
+    <ng-container *ngIf="type == 'datetime'">
+      <div style="display: flex; align-items: center">
+        <input
+          matInput
+          nbInput
+          fullWidth
+          [ngxMatDatetimePicker]="formpicker"
+          [formControl]="inputFormControl"
+          [disabled]="isReadOnly || inputFormControl.disabled"
+        />
+        <mat-datepicker-toggle
+          style="position: absolute; right: 18px"
+          matSuffix
+          [for]="formpicker"
+        ></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #formpicker
+          [showSeconds]="true"
+        >
+        </ngx-mat-datetime-picker>
+      </div>
     </ng-container>
   </ng-container>
 
