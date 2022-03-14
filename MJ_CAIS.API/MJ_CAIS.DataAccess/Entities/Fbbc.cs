@@ -41,10 +41,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? GdkpCaseNumber { get; set; }
         public string? GdkpTom { get; set; }
         public string? GdkpStr { get; set; }
-        public string? NjrCountry { get; set; }
-        public string? NjrIdentifier { get; set; }
-        public string? NjrFirstId { get; set; }
-        public string? EcrisMsgId { get; set; }
         public string? EcrisConvId { get; set; }
         public string? EcrisUpdConvTypeId { get; set; }
         public string? EcrisUpdConvId { get; set; }
@@ -59,12 +55,12 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? DestroyedDate { get; set; }
         public string? PersonId { get; set; }
         public decimal? Version { get; set; }
+        public string? StatusCode { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
         public virtual GCountry? Country { get; set; }
         public virtual FbbcDocType? DocType { get; set; }
-        public virtual EEcrisMessage? EcrisMsg { get; set; }
         public virtual PPerson? Person { get; set; }
         public virtual FbbcSanctType? SanctionType { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }

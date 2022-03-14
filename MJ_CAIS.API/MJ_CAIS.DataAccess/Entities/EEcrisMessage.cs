@@ -9,7 +9,6 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             DDocuments = new HashSet<DDocument>();
             EEcrisIdentifications = new HashSet<EEcrisIdentification>();
-            Fbbcs = new HashSet<Fbbc>();
             InverseRequestMsg = new HashSet<EEcrisMessage>();
         }
 
@@ -27,6 +26,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? BirthDate { get; set; }
         public string? BirthCountry { get; set; }
         public string? BirthCity { get; set; }
+        public string? FbbcId { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }
@@ -36,7 +36,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual EEcrisAuthority? ToAuth { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }
-        public virtual ICollection<Fbbc> Fbbcs { get; set; }
         public virtual ICollection<EEcrisMessage> InverseRequestMsg { get; set; }
     }
 }

@@ -15,6 +15,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? DecidingAuthId { get; set; }
         public decimal? IsCentral { get; set; }
         public string? OldId { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidTo { get; set; }
 
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }

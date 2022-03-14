@@ -49,6 +49,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<Fbbc> Fbbcs { get; set; } = null!;
         public virtual DbSet<FbbcDocType> FbbcDocTypes { get; set; } = null!;
         public virtual DbSet<FbbcSanctType> FbbcSanctTypes { get; set; } = null!;
+        public virtual DbSet<FbbcStatus> FbbcStatuses { get; set; } = null!;
         public virtual DbSet<GCity> GCities { get; set; } = null!;
         public virtual DbSet<GCountry> GCountries { get; set; } = null!;
         public virtual DbSet<GCountrySubdivision> GCountrySubdivisions { get; set; } = null!;
@@ -58,6 +59,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
         public virtual DbSet<PPersGroup> PPersGroups { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
+        public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -1352,6 +1354,14 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
+
                 entity.Property(e => e.Visible)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VISIBLE");
@@ -1583,6 +1593,8 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.EcrisMsgStatus, "XIF6E_ECRIS_MESSAGES");
 
+                entity.HasIndex(e => e.FbbcId, "XIF7E_ECRIS_MESSAGES");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -1604,6 +1616,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ECRIS_MSG_STATUS");
+
+                entity.Property(e => e.FbbcId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FBBC_ID");
 
                 entity.Property(e => e.FromAuthId)
                     .HasMaxLength(50)
@@ -1768,9 +1785,9 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.BirthCountryId, "XIF5FBBC");
 
-                entity.HasIndex(e => e.EcrisMsgId, "XIF6FBBC");
-
                 entity.HasIndex(e => e.PersonId, "XIF7FBBC");
+
+                entity.HasIndex(e => e.StatusCode, "XIF8FBBC");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -1838,11 +1855,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.EcrisConvId)
                     .HasMaxLength(100)
                     .HasColumnName("ECRIS_CONV_ID");
-
-                entity.Property(e => e.EcrisMsgId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ECRIS_MSG_ID");
 
                 entity.Property(e => e.EcrisUpdConvId)
                     .HasMaxLength(100)
@@ -1916,20 +1928,6 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("MOTHER_SURNAME");
 
-                entity.Property(e => e.NjrCountry)
-                    .HasMaxLength(18)
-                    .IsUnicode(false)
-                    .HasColumnName("NJR_COUNTRY")
-                    .IsFixedLength();
-
-                entity.Property(e => e.NjrFirstId)
-                    .HasMaxLength(100)
-                    .HasColumnName("NJR_FIRST_ID");
-
-                entity.Property(e => e.NjrIdentifier)
-                    .HasMaxLength(100)
-                    .HasColumnName("NJR_IDENTIFIER");
-
                 entity.Property(e => e.OffenceEndDate)
                     .HasColumnType("DATE")
                     .HasColumnName("OFFENCE_END_DATE");
@@ -1955,6 +1953,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.SequentialIndex)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("SEQUENTIAL_INDEX");
+
+                entity.Property(e => e.StatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_CODE");
 
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
@@ -1989,11 +1992,6 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.Fbbcs)
                     .HasForeignKey(d => d.DocTypeId)
                     .HasConstraintName("FK_FBBC_FBBC_DOC_TYPES");
-
-                entity.HasOne(d => d.EcrisMsg)
-                    .WithMany(p => p.Fbbcs)
-                    .HasForeignKey(d => d.EcrisMsgId)
-                    .HasConstraintName("FK_FBBC_E_ECRIS_MESSAGES");
 
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.Fbbcs)
@@ -2035,6 +2033,23 @@ namespace MJ_CAIS.DataAccess
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(200)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<FbbcStatus>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKFBBC_STATUSES");
+
+                entity.ToTable("FBBC_STATUSES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("CODE");
 
                 entity.Property(e => e.Name)
@@ -2202,6 +2217,14 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("OLD_ID");
+
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
 
                 entity.HasOne(d => d.DecidingAuth)
                     .WithMany(p => p.GCsAuthorities)
@@ -2471,6 +2494,212 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.PPeople)
                     .HasForeignKey(d => d.BirthCountryId)
                     .HasConstraintName("FK_P_PERSON_G_COUNTRIES");
+            });
+
+            modelBuilder.Entity<ZImportFbbc>(entity =>
+            {
+                entity.ToTable("Z_IMPORT_FBBC");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Anotacia)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("ANOTACIA");
+
+                entity.Property(e => e.Birthcountry)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("BIRTHCOUNTRY");
+
+                entity.Property(e => e.Birthday)
+                    .HasMaxLength(8)
+                    .HasColumnName("BIRTHDAY");
+
+                entity.Property(e => e.Birthplace)
+                    .HasMaxLength(200)
+                    .HasColumnName("BIRTHPLACE");
+
+                entity.Property(e => e.Country)
+                    .HasMaxLength(32)
+                    .HasColumnName("COUNTRY")
+                    .IsFixedLength();
+
+                entity.Property(e => e.CountryId)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("COUNTRY_ID");
+
+                entity.Property(e => e.DateBegin)
+                    .HasMaxLength(10)
+                    .HasColumnName("DATE_BEGIN");
+
+                entity.Property(e => e.DateDecision)
+                    .HasMaxLength(8)
+                    .HasColumnName("DATE_DECISION");
+
+                entity.Property(e => e.DateDecisionFinal)
+                    .HasMaxLength(8)
+                    .HasColumnName("DATE_DECISION_FINAL");
+
+                entity.Property(e => e.DateDestroyed)
+                    .HasMaxLength(8)
+                    .HasColumnName("DATE_DESTROYED");
+
+                entity.Property(e => e.DateEnd)
+                    .HasMaxLength(10)
+                    .HasColumnName("DATE_END");
+
+                entity.Property(e => e.DateIns)
+                    .HasColumnType("DATE")
+                    .HasColumnName("DATE_INS");
+
+                entity.Property(e => e.DateIssue)
+                    .HasMaxLength(8)
+                    .HasColumnName("DATE_ISSUE");
+
+                entity.Property(e => e.DateLastUpd)
+                    .HasColumnType("DATE")
+                    .HasColumnName("DATE_LAST_UPD");
+
+                entity.Property(e => e.DateReceived)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .HasColumnName("DATE_RECEIVED")
+                    .IsFixedLength();
+
+                entity.Property(e => e.EcrisConvId)
+                    .HasMaxLength(20)
+                    .HasColumnName("ECRIS_CONV_ID");
+
+                entity.Property(e => e.EcrisCountry)
+                    .HasMaxLength(2)
+                    .HasColumnName("ECRIS_COUNTRY");
+
+                entity.Property(e => e.EcrisId)
+                    .HasMaxLength(25)
+                    .HasColumnName("ECRIS_ID");
+
+                entity.Property(e => e.EcrisRelatedConvId)
+                    .HasMaxLength(128)
+                    .HasColumnName("ECRIS_RELATED_CONV_ID");
+
+                entity.Property(e => e.EcrisUpdatedConvId)
+                    .HasMaxLength(20)
+                    .HasColumnName("ECRIS_UPDATED_CONV_ID");
+
+                entity.Property(e => e.EcrisUpdatedConvType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ECRIS_UPDATED_CONV_TYPE");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(10)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.Family)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILY");
+
+                entity.Property(e => e.FatherFamily)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_FAMILY");
+
+                entity.Property(e => e.FatherFname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_FNAME");
+
+                entity.Property(e => e.FatherMname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_MNAME");
+
+                entity.Property(e => e.FlagAdmPenality)
+                    .HasMaxLength(1)
+                    .HasColumnName("FLAG_ADM_PENALITY");
+
+                entity.Property(e => e.Fname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FNAME");
+
+                entity.Property(e => e.GdkpDate)
+                    .HasMaxLength(10)
+                    .HasColumnName("GDKP_DATE");
+
+                entity.Property(e => e.GdkpDelo)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("GDKP_DELO");
+
+                entity.Property(e => e.GdkpNumber)
+                    .HasMaxLength(8)
+                    .HasColumnName("GDKP_NUMBER");
+
+                entity.Property(e => e.GdkpStr)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("GDKP_STR");
+
+                entity.Property(e => e.GdkpTom)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("GDKP_TOM");
+
+                entity.Property(e => e.ImageFileName)
+                    .HasMaxLength(1028)
+                    .HasColumnName("IMAGE_FILE_NAME");
+
+                entity.Property(e => e.Judge)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("JUDGE");
+
+                entity.Property(e => e.Mname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MNAME");
+
+                entity.Property(e => e.MotherFamily)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_FAMILY");
+
+                entity.Property(e => e.MotherFname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_FNAME");
+
+                entity.Property(e => e.MotherMname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_MNAME");
+
+                entity.Property(e => e.NjrCountry)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .HasColumnName("NJR_COUNTRY")
+                    .IsFixedLength();
+
+                entity.Property(e => e.NjrId)
+                    .HasMaxLength(20)
+                    .HasColumnName("NJR_ID");
+
+                entity.Property(e => e.NjrIdFirst)
+                    .HasMaxLength(20)
+                    .HasColumnName("NJR_ID_FIRST");
+
+                entity.Property(e => e.RegdocType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("REGDOC_TYPE");
+
+                entity.Property(e => e.SequentialNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("SEQUENTIAL_NUMBER");
+
+                entity.Property(e => e.UserEntered)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("USER_ENTERED");
+
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(200)
+                    .HasColumnName("USER_NAME");
+
+                entity.Property(e => e.UserUpdated)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("USER_UPDATED");
+
+                entity.Property(e => e.XmlData)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("XML_DATA");
             });
 
             OnModelCreatingPartial(modelBuilder);
