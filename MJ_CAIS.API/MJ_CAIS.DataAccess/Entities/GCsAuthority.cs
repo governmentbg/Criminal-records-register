@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCsAuthority
+    public partial class GCsAuthority : IBaseNomenclature
     {
         public GCsAuthority()
         {

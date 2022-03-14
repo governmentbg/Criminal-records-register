@@ -38,8 +38,6 @@ export class BulletinResolver implements Resolve<any> {
       nationalities: this.nomenclatureService.getNationalities(),
       idDocumentCategoryTypes:
         this.nomenclatureService.getIdDocumentCategoryTypes(),
-      idDocIssuingAuthorities:
-        this.nomenclatureService.getIdDocIssuingAuthorities(),
       decisionTypes: this.nomenclatureService.getDecisionTypes(),
       decidingAuthorities: this.nomenclatureService.getDecidingAuthorities(),
       caseTypes: this.nomenclatureService.getCaseTypes(),
@@ -80,7 +78,6 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalities: Observable<BaseNomenclatureModel[]>;
   public idDocumentCategoryTypes: Observable<BaseNomenclatureModel[]>;
-  public idDocIssuingAuthorities: Observable<BaseNomenclatureModel[]>;
   public decisionTypes: Observable<BaseNomenclatureModel[]>;
   public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
   public caseTypes: Observable<BaseNomenclatureModel[]>;

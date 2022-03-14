@@ -59,10 +59,6 @@ string
     );
   }
 
-  public getIdDocIssuingAuthorities(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-  }
-
   public getDecisionTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_decision_types`
@@ -136,15 +132,12 @@ string
   }
 
   public getCsAuthorities(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-    // todo: 
-    // return this.http.get<BaseNomenclatureModel[]>(
-    //   `${this.url}/g_cs_authorities`
-    // );
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/g_cs_authorities`
+    );
   }
 
   public getDocumentTypes(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/d_doc_types`
     );

@@ -279,9 +279,7 @@
               ></cais-input>
             </div>
           </div>
-          <div class="font-weight-bold">
-            Място на раждане
-          </div>
+          <div class="font-weight-bold">Място на раждане</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-3">
@@ -368,13 +366,12 @@
 
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-autocomplete
+              <cais-input
+                [type]="'text'"
                 [label]="'Издаващ орган'"
                 [inputFormControl]="fullForm.idDocIssuingAuthority"
                 [parentGroup]="fullForm.group"
-                [inputName]="'idDocIssuingAuthority'"
-                [items]="dbData.idDocIssuingAuthorities"
-              ></cais-autocomplete>
+              ></cais-input>
             </div>
             <div class="form-group col-md-3">
               <cais-input
@@ -423,7 +420,7 @@
               ></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <label class="label">Майка - Дата на раждане</label>
+              <label class="label">Майка - Пълно име</label>
               <input type="text" nbInput fullWidth value="N/A" />
             </div>
           </div>
@@ -454,7 +451,7 @@
               ></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <label class="label">Баща - Дата на раждане</label>
+              <label class="label">Баща - Пълно име</label>
               <input type="text" nbInput fullWidth value="N/A" />
             </div>
           </div>
