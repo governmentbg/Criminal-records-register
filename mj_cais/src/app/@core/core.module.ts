@@ -73,6 +73,7 @@ import { GridWithTransactionsComponent } from "./components/grid/grid-with-trans
 import { NbCardModule } from "@nebular/theme";
 import { ConfirmDialogComponent } from "./components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CaisGridPagerComponent } from './components/grid/cais-grid-pager/cais-grid-pager.component';
+import { LookupComponent } from './components/forms/inputs/lookup/lookup.component';
 
 const socialLinks = [
   {
@@ -173,7 +174,8 @@ const COMPONENTS = [
   RadioGroupComponent,
   GridWithTransactionsComponent,
   ConfirmDialogComponent,
-  CaisGridPagerComponent
+  CaisGridPagerComponent,
+  LookupComponent
 ];
 
 @NgModule({

@@ -1,0 +1,69 @@
+<div [formGroup]="parentGroup"
+[ngClass]="setInvalidContainer()"    
+>
+  <ng-container>
+    <label for="{{ inputName }}" class="label"
+      >{{ label }}
+      <ng-container *ngIf="formUtils.hasRequiredField(inputControl.id)"
+        ><span style="color: red">*</span></ng-container
+      ></label
+    >
+
+    <input
+      type="hidden"
+      nbInput
+      formControlName="{{ inputId }}"
+      name="{{ inputId }}"
+    />
+
+    <nb-form-field>
+      <input
+        type="text"
+        nbInput
+        fullWidth
+        readonly="readonly"
+        formControlName="{{ inputName }}"
+        [ngClass]="validationCss()"
+        [class.lookup-read-only]="parentGroup.disabled"
+        name="{{ inputName }}"
+      />
+
+      <button
+        [disabled]="inputControl.id.disabled"
+        type="button"
+        nbSuffix
+        nbButton
+        ghost
+        (click)="openFunction()"
+      >
+        <nb-icon
+          [icon]="'search'"
+          pack="fa"
+          title="Търсене"
+        ></nb-icon>
+      </button>
+
+      <button
+        [disabled]="inputControl.id.disabled"
+        type="button"
+        nbSuffix
+        nbButton
+        ghost
+        (click)="clearSelection()"
+      >
+        <nb-icon
+          [icon]="'times'"
+          pack="fa"
+          title="Изчистване на стойност"
+        ></nb-icon>
+      </button>
+    </nb-form-field>
+  </ng-container>
+
+  <cais-validation-message
+    label="{{ inputName }}"
+    [showRequired]="
+      inputControl.id?.errors?.required && inputHasBeenInteracted()
+    "
+  ></cais-validation-message>
+</div>
