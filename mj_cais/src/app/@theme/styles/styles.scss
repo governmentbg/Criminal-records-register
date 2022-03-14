@@ -35,4 +35,29 @@
   @include ngx-pace-theme();
 
   @include nb-overrides();
-} ;
+}
+
+// File styles
+.file-drop-zone {
+  border: dotted 3px lightgray;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.file-over-class {
+  border: dotted 3px green;
+}
+
+.file-select-hidden {
+  visibility: hidden;
+  position: absolute;
+  overflow: hidden;
+  width: 0px;
+  height: 0px;
+  border: none;
+  margin: 0;
+  padding: 0;
+}

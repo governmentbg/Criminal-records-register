@@ -115,18 +115,7 @@
               class="bg-light p-2 rounded"
             >
               <strong class="mr-1">Избор на файл</strong>
-              <span
-                style="
-                  visibility: hidden;
-                  position: absolute;
-                  overflow: hidden;
-                  width: 0px;
-                  height: 0px;
-                  border: none;
-                  margin: 0;
-                  padding: 0;
-                "
-                ><input
+              <span class="file-select-hidden"><input
                   type="file"
                   ng2FileSelect
                   [uploader]="uploader"
@@ -170,6 +159,7 @@
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </button>
             </div>
+            
           </div>
         </div>
 
@@ -285,7 +275,9 @@
         <div class="row">
           <div class="col-md-4">
             <label class="label">Държава</label>
-            <div class="form-group display-input-container">N/A</div>
+            <div class="form-group display-input-container">
+              {{ bulletinInfo.country }}
+            </div>
           </div>
           <div class="col-md-4">
             <label class="label">Област</label>
@@ -293,17 +285,23 @@
           </div>
           <div class="col-md-4">
             <label class="label">Населено място</label>
-            <div class="form-group display-input-container">N/A</div>
+            <div class="form-group display-input-container">
+              {{ bulletinInfo.city }}
+            </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4">
             <label class="label">Майка</label>
-            <div class="form-group display-input-container">N/A</div>
+            <div class="form-group display-input-container">
+              {{ bulletinInfo.motherFullname }}
+            </div>
           </div>
           <div class="col-md-4">
             <label class="label">Баща</label>
-            <div class="form-group display-input-container">N/A</div>
+            <div class="form-group display-input-container">
+              {{ bulletinInfo.fatherFullname }}
+            </div>
           </div>
           <div class="col-md-4">
             <label class="label">БС по местоположение</label>

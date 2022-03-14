@@ -17,4 +17,8 @@ export class BulletinDocumentInfoModel {
   public decisionDate: string;
   public caseNumber: string;
   public caseYear: string;
+  public motherFullname: string;
+  public fatherFullname: string;
+  public country: string
+  public city: string;
 }

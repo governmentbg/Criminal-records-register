@@ -41,6 +41,7 @@ export class BulletinDocumentFormComponent implements OnInit {
   public uploader: CustomFileUploader;
   public bulletinInfo: BulletinDocumentInfoModel =
     new BulletinDocumentInfoModel();
+  public hasDropZoneOver: boolean = false;
 
   protected validationMessage = "Грешка при валидациите!";
 
@@ -55,6 +56,10 @@ export class BulletinDocumentFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initDocumentInfoModel();
+  }
+
+  public fileOverAnother(e: any): void {
+    this.hasDropZoneOver = e;
   }
 
   onOpenDialog() {
@@ -215,11 +220,14 @@ export class BulletinDocumentFormComponent implements OnInit {
       this.bulletinInfo.sex = sexName;
     }
 
-    this.bulletinInfo.birthDate = this.dateFormatService.displayDate(this.bulletinForm.birthDate.value);
+    this.bulletinInfo.birthDate = this.dateFormatService.displayDate(
+      this.bulletinForm.birthDate.value
+    );
     this.bulletinInfo.egn = this.bulletinForm.egn.value;
     this.bulletinInfo.lnch = this.bulletinForm.lnch.value;
     this.bulletinInfo.ln = this.bulletinForm.ln.value;
-    this.bulletinInfo.registrationNumber = this.bulletinForm.registrationNumber.value;
+    this.bulletinInfo.registrationNumber =
+      this.bulletinForm.registrationNumber.value;
 
     if (this.bulletinForm.decisionTypeId.value) {
       let decisionTypeName = (this.dbData.decisionTypes as any).find(
@@ -236,8 +244,42 @@ export class BulletinDocumentFormComponent implements OnInit {
     }
 
     this.bulletinInfo.decisionNumber = this.bulletinForm.decisionNumber.value;
-    this.bulletinInfo.decisionDate = this.dateFormatService.displayDateTime(this.bulletinForm.decisionDate.value);
+    this.bulletinInfo.decisionDate = this.dateFormatService.displayDateTime(
+      this.bulletinForm.decisionDate.value
+    );
     this.bulletinInfo.caseNumber = this.bulletinForm.caseNumber.value;
-    this.bulletinInfo.caseYear = this.dateFormatService.displayDateTime(this.bulletinForm.caseYear.value);
+    this.bulletinInfo.caseYear = this.dateFormatService.displayDateTime(
+      this.bulletinForm.caseYear.value
+    );
+
+    var motherFullname =
+      (this.bulletinForm.motherFirstname.value ??
+      "") + " " + (this.bulletinForm.motherSurname.value ??
+      "") + " " + (this.bulletinForm.motherFamilyname.value ??
+      "");
+
+    this.bulletinInfo.motherFullname = motherFullname ?? "";
+
+    var fatherFullname =
+    (this.bulletinForm.fatherFirstname.value ??
+    "") + " " + (this.bulletinForm.fatherSurname.value ??
+    "") + " " + (this.bulletinForm.fatherFamilyname.value ??
+    "");
+
+    this.bulletinInfo.fatherFullname = fatherFullname ?? "";
+
+    if (this.bulletinForm.birthCountryId.value) {
+      let countryName = (this.dbData.countries as any).find(
+        (x) => x.id === this.bulletinForm.birthCountryId.value
+      )?.name;
+      this.bulletinInfo.country = countryName;
+    }
+
+    if (this.bulletinForm.birthCityId.value) {
+      let cityName = (this.dbData.countries as any).find(
+        (x) => x.id === this.bulletinForm.birthCityId.value
+      )?.name;
+      this.bulletinInfo.city = cityName;
+    }
   }
 }
