@@ -14,7 +14,10 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from "@angular/material-moment-adapter";
 import { MatInputModule } from "@angular/material/input";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+} from "@angular-material-components/datetime-picker";
 
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { UserData } from "./data/users";
@@ -69,6 +72,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { GridWithTransactionsComponent } from "./components/grid/grid-with-transactions.component";
 import { NbCardModule } from "@nebular/theme";
 import { ConfirmDialogComponent } from "./components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { CaisGridPagerComponent } from './components/grid/cais-grid-pager/cais-grid-pager.component';
 
 const socialLinks = [
   {
@@ -168,7 +172,8 @@ const COMPONENTS = [
   CheckboxGroupComponent,
   RadioGroupComponent,
   GridWithTransactionsComponent,
-  ConfirmDialogComponent
+  ConfirmDialogComponent,
+  CaisGridPagerComponent
 ];
 
 @NgModule({

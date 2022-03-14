@@ -14,6 +14,7 @@
   (onSortingDone)="sortingDone($event)"
   (onFilteringDone)="filteringDone($event)"
   (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
   [allowFiltering]="true"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
@@ -115,15 +116,14 @@
     </ng-template>
   </igx-column>
 
-  <!-- <ng-template #pager let-grid>
+   <ng-template #pager let-grid>
     <div class="tl-paginator">
-      <sevlievo-grid-pager
+      <cais-grid-pager
         [page]="remoteService.pagerParams.page"
         [perPage]="remoteService.pagerParams.perPage"
         [totalCount]="remoteService.pagerParams.totalCount"
-        [excelReference]="excelExportAll"
         (pagerChange)="pagerChange($event)"
-      ></sevlievo-grid-pager>
+      ></cais-grid-pager>
     </div>
-  </ng-template> -->
+  </ng-template> 
 </igx-grid>
