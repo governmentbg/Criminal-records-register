@@ -24,6 +24,10 @@
 @import "./layout";
 @import "./overrides";
 
+@import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
+@include igx-core();
+@include igx-typography();
+
 // install the framework and custom global styles
 @include nb-install() {
   // framework global styles
@@ -35,6 +39,29 @@
   @include ngx-pace-theme();
 
   @include nb-overrides();
+}
+
+.nb-theme-dark {
+  $custom-palette: igx-palette(
+    $primary: #f0f2ff,
+    $secondary: #3f51b5,
+    $surface: #222b45,
+    $error: #cf1a2b,
+    $success: #689f38,
+    $warn: #ff9800,
+    $info: #9208bc,
+    $grays: #fff,
+  );
+  @include igx-theme(
+    $palette: $custom-palette,
+    $schema: $dark-indigo-schema,
+    $roundness: null,
+    $elevation: null
+  );
+  @include igx-typography(
+    $font-family: "Nunito Sans",
+    $type-scale: $indigo-type-scale
+  );
 }
 
 // File styles
