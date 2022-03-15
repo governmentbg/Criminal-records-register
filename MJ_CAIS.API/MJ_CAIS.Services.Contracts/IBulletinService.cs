@@ -18,5 +18,7 @@ namespace MJ_CAIS.Services.Contracts
         Task DeleteComplaintDocumentAsync(string documentId);
 
         Task<DocumentDTO> GetDocumentContentAsync(string documentId);
+
+        Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId);
     }
 }

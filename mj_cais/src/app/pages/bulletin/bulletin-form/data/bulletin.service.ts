@@ -1,10 +1,15 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { environment } from "../../../../../environments/environment";
+import {
+  PersonAliasCodeConstants,
+  PersonAliasNameConstants,
+} from "../../../../@core/constants/person-alias-type.constants";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { BulletinDecisionModel } from "../models/bulletin-decision.model";
 import { BulletinDocumentModel } from "../models/bulletin-document.model";
 import { BulletinOffenceModel } from "../models/bulletin-offence.model";
+import { BulletinPersonAliasModel } from "../models/bulletin-person-alias.model";
 import { BulletinSanctionModel } from "../models/bulletin-sanction.model";
 import { BulletinModel } from "../models/bulletin.model";
 
@@ -38,15 +43,50 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     );
   }
 
-  public saveDocument(bulletinId: string ,model: BulletinDocumentModel): Observable<any> {
+  public saveDocument(
+    bulletinId: string,
+    model: BulletinDocumentModel
+  ): Observable<any> {
     return this.http.post<BulletinDocumentModel>(
       environment.apiUrl + `/bulletins/${bulletinId}/documents`,
       model
     );
   }
 
-  public downloadDocument(bulletinId: string ,documentId: string){
-    let url = environment.apiUrl + `/bulletins/${bulletinId}/documents-download/` + documentId;
-		return this.http.get(url, { responseType: 'blob', observe: 'response' });
+  public downloadDocument(bulletinId: string, documentId: string) {
+    let url =
+      environment.apiUrl +
+      `/bulletins/${bulletinId}/documents-download/` +
+      documentId;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+  public getPersonAlias(id: string): Observable<BulletinPersonAliasModel[]> {
+    return this.http
+      .get<BulletinPersonAliasModel[]>(
+        environment.apiUrl + `/bulletins/${id}/person-alias`
+      )
+      .pipe(
+        map((items: BulletinPersonAliasModel[]) => {
+          return items.map((item) => {
+            switch (item.typeCode) {
+              case PersonAliasCodeConstants.Nickname:
+                item.typeId = 1;
+                item.typeName = PersonAliasNameConstants.Nickname;
+                break;
+              case PersonAliasCodeConstants.Previous:
+                item.typeId = 2;
+                item.typeName = PersonAliasNameConstants.Previous;
+                break;
+              case PersonAliasCodeConstants.Maiden:
+                item.typeId = 3;
+                item.typeName = PersonAliasNameConstants.Maiden;
+                break;
+            }
+
+            return item;
+          });
+        })
+      );
   }
 }

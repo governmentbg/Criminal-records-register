@@ -1,6 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { GenderConstants } from "../../constants/gender.constants";
+import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "./cais-crud.service";
 
@@ -141,5 +142,9 @@ string
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/d_doc_types`
     );
+  }
+
+  public getPersonAliasTypes(): Observable<BaseNomenclatureModel[]> {
+    return of(PersonAliasConstants.allData);
   }
 }

@@ -41,7 +41,7 @@ export class BulletinDecisionFormComponent {
     );
   }
 
-  onAddOrUpdateBulletineDecisionRow() {
+  onAddOrUpdateBulletinDecisionRow() {
     if (!this.bulletinDecisionForm.group.valid) {
       this.bulletinDecisionForm.group.markAllAsTouched();
       return;

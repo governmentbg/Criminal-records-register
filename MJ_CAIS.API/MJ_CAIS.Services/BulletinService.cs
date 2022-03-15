@@ -163,7 +163,18 @@ namespace MJ_CAIS.Services
                 Name = document.Name,
                 DocumentContent = document.DocContent.Content,
                 MimeType = document.DocContent.MimeType
-            };           
+            };
+        }
+
+        public async Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId)
+        {
+            var dbContext = _bulletinRepository.GetDbContext();
+
+            var result = dbContext.BBullPersAliases
+                .AsNoTracking()
+                .ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
+
+            return await Task.FromResult(result);
         }
 
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
@@ -173,6 +184,7 @@ namespace MJ_CAIS.Services
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
+            entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.PersonAliasTransactions);
 
             await SaveEntityAsync(entity);
             return entity.Id;

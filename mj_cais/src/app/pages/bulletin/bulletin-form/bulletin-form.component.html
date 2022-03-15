@@ -205,35 +205,198 @@
           <div class="font-weight-bold">
             Псевдоним или други използвани имена на осъденото лице
           </div>
-          <hr />
+          <app-grid-with-transactions
+            [gridTransactions]="fullForm.personAliasTransactions"
+          >
+            <igx-grid
+              #bulletinPersonAliasGrid
+              [height]="null"
+              [data]="dbData.personAlias"
+              [primaryKey]="'id'"
+            >
+              <igx-grid-toolbar>
+                <button
+                  igxButton="flat"
+                  (click)="bulletinPersonAliasDialog.open()"
+                  *ngIf="!isForPreview"
+                  class="addProdBtn"
+                >
+                  <igx-icon>add</igx-icon> Добави
+                </button>
+              </igx-grid-toolbar>
 
-          <div class="row">
-            <label class="label label-front col-md-2">Псевдоним</label>
-            <div class="form-group col-md-3">
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-            <div class="form-group col-md-3">
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-            <div class="form-group col-md-3">
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-          </div>
+              <igx-column
+                field="id"
+                header="Идентификатор"
+                [sortable]="false"
+                [dataType]="'string'"
+                [hidden]="true"
+              >
+              </igx-column>
 
-          <div class="row">
-            <label class="label label-front col-md-2">Моминско име</label>
-            <div class="form-group col-md-3">
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-            <div class="form-group col-md-3">
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-            <div class="form-group col-md-3">
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-          </div>
+              <igx-column
+                field="typeName"
+                header="Тип"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
 
-          <div class="row">
+              <igx-column
+                field="firstname"
+                header="Име"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
+
+              <igx-column
+                field="surname"
+                header="Презиме"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
+
+              <igx-column
+                field="familyname"
+                header="Фамилия"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
+
+              <igx-column
+                field="fullname"
+                header="Пълно име"
+                dataType="string"
+                [sortable]="true"
+              >
+              </igx-column>
+
+              <igx-action-strip #actionstrip>
+                <button
+                  title="Редактирай"
+                  igxButton="icon"
+                  igxRipple
+                  (click)="onOpenEditBulletinPersonAlias(actionstrip.context)"
+                >
+                  <igx-icon>edit</igx-icon>
+                </button>
+                <button
+                  title="Изтрии"
+                  igxButton="icon"
+                  igxRipple
+                  (click)="onDeleteBulletinPersonAlias(actionstrip.context)"
+                >
+                  <igx-icon>delete</igx-icon>
+                </button>
+              </igx-action-strip>
+            </igx-grid>
+          </app-grid-with-transactions>
+
+          <igx-dialog #bulletinPersonAliasDialog>
+            <div class="dialogNewRecord" style="min-width: 1000px">
+              <nb-card>
+                <nb-card-header>
+                  <div class="d-flex" style="justify-content: space-between">
+                    <div class="d-flex align-items-center">
+                      <h5 style="font-weight: bold">Псевдоним</h5>
+                    </div>
+                    <div class="d-flex">
+                      <div>
+                        <button
+                          nbButton
+                          matRipple
+                          [status]="'success'"
+                          (click)="onAddOrUpdateBulletinPersonAliasRow()"
+                          type="button"
+                          class="ml-2"
+                        >
+                          Потвърди
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          nbButton
+                          matRipple
+                          (click)="onCloseBulletinPersonAliasDilog()"
+                          type="button"
+                          class="ml-2"
+                        >
+                          Откажи
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </nb-card-header>
+                <nb-card-body>
+                  <div class="row mt-2">
+                    <div class="form-group col-md-8">
+                      <cais-autocomplete
+                        [label]="'Тип'"
+                        [inputFormControl]="bulletinPersonAliasForm.typeId"
+                        [parentGroup]="bulletinPersonAliasForm.group"
+                        [items]="dbData.personAliasTypes"
+                        [inputName]="'typeId'"
+                      >
+                      </cais-autocomplete>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="form-group col-md-6">
+                      <cais-input
+                        [type]="'text'"
+                        [label]="'Име'"
+                        [inputFormControl]="bulletinPersonAliasForm.firstname"
+                        [parentGroup]="bulletinPersonAliasForm.group"
+                        [inputName]="'firstname'"
+                      >
+                      </cais-input>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="form-group col-md-6">
+                      <cais-input
+                        [type]="'text'"
+                        [label]="'Презиме'"
+                        [inputFormControl]="bulletinPersonAliasForm.surname"
+                        [parentGroup]="bulletinPersonAliasForm.group"
+                        [inputName]="'surname'"
+                      >
+                      </cais-input>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="form-group col-md-6">
+                      <cais-input
+                        [type]="'text'"
+                        [label]="'Фамилия'"
+                        [inputFormControl]="bulletinPersonAliasForm.familyname"
+                        [parentGroup]="bulletinPersonAliasForm.group"
+                        [inputName]="'familyname'"
+                      >
+                      </cais-input>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="form-group col-md-6">
+                      <cais-input
+                        [type]="'text'"
+                        [label]="'Пълно име'"
+                        [inputFormControl]="bulletinPersonAliasForm.fullname"
+                        [parentGroup]="bulletinPersonAliasForm.group"
+                        [inputName]="'fullname'"
+                      >
+                      </cais-input>
+                    </div>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+            </div>
+          </igx-dialog>
+
+          <div class="row mt-3">
             <div class="form-group col-md-3">
               <cais-autocomplete
                 [label]="'Пол'"

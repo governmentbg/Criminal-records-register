@@ -85,7 +85,6 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-
         [HttpPost("{aId}/documents")]
         public async Task<IActionResult> PostDocument(string aId, [FromBody] DocumentDTO aInDto)
         {
@@ -114,6 +113,13 @@ namespace MJ_CAIS.Web.Controllers
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
             return File(content, mimeType, fileName);
+        }
+
+        [HttpGet("{aId}/person-alias")]
+        public async Task<IActionResult> GetPersonAlias(string aId)
+        {
+            var result = await this._bulletinService.GetPersonAliasByBulletinIdAsync(aId);
+            return Ok(result);
         }
 
         private string getContentType(string fileName)

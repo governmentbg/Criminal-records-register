@@ -42,6 +42,7 @@ export class FormUtils {
       return new SelectListModel({
         text: baseNomenclature.name,
         value: baseNomenclature.id,
+        code: baseNomenclature.code
       });
     });
   }
