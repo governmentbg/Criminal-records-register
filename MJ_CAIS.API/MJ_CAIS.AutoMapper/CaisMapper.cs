@@ -174,6 +174,36 @@ namespace MJ_CAIS.AutoMapperContainer
             return result;
         }
 
+        public static List<TEntityType> MapMultipleChooseToEntityList<TEntityType, TPrimaryKey, TForeignKey>(MultipleChooseDTO<TPrimaryKey, TForeignKey> multipleChooseEditor,
+            string pkName, string fkName)
+             where TEntityType : BaseEntity
+        {
+            var entitiesForUpdate = new List<TEntityType>();
+            if (!multipleChooseEditor.IsChanged) return entitiesForUpdate;
+
+            //for delete
+            foreach (var item in multipleChooseEditor.SelectedPrimaryKeys)
+            {
+                var entity = Activator.CreateInstance<TEntityType>();
+                entity.EntityState = EntityStateEnum.Deleted;
+                entity.GetType().GetProperty(pkName)?.SetValue(entity, item);
+                entitiesForUpdate.Add(entity);
+            }
+
+            //for add
+            foreach (var item in multipleChooseEditor.SelectedForeignKeys)
+            {
+                var entity = Activator.CreateInstance<TEntityType>();
+                ChangeTransactionIdOnAdd(entity, pkName);
+                entity.EntityState = EntityStateEnum.Added;
+                entity.GetType().GetProperty(fkName)?.SetValue(entity, item);
+                entitiesForUpdate.Add(entity);
+            }
+
+            return entitiesForUpdate;
+        }
+
+
         private static EntityType CreateDummyEntity<EntityType>(string transactionRowID, string entityPKName) where EntityType : BaseEntity
         {
             EntityType entity = Activator.CreateInstance<EntityType>();

@@ -78,7 +78,6 @@ export class BulletinFormComponent
   ngOnInit(): void {
     this.fullForm = new BulletinForm();
     this.fullForm.group.patchValue(this.dbData.element);
-    debugger;
     this.formFinishedLoading.emit();
   }
 
@@ -115,6 +114,7 @@ export class BulletinFormComponent
       this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
     this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
 
+    debugger;
     this.validateAndSave(this.fullForm);
   };
 
@@ -142,7 +142,6 @@ export class BulletinFormComponent
         (x) => x.id === this.bulletinPersonAliasForm.typeId.value
       );
 
-      debugger;
       this.bulletinPersonAliasForm.typeName.patchValue(typeObj?.name);
       this.bulletinPersonAliasForm.typeCode.patchValue(typeObj?.code);
     }

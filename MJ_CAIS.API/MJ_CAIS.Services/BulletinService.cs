@@ -1,13 +1,16 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.DTO.Common;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services
 {
@@ -24,6 +27,26 @@ namespace MJ_CAIS.Services
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
+        }
+
+        public override async Task<BulletinDTO> SelectAsync(string aId)
+        {
+            var context = _bulletinRepository.GetDbContext();
+
+            var bulletin = await context.BBulletins.AsNoTracking()
+                .ProjectTo<BulletinDTO>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == aId);
+
+            if(bulletin == null) return null;
+
+            var nationalities = await context.BPersNationalities.AsNoTracking()
+               .Where(x => x.BulletinId == aId).ToListAsync();
+
+            var nationalityIds = nationalities.Select(x => x.Id);
+            var countryIds = nationalities.Select(x => x.CountryId);
+
+            bulletin.Nationalities = new MultipleChooseDTO(nationalityIds, countryIds);
+            return bulletin;
         }
 
         public override async Task<string> InsertAsync(BulletinDTO aInDto)
@@ -185,6 +208,8 @@ namespace MJ_CAIS.Services
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
             entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.PersonAliasTransactions);
+
+            entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
 
             await SaveEntityAsync(entity);
             return entity.Id;

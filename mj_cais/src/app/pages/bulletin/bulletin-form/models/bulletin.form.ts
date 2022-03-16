@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { MultipleChooseForm } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
 
 export class BulletinForm {
   public group: FormGroup;
@@ -71,6 +72,7 @@ export class BulletinForm {
   public documentsTransactions: FormControl;
   public ecrisConvictionId: FormControl;
   public personAliasTransactions: FormControl;
+  public nationalities: MultipleChooseForm;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -144,6 +146,7 @@ export class BulletinForm {
     this.documentsTransactions = new FormControl(null);
     this.ecrisConvictionId = new FormControl(null);
     this.personAliasTransactions = new FormControl(null);
+    this.nationalities = new MultipleChooseForm(true);
 
     this.group = new FormGroup({
       id: this.id,
@@ -212,7 +215,8 @@ export class BulletinForm {
       decisionsTransactions: this.decisionsTransactions,
       documentsTransactions: this.documentsTransactions,
       ecrisConvictionId: this.ecrisConvictionId,
-      personAliasTransactions: this.personAliasTransactions
+      personAliasTransactions: this.personAliasTransactions,
+      nationalities: this.nationalities.group,
     });
   }
 }

@@ -1,3 +1,5 @@
+import { MultipleChooseModel } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.model";
+
 export class BulletinModel {
   public id: string = null;
   public version: number = null;
@@ -60,6 +62,7 @@ export class BulletinModel {
   public convRetPeriodEndDate: Date = null;
   public createdByPosition: string = null;
   public bulletinType: string = null;
+  public nationalities: MultipleChooseModel = new MultipleChooseModel();
 
   constructor(init?: Partial<BulletinModel>) {
     if (init) {
@@ -124,6 +127,7 @@ export class BulletinModel {
       this.convRetPeriodEndDate = init.convRetPeriodEndDate ?? null;
       this.createdByPosition = init.createdByPosition ?? null;
       this.bulletinType = init.bulletinType ?? null;
+      this.nationalities = init.nationalities ?? new MultipleChooseModel()
     }
   }
 }
