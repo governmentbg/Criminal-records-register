@@ -13,9 +13,9 @@ import { CustomToastrService } from "../../../../../@core/services/common/custom
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
 import { BulletinService } from "../../data/bulletin.service";
-import { BulletinDocumentInfoModel } from "../../models/bulletin-document-info.model";
-import { BulletinDocumentForm } from "../../models/bulletin-document.form";
+import { BulletinDocumentInfoModel } from "./models/bulletin-document-info.model";
 import { BulletinForm } from "../../models/bulletin.form";
+import { BulletinDocumentForm } from "./models/bulletin-document.form";
 
 @Component({
   selector: "cais-bulletin-document-form",
