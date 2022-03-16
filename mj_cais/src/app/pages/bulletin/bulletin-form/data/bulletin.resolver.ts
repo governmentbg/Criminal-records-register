@@ -8,11 +8,11 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { BulletinDecisionModel } from "../models/bulletin-decision.model";
-import { BulletinDocumentModel } from "../models/bulletin-document.model";
-import { BulletinOffenceModel } from "../models/bulletin-offence.model";
+import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/models/bulletin-decision.model";
+import { BulletinDocumentModel } from "../tabs/bulletin-documents-form/models/bulletin-document.model";
+import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/models/bulletin-offence.model";
 import { BulletinPersonAliasModel } from "../models/bulletin-person-alias.model";
-import { BulletinSanctionModel } from "../models/bulletin-sanction.model";
+import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/models/bulletin-sanction.model";
 import { BulletinModel } from "../models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
