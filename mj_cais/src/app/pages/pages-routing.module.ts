@@ -9,6 +9,7 @@ import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.co
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
+import { EcrisIdentificationOverviewComponent } from "./ecris/ecris-identification-overview/ecris-identification-overview.component";
 
 const routes: Routes = [
   {
@@ -53,6 +54,11 @@ const routes: Routes = [
         path: "fbbcs/create",
         component: FbbcFormComponent,
         //resolve: { dbData: FbbcResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-identification",
+        component: EcrisIdentificationOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

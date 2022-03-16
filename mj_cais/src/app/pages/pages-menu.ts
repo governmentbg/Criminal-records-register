@@ -30,13 +30,24 @@ export class PagesMenu {
         title: "Бюлетини",
         icon: "home-outline",
         link: "/pages/bulletins",
-        home: true,
+        home: false,
       },
       {
         title: "Осъдени в чужбина",
         icon: "home-outline",
         link: "/pages/fbbcs",
-        home: true,
+        home: false,
+      },
+      {
+        title: "ECRIS",
+        icon: "layout-outline",
+        expanded: true,
+        children: [
+          {
+            title: "За идентификация",
+            link: "/pages/ecris-identification",
+          },
+        ],
       },
       {
         title: "FEATURES",

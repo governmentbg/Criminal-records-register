@@ -17,19 +17,10 @@ namespace MJ_CAIS.DataAccess
 
         public string Id { get; set; } = null!;
 
-        //[Comment("Потребител който е insert-нал записа")]
-        //[CustomStringLength(MaxLengthEnum.Name)]
-        //public string SysInsUsername { get; set; }
-
-        //[Comment("Дата на insert на записа")]
-        //public DateTime? SysInsDate { get; set; }
-
-        //[Comment("Потребител който е update-нал записа")]
-        //[CustomStringLength(MaxLengthEnum.Name)]
-        //public string SysUpdUsername { get; set; }
-
-        //[Comment("Дата на update на записа")]
-        //public DateTime? SysUpdDate { get; set; }
+        //public DateTime? CreatedOn { get; set; }
+        //public string? CreatedBy { get; set; }
+        //public string? UpdatedBy { get; set; }
+        //public DateTime? UpdatedOn { get; set; }
 
         [NotMapped]
         public EntityStateEnum EntityState { get; set; }
