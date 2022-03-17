@@ -114,7 +114,6 @@ export class BulletinFormComponent
       this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
     this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
 
-    debugger;
     this.validateAndSave(this.fullForm);
   };
 

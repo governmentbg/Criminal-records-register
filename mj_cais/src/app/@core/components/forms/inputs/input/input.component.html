@@ -98,10 +98,7 @@
           matSuffix
           [for]="formpicker"
         ></mat-datepicker-toggle>
-        <ngx-mat-datetime-picker
-          #formpicker
-          [showSeconds]="true"
-        >
+        <ngx-mat-datetime-picker #formpicker [showSeconds]="true">
         </ngx-mat-datetime-picker>
       </div>
     </ng-container>
@@ -116,4 +113,12 @@
     [showLnch]="inputFormControl?.errors?.lnch && inputHasBeenInteracted()"
     [showEmail]="inputFormControl?.errors?.email && inputHasBeenInteracted()"
   ></cais-validation-message>
+  <mat-error *ngIf="inputFormControl?.errors?.serverErrors">
+    <div
+      class="caption status-danger"
+      *ngFor="let serverError of inputFormControl?.errors?.serverErrors"
+    >
+      {{ serverError }}
+    </div>
+  </mat-error>
 </div>

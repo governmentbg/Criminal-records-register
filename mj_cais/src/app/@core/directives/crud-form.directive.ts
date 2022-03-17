@@ -131,6 +131,18 @@ export abstract class CrudForm<
         }
 
         this.toastr.showBodyToast("danger", title, errorText);
+
+        // if has server side validation errors add them to the form control
+        Object.keys(errorResponse.error.errors).forEach((prop) => {
+          var propName = prop[0].toLocaleLowerCase() + prop.slice(1);
+          const formControl = this.fullForm.group.get(propName);
+          if (formControl) {
+            // activate the error message
+            formControl.setErrors({
+              serverErrors: errorResponse.error.errors[prop],
+            });
+          }
+        });
       },
     });
   }

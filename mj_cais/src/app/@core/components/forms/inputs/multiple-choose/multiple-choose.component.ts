@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { NgSelectConfig } from "@ng-select/ng-select";
 import { BaseNomenclatureModel } from "../../../../models/nomenclature/base-nomenclature.model";
 import { FormUtils } from "../../../../utils/form.utils";
 import { MultipleChooseForm } from "./models/multiple-choose.form";
@@ -21,7 +22,9 @@ export class MultipleChooseComponent {
 
   public inputName = "selectedForeignKeys";
 
-  constructor(public formUtils: FormUtils) {}
+  constructor(public formUtils: FormUtils,private config: NgSelectConfig) {
+    this.config.notFoundText = "Няма намерени резултати";
+  }
 
   onSelectionChange(value: string) {
     this.inputFormControl.isChanged.patchValue(true);
