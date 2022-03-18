@@ -28,9 +28,37 @@ export class PagesMenu {
       },
       {
         title: "Бюлетини",
-        icon: "home-outline",
-        link: "/pages/bulletins",
-        home: false,
+        icon: { icon: "file-alt", pack: "fa" },
+        children: [
+          {
+            title: "Актуални бюлетини",
+            link: "/pages/bulletins",
+          },
+          {
+            title: "Нови бюлетини",  
+            link: "/pages/bulletins-new-eiss", 
+          },
+          {
+            title: "За унищожаване",  
+            link: "/pages/bulletins-for-destruction", 
+          },
+          {
+            title: "Реабилитация", 
+            children: [
+              {
+                title: "Подлежащи",
+                link: "/pages/bulletins-for-rehabilitation", 
+              },
+              {
+                title: "Заявки",
+                link: "/pages/bulletins-requests", 
+              },
+            ]  
+          },    
+          {
+            title: "Бюлетини за ECRIS",     
+          },
+        ],
       },
       {
         title: "Осъдени в чужбина",
