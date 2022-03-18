@@ -19,6 +19,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? NameEn { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
+        public string? CountryId { get; set; }
 
         public virtual ICollection<EEcrisMessage> EEcrisMessageFromAuths { get; set; }
         public virtual ICollection<EEcrisMessage> EEcrisMessageToAuths { get; set; }

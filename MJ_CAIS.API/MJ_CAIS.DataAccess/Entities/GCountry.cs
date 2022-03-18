@@ -27,6 +27,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? NameEn { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
+        public string? Iso3166Alpha2 { get; set; }
 
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
