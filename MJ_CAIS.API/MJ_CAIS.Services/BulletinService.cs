@@ -24,6 +24,37 @@ namespace MJ_CAIS.Services
             _bulletinRepository = bulletinRepository;
         }
 
+        public async Task<IgPageResult<BulletinGridDTO>> GetAllCustomAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId)
+        {
+            var context = _bulletinRepository.GetDbContext();
+
+            var baseQuery = context.BBulletins.AsNoTracking()
+                .Include(x => x.BulletinAuthority)
+                .Where(x => x.StatusId == statusId)
+                .Select(x => new BulletinGridDTO
+                {
+                    Id = x.Id,
+                    FirstName = x.Firstname,
+                    SurName = x.Surname,
+                    FamilyName = x.Familyname,
+                    RegistrationNumber = x.RegistrationNumber,
+                    StatusId = statusId,
+                    CreatedOn = x.CreatedOn,
+                    AlphabeticalIndex = x.AlphabeticalIndex,
+                    BulletinAuthorityName = x.BulletinAuthority != null ? x.BulletinAuthority.Name : string.Empty,
+                    Ln = x.Ln,
+                    Lnch = x.Lnch,
+                    Egn = x.Egn,
+                    DeleteDate = x.DeleteDate,
+                    RehabilitationDate = x.RehabilitationDate
+                });
+
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<BulletinGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
@@ -37,7 +68,7 @@ namespace MJ_CAIS.Services
                 .ProjectTo<BulletinDTO>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == aId);
 
-            if(bulletin == null) return null;
+            if (bulletin == null) return null;
 
             var nationalities = await context.BPersNationalities.AsNoTracking()
                .Where(x => x.BulletinId == aId).ToListAsync();
