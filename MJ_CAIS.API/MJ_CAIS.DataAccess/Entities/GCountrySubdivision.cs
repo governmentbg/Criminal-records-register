@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCountrySubdivision : IBaseNomenclature
+    public partial class GCountrySubdivision : BaseEntity, IBaseNomenclature
     {
         public GCountrySubdivision()
         {
             BOffences = new HashSet<BOffence>();
         }
 
-        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Code { get; set; }
         public string? Type { get; set; }

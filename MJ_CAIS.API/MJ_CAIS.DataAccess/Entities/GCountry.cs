@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCountry : IBaseNomenclature
+    public partial class GCountry : BaseEntity, IBaseNomenclature
     {
         public GCountry()
         {
@@ -17,7 +17,6 @@ namespace MJ_CAIS.DataAccess.Entities
             PPeople = new HashSet<PPerson>();
         }
 
-        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Iso31662Number { get; set; }
         public string? Iso31662Code { get; set; }
@@ -27,6 +26,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? NameEn { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
+        public string? Iso3166Alpha2 { get; set; }
 
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }

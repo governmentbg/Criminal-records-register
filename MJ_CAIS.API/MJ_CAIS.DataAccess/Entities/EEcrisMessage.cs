@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
@@ -21,11 +21,16 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? MsgTypeId { get; set; }
         public string? ResponseTypeId { get; set; }
         public string? EcrisMsgStatus { get; set; }
-        public string? PersonNames { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? BirthCountry { get; set; }
         public string? BirthCity { get; set; }
         public string? FbbcId { get; set; }
+        public string? Firstname { get; set; }
+        public string? Surname { get; set; }
+        public string? Familyname { get; set; }
+        public decimal? Sex { get; set; }
+        public string? Nationality1Code { get; set; }
+        public string? Nationality2Code { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }

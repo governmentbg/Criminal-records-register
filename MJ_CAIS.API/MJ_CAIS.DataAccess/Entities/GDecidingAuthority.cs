@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GDecidingAuthority : IBaseNomenclature
+    public partial class GDecidingAuthority : BaseEntity, IBaseNomenclature
     {
         public GDecidingAuthority()
         {
@@ -13,7 +13,6 @@ namespace MJ_CAIS.DataAccess.Entities
             GCsAuthorities = new HashSet<GCsAuthority>();
         }
 
-        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? NameEn { get; set; }

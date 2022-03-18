@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisMsgRespType
+    public partial class EEcrisMsgRespType : BaseEntity
     {
         public EEcrisMsgRespType()
         {
             EEcrisMessages = new HashSet<EEcrisMessage>();
         }
 
-        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Code { get; set; }
         public DateTime? ValidFrom { get; set; }

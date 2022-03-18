@@ -80,9 +80,16 @@ namespace MJ_CAIS.CodeGenerator.Utils
             return result;
         }
 
+        public string GetEntitiesPath(string rootPath)
+        {
+            var result = Path.Combine(rootPath, Constants.EntityPath);
+            return result;
+        }
+
         public string GetEntityPath(string rootPath, string entityName)
         {
-            var result = Path.Combine(rootPath, Constants.EntityPath, entityName + ".cs");
+            var entitiesPath = GetEntitiesPath(rootPath);
+            var result = Path.Combine(entitiesPath, entityName + ".cs");
             return result;
         }
 

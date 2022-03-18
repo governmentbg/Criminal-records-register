@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCsAuthority : IBaseNomenclature
+    public partial class GCsAuthority : BaseEntity, IBaseNomenclature
     {
         public GCsAuthority()
         {
             BBulletins = new HashSet<BBulletin>();
         }
 
-        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? DecidingAuthId { get; set; }
         public decimal? IsCentral { get; set; }

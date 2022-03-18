@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BEcrisOffCategory : IBaseNomenclature
+    public partial class BEcrisOffCategory : BaseEntity, IBaseNomenclature
     {
         public BEcrisOffCategory()
         {
             BOffences = new HashSet<BOffence>();
         }
 
-        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Category { get; set; }
         public decimal? CategoryIsOpen { get; set; }
