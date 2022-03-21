@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -64,20 +65,17 @@ namespace MJ_CAIS.Services
         {
             var context = _bulletinRepository.GetDbContext();
 
-            var bulletin = await context.BBulletins.AsNoTracking()
-                .ProjectTo<BulletinDTO>(mapper.ConfigurationProvider)
+            var bulletin = await context.BBulletins
+                .Include(x=>x.BPersNationalities)
+                .Include(x => x.BirthCity)
+                    .ThenInclude(x => x.Municipality)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == aId);
 
             if (bulletin == null) return null;
 
-            var nationalities = await context.BPersNationalities.AsNoTracking()
-               .Where(x => x.BulletinId == aId).ToListAsync();
-
-            var nationalityIds = nationalities.Select(x => x.Id);
-            var countryIds = nationalities.Select(x => x.CountryId);
-
-            bulletin.Nationalities = new MultipleChooseDTO(nationalityIds, countryIds);
-            return bulletin;
+            var result = mapper.Map<BulletinDTO>(bulletin);
+            return result;
         }
 
         public override async Task<string> InsertAsync(BulletinDTO aInDto)
@@ -224,8 +222,9 @@ namespace MJ_CAIS.Services
         {
             var dbContext = _bulletinRepository.GetDbContext();
 
-            var result = dbContext.BBullPersAliases
+            var result = dbContext.BBullPersAliases     
                 .AsNoTracking()
+                .Where(x=>x.BulletinId == aId)
                 .ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
 
             return await Task.FromResult(result);
@@ -234,6 +233,17 @@ namespace MJ_CAIS.Services
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
         {
             var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
+
+            if (entity.ModifiedProperties is null)
+                entity.ModifiedProperties = new List<string>();
+
+            entity.ModifiedProperties.Add(nameof(entity.BirthCountryId));
+            entity.ModifiedProperties.Add(nameof(entity.BirthCityId));
+
+            if (isAdded)
+            {
+                entity.StatusId = BulletinStatusTypeConstants.NewEISS;
+            }
 
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);

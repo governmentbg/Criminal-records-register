@@ -6,5 +6,8 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface INomenclatureDetailRepository : IBaseAsyncRepository<GNomenclature, string, CaisDbContext>
     {
+        IQueryable<BaseNomenclatureDTO> GetMunicipalitiesByDistrict(string districtId);
+
+        IQueryable<BaseNomenclatureDTO> GetCitiesByMunicipality(string municipalityId);
     }
 }

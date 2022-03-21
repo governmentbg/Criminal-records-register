@@ -75,6 +75,7 @@ import { ConfirmDialogComponent } from "./components/dialogs/confirm-dialog-comp
 import { CaisGridPagerComponent } from './components/grid/cais-grid-pager/cais-grid-pager.component';
 import { LookupComponent } from './components/forms/inputs/lookup/lookup.component';
 import { MultipleChooseComponent } from './components/forms/inputs/multiple-choose/multiple-choose.component';
+import { AddressFormComponent } from './components/forms/address-form/address-form.component';
 
 const socialLinks = [
   {
@@ -177,7 +178,8 @@ const COMPONENTS = [
   ConfirmDialogComponent,
   CaisGridPagerComponent,
   LookupComponent,
-  MultipleChooseComponent
+  MultipleChooseComponent,
+  AddressFormComponent
 ];
 
 @NgModule({

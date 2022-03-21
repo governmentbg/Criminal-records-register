@@ -16,7 +16,8 @@
 
         public MultipleChooseDTO()
         {
-
+            this.SelectedPrimaryKeys = new List<TPrimaryKey>();
+            this.SelectedForeignKeys = new List<TForeignKey>();
         }
     }
 

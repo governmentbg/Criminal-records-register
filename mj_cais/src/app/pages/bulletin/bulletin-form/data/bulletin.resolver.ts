@@ -48,7 +48,7 @@ export class BulletinResolver implements Resolve<any> {
       countries: this.nomenclatureService.getCountries(),
       countriesSubdivisions:
         this.nomenclatureService.getCountriesSubdivisions(),
-      cities: this.nomenclatureService.getCities(),
+      //cities: this.nomenclatureService.getCities(),
       completions: this.nomenclatureService.getLvlCompletions(),
       parts: this.nomenclatureService.getExrisOffLevelParts(),
       sanctions: this.service.getSanctions(bulletineId),
@@ -89,7 +89,7 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public ecrisOffCategories: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
   public countriesSubdivisions: Observable<BaseNomenclatureModel[]>;
-  public cities: Observable<BaseNomenclatureModel[]>;
+  //public cities: Observable<BaseNomenclatureModel[]>;
   public completions: Observable<BaseNomenclatureModel[]>;
   public parts: Observable<BaseNomenclatureModel[]>;
   public sanctionCategories: Observable<BaseNomenclatureModel[]>;

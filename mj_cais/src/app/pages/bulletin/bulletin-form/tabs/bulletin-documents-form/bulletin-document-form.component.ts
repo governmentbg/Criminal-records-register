@@ -268,16 +268,16 @@ export class BulletinDocumentFormComponent implements OnInit {
 
     this.bulletinInfo.fatherFullname = fatherFullname ?? "";
 
-    if (this.bulletinForm.birthCountryId.value) {
+    if (this.bulletinForm.address.countryId.value) {
       let countryName = (this.dbData.countries as any).find(
-        (x) => x.id === this.bulletinForm.birthCountryId.value
+        (x) => x.id === this.bulletinForm.address.countryId.value
       )?.name;
       this.bulletinInfo.country = countryName;
     }
 
-    if (this.bulletinForm.birthCityId.value) {
+    if (this.bulletinForm.address.cityId.value) {
       let cityName = (this.dbData.countries as any).find(
-        (x) => x.id === this.bulletinForm.birthCityId.value
+        (x) => x.id === this.bulletinForm.address.cityId.value
       )?.name;
       this.bulletinInfo.city = cityName;
     }

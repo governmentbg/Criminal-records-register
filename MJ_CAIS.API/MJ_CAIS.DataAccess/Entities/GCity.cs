@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCity : BaseEntity
+    public partial class GCity : BaseEntity, IBaseNomenclature 
     {
         public GCity()
         {
