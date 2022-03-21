@@ -14,7 +14,6 @@ export class BulletinNewEissOverviewComponent extends RemoteGridWithStatePersist
   BulletinGridService
 > {
   constructor(service: BulletinGridService, injector: Injector) {
-    debugger;
     super("bulletins-search", service, injector);
     this.service.updateUrl(
       `bulletins?statusId=${BulletinStatusTypeConstants.NewEISS}`

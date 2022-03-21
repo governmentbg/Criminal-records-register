@@ -10,8 +10,19 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<BBulletin, BulletinGridDTO>();
 
-            CreateMap<BulletinDTO, BBulletin>();
-            CreateMap<BBulletin, BulletinDTO>();
+            CreateMap<BulletinDTO, BBulletin>()
+                .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
+                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.CountryId))
+                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
+
+            CreateMap<BBulletin, BulletinDTO>()
+                .ForPath(d => d.Address.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
+                .ForPath(d => d.Address.CountryId, opt => opt.MapFrom(src => src.BirthCountryId))
+                .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
+                .ForPath(d => d.Address.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
+                .ForPath(d => d.Address.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
+                .ForPath(d => d.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.Id)))
+                .ForPath(d => d.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.CountryId)));
 
             CreateMap<OffenceDTO, BOffence>()
                 .ForPath(d => d.OffenceCat.Name, opt => opt.MapFrom(src => src.OffenceCatName))
@@ -50,7 +61,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
              .ForMember(d => d.DocumentContent, opt => opt.Ignore());
 
             CreateMap<BBullPersAlias, PersonAliasDTO>()
-                .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type)) 
+                .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type))
                 .ReverseMap()
                 .ForMember(d => d.Type, opt => opt.MapFrom(src => src.TypeCode));
 

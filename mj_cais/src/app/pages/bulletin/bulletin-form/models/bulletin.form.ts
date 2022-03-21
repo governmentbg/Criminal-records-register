@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
 import { MultipleChooseForm } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
 
 export class BulletinForm {
@@ -41,9 +42,6 @@ export class BulletinForm {
   public lnch: FormControl;
   public birthDate: FormControl;
   public birthDatePrecision: FormControl;
-  public birthCityId: FormControl;
-  public birthCountryId: FormControl;
-  public birthPlaceOther: FormControl;
   public fullnameLat: FormControl;
   public idDocNumber: FormControl;
   public idDocCategoryId: FormControl;
@@ -73,6 +71,7 @@ export class BulletinForm {
   public ecrisConvictionId: FormControl;
   public personAliasTransactions: FormControl;
   public nationalities: MultipleChooseForm;
+  public address: AddressForm;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -113,11 +112,6 @@ export class BulletinForm {
     this.lnch = new FormControl(null, [Validators.required]);
     this.birthDate = new FormControl(null, [Validators.required]);
     this.birthDatePrecision = new FormControl(null);
-    //this.birthCityId = new FormControl(null, [Validators.required]); // todo:
-    this.birthCityId = new FormControl(null);
-    //this.birthCountryId = new FormControl(null, [Validators.required]); // todo:
-    this.birthCountryId = new FormControl(null);
-    this.birthPlaceOther = new FormControl(null);
     this.fullnameLat = new FormControl(null);
     this.idDocNumber = new FormControl(null);
     this.idDocCategoryId = new FormControl(null);
@@ -147,6 +141,7 @@ export class BulletinForm {
     this.ecrisConvictionId = new FormControl(null);
     this.personAliasTransactions = new FormControl(null);
     this.nationalities = new MultipleChooseForm(true);
+    this.address = new AddressForm();
 
     this.group = new FormGroup({
       id: this.id,
@@ -185,9 +180,6 @@ export class BulletinForm {
       lnch: this.lnch,
       birthDate: this.birthDate,
       birthDatePrecision: this.birthDatePrecision,
-      birthCityId: this.birthCityId,
-      birthCountryId: this.birthCountryId,
-      birthPlaceOther: this.birthPlaceOther,
       fullnameLat: this.fullnameLat,
       idDocNumber: this.idDocNumber,
       idDocCategoryId: this.idDocCategoryId,
@@ -217,6 +209,7 @@ export class BulletinForm {
       ecrisConvictionId: this.ecrisConvictionId,
       personAliasTransactions: this.personAliasTransactions,
       nationalities: this.nationalities.group,
+      address: this.address.group
     });
   }
 }

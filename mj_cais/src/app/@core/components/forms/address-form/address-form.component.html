@@ -1,0 +1,71 @@
+<div [formGroup]="parentForm.group">
+  <div class="row">
+    <div class="form-group col-md-3">
+      <cais-autocomplete
+        [label]="'Държава'"
+        [inputFormControl]="parentForm.countryId"
+        [parentGroup]="parentForm.group"
+        [inputName]="'countryId'"
+        [(items)]="countries"
+        (selectionChanged)="onCountryChanged($event)"
+      ></cais-autocomplete>
+    </div>
+
+    <div
+      class="form-group col-md-9"
+      [hidden]="!parentForm.isSetForForeignAddress"
+    >
+      <cais-input
+        [type]="'text'"
+        [label]="'Oписание в случай на друг адрес'"
+        [inputFormControl]="parentForm.foreignCountryAddress"
+        [parentGroup]="parentForm.group"
+        [inputName]="'foreignCountryAddress'"
+      ></cais-input>
+    </div>
+
+    <div
+      class="form-group col-md-3"
+      [hidden]="!parentForm.isSetForNativeAddress"
+    >
+      <cais-autocomplete
+        #districtAutocomplete
+        [label]="'Област'"
+        [inputFormControl]="parentForm.districtId"
+        [parentGroup]="parentForm.group"
+        [inputName]="'districtId'"
+        [(items)]="districts"
+        (selectionChanged)="onDistrictChanged($event)"
+      ></cais-autocomplete>
+    </div>
+
+    <div
+      class="form-group col-md-3"
+      [hidden]="!parentForm.isSetForNativeAddress"
+    >
+      <cais-autocomplete
+        #municipalityAutocomplete
+        [label]="'Община'"
+        [inputFormControl]="parentForm.municipalityId"
+        [parentGroup]="parentForm.group"
+        [inputName]="'municipalityId'"
+        [(items)]="municipalities"
+        (selectionChanged)="onMunicipalityChanged($event)"
+      ></cais-autocomplete>
+    </div>
+
+    <div
+      class="form-group col-md-3"
+      [hidden]="!parentForm.isSetForNativeAddress"
+    >
+      <cais-autocomplete
+        #cityAutocomplete
+        [label]="'Град'"
+        [inputFormControl]="parentForm.cityId"
+        [parentGroup]="parentForm.group"
+        [inputName]="'cityId'"
+        [(items)]="cities"
+      ></cais-autocomplete>
+    </div>
+  </div>
+</div>

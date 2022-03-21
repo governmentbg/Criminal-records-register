@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GBgMunicipality : BaseEntity
+    public partial class GBgMunicipality : BaseEntity, IBaseNomenclature
     {
         public GBgMunicipality()
         {

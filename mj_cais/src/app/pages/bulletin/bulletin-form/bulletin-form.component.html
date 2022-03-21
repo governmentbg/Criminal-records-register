@@ -462,51 +462,18 @@
           </div>
           <div class="font-weight-bold">Място на раждане</div>
           <hr />
-          <div class="row">
-            <div class="form-group col-md-3">
-              <cais-autocomplete
-                [label]="'Държава'"
-                [inputFormControl]="fullForm.birthCountryId"
-                [parentGroup]="fullForm.group"
-                [inputName]="'birthCountryId'"
-                [items]="dbData.countries"
-              ></cais-autocomplete>
-            </div>
-            <div class="form-group col-md-3">
-              <label class="label">Област</label>
-              <input type="text" nbInput fullWidth value="N/A" />
-            </div>
-            <div class="form-group col-md-3">
-              <cais-autocomplete
-                [label]="'Населено място'"
-                [inputFormControl]="fullForm.birthCityId"
-                [parentGroup]="fullForm.group"
-                [inputName]="'birthCityId'"
-                [items]="dbData.cities"
-              ></cais-autocomplete>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-9">
-              <cais-input
-                [type]="'text'"
-                [label]="'Място на раждане - описание в случай на друго'"
-                [inputFormControl]="fullForm.birthPlaceOther"
-                [parentGroup]="fullForm.group"
-                [inputType]="InputTypeConstants.TextArea"
-                [rows]="3"
-              ></cais-input>
-            </div>
-          </div>
+          <cais-address-form
+            [parentForm]="fullForm.address"
+          ></cais-address-form>        
           <div class="row">
             <div class="form-group col-md-6">
-                <cais-multiple-choose
-               [label]="'Гражданство'"
-               [inputFormControl]="fullForm.nationalities"
-               [parentGroup]="fullForm.group"             
-               [items]="dbData.countries"
+              <cais-multiple-choose
+                [label]="'Гражданство'"
+                [inputFormControl]="fullForm.nationalities"
+                [parentGroup]="fullForm.group"
+                [items]="dbData.countries"
               >
-              </cais-multiple-choose>  
+              </cais-multiple-choose>
             </div>
             <div class="form-group col-md-3">
               <cais-input

@@ -91,7 +91,7 @@ namespace MJ_CAIS.AutoMapperContainer
             }
         }
 
-        public static List<EntityType> MapToEntityList<ViewModelType, EntityType>(this IMapper mapper, List<ViewModelType> viewModels, bool isAdded) 
+        public static List<EntityType> MapToEntityList<ViewModelType, EntityType>(this IMapper mapper, List<ViewModelType> viewModels, bool isAdded)
             where ViewModelType : class
             where EntityType : BaseEntity
         {
@@ -181,23 +181,29 @@ namespace MJ_CAIS.AutoMapperContainer
             var entitiesForUpdate = new List<TEntityType>();
             if (!multipleChooseEditor.IsChanged) return entitiesForUpdate;
 
-            //for delete
-            foreach (var item in multipleChooseEditor.SelectedPrimaryKeys)
+            if (multipleChooseEditor.SelectedPrimaryKeys != null)
             {
-                var entity = Activator.CreateInstance<TEntityType>();
-                entity.EntityState = EntityStateEnum.Deleted;
-                entity.GetType().GetProperty(pkName)?.SetValue(entity, item);
-                entitiesForUpdate.Add(entity);
+                //for delete
+                foreach (var item in multipleChooseEditor.SelectedPrimaryKeys)
+                {
+                    var entity = Activator.CreateInstance<TEntityType>();
+                    entity.EntityState = EntityStateEnum.Deleted;
+                    entity.GetType().GetProperty(pkName)?.SetValue(entity, item);
+                    entitiesForUpdate.Add(entity);
+                }
             }
 
-            //for add
-            foreach (var item in multipleChooseEditor.SelectedForeignKeys)
+            if (multipleChooseEditor.SelectedForeignKeys != null)
             {
-                var entity = Activator.CreateInstance<TEntityType>();
-                ChangeTransactionIdOnAdd(entity, pkName);
-                entity.EntityState = EntityStateEnum.Added;
-                entity.GetType().GetProperty(fkName)?.SetValue(entity, item);
-                entitiesForUpdate.Add(entity);
+                //for add
+                foreach (var item in multipleChooseEditor.SelectedForeignKeys)
+                {
+                    var entity = Activator.CreateInstance<TEntityType>();
+                    ChangeTransactionIdOnAdd(entity, pkName);
+                    entity.EntityState = EntityStateEnum.Added;
+                    entity.GetType().GetProperty(fkName)?.SetValue(entity, item);
+                    entitiesForUpdate.Add(entity);
+                }
             }
 
             return entitiesForUpdate;

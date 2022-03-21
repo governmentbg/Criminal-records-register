@@ -27,5 +27,19 @@ namespace MJ_CAIS.Web.Controllers
             var result = _nomenclatureDetailService.GetBaseNomenclatureValues(tableName);
             return Ok(result);
         }
+
+        [HttpGet("municipalities/{districtId}")]
+        public IActionResult GetMunicipalitiesByProvince(string districtId)
+        {
+            var result = _nomenclatureDetailService.GetMunicipalitiesByDistrict(districtId);
+            return Ok(result);
+        }
+
+        [HttpGet("cities/{municipalityId}")]
+        public IActionResult GetSettlementsByMunicipality(string municipalityId)
+        {
+            var result = _nomenclatureDetailService.GetCitiesByMunicipality(municipalityId);
+            return Ok(result);
+        }
     }
 }
