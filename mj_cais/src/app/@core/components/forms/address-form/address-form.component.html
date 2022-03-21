@@ -12,6 +12,19 @@
     </div>
 
     <div
+      class="form-group col-md-9"
+      [hidden]="!parentForm.isSetForForeignAddress"
+    >
+      <cais-input
+        [type]="'text'"
+        [label]="'Oписание в случай на друг адрес'"
+        [inputFormControl]="parentForm.foreignCountryAddress"
+        [parentGroup]="parentForm.group"
+        [inputName]="'foreignCountryAddress'"
+      ></cais-input>
+    </div>
+
+    <div
       class="form-group col-md-3"
       [hidden]="!parentForm.isSetForNativeAddress"
     >

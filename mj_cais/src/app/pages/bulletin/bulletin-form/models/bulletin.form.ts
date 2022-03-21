@@ -42,9 +42,6 @@ export class BulletinForm {
   public lnch: FormControl;
   public birthDate: FormControl;
   public birthDatePrecision: FormControl;
-  //public birthCityId: FormControl;
-  public birthCountryId: FormControl;
-  public birthPlaceOther: FormControl;
   public fullnameLat: FormControl;
   public idDocNumber: FormControl;
   public idDocCategoryId: FormControl;
@@ -115,9 +112,6 @@ export class BulletinForm {
     this.lnch = new FormControl(null, [Validators.required]);
     this.birthDate = new FormControl(null, [Validators.required]);
     this.birthDatePrecision = new FormControl(null);
-    //this.birthCityId = new FormControl(null); // todo: remove
-    this.birthCountryId = new FormControl(null);// remove
-    this.birthPlaceOther = new FormControl(null);
     this.fullnameLat = new FormControl(null);
     this.idDocNumber = new FormControl(null);
     this.idDocCategoryId = new FormControl(null);
@@ -186,9 +180,6 @@ export class BulletinForm {
       lnch: this.lnch,
       birthDate: this.birthDate,
       birthDatePrecision: this.birthDatePrecision,
-      //birthCityId: this.birthCityId,
-      birthCountryId: this.birthCountryId,
-      birthPlaceOther: this.birthPlaceOther,
       fullnameLat: this.fullnameLat,
       idDocNumber: this.idDocNumber,
       idDocCategoryId: this.idDocCategoryId,

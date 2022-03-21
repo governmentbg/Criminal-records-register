@@ -38,9 +38,6 @@ export class BulletinModel {
   public lnch: string = null;
   public birthDate: Date = null;
   public birthDatePrecision: string = null;
-  //public birthCityId: string = null;
- //public birthCountryId: string = null;
-  public birthPlaceOther: string = null;
   public fullnameLat: string = null;
   public idDocNumber: string = null;
   public idDocCategoryId: string = null;
@@ -104,9 +101,6 @@ export class BulletinModel {
       this.lnch = init.lnch ?? null;
       this.birthDate = init.birthDate ?? null;
       this.birthDatePrecision = init.birthDatePrecision ?? null;
-      //this.birthCityId = init.birthCityId ?? null;
-      //this.birthCountryId = init.birthCountryId ?? null;
-      this.birthPlaceOther = init.birthPlaceOther ?? null;
       this.fullnameLat = init.fullnameLat ?? null;
       this.idDocNumber = init.idDocNumber ?? null;
       this.idDocCategoryId = init.idDocCategoryId ?? null;

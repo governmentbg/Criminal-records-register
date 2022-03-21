@@ -6,5 +6,6 @@
         public string? MunicipalityId { get; set; }
         public string? DistrictId { get; set; }
         public string? CityId { get; set; }
+        public string? ForeignCountryAddress { get; set; }
     }
 }

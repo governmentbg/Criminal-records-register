@@ -11,10 +11,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BBulletin, BulletinGridDTO>();
 
             CreateMap<BulletinDTO, BBulletin>()
-                .ForPath(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.CountryId))
-                .ForPath(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
+                .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
+                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.CountryId))
+                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
 
             CreateMap<BBulletin, BulletinDTO>()
+                .ForPath(d => d.Address.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                 .ForPath(d => d.Address.CountryId, opt => opt.MapFrom(src => src.BirthCountryId))
                 .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
                 .ForPath(d => d.Address.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))

@@ -66,7 +66,7 @@ namespace MJ_CAIS.Services
             var context = _bulletinRepository.GetDbContext();
 
             var bulletin = await context.BBulletins
-                .Include(x=>x.BPersNationalities)
+                .Include(x => x.BPersNationalities)
                 .Include(x => x.BirthCity)
                     .ThenInclude(x => x.Municipality)
                 .AsNoTracking()
@@ -222,9 +222,9 @@ namespace MJ_CAIS.Services
         {
             var dbContext = _bulletinRepository.GetDbContext();
 
-            var result = dbContext.BBullPersAliases     
+            var result = dbContext.BBullPersAliases
                 .AsNoTracking()
-                .Where(x=>x.BulletinId == aId)
+                .Where(x => x.BulletinId == aId)
                 .ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
 
             return await Task.FromResult(result);
@@ -233,12 +233,6 @@ namespace MJ_CAIS.Services
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
         {
             var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
-
-            if (entity.ModifiedProperties is null)
-                entity.ModifiedProperties = new List<string>();
-
-            entity.ModifiedProperties.Add(nameof(entity.BirthCountryId));
-            entity.ModifiedProperties.Add(nameof(entity.BirthCityId));
 
             if (isAdded)
             {
