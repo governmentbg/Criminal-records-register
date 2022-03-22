@@ -91,14 +91,14 @@
                 nbButton
                 matRipple
                 status="success"
-                (click)="onSubmitBulletineDocument()"
+                (click)="onSubmitFbbcDocument()"
               >
                 Потвърди
               </button>
               <button
                 nbButton
                 matRipple
-                (click)="onCloseBulletinDocumentDilog()"
+                (click)="onCloseFbbcDocumentDilog()"
                 class="ml-3"
               >
                 Откажи
@@ -167,8 +167,8 @@
           <div class="form-group col-md-8">
             <cais-autocomplete
               [label]="'Вид документ'"
-              [inputFormControl]="bulletinDocumentForm.docTypeId"
-              [parentGroup]="bulletinDocumentForm.group"
+              [inputFormControl]="fbbcDocumentForm.docTypeId"
+              [parentGroup]="fbbcDocumentForm.group"
               [items]="dbData.documentTypes"
               [inputName]="'docTypeId'"
             >
@@ -181,8 +181,8 @@
             <cais-input
               [type]="'text'"
               [label]="'Описание'"
-              [inputFormControl]="bulletinDocumentForm.descr"
-              [parentGroup]="bulletinDocumentForm.group"
+              [inputFormControl]="fbbcDocumentForm.descr"
+              [parentGroup]="fbbcDocumentForm.group"
               [inputName]="'descr'"
               [rows]="'3'"
               [inputType]="'TextArea'"

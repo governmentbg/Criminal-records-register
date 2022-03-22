@@ -106,12 +106,13 @@
     [pinned]="true"
   >
     <ng-template igxCell let-cell="cell">
-        <a
-        [title]="'Статус Унищожен'"  
+      <button
+        igxButton="icon"
+        [title]="'Унищожаване'"
+        (click)="openDestructionConfirmationDialog(cell.rowData.id)"
       >
-        <nb-icon pack="fa" icon="trash"></nb-icon> 
-
-      </a> 
+        <nb-icon pack="fa" icon="trash"></nb-icon>
+      </button>
       <a
         [title]="'Преглед'"
         [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"

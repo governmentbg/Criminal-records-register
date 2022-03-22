@@ -1,5 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { BulletinStatusTypeConstants } from "../../../pages/bulletin/bulletin-overview/models/bulletin-status-type.constants";
 import { GenderConstants } from "../../constants/gender.constants";
 import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
@@ -66,10 +67,7 @@ export class NomenclatureService extends CaisCrudService<
   }
 
   public getBulletinStatuses(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-    // return this.http.get<BaseNomenclatureModel[]>(
-    //   `${this.url}/b_bulletin_statuses`
-    // );
+    return of(BulletinStatusTypeConstants.allData);
   }
 
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
@@ -180,5 +178,19 @@ export class NomenclatureService extends CaisCrudService<
 
   public getPersonAliasTypes(): Observable<BaseNomenclatureModel[]> {
     return of(PersonAliasConstants.allData);
+  }
+
+  public getFbbcDocTypes(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/fbbc_doc_types`
+    );
+  }
+
+  public getFbbcSanctTypes(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/fbbc_sanct_types`
+    );
   }
 }

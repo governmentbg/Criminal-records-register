@@ -5,7 +5,7 @@ namespace MJ_CAIS.DTO.Bulletin
     public class BulletinDTO : BaseDTO
     {
         public decimal? Version { get; set; }
-        public string? CsAuthorityId { get; set; }
+        public string? CsAuthorityName { get; set; }
         public string? RegistrationNumber { get; set; }
         public decimal? SequentialIndex { get; set; }
         public string? DecisionNumber { get; set; }

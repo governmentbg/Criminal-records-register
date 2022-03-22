@@ -2,13 +2,14 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
 import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
 import { MultipleChooseForm } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
+import { BulletinStatusTypeEnum } from "../../bulletin-overview/models/bulletin-status-type.constants";
 
 export class BulletinForm {
   public group: FormGroup;
 
   public id: FormControl;
   public version: FormControl;
-  public csAuthorityId: FormControl;
+  public csAuthorityName: FormControl;
   public registrationNumber: FormControl;
   public sequentialIndex: FormControl;
   public decisionNumber: FormControl;
@@ -29,6 +30,7 @@ export class BulletinForm {
   public approvedByNames: FormControl;
   public approvedByPosition: FormControl;
   public statusId: FormControl;
+  public statusIdDisplay: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -77,7 +79,7 @@ export class BulletinForm {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid);
     this.version = new FormControl(null);
-    this.csAuthorityId = new FormControl(null);
+    this.csAuthorityName = new FormControl(null);
     this.registrationNumber = new FormControl(null);
     this.sequentialIndex = new FormControl(null, [Validators.required]);
     this.decisionNumber = new FormControl(null, [Validators.required]);
@@ -97,8 +99,8 @@ export class BulletinForm {
     this.createdByNames = new FormControl(null, [Validators.required]);
     this.approvedByNames = new FormControl(null, [Validators.required]);
     this.approvedByPosition = new FormControl(null, [Validators.required]);
-    //this.statusId = new FormControl(null, [Validators.required]); // todo:
-    this.statusId = new FormControl(null);
+    this.statusId = new FormControl(BulletinStatusTypeEnum.NewEISS);
+    this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewEISS);
     this.firstname = new FormControl(null, [Validators.required]);
     this.surname = new FormControl(null, [Validators.required]);
     this.familyname = new FormControl(null, [Validators.required]);
@@ -146,7 +148,7 @@ export class BulletinForm {
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
-      csAuthorityId: this.csAuthorityId,
+      csAuthorityName: this.csAuthorityName,
       registrationNumber: this.registrationNumber,
       sequentialIndex: this.sequentialIndex,
       decisionNumber: this.decisionNumber,
@@ -167,6 +169,7 @@ export class BulletinForm {
       approvedByNames: this.approvedByNames,
       approvedByPosition: this.approvedByPosition,
       statusId: this.statusId,
+      statusIdDisplay: this.statusIdDisplay,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,

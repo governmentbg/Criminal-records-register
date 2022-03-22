@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   IgxDialogComponent,
   IgxGridComponent,
@@ -12,17 +12,17 @@ import { CommonConstants } from "../../../../../@core/constants/common.constants
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
-import { BulletinService } from "../../data/bulletin.service";
-import { BulletinForm } from "../../models/bulletin.form";
-import { BulletinDocumentForm } from "./models/bulletin-document.form";
+import { FbbcService } from "../../data/fbbc.service";
+import { FbbcDocumentForm } from "../../models/fbbc-document.form";
+import { FbbcForm } from "../../models/fbbc.form";
 
 @Component({
-  selector: "cais-bulletin-document-form",
-  templateUrl: "./bulletin-document-form.component.html",
-  styleUrls: ["./bulletin-document-form.component.scss"],
+  selector: "cais-fbbc-document-form",
+  templateUrl: "./fbbc-document-form.component.html",
+  styleUrls: ["./fbbc-document-form.component.scss"],
 })
-export class BulletinDocumentFormComponent {
-  @Input() bulletinForm: BulletinForm;
+export class FbbcDocumentFormComponent implements OnInit {
+  @Input() fbbcForm: FbbcForm;
   @Input() documents: any;
   @Input() dbData: any;
   @Input() isForPreview: boolean;
@@ -36,7 +36,7 @@ export class BulletinDocumentFormComponent {
   @ViewChild("dialogAdd", { read: IgxDialogComponent })
   public dialog: IgxDialogComponent;
 
-  public bulletinDocumentForm = new BulletinDocumentForm();
+  public fbbcDocumentForm = new FbbcDocumentForm();
   public uploader: CustomFileUploader;
   public hasDropZoneOver: boolean = false;
 
@@ -44,12 +44,14 @@ export class BulletinDocumentFormComponent {
 
   constructor(
     public toastr: CustomToastrService,
-    public bulletinService: BulletinService,
+    public fbbcService: FbbcService,
     private dialogService: NbDialogService,
     private dateFormatService: DateFormatService
   ) {
     this.initializeUploader();
   }
+
+  ngOnInit(): void {}
 
   public fileOverAnother(e: any): void {
     this.hasDropZoneOver = e;
@@ -59,52 +61,47 @@ export class BulletinDocumentFormComponent {
     this.initializeUploader();
   }
 
-  onSubmitBulletineDocument() {
-    if (!this.bulletinDocumentForm.group.valid) {
+  onSubmitFbbcDocument() {
+    if (!this.fbbcDocumentForm.group.valid) {
       this.toastr.showToast("danger", this.validationMessage);
 
-      this.bulletinDocumentForm.group.markAllAsTouched();
+      this.fbbcDocumentForm.group.markAllAsTouched();
       return;
     }
 
-    let model = this.bulletinDocumentForm.group.value;
-    this.bulletinService
-      .saveDocument(this.bulletinForm.id.value, model)
-      .subscribe(
-        (res) => {
-          this.toastr.showToast("success", "Успешно добавен документ");
-          this.onAddDocumentRow();
-        },
+    let model = this.fbbcDocumentForm.group.value;
+    this.fbbcService.saveDocument(this.fbbcForm.id.value, model).subscribe(
+      (res) => {
+        this.toastr.showToast("success", "Успешно добавен документ");
+        this.onAddDocumentRow();
+      },
 
-        (error) => {
-          this.showErrorMessage(
-            error,
-            "Възникна грешка при запис на данните: "
-          );
-        }
-      );
+      (error) => {
+        this.showErrorMessage(error, "Възникна грешка при запис на данните: ");
+      }
+    );
   }
 
   onAddDocumentRow() {
-    if (this.bulletinDocumentForm.docTypeId.value) {
+    if (this.fbbcDocumentForm.docTypeId.value) {
       let docTypeName = (this.dbData.documentTypes as any).find(
-        (x) => x.id === this.bulletinDocumentForm.docTypeId.value
+        (x) => x.id === this.fbbcDocumentForm.docTypeId.value
       )?.name;
-      this.bulletinDocumentForm.docTypeName.patchValue(docTypeName);
+      this.fbbcDocumentForm.docTypeName.patchValue(docTypeName);
     }
 
-    this.documentsGrid.addRow(this.bulletinDocumentForm.group.value);
+    this.documentsGrid.addRow(this.fbbcDocumentForm.group.value);
 
-    this.onCloseBulletinDocumentDilog();
+    this.onCloseFbbcDocumentDilog();
   }
 
-  onCloseBulletinDocumentDilog() {
-    this.bulletinDocumentForm = new BulletinDocumentForm();
+  onCloseFbbcDocumentDilog() {
+    this.fbbcDocumentForm = new FbbcDocumentForm();
     this.dialog.close();
   }
 
   onRmoveDocument(item: FileItem) {
-    this.bulletinDocumentForm.documentContent.setValue(null);
+    this.fbbcDocumentForm.documentContent.setValue(null);
     item.remove();
   }
 
@@ -113,8 +110,8 @@ export class BulletinDocumentFormComponent {
       .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
       .onClose.subscribe((result) => {
         if (result) {
-          this.bulletinService
-            .deleteDocument(this.bulletinForm.id.value, documentId)
+          this.fbbcService
+            .deleteDocument(this.fbbcForm.id.value, documentId)
             .subscribe(
               (res) => {
                 this.toastr.showToast("success", "Успешно изтрит документ");
@@ -136,8 +133,8 @@ export class BulletinDocumentFormComponent {
   }
 
   download(id: string) {
-    this.bulletinService
-      .downloadDocument(this.bulletinForm.id.value, id)
+    this.fbbcService
+      .downloadDocument(this.fbbcForm.id.value, id)
       .subscribe((response: any) => {
         let blob = new Blob([response.body]);
         window.URL.createObjectURL(blob);
@@ -176,9 +173,9 @@ export class BulletinDocumentFormComponent {
         const blob = new Blob([file.rawFile], { type: file.type });
 
         this.convertFile(blob).subscribe((base64) => {
-          this.bulletinDocumentForm.documentContent.setValue(base64);
-          this.bulletinDocumentForm.mimeType.setValue(file.type);
-          this.bulletinDocumentForm.name.setValue(file.name);
+          this.fbbcDocumentForm.documentContent.setValue(base64);
+          this.fbbcDocumentForm.mimeType.setValue(file.type);
+          this.fbbcDocumentForm.name.setValue(file.name);
         });
       }
     };

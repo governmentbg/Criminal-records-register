@@ -9,6 +9,8 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<BulletinGridDTO>> GetAllCustomAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId);
 
+        Task ChangeStatusAsync(string aInDto, string statusId);
+
         Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId);
 
         Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId);

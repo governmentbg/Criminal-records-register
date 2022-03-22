@@ -13,7 +13,7 @@
         public string? SanctProbMeasureId { get; set; }
         public string? SanctProbMeasureName { get; set; }
         public string? Descr { get; set; }
-        public decimal? SpecificToMinor { get; set; }
+        public bool? SpecificToMinor { get; set; }
         public DateTime? DecisionStartDate { get; set; }
         public DateTime? DecisionEndDate { get; set; }
         public decimal? DecisionDurationYears { get; set; }

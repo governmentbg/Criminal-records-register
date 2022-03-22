@@ -8,6 +8,7 @@ import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.co
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
+import { FbbcResolver } from "./fbbc/fbbc-form/data/fbbc.resolver";
 import { EcrisIdentificationOverviewComponent } from "./ecris/ecris-identification-overview/ecris-identification-overview.component";
 import { BulletinNewEissOverviewComponent } from "./bulletin/bulletin-overview/bulletin-neweiss-overview/bulletin-neweiss-overview.component";
 import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bulletin-active-overview/bulletin-active-overview.component";
@@ -76,7 +77,21 @@ const routes: Routes = [
       {
         path: "fbbcs/create",
         component: FbbcFormComponent,
-        //resolve: { dbData: FbbcResolver },
+        resolve: { dbData: FbbcResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "fbbcs/edit/:ID",
+        component: FbbcFormComponent,
+        resolve: { dbData: FbbcResolver },
+        data: { edit: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "fbbcs/preview/:ID",
+        component: FbbcFormComponent,
+        resolve: { dbData: FbbcResolver },
+        data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },
       {

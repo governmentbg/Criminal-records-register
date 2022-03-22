@@ -1,6 +1,5 @@
 export class FbbcModel {
   public id: string = null;
-  // public id: string = null;
   public countryId: string = null;
   public docTypeId: string = null;
   public sanctionTypeId: string = null;
@@ -15,9 +14,8 @@ export class FbbcModel {
   public birthCityId: string = null;
   public birtyCountryDescr: string = null;
   public birthCountryId: string = null;
-  public birthYear: number = null;
-  public birthMonth: number = null;
-  public birthDay: number = null;
+  public birthDate: number = null;
+  public birthDatePrec: number = null;
   public offenceStartDate: Date = null;
   public offenceEndDate: Date = null;
   public annotation: string = null;
@@ -65,9 +63,8 @@ export class FbbcModel {
       this.birthCityId = init.birthCityId ?? null;
       this.birtyCountryDescr = init.birtyCountryDescr ?? null;
       this.birthCountryId = init.birthCountryId ?? null;
-      this.birthYear = init.birthYear ?? null;
-      this.birthMonth = init.birthMonth ?? null;
-      this.birthDay = init.birthDay ?? null;
+      this.birthDate = init.birthDate ?? null;
+      this.birthDatePrec = init.birthDatePrec ?? null;
       this.offenceStartDate = init.offenceStartDate ?? null;
       this.offenceEndDate = init.offenceEndDate ?? null;
       this.annotation = init.annotation ?? null;

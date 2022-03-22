@@ -4,7 +4,6 @@ export class FbbcForm {
   public group: FormGroup;
 
   public id: FormControl;
-  // public id: FormControl;
   public countryId: FormControl;
   public docTypeId: FormControl;
   public sanctionTypeId: FormControl;
@@ -19,9 +18,7 @@ export class FbbcForm {
   public birthCityId: FormControl;
   public birtyCountryDescr: FormControl;
   public birthCountryId: FormControl;
-  public birthYear: FormControl;
-  public birthMonth: FormControl;
-  public birthDay: FormControl;
+  public birthDate: FormControl;
   public offenceStartDate: FormControl;
   public offenceEndDate: FormControl;
   public annotation: FormControl;
@@ -53,7 +50,6 @@ export class FbbcForm {
 
   constructor() {
     this.id = new FormControl(null);
-    // this.id = new FormControl(null);
     this.countryId = new FormControl(null);
     this.docTypeId = new FormControl(null);
     this.sanctionTypeId = new FormControl(null);
@@ -68,9 +64,7 @@ export class FbbcForm {
     this.birthCityId = new FormControl(null);
     this.birtyCountryDescr = new FormControl(null);
     this.birthCountryId = new FormControl(null);
-    this.birthYear = new FormControl(null);
-    this.birthMonth = new FormControl(null);
-    this.birthDay = new FormControl(null);
+    this.birthDate = new FormControl(null);
     this.offenceStartDate = new FormControl(null);
     this.offenceEndDate = new FormControl(null);
     this.annotation = new FormControl(null);
@@ -102,7 +96,6 @@ export class FbbcForm {
 
     this.group = new FormGroup({
       id: this.id,
-      // id: this.id,
       countryId: this.countryId,
       docTypeId: this.docTypeId,
       sanctionTypeId: this.sanctionTypeId,
@@ -117,9 +110,7 @@ export class FbbcForm {
       birthCityId: this.birthCityId,
       birtyCountryDescr: this.birtyCountryDescr,
       birthCountryId: this.birthCountryId,
-      birthYear: this.birthYear,
-      birthMonth: this.birthMonth,
-      birthDay: this.birthDay,
+      birthDate: this.birthDate,
       offenceStartDate: this.offenceStartDate,
       offenceEndDate: this.offenceEndDate,
       annotation: this.annotation,
