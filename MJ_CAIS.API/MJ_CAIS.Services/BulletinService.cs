@@ -67,6 +67,7 @@ namespace MJ_CAIS.Services
 
             var bulletin = await context.BBulletins
                 .Include(x => x.BPersNationalities)
+                .Include(x => x.CsAuthority)
                 .Include(x => x.BirthCity)
                     .ThenInclude(x => x.Municipality)
                 .AsNoTracking()
@@ -87,7 +88,7 @@ namespace MJ_CAIS.Services
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
             var dbContext = _bulletinRepository.GetDbContext();
-        
+
             var offances = dbContext.BOffences
                 .AsNoTracking()
                 .Include(x => x.OffenceCat)

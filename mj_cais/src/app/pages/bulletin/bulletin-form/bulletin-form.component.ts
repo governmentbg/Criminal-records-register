@@ -77,6 +77,8 @@ export class BulletinFormComponent
 
   ngOnInit(): void {
     this.fullForm = new BulletinForm();
+    this.fullForm.statusId.disable();
+    this.fullForm.csAuthorityName.disable(); 
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
   }

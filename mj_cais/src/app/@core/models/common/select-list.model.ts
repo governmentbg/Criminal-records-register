@@ -1,6 +1,6 @@
 export class SelectListModel {
   public text: string;
-  public value: number;
+  public value: string | number;
   public selected: boolean;
   public code: string;
 

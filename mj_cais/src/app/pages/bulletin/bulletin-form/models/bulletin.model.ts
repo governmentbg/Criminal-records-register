@@ -4,7 +4,7 @@ import { MultipleChooseModel } from "../../../../@core/components/forms/inputs/m
 export class BulletinModel {
   public id: string = null;
   public version: number = null;
-  public csAuthorityId: string = null;
+  public csAuthorityName: string = null;
   public registrationNumber: string = null;
   public sequentialIndex: number = null;
   public decisionNumber: string = null;
@@ -67,7 +67,7 @@ export class BulletinModel {
     if (init) {
       this.id = init.id ?? null;
       this.version = init.version ?? null;
-      this.csAuthorityId = init.csAuthorityId ?? null;
+      this.csAuthorityName = init.csAuthorityName ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.sequentialIndex = init.sequentialIndex ?? null;
       this.decisionNumber = init.decisionNumber ?? null;

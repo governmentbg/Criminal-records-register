@@ -20,14 +20,12 @@
               ></cais-input>
             </div>
             <div class="form-group col-md-6">
-              <cais-autocomplete
+              <cais-input
+                [type]="'text'"
                 [label]="'Бюро съдимост, в което се съхранява бюлетина'"
-                [inputFormControl]="fullForm.csAuthorityId"
+                [inputFormControl]="fullForm.csAuthorityName"
                 [parentGroup]="fullForm.group"
-                [inputName]="'csAuthorityId'"
-                [items]="dbData.csAuthorities"
-              >
-              </cais-autocomplete>
+              ></cais-input>
             </div>
           </div>
           <div class="row">

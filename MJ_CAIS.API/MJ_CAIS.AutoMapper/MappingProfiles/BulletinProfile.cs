@@ -16,6 +16,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
 
             CreateMap<BBulletin, BulletinDTO>()
+                .ForMember(d => d.CsAuthorityName, opt => opt.MapFrom(src => src.CsAuthority.Name))
                 .ForPath(d => d.Address.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                 .ForPath(d => d.Address.CountryId, opt => opt.MapFrom(src => src.BirthCountryId))
                 .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
@@ -61,7 +62,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<PersonAliasDTO, BBullPersAlias>()
                 .ForMember(d => d.Type, opt => opt.MapFrom(src => src.TypeCode));
-
         }
     }
 }
