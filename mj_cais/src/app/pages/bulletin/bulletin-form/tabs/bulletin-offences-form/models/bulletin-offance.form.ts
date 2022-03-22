@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { AddressForm } from "../../../../../../@core/components/forms/address-form/model/address.form";
 
 export class BulletinOffenceForm {
   public group: FormGroup;
@@ -13,13 +14,6 @@ export class BulletinOffenceForm {
   public legalProvisions: FormControl;
   public offStartDate: FormControl;
   public offEndDate: FormControl;
-  public offPlaceCountryId: FormControl;
-  public offPlaceCountryName: FormControl;
-  public offPlaceSubdivId: FormControl;
-  public offPlaceSubdivName: FormControl;
-  public offPlaceCityId: FormControl;
-  public offPlaceCityName: FormControl;
-  public offPlaceDescr: FormControl;
   public occurrences: FormControl;
   public isContiniuous: FormControl;
   public respExemption: FormControl;
@@ -28,6 +22,7 @@ export class BulletinOffenceForm {
   public offLvlComplName: FormControl;
   public offLvlPartId: FormControl;
   public offLvlPartName: FormControl;
+  public offPlace:  AddressForm;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -41,13 +36,6 @@ export class BulletinOffenceForm {
     this.legalProvisions = new FormControl(null);
     this.offStartDate = new FormControl(null, [Validators.required]);
     this.offEndDate = new FormControl(null, [Validators.required]); // тодо: крайна дата, ако е период
-    this.offPlaceCountryId = new FormControl(null);
-    this.offPlaceCountryName = new FormControl(null);
-    this.offPlaceSubdivId = new FormControl(null);
-    this.offPlaceSubdivName = new FormControl(null);
-    this.offPlaceCityId = new FormControl(null);
-    this.offPlaceCityName = new FormControl(null);
-    this.offPlaceDescr = new FormControl(null);
      this.occurrences = new FormControl(null),//,  [     
     //   numberValidator(/^[0-9]*$/i) // <-- Here's how you pass in the custom validator.
     // ]);
@@ -58,6 +46,7 @@ export class BulletinOffenceForm {
     this.offLvlComplName = new FormControl(null);
     this.offLvlPartId = new FormControl(null);
     this.offLvlPartName = new FormControl(null);
+    this.offPlace = new AddressForm();
 
     this.group = new FormGroup({
       id: this.id,
@@ -70,13 +59,6 @@ export class BulletinOffenceForm {
       offStartDate: this.offStartDate,
       legalProvisions: this.legalProvisions,
       offEndDate: this.offEndDate,
-      offPlaceCountryId: this.offPlaceCountryId,
-      offPlaceCountryName: this.offPlaceCountryName,
-      offPlaceSubdivId: this.offPlaceSubdivId,
-      offPlaceSubdivName: this.offPlaceSubdivName,
-      offPlaceCityId: this.offPlaceCityId,
-      offPlaceCityName: this.offPlaceCityName,
-      offPlaceDescr: this.offPlaceDescr,
       occurrences: this.occurrences,
       isContiniuous: this.isContiniuous,
       respExemption: this.respExemption,
@@ -85,6 +67,7 @@ export class BulletinOffenceForm {
       offLvlComplName: this.offLvlComplName,
       offLvlPartId: this.offLvlPartId,
       offLvlPartName: this.offLvlPartName,
+      offPlace: this.offPlace.group
     });
   }
 }

@@ -2,7 +2,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressModel } from "./address.model";
 
 export class AddressForm {
-  public isSetForNativeAddress: boolean = false;
+  public isSetForNativeAddress: boolean = true;
   public isSetForForeignAddress: boolean = false;
 
   public group: FormGroup;
@@ -52,7 +52,7 @@ export class AddressForm {
     this.isSetForForeignAddress = true;
   }
 
-  public setForBulgarianAddress() {
+  public setForNativeAddress() {
     this.districtId.enable();
     this.municipalityId.enable();
     this.cityId.enable();

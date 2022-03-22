@@ -9,6 +9,7 @@ import {
 import { Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin, of } from "rxjs";
+import { CommonConstants } from "../../../constants/common.constants";
 import { BaseNomenclatureModel } from "../../../models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../services/rest/nomenclature.service";
 import { AutocompleteComponent } from "../inputs/autocomplete/autocomplete.component";
@@ -46,7 +47,7 @@ export class AddressFormComponent implements OnInit {
 
   @Input() parentForm: AddressForm;
 
-  private bgId = "CO-00-100-BGR"; // todo: code ?
+  private bgCountryId = CommonConstants.bgCountryId;
 
   ngOnInit(): void {
     let districtId = this.parentForm.districtId.value ?? 0;
@@ -84,10 +85,10 @@ export class AddressFormComponent implements OnInit {
         (this.parentForm.group.touched &&
           this.parentForm.countryId.value === null) ||
         this.parentForm.countryId.value === null ||
-        this.parentForm.countryId.value == this.bgId
+        this.parentForm.countryId.value == this.bgCountryId
       ) {
-        this.parentForm.countryId.setValue(this.bgId);
-        this.parentForm.setForBulgarianAddress();
+        this.parentForm.countryId.setValue(this.bgCountryId);
+        this.parentForm.setForNativeAddress();
       } else {
         this.parentForm.setForForeignAddress();
       }
@@ -99,11 +100,11 @@ export class AddressFormComponent implements OnInit {
   }
 
   public onCountryChanged(countryId: string): void {
-    if (countryId == this.bgId) {
+    if (countryId == this.bgCountryId) {
       this.nomenclatureService.getDistricts().subscribe((districts) => {
         this.districtAutocomplete.autoControl.items = districts;
       });
-      this.parentForm.setForBulgarianAddress();
+      this.parentForm.setForNativeAddress();
     } else {
       this.parentForm.setForForeignAddress();
     }

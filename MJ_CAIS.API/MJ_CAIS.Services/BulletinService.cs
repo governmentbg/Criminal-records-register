@@ -87,20 +87,48 @@ namespace MJ_CAIS.Services
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
             var dbContext = _bulletinRepository.GetDbContext();
-
-            var result = dbContext.BOffences
+        
+            var offances = dbContext.BOffences
                 .AsNoTracking()
                 .Include(x => x.OffenceCat)
                 .Include(x => x.EcrisOffCat)
                 .Include(x => x.OffPlaceCountry)
-                .Include(x => x.OffPlaceSubdiv)
                 .Include(x => x.OffPlaceCity)
+                    .ThenInclude(x => x.Municipality)
                 .Include(x => x.OffLvlCompl)
                 .Include(x => x.OffLvlPart)
                 .Where(x => x.BulletinId == aId)
-                .ProjectTo<OffenceDTO>(mapper.ConfigurationProvider);
+                .Select(x => new OffenceDTO
+                {
+                    Id = x.Id,
+                    EcrisOffCatId = x.EcrisOffCatId,
+                    EcrisOffCatName = x.EcrisOffCat.Name,
+                    FormOfGuilt = x.FormOfGuilt,
+                    IsContiniuous = x.IsContiniuous,
+                    LegalProvisions = x.LegalProvisions,
+                    Occurrences = x.Occurrences,
+                    OffenceCatId = x.OffenceCatId,
+                    OffenceCatName = x.OffenceCat.Name,
+                    OffEndDate = x.OffEndDate,
+                    OffLvlComplId = x.OffLvlComplId,
+                    OffLvlComplName = x.OffLvlCompl.Name,
+                    OffLvlPartId = x.OffLvlPartId,
+                    OffLvlPartName = x.OffLvlPart.Name,
+                    OffPlace = new AddressDTO
+                    {
+                        CityId = x.OffPlaceCityId,
+                        CountryId = x.OffPlaceCountryId,
+                        DistrictId = x.OffPlaceCity.Municipality.DistrictId,
+                        MunicipalityId = x.OffPlaceCity.MunicipalityId,
+                        ForeignCountryAddress = x.OffPlaceDescr
+                    },
+                    OffStartDate = x.OffStartDate,
+                    Recidivism = x.Recidivism,
+                    Remarks = x.Remarks,
+                    RespExemption = x.RespExemption
+                });
 
-            return await Task.FromResult(result);
+            return await Task.FromResult(offances);
         }
 
         public async Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId)
