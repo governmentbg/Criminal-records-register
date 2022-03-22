@@ -25,6 +25,7 @@ export class BulletinModel {
   public approvedByNames: string = null;
   public approvedByPosition: string = null;
   public statusId: string = null;
+  public statusIdDisplay: string = null;
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
@@ -88,6 +89,7 @@ export class BulletinModel {
       this.approvedByNames = init.approvedByNames ?? null;
       this.approvedByPosition = init.approvedByPosition ?? null;
       this.statusId = init.statusId ?? null;
+      this.statusIdDisplay = init.statusId ?? null;
       this.firstname = init.firstname ?? null;
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;

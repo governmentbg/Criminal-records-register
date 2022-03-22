@@ -30,6 +30,7 @@ export class BulletinForm {
   public approvedByNames: FormControl;
   public approvedByPosition: FormControl;
   public statusId: FormControl;
+  public statusIdDisplay: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -99,6 +100,7 @@ export class BulletinForm {
     this.approvedByNames = new FormControl(null, [Validators.required]);
     this.approvedByPosition = new FormControl(null, [Validators.required]);
     this.statusId = new FormControl(BulletinStatusTypeEnum.NewEISS);
+    this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewEISS);
     this.firstname = new FormControl(null, [Validators.required]);
     this.surname = new FormControl(null, [Validators.required]);
     this.familyname = new FormControl(null, [Validators.required]);
@@ -167,6 +169,7 @@ export class BulletinForm {
       approvedByNames: this.approvedByNames,
       approvedByPosition: this.approvedByPosition,
       statusId: this.statusId,
+      statusIdDisplay: this.statusIdDisplay,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,

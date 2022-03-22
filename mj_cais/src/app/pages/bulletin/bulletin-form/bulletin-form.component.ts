@@ -80,17 +80,16 @@ export class BulletinFormComponent
 
   ngOnInit(): void {
     this.fullForm = new BulletinForm();
-    this.fullForm.statusId.disable();
+    this.fullForm.statusIdDisplay.disable();
     this.fullForm.csAuthorityName.disable();
     this.fullForm.group.patchValue(this.dbData.element);
     this.showForUpdate =
-      this.fullForm.statusId.value == BulletinStatusTypeEnum.NewEISS &&
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS &&
       this.isEdit();
     this.formFinishedLoading.emit();
   }
 
   updateFunction = () => {
-    this.fullForm.statusId.enable();
     this.fullForm.statusId.patchValue(BulletinStatusTypeEnum.Active);
     this.submitFunction();
   };

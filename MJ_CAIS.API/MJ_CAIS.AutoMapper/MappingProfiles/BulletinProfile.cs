@@ -49,14 +49,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.DecisionChTypeName, opt => opt.MapFrom(src => src.DecisionChType.Name))
               .ForMember(d => d.DecisionTypeName, opt => opt.MapFrom(src => src.DecisionType.Name));
 
-            CreateMap<DocumentDTO, DDocument>()
-             .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
-             .ForMember(d => d.DocContent, opt => opt.Ignore());
-
-            CreateMap<DDocument, DocumentDTO>()
-             .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
-             .ForMember(d => d.DocumentContent, opt => opt.Ignore());
-
             CreateMap<BBullPersAlias, PersonAliasDTO>()
                 .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type));
 
