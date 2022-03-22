@@ -149,4 +149,18 @@ string
       `${this.url}/d_doc_types`
     );
   }
+
+  public getFbbcDocTypes(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/fbbc_doc_types`
+    );
+  }
+
+  public getFbbcSanctTypes(): Observable<BaseNomenclatureModel[]> {
+    return of([]);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/fbbc_sanct_types`
+    );
+  }
 }

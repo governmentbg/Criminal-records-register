@@ -1,0 +1,196 @@
+<igx-grid #documentsGrid [height]="null" [data]="documents" [primaryKey]="'id'">
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <button
+          *ngIf="showAddDeleteButton"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="onOpenDialog(); dialogAdd.open()"
+        >
+          Добави &nbsp;
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="false"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+  </igx-column>
+  <igx-column
+    field="name"
+    header="Наименование"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    field="descr"
+    header="Описание"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+
+  <igx-column
+    field="docTypeId"
+    header="Идентификатор на вид документ"
+    dataType="number"
+    [hidden]="true"
+  >
+  </igx-column>
+  <igx-column
+    field="docTypeName"
+    header="Вид документ"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+
+  <igx-column
+    width="100px"
+    header="Действия"
+    [sortable]="false"
+    [filterable]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <button
+        igxButton="icon"
+        [title]="'Изтегляне'"
+        (click)="download(cell.rowData.id)"
+      >
+        <nb-icon pack="fa" icon="download"></nb-icon>
+      </button>
+
+      <button
+        *ngIf="showAddDeleteButton"
+        igxButton="icon"
+        [title]="'Изтриване'"
+        (click)="openDeleteConfirmationDialog(cell.rowData.id)"
+      >
+        <nb-icon pack="fa" icon="trash"></nb-icon>
+      </button>
+    </ng-template>
+  </igx-column>
+</igx-grid>
+<igx-dialog #dialogAdd>
+  <div class="dialogNewRecord" style="min-width: 1000px">
+    <nb-card>
+      <nb-card-header>
+        <div class="d-flex" style="justify-content: space-between">
+          <div class="d-flex align-items-center">
+            <h5 style="font-weight: bold">Документ</h5>
+          </div>
+
+          <div class="d-flex">
+            <div>
+              <button
+                nbButton
+                matRipple
+                status="success"
+                (click)="onSubmitFbbcDocument()"
+              >
+                Потвърди
+              </button>
+              <button
+                nbButton
+                matRipple
+                (click)="onCloseFbbcDocumentDilog()"
+                class="ml-3"
+              >
+                Откажи
+              </button>
+            </div>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-2">
+          <div class="form-group col-md-12">
+            <div
+              *ngIf="uploader.queue && uploader.queue.length == 0"
+              class="bg-light p-2 rounded"
+            >
+              <strong class="mr-1">Избор на файл</strong>
+              <span class="file-select-hidden"
+                ><input
+                  type="file"
+                  ng2FileSelect
+                  [uploader]="uploader"
+                  #fileInput
+              /></span>
+
+              <div
+                ng2FileDrop
+                [ngClass]="{ 'file-over-class': hasDropZoneOver }"
+                (fileOver)="fileOverAnother($event)"
+                [uploader]="uploader"
+                class="well file-drop-zone"
+              >
+                <button
+                  nbButton
+                  [status]="'success'"
+                  (click)="fileInput.click()"
+                  class="mr-2"
+                >
+                  Изберете
+                </button>
+                или преместете с мишката файл за да го качите
+              </div>
+            </div>
+
+            <div
+              *ngFor="let item of uploader.queue"
+              class="bg-light p-2 rounded"
+            >
+              <strong>Избран файл: </strong>
+              <span class="mr-1">{{ item?.file?.name }}</span>
+
+              <button
+                #removeDocBtn
+                nbButton
+                matRipple
+                [status]="'danger'"
+                (click)="onRmoveDocument(item)"
+              >
+                Премахване &nbsp;
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="form-group col-md-8">
+            <cais-autocomplete
+              [label]="'Вид документ'"
+              [inputFormControl]="fbbcDocumentForm.docTypeId"
+              [parentGroup]="fbbcDocumentForm.group"
+              [items]="dbData.documentTypes"
+              [inputName]="'docTypeId'"
+            >
+            </cais-autocomplete>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-12">
+            <cais-input
+              [type]="'text'"
+              [label]="'Описание'"
+              [inputFormControl]="fbbcDocumentForm.descr"
+              [parentGroup]="fbbcDocumentForm.group"
+              [inputName]="'descr'"
+              [rows]="'3'"
+              [inputType]="'TextArea'"
+            >
+            </cais-input>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>

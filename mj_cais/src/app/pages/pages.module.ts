@@ -18,6 +18,7 @@ import { BulletinDecisionFormComponent } from './bulletin/bulletin-form/tabs/bul
 import { FbbcOverviewComponent } from './fbbc/fbbc-overview/fbbc-overview.component';
 import { FbbcFormComponent } from './fbbc/fbbc-form/fbbc-form.component';
 import { BulletinDocumentFormComponent } from './bulletin/bulletin-form/tabs/bulletin-documents-form/bulletin-document-form.component';
+import { FbbcDocumentFormComponent } from './fbbc/fbbc-form/grids/fbbc-document-form/fbbc-document-form.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { BulletinDocumentFormComponent } from './bulletin/bulletin-form/tabs/bul
     FbbcOverviewComponent,
     FbbcFormComponent,
     BulletinDocumentFormComponent,
+    FbbcDocumentFormComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })
