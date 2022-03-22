@@ -15,6 +15,7 @@ import {
   IgxGridComponent,
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
+import { BulletinStatusTypeEnum } from "../bulletin-overview/models/bulletin-status-type.constants";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -50,6 +51,8 @@ export class BulletinFormComponent
   })
   public bulletineDocumentsForm: BulletinDocumentFormComponent;
 
+  public showForUpdate: boolean = false;
+
   //#region Person alias variables
 
   public bulletinPersonAliasForm = new BulletinPersonAliasForm();
@@ -78,10 +81,19 @@ export class BulletinFormComponent
   ngOnInit(): void {
     this.fullForm = new BulletinForm();
     this.fullForm.statusId.disable();
-    this.fullForm.csAuthorityName.disable(); 
+    this.fullForm.csAuthorityName.disable();
     this.fullForm.group.patchValue(this.dbData.element);
+    this.showForUpdate =
+      this.fullForm.statusId.value == BulletinStatusTypeEnum.NewEISS &&
+      this.isEdit();
     this.formFinishedLoading.emit();
   }
+
+  updateFunction = () => {
+    this.fullForm.statusId.enable();
+    this.fullForm.statusId.patchValue(BulletinStatusTypeEnum.Active);
+    this.submitFunction();
+  };
 
   submitFunction = () => {
     let offancesTransactions =
@@ -139,7 +151,7 @@ export class BulletinFormComponent
     }
 
     if (this.bulletinPersonAliasForm.typeId.value) {
-      var typeObj =  (this.dbData.personAliasTypes as any).find(
+      var typeObj = (this.dbData.personAliasTypes as any).find(
         (x) => x.id === this.bulletinPersonAliasForm.typeId.value
       );
 
