@@ -30,7 +30,7 @@ export class FbbcResolver implements Resolve<any> {
       element: element,
       docTypes: this.nomenclatureService.getFbbcDocTypes(),
       countries: this.nomenclatureService.getCountries(),
-      cities: this.nomenclatureService.getCities(),
+      //cities: this.nomenclatureService.getCities(),
       sanctTypes: this.nomenclatureService.getFbbcSanctTypes(),
     //   documents: this.service.getDocuments(fbbcId),
     };
@@ -41,7 +41,7 @@ export class FbbcResolver implements Resolve<any> {
 export class FbbcResolverData extends BaseResolverData<FbbcModel> {
   public docTypes: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
-  public cities: Observable<BaseNomenclatureModel[]>;
+  //public cities: Observable<BaseNomenclatureModel[]>;
   public sanctTypes: Observable<BaseNomenclatureModel[]>;
   //public documents: Observable<FbbcDocumentModel[]>;
 }
