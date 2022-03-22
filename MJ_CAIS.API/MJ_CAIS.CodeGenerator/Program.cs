@@ -19,12 +19,12 @@ namespace MJ_CAIS.CodeGenerator
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
             ClassGenerator.GenerateDTO(projectPath, parameters);
-            ClassGenerator.GenerateGridDTO(projectPath, parameters);
-            ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
-            ClassGenerator.GenerateRepository(projectPath, parameters);
-            ClassGenerator.GenerateInterface(projectPath, parameters);
-            ClassGenerator.GenerateService(projectPath, parameters);
-            ClassGenerator.GenerateController(projectPath, parameters);
+            //ClassGenerator.GenerateGridDTO(projectPath, parameters);
+            //ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
+            //ClassGenerator.GenerateRepository(projectPath, parameters);
+            //ClassGenerator.GenerateInterface(projectPath, parameters);
+            //ClassGenerator.GenerateService(projectPath, parameters);
+            //ClassGenerator.GenerateController(projectPath, parameters);
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
             //ClassGenerator.GenerateAngularFormModel(projectPath, parameters);

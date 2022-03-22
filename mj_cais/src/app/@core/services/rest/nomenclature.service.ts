@@ -23,7 +23,7 @@ export class NomenclatureService extends CaisCrudService<
     if (this.cachedCountries) {
       return of(this.cachedCountries);
     }
-    
+
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_countries`);
   }
 
@@ -165,6 +165,12 @@ export class NomenclatureService extends CaisCrudService<
   public getCsAuthorities(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/g_cs_authorities`
+    );
+  }
+
+  public getEcrisAuthorities(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/e_ecris_authorities`
     );
   }
 

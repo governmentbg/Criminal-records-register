@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisAuthority : BaseEntity
+    public partial class EEcrisAuthority : BaseEntity, IBaseNomenclature
     {
         public EEcrisAuthority()
         {

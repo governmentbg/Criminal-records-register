@@ -23,6 +23,7 @@ import { BulletinActiveOverviewComponent } from './bulletin/bulletin-overview/bu
 import { BulletinForDestructionOverviewComponent } from './bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component';
 import { BulletinForRehabilitationOverviewComponent } from './bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { EcrisMessageFormComponent } from './ecris/ecris-message-form/ecris-message-form.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MatMenuModule } from '@angular/material/menu';
     BulletinNewEissOverviewComponent,
     BulletinActiveOverviewComponent,
     BulletinForDestructionOverviewComponent,
-    BulletinForRehabilitationOverviewComponent
+    BulletinForRehabilitationOverviewComponent,
+    EcrisMessageFormComponent
     ],
   providers: [PagesMenu, BulletinResolver],
 })
