@@ -294,50 +294,12 @@
         <hr />
 
         <div class="row ml-2">
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Държава'"
-              [inputFormControl]="bulletinOffenceForm.offPlaceCountryId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.countries"
-              [inputName]="'offPlaceCountryId'"
-            >
-            </cais-autocomplete>
-          </div>
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Област'"
-              [inputFormControl]="bulletinOffenceForm.offPlaceSubdivId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.countriesSubdivisions"
-              [inputName]="'offPlaceSubdivId'"
-            >
-            </cais-autocomplete>
-          </div>
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Град'"
-              [inputFormControl]="bulletinOffenceForm.offPlaceCityId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.cities"
-              [inputName]="'offPlaceCityId'"
-            >
-            </cais-autocomplete>
-          </div>
-        </div>
-        <div class="row ml-2">
           <div class="form-group col-md-12">
-            <cais-input
-              [type]="'text'"
-              [rows]="'3'"
-              [label]="'Описание'"
-              [inputFormControl]="bulletinOffenceForm.offPlaceDescr"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'offPlaceDescr'"
-              [inputType]="InputTypeConstants.TextArea"
-            >
-            </cais-input>
-          </div>
+            <cais-address-form
+              #offPlace
+              [parentForm]="bulletinOffenceForm.offPlace"
+            ></cais-address-form>
+          </div>        
         </div>
         <div class="row">
           <div class="form-group col-md-8">

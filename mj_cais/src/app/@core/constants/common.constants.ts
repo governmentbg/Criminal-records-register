@@ -8,6 +8,10 @@ export class CommonConstants {
     return "bg-BG";
   }
 
+  static get bgCountryId(){
+    return "CO-00-100-BGR";
+  }
+
   public static defaultDialogConfig = {
     closeOnBackdropClick: false,
   };

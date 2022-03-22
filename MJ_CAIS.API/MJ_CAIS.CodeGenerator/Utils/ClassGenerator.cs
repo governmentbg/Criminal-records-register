@@ -375,7 +375,7 @@ namespace MJ_CAIS.CodeGenerator.Utils
 
         public static string GetCurrentProjectPath()
         {
-            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+            var assemblyName = Assembly.GetEntryAssembly().GetName().Name;
             var exePath = Directory.GetCurrentDirectory();
             var index = exePath.IndexOf(assemblyName);
             var projectPath = exePath.Substring(0, index);

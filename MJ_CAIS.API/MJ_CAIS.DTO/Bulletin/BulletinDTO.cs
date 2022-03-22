@@ -5,7 +5,7 @@ namespace MJ_CAIS.DTO.Bulletin
     public class BulletinDTO : BaseDTO
     {
         public decimal? Version { get; set; }
-        public string? CsAuthorityId { get; set; }
+        public string? CsAuthorityName { get; set; }
         public string? RegistrationNumber { get; set; }
         public decimal? SequentialIndex { get; set; }
         public string? DecisionNumber { get; set; }
@@ -65,9 +65,11 @@ namespace MJ_CAIS.DTO.Bulletin
         public string? CreatedByPosition { get; set; }
         public string? BulletinType { get; set; }
         public string? EcrisConvictionId { get; set; }
-        
+        public AddressDTO Address { get; set; } = new AddressDTO();
+        public MultipleChooseDTO Nationalities { get; set; } = new MultipleChooseDTO();
         public List<TransactionDTO<OffenceDTO>> OffancesTransactions { get; set; }
         public List<TransactionDTO<SanctionDTO>> SanctionsTransactions { get; set; }
         public List<TransactionDTO<DecisionDTO>> DecisionsTransactions { get; set; }
+        public List<TransactionDTO<PersonAliasDTO>> PersonAliasTransactions { get; set; }
     }
 }

@@ -10,46 +10,58 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<BBulletin, BulletinGridDTO>();
 
-            CreateMap<BulletinDTO, BBulletin>();
-            CreateMap<BBulletin, BulletinDTO>();
+            CreateMap<BulletinDTO, BBulletin>()
+                .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
+                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.CountryId))
+                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
+
+            CreateMap<BBulletin, BulletinDTO>()
+                .ForMember(d => d.CsAuthorityName, opt => opt.MapFrom(src => src.CsAuthority.Name))
+                .ForPath(d => d.Address.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
+                .ForPath(d => d.Address.CountryId, opt => opt.MapFrom(src => src.BirthCountryId))
+                .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
+                .ForPath(d => d.Address.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
+                .ForPath(d => d.Address.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
+                .ForPath(d => d.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.Id)))
+                .ForPath(d => d.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.CountryId)));
 
             CreateMap<OffenceDTO, BOffence>()
-                .ForPath(d => d.OffenceCat.Name, opt => opt.MapFrom(src => src.OffenceCatName))
-                .ForPath(d => d.EcrisOffCat.Name, opt => opt.MapFrom(src => src.EcrisOffCatName))
-                .ForPath(d => d.OffPlaceCountry.Name, opt => opt.MapFrom(src => src.OffPlaceCountryId))
-                .ForPath(d => d.OffPlaceSubdiv.Name, opt => opt.MapFrom(src => src.OffPlaceSubdivName))
-                .ForPath(d => d.OffPlaceCity.Name, opt => opt.MapFrom(src => src.OffPlaceCityName))
-                .ForPath(d => d.OffLvlCompl.Name, opt => opt.MapFrom(src => src.OffLvlComplName))
-                .ForPath(d => d.OffLvlPart.Name, opt => opt.MapFrom(src => src.OffLvlPartName))
-                .ReverseMap();
+                .ForMember(d => d.OffenceCatId, opt => opt.MapFrom(src => src.OffenceCatId))
+                .ForMember(d => d.EcrisOffCatId, opt => opt.MapFrom(src => src.EcrisOffCatId))
+                .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffPlace.ForeignCountryAddress))
+                .ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffPlace.CountryId))
+                .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))
+                .ForMember(d => d.OffLvlComplId, opt => opt.MapFrom(src => src.OffLvlComplId))
+                .ForMember(d => d.OffLvlPartId, opt => opt.MapFrom(src => src.OffLvlPartId));
+          
+            CreateMap<SanctionDTO, BSanction>();
 
-            CreateMap<SanctionDTO, BSanction>()
-               .ForPath(d => d.SanctCategory.Name, opt => opt.MapFrom(src => src.SanctCategoryName))
-               .ForPath(d => d.SanctProbCateg.Name, opt => opt.MapFrom(src => src.SanctProbCategName))
-               .ForPath(d => d.EcrisSanctCateg.Name, opt => opt.MapFrom(src => src.EcrisSanctCategName))
-               .ForPath(d => d.SanctProbMeasure.Name, opt => opt.MapFrom(src => src.SanctProbMeasureName))
-               .ForPath(d => d.SanctActivity.Name, opt => opt.MapFrom(src => src.SanctActivityName))
-               .ReverseMap();
+            CreateMap<BSanction, SanctionDTO>()
+               .ForMember(d => d.SanctCategoryName, opt => opt.MapFrom(src => src.SanctCategory.Name))
+               .ForMember(d => d.SanctProbCategName, opt => opt.MapFrom(src => src.SanctProbCateg.Name))
+               .ForMember(d => d.EcrisSanctCategName, opt => opt.MapFrom(src => src.EcrisSanctCateg.Name))
+               .ForMember(d => d.SanctProbMeasureName, opt => opt.MapFrom(src => src.SanctProbMeasure.Name))
+               .ForMember(d => d.SanctActivityName, opt => opt.MapFrom(src => src.SanctActivity.Name));
 
-            CreateMap<DecisionDTO, BDecision>()
-              .ForPath(d => d.DecisionAuth.Name, opt => opt.MapFrom(src => src.DecisionAuthName))
-              .ForPath(d => d.DecisionChType.Name, opt => opt.MapFrom(src => src.DecisionChTypeName))
-              .ForPath(d => d.DecisionType.Name, opt => opt.MapFrom(src => src.DecisionTypeName))
-              .ForMember(d => d.DecisionAuth, opt => opt.Ignore())
-              .ForMember(d => d.DecisionChType, opt => opt.Ignore())
-              .ForMember(d => d.DecisionType, opt => opt.Ignore())
-              .ReverseMap();
+            CreateMap<DecisionDTO, BDecision>();
+            CreateMap<BDecision, DecisionDTO>()
+              .ForMember(d => d.DecisionAuthName, opt => opt.MapFrom(src => src.DecisionAuth.Name))
+              .ForMember(d => d.DecisionChTypeName, opt => opt.MapFrom(src => src.DecisionChType.Name))
+              .ForMember(d => d.DecisionTypeName, opt => opt.MapFrom(src => src.DecisionType.Name));
 
             CreateMap<DocumentDTO, DDocument>()
-             .ForPath(d => d.DocType.Name, opt => opt.MapFrom(src => src.DocTypeName))
-             //.ForPath(d => d.DocContent.Content, opt => opt.MapFrom(src => src.DocumentContent))
-             //.ForPath(d => d.DocContent.Id, opt => opt.MapFrom(src => src.DocumentContentId))
-             .ForPath(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
-             .ForMember(d => d.DocType, opt => opt.Ignore())
-             .ForMember(d => d.DocContent, opt => opt.Ignore())
-             .ReverseMap()
-             .ForPath(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
+             .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
+             .ForMember(d => d.DocContent, opt => opt.Ignore());
+
+            CreateMap<DDocument, DocumentDTO>()
+             .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
              .ForMember(d => d.DocumentContent, opt => opt.Ignore());
+
+            CreateMap<BBullPersAlias, PersonAliasDTO>()
+                .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type));
+
+            CreateMap<PersonAliasDTO, BBullPersAlias>()
+                .ForMember(d => d.Type, opt => opt.MapFrom(src => src.TypeCode));
         }
     }
 }

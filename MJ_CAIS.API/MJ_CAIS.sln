@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DIContainer", "MJ_C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.CodeGenerator", "MJ_CAIS.CodeGenerator\MJ_CAIS.CodeGenerator.csproj", "{AB5B8A08-CB15-41FA-B879-CF0FD1DD9453}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.FluentValidators", "MJ_CAIS.FluentValidators\MJ_CAIS.FluentValidators.csproj", "{952A4E1E-A5CA-49D6-B8BA-F47AFC981E4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.FluentValidators", "MJ_CAIS.FluentValidators\MJ_CAIS.FluentValidators.csproj", "{952A4E1E-A5CA-49D6-B8BA-F47AFC981E4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.EntityTransform", "MJ_CAIS.EntityTransform\MJ_CAIS.EntityTransform.csproj", "{E2B01588-012F-458A-9F22-25C42581CED2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,12 +82,17 @@ Global
 		{952A4E1E-A5CA-49D6-B8BA-F47AFC981E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{952A4E1E-A5CA-49D6-B8BA-F47AFC981E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{952A4E1E-A5CA-49D6-B8BA-F47AFC981E4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2B01588-012F-458A-9F22-25C42581CED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2B01588-012F-458A-9F22-25C42581CED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2B01588-012F-458A-9F22-25C42581CED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2B01588-012F-458A-9F22-25C42581CED2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AB5B8A08-CB15-41FA-B879-CF0FD1DD9453} = {581769BD-1AA6-4AC3-BE0F-DCBD441D6943}
+		{E2B01588-012F-458A-9F22-25C42581CED2} = {581769BD-1AA6-4AC3-BE0F-DCBD441D6943}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94008A3B-3454-426F-AC73-E514A8FBE632}

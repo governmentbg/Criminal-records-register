@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBullPersAlias
+    public partial class BBullPersAlias : BaseEntity
     {
-        public string Id { get; set; } = null!;
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }

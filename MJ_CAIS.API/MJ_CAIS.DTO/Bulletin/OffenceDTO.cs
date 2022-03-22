@@ -1,4 +1,6 @@
-﻿namespace MJ_CAIS.DTO.Bulletin
+﻿using MJ_CAIS.DTO.Common;
+
+namespace MJ_CAIS.DTO.Bulletin
 {
     public class OffenceDTO
     {
@@ -11,13 +13,7 @@
         public string? LegalProvisions { get; set; }
         public DateTime? OffStartDate { get; set; }
         public DateTime? OffEndDate { get; set; }
-        public string? OffPlaceCountryId { get; set; }
-        public string? OffPlaceCountryName { get; set; }
-        public string? OffPlaceSubdivId { get; set; }
-        public string? OffPlaceSubdivName { get; set; }
-        public string? OffPlaceCityId { get; set; }
-        public string? OffPlaceCityName { get; set; }
-        public string? OffPlaceDescr { get; set; }
+        public AddressDTO OffPlace { get; set; } = new AddressDTO();
         public decimal? Occurrences { get; set; }
         public decimal? IsContiniuous { get; set; }
         public string? OffLvlComplId { get; set; }

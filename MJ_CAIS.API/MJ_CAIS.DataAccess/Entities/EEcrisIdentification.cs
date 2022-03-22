@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisIdentification
+    public partial class EEcrisIdentification : BaseEntity
     {
-        public string Id { get; set; } = null!;
         public string? EcrisMsgId { get; set; }
         public string? PersonId { get; set; }
         public string? GraoPersonId { get; set; }

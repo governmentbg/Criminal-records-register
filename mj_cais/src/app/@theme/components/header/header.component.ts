@@ -23,19 +23,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   themes = [
     {
       value: "default",
-      name: "Light",
+      name: "Бяла",
     },
     {
       value: "dark",
-      name: "Dark",
-    },
-    {
-      value: "cosmic",
-      name: "Cosmic",
-    },
-    {
-      value: "corporate",
-      name: "Corporate",
+      name: "Тъмна",
     },
   ];
 

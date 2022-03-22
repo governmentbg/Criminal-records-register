@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class PPerson
+    public partial class PPerson : BaseEntity
     {
         public PPerson()
         {
@@ -14,7 +14,6 @@ namespace MJ_CAIS.DataAccess.Entities
             PPersGroupRelPers = new HashSet<PPersGroup>();
         }
 
-        public string Id { get; set; } = null!;
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }

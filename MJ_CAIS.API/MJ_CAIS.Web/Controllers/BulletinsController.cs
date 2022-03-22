@@ -22,9 +22,10 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public new async Task<IActionResult> GetAll(ODataQueryOptions<BulletinGridDTO> aQueryOptions)
+        public new async Task<IActionResult> GetAll(ODataQueryOptions<BulletinGridDTO> aQueryOptions,string statusId)
         {
-            return await base.GetAll(aQueryOptions);
+            var result = await _bulletinService.GetAllCustomAsync(aQueryOptions, statusId);
+            return Ok(result);
         }
 
         [HttpGet("getAll")]
@@ -85,7 +86,6 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-
         [HttpPost("{aId}/documents")]
         public async Task<IActionResult> PostDocument(string aId, [FromBody] DocumentDTO aInDto)
         {
@@ -114,6 +114,13 @@ namespace MJ_CAIS.Web.Controllers
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
             return File(content, mimeType, fileName);
+        }
+
+        [HttpGet("{aId}/person-alias")]
+        public async Task<IActionResult> GetPersonAlias(string aId)
+        {
+            var result = await this._bulletinService.GetPersonAliasByBulletinIdAsync(aId);
+            return Ok(result);
         }
 
         private string getContentType(string fileName)

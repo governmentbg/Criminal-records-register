@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BOffenceCategory: IBaseNomenclature
+    public partial class BOffenceCategory : BaseEntity, IBaseNomenclature
     {
         public BOffenceCategory()
         {
             BOffences = new HashSet<BOffence>();
         }
 
-        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? Code { get; set; }
         public decimal? OffLevel { get; set; }

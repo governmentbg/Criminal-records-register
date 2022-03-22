@@ -9,6 +9,7 @@
         public const string ServicesPath = "MJ_CAIS.Services";
         public const string InterfacesPath = "MJ_CAIS.Services.Contracts";
         public const string RepositoriesPath = "MJ_CAIS.Repositories";
+        public const string DbContextPath = "MJ_CAIS.DataAccess";
         public const string EntitiesPath = "MJ_CAIS.DataAccess";
         public const string DTOPath = "MJ_CAIS.DTO";
 
@@ -23,6 +24,8 @@
         public static readonly string RepositoryNamespace = $"{RepositoriesPath}.Impl";
         public static readonly string RepositoryInterfaceNamespace = $"{RepositoriesPath}.Contracts";
         public static readonly string EntityNamespace = "MJ_CAIS.DataAccess.Entities";
+        public static readonly string BaseEntityName = "BaseEntity";
+        public static readonly string NomenclatureInterfaceName = "IBaseNomenclature";
 
         public static readonly string EntityPath = @$"{EntitiesPath}\Entities";
         public static readonly string ControllersPath = @$"{WebPath}\Controllers";

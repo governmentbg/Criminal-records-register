@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BSanctionCategory: IBaseNomenclature
+    public partial class BSanctionCategory : BaseEntity, IBaseNomenclature
     {
         public BSanctionCategory()
         {
             BSanctions = new HashSet<BSanction>();
         }
 
-        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public DateTime? ValidFrom { get; set; }

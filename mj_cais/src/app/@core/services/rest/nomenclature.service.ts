@@ -1,6 +1,8 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { BulletinStatusTypeConstants } from "../../../pages/bulletin/bulletin-overview/models/bulletin-status-type.constants";
 import { GenderConstants } from "../../constants/gender.constants";
+import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "./cais-crud.service";
 
@@ -8,15 +10,38 @@ import { CaisCrudService } from "./cais-crud.service";
   providedIn: "root",
 })
 export class NomenclatureService extends CaisCrudService<
-BaseNomenclatureModel,
-string
+  BaseNomenclatureModel,
+  string
 > {
   constructor(injector: Injector) {
     super(BaseNomenclatureModel, injector, "nomenclature-details");
   }
 
+  private cachedCountries: BaseNomenclatureModel[];
+  private cachedDistricts: BaseNomenclatureModel[];
+
   public getCountries(): Observable<BaseNomenclatureModel[]> {
+    if (this.cachedCountries) {
+      return of(this.cachedCountries);
+    }
+    
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_countries`);
+  }
+
+  public saveCountries(countries: BaseNomenclatureModel[]) {
+    this.cachedCountries = countries;
+  }
+
+  public getDistricts(): Observable<BaseNomenclatureModel[]> {
+    if (this.cachedDistricts) {
+      return of(this.cachedDistricts);
+    }
+
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_bg_districts`);
+  }
+
+  public saveDistricts(districts: BaseNomenclatureModel[]) {
+    this.cachedDistricts = districts;
   }
 
   public getCountriesSubdivisions(): Observable<BaseNomenclatureModel[]> {
@@ -25,22 +50,26 @@ string
     );
   }
 
-  public getCities(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-    // todo:
+  public getMunicipalities(
+    districtId: string
+  ): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/g_cities`
+      `${this.url}/municipalities/${districtId}`
+    );
+  }
+
+  public getCities(
+    municipalityId: string
+  ): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/cities/${municipalityId}`
     );
   }
 
   public getBulletinStatuses(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-    // todo:
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/b_bulletin_statuses`
-    );
+    return of(BulletinStatusTypeConstants.allData);
   }
- 
+
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/b_case_types`);
   }
@@ -57,10 +86,6 @@ string
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_id_doc_categories`
     );
-  }
-
-  public getIdDocIssuingAuthorities(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
   }
 
   public getDecisionTypes(): Observable<BaseNomenclatureModel[]> {
@@ -116,7 +141,7 @@ string
       `${this.url}/b_ecris_stanct_categs`
     );
   }
-  
+
   public getSanctionProbMeasures(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_sanct_prob_measures`
@@ -136,18 +161,17 @@ string
   }
 
   public getCsAuthorities(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-    // todo: 
-    // return this.http.get<BaseNomenclatureModel[]>(
-    //   `${this.url}/g_cs_authorities`
-    // );
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/g_cs_authorities`
+    );
   }
 
   public getDocumentTypes(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/d_doc_types`
-    );
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/d_doc_types`);
+  }
+
+  public getPersonAliasTypes(): Observable<BaseNomenclatureModel[]> {
+    return of(PersonAliasConstants.allData);
   }
 
   public getFbbcDocTypes(): Observable<BaseNomenclatureModel[]> {

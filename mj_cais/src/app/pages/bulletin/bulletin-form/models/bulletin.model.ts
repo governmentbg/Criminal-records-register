@@ -1,7 +1,10 @@
+import { AddressModel } from "../../../../@core/components/forms/address-form/model/address.model";
+import { MultipleChooseModel } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.model";
+
 export class BulletinModel {
   public id: string = null;
   public version: number = null;
-  public csAuthorityId: string = null;
+  public csAuthorityName: string = null;
   public registrationNumber: string = null;
   public sequentialIndex: number = null;
   public decisionNumber: string = null;
@@ -35,9 +38,6 @@ export class BulletinModel {
   public lnch: string = null;
   public birthDate: Date = null;
   public birthDatePrecision: string = null;
-  public birthCityId: string = null;
-  public birthCountryId: string = null;
-  public birthPlaceOther: string = null;
   public fullnameLat: string = null;
   public idDocNumber: string = null;
   public idDocCategoryId: string = null;
@@ -60,12 +60,14 @@ export class BulletinModel {
   public convRetPeriodEndDate: Date = null;
   public createdByPosition: string = null;
   public bulletinType: string = null;
+  public nationalities: MultipleChooseModel = new MultipleChooseModel();
+  public address: AddressModel = new AddressModel();
 
   constructor(init?: Partial<BulletinModel>) {
     if (init) {
       this.id = init.id ?? null;
       this.version = init.version ?? null;
-      this.csAuthorityId = init.csAuthorityId ?? null;
+      this.csAuthorityName = init.csAuthorityName ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.sequentialIndex = init.sequentialIndex ?? null;
       this.decisionNumber = init.decisionNumber ?? null;
@@ -99,9 +101,6 @@ export class BulletinModel {
       this.lnch = init.lnch ?? null;
       this.birthDate = init.birthDate ?? null;
       this.birthDatePrecision = init.birthDatePrecision ?? null;
-      this.birthCityId = init.birthCityId ?? null;
-      this.birthCountryId = init.birthCountryId ?? null;
-      this.birthPlaceOther = init.birthPlaceOther ?? null;
       this.fullnameLat = init.fullnameLat ?? null;
       this.idDocNumber = init.idDocNumber ?? null;
       this.idDocCategoryId = init.idDocCategoryId ?? null;
@@ -124,6 +123,8 @@ export class BulletinModel {
       this.convRetPeriodEndDate = init.convRetPeriodEndDate ?? null;
       this.createdByPosition = init.createdByPosition ?? null;
       this.bulletinType = init.bulletinType ?? null;
+      this.nationalities = init.nationalities ?? new MultipleChooseModel(),
+      this.address = init.address ?? new AddressModel()
     }
   }
 }

@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BSanctProbMeasure : IBaseNomenclature
+    public partial class BSanctProbMeasure : BaseEntity, IBaseNomenclature
     {
         public BSanctProbMeasure()
         {
             BSanctions = new HashSet<BSanction>();
         }
 
-        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public DateTime? ValidFrom { get; set; }

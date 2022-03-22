@@ -9,6 +9,13 @@ import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bul
 import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bulletin-decision-form.component";
 import { BulletinDocumentFormComponent } from "./tabs/bulletin-documents-form/bulletin-document-form.component";
+import { BulletinPersonAliasForm } from "./models/bulletin-person-alias.form";
+import {
+  IgxDialogComponent,
+  IgxGridComponent,
+  IgxGridRowComponent,
+} from "@infragistics/igniteui-angular";
+import { BulletinStatusTypeEnum } from "../bulletin-overview/models/bulletin-status-type.constants";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -44,6 +51,19 @@ export class BulletinFormComponent
   })
   public bulletineDocumentsForm: BulletinDocumentFormComponent;
 
+  public showForUpdate: boolean = false;
+
+  //#region Person alias variables
+
+  public bulletinPersonAliasForm = new BulletinPersonAliasForm();
+  @ViewChild("bulletinPersonAliasGrid", { read: IgxGridComponent })
+  public bulletinPersonAliasGrid: IgxGridComponent;
+
+  @ViewChild("bulletinPersonAliasDialog", { read: IgxDialogComponent })
+  public bulletinPersonAliasDialog: IgxDialogComponent;
+
+  //#endregion
+
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
     this.backUrl = "pages/bulletins";
@@ -60,9 +80,20 @@ export class BulletinFormComponent
 
   ngOnInit(): void {
     this.fullForm = new BulletinForm();
+    this.fullForm.statusId.disable();
+    this.fullForm.csAuthorityName.disable();
     this.fullForm.group.patchValue(this.dbData.element);
+    this.showForUpdate =
+      this.fullForm.statusId.value == BulletinStatusTypeEnum.NewEISS &&
+      this.isEdit();
     this.formFinishedLoading.emit();
   }
+
+  updateFunction = () => {
+    this.fullForm.statusId.enable();
+    this.fullForm.statusId.patchValue(BulletinStatusTypeEnum.Active);
+    this.submitFunction();
+  };
 
   submitFunction = () => {
     let offancesTransactions =
@@ -93,6 +124,60 @@ export class BulletinFormComponent
 
     this.fullForm.documentsTransactions.setValue(docsTransactions);
 
+    let personAliasTransactions =
+      this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
+    this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
+
     this.validateAndSave(this.fullForm);
   };
+
+  //#region Person alias functions
+
+  public onOpenEditBulletinPersonAlias(event: IgxGridRowComponent) {
+    this.bulletinPersonAliasForm.group.patchValue(event.rowData);
+    this.bulletinPersonAliasDialog.open();
+  }
+
+  public onDeleteBulletinPersonAlias(event: IgxGridRowComponent) {
+    this.bulletinPersonAliasGrid.deleteRow(event.rowData.id);
+    this.bulletinPersonAliasGrid.data =
+      this.bulletinPersonAliasGrid.data.filter((d) => d.id != event.rowData.id);
+  }
+
+  onAddOrUpdateBulletinPersonAliasRow() {
+    if (!this.bulletinPersonAliasForm.group.valid) {
+      this.bulletinPersonAliasForm.group.markAllAsTouched();
+      return;
+    }
+
+    if (this.bulletinPersonAliasForm.typeId.value) {
+      var typeObj = (this.dbData.personAliasTypes as any).find(
+        (x) => x.id === this.bulletinPersonAliasForm.typeId.value
+      );
+
+      this.bulletinPersonAliasForm.typeName.patchValue(typeObj?.name);
+      this.bulletinPersonAliasForm.typeCode.patchValue(typeObj?.code);
+    }
+
+    let currentRow = this.bulletinPersonAliasGrid.getRowByKey(
+      this.bulletinPersonAliasForm.id.value
+    );
+
+    if (currentRow) {
+      currentRow.update(this.bulletinPersonAliasForm.group.value);
+    } else {
+      this.bulletinPersonAliasGrid.addRow(
+        this.bulletinPersonAliasForm.group.value
+      );
+    }
+
+    this.onCloseBulletinPersonAliasDilog();
+  }
+
+  onCloseBulletinPersonAliasDilog() {
+    this.bulletinPersonAliasForm = new BulletinPersonAliasForm();
+    this.bulletinPersonAliasDialog.close();
+  }
+
+  //#endregion
 }

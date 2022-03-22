@@ -1,0 +1,32 @@
+<div [formGroup]="inputFormControl.group">
+  <label for="{{ inputName }}" class="label"
+    >{{ label }}
+    <ng-container
+      *ngIf="
+        formUtils.hasRequiredField(
+          inputFormControl.selectedForeignKeys
+        )
+      "
+      ><span style="color: red">*</span></ng-container
+    >
+  </label>
+
+  <ng-select
+    #autoControl
+    formControlName="{{ inputName }}"
+    (change)="onSelectionChange($event)"
+    (clear)="onSelectionChange(undefined)"
+    [multiple]="true"
+  >
+    <ng-option *ngFor="let item of items" [value]="item.id">{{
+      item.name
+    }}</ng-option>
+  </ng-select>
+
+  <cais-validation-message
+    label="{{ inputName }}"
+    [showRequired]="
+    inputFormControl?.selectedForeignKeys?.errors?.required && inputHasBeenInteracted()
+    "
+  ></cais-validation-message>
+</div>

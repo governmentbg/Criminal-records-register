@@ -74,6 +74,8 @@ import { NbCardModule } from "@nebular/theme";
 import { ConfirmDialogComponent } from "./components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CaisGridPagerComponent } from './components/grid/cais-grid-pager/cais-grid-pager.component';
 import { LookupComponent } from './components/forms/inputs/lookup/lookup.component';
+import { MultipleChooseComponent } from './components/forms/inputs/multiple-choose/multiple-choose.component';
+import { AddressFormComponent } from './components/forms/address-form/address-form.component';
 
 const socialLinks = [
   {
@@ -175,7 +177,9 @@ const COMPONENTS = [
   GridWithTransactionsComponent,
   ConfirmDialogComponent,
   CaisGridPagerComponent,
-  LookupComponent
+  LookupComponent,
+  MultipleChooseComponent,
+  AddressFormComponent
 ];
 
 @NgModule({

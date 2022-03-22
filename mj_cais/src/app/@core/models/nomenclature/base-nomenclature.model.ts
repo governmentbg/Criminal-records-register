@@ -1,5 +1,5 @@
 export class BaseNomenclatureModel {
-  public id: number = null;
+  public id: string | number = null;
   public code: string = null;
   public name: string = null;
   public nameEn: string = null;

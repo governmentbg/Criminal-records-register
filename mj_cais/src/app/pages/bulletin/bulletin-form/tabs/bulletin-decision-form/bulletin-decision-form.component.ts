@@ -5,7 +5,7 @@ import {
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
-import { BulletinDecisionForm } from "../../models/bulletin-decision.form";
+import { BulletinDecisionForm } from "./models/bulletin-decision.form";
 
 @Component({
   selector: "cais-bulletin-decision-form",
@@ -41,7 +41,7 @@ export class BulletinDecisionFormComponent {
     );
   }
 
-  onAddOrUpdateBulletineDecisionRow() {
+  onAddOrUpdateBulletinDecisionRow() {
     if (!this.bulletinDecisionForm.group.valid) {
       this.bulletinDecisionForm.group.markAllAsTouched();
       return;

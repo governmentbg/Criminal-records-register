@@ -28,6 +28,16 @@ namespace MJ_CAIS.Services
             return result;
         }
 
+        public IQueryable<BaseNomenclatureDTO> GetMunicipalitiesByDistrict(string districtId)
+        {
+            return _nomenclatureDetailRepository.GetMunicipalitiesByDistrict(districtId);
+        }
+
+        public IQueryable<BaseNomenclatureDTO> GetCitiesByMunicipality(string municipalityId)
+        {
+            return _nomenclatureDetailRepository.GetCitiesByMunicipality(municipalityId);
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;

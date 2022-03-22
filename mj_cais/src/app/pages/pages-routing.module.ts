@@ -4,12 +4,16 @@ import { NgModule } from "@angular/core";
 import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
-import { BulletinOverviewComponent } from "./bulletin/bulletin-overview/bulletin-overview.component";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
 import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
 import { FbbcResolver } from "./fbbc/fbbc-form/data/fbbc.resolver";
+import { EcrisIdentificationOverviewComponent } from "./ecris/ecris-identification-overview/ecris-identification-overview.component";
+import { BulletinNewEissOverviewComponent } from "./bulletin/bulletin-overview/bulletin-neweiss-overview/bulletin-neweiss-overview.component";
+import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bulletin-active-overview/bulletin-active-overview.component";
+import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
+import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 
 const routes: Routes = [
   {
@@ -22,8 +26,26 @@ const routes: Routes = [
       },
       {
         path: "bulletins",
-        component: BulletinOverviewComponent,
+        component: BulletinActiveOverviewComponent,
         // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-new-eiss",
+        component: BulletinNewEissOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-for-destruction",
+        component: BulletinForDestructionOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-for-rehabilitation",
+        component: BulletinForRehabilitationOverviewComponent,
+      },
+      {
+        path: "bulletins-requests",
+        //component: PagesComponent, // todo:
       },
       {
         path: "bulletins/create",
@@ -68,6 +90,11 @@ const routes: Routes = [
         component: FbbcFormComponent,
         resolve: { dbData: FbbcResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-identification",
+        component: EcrisIdentificationOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

@@ -4,9 +4,13 @@ import {
   IgxGridComponent,
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
-import { BulletinOffenceForm } from "../../models/bulletin-offance.form";
+import { BulletinOffenceForm } from "./models/bulletin-offance.form";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { InputTypeConstants } from "../../../../../@core/constants/input-type.constants";
+import { CommonConstants } from "../../../../../@core/constants/common.constants";
+import { AddressFormComponent } from "../../../../../@core/components/forms/address-form/address-form.component";
+import { forkJoin, of } from "rxjs";
+import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
 
 @Component({
   selector: "cais-bulletin-offences-form",
@@ -29,11 +33,20 @@ export class BulletinOffencesFormComponent implements OnInit {
 
   public bulletinOffenceForm = new BulletinOffenceForm();
 
-  constructor(public dateFormatService: DateFormatService) {}
+  @ViewChild("offPlace", {
+    read: AddressFormComponent,
+  })
+  public offPlaceComponent: AddressFormComponent;
+
+  constructor(
+    public dateFormatService: DateFormatService,
+    private nomenclatureService: NomenclatureService
+  ) {}
 
   ngOnInit(): void {}
 
   public onOpenEditBulletinOffence(event: IgxGridRowComponent) {
+    this.updateOffPlaceObj(event);
     this.bulletinOffenceForm.group.patchValue(event.rowData);
     this.dialog.open();
   }
@@ -98,5 +111,47 @@ export class BulletinOffencesFormComponent implements OnInit {
   onCloseBulletinOffenceDilog() {
     this.bulletinOffenceForm = new BulletinOffenceForm();
     this.dialog.close();
+  }
+
+  private updateOffPlaceObj(event) {
+    var selectedCountryId = event.rowData.offPlace.countryId;
+
+    var isBgCountry = selectedCountryId == CommonConstants.bgCountryId;
+    if (!isBgCountry) {
+      this.bulletinOffenceForm.offPlace.setForForeignAddress();
+      return;
+    }
+
+    // update data for dropdowns
+    let emptyData = of([]);
+
+    let munObservable = emptyData;
+    let mustUpdateMun = event.rowData.offPlace.districtId;
+
+    if (mustUpdateMun) {
+      munObservable = this.nomenclatureService.getMunicipalities(
+        event.rowData.offPlace.districtId
+      );
+    }
+
+    let citiesObservable = emptyData;
+    var mustUpdateCities = event.rowData.offPlace.cityId;
+
+    if (mustUpdateCities) {
+      citiesObservable = this.nomenclatureService.getCities(
+        event.rowData.offPlace.municipalityId
+      );
+    }
+
+    if (mustUpdateCities || mustUpdateMun) {
+      forkJoin([munObservable, citiesObservable]).subscribe(
+        ([municipalities, cities]) => {
+          this.offPlaceComponent.municipalities = municipalities;
+          this.offPlaceComponent.cities = cities;
+        }
+      );
+    }
+
+    this.bulletinOffenceForm.offPlace.setForNativeAddress();
   }
 }

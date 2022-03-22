@@ -498,13 +498,14 @@
         <div class="font-weight-bold">Отлагане на изпълнението</div>
         <hr />
 
-        <div class="form-group col-md-4 ml-2 row">
+        <div class="form-group col-md-6 ml-2 row">
           <label class="nb-theme-default label duration-label"
             >Продължителност на отлагане на изпълнението</label
           >
           <div class="col-md-3 duration-container" style="margin-left: -16px">
             <cais-input
-              [type]="'text'"
+              [type]="'number'"
+              [label]="'Години'"
               [inputFormControl]="bulletinSanctionForm.suspentionDurationYears"
               [parentGroup]="bulletinSanctionForm.group"
               [inputName]="'suspentionDurationYears'"
@@ -513,7 +514,8 @@
           </div>
           <div class="col-md-3 duration-container">
             <cais-input
-              [type]="'text'"
+              [type]="'number'"
+              [label]="'Месеци'"
               [inputFormControl]="bulletinSanctionForm.suspentionDurationMonths"
               [parentGroup]="bulletinSanctionForm.group"
               [inputName]="'suspentionDurationMonths'"
@@ -522,7 +524,8 @@
           </div>
           <div class="col-md-3 duration-container">
             <cais-input
-              [type]="'text'"
+              [type]="'number'"
+              [label]="'Дни'"
               [inputFormControl]="bulletinSanctionForm.suspentionDurationDays"
               [parentGroup]="bulletinSanctionForm.group"
               [inputName]="'suspentionDurationDays'"
@@ -531,7 +534,8 @@
           </div>
           <div class="col-md-3 duration-container">
             <cais-input
-              [type]="'text'"
+              [type]="'number'"
+              [label]="'Часове'"
               [inputFormControl]="bulletinSanctionForm.suspentionDurationHours"
               [parentGroup]="bulletinSanctionForm.group"
               [inputName]="'suspentionDurationHours'"

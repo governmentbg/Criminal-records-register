@@ -8,10 +8,11 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { BulletinDecisionModel } from "../models/bulletin-decision.model";
-import { BulletinDocumentModel } from "../models/bulletin-document.model";
-import { BulletinOffenceModel } from "../models/bulletin-offence.model";
-import { BulletinSanctionModel } from "../models/bulletin-sanction.model";
+import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/models/bulletin-decision.model";
+import { BulletinDocumentModel } from "../tabs/bulletin-documents-form/models/bulletin-document.model";
+import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/models/bulletin-offence.model";
+import { BulletinPersonAliasModel } from "../models/bulletin-person-alias.model";
+import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/models/bulletin-sanction.model";
 import { BulletinModel } from "../models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
@@ -38,8 +39,6 @@ export class BulletinResolver implements Resolve<any> {
       nationalities: this.nomenclatureService.getNationalities(),
       idDocumentCategoryTypes:
         this.nomenclatureService.getIdDocumentCategoryTypes(),
-      idDocIssuingAuthorities:
-        this.nomenclatureService.getIdDocIssuingAuthorities(),
       decisionTypes: this.nomenclatureService.getDecisionTypes(),
       decidingAuthorities: this.nomenclatureService.getDecidingAuthorities(),
       caseTypes: this.nomenclatureService.getCaseTypes(),
@@ -49,7 +48,6 @@ export class BulletinResolver implements Resolve<any> {
       countries: this.nomenclatureService.getCountries(),
       countriesSubdivisions:
         this.nomenclatureService.getCountriesSubdivisions(),
-      cities: this.nomenclatureService.getCities(),
       completions: this.nomenclatureService.getLvlCompletions(),
       parts: this.nomenclatureService.getExrisOffLevelParts(),
       sanctions: this.service.getSanctions(bulletineId),
@@ -62,10 +60,11 @@ export class BulletinResolver implements Resolve<any> {
       sanctionActivities: this.nomenclatureService.getSanctionActivities(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
       decisions: this.service.getDecisions(bulletineId),
-      csAuthorities:  this.nomenclatureService.getCsAuthorities(),
       documents:  this.service.getDocuments(bulletineId),
       documentTypes:  this.nomenclatureService.getDocumentTypes(),
-      bulletinStatuses: this.nomenclatureService.getBulletinStatuses()
+      bulletinStatuses: this.nomenclatureService.getBulletinStatuses(),
+      personAlias: this.service.getPersonAlias(bulletineId),
+      personAliasTypes: this.nomenclatureService.getPersonAliasTypes()
     };
     return forkJoin(result);
   }
@@ -76,11 +75,11 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public offences: Observable<BulletinOffenceModel[]>;
   public decisions: Observable<BulletinDecisionModel[]>;
   public documents: Observable<BulletinDocumentModel[]>;
+  public personAlias: Observable<BulletinPersonAliasModel[]>;
 
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalities: Observable<BaseNomenclatureModel[]>;
   public idDocumentCategoryTypes: Observable<BaseNomenclatureModel[]>;
-  public idDocIssuingAuthorities: Observable<BaseNomenclatureModel[]>;
   public decisionTypes: Observable<BaseNomenclatureModel[]>;
   public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
   public caseTypes: Observable<BaseNomenclatureModel[]>;
@@ -88,7 +87,6 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public ecrisOffCategories: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
   public countriesSubdivisions: Observable<BaseNomenclatureModel[]>;
-  public cities: Observable<BaseNomenclatureModel[]>;
   public completions: Observable<BaseNomenclatureModel[]>;
   public parts: Observable<BaseNomenclatureModel[]>;
   public sanctionCategories: Observable<BaseNomenclatureModel[]>;
@@ -97,7 +95,7 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctionProbMeasures: Observable<BaseNomenclatureModel[]>;
   public sanctionActivities: Observable<BaseNomenclatureModel[]>;
   public decisionChTypes: Observable<BaseNomenclatureModel[]>;
-  public csAuthorities: Observable<BaseNomenclatureModel[]>;
   public documentTypes: Observable<BaseNomenclatureModel[]>;
   public bulletinStatuses : Observable<BaseNomenclatureModel[]>;
+  public personAliasTypes: Observable<BaseNomenclatureModel[]>;
 }
