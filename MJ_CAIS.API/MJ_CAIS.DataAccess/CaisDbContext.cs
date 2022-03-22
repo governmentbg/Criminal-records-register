@@ -43,9 +43,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisAuthority> EEcrisAuthorities { get; set; } = null!;
         public virtual DbSet<EEcrisIdentification> EEcrisIdentifications { get; set; } = null!;
         public virtual DbSet<EEcrisMessage> EEcrisMessages { get; set; } = null!;
-        public virtual DbSet<EEcrisMsgRespType> EEcrisMsgRespTypes { get; set; } = null!;
         public virtual DbSet<EEcrisMsgStatus> EEcrisMsgStatuses { get; set; } = null!;
-        public virtual DbSet<EEcrisMsgType> EEcrisMsgTypes { get; set; } = null!;
         public virtual DbSet<Fbbc> Fbbcs { get; set; } = null!;
         public virtual DbSet<FbbcDocType> FbbcDocTypes { get; set; } = null!;
         public virtual DbSet<FbbcSanctType> FbbcSanctTypes { get; set; } = null!;
@@ -1356,6 +1354,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.SystemCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SYSTEM_CODE");
+
                 entity.Property(e => e.ValidFrom)
                     .HasColumnType("DATE")
                     .HasColumnName("VALID_FROM");
@@ -1594,8 +1597,6 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.ToAuthId, "XIF2E_ECRIS_MESSAGES");
 
-                entity.HasIndex(e => e.MsgTypeId, "XIF3E_ECRIS_MESSAGES");
-
                 entity.HasIndex(e => e.ResponseTypeId, "XIF4E_ECRIS_MESSAGES");
 
                 entity.HasIndex(e => e.RequestMsgId, "XIF5E_ECRIS_MESSAGES");
@@ -1603,6 +1604,8 @@ namespace MJ_CAIS.DataAccess
                 entity.HasIndex(e => e.EcrisMsgStatus, "XIF6E_ECRIS_MESSAGES");
 
                 entity.HasIndex(e => e.FbbcId, "XIF7E_ECRIS_MESSAGES");
+
+                entity.HasIndex(e => e.MsgTypeId, "XIF8E_ECRIS_MESSAGES");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -1698,71 +1701,15 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.FromAuthId)
                     .HasConstraintName("FK_E_ECRIS_MESSAGES_AUTH_FROM");
 
-                entity.HasOne(d => d.MsgType)
-                    .WithMany(p => p.EEcrisMessages)
-                    .HasForeignKey(d => d.MsgTypeId)
-                    .HasConstraintName("FK_E_ECRIS_MESSAGES_E_MSG_TYPE");
-
                 entity.HasOne(d => d.RequestMsg)
                     .WithMany(p => p.InverseRequestMsg)
                     .HasForeignKey(d => d.RequestMsgId)
                     .HasConstraintName("FK_E_ECRIS_MESSAGES_E_REQ_MS");
 
-                entity.HasOne(d => d.ResponseType)
-                    .WithMany(p => p.EEcrisMessages)
-                    .HasForeignKey(d => d.ResponseTypeId)
-                    .HasConstraintName("FK_E_ECRIS_MESSAGES_E_RESP_T");
-
                 entity.HasOne(d => d.ToAuth)
                     .WithMany(p => p.EEcrisMessageToAuths)
                     .HasForeignKey(d => d.ToAuthId)
                     .HasConstraintName("FK_E_ECRIS_MESSAGES_AUTH_TO");
-            });
-
-            modelBuilder.Entity<EEcrisMsgRespType>(entity =>
-            {
-                entity.ToTable("E_ECRIS_MSG_RESP_TYPES");
-
-                entity.HasIndex(e => e.EcrisMsgTypeId, "XIF1E_ECRIS_MSG_RESP_TYPES");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.Code)
-                    .HasMaxLength(200)
-                    .HasColumnName("CODE");
-
-                entity.Property(e => e.EcrisMsgTypeId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ECRIS_MSG_TYPE_ID");
-
-                entity.Property(e => e.EcrisTechnId)
-                    .HasMaxLength(100)
-                    .HasColumnName("ECRIS_TECHN_ID");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(200)
-                    .HasColumnName("NAME");
-
-                entity.Property(e => e.NameEn)
-                    .HasMaxLength(200)
-                    .HasColumnName("NAME_EN");
-
-                entity.Property(e => e.ValidFrom)
-                    .HasColumnType("DATE")
-                    .HasColumnName("VALID_FROM");
-
-                entity.Property(e => e.ValidTo)
-                    .HasColumnType("DATE")
-                    .HasColumnName("VALID_TO");
-
-                entity.HasOne(d => d.EcrisMsgType)
-                    .WithMany(p => p.EEcrisMsgRespTypes)
-                    .HasForeignKey(d => d.EcrisMsgTypeId)
-                    .HasConstraintName("FK_E_ECRIS_MSG_RESP_TYPES_E_EC");
             });
 
             modelBuilder.Entity<EEcrisMsgStatus>(entity =>
@@ -1775,24 +1722,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Code)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("CODE");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(200)
-                    .HasColumnName("NAME");
-            });
-
-            modelBuilder.Entity<EEcrisMsgType>(entity =>
-            {
-                entity.ToTable("E_ECRIS_MSG_TYPES");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.Code)
-                    .HasMaxLength(200)
                     .HasColumnName("CODE");
 
                 entity.Property(e => e.Name)
@@ -2178,6 +2107,8 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.MunicipalityId, "XIF2G_CITIES");
 
+                entity.HasIndex(e => e.CsAuthorityId, "XIF3G_CITIES");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -2191,6 +2122,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("COUNTRY_ID");
+
+                entity.Property(e => e.CsAuthorityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CS_AUTHORITY_ID");
 
                 entity.Property(e => e.EcrisTechnId)
                     .HasMaxLength(100)
@@ -2229,6 +2165,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.GCities)
                     .HasForeignKey(d => d.CountryId)
                     .HasConstraintName("FK_G_CITIES_G_COUNTRIES");
+
+                entity.HasOne(d => d.CsAuthority)
+                    .WithMany(p => p.GCities)
+                    .HasForeignKey(d => d.CsAuthorityId)
+                    .HasConstraintName("FK_G_CITIES_G_CS_AUTHORITIES");
 
                 entity.HasOne(d => d.Municipality)
                     .WithMany(p => p.GCities)

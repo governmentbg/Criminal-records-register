@@ -18,7 +18,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Identifier { get; set; }
         public string? EcrisIdentifier { get; set; }
         public DateTime? MsgTimestamp { get; set; }
-        public string? MsgTypeId { get; set; }
         public string? ResponseTypeId { get; set; }
         public string? EcrisMsgStatus { get; set; }
         public DateTime? BirthDate { get; set; }
@@ -31,12 +30,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? Sex { get; set; }
         public string? Nationality1Code { get; set; }
         public string? Nationality2Code { get; set; }
+        public string? MsgTypeId { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }
-        public virtual EEcrisMsgType? MsgType { get; set; }
         public virtual EEcrisMessage? RequestMsg { get; set; }
-        public virtual EEcrisMsgRespType? ResponseType { get; set; }
         public virtual EEcrisAuthority? ToAuth { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }

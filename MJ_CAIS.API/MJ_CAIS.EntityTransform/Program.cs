@@ -32,6 +32,9 @@ namespace MJ_CAIS.EntityTransform
             nameof(GCountrySubdivision),
             nameof(GCsAuthority),
             nameof(GDecidingAuthority),
+            nameof(GBgDistrict),
+            nameof(GBgMunicipality),
+            nameof(GCity),
         };
     }
 }

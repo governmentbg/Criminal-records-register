@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public GCsAuthority()
         {
             BBulletins = new HashSet<BBulletin>();
+            GCities = new HashSet<GCity>();
         }
 
         public string? Name { get; set; }
@@ -19,5 +20,6 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
+        public virtual ICollection<GCity> GCities { get; set; }
     }
 }
