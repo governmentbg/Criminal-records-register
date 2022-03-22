@@ -115,7 +115,8 @@
               class="bg-light p-2 rounded"
             >
               <strong class="mr-1">Избор на файл</strong>
-              <span class="file-select-hidden"><input
+              <span class="file-select-hidden"
+                ><input
                   type="file"
                   ng2FileSelect
                   [uploader]="uploader"
@@ -159,7 +160,6 @@
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </button>
             </div>
-            
           </div>
         </div>
 
@@ -188,171 +188,6 @@
               [inputType]="'TextArea'"
             >
             </cais-input>
-          </div>
-        </div>
-
-        <div class="font-weight-bold">Данни за лице</div>
-        <hr />
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">Имена на кирилица</label>
-            <div class="form-group display-input-container">
-              <span>
-                {{ bulletinInfo.firstname }}
-              </span>
-              <span>
-                {{ bulletinInfo.surname }}
-              </span>
-              <span>
-                {{ bulletinInfo.familyname }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Имена на латиница</label>
-            <div class="form-group display-input-container">
-              <span>
-                {{ bulletinInfo.firstnameLat }}
-              </span>
-              <span>
-                {{ bulletinInfo.surnameLat }}
-              </span>
-              <span>
-                {{ bulletinInfo.familynameLat }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Псевдоним</label>
-            <div class="form-group display-input-container">
-              <span> N/A</span>
-              <span> N/A</span>
-              <span> N/A</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">Пол</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.sex }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Дата на раждане</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.birthDate }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Националност</label>
-            <div class="form-group display-input-container">N/A</div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">ЕГН</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.egn }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">ЛНЧ</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.lnch }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">ЛН</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.ln }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">Държава</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.country }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Област</label>
-            <div class="form-group display-input-container">N/A</div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Населено място</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.city }}
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">Майка</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.motherFullname }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Баща</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.fatherFullname }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">БС по местоположение</label>
-            <div class="form-group display-input-container">N/A</div>
-          </div>
-        </div>
-
-        <div class="font-weight-bold">Данни за бюлетин</div>
-        <hr />
-
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">Дата на регистрация</label>
-            <div class="form-group display-input-container">
-              N/A
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Номер</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.registrationNumber }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Вид</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.decisionTypeName }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
-            <label class="label">Съд издал акта</label>
-            <div class="form-group display-input-container">
-              {{ bulletinInfo.decidingAuthName }}
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Акт(№/дата)</label>
-            <div class="form-group display-input-container">
-              <span> {{ bulletinInfo.decisionNumber }} </span>
-              <span> {{ bulletinInfo.decisionDate}} </span>         
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="label">Дело(№/дата)</label>      
-            <div class="form-group display-input-container">
-              <span> {{ bulletinInfo.caseNumber }} </span>
-              <span> {{ bulletinInfo.caseYear}} </span>         
-            </div>
           </div>
         </div>
       </nb-card-body>

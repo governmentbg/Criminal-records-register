@@ -108,7 +108,7 @@ namespace MJ_CAIS.Services
                     EcrisOffCatId = x.EcrisOffCatId,
                     EcrisOffCatName = x.EcrisOffCat.Name,
                     FormOfGuilt = x.FormOfGuilt,
-                    IsContiniuous = x.IsContiniuous,
+                    IsContiniuous = x.IsContiniuous.HasValue ? (x.IsContiniuous.Value == 1 ? true : false) : null,
                     LegalProvisions = x.LegalProvisions,
                     Occurrences = x.Occurrences,
                     OffenceCatId = x.OffenceCatId,
@@ -127,9 +127,9 @@ namespace MJ_CAIS.Services
                         ForeignCountryAddress = x.OffPlaceDescr
                     },
                     OffStartDate = x.OffStartDate,
-                    Recidivism = x.Recidivism,
+                    Recidivism = x.Recidivism.HasValue ? (x.Recidivism.Value == 1 ? true : false) : null,
                     Remarks = x.Remarks,
-                    RespExemption = x.RespExemption
+                    RespExemption = x.RespExemption.HasValue ? (x.RespExemption.Value == 1 ? true : false) : null,
                 });
 
             return await Task.FromResult(offances);

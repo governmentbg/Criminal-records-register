@@ -33,7 +33,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))
                 .ForMember(d => d.OffLvlComplId, opt => opt.MapFrom(src => src.OffLvlComplId))
                 .ForMember(d => d.OffLvlPartId, opt => opt.MapFrom(src => src.OffLvlPartId));
-          
+
             CreateMap<SanctionDTO, BSanction>();
 
             CreateMap<BSanction, SanctionDTO>()
@@ -41,7 +41,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForMember(d => d.SanctProbCategName, opt => opt.MapFrom(src => src.SanctProbCateg.Name))
                .ForMember(d => d.EcrisSanctCategName, opt => opt.MapFrom(src => src.EcrisSanctCateg.Name))
                .ForMember(d => d.SanctProbMeasureName, opt => opt.MapFrom(src => src.SanctProbMeasure.Name))
-               .ForMember(d => d.SanctActivityName, opt => opt.MapFrom(src => src.SanctActivity.Name));
+               .ForMember(d => d.SanctActivityName, opt => opt.MapFrom(src => src.SanctActivity.Name))
+               .ForMember(d => d.SpecificToMinor, opt => opt.MapFrom(src => src.SpecificToMinor.Value == 1 ? true : false));
 
             CreateMap<DecisionDTO, BDecision>();
             CreateMap<BDecision, DecisionDTO>()

@@ -279,7 +279,7 @@
           <div class="form-group col-md-8 row">
             <div class="col-md-6">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [label]="'Количество на пробационна мярка'"
                 [inputFormControl]="bulletinSanctionForm.sanctProbValue"
                 [parentGroup]="bulletinSanctionForm.group"
@@ -337,7 +337,7 @@
         <hr />
 
         <div class="row mt-2 ml-2">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <cais-input
               [type]="'date'"
               [label]="'Начална дата'"
@@ -346,7 +346,7 @@
               [inputName]="'decisionStartDate'"
             ></cais-input>
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <cais-input
               [type]="'date'"
               [label]="'Крайна дата'"
@@ -355,13 +355,13 @@
               [inputName]="'decisionEndDate'"
             ></cais-input>
           </div>
-          <div class="form-group col-md-4 row">
+          <div class="form-group col-md-6 row">
             <label class="nb-theme-default label pl-3 duration-label"
               >Продължителност</label
             >
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.decisionDurationYears"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'decisionDurationYears'"
@@ -370,7 +370,7 @@
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.decisionDurationMonths"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'decisionDurationMonths'"
@@ -379,7 +379,7 @@
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.decisionDurationDays"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'decisionDurationDays'"
@@ -388,7 +388,7 @@
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.decisionDurationHours"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'decisionDurationHours'"
@@ -404,7 +404,7 @@
         <hr />
 
         <div class="row mt-2 ml-2">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <cais-input
               [type]="'date'"
               [label]="'Начална дата'"
@@ -413,7 +413,7 @@
               [inputName]="'executionStartDate'"
             ></cais-input>
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <cais-input
               [type]="'date'"
               [label]="'Крайна дата'"
@@ -422,13 +422,13 @@
               [inputName]="'executionEndDate'"
             ></cais-input>
           </div>
-          <div class="form-group col-md-4 row">
+          <div class="form-group col-md-6 row">
             <label class="nb-theme-default label pl-3 duration-label"
               >Продължителност</label
             >
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.executionDurationYears"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'executionDurationYears'"
@@ -437,7 +437,7 @@
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.executionDurationMonths"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'executionDurationMonths'"
@@ -446,7 +446,7 @@
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.executionDurationDays"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'executionDurationDays'"
@@ -455,7 +455,7 @@
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
-                [type]="'text'"
+                [type]="'number'"
                 [inputFormControl]="bulletinSanctionForm.executionDurationHours"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'executionDurationHours'"
@@ -468,7 +468,7 @@
         <div class="row">
           <div class="form-group col-md-6">
             <cais-input
-              [type]="'text'"
+              [type]="'number'"
               [label]="'Размер на наложеното наказание - глоба'"
               [inputFormControl]="bulletinSanctionForm.fineAmount"
               [parentGroup]="bulletinSanctionForm.group"

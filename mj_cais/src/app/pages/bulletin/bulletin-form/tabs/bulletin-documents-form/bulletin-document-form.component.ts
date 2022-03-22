@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import {
   IgxDialogComponent,
   IgxGridComponent,
@@ -13,7 +13,6 @@ import { CustomToastrService } from "../../../../../@core/services/common/custom
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
 import { BulletinService } from "../../data/bulletin.service";
-import { BulletinDocumentInfoModel } from "./models/bulletin-document-info.model";
 import { BulletinForm } from "../../models/bulletin.form";
 import { BulletinDocumentForm } from "./models/bulletin-document.form";
 
@@ -22,7 +21,7 @@ import { BulletinDocumentForm } from "./models/bulletin-document.form";
   templateUrl: "./bulletin-document-form.component.html",
   styleUrls: ["./bulletin-document-form.component.scss"],
 })
-export class BulletinDocumentFormComponent implements OnInit {
+export class BulletinDocumentFormComponent {
   @Input() bulletinForm: BulletinForm;
   @Input() documents: any;
   @Input() dbData: any;
@@ -39,8 +38,6 @@ export class BulletinDocumentFormComponent implements OnInit {
 
   public bulletinDocumentForm = new BulletinDocumentForm();
   public uploader: CustomFileUploader;
-  public bulletinInfo: BulletinDocumentInfoModel =
-    new BulletinDocumentInfoModel();
   public hasDropZoneOver: boolean = false;
 
   protected validationMessage = "Грешка при валидациите!";
@@ -52,10 +49,6 @@ export class BulletinDocumentFormComponent implements OnInit {
     private dateFormatService: DateFormatService
   ) {
     this.initializeUploader();
-  }
-
-  ngOnInit(): void {
-    this.initDocumentInfoModel();
   }
 
   public fileOverAnother(e: any): void {
@@ -203,83 +196,5 @@ export class BulletinDocumentFormComponent implements OnInit {
   private showErrorMessage(error, message: string) {
     var errorText = error.status + " " + error.statusText;
     this.toastr.showBodyToast("danger", message, errorText);
-  }
-
-  private initDocumentInfoModel() {
-    this.bulletinInfo.firstname = this.bulletinForm.firstname.value;
-    this.bulletinInfo.surname = this.bulletinForm.surname.value;
-    this.bulletinInfo.familyname = this.bulletinForm.familyname.value;
-    this.bulletinInfo.firstnameLat = this.bulletinForm.firstnameLat.value;
-    this.bulletinInfo.surnameLat = this.bulletinForm.surnameLat.value;
-    this.bulletinInfo.familynameLat = this.bulletinForm.familynameLat.value;
-
-    if (this.bulletinForm.sex.value) {
-      let sexName = (this.dbData.genderTypes as any).find(
-        (x) => x.id === this.bulletinForm.sex.value
-      )?.name;
-      this.bulletinInfo.sex = sexName;
-    }
-
-    this.bulletinInfo.birthDate = this.dateFormatService.displayDate(
-      this.bulletinForm.birthDate.value
-    );
-    this.bulletinInfo.egn = this.bulletinForm.egn.value;
-    this.bulletinInfo.lnch = this.bulletinForm.lnch.value;
-    this.bulletinInfo.ln = this.bulletinForm.ln.value;
-    this.bulletinInfo.registrationNumber =
-      this.bulletinForm.registrationNumber.value;
-
-    if (this.bulletinForm.decisionTypeId.value) {
-      let decisionTypeName = (this.dbData.decisionTypes as any).find(
-        (x) => x.id === this.bulletinForm.decisionTypeId.value
-      )?.name;
-      this.bulletinInfo.decisionTypeName = decisionTypeName;
-    }
-
-    if (this.bulletinForm.decidingAuthId.value) {
-      let decidingAuthName = (this.dbData.decidingAuthorities as any).find(
-        (x) => x.id === this.bulletinForm.decidingAuthId.value
-      )?.name;
-      this.bulletinInfo.decidingAuthName = decidingAuthName;
-    }
-
-    this.bulletinInfo.decisionNumber = this.bulletinForm.decisionNumber.value;
-    this.bulletinInfo.decisionDate = this.dateFormatService.displayDateTime(
-      this.bulletinForm.decisionDate.value
-    );
-    this.bulletinInfo.caseNumber = this.bulletinForm.caseNumber.value;
-    this.bulletinInfo.caseYear = this.dateFormatService.displayDateTime(
-      this.bulletinForm.caseYear.value
-    );
-
-    var motherFullname =
-      (this.bulletinForm.motherFirstname.value ??
-      "") + " " + (this.bulletinForm.motherSurname.value ??
-      "") + " " + (this.bulletinForm.motherFamilyname.value ??
-      "");
-
-    this.bulletinInfo.motherFullname = motherFullname ?? "";
-
-    var fatherFullname =
-    (this.bulletinForm.fatherFirstname.value ??
-    "") + " " + (this.bulletinForm.fatherSurname.value ??
-    "") + " " + (this.bulletinForm.fatherFamilyname.value ??
-    "");
-
-    this.bulletinInfo.fatherFullname = fatherFullname ?? "";
-
-    if (this.bulletinForm.address.countryId.value) {
-      let countryName = (this.dbData.countries as any).find(
-        (x) => x.id === this.bulletinForm.address.countryId.value
-      )?.name;
-      this.bulletinInfo.country = countryName;
-    }
-
-    if (this.bulletinForm.address.cityId.value) {
-      let cityName = (this.dbData.countries as any).find(
-        (x) => x.id === this.bulletinForm.address.cityId.value
-      )?.name;
-      this.bulletinInfo.city = cityName;
-    }
   }
 }

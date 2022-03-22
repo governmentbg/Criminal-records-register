@@ -10,7 +10,7 @@ export class BulletinSanctionModel {
   public sanctProbMeasureId: string = null;
   public sanctProbMeasureName: string = null;
   public descr: string = null;
-  public specificToMinor: number = null;
+  public specificToMinor: boolean = null;
   public decisionStartDate: Date = null;
   public decisionEndDate: Date = null;
   public decisionDurationYears: number = null;
