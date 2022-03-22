@@ -58,6 +58,13 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Delete(aId);
         }
 
+        [HttpPut("{aId}/change-status/{statusId}")]
+        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        {
+            await this._bulletinService.ChangeStatusAsync(aId,statusId);
+            return Ok();
+        }
+
         [HttpGet("{aId}/offences")]
         public async Task<IActionResult> GetOffences(string aId)
         {

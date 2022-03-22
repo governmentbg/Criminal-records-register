@@ -85,6 +85,9 @@ namespace MJ_CAIS.Services
         public override async Task UpdateAsync(string aId, BulletinDTO aInDto)
             => await UpdateBulletinAsync(aInDto, false);
 
+        public async Task ChangeStatusAsync(string aInDto, string statusId)
+            => await this._bulletinRepository.ChangeStatusAsync(aInDto, statusId);
+
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
             var dbContext = _bulletinRepository.GetDbContext();

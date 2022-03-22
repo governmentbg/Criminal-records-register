@@ -23,4 +23,27 @@ export class BulletinForRehabilitationOverviewComponent extends RemoteGridWithSt
   ngOnInit() {
     super.ngOnInit();
   }
+
+  public onCancelRehabilitation(bulletinId: string) {
+    this.service
+    .changeStatus(bulletinId, BulletinStatusTypeEnum.Active)
+    .subscribe(
+      (res) => {
+        this.toastr.showToast("success", "Успешно отказана реабилитация на бюлетин");
+
+        this.grid.deleteRow(bulletinId);
+        this.grid.data = this.grid.data.filter(
+          (d) => d.id != bulletinId
+        );
+      },
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Възникна грешка по време на отказ от реабилитация",
+          errorText
+        );
+      }
+    );
+  }
 }
