@@ -8,12 +8,12 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/models/bulletin-decision.model";
+import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/_models/bulletin-decision.model";
 import { BulletinDocumentModel } from "../tabs/bulletin-documents-form/models/bulletin-document.model";
 import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/models/bulletin-offence.model";
-import { BulletinPersonAliasModel } from "../models/bulletin-person-alias.model";
+import { BulletinPersonAliasModel } from "../_models/bulletin-person-alias.model";
 import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/models/bulletin-sanction.model";
-import { BulletinModel } from "../models/bulletin.model";
+import { BulletinModel } from "../_models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
 @Injectable({
@@ -60,11 +60,11 @@ export class BulletinResolver implements Resolve<any> {
       sanctionActivities: this.nomenclatureService.getSanctionActivities(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
       decisions: this.service.getDecisions(bulletineId),
-      documents:  this.service.getDocuments(bulletineId),
-      documentTypes:  this.nomenclatureService.getDocumentTypes(),
+      documents: this.service.getDocuments(bulletineId),
+      documentTypes: this.nomenclatureService.getDocumentTypes(),
       bulletinStatuses: this.nomenclatureService.getBulletinStatuses(),
       personAlias: this.service.getPersonAlias(bulletineId),
-      personAliasTypes: this.nomenclatureService.getPersonAliasTypes()
+      personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
     };
     return forkJoin(result);
   }
@@ -96,6 +96,6 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctionActivities: Observable<BaseNomenclatureModel[]>;
   public decisionChTypes: Observable<BaseNomenclatureModel[]>;
   public documentTypes: Observable<BaseNomenclatureModel[]>;
-  public bulletinStatuses : Observable<BaseNomenclatureModel[]>;
+  public bulletinStatuses: Observable<BaseNomenclatureModel[]>;
   public personAliasTypes: Observable<BaseNomenclatureModel[]>;
 }

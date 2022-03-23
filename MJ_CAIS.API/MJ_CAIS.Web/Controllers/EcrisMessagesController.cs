@@ -20,7 +20,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public new async Task<IActionResult> GetAll(ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
         {
             var result = await this._ecrisMessageService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);

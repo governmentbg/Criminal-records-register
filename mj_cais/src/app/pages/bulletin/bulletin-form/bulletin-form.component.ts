@@ -1,15 +1,15 @@
 import { Component, Injector, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
-import { BulletinForm } from "./models/bulletin.form";
-import { BulletinModel } from "./models/bulletin.model";
-import { BulletinResolverData } from "./data/bulletin.resolver";
-import { BulletinService } from "./data/bulletin.service";
+import { BulletinForm } from "./_models/bulletin.form";
+import { BulletinModel } from "./_models/bulletin.model";
+import { BulletinResolverData } from "./_data/bulletin.resolver";
+import { BulletinService } from "./_data/bulletin.service";
 import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bulletin-offences-form.component";
 import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bulletin-decision-form.component";
 import { BulletinDocumentFormComponent } from "./tabs/bulletin-documents-form/bulletin-document-form.component";
-import { BulletinPersonAliasForm } from "./models/bulletin-person-alias.form";
+import { BulletinPersonAliasForm } from "./_models/bulletin-person-alias.form";
 import {
   IgxDialogComponent,
   IgxGridComponent,

@@ -8,7 +8,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { EcrisMessageModel } from "../models/ecris-message.model";
+import { EcrisMessageModel } from "../_models/ecris-message.model";
 import { EcrisMessageService } from "./ecris-message.service";
 
 @Injectable({

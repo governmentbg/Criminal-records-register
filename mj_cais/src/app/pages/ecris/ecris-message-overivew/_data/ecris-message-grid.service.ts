@@ -1,6 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
-import { CaisCrudService } from "../../../@core/services/rest/cais-crud.service";
-import { EcrisMessageGridModel } from "../models/ecris-message-grid.model";
+import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
+import { EcrisMessageGridModel } from "../_models/ecris-message-grid.model";
 
 const currentEndpoint = "ecris-messages";
 
