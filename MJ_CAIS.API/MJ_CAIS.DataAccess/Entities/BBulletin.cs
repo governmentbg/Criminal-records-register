@@ -9,6 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             BBullPersAliases = new HashSet<BBullPersAlias>();
             BDecisions = new HashSet<BDecision>();
+            BInternalRequests = new HashSet<BInternalRequest>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
             BSanctions = new HashSet<BSanction>();
@@ -94,6 +95,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual BBulletinStatus? Status { get; set; }
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }
         public virtual ICollection<BDecision> BDecisions { get; set; }
+        public virtual ICollection<BInternalRequest> BInternalRequests { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
         public virtual ICollection<BSanction> BSanctions { get; set; }
