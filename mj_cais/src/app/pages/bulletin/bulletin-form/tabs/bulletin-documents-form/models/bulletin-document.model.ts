@@ -8,6 +8,7 @@ export class BulletinDocumentModel {
   public docTypeName: string = null;
   public documentContent: Byte[] = [];
   public documentContentId: string = null;
+  public createdDate = Date = null;
 
   constructor(init?: Partial<BulletinDocumentModel>) {
     if (init) {
@@ -18,6 +19,7 @@ export class BulletinDocumentModel {
       this.docTypeName = init.docTypeName ?? null;
       this.documentContent = init.documentContent ?? null;
       this.documentContentId = init.documentContentId ?? null
+      this.createdDate = init.createdDate ?? null
     }
   }
 }

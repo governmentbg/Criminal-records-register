@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { DocumentTypeEnum } from "./document-type-constants";
 
 export class BulletinDocumentForm {
   public group: FormGroup;
@@ -19,7 +20,7 @@ export class BulletinDocumentForm {
     this.id = new FormControl(guid, [Validators.required]);
     this.name = new FormControl(null, [Validators.required]);
     this.descr = new FormControl(null);
-    this.docTypeId = new FormControl(null);
+    this.docTypeId = new FormControl(DocumentTypeEnum.Unstructured);
     this.docTypeName = new FormControl(null);
     this.documentContent = new FormControl(null, [Validators.required]);
     this.documentContentId = new FormControl(documentContentGuid, [

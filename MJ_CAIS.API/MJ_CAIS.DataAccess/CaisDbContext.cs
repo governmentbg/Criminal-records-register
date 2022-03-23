@@ -28,10 +28,12 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<BEcrisOffLvlPart> BEcrisOffLvlParts { get; set; } = null!;
         public virtual DbSet<BEcrisStanctCateg> BEcrisStanctCategs { get; set; } = null!;
         public virtual DbSet<BIdDocCategory> BIdDocCategories { get; set; } = null!;
+        public virtual DbSet<BInternalRequest> BInternalRequests { get; set; } = null!;
         public virtual DbSet<BOffence> BOffences { get; set; } = null!;
         public virtual DbSet<BOffenceCategory> BOffenceCategories { get; set; } = null!;
         public virtual DbSet<BOffenceLvlCompletion> BOffenceLvlCompletions { get; set; } = null!;
         public virtual DbSet<BPersNationality> BPersNationalities { get; set; } = null!;
+        public virtual DbSet<BReqStatus> BReqStatuses { get; set; } = null!;
         public virtual DbSet<BSanctProbCategory> BSanctProbCategories { get; set; } = null!;
         public virtual DbSet<BSanctProbMeasure> BSanctProbMeasures { get; set; } = null!;
         public virtual DbSet<BSanction> BSanctions { get; set; } = null!;
@@ -56,6 +58,9 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GCsAuthority> GCsAuthorities { get; set; } = null!;
         public virtual DbSet<GDecidingAuthority> GDecidingAuthorities { get; set; } = null!;
         public virtual DbSet<GNomenclature> GNomenclatures { get; set; } = null!;
+        public virtual DbSet<GRole> GRoles { get; set; } = null!;
+        public virtual DbSet<GUser> GUsers { get; set; } = null!;
+        public virtual DbSet<GUserRole> GUserRoles { get; set; } = null!;
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
         public virtual DbSet<PPersGroup> PPersGroups { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
@@ -769,6 +774,52 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VALID_TO");
             });
 
+            modelBuilder.Entity<BInternalRequest>(entity =>
+            {
+                entity.ToTable("B_INTERNAL_REQUESTS");
+
+                entity.HasIndex(e => e.BulletinId, "XIF1N_INTERNAL_REQUESTS");
+
+                entity.HasIndex(e => e.ReqStatusCode, "XIF2N_INTERNAL_REQUESTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.RegNumber)
+                    .HasMaxLength(100)
+                    .HasColumnName("REG_NUMBER");
+
+                entity.Property(e => e.ReqStatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("REQ_STATUS_CODE");
+
+                entity.Property(e => e.RequestDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("REQUEST_DATE");
+
+                entity.Property(e => e.ResponseDescr).HasColumnName("RESPONSE_DESCR");
+
+                entity.HasOne(d => d.Bulletin)
+                    .WithMany(p => p.BInternalRequests)
+                    .HasForeignKey(d => d.BulletinId)
+                    .HasConstraintName("FK_N_INTERNAL_REQUESTS_B_BULLE");
+
+                entity.HasOne(d => d.ReqStatusCodeNavigation)
+                    .WithMany(p => p.BInternalRequests)
+                    .HasForeignKey(d => d.ReqStatusCode)
+                    .HasConstraintName("FK_N_INTERNAL_REQUESTS_N_REQ_S");
+            });
+
             modelBuilder.Entity<BOffence>(entity =>
             {
                 entity.ToTable("B_OFFENCES");
@@ -1015,6 +1066,23 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.BPersNationalities)
                     .HasForeignKey(d => d.CountryId)
                     .HasConstraintName("FK_B_PERS_NATIONALITIES_G_COUN");
+            });
+
+            modelBuilder.Entity<BReqStatus>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKN_REQ_STATUSES");
+
+                entity.ToTable("B_REQ_STATUSES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
             });
 
             modelBuilder.Entity<BSanctProbCategory>(entity =>
@@ -2404,6 +2472,106 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.TableName)
                     .HasMaxLength(200)
                     .HasColumnName("TABLE_NAME");
+            });
+
+            modelBuilder.Entity<GRole>(entity =>
+            {
+                entity.ToTable("G_ROLES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<GUser>(entity =>
+            {
+                entity.ToTable("G_USERS");
+
+                entity.HasIndex(e => e.CsAuthorityId, "XIF1G_USERS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Active)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ACTIVE");
+
+                entity.Property(e => e.CsAuthorityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CS_AUTHORITY_ID");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(100)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(200)
+                    .HasColumnName("EMAIL");
+
+                entity.Property(e => e.Familyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILYNAME");
+
+                entity.Property(e => e.Firstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FIRSTNAME");
+
+                entity.Property(e => e.Position).HasColumnName("POSITION");
+
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(200)
+                    .HasColumnName("SURNAME");
+
+                entity.HasOne(d => d.CsAuthority)
+                    .WithMany(p => p.GUsers)
+                    .HasForeignKey(d => d.CsAuthorityId)
+                    .HasConstraintName("FK_G_USERS_G_CS_AUTHORITIES");
+            });
+
+            modelBuilder.Entity<GUserRole>(entity =>
+            {
+                entity.ToTable("G_USER_ROLES");
+
+                entity.HasIndex(e => e.UserId, "XIF1G_USER_ROLES");
+
+                entity.HasIndex(e => e.RoleId, "XIF2G_USER_ROLES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.RoleId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ROLE_ID");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("USER_ID");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.GUserRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("FK_G_USER_ROLES_G_ROLES");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.GUserRoles)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_G_USER_ROLES_G_USERS");
             });
 
             modelBuilder.Entity<GraoPerson>(entity =>
