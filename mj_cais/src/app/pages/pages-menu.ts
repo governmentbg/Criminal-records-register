@@ -43,17 +43,8 @@ export class PagesMenu {
             link: "/pages/bulletins-for-destruction", 
           },
           {
-            title: "Реабилитация", 
-            children: [
-              {
-                title: "Подлежащи",
-                link: "/pages/bulletins-for-rehabilitation", 
-              },
-              {
-                title: "Заявки",
-                link: "/pages/bulletins-requests", 
-              },
-            ]  
+            title: "Подлежащи на реабилитация", 
+            link: "/pages/bulletins-for-rehabilitation",
           },    
           {
             title: "Бюлетини за ECRIS",     

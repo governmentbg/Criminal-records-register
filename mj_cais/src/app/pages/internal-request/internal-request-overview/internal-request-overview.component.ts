@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit } from "@angular/core";
+import { ActivatedRouteSnapshot, RouterEvent } from "@angular/router";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { InternalRequestGridService } from "./_data/internal-request-grid.service";
@@ -18,10 +19,16 @@ export class InternalRequestOverviewComponent extends RemoteGridWithStatePersist
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("internal-requests-search", service, injector);
+    super("internal-requests-search", service, injector);   
   }
 
   ngOnInit() {
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    if (bulletinId) {
+      this.service.updateUrl(`internal-requests?bulletinId=${bulletinId}`);
+    }else{
+      this.service.updateUrl(`internal-requests`);
+    }
     super.ngOnInit();
   }
 }

@@ -76,6 +76,11 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
+        path: "internal-requests/:ID",
+        component: InternalRequestOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
         path: "fbbcs",
         component: FbbcOverviewComponent,
         // canActivate: [AuthGuard],

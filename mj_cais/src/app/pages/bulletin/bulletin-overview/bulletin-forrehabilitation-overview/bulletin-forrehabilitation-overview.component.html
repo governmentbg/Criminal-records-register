@@ -116,9 +116,12 @@
         <button mat-menu-item (click)="onCancelRehabilitation(cell.rowData.id)">
           <span>Откажи</span>
         </button>
-        <button mat-menu-item>
-          <span>Виж заявки</span>
-        </button>
+        <button
+        mat-menu-item
+        [routerLink]="['/pages/internal-requests', cell.rowData.id]"
+      >
+        <span class="ml-1">Виж заявки</span>
+      </button>
         <button
           mat-menu-item
           [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
