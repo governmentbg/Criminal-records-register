@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.EcrisMessage;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts;
-using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.EcrisMessage;
+using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Web.Controllers.Common;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -20,9 +20,10 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public new async Task<IActionResult> GetAll(ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions)
+        public new async Task<IActionResult> GetAll(ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
         {
-            return await base.GetAll(aQueryOptions);
+            var result = await this._ecrisMessageService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
+            return Ok(result);
         }
     }
 }

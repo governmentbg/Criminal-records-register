@@ -14,6 +14,8 @@ import { BulletinNewEissOverviewComponent } from "./bulletin/bulletin-overview/b
 import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bulletin-active-overview/bulletin-active-overview.component";
 import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
+import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
+import { EcrisMessageResolver } from "./ecris/ecris-message-form/data/ecris-message.resolver";
 
 const routes: Routes = [
   {
@@ -95,6 +97,26 @@ const routes: Routes = [
       {
         path: "ecris-identification",
         component: EcrisIdentificationOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-messages/create",
+        component: EcrisMessageFormComponent,
+        resolve: { dbData: EcrisMessageResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-messages/edit/:ID",
+        component: EcrisMessageFormComponent,
+        resolve: { dbData: EcrisMessageResolver },
+        data: { edit: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-messages/preview/:ID",
+        component: EcrisMessageFormComponent,
+        resolve: { dbData: EcrisMessageResolver },
+        data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },
       {

@@ -52,7 +52,7 @@ namespace MJ_CAIS.Services
             this.PopulateDtoToEntityFieldsMapping();
         }
 
-        public ICollection<T> ApplyCheckboxChanges<T>(int[] ids, string foreignKey, bool isAdded, ICollection<T> dbEntities = null) where T : BaseEntity
+        public ICollection<T> ApplyCheckboxChanges<T>(string[] ids, string foreignKey, bool isAdded, ICollection<T> dbEntities = null) where T : BaseEntity
         {
             dbEntities = dbEntities ?? new List<T>();
             var result = new List<T>();
@@ -62,7 +62,7 @@ namespace MJ_CAIS.Services
             // Mark for add
             foreach (var fkId in ids)
             {
-                var contains = dbEntities.Any(x => (int)fkProperty.GetValue(x) == fkId);
+                var contains = dbEntities.Any(x => (string)fkProperty.GetValue(x) == fkId);
                 if (!contains)
                 {
                     var instance = Activator.CreateInstance<T>();
@@ -75,7 +75,7 @@ namespace MJ_CAIS.Services
             // Mark for delete
             foreach (var dbEntity in dbEntities)
             {
-                var searchId = (int)fkProperty.GetValue(dbEntity);
+                var searchId = (string)fkProperty.GetValue(dbEntity);
                 if (!ids.Contains(searchId))
                 {
                     dbEntity.EntityState = EntityStateEnum.Deleted;
