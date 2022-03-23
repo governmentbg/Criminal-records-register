@@ -46,7 +46,6 @@ export class BulletinDocumentFormComponent {
     public toastr: CustomToastrService,
     public bulletinService: BulletinService,
     private dialogService: NbDialogService,
-    private dateFormatService: DateFormatService
   ) {
     this.initializeUploader();
   }
@@ -56,6 +55,7 @@ export class BulletinDocumentFormComponent {
   }
 
   onOpenDialog() {
+    this.bulletinDocumentForm.docTypeId.disable();
     this.initializeUploader();
   }
 
@@ -68,6 +68,7 @@ export class BulletinDocumentFormComponent {
     }
 
     let model = this.bulletinDocumentForm.group.value;
+    model.docTypeId = this.bulletinDocumentForm.docTypeId.value;
     this.bulletinService
       .saveDocument(this.bulletinForm.id.value, model)
       .subscribe(
