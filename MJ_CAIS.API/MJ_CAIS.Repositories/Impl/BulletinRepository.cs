@@ -11,16 +11,23 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public async Task ChangeStatusAsync(string aInDto, string statusId)
+        public override IQueryable<BBulletin> SelectAllAsync()
+        {
+            return this._dbContext.BBulletins.AsNoTracking()
+                .Include(x => x.BulletinAuthority);
+        }
+
+        public override async Task<BBulletin> SelectAsync(string aId)
         {
             var bulletin = await _dbContext.BBulletins
-                .FirstOrDefaultAsync(x => x.Id == aInDto);
+               .Include(x => x.BPersNationalities)
+               .Include(x => x.CsAuthority)
+               .Include(x => x.BirthCity)
+                   .ThenInclude(x => x.Municipality)
+               .AsNoTracking()
+               .FirstOrDefaultAsync(x => x.Id == aId);
 
-            if (bulletin == null)
-                throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
-
-            bulletin.StatusId = statusId;
-            await _dbContext.SaveChangesAsync();
+            return bulletin;
         }
     }
 }

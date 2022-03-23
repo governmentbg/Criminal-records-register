@@ -5,7 +5,7 @@ import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
-import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
+import { BulletinResolver } from "./bulletin/bulletin-form/_data/bulletin.resolver";
 import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
 import { FbbcResolver } from "./fbbc/fbbc-form/data/fbbc.resolver";

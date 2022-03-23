@@ -8,7 +8,6 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.DTO.Common;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -25,31 +24,10 @@ namespace MJ_CAIS.Services
             _bulletinRepository = bulletinRepository;
         }
 
-        public async Task<IgPageResult<BulletinGridDTO>> GetAllCustomAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId)
+        public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId)
         {
-            var context = _bulletinRepository.GetDbContext();
-
-            var baseQuery = context.BBulletins.AsNoTracking()
-                .Include(x => x.BulletinAuthority)
-                .Where(x => x.StatusId == statusId)
-                .Select(x => new BulletinGridDTO
-                {
-                    Id = x.Id,
-                    FirstName = x.Firstname,
-                    SurName = x.Surname,
-                    FamilyName = x.Familyname,
-                    RegistrationNumber = x.RegistrationNumber,
-                    StatusId = statusId,
-                    CreatedOn = x.CreatedOn,
-                    AlphabeticalIndex = x.AlphabeticalIndex,
-                    BulletinAuthorityName = x.BulletinAuthority != null ? x.BulletinAuthority.Name : string.Empty,
-                    Ln = x.Ln,
-                    Lnch = x.Lnch,
-                    Egn = x.Egn,
-                    DeleteDate = x.DeleteDate,
-                    RehabilitationDate = x.RehabilitationDate
-                });
-
+            var entityQuery = this.GetSelectAllQueriable().Where(x => x.StatusId == statusId);
+            var baseQuery = entityQuery.ProjectTo<BulletinGridDTO>(mapperConfiguration);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<BulletinGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
@@ -61,24 +39,6 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public override async Task<BulletinDTO> SelectAsync(string aId)
-        {
-            var context = _bulletinRepository.GetDbContext();
-
-            var bulletin = await context.BBulletins
-                .Include(x => x.BPersNationalities)
-                .Include(x => x.CsAuthority)
-                .Include(x => x.BirthCity)
-                    .ThenInclude(x => x.Municipality)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == aId);
-
-            if (bulletin == null) return null;
-
-            var result = mapper.Map<BulletinDTO>(bulletin);
-            return result;
-        }
-
         public override async Task<string> InsertAsync(BulletinDTO aInDto)
             => await UpdateBulletinAsync(aInDto, true);
 
@@ -86,7 +46,17 @@ namespace MJ_CAIS.Services
             => await UpdateBulletinAsync(aInDto, false);
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
-            => await this._bulletinRepository.ChangeStatusAsync(aInDto, statusId);
+        {
+            var dbContext = _bulletinRepository.GetDbContext();
+            var bulletin = await dbContext.BBulletins
+               .FirstOrDefaultAsync(x => x.Id == aInDto);
+
+            if (bulletin == null)
+                throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
+
+            bulletin.StatusId = statusId;
+            await dbContext.SaveChangesAsync();
+        }
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
@@ -102,35 +72,7 @@ namespace MJ_CAIS.Services
                 .Include(x => x.OffLvlCompl)
                 .Include(x => x.OffLvlPart)
                 .Where(x => x.BulletinId == aId)
-                .Select(x => new OffenceDTO
-                {
-                    Id = x.Id,
-                    EcrisOffCatId = x.EcrisOffCatId,
-                    EcrisOffCatName = x.EcrisOffCat.Name,
-                    FormOfGuilt = x.FormOfGuilt,
-                    IsContiniuous = x.IsContiniuous.HasValue ? (x.IsContiniuous.Value == 1 ? true : false) : null,
-                    LegalProvisions = x.LegalProvisions,
-                    Occurrences = x.Occurrences,
-                    OffenceCatId = x.OffenceCatId,
-                    OffenceCatName = x.OffenceCat.Name,
-                    OffEndDate = x.OffEndDate,
-                    OffLvlComplId = x.OffLvlComplId,
-                    OffLvlComplName = x.OffLvlCompl.Name,
-                    OffLvlPartId = x.OffLvlPartId,
-                    OffLvlPartName = x.OffLvlPart.Name,
-                    OffPlace = new AddressDTO
-                    {
-                        CityId = x.OffPlaceCityId,
-                        CountryId = x.OffPlaceCountryId,
-                        DistrictId = x.OffPlaceCity.Municipality.DistrictId,
-                        MunicipalityId = x.OffPlaceCity.MunicipalityId,
-                        ForeignCountryAddress = x.OffPlaceDescr
-                    },
-                    OffStartDate = x.OffStartDate,
-                    Recidivism = x.Recidivism.HasValue ? (x.Recidivism.Value == 1 ? true : false) : null,
-                    Remarks = x.Remarks,
-                    RespExemption = x.RespExemption.HasValue ? (x.RespExemption.Value == 1 ? true : false) : null,
-                });
+                .ProjectTo<OffenceDTO>(mapperConfiguration);
 
             return await Task.FromResult(offances);
         }

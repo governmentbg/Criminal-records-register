@@ -1,6 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { BulletinStatusTypeConstants } from "../../../pages/bulletin/bulletin-overview/models/bulletin-status-type.constants";
+import { BulletinStatusTypeConstants } from "../../../pages/bulletin/bulletin-overview/_models/bulletin-status-type.constants";
 import { GenderConstants } from "../../constants/gender.constants";
 import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";

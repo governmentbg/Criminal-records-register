@@ -22,9 +22,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public new async Task<IActionResult> GetAll(ODataQueryOptions<BulletinGridDTO> aQueryOptions,string statusId)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<BulletinGridDTO> aQueryOptions,string statusId)
         {
-            var result = await _bulletinService.GetAllCustomAsync(aQueryOptions, statusId);
+            var result = await this._bulletinService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
         }
 

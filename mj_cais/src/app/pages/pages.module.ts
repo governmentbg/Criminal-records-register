@@ -9,7 +9,7 @@ import { MiscellaneousModule } from "./miscellaneous/miscellaneous.module";
 import { SharedModule } from "../shared.module";
 import { PagesMenu } from "./pages-menu";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
-import { BulletinResolver } from "./bulletin/bulletin-form/data/bulletin.resolver";
+import { BulletinResolver } from "./bulletin/bulletin-form/_data/bulletin.resolver";
 import { CoreModule } from "../@core/core.module";
 import { BulletinOffencesFormComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/bulletin-offences-form.component';
 import { BulletinSanctionsFormComponent } from './bulletin/bulletin-form/tabs/bulletin-sanctions-form/bulletin-sanctions-form.component';

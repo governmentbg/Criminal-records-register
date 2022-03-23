@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.DTO.Common;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -8,7 +9,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public BulletinProfile()
         {
-            CreateMap<BBulletin, BulletinGridDTO>();
+            CreateMap<BBulletin, BulletinGridDTO>()
+                .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name));
 
             CreateMap<BulletinDTO, BBulletin>()
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
@@ -33,6 +35,24 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))
                 .ForMember(d => d.OffLvlComplId, opt => opt.MapFrom(src => src.OffLvlComplId))
                 .ForMember(d => d.OffLvlPartId, opt => opt.MapFrom(src => src.OffLvlPartId));
+
+            CreateMap<BOffence, OffenceDTO>()
+               .ForMember(d => d.EcrisOffCatName, opt => opt.MapFrom(src => src.EcrisOffCat.Name))
+               .ForMember(d => d.OffenceCatName, opt => opt.MapFrom(src => src.OffenceCat.Name))
+               .ForMember(d => d.OffLvlComplName, opt => opt.MapFrom(src => src.OffLvlCompl.Name))
+               .ForMember(d => d.OffLvlPartName, opt => opt.MapFrom(src => src.OffLvlPart.Name))
+               .ForMember(d => d.IsContiniuous, opt => opt.MapFrom(src => src.IsContiniuous.HasValue && src.IsContiniuous.Value == 1 ? true : false))
+               .ForMember(d => d.Recidivism, opt => opt.MapFrom(src => src.Recidivism.HasValue && src.Recidivism.Value == 1 ? true : false))
+               .ForMember(d => d.RespExemption, opt => opt.MapFrom(src => src.RespExemption.HasValue && src.RespExemption.Value == 1 ? true : false))
+               .ForMember(d => d.OffPlace, opt => opt.MapFrom(src =>
+                    new AddressDTO
+                    {
+                        CityId = src.OffPlaceCityId,
+                        CountryId = src.OffPlaceCountryId,
+                        DistrictId = src.OffPlaceCity.Municipality.DistrictId,
+                        MunicipalityId = src.OffPlaceCity.MunicipalityId,
+                        ForeignCountryAddress = src.OffPlaceDescr
+                    }));
 
             CreateMap<SanctionDTO, BSanction>();
 

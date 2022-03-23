@@ -5,7 +5,7 @@ import {
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
-import { BulletinSanctionForm } from "./models/bulletin-sanction.form";
+import { BulletinSanctionForm } from "./_models/bulletin-sanction.form";
 
 @Component({
   selector: "cais-bulletin-sanctions-form",

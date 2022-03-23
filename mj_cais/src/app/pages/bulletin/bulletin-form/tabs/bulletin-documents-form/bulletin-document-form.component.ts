@@ -12,9 +12,9 @@ import { CommonConstants } from "../../../../../@core/constants/common.constants
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
-import { BulletinService } from "../../data/bulletin.service";
-import { BulletinForm } from "../../models/bulletin.form";
-import { BulletinDocumentForm } from "./models/bulletin-document.form";
+import { BulletinService } from "../../_data/bulletin.service";
+import { BulletinForm } from "../../_models/bulletin.form";
+import { BulletinDocumentForm } from "./_models/bulletin-document.form";
 
 @Component({
   selector: "cais-bulletin-document-form",

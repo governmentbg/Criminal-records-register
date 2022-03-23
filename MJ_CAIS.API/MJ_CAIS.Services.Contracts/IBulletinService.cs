@@ -7,7 +7,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IBulletinService : IBaseAsyncService<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string>
     {
-        Task<IgPageResult<BulletinGridDTO>> GetAllCustomAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId);
+        Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId);
 
         Task ChangeStatusAsync(string aInDto, string statusId);
 

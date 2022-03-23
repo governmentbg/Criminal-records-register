@@ -1,7 +1,9 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { BulletinGridModel } from "../models/bulletin-grid.model";
+import { BulletinGridModel } from "../_models/bulletin-grid.model";
+
+const currentEndpoint = "bulletins";
 
 @Injectable({ providedIn: "root" })
 export class BulletinGridService extends CaisCrudService<
@@ -9,7 +11,11 @@ export class BulletinGridService extends CaisCrudService<
   string
 > {
   constructor(injector: Injector) {
-    super(BulletinGridModel, injector, "bulletins");
+    super(BulletinGridModel, injector, currentEndpoint);
+  }
+
+  public updateUrlStatus(statusId: string) {
+    this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
   }
 
   public changeStatus(aId: string, statusId: string): Observable<any> {

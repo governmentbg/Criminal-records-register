@@ -4,7 +4,7 @@ import {
   IgxGridComponent,
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
-import { BulletinOffenceForm } from "./models/bulletin-offance.form";
+import { BulletinOffenceForm } from "./_models/bulletin-offance.form";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { InputTypeConstants } from "../../../../../@core/constants/input-type.constants";
 import { CommonConstants } from "../../../../../@core/constants/common.constants";

@@ -2,7 +2,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
 import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
 import { MultipleChooseForm } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
-import { BulletinStatusTypeEnum } from "../../bulletin-overview/models/bulletin-status-type.constants";
+import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin-status-type.constants";
 
 export class BulletinForm {
   public group: FormGroup;
