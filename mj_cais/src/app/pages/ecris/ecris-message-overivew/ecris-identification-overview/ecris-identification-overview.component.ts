@@ -1,10 +1,10 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
-import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
-import { DateFormatService } from "../../../@core/services/common/date-format.service";
-import { EcrisMessageStatusConstants } from "../models/ecris-message-status.constants";
-import { EcrisMessageGridModel } from "../models/ecris-message-grid.model";
-import { EcrisMessageGridService } from "../data/ecris-message-grid.service";
+import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { DateFormatService } from "../../../../@core/services/common/date-format.service";
+import { EcrisMessageStatusConstants } from "../_models/ecris-message-status.constants";
+import { EcrisMessageGridModel } from "../_models/ecris-message-grid.model";
+import { EcrisMessageGridService } from "../_data/ecris-message-grid.service";
 
 @Component({
   selector: "cais-ecris-identification-overview",

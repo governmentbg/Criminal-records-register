@@ -9,13 +9,13 @@ import { BulletinResolver } from "./bulletin/bulletin-form/_data/bulletin.resolv
 import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
 import { FbbcResolver } from "./fbbc/fbbc-form/data/fbbc.resolver";
-import { EcrisIdentificationOverviewComponent } from "./ecris/ecris-identification-overview/ecris-identification-overview.component";
+import { EcrisIdentificationOverviewComponent } from "./ecris/ecris-message-overivew/ecris-identification-overview/ecris-identification-overview.component";
 import { BulletinNewEissOverviewComponent } from "./bulletin/bulletin-overview/bulletin-neweiss-overview/bulletin-neweiss-overview.component";
 import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bulletin-active-overview/bulletin-active-overview.component";
 import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
-import { EcrisMessageResolver } from "./ecris/ecris-message-form/data/ecris-message.resolver";
+import { EcrisMessageResolver } from "./ecris/ecris-message-form/_data/ecris-message.resolver";
 
 const routes: Routes = [
   {
