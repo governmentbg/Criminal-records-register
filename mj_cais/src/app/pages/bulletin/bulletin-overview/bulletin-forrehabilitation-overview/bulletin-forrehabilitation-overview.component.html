@@ -110,9 +110,13 @@
         <nb-icon pack="fa" icon="bars"></nb-icon>
       </a>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <span>Създай заявка</span>
-        </button>
+        <button
+        mat-menu-item
+        [routerLink]="['/pages/internal-requests/create/', cell.rowData.id]"
+      >
+        <span class="ml-1">Създай заявка</span>
+      </button>
+        
         <button mat-menu-item (click)="onCancelRehabilitation(cell.rowData.id)">
           <span>Откажи</span>
         </button>

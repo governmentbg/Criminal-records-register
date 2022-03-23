@@ -17,6 +17,8 @@ import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-
 import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
 import { EcrisMessageResolver } from "./ecris/ecris-message-form/_data/ecris-message.resolver";
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
+import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
+import { InternalRequestResolver } from "./internal-request/internal-request-form/_data/internal-request.resolver";
 
 const routes: Routes = [
   {
@@ -78,6 +80,26 @@ const routes: Routes = [
       {
         path: "internal-requests/:ID",
         component: InternalRequestOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "internal-requests/create/:ID",
+        component: InternalRequestFormComponent,
+        resolve: { dbData: InternalRequestResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "internal-requests/edit/:ID",
+        component: InternalRequestFormComponent,
+        resolve: { dbData: InternalRequestResolver },
+        data: { edit: true },
+        // canActivate: [AuthGuard],
+      },
+       {
+        path: "internal-requests/preview/:ID",
+        component: InternalRequestFormComponent,
+        resolve: { dbData: InternalRequestResolver },
+        data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },
       {

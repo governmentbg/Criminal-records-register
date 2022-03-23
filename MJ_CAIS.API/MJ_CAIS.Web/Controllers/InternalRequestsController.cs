@@ -25,5 +25,23 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, bulletinId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}")]
+        public new async Task<IActionResult> Get(string aId)
+        {
+            return await base.Get(aId);
+        }
+
+        [HttpPost("")]
+        public new async Task<IActionResult> Post([FromBody] InternalRequestDTO aInDto)
+        {
+            return await base.Post(aInDto);
+        }
+
+        [HttpPut("{aId}")]
+        public new async Task<IActionResult> Put(string aId, [FromBody] InternalRequestDTO aInDto)
+        {
+            return await base.Put(aId, aInDto);
+        }
     }
 }

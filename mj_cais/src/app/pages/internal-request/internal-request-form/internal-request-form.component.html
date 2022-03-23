@@ -1,0 +1,42 @@
+<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onSaveFunction]="submitFunction"
+      [onCancelFunction]="globalCancelFunction"
+    ></cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="row">
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'text'"
+            [label]="'Регистрационен номер'"
+            [inputFormControl]="fullForm.regNumber"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'date'"
+            [label]="'Датата на създаване'"
+            [inputFormControl]="fullForm.requestDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+            <cais-input
+            [type]="'text'"
+            [label]="'Забележки'"
+            [inputFormControl]="fullForm.description"
+            [parentGroup]="fullForm.group"
+            [inputType]="InputTypeConstants.TextArea"
+          ></cais-input>
+        </div>     
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

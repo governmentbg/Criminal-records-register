@@ -1,5 +1,4 @@
-import { Component, Injector, OnInit } from "@angular/core";
-import { ActivatedRouteSnapshot, RouterEvent } from "@angular/router";
+import { Component, Injector } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { InternalRequestGridService } from "./_data/internal-request-grid.service";
