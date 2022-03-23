@@ -16,6 +16,7 @@ import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-ove
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
 import { EcrisMessageResolver } from "./ecris/ecris-message-form/_data/ecris-message.resolver";
+import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 
 const routes: Routes = [
   {
@@ -67,6 +68,11 @@ const routes: Routes = [
         component: BulletinFormComponent,
         resolve: { dbData: BulletinResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "internal-requests",
+        component: InternalRequestOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

@@ -61,6 +61,16 @@ export class PagesMenu {
         ],
       },
       {
+        title: "За решение от съдия",
+        icon: "message-circle-outline",
+        children: [
+          {
+            title: "Заявки за реабилитация",
+            link: "/pages/internal-requests",
+          },
+        ],
+      },
+      {
         title: "Осъдени в чужбина",
         icon: "home-outline",
         link: "/pages/fbbcs",

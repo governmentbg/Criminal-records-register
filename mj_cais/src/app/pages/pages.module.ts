@@ -25,6 +25,7 @@ import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-ove
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
+import { InternalRequestOverviewComponent } from './internal-request/internal-request-overview/internal-request-overview.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-mess
     BulletinForDestructionOverviewComponent,
     BulletinForRehabilitationOverviewComponent,
     EcrisMessageFormComponent,
+    InternalRequestOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })
