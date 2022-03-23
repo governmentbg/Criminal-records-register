@@ -41,5 +41,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = _nomenclatureDetailService.GetCitiesByMunicipality(municipalityId);
             return Ok(result);
         }
+
+        [HttpGet("bulletin-statuses")]
+        public IActionResult GetBulletinStatuses()
+        {
+            var result = _nomenclatureDetailService.GetBulletinStatuses();
+            return Ok(result);
+        }
     }
 }

@@ -1,6 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { BulletinStatusTypeConstants } from "../../../pages/bulletin/bulletin-overview/_models/bulletin-status-type.constants";
 import { GenderConstants } from "../../constants/gender.constants";
 import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
@@ -67,7 +66,9 @@ export class NomenclatureService extends CaisCrudService<
   }
 
   public getBulletinStatuses(): Observable<BaseNomenclatureModel[]> {
-    return of(BulletinStatusTypeConstants.allData);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/bulletin-statuses`
+    );
   }
 
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {

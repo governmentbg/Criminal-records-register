@@ -1,13 +1,14 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Nomenclature;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
     public interface INomenclatureDetailRepository : IBaseAsyncRepository<GNomenclature, string, CaisDbContext>
     {
-        IQueryable<BaseNomenclatureDTO> GetMunicipalitiesByDistrict(string districtId);
+        IQueryable<GBgMunicipality> GetMunicipalitiesByDistrict(string districtId);
 
-        IQueryable<BaseNomenclatureDTO> GetCitiesByMunicipality(string municipalityId);
+        IQueryable<GCity> GetCitiesByMunicipality(string municipalityId);
+
+        IQueryable<BBulletinStatus> GetBulletinStatuses();
     }
 }

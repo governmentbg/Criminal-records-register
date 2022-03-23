@@ -30,12 +30,23 @@ namespace MJ_CAIS.Services
 
         public IQueryable<BaseNomenclatureDTO> GetMunicipalitiesByDistrict(string districtId)
         {
-            return _nomenclatureDetailRepository.GetMunicipalitiesByDistrict(districtId);
+            return _nomenclatureDetailRepository
+                    .GetMunicipalitiesByDistrict(districtId)
+                    .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
         public IQueryable<BaseNomenclatureDTO> GetCitiesByMunicipality(string municipalityId)
         {
-            return _nomenclatureDetailRepository.GetCitiesByMunicipality(municipalityId);
+            return _nomenclatureDetailRepository
+                    .GetCitiesByMunicipality(municipalityId)
+                    .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
+        public IQueryable<BaseNomenclatureDTO> GetBulletinStatuses()
+        {
+            return _nomenclatureDetailRepository
+                .GetBulletinStatuses()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -54,7 +65,7 @@ namespace MJ_CAIS.Services
             {
                 throw new BusinessLogicException($"Invalid table name {tableName}");
             }
-            
+
             var dbContext = _nomenclatureDetailRepository.GetDbContext();
             var propertyName = StringHelper.ConvertNameToPascalCase(tableName);
             var property = dbContext.GetType().GetProperty(propertyName);
