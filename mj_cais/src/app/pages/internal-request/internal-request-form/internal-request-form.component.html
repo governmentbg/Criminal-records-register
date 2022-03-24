@@ -28,15 +28,41 @@
       </div>
       <div class="row">
         <div class="form-group col-md-6">
-            <cais-input
+          <cais-input
             [type]="'text'"
             [label]="'Забележки'"
             [inputFormControl]="fullForm.description"
             [parentGroup]="fullForm.group"
             [inputType]="InputTypeConstants.TextArea"
           ></cais-input>
-        </div>     
+        </div>
       </div>
+
+      <ng-container *ngIf='showStatus'>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-autocomplete
+              [label]="'Статус'"
+              [inputFormControl]="fullForm.reqStatusCode"
+              [parentGroup]="fullForm.group"
+              [inputName]="'reqStatusCode'"
+              [items]="dbData.requestTypes"
+            ></cais-autocomplete>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Мотиви на съдия'"
+              [inputFormControl]="fullForm.responseDescr"
+              [parentGroup]="fullForm.group"
+              [inputType]="InputTypeConstants.TextArea"
+            ></cais-input>
+          </div>
+        </div>
+      </ng-container>
     </form>
   </nb-card-body>
 </nb-card>

@@ -11,11 +11,13 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BInternalRequest, InternalRequestGridDTO>()
                .ForMember(d => d.BulletinNumber, opt => opt.MapFrom(src => src.Bulletin.RegistrationNumber))
                .ForMember(d => d.ReqStatus, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
-               .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Bulletin.Firstname))
-               .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Bulletin.Surname))
-               .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Bulletin.Familyname));
+               .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Bulletin.Firstname))
+               .ForMember(d => d.SurName, opt => opt.MapFrom(src => src.Bulletin.Surname))
+               .ForMember(d => d.FamilyName, opt => opt.MapFrom(src => src.Bulletin.Familyname));
 
-            CreateMap<BInternalRequest, InternalRequestDTO>();
+            CreateMap<BInternalRequest, InternalRequestDTO>()
+                .ForMember(d => d.ReqStatusCode, opt => opt.Ignore());
+
             CreateMap<InternalRequestDTO, BInternalRequest>();
 
         }

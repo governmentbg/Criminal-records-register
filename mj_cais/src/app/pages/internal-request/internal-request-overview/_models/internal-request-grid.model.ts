@@ -1,16 +1,15 @@
-
-
 export class InternalRequestGridModel {
 
     public id: string = null;
     public regNumber: string = null;
     public requestDate: string = null;
     public reqStatus: string = null;
+    public reqStatusCode: string = null;
     public description: string = null;
     public bulletinNumber: string = null;
-    public firstname: Date = null;
-    public surname: string = null;
-    public familyname: string = null;
+    public firstName: Date = null;
+    public surName: string = null;
+    public familyName: string = null;
 
     constructor(init?: Partial<InternalRequestGridModel>) {
       if (init) {
@@ -18,11 +17,12 @@ export class InternalRequestGridModel {
         this.regNumber = init.regNumber ?? null;
         this.requestDate = init.requestDate ?? null;
         this.reqStatus = init.reqStatus ?? null;
+        this.reqStatusCode = init.reqStatusCode ?? null;
         this.description = init.description ?? null;
         this.bulletinNumber = init.bulletinNumber ?? null;
-        this.firstname = init.firstname ?? null;
-        this.surname = init.surname ?? null;
-        this.familyname = init.familyname ?? null;
+        this.firstName = init.firstName ?? null;
+        this.surName = init.surName ?? null;
+        this.familyName = init.familyName ?? null;
       }
     }
   }

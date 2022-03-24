@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
@@ -34,6 +35,12 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<InternalRequestGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
+        }
+
+        public override Task<string> InsertAsync(InternalRequestDTO aInDto)
+        {
+            aInDto.ReqStatusCode = InternalRequestStatusTypeConstants.New;
+            return base.InsertAsync(aInDto);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

@@ -28,5 +28,10 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.BBulletinStatuses.AsNoTracking();
         }
+
+        public IQueryable<BReqStatus> GetInternalRequestStatuses()
+        {
+            return _dbContext.BReqStatuses.AsNoTracking();
+        }
     }
 }

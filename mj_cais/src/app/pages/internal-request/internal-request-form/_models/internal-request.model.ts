@@ -4,6 +4,8 @@ export class InternalRequestModel {
   public requestDate: Date = null;
   public description: string = null;
   public bulletinId: string = null;
+  public reqStatusCode: string = null;
+  public responseDescr: string = null;
 
   constructor(init?: Partial<InternalRequestModel>) {
     if (init) {
@@ -12,6 +14,8 @@ export class InternalRequestModel {
       this.requestDate = init.requestDate ?? null;
       this.description = init.description ?? null;
       this.bulletinId = init.bulletinId ?? null;
+      this.reqStatusCode = init.reqStatusCode ?? null;
+      this.responseDescr = init.responseDescr ?? null;
     }
   }
 }

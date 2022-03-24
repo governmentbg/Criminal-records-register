@@ -28,7 +28,7 @@
     field="id"
     header="Идентификатор"
     [sortable]="true"
-    [dataType]="'number'"
+    [dataType]="'string'"
     [hidden]="true"
   >
     <ng-template igxCell let-cell="cell">
@@ -55,17 +55,18 @@
     [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
       </span>
     </ng-template>
   </igx-column>
 
   <igx-column
-    field="requestDate"
-    header="Дата на заявката"
+    field="reqStatusCode"
+    header="Идентификатор статус"
     [sortable]="true"
     [dataType]="'string'"
+    [hidden]="true"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -142,6 +143,7 @@
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
+        *ngIf='cell.rowData.reqStatusCode == "New"'
         [title]="'Редактиране'"
         [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
       >
