@@ -6,6 +6,7 @@ export class InternalRequestModel {
   public bulletinId: string = null;
   public reqStatusCode: string = null;
   public responseDescr: string = null;
+  public reqStatusName: string = null;
 
   constructor(init?: Partial<InternalRequestModel>) {
     if (init) {
@@ -16,6 +17,7 @@ export class InternalRequestModel {
       this.bulletinId = init.bulletinId ?? null;
       this.reqStatusCode = init.reqStatusCode ?? null;
       this.responseDescr = init.responseDescr ?? null;
+      this.reqStatusName = init.reqStatusName ?? null;
     }
   }
 }

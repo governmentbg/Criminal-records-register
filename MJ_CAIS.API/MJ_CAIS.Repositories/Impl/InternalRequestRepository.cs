@@ -21,9 +21,8 @@ namespace MJ_CAIS.Repositories.Impl
         public override async Task<BInternalRequest> SelectAsync(string id)
         {
             return await this._dbContext.BInternalRequests.AsNoTracking()
-                .Include(x => x.Bulletin)
-                .Include(x => x.ReqStatusCodeNavigation)
-                .FirstOrDefaultAsync(x=>x.Id == id);
+                     .Include(x => x.ReqStatusCodeNavigation)
+                    .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

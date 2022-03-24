@@ -22,30 +22,25 @@ export class InternalRequestFormComponent
 {
   constructor(service: InternalRequestService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = "pages/internal-requests";
+    this.backUrl = this.isEdit()
+      ? "pages/internal-requests"
+      : `pages/bulletins-for-rehabilitation`;
+
     this.setDisplayTitle("Заявка към бюлетин");
   }
-
-  public showStatus: boolean = false;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
 
+  
+
     if (this.isEdit()) {
-      let isPeviewOfNewReq =
-        this.isEdit() &&
-        this.isForPreview &&
-        this.fullForm.reqStatusCode.value != null;
-
-      let isEdit = this.isEdit() && !this.isForPreview;
-      this.showStatus = isPeviewOfNewReq || isEdit;
-
+      this.fullForm.reqStatusCode.patchValue(null);
       this.fullForm.reqStatusCode.setValidators([Validators.required]);
     } else {
       var bulletinId = this.activatedRoute.snapshot.params["ID"];
       this.fullForm.bulletinId.patchValue(bulletinId);
-      this.backUrl = `pages/bulletins-for-rehabilitation`;
     }
 
     this.formFinishedLoading.emit();

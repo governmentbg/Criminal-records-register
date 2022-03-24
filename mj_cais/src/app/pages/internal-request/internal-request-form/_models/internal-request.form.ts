@@ -9,15 +9,17 @@ export class InternalRequestForm {
   public bulletinId: FormControl;
   public reqStatusCode: FormControl;
   public responseDescr: FormControl;
+  public reqStatusName: FormControl;
 
   constructor() {
     this.id = new FormControl(null);
     this.regNumber = new FormControl(null);
-    this.requestDate = new FormControl(Date.now());
+    this.requestDate = new FormControl(new Date);
     this.description = new FormControl(null);
     this.bulletinId = new FormControl(null);
     this.reqStatusCode = new FormControl(null);
     this.responseDescr = new FormControl(null);
+    this.reqStatusName = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -27,6 +29,7 @@ export class InternalRequestForm {
       bulletinId: this.bulletinId,
       reqStatusCode: this.reqStatusCode,
       responseDescr: this.responseDescr,
+      reqStatusName: this.reqStatusName
     });
   }
 }

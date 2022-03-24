@@ -143,7 +143,7 @@
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
-        *ngIf='cell.rowData.reqStatusCode == "New"'
+        *ngIf='cell.rowData.reqStatusCode == IRStatusTypeEnum.New && showEditButton'
         [title]="'Редактиране'"
         [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
       >

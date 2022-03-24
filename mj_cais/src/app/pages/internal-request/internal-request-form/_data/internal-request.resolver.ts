@@ -4,8 +4,7 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
 } from "@angular/router";
-import { forkJoin, map, Observable, of } from "rxjs";
-import { filter } from "rxjs-compat/operator/filter";
+import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
@@ -27,17 +26,26 @@ export class InternalRequestResolver implements Resolve<any> {
     state: RouterStateSnapshot
   ): Observable<any> {
     let id = route.params["ID"];
+    let isBulletinId = false;
     let isEdit = route.data["edit"];
     let element = isEdit ? this.service.find(id) : of(null);
 
+    if (!isEdit) {
+      isBulletinId = true;
+    }
+
     let result: InternalRequestResolverData = {
       element: element,
-      requestTypes: this.nomenclatureService.getInternalRequestStatusesFiltered(IRStatusTypeEnum.New),
+      bulletinPersonInfo: this.service.getBulletinPersonInfo(id, isBulletinId),
+      requestTypes: this.nomenclatureService.getInternalRequestStatusesFiltered(
+        IRStatusTypeEnum.New
+      ),
     };
     return forkJoin(result);
   }
 }
 
 export class InternalRequestResolverData extends BaseResolverData<InternalRequestModel> {
+  public bulletinPersonInfo: any;
   public requestTypes: Observable<BaseNomenclatureModel[]>;
 }

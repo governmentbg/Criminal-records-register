@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
@@ -60,6 +61,46 @@ namespace MJ_CAIS.Services
             };
 
             await SaveEntityAsync(entity, true);
+        }
+
+        public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string aId, bool isBulletinId)
+        {
+            var context = _internalRequestRepository.GetDbContext();
+
+            // id of internal request (when action is edit)
+            if (!isBulletinId)
+            {
+                var bulleintFromIR = await context.BInternalRequests.AsNoTracking()
+                    .Include(x => x.Bulletin.BirthCountry)
+                    .Include(x => x.Bulletin.BirthCity)
+                    .Include(x => x.Bulletin.BirthCity)
+                        .ThenInclude(x => x.Municipality)
+                            .ThenInclude(x => x.District)
+                    .Include(x => x.Bulletin.DecidingAuth)
+                    .Include(x => x.Bulletin.DecisionType)
+                    .Include(x => x.Bulletin.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+                    .Where(x => x.Id == aId)
+                    .Select(x => x.Bulletin)
+                    .FirstOrDefaultAsync();
+
+                return mapper.Map<BulletinPersonInfoModelDTO>(bulleintFromIR);
+            }
+
+            // id of bulletin (when action is create)
+            var bulleint = await context.BBulletins.AsNoTracking()
+                    .Include(x => x.BirthCountry)
+                    .Include(x => x.BirthCity)
+                    .Include(x => x.BirthCity)
+                        .ThenInclude(x => x.Municipality)
+                            .ThenInclude(x => x.District)
+                    .Include(x => x.DecidingAuth)
+                    .Include(x => x.DecisionType)
+                    .Include(x => x.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+               .FirstOrDefaultAsync(x => x.Id == aId);
+
+            return mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
