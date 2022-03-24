@@ -79,188 +79,191 @@
         </div>
       </ng-container>
 
-      <div class="font-weight-bold">Данни за лице</div>
-      <hr />
-      <div class="row">
-        <div class="col-md-4">
-          <label class="label">Имена на кирилица</label>
-          <div class="form-group display-input-container">
-            <span>
-              {{ this.dbData.bulletinPersonInfo.firstname }}
-            </span>
-            <span>
-              {{ this.dbData.bulletinPersonInfo.surname }}
-            </span>
-            <span>
-              {{ this.dbData.bulletinPersonInfo.familyname }}
-            </span>
+      <div class="bulletin-info-container">
+        <div class="font-weight-bold">Данни за лице</div>
+        <hr />
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">Имена на кирилица</label>
+            <div class="form-group display-input-container">
+              <span>
+                {{ this.dbData.bulletinPersonInfo.firstname }}
+              </span>
+              <span>
+                {{ this.dbData.bulletinPersonInfo.surname }}
+              </span>
+              <span>
+                {{ this.dbData.bulletinPersonInfo.familyname }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Имена на латиница</label>
+            <div class="form-group display-input-container">
+              <span>
+                {{ this.dbData.bulletinPersonInfo.firstnameLat }}
+              </span>
+              <span>
+                {{ this.dbData.bulletinPersonInfo.surnameLat }}
+              </span>
+              <span>
+                {{ this.dbData.bulletinPersonInfo.familynameLat }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Псевдоним</label>
+            <div class="form-group display-input-container" *ngFor="let item of this.dbData.bulletinPersonInfo.personAliases">
+              <span> {{item.firstname}}</span>
+              <span> {{item.surname}}</span>
+              <span> {{item.familyname}}</span>
+              <span> {{item.fullname}}</span>
+            </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <label class="label">Имена на латиница</label>
-          <div class="form-group display-input-container">
-            <span>
-              {{ this.dbData.bulletinPersonInfo.firstnameLat }}
-            </span>
-            <span>
-              {{ this.dbData.bulletinPersonInfo.surnameLat }}
-            </span>
-            <span>
-              {{ this.dbData.bulletinPersonInfo.familynameLat }}
-            </span>
+  
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">Пол</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.sex }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Дата на раждане</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.birthDate | date }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Националност</label>
+            <div class="form-group display-input-container">
+              <span *ngFor="let item of this.dbData.bulletinPersonInfo.nationalities">
+                {{item}}
+              </span>
+            </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <label class="label">Псевдоним</label>
-          <div class="form-group display-input-container">
-            <span> N/A</span>
-            <span> N/A</span>
-            <span> N/A</span>
+  
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">ЕГН</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.egn }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">ЛНЧ</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.lnch }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">ЛН</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.ln }}
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-2">
+            <label class="label">Държава</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.country }}
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="label">Област</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.districtname }}
+  
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="label">Община</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.municipalityName }}
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label class="label">Населено място</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.city }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Oписание в случай на друг адрес</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.foreignCountryAddress }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">Майка</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.motherFullname }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Баща</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.fatherFullname }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">БС по местоположение</label>
+            <div class="form-group display-input-container">N/A</div>
+          </div>
+        </div>
+  
+        <div class="font-weight-bold">Данни за бюлетин</div>
+        <hr />
+  
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">Дата на регистрация</label>
+            <div class="form-group display-input-container">N/A</div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Номер</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.registrationNumber }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Вид</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.decisionTypeName }}
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-4">
+            <label class="label">Съд издал акта</label>
+            <div class="form-group display-input-container">
+              {{ this.dbData.bulletinPersonInfo.decidingAuthName }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Акт(№/дата)</label>
+            <div class="form-group display-input-container">
+              <span> {{ this.dbData.bulletinPersonInfo.decisionNumber }} </span>
+              <span> {{ this.dbData.bulletinPersonInfo.decisionDate }} </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="label">Дело(№/дата)</label>
+            <div class="form-group display-input-container">
+              <span> {{ this.dbData.bulletinPersonInfo.caseNumber }} </span>
+              <span> {{ this.dbData.bulletinPersonInfo.caseYear }} </span>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <label class="label">Пол</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.sex }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Дата на раждане</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.birthDate }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Националност</label>
-          <div class="form-group display-input-container">
-            <span *ngFor="let item of this.dbData.bulletinPersonInfo.nationalities">
-              {{item}}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <label class="label">ЕГН</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.egn }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">ЛНЧ</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.lnch }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">ЛН</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.ln }}
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-3">
-          <label class="label">Държава</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.country }}
-          </div>
-        </div>
-        <div class="col-md-3">
-          <label class="label">Област</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.districtname }}
-
-          </div>
-        </div>
-        <div class="col-md-3">
-          <label class="label">Община</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.municipalityName }}
-
-          </div>
-        </div>
-        <div class="col-md-3">
-          <label class="label">Населено място</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.city }}
-          </div>
-        </div>
-        <div class="col-md-3">
-          <label class="label">Населено място описание</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.foreignCountryAddress }}
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <label class="label">Майка</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.motherFullname }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Баща</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.fatherFullname }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">БС по местоположение</label>
-          <div class="form-group display-input-container">N/A</div>
-        </div>
-      </div>
-
-      <div class="font-weight-bold">Данни за бюлетин</div>
-      <hr />
-
-      <div class="row">
-        <div class="col-md-4">
-          <label class="label">Дата на регистрация</label>
-          <div class="form-group display-input-container">N/A</div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Номер</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.registrationNumber }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Вид</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.decisionTypeName }}
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <label class="label">Съд издал акта</label>
-          <div class="form-group display-input-container">
-            {{ this.dbData.bulletinPersonInfo.decidingAuthName }}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Акт(№/дата)</label>
-          <div class="form-group display-input-container">
-            <span> {{ this.dbData.bulletinPersonInfo.decisionNumber }} </span>
-            <span> {{ this.dbData.bulletinPersonInfo.decisionDate }} </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <label class="label">Дело(№/дата)</label>
-          <div class="form-group display-input-container">
-            <span> {{ this.dbData.bulletinPersonInfo.caseNumber }} </span>
-            <span> {{ this.dbData.bulletinPersonInfo.caseYear }} </span>
-          </div>
-        </div>
-      </div>
+   
     </form>
   </nb-card-body>
 </nb-card>

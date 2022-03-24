@@ -80,6 +80,7 @@ namespace MJ_CAIS.Services
                     .Include(x => x.Bulletin.DecisionType)
                     .Include(x => x.Bulletin.BPersNationalities)
                         .ThenInclude(x => x.Country)
+                    .Include(x=>x.Bulletin.BBullPersAliases)
                     .Where(x => x.Id == aId)
                     .Select(x => x.Bulletin)
                     .FirstOrDefaultAsync();
@@ -98,6 +99,7 @@ namespace MJ_CAIS.Services
                     .Include(x => x.DecisionType)
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
+                    .Include(x => x.BBullPersAliases)
                .FirstOrDefaultAsync(x => x.Id == aId);
 
             return mapper.Map<BulletinPersonInfoModelDTO>(bulleint);

@@ -1,4 +1,6 @@
-﻿namespace MJ_CAIS.DTO.InternalRequest
+﻿using MJ_CAIS.DTO.Bulletin;
+
+namespace MJ_CAIS.DTO.InternalRequest
 {
     public class BulletinPersonInfoModelDTO
     {
@@ -28,5 +30,6 @@
         public string ForeignCountryAddress { get; set; }
         public string MunicipalityName { get; set; }
         public string Districtname { get; set; }
+        public List<PersonAliasDTO> PersonAliases { get; set; } = new List<PersonAliasDTO>();
     }
 }

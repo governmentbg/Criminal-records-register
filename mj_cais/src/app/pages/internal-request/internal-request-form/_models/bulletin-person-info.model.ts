@@ -1,3 +1,5 @@
+import { BulletinPersonAliasModel } from "../../../bulletin/bulletin-form/_models/bulletin-person-alias.model";
+
 export class BulletinPersonInfoModel {
     public firstname: string;
     public surname: string;
@@ -25,4 +27,5 @@ export class BulletinPersonInfoModel {
     public foreignCountryAddress: string;
     public municipalityName: string;
     public districtname: string;
+    public personAliases: BulletinPersonAliasModel[]
   }

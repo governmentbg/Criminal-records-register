@@ -19,13 +19,15 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
              .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name));
 
             CreateMap<BBulletin, BulletinPersonInfoModelDTO>()
+                .ForMember(d => d.Country, opt => opt.MapFrom(src => src.RegistrationNumber))
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.BirthCountry.Name))
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.BirthCity.Name))
-                .ForPath(d => d.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
-                .ForPath(d => d.MunicipalityName, opt => opt.MapFrom(src => src.BirthCity.Municipality.Name))
-                .ForPath(d => d.Districtname, opt => opt.MapFrom(src => src.BirthCity.Municipality.District.Name))
+                .ForMember(d => d.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
+                .ForMember(d => d.MunicipalityName, opt => opt.MapFrom(src => src.BirthCity.Municipality.Name))
+                .ForMember(d => d.Districtname, opt => opt.MapFrom(src => src.BirthCity.Municipality.District.Name))
                 .ForMember(d => d.DecisionTypeName, opt => opt.MapFrom(src => src.DecisionType.Name))
                 .ForMember(d => d.DecidingAuthName, opt => opt.MapFrom(src => src.DecidingAuth.Name))
+                .ForMember(d => d.PersonAliases, opt => opt.MapFrom(src => src.BBullPersAliases))
                 .ForMember(d => d.Nationalities, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.Country.Name)));
 
             CreateMap<InternalRequestDTO, BInternalRequest>();
