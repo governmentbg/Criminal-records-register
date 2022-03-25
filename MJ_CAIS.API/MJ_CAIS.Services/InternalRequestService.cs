@@ -50,7 +50,7 @@ namespace MJ_CAIS.Services
             var entity = mapper.MapToEntity<InternalRequestDTO, BInternalRequest>(aInDto, false);
 
             var bulletinStatus = entity.ReqStatusCode == InternalRequestStatusTypeConstants.Approved ?
-                BulletinStatusTypeConstants.Rehabilitated : BulletinStatusTypeConstants.Active;
+                BulletinConstants.Status.Rehabilitated : BulletinConstants.Status.Active;
 
             entity.Bulletin = new BBulletin
             {

@@ -13,6 +13,7 @@ export class BulletinGridModel {
   public egn: string = null;
   public deleteDate: Date = null;
   public rehabilitationDate: Date = null;
+  public bulletinType: string = null;
 
   constructor(init?: Partial<BulletinGridModel>) {
     if (init) {
@@ -30,6 +31,7 @@ export class BulletinGridModel {
       this.egn = init.egn ?? null;
       this.deleteDate = init.deleteDate ?? null;
       this.rehabilitationDate = init.rehabilitationDate ?? null;
+      this.bulletinType = init.bulletinType ?? null;
     }
   }
 }

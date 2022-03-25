@@ -210,7 +210,7 @@ namespace MJ_CAIS.Services
 
             if (isAdded)
             {
-                entity.StatusId = BulletinStatusTypeConstants.NewEISS;
+                entity.StatusId = BulletinConstants.Status.NewEISS;
             }
 
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
