@@ -64,7 +64,8 @@ export class BulletinResolver implements Resolve<any> {
       documentTypes:  this.nomenclatureService.getDocumentTypes(),
       bulletinStatuses: this.nomenclatureService.getBulletinStatuses(),
       personAlias: this.service.getPersonAlias(bulletineId),
-      personAliasTypes: this.nomenclatureService.getPersonAliasTypes()
+      personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
+      bulletinTypes: this.service.getBulletinTypes(),
     };
     return forkJoin(result);
   }
@@ -98,4 +99,5 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public documentTypes: Observable<BaseNomenclatureModel[]>;
   public bulletinStatuses : Observable<BaseNomenclatureModel[]>;
   public personAliasTypes: Observable<BaseNomenclatureModel[]>;
+  public bulletinTypes : Observable<BaseNomenclatureModel[]>;
 }

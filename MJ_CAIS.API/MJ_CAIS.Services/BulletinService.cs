@@ -213,6 +213,8 @@ namespace MJ_CAIS.Services
                 entity.StatusId = BulletinConstants.Status.NewEISS;
             }
 
+            UpdateDataForDestruction(entity);
+
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
@@ -222,6 +224,40 @@ namespace MJ_CAIS.Services
 
             await SaveEntityAsync(entity);
             return entity.Id;
+        }
+
+        /// <summary>
+        /// Унищожаване
+        /// За бюлетини за съдимост - 100 години от рождената дата на осъденото лице;
+        /// За бюлетини за административни наказания по чл. 78а от НК - 15 години от датата на влизане в сила на съдебния акт.
+        /// </summary>
+        /// <param name="bulletin"></param>
+        public void UpdateDataForDestruction(BBulletin bulletin)
+        {
+            if (bulletin.ModifiedProperties == null)
+                bulletin.ModifiedProperties = new List<string>();
+
+            if (bulletin.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) && bulletin.BirthDate.HasValue)
+            {
+                bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);              
+                bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));
+            }
+            else if (bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78А) && bulletin.DecisionFinalDate.HasValue)
+            {
+                bulletin.DeleteDate = bulletin.DecisionFinalDate.Value.AddYears(15);
+                bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));
+            }
+
+            // тодо:може ли да се променя типа на бюлетин ? от какво зависи той
+            // и при промяната му какво се случва със статуса
+            // например може бюлетин според чл. 78а да енастъпило време за унищожаване, но потребителя ако редактира 
+            // бюлетина и смени типа, статуса активен ли трябва да бъде ? 
+            // промяна на статус на бюлетин за унищожавне
+            if (bulletin.DeleteDate.HasValue && bulletin.DeleteDate <= DateTime.Now)
+            {
+                bulletin.StatusId = BulletinConstants.Status.ForDestruction;
+                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
+            }
         }
     }
 }
