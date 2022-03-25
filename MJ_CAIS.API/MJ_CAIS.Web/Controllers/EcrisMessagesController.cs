@@ -25,5 +25,32 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._ecrisMessageService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/bulletins")]
+        public async Task<IActionResult> GetEcrisBulletins(string aId)
+        {
+            var result = await this._ecrisMessageService.GetEcrisBulletinsByIdAsync(aId);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}")]
+        public new async Task<IActionResult> Get(string aId)
+        {
+            return await base.Get(aId);
+        }
+
+        // TODO: remove, no adding
+        [HttpPost("")]
+        public new async Task<IActionResult> Post([FromBody] EcrisMessageDTO aInDto)
+        {
+            return await base.Post(aInDto);
+        }
+
+        // TODO: remove, no updating
+        [HttpPut("{aId}")]
+        public new async Task<IActionResult> Put(string aId, [FromBody] EcrisMessageDTO aInDto)
+        {
+            return await base.Put(aId, aInDto);
+        }
     }
 }

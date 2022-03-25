@@ -21,7 +21,20 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Чакащи идентификация</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>Запитвания</igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <a
+          nbButton
+          matRipple
+          [status]="'success'"
+          [routerLink]="['/pages/ecris-messages/create']"
+        >
+          Добавяне &nbsp;
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </a>
+      </div>
+    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
   <igx-column
@@ -150,12 +163,12 @@
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <!-- <a
+      <a
         [title]="'Редактиране'"
         [routerLink]="['/pages/ecris-messages/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a> -->
+      </a>
     </ng-template>
   </igx-column>
 

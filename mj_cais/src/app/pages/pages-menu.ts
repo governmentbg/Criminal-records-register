@@ -35,19 +35,19 @@ export class PagesMenu {
             link: "/pages/bulletins",
           },
           {
-            title: "Нови бюлетини",  
-            link: "/pages/bulletins-new-eiss", 
+            title: "Нови бюлетини",
+            link: "/pages/bulletins-new-eiss",
           },
           {
-            title: "За унищожаване",  
-            link: "/pages/bulletins-for-destruction", 
+            title: "За унищожаване",
+            link: "/pages/bulletins-for-destruction",
           },
           {
-            title: "Подлежащи на реабилитация", 
+            title: "Подлежащи на реабилитация",
             link: "/pages/bulletins-for-rehabilitation",
-          },    
+          },
           {
-            title: "Бюлетини за ECRIS",     
+            title: "Бюлетини за ECRIS",
           },
         ],
       },
@@ -75,6 +75,10 @@ export class PagesMenu {
           {
             title: "За идентификация",
             link: "/pages/ecris-identification",
+          },
+          {
+            title: "Запитвания",
+            link: "/pages/ecris-req-waiting",
           },
         ],
       },

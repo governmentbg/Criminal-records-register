@@ -4,46 +4,70 @@ import { Guid } from "guid-typescript";
 export class EcrisMessageForm {
   public group: FormGroup;
   public id: FormControl;
-  public decisionChTypeId: FormControl;
-  public decisionChTypeName: FormControl;
-  public decisionEcli: FormControl;
-  public decisionNumber: FormControl;
-  public decisionDate: FormControl;
-  public decisionFinalDate: FormControl;
-  public decisionAuthId: FormControl;
-  public decisionAuthName: FormControl;
-  public decisionTypeId: FormControl;
-  public decisionTypeName: FormControl;
-  public descr: FormControl;
+  public requestMsgId: FormControl;
+  public fromAuthId: FormControl;
+  public toAuthId: FormControl;
+  public identifier: FormControl;
+  public ecrisIdentifier: FormControl;
+  public msgTimestamp: FormControl;
+  public responseTypeId: FormControl;
+  public ecrisMsgStatus: FormControl;
+  public birthDate: FormControl;
+  public birthCountry: FormControl;
+  public birthCity: FormControl;
+  public fbbcId: FormControl;
+  public firstname: FormControl;
+  public surname: FormControl;
+  public familyname: FormControl;
+  public sex: FormControl;
+  public nationality1Code: FormControl;
+  public nationality2Code: FormControl;
+  public msgTypeId: FormControl;
 
   constructor() {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.decisionChTypeId = new FormControl(null);
-    this.decisionChTypeName = new FormControl(null);
-    this.decisionEcli = new FormControl(null);
-    this.decisionNumber = new FormControl(null);
-    this.decisionDate = new FormControl(null);
-    this.decisionFinalDate = new FormControl(null);
-    this.decisionAuthId = new FormControl(null);
-    this.decisionAuthName = new FormControl(null);
-    this.decisionTypeId = new FormControl(null);
-    this.decisionTypeName = new FormControl(null);
-    this.descr = new FormControl(null);
+    this.requestMsgId = new FormControl(null);
+    this.fromAuthId = new FormControl(null);
+    this.toAuthId = new FormControl(null);
+    this.identifier = new FormControl(null);
+    this.ecrisIdentifier = new FormControl(null);
+    this.msgTimestamp = new FormControl(null);
+    this.responseTypeId = new FormControl(null);
+    this.ecrisMsgStatus = new FormControl(null);
+    this.birthDate = new FormControl(null);
+    this.birthCountry = new FormControl(null);
+    this.birthCity = new FormControl(null);
+    this.fbbcId = new FormControl(null);
+    this.firstname = new FormControl(null);
+    this.surname = new FormControl(null);
+    this.familyname = new FormControl(null);
+    this.sex = new FormControl(null);
+    this.nationality1Code = new FormControl(null);
+    this.nationality2Code = new FormControl(null);
+    this.msgTypeId = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
-      decisionChTypeId: this.decisionChTypeId,
-      decisionChTypeName: this.decisionChTypeName,
-      decisionEcli: this.decisionEcli,
-      decisionNumber: this.decisionNumber,
-      decisionDate: this.decisionDate,
-      decisionFinalDate: this.decisionFinalDate,
-      decisionAuthId: this.decisionAuthId,
-      decisionAuthName: this.decisionAuthName,
-      decisionTypeId: this.decisionTypeId,
-      decisionTypeName: this.decisionTypeName,
-      descr: this.descr,
+      requestMsgId: this.requestMsgId,
+      fromAuthId: this.fromAuthId,
+      toAuthId: this.toAuthId,
+      identifier: this.identifier,
+      ecrisIdentifier: this.ecrisIdentifier,
+      msgTimestamp: this.msgTimestamp,
+      responseTypeId: this.responseTypeId,
+      ecrisMsgStatus: this.ecrisMsgStatus,
+      birthDate: this.birthDate,
+      birthCountry: this.birthCountry,
+      birthCity: this.birthCity,
+      fbbcId: this.fbbcId,
+      firstname: this.firstname,
+      surname: this.surname,
+      familyname: this.familyname,
+      sex: this.sex,
+      nationality1Code: this.nationality1Code,
+      nationality2Code: this.nationality2Code,
+      msgTypeId: this.msgTypeId,
     });
   }
 }
