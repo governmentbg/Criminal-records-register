@@ -88,3 +88,16 @@
   margin: 0;
   padding: 0;
 }
+
+mat-datepicker-content {
+  .mat-calendar-body-cell {
+    position: absolute !important;
+    height: 100% !important;
+  }
+}
+
+ngx-mat-month-view {
+  .mat-calendar-body-cell{
+    position: relative !important;
+  }
+}
