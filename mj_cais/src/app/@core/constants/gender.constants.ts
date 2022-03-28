@@ -2,7 +2,14 @@ import { BaseNomenclatureModel } from "../models/nomenclature/base-nomenclature.
 
 export class GenderConstants {
   static get allData(): BaseNomenclatureModel[] {
-    return [GenderConstants.male, GenderConstants.female];
+    return [GenderConstants.male, GenderConstants.female ,GenderConstants.unknown];
+  }
+
+  static get unknown(): BaseNomenclatureModel {
+    let result = new BaseNomenclatureModel();
+    result.id = 0;
+    result.name = "Неизвестен";
+    return result;
   }
 
   static get male(): BaseNomenclatureModel {

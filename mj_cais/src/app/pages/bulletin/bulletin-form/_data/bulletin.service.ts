@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map, Observable, of } from "rxjs";
 import { environment } from "../../../../../environments/environment";
 import {
   PersonAliasCodeConstants,
@@ -12,6 +12,8 @@ import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/_models/bul
 import { BulletinPersonAliasModel } from "../_models/bulletin-person-alias.model";
 import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/_models/bulletin-sanction.model";
 import { BulletinModel } from "../_models/bulletin.model";
+import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
+import { BulletinTypeConstants } from "../_models/bulletin-type-constants";
 
 @Injectable({ providedIn: "root" })
 export class BulletinService extends CaisCrudService<BulletinModel, string> {
@@ -59,6 +61,10 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
       `/bulletins/${bulletinId}/documents-download/` +
       documentId;
     return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+  public getBulletinTypes(): Observable<BaseNomenclatureModel[]> {
+    return of(BulletinTypeConstants.allData);
   }
 
   public getPersonAlias(id: string): Observable<BulletinPersonAliasModel[]> {

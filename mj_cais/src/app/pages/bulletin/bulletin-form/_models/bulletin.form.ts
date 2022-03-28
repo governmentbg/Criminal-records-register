@@ -135,7 +135,7 @@ export class BulletinForm {
     this.convIsTransmittable = new FormControl(null);
     this.convRetPeriodEndDate = new FormControl(null);
     this.createdByPosition = new FormControl(null);
-    this.bulletinType = new FormControl(null);
+    this.bulletinType = new FormControl(null, [Validators.required]);
     this.offancesTransactions = new FormControl(null);
     this.sanctionsTransactions = new FormControl(null);
     this.decisionsTransactions = new FormControl(null);
@@ -212,7 +212,7 @@ export class BulletinForm {
       ecrisConvictionId: this.ecrisConvictionId,
       personAliasTransactions: this.personAliasTransactions,
       nationalities: this.nationalities.group,
-      address: this.address.group
+      address: this.address.group,
     });
   }
 }

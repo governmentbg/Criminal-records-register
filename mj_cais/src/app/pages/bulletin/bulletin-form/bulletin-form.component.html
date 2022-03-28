@@ -118,6 +118,15 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Тип'"
+                [inputFormControl]="fullForm.bulletinType"
+                [parentGroup]="fullForm.group"
+                [inputName]="'bulletinType'"
+                [items]="dbData.bulletinTypes"
+              ></cais-autocomplete>
+            </div>
           </div>
 
           <div class="row">

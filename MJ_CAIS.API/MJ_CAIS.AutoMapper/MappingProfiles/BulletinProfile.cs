@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Common;
@@ -10,7 +11,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public BulletinProfile()
         {
             CreateMap<BBulletin, BulletinGridDTO>()
-                .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name));
+                .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name))
+                .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
+                            src.BulletinType == nameof(BulletinConstants.Type.Bulletin78А) ?
+                            BulletinConstants.Type.Bulletin78А :
+                                        src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
+                                        BulletinConstants.Type.Unspecified));
 
             CreateMap<BulletinDTO, BBulletin>()
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))

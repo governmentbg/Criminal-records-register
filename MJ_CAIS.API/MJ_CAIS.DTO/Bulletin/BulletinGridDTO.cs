@@ -4,6 +4,8 @@
     {
         public string? RegistrationNumber { get; set; }
 
+        public string? BulletinType { get; set; }
+
         public string? FirstName { get; set; }
 
         public string? SurName { get; set; }
