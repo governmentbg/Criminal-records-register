@@ -43,5 +43,12 @@ namespace MJ_CAIS.Web.Controllers
         {
             return await base.Put(aId, aInDto);
         }
+
+        [HttpGet("{aId}/bulletin-person-info/{isBulletinId}")]
+        public async Task<IActionResult> GetBulletinPersonInfo(string aId, bool isBulletinId)
+        {
+            var result = await this._internalRequestService.GetBulletinPersonInfoAsync(aId, isBulletinId);
+            return Ok(result);
+        }
     }
 }

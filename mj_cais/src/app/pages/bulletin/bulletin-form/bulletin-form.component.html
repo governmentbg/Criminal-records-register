@@ -51,7 +51,7 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <nb-tabset>
+      <nb-tabset #nbtabset>
         <nb-tab tabTitle="Основна информация">
           <div class="row">
             <div class="form-group col-md-6">
@@ -117,6 +117,15 @@
                 [inputFormControl]="fullForm.bulletinReceivedDate"
                 [parentGroup]="fullForm.group"
               ></cais-input>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Тип'"
+                [inputFormControl]="fullForm.bulletinType"
+                [parentGroup]="fullForm.group"
+                [inputName]="'bulletinType'"
+                [items]="dbData.bulletinTypes"
+              ></cais-autocomplete>
             </div>
           </div>
 

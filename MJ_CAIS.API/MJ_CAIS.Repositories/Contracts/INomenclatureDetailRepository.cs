@@ -12,5 +12,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<BBulletinStatus> GetBulletinStatuses();
         IQueryable<FbbcDocType> GetAllFbbcDocTypes();
         IQueryable<FbbcSanctType> GetAllFbbcSanctTypes();
+
+        IQueryable<BReqStatus> GetInternalRequestStatuses();
     }
 }

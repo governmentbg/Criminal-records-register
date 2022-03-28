@@ -34,6 +34,16 @@
   </igx-column>
 
   <igx-column
+    field="bulletinType"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
     field="rehabilitationDate"
     header="Дата на настъпване на право на реабилитация"
     [sortable]="true"
@@ -111,21 +121,21 @@
       </a>
       <mat-menu #menu="matMenu">
         <button
-        mat-menu-item
-        [routerLink]="['/pages/internal-requests/create/', cell.rowData.id]"
-      >
-        <span class="ml-1">Създай заявка</span>
-      </button>
-        
+          mat-menu-item
+          [routerLink]="['/pages/internal-requests/create/', cell.rowData.id]"
+        >
+          <span class="ml-1">Създай заявка</span>
+        </button>
+
         <button mat-menu-item (click)="onCancelRehabilitation(cell.rowData.id)">
           <span>Откажи</span>
         </button>
         <button
-        mat-menu-item
-        [routerLink]="['/pages/internal-requests', cell.rowData.id]"
-      >
-        <span class="ml-1">Виж заявки</span>
-      </button>
+          mat-menu-item
+          [routerLink]="['/pages/internal-requests', cell.rowData.id]"
+        >
+          <span class="ml-1">Виж заявки</span>
+        </button>
         <button
           mat-menu-item
           [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"

@@ -10,6 +10,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<EEcrisMessage, EcrisMessageGridDTO>()
                 .ForMember(d => d.EcrisMsgStatusName, opt => opt.MapFrom(src => src.EcrisMsgStatusNavigation.Name));
+
+            CreateMap<EEcrisMessage, EcrisMessageDTO>();
+            CreateMap<EcrisMessageDTO, EEcrisMessage>();
         }
     }
 }

@@ -5,6 +5,7 @@ import {
   ElementRef,
   EventEmitter,
   Injector,
+  ViewChild,
 } from "@angular/core";
 import { Location } from "@angular/common";
 import { changei18n } from "@infragistics/igniteui-angular";
@@ -20,6 +21,7 @@ import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
 import { BaseResolverData } from "../models/common/base-resolver.data";
 import { InputTypeConstants } from "../constants/input-type.constants";
+import { NbTabComponent, NbTabsetComponent } from "@nebular/theme";
 
 @Directive()
 export abstract class CrudForm<
@@ -60,6 +62,8 @@ export abstract class CrudForm<
   protected successMessage = "Успешно запазени данни!";
   protected dangerMessage = "Грешка при запазване на данните: ";
   protected validationMessage = "Грешка при валидациите!";
+
+  @ViewChild("nbtabset") tabset: NbTabsetComponent;
 
   ngAfterViewChecked(): void {
     // This provides fix for:
@@ -169,6 +173,20 @@ export abstract class CrudForm<
       );
 
       if (validationSpan) {
+        // select tab containing controls with validation errors
+        let tab = validationSpan.closest("nb-tab");
+
+        if (tab && this.tabset && this.tabset.tabs) {
+          var tabParent = tab.parentElement;
+          var index = Array.prototype.indexOf.call(tabParent.children, tab) - 1;
+          var tabs = (this.tabset.tabs as any)._results;
+          var hasElement = tabs && tabs.length > index;
+          if (hasElement) {
+            var element = tabs[index] as NbTabComponent;
+            this.tabset.selectTab(element);
+          }
+        }
+
         var container = validationSpan.closest("div.ng-invalid");
         if (container) {
           container.scrollIntoView({ behavior: "smooth" });

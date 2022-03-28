@@ -62,5 +62,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = _nomenclatureDetailService.GetBulletinStatuses();
             return Ok(result);
         }
+
+        [HttpGet("internal-request-statuses")]
+        public IActionResult GetInternalRequestStatuses()
+        {
+            var result = _nomenclatureDetailService.GetInternalRequestStatuses();
+            return Ok(result);
+        }
     }
 }

@@ -21,14 +21,27 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Актуални бюлетини</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>Запитвания</igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <a
+          nbButton
+          matRipple
+          [status]="'success'"
+          [routerLink]="['/pages/ecris-messages/create']"
+        >
+          Добавяне &nbsp;
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </a>
+      </div>
+    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
   <igx-column
     field="id"
-    header="Идентификатор"
+    header="id"
     [sortable]="true"
-    [dataType]="'number'"
+    [dataType]="'string'"
     [hidden]="true"
   >
     <ng-template igxCell let-cell="cell">
@@ -37,10 +50,11 @@
   </igx-column>
 
   <igx-column
-    field="bulletinType"
-    header="Тип"
+    field="identifier"
+    header="Идентификатор"
     [sortable]="true"
     [dataType]="'string'"
+    [hidden]="false"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -48,10 +62,39 @@
   </igx-column>
 
   <igx-column
-    field="createdOn"
-    header="Дата на създаване"
+    field="msgTimestamp"
+    header="Дата"
+    [sortable]="true"
+    [dataType]="'date'"
+    [formatter]="this.dateFormatService.formatDate"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'date'"
+    [formatter]="this.dateFormatService.formatDate"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="birthCountryName"
+    header="Месторождение"
     [sortable]="true"
     [dataType]="'string'"
+    [hidden]="false"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -59,32 +102,11 @@
   </igx-column>
 
   <igx-column
-    field="registrationNumber"
-    header="Номер на бюлетин"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="alphabeticalIndex"
-    header="Входящ номер в азб. указател"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="firstName"
+    field="firstname"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
+    [hidden]="false"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -92,10 +114,11 @@
   </igx-column>
 
   <igx-column
-    field="surName"
+    field="surname"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
+    [hidden]="false"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -103,10 +126,23 @@
   </igx-column>
 
   <igx-column
-    field="familyName"
+    field="familyname"
     header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="nationality1Code"
+    header="Гражданство"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="false"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -123,13 +159,13 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+        [routerLink]="['/pages/ecris-messages/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
         [title]="'Редактиране'"
-        [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
+        [routerLink]="['/pages/ecris-messages/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>

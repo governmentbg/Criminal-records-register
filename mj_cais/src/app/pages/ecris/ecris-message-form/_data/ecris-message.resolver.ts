@@ -31,6 +31,8 @@ export class EcrisMessageResolver implements Resolve<any> {
     let result: EcrisMessageResolverData = {
       element: element,
       ecrisAuthorities: this.nomenclatureService.getEcrisAuthorities(),
+      genderTypes: this.nomenclatureService.getGenderTypes(),
+      countries: this.nomenclatureService.getCountries(),
     };
     return forkJoin(result);
   }
@@ -38,4 +40,6 @@ export class EcrisMessageResolver implements Resolve<any> {
 
 export class EcrisMessageResolverData extends BaseResolverData<EcrisMessageModel> {
   public ecrisAuthorities: Observable<BaseNomenclatureModel[]>;
+  public genderTypes: Observable<BaseNomenclatureModel[]>;
+  public countries: Observable<BaseNomenclatureModel[]>;
 }

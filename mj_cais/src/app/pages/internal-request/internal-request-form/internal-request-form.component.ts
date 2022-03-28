@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { InternalRequestResolverData } from "./_data/internal-request.resolver";
 import { InternalRequestService } from "./_data/internal-request.service";
@@ -20,19 +20,25 @@ export class InternalRequestFormComponent
   >
   implements OnInit
 {
-  
   constructor(service: InternalRequestService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = "pages/internal-requests";
-    this.setDisplayTitle("заявка към бюлетин");
+    this.backUrl = this.isEdit()
+      ? "pages/internal-requests"
+      : `pages/bulletins-for-rehabilitation`;
+
+    this.setDisplayTitle("Заявка към бюлетин");
   }
 
   ngOnInit(): void {
-    debugger;
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
 
-    if(!this.isEdit()){
+  
+
+    if (this.isEdit()) {
+      this.fullForm.reqStatusCode.patchValue(null);
+      this.fullForm.reqStatusCode.setValidators([Validators.required]);
+    } else {
       var bulletinId = this.activatedRoute.snapshot.params["ID"];
       this.fullForm.bulletinId.patchValue(bulletinId);
     }

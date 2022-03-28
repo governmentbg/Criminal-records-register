@@ -6,6 +6,9 @@ import {
 } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
+import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
+import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { IRStatusTypeEnum } from "../../internal-request-overview/_models/internal-request-status-type.constants";
 import { InternalRequestModel } from "../_models/internal-request.model";
 import { InternalRequestService } from "./internal-request.service";
 
@@ -13,22 +16,36 @@ import { InternalRequestService } from "./internal-request.service";
   providedIn: "root",
 })
 export class InternalRequestResolver implements Resolve<any> {
-  constructor(private service: InternalRequestService) {}
+  constructor(
+    private service: InternalRequestService,
+    private nomenclatureService: NomenclatureService
+  ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
-    debugger;
     let id = route.params["ID"];
+    let isBulletinId = false;
     let isEdit = route.data["edit"];
     let element = isEdit ? this.service.find(id) : of(null);
 
+    if (!isEdit) {
+      isBulletinId = true;
+    }
+
     let result: InternalRequestResolverData = {
       element: element,
+      bulletinPersonInfo: this.service.getBulletinPersonInfo(id, isBulletinId),
+      requestTypes: this.nomenclatureService.getInternalRequestStatusesFiltered(
+        IRStatusTypeEnum.New
+      ),
     };
     return forkJoin(result);
   }
 }
 
-export class InternalRequestResolverData extends BaseResolverData<InternalRequestModel> {}
+export class InternalRequestResolverData extends BaseResolverData<InternalRequestModel> {
+  public bulletinPersonInfo: any;
+  public requestTypes: Observable<BaseNomenclatureModel[]>;
+}

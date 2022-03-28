@@ -1,5 +1,4 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Guid } from "guid-typescript";
 
 export class InternalRequestForm {
   public group: FormGroup;
@@ -8,21 +7,29 @@ export class InternalRequestForm {
   public requestDate: FormControl;
   public description: FormControl;
   public bulletinId: FormControl;
+  public reqStatusCode: FormControl;
+  public responseDescr: FormControl;
+  public reqStatusName: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
+    this.id = new FormControl(null);
     this.regNumber = new FormControl(null);
-    this.requestDate = new FormControl(Date.now);
+    this.requestDate = new FormControl(new Date);
     this.description = new FormControl(null);
     this.bulletinId = new FormControl(null);
+    this.reqStatusCode = new FormControl(null);
+    this.responseDescr = new FormControl(null);
+    this.reqStatusName = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
       regNumber: this.regNumber,
       requestDate: this.requestDate,
       description: this.description,
-      bulletinId: this.bulletinId
+      bulletinId: this.bulletinId,
+      reqStatusCode: this.reqStatusCode,
+      responseDescr: this.responseDescr,
+      reqStatusName: this.reqStatusName
     });
   }
 }

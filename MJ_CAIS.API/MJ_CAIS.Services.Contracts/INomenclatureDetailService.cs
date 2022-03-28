@@ -14,5 +14,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetBulletinStatuses();
         IQueryable<BaseNomenclatureDTO> GetAllFbbcDocTypes();
         IQueryable<BaseNomenclatureDTO> GetAllFbbcSanctTypes();
+
+        IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses();
     }
 }

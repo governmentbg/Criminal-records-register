@@ -19,6 +19,7 @@ import { EcrisMessageResolver } from "./ecris/ecris-message-form/_data/ecris-mes
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { InternalRequestResolver } from "./internal-request/internal-request-form/_data/internal-request.resolver";
+import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
 
 const routes: Routes = [
   {
@@ -95,7 +96,7 @@ const routes: Routes = [
         data: { edit: true },
         // canActivate: [AuthGuard],
       },
-       {
+      {
         path: "internal-requests/preview/:ID",
         component: InternalRequestFormComponent,
         resolve: { dbData: InternalRequestResolver },
@@ -130,6 +131,11 @@ const routes: Routes = [
       {
         path: "ecris-identification",
         component: EcrisIdentificationOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-req-waiting",
+        component: EcrisReqWaitingOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

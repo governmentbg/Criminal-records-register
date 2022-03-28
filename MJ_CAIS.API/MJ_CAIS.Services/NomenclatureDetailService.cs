@@ -62,6 +62,12 @@ namespace MJ_CAIS.Services
                 .GetAllFbbcSanctTypes()
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
+        public IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses()
+        {
+            return _nomenclatureDetailRepository
+                .GetInternalRequestStatuses()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {

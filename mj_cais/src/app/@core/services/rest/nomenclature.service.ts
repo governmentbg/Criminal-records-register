@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { map, Observable, of } from "rxjs";
 import { GenderConstants } from "../../constants/gender.constants";
 import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
@@ -69,6 +69,22 @@ export class NomenclatureService extends CaisCrudService<
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/bulletin-statuses`
     );
+  }
+
+  public getInternalRequestStatuses(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/internal-request-statuses`
+    );
+  }
+
+  public getInternalRequestStatusesFiltered(code: string) {
+    return this.http
+      .get<BaseNomenclatureModel[]>(`${this.url}/internal-request-statuses`)
+      .pipe(
+        map((items: BaseNomenclatureModel[]) => {
+          return items.filter((t) => t.code != code);
+        })
+      );
   }
 
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
