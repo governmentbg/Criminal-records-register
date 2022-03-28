@@ -49,6 +49,19 @@ namespace MJ_CAIS.Services
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
+        public IQueryable<BaseNomenclatureDTO> GetAllFbbcDocTypes()
+        {
+            return _nomenclatureDetailRepository
+                .GetAllFbbcDocTypes()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
+        public IQueryable<BaseNomenclatureDTO> GetAllFbbcSanctTypes()
+        {
+            return _nomenclatureDetailRepository
+                .GetAllFbbcSanctTypes()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
         public IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses()
         {
             return _nomenclatureDetailRepository

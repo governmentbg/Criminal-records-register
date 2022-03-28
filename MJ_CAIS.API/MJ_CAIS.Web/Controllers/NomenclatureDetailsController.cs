@@ -28,6 +28,20 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("fbbc-doc-types")]
+        public IActionResult GetAllFbbcDocTypes()
+        {
+            var result = _nomenclatureDetailService.GetAllFbbcDocTypes();
+            return Ok(result);
+        }
+
+        [HttpGet("fbbc-sanct-types")]
+        public IActionResult GetAllFbbcSanctTypes()
+        {
+            var result = _nomenclatureDetailService.GetAllFbbcSanctTypes();
+            return Ok(result);
+        }
+
         [HttpGet("municipalities/{districtId}")]
         public IActionResult GetMunicipalitiesByProvince(string districtId)
         {

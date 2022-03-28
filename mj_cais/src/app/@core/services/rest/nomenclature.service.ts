@@ -198,16 +198,20 @@ export class NomenclatureService extends CaisCrudService<
   }
 
   public getFbbcDocTypes(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
     return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/fbbc_doc_types`
+      `${this.url}/fbbc-doc-types`
     );
   }
 
   public getFbbcSanctTypes(): Observable<BaseNomenclatureModel[]> {
-    return of([]);
     return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/fbbc_sanct_types`
+      `${this.url}/fbbc-sanct-types`
+    );
+  }
+
+  public getAllCities(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/g_cities`
     );
   }
 }
