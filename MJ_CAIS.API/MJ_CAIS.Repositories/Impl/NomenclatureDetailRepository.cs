@@ -28,5 +28,14 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.BBulletinStatuses.AsNoTracking();
         }
+
+        public IQueryable<FbbcDocType> GetAllFbbcDocTypes()
+        {
+            return _dbContext.FbbcDocTypes.AsNoTracking();
+        }
+        public IQueryable<FbbcSanctType> GetAllFbbcSanctTypes()
+        {
+            return _dbContext.FbbcSanctTypes.AsNoTracking();
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetCitiesByMunicipality(string municipalityId);
 
         IQueryable<BaseNomenclatureDTO> GetBulletinStatuses();
+        IQueryable<BaseNomenclatureDTO> GetAllFbbcDocTypes();
+        IQueryable<BaseNomenclatureDTO> GetAllFbbcSanctTypes();
     }
 }

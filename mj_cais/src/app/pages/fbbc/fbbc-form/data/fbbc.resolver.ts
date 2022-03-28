@@ -8,6 +8,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { FbbcDocumentModel } from "../models/fbbc-document.model";
 import { FbbcModel } from "../models/fbbc.model";
 import { FbbcService } from "./fbbc.service";
 
@@ -30,9 +31,9 @@ export class FbbcResolver implements Resolve<any> {
       element: element,
       docTypes: this.nomenclatureService.getFbbcDocTypes(),
       countries: this.nomenclatureService.getCountries(),
-      //cities: this.nomenclatureService.getCities(),
+      cities: this.nomenclatureService.getAllCities(),
       sanctTypes: this.nomenclatureService.getFbbcSanctTypes(),
-    //   documents: this.service.getDocuments(fbbcId),
+      documents: this.service.getDocuments(fbbcId),
     };
     return forkJoin(result);
   }
@@ -41,7 +42,7 @@ export class FbbcResolver implements Resolve<any> {
 export class FbbcResolverData extends BaseResolverData<FbbcModel> {
   public docTypes: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
-  //public cities: Observable<BaseNomenclatureModel[]>;
+  public cities: Observable<BaseNomenclatureModel[]>;
   public sanctTypes: Observable<BaseNomenclatureModel[]>;
-  //public documents: Observable<FbbcDocumentModel[]>;
+  public documents: Observable<FbbcDocumentModel[]>;
 }

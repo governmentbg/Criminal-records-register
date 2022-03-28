@@ -14,6 +14,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BBulletinStatus, BaseNomenclatureDTO>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
 
+            CreateMap<FbbcDocType, BaseNomenclatureDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
+            CreateMap<FbbcSanctType, BaseNomenclatureDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
         }
     }
 }
