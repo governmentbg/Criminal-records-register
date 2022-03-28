@@ -89,6 +89,8 @@
   padding: 0;
 }
 
+/*#region date time styles*/
+
 mat-datepicker-content {
   .mat-calendar-body-cell {
     position: absolute !important;
@@ -96,8 +98,16 @@ mat-datepicker-content {
   }
 }
 
-ngx-mat-month-view {
+ngx-mat-month-view, ngx-mat-multi-year-view ,ngx-mat-year-view{
   .mat-calendar-body-cell{
     position: relative !important;
   }
 }
+
+.nb-theme-default .mat-calendar-body-cell-content:hover,
+.mat-calendar-body-selected{
+  background-color: $primary;
+  color: white;
+}
+
+/*#endregion date time styles*/
