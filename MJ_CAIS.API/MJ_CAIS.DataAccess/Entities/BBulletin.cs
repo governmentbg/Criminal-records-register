@@ -45,7 +45,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FirstnameLat { get; set; }
         public string? SurnameLat { get; set; }
         public string? FamilynameLat { get; set; }
-        public decimal? Sex { get; set; }
+        public decimal Sex { get; set; }
         public string? Egn { get; set; }
         public string? Ln { get; set; }
         public string? Lnch { get; set; }
