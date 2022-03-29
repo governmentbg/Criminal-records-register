@@ -11,6 +11,9 @@ import { CommonConstants } from "../../../../../@core/constants/common.constants
 import { AddressFormComponent } from "../../../../../@core/components/forms/address-form/address-form.component";
 import { forkJoin, of } from "rxjs";
 import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
+import { NbDialogService } from "@nebular/theme";
+import { OffenceCategoryDialogComponent } from "./dialog/offence-category-dialog/offence-category-dialog.component";
+import { OffenceCategoryGridModel } from "./dialog/_models/offence-category-grid.model";
 
 @Component({
   selector: "cais-bulletin-offences-form",
@@ -40,7 +43,8 @@ export class BulletinOffencesFormComponent implements OnInit {
 
   constructor(
     public dateFormatService: DateFormatService,
-    private nomenclatureService: NomenclatureService
+    private nomenclatureService: NomenclatureService,
+    private dialogService: NbDialogService
   ) {}
 
   ngOnInit(): void {}
@@ -59,16 +63,10 @@ export class BulletinOffencesFormComponent implements OnInit {
   }
 
   onAddOrUpdateBulletineOffenceRow() {
+    debugger;
     if (!this.bulletinOffenceForm.group.valid) {
       this.bulletinOffenceForm.group.markAllAsTouched();
       return;
-    }
-
-    if (this.bulletinOffenceForm.offenceCatId.value) {
-      let offenceCatName = (this.dbData.offencesCategories as any).find(
-        (x) => x.id === this.bulletinOffenceForm.offenceCatId.value
-      ).name;
-      this.bulletinOffenceForm.offenceCatName.patchValue(offenceCatName);
     }
 
     if (this.bulletinOffenceForm.ecrisOffCatId.value) {
@@ -112,6 +110,26 @@ export class BulletinOffencesFormComponent implements OnInit {
     this.bulletinOffenceForm = new BulletinOffenceForm();
     this.dialog.close();
   }
+
+  //#region Offance Category
+
+  public openOffenceCategoryDialog = () => {
+    debugger;
+    this.dialogService
+      .open(OffenceCategoryDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe(this.onSelectOffenceCategory);
+  };
+
+  public onSelectOffenceCategory = (item: OffenceCategoryGridModel) => {
+    if (item) {
+      this.bulletinOffenceForm.offenceCategory.setValue(
+        item.id,
+        item.name + ", " + item.code
+      );
+    }
+  };
+
+  //#endregion
 
   private updateOffPlaceObj(event) {
     var selectedCountryId = event.rowData.offPlace.countryId;

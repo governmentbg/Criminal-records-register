@@ -1,0 +1,9 @@
+:host ::ng-deep {
+  .nb-form-field-suffix-medium {
+    margin-left: -3.75rem !important;
+  }
+
+  .nb-form-field-control-with-suffix [nbInput].size-medium {
+    padding-right: 5rem !important;
+  }
+}

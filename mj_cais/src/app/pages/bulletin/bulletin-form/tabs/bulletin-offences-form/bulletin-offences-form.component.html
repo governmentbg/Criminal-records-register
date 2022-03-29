@@ -26,14 +26,14 @@
     >
     </igx-column>
     <igx-column
-      field="offenceCatId"
+      field="offenceCategory.id"
       header="Идентификатор на код-национално ниво"
       dataType="number"
       [hidden]="true"
     >
     </igx-column>
     <igx-column
-      field="offenceCatName"
+      field="offenceCategory.displayName"
       header="Код-националното право"
       [sortable]="true"
       [dataType]="'string'"
@@ -208,14 +208,12 @@
       <nb-card-body>
         <div class="row mt-2">
           <div class="form-group col-md-8">
-            <cais-autocomplete
+            <cais-lookup
               [label]="'Код-националното право'"
-              [inputFormControl]="bulletinOffenceForm.offenceCatId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.offencesCategories"
-              [inputName]="'offenceCatId'"
-            >
-            </cais-autocomplete>
+              [inputControl]="bulletinOffenceForm.offenceCategory"
+              [parentGroup]="bulletinOffenceForm.offenceCategory.group"
+              [openFunction]="openOffenceCategoryDialog"
+            ></cais-lookup>
           </div>
           <div class="form-group col-md-4">
             <cais-input
@@ -299,7 +297,7 @@
               #offPlace
               [parentForm]="bulletinOffenceForm.offPlace"
             ></cais-address-form>
-          </div>        
+          </div>
         </div>
         <div class="row">
           <div class="form-group col-md-8">

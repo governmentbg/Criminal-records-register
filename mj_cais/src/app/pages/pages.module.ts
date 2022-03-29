@@ -28,6 +28,7 @@ import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-mess
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
+import { OffenceCategoryDialogComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew
     InternalRequestOverviewComponent,
     EcrisReqWaitingOverviewComponent,
     InternalRequestFormComponent,
+    OffenceCategoryDialogComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

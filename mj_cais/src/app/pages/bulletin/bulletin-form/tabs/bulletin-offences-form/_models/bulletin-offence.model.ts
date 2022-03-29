@@ -1,9 +1,9 @@
 import { AddressModel } from "../../../../../../@core/components/forms/address-form/model/address.model";
+import { LookupModel } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.model";
 
 export class BulletinOffenceModel {
   public id: string = null;
-  public offenceCatId: string = null;
-  public offenceCatName: string = null;
+  public offenceCategory: LookupModel;
   public remarks: string = null;
   public ecrisOffCatId: string = null;
   public ecrisOffCatName: string = null;
@@ -23,7 +23,7 @@ export class BulletinOffenceModel {
   constructor(init?: Partial<BulletinOffenceModel>) {
     if (init) {
       this.id = init.id ?? null;
-      this.offenceCatId = init.offenceCatId ?? null;
+      this.offenceCategory = init.offenceCategory ?? null;
       this.remarks = init.remarks ?? null;
       this.ecrisOffCatId = init.ecrisOffCatId ?? null;
       this.offStartDate = init.offStartDate ?? null;
@@ -35,7 +35,6 @@ export class BulletinOffenceModel {
       this.respExemption = init.respExemption ?? null;
       this.recidivism = init.recidivism ?? null;
       this.formOfGuilt = init.formOfGuilt ?? null;
-      this.offenceCatName = init.offenceCatName ?? null;
       this.ecrisOffCatName = init.ecrisOffCatName ?? null;
         this.offLvlComplName = init.offLvlComplName ?? null;
       this.offLvlPartName = init.offLvlPartName ?? null;
