@@ -109,6 +109,12 @@
     [showRequired]="
       inputFormControl?.errors?.required && inputHasBeenInteracted()
     "
+    [maxLength]="inputFormControl?.errors?.maxlength?.requiredLength"
+    [showMaxLength]="inputFormControl?.errors?.maxlength && inputHasBeenInteracted()"
+
+    [minLength]="inputFormControl?.errors?.minlength?.requiredLength"
+    [showMinLength]="inputFormControl?.errors?.minlength && inputHasBeenInteracted()"
+
     [showEgn]="inputFormControl?.errors?.egn && inputHasBeenInteracted()"
     [showLnch]="inputFormControl?.errors?.lnch && inputHasBeenInteracted()"
     [showEmail]="inputFormControl?.errors?.email && inputHasBeenInteracted()"

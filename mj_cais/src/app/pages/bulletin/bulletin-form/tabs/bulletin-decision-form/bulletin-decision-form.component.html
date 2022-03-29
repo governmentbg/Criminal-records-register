@@ -178,7 +178,7 @@
         <div class="row mt-2">
           <div class="form-group col-md-8">
             <cais-autocomplete
-              [label]="'Категория допълнителни сведения'"
+              [label]="'Категория'"
               [inputFormControl]="bulletinDecisionForm.decisionChTypeId"
               [parentGroup]="bulletinDecisionForm.group"
               [items]="dbData.decisionChTypes"
@@ -193,7 +193,7 @@
         <div class="row mt-2">
           <div class="form-group col-md-8">
             <cais-autocomplete
-              [label]="'Вид на акта'"
+              [label]="'Вид'"
               [inputFormControl]="bulletinDecisionForm.decisionTypeId"
               [parentGroup]="bulletinDecisionForm.group"
               [items]="dbData.decisionTypes"
@@ -207,7 +207,7 @@
           <div class="form-group col-md-4">
             <cais-input
               [type]="'text'"
-              [label]="'Номер на акта'"
+              [label]="'Номер'"
               [inputFormControl]="bulletinDecisionForm.decisionNumber"
               [parentGroup]="bulletinDecisionForm.group"
               [inputName]="'decisionNumber'"
@@ -217,7 +217,7 @@
           <div class="form-group col-md-4">
             <cais-input
               [type]="'date'"
-              [label]="'Дата на акта'"
+              [label]="'Дата на издаване'"
               [inputFormControl]="bulletinDecisionForm.decisionDate"
               [parentGroup]="bulletinDecisionForm.group"
               [inputName]="'decisionDate'"
@@ -226,7 +226,7 @@
           <div class="form-group col-md-4">
             <cais-input
               [type]="'date'"
-              [label]="'Дата на вилизане в сила на акта'"
+              [label]="'Дата на вилизане в сила'"
               [inputFormControl]="bulletinDecisionForm.decisionFinalDate"
               [parentGroup]="bulletinDecisionForm.group"
               [inputName]="'decisionFinalDate'"
