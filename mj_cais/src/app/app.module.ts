@@ -28,6 +28,7 @@ import { environment } from "../environments/environment";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { EditorModule } from "@tinymce/tinymce-angular";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { RouterExtService } from "./@core/services/common/router-ext.service";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -90,6 +91,7 @@ registerLocaleData(localeBg);
   providers: [
     IgxExcelExporterService,
     CustomToastrService,
+    RouterExtService,
     {
       provide: APP_INITIALIZER,
       useFactory: configureApp,

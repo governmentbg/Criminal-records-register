@@ -33,6 +33,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{aId}/fbbcs")]
+        public async Task<IActionResult> GetEcrisFbbcs(string aId)
+        {
+            var result = await this._ecrisMessageService.GetEcrisFbbcsByIdAsync(aId);
+            return Ok(result);
+        }
+
         [HttpGet("{aId}")]
         public new async Task<IActionResult> Get(string aId)
         {
