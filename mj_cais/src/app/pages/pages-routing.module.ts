@@ -22,6 +22,7 @@ import { InternalRequestResolver } from "./internal-request/internal-request-for
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
 import { FbbcActiveOverviewComponent } from "./fbbc/fbbc-overview/fbbc-active-overview/fbbc-active-overview.component";
 import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
+import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
 
 const routes: Routes = [
   {
@@ -163,6 +164,11 @@ const routes: Routes = [
         component: EcrisMessageFormComponent,
         resolve: { dbData: EcrisMessageResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "isin-new",
+        component: IsinNewOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

@@ -94,6 +94,11 @@ export class PagesMenu {
         ],
       },
       {
+        title: "Изтърпени наказания",
+        icon: "shuffle-2-outline",
+        link: "/pages/isin-new",
+      },
+      {
         title: "FEATURES",
         group: true,
       },
