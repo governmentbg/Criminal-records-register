@@ -162,6 +162,7 @@ export abstract class CrudForm<
             });
           }
         });
+        this.scrollToValidationError();
       },
     });
   }
@@ -186,6 +187,13 @@ export abstract class CrudForm<
       var validationSpan = el.nativeElement.querySelector(
         "cais-validation-message:not([type=hidden]) div span"
       );
+
+      // search for server validation error
+      if (validationSpan == null) {
+        validationSpan = el.nativeElement.querySelector(
+          "mat-error:not([type=hidden]) div.status-danger"
+        );
+      }
 
       if (validationSpan) {
         // select tab containing controls with validation errors
