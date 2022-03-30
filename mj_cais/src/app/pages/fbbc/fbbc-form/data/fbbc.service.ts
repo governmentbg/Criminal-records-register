@@ -1,6 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../../../environments/environment";
+import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { FbbcDocumentModel } from "../models/fbbc-document.model";
 import { FbbcModel } from "../models/fbbc.model";

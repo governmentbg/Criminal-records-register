@@ -6,7 +6,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin/bulletin-form/_data/bulletin.resolver";
-import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
+
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
 import { FbbcResolver } from "./fbbc/fbbc-form/data/fbbc.resolver";
 import { EcrisIdentificationOverviewComponent } from "./ecris/ecris-message-overivew/ecris-identification-overview/ecris-identification-overview.component";
@@ -20,6 +20,8 @@ import { InternalRequestOverviewComponent } from "./internal-request/internal-re
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { InternalRequestResolver } from "./internal-request/internal-request-form/_data/internal-request.resolver";
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
+import { FbbcActiveOverviewComponent } from "./fbbc/fbbc-overview/fbbc-active-overview/fbbc-active-overview.component";
+import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
 
 const routes: Routes = [
   {
@@ -105,7 +107,12 @@ const routes: Routes = [
       },
       {
         path: "fbbcs",
-        component: FbbcOverviewComponent,
+        component: FbbcActiveOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "fbbcs-for-destruction",
+        component: FbbcForDestructionOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

@@ -14,7 +14,7 @@ import { CoreModule } from "../@core/core.module";
 import { BulletinOffencesFormComponent } from "./bulletin/bulletin-form/tabs/bulletin-offences-form/bulletin-offences-form.component";
 import { BulletinSanctionsFormComponent } from "./bulletin/bulletin-form/tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 import { BulletinDecisionFormComponent } from "./bulletin/bulletin-form/tabs/bulletin-decision-form/bulletin-decision-form.component";
-import { FbbcOverviewComponent } from "./fbbc/fbbc-overview/fbbc-overview.component";
+import { FbbcActiveOverviewComponent } from "./fbbc/fbbc-overview/fbbc-active-overview/fbbc-active-overview.component";
 import { FbbcFormComponent } from "./fbbc/fbbc-form/fbbc-form.component";
 import { BulletinDocumentFormComponent } from "./bulletin/bulletin-form/tabs/bulletin-documents-form/bulletin-document-form.component";
 import { FbbcDocumentFormComponent } from "./fbbc/fbbc-form/grids/fbbc-document-form/fbbc-document-form.component";
@@ -28,6 +28,7 @@ import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-mess
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
+import { FbbcForDestructionOverviewComponent } from './fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,7 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew
     BulletinOffencesFormComponent,
     BulletinSanctionsFormComponent,
     BulletinDecisionFormComponent,
-    FbbcOverviewComponent,
+    FbbcActiveOverviewComponent,
     FbbcFormComponent,
     EcrisIdentificationOverviewComponent,
     BulletinDocumentFormComponent,
@@ -60,6 +61,7 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew
     InternalRequestOverviewComponent,
     EcrisReqWaitingOverviewComponent,
     InternalRequestFormComponent,
+    FbbcForDestructionOverviewComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

@@ -61,11 +61,22 @@ export class PagesMenu {
           },
         ],
       },
-      {
+     {
         title: "Осъдени в чужбина",
-        icon: "home-outline",
-        link: "/pages/fbbcs",
-        home: false,
+        icon: { icon: "file-alt", pack: "fa" },
+        children: [
+          {
+            title: "Актуални сведения",
+            link: "/pages/fbbcs",
+          },
+          {
+            title: "Подлежащи на заличаване",
+            link: "/pages/fbbcs-for-destruction",
+          },
+          {
+            title: "Заличени",
+          },
+        ],
       },
       {
         title: "ECRIS",
