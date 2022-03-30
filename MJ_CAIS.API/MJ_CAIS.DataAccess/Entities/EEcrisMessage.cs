@@ -31,6 +31,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Nationality1Code { get; set; }
         public string? Nationality2Code { get; set; }
         public string? MsgTypeId { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public string? EcrisMsgConvictionId { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }

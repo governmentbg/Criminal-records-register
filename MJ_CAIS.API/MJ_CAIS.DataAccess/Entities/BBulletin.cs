@@ -14,6 +14,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BPersNationalities = new HashSet<BPersNationality>();
             BSanctions = new HashSet<BSanction>();
             DDocuments = new HashSet<DDocument>();
+            EIsinData = new HashSet<EIsinDatum>();
         }
 
         public decimal? Version { get; set; }
@@ -100,5 +101,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
         public virtual ICollection<BSanction> BSanctions { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
+        public virtual ICollection<EIsinDatum> EIsinData { get; set; }
     }
 }
