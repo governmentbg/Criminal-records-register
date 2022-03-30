@@ -1,0 +1,31 @@
+/*#region date time styles*/
+
+:host ::ng-deep {
+  nb-form-field button.mat-button-base.mat-focus-indicator.mat-icon-button {
+    border-radius: 0 5px 5px 0 !important;
+    width: 39px !important;
+    height: 35px !important;
+    line-height: 34px !important;
+  }
+}
+
+mat-datepicker-content {
+  .mat-calendar-body-cell {
+    position: absolute !important;
+    height: 100% !important;
+  }
+}
+
+ngx-mat-month-view,
+ngx-mat-multi-year-view,
+ngx-mat-year-view {
+  .mat-calendar-body-cell {
+    position: relative !important;
+  }
+}
+
+.mat-datepicker-input.ng-dirty.ng-invalid.ng-touched {
+  border-color: #cf1a2b;
+}
+
+/*#endregion date time styles*/

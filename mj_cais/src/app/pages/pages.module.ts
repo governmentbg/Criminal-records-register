@@ -29,6 +29,7 @@ import { InternalRequestOverviewComponent } from "./internal-request/internal-re
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
 import { FbbcForDestructionOverviewComponent } from './fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component';
+import { OffenceCategoryDialogComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component';
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { FbbcForDestructionOverviewComponent } from './fbbc/fbbc-overview/fbbc-f
     EcrisReqWaitingOverviewComponent,
     InternalRequestFormComponent,
     FbbcForDestructionOverviewComponent,
+    OffenceCategoryDialogComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

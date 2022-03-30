@@ -18,9 +18,14 @@ export class BulletinDocumentForm {
     var guid = Guid.create().toString();
     var documentContentGuid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.name = new FormControl(null, [Validators.required]);
+    this.name = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
     this.descr = new FormControl(null);
-    this.docTypeId = new FormControl(DocumentTypeEnum.Unstructured);
+    this.docTypeId = new FormControl(DocumentTypeEnum.Unstructured, [
+      Validators.maxLength(50),
+    ]);
     this.docTypeName = new FormControl(null);
     this.documentContent = new FormControl(null, [Validators.required]);
     this.documentContentId = new FormControl(documentContentGuid, [

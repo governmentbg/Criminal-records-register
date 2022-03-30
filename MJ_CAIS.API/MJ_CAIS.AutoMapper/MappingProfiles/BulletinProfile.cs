@@ -3,6 +3,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Common;
+using MJ_CAIS.DTO.OffenceCategory;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -34,7 +35,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.CountryId)));
 
             CreateMap<OffenceDTO, BOffence>()
-                .ForMember(d => d.OffenceCatId, opt => opt.MapFrom(src => src.OffenceCatId))
+                .ForMember(d => d.OffenceCatId, opt => opt.MapFrom(src => src.OffenceCategory.Id))
                 .ForMember(d => d.EcrisOffCatId, opt => opt.MapFrom(src => src.EcrisOffCatId))
                 .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffPlace.ForeignCountryAddress))
                 .ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffPlace.CountryId))
@@ -44,7 +45,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<BOffence, OffenceDTO>()
                .ForMember(d => d.EcrisOffCatName, opt => opt.MapFrom(src => src.EcrisOffCat.Name))
-               .ForMember(d => d.OffenceCatName, opt => opt.MapFrom(src => src.OffenceCat.Name))
+               .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src => 
+                        new LookupDTO() {
+                            DisplayName = src.OffenceCat.Name, 
+                            Id = src.OffenceCatId 
+                        }))
                .ForMember(d => d.OffLvlComplName, opt => opt.MapFrom(src => src.OffLvlCompl.Name))
                .ForMember(d => d.OffLvlPartName, opt => opt.MapFrom(src => src.OffLvlPart.Name))
                .ForMember(d => d.IsContiniuous, opt => opt.MapFrom(src => src.IsContiniuous.HasValue && src.IsContiniuous.Value == 1 ? true : false))

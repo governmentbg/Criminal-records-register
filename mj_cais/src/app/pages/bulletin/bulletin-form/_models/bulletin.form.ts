@@ -80,67 +80,119 @@ export class BulletinForm {
     this.id = new FormControl(guid);
     this.version = new FormControl(null);
     this.csAuthorityName = new FormControl(null);
-    this.registrationNumber = new FormControl(null);
+    this.registrationNumber = new FormControl(null, Validators.maxLength(100));
     this.sequentialIndex = new FormControl(null, [Validators.required]);
-    this.decisionNumber = new FormControl(null, [Validators.required]);
+    this.decisionNumber = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
     this.decisionDate = new FormControl(null, [Validators.required]);
     this.decisionFinalDate = new FormControl(null, [Validators.required]);
-    this.decidingAuthId = new FormControl(null, [Validators.required]);
-    this.decisionTypeId = new FormControl(null);
-    this.caseTypeId = new FormControl(null);
-    this.caseNumber = new FormControl(null, [Validators.required]);
+    this.decidingAuthId = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(50),
+    ]);
+    this.decisionTypeId = new FormControl(null, [Validators.maxLength(200)]);
+    this.caseTypeId = new FormControl(null, [Validators.maxLength(50)]);
+    this.caseNumber = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
     this.caseYear = new FormControl(null, [Validators.required]);
     this.convRemarks = new FormControl(null);
-    this.alphabeticalIndex = new FormControl(null, [Validators.required]);
-    this.decisionEcli = new FormControl(null);
+    this.alphabeticalIndex = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
+    this.decisionEcli = new FormControl(null, [Validators.maxLength(100)]);
     this.bulletinCreateDate = new FormControl(null, [Validators.required]);
     this.bulletinReceivedDate = new FormControl(null);
-    this.bulletinAuthorityId = new FormControl(null);
+    this.bulletinAuthorityId = new FormControl(null, [
+      Validators.maxLength(50),
+    ]);
     this.createdByNames = new FormControl(null, [Validators.required]);
     this.approvedByNames = new FormControl(null, [Validators.required]);
     this.approvedByPosition = new FormControl(null, [Validators.required]);
-    this.statusId = new FormControl(BulletinStatusTypeEnum.NewEISS);
+    this.statusId = new FormControl(BulletinStatusTypeEnum.NewEISS, [
+      Validators.maxLength(50),
+    ]);
     this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewEISS);
-    this.firstname = new FormControl(null, [Validators.required]);
-    this.surname = new FormControl(null, [Validators.required]);
-    this.familyname = new FormControl(null, [Validators.required]);
-    this.fullname = new FormControl(null);
-    this.firstnameLat = new FormControl(null, [Validators.required]);
-    this.surnameLat = new FormControl(null, [Validators.required]);
-    this.familynameLat = new FormControl(null, [Validators.required]);
+    this.firstname = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.surname = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.familyname = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.fullname = new FormControl(null, [Validators.maxLength(200)]);
+    this.firstnameLat = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.surnameLat = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.familynameLat = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
     this.sex = new FormControl(null, [Validators.required]);
-    this.egn = new FormControl(null, [Validators.required]);
-    this.ln = new FormControl(null, [Validators.required]);
-    this.lnch = new FormControl(null, [Validators.required]);
+    this.egn = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
+    this.ln = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
+    this.lnch = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(100),
+    ]);
     this.birthDate = new FormControl(null, [Validators.required]);
-    this.birthDatePrecision = new FormControl(null);
-    this.fullnameLat = new FormControl(null);
-    this.idDocNumber = new FormControl(null);
-    this.idDocCategoryId = new FormControl(null);
+    this.birthDatePrecision = new FormControl(null, [
+      Validators.maxLength(200),
+    ]);
+    this.fullnameLat = new FormControl(null, [Validators.maxLength(200)]);
+    this.idDocNumber = new FormControl(null, [Validators.maxLength(100)]);
+    this.idDocCategoryId = new FormControl(null, [Validators.maxLength(50)]);
     this.idDocTypeDescr = new FormControl(null);
     this.idDocIssuingAuthority = new FormControl(null);
     this.idDocIssuingDate = new FormControl(null);
-    this.idDocIssuingDatePrec = new FormControl(null);
+    this.idDocIssuingDatePrec = new FormControl(null, [
+      Validators.maxLength(200),
+    ]);
     this.idDocValidDate = new FormControl(null);
-    this.idDocValidDatePrec = new FormControl(null);
-    this.motherFirstname = new FormControl(null);
-    this.motherFamilyname = new FormControl(null);
-    this.motherFullname = new FormControl(null);
-    this.fatherFirstname = new FormControl(null);
+    this.idDocValidDatePrec = new FormControl(null, [
+      Validators.maxLength(200),
+    ]);
+    this.motherFirstname = new FormControl(null, [Validators.maxLength(200)]);
+    this.motherFamilyname = new FormControl(null, [Validators.maxLength(200)]);
+    this.motherFullname = new FormControl(null, [Validators.maxLength(200)]);
+    this.fatherFirstname = new FormControl(null, [Validators.maxLength(200)]);
     this.fatherSurname = new FormControl(null);
-    this.fatherFamilyname = new FormControl(null);
-    this.fatherFullname = new FormControl(null);
-    this.motherSurname = new FormControl(null);
-    this.afisNumber = new FormControl(null);
+    this.fatherFamilyname = new FormControl(null, [Validators.maxLength(200)]);
+    this.fatherFullname = new FormControl(null, [Validators.maxLength(200)]);
+    this.motherSurname = new FormControl(null, [Validators.maxLength(200)]);
+    this.afisNumber = new FormControl(null, [Validators.maxLength(100)]);
     this.convIsTransmittable = new FormControl(null);
     this.convRetPeriodEndDate = new FormControl(null);
-    this.createdByPosition = new FormControl(null);
-    this.bulletinType = new FormControl(null, [Validators.required]);
+    this.createdByPosition = new FormControl(null, [Validators.maxLength(200)]);
+    this.bulletinType = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(50),
+    ]);
     this.offancesTransactions = new FormControl(null);
     this.sanctionsTransactions = new FormControl(null);
     this.decisionsTransactions = new FormControl(null);
     this.documentsTransactions = new FormControl(null);
-    this.ecrisConvictionId = new FormControl(null);
+    this.ecrisConvictionId = new FormControl(null, [Validators.maxLength(50)]);
     this.personAliasTransactions = new FormControl(null);
     this.nationalities = new MultipleChooseForm(true);
     this.address = new AddressForm();

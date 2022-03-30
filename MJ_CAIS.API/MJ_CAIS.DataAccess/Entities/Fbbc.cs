@@ -24,8 +24,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? BirthCityId { get; set; }
         public string? BirtyCountryDescr { get; set; }
         public string? BirthCountryId { get; set; }
-        public decimal? BirthDate { get; set; }
-        public decimal? BirthDatePrec { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string? BirthDatePrec { get; set; }
         public DateTime? OffenceStartDate { get; set; }
         public DateTime? OffenceEndDate { get; set; }
         public string? Annotation { get; set; }
@@ -36,7 +36,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FatherSurname { get; set; }
         public string? FatherFamilyname { get; set; }
         public string? GdkpNumber { get; set; }
-        public DateTime? GdkpDate { get; set; }
+        public string? GdkpDate { get; set; }
         public string? GdkpCaseNumber { get; set; }
         public string? GdkpTom { get; set; }
         public string? GdkpStr { get; set; }
@@ -55,6 +55,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PersonId { get; set; }
         public decimal? Version { get; set; }
         public string? StatusCode { get; set; }
+        public decimal? OldId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

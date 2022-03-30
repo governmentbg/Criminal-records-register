@@ -1835,11 +1835,12 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("BIRTH_COUNTRY_ID");
 
                 entity.Property(e => e.BirthDate)
-                    .HasColumnType("NUMBER(38)")
+                    .HasColumnType("DATE")
                     .HasColumnName("BIRTH_DATE");
 
                 entity.Property(e => e.BirthDatePrec)
-                    .HasColumnType("NUMBER(38)")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("BIRTH_DATE_PREC");
 
                 entity.Property(e => e.BirthPlace)
@@ -1919,7 +1920,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("GDKP_CASE_NUMBER");
 
                 entity.Property(e => e.GdkpDate)
-                    .HasColumnType("DATE")
+                    .HasMaxLength(100)
                     .HasColumnName("GDKP_DATE");
 
                 entity.Property(e => e.GdkpNumber)
@@ -1961,6 +1962,10 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.OffenceStartDate)
                     .HasColumnType("DATE")
                     .HasColumnName("OFFENCE_START_DATE");
+
+                entity.Property(e => e.OldId)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("OLD_ID");
 
                 entity.Property(e => e.PersonId)
                     .HasMaxLength(50)

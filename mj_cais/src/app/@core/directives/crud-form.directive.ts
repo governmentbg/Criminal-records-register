@@ -8,7 +8,11 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Location } from "@angular/common";
-import { changei18n } from "@infragistics/igniteui-angular";
+import {
+  changei18n,
+  ColumnPinningPosition,
+  IPinningConfig,
+} from "@infragistics/igniteui-angular";
 import {
   ABaseModel,
   CrudService,
@@ -16,12 +20,14 @@ import {
   FormComponent,
 } from "@tl/tl-common";
 import { IgxResourceStringsBG } from "igniteui-angular-i18n";
-import { Observable, of } from "rxjs";
+import { filter, Observable, of } from "rxjs";
 import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
 import { BaseResolverData } from "../models/common/base-resolver.data";
 import { InputTypeConstants } from "../constants/input-type.constants";
 import { NbTabComponent, NbTabsetComponent } from "@nebular/theme";
+import { NavigationEnd, Router } from "@angular/router";
+import { RouterExtService } from "../services/common/router-ext.service";
 
 @Directive()
 export abstract class CrudForm<
@@ -45,6 +51,8 @@ export abstract class CrudForm<
   }
 
   public InputTypeConstants = InputTypeConstants;
+
+  public pinningConfig: IPinningConfig = { columns: ColumnPinningPosition.End };
 
   public readonly CREATE_ACTION = "create";
   public readonly EDIT_ACTION = "edit";
@@ -92,7 +100,14 @@ export abstract class CrudForm<
   }
 
   public globalCancelFunction = () => {
-    this.router.navigateByUrl(this.backUrl);
+    let routerService = this.injector.get<RouterExtService>(RouterExtService);
+    let previousUrl = routerService.getPreviousUrl();
+    if (previousUrl && previousUrl != "/") {
+      // When coming from different view
+      this.redirectLocationBack();
+    } else {
+      this.router.navigateByUrl(this.backUrl);
+    }
   };
 
   protected validateAndSave(form: any) {

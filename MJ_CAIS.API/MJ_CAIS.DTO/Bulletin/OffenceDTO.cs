@@ -5,8 +5,7 @@ namespace MJ_CAIS.DTO.Bulletin
     public class OffenceDTO
     {
         public string Id { get; set; }
-        public string? OffenceCatId { get; set; }
-        public string? OffenceCatName { get; set; }
+        public LookupDTO OffenceCategory { get; set; } = new LookupDTO();
         public string? Remarks { get; set; }
         public string? EcrisOffCatId { get; set; }
         public string? EcrisOffCatName { get; set; }

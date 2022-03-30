@@ -53,11 +53,13 @@
     <form autocomplete="off">
       <nb-tabset #nbtabset>
         <nb-tab tabTitle="Основна информация">
+          <div class="font-weight-bold">Данни за бюлетин</div>
+          <hr />
           <div class="row">
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
-                [label]="'Номер на бюлетин'"
+                [label]="'Номер'"
                 [inputFormControl]="fullForm.registrationNumber"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -65,7 +67,7 @@
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
-                [label]="'Бюро съдимост, в което се съхранява бюлетина'"
+                [label]="'Бюро съдимост, в което се съхранява'"
                 [inputFormControl]="fullForm.csAuthorityName"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -95,7 +97,7 @@
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
-                [label]="'Входящ номер на бюлетина към азбучния указател'"
+                [label]="'Входящ номер към азбучния указател'"
                 [inputFormControl]="fullForm.alphabeticalIndex"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -129,6 +131,11 @@
             </div>
           </div>
 
+          <div class="font-weight-bold">
+            Данни за изготвяне, съставяне и проверка на бюлетин
+          </div>
+          <hr />
+
           <div class="row">
             <div class="form-group col-md-6">
               <cais-autocomplete
@@ -149,7 +156,7 @@
             </div>
           </div>
 
-          <div class="font-weight-bold">Съставил</div>
+          <div class="sub-header">Съставил</div>
           <hr />
 
           <div class="row">
@@ -164,13 +171,13 @@
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
-                [label]="'Длъжност'"
+                [label]="'Ддлъжност'"
                 [inputFormControl]="fullForm.createdByPosition"
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
           </div>
-          <div class="font-weight-bold">Проверил</div>
+          <div class="sub-header">Проверил</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-6">
@@ -191,8 +198,9 @@
             </div>
           </div>
         </nb-tab>
-
         <nb-tab tabTitle="Данни за лицето">
+          <div class="font-weight-bold">Имена</div>
+          <hr />
           <div class="row">
             <div class="form-group col-md-3">
               <cais-input
@@ -271,7 +279,7 @@
           </div>
 
           <div class="font-weight-bold">
-            Псевдоним или други използвани имена на осъденото лице
+            Псевдоним или други използвани имена
           </div>
           <app-grid-with-transactions
             [gridTransactions]="fullForm.personAliasTransactions"
@@ -514,7 +522,7 @@
           <hr />
           <cais-address-form
             [parentForm]="fullForm.address"
-          ></cais-address-form>        
+          ></cais-address-form>
           <div class="row">
             <div class="form-group col-md-6">
               <cais-multiple-choose
@@ -675,7 +683,7 @@
           <div class="row">
             <div class="form-group col-md-3">
               <cais-autocomplete
-                [label]="'Вид на акта'"
+                [label]="'Вид'"
                 [inputFormControl]="fullForm.decisionTypeId"
                 [parentGroup]="fullForm.group"
                 [inputName]="'decisionTypeId'"
@@ -686,7 +694,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
-                [label]="'Номер на акта'"
+                [label]="'Номер'"
                 [inputFormControl]="fullForm.decisionNumber"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -694,7 +702,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'date'"
-                [label]="'Дата на акта'"
+                [label]="'Дата на издаване'"
                 [inputFormControl]="fullForm.decisionDate"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -733,7 +741,7 @@
           <div class="row">
             <div class="form-group col-md-3">
               <cais-autocomplete
-                [label]="'Вид дело'"
+                [label]="'Вид'"
                 [inputFormControl]="fullForm.caseTypeId"
                 [parentGroup]="fullForm.group"
                 [inputName]="'caseTypeId'"
@@ -744,7 +752,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
-                [label]="'Номер на делото'"
+                [label]="'Номер'"
                 [inputFormControl]="fullForm.caseNumber"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -752,7 +760,7 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'number'"
-                [label]="'Година на делото'"
+                [label]="'Година'"
                 [inputFormControl]="fullForm.caseYear"
                 [parentGroup]="fullForm.group"
               ></cais-input>

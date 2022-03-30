@@ -8,6 +8,8 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { BulletinGridModel } from "../../../bulletin/bulletin-overview/_models/bulletin-grid.model";
+import { FbbcGridModel } from "../../../fbbc/fbbc-overview/models/fbbc-grid.model";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
 import { EcrisMessageService } from "./ecris-message.service";
 
@@ -33,6 +35,8 @@ export class EcrisMessageResolver implements Resolve<any> {
       ecrisAuthorities: this.nomenclatureService.getEcrisAuthorities(),
       genderTypes: this.nomenclatureService.getGenderTypes(),
       countries: this.nomenclatureService.getCountries(),
+      ecrisBulletins: this.service.getEcrisBulletins(id),
+      ecrisFbbcs: this.service.getEcrisFbbcs(id),
     };
     return forkJoin(result);
   }
@@ -42,4 +46,6 @@ export class EcrisMessageResolverData extends BaseResolverData<EcrisMessageModel
   public ecrisAuthorities: Observable<BaseNomenclatureModel[]>;
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
+  public ecrisBulletins: Observable<BulletinGridModel[]>;
+  public ecrisFbbcs: Observable<FbbcGridModel[]>;
 }

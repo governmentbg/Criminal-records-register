@@ -91,23 +91,15 @@
 
 /*#region date time styles*/
 
-mat-datepicker-content {
-  .mat-calendar-body-cell {
-    position: absolute !important;
-    height: 100% !important;
-  }
-}
-
-ngx-mat-month-view, ngx-mat-multi-year-view ,ngx-mat-year-view{
-  .mat-calendar-body-cell{
-    position: relative !important;
-  }
-}
-
 .nb-theme-default .mat-calendar-body-cell-content:hover,
-.mat-calendar-body-selected{
+.mat-calendar-body-selected {
   background-color: $primary;
   color: white;
 }
 
 /*#endregion date time styles*/
+
+.cais-lookup{
+  width: calc(100vw - 10%);
+  height: 90vh;
+}
