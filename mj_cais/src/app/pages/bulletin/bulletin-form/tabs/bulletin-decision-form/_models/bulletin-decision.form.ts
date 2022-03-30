@@ -19,15 +19,15 @@ export class BulletinDecisionForm {
   constructor() {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.decisionChTypeId = new FormControl(null);
+    this.decisionChTypeId = new FormControl(null, [Validators.maxLength(50)]);
     this.decisionChTypeName = new FormControl(null);
-    this.decisionEcli = new FormControl(null);
-    this.decisionNumber = new FormControl(null);
+    this.decisionEcli = new FormControl(null, [Validators.maxLength(100)]);
+    this.decisionNumber = new FormControl(null, [Validators.maxLength(100)]);
     this.decisionDate = new FormControl(null);
     this.decisionFinalDate = new FormControl(null);
-    this.decisionAuthId = new FormControl(null);
+    this.decisionAuthId = new FormControl(null, [Validators.maxLength(50)]);
     this.decisionAuthName = new FormControl(null);
-    this.decisionTypeId = new FormControl(null);
+    this.decisionTypeId = new FormControl(null, [Validators.maxLength(50)]);
     this.decisionTypeName = new FormControl(null);
     this.descr = new FormControl(null);
 

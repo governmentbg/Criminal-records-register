@@ -15,23 +15,23 @@ export class BulletinPersonAliasForm {
   constructor() {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.firstname = new FormControl(null);
-    this.surname = new FormControl(null);
-    this.familyname = new FormControl(null);
-    this.fullname = new FormControl(null);
+    this.firstname = new FormControl(null, [Validators.max(200)]);
+    this.surname = new FormControl(null, [Validators.max(200)]);
+    this.familyname = new FormControl(null, [Validators.max(200)]);
+    this.fullname = new FormControl(null, [Validators.max(200)]);
     this.typeId = new FormControl(null);
     this.typeName = new FormControl(null);
-    this.typeCode = new FormControl(null);
-  
+    this.typeCode = new FormControl(null, [Validators.max(200)]);
+
     this.group = new FormGroup({
       id: this.id,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,
       fullname: this.fullname,
-      typeId: this.typeId , 
+      typeId: this.typeId,
       typeName: this.typeName,
-      typeCode: this.typeCode
+      typeCode: this.typeCode,
     });
   }
 }

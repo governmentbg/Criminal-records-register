@@ -30,20 +30,18 @@ export class BulletinOffenceForm {
     this.offenceCategory = new LookupForm(true);
     this.formOfGuilt = new FormControl(null, [Validators.required]);
     this.remarks = new FormControl(null, [Validators.required]);
-    this.ecrisOffCatId = new FormControl(null);
+    this.ecrisOffCatId = new FormControl(null, [Validators.maxLength(50)]);
     this.ecrisOffCatName = new FormControl(null);
     this.legalProvisions = new FormControl(null);
     this.offStartDate = new FormControl(null, [Validators.required]);
     this.offEndDate = new FormControl(null, [Validators.required]); // тодо: крайна дата, ако е период
-    this.occurrences = new FormControl(null), //,  [
-      //   numberValidator(/^[0-9]*$/i) // <-- Here's how you pass in the custom validator.
-      // ]);
-      this.isContiniuous = new FormControl(null);
+    this.occurrences = new FormControl(null);
+    this.isContiniuous = new FormControl(null);
     this.respExemption = new FormControl(null);
     this.recidivism = new FormControl(null);
-    this.offLvlComplId = new FormControl(null);
+    this.offLvlComplId = new FormControl(null, [Validators.maxLength(50)]);
     this.offLvlComplName = new FormControl(null);
-    this.offLvlPartId = new FormControl(null);
+    this.offLvlPartId = new FormControl(null, [Validators.maxLength(50)]);
     this.offLvlPartName = new FormControl(null);
     this.offPlace = new AddressForm();
 

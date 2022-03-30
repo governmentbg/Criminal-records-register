@@ -43,12 +43,12 @@ export class BulletinSanctionForm {
     this.id = new FormControl(guid, [Validators.required]);
     this.sanctCategoryId = new FormControl(null, [Validators.required]);
     this.sanctCategoryName = new FormControl(null);
-    this.sanctProbCategId = new FormControl(null);
+    this.sanctProbCategId = new FormControl(null, [Validators.maxLength(50)]);
     this.sanctProbCategName = new FormControl(null);
-    this.ecrisSanctCategId = new FormControl(null);
+    this.ecrisSanctCategId = new FormControl(null, [Validators.maxLength(50)]);
     this.ecrisSanctCategName = new FormControl(null);
     this.sanctProbValue = new FormControl(null);
-    this.sanctProbMeasureId = new FormControl(null);
+    this.sanctProbMeasureId = new FormControl(null, [Validators.maxLength(50)]);
     this.sanctProbMeasureName = new FormControl(null);
     this.descr = new FormControl(null);
     this.specificToMinor = new FormControl(null);
@@ -71,7 +71,7 @@ export class BulletinSanctionForm {
     this.suspentionDurationDays = new FormControl(null);
     this.suspentionDurationHours = new FormControl(null);
     this.probationDescr = new FormControl(null, [Validators.required]);
-    this.sanctActivityId = new FormControl(null);
+    this.sanctActivityId = new FormControl(null, [Validators.maxLength(50)]);
     this.sanctActivityName = new FormControl(null);
     this.sanctActivityDescr = new FormControl(null);
 
