@@ -50,8 +50,20 @@
   </igx-column>
 
   <igx-column
+    field="ecrisIdentifier"
+    header="ECRIS Идентификатор"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
     field="identifier"
-    header="Идентификатор"
+    header="ЕГН"
     [sortable]="true"
     [dataType]="'string'"
     [hidden]="false"
@@ -138,19 +150,7 @@
   </igx-column>
 
   <igx-column
-    field="nationality1Code"
-    header="Гражданство"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    width="150px"
+    width="100px"
     header=""
     [sortable]="false"
     [filterable]="false"

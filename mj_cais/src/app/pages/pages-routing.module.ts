@@ -15,7 +15,7 @@ import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bu
 import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 import { EcrisReqWaitingFormComponent } from "./ecris/ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
-import { EcrisMessageResolver } from "./ecris/ecris-message-form/ecris-req-waiting-form/_data/ecris-message.resolver";
+import { EcrisReqWaitingResolver } from "./ecris/ecris-message-form/ecris-req-waiting-form/_data/ecris-req-waiting.resolver";
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { InternalRequestResolver } from "./internal-request/internal-request-form/_data/internal-request.resolver";
@@ -24,6 +24,8 @@ import { FbbcActiveOverviewComponent } from "./fbbc/fbbc-overview/fbbc-active-ov
 import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
 import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
 import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
+import { EcrisIdentificationFormComponent } from "./ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component";
+import { EcrisIdentificationResolver } from "./ecris/ecris-message-form/ecris-identification-form/_data/ecris-identification.resolver";
 
 const routes: Routes = [
   {
@@ -142,6 +144,21 @@ const routes: Routes = [
         component: EcrisIdentificationOverviewComponent,
         // canActivate: [AuthGuard],
       },
+
+      {
+        path: "ecris-identification/edit/:ID",
+        component: EcrisIdentificationFormComponent,
+        resolve: { dbData: EcrisIdentificationResolver },
+        data: { edit: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-identification/preview/:ID",
+        component: EcrisIdentificationFormComponent,
+        resolve: { dbData: EcrisIdentificationResolver },
+        data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
       {
         path: "ecris-req-waiting",
         component: EcrisReqWaitingOverviewComponent,
@@ -150,20 +167,20 @@ const routes: Routes = [
       {
         path: "ecris-req-waiting/create",
         component: EcrisReqWaitingFormComponent,
-        resolve: { dbData: EcrisMessageResolver },
+        resolve: { dbData: EcrisReqWaitingResolver },
         // canActivate: [AuthGuard],
       },
       {
         path: "ecris-req-waiting/edit/:ID",
         component: EcrisReqWaitingFormComponent,
-        resolve: { dbData: EcrisMessageResolver },
+        resolve: { dbData: EcrisReqWaitingResolver },
         data: { edit: true },
         // canActivate: [AuthGuard],
       },
       {
         path: "ecris-req-waiting/preview/:ID",
         component: EcrisReqWaitingFormComponent,
-        resolve: { dbData: EcrisMessageResolver },
+        resolve: { dbData: EcrisReqWaitingResolver },
         data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },

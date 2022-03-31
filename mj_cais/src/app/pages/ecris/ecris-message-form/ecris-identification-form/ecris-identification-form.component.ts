@@ -2,28 +2,28 @@ import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { EcrisMessageService } from "../_data/ecris-message.service";
-import { EcrisReqWaitingResolverData } from "./_data/ecris-req-waiting.resolver";
 import { EcrisMessageForm } from "../_models/ecris-message.form";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
+import { EcrisIdentificationResolverData } from "./_data/ecris-identification.resolver";
 
 @Component({
-  selector: "cais-ecris-req-waiting-form",
-  templateUrl: "./ecris-req-waiting-form.component.html",
-  styleUrls: ["./ecris-req-waiting-form.component.scss"],
+  selector: "cais-ecris-identification-form",
+  templateUrl: "./ecris-identification-form.component.html",
+  styleUrls: ["./ecris-identification-form.component.scss"],
 })
-export class EcrisReqWaitingFormComponent
+export class EcrisIdentificationFormComponent
   extends CrudForm<
     EcrisMessageModel,
     EcrisMessageForm,
-    EcrisReqWaitingResolverData,
+    EcrisIdentificationResolverData,
     EcrisMessageService
   >
   implements OnInit
 {
   constructor(service: EcrisMessageService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = "pages/ecris-req-waiting";
-    this.setDisplayTitle("запитване");
+    this.backUrl = "pages/ecris-identification";
+    this.setDisplayTitle("запитване за идентификация");
   }
 
   buildFormImpl(): FormGroup {
@@ -46,6 +46,6 @@ export class EcrisReqWaitingFormComponent
   };
 
   submitFunction = () => {
-    // TODO: custom only in tab "Отговор на запитване"
+    this.validateAndSave(this.fullForm);
   };
 }

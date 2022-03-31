@@ -14,7 +14,15 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
-                [label]="'Идентификатор на запитване'"
+                [label]="'ECRIS Идентификатор'"
+                [inputFormControl]="fullForm.ecrisIdentifier"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'ЕГН'"
                 [inputFormControl]="fullForm.identifier"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -64,21 +72,25 @@
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
+            <div class="form-group col-md-4">
+              <cais-autocomplete
                 [label]="'Основно гражданство'"
                 [inputFormControl]="fullForm.nationality1Code"
                 [parentGroup]="fullForm.group"
-              ></cais-input>
+                [inputName]="'nationality1Code'"
+                [items]="dbData.countries"
+              >
+              </cais-autocomplete>
             </div>
-            <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
+            <div class="form-group col-md-4">
+              <cais-autocomplete
                 [label]="'Друго гражданство'"
                 [inputFormControl]="fullForm.nationality2Code"
                 [parentGroup]="fullForm.group"
-              ></cais-input>
+                [inputName]="'nationality2Code'"
+                [items]="dbData.countries"
+              >
+              </cais-autocomplete>
             </div>
           </div>
 
@@ -236,6 +248,7 @@
             </igx-column>
           </igx-grid>
         </nb-tab>
+        <nb-tab tabTitle="Проверки в регистри"> </nb-tab>
       </nb-tabset>
     </form>
   </nb-card-body>
