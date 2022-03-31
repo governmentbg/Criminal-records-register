@@ -21,21 +21,7 @@
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>Подлежащи на заличаване</igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <a
-          nbButton
-          matRipple
-          [status]="'success'"
-          [routerLink]="['/pages/fbbcs/create']"
-        >
-          Добавяне &nbsp;
-          <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-      </div>
-    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
-
   <igx-column
     field="id"
     header="Идентификатор"
@@ -69,7 +55,7 @@
     field="birthDate"
     header="Дата на раждане"
     [sortable]="true"
-    [dataType]="'number'"
+    [dataType]="'date'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -98,7 +84,7 @@
   </igx-column> -->
 
   <igx-column
-    field="firstName"
+    field="firstname"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -109,7 +95,7 @@
   </igx-column>
 
   <igx-column
-    field="surName"
+    field="surname"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
@@ -120,7 +106,7 @@
   </igx-column>
 
   <igx-column
-    field="familyName"
+    field="familyname"
     header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"
@@ -138,6 +124,13 @@
     [pinned]="true"
   >
     <ng-template igxCell let-cell="cell">
+      <button
+        igxButton="icon"
+        [title]="'Заличи'"
+        (click)="openDestructionConfirmationDialog(cell.rowData.id)"
+      >
+        <nb-icon pack="fa" icon="trash"></nb-icon>
+      </button>
       <a
         [title]="'Преглед'"
         [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
@@ -152,4 +145,15 @@
       </a>
     </ng-template>
   </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
 </igx-grid>

@@ -21,9 +21,10 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public new async Task<IActionResult> GetAll(ODataQueryOptions<FbbcGridDTO> aQueryOptions)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<FbbcGridDTO> aQueryOptions, string statusId)
         {
-            return await base.GetAll(aQueryOptions);
+            var result = await this._fbbcService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
+            return Ok(result);
         }
 
         [HttpGet("getAll")]
@@ -104,6 +105,13 @@ namespace MJ_CAIS.Web.Controllers
             }
 
             return contentType;
+        }
+
+        [HttpPut("{aId}/change-status/{statusId}")]
+        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        {
+            await this._fbbcService.ChangeStatusAsync(aId, statusId);
+            return Ok();
         }
     }
 }
