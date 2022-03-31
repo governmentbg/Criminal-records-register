@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
+import {
+  ActivatedRoute,
+  Router,
+} from "@angular/router";
+import { GenderConstants } from "../../../@core/constants/gender.constants";
 import { IsinDataService } from "./_data/isin-data.service";
 import { IsinDataModel } from "./_models/isin-data.model";
 
@@ -11,7 +15,7 @@ import { IsinDataModel } from "./_models/isin-data.model";
 export class IsinDataFormComponent implements OnInit {
   constructor(
     private service: IsinDataService,
-     private route: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router
   ) {}
   public model: IsinDataModel;
@@ -20,10 +24,13 @@ export class IsinDataFormComponent implements OnInit {
     let id = this.route.snapshot.params["ID"];
     this.service.get(id).subscribe((response) => {
       this.model = response;
+
+      this.model.sex =
+        GenderConstants.allData.find((g) => g.id == response.sex)?.name ?? null;
     });
   }
 
-  public onCancelFunction(){
+  public onCancelFunction() {
     let backUrl = "pages/isin-new";
     this.router.navigateByUrl(backUrl);
   }
