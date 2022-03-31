@@ -24,14 +24,14 @@ import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bu
 import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 import { MatMenuModule } from "@angular/material/menu";
-import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
+import { EcrisReqWaitingFormComponent } from "./ecris/ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
-import { FbbcForDestructionOverviewComponent } from './fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component';
-import { OffenceCategoryDialogComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component';
-import { IsinNewOverviewComponent } from './isin/isin-data-overview/isin-new-overview/isin-new-overview.component';
-import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form.component';
+import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
+import { OffenceCategoryDialogComponent } from "./bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component";
+import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
+import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
 
 @NgModule({
   imports: [
@@ -60,7 +60,7 @@ import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form.comp
     BulletinActiveOverviewComponent,
     BulletinForDestructionOverviewComponent,
     BulletinForRehabilitationOverviewComponent,
-    EcrisMessageFormComponent,
+    EcrisReqWaitingFormComponent,
     InternalRequestOverviewComponent,
     EcrisReqWaitingOverviewComponent,
     InternalRequestFormComponent,

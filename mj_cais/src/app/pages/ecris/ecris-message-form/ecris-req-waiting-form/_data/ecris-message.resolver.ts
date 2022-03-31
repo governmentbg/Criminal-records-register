@@ -5,11 +5,11 @@ import {
   ActivatedRouteSnapshot,
 } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
-import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
-import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
-import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { BulletinGridModel } from "../../../bulletin/bulletin-overview/_models/bulletin-grid.model";
-import { FbbcGridModel } from "../../../fbbc/fbbc-overview/models/fbbc-grid.model";
+import { BaseResolverData } from "../../../../../@core/models/common/base-resolver.data";
+import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
+import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
+import { BulletinGridModel } from "../../../../bulletin/bulletin-overview/_models/bulletin-grid.model";
+import { FbbcGridModel } from "../../../../fbbc/fbbc-overview/models/fbbc-grid.model";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
 import { EcrisMessageService } from "./ecris-message.service";
 

@@ -1,17 +1,17 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { EcrisMessageResolverData } from "./_data/ecris-message.resolver";
 import { EcrisMessageService } from "./_data/ecris-message.service";
 import { EcrisMessageForm } from "./_models/ecris-message.form";
 import { EcrisMessageModel } from "./_models/ecris-message.model";
 
 @Component({
-  selector: "cais-ecris-message-form",
-  templateUrl: "./ecris-message-form.component.html",
-  styleUrls: ["./ecris-message-form.component.scss"],
+  selector: "cais-ecris-req-waiting-form",
+  templateUrl: "./ecris-req-waiting-form.component.html",
+  styleUrls: ["./ecris-req-waiting-form.component.scss"],
 })
-export class EcrisMessageFormComponent
+export class EcrisReqWaitingFormComponent
   extends CrudForm<
     EcrisMessageModel,
     EcrisMessageForm,

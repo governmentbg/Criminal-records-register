@@ -14,8 +14,8 @@ import { BulletinNewEissOverviewComponent } from "./bulletin/bulletin-overview/b
 import { BulletinActiveOverviewComponent } from "./bulletin/bulletin-overview/bulletin-active-overview/bulletin-active-overview.component";
 import { BulletinForDestructionOverviewComponent } from "./bulletin/bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
-import { EcrisMessageFormComponent } from "./ecris/ecris-message-form/ecris-message-form.component";
-import { EcrisMessageResolver } from "./ecris/ecris-message-form/_data/ecris-message.resolver";
+import { EcrisReqWaitingFormComponent } from "./ecris/ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
+import { EcrisMessageResolver } from "./ecris/ecris-message-form/ecris-req-waiting-form/_data/ecris-message.resolver";
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { InternalRequestResolver } from "./internal-request/internal-request-form/_data/internal-request.resolver";
@@ -148,21 +148,21 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
-        path: "ecris-messages/create",
-        component: EcrisMessageFormComponent,
+        path: "ecris-req-waiting/create",
+        component: EcrisReqWaitingFormComponent,
         resolve: { dbData: EcrisMessageResolver },
         // canActivate: [AuthGuard],
       },
       {
-        path: "ecris-messages/edit/:ID",
-        component: EcrisMessageFormComponent,
+        path: "ecris-req-waiting/edit/:ID",
+        component: EcrisReqWaitingFormComponent,
         resolve: { dbData: EcrisMessageResolver },
         data: { edit: true },
         // canActivate: [AuthGuard],
       },
       {
-        path: "ecris-messages/preview/:ID",
-        component: EcrisMessageFormComponent,
+        path: "ecris-req-waiting/preview/:ID",
+        component: EcrisReqWaitingFormComponent,
         resolve: { dbData: EcrisMessageResolver },
         data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
