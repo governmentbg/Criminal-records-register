@@ -9,5 +9,6 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string status);
         Task<IgPageResult<IsinBulletinGridDTO>> SelectIsinBulletinAllWithPaginationAsync(ODataQueryOptions<IsinBulletinGridDTO> aQueryOptions);
+        Task SelectBulletinAsync(string aInDto, string bulletinId);
     }
 }

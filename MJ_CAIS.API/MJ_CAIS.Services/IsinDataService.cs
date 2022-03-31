@@ -44,6 +44,25 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
+        public async Task SelectBulletinAsync(string aInDto, string bulletinId)
+        {
+            var dbContext = _isinDataRepository.GetDbContext();
+            var hasBulletin = await dbContext.BBulletins
+               .AnyAsync(x => x.Id == bulletinId);
+
+            if (!hasBulletin)
+                throw new ArgumentException($"Bulletin with id: {bulletinId} is missing");
+
+            var isinData = await dbContext.EIsinData
+               .FirstOrDefaultAsync(x => x.Id == aInDto);
+
+            if (isinData == null)
+                throw new ArgumentException($"Isin message with id: {aInDto} is missing");
+
+            isinData.Status = IsinDataConstants.Status.Identified;
+            isinData.BulletinId = bulletinId;
+            await dbContext.SaveChangesAsync();
+        }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {

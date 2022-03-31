@@ -2,6 +2,7 @@
 {
     public class BulletinConstants
     {
+        // todo: да се организират по-добре всички константи? като енъми?
         public static class Status
         {
             public const string NewEISS = "NewEISS"; // Нов зареден от ЕИСС

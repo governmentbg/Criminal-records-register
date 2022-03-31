@@ -38,5 +38,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._isinDataService.SelectIsinBulletinAllWithPaginationAsync(aQueryOptions);
             return Ok(result);
         }
+
+        [HttpPost("{aId}/select-bulletin/{bulletinId}")]
+        public async Task<IActionResult> SelectBulletin(string aId, string bulletinId)
+        {
+            await this._isinDataService.SelectBulletinAsync(aId, bulletinId);
+            return Ok();
+        }
     }
 }

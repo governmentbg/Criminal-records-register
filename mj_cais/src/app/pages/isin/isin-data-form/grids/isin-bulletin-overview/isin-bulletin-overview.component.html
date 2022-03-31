@@ -171,11 +171,18 @@
     width="10%"
   >
     <ng-template igxCell let-cell="cell">
-      <a
+      <button
+        igxButton="icon"
         [title]="'Избери'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+        (click)="selectBulletin(cell.rowData.id)"
       >
         <nb-icon pack="fa" icon="check"></nb-icon>
+      </button>
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
     </ng-template>
   </igx-column>

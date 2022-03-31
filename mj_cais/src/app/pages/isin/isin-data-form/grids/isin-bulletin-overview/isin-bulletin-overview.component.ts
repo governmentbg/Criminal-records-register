@@ -24,4 +24,23 @@ export class IsinBulletinOverviewComponent extends RemoteGridWithStatePersistanc
   ngOnInit() {
     super.ngOnInit();
   }
+
+  selectBulletin(bulletinId: string) {
+    let id = this.activatedRoute.snapshot.params["ID"];
+    this.service.selectBulletin(id, bulletinId).subscribe(
+      (res) => {
+        this.toastr.showToast("success", "Успешно идентифицирано съобщение");
+       // todo: navigate to ?
+      },
+
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Възникна грешка при избор на бюлетин:",
+          errorText
+        );
+      }
+    );
+  }
 }
