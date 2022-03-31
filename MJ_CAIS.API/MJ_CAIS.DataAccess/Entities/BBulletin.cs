@@ -15,6 +15,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BSanctions = new HashSet<BSanction>();
             DDocuments = new HashSet<DDocument>();
             EIsinData = new HashSet<EIsinDatum>();
+            EWebRequests = new HashSet<EWebRequest>();
         }
 
         public decimal? Version { get; set; }
@@ -102,5 +103,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BSanction> BSanctions { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EIsinDatum> EIsinData { get; set; }
+        public virtual ICollection<EWebRequest> EWebRequests { get; set; }
     }
 }

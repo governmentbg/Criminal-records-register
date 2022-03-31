@@ -5,11 +5,6 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class EIsinMsg : BaseEntity
     {
-        public EIsinMsg()
-        {
-            EIsinData = new HashSet<EIsinDatum>();
-        }
-
         public DateTime? MsgDatetime { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
@@ -20,7 +15,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? ResponseContent { get; set; }
         public string? Identifier { get; set; }
         public string? ApplicationId { get; set; }
-
-        public virtual ICollection<EIsinDatum> EIsinData { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 }

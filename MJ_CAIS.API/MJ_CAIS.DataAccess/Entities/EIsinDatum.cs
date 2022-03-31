@@ -32,11 +32,15 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CaseTypeId { get; set; }
         public string? CaseAuthCode { get; set; }
         public string? CaseAuthName { get; set; }
-        public string? IsinMsgId { get; set; }
+        public string? WebRequestId { get; set; }
         public string? BulletinId { get; set; }
         public string? Status { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
-        public virtual EIsinMsg? IsinMsg { get; set; }
+        public virtual EWebRequest? WebRequest { get; set; }
     }
 }

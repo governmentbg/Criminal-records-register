@@ -31,6 +31,7 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew
 import { FbbcForDestructionOverviewComponent } from './fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component';
 import { OffenceCategoryDialogComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component';
 import { IsinNewOverviewComponent } from './isin/isin-data-overview/isin-new-overview/isin-new-overview.component';
+import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form.component';
 
 @NgModule({
   imports: [
@@ -66,6 +67,7 @@ import { IsinNewOverviewComponent } from './isin/isin-data-overview/isin-new-ove
     FbbcForDestructionOverviewComponent,
     OffenceCategoryDialogComponent,
     IsinNewOverviewComponent,
+    IsinDataFormComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

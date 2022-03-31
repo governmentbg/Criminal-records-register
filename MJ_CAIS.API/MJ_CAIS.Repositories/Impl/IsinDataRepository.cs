@@ -11,10 +11,19 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public override IQueryable<EIsinDatum> SelectAllAsync()
-        {
-            return _dbContext.EIsinData.AsNoTracking()
-                .Include(x => x.IsinMsg);
-        }
+        // todo: remove
+        //public override IQueryable<EIsinDatum> SelectAllAsync()
+        //{ 
+        //    return _dbContext.EIsinData.AsNoTracking()
+        //        .Include(x => x.IsinMsg);
+        //}
+
+        //public override async Task<EIsinDatum> SelectAsync(string id)
+        //{
+        //    return await _dbContext.EIsinData
+        //        .AsNoTracking()
+        //        .Include(x => x.IsinMsg)
+        //        .FirstOrDefaultAsync(x => x.Id == id);
+        //}
     }
 }

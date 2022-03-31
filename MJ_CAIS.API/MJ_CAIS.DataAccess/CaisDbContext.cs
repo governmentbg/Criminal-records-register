@@ -48,6 +48,9 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisMsgStatus> EEcrisMsgStatuses { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
         public virtual DbSet<EIsinMsg> EIsinMsgs { get; set; } = null!;
+        public virtual DbSet<ERegixCache> ERegixCaches { get; set; } = null!;
+        public virtual DbSet<EWebRequest> EWebRequests { get; set; } = null!;
+        public virtual DbSet<EWebService> EWebServices { get; set; } = null!;
         public virtual DbSet<Fbbc> Fbbcs { get; set; } = null!;
         public virtual DbSet<FbbcDocType> FbbcDocTypes { get; set; } = null!;
         public virtual DbSet<FbbcSanctType> FbbcSanctTypes { get; set; } = null!;
@@ -1487,6 +1490,12 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("BULLETIN_ID");
 
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.Descr).HasColumnName("DESCR");
 
                 entity.Property(e => e.DocContentId)
@@ -1532,6 +1541,12 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("PERSON_ID");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
 
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.DDocuments)
@@ -1820,7 +1835,7 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("E_ISIN_DATA");
 
-                entity.HasIndex(e => e.IsinMsgId, "XIF1E_ISIN_DATA");
+                entity.HasIndex(e => e.WebRequestId, "XIF1E_ISIN_DATA");
 
                 entity.HasIndex(e => e.BulletinId, "XIF2E_ISIN_DATA");
 
@@ -1891,6 +1906,12 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("COUNTRY2_NAME");
 
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.DecisionAuthCode)
                     .HasMaxLength(18)
                     .IsUnicode(false)
@@ -1936,11 +1957,6 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("IDENTIFIER_TYPE");
 
-                entity.Property(e => e.IsinMsgId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ISIN_MSG_ID");
-
                 entity.Property(e => e.SanctionEndDate)
                     .HasColumnType("DATE")
                     .HasColumnName("SANCTION_END_DATE");
@@ -1963,15 +1979,26 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME");
 
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.WebRequestId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("WEB_REQUEST_ID");
+
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.EIsinData)
                     .HasForeignKey(d => d.BulletinId)
                     .HasConstraintName("FK_E_ISIN_DATA_B_BULLETINS");
 
-                entity.HasOne(d => d.IsinMsg)
+                entity.HasOne(d => d.WebRequest)
                     .WithMany(p => p.EIsinData)
-                    .HasForeignKey(d => d.IsinMsgId)
-                    .HasConstraintName("FK_E_ISIN_DATA_E_ISIN_MSGS");
+                    .HasForeignKey(d => d.WebRequestId)
+                    .HasConstraintName("FK_E_ISIN_DATA_E_WEB_REQUESTS");
             });
 
             modelBuilder.Entity<EIsinMsg>(entity =>
@@ -1989,6 +2016,12 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("APPLICATION_ID");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
 
                 entity.Property(e => e.ErrorCode).HasColumnName("ERROR_CODE");
 
@@ -2023,6 +2056,203 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.ToDate)
                     .HasColumnType("DATE")
                     .HasColumnName("TO_DATE");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+            });
+
+            modelBuilder.Entity<ERegixCache>(entity =>
+            {
+                entity.ToTable("E_REGIX_CACHE");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(100)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.ExecutionDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("EXECUTION_DATE");
+
+                entity.Property(e => e.Familyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILYNAME");
+
+                entity.Property(e => e.Firstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FIRSTNAME");
+
+                entity.Property(e => e.RequestXml)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("REQUEST_XML");
+
+                entity.Property(e => e.ResponseXml)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("RESPONSE_XML");
+
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(200)
+                    .HasColumnName("SURNAME");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.WebServiceName)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("WEB_SERVICE_NAME");
+            });
+
+            modelBuilder.Entity<EWebRequest>(entity =>
+            {
+                entity.ToTable("E_WEB_REQUESTS");
+
+                entity.HasIndex(e => e.BulletinId, "XIF1E_WEB_REQUESTS");
+
+                entity.HasIndex(e => e.ApplicationId, "XIF2E_WEB_REQUESTS");
+
+                entity.HasIndex(e => e.EcrisMsgId, "XIF3E_WEB_REQUESTS");
+
+                entity.HasIndex(e => e.WebServiceId, "XIF4E_WEB_REQUESTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.ApiServiceCallId)
+                    .HasMaxLength(100)
+                    .HasColumnName("API_SERVICE_CALL_ID");
+
+                entity.Property(e => e.ApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("APPLICATION_ID");
+
+                entity.Property(e => e.Attempts)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ATTEMPTS");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.CallContext)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("CALL_CONTEXT");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.EcrisMsgId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ECRIS_MSG_ID");
+
+                entity.Property(e => e.Error).HasColumnName("ERROR");
+
+                entity.Property(e => e.ExecutionDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("EXECUTION_DATE");
+
+                entity.Property(e => e.HasError)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.IsFromCache)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("IS_FROM_CACHE");
+
+                entity.Property(e => e.RemoteAddress)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("REMOTE_ADDRESS");
+
+                entity.Property(e => e.RequestXml)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("REQUEST_XML");
+
+                entity.Property(e => e.ResponseXml)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("RESPONSE_XML");
+
+                entity.Property(e => e.StackTrace)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("STACK_TRACE");
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.WebServiceId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("WEB_SERVICE_ID");
+
+                entity.HasOne(d => d.Bulletin)
+                    .WithMany(p => p.EWebRequests)
+                    .HasForeignKey(d => d.BulletinId)
+                    .HasConstraintName("FK_E_WEB_REQUESTS_B_BULLETINS");
+
+                entity.HasOne(d => d.EcrisMsg)
+                    .WithMany(p => p.EWebRequests)
+                    .HasForeignKey(d => d.EcrisMsgId)
+                    .HasConstraintName("FK_E_WEB_REQUESTS_E_ECRIS_MESS");
+
+                entity.HasOne(d => d.WebService)
+                    .WithMany(p => p.EWebRequests)
+                    .HasForeignKey(d => d.WebServiceId)
+                    .HasConstraintName("FK_E_WEB_REQUESTS_E_WEB_SERVIC");
+            });
+
+            modelBuilder.Entity<EWebService>(entity =>
+            {
+                entity.ToTable("E_WEB_SERVICES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.TypeCode)
+                    .HasMaxLength(200)
+                    .HasColumnName("TYPE_CODE");
+
+                entity.Property(e => e.WebServiceName)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("WEB_SERVICE_NAME");
             });
 
             modelBuilder.Entity<Fbbc>(entity =>
