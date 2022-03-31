@@ -31,5 +31,12 @@ namespace MJ_CAIS.Web.Controllers
         {
             return await base.Get(aId);
         }
+
+        [HttpGet("bulletins")]
+        public async Task<IActionResult> GetAllBulletins(ODataQueryOptions<IsinBulletinGridDTO> aQueryOptions)
+        {
+            var result = await this._isinDataService.SelectIsinBulletinAllWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
     }
 }

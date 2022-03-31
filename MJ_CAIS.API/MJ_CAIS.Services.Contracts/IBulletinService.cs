@@ -1,7 +1,7 @@
-using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services.Contracts
 {

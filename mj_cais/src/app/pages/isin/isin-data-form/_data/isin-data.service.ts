@@ -7,7 +7,7 @@ import { IsinDataModel } from "../_models/isin-data.model";
 @Injectable({
   providedIn: "root",
 })
-export class IsinDataService {
+export class IsinDataService  {
   constructor(private http: HttpClient) {}
 
   public get(id: string): Observable<IsinDataModel> {
