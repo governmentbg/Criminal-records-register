@@ -32,6 +32,7 @@ import { FbbcForDestructionOverviewComponent } from './fbbc/fbbc-overview/fbbc-f
 import { OffenceCategoryDialogComponent } from './bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component';
 import { IsinNewOverviewComponent } from './isin/isin-data-overview/isin-new-overview/isin-new-overview.component';
 import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form.component';
+import { FbbcDestructedOverviewComponent } from './fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form.comp
     OffenceCategoryDialogComponent,
     IsinNewOverviewComponent,
     IsinDataFormComponent,
+    FbbcDestructedOverviewComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

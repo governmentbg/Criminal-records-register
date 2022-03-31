@@ -2,12 +2,14 @@ export class FbbcGridModel {
   public id: string = null;
   public receiveDate: Date = null;
   public egn: string = null;
-  public birthDate: number = null;
+  public birthDate: Date = null;
   public birthCityId: string = null;
   public birthCountryId: string = null;
-  public firstName: string = null;
-  public surName: string = null;
-  public familyName: string = null;
+  public firstname: string = null;
+  public surname: string = null;
+  public familyname: string = null;
+  public docTypeId: string = null;
+  public destroyedDate: Date = null;
 
   constructor(init?: Partial<FbbcGridModel>) {
     if (init) {
@@ -17,9 +19,11 @@ export class FbbcGridModel {
       this.birthDate = init.birthDate ?? null;
       this.birthCityId = init.birthCityId ?? null;
       this.birthCountryId = init.birthCountryId ?? null;
-      this.firstName = init.firstName ?? null;
-      this.surName = init.surName ?? null;
-      this.familyName = init.familyName ?? null;
+      this.firstname = init.firstname ?? null;
+      this.surname = init.surname ?? null;
+      this.familyname = init.familyname ?? null;
+      this.docTypeId = init.docTypeId ?? null;
+      this.destroyedDate = init.destroyedDate ?? null;
     }
   }
 }

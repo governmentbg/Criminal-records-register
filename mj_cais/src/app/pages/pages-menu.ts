@@ -75,6 +75,7 @@ export class PagesMenu {
           },
           {
             title: "Заличени",
+            link: "/pages/fbbcs-destructed",
           },
         ],
       },
