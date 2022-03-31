@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Services.Contracts.Utils;
+using Microsoft.AspNet.OData.Query;
 
 namespace MJ_CAIS.Services
 {
@@ -25,6 +27,18 @@ namespace MJ_CAIS.Services
         {
             return false;
         }
+
+        public virtual async Task<IgPageResult<FbbcGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<FbbcGridDTO> aQueryOptions, string statusId)
+        {
+            var entityQuery = this.GetSelectAllQueriable().Where(x => x.StatusCode == statusId);
+            var baseQuery = entityQuery.ProjectTo<FbbcGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<FbbcGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
+        }
+
+
 
         public async Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId)
         {
@@ -110,6 +124,21 @@ namespace MJ_CAIS.Services
                 DocumentContent = document.DocContent.Content,
                 MimeType = document.DocContent.MimeType
             };
+        }
+
+        public async Task ChangeStatusAsync(string aInDto, string statusId)
+        {
+            var dbContext = _fbbcRepository.GetDbContext();
+            var fbbc = await dbContext.Fbbcs
+               .FirstOrDefaultAsync(x => x.Id == aInDto);
+
+            if (fbbc == null)
+            {
+                throw new ArgumentException($"Fbbc with id: {aInDto} is missing");
+            }
+            
+            fbbc.StatusCode = statusId;
+            await dbContext.SaveChangesAsync();
         }
     }
 }

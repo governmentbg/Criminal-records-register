@@ -24,8 +24,9 @@ import { FbbcActiveOverviewComponent } from "./fbbc/fbbc-overview/fbbc-active-ov
 import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
 import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
 import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
-import { EcrisIdentificationFormComponent } from "./ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component";
 import { EcrisIdentificationResolver } from "./ecris/ecris-message-form/ecris-identification-form/_data/ecris-identification.resolver";
+import { EcrisIdentificationFormComponent } from "./ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component";
+import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component";
 
 const routes: Routes = [
   {
@@ -117,6 +118,11 @@ const routes: Routes = [
       {
         path: "fbbcs-for-destruction",
         component: FbbcForDestructionOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "fbbcs-destructed",
+        component: FbbcDestructedOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

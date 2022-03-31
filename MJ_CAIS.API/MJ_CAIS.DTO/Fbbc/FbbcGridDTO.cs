@@ -10,6 +10,7 @@ namespace MJ_CAIS.DTO.Fbbc
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
-
+        public string? DocTypeId { get; set; }
+        public DateTime? DestroyedDate { get; set; }
     }
 }

@@ -1,6 +1,3 @@
-<!-- <tl-linear-progress
-  [visible]="this.remoteService.isLoading"
-></tl-linear-progress> -->
 <igx-grid
   #grid
   igxGridState
@@ -14,26 +11,14 @@
   (onSortingDone)="sortingDone($event)"
   (onFilteringDone)="filteringDone($event)"
   (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
   [allowFiltering]="true"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Актуални сведения</igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <a
-          nbButton
-          matRipple
-          [status]="'success'"
-          [routerLink]="['/pages/fbbcs/create']"
-        >
-          Добавяне &nbsp;
-          <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-      </div>
-    </igx-grid-toolbar-actions>
+    <igx-grid-toolbar-title>Бюлетини</igx-grid-toolbar-title>
   </igx-grid-toolbar>
 
   <igx-column
@@ -49,17 +34,22 @@
   </igx-column>
 
   <igx-column
-    field="receiveDate"
-    header="Дата на получаване"
+    field="bulletinType"
+    header="Тип"
     [sortable]="true"
-    [dataType]="'date'"
+    [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
 
-  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="registrationNumber"
+    header="Номер на бюлетин"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
@@ -69,16 +59,17 @@
     field="birthDate"
     header="Дата на раждане"
     [sortable]="true"
-    [dataType]="'date'"
+    [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
-
-  <!-- <igx-column
-    field="birthCityId"
-    header="Град"
+  <igx-column
+    field="identifier"
+    header="ЕГН/ЛНЧ/ЛН"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -86,19 +77,31 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
+
   <igx-column
-    field="birthCountryId"
-    header="Месторождение (държава)"
+    field="nationalities"
+    header="Гражданство"
     [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
-  </igx-column> -->
+  </igx-column>
 
   <igx-column
-    field="firstname"
+    field="birthPlace"
+    header="Месторождение"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="personName"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -107,10 +110,19 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
   <igx-column
-    field="surname"
-    header="Презиме"
+    field="decisionType"
+    header="Акт-вид"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="decisionNumber"
+    header="Акт-номер"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -120,8 +132,20 @@
   </igx-column>
 
   <igx-column
-    field="familyname"
-    header="Фамилия"
+    field="decisionDate"
+    header="Акт-дата"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="caseNumber"
+    header="Дело-номер"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -129,38 +153,41 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
   <igx-column
-  field="docTypeId"
-  header="Източник"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
-
+    field="decisionAuthName"
+    header="Съд"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
   <igx-column
-    width="150px"
     header=""
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    width="10%"
   >
     <ng-template igxCell let-cell="cell">
       <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
+        [title]="'Избери'"
+        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
       >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
+        <nb-icon pack="fa" icon="check"></nb-icon>
       </a>
     </ng-template>
   </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
 </igx-grid>

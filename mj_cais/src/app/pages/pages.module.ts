@@ -26,13 +26,15 @@ import { BulletinForRehabilitationOverviewComponent } from "./bulletin/bulletin-
 import { MatMenuModule } from "@angular/material/menu";
 import { EcrisReqWaitingFormComponent } from "./ecris/ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
 import { InternalRequestOverviewComponent } from "./internal-request/internal-request-overview/internal-request-overview.component";
+import { EcrisIdentificationFormComponent } from "./ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component";
 import { InternalRequestFormComponent } from "./internal-request/internal-request-form/internal-request-form.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
 import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
 import { OffenceCategoryDialogComponent } from "./bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component";
 import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
 import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
-import { EcrisIdentificationFormComponent } from './ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component';
+import { IsinBulletinOverviewComponent } from "./isin/isin-data-form/grids/isin-bulletin-overview/isin-bulletin-overview.component";
+import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component";
 
 @NgModule({
   imports: [
@@ -64,12 +66,14 @@ import { EcrisIdentificationFormComponent } from './ecris/ecris-message-form/ecr
     EcrisReqWaitingFormComponent,
     InternalRequestOverviewComponent,
     EcrisReqWaitingOverviewComponent,
+    EcrisIdentificationFormComponent,
     InternalRequestFormComponent,
     FbbcForDestructionOverviewComponent,
     OffenceCategoryDialogComponent,
     IsinNewOverviewComponent,
     IsinDataFormComponent,
-    EcrisIdentificationFormComponent,
+    IsinBulletinOverviewComponent,
+    FbbcDestructedOverviewComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

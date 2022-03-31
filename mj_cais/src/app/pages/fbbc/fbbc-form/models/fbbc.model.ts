@@ -14,8 +14,8 @@ export class FbbcModel {
   public birthCityId: string = null;
   public birtyCountryDescr: string = null;
   public birthCountryId: string = null;
-  public birthDate: number = null;
-  public birthDatePrec: number = null;
+  public birthDate: Date = null;
+  public birthDatePrec: string = null;
   public offenceStartDate: Date = null;
   public offenceEndDate: Date = null;
   public annotation: string = null;

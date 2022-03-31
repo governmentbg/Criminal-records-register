@@ -20,22 +20,8 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Актуални сведения</igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <a
-          nbButton
-          matRipple
-          [status]="'success'"
-          [routerLink]="['/pages/fbbcs/create']"
-        >
-          Добавяне &nbsp;
-          <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-      </div>
-    </igx-grid-toolbar-actions>
+    <igx-grid-toolbar-title>Заличени</igx-grid-toolbar-title>
   </igx-grid-toolbar>
-
   <igx-column
     field="id"
     header="Идентификатор"
@@ -49,8 +35,8 @@
   </igx-column>
 
   <igx-column
-    field="receiveDate"
-    header="Дата на получаване"
+    field="destroyedDate"
+    header="Дата на заличаване"
     [sortable]="true"
     [dataType]="'date'"
   >
@@ -131,17 +117,6 @@
   </igx-column>
 
   <igx-column
-  field="docTypeId"
-  header="Източник"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
-
-  <igx-column
     width="150px"
     header=""
     [sortable]="false"
@@ -155,12 +130,17 @@
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
     </ng-template>
   </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
 </igx-grid>

@@ -239,7 +239,7 @@ namespace MJ_CAIS.Services
 
             if (bulletin.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) && bulletin.BirthDate.HasValue)
             {
-                bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);              
+                bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);
                 bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));
             }
             else if (bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78À) && bulletin.DecisionFinalDate.HasValue)
