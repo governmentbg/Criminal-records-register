@@ -20,6 +20,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
              .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name));
 
             CreateMap<BBulletin, BulletinPersonInfoModelDTO>()
+                .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.RegistrationNumber))
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.BirthCountry.Name))
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.BirthCity.Name))

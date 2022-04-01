@@ -66,7 +66,6 @@ export class BulletinFormComponent
 
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = "pages/bulletins";
     this.setDisplayTitle("бюлетин");
   }
 

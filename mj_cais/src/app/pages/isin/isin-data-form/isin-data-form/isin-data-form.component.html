@@ -1,0 +1,197 @@
+<ng-container *ngIf="model">
+  <div class="inner-card-header">Съобщение</div>
+  <div class="inner-card-body">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Получено на: </span>
+          <span>
+            {{ model.msgDateTime | date }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Стаус: </span>
+          <span> Новопостъпил и неразпознат </span>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Имена: </span>
+          <span>
+            {{ model.firstName }} {{ model.surName }} {{ model.familyName }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЕГН/ЛНЧ: </span>
+          <span>
+            {{ model.identifier }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Дата на раждане: </span>
+          <span>
+            {{ model.birthDate | date }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Пол: </span>
+          <span>
+            {{ model.sex }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Гражданство: </span>
+          <span> {{ model.country1Name }}, {{ model.country2Name }} </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Месторождение: </span>
+          <span>
+            {{ model.birthPlace }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="cais-display-form-group">
+      <div class="label">Акт</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Вид: </span>
+          <span> {{ model.decisionType }} </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Номер: </span>
+          <span>
+            {{ model.decisionNumber }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Дата: </span>
+          <span>
+            {{ model.decisionDate | date }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Влиза в сила от: </span>
+          <span>
+            {{ model.decisionFinalDate | date }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Издаден от: </span>
+          <span>
+            {{ model.decisionAuthName }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="cais-display-form-group">
+      <div class="label">Дело</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Вид: </span>
+          <span> {{ model.caseType }} </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Номер: </span>
+          <span>
+            {{ model.caseNumber }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Година: </span>
+          <span>
+            {{ model.caseYear }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Съд: </span>
+          <span>
+            {{ model.caseAuthName }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="cais-display-form-group">
+      <div class="label">Присъда</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Правно основание: </span>
+          <span> ............ </span>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Съдържание и бележки: </span>
+          <span> ............ </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cais-display-form-group">
+      <div class="label">Наказание</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Нач. дата на наказание: </span>
+          <span> {{ model.sanctionStartDate | date }} </span>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Крайна дата на наказание: </span>
+          <span class="font-weight-bold">
+            {{ model.sanctionEndDate | date }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

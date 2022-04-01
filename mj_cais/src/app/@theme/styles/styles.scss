@@ -99,7 +99,7 @@
 
 /*#endregion date time styles*/
 
-.cais-lookup{
+.cais-lookup {
   width: calc(100vw - 10%);
   height: 90vh;
 }
@@ -108,8 +108,31 @@
   display: flex;
   align-items: center;
 
-  .label{
-      padding-right: 5px;
-      font-size: 14px !important;
+  .label {
+    padding-right: 5px;
+    font-size: 14px !important;
   }
 }
+
+/*#region card in display forms*/
+
+.inner-card-header {
+  padding: 0.6rem 0.5rem;
+  border-top: 1px solid #edf1f7;
+  font-family: Open Sans, sans-serif;
+  font-weight: 700;
+  line-height: 1.5rem;
+  border-bottom-style: solid;
+  border-bottom-width: 0.15rem;
+  border-bottom-color: $primary;
+  margin-bottom: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.inner-card-body {
+  padding: 1rem;
+}
+
+/*#endregion card in display forms*/

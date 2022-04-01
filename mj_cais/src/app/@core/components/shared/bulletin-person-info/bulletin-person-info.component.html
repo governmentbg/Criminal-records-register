@@ -1,6 +1,10 @@
-<div class="bulletin-info-container">
-  <div class="font-weight-bold">Данни за лице</div>
-  <hr />
+<div class="inner-card-header">
+  <div class="float-left">Данни за лице</div>
+  <div class="float-rigth">
+    <button nbButton size="small">Преглед</button>
+  </div>
+</div>
+<div class="inner-card-body">
   <div class="row mb-3">
     <div class="col-md-4">
       <div class="row col-md-12 cais-display-form-group">
@@ -82,8 +86,10 @@
       </div>
     </div>
   </div>
-
-  <div class="font-weight-bold">Място на раждане</div>
+  <div class="cais-display-form-group">
+    <div class="label">Място на раждане</div>
+  </div>
+  <hr />
   <div class="row mb-3">
     <div class="col-md-4">
       <div class="row col-md-12 cais-display-form-group">
@@ -129,8 +135,10 @@
       </div>
     </div>
   </div>
-
-  <div class="font-weight-bold">Родители</div>
+  <div class="cais-display-form-group">
+    <div class="label">Родители</div>
+  </div>
+  <hr />
   <div class="row mb-3">
     <div class="col-md-4">
       <div class="row col-md-12 cais-display-form-group">
@@ -155,9 +163,20 @@
       </div>
     </div>
   </div>
-
-  <div class="font-weight-bold">Данни за бюлетин</div>
-  <hr />
+</div>
+<div class="inner-card-header">
+  <div class="float-left">Данни за бюлетин</div>
+  <div class="float-rigth">
+    <button
+      nbButton
+      size="small"
+      [routerLink]="['/pages/bulletins/preview', model.bulletinId]"
+    >
+      Преглед
+    </button>
+  </div>
+</div>
+<div class="inner-card-body">
   <div class="row mb-3">
     <div class="col-md-4">
       <div class="row col-md-12 cais-display-form-group">
@@ -191,13 +210,15 @@
     <div class="col-md-4">
       <div class="row col-md-12 cais-display-form-group">
         <span class="label">Акт(№/дата): </span>
-        <span> {{ model.decisionNumber }} /  {{ model.decisionDate | date }} </span>
+        <span>
+          {{ model.decisionNumber }} / {{ model.decisionDate | date }}
+        </span>
       </div>
     </div>
     <div class="col-md-4">
       <div class="row col-md-12 cais-display-form-group">
         <span class="label">Дело(№/дата): </span>
-        <span> {{ model.caseNumber }} /  {{ model.caseYear | date }} </span>
+        <span> {{ model.caseNumber }} / {{ model.caseYear | date }} </span>
       </div>
     </div>
   </div>

@@ -2,6 +2,7 @@
 {
     public class BulletinPersonInfoModelDTO
     {
+        public string BulletinId { get; set; }
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public string Familyname { get; set; }
