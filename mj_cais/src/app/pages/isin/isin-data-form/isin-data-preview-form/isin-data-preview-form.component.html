@@ -12,6 +12,18 @@
             <button
               nbButton
               matRipple
+              [status]="'success'"
+              type="button"
+              class="ml-2"
+              style="min-width: 100px"
+              [title]="'Маркирай като обработено'"
+              (click)="onMarkAsClosed()"
+            >
+              Маркирай като обработено
+            </button>
+            <button
+              nbButton
+              matRipple
               (click)="onCancelFunction()"
               type="button"
               class="ml-2"

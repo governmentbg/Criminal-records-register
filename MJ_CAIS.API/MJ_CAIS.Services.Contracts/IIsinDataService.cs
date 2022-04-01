@@ -11,5 +11,6 @@ namespace MJ_CAIS.Services.Contracts
         Task<IgPageResult<IsinBulletinGridDTO>> SelectIsinBulletinAllWithPaginationAsync(ODataQueryOptions<IsinBulletinGridDTO> aQueryOptions);
         Task SelectBulletinAsync(string aInDto, string bulletinId);
         Task<IsinDataPreviewDTO> SelectForPreviewAsync(string aIdDto);
+        Task CloseAsync(string aInDto);
     }
 }

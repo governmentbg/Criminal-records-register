@@ -25,7 +25,7 @@ export class IsinBulletinOverviewComponent extends RemoteGridWithStatePersistanc
     super.ngOnInit();
   }
 
-  selectBulletin(bulletinId: string) {
+  onSelectBulletin(bulletinId: string) {
     let id = this.activatedRoute.snapshot.params["ID"];
     this.service.selectBulletin(id, bulletinId).subscribe(
       (res) => {

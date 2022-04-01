@@ -92,6 +92,20 @@ namespace MJ_CAIS.Services
             return isin;
         }
 
+        public async Task CloseAsync(string aInDto)
+        {
+            var dbContext = _isinDataRepository.GetDbContext();
+           
+            var isinData = await dbContext.EIsinData
+               .FirstOrDefaultAsync(x => x.Id == aInDto);
+
+            if (isinData == null)
+                throw new ArgumentException($"Isin message with id: {aInDto} is missing");
+
+            isinData.Status = IsinDataConstants.Status.Closed;
+            await dbContext.SaveChangesAsync();
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;

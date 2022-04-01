@@ -156,31 +156,25 @@
     [pinned]="true"
     [width]="'5%'"
   >
-  <ng-template igxCell let-cell="cell">
-    <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
-      <nb-icon pack="fa" icon="bars"></nb-icon>
-    </a>
-    <mat-menu #menu="matMenu">
-      <button
-        mat-menu-item
-        [routerLink]="['/pages/isin-data/preview', cell.rowData.id]"
-      >
-        <span class="ml-1">Преглед на съобщение</span>
-      </button>
-      <button
-        mat-menu-item
-        [routerLink]="['/pages/', cell.rowData.id]"
-      >
-        <span class="ml-1">Редакция на съобщение</span>
-      </button>
-      <button
-        mat-menu-item
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.bulletinId]"
-      >
-        <span class="ml-1">Преглед на бюлетин</span>
-      </button>
-    </mat-menu>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
+        <nb-icon pack="fa" icon="bars"></nb-icon>
+      </a>
+      <mat-menu #menu="matMenu">
+        <button
+          mat-menu-item
+          [routerLink]="['/pages/isin-data/preview', cell.rowData.id]"
+        >
+          <span class="ml-1">Преглед на съобщение</span>
+        </button>
+        <button
+          mat-menu-item
+          [routerLink]="['/pages/bulletins/preview', cell.rowData.bulletinId]"
+        >
+          <span class="ml-1">Преглед на бюлетин</span>
+        </button>
+      </mat-menu>
+    </ng-template>
   </igx-column>
 
   <ng-template #pager let-grid>

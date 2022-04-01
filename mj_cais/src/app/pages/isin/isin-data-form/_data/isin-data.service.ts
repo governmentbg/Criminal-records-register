@@ -22,4 +22,11 @@ export class IsinDataService  {
       environment.apiUrl + `/isin-data/preview/${id}`
     );
   }
+
+  public markAsClosed(id: string){
+    return this.http.post<any>(
+      environment.apiUrl + `/isin-data/${id}/close/`,
+      []
+    );
+  }
 }

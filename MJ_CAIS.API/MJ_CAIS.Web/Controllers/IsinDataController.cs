@@ -57,5 +57,12 @@ namespace MJ_CAIS.Web.Controllers
             await this._isinDataService.SelectBulletinAsync(aId, bulletinId);
             return Ok();
         }
+
+        [HttpPost("{aId}/close")]
+        public async Task<IActionResult> Close(string aId)
+        {
+            await this._isinDataService.CloseAsync(aId);
+            return Ok();
+        }
     }
 }
