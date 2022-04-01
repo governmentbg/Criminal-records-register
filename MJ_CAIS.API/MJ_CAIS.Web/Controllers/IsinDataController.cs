@@ -32,6 +32,18 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("preview/{aId}")]
+        public async Task<IActionResult> GetForPreview(string aId)
+        {
+            var result = await this._isinDataService.SelectForPreviewAsync(aId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("bulletins")]
         public async Task<IActionResult> GetAllBulletins(ODataQueryOptions<IsinBulletinGridDTO> aQueryOptions)
         {

@@ -103,3 +103,13 @@
   width: calc(100vw - 10%);
   height: 90vh;
 }
+
+.cais-display-form-group {
+  display: flex;
+  align-items: center;
+
+  .label{
+      padding-right: 5px;
+      font-size: 14px !important;
+  }
+}

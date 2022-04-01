@@ -1,4 +1,4 @@
-﻿namespace MJ_CAIS.DTO.Bulletin
+﻿namespace MJ_CAIS.DTO.Shared
 {
     public class PersonAliasDTO
     {

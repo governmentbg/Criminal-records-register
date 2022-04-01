@@ -1,18 +1,15 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  ActivatedRoute,
-  Router,
-} from "@angular/router";
-import { GenderConstants } from "../../../@core/constants/gender.constants";
-import { IsinDataService } from "./_data/isin-data.service";
-import { IsinDataModel } from "./_models/isin-data.model";
+import { ActivatedRoute, Router } from "@angular/router";
+import { GenderConstants } from "../../../../@core/constants/gender.constants";
+import { IsinDataService } from "../_data/isin-data.service";
+import { IsinDataModel } from "../_models/isin-data.model";
 
 @Component({
-  selector: "cais-isin-data-form",
-  templateUrl: "./isin-data-form.component.html",
-  styleUrls: ["./isin-data-form.component.scss"],
+  selector: "cais-isin-data-select-bulletin-form",
+  templateUrl: "./isin-data-select-bulletin-form.component.html",
+  styleUrls: ["./isin-data-select-bulletin-form.component.scss"],
 })
-export class IsinDataFormComponent implements OnInit {
+export class IsinDataSelectBulletinFormComponent implements OnInit {
   constructor(
     private service: IsinDataService,
     private route: ActivatedRoute,

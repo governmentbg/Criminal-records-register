@@ -9,11 +9,11 @@ import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.servi
 import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/_models/bulletin-decision.model";
 import { BulletinDocumentModel } from "../tabs/bulletin-documents-form/_models/bulletin-document.model";
 import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/_models/bulletin-offence.model";
-import { BulletinPersonAliasModel } from "../_models/bulletin-person-alias.model";
 import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/_models/bulletin-sanction.model";
 import { BulletinModel } from "../_models/bulletin.model";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { BulletinTypeConstants } from "../_models/bulletin-type-constants";
+import { BulletinPersonAliasModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-alias.model";
 
 @Injectable({ providedIn: "root" })
 export class BulletinService extends CaisCrudService<BulletinModel, string> {

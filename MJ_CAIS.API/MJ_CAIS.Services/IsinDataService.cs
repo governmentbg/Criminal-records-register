@@ -5,6 +5,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.IsinData;
+using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -64,6 +65,33 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<IsinDataPreviewDTO> SelectForPreviewAsync(string aIdDto)
+        {
+            var isin = await SelectIsinDataAsync(aIdDto);
+
+            if (isin == null) return null;
+
+            var context = _isinDataRepository.GetDbContext();
+
+            var bulleint = await context.BBulletins.AsNoTracking()
+                 .Include(x => x.BirthCountry)
+                 .Include(x => x.BirthCity)
+                 .Include(x => x.BirthCity)
+                     .ThenInclude(x => x.Municipality)
+                         .ThenInclude(x => x.District)
+                 .Include(x => x.DecidingAuth)
+                 .Include(x => x.DecisionType)
+                 .Include(x => x.BPersNationalities)
+                     .ThenInclude(x => x.Country)
+                 .Include(x => x.BBullPersAliases)
+            .FirstOrDefaultAsync(x => x.Id == isin.BulletinId);
+
+            if(bulleint == null) return null;
+
+            isin.BulletinPersonInfo = mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
+            return isin;
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
@@ -104,7 +132,7 @@ namespace MJ_CAIS.Services
                    };
         }
 
-        private async Task<IsinDataDTO> SelectIsinDataAsync(string aId)
+        private async Task<IsinDataPreviewDTO> SelectIsinDataAsync(string aId)
         {
             var dbContext = _isinDataRepository.GetDbContext();
 
@@ -121,7 +149,7 @@ namespace MJ_CAIS.Services
                         into isinCaseLeft
                         from isinCase in isinCaseLeft.DefaultIfEmpty()
                         where isin.Id == aId
-                        select new IsinDataDTO
+                        select new IsinDataPreviewDTO
                         {
                             Id = isin.Id,
                             MsgDateTime = isinMessage.ExecutionDate,
@@ -147,6 +175,7 @@ namespace MJ_CAIS.Services
                             CaseAuthName = isin.CaseAuthName,
                             SanctionStartDate = isin.SanctionStartDate,
                             SanctionEndDate = isin.SanctionEndDate,
+                            BulletinId = isin.BulletinId,
                         };
 
             return await query.FirstOrDefaultAsync();

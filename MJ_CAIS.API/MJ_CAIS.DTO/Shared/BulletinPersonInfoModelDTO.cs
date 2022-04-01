@@ -1,6 +1,4 @@
-﻿using MJ_CAIS.DTO.Bulletin;
-
-namespace MJ_CAIS.DTO.InternalRequest
+﻿namespace MJ_CAIS.DTO.Shared
 {
     public class BulletinPersonInfoModelDTO
     {
@@ -11,7 +9,7 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string SurnameLat { get; set; }
         public string FamilynameLat { get; set; }
         public string Sex { get; set; }
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         public string Egn { get; set; }
         public string Lnch { get; set; }
         public string Ln { get; set; }
@@ -19,7 +17,7 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string DecisionTypeName { get; set; }
         public string DecidingAuthName { get; set; }
         public string DecisionNumber { get; set; }
-        public DateTime DecisionDate { get; set; }
+        public DateTime? DecisionDate { get; set; }
         public string CaseNumber { get; set; }
         public int CaseYear { get; set; }
         public string MotherFullname { get; set; }
@@ -30,6 +28,6 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string ForeignCountryAddress { get; set; }
         public string MunicipalityName { get; set; }
         public string Districtname { get; set; }
-        public List<PersonAliasDTO> PersonAliases { get; set; } = new List<PersonAliasDTO>();
+        public IEnumerable<PersonAliasDTO> PersonAliases { get; set; } = new List<PersonAliasDTO>();
     }
 }

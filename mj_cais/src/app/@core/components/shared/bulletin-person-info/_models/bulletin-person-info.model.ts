@@ -1,4 +1,4 @@
-import { BulletinPersonAliasModel } from "../../../bulletin/bulletin-form/_models/bulletin-person-alias.model";
+import { BulletinPersonAliasModel } from "./bulletin-person-alias.model";
 
 export class BulletinPersonInfoModel {
     public firstname: string;

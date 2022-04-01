@@ -14,6 +14,7 @@ namespace MJ_CAIS.DTO.IsinData
         public string? Country2Name { get; set; }
         public string? BirthCountryName { get; set; }
         public string? BirthPlace { get; set; }
+        public string? BulletinId { get; set; }
 
         #region јкт
 

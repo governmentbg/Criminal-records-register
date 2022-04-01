@@ -32,10 +32,12 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew
 import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
 import { OffenceCategoryDialogComponent } from "./bulletin/bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component";
 import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
-import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
 import { IsinBulletinOverviewComponent } from "./isin/isin-data-form/grids/isin-bulletin-overview/isin-bulletin-overview.component";
 import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component";
 import { IsinIdentifiedOverviewComponent } from './isin/isin-data-overview/isin-identified-overview/isin-identified-overview.component';
+import { IsinDataSelectBulletinFormComponent } from './isin/isin-data-form/isin-data-select-bulletin-form/isin-data-select-bulletin-form.component';
+import { IsinDataPreviewFormComponent } from './isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component';
+import { BulletinPersonInfoComponent } from "../@core/components/shared/bulletin-person-info/bulletin-person-info.component";
 
 @NgModule({
   imports: [
@@ -72,10 +74,12 @@ import { IsinIdentifiedOverviewComponent } from './isin/isin-data-overview/isin-
     FbbcForDestructionOverviewComponent,
     OffenceCategoryDialogComponent,
     IsinNewOverviewComponent,
-    IsinDataFormComponent,
     IsinBulletinOverviewComponent,
     FbbcDestructedOverviewComponent,
     IsinIdentifiedOverviewComponent,
+    IsinDataSelectBulletinFormComponent,
+    IsinDataPreviewFormComponent,
+    BulletinPersonInfoComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

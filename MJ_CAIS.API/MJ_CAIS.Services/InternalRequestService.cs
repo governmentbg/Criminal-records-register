@@ -7,6 +7,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
+using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -80,7 +81,7 @@ namespace MJ_CAIS.Services
                     .Include(x => x.Bulletin.DecisionType)
                     .Include(x => x.Bulletin.BPersNationalities)
                         .ThenInclude(x => x.Country)
-                    .Include(x=>x.Bulletin.BBullPersAliases)
+                    .Include(x => x.Bulletin.BBullPersAliases)
                     .Where(x => x.Id == aId)
                     .Select(x => x.Bulletin)
                     .FirstOrDefaultAsync();

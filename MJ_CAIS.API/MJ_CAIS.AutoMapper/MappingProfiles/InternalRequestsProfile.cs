@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
+using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {

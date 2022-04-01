@@ -23,11 +23,12 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris/ecris-message-overivew
 import { FbbcActiveOverviewComponent } from "./fbbc/fbbc-overview/fbbc-active-overview/fbbc-active-overview.component";
 import { FbbcForDestructionOverviewComponent } from "./fbbc/fbbc-overview/fbbc-fordestruction-overview/fbbc-fordestruction-overview.component";
 import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-overview/isin-new-overview.component";
-import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
 import { EcrisIdentificationResolver } from "./ecris/ecris-message-form/ecris-identification-form/_data/ecris-identification.resolver";
 import { EcrisIdentificationFormComponent } from "./ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component";
 import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component";
 import { IsinIdentifiedOverviewComponent } from "./isin/isin-data-overview/isin-identified-overview/isin-identified-overview.component";
+import { IsinDataSelectBulletinFormComponent } from "./isin/isin-data-form/isin-data-select-bulletin-form/isin-data-select-bulletin-form.component";
+import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component";
 
 const routes: Routes = [
   {
@@ -202,8 +203,13 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
+        path: "isin-data/select-bulletin/:ID",
+        component: IsinDataSelectBulletinFormComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
         path: "isin-data/preview/:ID",
-        component: IsinDataFormComponent,
+        component: IsinDataPreviewFormComponent,
         // canActivate: [AuthGuard],
       },
       {

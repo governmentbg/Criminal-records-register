@@ -1,8 +1,8 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../../../environments/environment";
+import { BulletinPersonInfoModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-info.model";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { BulletinPersonInfoModel } from "../_models/bulletin-person-info.model";
 import { InternalRequestModel } from "../_models/internal-request.model";
 
 @Injectable({

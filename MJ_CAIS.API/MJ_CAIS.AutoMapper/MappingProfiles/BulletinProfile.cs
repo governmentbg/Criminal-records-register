@@ -3,7 +3,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Common;
-using MJ_CAIS.DTO.OffenceCategory;
+using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -45,10 +45,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<BOffence, OffenceDTO>()
                .ForMember(d => d.EcrisOffCatName, opt => opt.MapFrom(src => src.EcrisOffCat.Name))
-               .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src => 
-                        new LookupDTO() {
-                            DisplayName = src.OffenceCat.Name, 
-                            Id = src.OffenceCatId 
+               .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src =>
+                        new LookupDTO()
+                        {
+                            DisplayName = src.OffenceCat.Name,
+                            Id = src.OffenceCatId
                         }))
                .ForMember(d => d.OffLvlComplName, opt => opt.MapFrom(src => src.OffLvlCompl.Name))
                .ForMember(d => d.OffLvlPartName, opt => opt.MapFrom(src => src.OffLvlPart.Name))

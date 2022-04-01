@@ -1,4 +1,5 @@
 ﻿using MJ_CAIS.DTO.Common;
+using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.DTO.Bulletin
 {
