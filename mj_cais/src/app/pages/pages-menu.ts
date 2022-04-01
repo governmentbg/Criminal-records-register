@@ -39,6 +39,10 @@ export class PagesMenu {
             link: "/pages/bulletins-new-eiss",
           },
           {
+            title: "За отразяване",
+            link: "/pages/isin-identified",
+          },
+          {
             title: "За унищожаване",
             link: "/pages/bulletins-for-destruction",
           },

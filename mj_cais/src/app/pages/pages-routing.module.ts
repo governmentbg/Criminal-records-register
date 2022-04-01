@@ -27,6 +27,7 @@ import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.comp
 import { EcrisIdentificationResolver } from "./ecris/ecris-message-form/ecris-identification-form/_data/ecris-identification.resolver";
 import { EcrisIdentificationFormComponent } from "./ecris/ecris-message-form/ecris-identification-form/ecris-identification-form.component";
 import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component";
+import { IsinIdentifiedOverviewComponent } from "./isin/isin-data-overview/isin-identified-overview/isin-identified-overview.component";
 
 const routes: Routes = [
   {
@@ -193,6 +194,11 @@ const routes: Routes = [
       {
         path: "isin-new",
         component: IsinNewOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "isin-identified",
+        component: IsinIdentifiedOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

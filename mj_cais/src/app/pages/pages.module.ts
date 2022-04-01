@@ -35,6 +35,7 @@ import { IsinNewOverviewComponent } from "./isin/isin-data-overview/isin-new-ove
 import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form.component";
 import { IsinBulletinOverviewComponent } from "./isin/isin-data-form/grids/isin-bulletin-overview/isin-bulletin-overview.component";
 import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destructed-overview/fbbc-destructed-overview.component";
+import { IsinIdentifiedOverviewComponent } from './isin/isin-data-overview/isin-identified-overview/isin-identified-overview.component';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destr
     IsinDataFormComponent,
     IsinBulletinOverviewComponent,
     FbbcDestructedOverviewComponent,
+    IsinIdentifiedOverviewComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })
