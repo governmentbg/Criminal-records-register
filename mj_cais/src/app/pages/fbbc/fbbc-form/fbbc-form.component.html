@@ -16,6 +16,7 @@
             [parentGroup]="fullForm.group"
             [inputName]="'docTypeId'"
             [items]="dbData.docTypeId"
+            [hidden]="!isForPreview && !isForEdit"
           >
           </cais-autocomplete>
         </div>
@@ -71,27 +72,18 @@
           ></cais-input>
         </div>
       </div>
-
+      <div class="font-weight-bold">Място на раждане</div>
+      <hr />
+      <cais-address-form [parentForm]="fullForm.address"></cais-address-form>
       <div class="row">
-        <div class="form-group col-md-4">
-          <cais-autocomplete
-            [label]="'Месторождение - град'"
-            [inputFormControl]="fullForm.birthCityId"
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'text'"
+            [label]="'Месторождение (свободен текст)'"
+            [inputFormControl]="fullForm.birthPlace"
             [parentGroup]="fullForm.group"
-            [inputName]="'birthCityId'"
-            [items]="dbData.cities"
-          >
-          </cais-autocomplete>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-autocomplete
-            [label]="'Месторождение - държава'"
-            [inputFormControl]="fullForm.birthCountryId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'birthCountryId'"
-            [items]="dbData.countries"
-          >
-          </cais-autocomplete>
+            [hidden]="fullForm.address.countryId.value !== bgCountryId"
+          ></cais-input>
         </div>
       </div>
 

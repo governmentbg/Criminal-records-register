@@ -10,8 +10,14 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public FbbcProfile()
         {
             CreateMap<Fbbc, FbbcGridDTO>();
-            CreateMap<FbbcDTO, Fbbc>();
-            CreateMap<Fbbc, FbbcDTO>();
+            CreateMap<FbbcDTO, Fbbc>()
+                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.CountryId))
+                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
+            CreateMap<Fbbc, FbbcDTO>()
+                .ForPath(d => d.Address.CountryId, opt => opt.MapFrom(src => src.BirthCountryId))
+                .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
+                .ForPath(d => d.Address.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
+                .ForPath(d => d.Address.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null));
             CreateMap<FbbcDocumentDTO, DDocument>()
              .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
              .ForMember(d => d.DocContent, opt => opt.Ignore());

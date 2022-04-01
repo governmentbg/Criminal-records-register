@@ -6,6 +6,8 @@ import { FbbcService } from "./data/fbbc.service";
 import { FbbcResolverData } from "./data/fbbc.resolver";
 import { FormGroup } from "@angular/forms";
 import { FbbcDocumentFormComponent } from "./grids/fbbc-document-form/fbbc-document-form.component";
+import { FbbcStatusTypeEnum } from "../fbbc-overview/data/fbbc-status-type.constants";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -20,6 +22,9 @@ export class FbbcFormComponent
     read: FbbcDocumentFormComponent,
   })
   public fbbcDocumentsForm: FbbcDocumentFormComponent;
+
+  public isForEdit: boolean = false;
+  public bgCountryId = CommonConstants.bgCountryId;
 
   constructor(service: FbbcService, public injector: Injector) {
     super(service, injector);
@@ -39,6 +44,7 @@ export class FbbcFormComponent
     this.fullForm = new FbbcForm();
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
+    this.isForEdit = this.activatedRoute.snapshot.data["edit"];
   }
 
   submitFunction = () => {

@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
 
 export class FbbcForm {
   public group: FormGroup;
@@ -47,6 +48,7 @@ export class FbbcForm {
   public destroyedDate: FormControl;
   public personId: FormControl;
   public version: FormControl;
+  public address: AddressForm;
 
   constructor() {
     this.id = new FormControl(null);
@@ -93,6 +95,7 @@ export class FbbcForm {
     this.destroyedDate = new FormControl(null);
     this.personId = new FormControl(null);
     this.version = new FormControl(null);
+    this.address = new AddressForm();
 
     this.group = new FormGroup({
       id: this.id,
@@ -139,6 +142,7 @@ export class FbbcForm {
       destroyedDate: this.destroyedDate,
       personId: this.personId,
       version: this.version,
+      address: this.address.group,
     });
   }
 }

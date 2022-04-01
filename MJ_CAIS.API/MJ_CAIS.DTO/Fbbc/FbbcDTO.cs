@@ -1,3 +1,5 @@
+using MJ_CAIS.DTO.Common;
+
 namespace MJ_CAIS.DTO.Fbbc
 {
     public class FbbcDTO : BaseDTO
@@ -47,5 +49,6 @@ namespace MJ_CAIS.DTO.Fbbc
         public DateTime? DestroyedDate { get; set; }
         public string? PersonId { get; set; }
         public decimal? Version { get; set; }
+        public AddressDTO Address { get; set; } = new AddressDTO();
     }
 }
