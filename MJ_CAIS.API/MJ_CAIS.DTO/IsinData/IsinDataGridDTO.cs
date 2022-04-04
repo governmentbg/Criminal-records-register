@@ -10,7 +10,9 @@ namespace MJ_CAIS.DTO.IsinData
         public string PersonName { get; set; }
         public string? DecisionInfo { get; set; }
         public string? CaseInfo { get; set; }
-        public DateTime? SanctionEndDate { get; set; }
+        public DateTime? SanctionEndDate { get; set; }  
+        public DateTime? SanctionStartDate { get; set; }
         public string? BulletinId { get; set; }
+        public string Status { get; set; }
     }
 }

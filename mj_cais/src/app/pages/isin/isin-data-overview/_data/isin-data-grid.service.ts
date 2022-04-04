@@ -16,6 +16,8 @@ export class IsinDataGridService extends CaisCrudService<
   }
 
   public updateUrlStatus(status: string) {
-    this.updateUrl(`${currentEndpoint}?status=${status}`);
+    let searchUrl =
+      status == null ? currentEndpoint : `${currentEndpoint}?status=${status}`;
+    this.updateUrl(searchUrl);
   }
 }

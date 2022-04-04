@@ -1,53 +1,25 @@
 <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
   <nb-card-header class="card-header-shadow">
-    <div class="d-flex" style="justify-content: space-between">
-      <div class="d-flex align-items-center">
-        <div style="font-weight: bold; font-size: 22px">{{ displayTitle }}</div>
+    <cais-card-header
+      [label]="displayTitle"
+      [onSaveFunction]="submitFunction"
+      [onCancelFunction]="globalCancelFunction"
+    >
+      <div>
+        <button
+          *ngIf="!isForPreview && showForUpdate"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="updateFunction()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Актуализирай
+        </button>
       </div>
-      <div class="d-flex">
-        <ng-content></ng-content>
-        <div>
-          <button
-            *ngIf="!isForPreview"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="submitFunction()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
-            Запази
-          </button>
-        </div>
-        <div>
-          <button
-            *ngIf="!isForPreview && showForUpdate"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="updateFunction()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
-            Актуализирай
-          </button>
-        </div>
-        <div>
-          <button
-            nbButton
-            matRipple
-            (click)="globalCancelFunction()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
-            {{ isForPreview ? "Назад" : "Отказ" }}
-          </button>
-        </div>
-      </div>
-    </div>
+    </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
@@ -825,9 +797,11 @@
           >
           </cais-bulletin-document-form>
         </nb-tab>
-
+        <nb-tab tabTitle="ИСИН">
+          <cais-bulletin-isin-form></cais-bulletin-isin-form>
+        </nb-tab>
         <nb-tab tabTitle="Одит">
-          <span>Content #9</span>
+          <span>Content #10</span>
         </nb-tab>
       </nb-tabset>
     </form>

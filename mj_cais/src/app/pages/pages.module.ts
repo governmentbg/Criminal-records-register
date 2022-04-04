@@ -39,6 +39,7 @@ import { IsinDataSelectBulletinFormComponent } from './isin/isin-data-form/isin-
 import { IsinDataPreviewFormComponent } from './isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component';
 import { BulletinPersonInfoComponent } from "../@core/components/shared/bulletin-person-info/bulletin-person-info.component";
 import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form/isin-data-form.component';
+import { BulletinIsinFormComponent } from './bulletin/bulletin-form/tabs/bulletin-isin-form/bulletin-isin-form.component';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form/isin
     IsinDataSelectBulletinFormComponent,
     IsinDataPreviewFormComponent,
     BulletinPersonInfoComponent,
-    IsinDataFormComponent
+    IsinDataFormComponent,
+    BulletinIsinFormComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

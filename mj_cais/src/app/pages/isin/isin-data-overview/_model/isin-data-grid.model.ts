@@ -9,6 +9,7 @@ export class IsinDataGridModel {
   public decisionInfo: string = null;
   public caseInfo: string = null;
   public sanctionEndDate: Date = null;
+  public sanctionStartDate: Date = null;
   public bulletinId: string = null;
 
   constructor(init?: Partial<IsinDataGridModel>) {
@@ -23,6 +24,7 @@ export class IsinDataGridModel {
       this.decisionInfo = init.decisionInfo ?? null;
       this.caseInfo = init.caseInfo ?? null;
       this.sanctionEndDate = init.sanctionEndDate ?? null;
+      this.sanctionStartDate = init.sanctionStartDate ?? null;
       this.bulletinId = init.bulletinId ?? null;
     }
   }

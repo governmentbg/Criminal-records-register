@@ -117,7 +117,7 @@ namespace MJ_CAIS.Services
         {
             var dbContext = _isinDataRepository.GetDbContext();
 
-            return from isin in dbContext.EIsinData.AsNoTracking()
+            var query = from isin in dbContext.EIsinData.AsNoTracking()
                    join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
                              into isinMessageLeft
                    from isinMessage in isinMessageLeft.DefaultIfEmpty()
@@ -129,8 +129,8 @@ namespace MJ_CAIS.Services
                    join caseTypes in dbContext.BCaseTypes.AsNoTracking() on isin.CaseTypeId equals caseTypes.Code
                    into isinCaseLeft
                    from isinCase in isinCaseLeft.DefaultIfEmpty()
-                   where isin.Status == status
-                   select new IsinDataGridDTO
+                   where (isin.Status == status && !string.IsNullOrEmpty(status)) || string.IsNullOrEmpty(status)  // tood: филтър на бюлетини по БС на потребителя
+                        select new IsinDataGridDTO
                    {
                        Id = isin.Id,
                        MsgDateTime = isinMessage.ExecutionDate,
@@ -142,8 +142,11 @@ namespace MJ_CAIS.Services
                        Identifier = isin.Identifier,
                        Nationalities = isin.Country1Name + " " + isin.Country2Name,
                        PersonName = isin.Firstname + " " + isin.Surname + " " + isin.Familyname,
-                       SanctionEndDate = isin.SanctionEndDate
+                       SanctionEndDate = isin.SanctionEndDate,
+                       SanctionStartDate = isin.SanctionStartDate,
                    };
+
+            return query;
         }
 
         private async Task<IsinDataPreviewDTO> SelectIsinDataAsync(string aId)
