@@ -22,7 +22,7 @@
         public static class Type
         {
             public const string ConvictionBulletin = "за съдимост";
-            public const string Bulletin78А = "по чл.78а";
+            public const string Bulletin78A = "по чл.78а";
             public const string Unspecified = "неопределен";
         }
     }

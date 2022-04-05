@@ -7,7 +7,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IIsinDataService : IBaseAsyncService<IsinDataDTO, IsinDataDTO, IsinDataGridDTO, EIsinDatum, string>
     {
-        Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string status);
+        Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string? status, string? bulletinId);
         Task<IgPageResult<IsinBulletinGridDTO>> SelectIsinBulletinAllWithPaginationAsync(ODataQueryOptions<IsinBulletinGridDTO> aQueryOptions);
         Task SelectBulletinAsync(string aInDto, string bulletinId);
         Task<IsinDataPreviewDTO> SelectForPreviewAsync(string aIdDto);

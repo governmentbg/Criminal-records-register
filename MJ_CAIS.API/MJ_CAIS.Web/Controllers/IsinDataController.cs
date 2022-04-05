@@ -20,9 +20,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string? status)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string? status, string? bulletinId)
         {
-            var result = await this._isinDataService.SelectAllWithPaginationAsync(aQueryOptions, status);
+            var result = await this._isinDataService.SelectAllWithPaginationAsync(aQueryOptions, status, bulletinId);
             return Ok(result);
         }
 

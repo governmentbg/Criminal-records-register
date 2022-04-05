@@ -1,6 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
 import { map, Observable, of } from "rxjs";
-import { environment } from "../../../../../environments/environment";
 import {
   PersonAliasCodeConstants,
   PersonAliasNameConstants,
@@ -22,26 +21,24 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
   }
 
   public getOffences(id: string): Observable<BulletinOffenceModel[]> {
-    return this.http.get<BulletinOffenceModel[]>(
-      environment.apiUrl + `/bulletins/${id}/offences`
-    );
+    return this.http.get<BulletinOffenceModel[]>(`${this.url}/${id}/offences`);
   }
 
   public getSanctions(id: string): Observable<BulletinSanctionModel[]> {
     return this.http.get<BulletinSanctionModel[]>(
-      environment.apiUrl + `/bulletins/${id}/sanctions`
+      `${this.url}/${id}/sanctions`
     );
   }
 
   public getDecisions(id: string): Observable<BulletinDecisionModel[]> {
     return this.http.get<BulletinDecisionModel[]>(
-      environment.apiUrl + `/bulletins/${id}/decisions`
+      `${this.url}/${id}/decisions`
     );
   }
 
   public getDocuments(id: string): Observable<BulletinDocumentModel[]> {
     return this.http.get<BulletinDocumentModel[]>(
-      environment.apiUrl + `/bulletins/${id}/documents`
+      `${this.url}/${id}/documents`
     );
   }
 
@@ -50,16 +47,13 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     model: BulletinDocumentModel
   ): Observable<any> {
     return this.http.post<BulletinDocumentModel>(
-      environment.apiUrl + `/bulletins/${bulletinId}/documents`,
+      `${this.url}/${bulletinId}/documents`,
       model
     );
   }
 
   public downloadDocument(bulletinId: string, documentId: string) {
-    let url =
-      environment.apiUrl +
-      `/bulletins/${bulletinId}/documents-download/` +
-      documentId;
+    let url = +`${this.url}/${bulletinId}/documents-download/` + documentId;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
@@ -69,9 +63,7 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
 
   public getPersonAlias(id: string): Observable<BulletinPersonAliasModel[]> {
     return this.http
-      .get<BulletinPersonAliasModel[]>(
-        environment.apiUrl + `/bulletins/${id}/person-alias`
-      )
+      .get<BulletinPersonAliasModel[]>(`${this.url}/${id}/person-alias`)
       .pipe(
         map((items: BulletinPersonAliasModel[]) => {
           return items.map((item) => {

@@ -227,7 +227,7 @@ namespace MJ_CAIS.Services
                 bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);
                 bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));
             }
-            else if (bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78À) && bulletin.DecisionFinalDate.HasValue)
+            else if (bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) && bulletin.DecisionFinalDate.HasValue)
             {
                 bulletin.DeleteDate = bulletin.DecisionFinalDate.Value.AddYears(15);
                 bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));

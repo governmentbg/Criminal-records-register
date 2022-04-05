@@ -22,9 +22,9 @@ namespace MJ_CAIS.Services
             _isinDataRepository = isinDataRepository;
         }
 
-        public virtual async Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string status)
+        public virtual async Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string? status, string? bulletinId)
         {
-            var entityQuery = SelectAll(status);
+            var entityQuery = SelectAll(status, bulletinId);
             var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
             var pageResult = new IgPageResult<IsinDataGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
@@ -83,7 +83,7 @@ namespace MJ_CAIS.Services
                  .Include(x => x.BBullPersAliases)
             .FirstOrDefaultAsync(x => x.Id == isin.BulletinId);
 
-            if(bulleint == null) return null;
+            if (bulleint == null) return null;
 
             isin.BulletinPersonInfo = mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
             return isin;
@@ -108,36 +108,39 @@ namespace MJ_CAIS.Services
 
         #region Helper methods 
 
-        private IQueryable<IsinDataGridDTO> SelectAll(string status)
+        private IQueryable<IsinDataGridDTO> SelectAll(string? status, string? bulletinId)
         {
             var query = from isin in dbContext.EIsinData.AsNoTracking()
-                   join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
-                             into isinMessageLeft
-                   from isinMessage in isinMessageLeft.DefaultIfEmpty()
+                        join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
+                                  into isinMessageLeft
+                        from isinMessage in isinMessageLeft.DefaultIfEmpty()
 
-                   join decisionTypes in dbContext.BDecisionTypes.AsNoTracking() on isin.DecisionTypeId equals decisionTypes.Code
-                               into isinDecisionLeft
-                   from isinDecision in isinDecisionLeft.DefaultIfEmpty()
+                        join decisionTypes in dbContext.BDecisionTypes.AsNoTracking() on isin.DecisionTypeId equals decisionTypes.Code
+                                    into isinDecisionLeft
+                        from isinDecision in isinDecisionLeft.DefaultIfEmpty()
 
-                   join caseTypes in dbContext.BCaseTypes.AsNoTracking() on isin.CaseTypeId equals caseTypes.Code
-                   into isinCaseLeft
-                   from isinCase in isinCaseLeft.DefaultIfEmpty()
-                   where (isin.Status == status && !string.IsNullOrEmpty(status)) || string.IsNullOrEmpty(status)  // tood: филтър на бюлетини по БС на потребителя
+                        join caseTypes in dbContext.BCaseTypes.AsNoTracking() on isin.CaseTypeId equals caseTypes.Code
+                        into isinCaseLeft
+                        from isinCase in isinCaseLeft.DefaultIfEmpty()
+
+                        where (isin.BulletinId == bulletinId && !string.IsNullOrEmpty(bulletinId)) || // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                           (isin.Status == status && !string.IsNullOrEmpty(status)) //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+
                         select new IsinDataGridDTO
-                   {
-                       Id = isin.Id,
-                       MsgDateTime = isinMessage.ExecutionDate,
-                       BirthCountryName = isin.BirthcountryName,
-                       BirthDate = isin.Birthdate,
-                       BulletinId = isin.BulletinId,
-                       CaseInfo = isinCase.Name + " " + isin.CaseNumber + " " + isin.CaseYear + " " + isin.CaseAuthName,
-                       DecisionInfo = isinDecision.Name + " " + isin.DecisionNumber + " " + isin.DecisionDate + " " + isin.DecisionAuthName,
-                       Identifier = isin.Identifier,
-                       Nationalities = isin.Country1Name + " " + isin.Country2Name,
-                       PersonName = isin.Firstname + " " + isin.Surname + " " + isin.Familyname,
-                       SanctionEndDate = isin.SanctionEndDate,
-                       SanctionStartDate = isin.SanctionStartDate,
-                   };
+                        {
+                            Id = isin.Id,
+                            MsgDateTime = isinMessage.ExecutionDate,
+                            BirthCountryName = isin.BirthcountryName,
+                            BirthDate = isin.Birthdate,
+                            BulletinId = isin.BulletinId,
+                            CaseInfo = isinCase.Name + " " + isin.CaseNumber + " " + isin.CaseYear + " " + isin.CaseAuthName,
+                            DecisionInfo = isinDecision.Name + " " + isin.DecisionNumber + " " + isin.DecisionDate + " " + isin.DecisionAuthName,
+                            Identifier = isin.Identifier,
+                            Nationalities = isin.Country1Name + " " + isin.Country2Name,
+                            PersonName = isin.Firstname + " " + isin.Surname + " " + isin.Familyname,
+                            SanctionEndDate = isin.SanctionEndDate,
+                            SanctionStartDate = isin.SanctionStartDate,
+                        };
 
             return query;
         }
@@ -200,14 +203,13 @@ namespace MJ_CAIS.Services
                    .Select(x => new IsinBulletinGridDTO
                    {
                        Id = x.Id,
-                       BulletinType = x.BulletinType == nameof(BulletinConstants.Type.Bulletin78А) ?
-                           BulletinConstants.Type.Bulletin78А :
-                                       (x.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
-                                       BulletinConstants.Type.Unspecified),
+                       BulletinType = x.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
+                            (x.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
+                            BulletinConstants.Type.Unspecified),
                        RegistrationNumber = x.RegistrationNumber,
                        BirthDate = x.BirthDate,
                        Identifier = x.Egn + " " + x.Lnch + " " + x.Ln,
-                       Nationalities = x.BPersNationalities.Select(x=>x.Country.Name), // todo: filter
+                       Nationalities = x.BPersNationalities.Select(x => x.Country.Name), // todo: filter
                        PersonName = x.Firstname + " " + x.Surname + " " + x.Familyname,
                        DecisionType = x.DecisionType.Name,
                        DecisionNumber = x.DecisionNumber,

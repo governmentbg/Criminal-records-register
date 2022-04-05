@@ -42,6 +42,7 @@ export class FbbcFormComponent
 
   ngOnInit(): void {
     this.fullForm = new FbbcForm();
+    this.fullForm.docTypeId.disable();
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
