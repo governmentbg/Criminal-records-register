@@ -1,5 +1,7 @@
 export class EcrisMessageGridModel {
   public id: string = null;
+  public docTypeId: string = null;
+  public docTypeName: string = null;
   public identifier: string = null;
   public ecrisIdentifier: string = null;
   public msgTimestamp: Date = null;
@@ -18,6 +20,8 @@ export class EcrisMessageGridModel {
   constructor(init?: Partial<EcrisMessageGridModel>) {
     if (init) {
       this.id = init.id ?? null;
+      this.docTypeId = init.docTypeId ?? null;
+      this.docTypeName = init.docTypeName ?? null;
       this.identifier = init.identifier ?? null;
       this.ecrisIdentifier = init.ecrisIdentifier ?? null;
       this.msgTimestamp = init.msgTimestamp ?? null;

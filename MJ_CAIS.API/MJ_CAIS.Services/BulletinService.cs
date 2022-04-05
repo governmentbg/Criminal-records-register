@@ -48,7 +48,6 @@ namespace MJ_CAIS.Services
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
             var bulletin = await dbContext.BBulletins
                .FirstOrDefaultAsync(x => x.Id == aInDto);
 
@@ -61,8 +60,6 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
-
             var offances = dbContext.BOffences
                 .AsNoTracking()
                 .Include(x => x.OffenceCat)
@@ -80,8 +77,6 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
-
             var result = dbContext.BSanctions
                 .AsNoTracking()
                 .Include(x => x.EcrisSanctCateg)
@@ -97,8 +92,6 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<DecisionDTO>> GetDecisionsByBulletinIdAsync(string aId)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
-
             var result = dbContext.BDecisions
                 .AsNoTracking()
                 .Include(x => x.DecisionAuth)
@@ -112,8 +105,6 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<DocumentDTO>> GetDocumentsByBulletinIdAsync(string aId)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
-
             var result = dbContext.DDocuments
                 .AsNoTracking()
                 .Include(x => x.DocType)
@@ -132,7 +123,6 @@ namespace MJ_CAIS.Services
             if (aInDto.DocumentContent?.Length == 0)
                 throw new ArgumentNullException("Documetn is empty");
 
-            var context = _bulletinRepository.GetDbContext();
             var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
                 Guid.NewGuid().ToString() :
                 aInDto.DocumentContentId;
@@ -148,16 +138,14 @@ namespace MJ_CAIS.Services
                 MimeType = aInDto.MimeType
             };
 
-            context.Add(document);
-            context.Add(documentContent);
-            await context.SaveChangesAsync();
+            dbContext.Add(document);
+            dbContext.Add(documentContent);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteComplaintDocumentAsync(string documentId)
         {
-            var context = _bulletinRepository.GetDbContext();
-
-            var document = await context.Set<DDocument>().AsNoTracking()
+            var document = await dbContext.Set<DDocument>().AsNoTracking()
                 .Include(x => x.DocContent)
                 .FirstOrDefaultAsync(x => x.Id == documentId);
 
@@ -172,14 +160,12 @@ namespace MJ_CAIS.Services
                 document.DocContent.EntityState = EntityStateEnum.Deleted;
             }
 
-            await context.SaveEntityAsync(document, true);
+            await dbContext.SaveEntityAsync(document, true);
         }
 
         public async Task<DocumentDTO> GetDocumentContentAsync(string documentId)
         {
-            var context = _bulletinRepository.GetDbContext();
-
-            var document = await context.Set<DDocument>().AsNoTracking()
+            var document = await dbContext.Set<DDocument>().AsNoTracking()
                 .Include(x => x.DocContent)
                 .FirstOrDefaultAsync(x => x.Id == documentId);
 
@@ -195,8 +181,6 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
-
             var result = dbContext.BBullPersAliases
                 .AsNoTracking()
                 .Where(x => x.BulletinId == aId)

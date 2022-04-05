@@ -21,7 +21,7 @@ namespace MJ_CAIS.Services
         where TEntity : BaseEntity
         where TContext : DbContext
     {
-        private const int MAX_PAGE_SIZE = 100;
+        private const int MAX_PAGE_SIZE = 25;
 
         private const char QUESTION_MARK = '?';
         private const char QUERY_OPTIONS_SEPARATOR = '&';
@@ -29,6 +29,7 @@ namespace MJ_CAIS.Services
         private const string QUERY_OPTIONS_SKIP = "$skip";
         private const string QUERY_OPTIONS_TOP = "$top";
 
+        protected TContext dbContext;
         protected IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository;
         protected IMapper mapper;
         protected IConfigurationProvider mapperConfiguration => mapper.ConfigurationProvider;
@@ -38,15 +39,13 @@ namespace MJ_CAIS.Services
         /// </summary>
         protected Dictionary<string, string> dtoFieldsToEntityFields;
 
-        protected FilterQueryValidator queryValidator;
-
         protected ODataValidationSettings validationSettings;
 
-        protected BaseAsyncService(IMapper mapper, IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository, FilterQueryValidator queryValidator = null)
+        protected BaseAsyncService(IMapper mapper, IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository)
         {
             this.mapper = mapper;
             this.baseAsyncRepository = baseAsyncRepository;
-            this.queryValidator = queryValidator ?? new CustomQueryValidator<TGridDTO>();
+            this.dbContext = baseAsyncRepository.GetDbContext();
             this.validationSettings = new ODataValidationSettings();
             this.dtoFieldsToEntityFields = new Dictionary<string, string>();
             this.PopulateDtoToEntityFieldsMapping();
@@ -88,7 +87,6 @@ namespace MJ_CAIS.Services
 
         public virtual async Task SaveEntityAsync(BaseEntity entity, bool applyToAllLevels = true)
         {
-            var dbContext = this.baseAsyncRepository.GetDbContext();
             await dbContext.SaveEntityAsync(entity, applyToAllLevels);
         }
 
@@ -225,7 +223,7 @@ namespace MJ_CAIS.Services
             }
 
             repoObj.EntityState = EntityStateEnum.Deleted;
-            await this.baseAsyncRepository.GetDbContext().SaveEntityAsync(repoObj);
+            await dbContext.SaveEntityAsync(repoObj);
         }
 
         /// <summary>
@@ -299,9 +297,10 @@ namespace MJ_CAIS.Services
 
         protected virtual async Task<IQueryable<T>> ApplyOData<T>(IQueryable<T> query, ODataQueryOptions<T> aQueryOptions)
         {
+            var queryValidator = new CustomQueryValidator<T>();
             if (aQueryOptions.Filter != null)
             {
-                this.queryValidator.Validate(aQueryOptions.Filter, this.validationSettings);
+                queryValidator.Validate(aQueryOptions.Filter, this.validationSettings);
             }
 
             IQueryable resultQuery;

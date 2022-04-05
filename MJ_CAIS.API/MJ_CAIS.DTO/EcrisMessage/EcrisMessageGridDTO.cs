@@ -2,6 +2,8 @@ namespace MJ_CAIS.DTO.EcrisMessage
 {
     public class EcrisMessageGridDTO : BaseDTO
     {
+        public string? DocTypeId { get; set; }
+        public string? DocTypeName { get; set; }
         public string? Identifier { get; set; }
         public string? EcrisIdentifier { get; set; }
         public DateTime? MsgTimestamp { get; set; }
@@ -15,6 +17,8 @@ namespace MJ_CAIS.DTO.EcrisMessage
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
         public string? Nationality1Code { get; set; }
+        public string? Nationality1Name { get; set; }
         public string? Nationality2Code { get; set; }
+        public string? Nationality2Name { get; set; }
     }
 }

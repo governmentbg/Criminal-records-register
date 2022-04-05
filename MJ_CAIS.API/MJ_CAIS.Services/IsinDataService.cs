@@ -47,7 +47,6 @@ namespace MJ_CAIS.Services
 
         public async Task SelectBulletinAsync(string aInDto, string bulletinId)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
             var hasBulletin = await dbContext.BBulletins
                .AnyAsync(x => x.Id == bulletinId);
 
@@ -71,9 +70,7 @@ namespace MJ_CAIS.Services
 
             if (isin == null) return null;
 
-            var context = _isinDataRepository.GetDbContext();
-
-            var bulleint = await context.BBulletins.AsNoTracking()
+            var bulleint = await dbContext.BBulletins.AsNoTracking()
                  .Include(x => x.BirthCountry)
                  .Include(x => x.BirthCity)
                  .Include(x => x.BirthCity)
@@ -94,8 +91,6 @@ namespace MJ_CAIS.Services
 
         public async Task CloseAsync(string aInDto)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-           
             var isinData = await dbContext.EIsinData
                .FirstOrDefaultAsync(x => x.Id == aInDto);
 
@@ -115,8 +110,6 @@ namespace MJ_CAIS.Services
 
         private IQueryable<IsinDataGridDTO> SelectAll(string status)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             var query = from isin in dbContext.EIsinData.AsNoTracking()
                    join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
                              into isinMessageLeft
@@ -151,8 +144,6 @@ namespace MJ_CAIS.Services
 
         private async Task<IsinDataPreviewDTO> SelectIsinDataAsync(string aId)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             var query = from isin in dbContext.EIsinData.AsNoTracking()
                         join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
                                   into isinMessageLeft
@@ -200,8 +191,6 @@ namespace MJ_CAIS.Services
 
         private IQueryable<IsinBulletinGridDTO> SelectAllBulletin()
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             return dbContext.BBulletins.AsNoTracking()
                 .Include(x => x.DecidingAuth)
                 .Include(x => x.DecisionType)

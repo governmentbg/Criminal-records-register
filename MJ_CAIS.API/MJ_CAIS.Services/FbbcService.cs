@@ -42,8 +42,6 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId)
         {
-            var dbContext = _fbbcRepository.GetDbContext();
-
             var result = dbContext.DDocuments
                 .AsNoTracking()
                 .Include(x => x.DocType)
@@ -65,8 +63,7 @@ namespace MJ_CAIS.Services
             {
                 throw new ArgumentNullException("Documetn is empty");
             }
-                
-            var context = _fbbcRepository.GetDbContext();
+            
             var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
                 Guid.NewGuid().ToString() : aInDto.DocumentContentId;
 
@@ -81,16 +78,14 @@ namespace MJ_CAIS.Services
                 MimeType = aInDto.MimeType
             };
 
-            context.Add(document);
-            context.Add(documentContent);
-            await context.SaveChangesAsync();
+            dbContext.Add(document);
+            dbContext.Add(documentContent);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteDocumentAsync(string documentId)
         {
-            var context = _fbbcRepository.GetDbContext();
-
-            var document = await context.Set<DDocument>().AsNoTracking()
+            var document = await dbContext.Set<DDocument>().AsNoTracking()
                 .Include(x => x.DocContent)
                 .FirstOrDefaultAsync(x => x.Id == documentId);
 
@@ -105,14 +100,12 @@ namespace MJ_CAIS.Services
                 document.DocContent.EntityState = EntityStateEnum.Deleted;
             }
 
-            await context.SaveEntityAsync(document, true);
+            await dbContext.SaveEntityAsync(document, true);
         }
 
         public async Task<FbbcDocumentDTO> GetDocumentContentAsync(string documentId)
         {
-            var context = _fbbcRepository.GetDbContext();
-
-            var document = await context.Set<DDocument>().AsNoTracking()
+            var document = await dbContext.Set<DDocument>().AsNoTracking()
                 .Include(x => x.DocContent)
                 .FirstOrDefaultAsync(x => x.Id == documentId);
 
@@ -128,7 +121,6 @@ namespace MJ_CAIS.Services
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
-            var dbContext = _fbbcRepository.GetDbContext();
             var fbbc = await dbContext.Fbbcs
                .FirstOrDefaultAsync(x => x.Id == aInDto);
 

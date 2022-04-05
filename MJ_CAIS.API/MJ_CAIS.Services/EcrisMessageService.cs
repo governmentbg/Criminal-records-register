@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -35,8 +36,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<EcrisMessageGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
         {
-            var entityQuery = this.GetSelectAllQueriable().Where(x => x.EcrisMsgStatus == statusId);
-            var baseQuery = entityQuery.ProjectTo<EcrisMessageGridDTO>(mapperConfiguration);
+            var baseQuery = this.CustomGetAll().Where(x => x.EcrisMsgStatus == statusId);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<EcrisMessageGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
@@ -79,6 +79,60 @@ namespace MJ_CAIS.Services
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
+        }
+
+        private IQueryable<EcrisMessageGridDTO> CustomGetAll()
+        {
+            var result =
+                from ecrisMsg in this.dbContext.EEcrisMessages.AsNoTracking()
+                    
+                join ecrisMsgStatus in this.dbContext.EEcrisMsgStatuses.AsNoTracking()
+                    on ecrisMsg.EcrisMsgStatus equals ecrisMsgStatus.Code
+
+                join doc in this.dbContext.DDocuments.AsNoTracking()
+                    on ecrisMsg.Id equals doc.EcrisMsgId into doc_left
+                from doc in doc_left.DefaultIfEmpty()
+
+                join docType in this.dbContext.DDocTypes.AsNoTracking()
+                    on doc.DocTypeId equals docType.Id into docType_left
+                from docType in docType_left.DefaultIfEmpty()
+
+                join birthCountry in this.dbContext.GCountries.AsNoTracking()
+                    on ecrisMsg.BirthCountry equals birthCountry.Id into birthCountry_left
+                from birthCountry in birthCountry_left.DefaultIfEmpty()
+
+                join nationality1 in this.dbContext.GCountries.AsNoTracking()
+                    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
+                from nationality1 in nationality1_left.DefaultIfEmpty()
+
+                join nationality2 in this.dbContext.GCountries.AsNoTracking()
+                    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
+                from nationality2 in nationality2_left.DefaultIfEmpty()
+
+                select new EcrisMessageGridDTO
+                {
+                    Id = ecrisMsg.Id,
+                    DocTypeId = doc.DocTypeId,
+                    DocTypeName = docType.Name,
+                    Identifier = ecrisMsg.Identifier,
+                    EcrisIdentifier = ecrisMsg.EcrisIdentifier,
+                    MsgTimestamp = ecrisMsg.MsgTimestamp,
+                    EcrisMsgStatus = ecrisMsg.EcrisMsgStatus,
+                    EcrisMsgStatusName = ecrisMsgStatus.Name,
+                    BirthDate = ecrisMsg.BirthDate,
+                    BirthCountry = ecrisMsg.BirthCountry,
+                    BirthCountryName = birthCountry.Name,
+                    BirthCity = ecrisMsg.BirthCity,
+                    Firstname = ecrisMsg.Firstname,
+                    Surname = ecrisMsg.Surname,
+                    Familyname = ecrisMsg.Familyname,
+                    Nationality1Code = ecrisMsg.Nationality1Code,
+                    Nationality1Name = nationality1.Name,
+                    Nationality2Code = ecrisMsg.Nationality2Code,
+                    Nationality2Name = nationality2.Name,
+                };
+
+            return result;
         }
     }
 }
