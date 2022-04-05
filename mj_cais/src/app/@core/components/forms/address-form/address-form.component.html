@@ -1,14 +1,21 @@
 <div [formGroup]="parentForm.group">
   <div class="row">
     <div class="form-group col-md-3">
-      <cais-autocomplete
+
+      <!-- <cais-autocomplete
         [label]="'Държава'"
         [inputFormControl]="parentForm.countryId"
         [parentGroup]="parentForm.group"
         [inputName]="'countryId'"
         [(items)]="countries"
         (selectionChanged)="onCountryChanged($event)"
-      ></cais-autocomplete>
+      ></cais-autocomplete> -->
+      <cais-lookup
+      [label]="'Държава'"
+      [inputControl]="parentForm.country"
+      [parentGroup]="parentForm.country.group"
+      [openFunction]="openCountryDialog"
+    ></cais-lookup>
     </div>
 
     <div

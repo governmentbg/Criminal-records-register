@@ -2,7 +2,7 @@
 {
     public class AddressDTO
     {
-        public string? CountryId { get; set; }
+        public LookupDTO Country { get; set; } = new LookupDTO();
         public string? MunicipalityId { get; set; }
         public string? DistrictId { get; set; }
         public string? CityId { get; set; }

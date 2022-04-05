@@ -1,5 +1,8 @@
+using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.DTO.NomenclatureDetail;
+using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services.Contracts
 {
@@ -12,9 +15,13 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetCitiesByMunicipality(string municipalityId);
 
         IQueryable<BaseNomenclatureDTO> GetBulletinStatuses();
+
         IQueryable<BaseNomenclatureDTO> GetAllFbbcDocTypes();
+
         IQueryable<BaseNomenclatureDTO> GetAllFbbcSanctTypes();
 
         IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses();
+
+        Task<IgPageResult<CountryDTO>> GetCountriesAsync(ODataQueryOptions<CountryDTO> aQueryOptions);
     }
 }

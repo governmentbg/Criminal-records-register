@@ -41,5 +41,10 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.BReqStatuses.AsNoTracking();
         }
+
+        public IQueryable<GCountry> GetCountries()
+        {
+            return _dbContext.GCountries.AsNoTracking();
+        }
     }
 }

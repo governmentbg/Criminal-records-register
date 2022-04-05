@@ -63,7 +63,6 @@ export class BulletinOffencesFormComponent implements OnInit {
   }
 
   onAddOrUpdateBulletineOffenceRow() {
-    debugger;
     if (!this.bulletinOffenceForm.group.valid) {
       this.bulletinOffenceForm.group.markAllAsTouched();
       return;
@@ -114,7 +113,6 @@ export class BulletinOffencesFormComponent implements OnInit {
   //#region Offance Category
 
   public openOffenceCategoryDialog = () => {
-    debugger;
     this.dialogService
       .open(OffenceCategoryDialogComponent, CommonConstants.defaultDialogConfig)
       .onClose.subscribe(this.onSelectOffenceCategory);
@@ -132,7 +130,7 @@ export class BulletinOffencesFormComponent implements OnInit {
   //#endregion
 
   private updateOffPlaceObj(event) {
-    var selectedCountryId = event.rowData.offPlace.countryId;
+    var selectedCountryId = event.rowData.offPlace.country.id;
 
     var isBgCountry = selectedCountryId == CommonConstants.bgCountryId;
     if (!isBgCountry) {

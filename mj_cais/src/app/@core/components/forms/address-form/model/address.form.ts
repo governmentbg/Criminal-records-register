@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { LookupForm } from "../../inputs/lookup/models/lookup.form";
 import { AddressModel } from "./address.model";
 
 export class AddressForm {
@@ -7,29 +8,33 @@ export class AddressForm {
 
   public group: FormGroup;
 
-  public countryId: FormControl;
+  //public countryId: FormControl;
   public municipalityId: FormControl;
   public districtId: FormControl;
   public cityId: FormControl;
   public foreignCountryAddress: FormControl;
+  public country: LookupForm;
 
-  public mapFromAddressModel(address: AddressModel) {
-    this.countryId.setValue(address.countryId);
-    this.municipalityId.setValue(address.municipalityId);
-    this.districtId.setValue(address.districtId);
-    this.cityId.setValue(address.cityId);
-    this.foreignCountryAddress.setValue(address.foreignCountryAddress);
-  }
+  // public mapFromAddressModel(address: AddressModel) {
+  //   //this.countryId.setValue(address.countryId);
+  //   //this.country.setValue(address.country.id);
+  //   this.municipalityId.setValue(address.municipalityId);
+  //   this.districtId.setValue(address.districtId);
+  //   this.cityId.setValue(address.cityId);
+  //   this.foreignCountryAddress.setValue(address.foreignCountryAddress);
+  // }
 
   constructor() {
-    this.countryId = new FormControl(null, [Validators.required]);
+   // this.countryId = new FormControl(null, [Validators.required]);
+    this.country = new LookupForm(true);
     this.municipalityId = new FormControl(null, [Validators.required]);
     this.districtId = new FormControl(null, [Validators.required]);
     this.cityId = new FormControl(null, [Validators.required]);
     this.foreignCountryAddress = new FormControl(null, [Validators.required]);
 
     this.group = new FormGroup({
-      countryId: this.countryId,
+      //countryId: this.countryId,
+      country: this.country.group,
       districtId: this.districtId,
       municipalityId: this.municipalityId,
       cityId: this.cityId,

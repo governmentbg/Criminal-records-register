@@ -21,13 +21,14 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<BulletinDTO, BBulletin>()
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
-                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.CountryId))
+                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.Country.Id))
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
 
             CreateMap<BBulletin, BulletinDTO>()
                 .ForMember(d => d.CsAuthorityName, opt => opt.MapFrom(src => src.CsAuthority.Name))
                 .ForPath(d => d.Address.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
-                .ForPath(d => d.Address.CountryId, opt => opt.MapFrom(src => src.BirthCountryId))
+                .ForPath(d => d.Address.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
+                .ForPath(d => d.Address.Country.DisplayName, opt => opt.MapFrom(src => src.BirthCountry.Name))
                 .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
                 .ForPath(d => d.Address.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
                 .ForPath(d => d.Address.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
@@ -38,11 +39,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.OffenceCatId, opt => opt.MapFrom(src => src.OffenceCategory.Id))
                 .ForMember(d => d.EcrisOffCatId, opt => opt.MapFrom(src => src.EcrisOffCatId))
                 .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffPlace.ForeignCountryAddress))
-                .ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffPlace.CountryId))
+                .ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffPlace.Country.Id))
                 .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))
                 .ForMember(d => d.OffLvlComplId, opt => opt.MapFrom(src => src.OffLvlComplId))
-                .ForMember(d => d.OffLvlPartId, opt => opt.MapFrom(src => src.OffLvlPartId));
-
+                .ForMember(d => d.OffLvlPartId, opt => opt.MapFrom(src => src.OffLvlPartId))
+                .ForMember(d => d.OffPlaceCountry, opt => opt.Ignore());
+            
             CreateMap<BOffence, OffenceDTO>()
                .ForMember(d => d.EcrisOffCatName, opt => opt.MapFrom(src => src.EcrisOffCat.Name))
                .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src =>
@@ -60,7 +62,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                     new AddressDTO
                     {
                         CityId = src.OffPlaceCityId,
-                        CountryId = src.OffPlaceCountryId,
+                        Country =
+                         new LookupDTO
+                         {
+                             Id = src.OffPlaceCountryId,
+                             DisplayName = src.OffPlaceCountry.Name
+                         },
                         DistrictId = src.OffPlaceCity.Municipality.DistrictId,
                         MunicipalityId = src.OffPlaceCity.MunicipalityId,
                         ForeignCountryAddress = src.OffPlaceDescr

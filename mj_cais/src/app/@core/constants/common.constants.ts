@@ -12,6 +12,11 @@ export class CommonConstants {
     return "CO-00-100-BGR";
   }
 
+  static get bgCountryName(){
+    return "България";
+  }
+
+
   public static defaultDialogConfig = {
     closeOnBackdropClick: false,
   };

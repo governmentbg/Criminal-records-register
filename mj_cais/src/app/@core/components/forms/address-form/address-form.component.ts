@@ -8,11 +8,14 @@ import {
 } from "@angular/core";
 import { Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { NbDialogService } from "@nebular/theme";
 import { forkJoin, of } from "rxjs";
 import { CommonConstants } from "../../../constants/common.constants";
 import { BaseNomenclatureModel } from "../../../models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../services/rest/nomenclature.service";
 import { AutocompleteComponent } from "../inputs/autocomplete/autocomplete.component";
+import { CountryDialogComponent } from "./dialog/country-dialog/country-dialog.component";
+import { CountryGridModel } from "./dialog/_models/country-grid.model";
 import { AddressForm } from "./model/address.form";
 
 @Component({
@@ -23,10 +26,10 @@ import { AddressForm } from "./model/address.form";
 export class AddressFormComponent implements OnInit {
   constructor(
     private nomenclatureService: NomenclatureService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialogService: NbDialogService
   ) {}
 
-  public countries: BaseNomenclatureModel[] = [];
   public districts: BaseNomenclatureModel[] = [];
   public municipalities: BaseNomenclatureModel[] = [];
   public cities: BaseNomenclatureModel[] = [];
@@ -48,6 +51,7 @@ export class AddressFormComponent implements OnInit {
   @Input() parentForm: AddressForm;
 
   private bgCountryId = CommonConstants.bgCountryId;
+  private bgCountryName = CommonConstants.bgCountryName;
 
   ngOnInit(): void {
     let districtId = this.parentForm.districtId.value ?? 0;
@@ -68,26 +72,25 @@ export class AddressFormComponent implements OnInit {
     }
 
     forkJoin([
-      this.nomenclatureService.getCountries(),
       this.nomenclatureService.getDistricts(),
       munObservable,
       citiesObservable,
-    ]).subscribe(([countries, districts, municipalities, cities]) => {
-      this.nomenclatureService.saveCountries(countries);
+    ]).subscribe(([districts, municipalities, cities]) => {
       this.nomenclatureService.saveDistricts(districts);
-      this.countries = countries;
       this.districts = districts;
       this.municipalities = municipalities;
       this.cities = cities;
 
+      debugger;
       // Initial selected value
       if (
         (this.parentForm.group.touched &&
-          this.parentForm.countryId.value === null) ||
-        this.parentForm.countryId.value === null ||
-        this.parentForm.countryId.value == this.bgCountryId
+          this.parentForm.country.id.value === "") ||
+        this.parentForm.country.id.value === "" ||
+        this.parentForm.country.id.value == this.bgCountryId
       ) {
-        this.parentForm.countryId.setValue(this.bgCountryId);
+        this.parentForm.country.id.setValue(this.bgCountryId);
+        this.parentForm.country.displayName.setValue(this.bgCountryName);
         this.parentForm.setForNativeAddress();
       } else {
         this.parentForm.setForForeignAddress();
@@ -97,19 +100,6 @@ export class AddressFormComponent implements OnInit {
         this.parentForm.group.disable();
       }
     });
-  }
-
-  public onCountryChanged(countryId: string): void {
-    if (countryId == this.bgCountryId) {
-      this.nomenclatureService.getDistricts().subscribe((districts) => {
-        this.districtAutocomplete.autoControl.items = districts;
-      });
-      this.parentForm.setForNativeAddress();
-    } else {
-      this.parentForm.setForForeignAddress();
-    }
-
-    this.onCountrySelectionChanged.emit(countryId);
   }
 
   public async onDistrictChanged(value: string) {
@@ -158,4 +148,25 @@ export class AddressFormComponent implements OnInit {
       this.parentForm.cityId.setValidators([Validators.required]);
     });
   }
+
+  public openCountryDialog = () => {
+    this.dialogService
+      .open(CountryDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe(this.onSelectCountry);
+  };
+
+  public onSelectCountry = (item: CountryGridModel) => {
+    if (item) {
+      this.parentForm.country.setValue(item.id, item.name);
+
+      if (item.id == this.bgCountryId) {
+        this.nomenclatureService.getDistricts().subscribe((districts) => {
+          this.districtAutocomplete.autoControl.items = districts;
+        });
+        this.parentForm.setForNativeAddress();
+      } else {
+        this.parentForm.setForForeignAddress();
+      }
+    }
+  };
 }

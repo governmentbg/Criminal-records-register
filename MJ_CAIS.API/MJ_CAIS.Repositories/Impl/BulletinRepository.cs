@@ -22,6 +22,7 @@ namespace MJ_CAIS.Repositories.Impl
             var bulletin = await _dbContext.BBulletins
                .Include(x => x.BPersNationalities)
                .Include(x => x.CsAuthority)
+               .Include(x => x.BirthCountry)
                .Include(x => x.BirthCity)
                    .ThenInclude(x => x.Municipality)
                .AsNoTracking()

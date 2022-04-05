@@ -2,6 +2,7 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.DTO.NomenclatureDetail;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -21,6 +22,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
             CreateMap<BReqStatus, BaseNomenclatureDTO>()
                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
+            CreateMap<GCountry, CountryDTO>();
         }
     }
 }
