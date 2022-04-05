@@ -37,6 +37,18 @@
   </igx-column>
 
   <igx-column
+    field="docTypeName"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
     field="ecrisIdentifier"
     header="ECRIS Идентификатор"
     [sortable]="true"
@@ -50,7 +62,7 @@
 
   <igx-column
     field="identifier"
-    header="ЕГН"
+    header="Индетификатор"
     [sortable]="true"
     [dataType]="'string'"
     [hidden]="false"

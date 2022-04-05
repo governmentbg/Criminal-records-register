@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetSocialSecurityDataFromDeclarationsResponse">
+		<xs:annotation>
+			<xs:documentation>Справка с данни за осигурените лица от подадени декларации по Наредба Н-13 към Кодекса за социално осигуряване - резултат</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="SocialSecurityDataFromDeclarations" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SocialSecurityDataFromDeclaration" type="SocialSecurityDataFromDeclarationsResponseType" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="SocialSecurityDataFromDeclarationsResponseType">
+		<xs:sequence>
+			<xs:element name="DeclarationType" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Вид на декларацията</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonIdentifier" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатор на осигуреното лице (при избор на справката по осигурител);</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonLastNameAndInitials" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Инициали и фамилия на осигуреното лице (при избор на справката по осигурител);</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InsurerIdentifier" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатор на осигурител (при избор на справката за осигуреното лице)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InsurerName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на осигурител (при избор на справката за осигуреното лице)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InsurerAdress" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Адрес на осигурителя (при избор на справката за осигуреното лице)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Month" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Месец</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Year" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Година</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonType" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Вид осигурен</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalInsuredDays" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дни в осигуряване – общо</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DaysWorked" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Отработени дни</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LawEstablishedWorkHours" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Законоустановено работно време</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DailyAgreedWorkHours" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дневно договорено работно време</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SocialSecurityIncome" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Осигурителен доход (опционално поле)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GVRSFundFlag" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Флаг фонд ГВРС</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CorrectionCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на корекция</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SubmissionDate" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата на подаване</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestPersonIdentifier" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Идентификатор за осигуреното физическо лице – с ограничение до 10 разряда</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestPersonIdentifierType" type="PersonIdentifierTypeEnum" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Тип на идентификатор за физическите лица - с възможност за избор на: 
+•	ЕГН; 
+•	ЛН/ЛНЧ; 
+•	Служебен номер от регистъра на НАП; 
+•	ЕИК по БУЛСТАТ.
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestInsurerIdentificator" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Идентификатор на осигурителя (ЕИК/сл.№ от регистъра на НАП) -  с ограничение до 13 разряда.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="13"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RequestMonthFrom" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Месец от</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestYearFrom" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Година от</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestMonthTo" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Месец до</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequestYearTo" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>От request-a -> Година до</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PersonIdentifierTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NOT_SPECIFIED"/>
+			<xs:enumeration value="EGN"/>
+			<xs:enumeration value="LNCh"/>
+			<xs:enumeration value="NRASystemNo"/>
+			<xs:enumeration value="EIK_BULSTAT"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

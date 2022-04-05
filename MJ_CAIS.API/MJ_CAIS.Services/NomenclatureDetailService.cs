@@ -99,7 +99,6 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException($"Invalid table name {tableName}");
             }
 
-            var dbContext = _nomenclatureDetailRepository.GetDbContext();
             var propertyName = StringHelper.ConvertNameToPascalCase(tableName);
             var property = dbContext.GetType().GetProperty(propertyName);
             var dbSet = property.GetValue(dbContext) as IQueryable<IBaseNomenclature>;

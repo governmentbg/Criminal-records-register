@@ -66,12 +66,11 @@ namespace MJ_CAIS.Services
 
         public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string aId, bool isBulletinId)
         {
-            var context = _internalRequestRepository.GetDbContext();
-
             // id of internal request (when action is edit)
             if (!isBulletinId)
             {
-                var bulleintFromIR = await context.BInternalRequests.AsNoTracking()
+                var bulleintFromIR = await dbContext.BInternalRequests.AsNoTracking()
+                    .Include(x => x.Bulletin)
                     .Include(x => x.Bulletin.BirthCountry)
                     .Include(x => x.Bulletin.BirthCity)
                     .Include(x => x.Bulletin.BirthCity)
@@ -90,7 +89,7 @@ namespace MJ_CAIS.Services
             }
 
             // id of bulletin (when action is create)
-            var bulleint = await context.BBulletins.AsNoTracking()
+            var bulleint = await dbContext.BBulletins.AsNoTracking()
                     .Include(x => x.BirthCountry)
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCity)

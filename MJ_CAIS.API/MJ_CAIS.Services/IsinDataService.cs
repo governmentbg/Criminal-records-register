@@ -48,7 +48,6 @@ namespace MJ_CAIS.Services
 
         public async Task SelectBulletinAsync(string aInDto, string bulletinId)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
             var hasBulletin = await dbContext.BBulletins
                .AnyAsync(x => x.Id == bulletinId);
 
@@ -72,9 +71,7 @@ namespace MJ_CAIS.Services
 
             if (isin == null) return null;
 
-            var context = _isinDataRepository.GetDbContext();
-
-            var bulleint = await context.BBulletins.AsNoTracking()
+            var bulleint = await dbContext.BBulletins.AsNoTracking()
                  .Include(x => x.BirthCountry)
                  .Include(x => x.BirthCity)
                  .Include(x => x.BirthCity)
@@ -95,8 +92,6 @@ namespace MJ_CAIS.Services
 
         public async Task CloseAsync(string aInDto)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             var isinData = await dbContext.EIsinData
                .FirstOrDefaultAsync(x => x.Id == aInDto);
 
@@ -116,8 +111,6 @@ namespace MJ_CAIS.Services
 
         private IQueryable<IsinDataGridDTO> SelectAll(string? status, string? bulletinId)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             var query = from isin in dbContext.EIsinData.AsNoTracking()
                         join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
                                   into isinMessageLeft
@@ -131,8 +124,8 @@ namespace MJ_CAIS.Services
                         into isinCaseLeft
                         from isinCase in isinCaseLeft.DefaultIfEmpty()
 
-                        where (isin.BulletinId == bulletinId && !string.IsNullOrEmpty(bulletinId)) || // филтър по бюлетин във формата за преглед на бюлетин
-                           (isin.Status == status && !string.IsNullOrEmpty(status)) //филтър по статус в останалите форми където се листват съобщенията
+                        where (isin.BulletinId == bulletinId && !string.IsNullOrEmpty(bulletinId)) || // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                           (isin.Status == status && !string.IsNullOrEmpty(status)) //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
                         select new IsinDataGridDTO
                         {
@@ -155,8 +148,6 @@ namespace MJ_CAIS.Services
 
         private async Task<IsinDataPreviewDTO> SelectIsinDataAsync(string aId)
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             var query = from isin in dbContext.EIsinData.AsNoTracking()
                         join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
                                   into isinMessageLeft
@@ -204,35 +195,30 @@ namespace MJ_CAIS.Services
 
         private IQueryable<IsinBulletinGridDTO> SelectAllBulletin()
         {
-            var dbContext = _isinDataRepository.GetDbContext();
-
             return dbContext.BBulletins.AsNoTracking()
                 .Include(x => x.DecidingAuth)
                 .Include(x => x.DecisionType)
                 .Include(x => x.BirthCountry)
                 .Include(x => x.BirthCity)
                 .Include(x => x.BPersNationalities).ThenInclude(x => x.Country)
-                .ProjectTo<IsinBulletinGridDTO>(mapperConfiguration);
-
-                   //.Select(x => new IsinBulletinGridDTO
-                   //{
-                   //    Id = x.Id,
-                   //    BulletinType = x.BulletinType == nameof(BulletinConstants.Type.Bulletin78А) ?
-                   //        BulletinConstants.Type.Bulletin78А :
-                   //                    (x.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
-                   //                    BulletinConstants.Type.Unspecified),
-                   //    RegistrationNumber = x.RegistrationNumber,
-                   //    BirthDate = x.BirthDate,
-                   //    Identifier = x.Egn + " " + x.Lnch + " " + x.Ln,
-                   //    Nationalities = x.BPersNationalities.Select(x => x.Country.Name), // todo: filter
-                   //    PersonName = x.Firstname + " " + x.Surname + " " + x.Familyname,
-                   //    DecisionType = x.DecisionType.Name,
-                   //    DecisionNumber = x.DecisionNumber,
-                   //    DecisionDate = x.DecisionDate,
-                   //    DecisionAuthName = x.DecidingAuth.Name,
-                   //    CaseNumber = x.CaseNumber,
-                   //    BirthPlace = x.BirthCountry.Name + " " + x.BirthCity.Name
-                   //});
+                   .Select(x => new IsinBulletinGridDTO
+                   {
+                       Id = x.Id,
+                       BulletinType = x.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
+                            (x.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
+                            BulletinConstants.Type.Unspecified),
+                       RegistrationNumber = x.RegistrationNumber,
+                       BirthDate = x.BirthDate,
+                       Identifier = x.Egn + " " + x.Lnch + " " + x.Ln,
+                       Nationalities = x.BPersNationalities.Select(x => x.Country.Name), // todo: filter
+                       PersonName = x.Firstname + " " + x.Surname + " " + x.Familyname,
+                       DecisionType = x.DecisionType.Name,
+                       DecisionNumber = x.DecisionNumber,
+                       DecisionDate = x.DecisionDate,
+                       DecisionAuthName = x.DecidingAuth.Name,
+                       CaseNumber = x.CaseNumber,
+                       BirthPlace = x.BirthCountry.Name + " " + x.BirthCity.Name
+                   });
         }
 
         #endregion

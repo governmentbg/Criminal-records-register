@@ -1,5 +1,5 @@
 export enum FbbcStatusTypeEnum {
   Active = "Active", //	Актуален
-  ForDestruction = "ForDestruction", //Подлежащ на заличаване
+  ForDestruction = "ForDelete", //Подлежащ на заличаване
   Deleted = "Deleted", //	Заличен
 }

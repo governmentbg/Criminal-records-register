@@ -10,11 +10,5 @@ namespace MJ_CAIS.Repositories.Impl
         public EcrisMessageRepository(CaisDbContext dbContext) : base(dbContext)
         {
         }
-
-        public override IQueryable<EEcrisMessage> SelectAllAsync()
-        {
-            return this._dbContext.EEcrisMessages.AsNoTracking()
-                .Include(x => x.EcrisMsgStatusNavigation);
-        }
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://egov.bg/RegiX/NRA/SocialSecurityDataFromDeclarations/Request" targetNamespace="http://egov.bg/RegiX/NRA/SocialSecurityDataFromDeclarations/Request" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetSocialSecurityDataFromDeclarationsRequest" type="SocialSecurityDataFromDeclarationRequestType">
+		<xs:annotation>
+			<xs:documentation>Входни данни на Справка с данни за осигурените лица от подадени декларации по Наредба Н-13 към Кодекса за социално осигуряване</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:simpleType name="PersonIdentifierTypeEnumeration">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NOT_SPECIFIED"/>
+			<xs:enumeration value="EGN"/>
+			<xs:enumeration value="LNCh"/>
+			<xs:enumeration value="NRASystemNo"/>
+			<xs:enumeration value="EIK_BULSTAT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="SocialSecurityDataFromDeclarationRequestType">
+		<xs:sequence>
+			<xs:element name="PersonIdentifier" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатор за осигуреното физическо лице – с ограничение до 10 разряда</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="10"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PersonIdentifierType" type="PersonIdentifierTypeEnumeration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Тип на идентификатор за физическите лица - с възможност за избор на: 
+•	ЕГН; 
+•	ЛН/ЛНЧ; 
+•	Служебен номер от регистъра на НАП; 
+•	ЕИК по БУЛСТАТ.
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="InsurerIdentificator" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатор на осигурителя (ЕИК/сл.№ от регистъра на НАП) -  с ограничение до 13 разряда.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="13"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MonthFrom" type="xs:gMonth">
+				<xs:annotation>
+					<xs:documentation>Месец от</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="YearFrom" type="xs:gYear">
+				<xs:annotation>
+					<xs:documentation>Година от</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MonthTo" type="xs:gMonth">
+				<xs:annotation>
+					<xs:documentation>Месец до</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="YearTo" type="xs:gYear">
+				<xs:annotation>
+					<xs:documentation>Година до</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

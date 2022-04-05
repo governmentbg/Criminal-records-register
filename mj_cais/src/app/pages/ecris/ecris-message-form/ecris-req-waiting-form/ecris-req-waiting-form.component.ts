@@ -1,10 +1,10 @@
-import { Component, Injector, OnInit } from "@angular/core";
+import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { EcrisMessageService } from "../_data/ecris-message.service";
-import { EcrisReqWaitingResolverData } from "./_data/ecris-req-waiting.resolver";
 import { EcrisMessageForm } from "../_models/ecris-message.form";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
+import { EcrisReqWaitingResolverData } from "./_data/ecris-req-waiting.resolver";
 
 @Component({
   selector: "cais-ecris-req-waiting-form",
