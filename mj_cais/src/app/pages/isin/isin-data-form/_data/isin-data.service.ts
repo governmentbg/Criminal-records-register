@@ -1,32 +1,31 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../../../../environments/environment";
+import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { IsinDataPreviewModel } from "../_models/isin-data-preview.model";
 import { IsinDataModel } from "../_models/isin-data.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class IsinDataService  {
-  constructor(private http: HttpClient) {}
+export class IsinDataService extends CaisCrudService<
+  IsinDataPreviewModel,
+  string
+> {
+  constructor(injector: Injector) {
+    super(IsinDataPreviewModel, injector, "isin-data");
+  }
 
   public get(id: string): Observable<IsinDataModel> {
-    return this.http.get<IsinDataModel>(
-      environment.apiUrl + `/isin-data/${id}`
-    );
+    return this.http.get<IsinDataModel>(`${this.url}/${id}`);
   }
 
   public getForPreview(id: string): Observable<IsinDataPreviewModel> {
     return this.http.get<IsinDataPreviewModel>(
-      environment.apiUrl + `/isin-data/preview/${id}`
+      `${this.url}/preview/${id}`
     );
   }
 
-  public markAsClosed(id: string){
-    return this.http.post<any>(
-      environment.apiUrl + `/isin-data/${id}/close/`,
-      []
-    );
+  public markAsClosed(id: string) {
+    return this.http.post<any>(`${this.url}/${id}/close/`, []);
   }
 }

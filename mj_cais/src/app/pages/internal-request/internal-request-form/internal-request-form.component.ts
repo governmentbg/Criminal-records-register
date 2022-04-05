@@ -22,18 +22,12 @@ export class InternalRequestFormComponent
 {
   constructor(service: InternalRequestService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = this.isEdit()
-      ? "pages/internal-requests"
-      : `pages/bulletins-for-rehabilitation`;
-
     this.setDisplayTitle("Заявка към бюлетин");
   }
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
-
-  
 
     if (this.isEdit()) {
       this.fullForm.reqStatusCode.patchValue(null);

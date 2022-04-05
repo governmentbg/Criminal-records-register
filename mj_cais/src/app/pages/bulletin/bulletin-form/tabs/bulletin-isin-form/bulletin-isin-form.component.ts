@@ -19,7 +19,8 @@ export class BulletinIsinFormComponent extends RemoteGridWithStatePersistance<
     public dateFormatService: DateFormatService
   ) {
     super("isin-data-search", service, injector);
-    this.service.updateUrlStatus(null);
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    this.service.updateUrlBulletin(bulletinId);
   }
 
   ngOnInit() {

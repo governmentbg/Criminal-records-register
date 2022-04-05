@@ -10,7 +10,6 @@ import { Observable, ReplaySubject } from "rxjs";
 import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CommonConstants } from "../../../../../@core/constants/common.constants";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
-import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
 import { BulletinService } from "../../_data/bulletin.service";
 import { BulletinForm } from "../../_models/bulletin.form";
