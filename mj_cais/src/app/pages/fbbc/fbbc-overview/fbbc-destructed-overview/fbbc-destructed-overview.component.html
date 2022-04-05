@@ -14,6 +14,7 @@
   (onSortingDone)="sortingDone($event)"
   (onFilteringDone)="filteringDone($event)"
   (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
   [allowFiltering]="true"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
@@ -61,28 +62,6 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
-  <!-- <igx-column
-    field="birthCityId"
-    header="Град"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="birthCountryId"
-    header="Месторождение (държава)"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column> -->
-
   <igx-column
     field="firstname"
     header="Име"

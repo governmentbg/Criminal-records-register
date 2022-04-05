@@ -1,6 +1,3 @@
-<!-- <tl-linear-progress
-  [visible]="this.remoteService.isLoading"
-></tl-linear-progress> -->
 <igx-grid
   #grid
   igxGridState
@@ -14,6 +11,7 @@
   (onSortingDone)="sortingDone($event)"
   (onFilteringDone)="filteringDone($event)"
   (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
   [allowFiltering]="true"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
@@ -76,27 +74,6 @@
     </ng-template>
   </igx-column>
 
-  <!-- <igx-column
-    field="birthCityId"
-    header="Град"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="birthCountryId"
-    header="Месторождение (държава)"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column> -->
-
   <igx-column
     field="firstname"
     header="Име"
@@ -131,15 +108,15 @@
   </igx-column>
 
   <igx-column
-  field="docTypeId"
-  header="Източник"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
+    field="docTypeId"
+    header="Източник"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
 
   <igx-column
     width="150px"
@@ -163,4 +140,14 @@
       </a>
     </ng-template>
   </igx-column>
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
 </igx-grid>
