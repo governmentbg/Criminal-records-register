@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { IRStatusTypeEnum } from "../internal-request-overview/_models/internal-request-status-type.constants";
 import { InternalRequestResolverData } from "./_data/internal-request.resolver";
 import { InternalRequestService } from "./_data/internal-request.service";
 import { InternalRequestForm } from "./_models/internal-request.form";
@@ -30,6 +31,8 @@ export class InternalRequestFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
 
     if (this.isEdit()) {
+      this.isForPreview =
+        this.fullForm.reqStatusCode.value != IRStatusTypeEnum.New;
       this.fullForm.reqStatusCode.patchValue(null);
       this.fullForm.reqStatusCode.setValidators([Validators.required]);
     } else {

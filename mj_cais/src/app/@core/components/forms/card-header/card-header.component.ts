@@ -8,6 +8,8 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class CardHeaderComponent implements OnInit {
   @Input() label: string;
+  @Input() setForPreview: boolean;
+
   @Input() onSaveFunction: () => any;
   @Input() onCancelFunction: () => any;
 
@@ -18,6 +20,6 @@ export class CardHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
-    this.isForPreview = this.activatedRoute.snapshot.data["preview"];
+    this.isForPreview = this.activatedRoute.snapshot.data["preview"] || this.setForPreview;
   }
 }
