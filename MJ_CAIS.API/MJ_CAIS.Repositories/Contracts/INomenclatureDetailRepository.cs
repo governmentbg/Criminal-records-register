@@ -10,9 +10,13 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<GCity> GetCitiesByMunicipality(string municipalityId);
 
         IQueryable<BBulletinStatus> GetBulletinStatuses();
+
         IQueryable<FbbcDocType> GetAllFbbcDocTypes();
+
         IQueryable<FbbcSanctType> GetAllFbbcSanctTypes();
 
         IQueryable<BReqStatus> GetInternalRequestStatuses();
+
+        IQueryable<GCountry> GetCountries();
     }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
@@ -200,24 +201,7 @@ namespace MJ_CAIS.Services
                 .Include(x => x.BirthCountry)
                 .Include(x => x.BirthCity)
                 .Include(x => x.BPersNationalities).ThenInclude(x => x.Country)
-                   .Select(x => new IsinBulletinGridDTO
-                   {
-                       Id = x.Id,
-                       BulletinType = x.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
-                            (x.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
-                            BulletinConstants.Type.Unspecified),
-                       RegistrationNumber = x.RegistrationNumber,
-                       BirthDate = x.BirthDate,
-                       Identifier = x.Egn + " " + x.Lnch + " " + x.Ln,
-                       Nationalities = x.BPersNationalities.Select(x => x.Country.Name), // todo: filter
-                       PersonName = x.Firstname + " " + x.Surname + " " + x.Familyname,
-                       DecisionType = x.DecisionType.Name,
-                       DecisionNumber = x.DecisionNumber,
-                       DecisionDate = x.DecisionDate,
-                       DecisionAuthName = x.DecidingAuth.Name,
-                       CaseNumber = x.CaseNumber,
-                       BirthPlace = x.BirthCountry.Name + " " + x.BirthCity.Name
-                   });
+                .ProjectTo<IsinBulletinGridDTO>(mapperConfiguration);
         }
 
         #endregion

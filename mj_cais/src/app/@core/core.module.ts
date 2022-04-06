@@ -76,6 +76,7 @@ import { CaisGridPagerComponent } from './components/grid/cais-grid-pager/cais-g
 import { LookupComponent } from './components/forms/inputs/lookup/lookup.component';
 import { MultipleChooseComponent } from './components/forms/inputs/multiple-choose/multiple-choose.component';
 import { AddressFormComponent } from './components/forms/address-form/address-form.component';
+import { CountryDialogComponent } from './components/forms/address-form/dialog/country-dialog/country-dialog.component';
 
 const socialLinks = [
   {
@@ -195,7 +196,7 @@ const COMPONENTS = [
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule
   ],
-  declarations: [...COMPONENTS],
+  declarations: [...COMPONENTS, CountryDialogComponent],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
   ],

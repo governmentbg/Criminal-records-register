@@ -1,13 +1,16 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Helpers;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.DTO.NomenclatureDetail;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services
 {
@@ -67,6 +70,16 @@ namespace MJ_CAIS.Services
             return _nomenclatureDetailRepository
                 .GetInternalRequestStatuses()
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
+        public async Task<IgPageResult<CountryDTO>> GetCountriesAsync(ODataQueryOptions<CountryDTO> aQueryOptions)
+        {
+            var entityQuery = _nomenclatureDetailRepository.GetCountries();
+            var baseQuery = entityQuery.ProjectTo<CountryDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<CountryDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

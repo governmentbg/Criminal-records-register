@@ -1,7 +1,9 @@
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.DTO.NomenclatureDetail;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
@@ -67,6 +69,13 @@ namespace MJ_CAIS.Web.Controllers
         public IActionResult GetInternalRequestStatuses()
         {
             var result = _nomenclatureDetailService.GetInternalRequestStatuses();
+            return Ok(result);
+        }
+
+        [HttpGet("countries")]
+        public async Task<IActionResult> GetCountries(ODataQueryOptions<CountryDTO> aQueryOptions)
+        {
+            var result = await _nomenclatureDetailService.GetCountriesAsync(aQueryOptions);
             return Ok(result);
         }
     }
