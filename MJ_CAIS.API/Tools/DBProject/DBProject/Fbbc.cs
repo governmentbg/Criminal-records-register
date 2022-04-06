@@ -1,5 +1,4 @@
-﻿using MJ_CAIS.Common.XmlData;
-using Oracle.ManagedDataAccess.Client;
+﻿using MJ_CAIS.DataAccess.Entities;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -96,7 +95,7 @@ namespace DBProject
             {
                 if (row["REGDOC_TYPE"].ToString().Equals("5"))
                 {
-                    var msg = EcrisMessageXmlDTO.ParseXml(row["XML_DATA"].ToString());
+                    var msg = EEcrisMessage.ParseXml(row["XML_DATA"].ToString());
                     row["MSG_TIMESTAMP"] = msg.MsgTimestamp;
                     row["IDENTIFIER"] = msg.Identifier;
                     row["ECRIS_IDENTIFIER"] = msg.EcrisIdentifier;

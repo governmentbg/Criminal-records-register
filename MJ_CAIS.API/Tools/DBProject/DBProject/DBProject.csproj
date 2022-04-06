@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\MJ_CAIS.Common\MJ_CAIS.Common.csproj" />
+    <ProjectReference Include="..\..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
