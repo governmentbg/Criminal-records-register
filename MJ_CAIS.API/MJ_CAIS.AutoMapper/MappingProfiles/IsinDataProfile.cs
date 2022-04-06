@@ -39,8 +39,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.DecisionAuthName, opt => opt.MapFrom(src => src.DecidingAuth.Name))
                 .ForMember(d => d.BirthPlace, opt => opt.MapFrom(src => src.BirthCountry.Name + " " + src.BirthCity.Name))
                 .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
-                            src.BulletinType == nameof(BulletinConstants.Type.Bulletin78А) ?
-                            BulletinConstants.Type.Bulletin78А :
+                            src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ?
+                            BulletinConstants.Type.Bulletin78A :
                                         src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
                                         BulletinConstants.Type.Unspecified));
         }

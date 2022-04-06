@@ -43,15 +43,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.OffLvlComplId, opt => opt.MapFrom(src => src.OffLvlComplId))
                 .ForMember(d => d.OffLvlPartId, opt => opt.MapFrom(src => src.OffLvlPartId))
                 .ForMember(d => d.OffPlaceCountry, opt => opt.Ignore());
-            
+
             CreateMap<BOffence, OffenceDTO>()
                .ForMember(d => d.EcrisOffCatName, opt => opt.MapFrom(src => src.EcrisOffCat.Name))
-               .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src =>
-                        new LookupDTO()
-                        {
-                            DisplayName = src.OffenceCat.Name,
-                            Id = src.OffenceCatId
-                        }))
+               .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src => src.OffenceCat))
                .ForMember(d => d.OffLvlComplName, opt => opt.MapFrom(src => src.OffLvlCompl.Name))
                .ForMember(d => d.OffLvlPartName, opt => opt.MapFrom(src => src.OffLvlPart.Name))
                .ForMember(d => d.IsContiniuous, opt => opt.MapFrom(src => src.IsContiniuous.HasValue && src.IsContiniuous.Value == 1 ? true : false))
@@ -61,16 +56,16 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                     new AddressDTO
                     {
                         CityId = src.OffPlaceCityId,
-                        Country =
-                         new LookupDTO
-                         {
-                             Id = src.OffPlaceCountryId,
-                             DisplayName = src.OffPlaceCountry.Name
-                         },
                         DistrictId = src.OffPlaceCity.Municipality.DistrictId,
                         MunicipalityId = src.OffPlaceCity.MunicipalityId,
-                        ForeignCountryAddress = src.OffPlaceDescr
+                        ForeignCountryAddress = src.OffPlaceDescr,
+                        Country = new LookupDTO
+                        {
+                            Id = src.OffPlaceCountryId,
+                            DisplayName = src.OffPlaceCountry.Name
+                        }
                     }));
+              //.ForPath(d => d.OffPlace.Country, opt => opt.MapFrom(src => src.OffPlaceCountry));
 
             CreateMap<SanctionDTO, BSanction>();
 
@@ -93,6 +88,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<PersonAliasDTO, BBullPersAlias>()
                 .ForMember(d => d.Type, opt => opt.MapFrom(src => src.TypeCode));
+
+            CreateMap<BOffenceCategory, LookupDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(d => d.DisplayName, opt => opt.MapFrom(src => src.Name));
         }
     }
 }

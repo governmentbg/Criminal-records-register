@@ -17,7 +17,7 @@ import {
   NbSidebarModule,
   NbToastrModule,
 } from "@nebular/theme";
-import { IgxExcelExporterService } from "@infragistics/igniteui-angular";
+import { IgxExcelExporterService, IgxGridTransaction, IgxTransactionService } from "@infragistics/igniteui-angular";
 import { ConfigurationService } from "@tl/tl-common";
 import { forkJoin } from "rxjs";
 import { CustomToastrService } from "./@core/services/common/custom-toastr.service";
@@ -99,6 +99,7 @@ registerLocaleData(localeBg);
       multi: true,
     },
     { provide: LOCALE_ID, useValue: "bg" },
+    { provide: IgxGridTransaction, useClass: IgxTransactionService },
   ],
 })
 export class AppModule {}

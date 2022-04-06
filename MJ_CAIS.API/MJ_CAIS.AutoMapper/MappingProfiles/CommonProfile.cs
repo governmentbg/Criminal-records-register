@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.Nomenclature;
 using MJ_CAIS.DTO.NomenclatureDetail;
 
@@ -24,6 +25,13 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
 
             CreateMap<GCountry, CountryDTO>();
+
+            CreateMap<GCountry, LookupDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(d => d.DisplayName, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<LookupDTO, GCountry>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

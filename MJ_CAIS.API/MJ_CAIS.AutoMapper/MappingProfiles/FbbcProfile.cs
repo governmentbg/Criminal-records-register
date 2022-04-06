@@ -17,7 +17,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<Fbbc, FbbcDTO>()
                 .ForPath(d => d.Address.Country, opt => opt.MapFrom(src => new LookupDTO
                 {
-                    Id = src.BirthCountryId,
+                    Id = src.BirthCountry.Id,
                     DisplayName = src.BirthCountry.Name
                 }))
                 .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
