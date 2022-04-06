@@ -1,19 +1,17 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using System.Data;
-using DBProject;
+﻿using Microsoft.Extensions.Configuration;
 
-Console.WriteLine("Hello, World!");
+namespace DBProject
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+            IConfiguration config = configBuilder.Build();
 
-IConfigurationBuilder configBuilder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
-IConfiguration config =  configBuilder.Build();
-
-Fbbc.GetData(config.GetConnectionString("FBBCConnectionString"), config.GetConnectionString("DefaultConnectionString"));
+            var fbbcConnString = config.GetConnectionString("FBBCConnectionString");
+            var dbConnString = config.GetConnectionString("DefaultConnectionString");
+            Fbbc.GetData(fbbcConnString, dbConnString);
+        }
+    }
+}
