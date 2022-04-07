@@ -35,6 +35,7 @@ export class RemoteGridWithStatePersistance<
   public title: string;
 
   protected successMessage = "Успешно запазени данни!";
+  protected deletedSuccessfullyMessage = "Успешно изтрит запис!";
   protected dangerMessage = "Грешка при запазване на данните: ";
   protected validationMessage = "Грешка при валидациите!";
 
@@ -162,6 +163,12 @@ export class RemoteGridWithStatePersistance<
     }
 
     toastr.showBodyToast("danger", title, errorText);
+  };
+
+  protected deleteRowHandler = (pk) => {
+    this.toastr.showToast("success", this.deletedSuccessfullyMessage);
+    this.grid.deleteRow(pk);
+    this.grid.data = this.grid.data.filter((d) => d.id != pk);
   };
 
   public getIDField(): string {

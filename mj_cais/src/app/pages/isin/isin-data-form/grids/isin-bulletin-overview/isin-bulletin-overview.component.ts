@@ -30,17 +30,10 @@ export class IsinBulletinOverviewComponent extends RemoteGridWithStatePersistanc
     this.service.selectBulletin(id, bulletinId).subscribe(
       (res) => {
         this.toastr.showToast("success", "Успешно идентифицирано съобщение");
-       // todo: navigate to ?
-      },
+       this.router.navigateByUrl("pages/isin-new")             
 
-      (error) => {
-        var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast(
-          "danger",
-          "Възникна грешка при избор на бюлетин:",
-          errorText
-        );
-      }
+      },
+      (error) => this.errorHandler(error)  
     );
   }
 }
