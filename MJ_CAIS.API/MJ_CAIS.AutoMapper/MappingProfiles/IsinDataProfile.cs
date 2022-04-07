@@ -14,7 +14,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                         src.Egn +
                         (!string.IsNullOrEmpty(src.Egn) ? " / " + src.Lnch : src.Lnch) +
                         (!string.IsNullOrEmpty(src.Egn) || !string.IsNullOrEmpty(src.Lnch) ? " / " + src.Ln : src.Ln)))
-                .ForMember(d => d.Nationalities, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.Country.Name)))
+                .ForMember(d => d.Nationalities, opt => opt.MapFrom(src => src.BPersNationalities.Select(x => x.Country.Name)))// todo: filter is not working
                 .ForMember(d => d.PersonName, opt => opt.MapFrom(src => src.Firstname + " " + src.Surname + " " + src.Familyname))
                 .ForMember(d => d.DecisionType, opt => opt.MapFrom(src => src.DecisionType.Name))
                 .ForMember(d => d.DecisionNumber, opt => opt.MapFrom(src => src.DecisionNumber))
