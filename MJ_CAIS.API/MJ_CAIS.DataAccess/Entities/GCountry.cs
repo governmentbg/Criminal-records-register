@@ -20,7 +20,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? EcrisTechnId { get; set; }
         public string? Iso31662Number { get; set; }
         public string? Iso31662Code { get; set; }
-        public decimal? UsedForNationality { get; set; }
+        public bool? UsedForNationality { get; set; }
         public string? Remark { get; set; }
         public string? Name { get; set; }
         public string? NameEn { get; set; }

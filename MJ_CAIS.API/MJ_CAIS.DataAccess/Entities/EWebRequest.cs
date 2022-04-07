@@ -15,11 +15,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? RemoteAddress { get; set; }
         public string? Status { get; set; }
         public DateTime? ExecutionDate { get; set; }
-        public decimal? HasError { get; set; }
+        public bool? HasError { get; set; }
         public string? Error { get; set; }
         public string? StackTrace { get; set; }
         public decimal? Attempts { get; set; }
-        public decimal? IsFromCache { get; set; }
+        public bool? IsFromCache { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }

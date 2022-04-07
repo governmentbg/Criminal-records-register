@@ -20,11 +20,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? EisppCode { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
-        public decimal? ActiveForBulletins { get; set; }
+        public bool? ActiveForBulletins { get; set; }
         public decimal? OrderNumber { get; set; }
         public string? ParentId { get; set; }
-        public decimal? Visible { get; set; }
-        public decimal? IsGroup { get; set; }
+        public bool? Visible { get; set; }
+        public bool? IsGroup { get; set; }
         public string? DisplayName { get; set; }
         public string? OldId { get; set; }
 

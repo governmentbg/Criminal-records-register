@@ -47,7 +47,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? IsAdministrative { get; set; }
+        public bool? IsAdministrative { get; set; }
         public DateTime? ConvDecisionDate { get; set; }
         public DateTime? ConvDecFinalDate { get; set; }
         public decimal? SequentialIndex { get; set; }
@@ -63,6 +63,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual FbbcDocType? DocType { get; set; }
         public virtual PPerson? Person { get; set; }
         public virtual FbbcSanctType? SanctionType { get; set; }
+        public virtual FbbcStatus? StatusCodeNavigation { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
     }
 }

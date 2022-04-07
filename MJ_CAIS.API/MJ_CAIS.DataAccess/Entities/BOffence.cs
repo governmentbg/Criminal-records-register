@@ -18,11 +18,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? OffPlaceCityId { get; set; }
         public string? OffPlaceDescr { get; set; }
         public decimal? Occurrences { get; set; }
-        public decimal? IsContiniuous { get; set; }
+        public bool? IsContiniuous { get; set; }
         public string? OffLvlComplId { get; set; }
         public string? OffLvlPartId { get; set; }
-        public decimal? RespExemption { get; set; }
-        public decimal? Recidivism { get; set; }
+        public bool? RespExemption { get; set; }
+        public bool? Recidivism { get; set; }
         public string? BulletinId { get; set; }
         public string? FormOfGuilt { get; set; }
 

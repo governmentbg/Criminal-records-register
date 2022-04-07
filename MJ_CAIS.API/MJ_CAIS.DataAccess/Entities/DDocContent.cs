@@ -15,6 +15,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? Bytes { get; set; }
         public string? Md5Hash { get; set; }
         public string? Sha1Hash { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         public virtual ICollection<DDocument> DDocuments { get; set; }
     }
