@@ -33,12 +33,12 @@ namespace EcrisRIClient
 
         public async Task<string> GetInboxFolderIdentifier(string sessionId)
         {
-            storagePortv10Client client = new storagePortv10Client();
+            var client = new storagePortv10Client();
             var request = new BaseEcrisRiWSInputType();
+
             request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
             var resp = await client.getFoldersAsync(request);
             var foldersList = ((GetFoldersWSOutputDataType)resp.GetFoldersWSOutput.WSData).FolderList;
-
             for (int i = 0; i < foldersList.Length; i++)
             {
                 if (foldersList[i].FolderName == _searchFolderName)
@@ -46,15 +46,16 @@ namespace EcrisRIClient
                     return foldersList[i].FolderIdentifier;
                 }
             }
+
             return string.Empty;
         }
 
         public async Task<List<MessageShortViewType>> GetMessagesForFolder(string sessionId, string folderId, DateTime lastSuccessDate)
         {
-            storagePortv10Client client = new storagePortv10Client();
-            DateTime minDate = DateTime.Now;
-            int pageNumber = 0;
-            List<MessageShortViewType> resultList = new List<MessageShortViewType>();
+            var client = new storagePortv10Client();
+            var minDate = DateTime.Now;
+            var pageNumber = 0;
+            var resultList = new List<MessageShortViewType>();
             do
             {
                 var pageList = await GetMessagesPageForFolder(client, pageNumber, sessionId, folderId);
@@ -80,7 +81,7 @@ namespace EcrisRIClient
 
         private async Task<MessageShortViewType[]> GetMessagesPageForFolder(storagePortv10Client client, int pageNumber, string sessionId, string folderId)
         {
-            GetMessagesForFolderWSInputType request = new GetMessagesForFolderWSInputType();
+            var request = new GetMessagesForFolderWSInputType();
             request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
             request.WSData = new GetMessagesForFolderWSInputDataType()
             {
@@ -95,7 +96,6 @@ namespace EcrisRIClient
             var resp = await client.getMessagesForFolderAsync(request);
             var wsData = (GetMessagesForFolderWSOutputDataType)resp.GetMessagesForFolderWSOutput.WSData;
             return wsData.MessageShortViewList;
-
         }
     }
 }
