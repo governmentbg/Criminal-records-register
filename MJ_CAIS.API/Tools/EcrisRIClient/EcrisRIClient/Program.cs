@@ -1,10 +1,8 @@
 ﻿using EcrisRIClient.EcrisService;
 using Microsoft.Extensions.Configuration;
 using MJ_CAIS.Common.XmlData;
-using MJ_CAIS.DataAccess;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 namespace EcrisRIClient
 {
