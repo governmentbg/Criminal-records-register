@@ -49,9 +49,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src => src.OffenceCat))
                .ForMember(d => d.OffLvlComplName, opt => opt.MapFrom(src => src.OffLvlCompl.Name))
                .ForMember(d => d.OffLvlPartName, opt => opt.MapFrom(src => src.OffLvlPart.Name))
-               .ForMember(d => d.IsContiniuous, opt => opt.MapFrom(src => src.IsContiniuous.HasValue && src.IsContiniuous.Value == 1 ? true : false))
-               .ForMember(d => d.Recidivism, opt => opt.MapFrom(src => src.Recidivism.HasValue && src.Recidivism.Value == 1 ? true : false))
-               .ForMember(d => d.RespExemption, opt => opt.MapFrom(src => src.RespExemption.HasValue && src.RespExemption.Value == 1 ? true : false))
                .ForMember(d => d.OffPlace, opt => opt.MapFrom(src =>
                     new AddressDTO
                     {
@@ -74,8 +71,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForMember(d => d.SanctProbCategName, opt => opt.MapFrom(src => src.SanctProbCateg.Name))
                .ForMember(d => d.EcrisSanctCategName, opt => opt.MapFrom(src => src.EcrisSanctCateg.Name))
                .ForMember(d => d.SanctProbMeasureName, opt => opt.MapFrom(src => src.SanctProbMeasure.Name))
-               .ForMember(d => d.SanctActivityName, opt => opt.MapFrom(src => src.SanctActivity.Name))
-               .ForMember(d => d.SpecificToMinor, opt => opt.MapFrom(src => src.SpecificToMinor.Value == 1 ? true : false));
+               .ForMember(d => d.SanctActivityName, opt => opt.MapFrom(src => src.SanctActivity.Name));
 
             CreateMap<DecisionDTO, BDecision>();
             CreateMap<BDecision, DecisionDTO>()

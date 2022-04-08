@@ -51,7 +51,7 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{aId}/select-bulletin/{bulletinId}")]
+        [HttpPost("bulletins/{aId}/select/{bulletinId}")]
         public async Task<IActionResult> SelectBulletin(string aId, string bulletinId)
         {
             await this._isinDataService.SelectBulletinAsync(aId, bulletinId);

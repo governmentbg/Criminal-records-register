@@ -37,22 +37,8 @@ export class BulletinForDestructionOverviewComponent extends RemoteGridWithState
           this.service
             .changeStatus(bulletinId, BulletinStatusTypeEnum.Deleted)
             .subscribe(
-              (res) => {
-                this.toastr.showToast("success", "Успешно унищожен бюлетин");
-
-                this.grid.deleteRow(bulletinId);
-                this.grid.data = this.grid.data.filter(
-                  (d) => d.id != bulletinId
-                );
-              },
-              (error) => {
-                var errorText = error.status + " " + error.statusText;
-                this.toastr.showBodyToast(
-                  "danger",
-                  "Възникна грешка по време на унищожаване на бюлетин",
-                  errorText
-                );
-              }
+              (res) => this.deleteRowHandler(bulletinId),
+              (error) => this.errorHandler(error)
             );
         }
       });

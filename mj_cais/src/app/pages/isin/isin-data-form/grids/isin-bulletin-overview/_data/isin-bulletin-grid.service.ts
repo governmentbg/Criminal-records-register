@@ -15,7 +15,7 @@ export class IsinBulletinGridService extends CaisCrudService<
 
   selectBulletin(id: string, bulletinId: string) {
     return this.http.post<any>(
-      `${this.url}/${id}/select-bulletin/${bulletinId}`,
+      `${this.url}/${id}/select/${bulletinId}`,
       []
     );
   }

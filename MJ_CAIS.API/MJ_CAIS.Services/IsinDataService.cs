@@ -124,8 +124,8 @@ namespace MJ_CAIS.Services
                         into isinCaseLeft
                         from isinCase in isinCaseLeft.DefaultIfEmpty()
 
-                        where (isin.BulletinId == bulletinId && !string.IsNullOrEmpty(bulletinId)) || // ������ �� ������� ��� ������� �� ������� �� �������
-                           (isin.Status == status && !string.IsNullOrEmpty(status)) //������ �� ������ � ���������� ����� ������ �� ������� �����������
+                        where (isin.BulletinId == bulletinId && !string.IsNullOrEmpty(bulletinId)) ||
+                           (isin.Status == status && !string.IsNullOrEmpty(status))
 
                         select new IsinDataGridDTO
                         {
