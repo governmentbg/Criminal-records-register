@@ -14,8 +14,7 @@ namespace EcrisRIClient
         
         static async Task Main(string[] args)
         {
-            IConfigurationBuilder configBuilder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
-            IConfiguration config = configBuilder.Build();
+            IConfiguration config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
 
             var username = config.GetValue<string>("EcrisRiSettings:username");
             var password = config.GetValue<string>("EcrisRiSettings:password");

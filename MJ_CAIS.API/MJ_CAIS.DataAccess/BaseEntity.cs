@@ -17,11 +17,6 @@ namespace MJ_CAIS.DataAccess
 
         public string Id { get; set; } = null!;
 
-        //public DateTime? CreatedOn { get; set; }
-        //public string? CreatedBy { get; set; }
-        //public string? UpdatedBy { get; set; }
-        //public DateTime? UpdatedOn { get; set; }
-
         [NotMapped]
         public EntityStateEnum EntityState { get; set; }
 
@@ -30,5 +25,10 @@ namespace MJ_CAIS.DataAccess
 
         [NotMapped]
         public string PrimaryKeyName { get; private set; }
+
+        public static string GenerateNewId()
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

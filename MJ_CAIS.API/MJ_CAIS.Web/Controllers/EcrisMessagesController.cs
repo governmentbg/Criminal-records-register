@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisMessage;
+using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
