@@ -74,6 +74,17 @@
   </igx-column>
 
   <igx-column
+    field="bulletinId"
+    header="Идентификатор на бюлетин"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
     field="reqStatus"
     header="Статус"
     [sortable]="true"
@@ -138,14 +149,16 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
+        [routerLink]="['/pages/internal-requests/preview/', cell.rowData.id]"
+        [queryParams]="{bulletinId: cell.rowData.bulletinId}"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
         *ngIf='cell.rowData.reqStatusCode == IRStatusTypeEnum.New && showEditButton'
         [title]="'Редактиране'"
-        [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
+        [routerLink]="['/pages/internal-requests/edit/', cell.rowData.id]"
+        [queryParams]="{bulletinId: cell.rowData.bulletinId}"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>

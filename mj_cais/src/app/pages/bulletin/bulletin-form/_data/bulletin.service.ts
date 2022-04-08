@@ -53,7 +53,7 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
   }
 
   public downloadDocument(bulletinId: string, documentId: string) {
-    let url = +`${this.url}/${bulletinId}/documents-download/` + documentId;
+    let url = `${this.url}/${bulletinId}/documents-download/` + documentId;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 

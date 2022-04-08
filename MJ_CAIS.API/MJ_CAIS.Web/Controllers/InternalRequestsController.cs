@@ -44,10 +44,10 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Put(aId, aInDto);
         }
 
-        [HttpGet("{aId}/bulletin-person-info/{isBulletinId}")]
-        public async Task<IActionResult> GetBulletinPersonInfo(string aId, bool isBulletinId)
+        [HttpGet("bulletin-person-info/{bulletinId}")]
+        public async Task<IActionResult> GetBulletinPersonInfo(string bulletinId)
         {
-            var result = await this._internalRequestService.GetBulletinPersonInfoAsync(aId, isBulletinId);
+            var result = await this._internalRequestService.GetBulletinPersonInfoAsync(bulletinId);
             return Ok(result);
         }
     }

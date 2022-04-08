@@ -15,9 +15,9 @@ export class InternalRequestService extends CaisCrudService<
     super(InternalRequestModel, injector, "internal-requests");
   }
 
-  public getBulletinPersonInfo(id: string, isBulletinId: boolean): Observable<BulletinPersonInfoModel> {
+  public getBulletinPersonInfo(bulletinId: boolean): Observable<BulletinPersonInfoModel> {
     return this.http.get<BulletinPersonInfoModel>(
-      `${this.url}/${id}/bulletin-person-info/${isBulletinId}`
+      `${this.url}/bulletin-person-info/${bulletinId}`
     );
   }
 }

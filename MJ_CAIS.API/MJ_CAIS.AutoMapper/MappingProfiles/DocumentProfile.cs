@@ -14,6 +14,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<DDocument, DocumentDTO>()
              .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
+             .ForMember(d => d.MimeType, opt => opt.MapFrom(src => src.DocContent.MimeType))
              .ForMember(d => d.DocumentContent, opt => opt.Ignore());
         }
     }

@@ -60,66 +60,34 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
-            var offances = dbContext.BOffences
-                .AsNoTracking()
-                .Include(x => x.OffenceCat)
-                .Include(x => x.EcrisOffCat)
-                .Include(x => x.OffPlaceCountry)
-                .Include(x => x.OffPlaceCity)
-                    .ThenInclude(x => x.Municipality)
-                .Include(x => x.OffLvlCompl)
-                .Include(x => x.OffLvlPart)
-                .Where(x => x.BulletinId == aId)
-                .ProjectTo<OffenceDTO>(mapperConfiguration);
-
-            return await Task.FromResult(offances);
+            var offances = await _bulletinRepository.SelectAllOffencesAsync();
+            var filteredOffances = offances.Where(x => x.BulletinId == aId);
+            return filteredOffances.ProjectTo<OffenceDTO>(mapperConfiguration);
         }
 
         public async Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId)
         {
-            var result = dbContext.BSanctions
-                .AsNoTracking()
-                .Include(x => x.EcrisSanctCateg)
-                .Include(x => x.SanctActivity)
-                .Include(x => x.SanctCategory)
-                .Include(x => x.SanctProbCateg)
-                .Include(x => x.SanctProbMeasure)
-                .Where(x => x.BulletinId == aId)
-                .ProjectTo<SanctionDTO>(mapper.ConfigurationProvider);
-
-            return await Task.FromResult(result);
+            var sanctions = await _bulletinRepository.SelectAllSanctionsAsync();
+            var filteredSanctions = sanctions.Where(x => x.BulletinId == aId);         
+            return filteredSanctions.ProjectTo<SanctionDTO>(mapperConfiguration);
         }
 
         public async Task<IQueryable<DecisionDTO>> GetDecisionsByBulletinIdAsync(string aId)
         {
-            var result = dbContext.BDecisions
-                .AsNoTracking()
-                .Include(x => x.DecisionAuth)
-                .Include(x => x.DecisionChType)
-                .Include(x => x.DecisionType)
-                .Where(x => x.BulletinId == aId)
-                .ProjectTo<DecisionDTO>(mapper.ConfigurationProvider);
-
-            return await Task.FromResult(result);
+            var decisions = await _bulletinRepository.SelectAllDecisionsAsync();
+            var filteredDecisions = decisions.Where(x => x.BulletinId == aId);
+            return filteredDecisions.ProjectTo<DecisionDTO>(mapperConfiguration);           
         }
 
         public async Task<IQueryable<DocumentDTO>> GetDocumentsByBulletinIdAsync(string aId)
         {
-            var result = dbContext.DDocuments
-                .AsNoTracking()
-                .Include(x => x.DocType)
-                .Include(x => x.DocContent)
-                .Where(x => x.BulletinId == aId)
-                .ProjectTo<DocumentDTO>(mapper.ConfigurationProvider);
-
-            return await Task.FromResult(result);
+            var documents = await _bulletinRepository.SelectAllDocumentsAsync();
+            var filteredDocuments = documents.Where(x => x.BulletinId == aId);
+            return filteredDocuments.ProjectTo<DocumentDTO>(mapperConfiguration);
         }
 
         public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
         {
-            if (aInDto == null)
-                throw new ArgumentNullException(nameof(aInDto));
-
             if (aInDto.DocumentContent?.Length == 0)
                 throw new ArgumentNullException("Documetn is empty");
 
@@ -143,12 +111,9 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteComplaintDocumentAsync(string documentId)
+        public async Task DeleteDocumentAsync(string documentId)
         {
-            var document = await dbContext.Set<DDocument>().AsNoTracking()
-                .Include(x => x.DocContent)
-                .FirstOrDefaultAsync(x => x.Id == documentId);
-
+            var document = await _bulletinRepository.SelectDocumentAsync(documentId);
             if (document == null)
             {
                 throw new ArgumentException($"Document with id: {documentId} is missing");
@@ -165,28 +130,18 @@ namespace MJ_CAIS.Services
 
         public async Task<DocumentDTO> GetDocumentContentAsync(string documentId)
         {
-            var document = await dbContext.Set<DDocument>().AsNoTracking()
-                .Include(x => x.DocContent)
-                .FirstOrDefaultAsync(x => x.Id == documentId);
+            var document = await _bulletinRepository.SelectDocumentAsync(documentId);
+            if (document == null) return null;
 
-            if (document == null || document.DocContent == null) return null;
-
-            return new DocumentDTO
-            {
-                Name = document.Name,
-                DocumentContent = document.DocContent.Content,
-                MimeType = document.DocContent.MimeType
-            };
+            var documentDTO = mapper.Map<DocumentDTO>(document);
+            documentDTO.DocumentContent = document.DocContent.Content;
+            return documentDTO;
         }
 
         public async Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId)
         {
-            var result = dbContext.BBullPersAliases
-                .AsNoTracking()
-                .Where(x => x.BulletinId == aId)
-                .ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
-
-            return await Task.FromResult(result);
+            var result = await _bulletinRepository.SelectBullPersAliasByBulletinIdAsync(aId);
+            return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
         }
 
         private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)

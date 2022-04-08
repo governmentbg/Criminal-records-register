@@ -30,5 +30,65 @@ namespace MJ_CAIS.Repositories.Impl
 
             return bulletin;
         }
+
+        public async Task<DDocument> SelectDocumentAsync(string documentId)
+        {
+            return await _dbContext.DDocuments.AsNoTracking()
+               .Include(x => x.DocContent)
+               .FirstOrDefaultAsync(x => x.Id == documentId);
+        }
+
+        public async Task<IQueryable<DDocument>> SelectAllDocumentsAsync()
+        {
+            var query = _dbContext.DDocuments.AsNoTracking()
+               .Include(x => x.DocContent);
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<IQueryable<BBullPersAlias>> SelectBullPersAliasByBulletinIdAsync(string aId)
+        {
+            return await Task.FromResult(_dbContext.BBullPersAliases.AsNoTracking()
+                .Where(x => x.BulletinId == aId));
+        }
+
+        public async Task<IQueryable<BOffence>> SelectAllOffencesAsync()
+        {
+            var query = _dbContext.BOffences
+                 .AsNoTracking()
+                 .Include(x => x.OffenceCat)
+                 .Include(x => x.EcrisOffCat)
+                 .Include(x => x.OffPlaceCountry)
+                 .Include(x => x.OffPlaceCity)
+                     .ThenInclude(x => x.Municipality)
+                 .Include(x => x.OffLvlCompl)
+                 .Include(x => x.OffLvlPart);
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<IQueryable<BSanction>> SelectAllSanctionsAsync()
+        {
+            var query = _dbContext.BSanctions
+                 .AsNoTracking()
+                 .Include(x => x.EcrisSanctCateg)
+                 .Include(x => x.SanctActivity)
+                 .Include(x => x.SanctCategory)
+                 .Include(x => x.SanctProbCateg)
+                 .Include(x => x.SanctProbMeasure);
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<IQueryable<BDecision>> SelectAllDecisionsAsync()
+        {
+            var query = _dbContext.BDecisions
+                .AsNoTracking()
+                .Include(x => x.DecisionAuth)
+                .Include(x => x.DecisionChType)
+                .Include(x => x.DecisionType);
+
+            return await Task.FromResult(query);
+        }
     }
 }

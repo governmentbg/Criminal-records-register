@@ -24,6 +24,14 @@ namespace MJ_CAIS.Services
             _internalRequestRepository = internalRequestRepository;
         }
 
+        /// <summary>
+        /// Връща списък от заявки.
+        /// Когато адвокат разглежда заявки вижда всички. 
+        /// Когато служител БС разглежда вижда всички заявки към конкретен бюлетин в неговото БС 
+        /// </summary>
+        /// <param name="aQueryOptions"></param>
+        /// <param name="bulletinId"></param>
+        /// <returns></returns>
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? bulletinId)
         {
             var entityQuery = this.GetSelectAllQueriable();
@@ -46,6 +54,13 @@ namespace MJ_CAIS.Services
             return base.InsertAsync(aInDto);
         }
 
+        /// <summary>
+        /// При одобрение на заявката от адвокат, статуса на бюлетин към нея се променя на реабилитиран,
+        /// при отхвърляне статуса от 'Подлежащ на реабилитация' се променя на 'Активен'
+        /// </summary>
+        /// <param name="aId"></param>
+        /// <param name="aInDto"></param>
+        /// <returns></returns>
         public override async Task UpdateAsync(string aId, InternalRequestDTO aInDto)
         {
             var entity = mapper.MapToEntity<InternalRequestDTO, BInternalRequest>(aInDto, false);
@@ -64,31 +79,14 @@ namespace MJ_CAIS.Services
             await SaveEntityAsync(entity, true);
         }
 
-        public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string aId, bool isBulletinId)
+        /// <summary>
+        /// Основна информация за бюлетин и лицето към него, 
+        /// което се отнася за текущата заявка за реабилитация
+        /// </summary>
+        /// <param name="bulletinId"></param>
+        /// <returns></returns>
+        public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
         {
-            // id of internal request (when action is edit)
-            if (!isBulletinId)
-            {
-                var bulleintFromIR = await dbContext.BInternalRequests.AsNoTracking()
-                    .Include(x => x.Bulletin)
-                    .Include(x => x.Bulletin.BirthCountry)
-                    .Include(x => x.Bulletin.BirthCity)
-                    .Include(x => x.Bulletin.BirthCity)
-                        .ThenInclude(x => x.Municipality)
-                            .ThenInclude(x => x.District)
-                    .Include(x => x.Bulletin.DecidingAuth)
-                    .Include(x => x.Bulletin.DecisionType)
-                    .Include(x => x.Bulletin.BPersNationalities)
-                        .ThenInclude(x => x.Country)
-                    .Include(x => x.Bulletin.BBullPersAliases)
-                    .Where(x => x.Id == aId)
-                    .Select(x => x.Bulletin)
-                    .FirstOrDefaultAsync();
-
-                return mapper.Map<BulletinPersonInfoModelDTO>(bulleintFromIR);
-            }
-
-            // id of bulletin (when action is create)
             var bulleint = await dbContext.BBulletins.AsNoTracking()
                     .Include(x => x.BirthCountry)
                     .Include(x => x.BirthCity)
@@ -100,7 +98,7 @@ namespace MJ_CAIS.Services
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
                     .Include(x => x.BBullPersAliases)
-               .FirstOrDefaultAsync(x => x.Id == aId);
+               .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             return mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
         }
