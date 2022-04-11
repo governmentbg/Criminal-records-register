@@ -8,6 +8,7 @@ import { FormGroup } from "@angular/forms";
 import { FbbcDocumentFormComponent } from "./grids/fbbc-document-form/fbbc-document-form.component";
 import { FbbcStatusTypeEnum } from "../fbbc-overview/data/fbbc-status-type.constants";
 import { CommonConstants } from "../../../@core/constants/common.constants";
+import { DocTypeConstants } from "../../../@core/constants/doc-type.constants";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -25,6 +26,7 @@ export class FbbcFormComponent
 
   public isForEdit: boolean = false;
   public bgCountryId = CommonConstants.bgCountryId;
+  public docType = DocTypeConstants.ecris;
 
   constructor(service: FbbcService, public injector: Injector) {
     super(service, injector);

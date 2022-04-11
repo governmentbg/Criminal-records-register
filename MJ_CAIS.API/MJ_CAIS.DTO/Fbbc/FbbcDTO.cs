@@ -18,9 +18,8 @@ namespace MJ_CAIS.DTO.Fbbc
         public string? BirthCityId { get; set; }
         public string? BirtyCountryDescr { get; set; }
         public string? BirthCountryId { get; set; }
-        public decimal? BirthYear { get; set; }
-        public decimal? BirthMonth { get; set; }
-        public decimal? BirthDay { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string? BirthDatePrec { get; set; }
         public DateTime? OffenceStartDate { get; set; }
         public DateTime? OffenceEndDate { get; set; }
         public string? Annotation { get; set; }
@@ -42,7 +41,7 @@ namespace MJ_CAIS.DTO.Fbbc
         public string? EcrisConvId { get; set; }
         public string? EcrisUpdConvTypeId { get; set; }
         public string? EcrisUpdConvId { get; set; }
-        public decimal? IsAdministrative { get; set; }
+        public bool? IsAdministrative { get; set; }
         public DateTime? ConvDecisionDate { get; set; }
         public DateTime? ConvDecFinalDate { get; set; }
         public decimal? SequentialIndex { get; set; }

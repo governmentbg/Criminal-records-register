@@ -255,6 +255,7 @@
             [label]="'ID на присъда от ECRIS'"
             [inputFormControl]="fullForm.ecrisConvId"
             [parentGroup]="fullForm.group"
+            [hidden]="fullForm.docTypeId.value !== docType"
           ></cais-input>
         </div>
       </div>
