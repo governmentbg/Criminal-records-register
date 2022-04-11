@@ -83,8 +83,10 @@ export class BulletinFormComponent
     this.fullForm.csAuthorityName.disable();
     this.fullForm.group.patchValue(this.dbData.element);
     this.showForUpdate =
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS &&
-      this.isEdit();
+      this.isEdit() &&
+      (this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
+        this.fullForm.statusIdDisplay.value ==
+          BulletinStatusTypeEnum.NewOffice);
     this.formFinishedLoading.emit();
   }
 

@@ -150,7 +150,7 @@ namespace MJ_CAIS.Services
 
             if (isAdded)
             {
-                entity.StatusId = BulletinConstants.Status.NewEISS;
+                entity.StatusId = BulletinConstants.Status.NewOffice;
             }
 
             UpdateDataForDestruction(entity);

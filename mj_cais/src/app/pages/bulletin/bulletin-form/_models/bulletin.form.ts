@@ -113,10 +113,10 @@ export class BulletinForm {
     this.createdByNames = new FormControl(null, [Validators.required]);
     this.approvedByNames = new FormControl(null, [Validators.required]);
     this.approvedByPosition = new FormControl(null, [Validators.required]);
-    this.statusId = new FormControl(BulletinStatusTypeEnum.NewEISS, [
+    this.statusId = new FormControl(BulletinStatusTypeEnum.NewOffice, [
       Validators.maxLength(50),
     ]);
-    this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewEISS);
+    this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewOffice);
     this.firstname = new FormControl(null, [
       Validators.required,
       Validators.maxLength(200),

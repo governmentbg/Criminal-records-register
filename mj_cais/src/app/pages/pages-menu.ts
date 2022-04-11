@@ -36,6 +36,10 @@ export class PagesMenu {
           },
           {
             title: "Нови бюлетини",
+            link: "/pages/bulletins-new-office",
+          },
+          {
+            title: "Нови бюлетини от ЕИСС",
             link: "/pages/bulletins-new-eiss",
           },
           {
@@ -49,10 +53,7 @@ export class PagesMenu {
           {
             title: "Подлежащи на реабилитация",
             link: "/pages/bulletins-for-rehabilitation",
-          },
-          {
-            title: "Бюлетини за ECRIS",
-          },
+          }         
         ],
       },
       {

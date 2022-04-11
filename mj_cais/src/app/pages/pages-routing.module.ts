@@ -30,6 +30,7 @@ import { IsinIdentifiedOverviewComponent } from "./isin/isin-data-overview/isin-
 import { IsinDataSelectBulletinFormComponent } from "./isin/isin-data-form/isin-data-select-bulletin-form/isin-data-select-bulletin-form.component";
 import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component";
 import { HomeComponent } from "./home/home.component";
+import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 
 const routes: Routes = [
   {
@@ -47,6 +48,11 @@ const routes: Routes = [
       {
         path: "bulletins",
         component: BulletinActiveOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-new-office",
+        component: BulletinNewOfficeOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {
