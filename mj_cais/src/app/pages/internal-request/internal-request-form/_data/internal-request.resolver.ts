@@ -26,17 +26,13 @@ export class InternalRequestResolver implements Resolve<any> {
     state: RouterStateSnapshot
   ): Observable<any> {
     let id = route.params["ID"];
-    let isBulletinId = false;
+    let bulletinId = route.queryParams["bulletinId"];
     let isEdit = route.data["edit"];
     let element = isEdit ? this.service.find(id) : of(null);
 
-    if (!isEdit) {
-      isBulletinId = true;
-    }
-
     let result: InternalRequestResolverData = {
       element: element,
-      bulletinPersonInfo: this.service.getBulletinPersonInfo(id, isBulletinId),
+      bulletinPersonInfo: this.service.getBulletinPersonInfo(bulletinId),
       requestTypes: this.nomenclatureService.getInternalRequestStatusesFiltered(
         IRStatusTypeEnum.New
       ),

@@ -11,5 +11,6 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string? FirstName { get; set; }
         public string? SurName { get; set; }
         public string? FamilyName { get; set; }
+        public string? BulletinId { get; set; }
     }
 }

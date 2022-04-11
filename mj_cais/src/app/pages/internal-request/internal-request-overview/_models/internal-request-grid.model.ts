@@ -10,6 +10,7 @@ export class InternalRequestGridModel {
     public firstName: Date = null;
     public surName: string = null;
     public familyName: string = null;
+    public bulletinId: string = null;
 
     constructor(init?: Partial<InternalRequestGridModel>) {
       if (init) {
@@ -23,6 +24,7 @@ export class InternalRequestGridModel {
         this.firstName = init.firstName ?? null;
         this.surName = init.surName ?? null;
         this.familyName = init.familyName ?? null;
+        this.bulletinId = init.bulletinId ?? null;
       }
     }
   }

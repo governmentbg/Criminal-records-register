@@ -22,7 +22,7 @@ namespace MJ_CAIS.Services.Contracts
 
         Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto);
 
-        Task DeleteComplaintDocumentAsync(string documentId);
+        Task DeleteDocumentAsync(string documentId);
 
         Task<DocumentDTO> GetDocumentContentAsync(string documentId);
 

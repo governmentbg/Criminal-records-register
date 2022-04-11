@@ -9,7 +9,7 @@
         public string FirstnameLat { get; set; }
         public string SurnameLat { get; set; }
         public string FamilynameLat { get; set; }
-        public string Sex { get; set; }
+        public decimal? Sex { get; set; }
         public DateTime? BirthDate { get; set; }
         public string Egn { get; set; }
         public string Lnch { get; set; }
@@ -20,12 +20,12 @@
         public string DecisionNumber { get; set; }
         public DateTime? DecisionDate { get; set; }
         public string CaseNumber { get; set; }
-        public int CaseYear { get; set; }
+        public decimal? CaseYear { get; set; }
         public string MotherFullname { get; set; }
         public string FatherFullname { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
-        public string[] Nationalities { get; set; }
+        public IEnumerable<string> Nationalities { get; set; }
         public string ForeignCountryAddress { get; set; }
         public string MunicipalityName { get; set; }
         public string Districtname { get; set; }

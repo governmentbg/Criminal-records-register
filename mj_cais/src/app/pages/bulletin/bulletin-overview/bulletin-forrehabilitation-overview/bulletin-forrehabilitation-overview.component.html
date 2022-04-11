@@ -122,7 +122,8 @@
       <mat-menu #menu="matMenu">
         <button
           mat-menu-item
-          [routerLink]="['/pages/internal-requests/create/', cell.rowData.id]"
+          [routerLink]="['/pages/internal-request/create/']"
+          [queryParams]="{bulletinId: cell.rowData.id}"
         >
           <span class="ml-1">Създай заявка</span>
         </button>

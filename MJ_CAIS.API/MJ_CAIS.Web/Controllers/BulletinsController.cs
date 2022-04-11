@@ -103,7 +103,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpDelete("{aId}/documents/{documentId}")]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
-            await this._bulletinService.DeleteComplaintDocumentAsync(documentId);
+            await this._bulletinService.DeleteDocumentAsync(documentId);
             return Ok();
         }
 
@@ -115,7 +115,7 @@ namespace MJ_CAIS.Web.Controllers
 
             var content = result.DocumentContent;
             var fileName = result.Name;
-            var mimeType = getContentType(fileName);
+            var mimeType = GetContentType(fileName);
 
             Response.Headers.Add("File-Name", fileName);
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
@@ -130,7 +130,7 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        private string getContentType(string fileName)
+        private string GetContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
 
