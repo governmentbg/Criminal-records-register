@@ -42,7 +42,7 @@ namespace EcrisRIClient
                 MessageIdentifier = identifier //"RI-NOT-000000000000633"
             };
             var resp = await client.readMessageAsync(request);
-            var result = XmlUtils.SerializeToXml(resp.ReadMessageWSOutput.WSData);
+            var result = XmlUtils.SerializeToXml(resp.ReadMessageWSOutput);
             return result;
         }
     }
