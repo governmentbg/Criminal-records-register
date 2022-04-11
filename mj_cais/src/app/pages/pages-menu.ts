@@ -39,7 +39,7 @@ export class PagesMenu {
             link: "/pages/bulletins-new-eiss",
           },
           {
-            title: "За отразяване",
+            title: "За отразяване от ИСИН",
             link: "/pages/isin-identified",
           },
           {

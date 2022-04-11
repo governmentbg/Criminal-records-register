@@ -90,5 +90,23 @@ namespace MJ_CAIS.Repositories.Impl
 
             return await Task.FromResult(query);
         }
+
+        public async Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId)
+        {
+            var bulleint = await _dbContext.BBulletins.AsNoTracking()
+                    .Include(x => x.BirthCountry)
+                    .Include(x => x.BirthCity)
+                    .Include(x => x.BirthCity)
+                        .ThenInclude(x => x.Municipality)
+                            .ThenInclude(x => x.District)
+                    .Include(x => x.DecidingAuth)
+                    .Include(x => x.DecisionType)
+                    .Include(x => x.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+                    .Include(x => x.BBullPersAliases)
+               .FirstOrDefaultAsync(x => x.Id == bulletinId);
+
+            return bulleint;
+        }
     }
 }

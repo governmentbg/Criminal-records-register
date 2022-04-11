@@ -11,5 +11,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<BOffence>> SelectAllOffencesAsync();
         Task<IQueryable<BSanction>> SelectAllSanctionsAsync();
         Task<IQueryable<BDecision>> SelectAllDecisionsAsync();
+        Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId);
     }
 }
