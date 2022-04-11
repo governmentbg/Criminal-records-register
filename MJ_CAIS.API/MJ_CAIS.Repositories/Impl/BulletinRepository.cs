@@ -2,6 +2,8 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.DTO.Bulletin;
+using System.Linq;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -107,6 +109,19 @@ namespace MJ_CAIS.Repositories.Impl
                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             return bulleint;
+        }
+
+        public async Task<IQueryable<BulletinStatusCountDTO>> GetStatusCountAsync()
+        {
+            var query = _dbContext.BBulletins.AsNoTracking()
+                .GroupBy(x => x.StatusId)
+                .Select(x => new BulletinStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count()
+                });
+
+            return await Task.FromResult(query);
         }
     }
 }

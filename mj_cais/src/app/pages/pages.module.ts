@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { NbMenuModule, NbTabsetModule } from "@nebular/theme";
+import { NbListModule, NbMenuModule, NbTabsetModule } from "@nebular/theme";
 
 import { ThemeModule } from "../@theme/theme.module";
 import { PagesComponent } from "./pages.component";
@@ -40,6 +40,7 @@ import { IsinDataPreviewFormComponent } from './isin/isin-data-form/isin-data-pr
 import { BulletinPersonInfoComponent } from "../@core/components/shared/bulletin-person-info/bulletin-person-info.component";
 import { IsinDataFormComponent } from './isin/isin-data-form/isin-data-form/isin-data-form.component';
 import { BulletinIsinFormComponent } from './bulletin/bulletin-form/tabs/bulletin-isin-form/bulletin-isin-form.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { BulletinIsinFormComponent } from './bulletin/bulletin-form/tabs/bulleti
     ThemeModule,
     NbMenuModule,
     NbTabsetModule,
+    NbListModule,
     DashboardModule,
     MiscellaneousModule,
     SharedModule,
@@ -83,7 +85,8 @@ import { BulletinIsinFormComponent } from './bulletin/bulletin-form/tabs/bulleti
     IsinDataPreviewFormComponent,
     BulletinPersonInfoComponent,
     IsinDataFormComponent,
-    BulletinIsinFormComponent
+    BulletinIsinFormComponent,
+    HomeComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

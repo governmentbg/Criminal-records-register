@@ -29,6 +29,7 @@ import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destr
 import { IsinIdentifiedOverviewComponent } from "./isin/isin-data-overview/isin-identified-overview/isin-identified-overview.component";
 import { IsinDataSelectBulletinFormComponent } from "./isin/isin-data-form/isin-data-select-bulletin-form/isin-data-select-bulletin-form.component";
 import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component";
+import { HomeComponent } from "./home/home.component";
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
       {
         path: "iot-dashboard",
         component: DashboardComponent,
+      },
+      {
+        path: "home",
+        component: HomeComponent,
       },
       {
         path: "bulletins",
@@ -251,7 +256,7 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "iot-dashboard",
+        redirectTo: "home",
         pathMatch: "full",
       },
       {
