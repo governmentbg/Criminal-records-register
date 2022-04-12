@@ -3,7 +3,6 @@ import { NbListModule, NbMenuModule, NbTabsetModule } from "@nebular/theme";
 
 import { ThemeModule } from "../@theme/theme.module";
 import { PagesComponent } from "./pages.component";
-import { DashboardModule } from "./dashboard/dashboard.module";
 import { PagesRoutingModule } from "./pages-routing.module";
 import { MiscellaneousModule } from "./miscellaneous/miscellaneous.module";
 import { SharedModule } from "../shared.module";
@@ -50,7 +49,6 @@ import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview
     NbMenuModule,
     NbTabsetModule,
     NbListModule,
-    DashboardModule,
     MiscellaneousModule,
     SharedModule,
     CoreModule.forRoot(),
