@@ -11,16 +11,16 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        // public override async Task<Fbbc> SelectAsync(string aId)
-        // {
-        //     var fbbc = await _dbContext.Fbbcs
-        //        .Include(x => x.BirthCountry)
-        //        .Include(x => x.BirthCity)
-        //            .ThenInclude(x => x.Municipality)
-        //        .AsNoTracking()
-        //        .FirstOrDefaultAsync(x => x.Id == aId);
+        public override async Task<Fbbc> SelectAsync(string aId)
+        {
+            var fbbc = await _dbContext.Fbbcs
+               .Include(x => x.BirthCountry)
+               .Include(x => x.BirthCity)
+                   .ThenInclude(x => x.Municipality)
+               .AsNoTracking()
+               .FirstOrDefaultAsync(x => x.Id == aId);
 
-        //     return fbbc;
-        // }
+            return fbbc;
+        }
     }
 }

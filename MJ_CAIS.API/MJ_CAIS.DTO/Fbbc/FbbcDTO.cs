@@ -4,7 +4,7 @@ namespace MJ_CAIS.DTO.Fbbc
 {
     public class FbbcDTO : BaseDTO
     {
-        public string? CountryId { get; set; }
+        public LookupDTO Country { get; set; } = new LookupDTO();
         public string? DocTypeId { get; set; }
         public string? SanctionTypeId { get; set; }
         public DateTime? ReceiveDate { get; set; }

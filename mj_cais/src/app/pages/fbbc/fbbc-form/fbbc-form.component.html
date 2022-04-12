@@ -4,6 +4,8 @@
       [label]="displayTitle"
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
+      [onDeleteFunction]="deleteFunction"
+      [setforDelete]="true"
     ></cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
@@ -24,14 +26,13 @@
 
       <div class="row">
         <div class="form-group col-md-4">
-          <cais-autocomplete
+          <cais-lookup
             [label]="'Държава'"
-            [inputFormControl]="fullForm.countryId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'countryId'"
-            [items]="dbData.countries"
+            [inputControl]="fullForm.country"
+            [parentGroup]="fullForm.country.group"
+            [openFunction]="openCountryDialog"
           >
-          </cais-autocomplete>
+          </cais-lookup>
         </div>
       </div>
 

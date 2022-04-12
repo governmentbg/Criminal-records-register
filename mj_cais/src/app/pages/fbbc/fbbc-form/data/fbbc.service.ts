@@ -18,15 +18,26 @@ export class FbbcService extends CaisCrudService<FbbcModel, string> {
     );
   }
 
-  public saveDocument(fbbcId: string ,model: FbbcDocumentModel): Observable<any> {
+  public saveDocument(
+    fbbcId: string,
+    model: FbbcDocumentModel
+  ): Observable<any> {
     return this.http.post<FbbcDocumentModel>(
       environment.apiUrl + `/fbbcs/${fbbcId}/documents`,
       model
     );
   }
 
-  public downloadDocument(fbbcId: string ,documentId: string){
-    let url = environment.apiUrl + `/fbbcs/${fbbcId}/documents-download/` + documentId;
-		return this.http.get(url, { responseType: 'blob', observe: 'response' });
+  public downloadDocument(fbbcId: string, documentId: string) {
+    let url =
+      environment.apiUrl + `/fbbcs/${fbbcId}/documents-download/` + documentId;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+  public changeStatus(aId: string, statusId: string): Observable<any> {
+    return this.http.put(
+      environment.apiUrl + `/fbbcs/${aId}/change-status/${statusId}`,
+      {}
+    );
   }
 }

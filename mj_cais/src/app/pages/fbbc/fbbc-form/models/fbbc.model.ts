@@ -1,3 +1,5 @@
+import { AddressModel } from "../../../../@core/components/forms/address-form/model/address.model";
+
 export class FbbcModel {
   public id: string = null;
   public countryId: string = null;
@@ -44,6 +46,7 @@ export class FbbcModel {
   public destroyedDate: Date = null;
   public personId: string = null;
   public version: number = null;
+  public address: AddressModel = new AddressModel();
 
   constructor(init?: Partial<FbbcModel>) {
     if (init) {
@@ -93,6 +96,7 @@ export class FbbcModel {
       this.destroyedDate = init.destroyedDate ?? null;
       this.personId = init.personId ?? null;
       this.version = init.version ?? null;
+      this.address = init.address ?? new AddressModel()
     }
   }
 }

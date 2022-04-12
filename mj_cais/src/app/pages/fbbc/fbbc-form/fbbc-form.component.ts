@@ -9,6 +9,9 @@ import { FbbcDocumentFormComponent } from "./grids/fbbc-document-form/fbbc-docum
 import { FbbcStatusTypeEnum } from "../fbbc-overview/data/fbbc-status-type.constants";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { DocTypeConstants } from "../../../@core/constants/doc-type.constants";
+import { NbDialogService } from "@nebular/theme";
+import { CountryGridModel } from "../../../@core/components/forms/address-form/dialog/_models/country-grid.model";
+import { CountryDialogComponent } from "../../../@core/components/forms/address-form/dialog/country-dialog/country-dialog.component";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -23,12 +26,17 @@ export class FbbcFormComponent
     read: FbbcDocumentFormComponent,
   })
   public fbbcDocumentsForm: FbbcDocumentFormComponent;
+  public fbbcService: FbbcService;
 
   public isForEdit: boolean = false;
   public bgCountryId = CommonConstants.bgCountryId;
   public docType = DocTypeConstants.ecris;
 
-  constructor(service: FbbcService, public injector: Injector) {
+  constructor(
+    service: FbbcService,
+    public injector: Injector,
+    private dialogService: NbDialogService
+  ) {
     super(service, injector);
     this.backUrl = "pages/fbbcs";
     this.setDisplayTitle("Осъдени в чужбина");
@@ -52,5 +60,23 @@ export class FbbcFormComponent
 
   submitFunction = () => {
     this.validateAndSave(this.fullForm);
+  };
+
+  deleteFunction = () => {
+    debugger;
+    let id = this.activatedRoute.snapshot.params["ID"];
+    this.service.changeStatus(id, FbbcStatusTypeEnum.Deleted);
+  };
+
+  public openCountryDialog = () => {
+    this.dialogService
+      .open(CountryDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe(this.onSelectCountry);
+  };
+
+  public onSelectCountry = (item: CountryGridModel) => {
+    if (item) {
+      this.fullForm.country.setValue(item.id, item.name);
+    }
   };
 }
