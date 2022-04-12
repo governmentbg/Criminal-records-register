@@ -120,6 +120,7 @@
 
     <igx-action-strip #actionstrip>
       <button
+        *ngIf="!isForPreview"
         title="Редактирай"
         igxButton="icon"
         igxRipple
@@ -128,6 +129,7 @@
         <igx-icon>edit</igx-icon>
       </button>
       <button
+        *ngIf="!isForPreview"
         title="Изтрии"
         igxButton="icon"
         igxRipple

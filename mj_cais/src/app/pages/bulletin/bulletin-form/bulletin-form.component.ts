@@ -82,6 +82,10 @@ export class BulletinFormComponent
     this.fullForm.statusIdDisplay.disable();
     this.fullForm.csAuthorityName.disable();
     this.fullForm.group.patchValue(this.dbData.element);
+
+    //let disableEdit = this.fullForm.statusIdDisplay.value != BulletinStatusTypeEnum.NewOffice;
+    //this.isForPreview = disableEdit;
+
     this.showForUpdate =
       this.isEdit() &&
       (this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
