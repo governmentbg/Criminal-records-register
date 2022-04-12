@@ -19,7 +19,13 @@ export class PagesMenu {
   }
 
   getMenuItems(): NbMenuItem[] {
-    const dashboardMenu: NbMenuItem[] = [    
+    const dashboardMenu: NbMenuItem[] = [
+      {
+        title: "",
+        link: "/pages/home",
+        home: true,
+        hidden: true,
+      },
       {
         title: "Бюлетини",
         icon: { icon: "file-alt", pack: "fa" },
@@ -47,7 +53,7 @@ export class PagesMenu {
           {
             title: "Подлежащи на реабилитация",
             link: "/pages/bulletins-for-rehabilitation",
-          }         
+          },
         ],
       },
       {
@@ -60,7 +66,7 @@ export class PagesMenu {
           },
         ],
       },
-     {
+      {
         title: "Осъдени в чужбина",
         icon: { icon: "file-alt", pack: "fa" },
         children: [
@@ -97,7 +103,7 @@ export class PagesMenu {
         title: "Изтърпени наказания",
         icon: "shuffle-2-outline",
         link: "/pages/isin-new",
-      }     
+      },
     ];
 
     return dashboardMenu;
