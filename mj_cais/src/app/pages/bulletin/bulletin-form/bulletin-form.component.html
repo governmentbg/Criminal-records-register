@@ -7,7 +7,7 @@
     >
       <div>
         <button
-          *ngIf="!isForPreview && showForUpdate"
+          *ngIf="isForPreview && showForUpdate"
           nbButton
           matRipple
           [status]="'success'"
@@ -49,7 +49,7 @@
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'number'"
-                [label]="'Пореден номер на бюлетина за лицето '"
+                [label]="'Пореден номер на бюлетина за лицето'"
                 [inputFormControl]="fullForm.sequentialIndex"
                 [parentGroup]="fullForm.group"
               ></cais-input>
@@ -266,7 +266,7 @@
                 <button
                   igxButton="flat"
                   (click)="bulletinPersonAliasDialog.open()"
-                  *ngIf="!isForPreview"
+                  *ngIf="isBulletinPersonAliasEditable"
                   class="addProdBtn"
                 >
                   <igx-icon>add</igx-icon> Добави
@@ -320,7 +320,7 @@
 
               <igx-action-strip #actionstrip>
                 <button
-                *ngIf="!isForPreview"
+                  *ngIf="isBulletinPersonAliasEditable"
                   title="Редактирай"
                   igxButton="icon"
                   igxRipple
@@ -329,7 +329,7 @@
                   <igx-icon>edit</igx-icon>
                 </button>
                 <button
-                *ngIf="!isForPreview"
+                  *ngIf="isBulletinPersonAliasEditable"
                   title="Изтрии"
                   igxButton="icon"
                   igxRipple
@@ -478,16 +478,16 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
-                [label]="'ЛН'"
-                [inputFormControl]="fullForm.ln"
+                [label]="'ЛНЧ'"
+                [inputFormControl]="fullForm.lnch"
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
-                [label]="'ЛНЧ'"
-                [inputFormControl]="fullForm.lnch"
+                [label]="'ЛН'"
+                [inputFormControl]="fullForm.ln"
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
@@ -759,7 +759,7 @@
             #bulletineOffences
             [bulletinOffenceTransactions]="fullForm.offancesTransactions"
             [dbData]="dbData"
-            [isForPreview]="isForPreview"
+            [isForPreview]="!isOffancesEditable"
           ></cais-bulletin-offences-form>
         </nb-tab>
 
@@ -768,7 +768,7 @@
             #bulletineSanctions
             [bulletinSanctionsTransactions]="fullForm.sanctionsTransactions"
             [dbData]="dbData"
-            [isForPreview]="isForPreview"
+            [isForPreview]="!isSanctionsEditable"
           >
           </cais-bulletin-sanctions-form>
         </nb-tab>
@@ -791,9 +791,7 @@
           <cais-bulletin-document-form
             #bulletineDocuments
             [bulletinForm]="fullForm"
-            [showAddDeleteButton]="
-              (isEdit() && !isForPreview) || (!isEdit() && isForPreview)
-            "
+            [showAddDeleteButton]="isDocumentsEditable"
             [documents]="dbData.documents"
             [dbData]="dbData"
           >

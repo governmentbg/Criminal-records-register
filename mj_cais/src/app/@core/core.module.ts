@@ -113,7 +113,8 @@ const COMPONENTS = [
   CaisGridPagerComponent,
   LookupComponent,
   MultipleChooseComponent,
-  AddressFormComponent
+  AddressFormComponent,
+  CountryDialogComponent,
 ];
 
 @NgModule({
@@ -129,7 +130,7 @@ const COMPONENTS = [
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule
   ],
-  declarations: [...COMPONENTS, CountryDialogComponent],
+  declarations: [...COMPONENTS],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
   ],

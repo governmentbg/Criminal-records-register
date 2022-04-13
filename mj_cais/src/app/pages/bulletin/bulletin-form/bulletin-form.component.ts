@@ -31,30 +31,38 @@ export class BulletinFormComponent
   >
   implements OnInit
 {
+  //#region Престъпления
   @ViewChild("bulletineOffences", {
     read: BulletinOffencesFormComponent,
   })
   public bulletineOffencesForm: BulletinOffencesFormComponent;
+  public isOffancesEditable: boolean;
+  //#endregion
 
+  //#region Наказания
   @ViewChild("bulletineSanctions", {
     read: BulletinSanctionsFormComponent,
   })
   public bulletineSanctionsForm: BulletinSanctionsFormComponent;
+  public isSanctionsEditable: boolean;
+  //#endregion
 
+  //#region Допълнителни сведения
   @ViewChild("bulletineDecisions", {
     read: BulletinDecisionFormComponent,
   })
   public bulletineDescitionForm: BulletinDecisionFormComponent;
+  //#endregion
 
+  //#region Докумнти
   @ViewChild("bulletineDocuments", {
     read: BulletinDocumentFormComponent,
   })
   public bulletineDocumentsForm: BulletinDocumentFormComponent;
+  public isDocumentsEditable: boolean;
+  //#endregion
 
-  public showForUpdate: boolean = false;
-
-  //#region Person alias variables
-
+  //#region Псевдоним или други използвани имена
   public bulletinPersonAliasForm = new BulletinPersonAliasForm();
   @ViewChild("bulletinPersonAliasGrid", { read: IgxGridComponent })
   public bulletinPersonAliasGrid: IgxGridComponent;
@@ -62,11 +70,37 @@ export class BulletinFormComponent
   @ViewChild("bulletinPersonAliasDialog", { read: IgxDialogComponent })
   public bulletinPersonAliasDialog: IgxDialogComponent;
 
+  public isBulletinPersonAliasEditable = false;
   //#endregion
+
+  public showForUpdate: boolean = false;
 
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
     this.setDisplayTitle("бюлетин");
+  }
+
+  ngOnInit(): void {
+    let bulletinStatusId = (this.dbData.element as any)?.statusId;
+
+    // на този етап всички гридове без Допълнителни сведения
+    // могат да  се редактира само ако бюлетина е в статус нов от БС
+    let isGridsEditable =
+      !this.isForPreview &&
+      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
+    this.isBulletinPersonAliasEditable = isGridsEditable;
+    this.isOffancesEditable = isGridsEditable;
+    this.isSanctionsEditable = isGridsEditable;
+    this.isDocumentsEditable = isGridsEditable;
+
+    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit());
+    this.fullForm.group.patchValue(this.dbData.element);
+
+    this.showForUpdate =
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+
+    this.formFinishedLoading.emit();
   }
 
   buildFormImpl(): FormGroup {
@@ -75,23 +109,6 @@ export class BulletinFormComponent
 
   createInputObject(object: BulletinModel) {
     return new BulletinModel(object);
-  }
-
-  ngOnInit(): void {
-    this.fullForm = new BulletinForm();
-    this.fullForm.statusIdDisplay.disable();
-    this.fullForm.csAuthorityName.disable();
-    this.fullForm.group.patchValue(this.dbData.element);
-
-    //let disableEdit = this.fullForm.statusIdDisplay.value != BulletinStatusTypeEnum.NewOffice;
-    //this.isForPreview = disableEdit;
-
-    this.showForUpdate =
-      this.isEdit() &&
-      (this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
-        this.fullForm.statusIdDisplay.value ==
-          BulletinStatusTypeEnum.NewOffice);
-    this.formFinishedLoading.emit();
   }
 
   updateFunction = () => {
