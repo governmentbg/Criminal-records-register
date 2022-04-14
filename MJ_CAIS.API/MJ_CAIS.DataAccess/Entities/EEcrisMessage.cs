@@ -9,6 +9,8 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             DDocuments = new HashSet<DDocument>();
             EEcrisIdentifications = new HashSet<EEcrisIdentification>();
+            EEcrisInboxes = new HashSet<EEcrisInbox>();
+            EEcrisOutboxes = new HashSet<EEcrisOutbox>();
             EWebRequests = new HashSet<EWebRequest>();
             InverseRequestMsg = new HashSet<EEcrisMessage>();
         }
@@ -44,6 +46,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual EEcrisAuthority? ToAuth { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }
+        public virtual ICollection<EEcrisInbox> EEcrisInboxes { get; set; }
+        public virtual ICollection<EEcrisOutbox> EEcrisOutboxes { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
         public virtual ICollection<EEcrisMessage> InverseRequestMsg { get; set; }
     }
