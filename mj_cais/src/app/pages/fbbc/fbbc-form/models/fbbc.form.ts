@@ -1,11 +1,13 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
+import { LookupForm } from "../../../../@core/components/forms/inputs/lookup/models/lookup.form";
 
 export class FbbcForm {
   public group: FormGroup;
 
   public id: FormControl;
-  public countryId: FormControl;
+  //public countryId: FormControl;
+  public country: LookupForm;
   public docTypeId: FormControl;
   public sanctionTypeId: FormControl;
   public receiveDate: FormControl;
@@ -52,7 +54,8 @@ export class FbbcForm {
 
   constructor() {
     this.id = new FormControl(null);
-    this.countryId = new FormControl(null);
+    // this.countryId = new FormControl(null);
+    this.country = new LookupForm(true);
     this.docTypeId = new FormControl(null);
     this.sanctionTypeId = new FormControl(null);
     this.receiveDate = new FormControl(null);
@@ -99,7 +102,8 @@ export class FbbcForm {
 
     this.group = new FormGroup({
       id: this.id,
-      countryId: this.countryId,
+      // countryId: this.countryId,
+      country: this.country.group,
       docTypeId: this.docTypeId,
       sanctionTypeId: this.sanctionTypeId,
       receiveDate: this.receiveDate,

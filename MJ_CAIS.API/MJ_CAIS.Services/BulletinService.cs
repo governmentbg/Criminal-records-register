@@ -148,9 +148,10 @@ namespace MJ_CAIS.Services
         {
             var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
 
+            // въвеждане на бюлетин е възможно единствено от служител БС
             if (isAdded)
             {
-                entity.StatusId = BulletinConstants.Status.NewEISS;
+                entity.StatusId = BulletinConstants.Status.NewOffice;
             }
 
             UpdateDataForDestruction(entity);

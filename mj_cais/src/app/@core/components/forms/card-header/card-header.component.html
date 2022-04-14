@@ -30,5 +30,18 @@
         {{ isForPreview ? "Назад" : "Отказ" }}
       </button>
     </div>
+    <div>
+      <button
+        *ngIf="isForEdit && isForDelete && !isForPreview"
+        nbButton
+        matRipple
+        (click)="onDeleteFunction()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px"
+      >
+        Изтрий
+      </button>
+    </div>
   </div>
 </div>

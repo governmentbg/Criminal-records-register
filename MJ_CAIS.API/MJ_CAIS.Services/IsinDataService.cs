@@ -16,11 +16,13 @@ namespace MJ_CAIS.Services
     public class IsinDataService : BaseAsyncService<IsinDataDTO, IsinDataDTO, IsinDataGridDTO, EIsinDatum, string, CaisDbContext>, IIsinDataService
     {
         private readonly IIsinDataRepository _isinDataRepository;
+        private readonly IBulletinRepository _bulletinRepository;
 
-        public IsinDataService(IMapper mapper, IIsinDataRepository isinDataRepository)
+        public IsinDataService(IMapper mapper, IIsinDataRepository isinDataRepository, IBulletinRepository bulletinRepository)
             : base(mapper, isinDataRepository)
         {
             _isinDataRepository = isinDataRepository;
+            _bulletinRepository = bulletinRepository;
         }
 
         public virtual async Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string? status, string? bulletinId)
@@ -68,25 +70,12 @@ namespace MJ_CAIS.Services
         public async Task<IsinDataPreviewDTO> SelectForPreviewAsync(string aIdDto)
         {
             var isin = await SelectIsinDataAsync(aIdDto);
-
             if (isin == null) return null;
 
-            var bulleint = await dbContext.BBulletins.AsNoTracking()
-                 .Include(x => x.BirthCountry)
-                 .Include(x => x.BirthCity)
-                 .Include(x => x.BirthCity)
-                     .ThenInclude(x => x.Municipality)
-                         .ThenInclude(x => x.District)
-                 .Include(x => x.DecidingAuth)
-                 .Include(x => x.DecisionType)
-                 .Include(x => x.BPersNationalities)
-                     .ThenInclude(x => x.Country)
-                 .Include(x => x.BBullPersAliases)
-            .FirstOrDefaultAsync(x => x.Id == isin.BulletinId);
+            var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(isin.BulletinId);
+            if (bulletin == null) return null;
 
-            if (bulleint == null) return null;
-
-            isin.BulletinPersonInfo = mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
+            isin.BulletinPersonInfo = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
             return isin;
         }
 
@@ -200,7 +189,8 @@ namespace MJ_CAIS.Services
                 .Include(x => x.DecisionType)
                 .Include(x => x.BirthCountry)
                 .Include(x => x.BirthCity)
-                .Include(x => x.BPersNationalities).ThenInclude(x => x.Country)
+                .Include(x => x.BPersNationalities)
+                    .ThenInclude(x => x.Country)
                 .ProjectTo<IsinBulletinGridDTO>(mapperConfiguration);
         }
 

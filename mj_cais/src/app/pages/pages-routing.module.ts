@@ -2,7 +2,6 @@ import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 
 import { PagesComponent } from "./pages.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 import { BulletinFormComponent } from "./bulletin/bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin/bulletin-form/_data/bulletin.resolver";
@@ -29,6 +28,8 @@ import { FbbcDestructedOverviewComponent } from "./fbbc/fbbc-overview/fbbc-destr
 import { IsinIdentifiedOverviewComponent } from "./isin/isin-data-overview/isin-identified-overview/isin-identified-overview.component";
 import { IsinDataSelectBulletinFormComponent } from "./isin/isin-data-form/isin-data-select-bulletin-form/isin-data-select-bulletin-form.component";
 import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component";
+import { HomeComponent } from "./home/home.component";
+import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 
 const routes: Routes = [
   {
@@ -36,12 +37,17 @@ const routes: Routes = [
     component: PagesComponent,
     children: [
       {
-        path: "iot-dashboard",
-        component: DashboardComponent,
+        path: "home",
+        component: HomeComponent,
       },
       {
         path: "bulletins",
         component: BulletinActiveOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-new-office",
+        component: BulletinNewOfficeOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {
@@ -210,38 +216,7 @@ const routes: Routes = [
         path: "isin-data/preview/:ID",
         component: IsinDataPreviewFormComponent,
         // canActivate: [AuthGuard],
-      },
-      {
-        path: "layout",
-        loadChildren: () =>
-          import("./layout/layout.module").then((m) => m.LayoutModule),
-      },
-      {
-        path: "forms",
-        loadChildren: () =>
-          import("./forms/forms.module").then((m) => m.FormsModule),
-      },
-      {
-        path: "ui-features",
-        loadChildren: () =>
-          import("./ui-features/ui-features.module").then(
-            (m) => m.UiFeaturesModule
-          ),
-      },
-      {
-        path: "modal-overlays",
-        loadChildren: () =>
-          import("./modal-overlays/modal-overlays.module").then(
-            (m) => m.ModalOverlaysModule
-          ),
-      },
-      {
-        path: "extra-components",
-        loadChildren: () =>
-          import("./extra-components/extra-components.module").then(
-            (m) => m.ExtraComponentsModule
-          ),
-      },
+      },  
       {
         path: "miscellaneous",
         loadChildren: () =>
@@ -251,7 +226,7 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "iot-dashboard",
+        redirectTo: "home",
         pathMatch: "full",
       },
       {

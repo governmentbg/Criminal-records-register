@@ -17,11 +17,13 @@ namespace MJ_CAIS.Services
     public class InternalRequestService : BaseAsyncService<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, BInternalRequest, string, CaisDbContext>, IInternalRequestService
     {
         private readonly IInternalRequestRepository _internalRequestRepository;
+        private readonly IBulletinRepository _bulletinRepository;
 
-        public InternalRequestService(IMapper mapper, IInternalRequestRepository internalRequestRepository)
+        public InternalRequestService(IMapper mapper, IInternalRequestRepository internalRequestRepository, IBulletinRepository bulletinRepository)
             : base(mapper, internalRequestRepository)
         {
             _internalRequestRepository = internalRequestRepository;
+            _bulletinRepository = bulletinRepository;
         }
 
         /// <summary>
@@ -87,19 +89,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
         {
-            var bulleint = await dbContext.BBulletins.AsNoTracking()
-                    .Include(x => x.BirthCountry)
-                    .Include(x => x.BirthCity)
-                    .Include(x => x.BirthCity)
-                        .ThenInclude(x => x.Municipality)
-                            .ThenInclude(x => x.District)
-                    .Include(x => x.DecidingAuth)
-                    .Include(x => x.DecisionType)
-                    .Include(x => x.BPersNationalities)
-                        .ThenInclude(x => x.Country)
-                    .Include(x => x.BBullPersAliases)
-               .FirstOrDefaultAsync(x => x.Id == bulletinId);
-
+            var bulleint = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
             return mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
         }
 

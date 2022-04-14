@@ -2,6 +2,8 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.DTO.Bulletin;
+using System.Linq;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -87,6 +89,37 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.DecisionAuth)
                 .Include(x => x.DecisionChType)
                 .Include(x => x.DecisionType);
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId)
+        {
+            var bulleint = await _dbContext.BBulletins.AsNoTracking()
+                    .Include(x => x.BirthCountry)
+                    .Include(x => x.BirthCity)
+                    .Include(x => x.BirthCity)
+                        .ThenInclude(x => x.Municipality)
+                            .ThenInclude(x => x.District)
+                    .Include(x => x.DecidingAuth)
+                    .Include(x => x.DecisionType)
+                    .Include(x => x.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+                    .Include(x => x.BBullPersAliases)
+               .FirstOrDefaultAsync(x => x.Id == bulletinId);
+
+            return bulleint;
+        }
+
+        public async Task<IQueryable<BulletinStatusCountDTO>> GetStatusCountAsync()
+        {
+            var query = _dbContext.BBulletins.AsNoTracking()
+                .GroupBy(x => x.StatusId)
+                .Select(x => new BulletinStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count()
+                });
 
             return await Task.FromResult(query);
         }
