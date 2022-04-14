@@ -16,6 +16,7 @@ import {
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
 import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.constants";
+import { EActions } from "@tl/tl-common";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -74,7 +75,6 @@ export class BulletinFormComponent
   //#endregion
 
   public showForUpdate: boolean = false;
-
   constructor(service: BulletinService, public injector: Injector) {
     super(service, injector);
     this.setDisplayTitle("бюлетин");
@@ -86,12 +86,15 @@ export class BulletinFormComponent
     // на този етап всички гридове без Допълнителни сведения
     // могат да  се редактира само ако бюлетина е в статус нов от БС
     let isGridsEditable =
-      !this.isForPreview &&
-      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
+      (!this.isForPreview &&
+        bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
+      this.currentAction == EActions.CREATE;
     this.isBulletinPersonAliasEditable = isGridsEditable;
     this.isOffancesEditable = isGridsEditable;
     this.isSanctionsEditable = isGridsEditable;
-    this.isDocumentsEditable = isGridsEditable;
+    this.isDocumentsEditable =
+      !this.isForPreview &&
+      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
 
     this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit());
     this.fullForm.group.patchValue(this.dbData.element);
