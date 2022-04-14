@@ -21,7 +21,7 @@ export class IsinDataModel {
 
   public caseType: string = null;
   public caseNumber: string = null;
-  public caseYear: string = null;
+  public caseYear: number = null;
   public caseAuthName: string = null;
 
   public sanctionStartDate: Date = null;
