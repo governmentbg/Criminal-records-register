@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public BBulletin()
         {
             BBullPersAliases = new HashSet<BBullPersAlias>();
+            BBulletinStatusHes = new HashSet<BBulletinStatusH>();
             BDecisions = new HashSet<BDecision>();
             BInternalRequests = new HashSet<BInternalRequest>();
             BOffences = new HashSet<BOffence>();
@@ -85,6 +86,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? DeleteDate { get; set; }
         public DateTime? RehabilitationDate { get; set; }
         public string? EcrisConvictionId { get; set; }
+        public bool? Locked { get; set; }
+        public bool? NoSanction { get; set; }
+        public bool? PrevSuspSent { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -96,6 +100,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual BIdDocCategory? IdDocCategory { get; set; }
         public virtual BBulletinStatus? Status { get; set; }
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }
+        public virtual ICollection<BBulletinStatusH> BBulletinStatusHes { get; set; }
         public virtual ICollection<BDecision> BDecisions { get; set; }
         public virtual ICollection<BInternalRequest> BInternalRequests { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }

@@ -28,17 +28,17 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? DecisionAuthCode { get; set; }
         public string? DecisionAuthName { get; set; }
         public string? CaseNumber { get; set; }
-        public string? CaseYear { get; set; }
+        public decimal? CaseYear { get; set; }
         public string? CaseTypeId { get; set; }
         public string? CaseAuthCode { get; set; }
         public string? CaseAuthName { get; set; }
-        public string? WebRequestId { get; set; }
         public string? BulletinId { get; set; }
         public string? Status { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public string? WebRequestId { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual EWebRequest? WebRequest { get; set; }

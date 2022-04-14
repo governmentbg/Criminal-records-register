@@ -20,6 +20,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<BBullPersAlias> BBullPersAliases { get; set; } = null!;
         public virtual DbSet<BBulletin> BBulletins { get; set; } = null!;
         public virtual DbSet<BBulletinStatus> BBulletinStatuses { get; set; } = null!;
+        public virtual DbSet<BBulletinStatusH> BBulletinStatusHes { get; set; } = null!;
         public virtual DbSet<BCaseType> BCaseTypes { get; set; } = null!;
         public virtual DbSet<BDecision> BDecisions { get; set; } = null!;
         public virtual DbSet<BDecisionChType> BDecisionChTypes { get; set; } = null!;
@@ -354,6 +355,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("LNCH");
 
+                entity.Property(e => e.Locked)
+                    .HasPrecision(1)
+                    .HasColumnName("LOCKED");
+
                 entity.Property(e => e.MotherFamilyname)
                     .HasMaxLength(200)
                     .HasColumnName("MOTHER_FAMILYNAME");
@@ -369,6 +374,14 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.MotherSurname)
                     .HasMaxLength(200)
                     .HasColumnName("MOTHER_SURNAME");
+
+                entity.Property(e => e.NoSanction)
+                    .HasPrecision(1)
+                    .HasColumnName("NO_SANCTION");
+
+                entity.Property(e => e.PrevSuspSent)
+                    .HasPrecision(1)
+                    .HasColumnName("PREV_SUSP_SENT");
 
                 entity.Property(e => e.RegistrationNumber)
                     .HasMaxLength(100)
@@ -474,6 +487,74 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("NAME");
             });
 
+            modelBuilder.Entity<BBulletinStatusH>(entity =>
+            {
+                entity.ToTable("B_BULLETIN_STATUS_H");
+
+                entity.HasIndex(e => e.BulletinId, "XIF1B_BULLETIN_STATUS_H");
+
+                entity.HasIndex(e => e.NewStatusCode, "XIF2B_BULLETIN_STATUS_H");
+
+                entity.HasIndex(e => e.OldStatusCode, "XIF3B_BULLETIN_STATUS_H");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.Locked)
+                    .HasPrecision(1)
+                    .HasColumnName("LOCKED");
+
+                entity.Property(e => e.NewStatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NEW_STATUS_CODE");
+
+                entity.Property(e => e.OldStatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("OLD_STATUS_CODE");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.HasOne(d => d.Bulletin)
+                    .WithMany(p => p.BBulletinStatusHes)
+                    .HasForeignKey(d => d.BulletinId)
+                    .HasConstraintName("FK_B_BULLETIN_STATUS_H_B_BULLE");
+
+                entity.HasOne(d => d.NewStatusCodeNavigation)
+                    .WithMany(p => p.BBulletinStatusHNewStatusCodeNavigations)
+                    .HasForeignKey(d => d.NewStatusCode)
+                    .HasConstraintName("FK_B_BULLETIN_STATUS_H_B_NEW");
+
+                entity.HasOne(d => d.OldStatusCodeNavigation)
+                    .WithMany(p => p.BBulletinStatusHOldStatusCodeNavigations)
+                    .HasForeignKey(d => d.OldStatusCode)
+                    .HasConstraintName("FK_B_BULLETIN_STATUS_H_B_OLD");
+            });
+
             modelBuilder.Entity<BCaseType>(entity =>
             {
                 entity.ToTable("B_CASE_TYPES");
@@ -527,6 +608,18 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("BULLETIN_ID");
 
+                entity.Property(e => e.ChangeDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CHANGE_DATE");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.DecisionAuthId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -559,6 +652,14 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("DECISION_TYPE_ID");
 
                 entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
 
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.BDecisions)
@@ -858,6 +959,14 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("BULLETIN_ID");
 
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.EcrisOffCatId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -932,6 +1041,14 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.RespExemption)
                     .HasPrecision(1)
                     .HasColumnName("RESP_EXEMPTION");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
 
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.BOffences)
@@ -1181,6 +1298,14 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("BULLETIN_ID");
 
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.DecisionDurationDays)
                     .HasPrecision(4)
                     .HasColumnName("DECISION_DURATION_DAYS");
@@ -1289,6 +1414,14 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.SuspentionDurationYears)
                     .HasPrecision(4)
                     .HasColumnName("SUSPENTION_DURATION_YEARS");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
 
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.BSanctions)
@@ -1947,9 +2080,9 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("E_ISIN_DATA");
 
-                entity.HasIndex(e => e.WebRequestId, "XIF1E_ISIN_DATA");
-
                 entity.HasIndex(e => e.BulletinId, "XIF2E_ISIN_DATA");
+
+                entity.HasIndex(e => e.WebRequestId, "XIF3E_ISIN_DATA");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -1964,10 +2097,8 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("BIRTHCOUNTRY_CODE");
 
                 entity.Property(e => e.BirthcountryName)
-                    .HasMaxLength(18)
-                    .IsUnicode(false)
-                    .HasColumnName("BIRTHCOUNTRY_NAME")
-                    .IsFixedLength();
+                    .HasMaxLength(200)
+                    .HasColumnName("BIRTHCOUNTRY_NAME");
 
                 entity.Property(e => e.Birthdate)
                     .HasColumnType("DATE")
@@ -1997,7 +2128,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("CASE_TYPE_ID");
 
                 entity.Property(e => e.CaseYear)
-                    .HasMaxLength(100)
+                    .HasColumnType("NUMBER(38)")
                     .HasColumnName("CASE_YEAR");
 
                 entity.Property(e => e.Country1Code)
@@ -2031,10 +2162,8 @@ namespace MJ_CAIS.DataAccess
                     .IsFixedLength();
 
                 entity.Property(e => e.DecisionAuthName)
-                    .HasMaxLength(18)
-                    .IsUnicode(false)
-                    .HasColumnName("DECISION_AUTH_NAME")
-                    .IsFixedLength();
+                    .HasMaxLength(200)
+                    .HasColumnName("DECISION_AUTH_NAME");
 
                 entity.Property(e => e.DecisionDate)
                     .HasColumnType("DATE")
