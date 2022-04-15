@@ -7,6 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisRIClient", "EcrisRICli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Common", "..\..\MJ_CAIS.Common\MJ_CAIS.Common.csproj", "{916BAF7C-6F5E-47D9-ACAD-97C3E3C7C318}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DataAccess", "..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj", "{B5E460CC-CB42-4E92-8CE4-E175B1903038}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DIContainer", "..\..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj", "{1E1EC533-F021-4D0B-96FB-B4E17EFEDE29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisFromCAISDataImporter", "EcrisFromCAISDataImporter\EcrisFromCAISDataImporter.csproj", "{B67F743D-077F-4FA4-9E7B-D9FDE1CE51EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisToCAISExporter", "EcrisToCAISExporter\EcrisToCAISExporter.csproj", "{361636A0-0332-4F47-A09E-DA2D83D78B02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisIntegrationServices", "EcrisServices\EcrisIntegrationServices.csproj", "{28869F75-B9B8-4761-B389-9238007E42C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices", "..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj", "{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +33,30 @@ Global
 		{916BAF7C-6F5E-47D9-ACAD-97C3E3C7C318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{916BAF7C-6F5E-47D9-ACAD-97C3E3C7C318}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{916BAF7C-6F5E-47D9-ACAD-97C3E3C7C318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5E460CC-CB42-4E92-8CE4-E175B1903038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E460CC-CB42-4E92-8CE4-E175B1903038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E460CC-CB42-4E92-8CE4-E175B1903038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E460CC-CB42-4E92-8CE4-E175B1903038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1EC533-F021-4D0B-96FB-B4E17EFEDE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1EC533-F021-4D0B-96FB-B4E17EFEDE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1EC533-F021-4D0B-96FB-B4E17EFEDE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1EC533-F021-4D0B-96FB-B4E17EFEDE29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B67F743D-077F-4FA4-9E7B-D9FDE1CE51EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B67F743D-077F-4FA4-9E7B-D9FDE1CE51EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B67F743D-077F-4FA4-9E7B-D9FDE1CE51EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B67F743D-077F-4FA4-9E7B-D9FDE1CE51EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{361636A0-0332-4F47-A09E-DA2D83D78B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{361636A0-0332-4F47-A09E-DA2D83D78B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{361636A0-0332-4F47-A09E-DA2D83D78B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{361636A0-0332-4F47-A09E-DA2D83D78B02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28869F75-B9B8-4761-B389-9238007E42C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28869F75-B9B8-4761-B389-9238007E42C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28869F75-B9B8-4761-B389-9238007E42C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28869F75-B9B8-4761-B389-9238007E42C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

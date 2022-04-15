@@ -7,19 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EcrisRIClient.EcrisService
+namespace EcrisRISearchService
 {
+    
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ServerErrorFaultType : AbstractFaultType
     {
-
+        
         private string serverErrorFaultCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ServerErrorFaultCode
         {
             get
@@ -32,21 +34,21 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OperationFaultType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ServerErrorFaultType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AuthenticationFaultType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public abstract partial class AbstractFaultType
     {
-
+        
         private string messageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string message
         {
             get
@@ -59,153 +61,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "MonthDayType", Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0")]
-    public partial class MonthDayType1
-    {
-
-        private string dateMonthField;
-
-        private string dateDayField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gMonth", Order = 0)]
-        public string DateMonth
-        {
-            get
-            {
-                return this.dateMonthField;
-            }
-            set
-            {
-                this.dateMonthField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gDay", Order = 1)]
-        public string DateDay
-        {
-            get
-            {
-                return this.dateDayField;
-            }
-            set
-            {
-                this.dateDayField = value;
-            }
-        }
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "DateType", Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0")]
-    public partial class DateType1
-    {
-
-        private string dateYearField;
-
-        private MonthDayType1 dateMonthDayField;
-
-        public DateType1()
-        {
-            this.dateYearField = "1800";
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gYear", Order = 0)]
-        public string DateYear
-        {
-            get
-            {
-                return this.dateYearField;
-            }
-            set
-            {
-                this.dateYearField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
-        public MonthDayType1 DateMonthDay
-        {
-            get
-            {
-                return this.dateMonthDayField;
-            }
-            set
-            {
-                this.dateMonthDayField = value;
-            }
-        }
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "PositiveDecimalType", Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0")]
-    public partial class PositiveDecimalType1
-    {
-
-        private string positiveDecimalUnitField;
-
-        private string positiveDecimalFractionField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger", Order = 0)]
-        public string PositiveDecimalUnit
-        {
-            get
-            {
-                return this.positiveDecimalUnitField;
-            }
-            set
-            {
-                this.positiveDecimalUnitField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 1)]
-        public string PositiveDecimalFraction
-        {
-            get
-            {
-                return this.positiveDecimalFractionField;
-            }
-            set
-            {
-                this.positiveDecimalFractionField = value;
-            }
-        }
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "AbstractRelationshipType", Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0")]
-    public abstract partial class AbstractRelationshipType1
-    {
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class StatisticsPeriodType
     {
-
+        
         private StatisticsFixedPeriodType fixedPeriodField;
-
+        
         private StatisticsCustomPeriodType customPeriodField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StatisticsFixedPeriodType FixedPeriod
         {
             get
@@ -217,9 +86,9 @@ namespace EcrisRIClient.EcrisService
                 this.fixedPeriodField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StatisticsCustomPeriodType CustomPeriod
         {
             get
@@ -232,20 +101,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class StatisticsFixedPeriodType : AbstractStatisticsPeriodType
     {
-
+        
         private string yearField;
-
+        
         private string monthField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gYear", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gYear", Order=0)]
         public string Year
         {
             get
@@ -257,9 +126,9 @@ namespace EcrisRIClient.EcrisService
                 this.yearField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gMonth", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gMonth", Order=1)]
         public string Month
         {
             get
@@ -272,30 +141,30 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StatisticsCustomPeriodType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StatisticsFixedPeriodType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractStatisticsPeriodType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class StatisticsCustomPeriodType : AbstractStatisticsPeriodType
     {
-
+        
         private StrictDateType fromDateField;
-
+        
         private StrictDateType toDateField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateType FromDate
         {
             get
@@ -307,9 +176,9 @@ namespace EcrisRIClient.EcrisService
                 this.fromDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StrictDateType ToDate
         {
             get
@@ -322,20 +191,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class StrictDateType
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private System.DateTime valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -347,9 +216,9 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute(DataType = "date")]
+        [System.Xml.Serialization.XmlTextAttribute(DataType="date")]
         public System.DateTime Value
         {
             get
@@ -362,7 +231,140 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="MonthDayType", Namespace="http://ec.europa.eu/ECRIS/commons-v1.0")]
+    public partial class MonthDayType1
+    {
+        
+        private string dateMonthField;
+        
+        private string dateDayField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gMonth", Order=0)]
+        public string DateMonth
+        {
+            get
+            {
+                return this.dateMonthField;
+            }
+            set
+            {
+                this.dateMonthField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gDay", Order=1)]
+        public string DateDay
+        {
+            get
+            {
+                return this.dateDayField;
+            }
+            set
+            {
+                this.dateDayField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="DateType", Namespace="http://ec.europa.eu/ECRIS/commons-v1.0")]
+    public partial class DateType1
+    {
+        
+        private string dateYearField;
+        
+        private MonthDayType1 dateMonthDayField;
+        
+        public DateType1()
+        {
+            this.dateYearField = "1800";
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gYear", Order=0)]
+        public string DateYear
+        {
+            get
+            {
+                return this.dateYearField;
+            }
+            set
+            {
+                this.dateYearField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public MonthDayType1 DateMonthDay
+        {
+            get
+            {
+                return this.dateMonthDayField;
+            }
+            set
+            {
+                this.dateMonthDayField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="PositiveDecimalType", Namespace="http://ec.europa.eu/ECRIS/commons-v1.0")]
+    public partial class PositiveDecimalType1
+    {
+        
+        private string positiveDecimalUnitField;
+        
+        private string positiveDecimalFractionField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=0)]
+        public string PositiveDecimalUnit
+        {
+            get
+            {
+                return this.positiveDecimalUnitField;
+            }
+            set
+            {
+                this.positiveDecimalUnitField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=1)]
+        public string PositiveDecimalFraction
+        {
+            get
+            {
+                return this.positiveDecimalFractionField;
+            }
+            set
+            {
+                this.positiveDecimalFractionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="AbstractRelationshipType", Namespace="http://ec.europa.eu/ECRIS/commons-v1.0")]
+    public abstract partial class AbstractRelationshipType1
+    {
+    }
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StatisticDefinitionType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FaultType))]
@@ -390,26 +392,26 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CountryType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LanguageType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CentralAuthorityType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "EntityType", Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="EntityType", Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public abstract partial class EntityType1
     {
-
+        
         private System.DateTime validFromField;
-
+        
         private System.DateTime validToField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation1[] nameField;
-
+        
         public EntityType1()
         {
             this.validFromField = new System.DateTime(567709344000000000);
             this.validToField = new System.DateTime(946391904000000000);
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "date", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=0)]
         public System.DateTime ValidFrom
         {
             get
@@ -421,9 +423,9 @@ namespace EcrisRIClient.EcrisService
                 this.validFromField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "date", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=1)]
         public System.DateTime ValidTo
         {
             get
@@ -435,10 +437,10 @@ namespace EcrisRIClient.EcrisService
                 this.validToField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation1[] Name
         {
             get
@@ -451,22 +453,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS/commons-v1.0")]
     public partial class MultilingualTextType400CharsMultilingualTextLinguisticRepresentation1
     {
-
+        
         private string languageCodeField;
-
+        
         private bool translatedField;
-
+        
         private bool translatedFieldSpecified;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -480,7 +482,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool translated
@@ -494,7 +496,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool translatedSpecified
@@ -508,7 +510,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -523,22 +525,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/statistics-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/statistics-v1.0")]
     public partial class StatisticDefinitionType : EntityType1
     {
-
+        
         private string statisticDefinitionTechnicalIdentifierField;
-
+        
         private string statisticDefinitionCategoryCodeField;
-
+        
         private string statisticDefinitionCategorySubCategoryCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string StatisticDefinitionTechnicalIdentifier
         {
             get
@@ -550,9 +552,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticDefinitionTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string StatisticDefinitionCategoryCode
         {
             get
@@ -564,9 +566,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticDefinitionCategoryCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string StatisticDefinitionCategorySubCategoryCode
         {
             get
@@ -579,18 +581,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class FaultType : EntityType1
     {
-
+        
         private string faultCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "NCName", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="NCName", Order=0)]
         public string FaultCode
         {
             get
@@ -603,18 +605,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "FunctionalErrorType", Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="FunctionalErrorType", Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class FunctionalErrorType1 : EntityType1
     {
-
+        
         private string functionalErrorCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string FunctionalErrorCode
         {
             get
@@ -627,20 +629,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class RequestAdditionalInfoResponseType : EntityType1
     {
-
+        
         private string requestAdditionalInfoTypeTechnicalIdentifierField;
-
+        
         private string requestAdditionalInfoTypeCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string RequestAdditionalInfoTypeTechnicalIdentifier
         {
             get
@@ -652,9 +654,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestAdditionalInfoTypeTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=1)]
         public string RequestAdditionalInfoTypeCode
         {
             get
@@ -667,20 +669,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class NotificationResponseType : EntityType1
     {
-
+        
         private string notificationResponseTypeTechnicalIdentifierField;
-
+        
         private string notificationResponseTypeCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string NotificationResponseTypeTechnicalIdentifier
         {
             get
@@ -692,9 +694,9 @@ namespace EcrisRIClient.EcrisService
                 this.notificationResponseTypeTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=1)]
         public string NotificationResponseTypeCode
         {
             get
@@ -707,20 +709,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "SanctionToSanctionsRelationshipType", Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="SanctionToSanctionsRelationshipType", Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class SanctionToSanctionsRelationshipType1 : EntityType1
     {
-
+        
         private string sanctionToSanctionsRelationTypeTechnicalIdentifierField;
-
+        
         private string sanctionToSanctionsRelationTypeCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string SanctionToSanctionsRelationTypeTechnicalIdentifier
         {
             get
@@ -732,9 +734,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionToSanctionsRelationTypeTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string SanctionToSanctionsRelationTypeCode
         {
             get
@@ -747,20 +749,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class RequestResponseType : EntityType1
     {
-
+        
         private string requestResponseTypeTechnicalIdentifierField;
-
+        
         private string requestResponseTypeCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string RequestResponseTypeTechnicalIdentifier
         {
             get
@@ -772,9 +774,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestResponseTypeTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=1)]
         public string RequestResponseTypeCode
         {
             get
@@ -787,18 +789,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class IdentificationDocumentCategoryType : EntityType1
     {
-
+        
         private string identificationDocumentCategoryTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string IdentificationDocumentCategoryTechnicalIdentifier
         {
             get
@@ -811,7 +813,7 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestingAuthorityType1))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecisionChangeType))]
@@ -820,16 +822,16 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OffenceLevelOfCompletionType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionAlternativeType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OffenceLevelOfParticipationType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public abstract partial class AbstractCategorisedType : EntityType1
     {
-
+        
         private string categoryField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Category
         {
             get
@@ -842,18 +844,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(TypeName = "RequestingAuthorityType", Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(TypeName="RequestingAuthorityType", Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class RequestingAuthorityType1 : AbstractCategorisedType
     {
-
+        
         private string requestingAuthorityTypeTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string RequestingAuthorityTypeTechnicalIdentifier
         {
             get
@@ -866,18 +868,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class DecisionChangeType : AbstractCategorisedType
     {
-
+        
         private string decisionChangeTypeTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string DecisionChangeTypeTechnicalIdentifier
         {
             get
@@ -890,18 +892,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class SanctionNatureType : AbstractCategorisedType
     {
-
+        
         private string sanctionNatureTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string SanctionNatureTechnicalIdentifier
         {
             get
@@ -914,18 +916,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class SanctionTypeOfSuspensionType : AbstractCategorisedType
     {
-
+        
         private string sanctionTypeOfSuspensionTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string SanctionTypeOfSuspensionTechnicalIdentifier
         {
             get
@@ -938,18 +940,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class OffenceLevelOfCompletionType : AbstractCategorisedType
     {
-
+        
         private string offenceLevelOfCompletionTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string OffenceLevelOfCompletionTechnicalIdentifier
         {
             get
@@ -962,18 +964,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class SanctionAlternativeType : AbstractCategorisedType
     {
-
+        
         private string sanctionAlternativeTypeTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string SanctionAlternativeTypeTechnicalIdentifier
         {
             get
@@ -986,18 +988,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class OffenceLevelOfParticipationType : AbstractCategorisedType
     {
-
+        
         private string offenceLevelOfParticipationTechnicalIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string OffenceLevelOfParticipationTechnicalIdentifier
         {
             get
@@ -1010,21 +1012,21 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestPurposeCategoryType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionCategoryType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OffenceCategoryType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public abstract partial class AbstractCommonCategoryType : EntityType1
     {
-
+        
         private bool categoryIsOpenField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool CategoryIsOpen
         {
             get
@@ -1037,22 +1039,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class RequestPurposeCategoryType : AbstractCommonCategoryType
     {
-
+        
         private string requestPurposeTechnicalIdentifierField;
-
+        
         private string requestPurposeCategoryCodeField;
-
+        
         private string requestPurposeSubcategoryCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string RequestPurposeTechnicalIdentifier
         {
             get
@@ -1064,9 +1066,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestPurposeTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string RequestPurposeCategoryCode
         {
             get
@@ -1078,9 +1080,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestPurposeCategoryCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string RequestPurposeSubcategoryCode
         {
             get
@@ -1093,20 +1095,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class SanctionCategoryType : AbstractCommonCategoryType
     {
-
+        
         private string sanctionTechnicalIdentifierField;
-
+        
         private string sanctionCategoryField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string SanctionTechnicalIdentifier
         {
             get
@@ -1118,9 +1120,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string SanctionCategory
         {
             get
@@ -1133,20 +1135,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class OffenceCategoryType : AbstractCommonCategoryType
     {
-
+        
         private string offenceTechnicalIdentifierField;
-
+        
         private string offenceCategoryCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string OffenceTechnicalIdentifier
         {
             get
@@ -1158,9 +1160,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string OffenceCategoryCode
         {
             get
@@ -1173,20 +1175,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class CityType : EntityType1
     {
-
+        
         private string cityTechnicalIdentifierField;
-
+        
         private string cityCountryField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string CityTechnicalIdentifier
         {
             get
@@ -1198,9 +1200,9 @@ namespace EcrisRIClient.EcrisService
                 this.cityTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=1)]
         public string CityCountry
         {
             get
@@ -1213,26 +1215,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class CountrySubdivisionType : EntityType1
     {
-
+        
         private string countrySubdivisionTechnicalIdentifierField;
-
+        
         private string countrySubdivisionCodeField;
-
+        
         private CountrySubdivisionTypeCountrySubdivisionType countrySubdivisionType1Field;
-
+        
         private string countrySubdivisionMemberStateField;
-
+        
         private string countrySubdivisionToCountryField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string CountrySubdivisionTechnicalIdentifier
         {
             get
@@ -1244,9 +1246,9 @@ namespace EcrisRIClient.EcrisService
                 this.countrySubdivisionTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=1)]
         public string CountrySubdivisionCode
         {
             get
@@ -1258,9 +1260,9 @@ namespace EcrisRIClient.EcrisService
                 this.countrySubdivisionCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CountrySubdivisionType", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute("CountrySubdivisionType", Order=2)]
         public CountrySubdivisionTypeCountrySubdivisionType CountrySubdivisionType1
         {
             get
@@ -1272,9 +1274,9 @@ namespace EcrisRIClient.EcrisService
                 this.countrySubdivisionType1Field = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string CountrySubdivisionMemberState
         {
             get
@@ -1286,9 +1288,9 @@ namespace EcrisRIClient.EcrisService
                 this.countrySubdivisionMemberStateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=4)]
         public string CountrySubdivisionToCountry
         {
             get
@@ -1301,105 +1303,105 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public enum CountrySubdivisionTypeCountrySubdivisionType
     {
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Autonomous Region")]
         AutonomousRegion,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Autonomous City")]
         AutonomousCity,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Autonomous Community")]
         AutonomousCommunity,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Council Area")]
         CouncilArea,
-
+        
         /// <remarks/>
         Country,
-
+        
         /// <remarks/>
         Department,
-
+        
         /// <remarks/>
         District,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("District Council Area")]
         DistrictCouncilArea,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Federal Land")]
         FederalLand,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Local Council")]
         LocalCouncil,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Metropolitan Department")]
         MetropolitanDepartment,
-
+        
         /// <remarks/>
         Municipality,
-
+        
         /// <remarks/>
         Province,
-
+        
         /// <remarks/>
         Region,
-
+        
         /// <remarks/>
         State,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Unitary Authority")]
         UnitaryAuthority,
-
+        
         /// <remarks/>
         County,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Administrative Region")]
         AdministrativeRegion,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Overseas Department")]
         OverseasDepartment,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("Overseas Territory")]
         OverseasTerritory,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class CurrencyType : EntityType1
     {
-
+        
         private string currencyTechnicalIdentifierField;
-
+        
         private string currencyISO4217CodeField;
-
+        
         private string currencyISO4217NumberField;
-
+        
         private string[] currencyUsedInCountryField;
-
+        
         private string[] currencyReplacedByField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string CurrencyTechnicalIdentifier
         {
             get
@@ -1411,9 +1413,9 @@ namespace EcrisRIClient.EcrisService
                 this.currencyTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string CurrencyISO4217Code
         {
             get
@@ -1425,9 +1427,9 @@ namespace EcrisRIClient.EcrisService
                 this.currencyISO4217CodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string CurrencyISO4217Number
         {
             get
@@ -1439,9 +1441,9 @@ namespace EcrisRIClient.EcrisService
                 this.currencyISO4217NumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CurrencyUsedInCountry", DataType = "IDREF", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute("CurrencyUsedInCountry", DataType="IDREF", Order=3)]
         public string[] CurrencyUsedInCountry
         {
             get
@@ -1453,9 +1455,9 @@ namespace EcrisRIClient.EcrisService
                 this.currencyUsedInCountryField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CurrencyReplacedBy", DataType = "IDREF", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute("CurrencyReplacedBy", DataType="IDREF", Order=4)]
         public string[] CurrencyReplacedBy
         {
             get
@@ -1468,26 +1470,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class CountryType : EntityType1
     {
-
+        
         private string countryTechnicalIdentifierField;
-
+        
         private string countryISO31662CodeField;
-
+        
         private string countryISO31662NumberField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation1[] countryRemarkField;
-
+        
         private bool countryUsedForNationalityField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string CountryTechnicalIdentifier
         {
             get
@@ -1499,9 +1501,9 @@ namespace EcrisRIClient.EcrisService
                 this.countryTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CountryISO3166-2Code", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("CountryISO3166-2Code", Order=1)]
         public string CountryISO31662Code
         {
             get
@@ -1513,9 +1515,9 @@ namespace EcrisRIClient.EcrisService
                 this.countryISO31662CodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CountryISO3166-2Number", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute("CountryISO3166-2Number", Order=2)]
         public string CountryISO31662Number
         {
             get
@@ -1527,10 +1529,10 @@ namespace EcrisRIClient.EcrisService
                 this.countryISO31662NumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation1[] CountryRemark
         {
             get
@@ -1542,9 +1544,9 @@ namespace EcrisRIClient.EcrisService
                 this.countryRemarkField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool CountryUsedForNationality
         {
             get
@@ -1557,18 +1559,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class LanguageType : EntityType1
     {
-
+        
         private string languageISO6391CodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("LanguageISO639-1Code", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("LanguageISO639-1Code", Order=0)]
         public string LanguageISO6391Code
         {
             get
@@ -1581,20 +1583,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/common-reference-tables-v1.0")]
     public partial class CentralAuthorityType : EntityType1
     {
-
+        
         private string centralAuthorityTechnicalIdentifierField;
-
+        
         private string centralAuthorityMemberStateCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string CentralAuthorityTechnicalIdentifier
         {
             get
@@ -1606,9 +1608,9 @@ namespace EcrisRIClient.EcrisService
                 this.centralAuthorityTechnicalIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string CentralAuthorityMemberStateCode
         {
             get
@@ -1621,20 +1623,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UpdateEventsStateWSDataInputType
     {
-
+        
         private EventStateType eventStateField;
-
+        
         private int[] eventIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public EventStateType EventState
         {
             get
@@ -1646,9 +1648,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventStateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("EventIdentifier", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("EventIdentifier", Order=1)]
         public int[] EventIdentifier
         {
             get
@@ -1661,43 +1663,43 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EventStateType
     {
-
+        
         /// <remarks/>
         AVAILABLE,
-
+        
         /// <remarks/>
         ACKNOWLEDGED,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RecordedEventType
     {
-
+        
         private int eventIdField;
-
+        
         private string eventCodeField;
-
+        
         private EventStateType eventStateField;
-
+        
         private System.DateTime eventDateField;
-
+        
         private string eventDetailsField;
-
+        
         private EventSeverityType eventSeverityField;
-
+        
         private EventTypeType eventTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int EventId
         {
             get
@@ -1709,9 +1711,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventIdField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string EventCode
         {
             get
@@ -1723,9 +1725,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public EventStateType EventState
         {
             get
@@ -1737,9 +1739,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventStateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public System.DateTime EventDate
         {
             get
@@ -1751,9 +1753,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string EventDetails
         {
             get
@@ -1765,9 +1767,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventDetailsField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public EventSeverityType EventSeverity
         {
             get
@@ -1779,9 +1781,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventSeverityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public EventTypeType EventType
         {
             get
@@ -1794,52 +1796,52 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EventSeverityType
     {
-
+        
         /// <remarks/>
         INFORMATION,
-
+        
         /// <remarks/>
         WARNING,
-
+        
         /// <remarks/>
         ERROR,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EventTypeType
     {
-
+        
         /// <remarks/>
         SYSTEM,
-
+        
         /// <remarks/>
         FUNCTIONAL,
-
+        
         /// <remarks/>
         OPERATIONAL,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetEventsWSOutputDataType
     {
-
+        
         private RecordedEventType[] recordedEventField;
-
+        
         private int totalEventsField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RecordedEvent", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("RecordedEvent", Order=0)]
         public RecordedEventType[] RecordedEvent
         {
             get
@@ -1851,9 +1853,9 @@ namespace EcrisRIClient.EcrisService
                 this.recordedEventField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int TotalEvents
         {
             get
@@ -1866,18 +1868,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class EventDescriptionType
     {
-
+        
         private string languageCodeField;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -1891,7 +1893,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -1906,38 +1908,38 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetEventsWSDataInputType
     {
-
+        
         private EventDescriptionType eventDescriptionField;
-
+        
         private EventTypeType[] eventTypeField;
-
+        
         private EventSeverityType[] eventSeverityField;
-
+        
         private EventStateType eventStateField;
-
+        
         private bool eventStateFieldSpecified;
-
+        
         private StrictDateTimeType lastCheckField;
-
+        
         private EventsSortByType eventsSortedByField;
-
+        
         private bool eventsSortedByFieldSpecified;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public EventDescriptionType EventDescription
         {
             get
@@ -1949,9 +1951,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventDescriptionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("EventType", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("EventType", Order=1)]
         public EventTypeType[] EventType
         {
             get
@@ -1963,9 +1965,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("EventSeverity", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute("EventSeverity", Order=2)]
         public EventSeverityType[] EventSeverity
         {
             get
@@ -1977,9 +1979,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventSeverityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public EventStateType EventState
         {
             get
@@ -1991,7 +1993,7 @@ namespace EcrisRIClient.EcrisService
                 this.eventStateField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EventStateSpecified
@@ -2005,9 +2007,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventStateFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public StrictDateTimeType LastCheck
         {
             get
@@ -2019,9 +2021,9 @@ namespace EcrisRIClient.EcrisService
                 this.lastCheckField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public EventsSortByType EventsSortedBy
         {
             get
@@ -2033,7 +2035,7 @@ namespace EcrisRIClient.EcrisService
                 this.eventsSortedByField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EventsSortedBySpecified
@@ -2047,9 +2049,9 @@ namespace EcrisRIClient.EcrisService
                 this.eventsSortedByFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public int PageNumber
         {
             get
@@ -2061,7 +2063,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -2075,9 +2077,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=7)]
         public string ItemsPerPage
         {
             get
@@ -2090,20 +2092,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class StrictDateTimeType
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private System.DateTime valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -2115,7 +2117,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public System.DateTime Value
@@ -2130,45 +2132,45 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum EventsSortByType
     {
-
+        
         /// <remarks/>
         EventTypeAsc,
-
+        
         /// <remarks/>
         EventTypeDesc,
-
+        
         /// <remarks/>
         EventSeverityAsc,
-
+        
         /// <remarks/>
         EventSeverityDesc,
-
+        
         /// <remarks/>
         EventDateTimeAsc,
-
+        
         /// <remarks/>
         EventDateTimeDesc,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ManageEventTypesConnectionsToUserRolesWSDataInputType
     {
-
+        
         private string roleIdentifierField;
-
+        
         private string[] eventCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string RoleIdentifier
         {
             get
@@ -2180,9 +2182,9 @@ namespace EcrisRIClient.EcrisService
                 this.roleIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("EventCode", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("EventCode", Order=1)]
         public string[] EventCode
         {
             get
@@ -2195,20 +2197,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MailServerConnectionStatusWSOutputDataType
     {
-
+        
         private bool mailServerConnectionStatusField;
-
+        
         private bool mailSendingEnabledField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool MailServerConnectionStatus
         {
             get
@@ -2220,9 +2222,9 @@ namespace EcrisRIClient.EcrisService
                 this.mailServerConnectionStatusField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool MailSendingEnabled
         {
             get
@@ -2235,18 +2237,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetBuildNumberWSOutputDataType
     {
-
+        
         private string buildNumberField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string BuildNumber
         {
             get
@@ -2259,18 +2261,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SetSystemMaintenanceModeWSInputDataType
     {
-
+        
         private bool isMaintenanceModeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool IsMaintenanceMode
         {
             get
@@ -2283,19 +2285,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ValidateConfigurationFilesWSOutputDataType
     {
-
+        
         private string[] configurationFileListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ConfigurationFile", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("ConfigurationFile", IsNullable=false)]
         public string[] ConfigurationFileList
         {
             get
@@ -2308,18 +2310,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ValidateConfigurationFilesWSInputDataType
     {
-
+        
         private byte[] configurationZipFileField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=0)]
         public byte[] ConfigurationZipFile
         {
             get
@@ -2332,19 +2334,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UploadConfigurationFilesWSOutputDataType
     {
-
+        
         private string[] configurationFileListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ConfigurationFile", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("ConfigurationFile", IsNullable=false)]
         public string[] ConfigurationFileList
         {
             get
@@ -2357,18 +2359,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UploadConfigurationFilesWSInputDataType
     {
-
+        
         private byte[] configurationZipFileField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=0)]
         public byte[] ConfigurationZipFile
         {
             get
@@ -2381,22 +2383,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ResetPasswordWsInput
     {
-
+        
         private string loginUserNameField;
-
+        
         private string loginCurrentPasswordField;
-
+        
         private string loginNewPasswordField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string LoginUserName
         {
             get
@@ -2408,9 +2410,9 @@ namespace EcrisRIClient.EcrisService
                 this.loginUserNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string LoginCurrentPassword
         {
             get
@@ -2422,9 +2424,9 @@ namespace EcrisRIClient.EcrisService
                 this.loginCurrentPasswordField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string LoginNewPassword
         {
             get
@@ -2437,18 +2439,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class PerformFunctionalValidationWSOutputDataType
     {
-
+        
         private AbstractBusinessMessageType ecrisRiMessageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractBusinessMessageType EcrisRiMessage
         {
             get
@@ -2461,7 +2463,7 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CancellationMessageType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FunctionalErrorMessageType))]
@@ -2472,70 +2474,70 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestResponseMessageType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestDeadlineMessageType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestMessageType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractBusinessMessageType : AbstractMessageType
     {
-
+        
         private string messageLastModifiedByUserField;
-
+        
         private ContactPersonType messageContactPersonField;
-
+        
         private FunctionalErrorsListType messageFunctionalErrorsField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] messageRemarksField;
-
+        
         private string authoringLanguageField;
-
+        
         private PersonType messagePersonField;
-
+        
         private NistAttachmentType messageNistAttachmentField;
-
+        
         private ConvictionType notificationMessageConvictionField;
-
+        
         private UpdateConvictionReferenceType notificationMessageUpdatedConvictionReferenceField;
-
+        
         private ConvictionToConvictionsRelationshipType notificationMessageOtherAffectedConvictionField;
-
+        
         private NotificationResponseTypeExternalReferenceType notificationResponseMessageNotificationResponseTypeReferenceField;
-
+        
         private RequestAdditionalInfoTypeExternalReferenceType requestAdditionalInfoResponseMessageRequestAdditionalInfoResponseTypeReferenceField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] requestAdditionalInfoMessageRequestPurposeField;
-
+        
         private RequestPurposeExternalReferenceType requestMessageRequestPurposeCategoryReferenceField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] requestMessageRequestPurposeField;
-
+        
         private OffenceExternalReferenceType[] requestMessageAccusationOffenceCategoryReferenceField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] requestMessageAccusationField;
-
+        
         private RequestingAuthorityType requestMessageRequestingAuthorityField;
-
+        
         private RestrictedStringType50Chars requestMessageCaseReferenceNumberField;
-
+        
         private YesNoUnknownStringEnumerationType requestMessageConcernedPersonConsentField;
-
+        
         private YesNoUnknownStringEnumerationType requestMessageUrgencyField;
-
+        
         private ConvictionType[] requestResponseMessageConvictionField;
-
+        
         private MemberStateCodeType[] requestResponseMessageOtherMemberStateField;
-
+        
         private RequestResponseTypeExternalReferenceType requestResponseMessageRequestResponseTypeReferenceField;
-
+        
         private FunctionalErrorType[] messageFunctionalErrorField;
-
+        
         private AdditionalInformationRequestedEnumeration[] requestAdditionalInfoMessageAdditionalInformationRequestedField;
-
+        
         private NistAttachmentType requestAdditionalInfoMessageBinaryIDRequestedField;
-
+        
         private StrictDateType requestDeadlineMessageDeadlineField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageLastModifiedByUser
         {
             get
@@ -2547,9 +2549,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageLastModifiedByUserField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public ContactPersonType MessageContactPerson
         {
             get
@@ -2561,9 +2563,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageContactPersonField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public FunctionalErrorsListType MessageFunctionalErrors
         {
             get
@@ -2575,10 +2577,10 @@ namespace EcrisRIClient.EcrisService
                 this.messageFunctionalErrorsField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] MessageRemarks
         {
             get
@@ -2590,9 +2592,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageRemarksField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string AuthoringLanguage
         {
             get
@@ -2604,9 +2606,9 @@ namespace EcrisRIClient.EcrisService
                 this.authoringLanguageField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public PersonType MessagePerson
         {
             get
@@ -2618,9 +2620,9 @@ namespace EcrisRIClient.EcrisService
                 this.messagePersonField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public NistAttachmentType MessageNistAttachment
         {
             get
@@ -2632,9 +2634,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageNistAttachmentField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public ConvictionType NotificationMessageConviction
         {
             get
@@ -2646,9 +2648,9 @@ namespace EcrisRIClient.EcrisService
                 this.notificationMessageConvictionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public UpdateConvictionReferenceType NotificationMessageUpdatedConvictionReference
         {
             get
@@ -2660,9 +2662,9 @@ namespace EcrisRIClient.EcrisService
                 this.notificationMessageUpdatedConvictionReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public ConvictionToConvictionsRelationshipType NotificationMessageOtherAffectedConviction
         {
             get
@@ -2674,9 +2676,9 @@ namespace EcrisRIClient.EcrisService
                 this.notificationMessageOtherAffectedConvictionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public NotificationResponseTypeExternalReferenceType NotificationResponseMessageNotificationResponseTypeReference
         {
             get
@@ -2688,9 +2690,9 @@ namespace EcrisRIClient.EcrisService
                 this.notificationResponseMessageNotificationResponseTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public RequestAdditionalInfoTypeExternalReferenceType RequestAdditionalInfoResponseMessageRequestAdditionalInfoResponseTypeReference
         {
             get
@@ -2702,10 +2704,10 @@ namespace EcrisRIClient.EcrisService
                 this.requestAdditionalInfoResponseMessageRequestAdditionalInfoResponseTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 12)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=12)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] RequestAdditionalInfoMessageRequestPurpose
         {
             get
@@ -2717,9 +2719,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestAdditionalInfoMessageRequestPurposeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 13)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=13)]
         public RequestPurposeExternalReferenceType RequestMessageRequestPurposeCategoryReference
         {
             get
@@ -2731,10 +2733,10 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageRequestPurposeCategoryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 14)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=14)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] RequestMessageRequestPurpose
         {
             get
@@ -2746,9 +2748,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageRequestPurposeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestMessageAccusationOffenceCategoryReference", Order = 15)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestMessageAccusationOffenceCategoryReference", Order=15)]
         public OffenceExternalReferenceType[] RequestMessageAccusationOffenceCategoryReference
         {
             get
@@ -2760,10 +2762,10 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageAccusationOffenceCategoryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 16)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=16)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] RequestMessageAccusation
         {
             get
@@ -2775,9 +2777,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageAccusationField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 17)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=17)]
         public RequestingAuthorityType RequestMessageRequestingAuthority
         {
             get
@@ -2789,9 +2791,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageRequestingAuthorityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 18)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=18)]
         public RestrictedStringType50Chars RequestMessageCaseReferenceNumber
         {
             get
@@ -2803,9 +2805,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageCaseReferenceNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 19)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=19)]
         public YesNoUnknownStringEnumerationType RequestMessageConcernedPersonConsent
         {
             get
@@ -2817,9 +2819,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageConcernedPersonConsentField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 20)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=20)]
         public YesNoUnknownStringEnumerationType RequestMessageUrgency
         {
             get
@@ -2831,9 +2833,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageUrgencyField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestResponseMessageConviction", Order = 21)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestResponseMessageConviction", Order=21)]
         public ConvictionType[] RequestResponseMessageConviction
         {
             get
@@ -2845,9 +2847,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestResponseMessageConvictionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestResponseMessageOtherMemberState", Order = 22)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestResponseMessageOtherMemberState", Order=22)]
         public MemberStateCodeType[] RequestResponseMessageOtherMemberState
         {
             get
@@ -2859,9 +2861,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestResponseMessageOtherMemberStateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 23)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=23)]
         public RequestResponseTypeExternalReferenceType RequestResponseMessageRequestResponseTypeReference
         {
             get
@@ -2873,9 +2875,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestResponseMessageRequestResponseTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageFunctionalError", Order = 24)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageFunctionalError", Order=24)]
         public FunctionalErrorType[] MessageFunctionalError
         {
             get
@@ -2887,9 +2889,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageFunctionalErrorField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestAdditionalInfoMessageAdditionalInformationRequested", Order = 25)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestAdditionalInfoMessageAdditionalInformationRequested", Order=25)]
         public AdditionalInformationRequestedEnumeration[] RequestAdditionalInfoMessageAdditionalInformationRequested
         {
             get
@@ -2901,9 +2903,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestAdditionalInfoMessageAdditionalInformationRequestedField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 26)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=26)]
         public NistAttachmentType RequestAdditionalInfoMessageBinaryIDRequested
         {
             get
@@ -2915,9 +2917,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestAdditionalInfoMessageBinaryIDRequestedField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 27)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=27)]
         public StrictDateType RequestDeadlineMessageDeadline
         {
             get
@@ -2930,28 +2932,28 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class ContactPersonType
     {
-
+        
         private NameTextType forenameField;
-
+        
         private NameTextType surnameField;
-
+        
         private NameTextType secondSurnameField;
-
+        
         private string contactPersonPhoneNumberField;
-
+        
         private string contactPersonFaxNumberField;
-
+        
         private string contactPersonEmailField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public NameTextType Forename
         {
             get
@@ -2963,9 +2965,9 @@ namespace EcrisRIClient.EcrisService
                 this.forenameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public NameTextType Surname
         {
             get
@@ -2977,9 +2979,9 @@ namespace EcrisRIClient.EcrisService
                 this.surnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public NameTextType SecondSurname
         {
             get
@@ -2991,9 +2993,9 @@ namespace EcrisRIClient.EcrisService
                 this.secondSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string ContactPersonPhoneNumber
         {
             get
@@ -3005,9 +3007,9 @@ namespace EcrisRIClient.EcrisService
                 this.contactPersonPhoneNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string ContactPersonFaxNumber
         {
             get
@@ -3019,9 +3021,9 @@ namespace EcrisRIClient.EcrisService
                 this.contactPersonFaxNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string ContactPersonEmail
         {
             get
@@ -3034,22 +3036,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class NameTextType
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string languageCodeField;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -3061,7 +3063,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -3075,7 +3077,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -3090,22 +3092,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class FunctionalErrorsListType
     {
-
+        
         private System.DateTime validationTimestampField;
-
+        
         private bool validationTimestampFieldSpecified;
-
+        
         private FunctionalErrorsListTypeFunctionalError[] functionalErrorField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public System.DateTime ValidationTimestamp
         {
             get
@@ -3117,7 +3119,7 @@ namespace EcrisRIClient.EcrisService
                 this.validationTimestampField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ValidationTimestampSpecified
@@ -3131,9 +3133,9 @@ namespace EcrisRIClient.EcrisService
                 this.validationTimestampFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FunctionalError", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("FunctionalError", Order=1)]
         public FunctionalErrorsListTypeFunctionalError[] FunctionalError
         {
             get
@@ -3146,20 +3148,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class FunctionalErrorsListTypeFunctionalError
     {
-
+        
         private string functionalErrorCodeField;
-
+        
         private string[] functionalErrorReferencedElementField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string FunctionalErrorCode
         {
             get
@@ -3171,9 +3173,9 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FunctionalErrorReferencedElement", DataType = "IDREF", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("FunctionalErrorReferencedElement", DataType="IDREF", Order=1)]
         public string[] FunctionalErrorReferencedElement
         {
             get
@@ -3186,26 +3188,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string languageCodeField;
-
+        
         private bool translatedField;
-
+        
         private bool translatedFieldSpecified;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -3217,7 +3219,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -3231,7 +3233,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool translated
@@ -3245,7 +3247,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool translatedSpecified
@@ -3259,7 +3261,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -3274,69 +3276,69 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class PersonType : AbstractPersonType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MessageShortViewPersonType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonAliasType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractPersonType
     {
-
+        
         private PersonNameType personNameField;
-
+        
         private int personSexField;
-
+        
         private bool personSexFieldSpecified;
-
+        
         private DateType personBirthDateField;
-
+        
         private AbstractPlaceType personBirthPlaceField;
-
+        
         private CountryExternalReferenceType[] personNationalityReferenceField;
-
+        
         private NameTextType[] personFormerForenameField;
-
+        
         private NameTextType[] personFormerSurnameField;
-
+        
         private NameTextType[] personFormerSecondSurnameField;
-
+        
         private NameTextType[] personFatherForenameField;
-
+        
         private NameTextType[] personFatherSurnameField;
-
+        
         private NameTextType[] personFatherSecondSurnameField;
-
+        
         private NameTextType[] personMotherForenameField;
-
+        
         private NameTextType[] personMotherSurnameField;
-
+        
         private NameTextType[] personMotherSecondSurnameField;
-
+        
         private RestrictedStringType50Chars personIdentityNumberField;
-
+        
         private IdentificationDocumentType[] personIdentificationDocumentField;
-
+        
         private PersonAddressType[] personAddressField;
-
+        
         private PersonAliasType[] personAliasField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] personRemarksField;
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public PersonNameType PersonName
         {
             get
@@ -3348,9 +3350,9 @@ namespace EcrisRIClient.EcrisService
                 this.personNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int PersonSex
         {
             get
@@ -3362,7 +3364,7 @@ namespace EcrisRIClient.EcrisService
                 this.personSexField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PersonSexSpecified
@@ -3376,9 +3378,9 @@ namespace EcrisRIClient.EcrisService
                 this.personSexFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public DateType PersonBirthDate
         {
             get
@@ -3390,9 +3392,9 @@ namespace EcrisRIClient.EcrisService
                 this.personBirthDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public AbstractPlaceType PersonBirthPlace
         {
             get
@@ -3404,9 +3406,9 @@ namespace EcrisRIClient.EcrisService
                 this.personBirthPlaceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonNationalityReference", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonNationalityReference", Order=4)]
         public CountryExternalReferenceType[] PersonNationalityReference
         {
             get
@@ -3418,9 +3420,9 @@ namespace EcrisRIClient.EcrisService
                 this.personNationalityReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonFormerForename", Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonFormerForename", Order=5)]
         public NameTextType[] PersonFormerForename
         {
             get
@@ -3432,9 +3434,9 @@ namespace EcrisRIClient.EcrisService
                 this.personFormerForenameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonFormerSurname", Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonFormerSurname", Order=6)]
         public NameTextType[] PersonFormerSurname
         {
             get
@@ -3446,9 +3448,9 @@ namespace EcrisRIClient.EcrisService
                 this.personFormerSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonFormerSecondSurname", Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonFormerSecondSurname", Order=7)]
         public NameTextType[] PersonFormerSecondSurname
         {
             get
@@ -3460,9 +3462,9 @@ namespace EcrisRIClient.EcrisService
                 this.personFormerSecondSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonFatherForename", Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonFatherForename", Order=8)]
         public NameTextType[] PersonFatherForename
         {
             get
@@ -3474,9 +3476,9 @@ namespace EcrisRIClient.EcrisService
                 this.personFatherForenameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonFatherSurname", Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonFatherSurname", Order=9)]
         public NameTextType[] PersonFatherSurname
         {
             get
@@ -3488,9 +3490,9 @@ namespace EcrisRIClient.EcrisService
                 this.personFatherSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonFatherSecondSurname", Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonFatherSecondSurname", Order=10)]
         public NameTextType[] PersonFatherSecondSurname
         {
             get
@@ -3502,9 +3504,9 @@ namespace EcrisRIClient.EcrisService
                 this.personFatherSecondSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonMotherForename", Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonMotherForename", Order=11)]
         public NameTextType[] PersonMotherForename
         {
             get
@@ -3516,9 +3518,9 @@ namespace EcrisRIClient.EcrisService
                 this.personMotherForenameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonMotherSurname", Order = 12)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonMotherSurname", Order=12)]
         public NameTextType[] PersonMotherSurname
         {
             get
@@ -3530,9 +3532,9 @@ namespace EcrisRIClient.EcrisService
                 this.personMotherSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonMotherSecondSurname", Order = 13)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonMotherSecondSurname", Order=13)]
         public NameTextType[] PersonMotherSecondSurname
         {
             get
@@ -3544,9 +3546,9 @@ namespace EcrisRIClient.EcrisService
                 this.personMotherSecondSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 14)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=14)]
         public RestrictedStringType50Chars PersonIdentityNumber
         {
             get
@@ -3558,9 +3560,9 @@ namespace EcrisRIClient.EcrisService
                 this.personIdentityNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonIdentificationDocument", Order = 15)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonIdentificationDocument", Order=15)]
         public IdentificationDocumentType[] PersonIdentificationDocument
         {
             get
@@ -3572,9 +3574,9 @@ namespace EcrisRIClient.EcrisService
                 this.personIdentificationDocumentField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonAddress", Order = 16)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonAddress", Order=16)]
         public PersonAddressType[] PersonAddress
         {
             get
@@ -3586,9 +3588,9 @@ namespace EcrisRIClient.EcrisService
                 this.personAddressField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonAlias", Order = 17)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonAlias", Order=17)]
         public PersonAliasType[] PersonAlias
         {
             get
@@ -3600,10 +3602,10 @@ namespace EcrisRIClient.EcrisService
                 this.personAliasField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 18)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=18)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] PersonRemarks
         {
             get
@@ -3615,9 +3617,9 @@ namespace EcrisRIClient.EcrisService
                 this.personRemarksField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -3630,33 +3632,33 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class PersonNameType : AbstractNameType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonNameType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractNameType
     {
-
+        
         private NameTextType[] forenameField;
-
+        
         private NameTextType[] surnameField;
-
+        
         private NameTextType[] secondSurnameField;
-
+        
         private FullNameTextType[] fullNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Forename", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("Forename", Order=0)]
         public NameTextType[] Forename
         {
             get
@@ -3668,9 +3670,9 @@ namespace EcrisRIClient.EcrisService
                 this.forenameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Surname", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("Surname", Order=1)]
         public NameTextType[] Surname
         {
             get
@@ -3682,9 +3684,9 @@ namespace EcrisRIClient.EcrisService
                 this.surnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SecondSurname", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute("SecondSurname", Order=2)]
         public NameTextType[] SecondSurname
         {
             get
@@ -3696,9 +3698,9 @@ namespace EcrisRIClient.EcrisService
                 this.secondSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FullName", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute("FullName", Order=3)]
         public FullNameTextType[] FullName
         {
             get
@@ -3711,22 +3713,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class FullNameTextType
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string languageCodeField;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -3738,7 +3740,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -3752,7 +3754,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -3767,22 +3769,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class DateType
     {
-
+        
         private string dateYearField;
-
+        
         private MonthDayType dateMonthDayField;
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gYear", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gYear", Order=0)]
         public string DateYear
         {
             get
@@ -3794,9 +3796,9 @@ namespace EcrisRIClient.EcrisService
                 this.dateYearField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MonthDayType DateMonthDay
         {
             get
@@ -3808,9 +3810,9 @@ namespace EcrisRIClient.EcrisService
                 this.dateMonthDayField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -3823,20 +3825,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class MonthDayType
     {
-
+        
         private string dateMonthField;
-
+        
         private string dateDayField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gMonth", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gMonth", Order=0)]
         public string DateMonth
         {
             get
@@ -3848,9 +3850,9 @@ namespace EcrisRIClient.EcrisService
                 this.dateMonthField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gDay", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gDay", Order=1)]
         public string DateDay
         {
             get
@@ -3863,26 +3865,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AliasBirthPlaceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PlaceType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractPlaceType
     {
-
+        
         private CountryExternalReferenceType placeCountryReferenceField;
-
+        
         private CountrySubdivisionExternalReferenceType placeCountrySubdivisionReferenceField;
-
+        
         private CityExternalReferenceType placeTownReferenceField;
-
+        
         private MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[] placeTownNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public CountryExternalReferenceType PlaceCountryReference
         {
             get
@@ -3894,9 +3896,9 @@ namespace EcrisRIClient.EcrisService
                 this.placeCountryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public CountrySubdivisionExternalReferenceType PlaceCountrySubdivisionReference
         {
             get
@@ -3908,9 +3910,9 @@ namespace EcrisRIClient.EcrisService
                 this.placeCountrySubdivisionReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public CityExternalReferenceType PlaceTownReference
         {
             get
@@ -3922,10 +3924,10 @@ namespace EcrisRIClient.EcrisService
                 this.placeTownReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[] PlaceTownName
         {
             get
@@ -3938,21 +3940,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class CountryExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(NJRConvictionExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConvictionExternalReferenceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestAdditionalInfoTypeExternalReferenceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(NotificationResponseTypeExternalReferenceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestResponseTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestingAuthorityTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecisionChangeTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(IdentificationDocumentCategoryExternalReferenceType))]
@@ -3968,21 +3967,21 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CountrySubdivisionExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CurrencyExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CountryExternalReferenceType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestAdditionalInfoTypeExternalReferenceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(NotificationResponseTypeExternalReferenceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestResponseTypeExternalReferenceType))]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class NonBindingExternalReferenceType : StringType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(YesNoUnknownStringEnumerationType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(NonBindingExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(NJRConvictionExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConvictionExternalReferenceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestAdditionalInfoTypeExternalReferenceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(NotificationResponseTypeExternalReferenceType))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestResponseTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestingAuthorityTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecisionChangeTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(IdentificationDocumentCategoryExternalReferenceType))]
@@ -3998,20 +3997,23 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CountrySubdivisionExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CurrencyExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CountryExternalReferenceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestAdditionalInfoTypeExternalReferenceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(NotificationResponseTypeExternalReferenceType))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestResponseTypeExternalReferenceType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BusinessStringType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RestrictedStringType50Chars))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class StringType
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -4023,7 +4025,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -4038,203 +4040,203 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class YesNoUnknownStringEnumerationType : StringType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RestrictedStringType50Chars))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class BusinessStringType : StringType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class RestrictedStringType50Chars : BusinessStringType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class NJRConvictionExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class ConvictionExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
-    public partial class RequestAdditionalInfoTypeExternalReferenceType : NonBindingExternalReferenceType
-    {
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
-    public partial class NotificationResponseTypeExternalReferenceType : NonBindingExternalReferenceType
-    {
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
-    public partial class RequestResponseTypeExternalReferenceType : NonBindingExternalReferenceType
-    {
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class RequestingAuthorityTypeExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class DecisionChangeTypeExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class IdentificationDocumentCategoryExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class RequestPurposeExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class SanctionNatureExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class SanctionTypeOfSuspensionExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class SanctionAlternativeTypeExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class SanctionExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class OffenceLevelOfCompletionExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class OffenceLevelOfParticipationExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class OffenceExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class CityExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class CountrySubdivisionExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public partial class CurrencyExternalReferenceType : NonBindingExternalReferenceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    public partial class RequestAdditionalInfoTypeExternalReferenceType : NonBindingExternalReferenceType
+    {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    public partial class NotificationResponseTypeExternalReferenceType : NonBindingExternalReferenceType
+    {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    public partial class RequestResponseTypeExternalReferenceType : NonBindingExternalReferenceType
+    {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class MultilingualTextType200CharsMultilingualTextLinguisticRepresentation
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string languageCodeField;
-
+        
         private bool translatedField;
-
+        
         private bool translatedFieldSpecified;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -4246,7 +4248,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -4260,7 +4262,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool translated
@@ -4274,7 +4276,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool translatedSpecified
@@ -4288,7 +4290,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -4303,44 +4305,44 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class AliasBirthPlaceType : AbstractPlaceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class PlaceType : AbstractPlaceType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class IdentificationDocumentType
     {
-
+        
         private IdentificationDocumentCategoryExternalReferenceType identificationDocumentCategoryReferenceField;
-
+        
         private MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[] identificationDocumentType1Field;
-
+        
         private string identificationDocumentNumberField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] identificationDocumentIssuingAuthorityField;
-
+        
         private DateType identificationDocumentIssuingDateField;
-
+        
         private DateType identificationDocumentValidUntilField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public IdentificationDocumentCategoryExternalReferenceType IdentificationDocumentCategoryReference
         {
             get
@@ -4352,10 +4354,10 @@ namespace EcrisRIClient.EcrisService
                 this.identificationDocumentCategoryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute("IdentificationDocumentType", Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute("IdentificationDocumentType", Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[] IdentificationDocumentType1
         {
             get
@@ -4367,9 +4369,9 @@ namespace EcrisRIClient.EcrisService
                 this.identificationDocumentType1Field = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string IdentificationDocumentNumber
         {
             get
@@ -4381,10 +4383,10 @@ namespace EcrisRIClient.EcrisService
                 this.identificationDocumentNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] IdentificationDocumentIssuingAuthority
         {
             get
@@ -4396,9 +4398,9 @@ namespace EcrisRIClient.EcrisService
                 this.identificationDocumentIssuingAuthorityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public DateType IdentificationDocumentIssuingDate
         {
             get
@@ -4410,9 +4412,9 @@ namespace EcrisRIClient.EcrisService
                 this.identificationDocumentIssuingDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public DateType IdentificationDocumentValidUntil
         {
             get
@@ -4425,26 +4427,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class MultilingualTextType50CharsMultilingualTextLinguisticRepresentation
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string languageCodeField;
-
+        
         private bool translatedField;
-
+        
         private bool translatedFieldSpecified;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -4456,7 +4458,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -4470,7 +4472,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool translated
@@ -4484,7 +4486,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool translatedSpecified
@@ -4498,7 +4500,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -4513,26 +4515,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class MultilingualTextType400CharsMultilingualTextLinguisticRepresentation
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string languageCodeField;
-
+        
         private bool translatedField;
-
+        
         private bool translatedFieldSpecified;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -4544,7 +4546,7 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string languageCode
@@ -4558,7 +4560,7 @@ namespace EcrisRIClient.EcrisService
                 this.languageCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public bool translated
@@ -4572,7 +4574,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool translatedSpecified
@@ -4586,7 +4588,7 @@ namespace EcrisRIClient.EcrisService
                 this.translatedFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value
@@ -4601,26 +4603,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class PersonAddressType
     {
-
+        
         private PlaceType addressPlaceField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] addressStreetField;
-
+        
         private MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[] addressHouseNumberField;
-
+        
         private MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[] addressPostCodeField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] addressFullField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public PlaceType AddressPlace
         {
             get
@@ -4632,10 +4634,10 @@ namespace EcrisRIClient.EcrisService
                 this.addressPlaceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] AddressStreet
         {
             get
@@ -4647,10 +4649,10 @@ namespace EcrisRIClient.EcrisService
                 this.addressStreetField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[] AddressHouseNumber
         {
             get
@@ -4662,10 +4664,10 @@ namespace EcrisRIClient.EcrisService
                 this.addressHouseNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 3)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[] AddressPostCode
         {
             get
@@ -4677,10 +4679,10 @@ namespace EcrisRIClient.EcrisService
                 this.addressPostCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=4)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] AddressFull
         {
             get
@@ -4693,47 +4695,47 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class PersonAliasType : AbstractPersonType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class MessageShortViewPersonType : AbstractPersonType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(NistBinaryAttachmentType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class NistAttachmentType
     {
-
+        
         private string nistAttachmentIDField;
-
+        
         private string nistAttachmentFileNameField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] nistAttachmentTitleField;
-
+        
         private string nistAttachmentFileSizeField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] nistAttachmentCommentField;
-
+        
         private RestrictedStringType50Chars nistAttachmentMD5HashField;
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string NistAttachmentID
         {
             get
@@ -4745,9 +4747,9 @@ namespace EcrisRIClient.EcrisService
                 this.nistAttachmentIDField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string NistAttachmentFileName
         {
             get
@@ -4759,10 +4761,10 @@ namespace EcrisRIClient.EcrisService
                 this.nistAttachmentFileNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] NistAttachmentTitle
         {
             get
@@ -4774,9 +4776,9 @@ namespace EcrisRIClient.EcrisService
                 this.nistAttachmentTitleField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=3)]
         public string NistAttachmentFileSize
         {
             get
@@ -4788,10 +4790,10 @@ namespace EcrisRIClient.EcrisService
                 this.nistAttachmentFileSizeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=4)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] NistAttachmentComment
         {
             get
@@ -4803,9 +4805,9 @@ namespace EcrisRIClient.EcrisService
                 this.nistAttachmentCommentField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public RestrictedStringType50Chars NistAttachmentMD5Hash
         {
             get
@@ -4817,9 +4819,9 @@ namespace EcrisRIClient.EcrisService
                 this.nistAttachmentMD5HashField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -4832,18 +4834,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class NistBinaryAttachmentType : NistAttachmentType
     {
-
+        
         private byte[] nistBinaryAttachmentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=0)]
         public byte[] NistBinaryAttachment
         {
             get
@@ -4856,44 +4858,44 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class ConvictionType
     {
-
+        
         private string convictionIDField;
-
+        
         private CountryExternalReferenceType convictionConvictingCountryReferenceField;
-
+        
         private RestrictedStringType50Chars convictionFileNumberField;
-
+        
         private StrictDateType convictionDecisionDateField;
-
+        
         private StrictDateType convictionDecisionFinalDateField;
-
+        
         private DecidingAuthorityType convictionDecidingAuthorityField;
-
+        
         private YesNoUnknownStringEnumerationType convictionNonCriminalRulingField;
-
+        
         private StrictDateType convictionRetentionPeriodEndDateField;
-
+        
         private YesNoUnknownStringEnumerationType convictionIsTransmittableField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] convictionRemarksField;
-
+        
         private DecisionType[] convictionDecisionField;
-
+        
         private OffenceType[] convictionOffenceField;
-
+        
         private SanctionType[] convictionSanctionField;
-
+        
         private AbstractRelationshipType[] convictionRelationshipField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string ConvictionID
         {
             get
@@ -4905,9 +4907,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionIDField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public CountryExternalReferenceType ConvictionConvictingCountryReference
         {
             get
@@ -4919,9 +4921,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionConvictingCountryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public RestrictedStringType50Chars ConvictionFileNumber
         {
             get
@@ -4933,9 +4935,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionFileNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public StrictDateType ConvictionDecisionDate
         {
             get
@@ -4947,9 +4949,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionDecisionDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public StrictDateType ConvictionDecisionFinalDate
         {
             get
@@ -4961,9 +4963,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionDecisionFinalDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public DecidingAuthorityType ConvictionDecidingAuthority
         {
             get
@@ -4975,9 +4977,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionDecidingAuthorityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public YesNoUnknownStringEnumerationType ConvictionNonCriminalRuling
         {
             get
@@ -4989,9 +4991,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionNonCriminalRulingField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public StrictDateType ConvictionRetentionPeriodEndDate
         {
             get
@@ -5003,9 +5005,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionRetentionPeriodEndDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public YesNoUnknownStringEnumerationType ConvictionIsTransmittable
         {
             get
@@ -5017,10 +5019,10 @@ namespace EcrisRIClient.EcrisService
                 this.convictionIsTransmittableField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 9)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=9)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] ConvictionRemarks
         {
             get
@@ -5032,9 +5034,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionRemarksField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ConvictionDecision", Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute("ConvictionDecision", Order=10)]
         public DecisionType[] ConvictionDecision
         {
             get
@@ -5046,9 +5048,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionDecisionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ConvictionOffence", Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute("ConvictionOffence", Order=11)]
         public OffenceType[] ConvictionOffence
         {
             get
@@ -5060,9 +5062,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionOffenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ConvictionSanction", Order = 12)]
+        [System.Xml.Serialization.XmlElementAttribute("ConvictionSanction", Order=12)]
         public SanctionType[] ConvictionSanction
         {
             get
@@ -5074,9 +5076,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionSanctionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ConvictionRelationship", Order = 13)]
+        [System.Xml.Serialization.XmlElementAttribute("ConvictionRelationship", Order=13)]
         public AbstractRelationshipType[] ConvictionRelationship
         {
             get
@@ -5089,20 +5091,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class DecidingAuthorityType
     {
-
+        
         private RestrictedStringType50Chars decidingAuthorityCodeField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] decidingAuthorityNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RestrictedStringType50Chars DecidingAuthorityCode
         {
             get
@@ -5114,10 +5116,10 @@ namespace EcrisRIClient.EcrisService
                 this.decidingAuthorityCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] DecidingAuthorityName
         {
             get
@@ -5130,30 +5132,30 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class DecisionType
     {
-
+        
         private string decisionIDField;
-
+        
         private DecisionChangeTypeExternalReferenceType[] decisionChangeTypeReferenceField;
-
+        
         private StrictDateType decisionDateField;
-
+        
         private StrictDateType decisionFinalDateField;
-
+        
         private DecidingAuthorityType decisionDecidingAuthorityField;
-
+        
         private YesNoUnknownStringEnumerationType decisionDeleteConvictionFromRegisterField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] decisionRemarksField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string DecisionID
         {
             get
@@ -5165,9 +5167,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionIDField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DecisionChangeTypeReference", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("DecisionChangeTypeReference", Order=1)]
         public DecisionChangeTypeExternalReferenceType[] DecisionChangeTypeReference
         {
             get
@@ -5179,9 +5181,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionChangeTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public StrictDateType DecisionDate
         {
             get
@@ -5193,9 +5195,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public StrictDateType DecisionFinalDate
         {
             get
@@ -5207,9 +5209,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionFinalDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public DecidingAuthorityType DecisionDecidingAuthority
         {
             get
@@ -5221,9 +5223,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionDecidingAuthorityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public YesNoUnknownStringEnumerationType DecisionDeleteConvictionFromRegister
         {
             get
@@ -5235,10 +5237,10 @@ namespace EcrisRIClient.EcrisService
                 this.decisionDeleteConvictionFromRegisterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 6)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=6)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] DecisionRemarks
         {
             get
@@ -5251,40 +5253,40 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class OffenceType : AbstractNationalCategoriesSupportingEntityType
     {
-
+        
         private string offenceIDField;
-
+        
         private OffenceExternalReferenceType offenceCommonCategoryReferenceField;
-
+        
         private string offenceApplicableLegalProvisionsField;
-
+        
         private DateType offenceStartDateField;
-
+        
         private DateType offenceEndDateField;
-
+        
         private PlaceType offencePlaceField;
-
+        
         private string offenceNumberOfOccurrencesField;
-
+        
         private YesNoUnknownStringEnumerationType offenceIsContinuousField;
-
+        
         private OffenceLevelOfCompletionExternalReferenceType offenceLevelOfCompletionReferenceField;
-
+        
         private OffenceLevelOfParticipationExternalReferenceType offenceLevelOfParticipationReferenceField;
-
+        
         private YesNoUnknownStringEnumerationType offenceResponsibilityExemptionField;
-
+        
         private YesNoUnknownStringEnumerationType offenceRecidivismField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string OffenceID
         {
             get
@@ -5296,9 +5298,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceIDField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public OffenceExternalReferenceType OffenceCommonCategoryReference
         {
             get
@@ -5310,9 +5312,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceCommonCategoryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string OffenceApplicableLegalProvisions
         {
             get
@@ -5324,9 +5326,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceApplicableLegalProvisionsField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public DateType OffenceStartDate
         {
             get
@@ -5338,9 +5340,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceStartDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public DateType OffenceEndDate
         {
             get
@@ -5352,9 +5354,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceEndDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public PlaceType OffencePlace
         {
             get
@@ -5366,9 +5368,9 @@ namespace EcrisRIClient.EcrisService
                 this.offencePlaceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=6)]
         public string OffenceNumberOfOccurrences
         {
             get
@@ -5380,9 +5382,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceNumberOfOccurrencesField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public YesNoUnknownStringEnumerationType OffenceIsContinuous
         {
             get
@@ -5394,9 +5396,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceIsContinuousField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public OffenceLevelOfCompletionExternalReferenceType OffenceLevelOfCompletionReference
         {
             get
@@ -5408,9 +5410,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceLevelOfCompletionReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public OffenceLevelOfParticipationExternalReferenceType OffenceLevelOfParticipationReference
         {
             get
@@ -5422,9 +5424,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceLevelOfParticipationReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public YesNoUnknownStringEnumerationType OffenceResponsibilityExemption
         {
             get
@@ -5436,9 +5438,9 @@ namespace EcrisRIClient.EcrisService
                 this.offenceResponsibilityExemptionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public YesNoUnknownStringEnumerationType OffenceRecidivism
         {
             get
@@ -5451,26 +5453,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OffenceType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractNationalCategoriesSupportingEntityType
     {
-
+        
         private string nationalCategoryCodeField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] nationalCategoryTitleField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] remarksField;
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string NationalCategoryCode
         {
             get
@@ -5482,10 +5484,10 @@ namespace EcrisRIClient.EcrisService
                 this.nationalCategoryCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] NationalCategoryTitle
         {
             get
@@ -5497,10 +5499,10 @@ namespace EcrisRIClient.EcrisService
                 this.nationalCategoryTitleField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] Remarks
         {
             get
@@ -5512,9 +5514,9 @@ namespace EcrisRIClient.EcrisService
                 this.remarksField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -5527,42 +5529,42 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionType : AbstractNationalCategoriesSupportingEntityType
     {
-
+        
         private string sanctionIDField;
-
+        
         private SanctionNatureExternalReferenceType sanctionTypeReferenceField;
-
+        
         private SanctionExternalReferenceType sanctionCommonCategoryReferenceField;
-
+        
         private SanctionAlternativeTypeExternalReferenceType sanctionAlternativeTypeReferenceField;
-
+        
         private string sanctionMultiplierField;
-
+        
         private YesNoUnknownStringEnumerationType sanctionIsSpecificToMinorField;
-
+        
         private SanctionSentencedPeriodType sanctionSentencedPeriodField;
-
+        
         private SanctionPeriodType sanctionExecutionPeriodField;
-
+        
         private RestrictedPositiveIntegerWithErrorsType sanctionNumberOfFinesField;
-
+        
         private PositiveDecimalType sanctionAmountOfIndividualFineField;
-
+        
         private CurrencyExternalReferenceType sanctionCurrencyOfFineReferenceField;
-
+        
         private SanctionSuspensionType sanctionSuspensionField;
-
+        
         private SanctionInterruptionType[] sanctionInterruptionField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string SanctionID
         {
             get
@@ -5574,9 +5576,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionIDField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public SanctionNatureExternalReferenceType SanctionTypeReference
         {
             get
@@ -5588,9 +5590,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public SanctionExternalReferenceType SanctionCommonCategoryReference
         {
             get
@@ -5602,9 +5604,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionCommonCategoryReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public SanctionAlternativeTypeExternalReferenceType SanctionAlternativeTypeReference
         {
             get
@@ -5616,9 +5618,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionAlternativeTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=4)]
         public string SanctionMultiplier
         {
             get
@@ -5630,9 +5632,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionMultiplierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public YesNoUnknownStringEnumerationType SanctionIsSpecificToMinor
         {
             get
@@ -5644,9 +5646,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionIsSpecificToMinorField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public SanctionSentencedPeriodType SanctionSentencedPeriod
         {
             get
@@ -5658,9 +5660,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionSentencedPeriodField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public SanctionPeriodType SanctionExecutionPeriod
         {
             get
@@ -5672,9 +5674,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionExecutionPeriodField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public RestrictedPositiveIntegerWithErrorsType SanctionNumberOfFines
         {
             get
@@ -5686,9 +5688,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionNumberOfFinesField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public PositiveDecimalType SanctionAmountOfIndividualFine
         {
             get
@@ -5700,9 +5702,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionAmountOfIndividualFineField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public CurrencyExternalReferenceType SanctionCurrencyOfFineReference
         {
             get
@@ -5714,9 +5716,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionCurrencyOfFineReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public SanctionSuspensionType SanctionSuspension
         {
             get
@@ -5728,9 +5730,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionSuspensionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SanctionInterruption", Order = 12)]
+        [System.Xml.Serialization.XmlElementAttribute("SanctionInterruption", Order=12)]
         public SanctionInterruptionType[] SanctionInterruption
         {
             get
@@ -5743,18 +5745,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionSentencedPeriodType : AbstractPeriodType
     {
-
+        
         private YesNoUnknownStringEnumerationType durationExactField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public YesNoUnknownStringEnumerationType DurationExact
         {
             get
@@ -5767,26 +5769,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionInterruptionType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionSuspensionType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionSentencedPeriodType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionPeriodType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractPeriodType
     {
-
+        
         private StrictDateType periodStartDateField;
-
+        
         private string periodDurationField;
-
+        
         private StrictDateType periodEndDateField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateType PeriodStartDate
         {
             get
@@ -5798,9 +5800,9 @@ namespace EcrisRIClient.EcrisService
                 this.periodStartDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "duration", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="duration", Order=1)]
         public string PeriodDuration
         {
             get
@@ -5812,9 +5814,9 @@ namespace EcrisRIClient.EcrisService
                 this.periodDurationField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public StrictDateType PeriodEndDate
         {
             get
@@ -5827,19 +5829,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionInterruptionType : AbstractPeriodType
     {
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] sanctionInterruptionRemarksField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] SanctionInterruptionRemarks
         {
             get
@@ -5852,26 +5854,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionSuspensionType : AbstractPeriodType
     {
-
+        
         private SanctionTypeOfSuspensionExternalReferenceType sanctionSuspensionTypeReferenceField;
-
+        
         private string sanctionProbationDurationField;
-
+        
         private string sanctionDurationSuspendedPartField;
-
+        
         private PositiveDecimalType sanctionSuspensionPartiallySuspendedAmountField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] sanctionSuspensionRemarksField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public SanctionTypeOfSuspensionExternalReferenceType SanctionSuspensionTypeReference
         {
             get
@@ -5883,9 +5885,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionSuspensionTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "duration", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="duration", Order=1)]
         public string SanctionProbationDuration
         {
             get
@@ -5897,9 +5899,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionProbationDurationField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "duration", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="duration", Order=2)]
         public string SanctionDurationSuspendedPart
         {
             get
@@ -5911,9 +5913,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionDurationSuspendedPartField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public PositiveDecimalType SanctionSuspensionPartiallySuspendedAmount
         {
             get
@@ -5925,10 +5927,10 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionSuspensionPartiallySuspendedAmountField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 4)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=4)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] SanctionSuspensionRemarks
         {
             get
@@ -5941,22 +5943,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class PositiveDecimalType
     {
-
+        
         private string positiveDecimalUnitField;
-
+        
         private string positiveDecimalFractionField;
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=0)]
         public string PositiveDecimalUnit
         {
             get
@@ -5968,9 +5970,9 @@ namespace EcrisRIClient.EcrisService
                 this.positiveDecimalUnitField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=1)]
         public string PositiveDecimalFraction
         {
             get
@@ -5982,9 +5984,9 @@ namespace EcrisRIClient.EcrisService
                 this.positiveDecimalFractionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -5997,28 +5999,28 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionPeriodType : AbstractPeriodType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class RestrictedPositiveIntegerWithErrorsType
     {
-
+        
         private string functionalErrorReferenceIdentifierField;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, DataType = "ID")]
+        [System.Xml.Serialization.XmlAttributeAttribute(Form=System.Xml.Schema.XmlSchemaForm.Qualified, DataType="ID")]
         public string functionalErrorReferenceIdentifier
         {
             get
@@ -6030,9 +6032,9 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorReferenceIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute(DataType = "positiveInteger")]
+        [System.Xml.Serialization.XmlTextAttribute(DataType="positiveInteger")]
         public string Value
         {
             get
@@ -6045,33 +6047,33 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecisionToSanctionsRelationshipType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DecisionToOffencesRelationshipType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionToSanctionsRelationshipType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SanctionToOffencesRelationshipType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ConvictionToConvictionsRelationshipType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public abstract partial class AbstractRelationshipType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class DecisionToSanctionsRelationshipType : AbstractRelationshipType
     {
-
+        
         private string decisionField;
-
+        
         private string[] sanctionField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=0)]
         public string Decision
         {
             get
@@ -6083,9 +6085,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Sanction", DataType = "IDREF", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("Sanction", DataType="IDREF", Order=1)]
         public string[] Sanction
         {
             get
@@ -6098,20 +6100,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class DecisionToOffencesRelationshipType : AbstractRelationshipType
     {
-
+        
         private string decisionField;
-
+        
         private string[] offenceField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=0)]
         public string Decision
         {
             get
@@ -6123,9 +6125,9 @@ namespace EcrisRIClient.EcrisService
                 this.decisionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Offence", DataType = "IDREF", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("Offence", DataType="IDREF", Order=1)]
         public string[] Offence
         {
             get
@@ -6138,22 +6140,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionToSanctionsRelationshipType : AbstractRelationshipType
     {
-
+        
         private string sourceSanctionField;
-
+        
         private string[] destinationSanctionField;
-
+        
         private string relationshipTypeReferenceField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=0)]
         public string SourceSanction
         {
             get
@@ -6165,9 +6167,9 @@ namespace EcrisRIClient.EcrisService
                 this.sourceSanctionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DestinationSanction", DataType = "IDREF", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("DestinationSanction", DataType="IDREF", Order=1)]
         public string[] DestinationSanction
         {
             get
@@ -6179,7 +6181,7 @@ namespace EcrisRIClient.EcrisService
                 this.destinationSanctionField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string relationshipTypeReference
@@ -6194,20 +6196,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class SanctionToOffencesRelationshipType : AbstractRelationshipType
     {
-
+        
         private string sanctionField;
-
+        
         private string[] offenceField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=0)]
         public string Sanction
         {
             get
@@ -6219,9 +6221,9 @@ namespace EcrisRIClient.EcrisService
                 this.sanctionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Offence", DataType = "IDREF", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("Offence", DataType="IDREF", Order=1)]
         public string[] Offence
         {
             get
@@ -6234,20 +6236,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class ConvictionToConvictionsRelationshipType : AbstractRelationshipType
     {
-
+        
         private string sourceConvictionField;
-
+        
         private StructuredConvictionReferenceType[] destinationConvictionField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "IDREF", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="IDREF", Order=0)]
         public string SourceConviction
         {
             get
@@ -6259,9 +6261,9 @@ namespace EcrisRIClient.EcrisService
                 this.sourceConvictionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DestinationConviction", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("DestinationConviction", Order=1)]
         public StructuredConvictionReferenceType[] DestinationConviction
         {
             get
@@ -6274,20 +6276,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class StructuredConvictionReferenceType
     {
-
+        
         private object itemField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ECRISConvictionReference", typeof(ConvictionExternalReferenceType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("ExternalConviction", typeof(StructuredConvictionReferenceTypeExternalConviction), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("NJRConvictionReference", typeof(NJRConvictionExternalReferenceType), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("ECRISConvictionReference", typeof(ConvictionExternalReferenceType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("ExternalConviction", typeof(StructuredConvictionReferenceTypeExternalConviction), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("NJRConvictionReference", typeof(NJRConvictionExternalReferenceType), Order=0)]
         public object Item
         {
             get
@@ -6300,22 +6302,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class StructuredConvictionReferenceTypeExternalConviction
     {
-
+        
         private DecidingAuthorityType convictingAuthorityField;
-
+        
         private string convictionFileNumberField;
-
+        
         private StrictDateType convictionDecisionFinalDateField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public DecidingAuthorityType ConvictingAuthority
         {
             get
@@ -6327,9 +6329,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictingAuthorityField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string ConvictionFileNumber
         {
             get
@@ -6341,9 +6343,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionFileNumberField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public StrictDateType ConvictionDecisionFinalDate
         {
             get
@@ -6356,20 +6358,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class UpdateConvictionReferenceType
     {
-
+        
         private object itemField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ECRISConvictionReference", typeof(string), DataType = "IDREF", Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("ExternalConviction", typeof(StructuredConvictionReferenceTypeExternalConviction), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("NJRConvictionReference", typeof(NJRConvictionExternalReferenceType), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("ECRISConvictionReference", typeof(string), DataType="IDREF", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("ExternalConviction", typeof(StructuredConvictionReferenceTypeExternalConviction), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("NJRConvictionReference", typeof(NJRConvictionExternalReferenceType), Order=0)]
         public object Item
         {
             get
@@ -6382,22 +6384,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestingAuthorityType
     {
-
+        
         private RequestingAuthorityTypeExternalReferenceType requestingAuthorityTypeReferenceField;
-
+        
         private RestrictedStringType50Chars requestingAuthorityCodeField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] requestingAuthorityNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RequestingAuthorityTypeExternalReferenceType RequestingAuthorityTypeReference
         {
             get
@@ -6409,9 +6411,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestingAuthorityTypeReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public RestrictedStringType50Chars RequestingAuthorityCode
         {
             get
@@ -6423,10 +6425,10 @@ namespace EcrisRIClient.EcrisService
                 this.requestingAuthorityCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] RequestingAuthorityName
         {
             get
@@ -6439,114 +6441,114 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public enum MemberStateCodeType
     {
-
+        
         /// <remarks/>
         AT,
-
+        
         /// <remarks/>
         BE,
-
+        
         /// <remarks/>
         BG,
-
+        
         /// <remarks/>
         CY,
-
+        
         /// <remarks/>
         CZ,
-
+        
         /// <remarks/>
         DE,
-
+        
         /// <remarks/>
         DK,
-
+        
         /// <remarks/>
         EE,
-
+        
         /// <remarks/>
         ES,
-
+        
         /// <remarks/>
         FI,
-
+        
         /// <remarks/>
         FR,
-
+        
         /// <remarks/>
         GB,
-
+        
         /// <remarks/>
         GR,
-
+        
         /// <remarks/>
         HR,
-
+        
         /// <remarks/>
         HU,
-
+        
         /// <remarks/>
         IE,
-
+        
         /// <remarks/>
         IT,
-
+        
         /// <remarks/>
         LT,
-
+        
         /// <remarks/>
         LU,
-
+        
         /// <remarks/>
         LV,
-
+        
         /// <remarks/>
         MT,
-
+        
         /// <remarks/>
         NL,
-
+        
         /// <remarks/>
         PL,
-
+        
         /// <remarks/>
         PT,
-
+        
         /// <remarks/>
         RO,
-
+        
         /// <remarks/>
         SE,
-
+        
         /// <remarks/>
         SI,
-
+        
         /// <remarks/>
         SK,
-
+        
         /// <remarks/>
         ZZ,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class FunctionalErrorType
     {
-
+        
         private string functionalErrorCodeField;
-
+        
         private UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] functionalErrorAdditionalInformationField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="ID", Order=0)]
         public string FunctionalErrorCode
         {
             get
@@ -6558,10 +6560,10 @@ namespace EcrisRIClient.EcrisService
                 this.functionalErrorCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[] FunctionalErrorAdditionalInformation
         {
             get
@@ -6574,62 +6576,62 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public enum AdditionalInformationRequestedEnumeration
     {
-
+        
         /// <remarks/>
         Forename,
-
+        
         /// <remarks/>
         Surname,
-
+        
         /// <remarks/>
         SecondSurname,
-
+        
         /// <remarks/>
         Sex,
-
+        
         /// <remarks/>
         BirthDate,
-
+        
         /// <remarks/>
         BirthPlace,
-
+        
         /// <remarks/>
         Nationality,
-
+        
         /// <remarks/>
         FormerName,
-
+        
         /// <remarks/>
         MotherName,
-
+        
         /// <remarks/>
         FatherName,
-
+        
         /// <remarks/>
         IdentityNumber,
-
+        
         /// <remarks/>
         IdentificationDocument,
-
+        
         /// <remarks/>
         Address,
-
+        
         /// <remarks/>
         Alias,
-
+        
         /// <remarks/>
         Fingerprints,
-
+        
         /// <remarks/>
         MoreInformationOnRequestPurpose,
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbstractBusinessMessageType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CancellationMessageType))]
@@ -6646,34 +6648,34 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResponseMessageShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MessageRelatedToRequestShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestMessageShortViewType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public abstract partial class AbstractMessageType : IdentifiableMessageType
     {
-
+        
         private RestrictedIdentifiableMessageType messageResponseToField;
-
+        
         private MemberStateCodeType messageSendingMemberStateField;
-
+        
         private bool messageSendingMemberStateFieldSpecified;
-
+        
         private MemberStateCodeType[] messageReceivingMemberStateField;
-
+        
         private EcrisMessageType messageTypeField;
-
+        
         private bool messageTypeFieldSpecified;
-
+        
         private System.DateTime messageSenderTimestampField;
-
+        
         private bool messageSenderTimestampFieldSpecified;
-
+        
         private System.DateTime messageVersionTimestampField;
-
+        
         private bool messageVersionTimestampFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RestrictedIdentifiableMessageType MessageResponseTo
         {
             get
@@ -6685,9 +6687,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageResponseToField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MemberStateCodeType MessageSendingMemberState
         {
             get
@@ -6699,7 +6701,7 @@ namespace EcrisRIClient.EcrisService
                 this.messageSendingMemberStateField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessageSendingMemberStateSpecified
@@ -6713,9 +6715,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageSendingMemberStateFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageReceivingMemberState", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageReceivingMemberState", Order=2)]
         public MemberStateCodeType[] MessageReceivingMemberState
         {
             get
@@ -6727,9 +6729,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageReceivingMemberStateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public EcrisMessageType MessageType
         {
             get
@@ -6741,7 +6743,7 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessageTypeSpecified
@@ -6755,9 +6757,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypeFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public System.DateTime MessageSenderTimestamp
         {
             get
@@ -6769,7 +6771,7 @@ namespace EcrisRIClient.EcrisService
                 this.messageSenderTimestampField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessageSenderTimestampSpecified
@@ -6783,9 +6785,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageSenderTimestampFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public System.DateTime MessageVersionTimestamp
         {
             get
@@ -6797,7 +6799,7 @@ namespace EcrisRIClient.EcrisService
                 this.messageVersionTimestampField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessageVersionTimestampSpecified
@@ -6812,15 +6814,15 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RestrictedIdentifiableMessageType : IdentifiableMessageType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbstractMessageType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbstractBusinessMessageType))]
@@ -6839,18 +6841,18 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MessageRelatedToRequestShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestMessageShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RestrictedIdentifiableMessageType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class IdentifiableMessageType
     {
-
+        
         private string messageIdentifierField;
-
+        
         private string messageEcrisIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageIdentifier
         {
             get
@@ -6862,9 +6864,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string MessageEcrisIdentifier
         {
             get
@@ -6877,76 +6879,76 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EcrisMessageType
     {
-
+        
         /// <remarks/>
         REQ,
-
+        
         /// <remarks/>
         RDL,
-
+        
         /// <remarks/>
         RRS,
-
+        
         /// <remarks/>
         NOT,
-
+        
         /// <remarks/>
         NRS,
-
+        
         /// <remarks/>
         RAI,
-
+        
         /// <remarks/>
         RAR,
-
+        
         /// <remarks/>
         FEM,
-
+        
         /// <remarks/>
         CAN,
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestAdditionalInfoMessageShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ResponseMessageShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MessageRelatedToRequestShortViewType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RequestMessageShortViewType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class MessageShortViewType : AbstractMessageType
     {
-
+        
         private MessageShortViewPersonType messageShortViewPersonField;
-
+        
         private StrictDateTimeType messageDeadlineField;
-
+        
         private StrictDateTimeType messageLastUpdateDateField;
-
+        
         private string messageLastModifiedByUserField;
-
+        
         private bool messageHasFunctionalErrorsField;
-
+        
         private bool messageHasNISTAttachmentField;
-
+        
         private bool messageIsRepliedField;
-
+        
         private bool messageTransmissionProblemField;
-
+        
         private bool messageIsArchivedField;
-
+        
         private bool messageIsCancelledField;
-
+        
         private IdentifiableFolderType containerFolderField;
-
+        
         private string authoringLanguageField;
-
+        
         public MessageShortViewType()
         {
             this.messageHasFunctionalErrorsField = false;
@@ -6956,9 +6958,9 @@ namespace EcrisRIClient.EcrisService
             this.messageIsArchivedField = false;
             this.messageIsCancelledField = false;
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MessageShortViewPersonType MessageShortViewPerson
         {
             get
@@ -6970,9 +6972,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageShortViewPersonField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StrictDateTimeType MessageDeadline
         {
             get
@@ -6984,9 +6986,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageDeadlineField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public StrictDateTimeType MessageLastUpdateDate
         {
             get
@@ -6998,9 +7000,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageLastUpdateDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string MessageLastModifiedByUser
         {
             get
@@ -7012,9 +7014,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageLastModifiedByUserField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool MessageHasFunctionalErrors
         {
@@ -7027,9 +7029,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageHasFunctionalErrorsField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool MessageHasNISTAttachment
         {
@@ -7042,9 +7044,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageHasNISTAttachmentField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool MessageIsReplied
         {
@@ -7057,9 +7059,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageIsRepliedField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool MessageTransmissionProblem
         {
@@ -7072,9 +7074,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTransmissionProblemField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool MessageIsArchived
         {
@@ -7087,9 +7089,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageIsArchivedField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         [System.ComponentModel.DefaultValueAttribute(false)]
         public bool MessageIsCancelled
         {
@@ -7102,9 +7104,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageIsCancelledField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public IdentifiableFolderType ContainerFolder
         {
             get
@@ -7116,9 +7118,9 @@ namespace EcrisRIClient.EcrisService
                 this.containerFolderField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public string AuthoringLanguage
         {
             get
@@ -7131,25 +7133,25 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FolderType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class IdentifiableFolderType
     {
-
+        
         private string folderIdentifierField;
-
+        
         private string folderNameField;
-
+        
         private bool folderPredefinedField;
-
+        
         private bool folderPredefinedFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string FolderIdentifier
         {
             get
@@ -7161,9 +7163,9 @@ namespace EcrisRIClient.EcrisService
                 this.folderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string FolderName
         {
             get
@@ -7175,9 +7177,9 @@ namespace EcrisRIClient.EcrisService
                 this.folderNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public bool FolderPredefined
         {
             get
@@ -7189,7 +7191,7 @@ namespace EcrisRIClient.EcrisService
                 this.folderPredefinedField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FolderPredefinedSpecified
@@ -7204,26 +7206,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class FolderType : IdentifiableFolderType
     {
-
+        
         private string parentFolderIdentifierField;
-
+        
         private string precedingFolderIdentifierField;
-
+        
         private string followingFolderIdentifierField;
-
+        
         private FolderType[] folderContainedFoldersField;
-
+        
         private int folderNumberOfMessagesContainedField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ParentFolderIdentifier
         {
             get
@@ -7235,9 +7237,9 @@ namespace EcrisRIClient.EcrisService
                 this.parentFolderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string PrecedingFolderIdentifier
         {
             get
@@ -7249,9 +7251,9 @@ namespace EcrisRIClient.EcrisService
                 this.precedingFolderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string FollowingFolderIdentifier
         {
             get
@@ -7263,9 +7265,9 @@ namespace EcrisRIClient.EcrisService
                 this.followingFolderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FolderContainedFolders", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute("FolderContainedFolders", Order=3)]
         public FolderType[] FolderContainedFolders
         {
             get
@@ -7277,9 +7279,9 @@ namespace EcrisRIClient.EcrisService
                 this.folderContainedFoldersField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int FolderNumberOfMessagesContained
         {
             get
@@ -7292,18 +7294,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestAdditionalInfoMessageShortViewType : MessageShortViewType
     {
-
+        
         private AdditionalInformationRequestedEnumeration[] requestAdditionalInfoShortViewInformationRequestedField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestAdditionalInfoShortViewInformationRequested", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestAdditionalInfoShortViewInformationRequested", Order=0)]
         public AdditionalInformationRequestedEnumeration[] RequestAdditionalInfoShortViewInformationRequested
         {
             get
@@ -7316,23 +7318,23 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MessageRelatedToRequestShortViewType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class ResponseMessageShortViewType : MessageShortViewType
     {
-
+        
         private string responseMessageShortViewResponseCodeField;
-
+        
         private string originalMessageEcrisIdentifierField;
-
+        
         private string originalMessageIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ResponseMessageShortViewResponseCode
         {
             get
@@ -7344,9 +7346,9 @@ namespace EcrisRIClient.EcrisService
                 this.responseMessageShortViewResponseCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string OriginalMessageEcrisIdentifier
         {
             get
@@ -7358,9 +7360,9 @@ namespace EcrisRIClient.EcrisService
                 this.originalMessageEcrisIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string OriginalMessageIdentifier
         {
             get
@@ -7373,20 +7375,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class MessageRelatedToRequestShortViewType : ResponseMessageShortViewType
     {
-
+        
         private YesNoUnknownStringEnumerationType requestMessageShortViewUrgencyField;
-
+        
         private RequestPurposeExternalReferenceType requestMessageShortViewPurposeCategoryReferenceField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public YesNoUnknownStringEnumerationType RequestMessageShortViewUrgency
         {
             get
@@ -7398,9 +7400,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageShortViewUrgencyField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public RequestPurposeExternalReferenceType RequestMessageShortViewPurposeCategoryReference
         {
             get
@@ -7413,20 +7415,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestMessageShortViewType : MessageShortViewType
     {
-
+        
         private YesNoUnknownStringEnumerationType requestMessageShortViewUrgencyField;
-
+        
         private RequestPurposeExternalReferenceType requestMessageShortViewPurposeCategoryReferenceField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public YesNoUnknownStringEnumerationType RequestMessageShortViewUrgency
         {
             get
@@ -7438,9 +7440,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestMessageShortViewUrgencyField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public RequestPurposeExternalReferenceType RequestMessageShortViewPurposeCategoryReference
         {
             get
@@ -7453,90 +7455,90 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class CancellationMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class FunctionalErrorMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestAdditionalInfoResponseMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestAdditionalInfoMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class NotificationResponseMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class NotificationMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestResponseMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestDeadlineMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestMessageType : AbstractBusinessMessageType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class PerformFunctionalValidationWSInputDataType
     {
-
+        
         private AbstractBusinessMessageType ecrisRiMessageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractBusinessMessageType EcrisRiMessage
         {
             get
@@ -7549,18 +7551,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SetSystemAvailabilityWSInputDataType
     {
-
+        
         private bool isSystemAvailableField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool IsSystemAvailable
         {
             get
@@ -7573,18 +7575,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListBackendLogsWSOutputDataType
     {
-
+        
         private BackendLogWSOutputDataType[] logsField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Logs", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("Logs", Order=0)]
         public BackendLogWSOutputDataType[] Logs
         {
             get
@@ -7597,20 +7599,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class BackendLogWSOutputDataType
     {
-
+        
         private string logField;
-
+        
         private System.DateTime logsTimestampField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Log
         {
             get
@@ -7622,9 +7624,9 @@ namespace EcrisRIClient.EcrisService
                 this.logField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public System.DateTime LogsTimestamp
         {
             get
@@ -7637,22 +7639,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListBackendLogsWSInputDataType
     {
-
+        
         private BackendLogsTypeEnumeration logTypeField;
-
+        
         private MemberStateCodeType memberStateEndpointMemberStateCodeField;
-
+        
         private bool memberStateEndpointMemberStateCodeFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public BackendLogsTypeEnumeration LogType
         {
             get
@@ -7664,9 +7666,9 @@ namespace EcrisRIClient.EcrisService
                 this.logTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MemberStateCodeType MemberStateEndpointMemberStateCode
         {
             get
@@ -7678,7 +7680,7 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointMemberStateCodeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MemberStateEndpointMemberStateCodeSpecified
@@ -7693,31 +7695,31 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum BackendLogsTypeEnumeration
     {
-
+        
         /// <remarks/>
         ECRIS,
-
+        
         /// <remarks/>
         COMMUNICATION,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SystemAvailabilityWSOutputDataType
     {
-
+        
         private bool isSystemAvailableField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool IsSystemAvailable
         {
             get
@@ -7730,18 +7732,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MoveDownRuleWSInputDataType
     {
-
+        
         private string ruleIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string RuleIdentifier
         {
             get
@@ -7754,18 +7756,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MoveUpRuleWSInputDataType
     {
-
+        
         private string ruleIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string RuleIdentifier
         {
             get
@@ -7778,18 +7780,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteRuleWSInputDataType
     {
-
+        
         private string ruleIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string RuleIdentifier
         {
             get
@@ -7802,18 +7804,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreRuleWSInputDataType
     {
-
+        
         private RuleType ruleField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RuleType Rule
         {
             get
@@ -7826,46 +7828,46 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RuleType
     {
-
+        
         private string ruleIdentifierField;
-
+        
         private string ruleNameField;
-
+        
         private int orderIdField;
-
+        
         private bool orderIdFieldSpecified;
-
+        
         private EcrisMessageTypeOrAlias[] messageTypesField;
-
+        
         private MemberStateCodeType[] memberStatesField;
-
+        
         private string surnameInitialsFromField;
-
+        
         private string surnameInitialsToField;
-
+        
         private FolderType targetFolderField;
-
+        
         private int personGenderField;
-
+        
         private bool personGenderFieldSpecified;
-
+        
         private RuleTransactionType transactionTypeField;
-
+        
         private bool transactionTypeFieldSpecified;
-
+        
         private MessageDirection triggerOnField;
-
+        
         private RuleMoveType moveTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string RuleIdentifier
         {
             get
@@ -7877,9 +7879,9 @@ namespace EcrisRIClient.EcrisService
                 this.ruleIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string RuleName
         {
             get
@@ -7891,9 +7893,9 @@ namespace EcrisRIClient.EcrisService
                 this.ruleNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int OrderId
         {
             get
@@ -7905,7 +7907,7 @@ namespace EcrisRIClient.EcrisService
                 this.orderIdField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool OrderIdSpecified
@@ -7919,9 +7921,9 @@ namespace EcrisRIClient.EcrisService
                 this.orderIdFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageTypes", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageTypes", Order=3)]
         public EcrisMessageTypeOrAlias[] MessageTypes
         {
             get
@@ -7933,9 +7935,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypesField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MemberStates", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute("MemberStates", Order=4)]
         public MemberStateCodeType[] MemberStates
         {
             get
@@ -7947,9 +7949,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStatesField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public string SurnameInitialsFrom
         {
             get
@@ -7961,9 +7963,9 @@ namespace EcrisRIClient.EcrisService
                 this.surnameInitialsFromField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string SurnameInitialsTo
         {
             get
@@ -7975,9 +7977,9 @@ namespace EcrisRIClient.EcrisService
                 this.surnameInitialsToField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public FolderType TargetFolder
         {
             get
@@ -7989,9 +7991,9 @@ namespace EcrisRIClient.EcrisService
                 this.targetFolderField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public int PersonGender
         {
             get
@@ -8003,7 +8005,7 @@ namespace EcrisRIClient.EcrisService
                 this.personGenderField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PersonGenderSpecified
@@ -8017,9 +8019,9 @@ namespace EcrisRIClient.EcrisService
                 this.personGenderFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public RuleTransactionType TransactionType
         {
             get
@@ -8031,7 +8033,7 @@ namespace EcrisRIClient.EcrisService
                 this.transactionTypeField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TransactionTypeSpecified
@@ -8045,9 +8047,9 @@ namespace EcrisRIClient.EcrisService
                 this.transactionTypeFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public MessageDirection TriggerOn
         {
             get
@@ -8059,9 +8061,9 @@ namespace EcrisRIClient.EcrisService
                 this.triggerOnField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public RuleMoveType MoveType
         {
             get
@@ -8074,21 +8076,21 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class EcrisMessageTypeOrAlias
     {
-
+        
         private object itemField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageType", typeof(EcrisMessageTypeOrAliasMessageType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("NotificationResponseMessageType", typeof(EcrisMessageTypeOrAliasNotificationResponseMessageType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("RequestAdditionalInfoResponseMessageType", typeof(EcrisMessageTypeOrAliasRequestAdditionalInfoResponseMessageType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("RequestResponseMessageType", typeof(EcrisMessageTypeOrAliasRequestResponseMessageType), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageType", typeof(EcrisMessageTypeOrAliasMessageType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("NotificationResponseMessageType", typeof(EcrisMessageTypeOrAliasNotificationResponseMessageType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestAdditionalInfoResponseMessageType", typeof(EcrisMessageTypeOrAliasRequestAdditionalInfoResponseMessageType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestResponseMessageType", typeof(EcrisMessageTypeOrAliasRequestResponseMessageType), Order=0)]
         public object Item
         {
             get
@@ -8101,54 +8103,54 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EcrisMessageTypeOrAliasMessageType
     {
-
+        
         /// <remarks/>
         REQ,
-
+        
         /// <remarks/>
         RDL,
-
+        
         /// <remarks/>
         NOT,
-
+        
         /// <remarks/>
         RAI,
-
+        
         /// <remarks/>
         FEM,
-
+        
         /// <remarks/>
         CAN,
-
+        
         /// <remarks/>
         NRS,
-
+        
         /// <remarks/>
         RRS,
-
+        
         /// <remarks/>
         RAR,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class EcrisMessageTypeOrAliasNotificationResponseMessageType
     {
-
+        
         private EcrisMessageTypeOrAliasNotificationResponseMessageTypeMessageType messageTypeField;
-
+        
         private NotificationResponseTypeExternalReferenceType[] messageResponseCodesField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public EcrisMessageTypeOrAliasNotificationResponseMessageTypeMessageType MessageType
         {
             get
@@ -8160,9 +8162,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageResponseCodes", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageResponseCodes", Order=1)]
         public NotificationResponseTypeExternalReferenceType[] MessageResponseCodes
         {
             get
@@ -8175,30 +8177,30 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EcrisMessageTypeOrAliasNotificationResponseMessageTypeMessageType
     {
-
+        
         /// <remarks/>
         NRS,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class EcrisMessageTypeOrAliasRequestAdditionalInfoResponseMessageType
     {
-
+        
         private EcrisMessageTypeOrAliasRequestAdditionalInfoResponseMessageTypeMessageType messageTypeField;
-
+        
         private RequestAdditionalInfoTypeExternalReferenceType[] messageResponseCodesField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public EcrisMessageTypeOrAliasRequestAdditionalInfoResponseMessageTypeMessageType MessageType
         {
             get
@@ -8210,9 +8212,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageResponseCodes", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageResponseCodes", Order=1)]
         public RequestAdditionalInfoTypeExternalReferenceType[] MessageResponseCodes
         {
             get
@@ -8225,30 +8227,30 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EcrisMessageTypeOrAliasRequestAdditionalInfoResponseMessageTypeMessageType
     {
-
+        
         /// <remarks/>
         RAR,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class EcrisMessageTypeOrAliasRequestResponseMessageType
     {
-
+        
         private EcrisMessageTypeOrAliasRequestResponseMessageTypeMessageType messageTypeField;
-
+        
         private RequestResponseTypeExternalReferenceType[] messageResponseCodesField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public EcrisMessageTypeOrAliasRequestResponseMessageTypeMessageType MessageType
         {
             get
@@ -8260,9 +8262,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageResponseCodes", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageResponseCodes", Order=1)]
         public RequestResponseTypeExternalReferenceType[] MessageResponseCodes
         {
             get
@@ -8275,73 +8277,73 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum EcrisMessageTypeOrAliasRequestResponseMessageTypeMessageType
     {
-
+        
         /// <remarks/>
         RRS,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public enum RuleTransactionType
     {
-
+        
         /// <remarks/>
         NOT,
-
+        
         /// <remarks/>
         REQ,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public enum MessageDirection
     {
-
+        
         /// <remarks/>
         SENT,
-
+        
         /// <remarks/>
         RECEIVED,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SENT-RECEIVED")]
         SENTRECEIVED,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public enum RuleMoveType
     {
-
+        
         /// <remarks/>
         MESSAGE,
-
+        
         /// <remarks/>
         TRANSACTION,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListAssignedFolderRolesWSOutputDataType
     {
-
+        
         private RoleType[] roleDataTypeField;
-
+        
         private int roleCountField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RoleDataType", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("RoleDataType", Order=0)]
         public RoleType[] RoleDataType
         {
             get
@@ -8353,9 +8355,9 @@ namespace EcrisRIClient.EcrisService
                 this.roleDataTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int RoleCount
         {
             get
@@ -8368,24 +8370,24 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RoleType
     {
-
+        
         private string roleIdentifierField;
-
+        
         private string roleNameField;
-
+        
         private AbstractAccessRightType[] accessRightsField;
-
+        
         private string[] eventCodesField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string RoleIdentifier
         {
             get
@@ -8397,9 +8399,9 @@ namespace EcrisRIClient.EcrisService
                 this.roleIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string RoleName
         {
             get
@@ -8411,9 +8413,9 @@ namespace EcrisRIClient.EcrisService
                 this.roleNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AccessRights", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute("AccessRights", Order=2)]
         public AbstractAccessRightType[] AccessRights
         {
             get
@@ -8425,9 +8427,9 @@ namespace EcrisRIClient.EcrisService
                 this.accessRightsField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("EventCodes", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute("EventCodes", Order=3)]
         public string[] EventCodes
         {
             get
@@ -8440,24 +8442,24 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ViewAccessRightsType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SendAccessRightsType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(EditAccessRightsType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BasicAccessRightsType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public abstract partial class AbstractAccessRightType
     {
-
+        
         private string accessRightTypeField;
-
+        
         private string[] messageTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string AccessRightType
         {
             get
@@ -8469,9 +8471,9 @@ namespace EcrisRIClient.EcrisService
                 this.accessRightTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageType", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageType", Order=1)]
         public string[] MessageType
         {
             get
@@ -8484,50 +8486,50 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class ViewAccessRightsType : AbstractAccessRightType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class SendAccessRightsType : AbstractAccessRightType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class EditAccessRightsType : AbstractAccessRightType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class BasicAccessRightsType : AbstractAccessRightType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListAssignedFolderRolesWSInputDataType
     {
-
+        
         private string folderIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string FolderIdentifier
         {
             get
@@ -8540,20 +8542,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class AssignFolderRolesWSInputDataType
     {
-
+        
         private string folderIdentifierField;
-
+        
         private string[] rolesIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string FolderIdentifier
         {
             get
@@ -8565,9 +8567,9 @@ namespace EcrisRIClient.EcrisService
                 this.folderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RolesIdentifier", DataType = "positiveInteger", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("RolesIdentifier", DataType="positiveInteger", Order=1)]
         public string[] RolesIdentifier
         {
             get
@@ -8580,20 +8582,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RuleViewListType
     {
-
+        
         private int totalCountField;
-
+        
         private RuleType[] ruleField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int TotalCount
         {
             get
@@ -8605,9 +8607,9 @@ namespace EcrisRIClient.EcrisService
                 this.totalCountField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Rule", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("Rule", Order=1)]
         public RuleType[] Rule
         {
             get
@@ -8620,18 +8622,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RuleListWSOutputDataType
     {
-
+        
         private RuleViewListType ruleViewListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RuleViewListType RuleViewList
         {
             get
@@ -8644,20 +8646,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class UserViewListType
     {
-
+        
         private int totalCountField;
-
+        
         private UserType[] userField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int TotalCount
         {
             get
@@ -8669,9 +8671,9 @@ namespace EcrisRIClient.EcrisService
                 this.totalCountField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("User", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("User", Order=1)]
         public UserType[] User
         {
             get
@@ -8684,52 +8686,52 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class UserType
     {
-
+        
         private string userIdentifierField;
-
+        
         private string userNameField;
-
+        
         private string userPasswordField;
-
+        
         private string userLanguageField;
-
+        
         private bool userLoggedInField;
-
+        
         private bool userLoggedInFieldSpecified;
-
+        
         private System.DateTime userLoginDateField;
-
+        
         private bool userLoginDateFieldSpecified;
-
+        
         private System.DateTime userPasswordDateField;
-
+        
         private bool userPasswordDateFieldSpecified;
-
+        
         private NameTextType forenameField;
-
+        
         private NameTextType surnameField;
-
+        
         private NameTextType secondSurnameField;
-
+        
         private RoleType[] userRolesField;
-
+        
         private bool userEnabledField;
-
+        
         private bool userEnabledFieldSpecified;
-
+        
         private bool userPasswordNeverExpiresField;
-
+        
         private bool userPasswordNeverExpiresFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string UserIdentifier
         {
             get
@@ -8741,9 +8743,9 @@ namespace EcrisRIClient.EcrisService
                 this.userIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string UserName
         {
             get
@@ -8755,9 +8757,9 @@ namespace EcrisRIClient.EcrisService
                 this.userNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string UserPassword
         {
             get
@@ -8769,9 +8771,9 @@ namespace EcrisRIClient.EcrisService
                 this.userPasswordField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string UserLanguage
         {
             get
@@ -8783,9 +8785,9 @@ namespace EcrisRIClient.EcrisService
                 this.userLanguageField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public bool UserLoggedIn
         {
             get
@@ -8797,7 +8799,7 @@ namespace EcrisRIClient.EcrisService
                 this.userLoggedInField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserLoggedInSpecified
@@ -8811,9 +8813,9 @@ namespace EcrisRIClient.EcrisService
                 this.userLoggedInFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public System.DateTime UserLoginDate
         {
             get
@@ -8825,7 +8827,7 @@ namespace EcrisRIClient.EcrisService
                 this.userLoginDateField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserLoginDateSpecified
@@ -8839,9 +8841,9 @@ namespace EcrisRIClient.EcrisService
                 this.userLoginDateFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public System.DateTime UserPasswordDate
         {
             get
@@ -8853,7 +8855,7 @@ namespace EcrisRIClient.EcrisService
                 this.userPasswordDateField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserPasswordDateSpecified
@@ -8867,9 +8869,9 @@ namespace EcrisRIClient.EcrisService
                 this.userPasswordDateFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public NameTextType Forename
         {
             get
@@ -8881,9 +8883,9 @@ namespace EcrisRIClient.EcrisService
                 this.forenameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public NameTextType Surname
         {
             get
@@ -8895,9 +8897,9 @@ namespace EcrisRIClient.EcrisService
                 this.surnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public NameTextType SecondSurname
         {
             get
@@ -8909,9 +8911,9 @@ namespace EcrisRIClient.EcrisService
                 this.secondSurnameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("UserRoles", Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute("UserRoles", Order=10)]
         public RoleType[] UserRoles
         {
             get
@@ -8923,9 +8925,9 @@ namespace EcrisRIClient.EcrisService
                 this.userRolesField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public bool UserEnabled
         {
             get
@@ -8937,7 +8939,7 @@ namespace EcrisRIClient.EcrisService
                 this.userEnabledField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserEnabledSpecified
@@ -8951,9 +8953,9 @@ namespace EcrisRIClient.EcrisService
                 this.userEnabledFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 12)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=12)]
         public bool UserPasswordNeverExpires
         {
             get
@@ -8965,7 +8967,7 @@ namespace EcrisRIClient.EcrisService
                 this.userPasswordNeverExpiresField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UserPasswordNeverExpiresSpecified
@@ -8980,18 +8982,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserListWSOutputDataType
     {
-
+        
         private UserViewListType userViewListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public UserViewListType UserViewList
         {
             get
@@ -9004,26 +9006,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RuleListWSInputDataType
     {
-
+        
         private RuleListWSInputDataTypeRulesSortedBy rulesSortedByField;
-
+        
         private bool rulesSortedByFieldSpecified;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RuleListWSInputDataTypeRulesSortedBy RulesSortedBy
         {
             get
@@ -9035,7 +9037,7 @@ namespace EcrisRIClient.EcrisService
                 this.rulesSortedByField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RulesSortedBySpecified
@@ -9049,9 +9051,9 @@ namespace EcrisRIClient.EcrisService
                 this.rulesSortedByFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int PageNumber
         {
             get
@@ -9063,7 +9065,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -9077,9 +9079,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=2)]
         public string ItemsPerPage
         {
             get
@@ -9092,71 +9094,71 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum RuleListWSInputDataTypeRulesSortedBy
     {
-
+        
         /// <remarks/>
         OrderAsc,
-
+        
         /// <remarks/>
         OrderDesc,
-
+        
         /// <remarks/>
         RuleNameAsc,
-
+        
         /// <remarks/>
         RuleNameDesc,
-
+        
         /// <remarks/>
         MessageTypeAsc,
-
+        
         /// <remarks/>
         MessageTypeDesc,
-
+        
         /// <remarks/>
         MemberStateAsc,
-
+        
         /// <remarks/>
         MemberStateDesc,
-
+        
         /// <remarks/>
         SurnameInitialsAsc,
-
+        
         /// <remarks/>
         SurnameInitialsDesc,
-
+        
         /// <remarks/>
         TargetFolderAsc,
-
+        
         /// <remarks/>
         TargetFolderDesc,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserListWSInputDataType
     {
-
+        
         private bool getAdministratorField;
-
+        
         private UserListWSInputDataTypeUsersSortedBy usersSortedByField;
-
+        
         private bool usersSortedByFieldSpecified;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public bool getAdministrator
         {
             get
@@ -9168,9 +9170,9 @@ namespace EcrisRIClient.EcrisService
                 this.getAdministratorField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public UserListWSInputDataTypeUsersSortedBy UsersSortedBy
         {
             get
@@ -9182,7 +9184,7 @@ namespace EcrisRIClient.EcrisService
                 this.usersSortedByField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool UsersSortedBySpecified
@@ -9196,9 +9198,9 @@ namespace EcrisRIClient.EcrisService
                 this.usersSortedByFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int PageNumber
         {
             get
@@ -9210,7 +9212,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -9224,9 +9226,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=3)]
         public string ItemsPerPage
         {
             get
@@ -9239,55 +9241,55 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum UserListWSInputDataTypeUsersSortedBy
     {
-
+        
         /// <remarks/>
         UserNameAsc,
-
+        
         /// <remarks/>
         UserNameDesc,
-
+        
         /// <remarks/>
         FullNameAsc,
-
+        
         /// <remarks/>
         FullNameDesc,
-
+        
         /// <remarks/>
         RolesAsc,
-
+        
         /// <remarks/>
         RolesDesc,
-
+        
         /// <remarks/>
         StatusAsc,
-
+        
         /// <remarks/>
         StatusDesc,
-
+        
         /// <remarks/>
         LoginDateAsc,
-
+        
         /// <remarks/>
         LoginDateDesc,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DisableUserWSInputDataType
     {
-
+        
         private string userIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string UserIdentifier
         {
             get
@@ -9300,18 +9302,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class EnableUserWSInputDataType
     {
-
+        
         private string userIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string UserIdentifier
         {
             get
@@ -9324,18 +9326,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveUserWSInputDataType
     {
-
+        
         private string userIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
         public string UserIdentifier
         {
             get
@@ -9348,18 +9350,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserWSOutputDataType
     {
-
+        
         private UserType userField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public UserType User
         {
             get
@@ -9372,18 +9374,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserWSInputDataType
     {
-
+        
         private UserType userField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public UserType User
         {
             get
@@ -9396,18 +9398,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveUserRoleWSInputDataType
     {
-
+        
         private RoleType roleDataTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RoleType RoleDataType
         {
             get
@@ -9420,18 +9422,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreRoleWSInputDataType
     {
-
+        
         private RoleType roleDataTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RoleType RoleDataType
         {
             get
@@ -9444,20 +9446,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAvailableRolesWSOutputDataType
     {
-
+        
         private RoleType[] roleDataTypeField;
-
+        
         private int roleCountField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RoleDataType", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("RoleDataType", Order=0)]
         public RoleType[] RoleDataType
         {
             get
@@ -9469,9 +9471,9 @@ namespace EcrisRIClient.EcrisService
                 this.roleDataTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int RoleCount
         {
             get
@@ -9484,26 +9486,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAvailableRolesWSInputDataType
     {
-
+        
         private RetrieveAvailableRolesWSInputDataTypeRolesSortedBy rolesSortedByField;
-
+        
         private bool rolesSortedByFieldSpecified;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RetrieveAvailableRolesWSInputDataTypeRolesSortedBy RolesSortedBy
         {
             get
@@ -9515,7 +9517,7 @@ namespace EcrisRIClient.EcrisService
                 this.rolesSortedByField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RolesSortedBySpecified
@@ -9529,9 +9531,9 @@ namespace EcrisRIClient.EcrisService
                 this.rolesSortedByFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int PageNumber
         {
             get
@@ -9543,7 +9545,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -9557,9 +9559,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=2)]
         public string ItemsPerPage
         {
             get
@@ -9572,33 +9574,33 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum RetrieveAvailableRolesWSInputDataTypeRolesSortedBy
     {
-
+        
         /// <remarks/>
         RoleNameAsc,
-
+        
         /// <remarks/>
         RoleNameDesc,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MemberStateCodeContainingWSInputDataType
     {
-
+        
         private MemberStateCodeType memberStateCodeField;
-
+        
         private string ecrisVersionField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MemberStateCodeType MemberStateCode
         {
             get
@@ -9610,9 +9612,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string EcrisVersion
         {
             get
@@ -9625,23 +9627,23 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MemberStateEndpointType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class MemberStateEndpointStatusType
     {
-
+        
         private MemberStateCodeType memberStateEndpointMemberStateCodeField;
-
+        
         private bool memberStateEndpointCommunicationStatusField;
-
+        
         private bool memberStateEndpointIsAliveStatusField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MemberStateCodeType MemberStateEndpointMemberStateCode
         {
             get
@@ -9653,9 +9655,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointMemberStateCodeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public bool MemberStateEndpointCommunicationStatus
         {
             get
@@ -9667,9 +9669,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointCommunicationStatusField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public bool MemberStateEndpointIsAliveStatus
         {
             get
@@ -9682,30 +9684,30 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class MemberStateEndpointType : MemberStateEndpointStatusType
     {
-
+        
         private string memberStateEndpointUrlField;
-
+        
         private MemberStateEndpointTypeMemberStateEndpointEcrisVersion memberStateEndpointEcrisVersionField;
-
+        
         private string memberStateEndpointLagField;
-
+        
         private System.DateTime memberStateEndpointLastExchangeTimestampField;
-
+        
         private bool memberStateEndpointLastExchangeTimestampFieldSpecified;
-
+        
         private BinaryAttachmentSupportEnum binaryAttachmentSupportField;
-
+        
         private bool binaryAttachmentSupportFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MemberStateEndpointUrl
         {
             get
@@ -9717,9 +9719,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointUrlField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MemberStateEndpointTypeMemberStateEndpointEcrisVersion MemberStateEndpointEcrisVersion
         {
             get
@@ -9731,9 +9733,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointEcrisVersionField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=2)]
         public string MemberStateEndpointLag
         {
             get
@@ -9745,9 +9747,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointLagField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public System.DateTime MemberStateEndpointLastExchangeTimestamp
         {
             get
@@ -9759,7 +9761,7 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointLastExchangeTimestampField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MemberStateEndpointLastExchangeTimestampSpecified
@@ -9773,9 +9775,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateEndpointLastExchangeTimestampFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public BinaryAttachmentSupportEnum BinaryAttachmentSupport
         {
             get
@@ -9787,7 +9789,7 @@ namespace EcrisRIClient.EcrisService
                 this.binaryAttachmentSupportField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool BinaryAttachmentSupportSpecified
@@ -9802,46 +9804,46 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public enum MemberStateEndpointTypeMemberStateEndpointEcrisVersion
     {
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("v1.0")]
         v10,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public enum BinaryAttachmentSupportEnum
     {
-
+        
         /// <remarks/>
         NOFP,
-
+        
         /// <remarks/>
         PUSH,
-
+        
         /// <remarks/>
         PULL,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveMemberStateEndpointListWSOutputDataType
     {
-
+        
         private MemberStateEndpointType[] memberStateEndpointListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MemberStateEndpoint", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MemberStateEndpoint", IsNullable=false)]
         public MemberStateEndpointType[] MemberStateEndpointList
         {
             get
@@ -9854,22 +9856,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class MessageTransactionType
     {
-
+        
         private System.DateTime messageTransactionDeadlineField;
-
+        
         private bool messageTransactionDeadlineFieldSpecified;
-
+        
         private MessageShortViewType[] messageTransactionMessageListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public System.DateTime MessageTransactionDeadline
         {
             get
@@ -9881,7 +9883,7 @@ namespace EcrisRIClient.EcrisService
                 this.messageTransactionDeadlineField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessageTransactionDeadlineSpecified
@@ -9895,10 +9897,10 @@ namespace EcrisRIClient.EcrisService
                 this.messageTransactionDeadlineFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Message", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Message", IsNullable=false)]
         public MessageShortViewType[] MessageTransactionMessageList
         {
             get
@@ -9911,18 +9913,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetTransactionForMessageWSOutputDataType
     {
-
+        
         private MessageTransactionType messageTransactionField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MessageTransactionType MessageTransaction
         {
             get
@@ -9935,18 +9937,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetTransactionForMessageWSInputDataType
     {
-
+        
         private string messageIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageIdentifier
         {
             get
@@ -9959,20 +9961,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class StatisticYearType
     {
-
+        
         private string yearField;
-
+        
         private string[] monthsField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "gYear", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gYear", Order=0)]
         public string Year
         {
             get
@@ -9984,9 +9986,9 @@ namespace EcrisRIClient.EcrisService
                 this.yearField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Months", DataType = "gMonth", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("Months", DataType="gMonth", Order=1)]
         public string[] Months
         {
             get
@@ -9999,20 +10001,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class CalculateNextExportDeadlineWSOutputDataType
     {
-
+        
         private StrictDateType exportDeadlineField;
-
+        
         private StatisticalIndicatorTypeEnumerationType exportIndicatorTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateType ExportDeadline
         {
             get
@@ -10024,9 +10026,9 @@ namespace EcrisRIClient.EcrisService
                 this.exportDeadlineField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StatisticalIndicatorTypeEnumerationType ExportIndicatorType
         {
             get
@@ -10039,36 +10041,36 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum StatisticalIndicatorTypeEnumerationType
     {
-
+        
         /// <remarks/>
         Yearly,
-
+        
         /// <remarks/>
         Monthly,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/statistics-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/statistics-v1.0")]
     public partial class StatisticRecordType
     {
-
+        
         private string itemField;
-
+        
         private ItemChoiceType1 itemElementNameField;
-
+        
         private string valueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReceivedFrom", typeof(string), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("SentTo", typeof(string), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("ReceivedFrom", typeof(string), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("SentTo", typeof(string), Order=0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemElementName")]
         public string Item
         {
@@ -10081,9 +10083,9 @@ namespace EcrisRIClient.EcrisService
                 this.itemField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public ItemChoiceType1 ItemElementName
         {
@@ -10096,9 +10098,9 @@ namespace EcrisRIClient.EcrisService
                 this.itemElementNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger", Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger", Order=2)]
         public string Value
         {
             get
@@ -10111,33 +10113,33 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/statistics-v1.0", IncludeInSchema = false)]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/statistics-v1.0", IncludeInSchema=false)]
     public enum ItemChoiceType1
     {
-
+        
         /// <remarks/>
         ReceivedFrom,
-
+        
         /// <remarks/>
         SentTo,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS/statistics-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS/statistics-v1.0")]
     public partial class StatisticType
     {
-
+        
         private string statisticIDField;
-
+        
         private StatisticRecordType[] statisticRecordField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string StatisticID
         {
             get
@@ -10149,9 +10151,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticIDField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("StatisticRecord", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("StatisticRecord", Order=1)]
         public StatisticRecordType[] StatisticRecord
         {
             get
@@ -10164,18 +10166,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DownloadStatisticsWSOutputDataType
     {
-
+        
         private Statistics statisticsField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://ec.europa.eu/ECRIS/statistics-v1.0", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Namespace="http://ec.europa.eu/ECRIS/statistics-v1.0", Order=0)]
         public Statistics Statistics
         {
             get
@@ -10188,26 +10190,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS/statistics-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS/statistics-v1.0")]
     public partial class Statistics
     {
-
+        
         private System.DateTime statisticsCreatedOnDateField;
-
+        
         private System.DateTime statisticsLoggedFromTimestampField;
-
+        
         private System.DateTime statisticsLoggedToTimestampField;
-
+        
         private string statisticsProducedByMemberStateField;
-
+        
         private StatisticType[] statisticField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public System.DateTime StatisticsCreatedOnDate
         {
             get
@@ -10219,9 +10221,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticsCreatedOnDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public System.DateTime StatisticsLoggedFromTimestamp
         {
             get
@@ -10233,9 +10235,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticsLoggedFromTimestampField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public System.DateTime StatisticsLoggedToTimestamp
         {
             get
@@ -10247,9 +10249,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticsLoggedToTimestampField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public string StatisticsProducedByMemberState
         {
             get
@@ -10261,9 +10263,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticsProducedByMemberStateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Statistic", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute("Statistic", Order=4)]
         public StatisticType[] Statistic
         {
             get
@@ -10276,20 +10278,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DownloadStatisticsWSInputDataType
     {
-
+        
         private AbstractStatisticsPeriodType statisticsPeriodField;
-
+        
         private StatisticalIndicatorTypeEnumerationType[] statisticalIndicatorTypeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractStatisticsPeriodType StatisticsPeriod
         {
             get
@@ -10301,9 +10303,9 @@ namespace EcrisRIClient.EcrisService
                 this.statisticsPeriodField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("StatisticalIndicatorType", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute("StatisticalIndicatorType", Order=1)]
         public StatisticalIndicatorTypeEnumerationType[] StatisticalIndicatorType
         {
             get
@@ -10316,18 +10318,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class AdministrativeMessageWSInputDataType
     {
-
+        
         private MemberStateCodeType memberStateField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MemberStateCodeType MemberState
         {
             get
@@ -10340,19 +10342,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveStoredQueriesWSOutputDataType
     {
-
+        
         private QueryType[] queryListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Query", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Query", IsNullable=false)]
         public QueryType[] QueryList
         {
             get
@@ -10365,20 +10367,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class QueryType
     {
-
+        
         private string queryNameField;
-
+        
         private QueryTypeQueryParameters queryParametersField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string QueryName
         {
             get
@@ -10390,9 +10392,9 @@ namespace EcrisRIClient.EcrisService
                 this.queryNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public QueryTypeQueryParameters QueryParameters
         {
             get
@@ -10405,52 +10407,52 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class QueryTypeQueryParameters
     {
-
+        
         private string forenameQueryParameterField;
-
+        
         private string surnameQueryParameterField;
-
+        
         private string personIdentityNumberQueryParameterField;
-
+        
         private BirthDateQueryParameter personDateOfBirthQueryParameterField;
-
+        
         private CountryExternalReferenceType[] personCountryOfBirthQueryParameterField;
-
+        
         private QueryTypeQueryParametersPersonTownOfBirthQueryParameter[] personTownOfBirthQueryParameterField;
-
+        
         private int personSexQueryParameterField;
-
+        
         private bool personSexQueryParameterFieldSpecified;
-
+        
         private CountryExternalReferenceType[] personNationalityQueryParameterField;
-
+        
         private QueryTypeQueryParametersMemberStateQueryParameter memberStateQueryParameterField;
-
+        
         private DateStrictRangeQueryParameter messageDeadlineQueryParameterField;
-
+        
         private MessageDateQueryParameterType messageDateQueryParameterField;
-
+        
         private string convictionIdentifierQueryParameterField;
-
+        
         private string[] folderQueryParameterField;
-
+        
         private YesNoUnknownStringEnumerationType[] requestUrgencyQueryParameterField;
-
+        
         private RequestPurposeExternalReferenceType[] requestPurposeCategoryQueryParameterField;
-
+        
         private EcrisMessageTypeOrAlias[] messageTypeQueryParameterField;
-
+        
         private string lastModifiedByUserQueryParameterField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ForenameQueryParameter
         {
             get
@@ -10462,9 +10464,9 @@ namespace EcrisRIClient.EcrisService
                 this.forenameQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string SurnameQueryParameter
         {
             get
@@ -10476,9 +10478,9 @@ namespace EcrisRIClient.EcrisService
                 this.surnameQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string PersonIdentityNumberQueryParameter
         {
             get
@@ -10490,9 +10492,9 @@ namespace EcrisRIClient.EcrisService
                 this.personIdentityNumberQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public BirthDateQueryParameter PersonDateOfBirthQueryParameter
         {
             get
@@ -10504,9 +10506,9 @@ namespace EcrisRIClient.EcrisService
                 this.personDateOfBirthQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonCountryOfBirthQueryParameter", Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonCountryOfBirthQueryParameter", Order=4)]
         public CountryExternalReferenceType[] PersonCountryOfBirthQueryParameter
         {
             get
@@ -10518,9 +10520,9 @@ namespace EcrisRIClient.EcrisService
                 this.personCountryOfBirthQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonTownOfBirthQueryParameter", Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonTownOfBirthQueryParameter", Order=5)]
         public QueryTypeQueryParametersPersonTownOfBirthQueryParameter[] PersonTownOfBirthQueryParameter
         {
             get
@@ -10532,9 +10534,9 @@ namespace EcrisRIClient.EcrisService
                 this.personTownOfBirthQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 6)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public int PersonSexQueryParameter
         {
             get
@@ -10546,7 +10548,7 @@ namespace EcrisRIClient.EcrisService
                 this.personSexQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PersonSexQueryParameterSpecified
@@ -10560,9 +10562,9 @@ namespace EcrisRIClient.EcrisService
                 this.personSexQueryParameterFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonNationalityQueryParameter", Order = 7)]
+        [System.Xml.Serialization.XmlElementAttribute("PersonNationalityQueryParameter", Order=7)]
         public CountryExternalReferenceType[] PersonNationalityQueryParameter
         {
             get
@@ -10574,9 +10576,9 @@ namespace EcrisRIClient.EcrisService
                 this.personNationalityQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 8)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         public QueryTypeQueryParametersMemberStateQueryParameter MemberStateQueryParameter
         {
             get
@@ -10588,9 +10590,9 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 9)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         public DateStrictRangeQueryParameter MessageDeadlineQueryParameter
         {
             get
@@ -10602,9 +10604,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageDeadlineQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 10)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
         public MessageDateQueryParameterType MessageDateQueryParameter
         {
             get
@@ -10616,9 +10618,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageDateQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 11)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
         public string ConvictionIdentifierQueryParameter
         {
             get
@@ -10630,9 +10632,9 @@ namespace EcrisRIClient.EcrisService
                 this.convictionIdentifierQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FolderQueryParameter", Order = 12)]
+        [System.Xml.Serialization.XmlElementAttribute("FolderQueryParameter", Order=12)]
         public string[] FolderQueryParameter
         {
             get
@@ -10644,9 +10646,9 @@ namespace EcrisRIClient.EcrisService
                 this.folderQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestUrgencyQueryParameter", Order = 13)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestUrgencyQueryParameter", Order=13)]
         public YesNoUnknownStringEnumerationType[] RequestUrgencyQueryParameter
         {
             get
@@ -10658,9 +10660,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestUrgencyQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RequestPurposeCategoryQueryParameter", Order = 14)]
+        [System.Xml.Serialization.XmlElementAttribute("RequestPurposeCategoryQueryParameter", Order=14)]
         public RequestPurposeExternalReferenceType[] RequestPurposeCategoryQueryParameter
         {
             get
@@ -10672,9 +10674,9 @@ namespace EcrisRIClient.EcrisService
                 this.requestPurposeCategoryQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MessageTypeQueryParameter", Order = 15)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageTypeQueryParameter", Order=15)]
         public EcrisMessageTypeOrAlias[] MessageTypeQueryParameter
         {
             get
@@ -10686,9 +10688,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageTypeQueryParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 16)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=16)]
         public string LastModifiedByUserQueryParameter
         {
             get
@@ -10701,20 +10703,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class BirthDateQueryParameter : AbstractDateQueryParameter
     {
-
+        
         private DateRange birthDateRangeParameterField;
-
+        
         private DateType birthDateTypeParameterField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public DateRange BirthDateRangeParameter
         {
             get
@@ -10726,9 +10728,9 @@ namespace EcrisRIClient.EcrisService
                 this.birthDateRangeParameterField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public DateType BirthDateTypeParameter
         {
             get
@@ -10741,20 +10743,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DateRange
     {
-
+        
         private DateType fromDateField;
-
+        
         private DateType toDateField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public DateType FromDate
         {
             get
@@ -10766,9 +10768,9 @@ namespace EcrisRIClient.EcrisService
                 this.fromDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public DateType ToDate
         {
             get
@@ -10781,22 +10783,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BirthDateQueryParameter))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DateStrictRangeQueryParameter))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public abstract partial class AbstractDateQueryParameter
     {
-
+        
         private AbstractDateQueryParameterDateParameterType dateParameterTypeField;
-
+        
         private string intervalParameterField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractDateQueryParameterDateParameterType DateParameterType
         {
             get
@@ -10808,9 +10810,9 @@ namespace EcrisRIClient.EcrisService
                 this.dateParameterTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=1)]
         public string IntervalParameter
         {
             get
@@ -10823,43 +10825,43 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum AbstractDateQueryParameterDateParameterType
     {
-
+        
         /// <remarks/>
         Today,
-
+        
         /// <remarks/>
         CurrentWeek,
-
+        
         /// <remarks/>
         WithinLast,
-
+        
         /// <remarks/>
         WithinNext,
-
+        
         /// <remarks/>
         Range,
-
+        
         /// <remarks/>
         Date,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DateStrictRangeQueryParameter : AbstractDateQueryParameter
     {
-
+        
         private StrictDateRange dateRangeParameterField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateRange DateRangeParameter
         {
             get
@@ -10872,20 +10874,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StrictDateRange
     {
-
+        
         private StrictDateType fromDateField;
-
+        
         private StrictDateType toDateField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateType FromDate
         {
             get
@@ -10897,9 +10899,9 @@ namespace EcrisRIClient.EcrisService
                 this.fromDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StrictDateType ToDate
         {
             get
@@ -10912,20 +10914,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class QueryTypeQueryParametersPersonTownOfBirthQueryParameter
     {
-
+        
         private CityExternalReferenceType placeTownReferenceField;
-
+        
         private string placeTownNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public CityExternalReferenceType PlaceTownReference
         {
             get
@@ -10937,9 +10939,9 @@ namespace EcrisRIClient.EcrisService
                 this.placeTownReferenceField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string PlaceTownName
         {
             get
@@ -10952,22 +10954,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class QueryTypeQueryParametersMemberStateQueryParameter
     {
-
+        
         private MemberStateCodeType[] memberStateCodesField;
-
+        
         private QueryTypeQueryParametersMemberStateQueryParameterDestination destinationField;
-
+        
         private bool destinationFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MemberStateCodes", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("MemberStateCodes", Order=0)]
         public MemberStateCodeType[] MemberStateCodes
         {
             get
@@ -10979,7 +10981,7 @@ namespace EcrisRIClient.EcrisService
                 this.memberStateCodesField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public QueryTypeQueryParametersMemberStateQueryParameterDestination Destination
@@ -10993,7 +10995,7 @@ namespace EcrisRIClient.EcrisService
                 this.destinationField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool DestinationSpecified
@@ -11008,37 +11010,37 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum QueryTypeQueryParametersMemberStateQueryParameterDestination
     {
-
+        
         /// <remarks/>
         SENT,
-
+        
         /// <remarks/>
         RECEIVED,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SENT-RECEIVED")]
         SENTRECEIVED,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MessageDateQueryParameterType
     {
-
+        
         private MessageDateTypeEnumeration dateTypeField;
-
+        
         private DateStrictRangeQueryParameter dateValueField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MessageDateTypeEnumeration DateType
         {
             get
@@ -11050,9 +11052,9 @@ namespace EcrisRIClient.EcrisService
                 this.dateTypeField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public DateStrictRangeQueryParameter DateValue
         {
             get
@@ -11065,31 +11067,31 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum MessageDateTypeEnumeration
     {
-
+        
         /// <remarks/>
         LastUpdated,
-
+        
         /// <remarks/>
         SentReceived,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveStoredQueryWSInputDataType
     {
-
+        
         private string queryNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string QueryName
         {
             get
@@ -11102,25 +11104,25 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreOrSendMessageWithCommentWSInputDataType
     {
-
+        
         private object itemField;
-
+        
         private string backendSessionIdField;
-
+        
         private string commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SendMessageWSInputData", typeof(SendMessageWSInputDataType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("SendMessageZipWSInputData", typeof(SendMessageZipWSInputDataType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("StoreMessageWSInputData", typeof(StoreMessageWSInputDataType), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("StoreMessageZipWSInputData", typeof(StoreMessageZipWSInputDataType), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("SendMessageWSInputData", typeof(SendMessageWSInputDataType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("SendMessageZipWSInputData", typeof(SendMessageZipWSInputDataType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("StoreMessageWSInputData", typeof(StoreMessageWSInputDataType), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("StoreMessageZipWSInputData", typeof(StoreMessageZipWSInputDataType), Order=0)]
         public object Item
         {
             get
@@ -11132,9 +11134,9 @@ namespace EcrisRIClient.EcrisService
                 this.itemField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string BackendSessionId
         {
             get
@@ -11146,9 +11148,9 @@ namespace EcrisRIClient.EcrisService
                 this.backendSessionIdField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Comment
         {
             get
@@ -11161,18 +11163,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageWSInputDataType
     {
-
+        
         private AbstractMessageType ecrisMessageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractMessageType EcrisMessage
         {
             get
@@ -11185,18 +11187,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageZipWSInputDataType
     {
-
+        
         private byte[] ecrisRiZipField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=0)]
         public byte[] EcrisRiZip
         {
             get
@@ -11209,20 +11211,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageWSInputDataType
     {
-
+        
         private AbstractMessageType ecrisRiMessageField;
-
+        
         private string targetFolderIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractMessageType EcrisRiMessage
         {
             get
@@ -11234,9 +11236,9 @@ namespace EcrisRIClient.EcrisService
                 this.ecrisRiMessageField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string TargetFolderIdentifier
         {
             get
@@ -11249,20 +11251,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageZipWSInputDataType
     {
-
+        
         private byte[] ecrisRiZipField;
-
+        
         private string targetFolderIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=0)]
         public byte[] EcrisRiZip
         {
             get
@@ -11274,9 +11276,9 @@ namespace EcrisRIClient.EcrisService
                 this.ecrisRiZipField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string TargetFolderIdentifier
         {
             get
@@ -11289,22 +11291,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageZipWithCommentWSInputDataType
     {
-
+        
         private SendMessageZipWSInputDataType sendMessageZipWSInputDataField;
-
+        
         private string backendSessionIdField;
-
+        
         private string commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public SendMessageZipWSInputDataType SendMessageZipWSInputData
         {
             get
@@ -11316,9 +11318,9 @@ namespace EcrisRIClient.EcrisService
                 this.sendMessageZipWSInputDataField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string BackendSessionId
         {
             get
@@ -11330,9 +11332,9 @@ namespace EcrisRIClient.EcrisService
                 this.backendSessionIdField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Comment
         {
             get
@@ -11345,22 +11347,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageWithCommentWSInputDataType
     {
-
+        
         private SendMessageWSInputDataType sendMessageWSInputDataField;
-
+        
         private string backendSessionIdField;
-
+        
         private string commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public SendMessageWSInputDataType SendMessageWSInputData
         {
             get
@@ -11372,9 +11374,9 @@ namespace EcrisRIClient.EcrisService
                 this.sendMessageWSInputDataField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string BackendSessionId
         {
             get
@@ -11386,9 +11388,9 @@ namespace EcrisRIClient.EcrisService
                 this.backendSessionIdField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Comment
         {
             get
@@ -11401,22 +11403,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageZipWithCommentWSInputDataType
     {
-
+        
         private StoreMessageZipWSInputDataType storeMessageZipWSInputDataField;
-
+        
         private string backendSessionIdField;
-
+        
         private string commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StoreMessageZipWSInputDataType StoreMessageZipWSInputData
         {
             get
@@ -11428,9 +11430,9 @@ namespace EcrisRIClient.EcrisService
                 this.storeMessageZipWSInputDataField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string BackendSessionId
         {
             get
@@ -11442,9 +11444,9 @@ namespace EcrisRIClient.EcrisService
                 this.backendSessionIdField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Comment
         {
             get
@@ -11457,22 +11459,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageWithCommentWSInputDataType
     {
-
+        
         private StoreMessageWSInputDataType storeMessageWSInputDataField;
-
+        
         private string backendSessionIdField;
-
+        
         private string commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StoreMessageWSInputDataType StoreMessageWSInputData
         {
             get
@@ -11484,9 +11486,9 @@ namespace EcrisRIClient.EcrisService
                 this.storeMessageWSInputDataField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string BackendSessionId
         {
             get
@@ -11498,9 +11500,9 @@ namespace EcrisRIClient.EcrisService
                 this.backendSessionIdField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Comment
         {
             get
@@ -11513,18 +11515,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteMessageCommentWSInputDataType
     {
-
+        
         private string messageIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageIdentifier
         {
             get
@@ -11537,20 +11539,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SetMessageCommentWSInputDataType
     {
-
+        
         private string messageIdentifierField;
-
+        
         private string messageCommentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageIdentifier
         {
             get
@@ -11562,9 +11564,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string MessageComment
         {
             get
@@ -11577,22 +11579,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0")]
     public partial class GuiCommentType
     {
-
+        
         private string userNameField;
-
+        
         private System.DateTime commentDateField;
-
+        
         private string commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string UserName
         {
             get
@@ -11604,9 +11606,9 @@ namespace EcrisRIClient.EcrisService
                 this.userNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public System.DateTime CommentDate
         {
             get
@@ -11618,9 +11620,9 @@ namespace EcrisRIClient.EcrisService
                 this.commentDateField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string Comment
         {
             get
@@ -11633,18 +11635,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessageCommentWSOutputDataType
     {
-
+        
         private GuiCommentType commentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public GuiCommentType Comment
         {
             get
@@ -11657,18 +11659,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessageCommentWSInputDataType
     {
-
+        
         private string messageIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageIdentifier
         {
             get
@@ -11681,21 +11683,21 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SearchWSOutputDataType
     {
-
+        
         private MessageShortViewType[] messageShortViewListField;
-
+        
         private int numberOfResultsField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Message", Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Message", Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0", IsNullable=false)]
         public MessageShortViewType[] MessageShortViewList
         {
             get
@@ -11707,9 +11709,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageShortViewListField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int NumberOfResults
         {
             get
@@ -11722,28 +11724,28 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SearchWSInputDataType
     {
-
+        
         private QueryType searchQueryField;
-
+        
         private MessageSortByType messagesSortedByField;
-
+        
         private bool messagesSortedByFieldSpecified;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public QueryType SearchQuery
         {
             get
@@ -11755,9 +11757,9 @@ namespace EcrisRIClient.EcrisService
                 this.searchQueryField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MessageSortByType MessagesSortedBy
         {
             get
@@ -11769,7 +11771,7 @@ namespace EcrisRIClient.EcrisService
                 this.messagesSortedByField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessagesSortedBySpecified
@@ -11783,9 +11785,9 @@ namespace EcrisRIClient.EcrisService
                 this.messagesSortedByFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int PageNumber
         {
             get
@@ -11797,7 +11799,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -11811,9 +11813,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=3)]
         public string ItemsPerPage
         {
             get
@@ -11826,79 +11828,79 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum MessageSortByType
     {
-
+        
         /// <remarks/>
         ReceivedSendDateAsc,
-
+        
         /// <remarks/>
         ReceivedSendDateDesc,
-
+        
         /// <remarks/>
         SendingMemberStateAsc,
-
+        
         /// <remarks/>
         SendingMemberStateDesc,
-
+        
         /// <remarks/>
         ReceivingMemberStateAsc,
-
+        
         /// <remarks/>
         ReceivingMemberStateDesc,
-
+        
         /// <remarks/>
         DeadlineDateAsc,
-
+        
         /// <remarks/>
         DeadlineDateDesc,
-
+        
         /// <remarks/>
         VersionAsc,
-
+        
         /// <remarks/>
         VersionDesc,
-
+        
         /// <remarks/>
         MessageTypeAsc,
-
+        
         /// <remarks/>
         MessageTypeDesc,
-
+        
         /// <remarks/>
         DescriptionAsc,
-
+        
         /// <remarks/>
         DescriptionDesc,
-
+        
         /// <remarks/>
         HasAttachmentsAsc,
-
+        
         /// <remarks/>
         HasAttachmentsDesc,
-
+        
         /// <remarks/>
         FolderAsc,
-
+        
         /// <remarks/>
         FolderDesc,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ExportReferenceTablesWSOutputDataType
     {
-
+        
         private ReferenceTableListType referenceTableListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public ReferenceTableListType ReferenceTableList
         {
             get
@@ -11911,18 +11913,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ReferenceTableListType
     {
-
+        
         private ReferenceTableListTypeReferenceTable referenceTableField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public ReferenceTableListTypeReferenceTable ReferenceTable
         {
             get
@@ -11935,20 +11937,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ReferenceTableListTypeReferenceTable
     {
-
+        
         private EntityType[] referenceValueField;
-
+        
         private string tableNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReferenceValue", Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("ReferenceValue", Order=0)]
         public EntityType[] ReferenceValue
         {
             get
@@ -11960,7 +11962,7 @@ namespace EcrisRIClient.EcrisService
                 this.referenceValueField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string tableName
@@ -11975,23 +11977,23 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/common-reference-tables-v1.0")]
     public abstract partial class EntityType
     {
-
+        
         private StrictDateType validFromField;
-
+        
         private StrictDateType validToField;
-
+        
         private MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] nameField;
-
+        
         /// <remarks/>
         // CODEGEN Warning: 'default' attribute supported only for primitive types.  Ignoring default='1800-01-01' attribute.
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateType ValidFrom
         {
             get
@@ -12003,10 +12005,10 @@ namespace EcrisRIClient.EcrisService
                 this.validFromField = value;
             }
         }
-
+        
         /// <remarks/>
         // CODEGEN Warning: 'default' attribute supported only for primitive types.  Ignoring default='2999-12-31' attribute.
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StrictDateType ValidTo
         {
             get
@@ -12018,10 +12020,10 @@ namespace EcrisRIClient.EcrisService
                 this.validToField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace = "http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MultilingualTextLinguisticRepresentation", Namespace="http://ec.europa.eu/ECRIS-RI/commons-v1.0", IsNullable=false)]
         public MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[] Name
         {
             get
@@ -12034,18 +12036,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ReadNistWSOutputDataType
     {
-
+        
         private NistBinaryAttachmentType nistAttachmentField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable = true, Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
         public NistBinaryAttachmentType NistAttachment
         {
             get
@@ -12058,18 +12060,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ReadMessageWSOutputDataType
     {
-
+        
         private AbstractMessageType ecrisRiMessageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractMessageType EcrisRiMessage
         {
             get
@@ -12082,18 +12084,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class EcrisRiIdentifierContainingMessageWSInputDataType
     {
-
+        
         private string messageIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string MessageIdentifier
         {
             get
@@ -12106,18 +12108,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageWSOutputDataType
     {
-
+        
         private AbstractMessageType ecrisMessageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractMessageType EcrisMessage
         {
             get
@@ -12130,18 +12132,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreFolderWSInputDataType
     {
-
+        
         private FolderType folderField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public FolderType Folder
         {
             get
@@ -12154,40 +12156,40 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RemoveMessagesResult
     {
-
+        
         private int removedCountField;
-
+        
         private bool removedCountFieldSpecified;
-
+        
         private int noAccessToFolderCountField;
-
+        
         private bool noAccessToFolderCountFieldSpecified;
-
+        
         private int noRemovalRightsCountField;
-
+        
         private bool noRemovalRightsCountFieldSpecified;
-
+        
         private int alreadyDeletedCountField;
-
+        
         private bool alreadyDeletedCountFieldSpecified;
-
+        
         private int failedDeadlineCountField;
-
+        
         private bool failedDeadlineCountFieldSpecified;
-
+        
         private int failedCountField;
-
+        
         private bool failedCountFieldSpecified;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public int RemovedCount
         {
             get
@@ -12199,7 +12201,7 @@ namespace EcrisRIClient.EcrisService
                 this.removedCountField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RemovedCountSpecified
@@ -12213,9 +12215,9 @@ namespace EcrisRIClient.EcrisService
                 this.removedCountFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public int NoAccessToFolderCount
         {
             get
@@ -12227,7 +12229,7 @@ namespace EcrisRIClient.EcrisService
                 this.noAccessToFolderCountField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool NoAccessToFolderCountSpecified
@@ -12241,9 +12243,9 @@ namespace EcrisRIClient.EcrisService
                 this.noAccessToFolderCountFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int NoRemovalRightsCount
         {
             get
@@ -12255,7 +12257,7 @@ namespace EcrisRIClient.EcrisService
                 this.noRemovalRightsCountField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool NoRemovalRightsCountSpecified
@@ -12269,9 +12271,9 @@ namespace EcrisRIClient.EcrisService
                 this.noRemovalRightsCountFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public int AlreadyDeletedCount
         {
             get
@@ -12283,7 +12285,7 @@ namespace EcrisRIClient.EcrisService
                 this.alreadyDeletedCountField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool AlreadyDeletedCountSpecified
@@ -12297,9 +12299,9 @@ namespace EcrisRIClient.EcrisService
                 this.alreadyDeletedCountFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public int FailedDeadlineCount
         {
             get
@@ -12311,7 +12313,7 @@ namespace EcrisRIClient.EcrisService
                 this.failedDeadlineCountField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FailedDeadlineCountSpecified
@@ -12325,9 +12327,9 @@ namespace EcrisRIClient.EcrisService
                 this.failedDeadlineCountFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
         public int FailedCount
         {
             get
@@ -12339,7 +12341,7 @@ namespace EcrisRIClient.EcrisService
                 this.failedCountField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FailedCountSpecified
@@ -12354,18 +12356,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveMessagesWSOutputDataType
     {
-
+        
         private RemoveMessagesResult removeMessagesResultField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public RemoveMessagesResult RemoveMessagesResult
         {
             get
@@ -12378,19 +12380,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveMessagesWSInputDataType
     {
-
+        
         private string[] messageIdentifierListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MessageIdentifier", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MessageIdentifier", IsNullable=false)]
         public string[] MessageIdentifierList
         {
             get
@@ -12403,18 +12405,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteFolderWSInputDataType
     {
-
+        
         private string folderIdentifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string FolderIdentifier
         {
             get
@@ -12427,22 +12429,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MoveMessagesToFolderWSInputDataType
     {
-
+        
         private string folderIdentifierField;
-
+        
         private string[] messageIdentifierListField;
-
+        
         private bool ignoreInvalidMessagesField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string FolderIdentifier
         {
             get
@@ -12454,10 +12456,10 @@ namespace EcrisRIClient.EcrisService
                 this.folderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("MessageIdentifier", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("MessageIdentifier", IsNullable=false)]
         public string[] MessageIdentifierList
         {
             get
@@ -12469,9 +12471,9 @@ namespace EcrisRIClient.EcrisService
                 this.messageIdentifierListField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public bool ignoreInvalidMessages
         {
             get
@@ -12484,19 +12486,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessagesForFolderWSOutputDataType
     {
-
+        
         private MessageShortViewType[] messageShortViewListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Message", Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Message", Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0", IsNullable=false)]
         public MessageShortViewType[] MessageShortViewList
         {
             get
@@ -12509,28 +12511,28 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessagesForFolderWSInputDataType
     {
-
+        
         private string folderIdentifierField;
-
+        
         private MessageSortByType messagesSortedByField;
-
+        
         private bool messagesSortedByFieldSpecified;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string FolderIdentifier
         {
             get
@@ -12542,9 +12544,9 @@ namespace EcrisRIClient.EcrisService
                 this.folderIdentifierField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public MessageSortByType MessagesSortedBy
         {
             get
@@ -12556,7 +12558,7 @@ namespace EcrisRIClient.EcrisService
                 this.messagesSortedByField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool MessagesSortedBySpecified
@@ -12570,9 +12572,9 @@ namespace EcrisRIClient.EcrisService
                 this.messagesSortedByFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int PageNumber
         {
             get
@@ -12584,7 +12586,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -12598,9 +12600,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=3)]
         public string ItemsPerPage
         {
             get
@@ -12613,23 +12615,23 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FindAccessibleMessageByIdentifierWSInputDataType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(FindMessageByEcrisIdentifierWSInputDataType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageInputDataType
     {
-
+        
         private string itemField;
-
+        
         private ItemChoiceType itemElementNameField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("EcrisIdentifier", typeof(string), Order = 0)]
-        [System.Xml.Serialization.XmlElementAttribute("MessageRiIdentifier", typeof(string), Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute("EcrisIdentifier", typeof(string), Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("MessageRiIdentifier", typeof(string), Order=0)]
         [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemElementName")]
         public string Item
         {
@@ -12642,9 +12644,9 @@ namespace EcrisRIClient.EcrisService
                 this.itemField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public ItemChoiceType ItemElementName
         {
@@ -12658,47 +12660,47 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0", IncludeInSchema = false)]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0", IncludeInSchema=false)]
     public enum ItemChoiceType
     {
-
+        
         /// <remarks/>
         EcrisIdentifier,
-
+        
         /// <remarks/>
         MessageRiIdentifier,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindAccessibleMessageByIdentifierWSInputDataType : FindMessageInputDataType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByEcrisIdentifierWSInputDataType : FindMessageInputDataType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByIdentifierWSOutputDataType
     {
-
+        
         private MessageShortViewType messageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public MessageShortViewType Message
         {
             get
@@ -12711,18 +12713,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByIdentifierWSInputDataType
     {
-
+        
         private string identifierField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Identifier
         {
             get
@@ -12735,19 +12737,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetFoldersWSOutputDataType
     {
-
+        
         private FolderType[] folderListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Folder", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Folder", IsNullable=false)]
         public FolderType[] FolderList
         {
             get
@@ -12760,22 +12762,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class AuditLogEntryType
     {
-
+        
         private string usernameField;
-
+        
         private System.DateTime timestampField;
-
+        
         private string actionPerformedField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string Username
         {
             get
@@ -12787,9 +12789,9 @@ namespace EcrisRIClient.EcrisService
                 this.usernameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public System.DateTime Timestamp
         {
             get
@@ -12801,9 +12803,9 @@ namespace EcrisRIClient.EcrisService
                 this.timestampField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public string ActionPerformed
         {
             get
@@ -12816,19 +12818,19 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAuditLogWSOutputDataType
     {
-
+        
         private AuditLogEntryType[] auditLogListField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Order = 0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("AuditLogEntry", Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0", IsNullable = false)]
+        [System.Xml.Serialization.XmlArrayAttribute(Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("AuditLogEntry", Namespace="http://ec.europa.eu/ECRIS-RI/domain-v1.0", IsNullable=false)]
         public AuditLogEntryType[] AuditLogList
         {
             get
@@ -12841,26 +12843,26 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAuditLogWSInputDataType
     {
-
+        
         private StrictDateType auditLogPeriodStartField;
-
+        
         private StrictDateType auditLogPeriodEndField;
-
+        
         private int pageNumberField;
-
+        
         private bool pageNumberFieldSpecified;
-
+        
         private string itemsPerPageField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public StrictDateType AuditLogPeriodStart
         {
             get
@@ -12872,9 +12874,9 @@ namespace EcrisRIClient.EcrisService
                 this.auditLogPeriodStartField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public StrictDateType AuditLogPeriodEnd
         {
             get
@@ -12886,9 +12888,9 @@ namespace EcrisRIClient.EcrisService
                 this.auditLogPeriodEndField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 2)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public int PageNumber
         {
             get
@@ -12900,7 +12902,7 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberField = value;
             }
         }
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PageNumberSpecified
@@ -12914,9 +12916,9 @@ namespace EcrisRIClient.EcrisService
                 this.pageNumberFieldSpecified = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger", Order = 3)]
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=3)]
         public string ItemsPerPage
         {
             get
@@ -12929,18 +12931,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LoginWSOutputDataType
     {
-
+        
         private UserType authenticatedUserField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public UserType AuthenticatedUser
         {
             get
@@ -12953,20 +12955,20 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LoginWSInputDataType
     {
-
+        
         private string loginUserNameField;
-
+        
         private string loginUserPasswordField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string LoginUserName
         {
             get
@@ -12978,9 +12980,9 @@ namespace EcrisRIClient.EcrisService
                 this.loginUserNameField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string LoginUserPassword
         {
             get
@@ -12993,18 +12995,18 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class BaseEcrisRiWSOutputDataType
     {
-
+        
         private string actionExecutionInformationField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string ActionExecutionInformation
         {
             get
@@ -13017,22 +13019,22 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LoginWSInputMetaDataType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SessionIdContainingWSMetaDataType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public abstract partial class AbstractWSMetaDataType
     {
-
+        
         private System.DateTime metaDataTimeStampField;
-
+        
         private string sessionIdField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public System.DateTime MetaDataTimeStamp
         {
             get
@@ -13044,9 +13046,9 @@ namespace EcrisRIClient.EcrisService
                 this.metaDataTimeStampField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string SessionId
         {
             get
@@ -13059,23 +13061,23 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LoginWSInputMetaDataType : AbstractWSMetaDataType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SessionIdContainingWSMetaDataType : AbstractWSMetaDataType
     {
     }
-
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(UpdateEventsStateWSInputType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetEventsWSOutputType))]
@@ -13175,18 +13177,18 @@ namespace EcrisRIClient.EcrisService
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LoginWSInputType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BaseEcrisRiWSOutputType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BaseEcrisRiWSInputType))]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public abstract partial class AbstractWSType
     {
-
+        
         private AbstractWSMetaDataType wSMetaDataField;
-
+        
         private object wSDataField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public AbstractWSMetaDataType WSMetaData
         {
             get
@@ -13198,9 +13200,9 @@ namespace EcrisRIClient.EcrisService
                 this.wSMetaDataField = value;
             }
         }
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 1)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public object WSData
         {
             get
@@ -13213,801 +13215,802 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UpdateEventsStateWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetEventsWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetEventsWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ManageEventTypesConnectionsToUserRolesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MailServerConnectionStatusWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetBuildNumberWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetBuildNumberWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SetSystemMaintenanceModeWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ValidateConfigurationFilesWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ValidateConfigurationFilesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UploadConfigurationFilesWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UploadConfigurationFilesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class PerformFunctionalValidationWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class PerformFunctionalValidationWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SetSystemAvailabilityWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListBackendLogsWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListBackendLogsWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ResetRetransmitCounterWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ResetRetransmitCounterWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SystemAvailabilityWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class CheckMemberStatesCommunicationsStatusWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class CheckMemberStatesCommunicationsStatusWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MoveDownRuleWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MoveUpRuleWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteRuleWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreRuleWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RuleListWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListAssignedFolderRolesWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ListAssignedFolderRolesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class AssignFolderRolesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserListWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RuleListWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserListWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DisableUserWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class EnableUserWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveUserWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class PasswordWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class UserWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveUserRoleWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreRoleWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAvailableRolesWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAvailableRolesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MemberStateCodeContainingWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveMemberStateEndpointListWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetTransactionForMessageWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetTransactionForMessageWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetYearsMonthsWithStatisticsWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class CalculateNextExportDeadlineWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DownloadStatisticsWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DownloadStatisticsWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class AdministrativeMessageWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
-    public partial class RetrieveStoredQueriesWSOutputType : AbstractWSType { 
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    public partial class RetrieveStoredQueriesWSOutputType : AbstractWSType
+    {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveStoredQueryWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteStoredQueriesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SearchWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageZipWithCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageWithCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageZipWithCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageWithCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteMessageCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SetMessageCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessageCommentWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessageCommentWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SearchWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ExportReferenceTablesWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ExportReferenceTablesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageZipWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class SendMessageWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ReadNistWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class ReadMessageWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class EcrisRiIdentifierContainingWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageZipWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreMessageWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class StoreFolderWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveMessagesWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RemoveMessagesWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class DeleteFolderWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class MoveMessagesToFolderWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessagesForFolderWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetMessagesForFolderWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindAccessibleMessageByIdentifierWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindAccessibleMessageByIdentifierWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByEcrisIdentifierWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByEcrisIdentifierWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByIdentifierWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class FindMessageByIdentifierWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class GetFoldersWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAuditLogWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class RetrieveAuditLogWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LogoutWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LogoutWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LoginWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class LoginWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class BaseEcrisRiWSOutputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class BaseEcrisRiWSInputType : AbstractWSType
     {
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class OperationFaultType : AbstractFaultType
     {
-
+        
         private OperationFaultCodeType operationFaultCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public OperationFaultCodeType OperationFaultCode
         {
             get
@@ -14020,273 +14023,273 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public enum OperationFaultCodeType
     {
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-001")]
         SDM001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-002")]
         SDM002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-003")]
         SDM003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-004")]
         SDM004,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-005")]
         SDM005,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-006")]
         SDM006,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-007")]
         SDM007,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-001")]
         SM001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-002")]
         SM002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-003")]
         SM003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-004")]
         SM004,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-005")]
         SM005,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-008")]
         SM008,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SM-009")]
         SM009,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("CF-001")]
         CF001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RF-001")]
         RF001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RF-002")]
         RF002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RF-003")]
         RF003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RF-004")]
         RF004,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RF-005")]
         RF005,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("CU-001")]
         CU001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("CU-002")]
         CU002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RU-001")]
         RU001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RU-002")]
         RU002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("DQ-001")]
         DQ001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SRU-001")]
         SRU001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SRU-002")]
         SRU002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SRO-001")]
         SRO001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RR-001")]
         RR001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RR-002")]
         RR002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RR-003")]
         RR003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-001")]
         MM001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-002")]
         MM002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-003")]
         MM003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-004")]
         MM004,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EM-001")]
         EM001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EM-002")]
         EM002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EM-003")]
         EM003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EM-004")]
         EM004,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EM-005")]
         EM005,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EM-006")]
         EM006,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("DM-001")]
         DM001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RUR-001")]
         RUR001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RUR-002")]
         RUR002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-001")]
         MM0011,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-002")]
         MM0021,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("MM-003")]
         MM0031,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("NF-001")]
         NF001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-006")]
         SDM0061,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-007")]
         SDM0071,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-008")]
         SDM008,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SDM-009")]
         SDM009,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("KIN-001")]
         KIN001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("RM-001")]
         RM001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SC-001")]
         SC001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SC-002")]
         SC002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("CRT-001")]
         CRT001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EV-001")]
         EV001,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EV-002")]
         EV002,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EV-003")]
         EV003,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("EV-004")]
         EV004,
-
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("SE-001")]
         SE001,
     }
-
+    
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3-preview3.21351.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/messages-v1.0")]
     public partial class AuthenticationFaultType : AbstractFaultType
     {
-
+        
         private string authenticationFaultCodeField;
-
+        
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public string AuthenticationFaultCode
         {
             get
@@ -14299,5 +14302,839 @@ namespace EcrisRIClient.EcrisService
             }
         }
     }
-
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ServiceModel.ServiceContractAttribute(Name="searchPort-v1.0", Namespace="http://ec.europa.eu/ECRIS-RI/contract", ConfigurationName="EcrisRISearchService.searchPortv10")]
+    public interface searchPortv10
+    {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://ec.europa.eu/ECRIS-RI/search/performSearch", ReplyAction="*")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.ServerErrorFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/performSearch", Name="ServerErrorFaultMessage")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.AuthenticationFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/performSearch", Name="AuthenticationFaultMessage")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StatisticsPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DateType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PositiveDecimalType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRelationshipType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EntityType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UpdateEventsStateWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ManageEventTypesConnectionsToUserRolesWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MailServerConnectionStatusWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetBuildNumberWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemMaintenanceModeWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ResetPasswordWsInput))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemAvailabilityWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SystemAvailabilityWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveDownRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveUpRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AssignFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DisableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EnableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MemberStateCodeContainingWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveMemberStateEndpointListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(CalculateNextExportDeadlineWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AdministrativeMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueriesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueryWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreOrSendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractDateQueryParameter))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ExportReferenceTablesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadNistWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EcrisRiIdentifierContainingMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveMessagesToFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNationalCategoriesSupportingEntityType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StringType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNameType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPersonType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(IdentifiableMessageType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetFoldersWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseEcrisRiWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractFaultType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractWSType))]
+        System.Threading.Tasks.Task<EcrisRISearchService.performSearchResponse> performSearchAsync(EcrisRISearchService.performSearchRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://ec.europa.eu/ECRIS-RI/search/storeQuery", ReplyAction="*")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.ServerErrorFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/storeQuery", Name="ServerErrorFaultMessage")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.AuthenticationFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/storeQuery", Name="AuthenticationFaultMessage")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StatisticsPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DateType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PositiveDecimalType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRelationshipType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EntityType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UpdateEventsStateWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ManageEventTypesConnectionsToUserRolesWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MailServerConnectionStatusWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetBuildNumberWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemMaintenanceModeWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ResetPasswordWsInput))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemAvailabilityWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SystemAvailabilityWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveDownRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveUpRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AssignFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DisableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EnableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MemberStateCodeContainingWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveMemberStateEndpointListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(CalculateNextExportDeadlineWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AdministrativeMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueriesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueryWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreOrSendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractDateQueryParameter))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ExportReferenceTablesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadNistWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EcrisRiIdentifierContainingMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveMessagesToFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNationalCategoriesSupportingEntityType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StringType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNameType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPersonType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(IdentifiableMessageType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetFoldersWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseEcrisRiWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractFaultType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractWSType))]
+        System.Threading.Tasks.Task<EcrisRISearchService.storeQueryResponse> storeQueryAsync(EcrisRISearchService.storeQueryRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://ec.europa.eu/ECRIS-RI/search/retrieveStoredQueries", ReplyAction="*")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.ServerErrorFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/retrieveStoredQueries", Name="ServerErrorFaultMessage")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.AuthenticationFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/retrieveStoredQueries", Name="AuthenticationFaultMessage")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StatisticsPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DateType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PositiveDecimalType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRelationshipType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EntityType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UpdateEventsStateWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ManageEventTypesConnectionsToUserRolesWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MailServerConnectionStatusWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetBuildNumberWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemMaintenanceModeWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ResetPasswordWsInput))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemAvailabilityWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SystemAvailabilityWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveDownRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveUpRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AssignFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DisableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EnableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MemberStateCodeContainingWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveMemberStateEndpointListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(CalculateNextExportDeadlineWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AdministrativeMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueriesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueryWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreOrSendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractDateQueryParameter))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ExportReferenceTablesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadNistWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EcrisRiIdentifierContainingMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveMessagesToFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNationalCategoriesSupportingEntityType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StringType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNameType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPersonType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(IdentifiableMessageType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetFoldersWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseEcrisRiWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractFaultType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractWSType))]
+        System.Threading.Tasks.Task<EcrisRISearchService.retrieveStoredQueriesResponse> retrieveStoredQueriesAsync(EcrisRISearchService.retrieveStoredQueriesRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://ec.europa.eu/ECRIS-RI/search/deleteStoredQueries", ReplyAction="*")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.ServerErrorFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/deleteStoredQueries", Name="ServerErrorFaultMessage")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.AuthenticationFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/deleteStoredQueries", Name="AuthenticationFaultMessage")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StatisticsPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DateType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PositiveDecimalType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRelationshipType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EntityType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UpdateEventsStateWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ManageEventTypesConnectionsToUserRolesWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MailServerConnectionStatusWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetBuildNumberWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemMaintenanceModeWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ResetPasswordWsInput))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemAvailabilityWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SystemAvailabilityWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveDownRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveUpRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AssignFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DisableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EnableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MemberStateCodeContainingWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveMemberStateEndpointListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(CalculateNextExportDeadlineWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AdministrativeMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueriesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueryWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreOrSendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractDateQueryParameter))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ExportReferenceTablesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadNistWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EcrisRiIdentifierContainingMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveMessagesToFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNationalCategoriesSupportingEntityType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StringType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNameType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPersonType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(IdentifiableMessageType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetFoldersWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseEcrisRiWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractFaultType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractWSType))]
+        System.Threading.Tasks.Task<EcrisRISearchService.storeQueryResponse> deleteStoredQueriesAsync(EcrisRISearchService.deleteStoredQueriesRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://ec.europa.eu/ECRIS-RI/search/retrieveStoredQuery", ReplyAction="*")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.ServerErrorFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/retrieveStoredQuery", Name="ServerErrorFaultMessage")]
+        [System.ServiceModel.FaultContractAttribute(typeof(EcrisRISearchService.AuthenticationFaultType), Action="http://ec.europa.eu/ECRIS-RI/search/retrieveStoredQuery", Name="AuthenticationFaultMessage")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StatisticsPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DateType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PositiveDecimalType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractRelationshipType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EntityType1))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UpdateEventsStateWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetEventsWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ManageEventTypesConnectionsToUserRolesWSDataInputType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MailServerConnectionStatusWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetBuildNumberWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemMaintenanceModeWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ValidateConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UploadConfigurationFilesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ResetPasswordWsInput))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PerformFunctionalValidationWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetSystemAvailabilityWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListBackendLogsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SystemAvailabilityWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveDownRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveUpRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRuleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ListAssignedFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AssignFolderRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RuleListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserListWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DisableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EnableUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(UserWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveUserRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreRoleWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAvailableRolesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MemberStateCodeContainingWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveMemberStateEndpointListWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetTransactionForMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(CalculateNextExportDeadlineWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DownloadStatisticsWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AdministrativeMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueriesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveStoredQueryWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreOrSendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SendMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageZipWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWithCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessageCommentWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractDateQueryParameter))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(SearchWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ExportReferenceTablesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadNistWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ReadMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(EcrisRiIdentifierContainingMessageWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreMessageWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StoreFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RemoveMessagesWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DeleteFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(MoveMessagesToFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetMessagesForFolderWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPeriodType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNationalCategoriesSupportingEntityType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(StringType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractNameType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractPersonType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(IdentifiableMessageType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(FindMessageByIdentifierWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(GetFoldersWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(RetrieveAuditLogWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(LoginWSInputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BaseEcrisRiWSOutputDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractFaultType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AbstractWSType))]
+        System.Threading.Tasks.Task<EcrisRISearchService.retrieveStoredQueriesResponse> retrieveStoredQueryAsync(EcrisRISearchService.retrieveStoredQueryRequest request);
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class performSearchRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/search-v1.0", Order=0)]
+        public EcrisRISearchService.SearchWSInputType PerformSearchWSInput;
+        
+        public performSearchRequest()
+        {
+        }
+        
+        public performSearchRequest(EcrisRISearchService.SearchWSInputType PerformSearchWSInput)
+        {
+            this.PerformSearchWSInput = PerformSearchWSInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class performSearchResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/search-v1.0", Order=0)]
+        public EcrisRISearchService.SearchWSOutputType PerformSearchWSOutput;
+        
+        public performSearchResponse()
+        {
+        }
+        
+        public performSearchResponse(EcrisRISearchService.SearchWSOutputType PerformSearchWSOutput)
+        {
+            this.PerformSearchWSOutput = PerformSearchWSOutput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class storeQueryRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/search-v1.0", Order=0)]
+        public EcrisRISearchService.SearchWSInputType StoreQueryWSInput;
+        
+        public storeQueryRequest()
+        {
+        }
+        
+        public storeQueryRequest(EcrisRISearchService.SearchWSInputType StoreQueryWSInput)
+        {
+            this.StoreQueryWSInput = StoreQueryWSInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class storeQueryResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/contract", Order=0)]
+        public EcrisRISearchService.BaseEcrisRiWSOutputType BaseEcrisRiWSOutput;
+        
+        public storeQueryResponse()
+        {
+        }
+        
+        public storeQueryResponse(EcrisRISearchService.BaseEcrisRiWSOutputType BaseEcrisRiWSOutput)
+        {
+            this.BaseEcrisRiWSOutput = BaseEcrisRiWSOutput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class retrieveStoredQueriesRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/contract", Order=0)]
+        public EcrisRISearchService.BaseEcrisRiWSInputType BaseEcrisRiWSInput;
+        
+        public retrieveStoredQueriesRequest()
+        {
+        }
+        
+        public retrieveStoredQueriesRequest(EcrisRISearchService.BaseEcrisRiWSInputType BaseEcrisRiWSInput)
+        {
+            this.BaseEcrisRiWSInput = BaseEcrisRiWSInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class retrieveStoredQueriesResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/search-v1.0", Order=0)]
+        public EcrisRISearchService.RetrieveStoredQueriesWSOutputType RetrieveStoredQueriesWSOutput;
+        
+        public retrieveStoredQueriesResponse()
+        {
+        }
+        
+        public retrieveStoredQueriesResponse(EcrisRISearchService.RetrieveStoredQueriesWSOutputType RetrieveStoredQueriesWSOutput)
+        {
+            this.RetrieveStoredQueriesWSOutput = RetrieveStoredQueriesWSOutput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class deleteStoredQueriesRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/search-v1.0", Order=0)]
+        public EcrisRISearchService.DeleteStoredQueriesWSInputType DeleteStoredQueriesWSInput;
+        
+        public deleteStoredQueriesRequest()
+        {
+        }
+        
+        public deleteStoredQueriesRequest(EcrisRISearchService.DeleteStoredQueriesWSInputType DeleteStoredQueriesWSInput)
+        {
+            this.DeleteStoredQueriesWSInput = DeleteStoredQueriesWSInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class retrieveStoredQueryRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ec.europa.eu/ECRIS-RI/search-v1.0", Order=0)]
+        public EcrisRISearchService.RetrieveStoredQueryWSInputType RetrieveStoredQueryWSInput;
+        
+        public retrieveStoredQueryRequest()
+        {
+        }
+        
+        public retrieveStoredQueryRequest(EcrisRISearchService.RetrieveStoredQueryWSInputType RetrieveStoredQueryWSInput)
+        {
+            this.RetrieveStoredQueryWSInput = RetrieveStoredQueryWSInput;
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    public interface searchPortv10Channel : EcrisRISearchService.searchPortv10, System.ServiceModel.IClientChannel
+    {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    public partial class searchPortv10Client : System.ServiceModel.ClientBase<EcrisRISearchService.searchPortv10>, EcrisRISearchService.searchPortv10
+    {
+        
+        /// <summary>
+        /// Implement this partial method to configure the service endpoint.
+        /// </summary>
+        /// <param name="serviceEndpoint">The endpoint to configure</param>
+        /// <param name="clientCredentials">The client credentials</param>
+        static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
+        
+        public searchPortv10Client() : 
+                base(searchPortv10Client.GetDefaultBinding(), searchPortv10Client.GetDefaultEndpointAddress())
+        {
+            this.Endpoint.Name = EndpointConfiguration.searchPort.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public searchPortv10Client(EndpointConfiguration endpointConfiguration) : 
+                base(searchPortv10Client.GetBindingForEndpoint(endpointConfiguration), searchPortv10Client.GetEndpointAddress(endpointConfiguration))
+        {
+            this.Endpoint.Name = endpointConfiguration.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public searchPortv10Client(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
+                base(searchPortv10Client.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
+        {
+            this.Endpoint.Name = endpointConfiguration.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public searchPortv10Client(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(searchPortv10Client.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        {
+            this.Endpoint.Name = endpointConfiguration.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public searchPortv10Client(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress)
+        {
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EcrisRISearchService.performSearchResponse> EcrisRISearchService.searchPortv10.performSearchAsync(EcrisRISearchService.performSearchRequest request)
+        {
+            return base.Channel.performSearchAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<EcrisRISearchService.performSearchResponse> performSearchAsync(EcrisRISearchService.SearchWSInputType PerformSearchWSInput)
+        {
+            EcrisRISearchService.performSearchRequest inValue = new EcrisRISearchService.performSearchRequest();
+            inValue.PerformSearchWSInput = PerformSearchWSInput;
+            return ((EcrisRISearchService.searchPortv10)(this)).performSearchAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EcrisRISearchService.storeQueryResponse> EcrisRISearchService.searchPortv10.storeQueryAsync(EcrisRISearchService.storeQueryRequest request)
+        {
+            return base.Channel.storeQueryAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<EcrisRISearchService.storeQueryResponse> storeQueryAsync(EcrisRISearchService.SearchWSInputType StoreQueryWSInput)
+        {
+            EcrisRISearchService.storeQueryRequest inValue = new EcrisRISearchService.storeQueryRequest();
+            inValue.StoreQueryWSInput = StoreQueryWSInput;
+            return ((EcrisRISearchService.searchPortv10)(this)).storeQueryAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EcrisRISearchService.retrieveStoredQueriesResponse> EcrisRISearchService.searchPortv10.retrieveStoredQueriesAsync(EcrisRISearchService.retrieveStoredQueriesRequest request)
+        {
+            return base.Channel.retrieveStoredQueriesAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<EcrisRISearchService.retrieveStoredQueriesResponse> retrieveStoredQueriesAsync(EcrisRISearchService.BaseEcrisRiWSInputType BaseEcrisRiWSInput)
+        {
+            EcrisRISearchService.retrieveStoredQueriesRequest inValue = new EcrisRISearchService.retrieveStoredQueriesRequest();
+            inValue.BaseEcrisRiWSInput = BaseEcrisRiWSInput;
+            return ((EcrisRISearchService.searchPortv10)(this)).retrieveStoredQueriesAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EcrisRISearchService.storeQueryResponse> EcrisRISearchService.searchPortv10.deleteStoredQueriesAsync(EcrisRISearchService.deleteStoredQueriesRequest request)
+        {
+            return base.Channel.deleteStoredQueriesAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<EcrisRISearchService.storeQueryResponse> deleteStoredQueriesAsync(EcrisRISearchService.DeleteStoredQueriesWSInputType DeleteStoredQueriesWSInput)
+        {
+            EcrisRISearchService.deleteStoredQueriesRequest inValue = new EcrisRISearchService.deleteStoredQueriesRequest();
+            inValue.DeleteStoredQueriesWSInput = DeleteStoredQueriesWSInput;
+            return ((EcrisRISearchService.searchPortv10)(this)).deleteStoredQueriesAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EcrisRISearchService.retrieveStoredQueriesResponse> EcrisRISearchService.searchPortv10.retrieveStoredQueryAsync(EcrisRISearchService.retrieveStoredQueryRequest request)
+        {
+            return base.Channel.retrieveStoredQueryAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<EcrisRISearchService.retrieveStoredQueriesResponse> retrieveStoredQueryAsync(EcrisRISearchService.RetrieveStoredQueryWSInputType RetrieveStoredQueryWSInput)
+        {
+            EcrisRISearchService.retrieveStoredQueryRequest inValue = new EcrisRISearchService.retrieveStoredQueryRequest();
+            inValue.RetrieveStoredQueryWSInput = RetrieveStoredQueryWSInput;
+            return ((EcrisRISearchService.searchPortv10)(this)).retrieveStoredQueryAsync(inValue);
+        }
+        
+        public virtual System.Threading.Tasks.Task OpenAsync()
+        {
+            return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginOpen(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndOpen));
+        }
+        
+        public virtual System.Threading.Tasks.Task CloseAsync()
+        {
+            return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginClose(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndClose));
+        }
+        
+        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.searchPort))
+            {
+                System.ServiceModel.Channels.CustomBinding result = new System.ServiceModel.Channels.CustomBinding();
+                System.ServiceModel.Channels.TextMessageEncodingBindingElement textBindingElement = new System.ServiceModel.Channels.TextMessageEncodingBindingElement();
+                textBindingElement.MessageVersion = System.ServiceModel.Channels.MessageVersion.CreateVersion(System.ServiceModel.EnvelopeVersion.Soap12, System.ServiceModel.Channels.AddressingVersion.None);
+                result.Elements.Add(textBindingElement);
+                System.ServiceModel.Channels.HttpTransportBindingElement httpBindingElement = new System.ServiceModel.Channels.HttpTransportBindingElement();
+                httpBindingElement.AllowCookies = true;
+                httpBindingElement.MaxBufferSize = int.MaxValue;
+                httpBindingElement.MaxReceivedMessageSize = int.MaxValue;
+                result.Elements.Add(httpBindingElement);
+                return result;
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }
+        
+        private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.searchPort))
+            {
+                return new System.ServiceModel.EndpointAddress("http://172.16.0.101/ecris-ri-backend/s/search");
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }
+        
+        private static System.ServiceModel.Channels.Binding GetDefaultBinding()
+        {
+            return searchPortv10Client.GetBindingForEndpoint(EndpointConfiguration.searchPort);
+        }
+        
+        private static System.ServiceModel.EndpointAddress GetDefaultEndpointAddress()
+        {
+            return searchPortv10Client.GetEndpointAddress(EndpointConfiguration.searchPort);
+        }
+        
+        public enum EndpointConfiguration
+        {
+            
+            searchPort,
+        }
+    }
 }

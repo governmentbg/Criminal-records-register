@@ -19,12 +19,15 @@ namespace MJ_CAIS.DIContainer
 
             services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
+
             var servicesTypes = typeof(BulletinService).Assembly.GetClassTypes("Service");
             var interfaceTypes = typeof(IBulletinService).Assembly.GetInterfaceTypes("Service");
             AddTransientTypes(services, servicesTypes, interfaceTypes);
 
             var repositoryTypes = typeof(BulletinRepository).Assembly.GetClassTypes("Repository");
             var interfaceRepositoryTypes = typeof(IBulletinRepository).Assembly.GetInterfaceTypes("Repository");
+
+
             AddTransientTypes(services, repositoryTypes, interfaceRepositoryTypes);
         }
 

@@ -39,6 +39,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? EcrisMsgConvictionId { get; set; }
+        public string? Pin { get; set; }
+        public DateTime? Deadline { get; set; }
+        public bool? Urgent { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }

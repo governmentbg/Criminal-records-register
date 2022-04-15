@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GCsAuthority()
         {
+            AApplications = new HashSet<AApplication>();
             BBulletins = new HashSet<BBulletin>();
             GCities = new HashSet<GCity>();
             GUsers = new HashSet<GUser>();
@@ -20,6 +21,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidTo { get; set; }
 
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
+        public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<GUser> GUsers { get; set; }

@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GCountry()
         {
+            AAppCitizenships = new HashSet<AAppCitizenship>();
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
@@ -28,6 +29,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidTo { get; set; }
         public string? Iso3166Alpha2 { get; set; }
 
+        public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }

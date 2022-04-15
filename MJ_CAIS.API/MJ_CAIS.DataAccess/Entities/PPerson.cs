@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public PPerson()
         {
+            AApplications = new HashSet<AApplication>();
             DDocuments = new HashSet<DDocument>();
             EEcrisIdentifications = new HashSet<EEcrisIdentification>();
             Fbbcs = new HashSet<Fbbc>();
@@ -35,6 +36,7 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
+        public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }
         public virtual ICollection<Fbbc> Fbbcs { get; set; }
