@@ -15,7 +15,7 @@ using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services
 {
-    public class BulletinService : BaseAsyncService<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string, CaisDbContext>, IBulletinService
+    public class BulletinService : BaseAsyncService<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string, CaisDbContext>, IBulletinService
     {
         private readonly IBulletinRepository _bulletinRepository;
 
@@ -40,11 +40,19 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public override async Task<string> InsertAsync(BulletinDTO aInDto)
-            => await UpdateBulletinAsync(aInDto, true);
+        public async Task<string> InsertAsync(BulletinAddDTO aInDto)
+        {
+            var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
+            // въвеждане на бюлетин е възможно единствено от служител БС
+            bulletin.StatusId = BulletinConstants.Status.NewOffice;
+            return await UpdateBulletinAsync(aInDto, bulletin);
+        }
 
-        public override async Task UpdateAsync(string aId, BulletinDTO aInDto)
-            => await UpdateBulletinAsync(aInDto, false);
+        public async Task UpdateAsync(BulletinEditDTO aInDto)
+        {
+            var bulletin = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
+            await UpdateBulletinAsync(aInDto, bulletin);
+        }
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
@@ -68,7 +76,7 @@ namespace MJ_CAIS.Services
         public async Task<IQueryable<SanctionDTO>> GetSanctionsByBulletinIdAsync(string aId)
         {
             var sanctions = await _bulletinRepository.SelectAllSanctionsAsync();
-            var filteredSanctions = sanctions.Where(x => x.BulletinId == aId);         
+            var filteredSanctions = sanctions.Where(x => x.BulletinId == aId);
             return filteredSanctions.ProjectTo<SanctionDTO>(mapperConfiguration);
         }
 
@@ -76,7 +84,7 @@ namespace MJ_CAIS.Services
         {
             var decisions = await _bulletinRepository.SelectAllDecisionsAsync();
             var filteredDecisions = decisions.Where(x => x.BulletinId == aId);
-            return filteredDecisions.ProjectTo<DecisionDTO>(mapperConfiguration);           
+            return filteredDecisions.ProjectTo<DecisionDTO>(mapperConfiguration);
         }
 
         public async Task<IQueryable<DocumentDTO>> GetDocumentsByBulletinIdAsync(string aId)
@@ -144,16 +152,8 @@ namespace MJ_CAIS.Services
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
         }
 
-        private async Task<string> UpdateBulletinAsync(BulletinDTO aInDto, bool isAdded)
+        private async Task<string> UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity)
         {
-            var entity = mapper.MapToEntity<BulletinDTO, BBulletin>(aInDto, isAdded);
-
-            // въвеждане на бюлетин е възможно единствено от служител БС
-            if (isAdded)
-            {
-                entity.StatusId = BulletinConstants.Status.NewOffice;
-            }
-
             UpdateDataForDestruction(entity);
 
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);

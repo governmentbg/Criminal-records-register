@@ -7,6 +7,7 @@ export class BulletinModel {
   public csAuthorityName: string = null;
   public registrationNumber: string = null;
   public sequentialIndex: number = null;
+  public ecrisConvictionId: string = null;
   public decisionNumber: string = null;
   public decisionDate: Date = null;
   public decisionFinalDate: Date = null;
@@ -71,6 +72,7 @@ export class BulletinModel {
       this.csAuthorityName = init.csAuthorityName ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.sequentialIndex = init.sequentialIndex ?? null;
+      this.ecrisConvictionId = init.ecrisConvictionId ?? null;
       this.decisionNumber = init.decisionNumber ?? null;
       this.decisionDate = init.decisionDate ?? null;
       this.decisionFinalDate = init.decisionFinalDate ?? null;

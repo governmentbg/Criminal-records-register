@@ -3,9 +3,8 @@ using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.DTO.Bulletin
 {
-    public class BulletinDTO : BaseDTO
+    public class BulletinBaseDTO : BaseDTO
     {
-        public decimal? Version { get; set; }
         public string? CsAuthorityName { get; set; }
         public string? RegistrationNumber { get; set; }
         public decimal? SequentialIndex { get; set; }

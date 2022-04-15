@@ -4,7 +4,7 @@ export class BulletinTypeConstants {
   static get allData(): BaseNomenclatureModel[] {
     return [
       BulletinTypeConstants.convictionBulletin,
-      BulletinTypeConstants.bulletin78А,
+      BulletinTypeConstants.bulletin78A,
       BulletinTypeConstants.unspecified,
     ];
   }
@@ -17,9 +17,9 @@ export class BulletinTypeConstants {
     return result;
   }
 
-  static get bulletin78А(): BaseNomenclatureModel {
+  static get bulletin78A(): BaseNomenclatureModel {
     let result = new BaseNomenclatureModel();
-    result.code = "Bulletin78А";
+    result.code = "Bulletin78A";
     result.id = result.code;
     result.name = "по чл.78а";
     return result;

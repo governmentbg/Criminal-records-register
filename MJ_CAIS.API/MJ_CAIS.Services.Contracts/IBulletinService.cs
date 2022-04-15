@@ -6,7 +6,7 @@ using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services.Contracts
 {
-    public interface IBulletinService : IBaseAsyncService<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string>
+    public interface IBulletinService : IBaseAsyncService<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string>
     {
         Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId);
 
@@ -27,5 +27,9 @@ namespace MJ_CAIS.Services.Contracts
         Task<DocumentDTO> GetDocumentContentAsync(string documentId);
 
         Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId);
+
+        Task<string> InsertAsync(BulletinAddDTO aInDto);
+
+        Task UpdateAsync(BulletinEditDTO aInDto);
     }
 }

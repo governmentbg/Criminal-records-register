@@ -30,7 +30,7 @@ namespace MJ_CAIS.DTO.IsinData
 
         public string? CaseType { get; set; }
         public string? CaseNumber { get; set; }
-        public string? CaseYear { get; set; }
+        public decimal? CaseYear { get; set; }
         public string? CaseAuthName { get; set; }
 
         #endregion

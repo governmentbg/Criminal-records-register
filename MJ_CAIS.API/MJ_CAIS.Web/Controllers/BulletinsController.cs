@@ -11,7 +11,7 @@ namespace MJ_CAIS.Web.Controllers
 {
     [Route("bulletins")]
     [AllowAnonymous] // TODO: remove
-    public class BulletinsController : BaseApiCrudController<BulletinDTO, BulletinDTO, BulletinGridDTO, BBulletin, string>
+    public class BulletinsController : BaseApiCrudController<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string>
     {
         private readonly IBulletinService _bulletinService;
 
@@ -41,15 +41,17 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        public new async Task<IActionResult> Post([FromBody] BulletinDTO aInDto)
+        public async Task<IActionResult> Post([FromBody] BulletinAddDTO aInDto)
         {
-            return await base.Post(aInDto);
+            var id = await this._bulletinService.InsertAsync(aInDto);
+            return Ok(new { id });
         }
 
         [HttpPut("{aId}")]
-        public new async Task<IActionResult> Put(string aId, [FromBody] BulletinDTO aInDto)
+        public async Task<IActionResult> Put(string aId, [FromBody] BulletinEditDTO aInDto)
         {
-            return await base.Put(aId, aInDto);
+            await this._bulletinService.UpdateAsync(aInDto);
+            return Ok();
         }
 
         [HttpDelete("{aId}")]
