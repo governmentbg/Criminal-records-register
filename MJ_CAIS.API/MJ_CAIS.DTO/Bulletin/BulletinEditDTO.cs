@@ -2,5 +2,6 @@
 {
     public class BulletinEditDTO : BulletinBaseDTO
     {
+        public bool? Locked { get; set; }
     }
 }

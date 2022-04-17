@@ -36,6 +36,13 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     );
   }
 
+  public changeStatus(aId: string, statusId: string): Observable<any> {
+    return this.http.put(
+      `${this.url}/${aId}/change-status/${statusId}`,
+      {}
+    );
+  }
+
   public getDocuments(id: string): Observable<BulletinDocumentModel[]> {
     return this.http.get<BulletinDocumentModel[]>(
       `${this.url}/${id}/documents`

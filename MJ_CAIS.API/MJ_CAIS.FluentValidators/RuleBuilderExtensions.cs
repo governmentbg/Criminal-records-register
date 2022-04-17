@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DTO.Bulletin;
 
 namespace MJ_CAIS.FluentValidators
 {
@@ -33,6 +35,20 @@ namespace MJ_CAIS.FluentValidators
             return ruleBuilder
                 .Length(minLength, maxLength)
                 .WithMessage(message);
+        }
+
+        public static IRuleBuilderOptions<BulletinEditDTO, TProperty> WhenBulletinIsUnlockedNewOffice<TProperty>(this IRuleBuilderOptions<BulletinEditDTO, TProperty> rule)
+        {
+            rule.When(x => x.StatusId == BulletinConstants.Status.NewOffice || (x.Locked.HasValue && !x.Locked.Value));
+            return rule;
+        }
+
+        public static IRuleBuilderOptions<BulletinEditDTO, TProperty> WhenBulletinIsUnlockedNewEISS<TProperty>(this IRuleBuilderOptions<BulletinEditDTO, TProperty> rule)
+        {
+            rule.When(x => x.StatusId == BulletinConstants.Status.NewEISS ||
+                           x.StatusId == BulletinConstants.Status.NewOffice ||
+                            (x.Locked.HasValue && !x.Locked.Value));
+            return rule;
         }
     }
 }

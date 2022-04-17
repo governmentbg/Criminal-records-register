@@ -10,107 +10,108 @@ namespace MJ_CAIS.FluentValidators.Bulletin
         {
             RuleFor(x => x.SequentialIndex)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewEISS || x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewEISS();
 
             RuleFor(x => x.DecisionNumber)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(100);
 
             RuleFor(x => x.DecisionDate)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.DecisionFinalDate)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.DecidingAuthId)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(50);
 
             RuleFor(x => x.CaseNumber)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(100);
 
             RuleFor(x => x.CaseYear)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.AlphabeticalIndex)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewEISS || x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewEISS()
                 .HasMaxLength(100);
 
             RuleFor(x => x.BulletinCreateDate)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.CreatedByNames)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.ApprovedByNames)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.ApprovedByPosition)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.Firstname)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(200);
 
             RuleFor(x => x.Surname)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(200);
 
             RuleFor(x => x.Familyname)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(200);
 
             RuleFor(x => x.FirstnameLat)
                 .RequredField()
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(200);
 
             RuleFor(x => x.SurnameLat)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(200);
 
             RuleFor(x => x.FamilynameLat)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(200);
 
             RuleFor(x => x.Sex)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.Egn)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(100);
 
             RuleFor(x => x.Ln)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(100);
 
             RuleFor(x => x.Lnch)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice)
+                .WhenBulletinIsUnlockedNewOffice()
                 .HasMaxLength(100);
 
             RuleFor(x => x.BirthDate)
                 .RequredField()
-                .When(x => x.StatusId == BulletinConstants.Status.NewOffice);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.AfisNumber).HasMaxLength(100);
             RuleFor(x => x.BirthDatePrecision).HasMaxLength(200);

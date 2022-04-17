@@ -9,6 +9,9 @@ import { NbDialogRef } from "@nebular/theme";
 export class ConfirmDialogComponent implements OnInit {
   constructor(protected ref: NbDialogRef<ConfirmDialogComponent>) {}
 
+  public confirmMessage:string;
+  public showHeder: boolean = true;
+
   ngOnInit(): void {}
 
   success() {

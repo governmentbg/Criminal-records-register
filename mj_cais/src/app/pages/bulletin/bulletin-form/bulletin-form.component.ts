@@ -17,6 +17,10 @@ import {
 } from "@infragistics/igniteui-angular";
 import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.constants";
 import { EActions } from "@tl/tl-common";
+import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { CommonConstants } from "../../../@core/constants/common.constants";
+import { NbDialogService } from "@nebular/theme";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -53,6 +57,7 @@ export class BulletinFormComponent
     read: BulletinDecisionFormComponent,
   })
   public bulletineDescitionForm: BulletinDecisionFormComponent;
+  public isDecisionEditable: boolean = false;
   //#endregion
 
   //#region Докумнти
@@ -75,7 +80,13 @@ export class BulletinFormComponent
   //#endregion
 
   public showForUpdate: boolean = false;
-  constructor(service: BulletinService, public injector: Injector) {
+
+  constructor(
+    service: BulletinService,
+    public injector: Injector,
+    private dialogService: NbDialogService,
+    private translate: TranslateService
+  ) {
     super(service, injector);
     this.setDisplayTitle("бюлетин");
   }
@@ -96,7 +107,14 @@ export class BulletinFormComponent
       !this.isForPreview &&
       bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
 
-    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit());
+      this.isDecisionEditable =
+      !this.isForPreview &&
+      bulletinStatusId == BulletinStatusTypeEnum.NewOffice || 
+      bulletinStatusId == BulletinStatusTypeEnum.Active; 
+
+    let locked = (this.dbData.element as any)?.locked;
+
+    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(),locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
     this.showForUpdate =
@@ -114,10 +132,47 @@ export class BulletinFormComponent
     return new BulletinModel(object);
   }
 
-  updateFunction = () => {
-    this.fullForm.statusId.patchValue(BulletinStatusTypeEnum.Active);
-    this.submitFunction();
-  };
+  //#region Актуализация на бюлетин
+
+  public openUpdateConfirmationDialog() {
+    let dialogRef = this.dialogService.open(
+      ConfirmDialogComponent,
+      CommonConstants.defaultDialogConfig
+    );
+
+    dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
+      "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
+    );
+    dialogRef.componentRef.instance.showHeder = false;
+
+    dialogRef.onClose.subscribe((result) => {
+      if (result) {
+        this.service
+          .changeStatus(this.fullForm.id.value, BulletinStatusTypeEnum.Active)
+          .subscribe(
+            (res) => {
+              this.toastr.showToast(
+                "success",
+                this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
+              );
+              //todo: redirect;
+            },
+            (error) => {
+              let title = this.dangerMessage;
+              let errorText = error.status + " " + error.statusText;
+              if (error.error && error.error.customMessage) {
+                title = error.error.customMessage;
+                errorText = "";
+              }
+
+              this.toastr.showBodyToast("danger", title, errorText);
+            }
+          );
+      }
+    });
+  }
+
+  //#endregion
 
   submitFunction = () => {
     let offancesTransactions =

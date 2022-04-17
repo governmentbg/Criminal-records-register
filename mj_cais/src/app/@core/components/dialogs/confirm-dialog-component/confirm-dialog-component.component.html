@@ -1,7 +1,10 @@
 <nb-card>
     <nb-card-header>Сигурни ли сте?</nb-card-header>
     <nb-card-body>
-      <h5 class="mt-0">Тази операция е необратима!</h5>
+      <ng-container *ngIf="showHeder">
+        <h5 class="mt-0">Тази операция е необратима!</h5>
+      </ng-container>
+      {{confirmMessage}}
     </nb-card-body>
     <nb-card-footer>
       <div class="row">

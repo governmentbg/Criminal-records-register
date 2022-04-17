@@ -3,6 +3,7 @@ import { MultipleChooseModel } from "../../../../@core/components/forms/inputs/m
 
 export class BulletinModel {
   public id: string = null;
+  public locked: boolean = null;
   public version: number = null;
   public csAuthorityName: string = null;
   public registrationNumber: string = null;
@@ -68,6 +69,7 @@ export class BulletinModel {
   constructor(init?: Partial<BulletinModel>) {
     if (init) {
       this.id = init.id ?? null;
+      this.locked = init.locked ?? null;
       this.version = init.version ?? null;
       this.csAuthorityName = init.csAuthorityName ?? null;
       this.registrationNumber = init.registrationNumber ?? null;

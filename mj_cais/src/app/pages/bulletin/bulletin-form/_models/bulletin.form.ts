@@ -82,18 +82,21 @@ export class BulletinForm {
   public documentsTransactions: FormControl;
   public address: AddressForm;
 
-  constructor(bulletinStstus: string, isEdit: boolean) {
+  constructor(bulletinStstus: string, isEdit: boolean, locked: boolean) {
     debugger;
     this.initFormControls();
-    // добавяне или редакция на бюлетин от служители БС преди да
-    // актуализират бюлетин
-    if (!isEdit || bulletinStstus == BulletinStatusTypeEnum.NewOffice) {
-      this.initForAdd();
+    // няма рестрикции при добавяне на бюлетин
+    // редакция на бюлетин от служирел БС преди актуализация
+    // или ако бюлетина е бил отключен посредством администратор
+    let unlockedRecord = locked == false || !isEdit || (isEdit && bulletinStstus == BulletinStatusTypeEnum.NewOffice );
+    // няма рестрикции по формата
+    if( unlockedRecord){
+      this.initUnlocked();
       this.initGroup();
       return;
     }
 
-    // редакция на форма в зависимост от статуса
+    // ако е редакция на NewEISS се позволява редакция на определени полета
     if (bulletinStstus == BulletinStatusTypeEnum.NewEISS) {
       this.initForEditNewEISS();
       this.initGroup();
@@ -113,7 +116,7 @@ export class BulletinForm {
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.disable();
     this.ecrisConvictionId.disable();
-    // bulletinReceivedDate
+    this.bulletinReceivedDate.disable();
     this.bulletinType.disable();
     this.bulletinAuthorityId.disable();
     this.bulletinCreateDate.disable();
@@ -129,7 +132,6 @@ export class BulletinForm {
     this.surnameLat.disable();
     this.familynameLat.disable();
     this.fullnameLat.disable();
-    //personAliasTransactions
     this.sex.disable();
     this.birthDate.disable();
     this.birthDatePrecision.disable();
@@ -164,7 +166,7 @@ export class BulletinForm {
     this.caseNumber.disable();
     this.caseYear.disable();
     this.convRemarks.disable();
-    this.statusId.disable();
+    //this.statusId.disable();
     this.address = new AddressForm(false, true);
   }
 
@@ -232,11 +234,11 @@ export class BulletinForm {
     this.caseNumber.disable();
     this.caseYear.disable();
     this.convRemarks.disable();
-    this.statusId.disable();
+    //this.statusId.disable();
     this.address = new AddressForm(false, true);
   }
 
-  private initForAdd(): void {
+  private initUnlocked(): void {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid);
     this.registrationNumber.setValidators(Validators.maxLength(100));
