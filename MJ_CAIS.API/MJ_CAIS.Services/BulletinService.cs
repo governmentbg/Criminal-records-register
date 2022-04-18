@@ -27,9 +27,14 @@ namespace MJ_CAIS.Services
             _bulletinRepository = bulletinRepository;
         }
 
-        public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string statusId)
+        public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
-            var entityQuery = this.GetSelectAllQueriable().Where(x => x.StatusId == statusId);
+            var entityQuery = this.GetSelectAllQueriable();
+            if (!string.IsNullOrEmpty(statusId))
+            {
+                entityQuery = entityQuery.Where(x => x.StatusId == statusId);
+            }
+
             var baseQuery = entityQuery.ProjectTo<BulletinGridDTO>(mapperConfiguration);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<BulletinGridDTO>();
@@ -52,7 +57,7 @@ namespace MJ_CAIS.Services
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
             // въвеждане на бюлетин е възможно единствено от служител БС
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
-            return await UpdateBulletinAsync(aInDto, bulletin,null);
+            return await UpdateBulletinAsync(aInDto, bulletin, null);
         }
 
         /// <summary>
@@ -227,7 +232,7 @@ namespace MJ_CAIS.Services
 
             UpdateTransactions(aInDto, entity);
 
-            await UpdateStatusByDecisionsAsync(entity,oldStatus);
+            await UpdateStatusByDecisionsAsync(entity, oldStatus);
 
             await SaveEntityAsync(entity);
             return entity.Id;
@@ -255,7 +260,7 @@ namespace MJ_CAIS.Services
                 entityToSave.StatusId = BulletinConstants.Status.Rehabilitated;
             }
 
-            if(entityToSave.EntityState == EntityStateEnum.Modified)
+            if (entityToSave.EntityState == EntityStateEnum.Modified)
             {
                 var isAddedHistory = AddBulletinStatusH(oldStatus, entityToSave.StatusId, entityToSave.Id);
                 if (isAddedHistory)
@@ -263,7 +268,7 @@ namespace MJ_CAIS.Services
                     UpdateModifiedProperties(entityToSave, nameof(entityToSave.StatusId));
                 }
             }
-            
+
             // Всички активни бюлетини са заключени за редакция
             // могат да се добавят само допълнителни сведения
             if (entityToSave.StatusId == BulletinConstants.Status.Active)

@@ -13,6 +13,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<BBulletin, BulletinGridDTO>()
                 .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name))
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.Status.Name))
                 .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
                            src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
                            src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :

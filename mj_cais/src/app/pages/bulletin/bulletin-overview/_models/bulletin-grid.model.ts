@@ -5,6 +5,7 @@ export class BulletinGridModel {
   public surName: string = null;
   public familyName: string = null;
   public statusId: string = null;
+  public statusName: string = null;
   public createdOn: Date = null;
   public alphabeticalIndex: string = null;
   public bulletinAuthorityName: string = null;
@@ -23,6 +24,7 @@ export class BulletinGridModel {
       this.surName = init.surName ?? null;
       this.familyName = init.familyName ?? null;
       this.statusId = init.statusId ?? null;
+      this.statusName = init.statusName ?? null;
       this.createdOn = init.createdOn ?? null;
       this.alphabeticalIndex = init.alphabeticalIndex ?? null;
       this.bulletinAuthorityName = init.bulletinAuthorityName ?? null;

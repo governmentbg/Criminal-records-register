@@ -8,6 +8,7 @@
         public string? SurName { get; set; }
         public string? FamilyName { get; set; }
         public string? StatusId { get; set; }
+        public string? StatusName { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? AlphabeticalIndex { get; set; }
         public string? BulletinAuthorityName { get; set; }

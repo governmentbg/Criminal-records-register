@@ -22,6 +22,11 @@
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>Актуални бюлетини</igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <nb-toggle (checkedChange)="onShowAllBulletinChange($event)" status="info"  labelPosition="left">Всички бюлетини</nb-toggle>
+      </div>
+    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
   <igx-column
@@ -41,6 +46,17 @@
     header="Тип"
     [sortable]="true"
     [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="statusName"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="hideStatus"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -128,6 +144,7 @@
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
+        *ngIf="hideStatus"
         [title]="'Редактиране'"
         [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
       >

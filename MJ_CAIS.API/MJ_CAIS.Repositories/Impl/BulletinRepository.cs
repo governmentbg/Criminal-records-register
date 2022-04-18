@@ -16,7 +16,8 @@ namespace MJ_CAIS.Repositories.Impl
         public override IQueryable<BBulletin> SelectAllAsync()
         {
             return this._dbContext.BBulletins.AsNoTracking()
-                .Include(x => x.BulletinAuthority);
+                                .Include(x => x.Status)
+                                .Include(x => x.BulletinAuthority);
         }
 
         public override async Task<BBulletin> SelectAsync(string aId)

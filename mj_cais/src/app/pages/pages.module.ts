@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { NbListModule, NbMenuModule, NbTabsetModule } from "@nebular/theme";
+import { NbListModule, NbMenuModule, NbTabsetModule, NbToggleModule } from "@nebular/theme";
 
 import { ThemeModule } from "../@theme/theme.module";
 import { PagesComponent } from "./pages.component";
@@ -53,6 +53,7 @@ import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview
     SharedModule,
     CoreModule.forRoot(),
     MatMenuModule,
+    NbToggleModule
   ],
   declarations: [
     PagesComponent,

@@ -14,8 +14,12 @@ export class BulletinGridService extends CaisCrudService<
     super(BulletinGridModel, injector, currentEndpoint);
   }
 
-  public updateUrlStatus(statusId: string) {
-    this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
+  public updateUrlStatus(statusId?: string) {
+    if(statusId){
+      this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
+    }else{
+      this.updateUrl(`${currentEndpoint}`);
+    }
   }
 
   public changeStatus(aId: string, statusId: string): Observable<any> {

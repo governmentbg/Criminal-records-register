@@ -18,7 +18,20 @@ export class BulletinActiveOverviewComponent extends RemoteGridWithStatePersista
     this.service.updateUrlStatus(BulletinStatusTypeEnum.Active);
   }
 
+  public hideStatus: boolean = true;
+
   ngOnInit() {
     super.ngOnInit();
+  }
+
+  onShowAllBulletinChange(isChacked: boolean) {
+    debugger;
+    if (isChacked) {
+      this.service.updateUrlStatus();
+    } else {
+      this.service.updateUrlStatus(BulletinStatusTypeEnum.Active);
+    }
+    this.hideStatus = !isChacked;
+    this.ngOnInit();
   }
 }
