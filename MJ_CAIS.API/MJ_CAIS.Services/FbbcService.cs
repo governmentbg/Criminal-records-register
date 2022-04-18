@@ -130,6 +130,12 @@ namespace MJ_CAIS.Services
             }
             
             fbbc.StatusCode = statusId;
+
+            if (statusId == EntityStateEnum.Deleted.ToString())
+            {
+                fbbc.DestroyedDate = DateTime.Now;
+            }
+
             await dbContext.SaveChangesAsync();
         }
     }

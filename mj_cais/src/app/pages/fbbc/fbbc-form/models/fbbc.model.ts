@@ -1,8 +1,9 @@
 import { AddressModel } from "../../../../@core/components/forms/address-form/model/address.model";
+import { LookupModel } from "../../../../@core/components/forms/inputs/lookup/models/lookup.model";
 
 export class FbbcModel {
   public id: string = null;
-  public countryId: string = null;
+  public country: LookupModel;
   public docTypeId: string = null;
   public sanctionTypeId: string = null;
   public receiveDate: Date = null;
@@ -47,12 +48,14 @@ export class FbbcModel {
   public personId: string = null;
   public version: number = null;
   public address: AddressModel = new AddressModel();
+  public statusCode: string = null;
+  public oldId: number = null;
 
   constructor(init?: Partial<FbbcModel>) {
     if (init) {
       this.id = init.id ?? null;
       // this.id = init.id ?? null;
-      this.countryId = init.countryId ?? null;
+      //this.country = init.country ?? null;
       this.docTypeId = init.docTypeId ?? null;
       this.sanctionTypeId = init.sanctionTypeId ?? null;
       this.receiveDate = init.receiveDate ?? null;
@@ -96,7 +99,9 @@ export class FbbcModel {
       this.destroyedDate = init.destroyedDate ?? null;
       this.personId = init.personId ?? null;
       this.version = init.version ?? null;
-      this.address = init.address ?? new AddressModel()
+      this.address = init.address ?? new AddressModel();
+      this.statusCode = init.statusCode ?? null;
+      this.oldId = init.oldId ?? null;
     }
   }
 }

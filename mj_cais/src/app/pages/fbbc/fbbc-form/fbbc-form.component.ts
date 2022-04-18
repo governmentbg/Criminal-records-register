@@ -29,6 +29,7 @@ export class FbbcFormComponent
   public fbbcService: FbbcService;
 
   public isForEdit: boolean = false;
+  public isForCreate: boolean = false;
   public bgCountryId = CommonConstants.bgCountryId;
   public docType = DocTypeConstants.ecris;
 
@@ -56,16 +57,24 @@ export class FbbcFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
+    this.isForCreate = this.activatedRoute.snapshot.outlet === "primary";
   }
 
   submitFunction = () => {
+    if (this.isForCreate) {
+      this.fullForm.docTypeId.setValue(DocTypeConstants.ecris);
+      this.fullForm.statusCode.setValue(FbbcStatusTypeEnum.Active);
+    }
     this.validateAndSave(this.fullForm);
   };
 
   deleteFunction = () => {
-    debugger;
     let id = this.activatedRoute.snapshot.params["ID"];
-    this.service.changeStatus(id, FbbcStatusTypeEnum.Deleted);
+    this.service
+      .changeStatus(id, FbbcStatusTypeEnum.Deleted)
+      .subscribe((res) => {
+        this.reloadCurrentRoute();
+      });
   };
 
   public openCountryDialog = () => {
@@ -76,7 +85,7 @@ export class FbbcFormComponent
 
   public onSelectCountry = (item: CountryGridModel) => {
     if (item) {
-      this.fullForm.country.setValue(item.id, item.name);
+      //this.fullForm.country.setValue(item.id, item.name);
     }
   };
 }

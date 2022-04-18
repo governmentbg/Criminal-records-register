@@ -35,9 +35,7 @@ export class FbbcService extends CaisCrudService<FbbcModel, string> {
   }
 
   public changeStatus(aId: string, statusId: string): Observable<any> {
-    return this.http.put(
-      environment.apiUrl + `/fbbcs/${aId}/change-status/${statusId}`,
-      {}
-    );
+    let url = environment.apiUrl + `/fbbcs/${aId}/change-status/${statusId}`;
+    return this.http.put(url, {});
   }
 }

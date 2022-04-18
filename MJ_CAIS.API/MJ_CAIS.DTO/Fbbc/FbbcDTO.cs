@@ -4,7 +4,7 @@ namespace MJ_CAIS.DTO.Fbbc
 {
     public class FbbcDTO : BaseDTO
     {
-        public LookupDTO Country { get; set; } = new LookupDTO();
+        //public LookupDTO Country { get; set; } = new LookupDTO();
         public string? DocTypeId { get; set; }
         public string? SanctionTypeId { get; set; }
         public DateTime? ReceiveDate { get; set; }
@@ -30,7 +30,7 @@ namespace MJ_CAIS.DTO.Fbbc
         public string? FatherSurname { get; set; }
         public string? FatherFamilyname { get; set; }
         public string? GdkpNumber { get; set; }
-        public DateTime? GdkpDate { get; set; }
+        public string? GdkpDate { get; set; }
         public string? GdkpCaseNumber { get; set; }
         public string? GdkpTom { get; set; }
         public string? GdkpStr { get; set; }
@@ -49,5 +49,7 @@ namespace MJ_CAIS.DTO.Fbbc
         public string? PersonId { get; set; }
         public decimal? Version { get; set; }
         public AddressDTO Address { get; set; } = new AddressDTO();
+        public string? StatusCode { get; set; }
+        public decimal? OldId { get; set; }
     }
 }
