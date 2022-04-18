@@ -110,7 +110,8 @@ export class BulletinFormComponent
       this.isDecisionEditable =
       !this.isForPreview &&
       bulletinStatusId == BulletinStatusTypeEnum.NewOffice || 
-      bulletinStatusId == BulletinStatusTypeEnum.Active; 
+      bulletinStatusId == BulletinStatusTypeEnum.Active || 
+      bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
 
     let locked = (this.dbData.element as any)?.locked;
 

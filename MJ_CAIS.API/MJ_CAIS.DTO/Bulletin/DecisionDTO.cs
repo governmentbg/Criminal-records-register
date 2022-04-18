@@ -7,6 +7,7 @@
         public string? DecisionChTypeName { get; set; }
         public string? DecisionEcli { get; set; }
         public string? DecisionNumber { get; set; }
+        public DateTime? ChangeDate { get; set; }
         public DateTime? DecisionDate { get; set; }
         public DateTime? DecisionFinalDate { get; set; }
         public string? DecisionAuthId { get; set; }

@@ -11,6 +11,7 @@ export class BulletinDecisionModel {
   public decisionTypeId: string = null;
   public decisionTypeName: string = null;
   public descr: string = null;
+  public changeDate: Date = null;
 
   constructor(init?: Partial<BulletinDecisionModel>) {
     if (init) {
@@ -26,6 +27,7 @@ export class BulletinDecisionModel {
       this.decisionTypeId = init.decisionTypeId ?? null;
       this.decisionTypeName = init.decisionTypeName ?? null;
       this.descr = init.descr ?? null;
+      this.changeDate = init.changeDate ?? null;
     }
   }
 }

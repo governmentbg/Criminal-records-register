@@ -52,7 +52,7 @@ namespace MJ_CAIS.Services
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
             // въвеждане на бюлетин е възможно единствено от служител БС
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
-            return await UpdateBulletinAsync(aInDto, bulletin);
+            return await UpdateBulletinAsync(aInDto, bulletin,null);
         }
 
         /// <summary>
@@ -78,7 +78,8 @@ namespace MJ_CAIS.Services
             // валидираме и добавяме пропъртита спямо статуса
             if (bulletinDb.Locked.HasValue && bulletinDb.Locked.Value)
             {
-                if (bulletinDb.StatusId == BulletinConstants.Status.Active)
+                if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
+                    bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
                 {
                     // нищо от основния обект не се редакцита
                     // добавят се само доп.сведения
@@ -102,38 +103,7 @@ namespace MJ_CAIS.Services
                 ValidateUpdateLockedBulletin(aInDto, bulletin.StatusId);
             }
 
-            await UpdateBulletinAsync(aInDto, bulletin);
-        }
-
-        /// <summary>
-        /// Валидация на редакция според статус и състояние на бюлетин
-        /// Когато е отключен за редакция няма значени в кой статус се намира
-        /// може да се променят всички данни
-        /// </summary>
-        /// <param name="aInDto"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        private void ValidateUpdateLockedBulletin(BulletinEditDTO aInDto, string status)
-        {
-            // todo: za ostanlite statuso
-            if (status == BulletinConstants.Status.NewEISS)
-            {
-                CheckForTransactionWhenBulletinIsLocked(aInDto.DecisionsTransactions, status);
-            }
-            
-            CheckForTransactionWhenBulletinIsLocked(aInDto.OffancesTransactions, status);
-            CheckForTransactionWhenBulletinIsLocked(aInDto.SanctionsTransactions, status);
-            CheckForTransactionWhenBulletinIsLocked(aInDto.PersonAliasTransactions, status);
-        }
-
-        private void CheckForTransactionWhenBulletinIsLocked<T>(List<TransactionDTO<T>> transactions, string currentStatus)
-            where T : class
-        {
-            if (transactions != null && transactions.Count > 0)
-            {
-                // todo: log error
-                throw new BusinessLogicException($"Bulletin is locked! Status: {currentStatus}");
-            }
+            await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
         }
 
         /// <summary>
@@ -150,15 +120,7 @@ namespace MJ_CAIS.Services
             if (bulletin == null)
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
-            //TODO: валидация при преминаване от един статус в друг ?
-            var oldStatus = bulletin.StatusId;
-            var satusHistory = new BBulletinStatusH
-            {
-                Id = Guid.NewGuid().ToString(),
-                BulletinId = aInDto,
-                OldStatusCode = oldStatus,
-                NewStatusCode = statusId,
-            };
+            AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
             // Всички активни бюлетини са заключени за редакция
             // могат да се добавят само допълнителни сведения
@@ -168,7 +130,6 @@ namespace MJ_CAIS.Services
             }
 
             bulletin.StatusId = statusId;
-            dbContext.Add(satusHistory);
             await dbContext.SaveChangesAsync();
         }
 
@@ -258,19 +219,95 @@ namespace MJ_CAIS.Services
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
         }
 
-        private async Task<string> UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity)
+        #region Helpers
+
+        private async Task<string> UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity, string oldStatus)
         {
             UpdateDataForDestruction(entity);
 
+            UpdateTransactions(aInDto, entity);
+
+            await UpdateStatusByDecisionsAsync(entity,oldStatus);
+
+            await SaveEntityAsync(entity);
+            return entity.Id;
+        }
+
+        /// <summary>
+        /// Промяна на статус на бюлетин в зависимост от добавено допълнително сведения
+        /// ReplacedAct425 (Постановен съдебен акт по чл. 425 НПК)
+        /// Rehabilitated (Извършена реабилитация)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        private async Task UpdateStatusByDecisionsAsync(BBulletin entityToSave, string oldStatus)
+        {
+            // todo: може ли да се прескачат статуси ??
+            // само ако статуса е бил за реабилитация и се добави реабилитация 
+            // да се сменяме статуса или? 
+            var rehabilitationId = await dbContext.BDecisionChTypes.AsNoTracking()
+                 .Where(x => x.NameEn == "Rehabilitation")
+                 .Select(x => x.Id)
+                 .FirstOrDefaultAsync();
+
+            if (!string.IsNullOrEmpty(rehabilitationId) && entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
+            {
+                entityToSave.StatusId = BulletinConstants.Status.Rehabilitated;
+            }
+
+            if(entityToSave.EntityState == EntityStateEnum.Modified)
+            {
+                var isAddedHistory = AddBulletinStatusH(oldStatus, entityToSave.StatusId, entityToSave.Id);
+                if (isAddedHistory)
+                {
+                    UpdateModifiedProperties(entityToSave, nameof(entityToSave.StatusId));
+                }
+            }
+            
+            // Всички активни бюлетини са заключени за редакция
+            // могат да се добавят само допълнителни сведения
+            if (entityToSave.StatusId == BulletinConstants.Status.Active)
+            {
+                entityToSave.Locked = true;
+                UpdateModifiedProperties(entityToSave, nameof(entityToSave.Locked));
+            }
+        }
+
+        /// <summary>
+        /// Ако има промяна в статуса на бюлетин се добавя към хистори таблица
+        /// </summary>
+        /// <param name="oldStatus">Предишен статус</param>
+        /// <param name="newStatus">Нов статус</param>
+        /// <param name="bulletinId">Идентификатор на бюлетин</param>
+        private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
+        {
+            //TODO: валидация при преминаване от един статус в друг ?
+
+            if (!string.IsNullOrEmpty(oldStatus) && oldStatus != newStatus)
+            {
+                var satusHistory = new BBulletinStatusH
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    BulletinId = bulletinId,
+                    OldStatusCode = oldStatus,
+                    NewStatusCode = newStatus,
+                    EntityState = EntityStateEnum.Added,
+                };
+
+                dbContext.BBulletinStatusHes.Add(satusHistory);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void UpdateTransactions(BulletinBaseDTO aInDto, BBulletin entity)
+        {
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
             entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
             entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.PersonAliasTransactions);
-
             entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
-
-            await SaveEntityAsync(entity);
-            return entity.Id;
         }
 
         /// <summary>
@@ -279,20 +316,17 @@ namespace MJ_CAIS.Services
         /// За бюлетини за административни наказания по чл. 78а от НК - 15 години от датата на влизане в сила на съдебния акт.
         /// </summary>
         /// <param name="bulletin"></param>
-        public void UpdateDataForDestruction(BBulletin bulletin)
+        private void UpdateDataForDestruction(BBulletin bulletin)
         {
-            if (bulletin.ModifiedProperties == null)
-                bulletin.ModifiedProperties = new List<string>();
-
             if (bulletin.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) && bulletin.BirthDate.HasValue)
             {
                 bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);
-                bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));
+                UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
             }
             else if (bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) && bulletin.DecisionFinalDate.HasValue)
             {
                 bulletin.DeleteDate = bulletin.DecisionFinalDate.Value.AddYears(15);
-                bulletin.ModifiedProperties.Add(nameof(bulletin.DeleteDate));
+                UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
             }
 
             // тодо:може ли да се променя типа на бюлетин ? от какво зависи той
@@ -303,8 +337,51 @@ namespace MJ_CAIS.Services
             if (bulletin.DeleteDate.HasValue && bulletin.DeleteDate <= DateTime.Now)
             {
                 bulletin.StatusId = BulletinConstants.Status.ForDestruction;
-                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
+                UpdateModifiedProperties(bulletin, nameof(bulletin.StatusId));
             }
         }
+
+        private void UpdateModifiedProperties(BBulletin entityToSave, string nameOfProp)
+        {
+            if (entityToSave.ModifiedProperties == null)
+            {
+                entityToSave.ModifiedProperties = new List<string>();
+            }
+
+            entityToSave.ModifiedProperties.Add(nameOfProp);
+        }
+
+        /// <summary>
+        /// Валидация на редакция според статус и състояние на бюлетин
+        /// Когато е отключен за редакция няма значени в кой статус се намира
+        /// може да се променят всички данни
+        /// </summary>
+        /// <param name="aInDto"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        private void ValidateUpdateLockedBulletin(BulletinEditDTO aInDto, string status)
+        {
+            // todo: za ostanlite statuso
+            if (status == BulletinConstants.Status.NewEISS)
+            {
+                CheckForTransactionWhenBulletinIsLocked(aInDto.DecisionsTransactions, status);
+            }
+
+            CheckForTransactionWhenBulletinIsLocked(aInDto.OffancesTransactions, status);
+            CheckForTransactionWhenBulletinIsLocked(aInDto.SanctionsTransactions, status);
+            CheckForTransactionWhenBulletinIsLocked(aInDto.PersonAliasTransactions, status);
+        }
+
+        private void CheckForTransactionWhenBulletinIsLocked<T>(List<TransactionDTO<T>> transactions, string currentStatus)
+            where T : class
+        {
+            if (transactions != null && transactions.Count > 0)
+            {
+                // todo: log error
+                throw new BusinessLogicException($"Bulletin is locked! Status: {currentStatus}");
+            }
+        }
+
+        #endregion
     }
 }

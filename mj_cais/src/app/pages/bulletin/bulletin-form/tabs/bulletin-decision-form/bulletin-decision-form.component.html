@@ -38,7 +38,19 @@
       [sortable]="true"
       [dataType]="'string'"
     ></igx-column>
-
+    <igx-column
+      field="changeDate"
+      [sortable]="true"
+      header="Дата на промяна"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
     <igx-column
       field="decisionTypeId"
       header="Идентификатор на вид съдебен акт"
@@ -68,8 +80,8 @@
       [formatter]="this.dateFormatService.formatDate"
     >
       <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
         </span>
       </ng-template>
     </igx-column>
@@ -82,8 +94,8 @@
       [formatter]="this.dateFormatService.formatDate"
     >
       <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
         </span>
       </ng-template>
     </igx-column>
@@ -187,6 +199,15 @@
               [inputName]="'decisionChTypeId'"
             >
             </cais-autocomplete>
+          </div>
+          <div class="form-group col-md-4">
+            <cais-input
+              [type]="'date'"
+              [label]="'Дата на промяна'"
+              [inputFormControl]="bulletinDecisionForm.changeDate"
+              [parentGroup]="bulletinDecisionForm.group"
+              [inputName]="'changeDate'"
+            ></cais-input>
           </div>
         </div>
         <div class="font-weight-bold">Съдебен акт</div>
