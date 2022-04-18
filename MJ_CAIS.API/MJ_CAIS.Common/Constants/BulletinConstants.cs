@@ -11,6 +11,7 @@
             public const string Deleted = "Deleted"; //	Унищожен
             public const string ForRehabilitation = "ForRehabilitation"; //	Подлежащ на реабилитация на лицето
             public const string Rehabilitated = "Rehabilitated"; //	Извършена реабилитация
+            public const string ReplacedAct425 = "ReplacedAct425"; // Постановен съдебен акт по чл. 425 НПК
         }
 
         public static class Type

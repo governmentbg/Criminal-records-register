@@ -94,22 +94,21 @@ export class BulletinFormComponent
   ngOnInit(): void {
     let bulletinStatusId = (this.dbData.element as any)?.statusId;
 
-    // на този етап всички гридове без Допълнителни сведения
-    // могат да  се редактира само ако бюлетина е в статус нов от БС
     let isGridsEditable =
       (!this.isForPreview &&
         bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
       this.currentAction == EActions.CREATE;
+
     this.isBulletinPersonAliasEditable = isGridsEditable;
     this.isOffancesEditable = isGridsEditable;
     this.isSanctionsEditable = isGridsEditable;
+
     this.isDocumentsEditable =
       !this.isForPreview &&
       bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
 
       this.isDecisionEditable =
       !this.isForPreview &&
-      bulletinStatusId == BulletinStatusTypeEnum.NewOffice || 
       bulletinStatusId == BulletinStatusTypeEnum.Active || 
       bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
 

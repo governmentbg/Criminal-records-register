@@ -25,7 +25,6 @@ export class BulletinActiveOverviewComponent extends RemoteGridWithStatePersista
   }
 
   onShowAllBulletinChange(isChacked: boolean) {
-    debugger;
     if (isChacked) {
       this.service.updateUrlStatus();
     } else {

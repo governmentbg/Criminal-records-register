@@ -232,7 +232,7 @@ namespace MJ_CAIS.Services
 
             UpdateTransactions(aInDto, entity);
 
-            await UpdateStatusByDecisionsAsync(entity, oldStatus);
+            UpdateStatusByDecisions(entity, oldStatus);
 
             await SaveEntityAsync(entity);
             return entity.Id;
@@ -245,19 +245,19 @@ namespace MJ_CAIS.Services
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        private async Task UpdateStatusByDecisionsAsync(BBulletin entityToSave, string oldStatus)
-        {
-            // todo: може ли да се прескачат статуси ??
-            // само ако статуса е бил за реабилитация и се добави реабилитация 
-            // да се сменяме статуса или? 
-            var rehabilitationId = await dbContext.BDecisionChTypes.AsNoTracking()
-                 .Where(x => x.NameEn == "Rehabilitation")
-                 .Select(x => x.Id)
-                 .FirstOrDefaultAsync();
-
-            if (!string.IsNullOrEmpty(rehabilitationId) && entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
+        private void UpdateStatusByDecisions(BBulletin entityToSave, string oldStatus)
+        {          
+            const string judicialAnnulmentId = "DCH-00-Y";
+            const string rehabilitationId = "DCH-00-R";
+        
+            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
             {
                 entityToSave.StatusId = BulletinConstants.Status.Rehabilitated;
+            }
+
+            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == judicialAnnulmentId))
+            {
+                entityToSave.StatusId = BulletinConstants.Status.ReplacedAct425;
             }
 
             if (entityToSave.EntityState == EntityStateEnum.Modified)
