@@ -65,6 +65,8 @@ namespace MJ_CAIS.DTO.Bulletin
         public string? CreatedByPosition { get; set; }
         public string? BulletinType { get; set; }
         public string? EcrisConvictionId { get; set; }
+        public bool? NoSanction { get; set; }
+        public bool? PrevSuspSent { get; set; }
         public AddressDTO Address { get; set; } = new AddressDTO();
         public MultipleChooseDTO Nationalities { get; set; } = new MultipleChooseDTO();
         public List<TransactionDTO<OffenceDTO>> OffancesTransactions { get; set; }

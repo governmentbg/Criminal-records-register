@@ -43,6 +43,9 @@ export class BulletinForm {
 
   public afisNumber: FormControl;
 
+  public noSanction: FormControl;
+  public prevSuspSent:FormControl;
+
   public idDocNumber: FormControl;
   public idDocCategoryId: FormControl;
   public idDocTypeDescr: FormControl;
@@ -166,7 +169,8 @@ export class BulletinForm {
     this.caseNumber.disable();
     this.caseYear.disable();
     this.convRemarks.disable();
-    //this.statusId.disable();
+    this.noSanction.disable();
+    this.prevSuspSent.disable();
     this.address = new AddressForm(false, true);
   }
 
@@ -180,7 +184,6 @@ export class BulletinForm {
       Validators.maxLength(100),
     ]);
     this.ecrisConvictionId.setValidators(Validators.maxLength(50));
-    // bulletinReceivedDate
     this.bulletinType.setValidators([
       Validators.required,
       Validators.maxLength(50),
@@ -199,7 +202,6 @@ export class BulletinForm {
     this.surnameLat.disable();
     this.familynameLat.disable();
     this.fullnameLat.disable();
-    //personAliasTransactions
     this.sex.disable();
     this.birthDate.disable();
     this.birthDatePrecision.disable();
@@ -234,7 +236,8 @@ export class BulletinForm {
     this.caseNumber.disable();
     this.caseYear.disable();
     this.convRemarks.disable();
-    //this.statusId.disable();
+    this.noSanction.disable();
+    this.prevSuspSent.disable();
     this.address = new AddressForm(false, true);
   }
 
@@ -397,6 +400,8 @@ export class BulletinForm {
       personAliasTransactions: this.personAliasTransactions,
       nationalities: this.nationalities.group,
       address: this.address.group,
+      prevSuspSent: this.prevSuspSent,
+      noSanction: this.noSanction
     });
   }
 
@@ -465,5 +470,7 @@ export class BulletinForm {
     this.sanctionsTransactions = new FormControl(null);
     this.decisionsTransactions = new FormControl(null);
     this.documentsTransactions = new FormControl(null);
+    this.noSanction = new FormControl(null);
+    this.prevSuspSent = new FormControl(null);
   }
 }

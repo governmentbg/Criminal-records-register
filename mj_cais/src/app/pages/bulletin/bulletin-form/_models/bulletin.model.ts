@@ -63,6 +63,8 @@ export class BulletinModel {
   public convRetPeriodEndDate: Date = null;
   public createdByPosition: string = null;
   public bulletinType: string = null;
+  public noSanction: boolean = null;
+  public prevSuspSent: boolean = null;
   public nationalities: MultipleChooseModel = new MultipleChooseModel();
   public address: AddressModel = new AddressModel();
 
@@ -129,6 +131,8 @@ export class BulletinModel {
       this.convRetPeriodEndDate = init.convRetPeriodEndDate ?? null;
       this.createdByPosition = init.createdByPosition ?? null;
       this.bulletinType = init.bulletinType ?? null;
+      this.noSanction = init.noSanction ?? null;
+      this.prevSuspSent = init.prevSuspSent ?? null;
       this.nationalities = init.nationalities ?? new MultipleChooseModel(),
       this.address = init.address ?? new AddressModel()
     }

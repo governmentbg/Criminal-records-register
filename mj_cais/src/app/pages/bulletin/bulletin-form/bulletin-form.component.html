@@ -689,7 +689,7 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               <cais-autocomplete
                 [label]="'Съдебен орган издал акта'"
                 [inputFormControl]="fullForm.decidingAuthId"
@@ -708,7 +708,38 @@
               ></cais-input>
             </div>
           </div>
-
+          <div class="row mb-2">
+            <div class="col-md-3">
+              <div
+                class="nb-form-control-container"
+                style="
+                  height: 40px;
+                  max-width: 100%;
+                  display: flex;
+                  align-items: center;
+                "
+              >
+                <nb-checkbox [formControl]="fullForm.noSanction"
+                  >Съдебен акт, без налагане на наказание</nb-checkbox
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div
+                class="nb-form-control-container"
+                style="
+                  height: 40px;
+                  max-width: 100%;
+                  display: flex;
+                  align-items: center;
+                "
+              >
+                <nb-checkbox [formControl]="fullForm.prevSuspSent"
+                  >Постановено изтърпяване на предходна условна присъда</nb-checkbox
+                >
+              </div>
+            </div>          
+          </div>
           <div class="font-weight-bold">Данни за делото</div>
           <hr />
 
