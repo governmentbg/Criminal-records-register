@@ -163,6 +163,13 @@ namespace MJ_CAIS.Services
             return filteredDocuments.ProjectTo<DocumentDTO>(mapperConfiguration);
         }
 
+        public async Task<IQueryable<BulletinStatusHistoryDTO>> GetStatusHistoryByBulletinIdAsync(string aId)
+        {
+            var statues = await _bulletinRepository.SelectAllStatusHistoryDataAsync();
+            var filteredStatuses = statues.Where(x => x.BulletinId == aId);
+            return filteredStatuses.ProjectTo<BulletinStatusHistoryDTO>(mapperConfiguration);
+        }
+
         public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
         {
             if (aInDto.DocumentContent?.Length == 0)
@@ -291,6 +298,7 @@ namespace MJ_CAIS.Services
                     OldStatusCode = oldStatus,
                     NewStatusCode = newStatus,
                     EntityState = EntityStateEnum.Added,
+                    CreatedOn = DateTime.UtcNow,
                 };
 
                 dbContext.BBulletinStatusHes.Add(satusHistory);

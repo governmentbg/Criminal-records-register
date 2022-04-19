@@ -13,6 +13,7 @@ import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/_models/bu
 import { BulletinDocumentModel } from "../tabs/bulletin-documents-form/_models/bulletin-document.model";
 import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/_models/bulletin-offence.model";
 import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/_models/bulletin-sanction.model";
+import { BulletinStatusHistoryModel } from "../tabs/bulletin-status-history-overview/_models/bulletin-status-history.model";
 import { BulletinModel } from "../_models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
@@ -66,6 +67,7 @@ export class BulletinResolver implements Resolve<any> {
       personAlias: this.service.getPersonAlias(bulletineId),
       personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
       bulletinTypes: this.service.getBulletinTypes(),
+      bulletinStatusHistoryData: this.service.getBulletinStatusHistoryData(bulletineId)
     };
     return forkJoin(result);
   }
@@ -77,6 +79,7 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public decisions: Observable<BulletinDecisionModel[]>;
   public documents: Observable<BulletinDocumentModel[]>;
   public personAlias: Observable<BulletinPersonAliasModel[]>;
+  public bulletinStatusHistoryData: Observable<BulletinStatusHistoryModel[]>;
 
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalities: Observable<BaseNomenclatureModel[]>;

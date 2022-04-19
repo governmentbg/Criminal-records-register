@@ -94,6 +94,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BOffenceCategory, LookupDTO>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(d => d.DisplayName, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<BBulletinStatusH, BulletinStatusHistoryDTO>()
+              .ForMember(d => d.NewStatus, opt => opt.MapFrom(src => src.NewStatusCodeNavigation.Name))
+              .ForMember(d => d.OldStatus, opt => opt.MapFrom(src => src.OldStatusCodeNavigation.Name));
         }
     }
 }

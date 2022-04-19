@@ -94,6 +94,16 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
+        public async Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync()
+        {
+            var query = _dbContext.BBulletinStatusHes.AsNoTracking()
+                 .Include(x => x.NewStatusCodeNavigation)
+                 .Include(x => x.OldStatusCodeNavigation)
+                 .OrderByDescending(x => x.CreatedOn);
+
+            return await Task.FromResult(query);
+        }
+
         public async Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId)
         {
             var bulleint = await _dbContext.BBulletins.AsNoTracking()

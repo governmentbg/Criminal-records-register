@@ -736,10 +736,11 @@
                 "
               >
                 <nb-checkbox [formControl]="fullForm.prevSuspSent"
-                  >Постановено изтърпяване на предходна условна присъда</nb-checkbox
+                  >Постановено изтърпяване на предходна условна
+                  присъда</nb-checkbox
                 >
               </div>
-            </div>          
+            </div>
           </div>
           <div class="font-weight-bold">Данни за делото</div>
           <hr />
@@ -833,7 +834,10 @@
           <cais-bulletin-isin-form></cais-bulletin-isin-form>
         </nb-tab>
         <nb-tab tabTitle="Одит">
-          <span>Content #10</span>
+          <cais-bulletin-status-history-overview
+            [historyData]="dbData.bulletinStatusHistoryData"
+          >
+          </cais-bulletin-status-history-overview>
         </nb-tab>
       </nb-tabset>
     </form>
