@@ -238,6 +238,23 @@ namespace MJ_CAIS.Services
 
             UpdateStatusByDecisions(entity, oldStatus);
 
+            if (entity.EntityState == EntityStateEnum.Modified)
+            {
+                var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id);
+                if (isAddedHistory)
+                {
+                    UpdateModifiedProperties(entity, nameof(entity.StatusId));
+                }
+            }
+
+            // it is locked each time
+            // unless the statue is NewOffice or NewEISS
+            if (entity.StatusId != BulletinConstants.Status.NewOffice)
+            {
+                entity.Locked = true;
+                UpdateModifiedProperties(entity, nameof(entity.Locked));
+            }
+
             await SaveEntityAsync(entity);
             return entity.Id;
         }
@@ -261,23 +278,6 @@ namespace MJ_CAIS.Services
             if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == judicialAnnulmentId))
             {
                 entityToSave.StatusId = BulletinConstants.Status.ReplacedAct425;
-            }
-
-            if (entityToSave.EntityState == EntityStateEnum.Modified)
-            {
-                var isAddedHistory = AddBulletinStatusH(oldStatus, entityToSave.StatusId, entityToSave.Id);
-                if (isAddedHistory)
-                {
-                    UpdateModifiedProperties(entityToSave, nameof(entityToSave.StatusId));
-                }
-            }
-
-            // All active bulletins are locked for editing
-            // only decisions can be added
-            if (entityToSave.StatusId == BulletinConstants.Status.Active)
-            {
-                entityToSave.Locked = true;
-                UpdateModifiedProperties(entityToSave, nameof(entityToSave.Locked));
             }
         }
 
