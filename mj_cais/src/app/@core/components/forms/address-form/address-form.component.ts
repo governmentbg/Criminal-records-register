@@ -81,7 +81,6 @@ export class AddressFormComponent implements OnInit {
       this.municipalities = municipalities;
       this.cities = cities;
 
-      debugger;
       // Initial selected value
       if (
         (this.parentForm.group.touched &&

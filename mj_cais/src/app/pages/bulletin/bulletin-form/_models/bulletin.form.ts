@@ -44,7 +44,7 @@ export class BulletinForm {
   public afisNumber: FormControl;
 
   public noSanction: FormControl;
-  public prevSuspSent:FormControl;
+  public prevSuspSent: FormControl;
 
   public idDocNumber: FormControl;
   public idDocCategoryId: FormControl;
@@ -86,14 +86,16 @@ export class BulletinForm {
   public address: AddressForm;
 
   constructor(bulletinStstus: string, isEdit: boolean, locked: boolean) {
-    debugger;
     this.initFormControls();
     // няма рестрикции при добавяне на бюлетин
     // редакция на бюлетин от служирел БС преди актуализация
     // или ако бюлетина е бил отключен посредством администратор
-    let unlockedRecord = locked == false || !isEdit || (isEdit && bulletinStstus == BulletinStatusTypeEnum.NewOffice );
+    let unlockedRecord =
+      locked == false ||
+      !isEdit ||
+      (isEdit && bulletinStstus == BulletinStatusTypeEnum.NewOffice);
     // няма рестрикции по формата
-    if( unlockedRecord){
+    if (unlockedRecord) {
       this.initUnlocked();
       this.initGroup();
       return;
@@ -401,7 +403,7 @@ export class BulletinForm {
       nationalities: this.nationalities.group,
       address: this.address.group,
       prevSuspSent: this.prevSuspSent,
-      noSanction: this.noSanction
+      noSanction: this.noSanction,
     });
   }
 

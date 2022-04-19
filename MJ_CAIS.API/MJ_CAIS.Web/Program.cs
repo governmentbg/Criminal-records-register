@@ -2,7 +2,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
-using MJ_CAIS.FluentValidators;
 using MJ_CAIS.FluentValidators.Bulletin;
 using MJ_CAIS.Web.Setup;
 
