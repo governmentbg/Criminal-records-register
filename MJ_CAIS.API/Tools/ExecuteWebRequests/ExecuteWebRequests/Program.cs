@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DIContainer;
 using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.DbServices;
@@ -22,6 +23,9 @@ namespace ExecuteWebRequests
 
             using (host)
             {
+                var dbContext = host.Services.GetService<CaisDbContext>();
+
+
                 var regixService = host.Services.GetService<RegixService>();
                 var webRequests = regixService.GetRequestsForExecution();
 

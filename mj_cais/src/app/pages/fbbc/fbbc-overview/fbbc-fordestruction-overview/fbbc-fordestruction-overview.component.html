@@ -37,9 +37,12 @@
     header="Дата на получаване"
     [sortable]="true"
     [dataType]="'date'"
+    [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 
@@ -54,9 +57,12 @@
     header="Дата на раждане"
     [sortable]="true"
     [dataType]="'date'"
+    [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 

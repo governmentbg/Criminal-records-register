@@ -35,6 +35,7 @@
         *ngIf="isForEdit && isForDelete && !isForPreview"
         nbButton
         matRipple
+        [status]="'danger'"
         (click)="onDeleteFunction()"
         type="button"
         class="ml-2"

@@ -8,6 +8,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { EcrisMessageGridModel } from "../../../ecris/ecris-message-overivew/_models/ecris-message-grid.model";
 import { FbbcDocumentModel } from "../models/fbbc-document.model";
 import { FbbcModel } from "../models/fbbc.model";
 import { FbbcService } from "./fbbc.service";
@@ -34,6 +35,7 @@ export class FbbcResolver implements Resolve<any> {
       cities: this.nomenclatureService.getAllCities(),
       sanctTypes: this.nomenclatureService.getFbbcSanctTypes(),
       documents: this.service.getDocuments(fbbcId),
+      ecrisMessages: this.service.getEcrisMessages(fbbcId),
     };
     return forkJoin(result);
   }
@@ -45,4 +47,5 @@ export class FbbcResolverData extends BaseResolverData<FbbcModel> {
   public cities: Observable<BaseNomenclatureModel[]>;
   public sanctTypes: Observable<BaseNomenclatureModel[]>;
   public documents: Observable<FbbcDocumentModel[]>;
+  public ecrisMessages: Observable<EcrisMessageGridModel[]>;
 }

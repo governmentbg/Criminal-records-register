@@ -12,6 +12,7 @@ import { DocTypeConstants } from "../../../@core/constants/doc-type.constants";
 import { NbDialogService } from "@nebular/theme";
 import { CountryGridModel } from "../../../@core/components/forms/address-form/dialog/_models/country-grid.model";
 import { CountryDialogComponent } from "../../../@core/components/forms/address-form/dialog/country-dialog/country-dialog.component";
+import { DateFormatService } from "../../../@core/services/common/date-format.service";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -29,13 +30,15 @@ export class FbbcFormComponent
   public fbbcService: FbbcService;
 
   public isForEdit: boolean = false;
+  public isForCreate: boolean = false;
   public bgCountryId = CommonConstants.bgCountryId;
   public docType = DocTypeConstants.ecris;
 
   constructor(
     service: FbbcService,
     public injector: Injector,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    public dateFormatService: DateFormatService
   ) {
     super(service, injector);
     this.backUrl = "pages/fbbcs";
@@ -56,16 +59,24 @@ export class FbbcFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
+    this.isForCreate = this.activatedRoute.snapshot.outlet === "primary";
   }
 
   submitFunction = () => {
+    if (this.isForCreate) {
+      this.fullForm.docTypeId.setValue(DocTypeConstants.ecris);
+      this.fullForm.statusCode.setValue(FbbcStatusTypeEnum.Active);
+    }
     this.validateAndSave(this.fullForm);
   };
 
   deleteFunction = () => {
-    debugger;
     let id = this.activatedRoute.snapshot.params["ID"];
-    this.service.changeStatus(id, FbbcStatusTypeEnum.Deleted);
+    this.service
+      .changeStatus(id, FbbcStatusTypeEnum.Deleted)
+      .subscribe((res) => {
+        this.reloadCurrentRoute();
+      });
   };
 
   public openCountryDialog = () => {
@@ -76,7 +87,7 @@ export class FbbcFormComponent
 
   public onSelectCountry = (item: CountryGridModel) => {
     if (item) {
-      this.fullForm.country.setValue(item.id, item.name);
+      //this.fullForm.country.setValue(item.id, item.name);
     }
   };
 }

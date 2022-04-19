@@ -57,13 +57,19 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Delete(aId);
         }
 
+        [HttpGet("{aId}/ecris-messages")]
+        public async Task<IActionResult> GetEcrisMessages(string aId)
+        {
+            var result = await this._fbbcService.GetEcrisMessagesByFbbcIdAsync(aId);
+            return Ok(result);
+        }
+
         [HttpGet("{aId}/documents")]
         public async Task<IActionResult> GetDocuments(string aId)
         {
             var result = await this._fbbcService.GetDocumentsByFbbcIdAsync(aId);
             return Ok(result);
         }
-
 
         [HttpPost("{aId}/documents")]
         public async Task<IActionResult> PostDocument(string aId, [FromBody] FbbcDocumentDTO aInDto)

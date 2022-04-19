@@ -10,6 +10,7 @@ import { Observable, ReplaySubject } from "rxjs";
 import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CommonConstants } from "../../../../../@core/constants/common.constants";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
+import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
 import { BulletinService } from "../../_data/bulletin.service";
 import { BulletinForm } from "../../_models/bulletin.form";
@@ -45,6 +46,7 @@ export class BulletinDocumentFormComponent {
     public toastr: CustomToastrService,
     public bulletinService: BulletinService,
     private dialogService: NbDialogService,
+    public dateFormatService: DateFormatService
   ) {
     this.initializeUploader();
   }
@@ -66,8 +68,10 @@ export class BulletinDocumentFormComponent {
       return;
     }
 
+    this.bulletinDocumentForm.createdOn.patchValue(new Date());
     let model = this.bulletinDocumentForm.group.value;
     model.docTypeId = this.bulletinDocumentForm.docTypeId.value;
+
     this.bulletinService
       .saveDocument(this.bulletinForm.id.value, model)
       .subscribe(
@@ -92,7 +96,6 @@ export class BulletinDocumentFormComponent {
       )?.name;
       this.bulletinDocumentForm.docTypeName.patchValue(docTypeName);
     }
-
     this.documentsGrid.addRow(this.bulletinDocumentForm.group.value);
 
     this.onCloseBulletinDocumentDilog();

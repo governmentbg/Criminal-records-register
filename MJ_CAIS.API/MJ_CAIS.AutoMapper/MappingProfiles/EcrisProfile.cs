@@ -10,6 +10,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<EEcrisMessage, EcrisMessageDTO>();
             CreateMap<EcrisMessageDTO, EEcrisMessage>();
+
+            CreateMap<EEcrisMessage, EcrisMessageGridDTO>();
         }
     }
 }

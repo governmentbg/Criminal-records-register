@@ -48,24 +48,24 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// Ръчно добавяне на бюлетин от служител БС
+        /// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
         /// </summary>
         /// <param name="aInDto"></param>
         /// <returns></returns>
         public async Task<string> InsertAsync(BulletinAddDTO aInDto)
         {
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
-            // въвеждане на бюлетин е възможно единствено от служител БС
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
             return await UpdateBulletinAsync(aInDto, bulletin, null);
         }
 
         /// <summary>
-        /// Актуализация на данни в бюлетин според статуса
-        /// NewOffice => позволена промяна на всички данни
-        /// NewEISS => само регистрационна информация
-        /// Active => само данни за допълнителни сведения
-        /// ForDestruction, Deleted, ForRehabilitation, Rehabilitated => не подлежи на редакция
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        /// NewOffice => пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+        /// NewEISS => пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        /// Active => пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        /// ForDestruction, Deleted, ForRehabilitation, Rehabilitated => пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         /// </summary>
         /// <param name="aInDto"></param>
         /// <returns></returns>
@@ -79,21 +79,21 @@ namespace MJ_CAIS.Services
 
             var bulletin = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
 
-            // ако бюлетина е заключен за редакция,
-            // валидираме и добавяме пропъртита спямо статуса
+            // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (bulletinDb.Locked.HasValue && bulletinDb.Locked.Value)
             {
                 if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
                     bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
                 {
-                    // нищо от основния обект не се редакцита
-                    // добавят се само доп.сведения
+                    // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     bulletin.ModifiedProperties = new List<string>();
                 }
                 else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
                 {
-                    // при актуализация на бюлетин в статус NewEISS
-                    // се променя само регистрационна информация
+                    // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ NewEISS
+                    // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     bulletin.ModifiedProperties = new List<string>
                     {
                         nameof(bulletin.RegistrationNumber),
@@ -105,17 +105,16 @@ namespace MJ_CAIS.Services
                     };
                 }
 
-                ValidateUpdateLockedBulletin(aInDto, bulletin.StatusId);
             }
 
             await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
         }
 
         /// <summary>
-        /// Промяна на статуса на бюлетин от потребител на БС
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ
         /// </summary>
-        /// <param name="aInDto">Идентификатор на бюлетин</param>
-        /// <param name="statusId">Статус</param>
+        /// <param name="aInDto">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</param>
+        /// <param name="statusId">пїЅпїЅпїЅпїЅпїЅпїЅ</param>
         /// <exception cref="ArgumentException"></exception>
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
@@ -127,8 +126,8 @@ namespace MJ_CAIS.Services
 
             AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
-            // Всички активни бюлетини са заключени за редакция
-            // могат да се добавят само допълнителни сведения
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (statusId == BulletinConstants.Status.Active)
             {
                 bulletin.Locked = true;
@@ -232,32 +231,32 @@ namespace MJ_CAIS.Services
 
             UpdateTransactions(aInDto, entity);
 
-            await UpdateStatusByDecisionsAsync(entity, oldStatus);
+            UpdateStatusByDecisions(entity, oldStatus);
 
             await SaveEntityAsync(entity);
             return entity.Id;
         }
 
         /// <summary>
-        /// Промяна на статус на бюлетин в зависимост от добавено допълнително сведения
-        /// ReplacedAct425 (Постановен съдебен акт по чл. 425 НПК)
-        /// Rehabilitated (Извършена реабилитация)
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        /// ReplacedAct425 (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ. 425 пїЅпїЅпїЅ)
+        /// Rehabilitated (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        private async Task UpdateStatusByDecisionsAsync(BBulletin entityToSave, string oldStatus)
+        private void UpdateStatusByDecisions(BBulletin entityToSave, string oldStatus)
         {
-            // todo: може ли да се прескачат статуси ??
-            // само ако статуса е бил за реабилитация и се добави реабилитация 
-            // да се сменяме статуса или? 
-            var rehabilitationId = await dbContext.BDecisionChTypes.AsNoTracking()
-                 .Where(x => x.NameEn == "Rehabilitation")
-                 .Select(x => x.Id)
-                 .FirstOrDefaultAsync();
+            const string judicialAnnulmentId = "DCH-00-Y";
+            const string rehabilitationId = "DCH-00-R";
 
-            if (!string.IsNullOrEmpty(rehabilitationId) && entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
+            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
             {
                 entityToSave.StatusId = BulletinConstants.Status.Rehabilitated;
+            }
+
+            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == judicialAnnulmentId))
+            {
+                entityToSave.StatusId = BulletinConstants.Status.ReplacedAct425;
             }
 
             if (entityToSave.EntityState == EntityStateEnum.Modified)
@@ -269,8 +268,8 @@ namespace MJ_CAIS.Services
                 }
             }
 
-            // Всички активни бюлетини са заключени за редакция
-            // могат да се добавят само допълнителни сведения
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (entityToSave.StatusId == BulletinConstants.Status.Active)
             {
                 entityToSave.Locked = true;
@@ -279,14 +278,14 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// Ако има промяна в статуса на бюлетин се добавя към хистори таблица
+        /// пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         /// </summary>
-        /// <param name="oldStatus">Предишен статус</param>
-        /// <param name="newStatus">Нов статус</param>
-        /// <param name="bulletinId">Идентификатор на бюлетин</param>
+        /// <param name="oldStatus">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ</param>
+        /// <param name="newStatus">пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ</param>
+        /// <param name="bulletinId">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</param>
         private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
         {
-            //TODO: валидация при преминаване от един статус в друг ?
+            //TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ ?
 
             if (!string.IsNullOrEmpty(oldStatus) && oldStatus != newStatus)
             {
@@ -316,9 +315,9 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// Унищожаване
-        /// За бюлетини за съдимост - 100 години от рождената дата на осъденото лице;
-        /// За бюлетини за административни наказания по чл. 78а от НК - 15 години от датата на влизане в сила на съдебния акт.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        /// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - 100 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ;
+        /// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ. 78пїЅ пїЅпїЅ пїЅпїЅ - 15 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.
         /// </summary>
         /// <param name="bulletin"></param>
         private void UpdateDataForDestruction(BBulletin bulletin)
@@ -334,11 +333,11 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
             }
 
-            // тодо:може ли да се променя типа на бюлетин ? от какво зависи той
-            // и при промяната му какво се случва със статуса
-            // например може бюлетин според чл. 78а да енастъпило време за унищожаване, но потребителя ако редактира 
-            // бюлетина и смени типа, статуса активен ли трябва да бъде ? 
-            // промяна на статус на бюлетин за унищожавне
+            // пїЅпїЅпїЅпїЅ:пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ? пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+            // пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ. 78пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ ? 
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (bulletin.DeleteDate.HasValue && bulletin.DeleteDate <= DateTime.Now)
             {
                 bulletin.StatusId = BulletinConstants.Status.ForDestruction;
@@ -356,36 +355,6 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
 
-        /// <summary>
-        /// Валидация на редакция според статус и състояние на бюлетин
-        /// Когато е отключен за редакция няма значени в кой статус се намира
-        /// може да се променят всички данни
-        /// </summary>
-        /// <param name="aInDto"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        private void ValidateUpdateLockedBulletin(BulletinEditDTO aInDto, string status)
-        {
-            // todo: za ostanlite statuso
-            if (status == BulletinConstants.Status.NewEISS)
-            {
-                CheckForTransactionWhenBulletinIsLocked(aInDto.DecisionsTransactions, status);
-            }
-
-            CheckForTransactionWhenBulletinIsLocked(aInDto.OffancesTransactions, status);
-            CheckForTransactionWhenBulletinIsLocked(aInDto.SanctionsTransactions, status);
-            CheckForTransactionWhenBulletinIsLocked(aInDto.PersonAliasTransactions, status);
-        }
-
-        private void CheckForTransactionWhenBulletinIsLocked<T>(List<TransactionDTO<T>> transactions, string currentStatus)
-            where T : class
-        {
-            if (transactions != null && transactions.Count > 0)
-            {
-                // todo: log error
-                throw new BusinessLogicException($"Bulletin is locked! Status: {currentStatus}");
-            }
-        }
 
         #endregion
     }

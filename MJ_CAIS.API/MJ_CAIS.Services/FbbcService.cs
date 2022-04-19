@@ -10,17 +10,20 @@ using AutoMapper.QueryableExtensions;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.DTO.EcrisMessage;
 
 namespace MJ_CAIS.Services
 {
     public class FbbcService : BaseAsyncService<FbbcDTO, FbbcDTO, FbbcGridDTO, Fbbc, string, CaisDbContext>, IFbbcService
     {
         private readonly IFbbcRepository _fbbcRepository;
+        private readonly IEcrisMessageRepository _ecrisMessageRepository;
 
-        public FbbcService(IMapper mapper, IFbbcRepository fbbcRepository)
+        public FbbcService(IMapper mapper, IFbbcRepository fbbcRepository, IEcrisMessageRepository ecrisMessageRepository)
             : base(mapper, fbbcRepository)
         {
             _fbbcRepository = fbbcRepository;
+            _ecrisMessageRepository = ecrisMessageRepository;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -38,7 +41,14 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
+        public async Task<IQueryable<EcrisMessageGridDTO>> GetEcrisMessagesByFbbcIdAsync(string aId)
+        {
+            var result = dbContext.EEcrisMessages.AsNoTracking()
+                .Where(x => x.FbbcId == aId)
+                .ProjectTo<EcrisMessageGridDTO>(mapper.ConfigurationProvider);
 
+            return await Task.FromResult(result);
+        }
 
         public async Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId)
         {
@@ -130,6 +140,12 @@ namespace MJ_CAIS.Services
             }
             
             fbbc.StatusCode = statusId;
+
+            if (statusId == EntityStateEnum.Deleted.ToString())
+            {
+                fbbc.DestroyedDate = DateTime.Now;
+            }
+
             await dbContext.SaveChangesAsync();
         }
     }
