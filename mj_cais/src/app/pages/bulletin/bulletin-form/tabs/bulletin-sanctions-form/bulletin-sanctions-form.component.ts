@@ -26,7 +26,9 @@ export class BulletinSanctionsFormComponent {
   public dialog: IgxDialogComponent;
 
   public bulletinSanctionForm = new BulletinSanctionForm();
+  public showProbationData: boolean = false;
 
+  private probationCode = "nkz_probacia";
   constructor(public dateFormatService: DateFormatService) {}
 
   onAddOrUpdateSanctionRow() {
@@ -85,6 +87,9 @@ export class BulletinSanctionsFormComponent {
 
   public onOpenEditSanction(event: IgxGridRowComponent) {
     this.bulletinSanctionForm.group.patchValue(event.rowData);
+    this.showProbationData =
+      this.bulletinSanctionForm.sanctCategoryId.value == this.probationCode;
+
     this.dialog.open();
   }
 
@@ -98,6 +103,14 @@ export class BulletinSanctionsFormComponent {
   public onCloseSanctionDilog() {
     this.bulletinSanctionForm = new BulletinSanctionForm();
     this.dialog.close();
+  }
+
+  public onSanctionCategoryChange(selectedElement) {
+    this.showProbationData = selectedElement == this.probationCode;
+    // clear probation data
+    this.bulletinSanctionForm.sanctProbCategId.patchValue(null);
+    this.bulletinSanctionForm.sanctProbValue.patchValue(null);
+    this.bulletinSanctionForm.sanctProbMeasureId.patchValue(null);
   }
 
   private GetNameById(data: any, id: string) {

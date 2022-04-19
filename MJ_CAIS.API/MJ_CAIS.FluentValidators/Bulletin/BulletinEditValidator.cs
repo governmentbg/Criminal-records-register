@@ -138,6 +138,17 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             RuleFor(x => x.RegistrationNumber).HasMaxLength(100);
             RuleFor(x => x.StatusId).HasMaxLength(50);
             RuleFor(x => x.Surname).HasMaxLength(200);
+
+            RuleFor(x => x.DecisionsTransactions)
+                .MustBeEmptyIfWhenIsInStatus("Допълнителни сведения",
+                                    BulletinConstants.Status.Active,
+                                    BulletinConstants.Status.ForRehabilitation);
+
+            RuleFor(x => x.OffancesTransactions)
+                .MustBeEmptyIfWhenIsInStatus("Престъпления", BulletinConstants.Status.NewOffice);
+
+              RuleFor(x => x.SanctionsTransactions)
+                .MustBeEmptyIfWhenIsInStatus("Наказания", BulletinConstants.Status.NewOffice);
         }
     }
 }

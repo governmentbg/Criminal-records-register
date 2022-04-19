@@ -10,5 +10,6 @@
         public byte[]? DocumentContent { get; set; }
         public string? DocumentContentId { get; set; }
         public string? MimeType { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }

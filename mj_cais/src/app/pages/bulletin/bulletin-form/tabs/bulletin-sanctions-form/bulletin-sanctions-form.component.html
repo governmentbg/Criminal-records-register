@@ -186,7 +186,7 @@
 
     <igx-action-strip #actionstrip>
       <button
-      *ngIf="!isForPreview"
+        *ngIf="!isForPreview"
         title="Редактирай"
         igxButton="icon"
         igxRipple
@@ -195,7 +195,7 @@
         <igx-icon>edit</igx-icon>
       </button>
       <button
-      *ngIf="!isForPreview"
+        *ngIf="!isForPreview"
         title="Изтрии"
         igxButton="icon"
         igxRipple
@@ -252,22 +252,10 @@
               [parentGroup]="bulletinSanctionForm.group"
               [items]="dbData.sanctionCategories"
               [inputName]="'sanctCategoryId'"
+              (selectionChanged)="onSanctionCategoryChange($event)"
             >
             </cais-autocomplete>
           </div>
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Вид пробационна мярка'"
-              [inputFormControl]="bulletinSanctionForm.sanctProbCategId"
-              [parentGroup]="bulletinSanctionForm.group"
-              [items]="dbData.sanctionProbCategories"
-              [inputName]="'sanctProbCategId'"
-            >
-            </cais-autocomplete>
-          </div>
-        </div>
-
-        <div class="row mt-2">
           <div class="form-group col-md-4">
             <cais-autocomplete
               [label]="'Обща категория'"
@@ -278,9 +266,25 @@
             >
             </cais-autocomplete>
           </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="form-group col-md-4">
+            <cais-autocomplete
+              *ngIf="showProbationData"
+              [label]="'Вид пробационна мярка'"
+              [inputFormControl]="bulletinSanctionForm.sanctProbCategId"
+              [parentGroup]="bulletinSanctionForm.group"
+              [items]="dbData.sanctionProbCategories"
+              [inputName]="'sanctProbCategId'"
+            >
+            </cais-autocomplete>
+          </div>
+
           <div class="form-group col-md-8 row">
             <div class="col-md-6">
               <cais-input
+                *ngIf="showProbationData"
                 [type]="'number'"
                 [label]="'Количество на пробационна мярка'"
                 [inputFormControl]="bulletinSanctionForm.sanctProbValue"
@@ -291,6 +295,7 @@
             </div>
             <div class="col-md-6">
               <cais-autocomplete
+                *ngIf="showProbationData"
                 [label]="'Мерна еденица'"
                 [inputFormControl]="bulletinSanctionForm.sanctProbMeasureId"
                 [parentGroup]="bulletinSanctionForm.group"
@@ -440,7 +445,9 @@
             <div class="col-md-3 duration-container">
               <cais-input
                 [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.executionDurationMonths"
+                [inputFormControl]="
+                  bulletinSanctionForm.executionDurationMonths
+                "
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'executionDurationMonths'"
               >
