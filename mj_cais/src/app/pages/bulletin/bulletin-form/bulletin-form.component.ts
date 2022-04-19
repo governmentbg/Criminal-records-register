@@ -80,7 +80,8 @@ export class BulletinFormComponent
   //#endregion
 
   public showForUpdate: boolean = false;
-
+  public setEditToBeForPreview: boolean = false;
+  
   constructor(
     service: BulletinService,
     public injector: Injector,
@@ -93,33 +94,12 @@ export class BulletinFormComponent
 
   ngOnInit(): void {
     let bulletinStatusId = (this.dbData.element as any)?.statusId;
-
-    let isGridsEditable =
-      (!this.isForPreview &&
-        bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
-      this.currentAction == EActions.CREATE;
-
-    this.isBulletinPersonAliasEditable = isGridsEditable;
-    this.isOffancesEditable = isGridsEditable;
-    this.isSanctionsEditable = isGridsEditable;
-
-    this.isDocumentsEditable =
-      !this.isForPreview &&
-      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
-
-      this.isDecisionEditable =
-      !this.isForPreview &&
-      bulletinStatusId == BulletinStatusTypeEnum.Active || 
-      bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
-
     let locked = (this.dbData.element as any)?.locked;
 
-    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(),locked);
+    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(), locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
-    this.showForUpdate =
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+    this.initAllowedButtons(bulletinStatusId);
 
     this.formFinishedLoading.emit();
   }
@@ -131,6 +111,42 @@ export class BulletinFormComponent
   createInputObject(object: BulletinModel) {
     return new BulletinModel(object);
   }
+  
+  submitFunction = () => {
+    let offancesTransactions =
+      this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
+        true
+      );
+
+    this.fullForm.offancesTransactions.setValue(offancesTransactions);
+
+    let sanctionsTransactions =
+      this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
+        true
+      );
+
+    this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
+
+    let decisionsTransactions =
+      this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
+        true
+      );
+
+    this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
+
+    let docsTransactions =
+      this.bulletineDocumentsForm.documentsGrid.transactions.getAggregatedChanges(
+        true
+      );
+
+    this.fullForm.documentsTransactions.setValue(docsTransactions);
+
+    let personAliasTransactions =
+      this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
+    this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
+
+    this.validateAndSave(this.fullForm);
+  };
 
   //#region Актуализация на бюлетин
 
@@ -173,42 +189,6 @@ export class BulletinFormComponent
   }
 
   //#endregion
-
-  submitFunction = () => {
-    let offancesTransactions =
-      this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
-        true
-      );
-
-    this.fullForm.offancesTransactions.setValue(offancesTransactions);
-
-    let sanctionsTransactions =
-      this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
-        true
-      );
-
-    this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
-
-    let decisionsTransactions =
-      this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
-        true
-      );
-
-    this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
-
-    let docsTransactions =
-      this.bulletineDocumentsForm.documentsGrid.transactions.getAggregatedChanges(
-        true
-      );
-
-    this.fullForm.documentsTransactions.setValue(docsTransactions);
-
-    let personAliasTransactions =
-      this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
-    this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
-
-    this.validateAndSave(this.fullForm);
-  };
 
   //#region Person alias functions
 
@@ -259,4 +239,35 @@ export class BulletinFormComponent
   }
 
   //#endregion
+
+  private initAllowedButtons(bulletinStatusId: string) {
+    let isGridsEditable =
+      (!this.isForPreview &&
+        bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
+      this.currentAction == EActions.CREATE;
+
+    this.isBulletinPersonAliasEditable = isGridsEditable;
+    this.isOffancesEditable = isGridsEditable;
+    this.isSanctionsEditable = isGridsEditable;
+
+    this.isDocumentsEditable =
+      !this.isForPreview &&
+      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
+
+    this.isDecisionEditable =
+      (!this.isForPreview &&
+        bulletinStatusId == BulletinStatusTypeEnum.Active) ||
+      bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
+
+    let hideUpdateButton =
+      bulletinStatusId == BulletinStatusTypeEnum.Rehabilitated ||
+      bulletinStatusId == BulletinStatusTypeEnum.Deleted ||
+      bulletinStatusId == BulletinStatusTypeEnum.ForDestruction ||
+      bulletinStatusId == BulletinStatusTypeEnum.ReplacedAct425;
+    this.setEditToBeForPreview = hideUpdateButton;
+
+    this.showForUpdate =
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+  }
 }
