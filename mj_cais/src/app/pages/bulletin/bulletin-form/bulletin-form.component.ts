@@ -171,7 +171,7 @@ export class BulletinFormComponent
                 "success",
                 this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
               );
-              //todo: redirect;
+              this.router.navigate(['pages/bulletins']); 
             },
             (error) => {
               let title = this.dangerMessage;

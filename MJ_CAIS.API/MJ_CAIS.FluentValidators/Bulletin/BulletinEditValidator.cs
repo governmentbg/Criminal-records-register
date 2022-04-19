@@ -140,15 +140,15 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             RuleFor(x => x.Surname).HasMaxLength(200);
 
             RuleFor(x => x.DecisionsTransactions)
-                .MustBeEmptyIfWhenIsInStatus("Допълнителни сведения",
+                .MustBeEmptyWhenIsInStatus("Допълнителни сведения",
                                     BulletinConstants.Status.Active,
                                     BulletinConstants.Status.ForRehabilitation);
 
             RuleFor(x => x.OffancesTransactions)
-                .MustBeEmptyIfWhenIsInStatus("Престъпления", BulletinConstants.Status.NewOffice);
+                .MustBeEmptyWhenIsInStatus("Престъпления", BulletinConstants.Status.NewOffice);
 
               RuleFor(x => x.SanctionsTransactions)
-                .MustBeEmptyIfWhenIsInStatus("Наказания", BulletinConstants.Status.NewOffice);
+                .MustBeEmptyWhenIsInStatus("Наказания", BulletinConstants.Status.NewOffice);
         }
     }
 }

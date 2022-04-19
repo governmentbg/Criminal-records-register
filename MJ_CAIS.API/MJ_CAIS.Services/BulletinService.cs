@@ -5,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
-using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -48,24 +46,24 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// ����� �������� �� ������� �� �������� ��
+        /// Manually add a bulletin by an employee
         /// </summary>
         /// <param name="aInDto"></param>
         /// <returns></returns>
         public async Task<string> InsertAsync(BulletinAddDTO aInDto)
         {
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
-            // ��������� �� ������� � �������� ���������� �� �������� ��
+            // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
             return await UpdateBulletinAsync(aInDto, bulletin, null);
         }
 
         /// <summary>
-        /// ������������ �� ����� � ������� ������ �������
-        /// NewOffice => ��������� ������� �� ������ �����
-        /// NewEISS => ���� �������������� ����������
-        /// Active => ���� ����� �� ������������ ��������
-        /// ForDestruction, Deleted, ForRehabilitation, Rehabilitated => �� ������� �� ��������
+        /// Update data in the bulletin according to status
+        /// NewOffice => allowed change of all data
+        /// NewEISS => registration information only
+        /// Active => decision information only
+        /// ForDestruction, Deleted, ForRehabilitation, Rehabilitated => editing is not allowed
         /// </summary>
         /// <param name="aInDto"></param>
         /// <returns></returns>
@@ -79,21 +77,21 @@ namespace MJ_CAIS.Services
 
             var bulletin = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
 
-            // ��� �������� � �������� �� ��������,
-            // ���������� � �������� ���������� ����� �������
+            // if the bulletin is locked for editing,
+            // we add property according to the status
             if (bulletinDb.Locked.HasValue && bulletinDb.Locked.Value)
             {
                 if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
                     bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
                 {
-                    // ���� �� �������� ����� �� �� ���������
-                    // ������� �� ���� ���.��������
+                    // nothing of the main object is edited
+                    // only decisions added
                     bulletin.ModifiedProperties = new List<string>();
                 }
                 else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
                 {
-                    // ��� ������������ �� ������� � ������ NewEISS
-                    // �� ������� ���� �������������� ����������
+                    // when updating a bulletin in NewEISS status
+                    // only registration information is changed
                     bulletin.ModifiedProperties = new List<string>
                     {
                         nameof(bulletin.RegistrationNumber),
@@ -111,10 +109,10 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// ������� �� ������� �� ������� �� ���������� �� ��
+        /// Change of the status of a bulletin by a employee
         /// </summary>
-        /// <param name="aInDto">������������� �� �������</param>
-        /// <param name="statusId">������</param>
+        /// <param name="aInDto">Bulletin ID</param>
+        /// <param name="statusId">Status</param>
         /// <exception cref="ArgumentException"></exception>
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
@@ -126,8 +124,8 @@ namespace MJ_CAIS.Services
 
             AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
-            // ������ ������� �������� �� ��������� �� ��������
-            // ����� �� �� ������� ���� ������������ ��������
+            // All active bulletins are locked for editing
+            // only decisions can be added
             if (statusId == BulletinConstants.Status.Active)
             {
                 bulletin.Locked = true;
@@ -238,9 +236,8 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// ������� �� ������ �� ������� � ���������� �� �������� ������������ ��������
-        /// ReplacedAct425 (���������� ������� ��� �� ��. 425 ���)
-        /// Rehabilitated (��������� ������������)
+        /// Change the status of the bulletin depending on the added decision information
+        /// (ReplacedAct425, Rehabilitated)
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -268,8 +265,8 @@ namespace MJ_CAIS.Services
                 }
             }
 
-            // ������ ������� �������� �� ��������� �� ��������
-            // ����� �� �� ������� ���� ������������ ��������
+            // All active bulletins are locked for editing
+            // only decisions can be added
             if (entityToSave.StatusId == BulletinConstants.Status.Active)
             {
                 entityToSave.Locked = true;
@@ -278,15 +275,13 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// ��� ��� ������� � ������� �� ������� �� ������ ��� ������� �������
+        /// If there is a change in the status of the bulletin is added to the history table
         /// </summary>
-        /// <param name="oldStatus">�������� ������</param>
-        /// <param name="newStatus">��� ������</param>
-        /// <param name="bulletinId">������������� �� �������</param>
+        /// <param name="oldStatus">Previous status</param>
+        /// <param name="newStatus">New status</param>
+        /// <param name="bulletinId">ID</param>
         private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
         {
-            //TODO: ��������� ��� ����������� �� ���� ������ � ���� ?
-
             if (!string.IsNullOrEmpty(oldStatus) && oldStatus != newStatus)
             {
                 var satusHistory = new BBulletinStatusH
@@ -315,9 +310,10 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// �����������
-        /// �� �������� �� �������� - 100 ������ �� ��������� ���� �� ��������� ����;
-        /// �� �������� �� ��������������� ��������� �� ��. 78� �� �� - 15 ������ �� ������ �� ������� � ���� �� �������� ���.
+        /// Destruction
+        /// For criminal records - 100 years from the date of birth of the convicted person
+        /// For bulletins for administrative sanctions under Art. 78a - 
+        ///     15 years from the date of entry into force of the judicial act
         /// </summary>
         /// <param name="bulletin"></param>
         private void UpdateDataForDestruction(BBulletin bulletin)
@@ -333,11 +329,6 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
             }
 
-            // ����:���� �� �� �� ������� ���� �� ������� ? �� ����� ������ ���
-            // � ��� ��������� �� ����� �� ������ ��� �������
-            // �������� ���� ������� ������ ��. 78� �� ���������� ����� �� �����������, �� ����������� ��� ��������� 
-            // �������� � ����� ����, ������� ������� �� ������ �� ���� ? 
-            // ������� �� ������ �� ������� �� ����������
             if (bulletin.DeleteDate.HasValue && bulletin.DeleteDate <= DateTime.Now)
             {
                 bulletin.StatusId = BulletinConstants.Status.ForDestruction;

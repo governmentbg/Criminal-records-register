@@ -21,17 +21,17 @@ namespace MJ_CAIS.FluentValidators.Bulletin
         }
 
         /// <summary>
-        /// Допълнителни сведения => могат да се променят ако бюлетина е отключен или
-        /// в статус Активен или Подлежащ на реабилитация
-        /// Останалите колекции => могат да се редактират всички отключени
-        /// или тези в статус нови добавени от БС
+        /// Decisions => may change if the bulletin is unlocked or
+        /// in the status Active or ForRehabilitation
+        /// Other collections => may change if the bulletin is unlocked or
+        /// in the status NewOffice
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="ruleBuilder"></param>
-        /// <param name="listName">Име на колекцията</param>
-        /// <param name="allowedStatuses">Статуси за които е позволено да има редакция на колекцията</param>
+        /// <param name="listName">Name of а collection</param>
+        /// <param name="allowedStatuses">Statuses for which it is allowed to edit the collection</param>
         /// <returns></returns>
-        public static IRuleBuilderOptions<BulletinEditDTO, IList<TElement>> MustBeEmptyIfWhenIsInStatus<TElement>(this IRuleBuilder<BulletinEditDTO, IList<TElement>> ruleBuilder, string listName, params string[] allowedStatuses)
+        public static IRuleBuilderOptions<BulletinEditDTO, IList<TElement>> MustBeEmptyWhenIsInStatus<TElement>(this IRuleBuilder<BulletinEditDTO, IList<TElement>> ruleBuilder, string listName, params string[] allowedStatuses)
         {
             return ruleBuilder.Must((rootObject, list, context) =>
             {
