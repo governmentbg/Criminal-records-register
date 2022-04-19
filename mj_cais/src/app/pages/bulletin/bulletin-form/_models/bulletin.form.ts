@@ -84,10 +84,10 @@ export class BulletinForm {
   public decisionsTransactions: FormControl;
   public documentsTransactions: FormControl;
   public address: AddressForm;
+  public locked:FormControl;
 
   constructor(bulletinStstus: string, isEdit: boolean, locked: boolean) {
-    debugger;
-    this.initFormControls();
+    this.initFormControls(locked);
     // няма рестрикции при добавяне на бюлетин
     // редакция на бюлетин от служирел БС преди актуализация
     // или ако бюлетина е бил отключен посредством администратор
@@ -401,14 +401,15 @@ export class BulletinForm {
       nationalities: this.nationalities.group,
       address: this.address.group,
       prevSuspSent: this.prevSuspSent,
-      noSanction: this.noSanction
+      noSanction: this.noSanction,
+      locked:this.locked
     });
   }
 
-  private initFormControls(): void {
+  private initFormControls(locked: boolean): void {
     this.id = new FormControl(null);
     this.registrationNumber = new FormControl(null);
-
+    this.locked = new FormControl(locked);
     this.csAuthorityName = new FormControl(null);
     this.sequentialIndex = new FormControl(null);
     this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewOffice);

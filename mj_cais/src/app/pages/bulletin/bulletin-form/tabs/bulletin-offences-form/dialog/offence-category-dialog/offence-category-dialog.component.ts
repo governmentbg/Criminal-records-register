@@ -30,7 +30,6 @@ export class OffenceCategoryDialogComponent extends RemoteGridWithStatePersistan
     injector: Injector
   ) {
     super("offence-categories-dialog", service, injector);
-    debugger;
   }
 
   handleRowSelection(event) {

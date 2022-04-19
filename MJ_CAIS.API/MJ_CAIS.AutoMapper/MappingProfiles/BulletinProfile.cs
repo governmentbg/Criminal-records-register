@@ -25,7 +25,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
 
             CreateMap<BulletinEditDTO, BBulletin>()
-                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
+                .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Address.ForeignCountryAddress))
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.Country.Id))
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
 
