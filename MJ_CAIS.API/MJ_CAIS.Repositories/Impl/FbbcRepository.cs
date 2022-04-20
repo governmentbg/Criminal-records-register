@@ -14,6 +14,7 @@ namespace MJ_CAIS.Repositories.Impl
         public override async Task<Fbbc> SelectAsync(string aId)
         {
             var fbbc = await _dbContext.Fbbcs
+               .Include(x => x.Country)
                .Include(x => x.BirthCountry)
                .Include(x => x.BirthCity)
                    .ThenInclude(x => x.Municipality)

@@ -3,7 +3,7 @@ import { LookupModel } from "../../../../@core/components/forms/inputs/lookup/mo
 
 export class FbbcModel {
   public id: string = null;
-  public country: LookupModel;
+  public countryLookup: LookupModel;
   public docTypeId: string = null;
   public sanctionTypeId: string = null;
   public receiveDate: Date = null;
@@ -55,7 +55,7 @@ export class FbbcModel {
     if (init) {
       this.id = init.id ?? null;
       // this.id = init.id ?? null;
-      //this.country = init.country ?? null;
+      this.countryLookup = init.countryLookup ?? null;
       this.docTypeId = init.docTypeId ?? null;
       this.sanctionTypeId = init.sanctionTypeId ?? null;
       this.receiveDate = init.receiveDate ?? null;
