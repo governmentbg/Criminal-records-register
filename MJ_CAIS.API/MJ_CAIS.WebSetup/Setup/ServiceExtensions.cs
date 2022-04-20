@@ -2,10 +2,12 @@
 using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using MJ_CAIS.DIContainer;
 
-namespace MJ_CAIS.Web.Setup
+namespace MJ_CAIS.WebSetup.Setup
 {
     public static class ServiceExtensions
     {

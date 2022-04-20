@@ -36,7 +36,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebPortal.Public", "MJ_CAIS.WebPortal.Public\MJ_CAIS.WebPortal.Public.csproj", "{25518EA5-3F59-474C-A79B-83A79E45919E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.WebPortal.Internal", "MJ_CAIS.WebPortal.Internal\MJ_CAIS.WebPortal.Internal.csproj", "{AC6EAA06-7170-4AD2-88E7-ED44D638213D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebPortal.Internal", "MJ_CAIS.WebPortal.Internal\MJ_CAIS.WebPortal.Internal.csproj", "{AC6EAA06-7170-4AD2-88E7-ED44D638213D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.WebSetup", "MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj", "{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,6 +106,10 @@ Global
 		{AC6EAA06-7170-4AD2-88E7-ED44D638213D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC6EAA06-7170-4AD2-88E7-ED44D638213D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC6EAA06-7170-4AD2-88E7-ED44D638213D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

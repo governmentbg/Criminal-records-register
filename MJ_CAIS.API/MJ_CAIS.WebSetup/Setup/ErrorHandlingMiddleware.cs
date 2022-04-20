@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Exceptions;
-using MJ_CAIS.Web.Identity;
 using System.Net;
 using System.Text.Json;
 
-namespace MJ_CAIS.Web.Setup
+namespace MJ_CAIS.WebSetup.Setup
 {
     public class ErrorHandlingMiddleware
     {

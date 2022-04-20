@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace MJ_CAIS.Web.Identity
+namespace MJ_CAIS.WebSetup.Setup
 {
     public static class ClaimsPrincipalExtensions
     {

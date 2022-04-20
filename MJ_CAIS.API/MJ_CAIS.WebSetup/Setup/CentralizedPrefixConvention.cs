@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Routing;
 
-namespace MJ_CAIS.Web.Setup
+namespace MJ_CAIS.WebSetup.Setup
 {
     public class CentralizedPrefixConvention : IApplicationModelConvention
     {
