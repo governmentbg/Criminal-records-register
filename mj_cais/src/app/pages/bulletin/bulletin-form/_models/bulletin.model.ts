@@ -82,6 +82,8 @@ export class BulletinModel {
     this.bulletinCreateDate = init?.bulletinCreateDate ?? null;
     this.createdByNames = init?.createdByNames ?? null;
     this.createdByPosition = init?.createdByPosition ?? null;
+    this.approvedByNames = init?.approvedByNames ?? null;
+    this.approvedByPosition = init?.approvedByPosition ?? null;
     this.nationalities = init?.nationalities ?? null;
     this.firstname = init?.firstname ?? null;
     this.surname = init?.surname ?? null;

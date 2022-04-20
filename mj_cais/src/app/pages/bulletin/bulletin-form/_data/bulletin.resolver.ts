@@ -44,13 +44,8 @@ export class BulletinResolver implements Resolve<any> {
       decidingAuthorities: this.nomenclatureService.getDecidingAuthorities(),
       caseTypes: this.nomenclatureService.getCaseTypes(),
       offences: this.service.getOffences(bulletineId),
-      offencesCategories: this.nomenclatureService.getOffenceCategories(),
       ecrisOffCategories: this.nomenclatureService.getEcrisOffCategories(),
       countries: this.nomenclatureService.getCountries(),
-      countriesSubdivisions:
-        this.nomenclatureService.getCountriesSubdivisions(),
-      completions: this.nomenclatureService.getLvlCompletions(),
-      parts: this.nomenclatureService.getExrisOffLevelParts(),
       sanctions: this.service.getSanctions(bulletineId),
       sanctionCategories: this.nomenclatureService.getSanctionCategories(),
       sanctionProbCategories:
@@ -67,7 +62,8 @@ export class BulletinResolver implements Resolve<any> {
       personAlias: this.service.getPersonAlias(bulletineId),
       personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
       bulletinTypes: this.service.getBulletinTypes(),
-      bulletinStatusHistoryData: this.service.getBulletinStatusHistoryData(bulletineId)
+      bulletinStatusHistoryData: this.service.getBulletinStatusHistoryData(bulletineId),
+      formOfGuilts: this.nomenclatureService.getFormOfGuilts()
     };
     return forkJoin(result);
   }
@@ -87,12 +83,8 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public decisionTypes: Observable<BaseNomenclatureModel[]>;
   public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
   public caseTypes: Observable<BaseNomenclatureModel[]>;
-  public offencesCategories: Observable<BaseNomenclatureModel[]>;
   public ecrisOffCategories: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
-  public countriesSubdivisions: Observable<BaseNomenclatureModel[]>;
-  public completions: Observable<BaseNomenclatureModel[]>;
-  public parts: Observable<BaseNomenclatureModel[]>;
   public sanctionCategories: Observable<BaseNomenclatureModel[]>;
   public sanctionProbCategories: Observable<BaseNomenclatureModel[]>;
   public ecrisSanctionCategories: Observable<BaseNomenclatureModel[]>;
@@ -103,4 +95,5 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public bulletinStatuses : Observable<BaseNomenclatureModel[]>;
   public personAliasTypes: Observable<BaseNomenclatureModel[]>;
   public bulletinTypes : Observable<BaseNomenclatureModel[]>;
+  public formOfGuilts :  Observable<BaseNomenclatureModel[]>;
 }

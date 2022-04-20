@@ -7,7 +7,7 @@ namespace MJ_CAIS.FluentValidators.Bulletin
     {
         public OffenceValidator()
         {
-            RuleFor(x => x.FormOfGuilt).NotEmpty();
+            RuleFor(x => x.FormOfGuiltId).NotEmpty();
             RuleFor(x => x.Remarks).NotEmpty();
             RuleFor(x => x.OffStartDate).NotEmpty();
             RuleFor(x => x.OffEndDate).NotEmpty();

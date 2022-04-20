@@ -1,3 +1,6 @@
+<tl-linear-progress
+  [visible]="this.remoteService.isLoading"
+></tl-linear-progress>
 <nb-card class="cais-lookup">
   <nb-card-header>
     <div class="row">
@@ -15,74 +18,72 @@
     </div>
   </nb-card-header>
   <nb-card-body>
-    <app-grid-with-transactions [gridTransactions]="">
-      <igx-grid
-        #grid
-        igxGridState
-        [data]="items$ | async"
-        [height]="null"
-        [filterStrategy]="noopFilterStrategy"
-        [sortStrategy]="noopSortStrategy"
-        [paging]="true"
-        [clipboardOptions]="{ copyHeaders: false }"
-        [displayDensity]="'cosy'"
-        (onSortingDone)="sortingDone($event)"
-        (onFilteringDone)="filteringDone($event)"
-        (onSelection)="cellSelection($event)"
-        [paginationTemplate]="pager"
-        [allowFiltering]="true"
-        [primaryKey]="'id'"
-        [cellSelection]="'none'"
-        [rowSelection]="selectionMode"
-        [selectedRows]="selectedRows"
-        [hideRowSelectors]="false"
-        [pinning]="pinningConfig"
-        (onRowSelectionChange)="handleRowSelection($event)"
+    <igx-grid
+      #grid
+      igxGridState
+      [data]="items$ | async"
+      [height]="null"
+      [filterStrategy]="noopFilterStrategy"
+      [sortStrategy]="noopSortStrategy"
+      [paging]="true"
+      [clipboardOptions]="{ copyHeaders: false }"
+      [displayDensity]="'cosy'"
+      (onSortingDone)="sortingDone($event)"
+      (onFilteringDone)="filteringDone($event)"
+      (onSelection)="cellSelection($event)"
+      [paginationTemplate]="pager"
+      [allowFiltering]="true"
+      [primaryKey]="'id'"
+      [cellSelection]="'none'"
+      [rowSelection]="selectionMode"
+      [selectedRows]="selectedRows"
+      [hideRowSelectors]="false"
+      [pinning]="pinningConfig"
+      (onRowSelectionChange)="handleRowSelection($event)"
+    >
+      <igx-column
+        field="id"
+        header="'Идентификатор'"
+        [sortable]="true"
+        [dataType]="'number'"
+        [hidden]="true"
       >
-        <igx-column
-          field="id"
-          header="'Идентификатор'"
-          [sortable]="true"
-          [dataType]="'number'"
-          [hidden]="true"
-        >
-          <ng-template igxCell let-cell="cell">
-            <span [title]="cell.value">{{ cell.value }}</span>
-          </ng-template>
-        </igx-column>
-
-        <igx-column
-          field="name"
-          header="Наименование"
-          [sortable]="true"
-          [dataType]="'string'"
-        >
-          <ng-template igxCell let-cell="cell">
-            <span [title]="cell.value">{{ cell.value }}</span>
-          </ng-template>
-        </igx-column>
-
-        <igx-column
-          field="code"
-          header="Системен идентификатор от Стандарти на ЕИСПП - Квалификация на престъпленията"
-          [dataType]="'string'"
-        >
-          <ng-template igxCell let-cell="cell">
-            <span [title]="cell.value">{{ cell.value }}</span>
-          </ng-template>
-        </igx-column>
-
-        <ng-template #pager let-grid>
-          <div class="tl-paginator">
-            <cais-grid-pager
-              [page]="remoteService.pagerParams.page"
-              [perPage]="remoteService.pagerParams.perPage"
-              [totalCount]="remoteService.pagerParams.totalCount"
-              (pagerChange)="pagerChange($event)"
-            ></cais-grid-pager>
-          </div>
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
-      </igx-grid>
-   </app-grid-with-transactions> 
+      </igx-column>
+
+      <igx-column
+        field="name"
+        header="Наименование"
+        [sortable]="true"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+
+      <igx-column
+        field="code"
+        header="Системен идентификатор от Стандарти на ЕИСПП - Квалификация на престъпленията"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+
+      <ng-template #pager let-grid>
+        <div class="tl-paginator">
+          <cais-grid-pager
+            [page]="remoteService.pagerParams.page"
+            [perPage]="remoteService.pagerParams.perPage"
+            [totalCount]="remoteService.pagerParams.totalCount"
+            (pagerChange)="pagerChange($event)"
+          ></cais-grid-pager>
+        </div>
+      </ng-template>
+    </igx-grid>
   </nb-card-body>
 </nb-card>

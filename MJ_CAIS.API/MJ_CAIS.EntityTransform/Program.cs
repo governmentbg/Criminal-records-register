@@ -36,6 +36,7 @@ namespace MJ_CAIS.EntityTransform
             nameof(GBgMunicipality),
             nameof(GCity),
             nameof(EEcrisAuthority),
+            nameof(BFormOfGuilt),
         };
     }
 }

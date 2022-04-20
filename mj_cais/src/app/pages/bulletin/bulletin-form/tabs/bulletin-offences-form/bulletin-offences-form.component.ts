@@ -76,20 +76,12 @@ export class BulletinOffencesFormComponent implements OnInit {
       this.bulletinOffenceForm.ecrisOffCatName.patchValue(ecrisOffCatName);
     }
 
-    if (this.bulletinOffenceForm.offLvlComplId.value) {
-      let offLvlComplName = (this.dbData.completions as any).find(
-        (x) => x.id === this.bulletinOffenceForm.offLvlComplId.value
+    if (this.bulletinOffenceForm.formOfGuiltId.value) {
+      let formOfGuiltName = (this.dbData.formOfGuilts as any).find(
+        (x) => x.id === this.bulletinOffenceForm.formOfGuiltId.value
       ).name;
 
-      this.bulletinOffenceForm.offLvlComplName.patchValue(offLvlComplName);
-    }
-
-    if (this.bulletinOffenceForm.offLvlPartId.value) {
-      let offLvlPartName = (this.dbData.parts as any).find(
-        (x) => x.id === this.bulletinOffenceForm.offLvlPartId.value
-      ).name;
-
-      this.bulletinOffenceForm.offLvlPartName.patchValue(offLvlPartName);
+      this.bulletinOffenceForm.formOfGuiltName.patchValue(formOfGuiltName);
     }
 
     let currentRow = this.offencesGrid.getRowByKey(
