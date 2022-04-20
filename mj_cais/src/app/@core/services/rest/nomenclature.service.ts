@@ -129,18 +129,6 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
-  public getLvlCompletions(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/b_offence_lvl_completions`
-    );
-  }
-
-  public getExrisOffLevelParts(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/b_ecris_off_lvl_parts`
-    );
-  }
-
   public getSanctionCategories(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_sanction_categories`
@@ -168,6 +156,12 @@ export class NomenclatureService extends CaisCrudService<
   public getSanctionActivities(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_sanction_activities`
+    );
+  }
+
+  public getFormOfGuilts(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/b_form_of_guilts`
     );
   }
 
