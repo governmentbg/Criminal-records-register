@@ -12,6 +12,7 @@ export class BulletinForm {
   public csAuthorityName: FormControl;
   public sequentialIndex: FormControl;
   public statusIdDisplay: FormControl;
+  public statusId: FormControl;
   public alphabeticalIndex: FormControl;
   public ecrisConvictionId: FormControl;
   public bulletinReceivedDate: FormControl;
@@ -34,32 +35,22 @@ export class BulletinForm {
   public personAliasTransactions: FormControl;
   public sex: FormControl;
   public birthDate: FormControl;
-  public birthDatePrecision: FormControl;
+  public birthPlace: AddressForm;
   public egn: FormControl;
   public lnch: FormControl;
   public ln: FormControl;
-
   public nationalities: MultipleChooseForm;
-
   public afisNumber: FormControl;
-
-  public noSanction: FormControl;
-  public prevSuspSent: FormControl;
-
   public idDocNumber: FormControl;
   public idDocCategoryId: FormControl;
   public idDocTypeDescr: FormControl;
   public idDocIssuingAuthority: FormControl;
   public idDocIssuingDate: FormControl;
-  public idDocIssuingDatePrec: FormControl;
   public idDocValidDate: FormControl;
-  public idDocValidDatePrec: FormControl;
-
   public motherFirstname: FormControl;
   public motherSurname: FormControl;
   public motherFamilyname: FormControl;
   public motherFullname: FormControl;
-
   public fatherFirstname: FormControl;
   public fatherSurname: FormControl;
   public fatherFamilyname: FormControl;
@@ -75,16 +66,17 @@ export class BulletinForm {
   public caseTypeId: FormControl;
   public caseNumber: FormControl;
   public caseYear: FormControl;
+  public caseAuthId:FormControl;
   public convRemarks: FormControl;
 
-  public statusId: FormControl;
+  public noSanction: FormControl;
+  public prevSuspSent: FormControl;
+  public prevSuspSentDescr: FormControl;
+  public locked: FormControl;
 
   public offancesTransactions: FormControl;
   public sanctionsTransactions: FormControl;
   public decisionsTransactions: FormControl;
-  public documentsTransactions: FormControl;
-  public address: AddressForm;
-  public locked: FormControl;
 
   constructor(bulletinStstus: string, isEdit: boolean, locked: boolean) {
     this.initFormControls(locked);
@@ -116,6 +108,7 @@ export class BulletinForm {
   }
 
   private initNonEditableObj(): void {
+    //this.group.disable();
     this.registrationNumber.disable();
     this.csAuthorityName.disable();
     this.sequentialIndex.disable();
@@ -140,7 +133,7 @@ export class BulletinForm {
     this.fullnameLat.disable();
     this.sex.disable();
     this.birthDate.disable();
-    this.birthDatePrecision.disable();
+    this.birthPlace = new AddressForm(false, true);
     this.egn.disable();
     this.lnch.disable();
     this.ln.disable();
@@ -151,9 +144,7 @@ export class BulletinForm {
     this.idDocTypeDescr.disable();
     this.idDocIssuingAuthority.disable();
     this.idDocIssuingDate.disable();
-    this.idDocIssuingDatePrec.disable();
     this.idDocValidDate.disable();
-    this.idDocValidDatePrec.disable();
     this.motherFirstname.disable();
     this.motherSurname.disable();
     this.motherFamilyname.disable();
@@ -171,10 +162,11 @@ export class BulletinForm {
     this.caseTypeId.disable();
     this.caseNumber.disable();
     this.caseYear.disable();
+    this.caseAuthId.disable();
     this.convRemarks.disable();
     this.noSanction.disable();
     this.prevSuspSent.disable();
-    this.address = new AddressForm(false, true);
+    this.prevSuspSentDescr.disable();
   }
 
   private initForEditNewEISS(): void {
@@ -207,7 +199,7 @@ export class BulletinForm {
     this.fullnameLat.disable();
     this.sex.disable();
     this.birthDate.disable();
-    this.birthDatePrecision.disable();
+    this.birthPlace = new AddressForm(false, true);
     this.egn.disable();
     this.lnch.disable();
     this.ln.disable();
@@ -218,9 +210,7 @@ export class BulletinForm {
     this.idDocTypeDescr.disable();
     this.idDocIssuingAuthority.disable();
     this.idDocIssuingDate.disable();
-    this.idDocIssuingDatePrec.disable();
     this.idDocValidDate.disable();
-    this.idDocValidDatePrec.disable();
     this.motherFirstname.disable();
     this.motherSurname.disable();
     this.motherFamilyname.disable();
@@ -238,10 +228,11 @@ export class BulletinForm {
     this.caseTypeId.disable();
     this.caseNumber.disable();
     this.caseYear.disable();
+    this.caseAuthId.disable();
     this.convRemarks.disable();
     this.noSanction.disable();
     this.prevSuspSent.disable();
-    this.address = new AddressForm(false, true);
+    this.prevSuspSentDescr.disable();
   }
 
   private initUnlocked(): void {
@@ -296,7 +287,7 @@ export class BulletinForm {
     this.fullnameLat.setValidators(Validators.maxLength(200));
     this.sex.setValidators(Validators.required);
     this.birthDate.setValidators(Validators.required);
-    this.birthDatePrecision.setValidators(Validators.maxLength(200));
+    this.birthPlace = new AddressForm(true);
     this.egn.setValidators([Validators.required, Validators.maxLength(100)]);
     this.lnch.setValidators([Validators.required, Validators.maxLength(100)]);
     this.ln.setValidators([Validators.required, Validators.maxLength(100)]);
@@ -304,8 +295,6 @@ export class BulletinForm {
     this.afisNumber.setValidators(Validators.maxLength(100));
     this.idDocNumber.setValidators(Validators.maxLength(100));
     this.idDocCategoryId.setValidators(Validators.maxLength(50));
-    this.idDocIssuingDatePrec.setValidators(Validators.maxLength(200));
-    this.idDocValidDatePrec.setValidators(Validators.maxLength(200));
     this.motherFirstname.setValidators(Validators.maxLength(200));
     this.motherSurname.setValidators(Validators.maxLength(200));
     this.motherFamilyname.setValidators(Validators.maxLength(200));
@@ -334,34 +323,27 @@ export class BulletinForm {
     ]);
     this.caseYear.setValidators(Validators.required);
     this.statusId.setValidators(Validators.maxLength(50));
-    this.address = new AddressForm(true);
   }
 
   private initGroup(): void {
     this.group = new FormGroup({
       id: this.id,
-      csAuthorityName: this.csAuthorityName,
       registrationNumber: this.registrationNumber,
+      csAuthorityName: this.csAuthorityName,
       sequentialIndex: this.sequentialIndex,
-      decisionNumber: this.decisionNumber,
-      decisionDate: this.decisionDate,
-      decisionFinalDate: this.decisionFinalDate,
-      decidingAuthId: this.decidingAuthId,
-      decisionTypeId: this.decisionTypeId,
-      caseTypeId: this.caseTypeId,
-      caseNumber: this.caseNumber,
-      caseYear: this.caseYear,
-      convRemarks: this.convRemarks,
-      alphabeticalIndex: this.alphabeticalIndex,
-      decisionEcli: this.decisionEcli,
-      bulletinCreateDate: this.bulletinCreateDate,
-      bulletinReceivedDate: this.bulletinReceivedDate,
-      bulletinAuthorityId: this.bulletinAuthorityId,
-      createdByNames: this.createdByNames,
-      approvedByNames: this.approvedByNames,
-      approvedByPosition: this.approvedByPosition,
       statusId: this.statusId,
       statusIdDisplay: this.statusIdDisplay,
+      alphabeticalIndex: this.alphabeticalIndex,
+      ecrisConvictionId: this.ecrisConvictionId,
+      bulletinReceivedDate: this.bulletinReceivedDate,
+      bulletinType: this.bulletinType,
+      bulletinAuthorityId: this.bulletinAuthorityId,
+      bulletinCreateDate: this.bulletinCreateDate,
+      createdByNames: this.createdByNames,
+      createdByPosition: this.createdByPosition,
+      approvedByNames: this.approvedByNames,
+      approvedByPosition: this.approvedByPosition,
+
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,
@@ -369,42 +351,52 @@ export class BulletinForm {
       firstnameLat: this.firstnameLat,
       surnameLat: this.surnameLat,
       familynameLat: this.familynameLat,
+      personAliasTransactions: this.personAliasTransactions,
       sex: this.sex,
-      egn: this.egn,
-      ln: this.ln,
-      lnch: this.lnch,
       birthDate: this.birthDate,
-      birthDatePrecision: this.birthDatePrecision,
+      birthPlace: this.birthPlace.group,
+      egn: this.egn,
+      lnch: this.lnch,
+      ln: this.ln,
+      nationalities: this.nationalities.group,
+      afisNumber: this.afisNumber,
       fullnameLat: this.fullnameLat,
       idDocNumber: this.idDocNumber,
       idDocCategoryId: this.idDocCategoryId,
       idDocTypeDescr: this.idDocTypeDescr,
       idDocIssuingAuthority: this.idDocIssuingAuthority,
       idDocIssuingDate: this.idDocIssuingDate,
-      idDocIssuingDatePrec: this.idDocIssuingDatePrec,
       idDocValidDate: this.idDocValidDate,
-      idDocValidDatePrec: this.idDocValidDatePrec,
       motherFirstname: this.motherFirstname,
+      motherSurname: this.motherSurname,
       motherFamilyname: this.motherFamilyname,
       motherFullname: this.motherFullname,
       fatherFirstname: this.fatherFirstname,
       fatherSurname: this.fatherSurname,
       fatherFamilyname: this.fatherFamilyname,
       fatherFullname: this.fatherFullname,
-      motherSurname: this.motherSurname,
-      afisNumber: this.afisNumber,
-      createdByPosition: this.createdByPosition,
-      bulletinType: this.bulletinType,
+
+      decisionNumber: this.decisionNumber,
+      decisionDate: this.decisionDate,
+      decisionFinalDate: this.decisionFinalDate,
+      decidingAuthId: this.decidingAuthId,
+      decisionTypeId: this.decisionTypeId,
+      decisionEcli: this.decisionEcli,
+
+      caseTypeId: this.caseTypeId,
+      caseNumber: this.caseNumber,
+      caseYear: this.caseYear,
+      caseAuthId:this.caseAuthId,
+      convRemarks: this.convRemarks,
+
+
       offancesTransactions: this.offancesTransactions,
       sanctionsTransactions: this.sanctionsTransactions,
       decisionsTransactions: this.decisionsTransactions,
-      documentsTransactions: this.documentsTransactions,
-      ecrisConvictionId: this.ecrisConvictionId,
-      personAliasTransactions: this.personAliasTransactions,
-      nationalities: this.nationalities.group,
-      address: this.address.group,
-      prevSuspSent: this.prevSuspSent,
+
       noSanction: this.noSanction,
+      prevSuspSent: this.prevSuspSent,
+      prevSuspSentDescr: this.prevSuspSentDescr,
       locked: this.locked,
     });
   }
@@ -412,10 +404,10 @@ export class BulletinForm {
   private initFormControls(locked: boolean): void {
     this.id = new FormControl(null);
     this.registrationNumber = new FormControl(null);
-    this.locked = new FormControl(locked);
     this.csAuthorityName = new FormControl(null);
     this.sequentialIndex = new FormControl(null);
     this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewOffice);
+    this.statusId = new FormControl(BulletinStatusTypeEnum.NewOffice);
     this.alphabeticalIndex = new FormControl(null);
     this.ecrisConvictionId = new FormControl(null);
     this.bulletinReceivedDate = new FormControl(null);
@@ -426,6 +418,7 @@ export class BulletinForm {
     this.createdByPosition = new FormControl(null);
     this.approvedByNames = new FormControl(null);
     this.approvedByPosition = new FormControl(null);
+
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
     this.familyname = new FormControl(null);
@@ -437,7 +430,7 @@ export class BulletinForm {
     this.personAliasTransactions = new FormControl(null);
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
-    this.birthDatePrecision = new FormControl(null);
+    this.birthPlace = new AddressForm(false);
     this.egn = new FormControl(null);
     this.lnch = new FormControl(null);
     this.ln = new FormControl(null);
@@ -448,9 +441,7 @@ export class BulletinForm {
     this.idDocTypeDescr = new FormControl(null);
     this.idDocIssuingAuthority = new FormControl(null);
     this.idDocIssuingDate = new FormControl(null);
-    this.idDocIssuingDatePrec = new FormControl(null);
     this.idDocValidDate = new FormControl(null);
-    this.idDocValidDatePrec = new FormControl(null);
     this.motherFirstname = new FormControl(null);
     this.motherSurname = new FormControl(null);
     this.motherFamilyname = new FormControl(null);
@@ -459,22 +450,27 @@ export class BulletinForm {
     this.fatherSurname = new FormControl(null);
     this.fatherFamilyname = new FormControl(null);
     this.fatherFullname = new FormControl(null);
+    
     this.decisionTypeId = new FormControl(null);
     this.decisionNumber = new FormControl(null);
     this.decisionDate = new FormControl(null);
     this.decisionFinalDate = new FormControl(null);
     this.decidingAuthId = new FormControl(null);
     this.decisionEcli = new FormControl(null);
+    
     this.caseTypeId = new FormControl(null);
     this.caseNumber = new FormControl(null);
     this.caseYear = new FormControl(null);
+    this.caseAuthId = new FormControl(null);
     this.convRemarks = new FormControl(null);
-    this.statusId = new FormControl(BulletinStatusTypeEnum.NewOffice);
+
+    this.noSanction = new FormControl(null);
+    this.prevSuspSent = new FormControl(null);
+    this.prevSuspSentDescr = new FormControl(null);
+    this.locked = new FormControl(locked);
+
     this.offancesTransactions = new FormControl(null);
     this.sanctionsTransactions = new FormControl(null);
     this.decisionsTransactions = new FormControl(null);
-    this.documentsTransactions = new FormControl(null);
-    this.noSanction = new FormControl(null);
-    this.prevSuspSent = new FormControl(null);
   }
 }

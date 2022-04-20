@@ -134,13 +134,6 @@ export class BulletinFormComponent
 
     this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
 
-    let docsTransactions =
-      this.bulletineDocumentsForm.documentsGrid.transactions.getAggregatedChanges(
-        true
-      );
-
-    this.fullForm.documentsTransactions.setValue(docsTransactions);
-
     let personAliasTransactions =
       this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
     this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
