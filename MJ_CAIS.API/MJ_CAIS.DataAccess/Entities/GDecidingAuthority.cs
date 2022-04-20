@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public GDecidingAuthority()
         {
             BBulletinBulletinAuthorities = new HashSet<BBulletin>();
+            BBulletinCaseAuths = new HashSet<BBulletin>();
             BBulletinDecidingAuths = new HashSet<BBulletin>();
             BDecisions = new HashSet<BDecision>();
             GCsAuthorities = new HashSet<GCsAuthority>();
@@ -29,6 +30,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? OldId { get; set; }
 
         public virtual ICollection<BBulletin> BBulletinBulletinAuthorities { get; set; }
+        public virtual ICollection<BBulletin> BBulletinCaseAuths { get; set; }
         public virtual ICollection<BBulletin> BBulletinDecidingAuths { get; set; }
         public virtual ICollection<BDecision> BDecisions { get; set; }
         public virtual ICollection<GCsAuthority> GCsAuthorities { get; set; }

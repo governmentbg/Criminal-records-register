@@ -6,12 +6,10 @@
         public string? SanctCategoryId { get; set; }
         public string? SanctCategoryName { get; set; }
         public string? SanctProbCategId { get; set; }
-        public string? SanctProbCategName { get; set; }
         public string? EcrisSanctCategId { get; set; }
         public string? EcrisSanctCategName { get; set; }
         public int? SanctProbValue { get; set; }
         public string? SanctProbMeasureId { get; set; }
-        public string? SanctProbMeasureName { get; set; }
         public string? Descr { get; set; }
         public bool? SpecificToMinor { get; set; }
         public DateTime? DecisionStartDate { get; set; }
@@ -34,7 +32,5 @@
         public byte? SuspentionDurationHours { get; set; }
         public string? ProbationDescr { get; set; }
         public string? SanctActivityId { get; set; }
-        public string? SanctActivityName { get; set; }
-        public string? SanctActivityDescr { get; set; }
     }
 }

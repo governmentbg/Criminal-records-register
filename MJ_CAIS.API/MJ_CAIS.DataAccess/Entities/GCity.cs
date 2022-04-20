@@ -7,10 +7,11 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GCity()
         {
+            AApplications = new HashSet<AApplication>();
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             Fbbcs = new HashSet<Fbbc>();
-            PPeople = new HashSet<PPerson>();
+            PPersonAliases = new HashSet<PPersonAlias>();
         }
 
         public string? EcrisTechnId { get; set; }
@@ -28,9 +29,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCountry? Country { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual GBgMunicipality? Municipality { get; set; }
+        public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<Fbbc> Fbbcs { get; set; }
-        public virtual ICollection<PPerson> PPeople { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliases { get; set; }
     }
 }

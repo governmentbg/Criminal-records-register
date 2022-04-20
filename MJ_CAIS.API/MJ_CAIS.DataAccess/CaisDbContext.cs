@@ -20,10 +20,12 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<AAppCitizenship> AAppCitizenships { get; set; } = null!;
         public virtual DbSet<AAppPersAlias> AAppPersAliases { get; set; } = null!;
         public virtual DbSet<AApplication> AApplications { get; set; } = null!;
+        public virtual DbSet<AApplicationStatus> AApplicationStatuses { get; set; } = null!;
         public virtual DbSet<AApplicationType> AApplicationTypes { get; set; } = null!;
         public virtual DbSet<APaymentMethod> APaymentMethods { get; set; } = null!;
         public virtual DbSet<APurpose> APurposes { get; set; } = null!;
         public virtual DbSet<ASrvcResRcptMeth> ASrvcResRcptMeths { get; set; } = null!;
+        public virtual DbSet<AStatusH> AStatusHes { get; set; } = null!;
         public virtual DbSet<BBullPersAlias> BBullPersAliases { get; set; } = null!;
         public virtual DbSet<BBulletin> BBulletins { get; set; } = null!;
         public virtual DbSet<BBulletinStatus> BBulletinStatuses { get; set; } = null!;
@@ -35,12 +37,14 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<BEcrisOffCategory> BEcrisOffCategories { get; set; } = null!;
         public virtual DbSet<BEcrisOffLvlPart> BEcrisOffLvlParts { get; set; } = null!;
         public virtual DbSet<BEcrisStanctCateg> BEcrisStanctCategs { get; set; } = null!;
+        public virtual DbSet<BFormOfGuilt> BFormOfGuilts { get; set; } = null!;
         public virtual DbSet<BIdDocCategory> BIdDocCategories { get; set; } = null!;
         public virtual DbSet<BInternalRequest> BInternalRequests { get; set; } = null!;
         public virtual DbSet<BOffence> BOffences { get; set; } = null!;
         public virtual DbSet<BOffenceCategory> BOffenceCategories { get; set; } = null!;
         public virtual DbSet<BOffenceLvlCompletion> BOffenceLvlCompletions { get; set; } = null!;
         public virtual DbSet<BPersNationality> BPersNationalities { get; set; } = null!;
+        public virtual DbSet<BProbation> BProbations { get; set; } = null!;
         public virtual DbSet<BReqStatus> BReqStatuses { get; set; } = null!;
         public virtual DbSet<BSanctProbCategory> BSanctProbCategories { get; set; } = null!;
         public virtual DbSet<BSanctProbMeasure> BSanctProbMeasures { get; set; } = null!;
@@ -79,6 +83,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
         public virtual DbSet<PPersGroup> PPersGroups { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
+        public virtual DbSet<PPersonAlias> PPersonAliases { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
 
@@ -158,6 +163,12 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.PaymentMethodId, "XIF6A_APPLICATIONS");
 
+                entity.HasIndex(e => e.DocContentId, "XIF7A_APPLICATIONS");
+
+                entity.HasIndex(e => e.StatusCode, "XIF8A_APPLICATIONS");
+
+                entity.HasIndex(e => e.BirthCountryId, "XIF9A_APPLICATIONS");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -188,17 +199,25 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("APPLICATION_TYPE_ID");
 
-                entity.Property(e => e.BirthDay)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_DAY");
+                entity.Property(e => e.BirthCityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BIRTH_CITY_ID");
 
-                entity.Property(e => e.BirthMonth)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_MONTH");
+                entity.Property(e => e.BirthCountryId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BIRTH_COUNTRY_ID");
 
-                entity.Property(e => e.BirthYear)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_YEAR");
+                entity.Property(e => e.BirthDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("BIRTH_DATE");
+
+                entity.Property(e => e.BirthDatePrecision)
+                    .HasMaxLength(200)
+                    .HasColumnName("BIRTH_DATE_PRECISION");
+
+                entity.Property(e => e.BirthPlaceOther).HasColumnName("BIRTH_PLACE_OTHER");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
@@ -212,6 +231,11 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("CS_AUTHORITY_ID");
 
                 entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.DocContentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DOC_CONTENT_ID");
 
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
@@ -327,6 +351,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("SRVC_RES_RCPT_METH_ID");
 
+                entity.Property(e => e.StatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_CODE");
+
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME");
@@ -349,6 +378,16 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.ApplicationTypeId)
                     .HasConstraintName("FK_A_APPLICATIONS_A_APPLICATIO");
+
+                entity.HasOne(d => d.BirthCity)
+                    .WithMany(p => p.AApplications)
+                    .HasForeignKey(d => d.BirthCityId)
+                    .HasConstraintName("FK_A_APPLICATIONS_G_CITIES");
+
+                entity.HasOne(d => d.BirthCountry)
+                    .WithMany(p => p.AApplications)
+                    .HasForeignKey(d => d.BirthCountryId)
+                    .HasConstraintName("FK_A_APPLICATIONS_G_COUNTRIES");
 
                 entity.HasOne(d => d.CsAuthority)
                     .WithMany(p => p.AApplications)
@@ -374,6 +413,23 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.SrvcResRcptMethId)
                     .HasConstraintName("FK_A_APPLICATIONS_A_SRVC_RES_R");
+            });
+
+            modelBuilder.Entity<AApplicationStatus>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKA_APPLICATION_STATUSES");
+
+                entity.ToTable("A_APPLICATION_STATUSES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
             });
 
             modelBuilder.Entity<AApplicationType>(entity =>
@@ -504,6 +560,62 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VALID_TO");
             });
 
+            modelBuilder.Entity<AStatusH>(entity =>
+            {
+                entity.ToTable("A_STATUS_H");
+
+                entity.HasIndex(e => new { e.StatusCode, e.ApplicationId, e.ReportOrder }, "XAK1A_STATUS_H")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.StatusCode, "XIF1A_STATUS_H");
+
+                entity.HasIndex(e => e.ApplicationId, "XIF2A_STATUS_H");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.ApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("APPLICATION_ID");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.ReportOrder)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("REPORT_ORDER");
+
+                entity.Property(e => e.StatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_CODE");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.AStatusHes)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("FK_A_STATUS_H_A_APPLICATIONS");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.AStatusHes)
+                    .HasForeignKey(d => d.StatusCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_A_STATUS_H_A_APPLICATION_ST");
+            });
+
             modelBuilder.Entity<BBullPersAlias>(entity =>
             {
                 entity.ToTable("B_BULL_PERS_ALIAS");
@@ -555,6 +667,8 @@ namespace MJ_CAIS.DataAccess
                 entity.HasIndex(e => e.IdDocCategoryId, "XIF15B_BULLETINS");
 
                 entity.HasIndex(e => e.CsAuthorityId, "XIF17B_BULLETINS");
+
+                entity.HasIndex(e => e.CaseAuthId, "XIF19B_BULLETINS");
 
                 entity.HasIndex(e => e.DecidingAuthId, "XIF2B_BULLETINS");
 
@@ -621,6 +735,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.BulletinType)
                     .HasMaxLength(200)
                     .HasColumnName("BULLETIN_TYPE");
+
+                entity.Property(e => e.CaseAuthId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CASE_AUTH_ID");
 
                 entity.Property(e => e.CaseNumber)
                     .HasMaxLength(100)
@@ -808,6 +927,8 @@ namespace MJ_CAIS.DataAccess
                     .HasPrecision(1)
                     .HasColumnName("PREV_SUSP_SENT");
 
+                entity.Property(e => e.PrevSuspSentDescr).HasColumnName("PREV_SUSP_SENT_DESCR");
+
                 entity.Property(e => e.RegistrationNumber)
                     .HasMaxLength(100)
                     .HasColumnName("REGISTRATION_NUMBER");
@@ -863,6 +984,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.BBulletinBulletinAuthorities)
                     .HasForeignKey(d => d.BulletinAuthorityId)
                     .HasConstraintName("FK_B_BULLETINS_G_DEC_AUTH_BULL");
+
+                entity.HasOne(d => d.CaseAuth)
+                    .WithMany(p => p.BBulletinCaseAuths)
+                    .HasForeignKey(d => d.CaseAuthId)
+                    .HasConstraintName("FK_B_BULLETINS_G_DEC_AUTH_C");
 
                 entity.HasOne(d => d.CaseType)
                     .WithMany(p => p.BBulletins)
@@ -1132,6 +1258,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(500)
                     .HasColumnName("NAME_EN");
 
+                entity.Property(e => e.OrderNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ORDER_NUMBER");
+
                 entity.Property(e => e.ValidFrom)
                     .HasColumnType("DATE")
                     .HasColumnName("VALID_FROM");
@@ -1278,6 +1408,49 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VALID_TO");
             });
 
+            modelBuilder.Entity<BFormOfGuilt>(entity =>
+            {
+                entity.ToTable("B_FORM_OF_GUILT");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
+            });
+
             modelBuilder.Entity<BIdDocCategory>(entity =>
             {
                 entity.ToTable("B_ID_DOC_CATEGORIES");
@@ -1366,13 +1539,9 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.OffPlaceCountryId, "XIF4B_OFFENCES");
 
-                entity.HasIndex(e => e.OffPlaceSubdivId, "XIF5B_OFFENCES");
-
                 entity.HasIndex(e => e.OffPlaceCityId, "XIF6B_OFFENCES");
 
-                entity.HasIndex(e => e.OffLvlComplId, "XIF7B_OFFENCES");
-
-                entity.HasIndex(e => e.OffLvlPartId, "XIF8B_OFFENCES");
+                entity.HasIndex(e => e.FormOfGuiltId, "XIF7B_OFFENCES");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -1397,17 +1566,12 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ECRIS_OFF_CAT_ID");
 
-                entity.Property(e => e.FormOfGuilt).HasColumnName("FORM_OF_GUILT");
-
-                entity.Property(e => e.IsContiniuous)
-                    .HasPrecision(1)
-                    .HasColumnName("IS_CONTINIUOUS");
+                entity.Property(e => e.FormOfGuiltId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FORM_OF_GUILT_ID");
 
                 entity.Property(e => e.LegalProvisions).HasColumnName("LEGAL_PROVISIONS");
-
-                entity.Property(e => e.Occurrences)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("OCCURRENCES");
 
                 entity.Property(e => e.OffEndDate)
                     .HasColumnType("DATE")
@@ -1416,16 +1580,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.OffEndDatePrec)
                     .HasMaxLength(200)
                     .HasColumnName("OFF_END_DATE_PREC");
-
-                entity.Property(e => e.OffLvlComplId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("OFF_LVL_COMPL_ID");
-
-                entity.Property(e => e.OffLvlPartId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("OFF_LVL_PART_ID");
 
                 entity.Property(e => e.OffPlaceCityId)
                     .HasMaxLength(50)
@@ -1438,11 +1592,6 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("OFF_PLACE_COUNTRY_ID");
 
                 entity.Property(e => e.OffPlaceDescr).HasColumnName("OFF_PLACE_DESCR");
-
-                entity.Property(e => e.OffPlaceSubdivId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("OFF_PLACE_SUBDIV_ID");
 
                 entity.Property(e => e.OffStartDate)
                     .HasColumnType("DATE")
@@ -1457,15 +1606,7 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("OFFENCE_CAT_ID");
 
-                entity.Property(e => e.Recidivism)
-                    .HasPrecision(1)
-                    .HasColumnName("RECIDIVISM");
-
                 entity.Property(e => e.Remarks).HasColumnName("REMARKS");
-
-                entity.Property(e => e.RespExemption)
-                    .HasPrecision(1)
-                    .HasColumnName("RESP_EXEMPTION");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
@@ -1485,16 +1626,6 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.EcrisOffCatId)
                     .HasConstraintName("FK_B_OFFENCES_B_ECRIS_OFF_CATE");
 
-                entity.HasOne(d => d.OffLvlCompl)
-                    .WithMany(p => p.BOffences)
-                    .HasForeignKey(d => d.OffLvlComplId)
-                    .HasConstraintName("FK_B_OFFENCES_B_OFFENCE_LVL_CO");
-
-                entity.HasOne(d => d.OffLvlPart)
-                    .WithMany(p => p.BOffences)
-                    .HasForeignKey(d => d.OffLvlPartId)
-                    .HasConstraintName("FK_B_OFFENCES_B_ECRIS_OFF_LVL_");
-
                 entity.HasOne(d => d.OffPlaceCity)
                     .WithMany(p => p.BOffences)
                     .HasForeignKey(d => d.OffPlaceCityId)
@@ -1504,11 +1635,6 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.BOffences)
                     .HasForeignKey(d => d.OffPlaceCountryId)
                     .HasConstraintName("FK_B_OFFENCES_G_COUNTRIES");
-
-                entity.HasOne(d => d.OffPlaceSubdiv)
-                    .WithMany(p => p.BOffences)
-                    .HasForeignKey(d => d.OffPlaceSubdivId)
-                    .HasConstraintName("FK_B_OFFENCES_G_COUNTRY_SUBDIV");
 
                 entity.HasOne(d => d.OffenceCat)
                     .WithMany(p => p.BOffences)
@@ -1618,6 +1744,88 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_B_PERS_NATIONALITIES_G_COUN");
             });
 
+            modelBuilder.Entity<BProbation>(entity =>
+            {
+                entity.ToTable("B_PROBATIONS");
+
+                entity.HasIndex(e => e.SanctProbCategId, "XIF1B_PROBATIONS");
+
+                entity.HasIndex(e => e.SanctProbMeasureId, "XIF2B_PROBATIONS");
+
+                entity.HasIndex(e => e.SanctionId, "XIF3B_PROBATIONS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.DecisionDurationDays)
+                    .HasPrecision(4)
+                    .HasColumnName("DECISION_DURATION_DAYS");
+
+                entity.Property(e => e.DecisionDurationHours)
+                    .HasPrecision(4)
+                    .HasColumnName("DECISION_DURATION_HOURS");
+
+                entity.Property(e => e.DecisionDurationMonths)
+                    .HasPrecision(4)
+                    .HasColumnName("DECISION_DURATION_MONTHS");
+
+                entity.Property(e => e.DecisionDurationYears)
+                    .HasPrecision(4)
+                    .HasColumnName("DECISION_DURATION_YEARS");
+
+                entity.Property(e => e.SanctProbCategId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SANCT_PROB_CATEG_ID");
+
+                entity.Property(e => e.SanctProbMeasureId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SANCT_PROB_MEASURE_ID");
+
+                entity.Property(e => e.SanctProbValue)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("SANCT_PROB_VALUE");
+
+                entity.Property(e => e.SanctionId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SANCTION_ID");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.HasOne(d => d.SanctProbCateg)
+                    .WithMany(p => p.BProbations)
+                    .HasForeignKey(d => d.SanctProbCategId)
+                    .HasConstraintName("FK_B_PROBATIONS_B_SANCT_PROB_C");
+
+                entity.HasOne(d => d.SanctProbMeasure)
+                    .WithMany(p => p.BProbations)
+                    .HasForeignKey(d => d.SanctProbMeasureId)
+                    .HasConstraintName("FK_B_PROBATIONS_B_SANCT_PROB_M");
+
+                entity.HasOne(d => d.Sanction)
+                    .WithMany(p => p.BProbations)
+                    .HasForeignKey(d => d.SanctionId)
+                    .HasConstraintName("FK_B_PROBATIONS_B_SANCTIONS");
+            });
+
             modelBuilder.Entity<BReqStatus>(entity =>
             {
                 entity.HasKey(e => e.Code)
@@ -1707,12 +1915,6 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.EcrisSanctCategId, "XIF4B_SANCTIONS");
 
-                entity.HasIndex(e => e.SanctProbCategId, "XIF6B_SANCTIONS");
-
-                entity.HasIndex(e => e.SanctProbMeasureId, "XIF7B_SANCTIONS");
-
-                entity.HasIndex(e => e.SanctActivityId, "XIF8B_SANCTIONS");
-
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -1747,14 +1949,6 @@ namespace MJ_CAIS.DataAccess
                     .HasPrecision(4)
                     .HasColumnName("DECISION_DURATION_YEARS");
 
-                entity.Property(e => e.DecisionEndDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("DECISION_END_DATE");
-
-                entity.Property(e => e.DecisionStartDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("DECISION_START_DATE");
-
                 entity.Property(e => e.Descr).HasColumnName("DESCR");
 
                 entity.Property(e => e.DetenctionDescr).HasColumnName("DETENCTION_DESCR");
@@ -1764,65 +1958,14 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ECRIS_SANCT_CATEG_ID");
 
-                entity.Property(e => e.ExecutionDurationDays)
-                    .HasPrecision(4)
-                    .HasColumnName("EXECUTION_DURATION_DAYS");
-
-                entity.Property(e => e.ExecutionDurationHours)
-                    .HasPrecision(4)
-                    .HasColumnName("EXECUTION_DURATION_HOURS");
-
-                entity.Property(e => e.ExecutionDurationMonths)
-                    .HasPrecision(4)
-                    .HasColumnName("EXECUTION_DURATION_MONTHS");
-
-                entity.Property(e => e.ExecutionDurationYears)
-                    .HasPrecision(4)
-                    .HasColumnName("EXECUTION_DURATION_YEARS");
-
-                entity.Property(e => e.ExecutionEndDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("EXECUTION_END_DATE");
-
-                entity.Property(e => e.ExecutionStartDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("EXECUTION_START_DATE");
-
                 entity.Property(e => e.FineAmount)
                     .HasColumnType("NUMBER(18,2)")
                     .HasColumnName("FINE_AMOUNT");
-
-                entity.Property(e => e.ProbationDescr).HasColumnName("PROBATION_DESCR");
-
-                entity.Property(e => e.SanctActivityDescr).HasColumnName("SANCT_ACTIVITY_DESCR");
-
-                entity.Property(e => e.SanctActivityId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("SANCT_ACTIVITY_ID");
 
                 entity.Property(e => e.SanctCategoryId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("SANCT_CATEGORY_ID");
-
-                entity.Property(e => e.SanctProbCategId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("SANCT_PROB_CATEG_ID");
-
-                entity.Property(e => e.SanctProbMeasureId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("SANCT_PROB_MEASURE_ID");
-
-                entity.Property(e => e.SanctProbValue)
-                    .HasPrecision(8)
-                    .HasColumnName("SANCT_PROB_VALUE");
-
-                entity.Property(e => e.SpecificToMinor)
-                    .HasPrecision(1)
-                    .HasColumnName("SPECIFIC_TO_MINOR");
 
                 entity.Property(e => e.SuspentionDurationDays)
                     .HasPrecision(4)
@@ -1858,25 +2001,10 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.EcrisSanctCategId)
                     .HasConstraintName("FK_B_SANCTIONS_B_ECRIS_STANCT_");
 
-                entity.HasOne(d => d.SanctActivity)
-                    .WithMany(p => p.BSanctions)
-                    .HasForeignKey(d => d.SanctActivityId)
-                    .HasConstraintName("FK_B_SANCTIONS_B_SANCTION_ACTI");
-
                 entity.HasOne(d => d.SanctCategory)
                     .WithMany(p => p.BSanctions)
                     .HasForeignKey(d => d.SanctCategoryId)
                     .HasConstraintName("FK_B_SANCTIONS_B_SANCTION_CATE");
-
-                entity.HasOne(d => d.SanctProbCateg)
-                    .WithMany(p => p.BSanctions)
-                    .HasForeignKey(d => d.SanctProbCategId)
-                    .HasConstraintName("FK_B_SANCTIONS_B_SANCT_PROB_CA");
-
-                entity.HasOne(d => d.SanctProbMeasure)
-                    .WithMany(p => p.BSanctions)
-                    .HasForeignKey(d => d.SanctProbMeasureId)
-                    .HasConstraintName("FK_B_SANCTIONS_B_SANCT_PROB_ME");
             });
 
             modelBuilder.Entity<BSanctionActivity>(entity =>
@@ -1931,6 +2059,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Name)
                     .HasMaxLength(500)
                     .HasColumnName("NAME");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("TYPE");
 
                 entity.Property(e => e.ValidFrom)
                     .HasColumnType("DATE")
@@ -3768,18 +3901,33 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("P_PERSON");
 
-                entity.HasIndex(e => e.BirthCityId, "XIF1P_PERSON");
-
-                entity.HasIndex(e => e.BirthCountryId, "XIF2P_PERSON");
+                entity.HasIndex(e => e.PersGroupId, "XIF1P_PERSON");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
-                entity.Property(e => e.AfisNumber)
-                    .HasMaxLength(200)
-                    .HasColumnName("AFIS_NUMBER");
+                entity.Property(e => e.PersGroupId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERS_GROUP_ID");
+            });
+
+            modelBuilder.Entity<PPersonAlias>(entity =>
+            {
+                entity.ToTable("P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.PersonId, "XIF1P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.BirthCountryId, "XIF2P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.BirthCityId, "XIF3P_PERSON_ALIASES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
 
                 entity.Property(e => e.BirthCityId)
                     .HasMaxLength(50)
@@ -3791,19 +3939,16 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("BIRTH_COUNTRY_ID");
 
-                entity.Property(e => e.BirthDay)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_DAY");
+                entity.Property(e => e.BirthDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("BIRTH_DATE");
 
-                entity.Property(e => e.BirthMonth)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_MONTH");
+                entity.Property(e => e.BirthDatePrec)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BIRTH_DATE_PREC");
 
                 entity.Property(e => e.BirthPlaceOther).HasColumnName("BIRTH_PLACE_OTHER");
-
-                entity.Property(e => e.BirthYear)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("BIRTH_YEAR");
 
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
@@ -3813,17 +3958,9 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("FAMILYNAME");
 
-                entity.Property(e => e.FamilynameLat)
-                    .HasMaxLength(200)
-                    .HasColumnName("FAMILYNAME_LAT");
-
                 entity.Property(e => e.Firstname)
                     .HasMaxLength(200)
                     .HasColumnName("FIRSTNAME");
-
-                entity.Property(e => e.FirstnameLat)
-                    .HasMaxLength(200)
-                    .HasColumnName("FIRSTNAME_LAT");
 
                 entity.Property(e => e.Fullname)
                     .HasMaxLength(200)
@@ -3837,6 +3974,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("LNCH");
 
+                entity.Property(e => e.PersonId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERSON_ID");
+
                 entity.Property(e => e.Sex)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("SEX");
@@ -3845,19 +3987,24 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME");
 
-                entity.Property(e => e.SurnameLat)
+                entity.Property(e => e.Type)
                     .HasMaxLength(200)
-                    .HasColumnName("SURNAME_LAT");
+                    .HasColumnName("TYPE");
 
                 entity.HasOne(d => d.BirthCity)
-                    .WithMany(p => p.PPeople)
+                    .WithMany(p => p.PPersonAliases)
                     .HasForeignKey(d => d.BirthCityId)
-                    .HasConstraintName("FK_P_PERSON_G_CITIES");
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_CITIES");
 
                 entity.HasOne(d => d.BirthCountry)
-                    .WithMany(p => p.PPeople)
+                    .WithMany(p => p.PPersonAliases)
                     .HasForeignKey(d => d.BirthCountryId)
-                    .HasConstraintName("FK_P_PERSON_G_COUNTRIES");
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_COUNTRIE");
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.PPersonAliases)
+                    .HasForeignKey(d => d.PersonId)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_P_PERSON");
             });
 
             modelBuilder.Entity<ZImportFbbc>(entity =>

@@ -12,8 +12,6 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             RuleFor(x => x.OffStartDate).NotEmpty();
             RuleFor(x => x.OffEndDate).NotEmpty();
             RuleFor(x => x.EcrisOffCatId).HasMaxLength(50);
-            RuleFor(x => x.OffLvlComplId).HasMaxLength(50);
-            RuleFor(x => x.OffLvlPartId).HasMaxLength(50);
         }
     }
 }

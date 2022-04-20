@@ -9,6 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             AAppCitizenships = new HashSet<AAppCitizenship>();
             AAppPersAliases = new HashSet<AAppPersAlias>();
+            AStatusHes = new HashSet<AStatusH>();
         }
 
         public string? RegistrationNumber { get; set; }
@@ -24,9 +25,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Egn { get; set; }
         public string? Ln { get; set; }
         public string? Lnch { get; set; }
-        public decimal? BirthYear { get; set; }
-        public decimal? BirthMonth { get; set; }
-        public decimal? BirthDay { get; set; }
         public string? PersonId { get; set; }
         public string? ApplicantName { get; set; }
         public string? Address { get; set; }
@@ -61,8 +59,17 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
         public string? PaymentMethodId { get; set; }
         public bool? FromCosul { get; set; }
+        public string? DocContentId { get; set; }
+        public string? StatusCode { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string? BirthDatePrecision { get; set; }
+        public string? BirthCountryId { get; set; }
+        public string? BirthCityId { get; set; }
+        public string? BirthPlaceOther { get; set; }
 
         public virtual AApplicationType? ApplicationType { get; set; }
+        public virtual GCity? BirthCity { get; set; }
+        public virtual GCountry? BirthCountry { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual APaymentMethod? PaymentMethod { get; set; }
         public virtual PPerson? Person { get; set; }
@@ -70,5 +77,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ASrvcResRcptMeth? SrvcResRcptMeth { get; set; }
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
         public virtual ICollection<AAppPersAlias> AAppPersAliases { get; set; }
+        public virtual ICollection<AStatusH> AStatusHes { get; set; }
     }
 }
