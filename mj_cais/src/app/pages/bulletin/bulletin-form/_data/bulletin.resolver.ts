@@ -53,7 +53,6 @@ export class BulletinResolver implements Resolve<any> {
       ecrisSanctionCategories:
         this.nomenclatureService.getEcrisSanctionCategories(),
       sanctionProbMeasures: this.nomenclatureService.getSanctionProbMeasures(),
-      sanctionActivities: this.nomenclatureService.getSanctionActivities(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
       decisions: this.service.getDecisions(bulletineId),
       documents:  this.service.getDocuments(bulletineId),
@@ -89,7 +88,6 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctionProbCategories: Observable<BaseNomenclatureModel[]>;
   public ecrisSanctionCategories: Observable<BaseNomenclatureModel[]>;
   public sanctionProbMeasures: Observable<BaseNomenclatureModel[]>;
-  public sanctionActivities: Observable<BaseNomenclatureModel[]>;
   public decisionChTypes: Observable<BaseNomenclatureModel[]>;
   public documentTypes: Observable<BaseNomenclatureModel[]>;
   public bulletinStatuses : Observable<BaseNomenclatureModel[]>;

@@ -37,12 +37,7 @@ export class BulletinSanctionsFormComponent {
       return;
     }
 
-    this.bulletinSanctionForm.sanctProbCategName.patchValue(
-      this.GetNameById(
-        this.dbData.sanctionProbCategories,
-        this.bulletinSanctionForm.sanctProbCategId.value
-      )
-    );
+   
 
     this.bulletinSanctionForm.sanctCategoryName.patchValue(
       this.GetNameById(
@@ -55,20 +50,6 @@ export class BulletinSanctionsFormComponent {
       this.GetNameById(
         this.dbData.ecrisSanctionCategories,
         this.bulletinSanctionForm.ecrisSanctCategId.value
-      )
-    );
-
-    this.bulletinSanctionForm.sanctProbMeasureName.patchValue(
-      this.GetNameById(
-        this.dbData.sanctionProbMeasures,
-        this.bulletinSanctionForm.sanctProbMeasureId.value
-      )
-    );
-
-    this.bulletinSanctionForm.sanctActivityName.patchValue(
-      this.GetNameById(
-        this.dbData.sanctionActivities,
-        this.bulletinSanctionForm.sanctActivityId.value
       )
     );
 
@@ -107,10 +88,7 @@ export class BulletinSanctionsFormComponent {
 
   public onSanctionCategoryChange(selectedElement) {
     this.showProbationData = selectedElement == this.probationCode;
-    // clear probation data
-    this.bulletinSanctionForm.sanctProbCategId.patchValue(null);
-    this.bulletinSanctionForm.sanctProbValue.patchValue(null);
-    this.bulletinSanctionForm.sanctProbMeasureId.patchValue(null);
+    // todo:
   }
 
   private GetNameById(data: any, id: string) {

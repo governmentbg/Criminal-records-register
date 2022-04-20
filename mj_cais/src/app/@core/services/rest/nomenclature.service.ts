@@ -153,12 +153,6 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
-  public getSanctionActivities(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/b_sanction_activities`
-    );
-  }
-
   public getFormOfGuilts(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_form_of_guilts`

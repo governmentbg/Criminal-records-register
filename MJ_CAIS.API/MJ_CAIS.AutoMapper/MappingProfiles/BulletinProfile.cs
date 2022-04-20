@@ -64,7 +64,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                             DisplayName = src.OffPlaceCountry.Name
                         }
                     }));
-            //.ForPath(d => d.OffPlace.Country, opt => opt.MapFrom(src => src.OffPlaceCountry));
 
             CreateMap<SanctionDTO, BSanction>();
 

@@ -11,12 +11,8 @@ namespace MJ_CAIS.FluentValidators.Bulletin
                 .NotEmpty()
                 .HasMaxLength(50);
 
-            RuleFor(x => x.FineAmount).NotEmpty();
-            RuleFor(x => x.ProbationDescr).NotEmpty();
+            //RuleFor(x => x.FineAmount).NotEmpty(); // todo: if Fine is selected
             RuleFor(x => x.EcrisSanctCategId).HasMaxLength(50);
-            RuleFor(x => x.SanctActivityId).HasMaxLength(50);
-            RuleFor(x => x.SanctProbCategId).HasMaxLength(50);
-            RuleFor(x => x.SanctProbMeasureId).HasMaxLength(50);
         }
     }
 }

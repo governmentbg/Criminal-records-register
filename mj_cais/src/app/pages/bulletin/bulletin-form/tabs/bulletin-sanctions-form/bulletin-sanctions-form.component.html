@@ -41,21 +41,6 @@
     ></igx-column>
 
     <igx-column
-      field="sanctProbCategId"
-      header="Идентификатор на вид пробационна мярка"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-
-    <igx-column
-      field="sanctProbCategName"
-      header="Вид пробационна мярка"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
       field="ecrisSanctCategId"
       header="Идентификатор на обща категория"
       dataType="number"
@@ -71,28 +56,6 @@
     ></igx-column>
 
     <igx-column
-      field="sanctProbValue"
-      header="Количество на пробационна мярка"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="sanctProbMeasureId"
-      header="Идентификатор на мерна еденица за количество на пробационна мярка"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-
-    <igx-column
-      field="sanctProbMeasureName"
-      header="Мерна еденица за количество на пробационна мярка"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
       field="descr"
       header="Описание"
       [sortable]="true"
@@ -100,86 +63,8 @@
     ></igx-column>
 
     <igx-column
-      field="specificToMinor"
-      header="Специфично за непълнолетни"
-      [sortable]="true"
-      [dataType]="'boolean'"
-    ></igx-column>
-
-    <igx-column
-      field="decisionStartDate"
-      [sortable]="true"
-      header="Срок на наложеното наказание(начална дата)"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
-      field="decisionEndDate"
-      [sortable]="true"
-      header="Срок на наложеното наказание (крайна дата)"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
-      field="executionStartDate"
-      [sortable]="true"
-      header="Момент на действие на наказанието (начална дата)"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
-      field="executionEndDate"
-      [sortable]="true"
-      header="Момент на действие на наказанието (крайна дата)"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
       field="fineAmount"
       header="Размер на наложеното наказание - глоба"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="sanctActivityId"
-      header="Идентификатор на активност по наказание"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-
-    <igx-column
-      field="sanctActivityName"
-      header="Активност по наказание"
       [sortable]="true"
       [dataType]="'string'"
     ></igx-column>
@@ -322,46 +207,10 @@
           </div>
         </div>
 
-        <div class="row mt-2">
-          <div class="col-md-5">
-            <div
-              class="nb-form-control-container"
-              style="
-                height: 40px;
-                max-width: 100%;
-                display: flex;
-                align-items: center;
-              "
-            >
-              <nb-checkbox [formControl]="bulletinSanctionForm.specificToMinor"
-                >Специфично за непълнолетни</nb-checkbox
-              >
-            </div>
-          </div>
-        </div>
-
         <div class="font-weight-bold">Срок на наложеното наказание</div>
         <hr />
 
         <div class="row mt-2 ml-2">
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'date'"
-              [label]="'Начална дата'"
-              [inputFormControl]="bulletinSanctionForm.decisionStartDate"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'decisionStartDate'"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'date'"
-              [label]="'Крайна дата'"
-              [inputFormControl]="bulletinSanctionForm.decisionEndDate"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'decisionEndDate'"
-            ></cais-input>
-          </div>
           <div class="form-group col-md-6 row">
             <label class="nb-theme-default label pl-3 duration-label"
               >Продължителност</label
@@ -405,75 +254,6 @@
           </div>
         </div>
 
-        <div class="font-weight-bold">
-          Начален и краен момент на действие на наказанието
-        </div>
-        <hr />
-
-        <div class="row mt-2 ml-2">
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'date'"
-              [label]="'Начална дата'"
-              [inputFormControl]="bulletinSanctionForm.executionStartDate"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'executionStartDate'"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'date'"
-              [label]="'Крайна дата'"
-              [inputFormControl]="bulletinSanctionForm.executionEndDate"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'executionEndDate'"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-6 row">
-            <label class="nb-theme-default label pl-3 duration-label"
-              >Продължителност</label
-            >
-            <div class="col-md-3 duration-container">
-              <cais-input
-                [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.executionDurationYears"
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'executionDurationYears'"
-              >
-              </cais-input>
-            </div>
-            <div class="col-md-3 duration-container">
-              <cais-input
-                [type]="'number'"
-                [inputFormControl]="
-                  bulletinSanctionForm.executionDurationMonths
-                "
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'executionDurationMonths'"
-              >
-              </cais-input>
-            </div>
-            <div class="col-md-3 duration-container">
-              <cais-input
-                [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.executionDurationDays"
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'executionDurationDays'"
-              >
-              </cais-input>
-            </div>
-            <div class="col-md-3 duration-container">
-              <cais-input
-                [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.executionDurationHours"
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'executionDurationHours'"
-              >
-              </cais-input>
-            </div>
-          </div>
-        </div>
-
         <div class="row">
           <div class="form-group col-md-6">
             <cais-input
@@ -508,8 +288,10 @@
         <hr />
 
         <div class="form-group col-md-6 ml-2 row">
-          <label class="nb-theme-default label duration-label"
-            >Продължителност на отлагане на изпълнението</label
+          <label class="nb-theme-default label duration-label">
+            Освобождаването от изтърпяване на наказанието и неналагането на
+            наказание съгласно НК, както и условното осъждане по по чл. 66 ал.1
+            или чл.69 ал.1 НК, при което се посочва и изпитателният срок</label
           >
           <div class="col-md-3 duration-container" style="margin-left: -16px">
             <cais-input
@@ -553,49 +335,7 @@
           </div>
         </div>
 
-        <div class="row ml-2 col-md-6">
-          <div class="form-group">
-            <cais-input
-              [type]="'text'"
-              [label]="
-                'Освобождаването от изтърпяване на наказанието и неналагането на наказание съгласно НК, както и условното осъждане по чл. 66 НК, при което се посочва и изпитателният срок'
-              "
-              [inputFormControl]="bulletinSanctionForm.probationDescr"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'probationDescr'"
-              [rows]="'2'"
-              [inputType]="'TextArea'"
-            >
-            </cais-input>
-          </div>
-        </div>
-
-        <div class="row mt-2">
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Активност по наказание'"
-              [inputFormControl]="bulletinSanctionForm.sanctActivityId"
-              [parentGroup]="bulletinSanctionForm.group"
-              [items]="dbData.sanctionActivities"
-              [inputName]="'sanctActivityId'"
-            >
-            </cais-autocomplete>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Описание'"
-              [inputFormControl]="bulletinSanctionForm.sanctActivityDescr"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'sanctActivityDescr'"
-              [rows]="'2'"
-              [inputType]="'TextArea'"
-            >
-            </cais-input>
-          </div>
-        </div>
+        
       </nb-card-body>
     </nb-card>
   </div>
