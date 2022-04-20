@@ -3,6 +3,7 @@ import { NbDialogService } from "@nebular/theme";
 import { ConfirmDialogComponent } from "../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CommonConstants } from "../../../../@core/constants/common.constants";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { FbbcGridService } from "../data/fbbc-grid.service";
 import { FbbcStatusTypeEnum } from "../data/fbbc-status-type.constants";
 import { FbbcGridModel } from "../models/fbbc-grid.model";
@@ -16,11 +17,14 @@ export class FbbcForDestructionOverviewComponent extends RemoteGridWithStatePers
   FbbcGridModel,
   FbbcGridService
 > {
-  constructor(service: FbbcGridService,
+  constructor(
+    service: FbbcGridService,
     injector: Injector,
-    private dialogService: NbDialogService) {
-      super("fbbcs-search", service, injector);
-      this.service.updateUrlStatus(FbbcStatusTypeEnum.ForDestruction);
+    private dialogService: NbDialogService,
+    public dateFormatService: DateFormatService
+  ) {
+    super("fbbcs-search", service, injector);
+    this.service.updateUrlStatus(FbbcStatusTypeEnum.ForDestruction);
   }
 
   ngOnInit(): void {
@@ -39,9 +43,7 @@ export class FbbcForDestructionOverviewComponent extends RemoteGridWithStatePers
                 this.toastr.showToast("success", "Успешно унищожено сведение");
 
                 this.grid.deleteRow(fbbcId);
-                this.grid.data = this.grid.data.filter(
-                  (d) => d.id != fbbcId
-                );
+                this.grid.data = this.grid.data.filter((d) => d.id != fbbcId);
               },
               (error) => {
                 var errorText = error.status + " " + error.statusText;

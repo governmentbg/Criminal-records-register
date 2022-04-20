@@ -41,6 +41,7 @@ import { IsinDataFormComponent } from "./isin/isin-data-form/isin-data-form/isin
 import { BulletinIsinFormComponent } from "./bulletin/bulletin-form/tabs/bulletin-isin-form/bulletin-isin-form.component";
 import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
+import { BulletinStatusHistoryOverviewComponent } from './bulletin/bulletin-form/tabs/bulletin-status-history-overview/bulletin-status-history-overview.component';
 
 @NgModule({
   imports: [
@@ -88,6 +89,7 @@ import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview
     BulletinIsinFormComponent,
     HomeComponent,
     BulletinNewOfficeOverviewComponent,
+    BulletinStatusHistoryOverviewComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

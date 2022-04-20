@@ -8,7 +8,7 @@ export class FbbcGridModel {
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
-  public docTypeId: string = null;
+  public docType: string = null;
   public destroyedDate: Date = null;
 
   constructor(init?: Partial<FbbcGridModel>) {
@@ -22,7 +22,7 @@ export class FbbcGridModel {
       this.firstname = init.firstname ?? null;
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;
-      this.docTypeId = init.docTypeId ?? null;
+      this.docType = init.docType ?? null;
       this.destroyedDate = init.destroyedDate ?? null;
     }
   }

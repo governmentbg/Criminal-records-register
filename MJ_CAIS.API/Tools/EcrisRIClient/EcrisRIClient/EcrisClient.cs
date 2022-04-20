@@ -2,21 +2,33 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EcrisRIClient.EcrisService;
+using AutoMapper;
+using EcrisRIClient.Mappers;
 
 namespace EcrisRIClient
 {
     public class EcrisClient
+
     {
+        private IMapper _mapper;
         private readonly List<EcrisMessageType> _msgListForCais = new List<EcrisMessageType> { EcrisMessageType.REQ, EcrisMessageType.NOT };
         private string _username { get; set; }
         private string _password { get; set; }
         //private string _searchFolderName { get; set; }
         //private string _itemsPerPage { get; set; }
+        private storagePortv10Client _storageClient;
 
         public EcrisClient(string username, string password)
         {
             _username = username;
             _password = password;
+            _storageClient = new storagePortv10Client();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new ServiceToDtos());
+            });
+
+            _mapper = mapperConfig.CreateMapper();
             //_searchFolderName = folder;
             //_itemsPerPage = itemsPerPage;
         }
@@ -34,10 +46,10 @@ namespace EcrisRIClient
         public async Task<string> Logout(string sessionID)
         {
             authenticationPortv10Client client = new authenticationPortv10Client();
-            LogoutWSInputType logoutRequest = new LogoutWSInputType();           
-            
+            LogoutWSInputType logoutRequest = new LogoutWSInputType();
+
             logoutRequest.WSMetaData = new LoginWSInputMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionID };
- 
+
             var resp = await client.logoutAsync(logoutRequest);
             return ((BaseEcrisRiWSOutputDataType)resp.LogoutWSOutput.WSData).ActionExecutionInformation;
         }
@@ -143,15 +155,17 @@ namespace EcrisRIClient
 
 
         }
-        public async Task<SearchWSOutputDataType> ExecutePreparedQuery(string sessionID, QueryType query, int pageNumber, string itemsPerPage)
+        public async Task<MJ_CAIS.DTO.EcrisService.SearchWSOutputDataType> ExecutePreparedQuery(string sessionID, MJ_CAIS.DTO.EcrisService.QueryType query, int pageNumber, string itemsPerPage)
         {
-            var client = new searchPortv10Client();
 
+            EcrisRIClient.EcrisService.QueryType serviceQuery = _mapper.Map<EcrisRIClient.EcrisService.QueryType>(query);
+
+            var client = new searchPortv10Client();
             var request = new SearchWSInputType();
             request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionID };
             request.WSData = new SearchWSInputDataType()
             {
-                SearchQuery = query,
+                SearchQuery = serviceQuery,
                 ItemsPerPage = itemsPerPage,
                 PageNumber = pageNumber,
                 PageNumberSpecified = true,
@@ -160,12 +174,26 @@ namespace EcrisRIClient
             };
 
             var response = await client.performSearchAsync(request);
-            
-            return (SearchWSOutputDataType)response.PerformSearchWSOutput.WSData;
+
+            var result = _mapper.Map<EcrisRIClient.EcrisService.SearchWSOutputDataType, MJ_CAIS.DTO.EcrisService.SearchWSOutputDataType>((SearchWSOutputDataType)response.PerformSearchWSOutput.WSData);
+            return result;
 
         }
-        
 
+        public async Task<MJ_CAIS.DTO.EcrisService.ReadMessageWSOutputDataType> ReadMessage(string sessionId, string identifier)
+        {
+            EcrisRiIdentifierContainingWSInputType request = new EcrisRiIdentifierContainingWSInputType();
+            request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
+            request.WSData = new EcrisRiIdentifierContainingMessageWSInputDataType()
+            {
+                MessageIdentifier = identifier //"RI-NOT-000000000000633"
+            };
+            var resp = await _storageClient.readMessageAsync(request);
+
+            var result = _mapper.Map<EcrisRIClient.EcrisService.ReadMessageWSOutputDataType,
+                MJ_CAIS.DTO.EcrisService.ReadMessageWSOutputDataType>((ReadMessageWSOutputDataType)resp.ReadMessageWSOutput.WSData);
+            return result;
+        }
 
     }
 }

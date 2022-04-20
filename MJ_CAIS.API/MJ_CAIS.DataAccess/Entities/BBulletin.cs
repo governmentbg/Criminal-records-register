@@ -89,10 +89,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public bool? Locked { get; set; }
         public bool? NoSanction { get; set; }
         public bool? PrevSuspSent { get; set; }
+        public string? PrevSuspSentDescr { get; set; }
+        public string? CaseAuthId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
         public virtual GDecidingAuthority? BulletinAuthority { get; set; }
+        public virtual GDecidingAuthority? CaseAuth { get; set; }
         public virtual BCaseType? CaseType { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual GDecidingAuthority? DecidingAuth { get; set; }

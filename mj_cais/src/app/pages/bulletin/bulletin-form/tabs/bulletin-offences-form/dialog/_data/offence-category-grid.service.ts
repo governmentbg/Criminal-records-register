@@ -10,7 +10,6 @@ export class OffenceCategoryGridService extends CaisCrudService<
   string
 > {
   constructor(injector: Injector) {
-    debugger;
     super(OffenceCategoryGridModel, injector, "offence-categories");
   }
 }

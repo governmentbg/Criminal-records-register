@@ -5,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
-using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
-using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -48,24 +46,24 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// Ръчно добавяне на бюлетин от служител БС
+        /// Manually add a bulletin by an employee
         /// </summary>
         /// <param name="aInDto"></param>
         /// <returns></returns>
         public async Task<string> InsertAsync(BulletinAddDTO aInDto)
         {
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
-            // въвеждане на бюлетин е възможно единствено от служител БС
+            // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
             return await UpdateBulletinAsync(aInDto, bulletin, null);
         }
 
         /// <summary>
-        /// Актуализация на данни в бюлетин според статуса
-        /// NewOffice => позволена промяна на всички данни
-        /// NewEISS => само регистрационна информация
-        /// Active => само данни за допълнителни сведения
-        /// ForDestruction, Deleted, ForRehabilitation, Rehabilitated => не подлежи на редакция
+        /// Update data in the bulletin according to status
+        /// NewOffice => allowed change of all data
+        /// NewEISS => registration information only
+        /// Active => decision information only
+        /// ForDestruction, Deleted, ForRehabilitation, Rehabilitated => editing is not allowed
         /// </summary>
         /// <param name="aInDto"></param>
         /// <returns></returns>
@@ -79,21 +77,21 @@ namespace MJ_CAIS.Services
 
             var bulletin = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
 
-            // ако бюлетина е заключен за редакция,
-            // валидираме и добавяме пропъртита спямо статуса
+            // if the bulletin is locked for editing,
+            // we add property according to the status
             if (bulletinDb.Locked.HasValue && bulletinDb.Locked.Value)
             {
                 if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
                     bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
                 {
-                    // нищо от основния обект не се редакцита
-                    // добавят се само доп.сведения
+                    // nothing of the main object is edited
+                    // only decisions added
                     bulletin.ModifiedProperties = new List<string>();
                 }
                 else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
                 {
-                    // при актуализация на бюлетин в статус NewEISS
-                    // се променя само регистрационна информация
+                    // when updating a bulletin in NewEISS status
+                    // only registration information is changed
                     bulletin.ModifiedProperties = new List<string>
                     {
                         nameof(bulletin.RegistrationNumber),
@@ -105,17 +103,16 @@ namespace MJ_CAIS.Services
                     };
                 }
 
-                ValidateUpdateLockedBulletin(aInDto, bulletin.StatusId);
             }
 
             await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
         }
 
         /// <summary>
-        /// Промяна на статуса на бюлетин от потребител на БС
+        /// Change of the status of a bulletin by a employee
         /// </summary>
-        /// <param name="aInDto">Идентификатор на бюлетин</param>
-        /// <param name="statusId">Статус</param>
+        /// <param name="aInDto">Bulletin ID</param>
+        /// <param name="statusId">Status</param>
         /// <exception cref="ArgumentException"></exception>
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
@@ -127,8 +124,8 @@ namespace MJ_CAIS.Services
 
             AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
-            // Всички активни бюлетини са заключени за редакция
-            // могат да се добавят само допълнителни сведения
+            // All active bulletins are locked for editing
+            // only decisions can be added
             if (statusId == BulletinConstants.Status.Active)
             {
                 bulletin.Locked = true;
@@ -164,6 +161,13 @@ namespace MJ_CAIS.Services
             var documents = await _bulletinRepository.SelectAllDocumentsAsync();
             var filteredDocuments = documents.Where(x => x.BulletinId == aId);
             return filteredDocuments.ProjectTo<DocumentDTO>(mapperConfiguration);
+        }
+
+        public async Task<IQueryable<BulletinStatusHistoryDTO>> GetStatusHistoryByBulletinIdAsync(string aId)
+        {
+            var statues = await _bulletinRepository.SelectAllStatusHistoryDataAsync();
+            var filteredStatuses = statues.Where(x => x.BulletinId == aId);
+            return filteredStatuses.ProjectTo<BulletinStatusHistoryDTO>(mapperConfiguration);
         }
 
         public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
@@ -234,22 +238,38 @@ namespace MJ_CAIS.Services
 
             UpdateStatusByDecisions(entity, oldStatus);
 
+            if (entity.EntityState == EntityStateEnum.Modified)
+            {
+                var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id);
+                if (isAddedHistory)
+                {
+                    UpdateModifiedProperties(entity, nameof(entity.StatusId));
+                }
+            }
+
+            // it is locked each time
+            // unless the statue is NewOffice or NewEISS
+            if (entity.StatusId != BulletinConstants.Status.NewOffice)
+            {
+                entity.Locked = true;
+                UpdateModifiedProperties(entity, nameof(entity.Locked));
+            }
+
             await SaveEntityAsync(entity);
             return entity.Id;
         }
 
         /// <summary>
-        /// Промяна на статус на бюлетин в зависимост от добавено допълнително сведения
-        /// ReplacedAct425 (Постановен съдебен акт по чл. 425 НПК)
-        /// Rehabilitated (Извършена реабилитация)
+        /// Change the status of the bulletin depending on the added decision information
+        /// (ReplacedAct425, Rehabilitated)
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
         private void UpdateStatusByDecisions(BBulletin entityToSave, string oldStatus)
-        {          
+        {
             const string judicialAnnulmentId = "DCH-00-Y";
             const string rehabilitationId = "DCH-00-R";
-        
+
             if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
             {
                 entityToSave.StatusId = BulletinConstants.Status.Rehabilitated;
@@ -259,35 +279,16 @@ namespace MJ_CAIS.Services
             {
                 entityToSave.StatusId = BulletinConstants.Status.ReplacedAct425;
             }
-
-            if (entityToSave.EntityState == EntityStateEnum.Modified)
-            {
-                var isAddedHistory = AddBulletinStatusH(oldStatus, entityToSave.StatusId, entityToSave.Id);
-                if (isAddedHistory)
-                {
-                    UpdateModifiedProperties(entityToSave, nameof(entityToSave.StatusId));
-                }
-            }
-
-            // Всички активни бюлетини са заключени за редакция
-            // могат да се добавят само допълнителни сведения
-            if (entityToSave.StatusId == BulletinConstants.Status.Active)
-            {
-                entityToSave.Locked = true;
-                UpdateModifiedProperties(entityToSave, nameof(entityToSave.Locked));
-            }
         }
 
         /// <summary>
-        /// Ако има промяна в статуса на бюлетин се добавя към хистори таблица
+        /// If there is a change in the status of the bulletin is added to the history table
         /// </summary>
-        /// <param name="oldStatus">Предишен статус</param>
-        /// <param name="newStatus">Нов статус</param>
-        /// <param name="bulletinId">Идентификатор на бюлетин</param>
+        /// <param name="oldStatus">Previous status</param>
+        /// <param name="newStatus">New status</param>
+        /// <param name="bulletinId">ID</param>
         private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
         {
-            //TODO: валидация при преминаване от един статус в друг ?
-
             if (!string.IsNullOrEmpty(oldStatus) && oldStatus != newStatus)
             {
                 var satusHistory = new BBulletinStatusH
@@ -297,6 +298,7 @@ namespace MJ_CAIS.Services
                     OldStatusCode = oldStatus,
                     NewStatusCode = newStatus,
                     EntityState = EntityStateEnum.Added,
+                    CreatedOn = DateTime.UtcNow,
                 };
 
                 dbContext.BBulletinStatusHes.Add(satusHistory);
@@ -316,9 +318,10 @@ namespace MJ_CAIS.Services
         }
 
         /// <summary>
-        /// Унищожаване
-        /// За бюлетини за съдимост - 100 години от рождената дата на осъденото лице;
-        /// За бюлетини за административни наказания по чл. 78а от НК - 15 години от датата на влизане в сила на съдебния акт.
+        /// Destruction
+        /// For criminal records - 100 years from the date of birth of the convicted person
+        /// For bulletins for administrative sanctions under Art. 78a - 
+        ///     15 years from the date of entry into force of the judicial act
         /// </summary>
         /// <param name="bulletin"></param>
         private void UpdateDataForDestruction(BBulletin bulletin)
@@ -334,11 +337,6 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
             }
 
-            // тодо:може ли да се променя типа на бюлетин ? от какво зависи той
-            // и при промяната му какво се случва със статуса
-            // например може бюлетин според чл. 78а да енастъпило време за унищожаване, но потребителя ако редактира 
-            // бюлетина и смени типа, статуса активен ли трябва да бъде ? 
-            // промяна на статус на бюлетин за унищожавне
             if (bulletin.DeleteDate.HasValue && bulletin.DeleteDate <= DateTime.Now)
             {
                 bulletin.StatusId = BulletinConstants.Status.ForDestruction;
@@ -356,36 +354,6 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
 
-        /// <summary>
-        /// Валидация на редакция според статус и състояние на бюлетин
-        /// Когато е отключен за редакция няма значени в кой статус се намира
-        /// може да се променят всички данни
-        /// </summary>
-        /// <param name="aInDto"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        private void ValidateUpdateLockedBulletin(BulletinEditDTO aInDto, string status)
-        {
-            // todo: za ostanlite statuso
-            if (status == BulletinConstants.Status.NewEISS)
-            {
-                CheckForTransactionWhenBulletinIsLocked(aInDto.DecisionsTransactions, status);
-            }
-
-            CheckForTransactionWhenBulletinIsLocked(aInDto.OffancesTransactions, status);
-            CheckForTransactionWhenBulletinIsLocked(aInDto.SanctionsTransactions, status);
-            CheckForTransactionWhenBulletinIsLocked(aInDto.PersonAliasTransactions, status);
-        }
-
-        private void CheckForTransactionWhenBulletinIsLocked<T>(List<TransactionDTO<T>> transactions, string currentStatus)
-            where T : class
-        {
-            if (transactions != null && transactions.Count > 0)
-            {
-                // todo: log error
-                throw new BusinessLogicException($"Bulletin is locked! Status: {currentStatus}");
-            }
-        }
 
         #endregion
     }

@@ -1,6 +1,4 @@
 ﻿using MJ_CAIS.DataAccess;
-using EcrisRIClient;
-using EcrisRIClient.EcrisService;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess.Entities;
 using System.Linq;
@@ -10,6 +8,8 @@ using NLog;
 using NLog.Extensions.Logging;
 using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
+using EcrisRIClient;
+using MJ_CAIS.DTO.EcrisService;
 //using Microsoft.Extensions.Logging;
 
 namespace EcrisIntegrationServices
@@ -53,9 +53,9 @@ namespace EcrisIntegrationServices
                 _logger.LogTrace($"{messageType.ToString()}: EcrisClient logged in.");
                 var inboxFolderId = await client.GetInboxFolderIdentifier(sessionID, searchFolderName);
                 _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {inboxFolderId}.");
-                EcrisRIClient.EcrisService.QueryType query;
+                MJ_CAIS.DTO.EcrisService.QueryType query;
                 DateTime lastUpdatedTime;
-                if (messageType == EcrisMessageTypeOrAliasMessageType.REQ)
+                if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
                     lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
@@ -80,7 +80,7 @@ namespace EcrisIntegrationServices
                 int pageSize = Int32.Parse(itemsPerPage);
 
                 int totalNumberOfMessages = 0;
-                var storageClient = new storagePortv10Client();
+
                 //базата пази с точност до секунди, а от екрис идва дата с по-голяма точност
                 //lastUpdatedTime = lastUpdatedTime.AddSeconds(1);
                 do
@@ -94,31 +94,33 @@ namespace EcrisIntegrationServices
                     var filteredMessages = result.MessageShortViewList.Where(m => m.MessageVersionTimestamp > lastUpdatedTime).ToList();
                     foreach (var r in filteredMessages)
                     {
-                        
+
                         if (r != null)
                         {
-                            await AddMessageToDBContext(r, storageClient, sessionID, skipDataExtraction, joinSeparator);
+                            await AddMessageToDBContext(r, client, sessionID, skipDataExtraction, joinSeparator);
 
                         }
 
                     }
-                  
 
-                    var newDate = filteredMessages.Select(r => !r.MessageVersionTimestampSpecified ? DateTime.MinValue : r.MessageVersionTimestamp).Max(d => d);
-                    lastUpdatedTime = newDate!= DateTime.MinValue ? newDate : lastUpdatedTime;
-
-
-                    if (newDate != DateTime.MinValue && messageType == EcrisMessageTypeOrAliasMessageType.REQ)
+                    if (filteredMessages.Count > 0)
                     {
+                        var newDate = filteredMessages.Select(r => !r.MessageVersionTimestampSpecified ? DateTime.MinValue : r.MessageVersionTimestamp)?.Max(d => d);
+                        lastUpdatedTime = newDate.HasValue && newDate.Value != DateTime.MinValue ? newDate.Value : lastUpdatedTime;
 
-                        SetLastSynchDateForRequests(lastUpdatedTime, paramNameForSynch);
 
-                    };
-                    if (newDate != DateTime.MinValue && messageType == EcrisMessageTypeOrAliasMessageType.NOT)
-                    {
-                        SetLastSynchDateForNotifications(lastUpdatedTime, paramNameForSynch);
+                        if (newDate != DateTime.MinValue && messageType == EcrisMessageTypeOrAliasMessageType.REQ)
+                        {
 
-                    };
+                            SetLastSynchDateForRequests(lastUpdatedTime, paramNameForSynch);
+
+                        };
+                        if (newDate != DateTime.MinValue && messageType == EcrisMessageTypeOrAliasMessageType.NOT)
+                        {
+                            SetLastSynchDateForNotifications(lastUpdatedTime, paramNameForSynch);
+
+                        };
+                    }
                     _logger.LogTrace($"{messageType.ToString()}: Parameter {paramNameForSynch} set to {lastUpdatedTime.ToString("yyyy-MM-dd HH:mm:ss")}.");
                     _logger.LogTrace($"{messageType.ToString()}: Page {pageNumber} pre save.");
                     await _dbContext.SaveChangesAsync();
@@ -151,13 +153,13 @@ namespace EcrisIntegrationServices
 
 
 
-        private QueryType GetRequestsQuery(string searchFolderID, DateTime fromDate)
+        private MJ_CAIS.DTO.EcrisService.QueryType GetRequestsQuery(string searchFolderID, DateTime fromDate)
         {
 
             var query = GetBaseQuery(searchFolderID, fromDate);
-            query.QueryParameters.MessageTypeQueryParameter = new EcrisRIClient.EcrisService.EcrisMessageTypeOrAlias[]
+            query.QueryParameters.MessageTypeQueryParameter = new MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAlias[]
             {
-                new EcrisRIClient.EcrisService.EcrisMessageTypeOrAlias(){
+                new MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAlias(){
               Item = EcrisMessageTypeOrAliasMessageType.REQ
                 }
 
@@ -167,14 +169,14 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private QueryType GetNotificationsQuery(string searchFolderID, DateTime fromDate)
+        private MJ_CAIS.DTO.EcrisService.QueryType GetNotificationsQuery(string searchFolderID, DateTime fromDate)
         {
 
             //EcrisMessageTypeOrAliasMessageType.REQ
             var query = GetBaseQuery(searchFolderID, fromDate);
-            query.QueryParameters.MessageTypeQueryParameter = new EcrisRIClient.EcrisService.EcrisMessageTypeOrAlias[]
+            query.QueryParameters.MessageTypeQueryParameter = new MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAlias[]
             {
-                new EcrisRIClient.EcrisService.EcrisMessageTypeOrAlias(){
+                new MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAlias(){
               Item = EcrisMessageTypeOrAliasMessageType.NOT
                 }
 
@@ -183,32 +185,28 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private QueryType GetBaseQuery(string searchFolderID, DateTime fromDate)
+        private MJ_CAIS.DTO.EcrisService.QueryType GetBaseQuery(string searchFolderID, DateTime fromDate)
         {
-
-
-
-
-            EcrisRIClient.EcrisService.QueryType query = new EcrisRIClient.EcrisService.QueryType();
-            query.QueryParameters = new EcrisRIClient.EcrisService.QueryTypeQueryParameters();
+            MJ_CAIS.DTO.EcrisService.QueryType query = new MJ_CAIS.DTO.EcrisService.QueryType();
+            query.QueryParameters = new MJ_CAIS.DTO.EcrisService.QueryTypeQueryParameters();
             query.QueryParameters.FolderQueryParameter = new string[] { searchFolderID };
 
-            var period = new EcrisRIClient.EcrisService.StrictDateRange();
-            period.FromDate = new EcrisRIClient.EcrisService.StrictDateType()
+            var period = new MJ_CAIS.DTO.EcrisService.StrictDateRange();
+            period.FromDate = new MJ_CAIS.DTO.EcrisService.StrictDateType()
             {
 
                 Value = fromDate
 
             };
-            period.ToDate = new EcrisRIClient.EcrisService.StrictDateType() { Value = DateTime.Now };
+            period.ToDate = new MJ_CAIS.DTO.EcrisService.StrictDateType() { Value = DateTime.Now };
 
-            query.QueryParameters.MessageDateQueryParameter = new EcrisRIClient.EcrisService.MessageDateQueryParameterType()
+            query.QueryParameters.MessageDateQueryParameter = new MJ_CAIS.DTO.EcrisService.MessageDateQueryParameterType()
             {
-                DateType = EcrisRIClient.EcrisService.MessageDateTypeEnumeration.LastUpdated,
-                DateValue = new EcrisRIClient.EcrisService.DateStrictRangeQueryParameter()
+                DateType = MJ_CAIS.DTO.EcrisService.MessageDateTypeEnumeration.LastUpdated,
+                DateValue = new MJ_CAIS.DTO.EcrisService.DateStrictRangeQueryParameter()
                 {
                     DateRangeParameter = period,
-                    DateParameterType = EcrisRIClient.EcrisService.AbstractDateQueryParameterDateParameterType.Range
+                    DateParameterType = MJ_CAIS.DTO.EcrisService.AbstractDateQueryParameterDateParameterType.Range
 
 
                 }
@@ -220,21 +218,21 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private async Task AddMessageToDBContext(EcrisRIClient.EcrisService.MessageShortViewType msg, storagePortv10Client client, string sessionId, bool skipDataExtraction = false, string joinSeparator = " ")
+        private async Task AddMessageToDBContext(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, EcrisClient client, string sessionId, bool skipDataExtraction = false, string joinSeparator = " ")
         {//functionalErrorReferenceIdentifier - да се интерпретира ли някак и как?!
             if (!msg.MessageTypeSpecified)
             {
                 throw new Exception(String.Format($"Unknown type - MessageEcrisID  = {0}", msg.MessageEcrisIdentifier));
             }
             var identifier = msg.MessageIdentifier;
-            var messageContent = await ReadMessage(client, sessionId, identifier);
+            var messageContent = await client.ReadMessage(sessionId, identifier);
             EEcrisInbox inbox = new EEcrisInbox();
             inbox.Id = BaseEntity.GenerateNewId();
             //todo: get from enum
             inbox.Status = ECRISConstants.EcrisInboxStatuses.Pending;
-            inbox.XmlMessageTraits = XmlUtils.SerializeToXml(msg);
-            var outputData = (ReadMessageWSOutputDataType)messageContent.WSData;
-            inbox.XmlMessage = XmlUtils.SerializeToXml(outputData);
+            inbox.XmlMessageTraits = msg.SerializedXMLFromService;// XmlUtils.SerializeToXml(msg);
+            //var outputData = (ReadMessageWSOutputDataType)messageContent.WSData;
+            inbox.XmlMessage = messageContent.SerializedXMLFromService;//XmlUtils.SerializeToXml(outputData);
 
             inbox.ImportedOn = DateTime.UtcNow;
 
@@ -257,29 +255,29 @@ namespace EcrisIntegrationServices
 
                         //object req = (msg.MessageType == EcrisMessageType.REQ) ? (RequestMessageType)((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage : (NotificationMessageType)((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage;
                         //todo: add specific if needed
-                        if(msg.MessageType == EcrisMessageType.NOT)
+                        if (msg.MessageType == MJ_CAIS.DTO.EcrisService.EcrisMessageType.NOT)
                         {
-                            var req = ((NotificationMessageType)((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage);
+                            var req = ((NotificationMessageType)((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage);
                             m.EcrisMsgConvictionId = req.NotificationMessageConviction.ConvictionID;
-                            if(req.RequestMessageUrgency?.Value.ToLower()=="yes")
+                            if (req.RequestMessageUrgency?.Value.ToLower() == "yes")
                             {
                                 m.Urgent = true;
                             };
-                            if (req.RequestMessageUrgency?.Value.ToLower() =="no")
+                            if (req.RequestMessageUrgency?.Value.ToLower() == "no")
                             {
                                 m.Urgent = false;
                             };
 
                         }
-                        if (msg.MessageType == EcrisMessageType.REQ)
+                        if (msg.MessageType == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)
                         {
-                            var req = ((RequestMessageType)((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage);
+                            var req = ((RequestMessageType)((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage);
 
                             if (req.RequestMessageUrgency?.Value.ToLower() == "yes")
                             {
                                 m.Urgent = true;
                             };
-                            if (req.RequestMessageUrgency?.Value.ToLower() =="no")
+                            if (req.RequestMessageUrgency?.Value.ToLower() == "no")
                             {
                                 m.Urgent = false;
                             };
@@ -292,7 +290,7 @@ namespace EcrisIntegrationServices
                         d.EcrisMsg = m;
                         m.DDocuments.Add(d);
 
-                        DDocContent content = GetDDocContent(XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage));
+                        DDocContent content = GetDDocContent(XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage));
 
                         d.DocContent = content;
                         content.DDocuments.Add(d);
@@ -321,7 +319,7 @@ namespace EcrisIntegrationServices
             _dbContext.EEcrisInboxes.Add(inbox);
 
         }
-        private DDocument GetDDocument(EcrisMessageType t, string name, string firstName, string surName, string familyName)
+        private DDocument GetDDocument(MJ_CAIS.DTO.EcrisService.EcrisMessageType t, string name, string firstName, string surName, string familyName)
         {
             DDocument d = new DDocument();
             d.Id = BaseEntity.GenerateNewId();
@@ -330,11 +328,11 @@ namespace EcrisIntegrationServices
             d.Name = name;
 
             //todo: add resources
-            if (t == EcrisMessageType.REQ)
+            if (t == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)
             {
                 d.Descr = "Запитване за " + firstName + " " + surName + " " + familyName;
             }
-            if (t == EcrisMessageType.NOT)
+            if (t == MJ_CAIS.DTO.EcrisService.EcrisMessageType.NOT)
             {
                 d.Descr = "Нотификация за " + firstName + " " + surName + " " + familyName;
             }
@@ -365,7 +363,7 @@ namespace EcrisIntegrationServices
 
             return result;
         }
-        private EEcrisMessage ParseMessageTraits(EcrisRIClient.EcrisService.MessageShortViewType msg, string joinSeparator)
+        private EEcrisMessage ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
         {
             EEcrisMessage m = new EEcrisMessage();
 
@@ -435,27 +433,15 @@ namespace EcrisIntegrationServices
                 m.MsgTimestamp = msg.MessageVersionTimestamp;
             }
 
-           
+
             m.Deadline = msg.MessageDeadline?.Value;
             m.Pin = msg.MessageShortViewPerson?.PersonIdentityNumber?.Value;
-            
+
             m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForIdentification;
 
             return m;
         }
-        private async Task<ReadMessageWSOutputType> ReadMessage(storagePortv10Client client, string sessionId, string identifier)
-        {
-            EcrisRiIdentifierContainingWSInputType request = new EcrisRiIdentifierContainingWSInputType();
-            request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
-            request.WSData = new EcrisRiIdentifierContainingMessageWSInputDataType()
-            {
-                MessageIdentifier = identifier //"RI-NOT-000000000000633"
-            };
-            var resp = await client.readMessageAsync(request);
 
-            // var result = XmlUtils.SerializeToXml(resp.ReadMessageWSOutput);
-            return resp.ReadMessageWSOutput;
-        }
 
         private DateTime GetLastSynchDateForNotifications(string paramNameForSynch)
         {
@@ -481,7 +467,7 @@ namespace EcrisIntegrationServices
             var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
             if (parameter == null)
             {
-              
+
                 throw new Exception($"{paramNameForSynch} does not exist.");
             }
             parameter.LastDate = lastUpdate;

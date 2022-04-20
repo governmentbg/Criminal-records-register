@@ -16,6 +16,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidTo { get; set; }
         public string? Name { get; set; }
         public string? NameEn { get; set; }
+        public decimal? OrderNumber { get; set; }
 
         public virtual ICollection<BDecision> BDecisions { get; set; }
     }

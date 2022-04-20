@@ -10,5 +10,14 @@
             public const string CodeNJR = "4"; // NJR
             public const string CodeECRIS = "5"; // ECRIS
         }
+
+        public static class MessageTypeDescription
+        {
+            public const string CodePolice = "Получени от ЦД \"Криминална полиция\"";
+            public const string CodeCBSHandwritten = "ЦБС - получени по факс/писмо, ръчно въведени в ЦБС";
+            public const string CodeCDKP = "Данни, получени от ЦД \"КП\", редактирани в ЦБС";
+            public const string CodeNJR = "NJR";
+            public const string CodeECRIS = "ECRIS";
+        }
     }
 }

@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisIntegrationServices", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices", "..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj", "{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DTO", "..\..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj", "{C50AE003-6B93-4D94-A9FC-3FFAAE594F1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C6C955D-6FF5-4A9E-A684-A20DB95613A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C50AE003-6B93-4D94-A9FC-3FFAAE594F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50AE003-6B93-4D94-A9FC-3FFAAE594F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50AE003-6B93-4D94-A9FC-3FFAAE594F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50AE003-6B93-4D94-A9FC-3FFAAE594F1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

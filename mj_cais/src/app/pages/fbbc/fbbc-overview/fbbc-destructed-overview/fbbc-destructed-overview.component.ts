@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { FbbcGridService } from "../data/fbbc-grid.service";
 import { FbbcStatusTypeEnum } from "../data/fbbc-status-type.constants";
 import { FbbcGridModel } from "../models/fbbc-grid.model";
@@ -17,7 +18,8 @@ export class FbbcDestructedOverviewComponent extends RemoteGridWithStatePersista
   constructor(
     service: FbbcGridService,
     injector: Injector,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    public dateFormatService: DateFormatService
   ) {
     super("fbbcs-search", service, injector);
     this.service.updateUrlStatus(FbbcStatusTypeEnum.Deleted);

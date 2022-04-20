@@ -24,17 +24,17 @@
   >
   </igx-column>
   <igx-column
-    field="createdDate"
+    field="createdOn"
     header="Дата на създаване"
     [sortable]="true"
     [dataType]="'string'"
-  ></igx-column>
-  <!-- <igx-column
-    field="name"
-    header="Наименование"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column> -->
+  >
+  <ng-template igxCell let-cell="cell">
+    <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+      {{ this.dateFormatService.displayDateTime(cell.value) }}
+    </span>
+  </ng-template>
+</igx-column>
   <igx-column
     field="descr"
     header="Описание"

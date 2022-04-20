@@ -13,6 +13,7 @@ import { BulletinModel } from "../_models/bulletin.model";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { BulletinTypeConstants } from "../_models/bulletin-type-constants";
 import { BulletinPersonAliasModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-alias.model";
+import { BulletinStatusHistoryModel } from "../tabs/bulletin-status-history-overview/_models/bulletin-status-history.model";
 
 @Injectable({ providedIn: "root" })
 export class BulletinService extends CaisCrudService<BulletinModel, string> {
@@ -66,6 +67,12 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
 
   public getBulletinTypes(): Observable<BaseNomenclatureModel[]> {
     return of(BulletinTypeConstants.allData);
+  }
+
+  public getBulletinStatusHistoryData(id: string): Observable<BulletinStatusHistoryModel[]> {
+    return this.http.get<BulletinStatusHistoryModel[]>(
+      `${this.url}/${id}/status-history`
+    );
   }
 
   public getPersonAlias(id: string): Observable<BulletinPersonAliasModel[]> {

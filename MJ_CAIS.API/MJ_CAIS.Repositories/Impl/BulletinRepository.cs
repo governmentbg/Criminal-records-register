@@ -63,9 +63,7 @@ namespace MJ_CAIS.Repositories.Impl
                  .Include(x => x.EcrisOffCat)
                  .Include(x => x.OffPlaceCountry)
                  .Include(x => x.OffPlaceCity)
-                     .ThenInclude(x => x.Municipality)
-                 .Include(x => x.OffLvlCompl)
-                 .Include(x => x.OffLvlPart);
+                     .ThenInclude(x => x.Municipality);
 
             return await Task.FromResult(query);
         }
@@ -75,10 +73,7 @@ namespace MJ_CAIS.Repositories.Impl
             var query = _dbContext.BSanctions
                  .AsNoTracking()
                  .Include(x => x.EcrisSanctCateg)
-                 .Include(x => x.SanctActivity)
-                 .Include(x => x.SanctCategory)
-                 .Include(x => x.SanctProbCateg)
-                 .Include(x => x.SanctProbMeasure);
+                 .Include(x => x.SanctCategory);
 
             return await Task.FromResult(query);
         }
@@ -90,6 +85,16 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.DecisionAuth)
                 .Include(x => x.DecisionChType)
                 .Include(x => x.DecisionType);
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync()
+        {
+            var query = _dbContext.BBulletinStatusHes.AsNoTracking()
+                 .Include(x => x.NewStatusCodeNavigation)
+                 .Include(x => x.OldStatusCodeNavigation)
+                 .OrderByDescending(x => x.CreatedOn);
 
             return await Task.FromResult(query);
         }

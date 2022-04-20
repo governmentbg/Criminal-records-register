@@ -13,7 +13,7 @@ export class BulletinDocumentForm {
   public documentContent: FormControl;
   public documentContentId: FormControl;
   public mimeType: FormControl;
-  public createdDate: FormControl;
+  public createdOn: FormControl;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -33,7 +33,7 @@ export class BulletinDocumentForm {
       Validators.required,
     ]);
     this.mimeType = new FormControl(null);
-    this.createdDate = new FormControl(Date.now());
+    this.createdOn = new FormControl(Date.now);
     this.group = new FormGroup({
       id: this.id,
       name: this.name,
@@ -43,6 +43,7 @@ export class BulletinDocumentForm {
       documentContent: this.documentContent,
       documentContentId: this.documentContentId,
       mimeType: this.mimeType,
+      createdOn:this.createdOn
     });
   }
 }

@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public GCountry()
         {
             AAppCitizenships = new HashSet<AAppCitizenship>();
+            AApplications = new HashSet<AApplication>();
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
@@ -15,7 +16,7 @@ namespace MJ_CAIS.DataAccess.Entities
             FbbcCountries = new HashSet<Fbbc>();
             GCities = new HashSet<GCity>();
             GCountrySubdivisions = new HashSet<GCountrySubdivision>();
-            PPeople = new HashSet<PPerson>();
+            PPersonAliases = new HashSet<PPersonAlias>();
         }
 
         public string? EcrisTechnId { get; set; }
@@ -30,6 +31,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Iso3166Alpha2 { get; set; }
 
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
+        public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
@@ -37,6 +39,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<Fbbc> FbbcCountries { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<GCountrySubdivision> GCountrySubdivisions { get; set; }
-        public virtual ICollection<PPerson> PPeople { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliases { get; set; }
     }
 }

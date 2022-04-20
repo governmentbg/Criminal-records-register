@@ -7,7 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public BSanctProbMeasure()
         {
-            BSanctions = new HashSet<BSanction>();
+            BProbations = new HashSet<BProbation>();
         }
 
         public string? Code { get; set; }
@@ -16,6 +16,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidTo { get; set; }
         public string? ExternalId { get; set; }
 
-        public virtual ICollection<BSanction> BSanctions { get; set; }
+        public virtual ICollection<BProbation> BProbations { get; set; }
     }
 }

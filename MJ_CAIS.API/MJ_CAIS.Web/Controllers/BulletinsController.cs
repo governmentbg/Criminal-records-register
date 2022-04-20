@@ -63,7 +63,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("{aId}/change-status/{statusId}")]
         public async Task<IActionResult> ChangeStatus(string aId, string statusId)
         {
-            await this._bulletinService.ChangeStatusAsync(aId,statusId);
+            await this._bulletinService.ChangeStatusAsync(aId, statusId);
             return Ok();
         }
 
@@ -92,6 +92,13 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> GetDocuments(string aId)
         {
             var result = await this._bulletinService.GetDocumentsByBulletinIdAsync(aId);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}/status-history")]
+        public async Task<IActionResult> GetStatusHistory(string aId)
+        {
+            var result = await this._bulletinService.GetStatusHistoryByBulletinIdAsync(aId);
             return Ok(result);
         }
 

@@ -80,7 +80,8 @@ export class BulletinFormComponent
   //#endregion
 
   public showForUpdate: boolean = false;
-
+  public setEditToBeForPreview: boolean = false;
+  
   constructor(
     service: BulletinService,
     public injector: Injector,
@@ -93,33 +94,12 @@ export class BulletinFormComponent
 
   ngOnInit(): void {
     let bulletinStatusId = (this.dbData.element as any)?.statusId;
-
-    let isGridsEditable =
-      (!this.isForPreview &&
-        bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
-      this.currentAction == EActions.CREATE;
-
-    this.isBulletinPersonAliasEditable = isGridsEditable;
-    this.isOffancesEditable = isGridsEditable;
-    this.isSanctionsEditable = isGridsEditable;
-
-    this.isDocumentsEditable =
-      !this.isForPreview &&
-      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
-
-      this.isDecisionEditable =
-      !this.isForPreview &&
-      bulletinStatusId == BulletinStatusTypeEnum.Active || 
-      bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
-
     let locked = (this.dbData.element as any)?.locked;
 
-    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(),locked);
+    this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(), locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
-    this.showForUpdate =
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+    this.initAllowedButtons(bulletinStatusId);
 
     this.formFinishedLoading.emit();
   }
@@ -131,49 +111,7 @@ export class BulletinFormComponent
   createInputObject(object: BulletinModel) {
     return new BulletinModel(object);
   }
-
-  //#region Актуализация на бюлетин
-
-  public openUpdateConfirmationDialog() {
-    let dialogRef = this.dialogService.open(
-      ConfirmDialogComponent,
-      CommonConstants.defaultDialogConfig
-    );
-
-    dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
-      "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
-    );
-    dialogRef.componentRef.instance.showHeder = false;
-
-    dialogRef.onClose.subscribe((result) => {
-      if (result) {
-        this.service
-          .changeStatus(this.fullForm.id.value, BulletinStatusTypeEnum.Active)
-          .subscribe(
-            (res) => {
-              this.toastr.showToast(
-                "success",
-                this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
-              );
-              //todo: redirect;
-            },
-            (error) => {
-              let title = this.dangerMessage;
-              let errorText = error.status + " " + error.statusText;
-              if (error.error && error.error.customMessage) {
-                title = error.error.customMessage;
-                errorText = "";
-              }
-
-              this.toastr.showBodyToast("danger", title, errorText);
-            }
-          );
-      }
-    });
-  }
-
-  //#endregion
-
+  
   submitFunction = () => {
     let offancesTransactions =
       this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
@@ -209,6 +147,48 @@ export class BulletinFormComponent
 
     this.validateAndSave(this.fullForm);
   };
+
+  //#region Актуализация на бюлетин
+
+  public openUpdateConfirmationDialog() {
+    let dialogRef = this.dialogService.open(
+      ConfirmDialogComponent,
+      CommonConstants.defaultDialogConfig
+    );
+
+    dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
+      "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
+    );
+    dialogRef.componentRef.instance.showHeder = false;
+
+    dialogRef.onClose.subscribe((result) => {
+      if (result) {
+        this.service
+          .changeStatus(this.fullForm.id.value, BulletinStatusTypeEnum.Active)
+          .subscribe(
+            (res) => {
+              this.toastr.showToast(
+                "success",
+                this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
+              );
+              this.router.navigate(['pages/bulletins']); 
+            },
+            (error) => {
+              let title = this.dangerMessage;
+              let errorText = error.status + " " + error.statusText;
+              if (error.error && error.error.customMessage) {
+                title = error.error.customMessage;
+                errorText = "";
+              }
+
+              this.toastr.showBodyToast("danger", title, errorText);
+            }
+          );
+      }
+    });
+  }
+
+  //#endregion
 
   //#region Person alias functions
 
@@ -259,4 +239,35 @@ export class BulletinFormComponent
   }
 
   //#endregion
+
+  private initAllowedButtons(bulletinStatusId: string) {
+    let isGridsEditable =
+      (!this.isForPreview &&
+        bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
+      this.currentAction == EActions.CREATE;
+
+    this.isBulletinPersonAliasEditable = isGridsEditable;
+    this.isOffancesEditable = isGridsEditable;
+    this.isSanctionsEditable = isGridsEditable;
+
+    this.isDocumentsEditable =
+      !this.isForPreview &&
+      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
+
+    this.isDecisionEditable =
+      (!this.isForPreview &&
+        bulletinStatusId == BulletinStatusTypeEnum.Active) ||
+      bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
+
+    let hideUpdateButton =
+      bulletinStatusId == BulletinStatusTypeEnum.Rehabilitated ||
+      bulletinStatusId == BulletinStatusTypeEnum.Deleted ||
+      bulletinStatusId == BulletinStatusTypeEnum.ForDestruction ||
+      bulletinStatusId == BulletinStatusTypeEnum.ReplacedAct425;
+    this.setEditToBeForPreview = hideUpdateButton;
+
+    this.showForUpdate =
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
+      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+  }
 }
