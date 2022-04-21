@@ -69,7 +69,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<BSanction, SanctionDTO>()
                .ForMember(d => d.SanctCategoryName, opt => opt.MapFrom(src => src.SanctCategory.Name))
-               .ForMember(d => d.EcrisSanctCategName, opt => opt.MapFrom(src => src.EcrisSanctCateg.Name));
+               .ForMember(d => d.EcrisSanctCategName, opt => opt.MapFrom(src => src.EcrisSanctCateg.Name))
+               .ForMember(d => d.Probations, opt => opt.MapFrom(src => src.BProbations));
+
 
             CreateMap<DecisionDTO, BDecision>();
             CreateMap<BDecision, DecisionDTO>()
@@ -90,6 +92,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BBulletinStatusH, BulletinStatusHistoryDTO>()
               .ForMember(d => d.NewStatus, opt => opt.MapFrom(src => src.NewStatusCodeNavigation.Name))
               .ForMember(d => d.OldStatus, opt => opt.MapFrom(src => src.OldStatusCodeNavigation.Name));
+
+            CreateMap<BulletinProbationDTO, BProbation>();
+
+            CreateMap<BProbation, BulletinProbationDTO>();
+
         }
     }
 }

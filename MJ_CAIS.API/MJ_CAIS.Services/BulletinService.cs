@@ -311,7 +311,19 @@ namespace MJ_CAIS.Services
         private void UpdateTransactions(BulletinBaseDTO aInDto, BBulletin entity)
         {
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
-            entity.BSanctions = mapper.MapTransactions<SanctionDTO, BSanction>(aInDto.SanctionsTransactions);
+
+            foreach (var currentTransaction in aInDto.SanctionsTransactions)
+            {
+                var probTrans = mapper.MapTransactions<BulletinProbationDTO, BProbation>(currentTransaction.NewValue.ProbationsTransactions);           
+                var sanction = mapper.MapTransaction<SanctionDTO, BSanction>(currentTransaction);
+                sanction.BProbations = probTrans;
+                foreach (var prob in sanction.BProbations)
+                {
+                    prob.SanctionId = sanction.Id;
+                }
+                entity.BSanctions.Add(sanction);
+            }
+
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
             entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.PersonAliasTransactions);
             entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
