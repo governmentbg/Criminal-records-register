@@ -44,10 +44,17 @@ export class BulletinSanctionsFormComponent implements OnInit {
   public sanctionProbMeasuresOptions: BaseNomenclatureModel[];
 
   constructor(public dateFormatService: DateFormatService) {}
+
   ngOnInit(): void {
     this.sanctionProbCategoriesOptions = this.dbData.sanctionProbCategories;
     this.sanctionProbMeasuresOptions = this.dbData.sanctionProbMeasures;
   }
+
+  ngAfterViewInit(): void {
+    // todo: 
+    this.gridBulletinProbation.resourceStrings.igx_grid_snackbar_addrow_label = 'Добавен нов запис';
+    this.gridBulletinProbation.resourceStrings.igx_grid_add_row_label = 'Добави'
+}
 
   onAddOrUpdateSanctionRow() {
     if (!this.bulletinSanctionForm.group.valid) {
@@ -74,11 +81,11 @@ export class BulletinSanctionsFormComponent implements OnInit {
     );
 
     // data used only for vizualization in grid
-    let allSavedProbationsData = this.bulletinSanctionForm.probations.value;
+    let allSavedProbationsData = this.bulletinSanctionForm.probations.value ?? [];
 
     // saved transactions
     let allSavedTransactions =
-      this.bulletinSanctionForm.probationsTransactions.value;
+      this.bulletinSanctionForm.probationsTransactions.value ?? [];
 
     let newProbTransactions =
       this.gridBulletinProbation.transactions.getAggregatedChanges(true);
@@ -172,56 +179,16 @@ export class BulletinSanctionsFormComponent implements OnInit {
     this.gridBulletinProbation.transactions.clear();
     this.dialog.open();
   }
+
+  // todo: remove default add row button
+  public addNewProbation(){
+    this.gridBulletinProbation.gridAPI.grid.beginAddRowByIndex(null, -1, false);
+  }
+
   public onOpenEditSanction(event: IgxGridRowComponent) {
-    debugger;
-
     let sanctionProbations = event.rowData.probations;
-    //let sanctionTransactions = event.rowData.probationsTransactions;
-
-    // get all probation that are not deleted
-    // let probationToAddedToGrid = [];
-    // sanctionProbations.forEach((currentProbation) => {
-    //   let skip = sanctionTransactions.some(
-    //     (x) => x.id == currentProbation.id && (x.type == "delete" || x.type == "update")
-    //   );
-    //   if (!skip) {
-    //     probationToAddedToGrid.push(currentProbation);
-    //   }
-    // });
-    debugger;
     this.gridBulletinProbation.data = sanctionProbations;
-
-    // if (
-    //   event.rowData.probationsTransactions &&
-    //   event.rowData.probationsTransactions.length > 0
-    // ) {
-    //   this.gridBulletinProbation.transactions.clear();
-    //   debugger;
-
-    //   event.rowData.probationsTransactions.forEach((transaction) => {
-    //     if (transaction.type === "delete") {
-    //       // dummy transaction
-    //       let addedTransactionForDeleteState = {
-    //         id: transaction.id,
-    //         newValue: null,
-    //         type: TransactionType.ADD,
-    //       };
-
-    //       this.gridBulletinProbation.transactions.add(
-    //         addedTransactionForDeleteState
-    //       );
-    //     }
-
-    //     this.gridBulletinProbation.transactions.add(transaction);
-    //   });
-    // } else {
-    //   this.gridBulletinProbation.transactions.clear();
-    // }
-
     this.bulletinSanctionForm.group.patchValue(event.rowData);
-    // this.showProbationData =
-    //   this.bulletinSanctionForm.sanctCategoryId.value == this.probationCode;
-
     this.dialog.open();
   }
 
@@ -230,6 +197,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
     this.sanctionGrid.data = this.sanctionGrid.data.filter(
       (d) => d.id != event.rowData.id
     );
+
   }
 
   public onCloseSanctionDilog() {

@@ -10,7 +10,7 @@
         igxButton="flat"
         (click)="onOpenAddSanction()"
         *ngIf="!isForPreview"
-        class="addProdBtn"
+        class="addSanctionBtn"
       >
         <igx-icon>add</igx-icon> Добави
       </button>
@@ -171,7 +171,7 @@
         <div class="font-weight-bold">Пробационни мерки</div>
         <hr />
         <div class="form-group">
-          <div class="sample-wrapper">
+          <div class="sanction-prob-grid-wrapper">
             <app-grid-with-transactions
               [gridTransactions]="bulletinSanctionForm.probationsTransactions"
             >
@@ -182,7 +182,20 @@
                 [height]="null"
                 [primaryKey]="'id'"
                 [rowEditable]="true"
+                [emptyGridTemplate]="emptyTemplate"
               >
+                <igx-grid-toolbar>
+                  <igx-grid-toolbar-actions
+                    ><button
+                      *ngIf="!isForPreview"
+                      igxButton="flat"
+                      (click)="addNewProbation()"
+                    >
+                      <igx-icon>add</igx-icon> Добави
+                    </button></igx-grid-toolbar-actions
+                  >
+                </igx-grid-toolbar> 
+
                 <igx-column
                   field="id"
                   header="Идентификатор"
@@ -198,15 +211,15 @@
                   field="sanctProbCategId"
                   header="Вид пробационна мярка от Стандарти на ЕИСПП"
                   [editable]="true"
-                  width="30%"
+                  [width]="250"
                 >
-                <ng-template igxCell let-cell="cell">
-                  {{ getSanctionCategoryNameById(cell.value) }}
-                </ng-template>
-        
+                  <ng-template igxCell let-cell="cell">
+                    {{ getSanctionCategoryNameById(cell.value) }}
+                  </ng-template>
+
                   <ng-template igxCellEditor let-cell="cell" let-value>
                     <ng-select
-                      appendTo=".sample-wrapper"
+                      appendTo=".sanction-prob-grid-wrapper"
                       [(ngModel)]="cell.value"
                       [ngModelOptions]="{ standalone: true }"
                       style="width: 100%"
@@ -226,14 +239,14 @@
                   field="sanctProbMeasureId"
                   header="Мерна единица за количество на пробационна мярка"
                   [editable]="true"
-                  width="20%"
+                  [width]="200"
                 >
                   <ng-template igxCell let-cell="cell">
                     {{ getSanctionProbMeasureNameById(cell.value) }}
                   </ng-template>
                   <ng-template igxCellEditor let-cell="cell" let-value>
                     <ng-select
-                      appendTo=".sample-wrapper"
+                      appendTo=".sanction-prob-grid-wrapper"
                       [(ngModel)]="cell.value"
                       [ngModelOptions]="{ standalone: true }"
                       style="width: 100%"
@@ -246,7 +259,6 @@
                         {{ item.name }}
                       </ng-option>
                     </ng-select>
-
                   </ng-template>
                 </igx-column>
 
@@ -254,56 +266,60 @@
                   field="sanctProbValue"
                   header="Количество на пробационна мярка"
                   dataType="number"
-                  width="10%"
                 ></igx-column>
 
                 <igx-column
                   field="decisionDurationYears"
                   header="Продължителност (години)"
                   dataType="number"
-                  width="10%"
                 ></igx-column>
                 <igx-column
                   field="decisionDurationMonths"
                   header="Продължителност (месеци)"
                   dataType="number"
-                  width="10%"
                 ></igx-column>
                 <igx-column
                   field="decisionDurationDays"
                   header="Продължителност (дни)"
                   dataType="number"
-                  width="10%"
                 ></igx-column>
                 <igx-column
                   field="decisionDurationHours"
                   header="Продължителност (часове)"
                   dataType="number"
-                  width="10%"
                 ></igx-column>
 
+                <ng-template igxRowEditActions let-endRowEdit>
+                  <div class="custom-buttons">
+                    <button
+                      igxButton
+                      igxRowEditTabStop
+                      (click)="endRowEdit(false)"
+                    >
+                      <igx-icon>clear</igx-icon> Откажи
+                    </button>
+                    <button
+                      igxButton
+                      igxRowEditTabStop
+                      (click)="endRowEdit(true)"
+                    >
+                      <igx-icon>add</igx-icon> Добави
+                    </button>
+                  </div>
+                </ng-template>
+
                 <igx-action-strip #actionstrip>
-                  <igx-grid-editing-actions [addRow]="true"
-                    ><ng-template igxRowEditActions let-endRowEdit>
-                      <button
-                        igxButton
-                        igxRowEditTabStop
-                        (click)="endRowEdit(false)"
-                      >
-                        Откажи
-                      </button>
-                      <button
-                        igxButton
-                        igxRowEditTabStop
-                        (click)="endRowEdit(true)"
-                      >
-                        Добави
-                      </button>
-                    </ng-template>
+                  <igx-grid-editing-actions
+                    [addRow]="false"
+                    [contentEditable]="true"
+                  >
                   </igx-grid-editing-actions>
                 </igx-action-strip>
               </igx-grid>
             </app-grid-with-transactions>
+
+            <ng-template #emptyTemplate>           
+            </ng-template>
           </div>
         </div>
         <div class="font-weight-bold">Срок на наложеното наказание</div>
