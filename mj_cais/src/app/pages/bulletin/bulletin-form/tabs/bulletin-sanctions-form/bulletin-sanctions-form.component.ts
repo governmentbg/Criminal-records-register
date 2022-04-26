@@ -51,10 +51,12 @@ export class BulletinSanctionsFormComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    // todo: 
-    this.gridBulletinProbation.resourceStrings.igx_grid_snackbar_addrow_label = 'Добавен нов запис';
-    this.gridBulletinProbation.resourceStrings.igx_grid_add_row_label = 'Добави'
-}
+    // todo:
+    this.gridBulletinProbation.resourceStrings.igx_grid_snackbar_addrow_label =
+      "Добавен нов запис";
+    this.gridBulletinProbation.resourceStrings.igx_grid_add_row_label =
+      "Добави";
+  }
 
   onAddOrUpdateSanctionRow() {
     if (!this.bulletinSanctionForm.group.valid) {
@@ -63,14 +65,14 @@ export class BulletinSanctionsFormComponent implements OnInit {
     }
 
     this.bulletinSanctionForm.sanctCategoryName.patchValue(
-      this.GetNameById(
+      this.getNameById(
         this.dbData.sanctionCategories,
         this.bulletinSanctionForm.sanctCategoryId.value
       )
     );
 
     this.bulletinSanctionForm.ecrisSanctCategName.patchValue(
-      this.GetNameById(
+      this.getNameById(
         this.dbData.ecrisSanctionCategories,
         this.bulletinSanctionForm.ecrisSanctCategId.value
       )
@@ -80,89 +82,8 @@ export class BulletinSanctionsFormComponent implements OnInit {
       this.bulletinSanctionForm.id.value
     );
 
-    // data used only for vizualization in grid
-    let allSavedProbationsData = this.bulletinSanctionForm.probations.value ?? [];
-
-    // saved transactions
-    let allSavedTransactions =
-      this.bulletinSanctionForm.probationsTransactions.value ?? [];
-
-    let newProbTransactions =
-      this.gridBulletinProbation.transactions.getAggregatedChanges(true);
-
-      newProbTransactions.forEach((newTransaction) => {
-      debugger;
-      if (newTransaction.type == TransactionType.UPDATE) {
-        // when has update on a new local element
-        let tryToUpdateAddedEl = allSavedTransactions.some(
-          (x) => x.id == newTransaction.id && x.type == TransactionType.ADD
-        );
-
-        // remove old transaction 
-        // make new transaction in status added
-        if (tryToUpdateAddedEl) {
-          allSavedTransactions = allSavedTransactions.filter(
-            (x) => x.id != newTransaction.id
-          );
-          newTransaction.type = TransactionType.ADD;
-        } else {
-          // when update element from server
-          // remove it from collection but save transaction
-          allSavedProbationsData = allSavedProbationsData.filter(
-            (x) => x.id == newTransaction.id
-          );
-        }
-      }
-
-      if (newTransaction.type == TransactionType.DELETE) {
-        // when has delete a new local element
-        let tryToDeleteAddedEl = allSavedTransactions.some(
-          (x) => x.id == newTransaction.id && x.type == TransactionType.ADD
-        );
-
-        if (tryToDeleteAddedEl) {
-          allSavedTransactions = allSavedTransactions.filter(
-            (x) => x.id != newTransaction.id
-          );
-
-          // ignore this transaction
-          return;
-        }
-
-        // when delete element from server
-        // remove it from collection but save transaction
-        allSavedProbationsData = allSavedProbationsData.filter(
-          (x) => x.id == newTransaction.id
-        );
-      }
-
-      // when has transaction type added
-      allSavedTransactions.push(newTransaction);
-    });
-
-    this.bulletinSanctionForm.probationsTransactions.patchValue(
-      allSavedTransactions
-    );
-
-    // grid data
-    // used only for visualization in dialog
-    let probationsObjToAdd = allSavedProbationsData;
-    // add element from transaction only from type new or update
-    allSavedTransactions.forEach((element) => {
-      if (
-        element.type == TransactionType.ADD ||
-        element.type == TransactionType.UPDATE
-      ) {
-        probationsObjToAdd.push(element.newValue);
-      }
-    });
-
-    this.bulletinSanctionForm.probations.patchValue(probationsObjToAdd);
-
-    // remove data from probation grid and its transactions
-    // after save it in sanction grid 
-    this.gridBulletinProbation.data = [];
-    this.gridBulletinProbation.transactions.clear();
+    // todo: check if selected category is probation
+    this.updateProbationsTransactionData();
 
     if (currentRow) {
       currentRow.update(this.bulletinSanctionForm.group.value);
@@ -175,14 +96,8 @@ export class BulletinSanctionsFormComponent implements OnInit {
 
   public onOpenAddSanction() {
     // clear grid and old transactions
-    this.gridBulletinProbation.data = [];
-    this.gridBulletinProbation.transactions.clear();
+    this.clearProbationData();
     this.dialog.open();
-  }
-
-  // todo: remove default add row button
-  public addNewProbation(){
-    this.gridBulletinProbation.gridAPI.grid.beginAddRowByIndex(null, -1, false);
   }
 
   public onOpenEditSanction(event: IgxGridRowComponent) {
@@ -197,7 +112,6 @@ export class BulletinSanctionsFormComponent implements OnInit {
     this.sanctionGrid.data = this.sanctionGrid.data.filter(
       (d) => d.id != event.rowData.id
     );
-
   }
 
   public onCloseSanctionDilog() {
@@ -214,16 +128,175 @@ export class BulletinSanctionsFormComponent implements OnInit {
     return this.sanctionProbCategoriesOptions.find((s) => s.id === arr)?.name;
   }
 
+  //#region Probations actions
+
+  private updateProbationsTransactionData() {
+    // data used only for vizualization in grid
+    let allSavedProbationsData =
+      this.bulletinSanctionForm.probations.value ?? [];
+
+    // saved transactions
+    let allSavedTransactions =
+      this.bulletinSanctionForm.probationsTransactions.value ?? [];
+
+    let newProbTransactions =
+      this.gridBulletinProbation.transactions.getAggregatedChanges(true);
+
+    newProbTransactions.forEach((newTransaction) => {
+      if (newTransaction.type == TransactionType.UPDATE) {
+        // when has update on a new local element
+        let tryToUpdateAddedEl = allSavedTransactions.some(
+          (x) => x.id == newTransaction.id && x.type == TransactionType.ADD
+        );
+
+        // remove old transaction
+        // make new transaction in status added
+        if (tryToUpdateAddedEl) {
+          allSavedTransactions = allSavedTransactions.filter(
+            (x) => x.id != newTransaction.id
+          );
+          newTransaction.type = TransactionType.ADD;
+        } else {
+          // when update element from server
+          // remove it from collection but save transaction
+          allSavedProbationsData = allSavedProbationsData.filter(
+            (x) => x.id != newTransaction.id
+          );
+        }
+      }
+
+      if (newTransaction.type == TransactionType.DELETE) {
+        // when has delete a new local element
+        let tryToDeleteAddedEl = allSavedTransactions.some(
+          (x) => x.id == newTransaction.id && x.type == TransactionType.ADD
+        );
+
+        // when delete element remove it from collection
+        allSavedProbationsData = allSavedProbationsData.filter(
+          (x) => x.id != newTransaction.id
+        );
+
+        if (tryToDeleteAddedEl) {
+          allSavedTransactions = allSavedTransactions.filter(
+            (x) => x.id != newTransaction.id
+          );
+
+          // ignore this transaction
+          return;
+        }
+      }
+
+      // when has transaction type added
+      // or delete element from server
+      allSavedTransactions.push(newTransaction);
+    });
+
+    this.bulletinSanctionForm.probationsTransactions.patchValue(
+      allSavedTransactions
+    );
+
+    // grid data
+    // used only for visualization in dialog
+    let probationsObjToAdd = allSavedProbationsData;
+    // add element from transaction only from type new or update
+    // and element does not exist
+    allSavedTransactions.forEach((element) => {
+      let isAddOrUpdate =
+        element.type == TransactionType.ADD ||
+        element.type == TransactionType.UPDATE;
+      let exist = probationsObjToAdd.some((x) => x.id == element.id);
+      if (isAddOrUpdate && !exist) {
+        probationsObjToAdd.push(element.newValue);
+      }
+    });
+
+    this.bulletinSanctionForm.probations.patchValue(probationsObjToAdd);
+
+    // remove data from probation grid and its transactions
+    // after save it in sanction grid
+    this.clearProbationData();
+  }
+
+  public onSanctionProbRowDeleted(rowContext) {
+    // when delete element from server or locally added
+    // but saved in sanctions grid
+    if (rowContext && rowContext.data && rowContext.data.id) {
+      // dummy transaction
+      let addedTransactionForDeleteState = {
+        id: rowContext.data.id,
+        newValue: null,
+        type: TransactionType.ADD,
+      };
+
+      // first add transaction for this element
+      this.gridBulletinProbation.transactions.add(
+        addedTransactionForDeleteState
+      );
+
+      // then delete element from grid
+      this.gridBulletinProbation.data = this.gridBulletinProbation.data.filter(
+        (x) => x.id != rowContext.data.id
+      );
+
+      // update collection used for visualization
+      let savedProbations = this.bulletinSanctionForm.probations.value;
+      let filteredProbations = savedProbations.filter(
+        (x) => x.id != rowContext.data.id
+      );
+      this.bulletinSanctionForm.probations.patchValue(filteredProbations);
+
+      let savedTransactions =
+        this.bulletinSanctionForm.probationsTransactions.value;
+
+      // check if delete locally added element
+      let existingLocallyAdded = savedTransactions.some(
+        (x) => x.id == rowContext.data.id && x.type == TransactionType.ADD
+      );
+
+      // if element is locally added and deleted remove transactions
+      if (existingLocallyAdded) {
+        savedTransactions = savedTransactions.filter(
+          (x) => x.id != rowContext.data.id
+        );
+      } else {
+        // when delete lement saved in db
+        // save transaction
+        savedTransactions.push({
+          id: rowContext.data.id,
+          newValue: null,
+          type: TransactionType.DELETE,
+        });
+      }
+
+      this.bulletinSanctionForm.probationsTransactions.patchValue(
+        savedTransactions
+      );
+    }
+  }
+
+  public addNewProbation() {
+    this.gridBulletinProbation.gridAPI.grid.beginAddRowByIndex(null, -1, false);
+  }
+
+  private clearProbationData() {
+    this.gridBulletinProbation.data = [];
+    this.gridBulletinProbation.transactions.clear();
+  }
+
   public getSanctionProbMeasureNameById(arr: any): string {
     return this.sanctionProbMeasuresOptions.find((s) => s.id === arr)?.name;
   }
+
+  //#endregion
+
+  //#region Helpers
 
   public onGridOptionChange(id: number, cell: IgxGridCellComponent) {
     cell.value = id;
     cell.editValue = id;
   }
 
-  private GetNameById(data: any, id: string) {
+  private getNameById(data: any, id: string) {
     if (id) {
       let name = data.find((x) => x.id === id).name;
       return name;
@@ -231,4 +304,6 @@ export class BulletinSanctionsFormComponent implements OnInit {
 
     return null;
   }
+
+  //#endregion
 }

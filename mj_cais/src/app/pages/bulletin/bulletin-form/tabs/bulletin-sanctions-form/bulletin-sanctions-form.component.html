@@ -183,6 +183,7 @@
                 [primaryKey]="'id'"
                 [rowEditable]="true"
                 [emptyGridTemplate]="emptyTemplate"
+                (onRowDeleted)="onSanctionProbRowDeleted($event)"
               >
                 <igx-grid-toolbar>
                   <igx-grid-toolbar-actions
@@ -194,7 +195,7 @@
                       <igx-icon>add</igx-icon> Добави
                     </button></igx-grid-toolbar-actions
                   >
-                </igx-grid-toolbar> 
+                </igx-grid-toolbar>
 
                 <igx-column
                   field="id"
@@ -296,14 +297,14 @@
                       igxRowEditTabStop
                       (click)="endRowEdit(false)"
                     >
-                      <igx-icon>clear</igx-icon> Откажи
+                      <igx-icon>clear</igx-icon> Отказ
                     </button>
                     <button
                       igxButton
                       igxRowEditTabStop
                       (click)="endRowEdit(true)"
                     >
-                      <igx-icon>add</igx-icon> Добави
+                      <igx-icon>add</igx-icon> Запис
                     </button>
                   </div>
                 </ng-template>
@@ -318,8 +319,7 @@
               </igx-grid>
             </app-grid-with-transactions>
 
-            <ng-template #emptyTemplate>           
-            </ng-template>
+            <ng-template #emptyTemplate> </ng-template>
           </div>
         </div>
         <div class="font-weight-bold">Срок на наложеното наказание</div>
