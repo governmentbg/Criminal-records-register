@@ -189,6 +189,7 @@
                   [rowEditable]="true"
                   [emptyGridTemplate]="emptyTemplate"
                   (onRowDeleted)="onSanctionProbRowDeleted($event)"
+                  displayDensity="compact"
                 >
                   <igx-grid-toolbar>
                     <igx-grid-toolbar-actions
@@ -225,7 +226,7 @@
 
                     <ng-template igxCellEditor let-cell="cell" let-value>
                       <ng-select
-                        appendTo=".sanction-prob-grid-wrapper"
+                        appendTo="body"
                         [(ngModel)]="cell.value"
                         [ngModelOptions]="{ standalone: true }"
                         style="width: 100%"
@@ -252,7 +253,7 @@
                     </ng-template>
                     <ng-template igxCellEditor let-cell="cell" let-value>
                       <ng-select
-                        appendTo=".sanction-prob-grid-wrapper"
+                        appendTo="body"
                         [(ngModel)]="cell.value"
                         [ngModelOptions]="{ standalone: true }"
                         style="width: 100%"
@@ -274,26 +275,28 @@
                     dataType="number"
                   ></igx-column>
 
-                  <igx-column
-                    field="decisionDurationYears"
-                    header="Продължителност (години)"
-                    dataType="number"
-                  ></igx-column>
-                  <igx-column
-                    field="decisionDurationMonths"
-                    header="Продължителност (месеци)"
-                    dataType="number"
-                  ></igx-column>
-                  <igx-column
-                    field="decisionDurationDays"
-                    header="Продължителност (дни)"
-                    dataType="number"
-                  ></igx-column>
-                  <igx-column
-                    field="decisionDurationHours"
-                    header="Продължителност (часове)"
-                    dataType="number"
-                  ></igx-column>
+                  <igx-column-group header="Продължителност">
+                    <igx-column
+                      field="decisionDurationYears"
+                      header="Години"
+                      dataType="number"
+                    ></igx-column>
+                    <igx-column
+                      field="decisionDurationMonths"
+                      header="Месеци"
+                      dataType="number"
+                    ></igx-column>
+                    <igx-column
+                      field="decisionDurationDays"
+                      header="Дни"
+                      dataType="number"
+                    ></igx-column>
+                    <igx-column
+                      field="decisionDurationHours"
+                      header="Часове"
+                      dataType="number"
+                    ></igx-column>
+                  </igx-column-group>
 
                   <ng-template igxRowEditActions let-endRowEdit>
                     <div class="custom-buttons">
