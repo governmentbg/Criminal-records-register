@@ -254,7 +254,7 @@ namespace EcrisServices
                 o.OffencePlace.PlaceCountryReference = new CountryExternalReferenceType();
                 o.OffencePlace.PlaceCountryReference.Value = offence.OffPlaceCountry.EcrisTechnId;
                 o.OffencePlace.PlaceCountrySubdivisionReference = new CountrySubdivisionExternalReferenceType();
-                o.OffencePlace.PlaceCountrySubdivisionReference.Value = offence.OffPlaceSubdiv.EcrisTechnId;
+              //  o.OffencePlace.PlaceCountrySubdivisionReference.Value = offence.OffPlaceSubdiv.EcrisTechnId;
                 o.OffencePlace.PlaceTownReference = new CityExternalReferenceType();
                 o.OffencePlace.PlaceTownReference.Value = offence.OffPlaceCity.EcrisTechnId;
                 o.OffencePlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[2];
@@ -271,10 +271,10 @@ namespace EcrisServices
 
                 }
                 o.OffenceLevelOfCompletionReference = new OffenceLevelOfCompletionExternalReferenceType();
-                o.OffenceLevelOfCompletionReference.Value = offence.OffLvlCompl.EcrisTechnId;
+               // o.OffenceLevelOfCompletionReference.Value = offence.OffLvlCompl.EcrisTechnId;
                 o.OffenceLevelOfParticipationReference = new OffenceLevelOfParticipationExternalReferenceType();
-                o.OffenceLevelOfParticipationReference.Value = offence.OffLvlPart.EcrisTechnId;
-                o.OffenceResponsibilityExemption = CommonService.GetYesNoType(offence.RespExemption);
+               // o.OffenceLevelOfParticipationReference.Value = offence.OffLvlPart.EcrisTechnId;
+                //o.OffenceResponsibilityExemption = CommonService.GetYesNoType(offence.RespExemption);
                 if (offence.OffStartDate.HasValue)
                 {
                     o.OffenceStartDate = new DateType();
@@ -283,10 +283,10 @@ namespace EcrisServices
                     o.OffenceStartDate.DateMonthDay.DateDay = offence.OffStartDate.Value.Day.ToString();
                     o.OffenceStartDate.DateMonthDay.DateMonth = offence.OffStartDate.Value.Month.ToString();
                 }
-                o.OffenceNumberOfOccurrences = offence.Occurrences?.ToString();
+                //o.OffenceNumberOfOccurrences = offence.Occurrences?.ToString();
                 o.OffenceApplicableLegalProvisions = offence.LegalProvisions;
-                o.OffenceIsContinuous = CommonService.GetYesNoType(offence.IsContiniuous);
-                o.OffenceRecidivism = CommonService.GetYesNoType(offence.Recidivism);
+              //  o.OffenceIsContinuous = CommonService.GetYesNoType(offence.IsContiniuous);
+              //  o.OffenceRecidivism = CommonService.GetYesNoType(offence.Recidivism);
                 o.Remarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
                 o.Remarks[0].Value = offence.Remarks;
 
@@ -358,7 +358,7 @@ namespace EcrisServices
                   + " Дни: " + sanction.SuspentionDurationDays
                   + " Часове: " + sanction.SuspentionDurationHours;
                 s.SanctionSuspension.SanctionSuspensionRemarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
-                s.SanctionSuspension.SanctionSuspensionRemarks[0].Value = sanction.ProbationDescr;
+                //s.SanctionSuspension.SanctionSuspensionRemarks[0].Value = sanction.ProbationDescr;
                 s.SanctionAmountOfIndividualFine = new PositiveDecimalType();
                 s.SanctionAmountOfIndividualFine.PositiveDecimalUnit = sanction.FineAmount?.ToString();
 
@@ -371,16 +371,16 @@ namespace EcrisServices
                 //s.SanctionInterruption = new SanctionInterruptionType();
 
                 s.SanctionSentencedPeriod = new SanctionSentencedPeriodType();
-                if (sanction.DecisionStartDate.HasValue)
-                {
-                    s.SanctionSentencedPeriod.PeriodStartDate = new StrictDateType();
-                    s.SanctionSentencedPeriod.PeriodStartDate.Value = sanction.DecisionStartDate.Value;
-                }
-                if (sanction.DecisionEndDate.HasValue)
-                {
-                    s.SanctionSentencedPeriod.PeriodEndDate = new StrictDateType();
-                    s.SanctionSentencedPeriod.PeriodEndDate.Value = sanction.DecisionEndDate.Value;
-                }
+                ////if (sanction.DecisionStartDate.HasValue)
+                ////{
+                ////    s.SanctionSentencedPeriod.PeriodStartDate = new StrictDateType();
+                ////    s.SanctionSentencedPeriod.PeriodStartDate.Value = sanction.DecisionStartDate.Value;
+                ////}
+                //if (sanction.DecisionEndDate.HasValue)
+                //{
+                //    s.SanctionSentencedPeriod.PeriodEndDate = new StrictDateType();
+                //    s.SanctionSentencedPeriod.PeriodEndDate.Value = sanction.DecisionEndDate.Value;
+                //}
                 s.SanctionSentencedPeriod.PeriodDuration =
                   "Години: " + sanction.DecisionDurationYears
                   + " Месеци: " + sanction.DecisionDurationMonths
@@ -402,28 +402,28 @@ namespace EcrisServices
                 s.SanctionTypeReference.Value = sanction.EcrisSanctCateg.EcrisTechnId;
 
                 s.SanctionExecutionPeriod = new SanctionPeriodType();
-                if (sanction.ExecutionStartDate.HasValue)
-                {
-                    s.SanctionExecutionPeriod.PeriodStartDate = new StrictDateType();
-                    s.SanctionExecutionPeriod.PeriodStartDate.Value = sanction.ExecutionStartDate.Value;
+                //if (sanction.ExecutionStartDate.HasValue)
+                //{
+                //    s.SanctionExecutionPeriod.PeriodStartDate = new StrictDateType();
+                //    s.SanctionExecutionPeriod.PeriodStartDate.Value = sanction.ExecutionStartDate.Value;
 
-                }
-                if (sanction.ExecutionEndDate.HasValue)
-                {
-                    s.SanctionExecutionPeriod.PeriodEndDate = new StrictDateType();
-                    s.SanctionExecutionPeriod.PeriodEndDate.Value = sanction.ExecutionEndDate.Value;
+                //}
+                //if (sanction.ExecutionEndDate.HasValue)
+                //{
+                //    s.SanctionExecutionPeriod.PeriodEndDate = new StrictDateType();
+                //    s.SanctionExecutionPeriod.PeriodEndDate.Value = sanction.ExecutionEndDate.Value;
 
-                }
-                s.SanctionExecutionPeriod.PeriodDuration =
-                    "Години: " + sanction.ExecutionDurationYears
-                    + " Месеци: " + sanction.ExecutionDurationMonths
-                    + " Дни: " + sanction.ExecutionDurationDays
-                    + " Часове: " + sanction.ExecutionDurationHours;
-
-
+                //}
+                //s.SanctionExecutionPeriod.PeriodDuration =
+                //    "Години: " + sanction.ExecutionDurationYears
+                //    + " Месеци: " + sanction.ExecutionDurationMonths
+                //    + " Дни: " + sanction.ExecutionDurationDays
+                //    + " Часове: " + sanction.ExecutionDurationHours;
 
 
-                s.SanctionIsSpecificToMinor = CommonService.GetYesNoType(sanction.SpecificToMinor);
+
+
+                //s.SanctionIsSpecificToMinor = CommonService.GetYesNoType(sanction.SpecificToMinor);
 
 
                 result.Add(s);
