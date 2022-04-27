@@ -9,10 +9,10 @@ namespace MJ_CAIS.WebPortal.Internal
             // When file is linked, it is not added to configuration
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             
-            var builder = WebSetupConfig.ConfigureBuilder(args, config);
+            var builder = WebSetupConfig.CustomConfigureBuilder(args, config);
             var app = builder.Build();
             
-            WebSetupConfig.ConfigureApp(app);
+            WebSetupConfig.CustomConfigureApp(app);
             app.Run();
         }
     }

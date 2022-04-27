@@ -1,4 +1,6 @@
+using Microsoft.AspNet.OData.Extensions;
 using MJ_CAIS.WebSetup;
+using MJ_CAIS.WebSetup.Setup;
 
 namespace MJ_CAIS.WebPortal.Public
 {
@@ -9,10 +11,17 @@ namespace MJ_CAIS.WebPortal.Public
             // When file is linked, it is not added to configuration
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            var builder = WebSetupConfig.ConfigureBuilder(args, config);
+            var builder = WebSetupConfig.CustomConfigureBuilder(args, config);
+            builder.Services.AddControllersWithViews();
+
             var app = builder.Build();
 
-            WebSetupConfig.ConfigureApp(app);
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            WebSetupConfig.CustomConfigureApp(app);
+
             app.Run();
         }
     }

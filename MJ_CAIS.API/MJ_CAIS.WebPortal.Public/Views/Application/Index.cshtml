@@ -1,0 +1,48 @@
+﻿@using Infragistics.Web.Mvc
+@using MJ_CAIS.WebPortal.Public.Models.Application
+@model ApplicationViewModel
+
+@{
+    ViewData["Title"] = "Заявления";
+}
+
+<partial name="_InfragisticsLoader">
+    
+<div class="page-content scrollable-page">
+    <div class="box-content">
+        test
+        @(Html.Infragistics()
+        .Grid(Model.Applications)
+        .ID("applications")
+        .Language(ViewData["Culture"].ToString())
+        .Width("100%")
+        .PrimaryKey("Id")
+        .AutoGenerateColumns(false)
+        .AutoGenerateLayouts(false)
+        .Columns(column =>
+        {
+            column.Unbound("buttons").Width("8%");
+            column.For(x => x.RegistrationNumber).HeaderText("Registration Number").Width("10%");
+        })
+        .Features(feature =>
+        {
+            feature
+                .Sorting()
+                .Type(OpType.Remote);
+            feature
+                .Paging()
+                
+                .Type(OpType.Remote)
+                .PageSize(20)
+                .PageSizeDropDownLocation("above");
+                //.PagingHandler(OpType.Remote, pageSizeDropDownLocation: PageSizeDropDownLocation.inpager);
+            feature
+                .Filtering()
+                .Mode(FilterMode.Simple)
+                .Type(OpType.Remote);
+                //.SetFilterToLower();
+        })
+        .DataSourceUrl(Url.Action("GetApplications", "Application"))
+        .Render())
+    </div>
+</div>

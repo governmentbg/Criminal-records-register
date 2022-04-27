@@ -13,7 +13,7 @@ namespace MJ_CAIS.WebSetup
 {
     public class WebSetupConfig
     {
-        public static WebApplicationBuilder ConfigureBuilder(string[] args, IConfiguration? customConfig = null)
+        public static WebApplicationBuilder CustomConfigureBuilder(string[] args, IConfiguration? customConfig = null)
         {
             var builder = WebApplication.CreateBuilder(args);
             var configuration = customConfig ?? builder.Configuration;
@@ -27,11 +27,6 @@ namespace MJ_CAIS.WebSetup
             builder.Services.ConfigureOData();
             builder.Services.AddMvc(opt => opt.EnableEndpointRouting = false);
 
-            builder.Services.AddControllers(opt =>
-            {
-                opt.UseCentralRoutePrefix(new RouteAttribute("api"));
-            });
-
             builder.Services.AddFluentValidation(conf =>
             {
                 conf.RegisterValidatorsFromAssembly(typeof(DocumentValidator).Assembly);
@@ -41,7 +36,7 @@ namespace MJ_CAIS.WebSetup
             return builder;
         }
 
-        public static void ConfigureApp(WebApplication app)
+        public static void CustomConfigureApp(WebApplication app)
         {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -59,8 +54,6 @@ namespace MJ_CAIS.WebSetup
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseRouting();
 
