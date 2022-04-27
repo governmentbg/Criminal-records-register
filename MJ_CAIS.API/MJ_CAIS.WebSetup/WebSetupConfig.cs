@@ -2,6 +2,7 @@
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
@@ -12,10 +13,10 @@ namespace MJ_CAIS.WebSetup
 {
     public class WebSetupConfig
     {
-        public static WebApplicationBuilder ConfigureBuilder(string[] args)
+        public static WebApplicationBuilder ConfigureBuilder(string[] args, IConfiguration? customConfig = null)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var configuration = builder.Configuration;
+            var configuration = customConfig ?? builder.Configuration;
 
             builder.Services.AddRazorPages();
 
