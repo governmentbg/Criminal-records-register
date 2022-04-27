@@ -7116,6 +7116,8 @@ namespace MJ_CAIS.DTO.EcrisService
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://ec.europa.eu/ECRIS-RI/domain-v1.0")]
     public partial class RequestMessageType : AbstractBusinessMessageType
     {
+        [XmlIgnoreAttribute]
+        public string EcrisMsgId { get; set; }
     }
 
     /// <remarks/>

@@ -11,7 +11,7 @@ namespace EcrisRIClient
 
     {
         private IMapper _mapper;
-        private readonly List<EcrisMessageType> _msgListForCais = new List<EcrisMessageType> { EcrisMessageType.REQ, EcrisMessageType.NOT };
+        //private readonly List<EcrisMessageType> _msgListForCais = new List<EcrisMessageType> { EcrisMessageType.REQ, EcrisMessageType.NOT };
         private string _username { get; set; }
         private string _password { get; set; }
         //private string _searchFolderName { get; set; }
@@ -29,8 +29,7 @@ namespace EcrisRIClient
             });
 
             _mapper = mapperConfig.CreateMapper();
-            //_searchFolderName = folder;
-            //_itemsPerPage = itemsPerPage;
+           
         }
 
         public async Task<string> GetActiveSessionId()
@@ -103,58 +102,26 @@ namespace EcrisRIClient
         //    return resultList;
         //}
 
-        private async Task<MessageShortViewType[]> GetMessagesPageForFolder(storagePortv10Client client, int pageNumber, string sessionId, string folderId, string itemsPerPage)
-        {
-            var request = new GetMessagesForFolderWSInputType();
-            request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
-            request.WSData = new GetMessagesForFolderWSInputDataType()
-            {
-                FolderIdentifier = folderId,
-                MessagesSortedBy = MessageSortByType.VersionDesc,
-                MessagesSortedBySpecified = true,
-                ItemsPerPage = itemsPerPage,
-                PageNumber = pageNumber,
-                PageNumberSpecified = true
-            };
+        //private async Task<MessageShortViewType[]> GetMessagesPageForFolder(storagePortv10Client client, int pageNumber, string sessionId, string folderId, string itemsPerPage)
+        //{
+        //    var request = new GetMessagesForFolderWSInputType();
+        //    request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
+        //    request.WSData = new GetMessagesForFolderWSInputDataType()
+        //    {
+        //        FolderIdentifier = folderId,
+        //        MessagesSortedBy = MessageSortByType.VersionDesc,
+        //        MessagesSortedBySpecified = true,
+        //        ItemsPerPage = itemsPerPage,
+        //        PageNumber = pageNumber,
+        //        PageNumberSpecified = true
+        //    };
 
-            var resp = await client.getMessagesForFolderAsync(request);
-            var wsData = (GetMessagesForFolderWSOutputDataType)resp.GetMessagesForFolderWSOutput.WSData;
-            return wsData.MessageShortViewList;
-        }
+        //    var resp = await client.getMessagesForFolderAsync(request);
+        //    var wsData = (GetMessagesForFolderWSOutputDataType)resp.GetMessagesForFolderWSOutput.WSData;
+        //    return wsData.MessageShortViewList;
+        //}
 
-        public async Task<QueryType> GetPreparedQuery(string sessionID, string queryName)
-        {
-            var client = new searchPortv10Client();
-            var request = new RetrieveStoredQueryWSInputType();
-            request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionID };
-            request.WSData = new RetrieveStoredQueryWSInputDataType()
-            {
-                QueryName = queryName
-
-            };
-
-            var response = await client.retrieveStoredQueryAsync(request);
-            var wsData = (RetrieveStoredQueriesWSOutputDataType)response.RetrieveStoredQueriesWSOutput.WSData;
-            if (wsData.QueryList.Length != 1)
-                //todo:make exception
-                throw new Exception("QueryNotFound");
-            return wsData.QueryList[0];
-
-        }
-
-        public async Task SavePreparedQuery(string sessionID, QueryType query)
-        {
-            var client = new searchPortv10Client();
-
-            var request = new SearchWSInputType();
-            request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionID };
-            request.WSData = new SearchWSInputDataType() { SearchQuery = query };
-
-            var response = await client.storeQueryAsync(request);
-            //todo:how to check success?!    
-
-
-        }
+   
         public async Task<MJ_CAIS.DTO.EcrisService.SearchWSOutputDataType> ExecutePreparedQuery(string sessionID, MJ_CAIS.DTO.EcrisService.QueryType query, int pageNumber, string itemsPerPage)
         {
 
@@ -194,6 +161,57 @@ namespace EcrisRIClient
                 MJ_CAIS.DTO.EcrisService.ReadMessageWSOutputDataType>((ReadMessageWSOutputDataType)resp.ReadMessageWSOutput.WSData);
             return result;
         }
+
+        public async Task<MJ_CAIS.DTO.EcrisService.AbstractMessageType>  InsertRequestResponse(MJ_CAIS.DTO.EcrisService.RequestResponseMessageType incommingMessage, string sessionID, string folderID)
+        {
+            var msg = CreateRequestResponseMessage(incommingMessage);
+            EcrisRIClient.EcrisService.RequestResponseMessageType msgResult = (EcrisRIClient.EcrisService.RequestResponseMessageType) await InsertMessage(msg, folderID, sessionID);
+           
+            var result = _mapper.Map<EcrisRIClient.EcrisService.RequestResponseMessageType,
+                MJ_CAIS.DTO.EcrisService.RequestResponseMessageType>(msgResult);
+
+            return result;
+        }
+        public async Task<MJ_CAIS.DTO.EcrisService.AbstractMessageType> InsertNotification(MJ_CAIS.DTO.EcrisService.NotificationMessageType incommingMessage, string sessionID, string folderID)
+        {
+            var msg = CreateNotificationMessage(incommingMessage);
+            EcrisRIClient.EcrisService.NotificationMessageType msgResult = (EcrisRIClient.EcrisService.NotificationMessageType)await InsertMessage(msg, folderID, sessionID);
+
+            var result = _mapper.Map<EcrisRIClient.EcrisService.NotificationMessageType,
+                MJ_CAIS.DTO.EcrisService.NotificationMessageType>(msgResult);
+
+            return result;
+        }
+        private AbstractMessageType CreateRequestResponseMessage(MJ_CAIS.DTO.EcrisService.RequestResponseMessageType incommingMessage)
+        {
+            var result = _mapper.Map<MJ_CAIS.DTO.EcrisService.RequestResponseMessageType,
+                EcrisRIClient.EcrisService.RequestResponseMessageType>(incommingMessage);
+            return result;
+        }
+
+        private AbstractMessageType CreateNotificationMessage(MJ_CAIS.DTO.EcrisService.NotificationMessageType incommingMessage)
+        {
+            var result = _mapper.Map<MJ_CAIS.DTO.EcrisService.NotificationMessageType,
+                EcrisRIClient.EcrisService.NotificationMessageType>(incommingMessage);
+            return result;
+        }
+
+        private async Task<AbstractMessageType> InsertMessage(AbstractMessageType message,string folderId, string sessionId)
+        {
+            StoreMessageWSInputDataType reqData = new StoreMessageWSInputDataType();
+            reqData.EcrisRiMessage = message;
+            reqData.TargetFolderIdentifier = folderId;           
+            
+            StoreMessageWSInputType req = new StoreMessageWSInputType();
+            req.WSData = reqData;
+            req.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
+            
+            storeMessageResponse result = await _storageClient.storeMessageAsync(req);
+
+           return ((StoreMessageWSOutputDataType)result.StoreMessageWSOutput.WSData).EcrisMessage;
+                     
+        }
+
 
     }
 }
