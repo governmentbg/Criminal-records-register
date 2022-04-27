@@ -39,7 +39,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   public showProbationData: boolean = false;
   public showFineData: boolean = false;
   public showPrisonData: boolean = false;
-
+  public isSanctionPreview: boolean = false;
   public probations = [];
 
   public sanctionProbCategoriesOptions: BaseNomenclatureModel[];
@@ -97,6 +97,8 @@ export class BulletinSanctionsFormComponent implements OnInit {
   }
 
   public onOpenAddSanction() {
+    this.bulletinSanctionForm.group.enable();
+    this.isSanctionPreview = false;
     // clear grid and old transactions
     this.clearProbationData();
     this.showOrHidBySanctionCategory("");
@@ -104,12 +106,16 @@ export class BulletinSanctionsFormComponent implements OnInit {
   }
 
   public onOpenEditSanction(event: IgxGridRowComponent) {
-    let sanctionProbations = event.rowData.probations;
-    this.gridBulletinProbation.data = sanctionProbations;
-    this.bulletinSanctionForm.group.patchValue(event.rowData);
+    this.bulletinSanctionForm.group.enable();
+    this.isSanctionPreview = false;
+    this.updateDialogData(event);
+    this.dialog.open();
+  }
 
-    this.showOrHidBySanctionCategory(event.rowData.sanctCategoryId);
-
+  public onOpenPreviewSanction(event: IgxGridRowComponent) {
+    this.bulletinSanctionForm.group.disable();
+    this.isSanctionPreview = true;
+    this.updateDialogData(event);
     this.dialog.open();
   }
 
@@ -131,6 +137,14 @@ export class BulletinSanctionsFormComponent implements OnInit {
 
   public getSanctionCategoryNameById(arr: any): string {
     return this.sanctionProbCategoriesOptions.find((s) => s.id === arr)?.name;
+  }
+
+  private updateDialogData(event: IgxGridRowComponent) {
+    let sanctionProbations = event.rowData.probations;
+    this.gridBulletinProbation.data = sanctionProbations;
+    this.bulletinSanctionForm.group.patchValue(event.rowData);
+
+    this.showOrHidBySanctionCategory(event.rowData.sanctCategoryId);
   }
 
   //#region Probations actions

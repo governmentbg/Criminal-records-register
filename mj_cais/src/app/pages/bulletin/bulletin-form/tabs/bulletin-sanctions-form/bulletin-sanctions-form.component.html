@@ -62,14 +62,15 @@
       [dataType]="'string'"
     ></igx-column>
 
-    <igx-column
-      field="fineAmount"
-      header="Размер на наложеното наказание - глоба"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
     <igx-action-strip #actionstrip>
+      <button
+        title="Преглед"
+        igxButton="icon"
+        igxRipple
+        (click)="onOpenPreviewSanction(actionstrip.context)"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </button>
       <button
         *ngIf="!isForPreview"
         title="Редактирай"
@@ -103,6 +104,7 @@
           <div class="d-flex">
             <div>
               <button
+                *ngIf="!isSanctionPreview"
                 nbButton
                 matRipple
                 [status]="'success'"
@@ -191,7 +193,7 @@
                   <igx-grid-toolbar>
                     <igx-grid-toolbar-actions
                       ><button
-                        *ngIf="!isForPreview"
+                        *ngIf="!isForPreview && !isSanctionPreview"
                         igxButton="flat"
                         (click)="addNewProbation()"
                       >
@@ -312,7 +314,7 @@
                     </div>
                   </ng-template>
 
-                  <igx-action-strip #actionstrip>
+                  <igx-action-strip #actionstrip *ngIf="!isSanctionPreview">
                     <igx-grid-editing-actions
                       [addRow]="false"
                       [contentEditable]="true"
