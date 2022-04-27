@@ -55,15 +55,18 @@ export class FbbcFormComponent
 
   ngOnInit(): void {
     this.fullForm = new FbbcForm();
-    this.fullForm.docTypeId.disable();
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
     this.isForCreate = this.activatedRoute.snapshot.outlet === "primary";
+    if(this.isForEdit) {
+      this.fullForm.docTypeId.disable();
+    }
   }
 
   submitFunction = () => {
-    if (this.isForCreate) {
+    this.fullForm.docTypeId.enable();
+    if (this.isForCreate || this.isForEdit) {
       this.fullForm.docTypeId.setValue(DocTypeConstants.ecris);
       this.fullForm.statusCode.setValue(FbbcStatusTypeEnum.Active);
     }
@@ -87,7 +90,8 @@ export class FbbcFormComponent
 
   public onSelectCountry = (item: CountryGridModel) => {
     if (item) {
-      //this.fullForm.country.setValue(item.id, item.name);
+      debugger
+      this.fullForm.countryLookup.setValue(item.id, item.name);
     }
   };
 }

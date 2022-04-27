@@ -114,7 +114,6 @@ namespace MJ_CAIS.FluentValidators.Bulletin
                 .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.AfisNumber).HasMaxLength(100);
-            RuleFor(x => x.BirthDatePrecision).HasMaxLength(200);
             RuleFor(x => x.BulletinAuthorityId).HasMaxLength(50);
             RuleFor(x => x.BulletinType).HasMaxLength(50);
             RuleFor(x => x.CaseTypeId).HasMaxLength(50);
@@ -128,9 +127,7 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             RuleFor(x => x.Fullname).HasMaxLength(200);
             RuleFor(x => x.FullnameLat).HasMaxLength(200);
             RuleFor(x => x.IdDocCategoryId).HasMaxLength(50);
-            RuleFor(x => x.IdDocIssuingDatePrec).HasMaxLength(200);
             RuleFor(x => x.IdDocNumber).HasMaxLength(100);
-            RuleFor(x => x.IdDocValidDatePrec).HasMaxLength(200);
             RuleFor(x => x.MotherFamilyname).HasMaxLength(200);
             RuleFor(x => x.MotherFirstname).HasMaxLength(200);
             RuleFor(x => x.MotherFullname).HasMaxLength(200);

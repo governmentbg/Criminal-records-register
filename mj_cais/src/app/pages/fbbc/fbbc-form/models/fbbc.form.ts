@@ -7,7 +7,7 @@ export class FbbcForm {
 
   public id: FormControl;
   //public countryId: FormControl;
-  //public country: LookupForm;
+  public countryLookup: LookupForm;
   public docTypeId: FormControl;
   public sanctionTypeId: FormControl;
   public receiveDate: FormControl;
@@ -57,7 +57,7 @@ export class FbbcForm {
   constructor() {
     this.id = new FormControl(null);
     // this.countryId = new FormControl(null);
-    //this.country = new LookupForm(false);
+    this.countryLookup = new LookupForm(false);
     this.docTypeId = new FormControl(null);
     this.sanctionTypeId = new FormControl(null);
     this.receiveDate = new FormControl(null);
@@ -107,7 +107,7 @@ export class FbbcForm {
     this.group = new FormGroup({
       id: this.id,
       // countryId: this.countryId,
-      //country: this.country.group,
+      countryLookup: this.countryLookup.group,
       docTypeId: this.docTypeId,
       sanctionTypeId: this.sanctionTypeId,
       receiveDate: this.receiveDate,

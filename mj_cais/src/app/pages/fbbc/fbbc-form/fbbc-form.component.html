@@ -18,23 +18,23 @@
             [parentGroup]="fullForm.group"
             [inputName]="'docTypeId'"
             [items]="dbData.docTypeId"
-            [hidden]="!isForPreview && !isForEdit"
+            *ngIf="isForPreview || isForEdit"
           >
           </cais-autocomplete>
         </div>
       </div>
 
-      <!-- <div class="row">
+      <div class="row">
         <div class="form-group col-md-4">
           <cais-lookup
             [label]="'Държава'"
-            [inputControl]="fullForm.country"
-            [parentGroup]="fullForm.country.group"
+            [inputControl]="fullForm.countryLookup"
+            [parentGroup]="fullForm.countryLookup.group"
             [openFunction]="openCountryDialog"
           >
           </cais-lookup>
         </div>
-      </div> -->
+      </div>
 
       <div class="row">
         <div class="form-group col-md-3">
@@ -272,7 +272,8 @@
       >
       </cais-fbbc-document-form>
 
-      <div class="form-group mt-3">
+      <div class="form-group mt-3"
+      [hidden]="fullForm.docTypeId.value !== docType">
         <igx-grid
           #ecrisMessages
           igxGridState

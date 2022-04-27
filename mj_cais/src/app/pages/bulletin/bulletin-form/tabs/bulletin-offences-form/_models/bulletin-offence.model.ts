@@ -9,36 +9,22 @@ export class BulletinOffenceModel {
   public ecrisOffCatName: string = null;
   public offStartDate: Date = null;
   public offEndDate: Date = null;
-  public occurrences: number = null;
-  public isContiniuous: boolean = null;
-  public offLvlComplId: string = null;
-  public offLvlComplName: string = null;
-  public offLvlPartId: string = null;
-  public offLvlPartName: string = null;
-  public respExemption: boolean = null;
-  public recidivism: boolean = null;
-  public formOfGuilt: string = null;
+  public formOfGuiltId: string = null;
+  public formOfGuiltName: string = null;
   public offPlace: AddressModel = null;
+  public legalProvisions: string = null;
 
   constructor(init?: Partial<BulletinOffenceModel>) {
-    if (init) {
-      this.id = init.id ?? null;
-      this.offenceCategory = init.offenceCategory ?? null;
-      this.remarks = init.remarks ?? null;
-      this.ecrisOffCatId = init.ecrisOffCatId ?? null;
-      this.offStartDate = init.offStartDate ?? null;
-      this.offEndDate = init.offEndDate ?? null;
-      this.occurrences = init.occurrences ?? null;
-      this.isContiniuous = init.isContiniuous ?? null;
-      this.offLvlComplId = init.offLvlComplId ?? null;
-      this.offLvlPartId = init.offLvlPartId ?? null;
-      this.respExemption = init.respExemption ?? null;
-      this.recidivism = init.recidivism ?? null;
-      this.formOfGuilt = init.formOfGuilt ?? null;
-      this.ecrisOffCatName = init.ecrisOffCatName ?? null;
-        this.offLvlComplName = init.offLvlComplName ?? null;
-      this.offLvlPartName = init.offLvlPartName ?? null;
-      this.offPlace = init.offPlace ?? null;
-    }
+    this.id = init?.id ?? null;
+    this.offenceCategory = init?.offenceCategory ?? null;
+    this.remarks = init?.remarks ?? null;
+    this.ecrisOffCatId = init?.ecrisOffCatId ?? null;
+    this.offStartDate = init?.offStartDate ?? null;
+    this.offEndDate = init?.offEndDate ?? null;
+    this.legalProvisions = init?.legalProvisions ?? null;
+    this.ecrisOffCatName = init?.ecrisOffCatName ?? null;
+    this.offPlace = init?.offPlace ?? null;
+    this.formOfGuiltId = init?.formOfGuiltId ?? null;
+    this.formOfGuiltName = init?.formOfGuiltName ?? null;
   }
 }

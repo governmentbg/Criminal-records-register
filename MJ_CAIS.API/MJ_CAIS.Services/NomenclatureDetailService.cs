@@ -65,11 +65,27 @@ namespace MJ_CAIS.Services
                 .GetAllFbbcSanctTypes()
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
+
         public IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses()
         {
             return _nomenclatureDetailRepository
                 .GetInternalRequestStatuses()
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
+        public IQueryable<NomenclatureTypeDTO> GetSanctionCategories()
+        {
+            return _nomenclatureDetailRepository
+                .GetSanctionCategories()
+                .Select(x => new NomenclatureTypeDTO
+                {
+                    Id = x.Id,
+                    Code = x.Code,
+                    Name = x.Name,
+                    Type = x.Type,
+                    ValidFrom = x.ValidFrom,
+                    ValidTo = x.ValidTo,
+                });
         }
 
         public async Task<IgPageResult<CountryDTO>> GetCountriesAsync(ODataQueryOptions<CountryDTO> aQueryOptions)

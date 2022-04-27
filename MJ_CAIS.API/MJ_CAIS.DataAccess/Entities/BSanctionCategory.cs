@@ -15,6 +15,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
         public string? ExternalId { get; set; }
+        public string? Type { get; set; }
 
         public virtual ICollection<BSanction> BSanctions { get; set; }
     }

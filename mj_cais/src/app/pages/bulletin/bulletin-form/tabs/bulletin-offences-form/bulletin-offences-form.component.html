@@ -11,7 +11,6 @@
         igxButton="flat"
         (click)="dialogAdd.open()"
         *ngIf="!isForPreview"
-        class="addProdBtn"
       >
         <igx-icon>add</igx-icon> Добави
       </button>
@@ -39,7 +38,15 @@
       [dataType]="'string'"
     ></igx-column>
     <igx-column
-      field="formOfGuilt"
+      field="formOfGuiltId"
+      header="Идентификатор на Форма на вината"
+      [sortable]="false"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+    </igx-column>
+    <igx-column
+      field="formOfGuiltName"
       header="Форма на вината"
       [sortable]="true"
       [dataType]="'string'"
@@ -91,68 +98,10 @@
         </span>
       </ng-template>
     </igx-column>
-    <igx-column
-      field="occurrences"
-      header="Колко пъти е извършено"
-      [sortable]="true"
-      [dataType]="'number'"
-    >
-    </igx-column>
-    <igx-column
-      field="isContiniuous"
-      header="Непрекъснато извършвано престъпление"
-      [sortable]="true"
-      [dataType]="'boolean'"
-    >
-    </igx-column>
-    <igx-column
-      field="respExemption"
-      header="Освобождаване от наказателна отговорност"
-      [sortable]="true"
-      [dataType]="'boolean'"
-    >
-    </igx-column>
-    <igx-column
-      field="recidivism"
-      header="Рецидивизъм"
-      [sortable]="true"
-      [dataType]="'boolean'"
-    >
-    </igx-column>
-    <igx-column
-      field="offLvlComplId"
-      header="Идентификатор на степен на довършване"
-      [sortable]="true"
-      [dataType]="'text'"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="offLvlComplName"
-      header="Степен на довършване"
-      [sortable]="true"
-      [dataType]="'text'"
-    >
-    </igx-column>
-    <igx-column
-      field="offLvlPartId"
-      header="Идентификатор на степен на участие"
-      [sortable]="true"
-      [dataType]="'text'"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="offLvlPartName"
-      header="Степен на участие"
-      [sortable]="true"
-      [dataType]="'text'"
-    >
-    </igx-column>
 
     <igx-action-strip #actionstrip>
       <button
-      *ngIf="!isForPreview"
+        *ngIf="!isForPreview"
         title="Редактирай"
         igxButton="icon"
         igxRipple
@@ -161,7 +110,7 @@
         <igx-icon>edit</igx-icon>
       </button>
       <button
-      *ngIf="!isForPreview"
+        *ngIf="!isForPreview"
         title="Изтрии"
         igxButton="icon"
         igxRipple
@@ -218,13 +167,13 @@
             ></cais-lookup>
           </div>
           <div class="form-group col-md-4">
-            <cais-input
-              [type]="'text'"
+            <cais-autocomplete
               [label]="'Форма на вината'"
-              [inputFormControl]="bulletinOffenceForm.formOfGuilt"
+              [inputFormControl]="bulletinOffenceForm.formOfGuiltId"
               [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'formOfGuilt'"
-            ></cais-input>
+              [inputName]="'formOfGuiltId'"
+              [items]="dbData.formOfGuilts"
+            ></cais-autocomplete>
           </div>
         </div>
         <div class="row">
@@ -299,87 +248,6 @@
               #offPlace
               [parentForm]="bulletinOffenceForm.offPlace"
             ></cais-address-form>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-8">
-            <cais-input
-              [type]="'number'"
-              [label]="'Колко пъти е извършено'"
-              [inputFormControl]="bulletinOffenceForm.occurrences"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'occurrences'"
-            >
-            </cais-input>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-md-5">
-            <div
-              class="nb-form-control-container"
-              style="
-                height: 40px;
-                max-width: 100%;
-                display: flex;
-                align-items: center;
-              "
-            >
-              <nb-checkbox [formControl]="bulletinOffenceForm.isContiniuous"
-                >Непрекъснато извършвано престъпление</nb-checkbox
-              >
-            </div>
-          </div>
-          <div class="col-md-5">
-            <div
-              class="nb-form-control-container"
-              style="
-                height: 40px;
-                max-width: 100%;
-                display: flex;
-                align-items: center;
-              "
-            >
-              <nb-checkbox [formControl]="bulletinOffenceForm.respExemption"
-                >Освобождаване от наказателна отговорност</nb-checkbox
-              >
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div
-              class="nb-form-control-container"
-              style="
-                height: 40px;
-                max-width: 100%;
-                display: flex;
-                align-items: center;
-              "
-            >
-              <nb-checkbox [formControl]="bulletinOffenceForm.recidivism"
-                >Рецидивизъм
-              </nb-checkbox>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Степен на довършване'"
-              [inputFormControl]="bulletinOffenceForm.offLvlComplId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.completions"
-              [inputName]="'offLvlComplId'"
-            >
-            </cais-autocomplete>
-          </div>
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Степен на участие'"
-              [inputFormControl]="bulletinOffenceForm.offLvlPartId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.parts"
-              [inputName]="'offLvlPartId'"
-            >
-            </cais-autocomplete>
           </div>
         </div>
       </nb-card-body>

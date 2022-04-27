@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.Common\MJ_CAIS.Common.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.FluentValidators\MJ_CAIS.FluentValidators.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

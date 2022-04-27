@@ -30,6 +30,7 @@
     <ProjectReference Include="..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj" />
     <ProjectReference Include="..\MJ_CAIS.FluentValidators\MJ_CAIS.FluentValidators.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj" />
   </ItemGroup>
 
 </Project>

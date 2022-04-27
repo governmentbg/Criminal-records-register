@@ -1,7 +1,9 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace MJ_CAIS.Web.Setup
+namespace MJ_CAIS.WebSetup.Setup
 {
     public static class SwaggerConfig
     {
