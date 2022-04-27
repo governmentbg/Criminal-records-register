@@ -17,7 +17,6 @@ namespace MJ_CAIS.Repositories.Impl
                      .Where(x => x.DistrictId == districtId);
         }
 
-
         public IQueryable<GCity> GetCitiesByMunicipality(string municipalityId)
         {
             return _dbContext.GCities.AsNoTracking()
@@ -33,13 +32,20 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.FbbcDocTypes.AsNoTracking();
         }
+
         public IQueryable<FbbcSanctType> GetAllFbbcSanctTypes()
         {
             return _dbContext.FbbcSanctTypes.AsNoTracking();
         }
+
         public IQueryable<BReqStatus> GetInternalRequestStatuses()
         {
             return _dbContext.BReqStatuses.AsNoTracking();
+        }
+
+        public IQueryable<BSanctionCategory> GetSanctionCategories()
+        {
+            return _dbContext.BSanctionCategories.AsNoTracking();
         }
 
         public IQueryable<GCountry> GetCountries()

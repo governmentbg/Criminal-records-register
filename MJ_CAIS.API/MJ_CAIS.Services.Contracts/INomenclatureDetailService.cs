@@ -23,5 +23,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses();
 
         Task<IgPageResult<CountryDTO>> GetCountriesAsync(ODataQueryOptions<CountryDTO> aQueryOptions);
+
+        IQueryable<NomenclatureTypeDTO> GetSanctionCategories();
     }
 }

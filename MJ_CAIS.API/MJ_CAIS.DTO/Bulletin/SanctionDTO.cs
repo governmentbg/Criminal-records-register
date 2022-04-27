@@ -19,7 +19,6 @@ namespace MJ_CAIS.DTO.Bulletin
         public byte? SuspentionDurationYears { get; set; }
         public byte? SuspentionDurationMonths { get; set; }
         public byte? SuspentionDurationDays { get; set; }
-        public byte? SuspentionDurationHours { get; set; }
         public List<BulletinProbationDTO> Probations { get; set; } = new List<BulletinProbationDTO>();
         public List<TransactionDTO<BulletinProbationDTO>> ProbationsTransactions { get; set; } = new List<TransactionDTO<BulletinProbationDTO>>();
     }

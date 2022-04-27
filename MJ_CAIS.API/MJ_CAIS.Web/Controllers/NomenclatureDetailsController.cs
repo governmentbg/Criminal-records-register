@@ -78,5 +78,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await _nomenclatureDetailService.GetCountriesAsync(aQueryOptions);
             return Ok(result);
         }
+
+        [HttpGet("sanction-categories")]
+        public IActionResult GetSanctionCategories()
+        {
+            var result = _nomenclatureDetailService.GetSanctionCategories();
+            return Ok(result);
+        }
     }
 }

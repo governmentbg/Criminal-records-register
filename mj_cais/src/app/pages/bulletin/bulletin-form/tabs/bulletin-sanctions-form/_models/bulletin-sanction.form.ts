@@ -18,7 +18,6 @@ export class BulletinSanctionForm {
   public suspentionDurationYears: FormControl;
   public suspentionDurationMonths: FormControl;
   public suspentionDurationDays: FormControl;
-  public suspentionDurationHours: FormControl;
   public probationsTransactions: FormControl;
   public probations: FormControl;
 
@@ -39,7 +38,6 @@ export class BulletinSanctionForm {
     this.suspentionDurationYears = new FormControl(null);
     this.suspentionDurationMonths = new FormControl(null);
     this.suspentionDurationDays = new FormControl(null);
-    this.suspentionDurationHours = new FormControl(null);
     this.probationsTransactions = new FormControl(null);
     this.probations = new FormControl(null);
 
@@ -59,7 +57,6 @@ export class BulletinSanctionForm {
       suspentionDurationYears: this.suspentionDurationYears,
       suspentionDurationMonths: this.suspentionDurationMonths,
       suspentionDurationDays: this.suspentionDurationDays,
-      suspentionDurationHours: this.suspentionDurationHours,
       probationsTransactions: this.probationsTransactions,
       probations: this.probations
     });

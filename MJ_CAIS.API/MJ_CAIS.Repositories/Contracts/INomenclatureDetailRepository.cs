@@ -18,5 +18,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<BReqStatus> GetInternalRequestStatuses();
 
         IQueryable<GCountry> GetCountries();
+
+        IQueryable<BSanctionCategory> GetSanctionCategories();
     }
 }

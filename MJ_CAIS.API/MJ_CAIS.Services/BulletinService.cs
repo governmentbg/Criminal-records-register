@@ -234,7 +234,7 @@ namespace MJ_CAIS.Services
         {
             UpdateDataForDestruction(entity);
 
-            UpdateTransactions(aInDto, entity);
+            await UpdateTransactionsAsync(aInDto, entity);
 
             UpdateStatusByDecisions(entity, oldStatus);
 
@@ -308,25 +308,57 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        private void UpdateTransactions(BulletinBaseDTO aInDto, BBulletin entity)
+        private async Task UpdateTransactionsAsync(BulletinBaseDTO aInDto, BBulletin entity)
         {
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
 
-            foreach (var currentTransaction in aInDto.SanctionsTransactions)
+            var deletedSanctionIds = aInDto.SanctionsTransactions
+                    .Where(x => x.Type == TransactionTypesEnum.DELETE)
+                    .Select(x => x.Id).ToList();
+
+            var sanctions = await GetDeletedSanctionsAsync(deletedSanctionIds);
+
+            // added or updated entities
+            foreach (var currentTransaction in aInDto.SanctionsTransactions.Where(x => x.Type != TransactionTypesEnum.DELETE))
             {
-                var probTrans = mapper.MapTransactions<BulletinProbationDTO, BProbation>(currentTransaction.NewValue.ProbationsTransactions);           
+                var probTrans = mapper.MapTransactions<BulletinProbationDTO, BProbation>(currentTransaction.NewValue.ProbationsTransactions);
                 var sanction = mapper.MapTransaction<SanctionDTO, BSanction>(currentTransaction);
                 sanction.BProbations = probTrans;
+
                 foreach (var prob in sanction.BProbations)
                 {
                     prob.SanctionId = sanction.Id;
                 }
-                entity.BSanctions.Add(sanction);
+
+                sanctions.Add(sanction);
             }
 
+            entity.BSanctions = sanctions;
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
             entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.PersonAliasTransactions);
             entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
+        }
+
+        private async Task<List<BSanction>> GetDeletedSanctionsAsync(List<string> deletedSanctionIds)
+        {
+            if (deletedSanctionIds.Count == 0) return new List<BSanction>();
+
+            var deletedSanctionAndItsProbations = await dbContext.BSanctions.AsNoTracking()
+                      .Where(x => deletedSanctionIds.Contains(x.Id))
+                      .Include(x => x.BProbations)
+                      .Select(x => new BSanction
+                      {
+                          Id = x.Id,
+                          EntityState = EntityStateEnum.Deleted,
+                          BProbations = x.BProbations.Select(x => new BProbation
+                          {
+                              Id = x.Id,
+                              EntityState = EntityStateEnum.Deleted,
+                          }).ToArray(),
+                      }).ToListAsync();
+
+
+            return deletedSanctionAndItsProbations;
         }
 
         /// <summary>

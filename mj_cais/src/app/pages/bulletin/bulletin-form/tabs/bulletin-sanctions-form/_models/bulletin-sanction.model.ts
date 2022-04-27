@@ -17,7 +17,6 @@ export class BulletinSanctionModel {
   public suspentionDurationYears: number = null;
   public suspentionDurationMonths: number = null;
   public suspentionDurationDays: number = null;
-  public suspentionDurationHours: number = null;
   public probations: BulletinProbationModel[];
   public probationsTransactions: Transaction[];
 
@@ -37,7 +36,6 @@ export class BulletinSanctionModel {
       this.suspentionDurationYears = init?.suspentionDurationYears ?? null;
       this.suspentionDurationMonths = init?.suspentionDurationMonths ?? null;
       this.suspentionDurationDays = init?.suspentionDurationDays ?? null;
-      this.suspentionDurationHours = init?.suspentionDurationHours ?? null;
       this.probations = init?.probations ?? null;
       this.probationsTransactions = init?.probationsTransactions ?? null;
   }

@@ -131,7 +131,7 @@ export class NomenclatureService extends CaisCrudService<
 
   public getSanctionCategories(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/b_sanction_categories`
+      `${this.url}/sanction-categories`
     );
   }
 
@@ -186,9 +186,7 @@ export class NomenclatureService extends CaisCrudService<
   }
 
   public getFbbcDocTypes(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/fbbc-doc-types`
-    );
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/fbbc-doc-types`);
   }
 
   public getFbbcSanctTypes(): Observable<BaseNomenclatureModel[]> {
@@ -198,8 +196,6 @@ export class NomenclatureService extends CaisCrudService<
   }
 
   public getAllCities(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/g_cities`
-    );
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_cities`);
   }
 }

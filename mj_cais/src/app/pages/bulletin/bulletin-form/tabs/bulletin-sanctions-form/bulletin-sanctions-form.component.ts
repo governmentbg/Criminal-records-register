@@ -8,6 +8,7 @@ import {
 } from "@infragistics/igniteui-angular";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { SanctionCategoryType } from "../../_models/sanction-category-type-constants";
 import { BulletinSanctionForm } from "./_models/bulletin-sanction.form";
 
 @Component({
@@ -34,9 +35,10 @@ export class BulletinSanctionsFormComponent implements OnInit {
   public gridBulletinProbation: IgxGridComponent;
 
   public bulletinSanctionForm = new BulletinSanctionForm();
-  public showProbationData: boolean = false;
 
-  private probationCode = "nkz_probacia";
+  public showProbationData: boolean = false;
+  public showFineData: boolean = false;
+  public showPrisonData: boolean = false;
 
   public probations = [];
 
@@ -97,6 +99,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   public onOpenAddSanction() {
     // clear grid and old transactions
     this.clearProbationData();
+    this.showOrHidBySanctionCategory("");
     this.dialog.open();
   }
 
@@ -104,6 +107,9 @@ export class BulletinSanctionsFormComponent implements OnInit {
     let sanctionProbations = event.rowData.probations;
     this.gridBulletinProbation.data = sanctionProbations;
     this.bulletinSanctionForm.group.patchValue(event.rowData);
+
+    this.showOrHidBySanctionCategory(event.rowData.sanctCategoryId);
+
     this.dialog.open();
   }
 
@@ -120,8 +126,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   }
 
   public onSanctionCategoryChange(selectedElement) {
-    this.showProbationData = selectedElement == this.probationCode;
-    // todo:
+    this.showOrHidBySanctionCategory(selectedElement);
   }
 
   public getSanctionCategoryNameById(arr: any): string {
@@ -212,9 +217,87 @@ export class BulletinSanctionsFormComponent implements OnInit {
 
     this.bulletinSanctionForm.probations.patchValue(probationsObjToAdd);
 
+    let selectedCategoryType = this.getSelectedCategoryType(
+      this.bulletinSanctionForm.sanctCategoryId.value
+    );
+
+    if (selectedCategoryType != SanctionCategoryType.Probation) {
+      this.updateTransactionWhenCategoryIsNotProbation(
+        allSavedTransactions,
+        probationsObjToAdd
+      );
+    }
+
+    if (selectedCategoryType != SanctionCategoryType.Fine) {
+      this.bulletinSanctionForm.fineAmount.patchValue(null);
+    }
+
+    if (selectedCategoryType != SanctionCategoryType.Prison) {
+      this.bulletinSanctionForm.suspentionDurationYears.patchValue(null);
+      this.bulletinSanctionForm.suspentionDurationMonths.patchValue(null);
+      this.bulletinSanctionForm.suspentionDurationDays.patchValue(null);
+    }
+
     // remove data from probation grid and its transactions
     // after save it in sanction grid
     this.clearProbationData();
+  }
+
+  private updateTransactionWhenCategoryIsNotProbation(
+    allSavedTransactions,
+    probationsObjToAdd
+  ) {
+    debugger;
+    let deleteTransactions = [];
+    allSavedTransactions.forEach((savedTransaction) => {
+      // when update saved element in db
+      let updateOrDeleteElementFromDb =
+        (savedTransaction.type == TransactionType.UPDATE ||
+          savedTransaction.type == TransactionType.DELETE) &&
+        !allSavedTransactions.some(
+          (x) => x.id == savedTransaction.id && x.type == TransactionType.ADD
+        );
+
+      if (updateOrDeleteElementFromDb) {
+        // must add delete transaction
+        let deleteTransaction = {
+          id: savedTransaction.id,
+          newValue: null,
+          type: TransactionType.DELETE,
+        };
+        deleteTransactions.push(deleteTransaction);
+      }
+    });
+
+    // if has saved element
+    probationsObjToAdd.forEach((probationToBeAdd) => {
+      let isNotDeleted =
+        deleteTransactions.length == 0 ||
+        !deleteTransactions.some((x) => x.id == probationToBeAdd.id);
+
+      // if element is not deleted or added locally
+      if (
+        isNotDeleted &&
+        !allSavedTransactions.some(
+          (x) => x.id == probationToBeAdd.id && x.type == TransactionType.ADD
+        )
+      ) {
+        let deleteTransaction = {
+          id: probationToBeAdd.id,
+          newValue: null,
+          type: TransactionType.DELETE,
+        };
+        deleteTransactions.push(deleteTransaction);
+      }
+    });
+
+    // element to be deleted from db
+    this.bulletinSanctionForm.probationsTransactions.patchValue(
+      deleteTransactions
+    );
+
+    // clear saved grid data used for visualization
+    this.bulletinSanctionForm.probations.patchValue([]);
   }
 
   public onSanctionProbRowDeleted(rowContext) {
@@ -290,6 +373,23 @@ export class BulletinSanctionsFormComponent implements OnInit {
   //#endregion
 
   //#region Helpers
+
+  private showOrHidBySanctionCategory(sanctionCategoryType: string) {
+    let selectedType = this.getSelectedCategoryType(sanctionCategoryType);
+
+    this.showProbationData = selectedType == SanctionCategoryType.Probation;
+    this.showFineData = selectedType == SanctionCategoryType.Fine;
+    this.showPrisonData = selectedType == SanctionCategoryType.Prison;
+  }
+
+  private getSelectedCategoryType(sanctionCategoryId: string): string {
+    let selectedType =
+      this.dbData.sanctionCategories.filter(
+        (x) => x.code == sanctionCategoryId
+      )[0]?.type ?? "";
+
+    return selectedType;
+  }
 
   public onGridOptionChange(id: number, cell: IgxGridCellComponent) {
     cell.value = id;
