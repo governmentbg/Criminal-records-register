@@ -79,5 +79,36 @@ namespace EcrisIntegrationServices
             }
             return null;
         }
+
+        public static string GetPeriodFromNumbers(int? years, int? months, int? days, int? hours)
+        {
+            return "P" +
+                  ((years == null || years==0)? "" : (years.ToString() + "Y"))
+                  + ((months == null || months ==0) ? "" : (months.ToString() + "M"))
+                    + ((days == null || days==0)? "" : (days.ToString() + "D"))
+                  + ((hours == null || hours == 0) ? "" : ("T" + hours.ToString() + "H"));
+        }
+
+        public static DateType GetDateTypeFromDateAndPrecission(DateTime date, string prec)
+        {
+            DateType res = new DateType();
+            if(prec.Contains('y') || prec.Contains('Y'))
+            {
+                res.DateYear = date.Year.ToString();
+
+            }
+            if (prec.Contains('m') || prec.Contains('M'))
+            {
+                res.DateMonthDay = new MonthDayType();
+                res.DateMonthDay.DateMonth = date.Month.ToString();
+                if (prec.Contains('d') || prec.Contains('D'))
+                {
+                    res.DateMonthDay.DateDay = date.Day.ToString();
+                }
+
+            }
+
+            return res;
+        }
     }
 }

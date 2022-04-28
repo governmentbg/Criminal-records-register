@@ -19,5 +19,13 @@
             public const string CodeNJR = "NJR";
             public const string CodeECRIS = "ECRIS";
         }
+
+        public static class FBBCStatus
+        {
+            public const string Active = "Active";
+            public const string Deleted = "Deleted";
+            public const string ForDelete = "ForDelete";
+         
+        }
     }
 }
