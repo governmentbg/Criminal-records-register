@@ -7,11 +7,7 @@
     [primaryKey]="'id'"
   >
     <igx-grid-toolbar>
-      <button
-        igxButton="flat"
-        (click)="dialogAdd.open()"
-        *ngIf="!isForPreview"
-      >
+      <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
         <igx-icon>add</igx-icon> Добави
       </button>
     </igx-grid-toolbar>
@@ -157,6 +153,17 @@
         </div>
       </nb-card-header>
       <nb-card-body>
+        <!--  <div class="row mt-2">
+          <div class="gorm-group col-md-8">
+            <label class="label">Крайна дата на извършване на деянието</label>
+             <cais-date-precision
+              [formModel]="bulletinOffenceForm.testDate"
+              [parentGroup]="bulletinOffenceForm.group"
+            >
+            </cais-date-precision> 
+          </div>
+        </div>-->
+
         <div class="row mt-2">
           <div class="form-group col-md-8">
             <cais-lookup
