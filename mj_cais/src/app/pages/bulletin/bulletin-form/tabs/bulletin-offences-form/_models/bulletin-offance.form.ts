@@ -1,6 +1,7 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
 import { AddressForm } from "../../../../../../@core/components/forms/address-form/model/address.form";
+import { DatePrecisionModelForm } from "../../../../../../@core/components/forms/inputs/date-precision/_models/date-precision.form";
 import { LookupForm } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.form";
 
 export class BulletinOffenceForm {
@@ -16,6 +17,7 @@ export class BulletinOffenceForm {
   public offStartDate: FormControl;
   public offEndDate: FormControl;
   public offPlace: AddressForm;
+  // public testDate: DatePrecisionModelForm;
 
   constructor() {
     var guid = Guid.create().toString();
@@ -30,6 +32,7 @@ export class BulletinOffenceForm {
     this.offStartDate = new FormControl(null, [Validators.required]);
     this.offEndDate = new FormControl(null, [Validators.required]); // тодо: крайна дата, ако е период
     this.offPlace = new AddressForm();
+    //this.testDate = new DatePrecisionModelForm(false,false);
 
     this.group = new FormGroup({
       id: this.id,
@@ -43,6 +46,7 @@ export class BulletinOffenceForm {
       legalProvisions: this.legalProvisions,
       offEndDate: this.offEndDate,
       offPlace: this.offPlace.group,
+      //testDate: this.testDate.group
     });
   }
 }

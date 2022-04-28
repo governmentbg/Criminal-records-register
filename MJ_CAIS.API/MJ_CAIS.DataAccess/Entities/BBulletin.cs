@@ -31,7 +31,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CaseTypeId { get; set; }
         public string? CaseNumber { get; set; }
         public decimal? CaseYear { get; set; }
-        public string? ConvRemarks { get; set; }
         public string? AlphabeticalIndex { get; set; }
         public string? DecisionEcli { get; set; }
         public DateTime? BulletinCreateDate { get; set; }
@@ -91,6 +90,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public bool? PrevSuspSent { get; set; }
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
+        public string? ConvRemarks { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

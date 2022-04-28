@@ -143,6 +143,16 @@
   }
 }
 
-.ng-dropdown-panel{
+.ng-dropdown-panel {
   z-index: 99999 !important;
+}
+
+igx-month-picker {
+  max-width: 400px;
+  margin: 20px;
+}
+
+igx-month-picker{
+  z-index: 1;
+  position: absolute;
 }

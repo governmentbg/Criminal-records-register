@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   IgxActionStripModule,
+  IgxCalendarModule,
   IgxComboModule,
   IgxDialogModule,
   IgxGridModule,
@@ -21,8 +22,8 @@ import {
 } from "@nebular/theme";
 import { TlCommonModule } from "@tl/tl-common";
 import { NgxPermissionsModule } from "ngx-permissions";
-import { ThemeModule } from "./@theme/theme.module";
 import { FileUploadModule } from "ng2-file-upload";
+import { HammerModule } from "@angular/platform-browser";
 
 @NgModule({
   declarations: [],
@@ -45,7 +46,9 @@ import { FileUploadModule } from "ng2-file-upload";
     IgxActionStripModule,
     IgxComboModule,
     IgxDialogModule,
-    FileUploadModule
+    FileUploadModule,
+    HammerModule, 
+    IgxCalendarModule
   ],
   exports: [
     TlCommonModule,
@@ -66,7 +69,9 @@ import { FileUploadModule } from "ng2-file-upload";
     IgxActionStripModule,
     IgxComboModule,
     IgxDialogModule,
-    FileUploadModule
+    FileUploadModule,
+    HammerModule, 
+    IgxCalendarModule
   ],
 })
 export class SharedModule {}

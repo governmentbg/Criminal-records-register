@@ -37,6 +37,7 @@ import { MultipleChooseComponent } from './components/forms/inputs/multiple-choo
 import { AddressFormComponent } from './components/forms/address-form/address-form.component';
 import { CountryDialogComponent } from './components/forms/address-form/dialog/country-dialog/country-dialog.component';
 import { throwIfAlreadyLoaded } from "./module-import-guard";
+import { DatePrecisionComponent } from './components/forms/inputs/date-precision/date-precision.component';
 
 const socialLinks = [
   {
@@ -115,6 +116,7 @@ const COMPONENTS = [
   MultipleChooseComponent,
   AddressFormComponent,
   CountryDialogComponent,
+  DatePrecisionComponent
 ];
 
 @NgModule({
