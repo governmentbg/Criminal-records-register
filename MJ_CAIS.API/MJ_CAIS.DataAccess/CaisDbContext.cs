@@ -76,10 +76,13 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GCountrySubdivision> GCountrySubdivisions { get; set; } = null!;
         public virtual DbSet<GCsAuthority> GCsAuthorities { get; set; } = null!;
         public virtual DbSet<GDecidingAuthority> GDecidingAuthorities { get; set; } = null!;
+        public virtual DbSet<GExtAdministration> GExtAdministrations { get; set; } = null!;
         public virtual DbSet<GNomenclature> GNomenclatures { get; set; } = null!;
         public virtual DbSet<GRole> GRoles { get; set; } = null!;
         public virtual DbSet<GUser> GUsers { get; set; } = null!;
         public virtual DbSet<GUserRole> GUserRoles { get; set; } = null!;
+        public virtual DbSet<GUsersCitizen> GUsersCitizens { get; set; } = null!;
+        public virtual DbSet<GUsersExt> GUsersExts { get; set; } = null!;
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
         public virtual DbSet<PPersGroup> PPersGroups { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
@@ -150,6 +153,12 @@ namespace MJ_CAIS.DataAccess
             modelBuilder.Entity<AApplication>(entity =>
             {
                 entity.ToTable("A_APPLICATIONS");
+
+                entity.HasIndex(e => e.UserCitizenId, "XIF11A_APPLICATIONS");
+
+                entity.HasIndex(e => e.UserId, "XIF12A_APPLICATIONS");
+
+                entity.HasIndex(e => e.UserExtId, "XIF13A_APPLICATIONS");
 
                 entity.HasIndex(e => e.PersonId, "XIF1A_APPLICATIONS");
 
@@ -369,6 +378,21 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.UpdatedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.UserCitizenId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("USER_CITIZEN_ID");
+
+                entity.Property(e => e.UserExtId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("USER_EXT_ID");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("USER_ID");
 
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
@@ -758,7 +782,9 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("CONV_IS_TRANSMITTABLE");
 
-                entity.Property(e => e.ConvRemarks).HasColumnName("CONV_REMARKS");
+                entity.Property(e => e.ConvRemarks)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("CONV_REMARKS");
 
                 entity.Property(e => e.ConvRetPeriodEndDate)
                     .HasColumnType("DATE")
@@ -1202,7 +1228,9 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("DECISION_TYPE_ID");
 
-                entity.Property(e => e.Descr).HasColumnName("DESCR");
+                entity.Property(e => e.Descr)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("DESCR");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
@@ -3697,6 +3725,22 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VISIBLE");
             });
 
+            modelBuilder.Entity<GExtAdministration>(entity =>
+            {
+                entity.ToTable("G_EXT_ADMINISTRATIONS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+            });
+
             modelBuilder.Entity<GNomenclature>(entity =>
             {
                 entity.ToTable("G_NOMENCLATURES");
@@ -3811,6 +3855,72 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.GUserRoles)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_G_USER_ROLES_G_USERS");
+            });
+
+            modelBuilder.Entity<GUsersCitizen>(entity =>
+            {
+                entity.ToTable("G_USERS_CITIZEN");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(100)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(200)
+                    .HasColumnName("EMAIL");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<GUsersExt>(entity =>
+            {
+                entity.ToTable("G_USERS_EXT");
+
+                entity.HasIndex(e => e.AdministrationId, "XIF1G_USERS_EXT");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Active)
+                    .HasPrecision(1)
+                    .HasColumnName("ACTIVE");
+
+                entity.Property(e => e.AdministrationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ADMINISTRATION_ID");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(100)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(200)
+                    .HasColumnName("EMAIL");
+
+                entity.Property(e => e.IsAdmin)
+                    .HasPrecision(1)
+                    .HasColumnName("IS_ADMIN");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.Position).HasColumnName("POSITION");
+
+                entity.HasOne(d => d.Administration)
+                    .WithMany(p => p.GUsersExts)
+                    .HasForeignKey(d => d.AdministrationId)
+                    .HasConstraintName("FK_G_USERS_EXT_G_EXT_ADMINISTR");
             });
 
             modelBuilder.Entity<GraoPerson>(entity =>

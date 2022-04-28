@@ -12,13 +12,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? DecisionFinalDate { get; set; }
         public string? DecisionAuthId { get; set; }
         public string? DecisionTypeId { get; set; }
-        public string? Descr { get; set; }
         public string? BulletinId { get; set; }
         public DateTime? ChangeDate { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public string? Descr { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual GDecidingAuthority? DecisionAuth { get; set; }
