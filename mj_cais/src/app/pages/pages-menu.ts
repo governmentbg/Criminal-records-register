@@ -27,6 +27,11 @@ export class PagesMenu {
         hidden: true,
       },
       {
+        title: "Лица",
+        icon: "people-outline",
+        link: "/pages/people",
+      },
+      {
         title: "Бюлетини",
         icon: { icon: "file-alt", pack: "fa" },
         children: [

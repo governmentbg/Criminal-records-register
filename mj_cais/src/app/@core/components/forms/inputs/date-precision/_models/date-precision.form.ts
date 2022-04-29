@@ -2,26 +2,29 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 export class DatePrecisionModelForm {
   public group: FormGroup;
-
   public date: FormControl;
-  //public yearAndMonth: FormControl;
-  // public year: FormControl;
+  public year: FormControl;
+  public month: FormControl;
   public precision: FormControl;
 
   constructor(isRequired?: boolean, disabled?: boolean) {
     let validators = isRequired && !disabled ? [Validators.required] : [];
-    //this.fullDate = new FormControl();
-    //this.yearAndMonth = new FormControl();
-    // this.year = new FormControl();
     this.precision = new FormControl(validators);
     this.date = new FormControl(validators);
+    this.year = new FormControl(null, [
+      Validators.maxLength(4),
+      Validators.minLength(4),
+    ]);
+    this.month = new FormControl(
+      Validators.maxLength(1),
+      Validators.minLength(2)
+    );
 
     this.group = new FormGroup({
-      // fullDate: this.fullDate,
-      //yearAndMonth: this.yearAndMonth,
-      //year: this.year,
-      date: this.date,
       precision: this.precision,
+      date: this.date,
+      year: this.year,
+      month: this.month,
     });
 
     if (disabled) {

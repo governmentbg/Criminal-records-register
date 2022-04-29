@@ -28,17 +28,13 @@ export class DatePrecisionComponent implements OnInit {
   public showFullDate: boolean = false;
   public showYearAndMonth: boolean = false;
   public showYear: boolean = false;
+
   public dateValue: Date;
-  public showMonthPicker: boolean = false;
-  public yearMonthDisplayInput: FormControl;
-  public yearDisplayInput: FormControl;
 
   ngOnInit() {
-    this.yearMonthDisplayInput = new FormControl();
-    this.yearDisplayInput = new FormControl(null, [
-      Validators.maxLength(4),
-      Validators.minLength(4),
-    ]);
+    // todo: maping from server 
+    // add validation
+
   }
 
   onDatePercisionChange(value: string) {
@@ -47,42 +43,5 @@ export class DatePrecisionComponent implements OnInit {
     this.showYear = value == DatePrecisionConstants.year.id;
     if (this.showFullDate) {
     }
-  }
-
-  public onSelection(selectedDate) {
-    this.showMonthPicker = false;
-    let dateFormated = this.dateService.displayDate(selectedDate);
-    this.formModel.date.patchValue(selectedDate);
-    this.yearMonthDisplayInput.patchValue(dateFormated);
-  }
-
-  public onClick(evt) {
-    this.showMonthPicker = true;
-  }
-
-  public onFocusout(evt) {
-    if (evt.relatedTarget) {
-      let isClickedNext = evt.relatedTarget.classList.contains(
-        "igx-calendar-picker__next"
-      );
-      let isClickedPrev = evt.relatedTarget.classList.contains(
-        "igx-calendar-picker__prev"
-      );
-      let isClickedInMonth = evt.relatedTarget.hasAttribute("ng-reflect-date");
-      let isClickedInYear = evt.relatedTarget.classList.contains(
-        "igx-calendar-picker__date"
-      );
-      this.showMonthPicker =
-        isClickedNext || isClickedInMonth || isClickedInYear || isClickedPrev;
-      return;
-    }
-
-    this.showMonthPicker = false;
-  }
-
-  public onFocusoutYear(evt) {
-    let year = this.yearDisplayInput.value;
-    let date = new Date(year, 1, 1);
-    this.formModel.date.patchValue(date);
   }
 }

@@ -30,6 +30,7 @@ import { IsinDataSelectBulletinFormComponent } from "./isin/isin-data-form/isin-
 import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component";
 import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
+import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
 
 const routes: Routes = [
   {
@@ -217,6 +218,11 @@ const routes: Routes = [
         component: IsinDataPreviewFormComponent,
         // canActivate: [AuthGuard],
       },  
+      {
+        path: "people",
+        component: PersonOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
       {
         path: "miscellaneous",
         loadChildren: () =>
