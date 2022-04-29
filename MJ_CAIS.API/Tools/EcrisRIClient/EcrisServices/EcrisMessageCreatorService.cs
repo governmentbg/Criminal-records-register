@@ -49,10 +49,13 @@ namespace EcrisIntegrationServices
                     {
                         foreach (var request in messages)
                         {
-                            var reqResp = await GenerateResponseToRequest(request);
+                            if (request != null)
+                            {
+                                var reqResp = await GenerateResponseToRequest(request);
 
-                            //todo: what is the value of convictionID?!
-                            AddMessageToDBContext(reqResp, "", joinSeparator);
+                                //todo: what is the value of convictionID?!
+                                await AddMessageToDBContextAsync(reqResp, "", joinSeparator);
+                            }
 
                         }
 
@@ -109,7 +112,7 @@ namespace EcrisIntegrationServices
 
         private async Task AddBulletinToResponce(RequestResponseMessageType reqResp, BBulletin buletin)
         {
-            throw new NotImplementedException();
+     
             List<BBulletin> personBuletins = new List<BBulletin>();
 
             if (personBuletins.Count > 0)
@@ -120,7 +123,7 @@ namespace EcrisIntegrationServices
                     convictions = new List<ConvictionType>();
 
                 }
-                string bgCode = _dbContext.GCountries.FirstOrDefault(c => c.Iso3166Alpha2 == "BG").EcrisTechnId;
+                string bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG")).EcrisTechnId;
                 foreach (var personBuletin in personBuletins)
                 {
                     ConvictionType conv = GetConvictionFromBuletin(personBuletin, bgCode);
@@ -133,7 +136,7 @@ namespace EcrisIntegrationServices
         }
 
 
-        private ConvictionType GetConvictionFromBuletin(BBulletin buletin, string bgCode)
+        private ConvictionType GetConvictionFromBuletin(BBulletin buletin, string? bgCode)
         {
             ConvictionType conv = new ConvictionType();
             conv.ConvictionSanction = GetSanctions(buletin);
@@ -149,8 +152,10 @@ namespace EcrisIntegrationServices
                 conv.ConvictionDecisionFinalDate = new StrictDateType();
                 conv.ConvictionDecisionFinalDate.Value = buletin.DecisionFinalDate.Value;
             }
-
-            conv.ConvictionIsTransmittable = CommonService.GetYesNoType(buletin.ConvIsTransmittable == 1);
+            if (CommonService.GetYesNoType(buletin.ConvIsTransmittable == 1) != null)
+            {
+                conv.ConvictionIsTransmittable = CommonService.GetYesNoType(buletin.ConvIsTransmittable == 1);
+            }
 
             if (buletin.ConvRetPeriodEndDate.HasValue)
             {
@@ -165,14 +170,17 @@ namespace EcrisIntegrationServices
             }
             if (!string.IsNullOrEmpty(buletin.DecidingAuthId))
             {
+
                 conv.ConvictionDecidingAuthority = new DecidingAuthorityType();
+
                 conv.ConvictionDecidingAuthority.DecidingAuthorityCode = new RestrictedStringType50Chars();
                 //todo: кой идентификатор да се пише тук
                 conv.ConvictionDecidingAuthority.DecidingAuthorityCode.Value = buletin.DecidingAuth.Id;
+
                 conv.ConvictionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[3];
-                conv.ConvictionDecidingAuthority.DecidingAuthorityName[0].Value = buletin.DecidingAuth.Name;
-                conv.ConvictionDecidingAuthority.DecidingAuthorityName[1].Value = buletin.DecidingAuth.NameEn;
-                conv.ConvictionDecidingAuthority.DecidingAuthorityName[2].Value = buletin.DecidingAuth.DisplayName;
+                conv.ConvictionDecidingAuthority.DecidingAuthorityName[0].Value = buletin.DecidingAuth?.Name;
+                conv.ConvictionDecidingAuthority.DecidingAuthorityName[1].Value = buletin.DecidingAuth?.NameEn;
+                conv.ConvictionDecidingAuthority.DecidingAuthorityName[2].Value = buletin.DecidingAuth?.DisplayName;
             }
             conv.ConvictionID = buletin.EcrisConvictionId;
             //todo: винаги ли е бг?
@@ -190,7 +198,7 @@ namespace EcrisIntegrationServices
 
         private OffenceType[] GetOffences(BBulletin personBuletin)
         {
-            throw new NotImplementedException();
+         
             List<OffenceType> result = new List<OffenceType>();
             foreach (var offence in personBuletin.BOffences)
             {
@@ -252,7 +260,7 @@ namespace EcrisIntegrationServices
 
         private DecisionType[] GetDecisions(BBulletin personBuletin)
         {
-            throw new NotImplementedException();
+          
             List<DecisionType> result = new List<DecisionType>();
             foreach (var decision in personBuletin.BDecisions)
             {
@@ -298,7 +306,6 @@ namespace EcrisIntegrationServices
 
         private SanctionType[] GetSanctions(BBulletin personBuletin)
         {
-            throw new NotImplementedException();
             List<SanctionType> result = new List<SanctionType>();
             foreach (var sanction in personBuletin.BSanctions)
             {
@@ -352,24 +359,28 @@ namespace EcrisIntegrationServices
 
             var docContents = _dbContext.DDocContents.Where(cont => cont.DDocuments.Where(d => d.FbbcId == fbbc.Id && d.EcrisMsgId != null).Any()
                                                                      && cont.MimeType == "application/xml").Select(cont => cont.Content);
-
-
-            var notifications = await docContents?.Select(c => XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c)) as NotificationMessageType)?.ToListAsync();
-
-            var listOfConvictions = reqResp.RequestResponseMessageConviction?.ToList();
-            if (listOfConvictions == null)
+            if (docContents != null)
             {
-                listOfConvictions = new List<ConvictionType>();
-            }
 
-            listOfConvictions.AddRange(notifications.Select(n => n.NotificationMessageConviction).ToList());
-            reqResp.RequestResponseMessageConviction = listOfConvictions.ToArray();
+                var notifications = await docContents.Where(c => c != null).Select(c => XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c)) as NotificationMessageType).ToListAsync();
+                if (notifications != null)
+                {
+                    var listOfConvictions = reqResp.RequestResponseMessageConviction?.ToList();
+                    if (listOfConvictions == null)
+                    {
+                        listOfConvictions = new List<ConvictionType>();
+                    }
+
+                    listOfConvictions.AddRange(notifications.Where(n => n != null).Select(n => n.NotificationMessageConviction).ToList());
+                    reqResp.RequestResponseMessageConviction = listOfConvictions.ToArray();
+                }
+            }
 
         }
 
         private async Task<List<Fbbc>> CheckFBBCAsync(RequestMessageType request, string personID)
         {
-                      
+
             //всички ekris msg за човека, за които има фббц запис
             var ecrisMsgs = _dbContext.EEcrisMessages.Where(e => e.FbbcId != null && e.EEcrisIdentifications.Any(ei => ei.Approved == 1 && ei.PersonId == personID))
                  .Select(e => e.Id).ToList();
@@ -384,7 +395,7 @@ namespace EcrisIntegrationServices
 
         private async Task<List<BBulletin>> CheckBuletinsAsync(RequestMessageType request, string personID)
         {
-  
+
 
             return new List<BBulletin>();
 
@@ -453,7 +464,7 @@ namespace EcrisIntegrationServices
 
         }
 
-        private async Task<List<RequestMessageType>> GetRequestForReplyingIdentifiedPeople(int pageNumber, int pageSize)
+        private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople(int pageNumber, int pageSize)
         {
             var contents = await _dbContext.DDocContents.Where(cont => cont.DDocuments
                                  .Where(dd => dd.EcrisMsgId != null
@@ -468,13 +479,17 @@ namespace EcrisIntegrationServices
 
             var result = contents?.Select(c => new { message = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c.Content)) as RequestMessageType, c.EcrisMsgId })
                   .ToList();
-            result?.ForEach(c => { c.message.EcrisMsgId = c.EcrisMsgId; });
-            return result?.Select(c => c.message)?.ToList();
+            if (result != null)
+            {
+                result.ForEach(c => { if (c.EcrisMsgId != null && c.message != null) c.message.EcrisMsgId = c.EcrisMsgId; });
+                return result.Select(c => c.message).ToList();
+            }
+            else return new List<RequestMessageType?>();
         }
-        private void AddMessageToDBContext(AbstractMessageType msg, string convictionID, string joinSeparator)
+        private async Task AddMessageToDBContextAsync(AbstractMessageType msg, string? convictionID, string joinSeparator)
         {
 
-            EEcrisMessage m = CreateEcrisMessage(msg, convictionID, joinSeparator);
+            EEcrisMessage m = await CreateEcrisMessageAsync(msg, convictionID, joinSeparator);
 
 
             DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, m.Firstname, m.Surname, m.Familyname, _dbContext);
@@ -490,7 +505,7 @@ namespace EcrisIntegrationServices
             _dbContext.DDocuments.Add(d);
             _dbContext.DDocContents.Add(content);
         }
-        private EEcrisMessage CreateEcrisMessage(MJ_CAIS.DTO.EcrisService.AbstractMessageType msg, string convictionID, string joinSeparator, string requestMsgId = "")
+        private async Task<EEcrisMessage> CreateEcrisMessageAsync(MJ_CAIS.DTO.EcrisService.AbstractMessageType msg, string? convictionID, string joinSeparator, string requestMsgId = "")
         {
             EEcrisMessage m = new EEcrisMessage();
 
@@ -498,11 +513,11 @@ namespace EcrisIntegrationServices
             m.EcrisIdentifier = msg.MessageEcrisIdentifier;
             m.Identifier = msg.MessageIdentifier;//или да се пази в m.RequestMsgId???
             m.EcrisMsgConvictionId = convictionID;
-            PersonType person = null;
+            PersonType? person = null;
             if (msg.MessageType == EcrisMessageType.RRS)
             {
                 person = ((RequestResponseMessageType)msg).MessagePerson;
-                m.MsgTypeId = CommonService.GetDocTypeCode(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
+                m.MsgTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
                 if (((RequestResponseMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;
@@ -524,7 +539,7 @@ namespace EcrisIntegrationServices
             if (msg.MessageType == EcrisMessageType.NOT)
             {
                 person = ((NotificationMessageType)msg).MessagePerson;
-                m.MsgTypeId = CommonService.GetDocTypeCode(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+                m.MsgTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
                 if (((NotificationMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;
@@ -537,8 +552,12 @@ namespace EcrisIntegrationServices
             }
             //има данни в msg.MessageShortViewPerson.PersonAlias - те интересуват ли ни?!
             ////има данни и за майка и баща - биха били полезни за идентификацията
-            m.BirthCity = string.Join(joinSeparator, person.PersonBirthPlace.PlaceTownName.Select(p => p.Value)); //msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownReference???
-            m.BirthDate = new DateTime(Int32.Parse(XmlUtils.GetNumbersFromString(person.PersonBirthDate.DateYear)),
+            var city = person?.PersonBirthPlace?.PlaceTownName?.Select(p => p.Value);
+            if (city != null)
+            {
+                m.BirthCity = string.Join(joinSeparator, city);
+            }//msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownReference???
+            m.BirthDate = new DateTime(Int32.Parse(XmlUtils.GetNumbersFromString(person?.PersonBirthDate?.DateYear)),
                                        Int32.Parse(XmlUtils.GetNumbersFromString(person.PersonBirthDate.DateMonthDay.DateMonth)),
                                        Int32.Parse(XmlUtils.GetNumbersFromString(person.PersonBirthDate.DateMonthDay.DateDay)));
             m.BirthCountry = person.PersonBirthPlace.PlaceCountryReference.Value;
@@ -603,7 +622,7 @@ namespace EcrisIntegrationServices
 
         public async Task CreateNotificationFromBulletin(BBulletin bulletin, string joinSeparator = " ")
         {
-            string bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
+            string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
             NotificationMessageType msg = new NotificationMessageType();
 
             msg.NotificationMessageConviction = GetConvictionFromBuletin(bulletin, bgCode);
@@ -622,7 +641,7 @@ namespace EcrisIntegrationServices
 
 
 
-            AddMessageToDBContext(msg, bulletin.EcrisConvictionId, joinSeparator);
+            await AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId, joinSeparator);
 
             await _dbContext.SaveChangesAsync();
 
@@ -635,12 +654,12 @@ namespace EcrisIntegrationServices
 
             msg.MessageSendingMemberStateSpecified = true;
             msg.MessageSendingMemberState = MemberStateCodeType.BG;
-            var notBGNacionality = bulletin.BPersNationalities.Where(nacionality => nacionality.Country.Iso3166Alpha2 != "BG");
+            var notBGNacionality = bulletin.BPersNationalities.Where(nacionality => nacionality.Country != null && nacionality.Country.Iso3166Alpha2 != "BG");
             List<MemberStateCodeType> notBGNacionalityInEU = new List<MemberStateCodeType>();
             foreach (var nacionality in notBGNacionality)
             {
-                object res;
-                if (Enum.TryParse(typeof(MemberStateCodeType), nacionality.Country.Iso3166Alpha2.ToUpper(), out res))
+                object? res;
+                if (Enum.TryParse(typeof(MemberStateCodeType), nacionality.Country?.Iso3166Alpha2?.ToUpper(), out res))
                 {
                     notBGNacionalityInEU.Add((MemberStateCodeType)res);
                 }
@@ -727,42 +746,28 @@ namespace EcrisIntegrationServices
             msg.MessagePerson.PersonIdentityNumber = new RestrictedStringType50Chars();
             msg.MessagePerson.PersonIdentityNumber.Value = string.Join(';', bulletin.Ln, bulletin.Lnch, bulletin.Egn);
 
-            msg.MessagePerson.PersonMotherForename = new NameTextType[1];
-            msg.MessagePerson.PersonMotherForename[0].Value = bulletin.MotherFirstname;
-            msg.MessagePerson.PersonMotherSecondSurname = new NameTextType[1];
-            msg.MessagePerson.PersonMotherSecondSurname[0].Value = bulletin.MotherFamilyname;
-            msg.MessagePerson.PersonMotherSurname = new NameTextType[1];
-            msg.MessagePerson.PersonMotherSurname[0].Value = bulletin.MotherSurname;
+            msg.MessagePerson.PersonMotherForename = CommonService.GetNameTextType(new List<string?>() { bulletin.MotherFirstname }, new List<string>())?.ToArray();
+            msg.MessagePerson.PersonMotherSecondSurname = CommonService.GetNameTextType(new List<string?>() { bulletin.MotherFamilyname }, new List<string>())?.ToArray();
+            msg.MessagePerson.PersonMotherSurname = CommonService.GetNameTextType(new List<string?>() { bulletin.MotherSurname }, new List<string>())?.ToArray();
+
+
 
 
 
             msg.MessagePerson.PersonName = new PersonNameType();
-            msg.MessagePerson.PersonName.Forename = new NameTextType[2];
-            msg.MessagePerson.PersonName.Forename[0].Value = bulletin.Firstname;
-            msg.MessagePerson.PersonName.Forename[0].languageCode = "BG";
-            msg.MessagePerson.PersonName.Forename[1].Value = bulletin.FirstnameLat;
-            msg.MessagePerson.PersonName.Forename[1].languageCode = "EN";
-
-            msg.MessagePerson.PersonName.SecondSurname = new NameTextType[2];
-            msg.MessagePerson.PersonName.SecondSurname[0].Value = bulletin.Familyname;
-            msg.MessagePerson.PersonName.SecondSurname[0].languageCode = "BG";
-            msg.MessagePerson.PersonName.SecondSurname[1].Value = bulletin.FamilynameLat;
-            msg.MessagePerson.PersonName.SecondSurname[1].languageCode = "EN";
-
-            msg.MessagePerson.PersonName.Surname = new NameTextType[2];
-            msg.MessagePerson.PersonName.Surname[0].Value = bulletin.Surname;
-            msg.MessagePerson.PersonName.Surname[0].languageCode = "BG";
-            msg.MessagePerson.PersonName.Surname[1].Value = bulletin.SurnameLat;
-            msg.MessagePerson.PersonName.Surname[1].languageCode = "EN";
-
-            msg.MessagePerson.PersonName.FullName = new FullNameTextType[2];
-            msg.MessagePerson.PersonName.FullName[0].Value = bulletin.Fullname;
-            msg.MessagePerson.PersonName.FullName[0].languageCode = "BG";
-            msg.MessagePerson.PersonName.FullName[1].Value = bulletin.FullnameLat;
-            msg.MessagePerson.PersonName.FullName[1].languageCode = "EN";
+            msg.MessagePerson.PersonName.Forename = CommonService.GetNameTextType(new List<string?>() { bulletin.Firstname, bulletin.FirstnameLat }, new List<string>() { "BG", "EN" })?.ToArray();
 
 
-            msg.MessagePerson.PersonNationalityReference = bulletin.BPersNationalities.Select(n => new CountryExternalReferenceType() { Value = n.Country.Iso3166Alpha2 }).ToArray();
+            msg.MessagePerson.PersonName.SecondSurname = CommonService.GetNameTextType(new List<string?>() { bulletin.Familyname, bulletin.FamilynameLat }, new List<string>() { "BG", "EN" })?.ToArray();
+
+            msg.MessagePerson.PersonName.Surname = CommonService.GetNameTextType(new List<string?>() { bulletin.Surname, bulletin.SurnameLat }, new List<string>() { "BG", "EN" })?.ToArray();
+
+
+            msg.MessagePerson.PersonName.FullName = CommonService.GetFullNameTextType(new List<string?>() { bulletin.Fullname, bulletin.FullnameLat }, new List<string>() { "BG", "EN" })?.ToArray();
+
+
+
+            msg.MessagePerson.PersonNationalityReference = bulletin.BPersNationalities.Where(n => n.Country != null && n.Country.Iso3166Alpha2 != null).Select(n => new CountryExternalReferenceType() { Value = n.Country.Iso3166Alpha2 }).ToArray();
 
             //msg.MessagePerson.PersonRemarks ;
             //1-мъж, 2 - жена
@@ -770,6 +775,154 @@ namespace EcrisIntegrationServices
             msg.MessagePerson.PersonSexSpecified = bulletin.Sex == 0;
 
 
+        }
+
+        public async Task ProcessIdentifiedNotificationsAsync()
+        {
+            _logger.LogInformation($"ProcessIdentifiedNotificationsAsync started.");
+            var notificationType = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+            _logger.LogTrace($"Notification type: {notificationType}.");
+            var ecrisMsgs = _dbContext.EEcrisMessages.Where(em => em.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON && em.MsgTypeId == notificationType && em.FbbcId==null);
+    
+            foreach (var msg in ecrisMsgs)
+            {
+                //променливи, за да можем да върнем състоянието в catch ако се счупи
+                Fbbc f = null;
+                Fbbc stateF = null;
+                bool isNewF = false;
+                List<DDocument> stateD = new List<DDocument>();
+                try
+                {
+                    _logger.LogTrace($"EcrisMessageID: {msg.Id}.");
+                    var personId = await CommonService.GetPersonIDForEcrisMessages(msg.Id, _dbContext);
+                    if (personId == null)
+                    {
+                        throw new Exception($"{msg.Id} : Person not identified.");
+                    }
+                    _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}");
+                    var fbbcs = await _dbContext.Fbbcs.Where(fbbc => fbbc.EcrisConvId == msg.EcrisMsgConvictionId
+                                                                                && fbbc.PersonId == personId
+                                                                                && fbbc.StatusCode == "Active").ToListAsync();
+                    if (fbbcs.Count() == 0)
+                    {
+                        isNewF=true;
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc does not exist. It will be created.");
+                        //todo: validate entries; check codes
+                         f = new Fbbc();
+                        f.Id = BaseEntity.GenerateNewId();
+                        f.Surname = msg.Surname;
+                        f.EcrisConvId = msg.EcrisMsgConvictionId;
+                        f.Familyname = msg.Familyname;
+                        f.Firstname = msg.Firstname;
+                        f.BirthDate = msg.BirthDate;
+                        f.BirthDatePrec = "YMD";
+                        f.BirthPlace = msg.BirthCity;
+                        f.BirtyCountryDescr = msg.BirthCountry;
+                        f.DocTypeId = msg.MsgTypeId;
+                        f.Egn = msg.Pin;
+                        f.PersonId = personId;
+                        f.ReceiveDate = msg.MsgTimestamp;
+                        f.EcrisUpdConvTypeId = "1";
+                        f.StatusCode = "Active";
+
+                        var content = msg.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml").Select(d => d.DocContent.Content).FirstOrDefault();
+                        NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
+
+                        f.ConvDecisionDate = CommonService.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionDate);
+                        f.ConvDecFinalDate = CommonService.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionFinalDate);
+                        bool isFordelete = false;
+                        foreach (var d in notification.NotificationMessageConviction.ConvictionDecision)
+                        {
+                            if (d.DecisionDeleteConvictionFromRegister?.Value?.ToLower() == "yes")
+                            {
+                                isFordelete = true;
+
+                            }
+                        }
+                        if (isFordelete)
+                        {
+                            f.StatusCode = "ForDelete";
+                            _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc {f.Id} will be marked as deleted.");
+
+                        }
+                        else
+                        {
+                            f.StatusCode = "Active";
+                        }
+                        msg.FbbcId = f.Id;
+                        foreach (var d in msg.DDocuments)
+                        {
+                            stateD.Add(d);
+                            d.FbbcId = f.Id;
+                            _dbContext.DDocuments.Update(d);
+                        }
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, number of documents which will be updated: {msg.DDocuments.Count()} .");
+                        _dbContext.Fbbcs.Add(f);
+                        _dbContext.EEcrisMessages.Update(msg);
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id} updated.");
+                    }
+                    else
+                    {
+                         f = fbbcs.First();
+                        stateF = f;
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, linked fbbc: {f.Id} ");
+                        var content = msg.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml").Select(d => d.DocContent.Content).FirstOrDefault();
+                        NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
+                        bool isFordelete = false;
+                        foreach (var d in notification.NotificationMessageConviction.ConvictionDecision)
+                        {
+                            if (d.DecisionDeleteConvictionFromRegister?.Value?.ToLower() == "yes")
+                            {
+                                isFordelete = true;
+
+                            }
+                        }
+                        if (isFordelete)
+                        {
+                            f.StatusCode = "ForDelete";
+                            _dbContext.Fbbcs.Update(f);
+                            _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc {f.Id} will be marked as deleted.");
+                        }
+
+                        msg.FbbcId = f.Id;
+
+                        foreach (var d in msg.DDocuments)
+                        {
+                            stateD.Add(d);
+                            d.FbbcId = f.Id;
+                            _dbContext.DDocuments.Update(d);
+                        }
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, number of documents which will be updated: {msg.DDocuments.Count()} .");
+                        _dbContext.EEcrisMessages.Update(msg);
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id} updated.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message, ex.Data);
+                    var entry = _dbContext.Entry(msg);
+                    entry.State = EntityState.Unchanged;
+                    if (isNewF)
+                    {
+                        var fEntry = _dbContext.Entry(f);
+                        fEntry.State = EntityState.Unchanged;
+                    }
+                    else
+                    {
+                        f = stateF;
+                        _dbContext.Fbbcs.Update(f);
+                    }
+                    _dbContext.DDocuments.UpdateRange(stateD);
+                    NLog.LogManager.Flush();
+                }
+
+                            }
+            _logger.LogTrace($"Pre - save changes.");
+            await _dbContext.SaveChangesAsync();
+            _logger.LogTrace($"Save changes to DB.");
+
+            _logger.LogInformation($"ProcessIdentifiedNotificationsAsync ended.");
+            NLog.LogManager.Flush();
         }
 
 

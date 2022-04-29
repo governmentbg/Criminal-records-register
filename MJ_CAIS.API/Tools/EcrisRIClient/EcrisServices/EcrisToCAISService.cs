@@ -56,7 +56,7 @@ namespace EcrisIntegrationServices
                 if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
                     lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
-                    docTypeCode = CommonService.GetDocTypeCode(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ,_dbContext);
+                    docTypeCode = await  CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ,_dbContext);
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
 
                 }
@@ -64,7 +64,7 @@ namespace EcrisIntegrationServices
                 {
                     if (messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                     {
-                        docTypeCode = CommonService.GetDocTypeCode(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT,_dbContext);
+                        docTypeCode = await CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT,_dbContext);
                         lastUpdatedTime = GetLastSynchDateForNotifications(paramNameForSynch);
                         query = GetNotificationsQuery(inboxFolderId, lastUpdatedTime);
 
@@ -217,7 +217,7 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private async Task AddMessageToDBContext(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, EcrisClient client, string sessionId, bool skipDataExtraction = false, string joinSeparator = " ", string docTypeCode = null)
+        private async Task AddMessageToDBContext(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, EcrisClient client, string sessionId, bool skipDataExtraction = false, string joinSeparator = " ", string? docTypeCode = null)
         {//functionalErrorReferenceIdentifier - да се интерпретира ли някак и как?!
             if (!msg.MessageTypeSpecified)
             {
@@ -265,6 +265,7 @@ namespace EcrisIntegrationServices
                             {
                                 m.Urgent = false;
                             };
+                            
 
                         }
                         if (msg.MessageType == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)

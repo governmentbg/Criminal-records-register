@@ -42,13 +42,22 @@ namespace EcrisMessageCreator
 
                 int pageSize = config.GetValue<int>("EcrisCreatorSettings:PageSize"); ;
                 string joinSeparator = config.GetValue<string>("EcrisCreatorSettings:joinSeparator");
+                bool createReply = config.GetValue<bool>("EcrisCreatorSettings:createReply");
+                bool mergeNotificationWithFBBC = config.GetValue<bool>("EcrisCreatorSettings:mergeNotificationWithFBBC");
                 //todo: repeat?check if exists?
                 using (host)
                 {
 
 
                     var msgCreatorService = host.Services.GetService<EcrisMessageCreatorService>();
-                    await msgCreatorService.CreateResponsesToRequests(pageSize, joinSeparator);
+                    if (createReply)
+                    {
+                        await msgCreatorService.CreateResponsesToRequests(pageSize, joinSeparator);
+                    }
+                    if (mergeNotificationWithFBBC)
+                    {
+                        await msgCreatorService.ProcessIdentifiedNotificationsAsync();
+                    }
 
 
 

@@ -40,8 +40,8 @@ namespace EcrisServices
         public async Task SendMessagesToEcris(string username, string password, string folderName)
         {
             _logger.LogInformation($"SendMessagesToEcris started. Username: {username}; Folder: {folderName}.");
-            string sessionID = null;
-            EcrisClient client = null;
+            string? sessionID = null;
+            EcrisClient? client = null;
             try
             {
                 var contents = await _dbContext.DDocContents.Where(cont => cont.DDocuments
@@ -54,22 +54,25 @@ namespace EcrisServices
                     _logger.LogTrace($" EcrisClient logged in.");
                     var folderId = await client.GetInboxFolderIdentifier(sessionID, folderName);
                     _logger.LogTrace($" Folder {folderName} identified as {folderId}.");
-                    var notificationTypeId = CommonService.GetDocTypeCode(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
-                    var responseTypeId = CommonService.GetDocTypeCode(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
+                    var notificationTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+                    var responseTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
                     foreach (var content in contents)
                     {
                         var ecrisMsg = content.DDocuments.First().EcrisMsg;
-                        var ecrisOutbox = ecrisMsg.EEcrisOutboxes.FirstOrDefault();
+                        var ecrisOutbox = ecrisMsg?.EEcrisOutboxes.FirstOrDefault();
                         bool isNew = false;
                         if (ecrisOutbox == null)
                         {
-                            _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : New outbox created.");
+                            _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : New outbox created.");
                             ecrisOutbox = new EEcrisOutbox();
                             ecrisOutbox.Id = BaseEntity.GenerateNewId();
                             ecrisOutbox.CreatedOn = DateTime.UtcNow;
                             isNew = true;
                         }
-
+                        if (content.Content == null)
+                        {
+                            throw new Exception("Empty content.");
+                        }
                         string xml = Encoding.UTF8.GetString(content.Content);
                         ecrisOutbox.XmlObject = xml;
                         //todo:add constants
@@ -77,7 +80,7 @@ namespace EcrisServices
                         ecrisOutbox.Error = null;
                         ecrisOutbox.HasError = false;
                         ecrisOutbox.Attempts = ecrisOutbox.Attempts == null ? 1 : ecrisOutbox.Attempts + 1;
-                        ecrisOutbox.EcrisMsgId = ecrisMsg.Id;
+                        ecrisOutbox.EcrisMsgId = ecrisMsg?.Id;
                         ecrisOutbox.StackTrace = null;
                         ecrisOutbox.ExecutionDate = DateTime.UtcNow;
 
@@ -86,9 +89,9 @@ namespace EcrisServices
                         AbstractMessageType msg = XmlUtils.DeserializeXml<AbstractMessageType>(xml);
                         //msg.MessageEcrisIdentifier = null;
                         //msg.MessageIdentifier = null;
-                        AbstractMessageType resp = null;
+                        AbstractMessageType? resp = null;
 
-                        var msgTypeID = ecrisMsg.MsgTypeId;
+                        var msgTypeID = ecrisMsg?.MsgTypeId;
                         try
                         {
                             if (msgTypeID == notificationTypeId)
@@ -104,12 +107,12 @@ namespace EcrisServices
                                 {
                                     _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
                                 }
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Outbox for pending pre-save.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending pre-save.");
                                 await _dbContext.SaveChangesAsync();
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Outbox for pending saved.");
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Notification pre-insert.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending saved.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Notification pre-insert.");
                                 resp = await client.InsertNotification(not, sessionID, folderId);
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Notification post-insert.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Notification post-insert.");
                             }
                             if (msgTypeID == responseTypeId)
                             {
@@ -123,23 +126,23 @@ namespace EcrisServices
                                 {
                                     _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
                                 }
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Outbox for pending pre-save.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending pre-save.");
                                 await _dbContext.SaveChangesAsync();
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Outbox for pending saved.");
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Response pre-insert.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending saved.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Response pre-insert.");
                                 resp = await client.InsertRequestResponse(reqResp, sessionID, folderId);
-                                _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Response post-insert.");
+                                _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Response post-insert.");
                             }
 
-                            ecrisMsg.EcrisIdentifier = resp.MessageEcrisIdentifier;
-                            ecrisMsg.Identifier = resp.MessageIdentifier;
+                            ecrisMsg.EcrisIdentifier = resp?.MessageEcrisIdentifier;
+                            ecrisMsg.Identifier = resp?.MessageIdentifier;
                             ecrisMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Sent;
                             _dbContext.EEcrisMessages.Update(ecrisMsg);
                             ecrisOutbox.Status = "SENT";
                             _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
-                            _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Outbox and ecris message pre-update.");
+                            _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox and ecris message pre-update.");
                             await _dbContext.SaveChangesAsync();
-                            _logger.LogTrace($"EcrisMessage({ecrisMsg.Id}) : Outbox and ecris message post-update.");
+                            _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox and ecris message post-update.");
                         }
                         catch (Exception ex)
                         {
