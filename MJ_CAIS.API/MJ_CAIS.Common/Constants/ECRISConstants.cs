@@ -17,7 +17,10 @@ namespace MJ_CAIS.Common.Constants
             public const string ReqWithRespUnconvicted = "ReqWithRespUnconvicted";
             public const string ReqWaitingForCSAuthority = "ReqWaitingForCSAuthority";
             public const string ReqWihtRespConvicted = "ReqWihtRespConvicted";
-
+            public const string NotificationCreated = "NotificationCreated";
+            public const string ResponceCreated = "ResponceCreated";
+            public const string ForSending = "ForSending";
+            public const string Sent = "Sent";
         }
         public static class EcrisInboxStatuses
         {

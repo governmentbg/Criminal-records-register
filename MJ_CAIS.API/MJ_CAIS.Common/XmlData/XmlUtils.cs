@@ -39,6 +39,18 @@ namespace MJ_CAIS.Common.XmlData
         {
             return node != null ? node.InnerText : null;
         }
+        public static string GetNumbersFromString(string inputValue)
+        {
+            string result = "";
+
+            for (int i = 0; i < inputValue.Length; i++)
+            {
+                if (Char.IsDigit(inputValue[i]))
+                    result += inputValue[i];
+            }
+
+            return result;
+        }
 
         public static XmlElement ToXmlElement(string input, bool preserveWhitespaces = false, bool removeXmlTag = true)
         {

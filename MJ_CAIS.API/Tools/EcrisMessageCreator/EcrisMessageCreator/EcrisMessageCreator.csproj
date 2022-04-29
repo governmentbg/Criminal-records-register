@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -12,9 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MJ_CAIS.Common\MJ_CAIS.Common.csproj" />
     <ProjectReference Include="..\..\..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
-    <ProjectReference Include="..\EcrisServices\EcrisIntegrationServices.csproj" />
+    <ProjectReference Include="..\..\EcrisRIClient\EcrisServices\EcrisIntegrationServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

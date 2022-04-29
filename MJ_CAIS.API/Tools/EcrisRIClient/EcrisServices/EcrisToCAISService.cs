@@ -26,10 +26,7 @@ namespace EcrisIntegrationServices
             _dbContext = dbContext;
             _logger = logger;
         }
-        public void SetDbContext(CaisDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        
         public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage, bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
         {
             _logger.LogInformation($"Synchronization of requests started.Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramRequestSynch: {paramRequestSynch}.");
@@ -55,9 +52,11 @@ namespace EcrisIntegrationServices
                 _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {inboxFolderId}.");
                 MJ_CAIS.DTO.EcrisService.QueryType query;
                 DateTime lastUpdatedTime;
+                string docTypeCode= "";
                 if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
                     lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
+                    docTypeCode = CommonService.GetDocTypeCode(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ,_dbContext);
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
 
                 }
@@ -65,6 +64,7 @@ namespace EcrisIntegrationServices
                 {
                     if (messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                     {
+                        docTypeCode = CommonService.GetDocTypeCode(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT,_dbContext);
                         lastUpdatedTime = GetLastSynchDateForNotifications(paramNameForSynch);
                         query = GetNotificationsQuery(inboxFolderId, lastUpdatedTime);
 
@@ -97,7 +97,7 @@ namespace EcrisIntegrationServices
 
                         if (r != null)
                         {
-                            await AddMessageToDBContext(r, client, sessionID, skipDataExtraction, joinSeparator);
+                            await AddMessageToDBContext(r, client, sessionID, skipDataExtraction, joinSeparator, docTypeCode);
 
                         }
 
@@ -151,7 +151,7 @@ namespace EcrisIntegrationServices
 
         }
 
-
+      
 
         private MJ_CAIS.DTO.EcrisService.QueryType GetRequestsQuery(string searchFolderID, DateTime fromDate)
         {
@@ -164,7 +164,6 @@ namespace EcrisIntegrationServices
                 }
 
             };
-
 
             return query;
 
@@ -218,7 +217,7 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private async Task AddMessageToDBContext(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, EcrisClient client, string sessionId, bool skipDataExtraction = false, string joinSeparator = " ")
+        private async Task AddMessageToDBContext(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, EcrisClient client, string sessionId, bool skipDataExtraction = false, string joinSeparator = " ", string docTypeCode = null)
         {//functionalErrorReferenceIdentifier - да се интерпретира ли някак и как?!
             if (!msg.MessageTypeSpecified)
             {
@@ -249,12 +248,11 @@ namespace EcrisIntegrationServices
 
 
                         var m = ParseMessageTraits(msg, joinSeparator);
+                        m.MsgTypeId = docTypeCode;
 
                         inbox.EcrisMsg = m;
                         inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
 
-                        //object req = (msg.MessageType == EcrisMessageType.REQ) ? (RequestMessageType)((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage : (NotificationMessageType)((ReadMessageWSOutputDataType)messageContent.WSData).EcrisRiMessage;
-                        //todo: add specific if needed
                         if (msg.MessageType == MJ_CAIS.DTO.EcrisService.EcrisMessageType.NOT)
                         {
                             var req = ((NotificationMessageType)((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage);
@@ -285,12 +283,12 @@ namespace EcrisIntegrationServices
                         }
 
 
-                        DDocument d = GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, m.Firstname, m.Surname, m.Familyname);
+                        DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, m.Firstname, m.Surname, m.Familyname,_dbContext);
 
                         d.EcrisMsg = m;
                         m.DDocuments.Add(d);
 
-                        DDocContent content = GetDDocContent(XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage));
+                        DDocContent content = CommonService.GetDDocContent(XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage));
 
                         d.DocContent = content;
                         content.DDocuments.Add(d);
@@ -319,50 +317,10 @@ namespace EcrisIntegrationServices
             _dbContext.EEcrisInboxes.Add(inbox);
 
         }
-        private DDocument GetDDocument(MJ_CAIS.DTO.EcrisService.EcrisMessageType t, string name, string firstName, string surName, string familyName)
-        {
-            DDocument d = new DDocument();
-            d.Id = BaseEntity.GenerateNewId();
-            var docType = _dbContext.DDocTypes.FirstOrDefault(dt => dt.Code != null && dt.Code.ToLower() == t.ToString().ToLower());
-            d.DocTypeId = docType?.Id;
-            d.Name = name;
+      
+     
 
-            //todo: add resources
-            if (t == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)
-            {
-                d.Descr = "Запитване за " + firstName + " " + surName + " " + familyName;
-            }
-            if (t == MJ_CAIS.DTO.EcrisService.EcrisMessageType.NOT)
-            {
-                d.Descr = "Нотификация за " + firstName + " " + surName + " " + familyName;
-            }
-            return d;
-        }
-        private DDocContent GetDDocContent(string contentXML)
-        {
-            DDocContent content = new DDocContent();
-            content.Id = BaseEntity.GenerateNewId();
-            content.MimeType = "application/xml";
-            content.Content = Encoding.UTF8.GetBytes(contentXML);
-            content.Bytes = content.Content.Length;
-            //byte[] hashBytes = (new MD5CryptoServiceProvider()).ComputeHash(content.Content);
-            // content.Md5Hash = Convert.ToHexString(hashBytes);
-            // content.Sha1Hash = Convert.ToHexString(new SHA1CryptoServiceProvider().ComputeHash(content.Content));
-            return content;
-        }
-
-        private string GetNumbersFromString(string inputValue)
-        {
-            string result = "";
-
-            for (int i = 0; i < inputValue.Length; i++)
-            {
-                if (Char.IsDigit(inputValue[i]))
-                    result += inputValue[i];
-            }
-
-            return result;
-        }
+    
         private EEcrisMessage ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
         {
             EEcrisMessage m = new EEcrisMessage();
@@ -374,9 +332,9 @@ namespace EcrisIntegrationServices
             //има данни в msg.MessageShortViewPerson.PersonAlias - те интересуват ли ни?!
             ////има данни и за майка и баща - биха били полезни за идентификацията
             m.BirthCity = string.Join(joinSeparator, msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownName.Select(p => p.Value)); //msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownReference???
-            m.BirthDate = new DateTime(Int32.Parse(GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateYear)),
-                                       Int32.Parse(GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateMonth)),
-                                       Int32.Parse(GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateDay)));
+            m.BirthDate = new DateTime(Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateYear)),
+                                       Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateMonth)),
+                                       Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateDay)));
             m.BirthCountry = msg.MessageShortViewPerson.PersonBirthPlace.PlaceCountryReference.Value;
             m.Sex = msg.MessageShortViewPerson.PersonSex;
             var familyName = msg.MessageShortViewPerson.PersonName?.SecondSurname?.Select(p => p.Value);

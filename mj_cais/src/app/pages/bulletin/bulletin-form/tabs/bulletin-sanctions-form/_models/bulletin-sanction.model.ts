@@ -1,3 +1,6 @@
+import { Transaction } from "@infragistics/igniteui-angular";
+import { BulletinProbationModel } from "./bulletin-probation.model";
+
 export class BulletinSanctionModel {
   public id: string = null;
   public sanctCategoryId: string = null;
@@ -14,26 +17,26 @@ export class BulletinSanctionModel {
   public suspentionDurationYears: number = null;
   public suspentionDurationMonths: number = null;
   public suspentionDurationDays: number = null;
-  public suspentionDurationHours: number = null;
+  public probations: BulletinProbationModel[];
+  public probationsTransactions: Transaction[];
 
   constructor(init?: Partial<BulletinSanctionModel>) {
-    if (init) {
-      this.id = init.id ?? null;
-      this.sanctCategoryId = init.sanctCategoryId ?? null;
-      this.sanctCategoryName = init.sanctCategoryName ?? null;
-      this.ecrisSanctCategId = init.ecrisSanctCategId ?? null;
-      this.ecrisSanctCategName = init.ecrisSanctCategName ?? null;
-      this.descr = init.descr ?? null;
-      this.decisionDurationYears = init.decisionDurationYears ?? null;
-      this.decisionDurationMonths = init.decisionDurationMonths ?? null;
-      this.decisionDurationDays = init.decisionDurationDays ?? null;
-      this.decisionDurationHours = init.decisionDurationHours ?? null;
-      this.fineAmount = init.fineAmount ?? null;
-      this.detenctionDescr = init.detenctionDescr ?? null;
-      this.suspentionDurationYears = init.suspentionDurationYears ?? null;
-      this.suspentionDurationMonths = init.suspentionDurationMonths ?? null;
-      this.suspentionDurationDays = init.suspentionDurationDays ?? null;
-      this.suspentionDurationHours = init.suspentionDurationHours ?? null;
-    }
+      this.id = init?.id ?? null;
+      this.sanctCategoryId = init?.sanctCategoryId ?? null;
+      this.sanctCategoryName = init?.sanctCategoryName ?? null;
+      this.ecrisSanctCategId = init?.ecrisSanctCategId ?? null;
+      this.ecrisSanctCategName = init?.ecrisSanctCategName ?? null;
+      this.descr = init?.descr ?? null;
+      this.decisionDurationYears = init?.decisionDurationYears ?? null;
+      this.decisionDurationMonths = init?.decisionDurationMonths ?? null;
+      this.decisionDurationDays = init?.decisionDurationDays ?? null;
+      this.decisionDurationHours = init?.decisionDurationHours ?? null;
+      this.fineAmount = init?.fineAmount ?? null;
+      this.detenctionDescr = init?.detenctionDescr ?? null;
+      this.suspentionDurationYears = init?.suspentionDurationYears ?? null;
+      this.suspentionDurationMonths = init?.suspentionDurationMonths ?? null;
+      this.suspentionDurationDays = init?.suspentionDurationDays ?? null;
+      this.probations = init?.probations ?? null;
+      this.probationsTransactions = init?.probationsTransactions ?? null;
   }
 }

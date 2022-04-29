@@ -1,0 +1,95 @@
+<div [formGroup]="formModel.group">
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label for="date" class="label">
+        Точност
+        <!-- todo: add validation-->
+      </label>
+
+      <ng-select
+        #autoControl
+        formControlName="precision"
+        (change)="onDatePercisionChange($event)"
+        (clear)="onDatePercisionChange(undefined)"
+      >
+        <ng-option *ngFor="let item of items" [value]="item.id">{{
+          item.name
+        }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="form-group col-md-4">
+      <ng-container *ngIf="showFullDate">
+        <label class="label">Дата</label>
+        <nb-form-field>
+          <input
+            nbInput
+            fullWidth
+            [matDatepicker]="formpicker"
+            [formControl]="formModel.date"         
+            [readonly]="isReadOnly"
+          />
+
+          <mat-datepicker-toggle
+            nbSuffix
+            nbButton
+            ghost
+            [for]="formpicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker
+            #formpicker
+            [disabled]="isReadOnly || formModel.date.disabled"
+          ></mat-datepicker>
+        </nb-form-field>
+      </ng-container>
+      <ng-container *ngIf="showYearAndMonth">
+        <label class="label">Дата</label>
+        <input
+          type="text"
+          nbInput
+          fullWidth
+        
+          [value]="yearMonthDisplayInput.value"
+          (click)="onClick($event)"
+          (focusout)="onFocusout($event)"
+          readonly
+        />
+        <igx-month-picker
+          displayDensity="compact"
+          *ngIf="showMonthPicker"
+          (selected)="onSelection($event)"
+          #monthPicker
+          [value]="formModel.date.value"
+          [locale]="'bg'"
+          [formatOptions]="{
+            month: 'long'
+          }"
+        ></igx-month-picker>
+      </ng-container>
+      <ng-container *ngIf="showYear">
+        <label class="label">Дата</label>
+        <input
+          min="0" 
+          max="9999"
+          [minLength]="4"
+          [maxLength]="4"
+          type="number"
+          nbInput
+          fullWidth  
+          [value]="yearDisplayInput"         
+          (focusout)="onFocusoutYear($event)"
+        />
+      </ng-container>
+    </div>
+  </div>
+  <!-- <cais-validation-message
+    label="{{ formModel.date }}"
+    [showRequired]="
+    formModel.date?.errors?.required &&
+      (inputHasBeenInteracted || formModel.date.touched)
+    "
+    [showAcceptedValues]="
+    formModel.date?.errors?.acceptedValues &&
+      (inputHasBeenInteracted || formModel.date.touched)
+    "
+  ></cais-validation-message> -->
+</div>

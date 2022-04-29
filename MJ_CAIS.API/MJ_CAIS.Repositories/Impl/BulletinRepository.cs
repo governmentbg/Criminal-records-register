@@ -73,7 +73,8 @@ namespace MJ_CAIS.Repositories.Impl
             var query = _dbContext.BSanctions
                  .AsNoTracking()
                  .Include(x => x.EcrisSanctCateg)
-                 .Include(x => x.SanctCategory);
+                 .Include(x => x.SanctCategory)
+                 .Include(x=>x.BProbations);
 
             return await Task.FromResult(query);
         }

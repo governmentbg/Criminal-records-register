@@ -66,6 +66,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? BirthCountryId { get; set; }
         public string? BirthCityId { get; set; }
         public string? BirthPlaceOther { get; set; }
+        public string? UserCitizenId { get; set; }
+        public string? UserId { get; set; }
+        public string? UserExtId { get; set; }
 
         public virtual AApplicationType? ApplicationType { get; set; }
         public virtual GCity? BirthCity { get; set; }

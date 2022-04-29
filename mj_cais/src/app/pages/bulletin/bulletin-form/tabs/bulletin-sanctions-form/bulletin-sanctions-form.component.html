@@ -8,9 +8,9 @@
     <igx-grid-toolbar>
       <button
         igxButton="flat"
-        (click)="sanctionDialogAdd.open()"
+        (click)="onOpenAddSanction()"
         *ngIf="!isForPreview"
-        class="addProdBtn"
+        class="addSanctionBtn"
       >
         <igx-icon>add</igx-icon> Добави
       </button>
@@ -62,14 +62,15 @@
       [dataType]="'string'"
     ></igx-column>
 
-    <igx-column
-      field="fineAmount"
-      header="Размер на наложеното наказание - глоба"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
     <igx-action-strip #actionstrip>
+      <button
+        title="Преглед"
+        igxButton="icon"
+        igxRipple
+        (click)="onOpenPreviewSanction(actionstrip.context)"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </button>
       <button
         *ngIf="!isForPreview"
         title="Редактирай"
@@ -93,7 +94,7 @@
 </app-grid-with-transactions>
 
 <igx-dialog #sanctionDialogAdd>
-  <div class="dialogNewRecord" style="max-width: 1200px">
+  <div class="dialogNewRecord" style="max-width: 1200px; min-width: 1200px">
     <nb-card>
       <nb-card-header>
         <div class="d-flex" style="justify-content: space-between">
@@ -103,6 +104,7 @@
           <div class="d-flex">
             <div>
               <button
+                *ngIf="!isSanctionPreview"
                 nbButton
                 matRipple
                 [status]="'success'"
@@ -130,7 +132,7 @@
 
       <nb-card-body>
         <div class="row mt-2">
-          <div class="form-group col-md-8">
+          <div class="form-group col-md-6">
             <cais-autocomplete
               [label]="'Вид наказание'"
               [inputFormControl]="bulletinSanctionForm.sanctCategoryId"
@@ -141,7 +143,10 @@
             >
             </cais-autocomplete>
           </div>
-          <div class="form-group col-md-4">
+        </div>
+
+        <div class="row mt-2">
+          <div class="form-group col-md-8">
             <cais-autocomplete
               [label]="'Обща категория'"
               [inputFormControl]="bulletinSanctionForm.ecrisSanctCategId"
@@ -152,46 +157,6 @@
             </cais-autocomplete>
           </div>
         </div>
-
-        <div class="row mt-2">
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              *ngIf="showProbationData"
-              [label]="'Вид пробационна мярка'"
-              [inputFormControl]="bulletinSanctionForm.sanctProbCategId"
-              [parentGroup]="bulletinSanctionForm.group"
-              [items]="dbData.sanctionProbCategories"
-              [inputName]="'sanctProbCategId'"
-            >
-            </cais-autocomplete>
-          </div>
-
-          <div class="form-group col-md-8 row">
-            <div class="col-md-6">
-              <cais-input
-                *ngIf="showProbationData"
-                [type]="'number'"
-                [label]="'Количество на пробационна мярка'"
-                [inputFormControl]="bulletinSanctionForm.sanctProbValue"
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'sanctProbValue'"
-              >
-              </cais-input>
-            </div>
-            <div class="col-md-6">
-              <cais-autocomplete
-                *ngIf="showProbationData"
-                [label]="'Мерна еденица'"
-                [inputFormControl]="bulletinSanctionForm.sanctProbMeasureId"
-                [parentGroup]="bulletinSanctionForm.group"
-                [items]="dbData.sanctionProbMeasures"
-                [inputName]="'sanctProbMeasureId'"
-              >
-              </cais-autocomplete>
-            </div>
-          </div>
-        </div>
-
         <div class="row">
           <div class="form-group col-md-12">
             <cais-input
@@ -207,135 +172,298 @@
           </div>
         </div>
 
-        <div class="font-weight-bold">Срок на наложеното наказание</div>
-        <hr />
+        <div [ngClass]="{ 'hidden-container': !showProbationData }">
+          <div class="font-weight-bold">Пробационни мерки</div>
+          <hr />
+          <div class="form-group">
+            <div class="sanction-prob-grid-wrapper">
+              <app-grid-with-transactions
+                [gridTransactions]="bulletinSanctionForm.probationsTransactions"
+              >
+                <igx-grid
+                  class="custom-grid"
+                  #gridBulletinProbation
+                  [data]="probations"
+                  [height]="null"
+                  [primaryKey]="'id'"
+                  [rowEditable]="true"
+                  [emptyGridTemplate]="emptyTemplate"
+                  (onRowDeleted)="onSanctionProbRowDeleted($event)"
+                  displayDensity="compact"
+                >
+                  <igx-grid-toolbar>
+                    <igx-grid-toolbar-actions
+                      ><button
+                        *ngIf="!isForPreview && !isSanctionPreview"
+                        igxButton="flat"
+                        (click)="addNewProbation()"
+                      >
+                        <igx-icon>add</igx-icon> Добави
+                      </button></igx-grid-toolbar-actions
+                    >
+                  </igx-grid-toolbar>
 
-        <div class="row mt-2 ml-2">
-          <div class="form-group col-md-6 row">
-            <label class="nb-theme-default label pl-3 duration-label"
-              >Продължителност</label
-            >
-            <div class="col-md-3 duration-container">
+                  <igx-column
+                    field="id"
+                    header="Идентификатор"
+                    [hidden]="true"
+                  ></igx-column>
+                  <igx-column
+                    field="sanctionId"
+                    header="Идентификатор на наказанието"
+                    [hidden]="true"
+                  ></igx-column>
+
+                  <igx-column
+                    field="sanctProbCategId"
+                    header="Вид пробационна мярка от Стандарти на ЕИСПП"
+                    [editable]="true"
+                    [width]="250"
+                  >
+                    <ng-template igxCell let-cell="cell">
+                      {{ getSanctionCategoryNameById(cell.value) }}
+                    </ng-template>
+
+                    <ng-template igxCellEditor let-cell="cell" let-value>
+                      <ng-select
+                        appendTo="body"
+                        [(ngModel)]="cell.value"
+                        [ngModelOptions]="{ standalone: true }"
+                        style="width: 100%"
+                        (change)="onGridOptionChange($event, cell)"
+                      >
+                        <ng-option
+                          *ngFor="let item of sanctionProbCategoriesOptions"
+                          [value]="item.id"
+                        >
+                          {{ item.name }}
+                        </ng-option>
+                      </ng-select>
+                    </ng-template>
+                  </igx-column>
+
+                  <igx-column
+                    field="sanctProbMeasureId"
+                    header="Мерна единица за количество на пробационна мярка"
+                    [editable]="true"
+                    [width]="200"
+                  >
+                    <ng-template igxCell let-cell="cell">
+                      {{ getSanctionProbMeasureNameById(cell.value) }}
+                    </ng-template>
+                    <ng-template igxCellEditor let-cell="cell" let-value>
+                      <ng-select
+                        appendTo="body"
+                        [(ngModel)]="cell.value"
+                        [ngModelOptions]="{ standalone: true }"
+                        style="width: 100%"
+                        (change)="onGridOptionChange($event, cell)"
+                      >
+                        <ng-option
+                          *ngFor="let item of sanctionProbMeasuresOptions"
+                          [value]="item.id"
+                        >
+                          {{ item.name }}
+                        </ng-option>
+                      </ng-select>
+                    </ng-template>
+                  </igx-column>
+
+                  <igx-column
+                    field="sanctProbValue"
+                    header="Количество на пробационна мярка"
+                    dataType="number"
+                  ></igx-column>
+
+                  <igx-column-group header="Продължителност">
+                    <igx-column
+                      field="decisionDurationYears"
+                      header="Години"
+                      dataType="number"
+                    ></igx-column>
+                    <igx-column
+                      field="decisionDurationMonths"
+                      header="Месеци"
+                      dataType="number"
+                    ></igx-column>
+                    <igx-column
+                      field="decisionDurationDays"
+                      header="Дни"
+                      dataType="number"
+                    ></igx-column>
+                    <igx-column
+                      field="decisionDurationHours"
+                      header="Часове"
+                      dataType="number"
+                    ></igx-column>
+                  </igx-column-group>
+
+                  <ng-template igxRowEditActions let-endRowEdit>
+                    <div class="custom-buttons">
+                      <button
+                        igxButton
+                        igxRowEditTabStop
+                        (click)="endRowEdit(false)"
+                      >
+                        <igx-icon>clear</igx-icon> Отказ
+                      </button>
+                      <button
+                        igxButton
+                        igxRowEditTabStop
+                        (click)="endRowEdit(true)"
+                      >
+                        <igx-icon>add</igx-icon> Запис
+                      </button>
+                    </div>
+                  </ng-template>
+
+                  <igx-action-strip #actionstrip *ngIf="!isSanctionPreview">
+                    <igx-grid-editing-actions
+                      [addRow]="false"
+                      [contentEditable]="true"
+                    >
+                    </igx-grid-editing-actions>
+                  </igx-action-strip>
+                </igx-grid>
+              </app-grid-with-transactions>
+
+              <ng-template #emptyTemplate> </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="showFineData">
+          <div class="row">
+            <div class="form-group col-md-6">
               <cais-input
                 [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.decisionDurationYears"
+                [label]="'Размер на наложеното наказание - глоба'"
+                [inputFormControl]="bulletinSanctionForm.fineAmount"
                 [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'decisionDurationYears'"
+                [inputName]="'fineAmount'"
+              >
+              </cais-input>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!showProbationData && !showFineData">
+          <div class="font-weight-bold">Срок на наложеното наказание</div>
+          <hr />
+
+          <div class="row mt-2 ml-2">
+            <div class="form-group col-md-6 row">
+              <label class="nb-theme-default label pl-3 duration-label"
+                >Продължителност</label
+              >
+              <div class="col-md-3 duration-container">
+                <cais-input
+                  [type]="'number'"
+                  [inputFormControl]="
+                    bulletinSanctionForm.decisionDurationYears
+                  "
+                  [parentGroup]="bulletinSanctionForm.group"
+                  [inputName]="'decisionDurationYears'"
+                >
+                </cais-input>
+              </div>
+              <div class="col-md-3 duration-container">
+                <cais-input
+                  [type]="'number'"
+                  [inputFormControl]="
+                    bulletinSanctionForm.decisionDurationMonths
+                  "
+                  [parentGroup]="bulletinSanctionForm.group"
+                  [inputName]="'decisionDurationMonths'"
+                >
+                </cais-input>
+              </div>
+              <div class="col-md-3 duration-container">
+                <cais-input
+                  [type]="'number'"
+                  [inputFormControl]="bulletinSanctionForm.decisionDurationDays"
+                  [parentGroup]="bulletinSanctionForm.group"
+                  [inputName]="'decisionDurationDays'"
+                >
+                </cais-input>
+              </div>
+              <div class="col-md-3 duration-container">
+                <cais-input
+                  [type]="'number'"
+                  [inputFormControl]="
+                    bulletinSanctionForm.decisionDurationHours
+                  "
+                  [parentGroup]="bulletinSanctionForm.group"
+                  [inputName]="'decisionDurationHours'"
+                >
+                </cais-input>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="
+                  'Приспадането и зачитането на предварителното задържане по чл. 59, ал. 1 НК'
+                "
+                [inputFormControl]="bulletinSanctionForm.detenctionDescr"
+                [parentGroup]="bulletinSanctionForm.group"
+                [inputName]="'detenctionDescr'"
+                [rows]="'1'"
+                [inputType]="'TextArea'"
+              >
+              </cais-input>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="showPrisonData">
+          <div class="font-weight-bold">Отлагане на изпълнението</div>
+          <hr />
+
+          <div class="form-group col-md-6 ml-2 row">
+            <label class="nb-theme-default label duration-label">
+              Освобождаването от изтърпяване на наказанието и неналагането на
+              наказание съгласно НК, както и условното осъждане по по чл. 66
+              ал.1 или чл.69 ал.1 НК, при което се посочва и изпитателният
+              срок</label
+            >
+            <div class="col-md-3 duration-container" style="margin-left: -16px">
+              <cais-input
+                [type]="'number'"
+                [label]="'Години'"
+                [inputFormControl]="
+                  bulletinSanctionForm.suspentionDurationYears
+                "
+                [parentGroup]="bulletinSanctionForm.group"
+                [inputName]="'suspentionDurationYears'"
               >
               </cais-input>
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
                 [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.decisionDurationMonths"
+                [label]="'Месеци'"
+                [inputFormControl]="
+                  bulletinSanctionForm.suspentionDurationMonths
+                "
                 [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'decisionDurationMonths'"
+                [inputName]="'suspentionDurationMonths'"
               >
               </cais-input>
             </div>
             <div class="col-md-3 duration-container">
               <cais-input
                 [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.decisionDurationDays"
+                [label]="'Дни'"
+                [inputFormControl]="bulletinSanctionForm.suspentionDurationDays"
                 [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'decisionDurationDays'"
-              >
-              </cais-input>
-            </div>
-            <div class="col-md-3 duration-container">
-              <cais-input
-                [type]="'number'"
-                [inputFormControl]="bulletinSanctionForm.decisionDurationHours"
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'decisionDurationHours'"
+                [inputName]="'suspentionDurationDays'"
               >
               </cais-input>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'number'"
-              [label]="'Размер на наложеното наказание - глоба'"
-              [inputFormControl]="bulletinSanctionForm.fineAmount"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'fineAmount'"
-            >
-            </cais-input>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="
-                'Приспадането и зачитането на предварителното задържане по чл. 59, ал. 1 НК'
-              "
-              [inputFormControl]="bulletinSanctionForm.detenctionDescr"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'detenctionDescr'"
-              [rows]="'1'"
-              [inputType]="'TextArea'"
-            >
-            </cais-input>
-          </div>
-        </div>
-
-        <div class="font-weight-bold">Отлагане на изпълнението</div>
-        <hr />
-
-        <div class="form-group col-md-6 ml-2 row">
-          <label class="nb-theme-default label duration-label">
-            Освобождаването от изтърпяване на наказанието и неналагането на
-            наказание съгласно НК, както и условното осъждане по по чл. 66 ал.1
-            или чл.69 ал.1 НК, при което се посочва и изпитателният срок</label
-          >
-          <div class="col-md-3 duration-container" style="margin-left: -16px">
-            <cais-input
-              [type]="'number'"
-              [label]="'Години'"
-              [inputFormControl]="bulletinSanctionForm.suspentionDurationYears"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'suspentionDurationYears'"
-            >
-            </cais-input>
-          </div>
-          <div class="col-md-3 duration-container">
-            <cais-input
-              [type]="'number'"
-              [label]="'Месеци'"
-              [inputFormControl]="bulletinSanctionForm.suspentionDurationMonths"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'suspentionDurationMonths'"
-            >
-            </cais-input>
-          </div>
-          <div class="col-md-3 duration-container">
-            <cais-input
-              [type]="'number'"
-              [label]="'Дни'"
-              [inputFormControl]="bulletinSanctionForm.suspentionDurationDays"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'suspentionDurationDays'"
-            >
-            </cais-input>
-          </div>
-          <div class="col-md-3 duration-container">
-            <cais-input
-              [type]="'number'"
-              [label]="'Часове'"
-              [inputFormControl]="bulletinSanctionForm.suspentionDurationHours"
-              [parentGroup]="bulletinSanctionForm.group"
-              [inputName]="'suspentionDurationHours'"
-            >
-            </cais-input>
-          </div>
-        </div>
-
-        
+        </ng-container>
       </nb-card-body>
     </nb-card>
   </div>

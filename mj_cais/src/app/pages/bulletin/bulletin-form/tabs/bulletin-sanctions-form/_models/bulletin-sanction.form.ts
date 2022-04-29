@@ -18,12 +18,13 @@ export class BulletinSanctionForm {
   public suspentionDurationYears: FormControl;
   public suspentionDurationMonths: FormControl;
   public suspentionDurationDays: FormControl;
-  public suspentionDurationHours: FormControl;
+  public probationsTransactions: FormControl;
+  public probations: FormControl;
 
   constructor() {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.sanctCategoryId = new FormControl(null, [Validators.required]);
+    this.sanctCategoryId = new FormControl(null);
     this.sanctCategoryName = new FormControl(null);
     this.ecrisSanctCategId = new FormControl(null);
     this.ecrisSanctCategName = new FormControl(null);
@@ -32,12 +33,13 @@ export class BulletinSanctionForm {
     this.decisionDurationMonths = new FormControl(null);
     this.decisionDurationDays = new FormControl(null);
     this.decisionDurationHours = new FormControl(null);
-    this.fineAmount = new FormControl(null, [Validators.required]);
+    this.fineAmount = new FormControl(null);
     this.detenctionDescr = new FormControl(null);
     this.suspentionDurationYears = new FormControl(null);
     this.suspentionDurationMonths = new FormControl(null);
     this.suspentionDurationDays = new FormControl(null);
-    this.suspentionDurationHours = new FormControl(null);
+    this.probationsTransactions = new FormControl(null);
+    this.probations = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -55,7 +57,8 @@ export class BulletinSanctionForm {
       suspentionDurationYears: this.suspentionDurationYears,
       suspentionDurationMonths: this.suspentionDurationMonths,
       suspentionDurationDays: this.suspentionDurationDays,
-      suspentionDurationHours: this.suspentionDurationHours,
+      probationsTransactions: this.probationsTransactions,
+      probations: this.probations
     });
   }
 }

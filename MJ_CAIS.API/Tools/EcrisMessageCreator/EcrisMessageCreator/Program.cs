@@ -16,7 +16,7 @@ using System.IO;
 using System.Threading.Tasks;
 using MJ_CAIS.DataAccess;
 
-namespace EcrisFromCAISExporter
+namespace EcrisMessageCreator
 {
     public class Program
     {
@@ -30,7 +30,7 @@ namespace EcrisFromCAISExporter
 
                 IHost host = Host.CreateDefaultBuilder()
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
-                    .ConfigureServices(services => services.AddSingleton<EcrisFromCAISService>())
+                    .ConfigureServices(services => services.AddSingleton<EcrisMessageCreatorService>())
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
@@ -40,22 +40,17 @@ namespace EcrisFromCAISExporter
                     .UseNLog()
                     .Build();
 
-
-                var username = config.GetValue<string>("EcrisRiSettings:username");
-                var password = config.GetValue<string>("EcrisRiSettings:password");
-                //todo: Get from config
-               // bool insertRepliesToReqests = config.GetValue<bool>("EcrisRiSettings:insertRepliesToReqests");
-               // bool insertNotifications = config.GetValue<bool>("EcrisRiSettings:insertNotifications");
-                string folderName = config.GetValue<string>("EcrisRiSettings:folderName");
+                int pageSize = config.GetValue<int>("EcrisCreatorSettings:PageSize"); ;
+                string joinSeparator = config.GetValue<string>("EcrisCreatorSettings:joinSeparator");
                 //todo: repeat?check if exists?
                 using (host)
                 {
 
-                    
-                     var ecrisFromService = host.Services.GetService<EcrisFromCAISService>();
-                     await ecrisFromService.SendMessagesToEcris(username, password, folderName);
-                   
-                   
+
+                    var msgCreatorService = host.Services.GetService<EcrisMessageCreatorService>();
+                    await msgCreatorService.CreateResponsesToRequests(pageSize, joinSeparator);
+
+
 
                 }
             }
