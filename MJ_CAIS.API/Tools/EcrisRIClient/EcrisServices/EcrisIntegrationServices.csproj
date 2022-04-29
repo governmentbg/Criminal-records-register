@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\MJ_CAIS.Common\MJ_CAIS.Common.csproj" />
     <ProjectReference Include="..\..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
+    <ProjectReference Include="..\..\..\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj" />
     <ProjectReference Include="..\EcrisRIClient\EcrisRIClient.csproj" />
   </ItemGroup>
 

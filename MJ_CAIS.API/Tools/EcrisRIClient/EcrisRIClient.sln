@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DTO", "..\..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj", "{C50AE003-6B93-4D94-A9FC-3FFAAE594F1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcrisMessageCreator", "..\EcrisMessageCreator\EcrisMessageCreator\EcrisMessageCreator.csproj", "{004EFB67-90BC-438C-ACBA-79BF1D91D3B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisMessageCreator", "..\EcrisMessageCreator\EcrisMessageCreator\EcrisMessageCreator.csproj", "{004EFB67-90BC-438C-ACBA-79BF1D91D3B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.EcrisObjectsServices", "..\..\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj", "{0A69E708-EDD3-49ED-B008-D3E67853DCD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{004EFB67-90BC-438C-ACBA-79BF1D91D3B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{004EFB67-90BC-438C-ACBA-79BF1D91D3B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{004EFB67-90BC-438C-ACBA-79BF1D91D3B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

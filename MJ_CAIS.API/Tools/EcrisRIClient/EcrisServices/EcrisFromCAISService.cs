@@ -7,6 +7,7 @@ using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisService;
+using MJ_CAIS.EcrisObjectsServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,15 +22,7 @@ namespace EcrisServices
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisFromCAISService> _logger;
-        const string REQUEST_SUCCESSFUL = "RRT-00-00";
-        const string REQUEST_DENIAL = "RRT-00-01";
-        const string REQUEST_NOT_FROM_MEMBER_STATE = "RRT-00-02";
-        const string REQUEST_DEAD_PERSON = "RRT-00-03";
-        const string REQUEST_NIST_NOT_MATCH = "RRT-00-04";
-        const string REQUEST_MULTIPLE_PEOPLE_FOUND = "RRT-00-05";
-        const string ECRIS_REQUEST_CODE = "EcrisReq";
-        const string ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON = "Identified";
-        const string ECRIS_MESSAGE_STATUS_UNIDENTIFIED_PERSON = "Unidentified";
+   
         public EcrisFromCAISService(CaisDbContext dbContext, ILogger<EcrisFromCAISService> logger)
         {
             _dbContext = dbContext;
