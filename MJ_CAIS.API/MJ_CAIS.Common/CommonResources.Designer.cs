@@ -61,6 +61,69 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Моля, свържете се с администратор..
+        /// </summary>
+        public static string MsgContactYourAdministrator {
+            get {
+                return ResourceManager.GetString("MsgContactYourAdministrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Възникна грешка при извършване на операцията в базата от данни..
+        /// </summary>
+        public static string MsgDataBaseError {
+            get {
+                return ResourceManager.GetString("MsgDataBaseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Няма намерени данни.
+        /// </summary>
+        public static string MsgDataNotFound {
+            get {
+                return ResourceManager.GetString("MsgDataNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Записът беше успешно изтрит..
+        /// </summary>
+        public static string MsgDeleteSuccessfull {
+            get {
+                return ResourceManager.GetString("MsgDeleteSuccessfull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Страницата, която се опитвате да достъпите, не е намерена. (HTTP Status Code: 404).
+        /// </summary>
+        public static string MsgError404 {
+            get {
+                return ResourceManager.GetString("MsgError404", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Възникна системна грешка. .
+        /// </summary>
+        public static string MsgErrorOccurred {
+            get {
+                return ResourceManager.GetString("MsgErrorOccurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Невалидно потребителско име или парола.
+        /// </summary>
+        public static string MsgInvalidloginAttempt {
+            get {
+                return ResourceManager.GetString("MsgInvalidloginAttempt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Полето &quot;{0}&quot; трябва да е максимум {1} символа..
         /// </summary>
         public static string MsgMinLength {
@@ -75,6 +138,51 @@ namespace MJ_CAIS.Common {
         public static string MsgNotSuportedTransaction {
             get {
                 return ResourceManager.GetString("MsgNotSuportedTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Възникна грешка при извършване на операцията..
+        /// </summary>
+        public static string MsgOperationException {
+            get {
+                return ResourceManager.GetString("MsgOperationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Възникна грешка при изпълняване на операцията!.
+        /// </summary>
+        public static string MsgSaveError {
+            get {
+                return ResourceManager.GetString("MsgSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Данните бяха записани успешно..
+        /// </summary>
+        public static string MsgSaveSuccessfull {
+            get {
+                return ResourceManager.GetString("MsgSaveSuccessfull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сесията Ви е изтекла..
+        /// </summary>
+        public static string MsgSessionExpired {
+            get {
+                return ResourceManager.GetString("MsgSessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Потребителят е заключен.
+        /// </summary>
+        public static string MsgUserLockout {
+            get {
+                return ResourceManager.GetString("MsgUserLockout", resourceCulture);
             }
         }
     }

@@ -14,7 +14,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Infragistics.Web.AspNetCore" Version="6.20.1.15" />
+    <PackageReference Include="Infragistics.Web.Documents.Excel" Version="20.1.215" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
 </Project>

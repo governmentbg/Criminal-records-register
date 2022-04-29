@@ -117,10 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MsgContactYourAdministrator" xml:space="preserve">
+    <value>Моля, свържете се с администратор.</value>
+  </data>
+  <data name="MsgDataBaseError" xml:space="preserve">
+    <value>Възникна грешка при извършване на операцията в базата от данни.</value>
+  </data>
+  <data name="MsgDataNotFound" xml:space="preserve">
+    <value>Няма намерени данни</value>
+  </data>
+  <data name="MsgDeleteSuccessfull" xml:space="preserve">
+    <value>Записът беше успешно изтрит.</value>
+  </data>
+  <data name="MsgError404" xml:space="preserve">
+    <value>Страницата, която се опитвате да достъпите, не е намерена. (HTTP Status Code: 404)</value>
+  </data>
+  <data name="MsgErrorOccurred" xml:space="preserve">
+    <value>Възникна системна грешка. </value>
+  </data>
+  <data name="MsgInvalidloginAttempt" xml:space="preserve">
+    <value>Невалидно потребителско име или парола</value>
+  </data>
   <data name="MsgMinLength" xml:space="preserve">
     <value>Полето "{0}" трябва да е максимум {1} символа.</value>
   </data>
   <data name="MsgNotSuportedTransaction" xml:space="preserve">
     <value>Тази транзакция не се поддържа.</value>
+  </data>
+  <data name="MsgOperationException" xml:space="preserve">
+    <value>Възникна грешка при извършване на операцията.</value>
+  </data>
+  <data name="MsgSaveError" xml:space="preserve">
+    <value>Възникна грешка при изпълняване на операцията!</value>
+  </data>
+  <data name="MsgSaveSuccessfull" xml:space="preserve">
+    <value>Данните бяха записани успешно.</value>
+  </data>
+  <data name="MsgSessionExpired" xml:space="preserve">
+    <value>Сесията Ви е изтекла.</value>
+  </data>
+  <data name="MsgUserLockout" xml:space="preserve">
+    <value>Потребителят е заключен</value>
   </data>
 </root>
