@@ -91,6 +91,8 @@ namespace MJ_CAIS.Repositories.Impl
             person.SurName = dataRow["surname"]?.ToString() ?? null;
             person.FamilyName = dataRow["familyname"]?.ToString() ?? null;
             person.FullName = dataRow["fullname"]?.ToString() ?? null;
+            var isParsed = int.TryParse(dataRow["all_records"]?.ToString(), out int allRecords);
+            person.TotalCount = isParsed ? allRecords : 0;
 
             return person;
         }

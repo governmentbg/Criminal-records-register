@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace MJ_CAIS.Services
 {
@@ -52,12 +53,31 @@ namespace MJ_CAIS.Services
                 var searchParams = aQueryOptions.Filter.RawValue;
                 var containsReg = new Regex("contains\\((\\w+?)\\s*,\\s*\'(.+?)'\\)\\s*");
                 var matches = containsReg.Matches(searchParams);
-                searchObj.Identifier = matches.FirstOrDefault(x => x.Groups?.Count > 1 && x.Groups[1].Value?.ToLower() == nameof(PersonGridDTO.Identifier).ToLower())?.Groups[2]?.Value;
-                searchObj.FirstName = matches.FirstOrDefault(x => x.Groups?.Count > 1 && x.Groups[1].Value?.ToLower() == nameof(PersonGridDTO.FirstName).ToLower())?.Groups[2]?.Value;
+
+                foreach (Match match in matches)
+                {
+                    // group 1 fullmatch, group 1 prop name, group 2 prop value
+                    if (match.Groups?.Count == null || match.Groups?.Count < 3) continue;
+                    var propName = match.Groups[1].Value?.ToLower();
+                    var propValue = match.Groups[2].Value?.ToLower();
+
+                    var propInfo = searchObj.GetType().GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                    if (propInfo != null)
+                    {
+                        if (propName.ToLower() == nameof(searchObj.BirthDateDisplay).ToLower())
+                        {
+                            var isParsed = DateTime.TryParse(propValue, out DateTime paresedDate);
+                            if (isParsed) searchObj.BirthDate = paresedDate;
+                            continue;
+                        }
+                        propInfo.SetValue(searchObj, propValue);
+                    }
+                }
             }
 
             var resultInPage = await _personRepository.SelectInPageAsync(searchObj, pageSize, currentPage);
             pageResult.Data = resultInPage;
+            pageResult.Total = resultInPage.FirstOrDefault()?.TotalCount ?? 0;
 
             return await Task.FromResult(pageResult);
         }

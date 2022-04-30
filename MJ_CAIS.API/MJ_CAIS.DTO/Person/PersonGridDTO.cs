@@ -7,6 +7,9 @@ namespace MJ_CAIS.DTO.Person
         public string SurName { get; set; }
         public string FamilyName { get; set; }
         public string FullName { get; set; }
-        public string BirthDate { get; set; }// todo date prec
+        public string BirthDateDisplay { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string BirthDatePrec { get; set; }
+        public int TotalCount { get; set; }
     }
 }

@@ -1,11 +1,7 @@
 <div [formGroup]="formModel.group">
   <div class="row">
     <div class="form-group col-md-4">
-      <label for="date" class="label">
-        Точност
-        <!-- todo: add validation-->
-      </label>
-
+      <label for="date" class="label"> Дата </label>
       <ng-select
         #autoControl
         formControlName="precision"
@@ -46,47 +42,38 @@
           <div class="col-md-6">
             <label class="label">Месец</label>
             <input
+              pattern="^(0?[1-9]|1[012])$"
               type="number"
               nbInput
               fullWidth
+              [ngClass]="validationCss(formModel.month)"
               [formControl]="formModel.month"
             />
           </div>
           <div class="col-md-6">
-              <label class="label">Година</label>
-              <input
-                type="number"
-                nbInput
-                fullWidth
-                [formControl]="formModel.year"
-              />
+            <label class="label">Година</label>
+            <input
+              pattern="^\d{4}$"
+              type="number"
+              nbInput
+              fullWidth
+              [ngClass]="validationCss(formModel.year)"
+              [formControl]="formModel.year"
+            />
           </div>
         </div>
       </ng-container>
       <ng-container *ngIf="showYear">
         <label class="label">Година</label>
         <input
-          min="0"
-          max="9999"
-          [minLength]="4"
-          [maxLength]="4"
+          pattern="^\d{4}$"
           type="number"
           nbInput
           fullWidth
+          [ngClass]="validationCss(formModel.year)"
           [formControl]="formModel.year"
         />
       </ng-container>
     </div>
   </div>
-  <!-- <cais-validation-message
-    label="{{ formModel.date }}"
-    [showRequired]="
-    formModel.date?.errors?.required &&
-      (inputHasBeenInteracted || formModel.date.touched)
-    "
-    [showAcceptedValues]="
-    formModel.date?.errors?.acceptedValues &&
-      (inputHasBeenInteracted || formModel.date.touched)
-    "
-  ></cais-validation-message> -->
 </div>

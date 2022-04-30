@@ -1,26 +1,27 @@
 <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
   <nb-card-header class="card-header-shadow">
-    <cais-card-header
-      [label]="'Лица'"
-      [onCancelFunction]=""
-      [setForPreview]="true"
-    >
-      <div>
-        <button
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="onSearch()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Търсене
-        </button>
+    <div class="d-flex" style="justify-content: space-between">
+      <div class="d-flex align-items-center">
+        <div style="font-weight: bold; font-size: 22px">Лица</div>
       </div>
-    </cais-card-header>
+      <div class="d-flex">
+        <div>
+          <button
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="onSearch()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px"
+          >
+            Търсене
+          </button>
+        </div>
+      </div>
+    </div>
   </nb-card-header>
-  <nb-card-body class="overflow-scroll" style="min-height: 500px;">
+  <nb-card-body class="overflow-scroll" style="min-height: 500px">
     <form autocomplete="off">
       <div class="row">
         <div class="form-group col-md-3">
@@ -78,13 +79,9 @@
       [data]="items$ | async"
       [height]="null"
       [filterStrategy]="noopFilterStrategy"
-      [sortStrategy]="noopSortStrategy"
       [paging]="true"
       [clipboardOptions]="{ copyHeaders: false }"
       [displayDensity]="'cosy'"
-      (onSortingDone)="sortingDone($event)"
-      (onFilteringDone)="filteringDone($event)"
-      (onSelection)="cellSelection($event)"
       [paginationTemplate]="pager"
       [allowFiltering]="false"
       [primaryKey]="'id'"
@@ -98,7 +95,6 @@
       <igx-column
         field="id"
         header="Идентификатор"
-        [sortable]="true"
         [dataType]="'string'"
         [hidden]="true"
       >
@@ -110,7 +106,6 @@
       <igx-column
         field="identifier"
         header="ЕГН/ЛНЧ/ЛН"
-        [sortable]="true"
         [dataType]="'string'"
       >
         <ng-template igxCell let-cell="cell">
@@ -121,7 +116,6 @@
       <igx-column
         field="firstName"
         header="Име"
-        [sortable]="true"
         [dataType]="'string'"
       >
         <ng-template igxCell let-cell="cell">
@@ -131,7 +125,6 @@
       <igx-column
         field="surName"
         header="Презиме"
-        [sortable]="true"
         [dataType]="'string'"
       >
         <ng-template igxCell let-cell="cell">
@@ -141,7 +134,6 @@
       <igx-column
         field="familyName"
         header="Фамилия"
-        [sortable]="true"
         [dataType]="'string'"
       >
         <ng-template igxCell let-cell="cell">
@@ -151,7 +143,6 @@
       <igx-column
         field="fullName"
         header="Пълно име"
-        [sortable]="true"
         [dataType]="'string'"
       >
         <ng-template igxCell let-cell="cell">
@@ -160,7 +151,6 @@
       </igx-column>
       <igx-column
         field="birthDate"
-        [sortable]="true"
         header="Дата на раждане"
         dataType="Date"
         [formatter]="this.dateFormatService.formatDate"
@@ -175,7 +165,6 @@
       <igx-column
         width="150px"
         header=""
-        [sortable]="false"
         [filterable]="false"
         [pinned]="true"
       >

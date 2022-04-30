@@ -34,9 +34,21 @@ export class DatePrecisionComponent implements OnInit {
   ngOnInit() {
     // todo: maping from server 
     // add validation
-
+  }
+  
+  public setInvalidContainer(inputFormControl: FormControl): string {
+    return inputFormControl.invalid &&
+      (inputFormControl.touched || inputFormControl.dirty)
+      ? "ng-invalid"
+      : "";
   }
 
+  public validationCss(inputFormControl: FormControl): string {
+    return inputFormControl.invalid &&
+      (inputFormControl.touched || inputFormControl.dirty)
+      ? "status-danger"
+      : "";
+  }
   onDatePercisionChange(value: string) {
     this.showFullDate = value == DatePrecisionConstants.fullDate.id;
     this.showYearAndMonth = value == DatePrecisionConstants.yearAndMonth.id;
