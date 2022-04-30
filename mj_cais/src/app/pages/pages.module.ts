@@ -43,6 +43,7 @@ import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { BulletinStatusHistoryOverviewComponent } from './bulletin/bulletin-form/tabs/bulletin-status-history-overview/bulletin-status-history-overview.component';
 import { PersonOverviewComponent } from './person/person-overview/person-overview.component';
+import { PersonFormComponent } from './person/person-form/person-form.component';
 
 @NgModule({
   imports: [
@@ -92,6 +93,7 @@ import { PersonOverviewComponent } from './person/person-overview/person-overvie
     BulletinNewOfficeOverviewComponent,
     BulletinStatusHistoryOverviewComponent,
     PersonOverviewComponent,
+    PersonFormComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

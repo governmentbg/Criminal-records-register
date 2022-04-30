@@ -31,6 +31,8 @@ import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-pr
 import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
+import { PersonResolver } from "./person/person-form/_data/person.resolver";
+import { PersonFormComponent } from "./person/person-form/person-form.component";
 
 const routes: Routes = [
   {
@@ -221,6 +223,19 @@ const routes: Routes = [
       {
         path: "people",
         component: PersonOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "people/create",
+        component: PersonFormComponent,
+        resolve: { dbData: PersonResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "people/preview/:ID",
+        component: PersonFormComponent,
+        resolve: { dbData: PersonResolver },
+        data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },
       {
