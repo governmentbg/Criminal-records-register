@@ -38,6 +38,7 @@ import { AddressFormComponent } from './components/forms/address-form/address-fo
 import { CountryDialogComponent } from './components/forms/address-form/dialog/country-dialog/country-dialog.component';
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { DatePrecisionComponent } from './components/forms/inputs/date-precision/date-precision.component';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 const socialLinks = [
   {
@@ -116,7 +117,7 @@ const COMPONENTS = [
   MultipleChooseComponent,
   AddressFormComponent,
   CountryDialogComponent,
-  DatePrecisionComponent
+  DatePrecisionComponent 
 ];
 
 @NgModule({
@@ -130,7 +131,8 @@ const COMPONENTS = [
     MatMomentDateModule,
     NbCardModule,
     NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
+    NgxMatNativeDateModule,
+    NgxSpinnerModule 
   ],
   declarations: [...COMPONENTS],
   providers: [

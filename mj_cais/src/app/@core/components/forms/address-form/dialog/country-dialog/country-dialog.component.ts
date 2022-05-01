@@ -1,9 +1,10 @@
-import { Component, Injector, Input } from "@angular/core";
+import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import {
   GridSelectionMode,
   IgxGridComponent,
 } from "@infragistics/igniteui-angular";
 import { NbDialogRef } from "@nebular/theme";
+import { NgxSpinnerService } from "ngx-spinner";
 import { RemoteGridWithStatePersistance } from "../../../../../directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../services/common/date-format.service";
 import { FormUtils } from "../../../../../utils/form.utils";
@@ -24,14 +25,38 @@ export class CountryDialogComponent extends RemoteGridWithStatePersistance<
   public selectedItem: any;
   public selectionMode: GridSelectionMode = "single";
   public selectedRows = [];
+  private intervalFuc;
 
   constructor(
     protected ref: NbDialogRef<CountryDialogComponent>,
     service: CountryGridService,
     injector: Injector,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    private spinner: NgxSpinnerService
   ) {
     super("country-dialog", service, injector);
+    // todo: да е на ниво lookup
+    this.spinner.show();
+    this.intervalFuc = setInterval(() => {
+      let isHiden = this.hideSpinner();
+      if(isHiden){
+        clearInterval(this.intervalFuc);
+      }
+    }, 500);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalFuc) {
+      clearInterval(this.intervalFuc);
+    }
+  }
+
+  hideSpinner():boolean {
+    if (!this.remoteService.isLoading) {
+       this.spinner.hide();
+       return true;
+    }
+    return false;
   }
 
   handleRowSelection(event) {

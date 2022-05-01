@@ -37,7 +37,8 @@
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss",
-              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css"
+              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css",
+              "node_modules/ngx-spinner/animations/ball-spin-clockwise.css"
             ],
             "scripts": [
               "node_modules/pace-js/pace.min.js",
@@ -118,7 +119,8 @@
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss",
-              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css"
+              "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css",
+              "node_modules/ngx-spinner/animations/ball-spin-clockwise.css"
             ],
             "assets": [
               "src/assets",
