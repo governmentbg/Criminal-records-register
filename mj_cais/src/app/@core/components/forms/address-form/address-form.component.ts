@@ -49,6 +49,7 @@ export class AddressFormComponent implements OnInit {
   cityAutocomplete: AutocompleteComponent;
 
   @Input() parentForm: AddressForm;
+  @Input() showDescWhenIsNativeAddress: boolean = false;
 
   private bgCountryId = CommonConstants.bgCountryId;
   private bgCountryName = CommonConstants.bgCountryName;
@@ -90,7 +91,7 @@ export class AddressFormComponent implements OnInit {
       ) {
         this.parentForm.country.id.setValue(this.bgCountryId);
         this.parentForm.country.displayName.setValue(this.bgCountryName);
-        this.parentForm.setForNativeAddress();
+        this.parentForm.setForNativeAddress(this.showDescWhenIsNativeAddress);
       } else {
         this.parentForm.setForForeignAddress();
       }
@@ -162,7 +163,7 @@ export class AddressFormComponent implements OnInit {
         this.nomenclatureService.getDistricts().subscribe((districts) => {
           this.districtAutocomplete.autoControl.items = districts;
         });
-        this.parentForm.setForNativeAddress();
+        this.parentForm.setForNativeAddress(this.showDescWhenIsNativeAddress);
       } else {
         this.parentForm.setForForeignAddress();
       }

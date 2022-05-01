@@ -160,6 +160,7 @@ export class BulletinOffencesFormComponent implements OnInit {
       );
     }
 
-    this.bulletinOffenceForm.offPlace.setForNativeAddress();
+    // show description in address
+    this.bulletinOffenceForm.offPlace.setForNativeAddress(true);
   }
 }
