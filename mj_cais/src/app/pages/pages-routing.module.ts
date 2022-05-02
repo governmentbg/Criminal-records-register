@@ -33,6 +33,7 @@ import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview
 import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
 import { PersonResolver } from "./person/person-form/_data/person.resolver";
 import { PersonFormComponent } from "./person/person-form/person-form.component";
+import { AuthGuard } from "../@core/services/common/guard.service";
 
 const routes: Routes = [
   {

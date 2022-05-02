@@ -1,0 +1,142 @@
+﻿.egov-header {
+    width: 100%;
+}
+
+.egov-identity-gerb {
+    flex-grow: 10;
+    display: flex;
+}
+
+.egov-identity {
+    padding: 0.5rem;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 6rem;
+    background-color: #fff;
+    width: 100%;
+    display: flex !important;
+    box-sizing: border-box;
+}
+
+.egov-identity-small {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    height: 4rem;
+    background-color: #fff;
+    width: 100%;
+    display: none !important;
+    box-sizing: border-box;
+}
+
+@media (max-width: 36rem) {
+    .egov-identity {
+        display: none !important;
+    }
+
+    .egov-identity-small {
+        display: flex !important;
+    }
+}
+
+.gerb {
+    width: auto;
+    height: 5rem;
+    max-height: 100%;
+}
+
+.identity-text {
+    margin: 1rem;
+    width: 54rem;
+}
+
+.rb-text {
+    display: block;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-block-start: 2.33em;
+    margin-block-end: 2.33em;
+    letter-spacing: 0.009375rem;
+    text-transform: none;
+    line-height: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.daeu-text {
+    font-size: medium;
+    margin: 0;
+    padding: 0;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: bold;
+}
+
+.eu-logo {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+}
+
+.gerb-text {
+    padding-left: 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.eu-text {
+    text-align: justify;
+    line-height: 0.8rem;
+    max-width: 23rem;
+    padding-right: 0.5rem;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.eu-text-span {
+    font-size: x-small
+}
+
+@media (max-width: 56rem) {
+    .eu-text {
+        display: none !important;
+    }
+}
+
+.navbar {
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+    height: 56px;
+    padding: 0 1em;
+    background: #014F86;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.26), 0 4px 5px 0 rgba(0, 0, 0, 0.12), 0 1px 10px 0 rgba(0, 0, 0, 0.08);
+    z-index: 4;
+}
+
+.navbar-title {
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: 0.009375rem;
+    text-transform: none;
+    line-height: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-bottom: 0;
+}
+
+.spinner > div {
+    background-color: #014F86;
+}

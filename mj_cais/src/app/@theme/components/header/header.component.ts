@@ -1,13 +1,18 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import {
   NbMediaBreakpointsService,
+  NbMenuBag,
+  NbMenuItem,
   NbMenuService,
   NbSidebarService,
   NbThemeService,
+  NB_WINDOW,
 } from "@nebular/theme";
 
 import { map, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { NbAuthOAuth2Token, NbAuthResult, NbAuthService, NbTokenService } from "@nebular/auth";
+import { HttpParams } from "@angular/common/http";
 
 @Component({
   selector: "ngx-header",
@@ -32,13 +37,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = "default";
 
-  userMenu = [{ title: "Profile" }, { title: "Log out" }];
+  userMenu = [
+    { title: "Profile" },
+    { title: "Log out", data: { id: 'logout' } }
+  ];
 
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private breakpointService: NbMediaBreakpointsService
+    private breakpointService: NbMediaBreakpointsService,
+    private authService: NbAuthService,
+    private tokenService: NbTokenService,
+    @Inject(NB_WINDOW) protected window: any
   ) {}
 
   ngOnInit() {
@@ -63,6 +74,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((themeName) => (this.currentTheme = themeName));
+      
+     this.menuService.onItemClick()
+      .subscribe((menu: NbMenuBag) => {
+        if (menu.item.data?.id === 'logout') {
+          this.authService.getToken().subscribe( (token: NbAuthOAuth2Token) => {
+            const t = token.getPayload();
+            this.authService.logout('eauth')
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((authResult: NbAuthResult) => {   
+              if (authResult.isSuccess()){
+                let params = new HttpParams();
+                params = params.set('id_token_hint', t.id_token);
+                params = params.set('post_logout_redirect_uri', window.location.origin);
+                this.window.location.href = `${window.location.origin}/auth/connect/endsession?${params.toString()}`;
+              }           
+            });
+          });
+        }
+	    });
   }
 
   ngOnDestroy() {

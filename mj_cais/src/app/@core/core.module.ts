@@ -1,13 +1,14 @@
 import {
+  Injectable,
   ModuleWithProviders,
   NgModule,
   Optional,
   SkipSelf,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { NbAuthModule, NbDummyAuthStrategy } from "@nebular/auth";
+import { NbAuthJWTToken, NbAuthModule, NbAuthOAuth2Token, NbAuthService, NbDummyAuthStrategy, NbOAuth2AuthStrategy } from "@nebular/auth";
 import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
-import { of as observableOf } from "rxjs";
+import { map, Observable, of as observableOf, of, switchMap } from "rxjs";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import {
   MatMomentDateModule,
@@ -39,6 +40,7 @@ import { CountryDialogComponent } from './components/forms/address-form/dialog/c
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { DatePrecisionComponent } from './components/forms/inputs/date-precision/date-precision.component';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { HttpClient } from "@angular/common/http";
 
 const socialLinks = [
   {
@@ -58,29 +60,37 @@ const socialLinks = [
   },
 ];
 
+@Injectable()
 export class NbSimpleRoleProvider extends NbRoleProvider {
-  getRole() {
-    // here you could provide any role based on any auth flow
-    return observableOf("guest");
+  
+  constructor(
+    private authService: NbAuthService,
+    private httpClient: HttpClient
+    ) {
+    super();
+  }
+
+  getRole(): Observable<string> {
+    return this.authService.onTokenChange()
+      .pipe(
+        switchMap( (tkn) =>{
+          return tkn.isValid() ? this.httpClient.get('/auth/connect/userinfo') : of({role: 'guest'});
+        }),
+        map ( (data: any) =>{
+          return  data?.role;
+        })
+      );
   }
 }
 
 export const NB_CORE_PROVIDERS = [
   ...NbAuthModule.forRoot({
     strategies: [
-      NbDummyAuthStrategy.setup({
-        name: "email",
-        delay: 3000,
-      }),
-    ],
-    forms: {
-      login: {
-        socialLinks: socialLinks,
-      },
-      register: {
-        socialLinks: socialLinks,
-      },
-    },
+      NbOAuth2AuthStrategy.setup( {
+        name: 'eauth',
+        clientId: 'cais-angular'
+      })
+    ]
   }).providers,
 
   NbSecurityModule.forRoot({
