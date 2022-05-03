@@ -32,7 +32,16 @@ export class BulletinResolver implements Resolve<any> {
   ): Observable<any> {
     let bulletineId = route.params["ID"];
     let isEdit = route.data["edit"];
-    let element = isEdit ? this.service.find(bulletineId) : of(null);
+    let personId = route.queryParams["personId"];
+    let element: any = of(null);
+
+    if (isEdit) {
+      element = this.service.find(bulletineId);
+    } else if (personId) {
+      element = this.service.getWithPersonData(personId);
+    } else {
+      element = of(null);
+    }
 
     let result: BulletinResolverData = {
       element: element,
@@ -55,14 +64,15 @@ export class BulletinResolver implements Resolve<any> {
       sanctionProbMeasures: this.nomenclatureService.getSanctionProbMeasures(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
       decisions: this.service.getDecisions(bulletineId),
-      documents:  this.service.getDocuments(bulletineId),
-      documentTypes:  this.nomenclatureService.getDocumentTypes(),
+      documents: this.service.getDocuments(bulletineId),
+      documentTypes: this.nomenclatureService.getDocumentTypes(),
       bulletinStatuses: this.nomenclatureService.getBulletinStatuses(),
       personAlias: this.service.getPersonAlias(bulletineId),
       personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
       bulletinTypes: this.service.getBulletinTypes(),
-      bulletinStatusHistoryData: this.service.getBulletinStatusHistoryData(bulletineId),
-      formOfGuilts: this.nomenclatureService.getFormOfGuilts()
+      bulletinStatusHistoryData:
+        this.service.getBulletinStatusHistoryData(bulletineId),
+      formOfGuilts: this.nomenclatureService.getFormOfGuilts(),
     };
     return forkJoin(result);
   }
@@ -90,8 +100,8 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public sanctionProbMeasures: Observable<BaseNomenclatureModel[]>;
   public decisionChTypes: Observable<BaseNomenclatureModel[]>;
   public documentTypes: Observable<BaseNomenclatureModel[]>;
-  public bulletinStatuses : Observable<BaseNomenclatureModel[]>;
+  public bulletinStatuses: Observable<BaseNomenclatureModel[]>;
   public personAliasTypes: Observable<BaseNomenclatureModel[]>;
-  public bulletinTypes : Observable<BaseNomenclatureModel[]>;
-  public formOfGuilts :  Observable<BaseNomenclatureModel[]>;
+  public bulletinTypes: Observable<BaseNomenclatureModel[]>;
+  public formOfGuilts: Observable<BaseNomenclatureModel[]>;
 }

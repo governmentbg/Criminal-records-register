@@ -21,6 +21,12 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     super(BulletinModel, injector, "bulletins");
   }
 
+  public getWithPersonData(personId: string): Observable<BulletinModel> {
+    return this.http.get<BulletinModel>(
+      `${this.url}/create?personId=${personId}`
+    );
+  }
+
   public getOffences(id: string): Observable<BulletinOffenceModel[]> {
     return this.http.get<BulletinOffenceModel[]>(`${this.url}/${id}/offences`);
   }
@@ -38,10 +44,7 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
   }
 
   public changeStatus(aId: string, statusId: string): Observable<any> {
-    return this.http.put(
-      `${this.url}/${aId}/change-status/${statusId}`,
-      {}
-    );
+    return this.http.put(`${this.url}/${aId}/change-status/${statusId}`, {});
   }
 
   public getDocuments(id: string): Observable<BulletinDocumentModel[]> {
@@ -69,7 +72,9 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     return of(BulletinTypeConstants.allData);
   }
 
-  public getBulletinStatusHistoryData(id: string): Observable<BulletinStatusHistoryModel[]> {
+  public getBulletinStatusHistoryData(
+    id: string
+  ): Observable<BulletinStatusHistoryModel[]> {
     return this.http.get<BulletinStatusHistoryModel[]>(
       `${this.url}/${id}/status-history`
     );

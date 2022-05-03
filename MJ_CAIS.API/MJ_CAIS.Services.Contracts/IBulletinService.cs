@@ -33,5 +33,7 @@ namespace MJ_CAIS.Services.Contracts
         Task UpdateAsync(BulletinEditDTO aInDto);
 
         Task<IQueryable<BulletinStatusHistoryDTO>> GetStatusHistoryByBulletinIdAsync(string aId);
+
+        Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId);
     }
 }

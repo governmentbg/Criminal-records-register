@@ -86,11 +86,12 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var person = new PersonGridDTO();
 
-            person.Identifier = dataRow["egn"]?.ToString() ?? null;
-            person.FirstName = dataRow["firstname"]?.ToString() ?? null;
-            person.SurName = dataRow["surname"]?.ToString() ?? null;
-            person.FamilyName = dataRow["familyname"]?.ToString() ?? null;
-            person.FullName = dataRow["fullname"]?.ToString() ?? null;
+            person.Id = dataRow["person_id"]?.ToString();
+            person.Identifier = dataRow["egn"]?.ToString();
+            person.FirstName = dataRow["firstname"]?.ToString() ;
+            person.SurName = dataRow["surname"]?.ToString();
+            person.FamilyName = dataRow["familyname"]?.ToString();
+            person.FullName = dataRow["fullname"]?.ToString();
             var isParsed = int.TryParse(dataRow["all_records"]?.ToString(), out int allRecords);
             person.TotalCount = isParsed ? allRecords : 0;
 

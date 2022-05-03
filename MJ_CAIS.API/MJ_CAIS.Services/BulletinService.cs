@@ -45,6 +45,16 @@ namespace MJ_CAIS.Services
             return false;
         }
 
+        public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
+        {
+            // todo: get person data
+            var result = new BulletinBaseDTO();
+            result.Firstname = "Test";
+            result.Familyname = "create from person form";
+            result.PersonId = personId;
+            return result;
+        }
+
         /// <summary>
         /// Manually add a bulletin by an employee
         /// </summary>
