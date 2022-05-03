@@ -77,7 +77,7 @@ namespace MJ_CAIS.DTO.Bulletin
         public string? CaseTypeId { get; set; }
         public string? CaseNumber { get; set; }
         public decimal? CaseYear { get; set; }
-        public decimal? CaseAuthId { get; set; }
+        public string? CaseAuthId { get; set; }
         public string? ConvRemarks { get; set; }
 
         #endregion
