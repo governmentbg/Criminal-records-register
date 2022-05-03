@@ -26,8 +26,8 @@
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/isin-new']">
-                Получени съобщения от ИСИН (0)
+              <a [routerLink]="['/pages/isin-identified']">
+                За отразяване от ИСИН ({{ model.isinIdentifiedCount }})
               </a>
             </nb-list-item>
           </nb-list>
@@ -35,6 +35,43 @@
       </nb-card>
     </div>
     <div class="col-md-6">
+      <div class="row col-md-12">
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>ECRIS</nb-card-header>
+          <nb-card-body>
+            <nb-list>
+              <nb-list-item>
+                <a [routerLink]="['/pages/ecris-identification']">
+                  За идентификация ({{ model.ecrisForIdentificationCount }})
+                </a>
+              </nb-list-item>
+              <nb-list-item>
+                <a [routerLink]="['/pages/ecris-req-waiting']">
+                  Запитвания ({{ model.ecrisWaitingForCSAuthorityCount }})
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="row col-md-12">
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>ISIN</nb-card-header>
+          <nb-card-body>
+            <nb-list>
+              <nb-list-item>
+                <a [routerLink]="['/pages/isin-new']">
+                  Получени съобщения от ИСИН ({{ model.isinNewCount }})
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+  <div class="row home-panel-container">
+    <!-- <div class="col-md-6">
       <nb-card accent="info">
         <nb-card-header>Свидетелства</nb-card-header>
         <nb-card-body>
@@ -57,6 +94,6 @@
           </nb-list>
         </nb-card-body>
       </nb-card>
-    </div>
+    </div> -->
   </div>
 </ng-container>

@@ -1,9 +1,8 @@
-using MJ_CAIS.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.DTO.Bulletin;
-using System.Linq;
+using MJ_CAIS.DTO.Home;
+using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -74,7 +73,7 @@ namespace MJ_CAIS.Repositories.Impl
                  .AsNoTracking()
                  .Include(x => x.EcrisSanctCateg)
                  .Include(x => x.SanctCategory)
-                 .Include(x=>x.BProbations);
+                 .Include(x => x.BProbations);
 
             return await Task.FromResult(query);
         }
@@ -118,11 +117,11 @@ namespace MJ_CAIS.Repositories.Impl
             return bulleint;
         }
 
-        public async Task<IQueryable<BulletinStatusCountDTO>> GetStatusCountAsync()
+        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
                 .GroupBy(x => x.StatusId)
-                .Select(x => new BulletinStatusCountDTO
+                .Select(x => new ObjectStatusCountDTO
                 {
                     Status = x.Key,
                     Count = x.Count()
