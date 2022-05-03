@@ -32,10 +32,11 @@ export class DatePrecisionComponent implements OnInit {
   public dateValue: Date;
 
   ngOnInit() {
-    // todo: maping from server 
+    // todo: maping from server
     // add validation
+    this.onDatePercisionChange(this.formModel.precision.value);
   }
-  
+
   public setInvalidContainer(inputFormControl: FormControl): string {
     return inputFormControl.invalid &&
       (inputFormControl.touched || inputFormControl.dirty)
@@ -49,11 +50,10 @@ export class DatePrecisionComponent implements OnInit {
       ? "status-danger"
       : "";
   }
+
   onDatePercisionChange(value: string) {
     this.showFullDate = value == DatePrecisionConstants.fullDate.id;
     this.showYearAndMonth = value == DatePrecisionConstants.yearAndMonth.id;
     this.showYear = value == DatePrecisionConstants.year.id;
-    if (this.showFullDate) {
-    }
   }
 }

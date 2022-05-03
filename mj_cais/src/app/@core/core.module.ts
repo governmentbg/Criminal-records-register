@@ -141,8 +141,7 @@ const COMPONENTS = [
     MatMomentDateModule,
     NbCardModule,
     NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    NgxSpinnerModule 
+    NgxMatNativeDateModule
   ],
   declarations: [...COMPONENTS],
   providers: [

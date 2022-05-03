@@ -1,7 +1,11 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
 import { CoreModule } from "./@core/core.module";
 import { LoggerModule, NgxLoggerLevel } from "ngx-logger";
 import { AppComponent } from "./app.component";
@@ -17,7 +21,11 @@ import {
   NbSidebarModule,
   NbToastrModule,
 } from "@nebular/theme";
-import { IgxExcelExporterService, IgxGridTransaction, IgxTransactionService } from "@infragistics/igniteui-angular";
+import {
+  IgxExcelExporterService,
+  IgxGridTransaction,
+  IgxTransactionService,
+} from "@infragistics/igniteui-angular";
 import { ConfigurationService } from "@tl/tl-common";
 import { forkJoin } from "rxjs";
 import { CustomToastrService } from "./@core/services/common/custom-toastr.service";
@@ -29,8 +37,18 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { EditorModule } from "@tinymce/tinymce-angular";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { RouterExtService } from "./@core/services/common/router-ext.service";
-import { NbAuthJWTInterceptor, NbAuthModule, NbAuthOAuth2Token, NbAuthService, NbOAuth2AuthStrategy, NbOAuth2GrantType, NbOAuth2ResponseType, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from "@nebular/auth";
+import {
+  NbAuthJWTInterceptor,
+  NbAuthModule,
+  NbAuthOAuth2Token,
+  NbAuthService,
+  NbOAuth2AuthStrategy,
+  NbOAuth2GrantType,
+  NbOAuth2ResponseType,
+  NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+} from "@nebular/auth";
 import { AuthGuard } from "./@core/services/common/guard.service";
+import { NgxSpinnerModule } from "ngx-spinner";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -61,6 +79,7 @@ registerLocaleData(localeBg);
     HttpClientModule,
     AppRoutingModule,
     EditorModule,
+    NgxSpinnerModule,
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
     }),
@@ -89,12 +108,12 @@ registerLocaleData(localeBg);
     }),
     NbAuthModule.forRoot({
       strategies: [
-        NbOAuth2AuthStrategy.setup( {
-          name: 'eauth',
-          clientId: 'cais-angular'
-        })
-      ]
-    })
+        NbOAuth2AuthStrategy.setup({
+          name: "eauth",
+          clientId: "cais-angular",
+        }),
+      ],
+    }),
   ],
   exports: [TranslateModule],
   bootstrap: [AppComponent],
@@ -111,46 +130,41 @@ registerLocaleData(localeBg);
     },
     { provide: LOCALE_ID, useValue: "bg" },
     { provide: IgxGridTransaction, useClass: IgxTransactionService },
-    { 
-      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, 
-      useValue: function (req: any) { 
-        if (req.url === '/auth/connect/token'){
+    {
+      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+      useValue: function (req: any) {
+        if (req.url === "/auth/connect/token") {
           return true;
         } else {
           return false;
         }
-      }, 
+      },
     },
-    { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true },
   ],
 })
 export class AppModule {
-  constructor(
-    authService: NbAuthService,
-    oauthStrategy: NbOAuth2AuthStrategy
-  ){
-    oauthStrategy.setOptions(
-      {
-        name: 'eauth',
-        clientId: 'cais-angular',
-        clientSecret: '',
-        authorize: {
-          endpoint: '/auth/connect/authorize',
-          responseType: NbOAuth2ResponseType.CODE,
-          scope: 'openid profile offline_access caisapi',
-          redirectUri: `${window.location.origin}/postlogin`
-        },
-        token: {
-          endpoint: '/auth/connect/token',
-          grantType: NbOAuth2GrantType.AUTHORIZATION_CODE,
-          redirectUri: `${window.location.origin}/postlogin`,
-          class: NbAuthOAuth2Token,
-        },
-        refresh: {
-            endpoint: '/auth/connect/token',
-            grantType: NbOAuth2GrantType.REFRESH_TOKEN
-        }
-      }
-    );
+  constructor(authService: NbAuthService, oauthStrategy: NbOAuth2AuthStrategy) {
+    oauthStrategy.setOptions({
+      name: "eauth",
+      clientId: "cais-angular",
+      clientSecret: "",
+      authorize: {
+        endpoint: "/auth/connect/authorize",
+        responseType: NbOAuth2ResponseType.CODE,
+        scope: "openid profile offline_access caisapi",
+        redirectUri: `${window.location.origin}/postlogin`,
+      },
+      token: {
+        endpoint: "/auth/connect/token",
+        grantType: NbOAuth2GrantType.AUTHORIZATION_CODE,
+        redirectUri: `${window.location.origin}/postlogin`,
+        class: NbAuthOAuth2Token,
+      },
+      refresh: {
+        endpoint: "/auth/connect/token",
+        grantType: NbOAuth2GrantType.REFRESH_TOKEN,
+      },
+    });
   }
 }

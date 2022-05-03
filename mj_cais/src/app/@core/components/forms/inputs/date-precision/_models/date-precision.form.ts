@@ -10,7 +10,7 @@ export class DatePrecisionModelForm {
 
   constructor(isRequired?: boolean, disabled?: boolean) {
     let validators = isRequired && !disabled ? [Validators.required] : [];
-    this.precision = new FormControl(validators);
+    this.precision = new FormControl(DatePrecisionConstants.fullDate.id, validators);
     this.date = new FormControl(validators);
     this.year = new FormControl(null, [
       Validators.maxLength(4),

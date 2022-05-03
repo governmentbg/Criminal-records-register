@@ -8,7 +8,14 @@ import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "ngx-app",
-  template: "<router-outlet></router-outlet>",
+  template: `<ngx-spinner
+      bdColor="rgba(0, 0, 0, 0.8)"
+      size="default"
+      color="#fff"
+      type="ball-spin-clockwise"
+      ><p style="color: white">Зареждане...</p></ngx-spinner
+    >
+    <router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
   constructor(private http: HttpClient, translate: TranslateService) {
