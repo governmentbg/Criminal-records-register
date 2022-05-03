@@ -9,39 +9,68 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Регистрационен номер'"
-            [inputFormControl]="fullForm.regNumber"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+      <ng-container *ngIf="isCreate">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Регистрационен номер'"
+              [inputFormControl]="fullForm.regNumber"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'date'"
+              [label]="'Датата на създаване'"
+              [inputFormControl]="fullForm.requestDate"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
         </div>
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'date'"
-            [label]="'Датата на създаване'"
-            [inputFormControl]="fullForm.requestDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Забележки'"
+              [inputFormControl]="fullForm.description"
+              [parentGroup]="fullForm.group"
+              [inputType]="InputTypeConstants.TextArea"
+            ></cais-input>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Забележки'"
-            [inputFormControl]="fullForm.description"
-            [parentGroup]="fullForm.group"
-            [inputType]="InputTypeConstants.TextArea"
-          ></cais-input>
+      </ng-container>
+      <ng-container *ngIf="!isCreate">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Регистрационен номер: </span>
+              <span>
+                {{ fullForm.regNumber.value }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Датата на създаване: </span>
+              <span>
+                {{ fullForm.requestDate.value | date }}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-
+        <div class="row mt-3 nmb-3">
+          <div class="col-md-12">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Забележки: </span>
+            </div>
+            <span style="word-break: break-all">{{ fullForm.description.value }}</span>
+          </div>
+        </div>
+      </ng-container>
       <ng-container *ngIf="isEdit()">
         <ng-container *ngIf="!this.isForPreview">
-          <div class="row">
+          <div class="row mt-2">
             <div class="form-group col-md-6">
               <cais-autocomplete
                 [label]="'Статус'"
@@ -80,7 +109,10 @@
         </div>
       </ng-container>
 
-      <cais-bulletin-person-info [model]="this.dbData.bulletinPersonInfo">
+      <cais-bulletin-person-info
+        *ngIf="this.dbData.bulletinPersonInfo"
+        [model]="this.dbData.bulletinPersonInfo"
+      >
       </cais-bulletin-person-info>
     </form>
   </nb-card-body>

@@ -2,6 +2,8 @@ import { BulletinPersonAliasModel } from "./bulletin-person-alias.model";
 
 export class BulletinPersonInfoModel {
   public bulletinId: string;
+  public bulletinReceivedDate: Date;
+  public csAuthorityName: string;
   public firstname: string;
   public surname: string;
   public familyname: string;
@@ -14,13 +16,19 @@ export class BulletinPersonInfoModel {
   public lnch: string;
   public ln: string;
   public registrationNumber: string;
-  public decisionTypeName: string;
+  public bulletinType: string;
   public decidingAuthName: string;
   public decisionNumber: string;
   public decisionDate: string;
   public caseNumber: string;
   public caseYear: string;
+  public motherFirstname: string;
+  public motherSurname: string;
+  public motherFamilyname: string;
   public motherFullname: string;
+  public fatherFirstname: string;
+  public fatherSurname: string;
+  public fatherFamilyname: string;
   public fatherFullname: string;
   public country: string;
   public city: string;

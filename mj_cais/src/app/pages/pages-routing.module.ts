@@ -98,12 +98,12 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
-        path: "internal-requests/:ID",
+        path: "internal-requests/:ID",// this id is bulletin id
         component: InternalRequestOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {
-        path: "internal-request/create",
+        path: "internal-requests/create/:ID",
         component: InternalRequestFormComponent,
         resolve: { dbData: InternalRequestResolver },
       },

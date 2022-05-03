@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
+import { EActions } from "@tl/tl-common";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
-import { IRStatusTypeEnum } from "../internal-request-overview/_models/internal-request-status-type.constants";
 import { InternalRequestResolverData } from "./_data/internal-request.resolver";
 import { InternalRequestService } from "./_data/internal-request.service";
 import { InternalRequestForm } from "./_models/internal-request.form";
@@ -21,28 +21,41 @@ export class InternalRequestFormComponent
   >
   implements OnInit
 {
+  private readonly PREVIEW_ACTION = "preview";
+  private readonly BULLETIN_OVERVIEW_URL =
+    "/pages/bulletins-for-rehabilitation";
+  public isCreate: boolean;
+
   constructor(service: InternalRequestService, public injector: Injector) {
     super(service, injector);
-    this.setDisplayTitle("Заявка към бюлетин");
+    this.setDisplayTitle("заявка към бюлетин");
   }
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
+    let currentUrl = this.router.url.toLocaleLowerCase();
+    let index = currentUrl.indexOf(this.PREVIEW_ACTION);
+    if (index > -1) {
+      this.isForPreview = true;
+    }
 
     if (this.isEdit()) {
-      this.isForPreview =
-        this.fullForm.reqStatusCode.value != IRStatusTypeEnum.New;
       this.fullForm.reqStatusCode.patchValue(null);
       this.fullForm.reqStatusCode.setValidators([Validators.required]);
     } else {
       var bulletinId = this.activatedRoute.snapshot.params["ID"];
       this.fullForm.bulletinId.patchValue(bulletinId);
     }
-
+    
+    this.isCreate = this.currentAction != EActions.EDIT;
     this.formFinishedLoading.emit();
   }
 
+  //override submit function
+  onSubmitSuccess(data: any) {
+    this.router.navigateByUrl(this.BULLETIN_OVERVIEW_URL);
+  }
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
   }

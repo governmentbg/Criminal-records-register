@@ -104,7 +104,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var bulleint = await _dbContext.BBulletins.AsNoTracking()
                     .Include(x => x.BirthCountry)
-                    .Include(x => x.BirthCity)
+                    .Include(x => x.CsAuthority)
                     .Include(x => x.BirthCity)
                         .ThenInclude(x => x.Municipality)
                             .ThenInclude(x => x.District)
