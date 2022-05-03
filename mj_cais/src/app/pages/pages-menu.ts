@@ -109,6 +109,17 @@ export class PagesMenu {
         icon: "shuffle-2-outline",
         link: "/pages/isin-new",
       },
+      {
+        title: "Административни услуги",
+        icon: { icon: "file-alt", pack: "fa" },
+        expanded: true,
+        children: [
+          {
+            title: "Свидетелства",
+            link: "/pages/applications/create",
+          },
+        ],
+      },
     ];
 
     return dashboardMenu;

@@ -30,6 +30,8 @@ import { IsinDataSelectBulletinFormComponent } from "./isin/isin-data-form/isin-
 import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-preview-form/isin-data-preview-form.component";
 import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
+import { ApplicationFormComponent } from "./application/application-form/application-form.component";
+import { ApplicationResolver } from "./application/application-form/data/application.resolver";
 import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
 import { PersonResolver } from "./person/person-form/_data/person.resolver";
 import { PersonFormComponent } from "./person/person-form/person-form.component";
@@ -220,7 +222,13 @@ const routes: Routes = [
         path: "isin-data/preview/:ID",
         component: IsinDataPreviewFormComponent,
         // canActivate: [AuthGuard],
-      },  
+      },
+      {
+        path: "applications/create",
+        component: ApplicationFormComponent,
+        resolve: { dbData: ApplicationResolver },
+        // canActivate: [AuthGuard],
+      },
       {
         path: "people",
         component: PersonOverviewComponent,
