@@ -48,9 +48,31 @@ namespace MJ_CAIS.EcrisObjectsServices
             await _dbContext.SaveChangesAsync();
 
         }
+        public async Task CreateNotificationFromBulletin(string bulletinID, string joinSeparator = " ")
+        {
+            var buletin = await  _dbContext.BBulletins
+                                .Include(b=>b.BOffences)
+                                .Include(b=>b.BSanctions)
+                                .Include(b=>b.BDecisions)
+                                .Include(b=>b.BPersNationalities)
+                                .Include(b=>b.BulletinAuthority)
+                                .Include(b=>b.CsAuthority)
+                                .Include(b=>b.BBullPersAliases)
+                                .Include(b=>b.BirthCountry)
+                                .Include(b=>b.CaseAuth)
+                                .Include(b=>b.DecidingAuth)
+                                .Include(b=>b.IdDocIssuingAuthority)
+                                .Include(b=>b.IdDocCategory)                              
+                                .FirstOrDefaultAsync(b => b.Id == bulletinID);
+            if(buletin==null)
+            {
+                throw new Exception($"Bulletin with ID {bulletinID} does not exist.");
+            }
 
+            await  CreateNotificationFromBulletin(buletin, joinSeparator);
+        }
 
-        private void LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
+            private void LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
         {
             msg.MessageType = EcrisMessageType.NOT;
             msg.MessageTypeSpecified = true;
