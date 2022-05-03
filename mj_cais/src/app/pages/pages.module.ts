@@ -42,6 +42,7 @@ import { BulletinIsinFormComponent } from "./bulletin/bulletin-form/tabs/bulleti
 import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { BulletinStatusHistoryOverviewComponent } from './bulletin/bulletin-form/tabs/bulletin-status-history-overview/bulletin-status-history-overview.component';
+import { ApplicationFormComponent } from './application/application-form/application-form.component';
 
 @NgModule({
   imports: [
@@ -90,6 +91,7 @@ import { BulletinStatusHistoryOverviewComponent } from './bulletin/bulletin-form
     HomeComponent,
     BulletinNewOfficeOverviewComponent,
     BulletinStatusHistoryOverviewComponent,
+    ApplicationFormComponent,
   ],
   providers: [PagesMenu, BulletinResolver],
 })

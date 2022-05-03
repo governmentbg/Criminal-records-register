@@ -1,0 +1,23 @@
+<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onSaveFunction]="submitFunction"
+      [onCancelFunction]="globalCancelFunction"
+    >
+    </cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <nb-tabset #nbtabset>
+        <nb-tab tabTitle="Заявление - ЕГН"> </nb-tab>
+      </nb-tabset>
+      <nb-tabset #nbtabset>
+        <nb-tab tabTitle="Заявление - ЛНЧ"> </nb-tab>
+      </nb-tabset>
+      <nb-tabset #nbtabset>
+        <nb-tab tabTitle="Заявление - Чужденец"> </nb-tab>
+      </nb-tabset>
+    </form>
+  </nb-card-body>
+</nb-card>
