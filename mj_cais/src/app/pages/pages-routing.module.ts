@@ -32,6 +32,10 @@ import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { ApplicationFormComponent } from "./application/application-form/application-form.component";
 import { ApplicationResolver } from "./application/application-form/data/application.resolver";
+import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
+import { PersonResolver } from "./person/person-form/_data/person.resolver";
+import { PersonFormComponent } from "./person/person-form/person-form.component";
+import { AuthGuard } from "../@core/services/common/guard.service";
 
 const routes: Routes = [
   {
@@ -223,6 +227,24 @@ const routes: Routes = [
         path: "applications/create",
         component: ApplicationFormComponent,
         resolve: { dbData: ApplicationResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "people",
+        component: PersonOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "people/create",
+        component: PersonFormComponent,
+        resolve: { dbData: PersonResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "people/preview/:ID",
+        component: PersonFormComponent,
+        resolve: { dbData: PersonResolver },
+        data: { edit: true, preview: true },
         // canActivate: [AuthGuard],
       },
       {

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using EcrisRIClient;
 using MJ_CAIS.DTO.EcrisService;
+using MJ_CAIS.EcrisObjectsServices;
 //using Microsoft.Extensions.Logging;
 
 namespace EcrisIntegrationServices

@@ -1,0 +1,29 @@
+﻿@{
+    string projectText = "Текст - информация за проекта";
+}
+<div class="egov-header">
+    <div class="egov-identity">
+        <div class="egov-identity-gerb">
+            <div>
+                <img class="gerb" src="~/logo-gerb.png">
+            </div>
+            <div class="gerb-text">
+                <h6 class="rb-text">Република България</h6>
+                <h6 class="daeu-text">Министерство на Правосъдието</h6>
+            </div>
+        </div>
+        <div class="eu-text">
+            <span class="eu-text-span">@projectText</span>
+        </div>
+        <img class="eu-logo" src="~/eu.png" [title]="projectText">
+    </div>
+    <div class="egov-identity-small">
+        <div class="egov-identity-gerb">
+            <img class="gerb" src="~/logo-small.gif">
+            <div class="gerb-text" igxLayout igxLayoutDir="col" igxLayoutJustify="center">
+                <h6 class="daeu-text">Министерство на Правосъдието</h6>
+            </div>
+        </div>
+        <img class="eu-logo" src="~/eu.png" title="@projectText">
+    </div>
+</div>

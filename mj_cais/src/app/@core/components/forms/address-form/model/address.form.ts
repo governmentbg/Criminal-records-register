@@ -65,7 +65,7 @@ export class AddressForm {
     this.isSetForForeignAddress = true;
   }
 
-  public setForNativeAddress() {
+  public setForNativeAddress(showDescWhenIsNativeAddress: boolean) {
     if (this.isDisabled) {
       this.districtId.disable();
       this.municipalityId.disable();
@@ -76,7 +76,9 @@ export class AddressForm {
       this.municipalityId.enable();
       this.cityId.enable();
 
-      this.foreignCountryAddress.disable();
+      if(!showDescWhenIsNativeAddress){
+        this.foreignCountryAddress.disable();
+      }
     }
 
     this.foreignCountryAddress.setValue(null);

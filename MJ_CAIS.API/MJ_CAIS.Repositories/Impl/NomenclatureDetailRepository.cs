@@ -50,7 +50,8 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<GCountry> GetCountries()
         {
-            return _dbContext.GCountries.AsNoTracking();
+            return _dbContext.GCountries.AsNoTracking()
+                .OrderBy(x=>x.Iso31662Code);
         }
     }
 }

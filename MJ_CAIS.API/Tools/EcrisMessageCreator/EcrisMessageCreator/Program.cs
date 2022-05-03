@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using MJ_CAIS.DataAccess;
+using MJ_CAIS.EcrisObjectsServices;
 
 namespace EcrisMessageCreator
 {
@@ -30,6 +31,7 @@ namespace EcrisMessageCreator
 
                 IHost host = Host.CreateDefaultBuilder()
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
+                    .ConfigureServices(services => services.AddSingleton<RequestService>())
                     .ConfigureServices(services => services.AddSingleton<EcrisMessageCreatorService>())
                     .ConfigureLogging(logging =>
                     {

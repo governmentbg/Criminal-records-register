@@ -1,7 +1,6 @@
 <div [formGroup]="parentForm.group">
   <div class="row">
     <div class="form-group col-md-3">
-
       <!-- <cais-autocomplete
         [label]="'Държава'"
         [inputFormControl]="parentForm.countryId"
@@ -11,26 +10,12 @@
         (selectionChanged)="onCountryChanged($event)"
       ></cais-autocomplete> -->
       <cais-lookup
-      [label]="'Държава'"
-      [inputControl]="parentForm.country"
-      [parentGroup]="parentForm.country.group"
-      [openFunction]="openCountryDialog"
-    ></cais-lookup>
+        [label]="'Държава'"
+        [inputControl]="parentForm.country"
+        [parentGroup]="parentForm.country.group"
+        [openFunction]="openCountryDialog"
+      ></cais-lookup>
     </div>
-
-    <div
-      class="form-group col-md-9"
-      [hidden]="!parentForm.isSetForForeignAddress"
-    >
-      <cais-input
-        [type]="'text'"
-        [label]="'Oписание в случай на друг адрес'"
-        [inputFormControl]="parentForm.foreignCountryAddress"
-        [parentGroup]="parentForm.group"
-        [inputName]="'foreignCountryAddress'"
-      ></cais-input>
-    </div>
-
     <div
       class="form-group col-md-3"
       [hidden]="!parentForm.isSetForNativeAddress"
@@ -73,6 +58,20 @@
         [inputName]="'cityId'"
         [(items)]="cities"
       ></cais-autocomplete>
+    </div>
+    <div
+      class="form-group col-md-9"
+      [hidden]="
+        parentForm.isSetForNativeAddress && !showDescWhenIsNativeAddress
+      "
+    >
+      <cais-input
+        [type]="'text'"
+        [label]="'Описание'"
+        [inputFormControl]="parentForm.foreignCountryAddress"
+        [parentGroup]="parentForm.group"
+        [inputName]="'foreignCountryAddress'"
+      ></cais-input>
     </div>
   </div>
 </div>
