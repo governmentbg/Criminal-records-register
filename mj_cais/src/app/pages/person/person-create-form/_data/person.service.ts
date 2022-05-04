@@ -3,10 +3,10 @@ import { map, Observable } from "rxjs";
 import {
   PersonAliasCodeConstants,
   PersonAliasNameConstants,
-} from "../../../../constants/person-alias-type.constants";
-import { CaisCrudService } from "../../../../services/rest/cais-crud.service";
-import { BulletinPersonAliasModel } from "../../../shared/bulletin-person-info/_models/bulletin-person-alias.model";
-import { PersonModel } from "../_models/person.model";
+} from "../../../../@core/constants/person-alias-type.constants";
+import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
+import { BulletinPersonAliasModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-alias.model";
+import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
 
 @Injectable({
   providedIn: "root",

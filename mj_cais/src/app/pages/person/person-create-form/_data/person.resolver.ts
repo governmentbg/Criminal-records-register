@@ -6,10 +6,10 @@ import {
   ActivatedRouteSnapshot,
 } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
-import { BaseResolverData } from "../../../../models/common/base-resolver.data";
-import { BaseNomenclatureModel } from "../../../../models/nomenclature/base-nomenclature.model";
-import { NomenclatureService } from "../../../../services/rest/nomenclature.service";
-import { PersonModel } from "../_models/person.model";
+import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
+import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
+import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
 import { PersonService } from "./person.service";
 
 @Injectable({
@@ -36,8 +36,7 @@ export class PersonResolver implements Resolve<any> {
       genderTypes: this.nomenclatureService.getGenderTypes(),
       countries: this.nomenclatureService.getCountries(),
       idDocumentCategoryTypes:
-        this.nomenclatureService.getIdDocumentCategoryTypes(),
-      personAlias: this.service.getPersonAlias(null), // todo:
+        this.nomenclatureService.getIdDocumentCategoryTypes(), // todo:
       personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
     };
     return forkJoin(result);
