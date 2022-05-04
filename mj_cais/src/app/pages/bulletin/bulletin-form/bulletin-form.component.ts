@@ -9,12 +9,6 @@ import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bul
 import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bulletin-decision-form.component";
 import { BulletinDocumentFormComponent } from "./tabs/bulletin-documents-form/bulletin-document-form.component";
-import { BulletinPersonAliasForm } from "./_models/bulletin-person-alias.form";
-import {
-  IgxDialogComponent,
-  IgxGridComponent,
-  IgxGridRowComponent,
-} from "@infragistics/igniteui-angular";
 import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.constants";
 import { EActions } from "@tl/tl-common";
 import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
@@ -68,20 +62,10 @@ export class BulletinFormComponent
   public isDocumentsEditable: boolean;
   //#endregion
 
-  //#region Псевдоним или други използвани имена
-  public bulletinPersonAliasForm = new BulletinPersonAliasForm();
-  @ViewChild("bulletinPersonAliasGrid", { read: IgxGridComponent })
-  public bulletinPersonAliasGrid: IgxGridComponent;
-
-  @ViewChild("bulletinPersonAliasDialog", { read: IgxDialogComponent })
-  public bulletinPersonAliasDialog: IgxDialogComponent;
-
   public isBulletinPersonAliasEditable = false;
-  //#endregion
-
   public showForUpdate: boolean = false;
   public setEditToBeForPreview: boolean = false;
-  
+
   constructor(
     service: BulletinService,
     public injector: Injector,
@@ -111,7 +95,7 @@ export class BulletinFormComponent
   createInputObject(object: BulletinModel) {
     return new BulletinModel(object);
   }
-  
+
   submitFunction = () => {
     let offancesTransactions =
       this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
@@ -133,10 +117,6 @@ export class BulletinFormComponent
       );
 
     this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
-
-    let personAliasTransactions =
-      this.bulletinPersonAliasGrid.transactions.getAggregatedChanges(true);
-    this.fullForm.personAliasTransactions.setValue(personAliasTransactions);
 
     this.validateAndSave(this.fullForm);
   };
@@ -164,7 +144,7 @@ export class BulletinFormComponent
                 "success",
                 this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
               );
-              this.router.navigate(['pages/bulletins']); 
+              this.router.navigate(["pages/bulletins"]);
             },
             (error) => {
               let title = this.dangerMessage;
@@ -179,56 +159,6 @@ export class BulletinFormComponent
           );
       }
     });
-  }
-
-  //#endregion
-
-  //#region Person alias functions
-
-  public onOpenEditBulletinPersonAlias(event: IgxGridRowComponent) {
-    this.bulletinPersonAliasForm.group.patchValue(event.rowData);
-    this.bulletinPersonAliasDialog.open();
-  }
-
-  public onDeleteBulletinPersonAlias(event: IgxGridRowComponent) {
-    this.bulletinPersonAliasGrid.deleteRow(event.rowData.id);
-    this.bulletinPersonAliasGrid.data =
-      this.bulletinPersonAliasGrid.data.filter((d) => d.id != event.rowData.id);
-  }
-
-  onAddOrUpdateBulletinPersonAliasRow() {
-    if (!this.bulletinPersonAliasForm.group.valid) {
-      this.bulletinPersonAliasForm.group.markAllAsTouched();
-      return;
-    }
-
-    if (this.bulletinPersonAliasForm.typeId.value) {
-      var typeObj = (this.dbData.personAliasTypes as any).find(
-        (x) => x.id === this.bulletinPersonAliasForm.typeId.value
-      );
-
-      this.bulletinPersonAliasForm.typeName.patchValue(typeObj?.name);
-      this.bulletinPersonAliasForm.typeCode.patchValue(typeObj?.code);
-    }
-
-    let currentRow = this.bulletinPersonAliasGrid.getRowByKey(
-      this.bulletinPersonAliasForm.id.value
-    );
-
-    if (currentRow) {
-      currentRow.update(this.bulletinPersonAliasForm.group.value);
-    } else {
-      this.bulletinPersonAliasGrid.addRow(
-        this.bulletinPersonAliasForm.group.value
-      );
-    }
-
-    this.onCloseBulletinPersonAliasDilog();
-  }
-
-  onCloseBulletinPersonAliasDilog() {
-    this.bulletinPersonAliasForm = new BulletinPersonAliasForm();
-    this.bulletinPersonAliasDialog.close();
   }
 
   //#endregion

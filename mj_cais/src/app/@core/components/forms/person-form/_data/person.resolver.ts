@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import {
+  Router,
   Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
 } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
-import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
-import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
-import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { BaseResolverData } from "../../../../models/common/base-resolver.data";
+import { BaseNomenclatureModel } from "../../../../models/nomenclature/base-nomenclature.model";
+import { NomenclatureService } from "../../../../services/rest/nomenclature.service";
 import { PersonModel } from "../_models/person.model";
 import { PersonService } from "./person.service";
 
@@ -24,6 +25,7 @@ export class PersonResolver implements Resolve<any> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
+    debugger;
     let personId = route.params["ID"];
     let isEdit = route.data["edit"];
     let element = isEdit ? this.service.find(personId) : of(null);
@@ -35,6 +37,8 @@ export class PersonResolver implements Resolve<any> {
       countries: this.nomenclatureService.getCountries(),
       idDocumentCategoryTypes:
         this.nomenclatureService.getIdDocumentCategoryTypes(),
+      personAlias: this.service.getPersonAlias(null), // todo:
+      personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
     };
     return forkJoin(result);
   }
@@ -45,4 +49,5 @@ export class PersonResolverData extends BaseResolverData<PersonModel> {
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
   public idDocumentCategoryTypes: Observable<BaseNomenclatureModel[]>;
+  public personAliasTypes: Observable<BaseNomenclatureModel[]>;
 }

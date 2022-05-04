@@ -49,9 +49,9 @@ namespace MJ_CAIS.Services
         {
             // todo: get person data
             var result = new BulletinBaseDTO();
-            result.Firstname = "Test";
-            result.Familyname = "create from person form";
-            result.PersonId = personId;
+            result.Person.Firstname = "Test";
+            result.Person.Familyname = "create from person form";
+            result.Person.Id = personId;
             return result;
         }
 
@@ -345,8 +345,8 @@ namespace MJ_CAIS.Services
 
             entity.BSanctions = sanctions;
             entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
-            entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.PersonAliasTransactions);
-            entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
+            entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.Person.PersonAliasTransactions);
+            entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Person.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
         }
 
         private async Task<List<BSanction>> GetDeletedSanctionsAsync(List<string> deletedSanctionIds)

@@ -1,0 +1,286 @@
+<div class="font-weight-bold">Имена</div>
+<hr />
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Име на кирилица'"
+      [inputFormControl]="personForm.firstname"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Презиме на кирилица'"
+      [inputFormControl]="personForm.surname"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Фамилия на кирилица'"
+      [inputFormControl]="personForm.familyname"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Имена на кирилица'"
+      [inputFormControl]="personForm.fullname"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Име на латиница'"
+      [inputFormControl]="personForm.firstnameLat"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Презиме на латиница'"
+      [inputFormControl]="personForm.surnameLat"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Фамилия на латиница'"
+      [inputFormControl]="personForm.familynameLat"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Имена на латиница'"
+      [inputFormControl]="personForm.fullnameLat"
+      [parentGroup]="personForm.group"
+    >
+    </cais-input>
+  </div>
+</div>
+
+<cais-bulletin-person-alias-form
+  [transactions]="personForm.personAliasTransactions"
+  [gridData]="personAliasGridData"
+  [isGridEditable]="isEditable" 
+  [personAliasTypes]="personAliasTypes"
+>
+</cais-bulletin-person-alias-form>
+<div class="row mt-3">
+  <div class="form-group col-md-3">
+    <cais-autocomplete
+      [label]="'Пол'"
+      [inputFormControl]="personForm.sex"
+      [parentGroup]="personForm.group"
+      [inputName]="'sex'"
+      [items]="genderTypes"
+    ></cais-autocomplete>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'date'"
+      [label]="'Дата на раждане'"
+      [inputFormControl]="personForm.birthDate"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>
+
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'ЕГН'"
+      [inputFormControl]="personForm.egn"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'ЛНЧ'"
+      [inputFormControl]="personForm.lnch"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'ЛН'"
+      [inputFormControl]="personForm.ln"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>
+<div class="font-weight-bold">Място на раждане</div>
+<hr />
+<cais-address-form [parentForm]="personForm.birthPlace"></cais-address-form>
+<div class="row">
+  <div class="form-group col-md-6">
+    <cais-multiple-choose
+      [label]="'Гражданство'"
+      [inputFormControl]="personForm.nationalities"
+      [parentGroup]="personForm.group"
+      [items]="countries"
+    >
+    </cais-multiple-choose>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'АФИС номер'"
+      [inputFormControl]="personForm.afisNumber"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>
+
+<div class="font-weight-bold">Документ за самоличност</div>
+<hr />
+
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Номер на документ'"
+      [inputFormControl]="personForm.idDocNumber"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-autocomplete
+      [label]="'Категория'"
+      [inputFormControl]="personForm.idDocCategoryId"
+      [parentGroup]="personForm.group"
+      [inputName]="'idDocCategoryId'"
+      [items]="idDocumentCategoryTypes"
+    >
+    </cais-autocomplete>
+  </div>
+  <div class="form-group col-md-6">
+    <cais-input
+      [type]="'text'"
+      [label]="'Друга категория в случай че липсва в списъка'"
+      [inputFormControl]="personForm.idDocTypeDescr"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>
+
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Издаващ орган'"
+      [inputFormControl]="personForm.idDocIssuingAuthority"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'date'"
+      [label]="'Дата на издаване'"
+      [inputFormControl]="personForm.idDocIssuingDate"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'date'"
+      [label]="'Дата на валидност'"
+      [inputFormControl]="personForm.idDocValidDate"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>
+
+<div class="font-weight-bold">Родители</div>
+<hr />
+
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Майка - име'"
+      [inputFormControl]="personForm.motherFirstname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Майка - презиме'"
+      [inputFormControl]="personForm.motherSurname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Майка - фамилия'"
+      [inputFormControl]="personForm.motherFamilyname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Майка - имена'"
+      [inputFormControl]="personForm.motherFullname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>
+
+<div class="row">
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Баща - име'"
+      [inputFormControl]="personForm.fatherFirstname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Баща - презиме'"
+      [inputFormControl]="personForm.fatherSurname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Баща - фамилия'"
+      [inputFormControl]="personForm.fatherFamilyname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+  <div class="form-group col-md-3">
+    <cais-input
+      [type]="'text'"
+      [label]="'Баща - имена'"
+      [inputFormControl]="personForm.fatherFullname"
+      [parentGroup]="personForm.group"
+    ></cais-input>
+  </div>
+</div>

@@ -1,7 +1,6 @@
 import { LookupModel } from "../../inputs/lookup/models/lookup.model";
 
 export class AddressModel {
-  //countryId: number;
   districtId: number;
   municipalityId: number;
   cityId: number;
@@ -9,7 +8,6 @@ export class AddressModel {
   country: LookupModel;
 
   constructor(init?: Partial<AddressModel>) {
-   // this.countryId = init?.countryId ?? null;
     this.country = init?.country ?? null;
     this.districtId = init?.districtId ?? null;
     this.municipalityId = init?.municipalityId ?? null;

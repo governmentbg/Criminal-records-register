@@ -1,10 +1,12 @@
-import { FormControl, FormGroup } from "@angular/forms";
-import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
-import { MultipleChooseForm } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AddressForm } from "../../address-form/model/address.form";
+import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 
 export class PersonForm {
   public group: FormGroup;
+
   public id: FormControl;
+  public contextType: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -17,7 +19,6 @@ export class PersonForm {
   public sex: FormControl;
   public birthDate: FormControl;
   public birthPlace: AddressForm;
-  public birthPlaceAuthId: FormControl;
   public egn: FormControl;
   public lnch: FormControl;
   public ln: FormControl;
@@ -37,9 +38,11 @@ export class PersonForm {
   public fatherSurname: FormControl;
   public fatherFamilyname: FormControl;
   public fatherFullname: FormControl;
+  public personAlias: FormControl;
 
   constructor() {
     this.id = new FormControl(null);
+    this.contextType = new FormControl(null);
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
     this.familyname = new FormControl(null);
@@ -49,14 +52,14 @@ export class PersonForm {
     this.familynameLat = new FormControl(null);
     this.fullnameLat = new FormControl(null);
     this.personAliasTransactions = new FormControl(null);
+    this.personAlias = new FormControl(null);
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
-    this.birthPlace = new AddressForm(false);
-    this.birthPlaceAuthId = new FormControl(null);
+    this.birthPlace = new AddressForm();
     this.egn = new FormControl(null);
     this.lnch = new FormControl(null);
     this.ln = new FormControl(null);
-    this.nationalities = new MultipleChooseForm(false);
+    this.nationalities = new MultipleChooseForm();
     this.afisNumber = new FormControl(null);
     this.idDocNumber = new FormControl(null);
     this.idDocCategoryId = new FormControl(null);
@@ -73,8 +76,54 @@ export class PersonForm {
     this.fatherFamilyname = new FormControl(null);
     this.fatherFullname = new FormControl(null);
 
+    // todo: add validation by context type
+    this.firstname.setValidators([
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+
+    this.surname.setValidators([
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+
+    this.familyname.setValidators([
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.fullname.setValidators(Validators.maxLength(200));
+    this.firstnameLat.setValidators([
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.surnameLat.setValidators([
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.familynameLat.setValidators([
+      Validators.required,
+      Validators.maxLength(200),
+    ]);
+    this.fullnameLat.setValidators(Validators.maxLength(200));
+    this.sex.setValidators(Validators.required);
+    this.birthDate.setValidators(Validators.required);
+    this.birthPlace = new AddressForm(true);
+    this.nationalities = new MultipleChooseForm(true);
+    this.afisNumber.setValidators(Validators.maxLength(100));
+    this.idDocNumber.setValidators(Validators.maxLength(100));
+    this.idDocCategoryId.setValidators(Validators.maxLength(50));
+    this.motherFirstname.setValidators(Validators.maxLength(200));
+    this.motherSurname.setValidators(Validators.maxLength(200));
+    this.motherFamilyname.setValidators(Validators.maxLength(200));
+    this.motherFullname.setValidators(Validators.maxLength(200));
+    this.fatherFirstname.setValidators(Validators.maxLength(200));
+    this.fatherSurname.setValidators(Validators.maxLength(200));
+    this.fatherFamilyname.setValidators(Validators.maxLength(200));
+    this.fatherFullname.setValidators(Validators.maxLength(200));
+    
     this.group = new FormGroup({
       id: this.id,
+      contextType: this.contextType,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,
@@ -82,17 +131,17 @@ export class PersonForm {
       firstnameLat: this.firstnameLat,
       surnameLat: this.surnameLat,
       familynameLat: this.familynameLat,
+      fullnameLat: this.fullnameLat,
       personAliasTransactions: this.personAliasTransactions,
+      personAlias: this.personAlias,
       sex: this.sex,
       birthDate: this.birthDate,
       birthPlace: this.birthPlace.group,
-      birthPlaceAuthId: this.birthPlaceAuthId,
       egn: this.egn,
       lnch: this.lnch,
       ln: this.ln,
       nationalities: this.nationalities.group,
       afisNumber: this.afisNumber,
-      fullnameLat: this.fullnameLat,
       idDocNumber: this.idDocNumber,
       idDocCategoryId: this.idDocCategoryId,
       idDocTypeDescr: this.idDocTypeDescr,

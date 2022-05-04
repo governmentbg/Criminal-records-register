@@ -6,7 +6,14 @@ import {
   SkipSelf,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { NbAuthJWTToken, NbAuthModule, NbAuthOAuth2Token, NbAuthService, NbDummyAuthStrategy, NbOAuth2AuthStrategy } from "@nebular/auth";
+import {
+  NbAuthJWTToken,
+  NbAuthModule,
+  NbAuthOAuth2Token,
+  NbAuthService,
+  NbDummyAuthStrategy,
+  NbOAuth2AuthStrategy,
+} from "@nebular/auth";
 import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
 import { map, Observable, of as observableOf, of, switchMap } from "rxjs";
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -32,15 +39,16 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { GridWithTransactionsComponent } from "./components/grid/grid-with-transactions.component";
 import { NbCardModule } from "@nebular/theme";
 import { ConfirmDialogComponent } from "./components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
-import { CaisGridPagerComponent } from './components/grid/cais-grid-pager/cais-grid-pager.component';
-import { LookupComponent } from './components/forms/inputs/lookup/lookup.component';
-import { MultipleChooseComponent } from './components/forms/inputs/multiple-choose/multiple-choose.component';
-import { AddressFormComponent } from './components/forms/address-form/address-form.component';
-import { CountryDialogComponent } from './components/forms/address-form/dialog/country-dialog/country-dialog.component';
+import { CaisGridPagerComponent } from "./components/grid/cais-grid-pager/cais-grid-pager.component";
+import { LookupComponent } from "./components/forms/inputs/lookup/lookup.component";
+import { MultipleChooseComponent } from "./components/forms/inputs/multiple-choose/multiple-choose.component";
+import { AddressFormComponent } from "./components/forms/address-form/address-form.component";
+import { CountryDialogComponent } from "./components/forms/address-form/dialog/country-dialog/country-dialog.component";
 import { throwIfAlreadyLoaded } from "./module-import-guard";
-import { DatePrecisionComponent } from './components/forms/inputs/date-precision/date-precision.component';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { DatePrecisionComponent } from "./components/forms/inputs/date-precision/date-precision.component";
 import { HttpClient } from "@angular/common/http";
+import { PersonFormComponent } from "./components/forms/person-form/person-form.component";
+import { BulletinPersonAliasFormComponent } from "./components/forms/person-form/bulletin-person-alias-form/bulletin-person-alias-form.component";
 
 const socialLinks = [
   {
@@ -62,35 +70,35 @@ const socialLinks = [
 
 @Injectable()
 export class NbSimpleRoleProvider extends NbRoleProvider {
-  
   constructor(
     private authService: NbAuthService,
     private httpClient: HttpClient
-    ) {
+  ) {
     super();
   }
 
   getRole(): Observable<string> {
-    return this.authService.onTokenChange()
-      .pipe(
-        switchMap( (tkn) =>{
-          return tkn.isValid() ? this.httpClient.get('/auth/connect/userinfo') : of({role: 'guest'});
-        }),
-        map ( (data: any) =>{
-          return  data?.role;
-        })
-      );
+    return this.authService.onTokenChange().pipe(
+      switchMap((tkn) => {
+        return tkn.isValid()
+          ? this.httpClient.get("/auth/connect/userinfo")
+          : of({ role: "guest" });
+      }),
+      map((data: any) => {
+        return data?.role;
+      })
+    );
   }
 }
 
 export const NB_CORE_PROVIDERS = [
   ...NbAuthModule.forRoot({
     strategies: [
-      NbOAuth2AuthStrategy.setup( {
-        name: 'eauth',
-        clientId: 'cais-angular'
-      })
-    ]
+      NbOAuth2AuthStrategy.setup({
+        name: "eauth",
+        clientId: "cais-angular",
+      }),
+    ],
   }).providers,
 
   NbSecurityModule.forRoot({
@@ -127,7 +135,9 @@ const COMPONENTS = [
   MultipleChooseComponent,
   AddressFormComponent,
   CountryDialogComponent,
-  DatePrecisionComponent 
+  DatePrecisionComponent,
+  PersonFormComponent,
+  BulletinPersonAliasFormComponent
 ];
 
 @NgModule({
@@ -141,7 +151,7 @@ const COMPONENTS = [
     MatMomentDateModule,
     NbCardModule,
     NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
+    NgxMatNativeDateModule,
   ],
   declarations: [...COMPONENTS],
   providers: [

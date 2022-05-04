@@ -33,9 +33,9 @@ import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview
 import { ApplicationFormComponent } from "./application/application-form/application-form.component";
 import { ApplicationResolver } from "./application/application-form/data/application.resolver";
 import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
-import { PersonResolver } from "./person/person-form/_data/person.resolver";
-import { PersonFormComponent } from "./person/person-form/person-form.component";
 import { AuthGuard } from "../@core/services/common/guard.service";
+import { PersonFormComponent } from "../@core/components/forms/person-form/person-form.component";
+import { PersonResolver } from "../@core/components/forms/person-form/_data/person.resolver";
 
 const routes: Routes = [
   {
