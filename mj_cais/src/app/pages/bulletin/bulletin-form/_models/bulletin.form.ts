@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
 import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin-status-type.constants";
 
@@ -91,7 +92,6 @@ export class BulletinForm {
     this.createdByPosition.disable();
     this.approvedByNames.disable();
     this.approvedByPosition.disable();
-    this.person.group.disable();
     this.decisionTypeId.disable();
     this.decisionNumber.disable();
     this.decisionDate.disable();
@@ -106,6 +106,8 @@ export class BulletinForm {
     this.noSanction.disable();
     this.prevSuspSent.disable();
     this.prevSuspSentDescr.disable();
+    this.person = new PersonForm(PersonContextEnum.Bulletin, false);
+    this.person.group.disable();
   }
 
   private initForEditNewEISS(): void {
@@ -128,7 +130,6 @@ export class BulletinForm {
     this.createdByPosition.disable();
     this.approvedByNames.disable();
     this.approvedByPosition.disable();
-    this.person.group.disable();
     this.decisionTypeId.disable();
     this.decisionNumber.disable();
     this.decisionDate.disable();
@@ -143,6 +144,8 @@ export class BulletinForm {
     this.noSanction.disable();
     this.prevSuspSent.disable();
     this.prevSuspSentDescr.disable();
+    this.person = new PersonForm(PersonContextEnum.Bulletin, false);
+    this.person.group.disable();
   }
 
   private initUnlocked(): void {
@@ -188,6 +191,7 @@ export class BulletinForm {
     ]);
     this.caseYear.setValidators(Validators.required);
     this.statusId.setValidators(Validators.maxLength(50));
+    this.person = new PersonForm(PersonContextEnum.Bulletin, true);
   }
 
   private initGroup(): void {
@@ -250,7 +254,7 @@ export class BulletinForm {
     this.createdByPosition = new FormControl(null);
     this.approvedByNames = new FormControl(null);
     this.approvedByPosition = new FormControl(null);
-    this.person = new PersonForm();
+
     this.decisionTypeId = new FormControl(null);
     this.decisionNumber = new FormControl(null);
     this.decisionDate = new FormControl(null);

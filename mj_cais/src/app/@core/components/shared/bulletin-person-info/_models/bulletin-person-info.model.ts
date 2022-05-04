@@ -1,4 +1,4 @@
-import { BulletinPersonAliasModel } from "./bulletin-person-alias.model";
+import { PersonAliasModel } from "../../../../models/common/person-alias.model";
 
 export class BulletinPersonInfoModel {
   public bulletinId: string;
@@ -36,5 +36,5 @@ export class BulletinPersonInfoModel {
   public foreignCountryAddress: string;
   public municipalityName: string;
   public districtname: string;
-  public personAliases: BulletinPersonAliasModel[];
+  public personAliases: PersonAliasModel[];
 }

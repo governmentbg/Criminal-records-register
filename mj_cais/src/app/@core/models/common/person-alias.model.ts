@@ -1,4 +1,4 @@
-export class BulletinPersonAliasModel {
+export class PersonAliasModel {
     public id: string = null;
     public firstname: string = null;
     public surname: string = null;
@@ -8,7 +8,7 @@ export class BulletinPersonAliasModel {
     public typeCode: string = null;
     public typeName: string = null;
   
-    constructor(init?: Partial<BulletinPersonAliasModel>) {
+    constructor(init?: Partial<PersonAliasModel>) {
       if (init) {
         this.id = init.id ?? null;
         this.firstname = init.firstname ?? null;

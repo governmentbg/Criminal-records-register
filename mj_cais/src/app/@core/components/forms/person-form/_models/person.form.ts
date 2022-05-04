@@ -1,11 +1,15 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressForm } from "../../address-form/model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
+import { PersonContextEnum } from "./person-context-enum";
 
 export class PersonForm {
   public group: FormGroup;
 
   public id: FormControl;
+  // appling validation rules,
+  // showing or hiding form controls
+  // depends on context type
   public contextType: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
@@ -40,9 +44,9 @@ export class PersonForm {
   public fatherFullname: FormControl;
   public personAlias: FormControl;
 
-  constructor() {
+  constructor(context: string, hasValidation: boolean = true) {
     this.id = new FormControl(null);
-    this.contextType = new FormControl(null);
+    this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
     this.familyname = new FormControl(null);
@@ -55,7 +59,6 @@ export class PersonForm {
     this.personAlias = new FormControl(null);
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
-    this.birthPlace = new AddressForm();
     this.egn = new FormControl(null);
     this.lnch = new FormControl(null);
     this.ln = new FormControl(null);
@@ -76,51 +79,72 @@ export class PersonForm {
     this.fatherFamilyname = new FormControl(null);
     this.fatherFullname = new FormControl(null);
 
-    // todo: add validation by context type
-    this.firstname.setValidators([
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
+    if (!hasValidation) {
+      this.birthPlace = new AddressForm(false, true);
+      this.birthPlace.group.disable();
+    } else {
+      this.birthPlace = new AddressForm(false, false);
+      if (context != PersonContextEnum.Fbbc) {
+        this.firstname.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
 
-    this.surname.setValidators([
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
+        this.surname.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
 
-    this.familyname.setValidators([
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
-    this.fullname.setValidators(Validators.maxLength(200));
-    this.firstnameLat.setValidators([
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
-    this.surnameLat.setValidators([
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
-    this.familynameLat.setValidators([
-      Validators.required,
-      Validators.maxLength(200),
-    ]);
-    this.fullnameLat.setValidators(Validators.maxLength(200));
-    this.sex.setValidators(Validators.required);
-    this.birthDate.setValidators(Validators.required);
-    this.birthPlace = new AddressForm(true);
-    this.nationalities = new MultipleChooseForm(true);
-    this.afisNumber.setValidators(Validators.maxLength(100));
-    this.idDocNumber.setValidators(Validators.maxLength(100));
-    this.idDocCategoryId.setValidators(Validators.maxLength(50));
-    this.motherFirstname.setValidators(Validators.maxLength(200));
-    this.motherSurname.setValidators(Validators.maxLength(200));
-    this.motherFamilyname.setValidators(Validators.maxLength(200));
-    this.motherFullname.setValidators(Validators.maxLength(200));
-    this.fatherFirstname.setValidators(Validators.maxLength(200));
-    this.fatherSurname.setValidators(Validators.maxLength(200));
-    this.fatherFamilyname.setValidators(Validators.maxLength(200));
-    this.fatherFullname.setValidators(Validators.maxLength(200));
-    
+        this.familyname.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+        this.fullname.setValidators(Validators.maxLength(200));
+        this.fullnameLat.setValidators(Validators.maxLength(200));
+        this.sex.setValidators(Validators.required);
+        this.motherFullname.setValidators(Validators.maxLength(200));
+        this.fatherFullname.setValidators(Validators.maxLength(200));
+      }
+
+      if (
+        context == PersonContextEnum.Application ||
+        context == PersonContextEnum.Bulletin
+      ) {
+        this.nationalities = new MultipleChooseForm(true);
+      }
+
+      if (
+        context == PersonContextEnum.Person ||
+        context == PersonContextEnum.Bulletin
+      ) {
+        this.afisNumber.setValidators(Validators.maxLength(100));
+        this.idDocNumber.setValidators(Validators.maxLength(100));
+        this.idDocCategoryId.setValidators(Validators.maxLength(50));
+      }
+
+      this.firstnameLat.setValidators([
+        Validators.required,
+        Validators.maxLength(200),
+      ]);
+      this.surnameLat.setValidators([
+        Validators.required,
+        Validators.maxLength(200),
+      ]);
+      this.familynameLat.setValidators([
+        Validators.required,
+        Validators.maxLength(200),
+      ]);
+
+      this.birthDate.setValidators(Validators.required);
+      this.birthPlace = new AddressForm(false);
+      this.motherFirstname.setValidators(Validators.maxLength(200));
+      this.motherSurname.setValidators(Validators.maxLength(200));
+      this.motherFamilyname.setValidators(Validators.maxLength(200));
+      this.fatherFirstname.setValidators(Validators.maxLength(200));
+      this.fatherSurname.setValidators(Validators.maxLength(200));
+      this.fatherFamilyname.setValidators(Validators.maxLength(200));
+    }
+
     this.group = new FormGroup({
       id: this.id,
       contextType: this.contextType,

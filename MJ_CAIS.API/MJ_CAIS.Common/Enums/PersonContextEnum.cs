@@ -2,6 +2,7 @@
 {
     public enum PersonContextEnum
     {
+        Person,
         Bulletin,
         Application,
         Fbbc

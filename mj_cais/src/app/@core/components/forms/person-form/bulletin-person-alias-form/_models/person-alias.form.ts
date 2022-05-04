@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
 
-export class BulletinPersonAliasForm {
+export class PersonAliasForm {
   public group: FormGroup;
   public id: FormControl;
   public firstname: FormControl;

@@ -1,5 +1,6 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonForm } from "../../../@core/components/forms/person-form/_models/person.form";
 import { PersonModel } from "../../../@core/components/forms/person-form/_models/person.model";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
@@ -22,7 +23,7 @@ export class PersonCreateFormComponent
   }
 
   ngOnInit(): void {
-    this.fullForm = new PersonForm();
+    this.fullForm = new PersonForm(PersonContextEnum.Person);
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
   }

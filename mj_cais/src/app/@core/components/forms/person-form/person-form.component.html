@@ -1,43 +1,45 @@
 <div class="font-weight-bold">Имена</div>
 <hr />
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Име на кирилица'"
-      [inputFormControl]="personForm.firstname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
+<ng-container *ngIf="!isFbbcContext">
+  <div class="row">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Име на кирилица'"
+        [inputFormControl]="personForm.firstname"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Презиме на кирилица'"
+        [inputFormControl]="personForm.surname"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Фамилия на кирилица'"
+        [inputFormControl]="personForm.familyname"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Имена на кирилица'"
+        [inputFormControl]="personForm.fullname"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
+    </div>
   </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Презиме на кирилица'"
-      [inputFormControl]="personForm.surname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Фамилия на кирилица'"
-      [inputFormControl]="personForm.familyname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Имена на кирилица'"
-      [inputFormControl]="personForm.fullname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-  </div>
-</div>
+</ng-container>
 <div class="row">
   <div class="form-group col-md-3">
     <cais-input
@@ -66,34 +68,42 @@
     >
     </cais-input>
   </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Имена на латиница'"
-      [inputFormControl]="personForm.fullnameLat"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-  </div>
+  <ng-container *ngIf="!isFbbcContext">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Имена на латиница'"
+        [inputFormControl]="personForm.fullnameLat"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
+    </div>
+  </ng-container>
 </div>
 
-<cais-bulletin-person-alias-form
-  [transactions]="personForm.personAliasTransactions"
-  [gridData]="personAliasGridData"
-  [isGridEditable]="isEditable" 
-  [personAliasTypes]="personAliasTypes"
->
-</cais-bulletin-person-alias-form>
-<div class="row mt-3">
-  <div class="form-group col-md-3">
-    <cais-autocomplete
-      [label]="'Пол'"
-      [inputFormControl]="personForm.sex"
-      [parentGroup]="personForm.group"
-      [inputName]="'sex'"
-      [items]="genderTypes"
-    ></cais-autocomplete>
-  </div>
+<ng-container *ngIf="isBulletinContext || isApplicationContext">
+  <cais-person-alias-form
+    [transactions]="personForm.personAliasTransactions"
+    [gridData]="personAliasGridData"
+    [isGridEditable]="isEditable"
+    [personAliasTypes]="personAliasTypes"
+  >
+  </cais-person-alias-form>
+</ng-container>
+
+<div class="row">
+  <ng-container *ngIf="!isFbbcContext">
+    <div class="form-group col-md-3">
+      <cais-autocomplete
+        [label]="'Пол'"
+        [inputFormControl]="personForm.sex"
+        [parentGroup]="personForm.group"
+        [inputName]="'sex'"
+        [items]="genderTypes"
+      ></cais-autocomplete>
+    </div>
+  </ng-container>
+
   <div class="form-group col-md-3">
     <cais-input
       [type]="'date'"
@@ -102,116 +112,136 @@
       [parentGroup]="personForm.group"
     ></cais-input>
   </div>
+  <ng-container *ngIf="isFbbcContext">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'ЕГН/ЛНЧ'"
+        [inputFormControl]="personForm.egn"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+  </ng-container>
 </div>
+<ng-container *ngIf="!isFbbcContext">
+  <div class="row">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'ЕГН'"
+        [inputFormControl]="personForm.egn"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
 
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'ЕГН'"
-      [inputFormControl]="personForm.egn"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'ЛНЧ'"
-      [inputFormControl]="personForm.lnch"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'ЛН'"
-      [inputFormControl]="personForm.ln"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-</div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'ЛНЧ'"
+        [inputFormControl]="personForm.lnch"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'ЛН'"
+        [inputFormControl]="personForm.ln"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div></div
+></ng-container>
 <div class="font-weight-bold">Място на раждане</div>
 <hr />
-<cais-address-form [parentForm]="personForm.birthPlace"></cais-address-form>
-<div class="row">
-  <div class="form-group col-md-6">
-    <cais-multiple-choose
-      [label]="'Гражданство'"
-      [inputFormControl]="personForm.nationalities"
-      [parentGroup]="personForm.group"
-      [items]="countries"
-    >
-    </cais-multiple-choose>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'АФИС номер'"
-      [inputFormControl]="personForm.afisNumber"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-</div>
-
-<div class="font-weight-bold">Документ за самоличност</div>
-<hr />
+<cais-address-form
+  [parentForm]="personForm.birthPlace"
+  [showDescWhenIsNativeAddress]="true"
+></cais-address-form>
 
 <div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Номер на документ'"
-      [inputFormControl]="personForm.idDocNumber"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-autocomplete
-      [label]="'Категория'"
-      [inputFormControl]="personForm.idDocCategoryId"
-      [parentGroup]="personForm.group"
-      [inputName]="'idDocCategoryId'"
-      [items]="idDocumentCategoryTypes"
-    >
-    </cais-autocomplete>
-  </div>
-  <div class="form-group col-md-6">
-    <cais-input
-      [type]="'text'"
-      [label]="'Друга категория в случай че липсва в списъка'"
-      [inputFormControl]="personForm.idDocTypeDescr"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
+  <ng-container *ngIf="isBulletinContext || isApplicationContext">
+    <div class="form-group col-md-6">
+      <cais-multiple-choose
+        [label]="'Гражданство'"
+        [inputFormControl]="personForm.nationalities"
+        [parentGroup]="personForm.group"
+        [items]="countries"
+      >
+      </cais-multiple-choose>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isBulletinContext || isPersonContext">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'АФИС номер'"
+        [inputFormControl]="personForm.afisNumber"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+  </ng-container>
 </div>
 
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Издаващ орган'"
-      [inputFormControl]="personForm.idDocIssuingAuthority"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'date'"
-      [label]="'Дата на издаване'"
-      [inputFormControl]="personForm.idDocIssuingDate"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'date'"
-      [label]="'Дата на валидност'"
-      [inputFormControl]="personForm.idDocValidDate"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-</div>
+<ng-container *ngIf="isBulletinContext || isPersonContext">
+  <div class="font-weight-bold">Документ за самоличност</div>
+  <hr />
 
+  <div class="row">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Номер на документ'"
+        [inputFormControl]="personForm.idDocNumber"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-autocomplete
+        [label]="'Категория'"
+        [inputFormControl]="personForm.idDocCategoryId"
+        [parentGroup]="personForm.group"
+        [inputName]="'idDocCategoryId'"
+        [items]="idDocumentCategoryTypes"
+      >
+      </cais-autocomplete>
+    </div>
+    <div class="form-group col-md-6">
+      <cais-input
+        [type]="'text'"
+        [label]="'Друга категория в случай че липсва в списъка'"
+        [inputFormControl]="personForm.idDocTypeDescr"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Издаващ орган'"
+        [inputFormControl]="personForm.idDocIssuingAuthority"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'date'"
+        [label]="'Дата на издаване'"
+        [inputFormControl]="personForm.idDocIssuingDate"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'date'"
+        [label]="'Дата на валидност'"
+        [inputFormControl]="personForm.idDocValidDate"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+  </div>
+</ng-container>
 <div class="font-weight-bold">Родители</div>
 <hr />
 
@@ -240,14 +270,16 @@
       [parentGroup]="personForm.group"
     ></cais-input>
   </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Майка - имена'"
-      [inputFormControl]="personForm.motherFullname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
+  <ng-container *ngIf="!isFbbcContext">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Майка - имена'"
+        [inputFormControl]="personForm.motherFullname"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+  </ng-container>
 </div>
 
 <div class="row">
@@ -275,12 +307,14 @@
       [parentGroup]="personForm.group"
     ></cais-input>
   </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Баща - имена'"
-      [inputFormControl]="personForm.fatherFullname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
+  <ng-container *ngIf="!isFbbcContext">
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Баща - имена'"
+        [inputFormControl]="personForm.fatherFullname"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+    </div>
+  </ng-container>
 </div>

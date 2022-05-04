@@ -1,18 +1,19 @@
 
-<div class="font-weight-bold">Псевдоним или други използвани имена</div>
+<div class="font-weight-bold mb-3">Псевдоним или други използвани имена</div>
 <app-grid-with-transactions
   [gridTransactions]="transactions"
 >
   <igx-grid
-    #bulletinPersonAliasGrid
+    #personAliasGrid
     [height]="null"
     [data]="gridData"
     [primaryKey]="'id'"
+    class="mb-3"
   >
     <igx-grid-toolbar>
       <button
         igxButton="flat"
-        (click)="bulletinPersonAliasDialog.open()"
+        (click)="personAliasDialog.open()"
         *ngIf="isGridEditable"
       >
         <igx-icon>add</igx-icon> Добави
@@ -70,7 +71,7 @@
         title="Редактирай"
         igxButton="icon"
         igxRipple
-        (click)="onOpenEditBulletinPersonAlias(actionstrip.context)"
+        (click)="onOpenEditPersonAlias(actionstrip.context)"
       >
         <igx-icon>edit</igx-icon>
       </button>
@@ -79,7 +80,7 @@
         title="Изтрии"
         igxButton="icon"
         igxRipple
-        (click)="onDeleteBulletinPersonAlias(actionstrip.context)"
+        (click)="onDeletePersonAlias(actionstrip.context)"
       >
         <igx-icon>delete</igx-icon>
       </button>
@@ -87,7 +88,7 @@
   </igx-grid>
 </app-grid-with-transactions>
 
-<igx-dialog #bulletinPersonAliasDialog>
+<igx-dialog #personAliasDialog>
   <div class="dialogNewRecord" style="min-width: 1000px">
     <nb-card>
       <nb-card-header>
@@ -101,7 +102,7 @@
                 nbButton
                 matRipple
                 [status]="'success'"
-                (click)="onAddOrUpdateBulletinPersonAliasRow()"
+                (click)="onAddOrUpdatePersonAliasRow()"
                 type="button"
                 class="ml-2"
               >
@@ -112,7 +113,7 @@
               <button
                 nbButton
                 matRipple
-                (click)="onCloseBulletinPersonAliasDilog()"
+                (click)="onClosePersonAliasDilog()"
                 type="button"
                 class="ml-2"
               >
@@ -127,8 +128,8 @@
           <div class="form-group col-md-4">
             <cais-autocomplete
               [label]="'Тип'"
-              [inputFormControl]="bulletinPersonAliasForm.typeId"
-              [parentGroup]="bulletinPersonAliasForm.group"
+              [inputFormControl]="personAliasForm.typeId"
+              [parentGroup]="personAliasForm.group"
               [items]="personAliasTypes"
               [inputName]="'typeId'"
             >
@@ -141,8 +142,8 @@
             <cais-input
               [type]="'text'"
               [label]="'Име'"
-              [inputFormControl]="bulletinPersonAliasForm.firstname"
-              [parentGroup]="bulletinPersonAliasForm.group"
+              [inputFormControl]="personAliasForm.firstname"
+              [parentGroup]="personAliasForm.group"
               [inputName]="'firstname'"
             >
             </cais-input>
@@ -154,8 +155,8 @@
             <cais-input
               [type]="'text'"
               [label]="'Презиме'"
-              [inputFormControl]="bulletinPersonAliasForm.surname"
-              [parentGroup]="bulletinPersonAliasForm.group"
+              [inputFormControl]="personAliasForm.surname"
+              [parentGroup]="personAliasForm.group"
               [inputName]="'surname'"
             >
             </cais-input>
@@ -167,8 +168,8 @@
             <cais-input
               [type]="'text'"
               [label]="'Фамилия'"
-              [inputFormControl]="bulletinPersonAliasForm.familyname"
-              [parentGroup]="bulletinPersonAliasForm.group"
+              [inputFormControl]="personAliasForm.familyname"
+              [parentGroup]="personAliasForm.group"
               [inputName]="'familyname'"
             >
             </cais-input>
@@ -180,8 +181,8 @@
             <cais-input
               [type]="'text'"
               [label]="'Имена'"
-              [inputFormControl]="bulletinPersonAliasForm.fullname"
-              [parentGroup]="bulletinPersonAliasForm.group"
+              [inputFormControl]="personAliasForm.fullname"
+              [parentGroup]="personAliasForm.group"
               [inputName]="'fullname'"
             >
             </cais-input>

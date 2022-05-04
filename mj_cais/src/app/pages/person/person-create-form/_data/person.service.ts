@@ -5,8 +5,8 @@ import {
   PersonAliasNameConstants,
 } from "../../../../@core/constants/person-alias-type.constants";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { BulletinPersonAliasModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-alias.model";
 import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
+import { PersonAliasModel } from "../../../../@core/models/common/person-alias.model";
 
 @Injectable({
   providedIn: "root",
@@ -16,11 +16,11 @@ export class PersonService extends CaisCrudService<PersonModel, string> {
     super(PersonModel, injector, "people");
   }
 
-  public getPersonAlias(id: string): Observable<BulletinPersonAliasModel[]> {
+  public getPersonAlias(id: string): Observable<PersonAliasModel[]> {
     return this.http
-      .get<BulletinPersonAliasModel[]>(`${this.url}/${id}/person-alias`)
+      .get<PersonAliasModel[]>(`${this.url}/${id}/person-alias`)
       .pipe(
-        map((items: BulletinPersonAliasModel[]) => {
+        map((items: PersonAliasModel[]) => {
           return items.map((item) => {
             switch (item.typeCode) {
               case PersonAliasCodeConstants.Nickname:

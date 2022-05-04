@@ -12,8 +12,8 @@ import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/_models/b
 import { BulletinModel } from "../_models/bulletin.model";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { BulletinTypeConstants } from "../_models/bulletin-type-constants";
-import { BulletinPersonAliasModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-alias.model";
 import { BulletinStatusHistoryModel } from "../tabs/bulletin-status-history-overview/_models/bulletin-status-history.model";
+import { PersonAliasModel } from "../../../../@core/models/common/person-alias.model";
 
 @Injectable({ providedIn: "root" })
 export class BulletinService extends CaisCrudService<BulletinModel, string> {
@@ -80,11 +80,11 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     );
   }
 
-  public getPersonAlias(id: string): Observable<BulletinPersonAliasModel[]> {
+  public getPersonAlias(id: string): Observable<PersonAliasModel[]> {
     return this.http
-      .get<BulletinPersonAliasModel[]>(`${this.url}/${id}/person-alias`)
+      .get<PersonAliasModel[]>(`${this.url}/${id}/person-alias`)
       .pipe(
-        map((items: BulletinPersonAliasModel[]) => {
+        map((items: PersonAliasModel[]) => {
           return items.map((item) => {
             switch (item.typeCode) {
               case PersonAliasCodeConstants.Nickname:

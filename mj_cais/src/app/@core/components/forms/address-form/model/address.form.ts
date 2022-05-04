@@ -81,7 +81,10 @@ export class AddressForm {
       }
     }
 
-    this.foreignCountryAddress.setValue(null);
+    if(!showDescWhenIsNativeAddress){
+      this.foreignCountryAddress.setValue(null);
+    }
+
     this.isSetForNativeAddress = true;
     this.isSetForForeignAddress = false;
   }

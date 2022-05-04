@@ -5,8 +5,8 @@ import {
   ActivatedRouteSnapshot,
 } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
-import { BulletinPersonAliasModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-alias.model";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
+import { PersonAliasModel } from "../../../../@core/models/common/person-alias.model";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/_models/bulletin-decision.model";
@@ -83,7 +83,7 @@ export class BulletinResolverData extends BaseResolverData<BulletinModel> {
   public offences: Observable<BulletinOffenceModel[]>;
   public decisions: Observable<BulletinDecisionModel[]>;
   public documents: Observable<BulletinDocumentModel[]>;
-  public personAlias: Observable<BulletinPersonAliasModel[]>;
+  public personAlias: Observable<PersonAliasModel[]>;
   public bulletinStatusHistoryData: Observable<BulletinStatusHistoryModel[]>;
 
   public genderTypes: Observable<BaseNomenclatureModel[]>;

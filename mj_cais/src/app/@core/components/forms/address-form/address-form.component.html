@@ -1,14 +1,6 @@
 <div [formGroup]="parentForm.group">
   <div class="row">
     <div class="form-group col-md-3">
-      <!-- <cais-autocomplete
-        [label]="'Държава'"
-        [inputFormControl]="parentForm.countryId"
-        [parentGroup]="parentForm.group"
-        [inputName]="'countryId'"
-        [(items)]="countries"
-        (selectionChanged)="onCountryChanged($event)"
-      ></cais-autocomplete> -->
       <cais-lookup
         [label]="'Държава'"
         [inputControl]="parentForm.country"
@@ -60,17 +52,19 @@
       ></cais-autocomplete>
     </div>
     <div
-      class="form-group col-md-9"
+      class="form-group col-md-6"
       [hidden]="
         parentForm.isSetForNativeAddress && !showDescWhenIsNativeAddress
       "
     >
       <cais-input
         [type]="'text'"
-        [label]="'Описание'"
+        [label]="'Месторождение (свободен текст)'"
         [inputFormControl]="parentForm.foreignCountryAddress"
         [parentGroup]="parentForm.group"
         [inputName]="'foreignCountryAddress'"
+        [rows]="'1'"
+        [inputType]="'TextArea'"
       ></cais-input>
     </div>
   </div>
