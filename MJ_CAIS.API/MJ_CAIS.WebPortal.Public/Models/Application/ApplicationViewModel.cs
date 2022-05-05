@@ -4,11 +4,11 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
 {
     public class ApplicationViewModel
     {
-        public ApplicationViewModel()
-        {
-            this.Applications = new List<ApplicationGridDTO>().AsQueryable();
-        }
+        //public ApplicationViewModel()
+        //{
+        //    this.Applications = new List<ApplicationGridDTO>().AsQueryable();
+        //}
 
-        public IQueryable<ApplicationGridDTO> Applications { get; set; }
+        //public IQueryable<ApplicationGridDTO> Applications { get; set; }
     }
 }

@@ -15,17 +15,17 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        [GridDataSourceAction]
-        public ActionResult GetApplications()
-        {
-            var result = new List<ApplicationGridDTO>
-            {
-                new ApplicationGridDTO { Id = "aaa", RegistrationNumber = "123" },
-                new ApplicationGridDTO { Id = "bbb", RegistrationNumber = "123" },
-                new ApplicationGridDTO { Id = "ccc", RegistrationNumber = "123" },
-            }.AsQueryable();
-            return View(result);
-        }
+        //[HttpGet]
+        //[GridDataSourceAction]
+        //public ActionResult GetApplications()
+        //{
+        //    var result = new List<ApplicationGridDTO>
+        //    {
+        //        new ApplicationGridDTO { Id = "aaa", RegistrationNumber = "123" },
+        //        new ApplicationGridDTO { Id = "bbb", RegistrationNumber = "123" },
+        //        new ApplicationGridDTO { Id = "ccc", RegistrationNumber = "123" },
+        //    }.AsQueryable();
+        //    return View(result);
+        //}
     }
 }
