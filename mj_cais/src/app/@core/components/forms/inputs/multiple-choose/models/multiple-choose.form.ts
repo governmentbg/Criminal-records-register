@@ -10,8 +10,8 @@ export class MultipleChooseForm {
   constructor(isRequired?: boolean, disabled?: boolean) {
 
     let validators = isRequired && !disabled? [Validators.required] : [];
-    this.selectedPrimaryKeys = new FormControl();
-    this.selectedForeignKeys = new FormControl("", validators);
+    this.selectedPrimaryKeys = new FormControl([]);
+    this.selectedForeignKeys = new FormControl([], validators);
     this.isChanged = new FormControl(false);
 
     if(disabled){

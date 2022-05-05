@@ -48,7 +48,7 @@ import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { DatePrecisionComponent } from "./components/forms/inputs/date-precision/date-precision.component";
 import { HttpClient } from "@angular/common/http";
 import { PersonFormComponent } from "./components/forms/person-form/person-form.component";
-import { PersonAliasFormComponent } from "./components/forms/person-form/bulletin-person-alias-form/person-alias-form.component";
+import { PersonAliasFormComponent } from "./components/forms/person-form/person-alias-form/person-alias-form.component";
 
 const socialLinks = [
   {

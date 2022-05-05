@@ -1,10 +1,10 @@
-using MJ_CAIS.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Person;
-using System.Data;
-using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -88,7 +88,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             person.Id = dataRow["person_id"]?.ToString();
             person.Identifier = dataRow["egn"]?.ToString();
-            person.FirstName = dataRow["firstname"]?.ToString() ;
+            person.FirstName = dataRow["firstname"]?.ToString();
             person.SurName = dataRow["surname"]?.ToString();
             person.FamilyName = dataRow["familyname"]?.ToString();
             person.FullName = dataRow["fullname"]?.ToString();

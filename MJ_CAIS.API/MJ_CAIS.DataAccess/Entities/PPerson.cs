@@ -5,14 +5,16 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class PPerson : BaseEntity
     {
+        public PPerson()
+        {
+            PPersonIds = new HashSet<PPersonId>();
+        }
+
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
         public string? Fullname { get; set; }
         public decimal? Sex { get; set; }
-        public string? Egn { get; set; }
-        public string? Ln { get; set; }
-        public string? Lnch { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? BirthDatePrec { get; set; }
         public string? BirthPlaceOther { get; set; }
@@ -31,8 +33,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FatherFullname { get; set; }
         public string? BirthCityId { get; set; }
         public string? BirthCountryId { get; set; }
+        public string? FirstnameLat { get; set; }
+        public string? SurnameLat { get; set; }
+        public string? FamilynameLat { get; set; }
+        public string? FullnameLat { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
+        public virtual ICollection<PPersonId> PPersonIds { get; set; }
     }
 }

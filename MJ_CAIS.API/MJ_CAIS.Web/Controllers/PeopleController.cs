@@ -25,5 +25,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, isPageInit);
             return Ok(result);
         }
+
+        [HttpPost("")]
+        public new async Task<IActionResult> Post([FromBody] PersonDTO aInDto)
+        {
+            throw new NotImplementedException();
+            return await base.Post(aInDto);
+        }
     }
 }

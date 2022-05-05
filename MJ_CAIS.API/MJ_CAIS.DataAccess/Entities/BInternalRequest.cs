@@ -11,6 +11,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? ReqStatusCode { get; set; }
         public string? ResponseDescr { get; set; }
         public DateTime? RequestDate { get; set; }
+        public string? AAppBulletinId { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual BReqStatus? ReqStatusCodeNavigation { get; set; }

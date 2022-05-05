@@ -12,6 +12,10 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
+using MJ_CAIS.AutoMapperContainer;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -23,6 +27,11 @@ namespace MJ_CAIS.Services
             : base(mapper, personRepository)
         {
             _personRepository = personRepository;
+        }
+
+        protected override bool IsChildRecord(string aId, List<string> aParentsList)
+        {
+            return false;
         }
 
         public async Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit)
@@ -82,11 +91,70 @@ namespace MJ_CAIS.Services
             return await Task.FromResult(pageResult);
         }
 
-
-
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
+        public override async Task<string> InsertAsync(PersonDTO aInDto)
         {
-            return false;
+            var entity = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
+            var pids = GetPersonIdsToBeAdded(aInDto, entity.Id);
+            // todo: add collection to entity
+            var person = await _personRepository.InsertAsync(entity);
+            return person.Id;
+        }
+
+        private List<PPersonId> GetPersonIdsToBeAdded(PersonDTO aInDto, string personId)
+        {
+            // todo: check for existing pids
+            var result = new List<PPersonId>();
+
+            if (!string.IsNullOrEmpty(aInDto.Egn))
+            {
+                result.Add(GetPersonId(aInDto.Egn, PidType.Egn));
+            }
+
+            if (!string.IsNullOrEmpty(aInDto.Lnch))
+            {
+                result.Add(GetPersonId(aInDto.Lnch, PidType.Lnch));
+            }
+
+            if (!string.IsNullOrEmpty(aInDto.Ln))
+            {
+                result.Add(GetPersonId(aInDto.Ln, PidType.Ln));
+            }
+
+            if (!string.IsNullOrEmpty(aInDto.AfisNumber))
+            {
+                result.Add(GetPersonId(aInDto.AfisNumber, PidType.AfisNumber));
+            }
+
+            return result;
+        }
+
+        private PPersonId GetPersonId(string pid, string pidType)
+        {
+            var issuerType = string.Empty;
+            switch (pidType)
+            {
+                case PidType.Egn:
+                    issuerType = IssuerType.GRAO;
+                    break;
+                case PidType.Lnch:
+                    issuerType = IssuerType.MVR;
+                    break;
+                case PidType.Ln:
+                    issuerType = IssuerType.EU;
+                    break;
+                case PidType.AfisNumber:
+                    issuerType = IssuerType.MVR;
+                    break;
+            }
+
+            return new PPersonId()
+            {
+                Pid = pid,
+                PidTypeId = pid,
+                CountryId = BG,
+                Issuer = issuerType,
+                EntityState = EntityStateEnum.Added,
+            };
         }
     }
 }
