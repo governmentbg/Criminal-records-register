@@ -99,6 +99,7 @@ namespace MJ_CAIS.AutoMapperContainer
             foreach (var model in viewModels)
             {
                 EntityType entity = mapper.MapToEntity<ViewModelType, EntityType>(model, isAdded);
+                result.Add(entity);
             }
 
             return result;

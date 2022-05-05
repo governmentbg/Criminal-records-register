@@ -93,68 +93,47 @@ namespace MJ_CAIS.Services
 
         public override async Task<string> InsertAsync(PersonDTO aInDto)
         {
-            var entity = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
-            var pids = GetPersonIdsToBeAdded(aInDto, entity.Id);
-            // todo: add collection to entity
-            var person = await _personRepository.InsertAsync(entity);
-            return person.Id;
-        }
+            var pids = new List<PPersonId>();
 
-        private List<PPersonId> GetPersonIdsToBeAdded(PersonDTO aInDto, string personId)
-        {
-            // todo: check for existing pids
-            var result = new List<PPersonId>();
-
+            // todo: make one call 
             if (!string.IsNullOrEmpty(aInDto.Egn))
             {
-                result.Add(GetPersonId(aInDto.Egn, PidType.Egn));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn));
             }
 
             if (!string.IsNullOrEmpty(aInDto.Lnch))
             {
-                result.Add(GetPersonId(aInDto.Lnch, PidType.Lnch));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch));
             }
 
             if (!string.IsNullOrEmpty(aInDto.Ln))
             {
-                result.Add(GetPersonId(aInDto.Ln, PidType.Ln));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln));
             }
 
             if (!string.IsNullOrEmpty(aInDto.AfisNumber))
             {
-                result.Add(GetPersonId(aInDto.AfisNumber, PidType.AfisNumber));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber));
             }
 
-            return result;
-        }
-
-        private PPersonId GetPersonId(string pid, string pidType)
-        {
-            var issuerType = string.Empty;
-            switch (pidType)
+            // must create new person object
+            if (pids.All(x => x.EntityState == EntityStateEnum.Added))
             {
-                case PidType.Egn:
-                    issuerType = IssuerType.GRAO;
-                    break;
-                case PidType.Lnch:
-                    issuerType = IssuerType.MVR;
-                    break;
-                case PidType.Ln:
-                    issuerType = IssuerType.EU;
-                    break;
-                case PidType.AfisNumber:
-                    issuerType = IssuerType.MVR;
-                    break;
+                // add person with pids
+                var person = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
+                person.PPersonIds = pids;
+
+                // add person history object with pids
+                var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
+                personH.PPersionIdsHes = mapper.MapToEntityList<PPersonId, PPersionIdsH>(pids, true);
+
+                var addedPerson = await _personRepository.InsertAsync(person, personH);
+                return addedPerson?.Id;
             }
 
-            return new PPersonId()
-            {
-                Pid = pid,
-                PidTypeId = pid,
-                CountryId = BG,
-                Issuer = issuerType,
-                EntityState = EntityStateEnum.Added,
-            };
-        }
+            // todo: когато съществува някои от идентификаторите,
+            // да се намери person колко обекта са и да се групират ако са повече от един
+            return null;
+        }    
     }
 }

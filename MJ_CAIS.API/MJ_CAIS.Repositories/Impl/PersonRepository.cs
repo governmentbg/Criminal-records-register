@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
+using System.Transactions;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -68,6 +71,71 @@ namespace MJ_CAIS.Repositories.Impl
             }
 
             return result;
+        }
+
+        public async Task<PPersonId> GetPersonIdAsyn(string pid, string pidType)
+        {
+            var issuerType = string.Empty;
+            switch (pidType)
+            {
+                case PidType.Egn:
+                    issuerType = IssuerType.GRAO;
+                    break;
+                case PidType.Lnch:
+                    issuerType = IssuerType.MVR;
+                    break;
+                case PidType.Ln:
+                    issuerType = IssuerType.EU;
+                    break;
+                case PidType.AfisNumber:
+                    issuerType = IssuerType.MVR;
+                    break;
+            }
+
+            var pidDb = await _dbContext.PPersonIds
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x =>
+                        x.Pid == pid &&
+                        x.PidTypeId == pidType &&
+                        x.Issuer == issuerType &&
+                        x.CountryId == BG);
+
+            // pid does not exist
+            if (pidDb == null)
+            {
+                return new PPersonId
+                {
+                    Pid = pid,
+                    PidTypeId = pidType,
+                    CountryId = BG,
+                    Issuer = issuerType,
+                    EntityState = EntityStateEnum.Added,
+                };
+            }
+
+            return pidDb;
+        }
+
+        /// <summary>
+        /// Insert new person with its history object.
+        /// Insert person pids and its pids history
+        /// </summary>
+        /// <param name="entity">New person entity</param>
+        /// <param name="personH">Old version of Person object</param>
+        /// <returns></returns>
+        public async Task<PPerson> InsertAsync(PPerson entity, PPersonH personH)
+        {
+            using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
+            await _dbContext.SaveEntityAsync(entity, true);
+            await _dbContext.SaveEntityAsync(personH, true);
+            scope.Complete();
+            return entity;
+        }
+
+        [Obsolete($"Use {nameof(InsertAsync)} with additional parameter personH instead.", true)]
+        public override Task<PPerson> InsertAsync(PPerson entity)
+        {
+            return base.InsertAsync(entity);
         }
 
         private static List<PersonGridDTO> GetPersons(DataTable dataTable)
