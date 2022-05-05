@@ -42,6 +42,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Pin { get; set; }
         public DateTime? Deadline { get; set; }
         public bool? Urgent { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }

@@ -8,11 +8,18 @@ namespace MJ_CAIS.DataAccess.Entities
         public AApplicationType()
         {
             AApplications = new HashSet<AApplication>();
+            DDocRegisters = new HashSet<DDocRegister>();
         }
 
         public string? Code { get; set; }
         public string? Name { get; set; }
+        public decimal? Version { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         public virtual ICollection<AApplication> AApplications { get; set; }
+        public virtual ICollection<DDocRegister> DDocRegisters { get; set; }
     }
 }

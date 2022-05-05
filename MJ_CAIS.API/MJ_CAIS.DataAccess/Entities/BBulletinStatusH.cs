@@ -14,6 +14,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Descr { get; set; }
         public bool? Locked { get; set; }
         public string? OldStatusCode { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual BBulletinStatus? NewStatusCodeNavigation { get; set; }

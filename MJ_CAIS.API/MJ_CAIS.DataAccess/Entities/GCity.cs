@@ -11,7 +11,8 @@ namespace MJ_CAIS.DataAccess.Entities
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             Fbbcs = new HashSet<Fbbc>();
-            PPersonAliases = new HashSet<PPersonAlias>();
+            PPeople = new HashSet<PPerson>();
+            PPersonHs = new HashSet<PPersonH>();
         }
 
         public string? EcrisTechnId { get; set; }
@@ -25,6 +26,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? OrderNumber { get; set; }
         public string? CodeRel { get; set; }
         public string? CsAuthorityId { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual GCountry? Country { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
@@ -33,6 +39,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<Fbbc> Fbbcs { get; set; }
-        public virtual ICollection<PPersonAlias> PPersonAliases { get; set; }
+        public virtual ICollection<PPerson> PPeople { get; set; }
+        public virtual ICollection<PPersonH> PPersonHs { get; set; }
     }
 }

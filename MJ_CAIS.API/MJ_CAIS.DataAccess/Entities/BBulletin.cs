@@ -17,6 +17,7 @@ namespace MJ_CAIS.DataAccess.Entities
             DDocuments = new HashSet<DDocument>();
             EIsinData = new HashSet<EIsinDatum>();
             EWebRequests = new HashSet<EWebRequest>();
+            PBulletinIds = new HashSet<PBulletinId>();
         }
 
         public decimal? Version { get; set; }
@@ -91,6 +92,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
         public string? ConvRemarks { get; set; }
+        public string? PersonId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -112,5 +114,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EIsinDatum> EIsinData { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
+        public virtual ICollection<PBulletinId> PBulletinIds { get; set; }
     }
 }

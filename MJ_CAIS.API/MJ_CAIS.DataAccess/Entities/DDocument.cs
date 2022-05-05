@@ -7,7 +7,6 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public string? Name { get; set; }
         public string? DocTypeId { get; set; }
-        public string? PersonId { get; set; }
         public string? EcrisMsgId { get; set; }
         public string? IsinMsgId { get; set; }
         public string? EissMsgId { get; set; }
@@ -21,12 +20,12 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual DDocContent? DocContent { get; set; }
         public virtual DDocType? DocType { get; set; }
         public virtual EEcrisMessage? EcrisMsg { get; set; }
         public virtual Fbbc? Fbbc { get; set; }
-        public virtual PPerson? Person { get; set; }
     }
 }

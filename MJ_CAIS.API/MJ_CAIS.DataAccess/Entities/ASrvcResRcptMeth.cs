@@ -14,6 +14,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Code { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual ICollection<AApplication> AApplications { get; set; }
     }

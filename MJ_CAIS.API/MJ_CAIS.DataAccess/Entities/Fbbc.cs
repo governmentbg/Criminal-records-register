@@ -61,7 +61,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCountry? BirthCountry { get; set; }
         public virtual GCountry? Country { get; set; }
         public virtual FbbcDocType? DocType { get; set; }
-        public virtual PPerson? Person { get; set; }
         public virtual FbbcSanctType? SanctionType { get; set; }
         public virtual FbbcStatus? StatusCodeNavigation { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }

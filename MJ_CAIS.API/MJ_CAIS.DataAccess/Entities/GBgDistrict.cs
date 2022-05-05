@@ -17,6 +17,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidTo { get; set; }
         public string? EkatteCode { get; set; }
         public string? EcrisTechnId { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual ICollection<GBgMunicipality> GBgMunicipalities { get; set; }
     }
