@@ -811,8 +811,6 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.CsAuthorityId, "XIF17B_BULLETINS");
 
-                entity.HasIndex(e => e.PersonId, "XIF18B_BULLETINS");
-
                 entity.HasIndex(e => e.CaseAuthId, "XIF19B_BULLETINS");
 
                 entity.HasIndex(e => e.DecidingAuthId, "XIF2B_BULLETINS");
@@ -1069,11 +1067,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.NoSanction)
                     .HasPrecision(1)
                     .HasColumnName("NO_SANCTION");
-
-                entity.Property(e => e.PersonId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("PERSON_ID");
 
                 entity.Property(e => e.PrevSuspSent)
                     .HasPrecision(1)
@@ -3899,6 +3892,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.Fbbcs)
                     .HasForeignKey(d => d.DocTypeId)
                     .HasConstraintName("FK_FBBC_FBBC_DOC_TYPES");
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.Fbbcs)
+                    .HasForeignKey(d => d.PersonId)
+                    .HasConstraintName("FK_FBBC_P_PERSON_IDS");
 
                 entity.HasOne(d => d.SanctionType)
                     .WithMany(p => p.Fbbcs)

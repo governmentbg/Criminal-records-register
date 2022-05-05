@@ -92,7 +92,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
         public string? ConvRemarks { get; set; }
-        public string? PersonId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public PPersonId()
         {
+            Fbbcs = new HashSet<Fbbc>();
             PAppIds = new HashSet<PAppId>();
             PBulletinIds = new HashSet<PBulletinId>();
         }
@@ -19,6 +20,7 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public virtual GCountry? Country { get; set; }
         public virtual PPersonIdType? PidType { get; set; }
+        public virtual ICollection<Fbbc> Fbbcs { get; set; }
         public virtual ICollection<PAppId> PAppIds { get; set; }
         public virtual ICollection<PBulletinId> PBulletinIds { get; set; }
     }
