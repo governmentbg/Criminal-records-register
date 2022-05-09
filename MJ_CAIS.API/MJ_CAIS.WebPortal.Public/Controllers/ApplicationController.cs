@@ -1,6 +1,7 @@
 ﻿using Infragistics.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
@@ -10,22 +11,21 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            throw new NotImplementedException();
             var viewModel = new ApplicationViewModel();
             return View(viewModel);
         }
 
-        //[HttpGet]
-        //[GridDataSourceAction]
-        //public ActionResult GetApplications()
-        //{
-        //    var result = new List<ApplicationGridDTO>
-        //    {
-        //        new ApplicationGridDTO { Id = "aaa", RegistrationNumber = "123" },
-        //        new ApplicationGridDTO { Id = "bbb", RegistrationNumber = "123" },
-        //        new ApplicationGridDTO { Id = "ccc", RegistrationNumber = "123" },
-        //    }.AsQueryable();
-        //    return View(result);
-        //}
+        [HttpGet]
+        [GridDataSourceAction]
+        public ActionResult GetApplications()
+        {
+            var result = new List<PublicApplicationGridDTO>
+            {
+                new PublicApplicationGridDTO { Id = "aaa", RegistrationNumber = "123" },
+                new PublicApplicationGridDTO { Id = "bbb", RegistrationNumber = "124" },
+                new PublicApplicationGridDTO { Id = "ccc", RegistrationNumber = "125" },
+            }.AsQueryable();
+            return View(result);
+        }
     }
 }

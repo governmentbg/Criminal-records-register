@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj" />
     <ProjectReference Include="..\MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj" />
   </ItemGroup>
 
