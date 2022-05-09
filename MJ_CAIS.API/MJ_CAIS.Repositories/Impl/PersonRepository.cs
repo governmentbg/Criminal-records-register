@@ -6,7 +6,6 @@ using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
-using System.Transactions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -112,6 +111,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Issuer = issuerType,
                     EntityState = EntityStateEnum.Added,
                     PersonId = personId,
+                    CreatedOn = DateTime.Now,
                 };
             }
 
@@ -127,15 +127,10 @@ namespace MJ_CAIS.Repositories.Impl
         /// <returns></returns>
         public async Task<PPerson> InsertAsync(PPerson entity, PPersonH personH)
         {
-            //using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
-
             _dbContext.ApplyChanges(entity, new List<BaseEntity>(), true);
             _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
             await _dbContext.SaveChangesAsync();
 
-            //await _dbContext.SaveEntityAsync(entity, true);
-            //await _dbContext.SaveEntityAsync(personH, true);
-            //scope.Complete();
             return entity;
         }
 
@@ -148,17 +143,9 @@ namespace MJ_CAIS.Repositories.Impl
         /// <returns></returns>
         public async Task<PPerson> UpdateAsync(PPerson entity, PPersonH personH)
         {
-            try
-            {
-                _dbContext.ApplyChanges(entity, new List<BaseEntity>(), false);
-                _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            _dbContext.ApplyChanges(entity, new List<BaseEntity>(), false);
+            _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
+            await _dbContext.SaveChangesAsync();
 
             return entity;
         }

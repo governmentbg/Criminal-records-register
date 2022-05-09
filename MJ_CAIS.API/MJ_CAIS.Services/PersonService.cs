@@ -121,12 +121,13 @@ namespace MJ_CAIS.Services
             {
                 // add person with pids
                 var person = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
+                person.CreatedOn = DateTime.UtcNow; // todo: remove
                 person.Id = personId;
                 person.PPersonIds = pids;
 
                 // add person history object with pids
                 var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
-
+                personH.CreatedOn = DateTime.UtcNow; // todo: remove
                 personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
                 var addedPerson = await _personRepository.InsertAsync(person, personH);
@@ -147,6 +148,7 @@ namespace MJ_CAIS.Services
                 // update person with new data
                 var personToSave = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
                 personToSave.Id = personToBeUpdated.Id;
+                personToSave.UpdatedOn = DateTime.UtcNow; // todo: remove
 
                 // create person history object with old data
                 var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToBeUpdated, true);
@@ -155,6 +157,7 @@ namespace MJ_CAIS.Services
                 {
                     CountryId = x.CountryId,
                     EntityState = EntityStateEnum.Added,
+                    CreatedOn = DateTime.UtcNow,// todo: remove
                     Id = BaseEntity.GenerateNewId(),
                     Issuer = x.Issuer,
                     PersonId = personToBeUpdated.Id,
@@ -167,6 +170,7 @@ namespace MJ_CAIS.Services
                 return personToSave?.Id;
             }
 
+            //todo: more then one person object
             // more then one person
             return null;
         }
