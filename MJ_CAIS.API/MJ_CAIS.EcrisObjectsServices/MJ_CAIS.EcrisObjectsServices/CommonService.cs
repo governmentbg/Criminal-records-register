@@ -60,9 +60,9 @@ namespace MJ_CAIS.EcrisObjectsServices
             return content;
         }
 
-        public static async Task<string?> GetPersonIDForEcrisMessages(string ecrisMsgID, CaisDbContext dbContext)
+        public static async Task<GraoPerson?> GetPersonIDForEcrisMessages(string ecrisMsgID, CaisDbContext dbContext)
         {
-            return (await dbContext.EEcrisIdentifications.FirstOrDefaultAsync(p => p.EcrisMsgId == ecrisMsgID && p.Approved == 1))?.GraoPerson?.Egn;
+            return (await dbContext.EEcrisIdentifications.FirstOrDefaultAsync(p => p.EcrisMsgId == ecrisMsgID && p.Approved == 1))?.GraoPerson;
 
         }
         public static YesNoUnknownStringEnumerationType? GetYesNoType(bool? value)
@@ -223,9 +223,10 @@ namespace MJ_CAIS.EcrisObjectsServices
             }
             if (!string.IsNullOrEmpty(buletin.ConvRemarks))
             {
-                conv.ConvictionRemarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
+                conv.ConvictionRemarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[2];
                 conv.ConvictionRemarks[0] = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation();
                 conv.ConvictionRemarks[0].Value = buletin.ConvRemarks;
+           
 
             }
             if (!string.IsNullOrEmpty(buletin.DecidingAuthId))
@@ -257,7 +258,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             conv.ConvictionID = string.IsNullOrEmpty(buletin.EcrisConvictionId)? "BG-C-000000000000000": buletin.EcrisConvictionId;
             //"The reference number of the decision in the national judicial system."
             conv.ConvictionFileNumber = new RestrictedStringType50Chars();
-            conv.ConvictionFileNumber.Value = "5";
+            conv.ConvictionFileNumber.Value = buletin.CaseYear +"-"+ buletin.CaseNumber;
             //conv.ConvictionNonCriminalRuling;
             return conv;
 
@@ -678,6 +679,20 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
             return m;
+        }
+
+       public static async Task<List<PPersonId>> GetPersonIDsByEGN(string Egn, CaisDbContext dbContext, string? graoIssuer, string? countryBGcode, string? egnType)
+        {
+            var pid = await dbContext.PPersonIds.FirstOrDefaultAsync(pp => pp.Pid == Egn && pp.Issuer == graoIssuer && pp.CountryId == countryBGcode && pp.PidTypeId == egnType);
+            if (pid != null)
+            {
+                var personIds = await dbContext.PPersonIds.Where(pp => pp.PersonId == pid.PersonId).ToListAsync();
+                return personIds;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 

@@ -65,9 +65,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                                 .Include(b=>b.BirthCountry)
                                 .Include(b => b.BirthCity)
                                 .Include(b=>b.CaseAuth)
-                                .Include(b=>b.DecidingAuth)
-                                //.Include(b=>b.IdDocIssuingAuthority)
-                            
+                                .Include(b=>b.DecidingAuth)             
                                 .Include(b=>b.IdDocCategory)                              
                                 .FirstOrDefaultAsync(b => b.Id == bulletinID);
             if(buletin==null)

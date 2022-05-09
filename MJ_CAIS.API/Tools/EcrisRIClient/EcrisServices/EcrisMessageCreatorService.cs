@@ -77,6 +77,7 @@ namespace EcrisIntegrationServices
               
         private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople(int pageNumber, int pageSize)
         {
+            //todo: кога сменяме статуса и дали не трябва винаги да връщаме първа страница?!
             var contents = await _dbContext.DDocContents.Where(cont => cont.DDocuments
                                  .Where(dd => dd.EcrisMsgId != null
                                  && dd.EcrisMsg.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON
@@ -106,7 +107,19 @@ namespace EcrisIntegrationServices
             var notificationType = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
             _logger.LogTrace($"Notification type: {notificationType}.");
             var ecrisMsgs = _dbContext.EEcrisMessages.Where(em => em.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON && em.MsgTypeId == notificationType && em.FbbcId==null);
-    
+           
+            //todo: тук каква е стойността и от къде се взема?!
+            string graoIssuer = "GRAO";
+            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.Id;
+            if (string.IsNullOrEmpty(countryBGcode))
+            {
+                throw new Exception("Country c.Iso3166Alpha2 == \"BG\" does not exist.");
+            }
+            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code== "EGN"))?.Id;
+            if (string.IsNullOrEmpty(egnType))
+            {
+                throw new Exception("Person Id type  Code== \"EGN\" does not exist.");
+            }
             foreach (var msg in ecrisMsgs)
             {
                 //променливи, за да можем да върнем състоянието в catch ако се счупи
@@ -117,36 +130,79 @@ namespace EcrisIntegrationServices
                 try
                 {
                     _logger.LogTrace($"EcrisMessageID: {msg.Id}.");
-                    var personId = await CommonService.GetPersonIDForEcrisMessages(msg.Id, _dbContext);
-                    if (personId == null)
+                    var graoPerson = await CommonService.GetPersonIDForEcrisMessages(msg.Id, _dbContext);
+                    if (graoPerson == null)
                     {
                         throw new Exception($"{msg.Id} : Person not identified.");
                     }
-                    _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}");
-                    var fbbcs = await _dbContext.Fbbcs.Where(fbbc => fbbc.EcrisConvId == msg.EcrisMsgConvictionId
-                                                                                && fbbc.PersonId == personId
-                                                                                && fbbc.StatusCode == "Active").ToListAsync();
+                    _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}");
+                    List<Fbbc> fbbcs = new List<Fbbc>();
+
+                   var personIds = await CommonService.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
+
+                    string pidId = "";
+                    if (personIds != null && personIds.Count>0)
+                    {
+                        var personIdsId = personIds.Select(x => x.Id).ToList();
+                        pidId = personIds.FirstOrDefault(p => p.Pid == graoPerson.Egn && p.Issuer == graoIssuer && p.CountryId == countryBGcode && p.PidTypeId == egnType)?.Id;
+
+                        fbbcs = await _dbContext.Fbbcs.Where(fbbc => fbbc.EcrisConvId == msg.EcrisMsgConvictionId
+                                                                                    && personIdsId.Contains(fbbc.PersonId)
+                                                                                    && fbbc.StatusCode == "Active").ToListAsync();
+                    }
+                    else
+                    {
+                        //todo: create person
+                        PPersonId pid =  new PPersonId();
+                        pid.Id = BaseEntity.GenerateNewId();
+                        pid.Pid = graoPerson.Egn;
+                        pid.Issuer = graoIssuer;
+                        pid.CountryId = countryBGcode;
+                        pid.PidTypeId = egnType;
+                        pidId = pid.Id;
+
+
+                        PPerson person = new PPerson();
+                        person.Id = BaseEntity.GenerateNewId();
+                        person.Firstname = graoPerson.Firstname;
+                        person.Surname = graoPerson.Surname;
+                        person.Familyname = graoPerson.Familyname;
+                        person.BirthDate = graoPerson.BirthDate;
+                        person.FatherFullname = graoPerson.FathersNames;
+                        person.MotherFullname = graoPerson.MothersNames;
+                        person.Sex = graoPerson.Sex;
+                        //todo: birth place?!
+                        person.PPersonIds = new List<PPersonId>();
+                        person.PPersonIds.Add(pid);
+
+                        pid.PersonId = person.Id;
+
+                        _dbContext.PPeople.Add(person);
+                        _dbContext.PPersonIds.Add(pid);
+
+                    }
                     if (fbbcs.Count() == 0)
                     {
                         isNewF=true;
-                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc does not exist. It will be created.");
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, fbbc does not exist. It will be created.");
                         //todo: validate entries; check codes
                         //todo: getfromSomewhere
-                        var names = msg.EEcrisMsgNames.FirstOrDefault();
+                        
                          f = new Fbbc();
                         f.Id = BaseEntity.GenerateNewId();
-                        f.Surname = names?.Surname;
+                        f.Surname = graoPerson.Surname;
                         f.EcrisConvId = msg.EcrisMsgConvictionId;
-                        f.Familyname = names?.Familyname;
-                        f.Firstname = names?.Firstname;
+                        f.Familyname = graoPerson.Familyname;
+                        f.Firstname = graoPerson.Firstname;
                         f.BirthDate = msg.BirthDate;
                         f.BirthDatePrec = "YMD";
                         f.BirthPlace = msg.BirthCity;
                         f.BirtyCountryDescr = msg.BirthCountry;
                         f.DocTypeId = msg.MsgTypeId;
                         f.Egn = msg.Pin;
-                        f.PersonId = personId;
+                        f.PersonId = pidId;
                         f.ReceiveDate = msg.MsgTimestamp;
+                        //toso: какво е това?
                         f.EcrisUpdConvTypeId = "1";
                         f.StatusCode = "Active";
 
@@ -167,7 +223,7 @@ namespace EcrisIntegrationServices
                         if (isFordelete)
                         {
                             f.StatusCode = "ForDelete";
-                            _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc {f.Id} will be marked as deleted.");
+                            _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, fbbc {f.Id} will be marked as deleted.");
 
                         }
                         else
@@ -181,7 +237,7 @@ namespace EcrisIntegrationServices
                             d.FbbcId = f.Id;
                             _dbContext.DDocuments.Update(d);
                         }
-                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, number of documents which will be updated: {msg.DDocuments.Count()} .");
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, number of documents which will be updated: {msg.DDocuments.Count()} .");
                         _dbContext.Fbbcs.Add(f);
                         _dbContext.EEcrisMessages.Update(msg);
                         _logger.LogTrace($"EcrisMessageID: {msg.Id} updated.");
@@ -189,8 +245,8 @@ namespace EcrisIntegrationServices
                     else
                     {
                          f = fbbcs.First();
-                        stateF = f;
-                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, linked fbbc: {f.Id} ");
+                         stateF = f;
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, linked fbbc: {f.Id} ");
                         var content = msg.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml").Select(d => d.DocContent.Content).FirstOrDefault();
                         NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
                         bool isFordelete = false;
@@ -206,7 +262,7 @@ namespace EcrisIntegrationServices
                         {
                             f.StatusCode = "ForDelete";
                             _dbContext.Fbbcs.Update(f);
-                            _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc {f.Id} will be marked as deleted.");
+                            _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, fbbc {f.Id} will be marked as deleted.");
                         }
 
                         msg.FbbcId = f.Id;
@@ -217,7 +273,7 @@ namespace EcrisIntegrationServices
                             d.FbbcId = f.Id;
                             _dbContext.DDocuments.Update(d);
                         }
-                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, number of documents which will be updated: {msg.DDocuments.Count()} .");
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, number of documents which will be updated: {msg.DDocuments.Count()} .");
                         _dbContext.EEcrisMessages.Update(msg);
                         _logger.LogTrace($"EcrisMessageID: {msg.Id} updated.");
                     }

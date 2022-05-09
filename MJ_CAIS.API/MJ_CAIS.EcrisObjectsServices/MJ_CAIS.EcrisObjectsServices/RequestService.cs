@@ -34,13 +34,13 @@ namespace MJ_CAIS.EcrisObjectsServices
         public async Task<RequestResponseMessageType> GenerateResponseToRequest(RequestMessageType request)
         {
             var reqResp = CreateRequestResponseNoConvictionSuccessful(request);
-            var personID = await CommonService.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
-            if (string.IsNullOrEmpty(personID))
+            var graoPerson = await CommonService.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
+            if (graoPerson==null)
             {
                 throw new Exception("Person is not identified.");
             }
             //todo: find convictions
-            var fbbcs = await CheckFBBCAsync(request, personID);
+            var fbbcs = await CheckFBBCAsync(request, graoPerson.Egn);
             _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of find fbbc records: {fbbcs.Count()}.");
 
             foreach (var fbbc in fbbcs)
@@ -49,7 +49,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                 _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, FBBC with ID {fbbc.Id} added.");
             }
 
-            var buletins = await CheckBuletinsAsync(request, personID);
+            var buletins = await CheckBuletinsAsync(request, graoPerson.Egn);
             _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of buletins fbbc records: {buletins.Count()}.");
             string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
 

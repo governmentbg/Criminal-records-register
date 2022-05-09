@@ -223,8 +223,6 @@ namespace EcrisIntegrationServices
 
                 }
 
-
-
             };
 
             return query;
@@ -279,6 +277,7 @@ namespace EcrisIntegrationServices
                                 m.Urgent = false;
                             };
 
+                            m.EcrisMsgConvictionId = req.NotificationMessageConviction.ConvictionID;
 
                         }
                         if (msg.MessageType == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)
