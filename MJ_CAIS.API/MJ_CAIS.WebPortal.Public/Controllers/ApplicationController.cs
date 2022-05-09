@@ -27,5 +27,11 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             }.AsQueryable();
             return View(result);
         }
+
+        [HttpGet]
+        public ActionResult ViewByCode()
+        {
+            return View();
+        }
     }
 }
