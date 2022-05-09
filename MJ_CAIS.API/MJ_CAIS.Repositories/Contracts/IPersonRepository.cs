@@ -8,8 +8,10 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber);
 
-        Task<PPersonId> GetPersonIdAsyn(string pid, string pidType);
+        Task<PPersonId> GetPersonIdAsyn(string pid, string pidType,string personId);
 
         Task<PPerson> InsertAsync(PPerson entity, PPersonH personH);
+
+        Task<PPerson> UpdateAsync(PPerson entity, PPersonH personH);
     }
 }

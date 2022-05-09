@@ -42,7 +42,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.FatherFullname, opt => opt.MapFrom(src => src.FatherFullname));
 
             CreateMap<PPerson, PPersonH>();
-            CreateMap<PPersonId, PPersionIdsH>();
+            CreateMap<PPersonId, PPersionIdsH>()
+                .ForMember(d => d.PersonId, opt => opt.MapFrom(src => src.PersonId));
+
+            CreateMap<PPerson, PPerson>();
+
         }
     }
 }

@@ -94,26 +94,26 @@ namespace MJ_CAIS.Services
         public override async Task<string> InsertAsync(PersonDTO aInDto)
         {
             var pids = new List<PPersonId>();
-
+            var personId = BaseEntity.GenerateNewId();
             // todo: make one call 
             if (!string.IsNullOrEmpty(aInDto.Egn))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn, personId));
             }
 
             if (!string.IsNullOrEmpty(aInDto.Lnch))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch, personId));
             }
 
             if (!string.IsNullOrEmpty(aInDto.Ln))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln, personId));
             }
 
             if (!string.IsNullOrEmpty(aInDto.AfisNumber))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber));
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber, personId));
             }
 
             // must create new person object
@@ -121,19 +121,54 @@ namespace MJ_CAIS.Services
             {
                 // add person with pids
                 var person = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
+                person.Id = personId;
                 person.PPersonIds = pids;
 
                 // add person history object with pids
                 var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
+
                 personH.PPersionIdsHes = mapper.MapToEntityList<PPersonId, PPersionIdsH>(pids, true);
 
                 var addedPerson = await _personRepository.InsertAsync(person, personH);
                 return addedPerson?.Id;
             }
 
-            // todo: когато съществува някои от идентификаторите,
-            // да се намери person колко обекта са и да се групират ако са повече от един
+            var existingPersonsIds = pids.Where(x => x.PersonId != personId).DistinctBy(x => x.PersonId).Select(x => x.PersonId);
+            // only one person
+            // update this person with data from submitted object (form bulletin, fbbc, application or person form)
+            if (existingPersonsIds.Count() == 1)
+            {
+                var personToBeUpdatedId = existingPersonsIds.First();
+                var personToBeUpdated = await dbContext.PPeople
+                    .AsNoTracking()
+                    .Include(x => x.PPersonIds)
+                    .FirstOrDefaultAsync(x => x.Id == personToBeUpdatedId);
+
+                // update person with new data
+                var personToSave = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
+                personToSave.Id = personToBeUpdated.Id;
+
+                // create person history object with old data
+                var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToBeUpdated, true);
+                personHistoryToBeAdded.Id = BaseEntity.GenerateNewId();
+                personHistoryToBeAdded.PPersionIdsHes = personToBeUpdated.PPersonIds.Select(x => new PPersionIdsH
+                {
+                    CountryId = x.CountryId,
+                    EntityState = EntityStateEnum.Added,
+                    Id = BaseEntity.GenerateNewId(),
+                    Issuer = x.Issuer,
+                    PersonId = personToBeUpdated.Id,
+                    PersonHId = personHistoryToBeAdded.Id,
+                    Pid = x.Pid,
+                    PidTypeId = x.PidTypeId,
+                }).ToList();
+
+                var updatedPerson = await _personRepository.UpdateAsync(personToSave, personHistoryToBeAdded);
+                return personToSave?.Id;
+            }
+
+            // more then one person
             return null;
-        }    
+        }
     }
 }

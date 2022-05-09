@@ -73,7 +73,7 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
-        public async Task<PPersonId> GetPersonIdAsyn(string pid, string pidType)
+        public async Task<PPersonId> GetPersonIdAsyn(string pid, string pidType, string personId)
         {
             var issuerType = string.Empty;
             switch (pidType)
@@ -105,11 +105,13 @@ namespace MJ_CAIS.Repositories.Impl
             {
                 return new PPersonId
                 {
+                    Id = BaseEntity.GenerateNewId(),
                     Pid = pid,
                     PidTypeId = pidType,
                     CountryId = BG,
                     Issuer = issuerType,
                     EntityState = EntityStateEnum.Added,
+                    PersonId = personId,
                 };
             }
 
@@ -125,10 +127,39 @@ namespace MJ_CAIS.Repositories.Impl
         /// <returns></returns>
         public async Task<PPerson> InsertAsync(PPerson entity, PPersonH personH)
         {
-            using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
-            await _dbContext.SaveEntityAsync(entity, true);
-            await _dbContext.SaveEntityAsync(personH, true);
-            scope.Complete();
+            //using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
+
+            _dbContext.ApplyChanges(entity, new List<BaseEntity>(), true);
+            _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
+            await _dbContext.SaveChangesAsync();
+
+            //await _dbContext.SaveEntityAsync(entity, true);
+            //await _dbContext.SaveEntityAsync(personH, true);
+            //scope.Complete();
+            return entity;
+        }
+
+        /// <summary>
+        /// Update person object
+        /// save onld data in P_PERSON_H and P_PERSON_IDS_H
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="personH"></param>
+        /// <returns></returns>
+        public async Task<PPerson> UpdateAsync(PPerson entity, PPersonH personH)
+        {
+            try
+            {
+                _dbContext.ApplyChanges(entity, new List<BaseEntity>(), false);
+                _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
             return entity;
         }
 
