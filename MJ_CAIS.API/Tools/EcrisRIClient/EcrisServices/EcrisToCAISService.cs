@@ -27,7 +27,7 @@ namespace EcrisIntegrationServices
             _dbContext = dbContext;
             _logger = logger;
         }
-        
+
         public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage, bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
         {
             _logger.LogInformation($"Synchronization of requests started.Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramRequestSynch: {paramRequestSynch}.");
@@ -43,21 +43,25 @@ namespace EcrisIntegrationServices
 
         private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch, string joinSeparator = " ")
         {
+            bool isLoggedIn = false;
+            string sessionID = "";
+            EcrisClient client = null;
             try
             {
-                EcrisClient client = new EcrisClient(username, password);
+                client = new EcrisClient(username, password);
                 _logger.LogTrace($"{messageType.ToString()}: EcrisClient created.");
-                var sessionID = await client.GetActiveSessionId();
+                sessionID = await client.GetActiveSessionId();
+                isLoggedIn = true;
                 _logger.LogTrace($"{messageType.ToString()}: EcrisClient logged in.");
                 var inboxFolderId = await client.GetInboxFolderIdentifier(sessionID, searchFolderName);
                 _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {inboxFolderId}.");
                 MJ_CAIS.DTO.EcrisService.QueryType query;
                 DateTime lastUpdatedTime;
-                string docTypeCode= "";
+                string docTypeCode = "";
                 if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
                     lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
-                    docTypeCode = await  CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ,_dbContext);
+                    docTypeCode = await CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ, _dbContext);
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
 
                 }
@@ -65,7 +69,7 @@ namespace EcrisIntegrationServices
                 {
                     if (messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                     {
-                        docTypeCode = await CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT,_dbContext);
+                        docTypeCode = await CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
                         lastUpdatedTime = GetLastSynchDateForNotifications(paramNameForSynch);
                         query = GetNotificationsQuery(inboxFolderId, lastUpdatedTime);
 
@@ -133,18 +137,26 @@ namespace EcrisIntegrationServices
 
                 _logger.LogTrace($"{messageType.ToString()}:Synchronization ended. Parameter {paramNameForSynch} set to {lastUpdatedTime.ToString("yyyy-MM-dd HH:mm:ss")}. ");
 
-                var logout = await client.Logout(sessionID);
 
-                _logger.LogTrace($"{messageType.ToString()}: Log out");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"{messageType.ToString()}: {ex.Message}", ex.Data);
-                throw ex;
+                //todo: има ли нещо за почистване?!
+
+                //throw ex;
             }
             finally
             {
-                //todo: logout?
+                if (isLoggedIn)
+                {
+                    if (client != null)
+                    {
+                        var logout = await client.Logout(sessionID);
+                    }
+
+                    _logger.LogTrace($"{messageType.ToString()}: Log out");
+                }
                 NLog.LogManager.Flush();
 
 
@@ -152,7 +164,7 @@ namespace EcrisIntegrationServices
 
         }
 
-      
+
 
         private MJ_CAIS.DTO.EcrisService.QueryType GetRequestsQuery(string searchFolderID, DateTime fromDate)
         {
@@ -246,10 +258,10 @@ namespace EcrisIntegrationServices
                     var existingMSg = _dbContext.EEcrisMessages.FirstOrDefault(ee => ee.EcrisIdentifier == msg.MessageEcrisIdentifier);
                     if (existingMSg == null)
                     {
-
+                        //todo: use methods from CommonService
 
                         var m = ParseMessageTraits(msg, joinSeparator);
-                        m.MsgTypeId = docTypeCode;
+                        m.MsgTypeId = docTypeCode;                  
 
                         inbox.EcrisMsg = m;
                         inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
@@ -266,7 +278,7 @@ namespace EcrisIntegrationServices
                             {
                                 m.Urgent = false;
                             };
-                            
+
 
                         }
                         if (msg.MessageType == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)
@@ -283,9 +295,13 @@ namespace EcrisIntegrationServices
                             };
 
                         }
+                        var names = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == "bg");
+                        if (names == null)
+                        {
+                            names = m.EEcrisMsgNames.FirstOrDefault();
+                        }
 
-
-                        DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, m.Firstname, m.Surname, m.Familyname,_dbContext);
+                        DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, _dbContext);
 
                         d.EcrisMsg = m;
                         m.DDocuments.Add(d);
@@ -296,8 +312,17 @@ namespace EcrisIntegrationServices
                         content.DDocuments.Add(d);
 
                         _dbContext.EEcrisMessages.Add(m);
+                     
                         _dbContext.DDocuments.Add(d);
                         _dbContext.DDocContents.Add(content);
+                        if (m.EEcrisMsgNationalities?.Count > 0)
+                        {
+                            _dbContext.EEcrisMsgNationalities.AddRange(m.EEcrisMsgNationalities);
+                        }
+                        if (m.EEcrisMsgNames.Count > 0)
+                        {
+                            _dbContext.EEcrisMsgNames.AddRange(m.EEcrisMsgNames);
+                        }
 
 
 
@@ -319,10 +344,9 @@ namespace EcrisIntegrationServices
             _dbContext.EEcrisInboxes.Add(inbox);
 
         }
-      
-     
 
-    
+  
+
         private EEcrisMessage ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
         {
             EEcrisMessage m = new EEcrisMessage();
@@ -339,21 +363,56 @@ namespace EcrisIntegrationServices
                                        Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateDay)));
             m.BirthCountry = msg.MessageShortViewPerson.PersonBirthPlace.PlaceCountryReference.Value;
             m.Sex = msg.MessageShortViewPerson.PersonSex;
-            var familyName = msg.MessageShortViewPerson.PersonName?.SecondSurname?.Select(p => p.Value);
-            if (familyName != null)
+
+            var forenames = msg.MessageShortViewPerson.PersonName?.Forename.ToList();
+            foreach (var forename in forenames)
             {
-                m.Familyname = string.Join(joinSeparator, familyName);
+                EEcrisMsgName name = new EEcrisMsgName();
+                name.Id = BaseEntity.GenerateNewId();
+                name.LangCode = forename.languageCode;
+                name.Firstname = forename.Value;
+                name.EEcrisMsgId = m.Id;
+                m.EEcrisMsgNames.Add(name);
             }
-            var firstName = msg.MessageShortViewPerson.PersonName?.Forename?.Select(p => p.Value);
-            if (firstName != null)
+
+            var familyNames = msg.MessageShortViewPerson.PersonName?.SecondSurname.ToList();
+            foreach (var familyName in familyNames)
             {
-                m.Firstname = string.Join(joinSeparator, firstName);
+                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
+                if (nameByLang == null)
+                {
+                    EEcrisMsgName name = new EEcrisMsgName();
+                    name.Id = BaseEntity.GenerateNewId();
+                    name.LangCode = familyName.languageCode;
+                    name.Firstname = familyName.Value;
+                    name.EEcrisMsgId = m.Id;
+                    m.EEcrisMsgNames.Add(name);
+                }
+                else
+                {
+                    nameByLang.Familyname = familyName.Value;
+                }
             }
-            var surname = msg.MessageShortViewPerson.PersonName?.Surname?.Select(p => p.Value);
-            if (surname != null)
+
+            var surnameNames = msg.MessageShortViewPerson.PersonName?.Surname.ToList();
+            foreach (var surname in surnameNames)
             {
-                m.Surname = string.Join(joinSeparator, surname);
+                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
+                if (nameByLang == null)
+                {
+                    EEcrisMsgName name = new EEcrisMsgName();
+                    name.Id = BaseEntity.GenerateNewId();
+                    name.LangCode = surname.languageCode;
+                    name.Firstname = surname.Value;
+                    name.EEcrisMsgId = m.Id;
+                    m.EEcrisMsgNames.Add(name);
+                }
+                else
+                {
+                    nameByLang.Surname = surname.Value;
+                }
             }
+
 
             var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.UtcNow && ea.ValidTo >= DateTime.UtcNow
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
@@ -378,16 +437,16 @@ namespace EcrisIntegrationServices
             if (nationalities != null)
             {
                 var countries = _dbContext.GCountries.Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
-                                                                && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
-                if (nationalities.Count > 0)
+                                                               && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
+                foreach (var nationality in nationalities)
                 {
-                    m.Nationality1Code = countries.FirstOrDefault(c => c.EcrisTechnId == msg.MessageShortViewPerson?.PersonNationalityReference[0]?.Value)?.Id;
-                }
-                if (nationalities.Count > 1)
-                {
-                    m.Nationality2Code = countries.FirstOrDefault(c => c.EcrisTechnId == msg.MessageShortViewPerson?.PersonNationalityReference[1]?.Value)?.Id;
+                    EEcrisMsgNationality nat = new EEcrisMsgNationality();
+                    nat.EEcrisMsgId = m.Id;
+                    nat.CountryId = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
+                    m.EEcrisMsgNationalities.Add(nat);
                 }
             }
+
             if (msg.MessageVersionTimestampSpecified)
             {
                 m.MsgTimestamp = msg.MessageVersionTimestamp;

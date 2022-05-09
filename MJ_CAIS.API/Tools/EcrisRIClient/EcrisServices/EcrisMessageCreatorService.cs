@@ -18,15 +18,8 @@ namespace EcrisIntegrationServices
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisMessageCreatorService> _logger;
-        const string REQUEST_SUCCESSFUL = "RRT-00-00";
-        const string REQUEST_DENIAL = "RRT-00-01";
-        const string REQUEST_NOT_FROM_MEMBER_STATE = "RRT-00-02";
-        const string REQUEST_DEAD_PERSON = "RRT-00-03";
-        const string REQUEST_NIST_NOT_MATCH = "RRT-00-04";
-        const string REQUEST_MULTIPLE_PEOPLE_FOUND = "RRT-00-05";
         const string ECRIS_REQUEST_CODE = "EcrisReq";
         const string ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON = "Identified";
-        const string ECRIS_MESSAGE_STATUS_UNIDENTIFIED_PERSON = "Unidentified";
         RequestService _requestService;
         public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService)
         {
@@ -57,7 +50,7 @@ namespace EcrisIntegrationServices
                                 var reqResp = await _requestService.GenerateResponseToRequest(request);
 
                                 //todo: what is the value of convictionID?!
-                                await CommonService.AddMessageToDBContextAsync(reqResp, "", joinSeparator,_dbContext);
+                                await CommonService.AddMessageToDBContextAsync(reqResp, "","", joinSeparator,_dbContext);
                             }
 
                         }
@@ -138,12 +131,14 @@ namespace EcrisIntegrationServices
                         isNewF=true;
                         _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {personId}, fbbc does not exist. It will be created.");
                         //todo: validate entries; check codes
+                        //todo: getfromSomewhere
+                        var names = msg.EEcrisMsgNames.FirstOrDefault();
                          f = new Fbbc();
                         f.Id = BaseEntity.GenerateNewId();
-                        f.Surname = msg.Surname;
+                        f.Surname = names?.Surname;
                         f.EcrisConvId = msg.EcrisMsgConvictionId;
-                        f.Familyname = msg.Familyname;
-                        f.Firstname = msg.Firstname;
+                        f.Familyname = names?.Familyname;
+                        f.Firstname = names?.Firstname;
                         f.BirthDate = msg.BirthDate;
                         f.BirthDatePrec = "YMD";
                         f.BirthPlace = msg.BirthCity;

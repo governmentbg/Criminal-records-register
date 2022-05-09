@@ -33,6 +33,8 @@ namespace EcrisMessageCreator
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton<RequestService>())
                     .ConfigureServices(services => services.AddSingleton<EcrisMessageCreatorService>())
+                        
+                    .ConfigureServices(services => services.AddSingleton<NotificationService>())
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
@@ -50,16 +52,17 @@ namespace EcrisMessageCreator
                 using (host)
                 {
 
-
-                    var msgCreatorService = host.Services.GetService<EcrisMessageCreatorService>();
-                    if (createReply)
-                    {
-                        await msgCreatorService.CreateResponsesToRequests(pageSize, joinSeparator);
-                    }
-                    if (mergeNotificationWithFBBC)
-                    {
-                        await msgCreatorService.ProcessIdentifiedNotificationsAsync();
-                    }
+                    var n = host.Services.GetService<NotificationService>();
+                    await n.CreateNotificationFromBulletin("0fe02bdd-739d-cce9-dce7-805548fd8f78");
+                    //var msgCreatorService = host.Services.GetService<EcrisMessageCreatorService>();
+                    //if (createReply)
+                    //{
+                    //    await msgCreatorService.CreateResponsesToRequests(pageSize, joinSeparator);
+                    //}
+                    //if (mergeNotificationWithFBBC)
+                    //{
+                    //    await msgCreatorService.ProcessIdentifiedNotificationsAsync();
+                    //}
 
 
 

@@ -17,6 +17,7 @@ namespace MJ_CAIS.EcrisObjectsServices
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<NotificationService> _logger;
+
         public NotificationService(CaisDbContext dbContext, ILogger<NotificationService> logger)
         {
             _dbContext = dbContext;
@@ -27,9 +28,9 @@ namespace MJ_CAIS.EcrisObjectsServices
             string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
             NotificationMessageType msg = new NotificationMessageType();
 
-            msg.NotificationMessageConviction = CommonService.GetConvictionFromBuletin(bulletin, bgCode);
+            msg.NotificationMessageConviction = await CommonService.GetConvictionFromBuletin(bulletin, bgCode, _dbContext);
 
-            LoadCommonDataFromBulletin(msg, bulletin);
+           await  LoadCommonDataFromBulletin(msg, bulletin);
 
             //дали може да се вземе от някъде?!
             //msg.NotificationMessageOtherAffectedConviction = new ConvictionToConvictionsRelationshipType();
@@ -43,25 +44,30 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
 
-            await CommonService.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId, joinSeparator,_dbContext);
+            await CommonService.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId,bulletin.Id, joinSeparator,_dbContext);
+
+
 
             await _dbContext.SaveChangesAsync();
 
         }
         public async Task CreateNotificationFromBulletin(string bulletinID, string joinSeparator = " ")
         {
+            //todo: дали да проверявам за статус, националност и някакви други условия?!
             var buletin = await  _dbContext.BBulletins
                                 .Include(b=>b.BOffences)
                                 .Include(b=>b.BSanctions)
                                 .Include(b=>b.BDecisions)
-                                .Include(b=>b.BPersNationalities)
+                                .Include(b => b.BPersNationalities)
                                 .Include(b=>b.BulletinAuthority)
                                 .Include(b=>b.CsAuthority)
                                 .Include(b=>b.BBullPersAliases)
                                 .Include(b=>b.BirthCountry)
+                                .Include(b => b.BirthCity)
                                 .Include(b=>b.CaseAuth)
                                 .Include(b=>b.DecidingAuth)
-                                .Include(b=>b.IdDocIssuingAuthority)
+                                //.Include(b=>b.IdDocIssuingAuthority)
+                            
                                 .Include(b=>b.IdDocCategory)                              
                                 .FirstOrDefaultAsync(b => b.Id == bulletinID);
             if(buletin==null)
@@ -72,19 +78,21 @@ namespace MJ_CAIS.EcrisObjectsServices
             await  CreateNotificationFromBulletin(buletin, joinSeparator);
         }
 
-            private void LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
+            private async Task LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
         {
             msg.MessageType = EcrisMessageType.NOT;
             msg.MessageTypeSpecified = true;
 
             msg.MessageSendingMemberStateSpecified = true;
             msg.MessageSendingMemberState = MemberStateCodeType.BG;
-            var notBGNacionality = bulletin.BPersNationalities.Where(nacionality => nacionality.Country != null && nacionality.Country.Iso3166Alpha2 != "BG");
+            var countriesIds = bulletin.BPersNationalities.Select(n => n.CountryId);
+            var notBGNacionality = await _dbContext.GCountries.Where(c => countriesIds.Contains(c.Id) && c.Iso3166Alpha2 != "BG").ToListAsync();
+               // bulletin.BPersNationalities.Where(nacionality => nacionality.Country != null && nacionality.Country.Iso3166Alpha2 != "BG");
             List<MemberStateCodeType> notBGNacionalityInEU = new List<MemberStateCodeType>();
             foreach (var nacionality in notBGNacionality)
             {
                 object? res;
-                if (Enum.TryParse(typeof(MemberStateCodeType), nacionality.Country?.Iso3166Alpha2?.ToUpper(), out res))
+                if (Enum.TryParse(typeof(MemberStateCodeType), nacionality.Iso3166Alpha2?.ToUpper(), out res))
                 {
                     notBGNacionalityInEU.Add((MemberStateCodeType)res);
                 }
@@ -110,24 +118,46 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             //todo: да се добавят ли от групата?!
             //msg.MessagePerson.PersonAlias;
-            msg.MessagePerson.PersonBirthPlace = new AliasBirthPlaceType();
+            msg.MessagePerson.PersonBirthPlace = new PlaceType();
             if (bulletin.BirthCity != null)
             {
-                msg.MessagePerson.PersonBirthPlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[2];
+                if (!string.IsNullOrEmpty(bulletin.BirthCity.NameEn))
+                {
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[2];
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[1] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[1].Value = bulletin.BirthCity.NameEn;
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[1].languageCode = ECRISConstants.LanguageCodes.En;
+                }
+                else
+                {
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[1];
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
+                }
                 msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].Value = bulletin.BirthCity.Name;
-                msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].languageCode = "BG";
-                msg.MessagePerson.PersonBirthPlace.PlaceTownName[1].Value = bulletin.BirthCity.NameEn;
-                msg.MessagePerson.PersonBirthPlace.PlaceTownName[1].languageCode = "EN";
-                msg.MessagePerson.PersonBirthPlace.PlaceTownReference = new CityExternalReferenceType();
-                msg.MessagePerson.PersonBirthPlace.PlaceTownReference.Value = bulletin.BirthCity.EcrisTechnId;
+                msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+              
+                if (!string.IsNullOrEmpty(bulletin.BirthCity.EcrisTechnId))
+                {
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownReference = new CityExternalReferenceType();
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownReference.Value = bulletin.BirthCity.EcrisTechnId;
+                }
             }
             else
             {
-                msg.MessagePerson.PersonBirthPlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[1];
-                msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].Value = bulletin.BirthPlaceOther;
+                if (!string.IsNullOrEmpty(bulletin.BirthPlaceOther))
+                {
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[1];
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].Value = bulletin.BirthPlaceOther;
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+                }
             }
-            msg.MessagePerson.PersonBirthPlace.PlaceCountryReference = new CountryExternalReferenceType();
-            msg.MessagePerson.PersonBirthPlace.PlaceCountryReference.Value = bulletin.BirthCountry.EcrisTechnId;
+            if (!string.IsNullOrEmpty(bulletin.BirthCountry.EcrisTechnId))
+            {
+                msg.MessagePerson.PersonBirthPlace.PlaceCountryReference = new CountryExternalReferenceType();
+                msg.MessagePerson.PersonBirthPlace.PlaceCountryReference.Value = bulletin.BirthCountry.EcrisTechnId;
+            }
 
 
             if (bulletin.BirthDate.HasValue)
@@ -138,33 +168,54 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
             msg.MessagePerson.PersonFatherForename = new NameTextType[1];
+            msg.MessagePerson.PersonFatherForename[0] = new NameTextType();
             msg.MessagePerson.PersonFatherForename[0].Value = bulletin.FatherFirstname;
             msg.MessagePerson.PersonFatherSecondSurname = new NameTextType[1];
+            msg.MessagePerson.PersonFatherSecondSurname[0]=new NameTextType();
             msg.MessagePerson.PersonFatherSecondSurname[0].Value = bulletin.FatherFamilyname;
             msg.MessagePerson.PersonFatherSurname = new NameTextType[1];
+            msg.MessagePerson.PersonFatherSurname[0] = new NameTextType();
             msg.MessagePerson.PersonFatherSurname[0].Value = bulletin.FatherSurname;
             //msg.MessagePerson.PersonFormerForename;
             //msg.MessagePerson.PersonFormerSecondSurname;
             //msg.MessagePerson.PersonFormerSurname;
 
             msg.MessagePerson.PersonIdentificationDocument = new IdentificationDocumentType[1];
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentNumber = bulletin.IdDocNumber;
+            msg.MessagePerson.PersonIdentificationDocument[0] = new IdentificationDocumentType();
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentNumber = bulletin.IdDocNumber;
             if (bulletin.IdDocIssuingDate.HasValue)
             {
-                msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentIssuingDate = CommonService.GetDateTypeFromDateAndPrecission(bulletin.IdDocIssuingDate.Value, bulletin.IdDocIssuingDatePrec);
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingDate = CommonService.GetDateTypeFromDateAndPrecission(bulletin.IdDocIssuingDate.Value, bulletin.IdDocIssuingDatePrec);
             }
 
 
             if (bulletin.IdDocValidDate.HasValue)
             {
-                msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentValidUntil = CommonService.GetDateTypeFromDateAndPrecission(bulletin.IdDocValidDate.Value, bulletin.IdDocValidDatePrec);
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentValidUntil = CommonService.GetDateTypeFromDateAndPrecission(bulletin.IdDocValidDate.Value, bulletin.IdDocValidDatePrec);
             }
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentType1[0].Value = bulletin.IdDocTypeDescr;
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentCategoryReference = new IdentificationDocumentCategoryExternalReferenceType();
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentCategoryReference.Value = bulletin.IdDocCategory.EcrisTechnId;
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentIssuingAuthority = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
-            msg.MessagePerson.PersonIdentificationDocument[1].IdentificationDocumentIssuingAuthority[0].Value = bulletin.IdDocIssuingAuthority;
+  
+            if (!string.IsNullOrEmpty(bulletin.IdDocTypeDescr))
+            {
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocTypeDescr;
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+            }
+            else
+            {
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocCategory.EcrisTechnId;
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+
+            }
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference = new IdentificationDocumentCategoryExternalReferenceType();
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference.Value = bulletin.IdDocCategory.EcrisTechnId;
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].Value = bulletin.IdDocIssuingAuthority;
+            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+
 
 
             //egn, lnch или лн?!
@@ -180,24 +231,28 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
             msg.MessagePerson.PersonName = new PersonNameType();
-            msg.MessagePerson.PersonName.Forename = CommonService.GetNameTextType(new List<string?>() { bulletin.Firstname, bulletin.FirstnameLat }, new List<string>() { "BG", "EN" })?.ToArray();
+            msg.MessagePerson.PersonName.Forename = CommonService.GetNameTextType(new List<string?>() { bulletin.Firstname }, 
+                                                            new List<string>() { ECRISConstants.LanguageCodes.Bg })?.ToArray();
 
 
-            msg.MessagePerson.PersonName.SecondSurname = CommonService.GetNameTextType(new List<string?>() { bulletin.Familyname, bulletin.FamilynameLat }, new List<string>() { "BG", "EN" })?.ToArray();
+            msg.MessagePerson.PersonName.SecondSurname = CommonService.GetNameTextType(new List<string?>() { bulletin.Familyname},
+                                                            new List<string>() { ECRISConstants.LanguageCodes.Bg})?.ToArray();
 
-            msg.MessagePerson.PersonName.Surname = CommonService.GetNameTextType(new List<string?>() { bulletin.Surname, bulletin.SurnameLat }, new List<string>() { "BG", "EN" })?.ToArray();
-
-
-            msg.MessagePerson.PersonName.FullName = CommonService.GetFullNameTextType(new List<string?>() { bulletin.Fullname, bulletin.FullnameLat }, new List<string>() { "BG", "EN" })?.ToArray();
-
+            msg.MessagePerson.PersonName.Surname = CommonService.GetNameTextType(new List<string?>() { bulletin.Surname},
+                                                                new List<string>() { ECRISConstants.LanguageCodes.Bg })?.ToArray();
 
 
-            msg.MessagePerson.PersonNationalityReference = bulletin.BPersNationalities.Where(n => n.Country != null && n.Country.Iso3166Alpha2 != null).Select(n => new CountryExternalReferenceType() { Value = n.Country.Iso3166Alpha2 }).ToArray();
+            msg.MessagePerson.PersonName.FullName = CommonService.GetFullNameTextType(new List<string?>() { bulletin.Fullname },
+                                                    new List<string>() { ECRISConstants.LanguageCodes.Bg})?.ToArray();
+
+
+
+            msg.MessagePerson.PersonNationalityReference = bulletin.BPersNationalities.Where(n => n.Country != null && n.Country.Iso3166Alpha2 != null).Select(n => new CountryExternalReferenceType() { Value = n.Country.EcrisTechnId }).ToArray();
 
             //msg.MessagePerson.PersonRemarks ;
             //1-мъж, 2 - жена
             msg.MessagePerson.PersonSex = (int)bulletin.Sex;
-            msg.MessagePerson.PersonSexSpecified = bulletin.Sex == 0;
+            msg.MessagePerson.PersonSexSpecified = true;
 
 
         }
