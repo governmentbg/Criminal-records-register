@@ -12,6 +12,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
+            EEcrisMsgNationalities = new HashSet<EEcrisMsgNationality>();
             FbbcBirthCountries = new HashSet<Fbbc>();
             FbbcCountries = new HashSet<Fbbc>();
             GCities = new HashSet<GCity>();
@@ -42,6 +43,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
+        public virtual ICollection<EEcrisMsgNationality> EEcrisMsgNationalities { get; set; }
         public virtual ICollection<Fbbc> FbbcBirthCountries { get; set; }
         public virtual ICollection<Fbbc> FbbcCountries { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }

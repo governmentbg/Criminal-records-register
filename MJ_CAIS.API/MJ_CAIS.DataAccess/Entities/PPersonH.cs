@@ -7,7 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public PPersonH()
         {
-            PPersionIdsHes = new HashSet<PPersionIdsH>();
+            PPersonIdsHes = new HashSet<PPersonIdsH>();
         }
 
         public string? Firstname { get; set; }
@@ -40,6 +40,6 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
-        public virtual ICollection<PPersionIdsH> PPersionIdsHes { get; set; }
+        public virtual ICollection<PPersonIdsH> PPersonIdsHes { get; set; }
     }
 }

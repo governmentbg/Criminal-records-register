@@ -15,6 +15,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BPersNationalities = new HashSet<BPersNationality>();
             BSanctions = new HashSet<BSanction>();
             DDocuments = new HashSet<DDocument>();
+            EEcrisReferences = new HashSet<EEcrisReference>();
             EIsinData = new HashSet<EIsinDatum>();
             EWebRequests = new HashSet<EWebRequest>();
             PBulletinIds = new HashSet<PBulletinId>();
@@ -111,6 +112,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
         public virtual ICollection<BSanction> BSanctions { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
+        public virtual ICollection<EEcrisReference> EEcrisReferences { get; set; }
         public virtual ICollection<EIsinDatum> EIsinData { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
         public virtual ICollection<PBulletinId> PBulletinIds { get; set; }

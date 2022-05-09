@@ -127,7 +127,7 @@ namespace MJ_CAIS.Services
                 // add person history object with pids
                 var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
 
-                personH.PPersionIdsHes = mapper.MapToEntityList<PPersonId, PPersionIdsH>(pids, true);
+                personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
                 var addedPerson = await _personRepository.InsertAsync(person, personH);
                 return addedPerson?.Id;
@@ -151,7 +151,7 @@ namespace MJ_CAIS.Services
                 // create person history object with old data
                 var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToBeUpdated, true);
                 personHistoryToBeAdded.Id = BaseEntity.GenerateNewId();
-                personHistoryToBeAdded.PPersionIdsHes = personToBeUpdated.PPersonIds.Select(x => new PPersionIdsH
+                personHistoryToBeAdded.PPersonIdsHes = personToBeUpdated.PPersonIds.Select(x => new PPersonIdsH
                 {
                     CountryId = x.CountryId,
                     EntityState = EntityStateEnum.Added,

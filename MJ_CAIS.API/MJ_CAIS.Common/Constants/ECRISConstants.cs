@@ -27,7 +27,13 @@ namespace MJ_CAIS.Common.Constants
             public const string Pending = "PENDING";
             public const string Processed = "PROCESSED";
             public const string Error = "ERROR";
-         
+
+        }
+
+        public static class LanguageCodes
+        {
+            public const string Bg = "bg";
+            public const string En = "en";
         }
 
     }

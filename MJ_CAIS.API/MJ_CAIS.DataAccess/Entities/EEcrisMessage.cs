@@ -10,7 +10,10 @@ namespace MJ_CAIS.DataAccess.Entities
             DDocuments = new HashSet<DDocument>();
             EEcrisIdentifications = new HashSet<EEcrisIdentification>();
             EEcrisInboxes = new HashSet<EEcrisInbox>();
+            EEcrisMsgNames = new HashSet<EEcrisMsgName>();
+            EEcrisMsgNationalities = new HashSet<EEcrisMsgNationality>();
             EEcrisOutboxes = new HashSet<EEcrisOutbox>();
+            EEcrisReferences = new HashSet<EEcrisReference>();
             EWebRequests = new HashSet<EWebRequest>();
             InverseRequestMsg = new HashSet<EEcrisMessage>();
         }
@@ -27,12 +30,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? BirthCountry { get; set; }
         public string? BirthCity { get; set; }
         public string? FbbcId { get; set; }
-        public string? Firstname { get; set; }
-        public string? Surname { get; set; }
-        public string? Familyname { get; set; }
         public decimal? Sex { get; set; }
-        public string? Nationality1Code { get; set; }
-        public string? Nationality2Code { get; set; }
         public string? MsgTypeId { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -43,6 +41,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? Deadline { get; set; }
         public bool? Urgent { get; set; }
         public decimal? Version { get; set; }
+        public string? BulletinId { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }
         public virtual EEcrisAuthority? FromAuth { get; set; }
@@ -51,7 +50,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }
         public virtual ICollection<EEcrisInbox> EEcrisInboxes { get; set; }
+        public virtual ICollection<EEcrisMsgName> EEcrisMsgNames { get; set; }
+        public virtual ICollection<EEcrisMsgNationality> EEcrisMsgNationalities { get; set; }
         public virtual ICollection<EEcrisOutbox> EEcrisOutboxes { get; set; }
+        public virtual ICollection<EEcrisReference> EEcrisReferences { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
         public virtual ICollection<EEcrisMessage> InverseRequestMsg { get; set; }
     }

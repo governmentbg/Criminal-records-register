@@ -34,9 +34,9 @@ namespace MJ_CAIS.DataAccess.Entities
                     var personNode = node.SelectSingleNode("ns2:MessagePerson", nsmgr);
                     if (personNode != null)
                     {
-                        result.Firstname = personNode.SelectSingleNode("ns2:PersonName/ns2:Forename", nsmgr).GetValueOrNull();
-                        result.Surname = personNode.SelectSingleNode("ns2:PersonName/ns2:SecondSurname", nsmgr).GetValueOrNull();
-                        result.Familyname = personNode.SelectSingleNode("ns2:PersonName/ns2:Surname", nsmgr).GetValueOrNull();
+                       // result.Firstname = personNode.SelectSingleNode("ns2:PersonName/ns2:Forename", nsmgr).GetValueOrNull();
+                       // result.Surname = personNode.SelectSingleNode("ns2:PersonName/ns2:SecondSurname", nsmgr).GetValueOrNull();
+                       // result.Familyname = personNode.SelectSingleNode("ns2:PersonName/ns2:Surname", nsmgr).GetValueOrNull();
 
                         int sex;
                         if (int.TryParse(personNode.SelectSingleNode("ns2:PersonSex", nsmgr).GetValueOrNull(), out sex))
@@ -99,8 +99,8 @@ namespace MJ_CAIS.DataAccess.Entities
                         if (nationalityNodes != null)
                         {
 
-                            result.Nationality1Code = nationalityNodes[0] != null ? nationalityNodes[0].InnerText : null;
-                            result.Nationality2Code = nationalityNodes[1] != null ? nationalityNodes[1].InnerText : null;
+                           // result.Nationality1Code = nationalityNodes[0] != null ? nationalityNodes[0].InnerText : null;
+                           // result.Nationality2Code = nationalityNodes[1] != null ? nationalityNodes[1].InnerText : null;
                         }
                     }
                 }

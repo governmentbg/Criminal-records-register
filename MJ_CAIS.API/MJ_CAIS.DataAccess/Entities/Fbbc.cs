@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public Fbbc()
         {
             DDocuments = new HashSet<DDocument>();
+            EEcrisReferences = new HashSet<EEcrisReference>();
         }
 
         public string? CountryId { get; set; }
@@ -65,5 +66,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual FbbcSanctType? SanctionType { get; set; }
         public virtual FbbcStatus? StatusCodeNavigation { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
+        public virtual ICollection<EEcrisReference> EEcrisReferences { get; set; }
     }
 }

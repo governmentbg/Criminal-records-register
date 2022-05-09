@@ -101,13 +101,13 @@ namespace MJ_CAIS.Services
                     on ecrisMsg.BirthCountry equals birthCountry.Id into birthCountry_left
                 from birthCountry in birthCountry_left.DefaultIfEmpty()
 
-                join nationality1 in this.dbContext.GCountries.AsNoTracking()
-                    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
-                from nationality1 in nationality1_left.DefaultIfEmpty()
+               // join nationality1 in this.dbContext.GCountries.AsNoTracking()
+                //    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
+                //from nationality1 in nationality1_left.DefaultIfEmpty()
 
-                join nationality2 in this.dbContext.GCountries.AsNoTracking()
-                    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
-                from nationality2 in nationality2_left.DefaultIfEmpty()
+               // join nationality2 in this.dbContext.GCountries.AsNoTracking()
+                //    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
+                //from nationality2 in nationality2_left.DefaultIfEmpty()
 
                 select new EcrisMessageGridDTO
                 {
@@ -123,13 +123,13 @@ namespace MJ_CAIS.Services
                     BirthCountry = ecrisMsg.BirthCountry,
                     BirthCountryName = birthCountry.Name,
                     BirthCity = ecrisMsg.BirthCity,
-                    Firstname = ecrisMsg.Firstname,
-                    Surname = ecrisMsg.Surname,
-                    Familyname = ecrisMsg.Familyname,
-                    Nationality1Code = ecrisMsg.Nationality1Code,
-                    Nationality1Name = nationality1.Name,
-                    Nationality2Code = ecrisMsg.Nationality2Code,
-                    Nationality2Name = nationality2.Name,
+                    //Firstname = ecrisMsg.Firstname,
+                    //Surname = ecrisMsg.Surname,
+                   // Familyname = ecrisMsg.Familyname,
+                    //Nationality1Code = ecrisMsg.Nationality1Code,
+                    //Nationality1Name = nationality1.Name,
+                    //Nationality2Code = ecrisMsg.Nationality2Code,
+                    //Nationality2Name = nationality2.Name,
                 };
 
             return result;
