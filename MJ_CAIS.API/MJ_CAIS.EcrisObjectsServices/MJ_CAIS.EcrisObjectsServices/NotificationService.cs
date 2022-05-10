@@ -151,7 +151,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                     msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].languageCode = ECRISConstants.LanguageCodes.Bg;
                 }
             }
-            if (!string.IsNullOrEmpty(bulletin.BirthCountry.EcrisTechnId))
+            if (!string.IsNullOrEmpty(bulletin.BirthCountry?.EcrisTechnId))
             {
                 msg.MessagePerson.PersonBirthPlace.PlaceCountryReference = new CountryExternalReferenceType();
                 msg.MessagePerson.PersonBirthPlace.PlaceCountryReference.Value = bulletin.BirthCountry.EcrisTechnId;
@@ -201,19 +201,27 @@ namespace MJ_CAIS.EcrisObjectsServices
             }
             else
             {
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocCategory.EcrisTechnId;
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
-
+                if (!string.IsNullOrEmpty(bulletin.IdDocCategory?.EcrisTechnId))
+                {
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocCategory?.EcrisTechnId;
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+                }
             }
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference = new IdentificationDocumentCategoryExternalReferenceType();
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference.Value = bulletin.IdDocCategory.EcrisTechnId;
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].Value = bulletin.IdDocIssuingAuthority;
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].languageCode = ECRISConstants.LanguageCodes.Bg;
-
+            if (!string.IsNullOrEmpty(bulletin.IdDocCategory?.EcrisTechnId))
+            {
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference = new IdentificationDocumentCategoryExternalReferenceType();
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference.Value = bulletin.IdDocCategory.EcrisTechnId;
+     
+            }
+            if (!string.IsNullOrEmpty(bulletin.IdDocIssuingAuthority))
+            {
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].Value = bulletin.IdDocIssuingAuthority;
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+            }
 
 
             //egn, lnch или лн?!
