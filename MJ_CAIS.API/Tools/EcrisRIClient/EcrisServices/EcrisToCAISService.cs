@@ -363,52 +363,61 @@ namespace EcrisIntegrationServices
             m.BirthCountry = msg.MessageShortViewPerson.PersonBirthPlace.PlaceCountryReference.Value;
             m.Sex = msg.MessageShortViewPerson.PersonSex;
 
-            var forenames = msg.MessageShortViewPerson.PersonName?.Forename.ToList();
-            foreach (var forename in forenames)
+            var forenames = msg.MessageShortViewPerson.PersonName?.Forename?.ToList();
+            if (forenames != null)
             {
-                EEcrisMsgName name = new EEcrisMsgName();
-                name.Id = BaseEntity.GenerateNewId();
-                name.LangCode = forename.languageCode;
-                name.Firstname = forename.Value;
-                name.EEcrisMsgId = m.Id;
-                m.EEcrisMsgNames.Add(name);
-            }
-
-            var familyNames = msg.MessageShortViewPerson.PersonName?.SecondSurname.ToList();
-            foreach (var familyName in familyNames)
-            {
-                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
-                if (nameByLang == null)
+                foreach (var forename in forenames)
                 {
                     EEcrisMsgName name = new EEcrisMsgName();
                     name.Id = BaseEntity.GenerateNewId();
-                    name.LangCode = familyName.languageCode;
-                    name.Firstname = familyName.Value;
+                    name.LangCode = forename.languageCode;
+                    name.Firstname = forename.Value;
                     name.EEcrisMsgId = m.Id;
                     m.EEcrisMsgNames.Add(name);
-                }
-                else
-                {
-                    nameByLang.Familyname = familyName.Value;
                 }
             }
 
-            var surnameNames = msg.MessageShortViewPerson.PersonName?.Surname.ToList();
-            foreach (var surname in surnameNames)
+            var familyNames = msg.MessageShortViewPerson.PersonName?.SecondSurname?.ToList();
+            if (familyNames!=null)
             {
-                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
-                if (nameByLang == null)
+                foreach (var familyName in familyNames)
                 {
-                    EEcrisMsgName name = new EEcrisMsgName();
-                    name.Id = BaseEntity.GenerateNewId();
-                    name.LangCode = surname.languageCode;
-                    name.Firstname = surname.Value;
-                    name.EEcrisMsgId = m.Id;
-                    m.EEcrisMsgNames.Add(name);
+                    var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
+                    if (nameByLang == null)
+                    {
+                        EEcrisMsgName name = new EEcrisMsgName();
+                        name.Id = BaseEntity.GenerateNewId();
+                        name.LangCode = familyName.languageCode;
+                        name.Firstname = familyName.Value;
+                        name.EEcrisMsgId = m.Id;
+                        m.EEcrisMsgNames.Add(name);
+                    }
+                    else
+                    {
+                        nameByLang.Familyname = familyName.Value;
+                    }
                 }
-                else
+            }
+
+            var surnameNames = msg.MessageShortViewPerson.PersonName?.Surname?.ToList();
+            if (surnameNames != null)
+            {
+                foreach (var surname in surnameNames)
                 {
-                    nameByLang.Surname = surname.Value;
+                    var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
+                    if (nameByLang == null)
+                    {
+                        EEcrisMsgName name = new EEcrisMsgName();
+                        name.Id = BaseEntity.GenerateNewId();
+                        name.LangCode = surname.languageCode;
+                        name.Firstname = surname.Value;
+                        name.EEcrisMsgId = m.Id;
+                        m.EEcrisMsgNames.Add(name);
+                    }
+                    else
+                    {
+                        nameByLang.Surname = surname.Value;
+                    }
                 }
             }
 
@@ -439,10 +448,15 @@ namespace EcrisIntegrationServices
                                                                && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
                 foreach (var nationality in nationalities)
                 {
-                    EEcrisMsgNationality nat = new EEcrisMsgNationality();
-                    nat.EEcrisMsgId = m.Id;
-                    nat.CountryId = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
-                    m.EEcrisMsgNationalities.Add(nat);
+                    var countryID = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
+                    if (countryID != null)
+                    {
+                        EEcrisMsgNationality nat = new EEcrisMsgNationality();
+                        nat.Id = BaseEntity.GenerateNewId();
+                        nat.EEcrisMsgId = m.Id;
+                        nat.CountryId = countryID;
+                        m.EEcrisMsgNationalities.Add(nat);
+                    }
                 }
             }
 
