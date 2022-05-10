@@ -29,6 +29,12 @@ namespace MJ_CAIS.Services
             _personRepository = personRepository;
         }
 
+        public async Task<PPerson> SelectPersonAsync(string aId)
+        {
+            var personDb = await  _personRepository.SelectAsync(aId);
+            return personDb;
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
