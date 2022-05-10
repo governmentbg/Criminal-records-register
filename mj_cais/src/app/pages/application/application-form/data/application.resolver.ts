@@ -8,7 +8,6 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { EcrisMessageGridModel } from "../../../ecris/ecris-message-overivew/_models/ecris-message-grid.model";
 import { ApplicationModel } from "../models/application.model";
 import { ApplicationService } from "./application.service";
 
@@ -29,9 +28,16 @@ export class ApplicationResolver implements Resolve<any> {
 
     let result: ApplicationResolverData = {
       element: element,
+      purposeIds: this.nomenclatureService.getPurposes(),
+      paymentMethodIds: this.nomenclatureService.getPaymentMethods(),
+      srvcResRcptMethIds: this.nomenclatureService.getSrvcResRcptMethods(),
     };
     return forkJoin(result);
   }
 }
 
-export class ApplicationResolverData extends BaseResolverData<ApplicationModel> {}
+export class ApplicationResolverData extends BaseResolverData<ApplicationModel> {
+    purposeIds: Observable<BaseNomenclatureModel[]>;
+    paymentMethodIds: Observable<BaseNomenclatureModel[]>;
+    srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
+}

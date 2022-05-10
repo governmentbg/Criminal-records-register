@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AddressModel } from "../../../../@core/components/forms/address-form/model/address.model";
 
 export class ApplicationModel {
   public id: string = null;
@@ -17,7 +18,7 @@ export class ApplicationModel {
   public lnch: string = null;
   public personId: string = null;
   public applicantName: string = null;
-  public address: string = null;
+  public address: AddressModel = new AddressModel();
   public motherFirstname: string = null;
   public motherSurname: string = null;
   public motherFamilyname: string = null;
@@ -74,7 +75,7 @@ export class ApplicationModel {
       this.lnch = init.lnch ?? null;
       this.personId = init.personId ?? null;
       this.applicantName = init.applicantName ?? null;
-      this.address = init.address ?? null;
+      this.address = init.address ?? new AddressModel();
       this.motherFirstname = init.motherFirstname ?? null;
       this.motherSurname = init.motherSurname ?? null;
       this.motherFamilyname = init.motherFamilyname ?? null;

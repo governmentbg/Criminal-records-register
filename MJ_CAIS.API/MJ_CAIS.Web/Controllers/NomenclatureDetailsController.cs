@@ -30,6 +30,27 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("a-purposes")]
+        public IActionResult GetAllAPurposes()
+        {
+            var result = _nomenclatureDetailService.GetAllAPurposes();
+            return Ok(result);
+        }
+
+        [HttpGet("a-payment-methods")]
+        public IActionResult GetAllAPaymentMethods()
+        {
+            var result = _nomenclatureDetailService.GetAllAPaymentMethods();
+            return Ok(result);
+        }
+
+        [HttpGet("a-srvc-res-rcpt-methods")]
+        public IActionResult GetSrvcResRcptMethods()
+        {
+            var result = _nomenclatureDetailService.GetSrvcResRcptMethods();
+            return Ok(result);
+        }
+
         [HttpGet("fbbc-doc-types")]
         public IActionResult GetAllFbbcDocTypes()
         {

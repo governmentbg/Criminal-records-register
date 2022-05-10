@@ -53,5 +53,18 @@ namespace MJ_CAIS.Repositories.Impl
             return _dbContext.GCountries.AsNoTracking()
                 .OrderBy(x=>x.Iso31662Code);
         }
+
+        public IQueryable<APurpose> GetAllAPurposes()
+        {
+            return _dbContext.APurposes.AsNoTracking();
+        }
+        public IQueryable<APaymentMethod> GetAllAPaymentMethods()
+        {
+            return _dbContext.APaymentMethods.AsNoTracking();
+        }
+        public IQueryable<ASrvcResRcptMeth> GetSrvcResRcptMethods()
+        {
+            return _dbContext.ASrvcResRcptMeths.AsNoTracking();
+        }
     }
 }

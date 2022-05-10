@@ -198,4 +198,20 @@ export class NomenclatureService extends CaisCrudService<
   public getAllCities(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_cities`);
   }
+
+  public getPurposes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/a-purposes`);
+  }
+
+  public getPaymentMethods(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/a-payment-methods`
+    );
+  }
+
+  public getSrvcResRcptMethods(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/a-srvc-res-rcpt-methods`
+    );
+  }
 }
