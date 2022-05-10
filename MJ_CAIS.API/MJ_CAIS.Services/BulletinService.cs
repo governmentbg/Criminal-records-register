@@ -10,6 +10,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.Shared;
+using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -20,12 +21,14 @@ namespace MJ_CAIS.Services
     {
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IPersonService _personService;
+        private readonly INotificationService _notificationService;
 
-        public BulletinService(IMapper mapper, IBulletinRepository bulletinRepository, IPersonService personService)
+        public BulletinService(IMapper mapper, IBulletinRepository bulletinRepository, IPersonService personService, INotificationService notificationService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
             _personService = personService;
+            _notificationService = notificationService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -115,7 +118,9 @@ namespace MJ_CAIS.Services
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
             var bulletin = await dbContext.BBulletins
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
+                .Include(x => x.BPersNationalities)
+                    .ThenInclude(x => x.Country)
+                .FirstOrDefaultAsync(x => x.Id == aInDto);
 
             if (bulletin == null)
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
@@ -163,17 +168,23 @@ namespace MJ_CAIS.Services
                 };
             }
 
-            // todo: ECRIS
+            await dbContext.SaveChangesAsync();
 
-            try
+            // ECRIS
+            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id);
+            var isForECRIS = dbContext.EEcrisAuthorities.AsNoTracking().Any(x => personNationalities.Contains(x.CountryId));
+
+            if (isForECRIS)
             {
-                await dbContext.SaveChangesAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
+                try
+                {
+                    await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
+                }
+                catch (Exception ex)
+                {
+                    // todo:
+                    // ако не може да се изпрати съобщението ??
+                }
             }
         }
 
@@ -305,7 +316,7 @@ namespace MJ_CAIS.Services
             }
 
             var passedNavigationProperties = new List<BaseEntity>();
-            dbContext.ApplyChanges(entity, passedNavigationProperties, false);
+            dbContext.ApplyChanges(entity, passedNavigationProperties, true);
         }
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)

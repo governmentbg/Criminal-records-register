@@ -5,6 +5,7 @@ using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisService;
+using MJ_CAIS.EcrisObjectsServices.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.EcrisObjectsServices
 {
-    public class RequestService
+    public class RequestService : IRequestService
     {
         const string REQUEST_SUCCESSFUL = "RRT-00-00";
         const string REQUEST_DENIAL = "RRT-00-01";
@@ -34,7 +35,7 @@ namespace MJ_CAIS.EcrisObjectsServices
         public async Task<RequestResponseMessageType> GenerateResponseToRequest(RequestMessageType request)
         {
             var reqResp = CreateRequestResponseNoConvictionSuccessful(request);
-            var graoPerson = await CommonService.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
+            var graoPerson = await ServiceHelper.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
             if (graoPerson==null)
             {
                 throw new Exception("Person is not identified.");
@@ -74,7 +75,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             }           
 
-            ConvictionType conv = await CommonService.GetConvictionFromBuletin(buletin, bgCode, _dbContext);
+            ConvictionType conv = await ServiceHelper.GetConvictionFromBuletin(buletin, bgCode, _dbContext);
 
             convictions.Add(conv);
 
