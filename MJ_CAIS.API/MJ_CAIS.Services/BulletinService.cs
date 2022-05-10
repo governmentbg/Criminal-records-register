@@ -168,6 +168,8 @@ namespace MJ_CAIS.Services
                 };
             }
 
+            await dbContext.SaveChangesAsync();
+
             // ECRIS
             var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id);
             var isForECRIS = dbContext.EEcrisAuthorities.AsNoTracking().Any(x => personNationalities.Contains(x.CountryId));
@@ -177,16 +179,13 @@ namespace MJ_CAIS.Services
                 try
                 {
                     await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
-
                 }
                 catch (Exception ex)
                 {
                     // todo:
+                    // ако не може да се изпрати съобщението ??
                 }
-
             }
-
-            await dbContext.SaveChangesAsync();
         }
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
