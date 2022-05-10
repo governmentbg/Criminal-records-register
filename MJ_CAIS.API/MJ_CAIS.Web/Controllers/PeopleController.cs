@@ -26,11 +26,11 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpPost("")]
-        public new async Task<IActionResult> Post([FromBody] PersonDTO aInDto)
-        {
-            throw new NotImplementedException();
-            return await base.Post(aInDto);
-        }
+        //[HttpPost("")]
+        //public new async Task<IActionResult> Post([FromBody] PersonDTO aInDto)
+        //{
+        //    throw new NotImplementedException();
+        //    return await base.Post(aInDto);
+        //}
     }
 }

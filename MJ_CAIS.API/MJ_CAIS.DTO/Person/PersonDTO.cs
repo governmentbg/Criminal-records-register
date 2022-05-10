@@ -4,7 +4,7 @@ using MJ_CAIS.DTO.Shared;
 namespace MJ_CAIS.DTO.Person
 {
     public class PersonDTO : BaseDTO
-    {
+    { 
         public string? ContextType { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }

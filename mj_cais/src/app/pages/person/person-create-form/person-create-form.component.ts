@@ -16,6 +16,8 @@ export class PersonCreateFormComponent
   extends CrudForm<PersonModel, PersonForm, PersonResolverData, PersonService>
   implements OnInit
 {
+  public PersonContextEnum = PersonContextEnum;
+  
   private readonly PERSON_OVERVIEW_URL = "/pages/people";
   constructor(service: PersonService, public injector: Injector) {
     super(service, injector);

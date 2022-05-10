@@ -6,6 +6,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.StaticFiles;
+using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Web.Controllers
 {

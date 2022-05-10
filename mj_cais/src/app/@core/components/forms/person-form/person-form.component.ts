@@ -5,7 +5,7 @@ import { PersonForm } from "./_models/person.form";
 import { PersonContextEnum } from "./_models/person-context-enum";
 
 @Component({
-  selector: "cais-person-form",
+  selector: "cais-person-form[contextType]",
   templateUrl: "./person-form.component.html",
   styleUrls: ["./person-form.component.scss"],
 })
@@ -17,6 +17,7 @@ export class PersonFormComponent implements OnInit {
   @Input() genderTypes: BaseNomenclatureModel[] = [];
   @Input() countries: BaseNomenclatureModel[] = [];
   @Input() idDocumentCategoryTypes: BaseNomenclatureModel[] = [];
+  @Input() contextType: string;
 
   public isFbbcContext: boolean;
   public isBulletinContext: boolean;
@@ -25,10 +26,10 @@ export class PersonFormComponent implements OnInit {
 
   ngOnInit(): void {
     // when form is init context type must be set
-    let context = this.personForm.contextType.value;
-    this.isFbbcContext = context == PersonContextEnum.Fbbc;
-    this.isBulletinContext = context == PersonContextEnum.Bulletin;
-    this.isPersonContext = context == PersonContextEnum.Person;
-    this.isApplicationContext = context == PersonContextEnum.Application;
+   
+    this.isFbbcContext = this.contextType == PersonContextEnum.Fbbc;
+    this.isBulletinContext =  this.contextType == PersonContextEnum.Bulletin;
+    this.isPersonContext =  this.contextType == PersonContextEnum.Person;
+    this.isApplicationContext =  this.contextType == PersonContextEnum.Application;
   }
 }

@@ -31,13 +31,13 @@ namespace MJ_CAIS.Repositories.Impl
 
                     // Set parameters
 
-                    cmd.Parameters.Add(new OracleParameter("p_egn", OracleDbType.Varchar2, null, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_egn", OracleDbType.Varchar2, searchObj.Pid, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, searchObj.FirstName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, null, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, null, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, null, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, null, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, null, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, searchObj.SurName, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.FamilyName, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, searchObj.FullName, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, searchObj.BirthDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, searchObj.BirthDatePrec, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_size", OracleDbType.Int32, pageSize, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_number", OracleDbType.Int32, pageNumber, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
@@ -72,6 +72,14 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
+        /// <summary>
+        /// Get PersonId object by pid value and pid type
+        /// The personId is set only if the object does not exist in the database
+        /// </summary>
+        /// <param name="pid">Indetifier</param>
+        /// <param name="pidType">Identifier type (EGN, LNCH, LN, AfisNumber)</param>
+        /// <param name="personId">Identifier of the person to which the object will be added </param>
+        /// <returns></returns>
         public async Task<PPersonId> GetPersonIdAsyn(string pid, string pidType, string personId)
         {
             var issuerType = string.Empty;
@@ -94,7 +102,7 @@ namespace MJ_CAIS.Repositories.Impl
             var pidDb = await _dbContext.PPersonIds
                     .AsNoTracking()
                     .FirstOrDefaultAsync(x =>
-                        x.Pid == pid &&
+                        x.Pid.ToLower() == pid.ToLower() &&
                         x.PidTypeId == pidType &&
                         x.Issuer == issuerType &&
                         x.CountryId == BG);
@@ -116,38 +124,6 @@ namespace MJ_CAIS.Repositories.Impl
             }
 
             return pidDb;
-        }
-
-        /// <summary>
-        /// Insert new person with its history object.
-        /// Insert person pids and its pids history
-        /// </summary>
-        /// <param name="entity">New person entity</param>
-        /// <param name="personH">Old version of Person object</param>
-        /// <returns></returns>
-        public async Task<PPerson> InsertAsync(PPerson entity, PPersonH personH)
-        {
-            _dbContext.ApplyChanges(entity, new List<BaseEntity>(), true);
-            _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
-            await _dbContext.SaveChangesAsync();
-
-            return entity;
-        }
-
-        /// <summary>
-        /// Update person object
-        /// save onld data in P_PERSON_H and P_PERSON_IDS_H
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="personH"></param>
-        /// <returns></returns>
-        public async Task<PPerson> UpdateAsync(PPerson entity, PPersonH personH)
-        {
-            _dbContext.ApplyChanges(entity, new List<BaseEntity>(), false);
-            _dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
-            await _dbContext.SaveChangesAsync();
-
-            return entity;
         }
 
         [Obsolete($"Use {nameof(InsertAsync)} with additional parameter personH instead.", true)]
@@ -173,7 +149,8 @@ namespace MJ_CAIS.Repositories.Impl
             var person = new PersonGridDTO();
 
             person.Id = dataRow["person_id"]?.ToString();
-            person.Identifier = dataRow["egn"]?.ToString();
+            person.Pid = dataRow["pid"]?.ToString();
+            person.PidTypeName = dataRow["pid_type_name"]?.ToString();       
             person.FirstName = dataRow["firstname"]?.ToString();
             person.SurName = dataRow["surname"]?.ToString();
             person.FamilyName = dataRow["familyname"]?.ToString();

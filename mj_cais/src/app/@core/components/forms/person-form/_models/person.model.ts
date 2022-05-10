@@ -2,6 +2,7 @@ import { AddressModel } from "../../address-form/model/address.model";
 import { MultipleChooseModel } from "../../inputs/multiple-choose/models/multiple-choose.model";
 
 export class PersonModel {
+
   public id: string = null;
   public contextType: string = null;
   public firstname: string = null;

@@ -8,6 +8,7 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -18,11 +19,13 @@ namespace MJ_CAIS.Services
     public class BulletinService : BaseAsyncService<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string, CaisDbContext>, IBulletinService
     {
         private readonly IBulletinRepository _bulletinRepository;
+        private readonly IPersonService _personService;
 
-        public BulletinService(IMapper mapper, IBulletinRepository bulletinRepository)
+        public BulletinService(IMapper mapper, IBulletinRepository bulletinRepository, IPersonService personService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
+            _personService = personService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -65,7 +68,12 @@ namespace MJ_CAIS.Services
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
             // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
-            return await UpdateBulletinAsync(aInDto, bulletin, null);
+
+            await UpdateBulletinAsync(aInDto, bulletin, null);
+            await dbContext.SaveChangesAsync();
+
+            return bulletin.Id;
+
         }
 
         /// <summary>
@@ -91,31 +99,11 @@ namespace MJ_CAIS.Services
             // we add property according to the status
             if (bulletinDb.Locked.HasValue && bulletinDb.Locked.Value)
             {
-                if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
-                    bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
-                {
-                    // nothing of the main object is edited
-                    // only decisions added
-                    bulletin.ModifiedProperties = new List<string>();
-                }
-                else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
-                {
-                    // when updating a bulletin in NewEISS status
-                    // only registration information is changed
-                    bulletin.ModifiedProperties = new List<string>
-                    {
-                        nameof(bulletin.RegistrationNumber),
-                        nameof(bulletin.SequentialIndex),
-                        nameof(bulletin.AlphabeticalIndex),
-                        nameof(bulletin.EcrisConvictionId),
-                        nameof(bulletin.BulletinType),
-                        nameof(bulletin.BulletinReceivedDate),
-                    };
-                }
-
+                SetModifiedPropertiesByStatus(bulletinDb, bulletin);
             }
 
             await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
+            await dbContext.SaveChangesAsync();
         }
 
         /// <summary>
@@ -142,7 +130,51 @@ namespace MJ_CAIS.Services
             }
 
             bulletin.StatusId = statusId;
-            await dbContext.SaveChangesAsync();
+
+            if (statusId != BulletinConstants.Status.Active)
+            {
+                await dbContext.SaveChangesAsync();
+                return;
+            }
+
+            // when status is set to active
+            // save data for person and its identifers
+
+            // get person data from bulletin
+            var personDto = mapper.Map<BBulletin, PersonDTO>(bulletin);
+            // preate person object, apply changes
+            var person = await _personService.CreatePersonAsync(personDto);
+
+            // create realtion between person identifier and bulletin
+            // create PBulletinId for all pids (locally added and saved in db)
+
+            foreach (var piersonIdObj in person.PPersonIds)
+            {
+                piersonIdObj.PBulletinIds = new List<PBulletinId>
+                {
+                    new PBulletinId
+                    {
+                        BulletinId = bulletin.Id,
+                        Id = BaseEntity.GenerateNewId(),
+                        EntityState = EntityStateEnum.Added,
+                        CreatedOn = DateTime.Now,
+                        PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
+                    }
+                };
+            }
+
+            // todo: ECRIS
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
@@ -240,7 +272,14 @@ namespace MJ_CAIS.Services
 
         #region Helpers
 
-        private async Task<string> UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity, string oldStatus)
+        /// <summary>
+        /// Only apply changes
+        /// </summary>
+        /// <param name="aInDto"></param>
+        /// <param name="entity"></param>
+        /// <param name="oldStatus"></param>
+        /// <returns></returns>
+        private async Task UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity, string oldStatus)
         {
             UpdateDataForDestruction(entity);
 
@@ -265,8 +304,33 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(entity, nameof(entity.Locked));
             }
 
-            await SaveEntityAsync(entity);
-            return entity.Id;
+            var passedNavigationProperties = new List<BaseEntity>();
+            dbContext.ApplyChanges(entity, passedNavigationProperties, false);
+        }
+
+        private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)
+        {
+            if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
+                bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
+            {
+                // nothing of the main object is edited
+                // only decisions added
+                bulletin.ModifiedProperties = new List<string>();
+            }
+            else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
+            {
+                // when updating a bulletin in NewEISS status
+                // only registration information is changed
+                bulletin.ModifiedProperties = new List<string>
+                    {
+                        nameof(bulletin.RegistrationNumber),
+                        nameof(bulletin.SequentialIndex),
+                        nameof(bulletin.AlphabeticalIndex),
+                        nameof(bulletin.EcrisConvictionId),
+                        nameof(bulletin.BulletinType),
+                        nameof(bulletin.BulletinReceivedDate),
+                    };
+            }
         }
 
         /// <summary>

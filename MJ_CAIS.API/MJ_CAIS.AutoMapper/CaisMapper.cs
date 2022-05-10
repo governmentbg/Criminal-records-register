@@ -91,7 +91,7 @@ namespace MJ_CAIS.AutoMapperContainer
             }
         }
 
-        public static List<EntityType> MapToEntityList<ViewModelType, EntityType>(this IMapper mapper, List<ViewModelType> viewModels, bool isAdded)
+        public static List<EntityType> MapToEntityList<ViewModelType, EntityType>(this IMapper mapper, List<ViewModelType> viewModels, bool isAdded, bool generateNewId = false)
             where ViewModelType : class
             where EntityType : BaseEntity
         {
@@ -99,6 +99,11 @@ namespace MJ_CAIS.AutoMapperContainer
             foreach (var model in viewModels)
             {
                 EntityType entity = mapper.MapToEntity<ViewModelType, EntityType>(model, isAdded);
+                if (generateNewId)
+                {
+                    entity.Id = BaseEntity.GenerateNewId();
+                }
+
                 result.Add(entity);
             }
 

@@ -15,6 +15,7 @@ import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confir
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { NbDialogService } from "@nebular/theme";
 import { TranslateService } from "@ngx-translate/core";
+import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -65,7 +66,7 @@ export class BulletinFormComponent
   public isBulletinPersonAliasEditable = false;
   public showForUpdate: boolean = false;
   public setEditToBeForPreview: boolean = false;
-
+  public PersonContextEnum = PersonContextEnum;
   constructor(
     service: BulletinService,
     public injector: Injector,
