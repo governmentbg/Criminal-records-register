@@ -3,7 +3,7 @@ import { DatePrecisionModelForm } from "../../../../@core/components/forms/input
 
 export class PersonSearchForm {
   public group: FormGroup;
-  public identifier: FormControl;
+  public pid: FormControl;
   public firstName: FormControl;
   public surName: FormControl;
   public familyName: FormControl;
@@ -11,7 +11,7 @@ export class PersonSearchForm {
   public birthDate: DatePrecisionModelForm;
 
   constructor() {
-    this.identifier = new FormControl(null);
+    this.pid = new FormControl(null);
     this.firstName = new FormControl(null);
     this.surName = new FormControl(null);
     this.familyName = new FormControl(null);
@@ -19,7 +19,7 @@ export class PersonSearchForm {
     this.birthDate = new DatePrecisionModelForm();
 
     this.group = new FormGroup({
-      identifier: this.identifier,
+      pid: this.pid,
       firstName: this.firstName,
       surName: this.surName,
       familyName: this.familyName,

@@ -8,5 +8,7 @@ namespace MJ_CAIS.Services.Contracts
     public interface IPersonService : IBaseAsyncService<PersonDTO, PersonDTO, PersonGridDTO, PPerson, string>
     {
         Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit);
+
+        Task<PPerson> CreatePersonAsync(PersonDTO aInDto);
     }
 }

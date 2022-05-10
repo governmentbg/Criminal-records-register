@@ -24,6 +24,15 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BReqStatus, BaseNomenclatureDTO>()
                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
 
+            CreateMap<APurpose, BaseNomenclatureDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
+            CreateMap<APaymentMethod, BaseNomenclatureDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
+            CreateMap<ASrvcResRcptMeth, BaseNomenclatureDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
             CreateMap<GCountry, CountryDTO>();
 
             CreateMap<GCountry, LookupDTO>()

@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
 
 export class ApplicationForm {
   public group: FormGroup;
@@ -19,7 +20,6 @@ export class ApplicationForm {
   public lnch: FormControl;
   public personId: FormControl;
   public applicantName: FormControl;
-  public address: FormControl;
   public motherFirstname: FormControl;
   public motherSurname: FormControl;
   public motherFamilyname: FormControl;
@@ -57,6 +57,7 @@ export class ApplicationForm {
   public userCitizenId: FormControl;
   public userId: FormControl;
   public userExtId: FormControl;
+  public address: AddressForm;
 
   constructor() {
     this.id = new FormControl(null);
@@ -75,7 +76,7 @@ export class ApplicationForm {
     this.lnch = new FormControl(null);
     this.personId = new FormControl(null);
     this.applicantName = new FormControl(null);
-    this.address = new FormControl(null);
+    this.address = new AddressForm();
     this.motherFirstname = new FormControl(null);
     this.motherSurname = new FormControl(null);
     this.motherFamilyname = new FormControl(null);
@@ -131,7 +132,7 @@ export class ApplicationForm {
       lnch: this.lnch,
       personId: this.personId,
       applicantName: this.applicantName,
-      address: this.address,
+      address: this.address.group,
       motherFirstname: this.motherFirstname,
       motherSurname: this.motherSurname,
       motherFamilyname: this.motherFamilyname,

@@ -3,7 +3,7 @@
     public class PersonConstants
     {
         public const string BG = "CO-00-100-BGR";
-   
+
         public static class PidType
         {
             /// <summary>

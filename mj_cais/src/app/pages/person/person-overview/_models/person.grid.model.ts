@@ -1,6 +1,7 @@
 export class PersonGridModel {
   public id: string = null;
-  public identifier: string = null;
+  public pid: string = null;
+  public pidTypeName: string = null;
   public firstName: string = null;
   public surName: string = null;
   public familyName: string = null;
@@ -9,7 +10,8 @@ export class PersonGridModel {
 
   constructor(init?: Partial<PersonGridModel>) {
     this.id = init?.id ?? null;
-    this.identifier = init?.identifier ?? null;
+    this.pid = init?.pid ?? null;
+    this.pidTypeName = init?.pidTypeName ?? null;
     this.firstName = init?.firstName ?? null;
     this.surName = init?.surName ?? null;
     this.familyName = init?.familyName ?? null;

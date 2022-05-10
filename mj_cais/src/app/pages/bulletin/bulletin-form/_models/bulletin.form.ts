@@ -106,7 +106,6 @@ export class BulletinForm {
     this.noSanction.disable();
     this.prevSuspSent.disable();
     this.prevSuspSentDescr.disable();
-    this.person = new PersonForm(PersonContextEnum.Bulletin, false);
     this.person.group.disable();
   }
 
@@ -144,7 +143,6 @@ export class BulletinForm {
     this.noSanction.disable();
     this.prevSuspSent.disable();
     this.prevSuspSentDescr.disable();
-    this.person = new PersonForm(PersonContextEnum.Bulletin, false);
     this.person.group.disable();
   }
 
@@ -191,7 +189,6 @@ export class BulletinForm {
     ]);
     this.caseYear.setValidators(Validators.required);
     this.statusId.setValidators(Validators.maxLength(50));
-    this.person = new PersonForm(PersonContextEnum.Bulletin, true);
   }
 
   private initGroup(): void {
@@ -254,6 +251,7 @@ export class BulletinForm {
     this.createdByPosition = new FormControl(null);
     this.approvedByNames = new FormControl(null);
     this.approvedByPosition = new FormControl(null);
+    this.person = new PersonForm(PersonContextEnum.Bulletin, true);
 
     this.decisionTypeId = new FormControl(null);
     this.decisionNumber = new FormControl(null);

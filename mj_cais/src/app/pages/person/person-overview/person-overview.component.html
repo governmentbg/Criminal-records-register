@@ -27,8 +27,8 @@
         <div class="form-group col-md-3">
           <cais-input
             [type]="'text'"
-            [label]="'ЕГН'"
-            [inputFormControl]="fullForm.identifier"
+            [label]="'Идентификатор'"
+            [inputFormControl]="fullForm.pid"
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
@@ -92,7 +92,7 @@
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>Лица</igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
+    <!-- <igx-grid-toolbar-actions>
       <div class="ml-auto">
         <a
           nbButton
@@ -103,7 +103,7 @@
         <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Добавяне
         </a>
       </div>
-    </igx-grid-toolbar-actions>
+    </igx-grid-toolbar-actions> -->
   </igx-grid-toolbar>
   <igx-column
     field="id"
@@ -116,12 +116,16 @@
     </ng-template>
   </igx-column>
 
-  <igx-column field="identifier" header="ЕГН/ЛНЧ/ЛН" [dataType]="'string'">
+  <igx-column field="pid" header="Идентификатор" [dataType]="'string'">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
+  <igx-column field="pidTypeName" header="Тип идентификатор" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
   <igx-column field="firstName" header="Име" [dataType]="'string'">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>

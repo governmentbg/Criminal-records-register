@@ -97,7 +97,27 @@ namespace MJ_CAIS.Services
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
         }
+        
+        public IQueryable<BaseNomenclatureDTO> GetAllAPurposes()
+        {
+            return _nomenclatureDetailRepository
+                .GetAllAPurposes()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
 
+        public IQueryable<BaseNomenclatureDTO> GetAllAPaymentMethods()
+        {
+            return _nomenclatureDetailRepository
+                .GetAllAPaymentMethods()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
+        public IQueryable<BaseNomenclatureDTO> GetSrvcResRcptMethods()
+        {
+            return _nomenclatureDetailRepository
+                .GetSrvcResRcptMethods()
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }        
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
