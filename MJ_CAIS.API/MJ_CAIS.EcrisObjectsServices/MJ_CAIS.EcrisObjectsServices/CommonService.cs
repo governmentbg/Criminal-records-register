@@ -67,28 +67,33 @@ namespace MJ_CAIS.EcrisObjectsServices
         }
         public static YesNoUnknownStringEnumerationType? GetYesNoType(bool? value)
         {
+            //Yes, No, UNKNOWN
+            YesNoUnknownStringEnumerationType res = new YesNoUnknownStringEnumerationType();
             if (value == true)
             {
-                YesNoUnknownStringEnumerationType res = new YesNoUnknownStringEnumerationType();
-                res.Value = "yes";
+
+                res.Value = "Yes";
                 return res;
             }
             if (value == false)
             {
-                YesNoUnknownStringEnumerationType res = new YesNoUnknownStringEnumerationType();
-                res.Value = "no";
+
+                res.Value = "No";
                 return res;
             }
-            return null;
+
+            res.Value = "UNKNOWN";
+            return res;
+
         }
 
         public static string GetPeriodFromNumbers(int? years, int? months, int? days, int? hours)
         {
             return "P" +
-                  ((years == null || years == 0) ? "" : (years.ToString() + "Y"))
-                  + ((months == null || months == 0) ? "" : (months.ToString() + "M"))
-                    + ((days == null || days == 0) ? "" : (days.ToString() + "D"))
-                  + ((hours == null || hours == 0) ? "" : ("T" + hours.ToString() + "H"));
+                  ((years == null || years == 0) ? "0Y" : (years.ToString() + "Y"))
+                  + ((months == null || months == 0) ? "0M" : (months.ToString() + "M"))
+                    + ((days == null || days == 0) ? "0D" : (days.ToString() + "D"))
+                  + ((hours == null || hours == 0) ? "T0H" : ("T" + hours.ToString() + "H"));
         }
 
         public static DateType GetDateTypeFromDateAndPrecission(DateTime date, string? prec)
@@ -197,10 +202,12 @@ namespace MJ_CAIS.EcrisObjectsServices
             var desidingAuthoritiesIDs = buletin.BDecisions.Select(s => s.DecisionAuthId).ToList();
             desidingAuthoritiesIDs.Add(buletin.DecidingAuthId);
             var desidingAuthorities = await dbContext.GDecidingAuthorities.Where(cat => desidingAuthoritiesIDs.Contains(cat.Id)).ToListAsync();
+            var offenceCategoriesIDs = buletin.BOffences.Select(s => s.EcrisOffCatId).ToList();
+            var ecrisOffenceCategories = await dbContext.BEcrisOffCategories.Where(cat => offenceCategoriesIDs.Contains(cat.Id)).ToListAsync();
 
             conv.ConvictionSanction = GetSanctions(buletin, sanctCategories, ecrisSanctCategories);
-            conv.ConvictionDecision = GetDecisions(buletin, decisionChTypes, desidingAuthorities);            
-            conv.ConvictionOffence = GetOffences(buletin, offenceCategories, offenceCountries, offenceCities); 
+            conv.ConvictionDecision = GetDecisions(buletin, decisionChTypes, desidingAuthorities);
+            conv.ConvictionOffence = GetOffences(buletin, offenceCategories, offenceCountries, offenceCities, ecrisOffenceCategories);
             if (buletin.DecisionDate.HasValue)
             {
                 conv.ConvictionDecisionDate = new StrictDateType();
@@ -226,12 +233,12 @@ namespace MJ_CAIS.EcrisObjectsServices
                 conv.ConvictionRemarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[2];
                 conv.ConvictionRemarks[0] = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation();
                 conv.ConvictionRemarks[0].Value = buletin.ConvRemarks;
-           
+
 
             }
             if (!string.IsNullOrEmpty(buletin.DecidingAuthId))
             {
-               var dAuth =  desidingAuthorities.FirstOrDefault(d=>d.Id == buletin.DecidingAuthId);
+                var dAuth = desidingAuthorities.FirstOrDefault(d => d.Id == buletin.DecidingAuthId);
                 if (dAuth != null)
                 {
                     conv.ConvictionDecidingAuthority = new DecidingAuthorityType();
@@ -242,38 +249,40 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                    //conv.ConvictionDecidingAuthority.DecidingAuthorityName[1] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                    //conv.ConvictionDecidingAuthority.DecidingAuthorityName[2] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
+                
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0].Value = dAuth.Name;
-                    //conv.ConvictionDecidingAuthority.DecidingAuthorityName[1].Value = dAuth.NameEn;
-                    //conv.ConvictionDecidingAuthority.DecidingAuthorityName[2].Value = dAuth.DisplayName;
+      
                 }
             }
-           
+
             //todo: винаги ли е бг?
             conv.ConvictionConvictingCountryReference = new CountryExternalReferenceType();
             conv.ConvictionConvictingCountryReference.Value = bgCode;
             //todo: какво да пиша в тези полета?
             //conv.ConvictionRelationship;
-            conv.ConvictionID = string.IsNullOrEmpty(buletin.EcrisConvictionId)? "BG-C-000000000000000": buletin.EcrisConvictionId;
+            conv.ConvictionID = string.IsNullOrEmpty(buletin.EcrisConvictionId) ? "BG-C-000000000000000" : buletin.EcrisConvictionId;
             //"The reference number of the decision in the national judicial system."
             conv.ConvictionFileNumber = new RestrictedStringType50Chars();
-            conv.ConvictionFileNumber.Value = buletin.CaseYear +"-"+ buletin.CaseNumber;
-            //conv.ConvictionNonCriminalRuling;
+            conv.ConvictionFileNumber.Value = buletin.CaseYear + "-" + buletin.CaseNumber;
+
+            conv.ConvictionNonCriminalRuling = CommonService.GetYesNoType(buletin.NoSanction);
+
             return conv;
 
         }
 
 
 
-        private static OffenceType[] GetOffences(BBulletin personBuletin, List<BOffenceCategory> categories, List<GCountry> countries, List<GCity> cities)
+        private static OffenceType[] GetOffences(BBulletin personBuletin, List<BOffenceCategory> categories, List<GCountry> countries, List<GCity> cities, List<BEcrisOffCategory> ecrisCategoies)
         {
 
             List<OffenceType> result = new List<OffenceType>();
+            int i = 0;
             foreach (var offence in personBuletin.BOffences)
             {
 
                 OffenceType o = new OffenceType();
+                i++;
                 if (offence.OffenceCatId != null)
                 {
                     var category = categories.FirstOrDefault(cat => cat.Id == offence.OffenceCatId);
@@ -288,21 +297,38 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                 //todo: how to set these values
                 //o.OffenceCommonCategoryReference;
-                //o.OffenceID;
+                if (offence.EcrisOffCatId != null) {
+                    var category = ecrisCategoies.FirstOrDefault(cat => cat.Id == offence.EcrisOffCatId);
+                    if (category != null && category.EcrisTechnId!= null) {
+                        o.OffenceCommonCategoryReference = new OffenceExternalReferenceType();
+                        o.OffenceCommonCategoryReference.Value = category.EcrisTechnId;
+                    }
+                }
+                //todo: 'O-[0-9]{5}'
+                o.OffenceID = "O-" + i.ToString("00000");
+                o.OffenceIsContinuous = CommonService.GetYesNoType(null);
+                o.OffenceNumberOfOccurrences = "1";
+                o.OffenceLevelOfCompletionReference = new OffenceLevelOfCompletionExternalReferenceType();
+                //'LC-[0-9]{2}-[0A-Z]' 
+                o.OffenceLevelOfCompletionReference.Value = "LC-00-0";
+                o.OffenceLevelOfParticipationReference = new OffenceLevelOfParticipationExternalReferenceType();
+                //'LP-[0-9]{2}-[0A-Z]' 
+                o.OffenceLevelOfParticipationReference.Value = "LP-00-0";
+                o.OffenceResponsibilityExemption = CommonService.GetYesNoType(null);
+                o.OffenceRecidivism = CommonService.GetYesNoType(null);
+                ////////
 
                 o.OffencePlace = new PlaceType();
                 if (offence.OffPlaceCountryId != null)
                 {
                     var country = countries.FirstOrDefault(cat => cat.Id == offence.OffPlaceCountryId);
-                    if(country!= null)
+                    if (country != null)
                     {
                         o.OffencePlace.PlaceCountryReference = new CountryExternalReferenceType();
                         o.OffencePlace.PlaceCountryReference.Value = offence.OffPlaceCountry.EcrisTechnId;
                     }
                 }
 
-                // o.OffencePlace.PlaceCountrySubdivisionReference = new CountrySubdivisionExternalReferenceType();
-                //  o.OffencePlace.PlaceCountrySubdivisionReference.Value = offence.OffPlaceSubdiv.EcrisTechnId;
                 if (offence.OffPlaceCityId != null)
                 {
                     var city = cities.FirstOrDefault(cat => cat.Id == offence.OffPlaceCityId);
@@ -324,35 +350,31 @@ namespace MJ_CAIS.EcrisObjectsServices
                         else
                         {
                             o.OffencePlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[1];
-                            o.OffencePlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();                        
+                            o.OffencePlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
                             o.OffencePlace.PlaceTownName[0].Value = city.Name;
-                       
+
 
                         }
                     }
                 }
-                
+
 
                 if (offence.OffEndDate.HasValue)
                 {
                     o.OffenceEndDate = CommonService.GetDateTypeFromDateAndPrecission(offence.OffEndDate.Value, offence.OffEndDatePrec);
-                  
+
 
                 }
-                // o.OffenceLevelOfCompletionReference = new OffenceLevelOfCompletionExternalReferenceType();
-                // o.OffenceLevelOfCompletionReference.Value = offence.OffLvlCompl.EcrisTechnId;
-                // o.OffenceLevelOfParticipationReference = new OffenceLevelOfParticipationExternalReferenceType();
-                // o.OffenceLevelOfParticipationReference.Value = offence.OffLvlPart.EcrisTechnId;
-                //o.OffenceResponsibilityExemption = CommonService.GetYesNoType(offence.RespExemption);
+             
                 if (offence.OffStartDate.HasValue)
                 {
                     o.OffenceStartDate = CommonService.GetDateTypeFromDateAndPrecission(offence.OffStartDate.Value, offence.OffStartDatePrec);
-              
+
                 }
-                //o.OffenceNumberOfOccurrences = offence.Occurrences?.ToString();
+               
                 o.OffenceApplicableLegalProvisions = offence.LegalProvisions;
-                //  o.OffenceIsContinuous = CommonService.GetYesNoType(offence.IsContiniuous);
-                //  o.OffenceRecidivism = CommonService.GetYesNoType(offence.Recidivism);
+               
+        
                 if (!string.IsNullOrEmpty(offence.Remarks))
                 {
                     o.Remarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
@@ -436,30 +458,28 @@ namespace MJ_CAIS.EcrisObjectsServices
         private static SanctionType[] GetSanctions(BBulletin personBuletin, List<BSanctionCategory> categories, List<BEcrisStanctCateg> ecrisStanctCategs)
         {
             List<SanctionType> result = new List<SanctionType>();
+            int i = 0;
             foreach (var sanction in personBuletin.BSanctions)
             {
                 SanctionType s = new SanctionType();
-                //в този обект има и данни за пробация?!
-                s.SanctionSuspension = new SanctionSuspensionType();
-                s.SanctionSuspension.PeriodDuration = CommonService.GetPeriodFromNumbers(sanction.SuspentionDurationYears, sanction.SuspentionDurationMonths,
-                                                                                              sanction.SuspentionDurationDays, sanction.SuspentionDurationHours);
-                s.SanctionSuspension.SanctionSuspensionRemarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
-                //s.SanctionSuspension.SanctionSuspensionRemarks[0].Value = sanction.ProbationDescr;
+                i++;
+               
                 s.SanctionAmountOfIndividualFine = new PositiveDecimalType();
                 s.SanctionAmountOfIndividualFine.PositiveDecimalUnit = sanction.FineAmount?.ToString();
 
-                //s.SanctionID;
-                //s.SanctionMultiplier;            
-                //s.SanctionCurrencyOfFineReference;
-                //s.SanctionNumberOfFines;
-                //s.SanctionAlternativeTypeReference;
-                //s.SanctionCommonCategoryReference;
-                //s.SanctionInterruption = new SanctionInterruptionType();
+                //todo: какви стойности да добавя тук?!
+                s.SanctionID = "S-"+ i.ToString("00000");
+                s.SanctionTypeReference = new SanctionNatureExternalReferenceType();
+                //'N-[0-9]{2}-[0A-Z]{1}'
+                s.SanctionTypeReference.Value = "N-00-0";
+                s.SanctionMultiplier = "1";
+                s.SanctionAlternativeTypeReference = new SanctionAlternativeTypeExternalReferenceType();
+                //SAT-[0-9]{2}-[A-Z]{1}
+                s.SanctionAlternativeTypeReference.Value = "SAT-00-Z";
+                s.SanctionIsSpecificToMinor = CommonService.GetYesNoType(null);
 
-                s.SanctionSentencedPeriod = new SanctionSentencedPeriodType();
-                //PnYnMnDTnHnMnS
-                s.SanctionSentencedPeriod.PeriodDuration = CommonService.GetPeriodFromNumbers(sanction.DecisionDurationYears, sanction.DecisionDurationMonths,
-                    sanction.DecisionDurationDays, sanction.DecisionDurationHours);
+              
+              
 
                 var category = categories.Where(cat => cat.Id == sanction.SanctCategoryId).FirstOrDefault();
                 if (category != null)
@@ -467,7 +487,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                     s.NationalCategoryCode = category.Code;
                     s.NationalCategoryTitle = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                     s.NationalCategoryTitle[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                    s.NationalCategoryTitle[0].Value  = category.Name;
+                    s.NationalCategoryTitle[0].Value = category.Name;
                 }
                 s.Remarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
                 s.Remarks[0] = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation();
@@ -475,13 +495,14 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
                 var ecrisCategory = ecrisStanctCategs.Where(cat => cat.Id == sanction.EcrisSanctCategId).FirstOrDefault();
-                if (ecrisCategory != null)
+                if (ecrisCategory != null&& ecrisCategory.EcrisTechnId!=null)
                 {
-                    s.SanctionTypeReference = new SanctionNatureExternalReferenceType();
-                    s.SanctionTypeReference.Value = ecrisCategory.EcrisTechnId;
+
+                    s.SanctionCommonCategoryReference = new SanctionExternalReferenceType(); 
+                    s.SanctionCommonCategoryReference.Value = ecrisCategory.EcrisTechnId;
                 }
 
-                result.Add(s);
+                      result.Add(s);
             }
 
 
@@ -495,12 +516,12 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             EEcrisMessage m = await CreateEcrisMessageAsync(msg, convictionID, joinSeparator, dbContext);
 
-            var names =  m.EEcrisMsgNames.FirstOrDefault(n=>n.LangCode=="bg");
+            var names = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == "bg");
             if (names == null)
             {
                 names = m.EEcrisMsgNames.FirstOrDefault();
             }
-
+            m.BulletinId = buletinID;
             DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, dbContext);
             if (!string.IsNullOrEmpty(buletinID))
             {
@@ -585,57 +606,64 @@ namespace MJ_CAIS.EcrisObjectsServices
             m.BirthCountry = person.PersonBirthPlace.PlaceCountryReference.Value;
             m.Sex = person.PersonSex;
 
-          
-            var forenames = person.PersonName?.Forename.ToList();
-            foreach(var forename in forenames)
+            var forenames = person?.PersonName?.Forename?.ToList();
+            if (forenames != null)
             {
-                EEcrisMsgName name = new EEcrisMsgName();
-                name.Id = BaseEntity.GenerateNewId();
-                name.LangCode = forename.languageCode;
-                name.Firstname = forename.Value;
-                name.EEcrisMsgId = m.Id;
-                m.EEcrisMsgNames.Add(name);
-            }
-
-            var familyNames = person.PersonName?.SecondSurname.ToList();
-            foreach (var familyName in familyNames)
-            {
-                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
-                if (nameByLang == null)
+                foreach (var forename in forenames)
                 {
                     EEcrisMsgName name = new EEcrisMsgName();
                     name.Id = BaseEntity.GenerateNewId();
-                    name.LangCode = familyName.languageCode;
-                    name.Firstname = familyName.Value;
+                    name.LangCode = forename.languageCode;
+                    name.Firstname = forename.Value;
                     name.EEcrisMsgId = m.Id;
                     m.EEcrisMsgNames.Add(name);
                 }
-                else
-                {
-                    nameByLang.Familyname = familyName.Value;
-                }
             }
 
-            var surnameNames = person.PersonName?.Surname.ToList();
-            foreach (var surname in surnameNames)
+            var familyNames = person?.PersonName?.SecondSurname?.ToList();
+            if (familyNames != null)
             {
-                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
-                if (nameByLang == null)
+                foreach (var familyName in familyNames)
                 {
-                    EEcrisMsgName name = new EEcrisMsgName();
-                    name.Id = BaseEntity.GenerateNewId();
-                    name.LangCode = surname.languageCode;
-                    name.Firstname = surname.Value;
-                    name.EEcrisMsgId = m.Id;
-                    m.EEcrisMsgNames.Add(name);
-                }
-                else
-                {
-                    nameByLang.Surname = surname.Value;
+                    var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
+                    if (nameByLang == null)
+                    {
+                        EEcrisMsgName name = new EEcrisMsgName();
+                        name.Id = BaseEntity.GenerateNewId();
+                        name.LangCode = familyName.languageCode;
+                        name.Firstname = familyName.Value;
+                        name.EEcrisMsgId = m.Id;
+                        m.EEcrisMsgNames.Add(name);
+                    }
+                    else
+                    {
+                        nameByLang.Familyname = familyName.Value;
+                    }
                 }
             }
 
-          
+            var surnameNames = person?.PersonName?.Surname?.ToList();
+            if (surnameNames != null)
+            {
+                foreach (var surname in surnameNames)
+                {
+                    var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
+                    if (nameByLang == null)
+                    {
+                        EEcrisMsgName name = new EEcrisMsgName();
+                        name.Id = BaseEntity.GenerateNewId();
+                        name.LangCode = surname.languageCode;
+                        name.Firstname = surname.Value;
+                        name.EEcrisMsgId = m.Id;
+                        m.EEcrisMsgNames.Add(name);
+                    }
+                    else
+                    {
+                        nameByLang.Surname = surname.Value;
+                    }
+                }
+            }
+
 
             var countriesAuthorities = dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.UtcNow && ea.ValidTo >= DateTime.UtcNow
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
@@ -658,15 +686,20 @@ namespace MJ_CAIS.EcrisObjectsServices
                                                                && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
                 foreach (var nationality in nationalities)
                 {
-                    EEcrisMsgNationality nat = new EEcrisMsgNationality();
-                    nat.EEcrisMsgId = m.Id;
-                    nat.CountryId = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
-                    m.EEcrisMsgNationalities.Add(nat);
+                    var countryID = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
+                    if (countryID != null)
+                    {
+                        EEcrisMsgNationality nat = new EEcrisMsgNationality();
+                        nat.Id = BaseEntity.GenerateNewId();
+                        nat.EEcrisMsgId = m.Id;
+                        nat.CountryId = countryID;
+                        m.EEcrisMsgNationalities.Add(nat);
+                    }
                 }
             }
-               
-              
-            
+
+
+
             if (msg.MessageVersionTimestampSpecified)
             {
                 m.MsgTimestamp = msg.MessageVersionTimestamp;
@@ -681,7 +714,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             return m;
         }
 
-       public static async Task<List<PPersonId>> GetPersonIDsByEGN(string Egn, CaisDbContext dbContext, string? graoIssuer, string? countryBGcode, string? egnType)
+        public static async Task<List<PPersonId>> GetPersonIDsByEGN(string Egn, CaisDbContext dbContext, string? graoIssuer, string? countryBGcode, string? egnType)
         {
             var pid = await dbContext.PPersonIds.FirstOrDefaultAsync(pp => pp.Pid == Egn && pp.Issuer == graoIssuer && pp.CountryId == countryBGcode && pp.PidTypeId == egnType);
             if (pid != null)
