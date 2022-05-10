@@ -49,8 +49,8 @@ namespace EcrisServices
                     _logger.LogTrace($" EcrisClient logged in.");
                     var folderId = await client.GetInboxFolderIdentifier(sessionID, folderName);
                     _logger.LogTrace($" Folder {folderName} identified as {folderId}.");
-                    var notificationTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
-                    var responseTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
+                    var notificationTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+                    var responseTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
                     foreach (var content in contents)
                     {
                         foreach (var document in content.DDocuments.Where(d => d.EcrisMsgId != null))

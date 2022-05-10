@@ -61,7 +61,7 @@ namespace EcrisIntegrationServices
                 if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
                     lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
-                    docTypeCode = await CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ, _dbContext);
+                    docTypeCode = await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ, _dbContext);
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
 
                 }
@@ -69,7 +69,7 @@ namespace EcrisIntegrationServices
                 {
                     if (messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                     {
-                        docTypeCode = await CommonService.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+                        docTypeCode = await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
                         lastUpdatedTime = GetLastSynchDateForNotifications(paramNameForSynch);
                         query = GetNotificationsQuery(inboxFolderId, lastUpdatedTime);
 
@@ -300,12 +300,12 @@ namespace EcrisIntegrationServices
                             names = m.EEcrisMsgNames.FirstOrDefault();
                         }
 
-                        DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, _dbContext);
+                        DDocument d = ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, _dbContext);
 
                         d.EcrisMsg = m;
                         m.DDocuments.Add(d);
 
-                        DDocContent content = CommonService.GetDDocContent(XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage));
+                        DDocContent content = ServiceHelper.GetDDocContent(XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage));
 
                         d.DocContent = content;
                         content.DDocuments.Add(d);
