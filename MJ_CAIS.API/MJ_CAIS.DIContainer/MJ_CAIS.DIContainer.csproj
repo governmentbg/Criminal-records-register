@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services\MJ_CAIS.Services.csproj" />
   </ItemGroup>
 

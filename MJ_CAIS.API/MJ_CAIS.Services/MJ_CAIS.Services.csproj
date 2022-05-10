@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.EcrisObjectsServices.Contracts\MJ_CAIS.EcrisObjectsServices.Contracts.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Repositories\MJ_CAIS.Repositories.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj" />
   </ItemGroup>
