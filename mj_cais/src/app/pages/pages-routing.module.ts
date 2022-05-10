@@ -34,9 +34,8 @@ import { ApplicationFormComponent } from "./application/application-form/applica
 import { ApplicationResolver } from "./application/application-form/data/application.resolver";
 import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
 import { AuthGuard } from "../@core/services/common/guard.service";
-import { PersonFormComponent } from "../@core/components/forms/person-form/person-form.component";
-import { PersonResolver } from "./person/person-create-form/_data/person.resolver";
-import { PersonCreateFormComponent } from "./person/person-create-form/person-create-form.component";
+import { PersonDetailsFormComponent } from "./person/person-details-form/person-details-form.component";
+import { PersonDetailsResolver } from "./person/person-details-form/_data/person-details.resolver";
 
 const routes: Routes = [
   {
@@ -236,16 +235,10 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
-        path: "people/create",
-        component: PersonCreateFormComponent,
-        resolve: { dbData: PersonResolver },
-        // canActivate: [AuthGuard],
-      },
-      {
         path: "people/preview/:ID",
-        component: PersonCreateFormComponent,
-        resolve: { dbData: PersonResolver },
-        data: { edit: true, preview: true },
+        component: PersonDetailsFormComponent,
+        resolve: { dbData: PersonDetailsResolver },
+        data: { edit: true, preview: true },    
         // canActivate: [AuthGuard],
       },
       {

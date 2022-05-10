@@ -16,7 +16,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<PPerson, PersonDTO>()
                .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
-               .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId));
+               .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId))
+               .ForPath(d => d.BirthPlace.Country.DisplayName, opt => opt.MapFrom(src => src.BirthCountry.Name))
+               .ForPath(d => d.BirthPlace.CityDisplayName, opt => opt.MapFrom(src => src.BirthCity.Name))
+               .ForPath(d => d.BirthPlace.MunicipalityDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.Name))
+               .ForPath(d => d.BirthPlace.DistrictDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.District.Name));
 
             CreateMap<PPerson, PPersonH>();
             CreateMap<PPersonId, PPersonIdsH>();

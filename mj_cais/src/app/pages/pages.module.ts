@@ -45,7 +45,7 @@ import { BulletinStatusHistoryOverviewComponent } from './bulletin/bulletin-form
 import { ApplicationFormComponent } from './application/application-form/application-form.component';
 import { PersonOverviewComponent } from './person/person-overview/person-overview.component';
 import { PostLoginComponent } from "./auth/post-login";
-import { PersonCreateFormComponent } from './person/person-create-form/person-create-form.component';
+import { PersonDetailsFormComponent } from './person/person-details-form/person-details-form.component';
 
 @NgModule({
   imports: [
@@ -97,7 +97,7 @@ import { PersonCreateFormComponent } from './person/person-create-form/person-cr
     ApplicationFormComponent,
     PersonOverviewComponent,
     PostLoginComponent,
-    PersonCreateFormComponent
+    PersonDetailsFormComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

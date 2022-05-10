@@ -29,10 +29,18 @@ namespace MJ_CAIS.Services
             _personRepository = personRepository;
         }
 
-        public async Task<PPerson> SelectPersonAsync(string aId)
+        public override async Task<PersonDTO> SelectAsync(string aId)
         {
-            var personDb = await  _personRepository.SelectAsync(aId);
-            return personDb;
+            var personDb = await _personRepository.SelectAsync(aId);
+            var person = MapPerson(personDb);
+            return person;
+        }
+
+        public async Task<PersonDTO> SelectWithBirthInfoAsync(string aId)
+        {
+            var personDb = await _personRepository.SelectWithBirthInfoAsync(aId);
+            var person = MapPerson(personDb);
+            return person;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -190,6 +198,18 @@ namespace MJ_CAIS.Services
             //todo: more then one person object
             // more then one person
             return null;
+        }
+
+        private PersonDTO MapPerson(PPerson personDb)
+        {
+            var person = mapper.Map<PPerson, PersonDTO>(personDb);
+
+            // todo: first identifier ??
+            person.Egn = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Egn)?.Pid;
+            person.Lnch = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Lnch)?.Pid;
+            person.Ln = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Ln)?.Pid;
+            person.AfisNumber = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.AfisNumber)?.Pid;
+            return person;
         }
     }
 }

@@ -55,16 +55,8 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
-            var personDb = await _personService.SelectPersonAsync(personId);
-            if(personDb == null) return result;
-
-            result.Person = mapper.Map<PPerson,PersonDTO>(personDb);
-
-            // todo: first identifier ??
-            result.Person.Egn = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Egn)?.Pid;
-            result.Person.Lnch = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Lnch)?.Pid;
-            result.Person.Ln = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Ln)?.Pid;
-            result.Person.AfisNumber = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.AfisNumber)?.Pid;
+            var person = await _personService.SelectAsync(personId);
+            result.Person = person ?? new PersonDTO();
             return result;
         }
 

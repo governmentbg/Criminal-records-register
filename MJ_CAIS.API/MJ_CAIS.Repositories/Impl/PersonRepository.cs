@@ -23,6 +23,16 @@ namespace MJ_CAIS.Repositories.Impl
                 .FirstAsync(x => x.Id == id);
         }
 
+        public async Task<PPerson> SelectWithBirthInfoAsync(string id)
+        {
+            return await this._dbContext.PPeople.AsNoTracking()
+                .Include(x => x.PPersonIds)
+                .Include(x => x.BirthCountry)
+                .Include(x => x.BirthCity)
+                   .ThenInclude(x => x.Municipality)
+                .FirstAsync(x => x.Id == id);
+        }
+
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)
         {
             DataSet ds = new DataSet();

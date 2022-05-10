@@ -1,17 +1,17 @@
 import { Injectable, Injector } from "@angular/core";
 import { map, Observable } from "rxjs";
+import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
 import {
   PersonAliasCodeConstants,
   PersonAliasNameConstants,
 } from "../../../../@core/constants/person-alias-type.constants";
-import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
 import { PersonAliasModel } from "../../../../@core/models/common/person-alias.model";
+import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class PersonService extends CaisCrudService<PersonModel, string> {
+export class PersonDetailsService extends CaisCrudService<PersonModel, string> {
   constructor(injector: Injector) {
     super(PersonModel, injector, "people");
   }
