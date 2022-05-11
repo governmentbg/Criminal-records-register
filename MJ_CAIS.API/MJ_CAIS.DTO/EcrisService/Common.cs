@@ -4886,6 +4886,10 @@ namespace MJ_CAIS.DTO.EcrisService
         private SanctionType[] convictionSanctionField;
 
         private AbstractRelationshipType[] convictionRelationshipField;
+        [XmlIgnoreAttribute]
+        public string? FbbcId { get; set; }
+        [XmlIgnoreAttribute]
+        public string? BuletinId { get; set; }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType = "ID", Order = 0)]

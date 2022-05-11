@@ -99,6 +99,8 @@ namespace EcrisRIClient.Mappers
 
 
             ))
+                .ForMember(dest=>dest.FbbcId, opt=>opt.Ignore())
+                   .ForMember(dest => dest.BuletinId, opt => opt.Ignore())
                 .ReverseMap()
                  .ForMember(dest => dest.ConvictionRelationship, opt => opt.MapFrom(src =>
 

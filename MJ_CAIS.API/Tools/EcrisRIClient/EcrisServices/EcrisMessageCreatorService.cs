@@ -109,13 +109,13 @@ namespace EcrisIntegrationServices
             var ecrisMsgs = _dbContext.EEcrisMessages.Where(em => em.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON && em.MsgTypeId == notificationType && em.FbbcId==null);
            
             //todo: тук каква е стойността и от къде се взема?!
-            string graoIssuer = "GRAO";
-            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.Id;
+            string graoIssuer = PersonConstants.IssuerType.GRAO;
+            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2.ToUpper() == "BG"))?.Id;
             if (string.IsNullOrEmpty(countryBGcode))
             {
                 throw new Exception("Country c.Iso3166Alpha2 == \"BG\" does not exist.");
             }
-            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code== "EGN"))?.Id;
+            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code.ToUpper()== PersonConstants.PidType.Egn.ToUpper()))?.Id;
             if (string.IsNullOrEmpty(egnType))
             {
                 throw new Exception("Person Id type  Code== \"EGN\" does not exist.");

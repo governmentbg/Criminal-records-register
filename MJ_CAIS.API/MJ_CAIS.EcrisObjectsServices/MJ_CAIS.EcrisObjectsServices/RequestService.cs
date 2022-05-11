@@ -48,6 +48,8 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 await AddFBBCToResponce(reqResp, fbbc);
                 _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, FBBC with ID {fbbc.Id} added.");
+                EEcrisReference eref = new EEcrisReference();
+             
             }
 
             var buletins = await CheckBuletinsAsync(request, graoPerson.Egn);
@@ -76,6 +78,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             }           
 
             ConvictionType conv = await ServiceHelper.GetConvictionFromBuletin(buletin, bgCode, _dbContext);
+            conv.BuletinId = buletin.Id;
 
             convictions.Add(conv);
 
@@ -85,7 +88,9 @@ namespace MJ_CAIS.EcrisObjectsServices
         }
         private async Task AddFBBCToResponce(RequestResponseMessageType reqResp, Fbbc fbbc)
         {
-            ConvictionType conv = new ConvictionType();
+            //ConvictionType conv = new ConvictionType();
+
+            //conv.FbbcId= fbbc.Id;
 
             var docContents = _dbContext.DDocContents.Where(cont => cont.DDocuments.Where(d => d.FbbcId == fbbc.Id && d.EcrisMsgId != null).Any()
                                                                      && cont.MimeType == "application/xml").Select(cont => cont.Content);
@@ -95,13 +100,16 @@ namespace MJ_CAIS.EcrisObjectsServices
                 var notifications = await docContents.Where(c => c != null).Select(c => XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c)) as NotificationMessageType).ToListAsync();
                 if (notifications != null)
                 {
+                    var notificationsConv = notifications.Where(n => n.NotificationMessageConviction != null).ToList();
+                    notificationsConv.ForEach(n=>n.NotificationMessageConviction.FbbcId = fbbc.Id);
+                    
                     var listOfConvictions = reqResp.RequestResponseMessageConviction?.ToList();
                     if (listOfConvictions == null)
                     {
                         listOfConvictions = new List<ConvictionType>();
                     }
 
-                    listOfConvictions.AddRange(notifications.Where(n => n != null).Select(n => n.NotificationMessageConviction).ToList());
+                    listOfConvictions.AddRange(notificationsConv.Select(c=>c.NotificationMessageConviction).ToList());
                     reqResp.RequestResponseMessageConviction = listOfConvictions.ToArray();
                 }
             }
