@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace MJ_CAIS.WebPortal.Public.Pages
 {
+    // TODO: remove asp page, and 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
@@ -24,6 +25,17 @@ namespace MJ_CAIS.WebPortal.Public.Pages
         }
 
         public void OnGet()
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            var exceptionResult = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            var error = exceptionResult.Error;
+            _logger.LogError(error, error.Message);
+
+            this.FormatedMessage = ExceptionUtils.GetFormatedLastError(error);
+        }
+
+        public void OnPost()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 

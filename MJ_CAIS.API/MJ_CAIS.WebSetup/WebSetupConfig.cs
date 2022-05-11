@@ -15,10 +15,10 @@ namespace MJ_CAIS.WebSetup
 {
     public class WebSetupConfig
     {
-        public static WebApplicationBuilder CustomConfigureBuilder(string[] args, IConfiguration? customConfig = null)
+        public static WebApplicationBuilder CustomConfigureBuilder(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var configuration = customConfig ?? builder.Configuration;
+            var configuration = builder.Configuration;
 
             builder.Services.AddRazorPages();
 

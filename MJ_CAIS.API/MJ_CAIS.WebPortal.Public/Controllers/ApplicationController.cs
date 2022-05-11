@@ -1,6 +1,5 @@
 ﻿using Infragistics.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 
@@ -17,7 +16,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
         [HttpGet]
         [GridDataSourceAction]
-        public ActionResult GetApplications()
+        public ActionResult GetUserApplications()
         {
             var result = new List<PublicApplicationGridDTO>
             {
@@ -26,12 +25,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 new PublicApplicationGridDTO { Id = "ccc", RegistrationNumber = "125" },
             }.AsQueryable();
             return View(result);
-        }
-
-        [HttpGet]
-        public ActionResult ViewByCode()
-        {
-            return View();
         }
     }
 }

@@ -1,18 +1,50 @@
-﻿<div class="text-center mb-3">
-    <h1 class="mt-2 text-center">Електронни услуги</h1>
+﻿@using MJ_CAIS.WebPortal.Public.Models.Conviction
+
+@model ConvictionCodeViewModel
+
+@{
+    ViewData["Title"] = "Начална страница";
+}
+
+<div class="text-center mb-3">
+    <h1 class="mt-2 text-center">Публичен портал</h1>
     <h4 class="mt-2 text-center">Централизирана автоматизирана информационна система "Електронни обществени поръчки" (ЦАИС ЕОП)</h4>
 </div>
 
 <div class="row text-center">
-    <div class="mb-3">
-        <a class="btn btn-primary col-md-3" asp-controller="Login" asp-action="SignIn">
-            Вход с КЕП
-        </a>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Проверка на електронно свидетелство</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <form asp-controller="Conviction" asp-action="ViewByCode" method="post" autocomplete="off">
+                        <label for="Code">Код за достъп:</label>
+                        <input asp-for="Code" class="form-control" style="max-width: 300px; display: inline-block;" />
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-primary">Проверка</button>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <a class="btn btn-primary col-md-3" asp-controller="Application" asp-action="ViewByCode">
-            Преглед на заявление по код
-        </a>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Заявления и справки</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="mb-3">
+                        <a class="btn btn-primary col-md-3" asp-controller="Login" asp-action="SignIn">
+                            Вход с КЕП
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
