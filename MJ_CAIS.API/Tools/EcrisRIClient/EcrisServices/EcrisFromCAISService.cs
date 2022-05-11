@@ -30,7 +30,7 @@ namespace EcrisServices
         }
 
 
-        public async Task SendMessagesToEcris(string username, string password, string folderName)
+        public async Task SendMessagesToEcris(string username, string password, string folderName, string endpointAuth, string endpointStorage, string endPointAddressSearch)
         {
             _logger.LogInformation($"SendMessagesToEcris started. Username: {username}; Folder: {folderName}.");
             string? sessionID = null;
@@ -43,7 +43,7 @@ namespace EcrisServices
                                             && cont.MimeType == "application/xml").ToListAsync();
                 if (contents.Count > 0)
                 {
-                    client = new EcrisClient(username, password);
+                    client = new EcrisClient(username, password, endpointAuth, endpointStorage, endPointAddressSearch);
                     _logger.LogTrace($" EcrisClient created.");
                     sessionID = await client.GetActiveSessionId();
                     _logger.LogTrace($" EcrisClient logged in.");

@@ -43,17 +43,17 @@ namespace EcrisFromCAISExporter
 
                 var username = config.GetValue<string>("EcrisRiSettings:username");
                 var password = config.GetValue<string>("EcrisRiSettings:password");
-                //todo: Get from config
-               // bool insertRepliesToReqests = config.GetValue<bool>("EcrisRiSettings:insertRepliesToReqests");
-               // bool insertNotifications = config.GetValue<bool>("EcrisRiSettings:insertNotifications");
-                string folderName = config.GetValue<string>("EcrisRiSettings:folderName");
+                var endpointAuth = config.GetValue<string>("EcrisRiSettings:endPointAddressAuthentication");
+                var endpointSearch = config.GetValue<string>("EcrisRiSettings:endPointAddressSearch");
+                var endpointStore = config.GetValue<string>("EcrisRiSettings:endPointAddressMessageStorage");
+                string folderName = config.GetValue<string>("ExportSettings:folderName");
                 //todo: repeat?check if exists?
                 using (host)
                 {
 
                     
                      var ecrisFromService = host.Services.GetService<EcrisFromCAISService>();
-                     await ecrisFromService.SendMessagesToEcris(username, password, folderName);
+                     await ecrisFromService.SendMessagesToEcris(username, password, folderName,endpointAuth, endpointStore, endpointSearch);
                    
                    
 

@@ -14,15 +14,22 @@ namespace EcrisRIClient
         //private readonly List<EcrisMessageType> _msgListForCais = new List<EcrisMessageType> { EcrisMessageType.REQ, EcrisMessageType.NOT };
         private string _username { get; set; }
         private string _password { get; set; }
+        private string _endPointAddressAuthentication { get; set; }
+        private string _endPointAddressMessageStorage { get; set; } 
+        private string _endPointAddressSearch { get; set; }
         //private string _searchFolderName { get; set; }
         //private string _itemsPerPage { get; set; }
         private storagePortv10Client _storageClient;
 
-        public EcrisClient(string username, string password)
+        public EcrisClient(string username, string password, string  endPointAddressAuthentication, string endPointAddressMessageStorage, string endPointAddressSearch)
         {
             _username = username;
             _password = password;
-            _storageClient = new storagePortv10Client();
+            //todo: use configuration
+            _endPointAddressAuthentication = endPointAddressAuthentication;
+            _endPointAddressMessageStorage = endPointAddressMessageStorage;
+            _endPointAddressSearch = endPointAddressSearch;
+            _storageClient = new storagePortv10Client(storagePortv10Client.EndpointConfiguration.storageServicePort, _endPointAddressMessageStorage);
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new ServiceToDtos());
@@ -34,7 +41,7 @@ namespace EcrisRIClient
 
         public async Task<string> GetActiveSessionId()
         {
-            authenticationPortv10Client client = new authenticationPortv10Client();
+            authenticationPortv10Client client = new authenticationPortv10Client(authenticationPortv10Client.EndpointConfiguration.authenticationPort, _endPointAddressAuthentication);
             LoginWSInputType loginRequest = new LoginWSInputType();
             loginRequest.WSMetaData = new LoginWSInputMetaDataType() { MetaDataTimeStamp = DateTime.Now };
             loginRequest.WSData = new LoginWSInputDataType() { LoginUserName = _username, LoginUserPassword = _password };
@@ -44,7 +51,7 @@ namespace EcrisRIClient
 
         public async Task<string> Logout(string sessionID)
         {
-            authenticationPortv10Client client = new authenticationPortv10Client();
+            authenticationPortv10Client client = new authenticationPortv10Client(authenticationPortv10Client.EndpointConfiguration.authenticationPort, _endPointAddressAuthentication);
             LogoutWSInputType logoutRequest = new LogoutWSInputType();
 
             logoutRequest.WSMetaData = new LoginWSInputMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionID };
@@ -55,7 +62,7 @@ namespace EcrisRIClient
 
         public async Task<string> GetInboxFolderIdentifier(string sessionId, string searchFolderName)
         {
-            var client = new storagePortv10Client();
+            var client = new storagePortv10Client(storagePortv10Client.EndpointConfiguration.storageServicePort, _endPointAddressMessageStorage);
             var request = new BaseEcrisRiWSInputType();
 
 
@@ -127,7 +134,7 @@ namespace EcrisRIClient
 
             EcrisRIClient.EcrisService.QueryType serviceQuery = _mapper.Map<EcrisRIClient.EcrisService.QueryType>(query);
 
-            var client = new searchPortv10Client();
+            var client = new searchPortv10Client(searchPortv10Client.EndpointConfiguration.searchPort, _endPointAddressSearch);
             var request = new SearchWSInputType();
             request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionID };
             request.WSData = new SearchWSInputDataType()

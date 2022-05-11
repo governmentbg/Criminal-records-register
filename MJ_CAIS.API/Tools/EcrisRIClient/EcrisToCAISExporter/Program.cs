@@ -43,16 +43,19 @@ namespace EcrisToCAISExporter
 
                 var username = config.GetValue<string>("EcrisRiSettings:username");
                 var password = config.GetValue<string>("EcrisRiSettings:password");
+                var endpointAuth = config.GetValue<string>("EcrisRiSettings:endPointAddressAuthentication");
+                var endpointSearch = config.GetValue<string>("EcrisRiSettings:endPointAddressSearch");
+                var endpointStore = config.GetValue<string>("EcrisRiSettings:endPointAddressMessageStorage");
                 //todo: Get from config
-                string joinSeparator = config.GetValue<string>("EcrisRiSettings:joinSeparator"); 
-                bool skipDataExtractionForRequests = config.GetValue<bool>("EcrisRiSettings:skipDataExtractionForRequests");
-                bool skipDataExtractionForNotifications = config.GetValue<bool>("EcrisRiSettings:skipDataExtractionForNotifications");
-                bool synchRequests = config.GetValue<bool>("EcrisRiSettings:synchRequests");
-                bool synchNotifications = config.GetValue<bool>("EcrisRiSettings:synchNotifications");
-                string pageSize = config.GetValue<string>("EcrisRiSettings:pageSize");
-                string folderName = config.GetValue<string>("EcrisRiSettings:folderName");
-                string paramRequestSynch = config.GetValue<string>("EcrisRiSettings:paramRequestSynch");
-                string paramNotificationSynch = config.GetValue<string>("EcrisRiSettings:paramNotificationSynch");
+                string joinSeparator = config.GetValue<string>("SynchronizationSettings:joinSeparator"); 
+                bool skipDataExtractionForRequests = config.GetValue<bool>("SynchronizationSettings:skipDataExtractionForRequests");
+                bool skipDataExtractionForNotifications = config.GetValue<bool>("SynchronizationSettings:skipDataExtractionForNotifications");
+                bool synchRequests = config.GetValue<bool>("SynchronizationSettings:synchRequests");
+                bool synchNotifications = config.GetValue<bool>("SynchronizationSettings:synchNotifications");
+                string pageSize = config.GetValue<string>("SynchronizationSettings:pageSize");
+                string folderName = config.GetValue<string>("SynchronizationSettings:folderName");
+                string paramRequestSynch = config.GetValue<string>("SynchronizationSettings:paramRequestSynch");
+                string paramNotificationSynch = config.GetValue<string>("SynchronizationSettings:paramNotificationSynch");
                 //todo: repeat?check if exists?
                 using (host)
                 {
@@ -63,7 +66,7 @@ namespace EcrisToCAISExporter
                     {
                         var ecrisTOService = host.Services.GetService<EcrisToCAISService>();
 
-                        await ecrisTOService.SynchRequests(username, password, folderName, pageSize, skipDataExtractionForRequests, joinSeparator, paramRequestSynch);
+                        await ecrisTOService.SynchRequests(username, password, folderName, pageSize,endpointAuth,endpointStore,endpointSearch, skipDataExtractionForRequests, joinSeparator, paramRequestSynch);
                     }
                     //});
                     //var t2 = Task.Run(async () =>
@@ -71,7 +74,7 @@ namespace EcrisToCAISExporter
                     if (synchNotifications)
                     {
                         var ecrisTOService = host.Services.GetService<EcrisToCAISService>();
-                        await ecrisTOService.SynchNotifications(username, password, folderName, pageSize, skipDataExtractionForNotifications, joinSeparator, paramNotificationSynch);
+                        await ecrisTOService.SynchNotifications(username, password, folderName, pageSize, endpointAuth, endpointStore, endpointSearch, skipDataExtractionForNotifications, joinSeparator, paramNotificationSynch);
                     }
                     //});
 

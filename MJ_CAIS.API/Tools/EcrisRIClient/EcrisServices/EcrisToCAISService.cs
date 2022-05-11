@@ -28,27 +28,27 @@ namespace EcrisIntegrationServices
             _logger = logger;
         }
 
-        public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage, bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
+        public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage,  string endpointAuth, string endpointStorage, string endPointAddressSearch, bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
         {
             _logger.LogInformation($"Synchronization of requests started.Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramRequestSynch: {paramRequestSynch}.");
-            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.REQ, skipDataExtraction, paramRequestSynch, joinSeparator);
+            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.REQ, skipDataExtraction, paramRequestSynch, endpointAuth, endpointStorage, endPointAddressSearch, joinSeparator);
             _logger.LogInformation("Synchronization of requests ended.");
         }
-        public async Task SynchNotifications(string username, string password, string searchFolderName, string itemsPerPage, bool skipDataExtraction = false, string joinSeparator = " ", string paramNotificationSynch = PARAM_NOTIFICATION_NAME)
+        public async Task SynchNotifications(string username, string password, string searchFolderName, string itemsPerPage, string endpointAuth, string endpointStorage, string endPointAddressSearch, bool skipDataExtraction = false, string joinSeparator = " ", string paramNotificationSynch = PARAM_NOTIFICATION_NAME)
         {
             _logger.LogInformation($"Synchronization of notifications started. Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramNotificationSynch: {paramNotificationSynch}.)");
-            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.NOT, skipDataExtraction, paramNotificationSynch, joinSeparator);
+            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.NOT, skipDataExtraction, paramNotificationSynch,   endpointAuth,  endpointStorage,  endPointAddressSearch, joinSeparator);
             _logger.LogInformation("Synchronization of notifications ended.");
         }
 
-        private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch, string joinSeparator = " ")
+        private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch,string  endpointAuth, string endpointStorage, string endPointAddressSearch,string joinSeparator = " ")
         {
             bool isLoggedIn = false;
             string sessionID = "";
             EcrisClient client = null;
             try
             {
-                client = new EcrisClient(username, password);
+                client = new EcrisClient(username, password, endpointAuth, endpointStorage, endPointAddressSearch);
                 _logger.LogTrace($"{messageType.ToString()}: EcrisClient created.");
                 sessionID = await client.GetActiveSessionId();
                 isLoggedIn = true;
