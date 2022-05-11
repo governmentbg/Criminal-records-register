@@ -92,7 +92,6 @@ export class PagesMenu {
       {
         title: "ECRIS",
         icon: "layout-outline",
-        expanded: true,
         children: [
           {
             title: "За идентификация",
@@ -112,7 +111,6 @@ export class PagesMenu {
       {
         title: "Административни услуги",
         icon: { icon: "file-alt", pack: "fa" },
-        expanded: true,
         children: [
           {
             title: "Свидетелства",

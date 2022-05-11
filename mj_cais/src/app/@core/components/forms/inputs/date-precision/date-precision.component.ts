@@ -23,6 +23,7 @@ export class DatePrecisionComponent implements OnInit {
 
   @Input() formModel: DatePrecisionModelForm;
   @Input() parentGroup: FormGroup;
+  @Input() label: string;
 
   public items: BaseNomenclatureModel[] = DatePrecisionConstants.allData;
   public showFullDate: boolean = false;

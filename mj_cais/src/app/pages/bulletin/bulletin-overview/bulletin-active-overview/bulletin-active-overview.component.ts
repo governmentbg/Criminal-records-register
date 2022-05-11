@@ -1,5 +1,6 @@
 import { Component, Injector } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { BulletinGridService } from "../_data/bulletin-grid.service";
 import { BulletinGridModel } from "../_models/bulletin-grid.model";
 import { BulletinStatusTypeEnum } from "../_models/bulletin-status-type.constants";
@@ -13,7 +14,7 @@ export class BulletinActiveOverviewComponent extends RemoteGridWithStatePersista
   BulletinGridModel,
   BulletinGridService
 > {
-  constructor(service: BulletinGridService, injector: Injector) {
+  constructor(service: BulletinGridService, injector: Injector, public dateFormatService: DateFormatService) {
     super("bulletins-search", service, injector);
     this.service.updateUrlStatus(BulletinStatusTypeEnum.Active);
   }
