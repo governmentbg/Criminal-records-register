@@ -62,7 +62,9 @@ namespace MJ_CAIS.EcrisObjectsServices
 
         public static async Task<GraoPerson?> GetPersonIDForEcrisMessages(string ecrisMsgID, CaisDbContext dbContext)
         {
-            return (await dbContext.EEcrisIdentifications.FirstOrDefaultAsync(p => p.EcrisMsgId == ecrisMsgID && p.Approved == 1))?.GraoPerson;
+            var identification = (await dbContext.EEcrisIdentifications.Include(ei=>ei.GraoPerson).FirstOrDefaultAsync(p => p.EcrisMsgId == ecrisMsgID && p.Approved == 1));
+           
+            return identification?.GraoPerson;
 
         }
         public static YesNoUnknownStringEnumerationType? GetYesNoType(bool? value)
@@ -525,11 +527,12 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 names = m.EEcrisMsgNames.FirstOrDefault();
             }
-            m.BulletinId = buletinID;
+          
             DDocument d = ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, dbContext);
             if (!string.IsNullOrEmpty(buletinID))
             {
                 d.BulletinId = buletinID;
+                m.BulletinId = buletinID;
             }
             d.EcrisMsg = m;
             m.DDocuments.Add(d);
@@ -545,9 +548,13 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 dbContext.EEcrisMsgNationalities.AddRange(m.EEcrisMsgNationalities);
             }
-            if (m.EEcrisMsgNames.Count > 0)
+            if (m.EEcrisMsgNames?.Count > 0)
             {
                 dbContext.EEcrisMsgNames.AddRange(m.EEcrisMsgNames);
+            }
+            if (m.EEcrisReferences?.Count > 0)
+            {
+                dbContext.EEcrisReferences.AddRange(m.EEcrisReferences);
             }
         }
 
@@ -573,15 +580,35 @@ namespace MJ_CAIS.EcrisObjectsServices
                 {
                     m.Urgent = false;
                 };
-                if (((RequestResponseMessageType)msg).RequestResponseMessageConviction.Length > 0)
+                if (((RequestResponseMessageType)msg).RequestResponseMessageConviction?.Length > 0)
                 {
-                    m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ResponceCreated;
+                    // m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ResponceCreated;
+                    //todo: понеже нямаме форма за визуализация:
+                    m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForSending;
+
+                    foreach(var conv in ((RequestResponseMessageType)msg).RequestResponseMessageConviction)
+                    {
+                        m.EEcrisReferences = new List<EEcrisReference>();
+                        if (!string.IsNullOrEmpty(conv.BuletinId) || !string.IsNullOrEmpty(conv.FbbcId))
+                        {
+                            EEcrisReference eref = new EEcrisReference();
+                            eref.Id = BaseEntity.GenerateNewId();
+                            eref.EcrisMsgId = m.Id;
+                            eref.BulletinId = conv.BuletinId;
+                            eref.FbbcId = conv.FbbcId;
+                            m.EEcrisReferences.Add(eref);
+
+                        }
+                    }
+
                 }
                 else
                 {
                     m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForSending;
                 }
                 m.RequestMsgId = requestMsgId;
+
+             
             }
             if (msg.MessageType == EcrisMessageType.NOT)
             {

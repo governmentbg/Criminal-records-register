@@ -76,7 +76,7 @@ namespace EcrisServices
                             string xml = Encoding.UTF8.GetString(content.Content);
                             ecrisOutbox.XmlObject = xml;
                             //todo:add constants
-                            ecrisOutbox.Status = "PENDING";
+                            ecrisOutbox.Status = ECRISConstants.EcrisOutboxStatuses.Pending;
                             ecrisOutbox.Error = null;
                             ecrisOutbox.HasError = false;
                             ecrisOutbox.Attempts = ecrisOutbox.Attempts == null ? 1 : ecrisOutbox.Attempts + 1;
@@ -97,7 +97,7 @@ namespace EcrisServices
                                 if (msgTypeID == notificationTypeId)
                                 {
                                     var not = (NotificationMessageType)msg;
-                                    ecrisOutbox.Operation = "STORE_NOTIFICATION";
+                                    ecrisOutbox.Operation = ECRISConstants.EcrisOutboxOperations.StoreResponce;
                                     if (isNew)
                                     {
 
@@ -117,7 +117,7 @@ namespace EcrisServices
                                 if (msgTypeID == responseTypeId)
                                 {
                                     var reqResp = (RequestResponseMessageType)msg;
-                                    ecrisOutbox.Operation = "STORE_RESPONSE";
+                                    ecrisOutbox.Operation = ECRISConstants.EcrisOutboxOperations.StoreResponce;
                                     if (isNew)
                                     {
                                         _dbContext.EEcrisOutboxes.Add(ecrisOutbox);
@@ -138,7 +138,7 @@ namespace EcrisServices
                                 ecrisMsg.Identifier = resp?.MessageIdentifier;
                                 ecrisMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Sent;
                                 _dbContext.EEcrisMessages.Update(ecrisMsg);
-                                ecrisOutbox.Status = "SENT";
+                                ecrisOutbox.Status = ECRISConstants.EcrisOutboxStatuses.Sent;
                                 _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
                                 _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox and ecris message pre-update.");
                                 await _dbContext.SaveChangesAsync();
@@ -148,7 +148,7 @@ namespace EcrisServices
                             {
                                 //continue with next
                                 _logger.LogError(ex.Message, ex.Data, ex);
-                                ecrisOutbox.Status = "ERROR";
+                                ecrisOutbox.Status = ECRISConstants.EcrisOutboxStatuses.Error;
                                 ecrisOutbox.HasError = true;
                                 ecrisOutbox.StackTrace = ex.StackTrace;
                                 ecrisOutbox.Error = ex.Message;
@@ -167,7 +167,7 @@ namespace EcrisServices
             catch (Exception ex)
             
             {
-                //todo: транзакции и промени в базата, logout?!
+                //todo: транзакции и промени в базата?!
                 _logger.LogError(ex.Message, ex.Data, ex);
                 throw ex;
             }

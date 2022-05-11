@@ -40,19 +40,31 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 throw new Exception("Person is not identified.");
             }
-            //todo: find convictions
-            var fbbcs = await CheckFBBCAsync(request, graoPerson.Egn);
+            string graoIssuer = PersonConstants.IssuerType.GRAO;
+            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2.ToUpper() == "BG"))?.Id;
+            if (string.IsNullOrEmpty(countryBGcode))
+            {
+                throw new Exception("Country c.Iso3166Alpha2 == \"BG\" does not exist.");
+            }
+            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code.ToUpper() == PersonConstants.PidType.Egn.ToUpper()))?.Id;
+            if (string.IsNullOrEmpty(egnType))
+            {
+                throw new Exception("Person Id type  Code== \"EGN\" does not exist.");
+            }
+            var personIds = await ServiceHelper.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
+
+            var fbbcs = await CheckFBBCAsync(request, personIds.Select(p=>p.Id).ToList());
+
             _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of find fbbc records: {fbbcs.Count()}.");
 
             foreach (var fbbc in fbbcs)
             {
                 await AddFBBCToResponce(reqResp, fbbc);
                 _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, FBBC with ID {fbbc.Id} added.");
-                EEcrisReference eref = new EEcrisReference();
-             
+                            
             }
 
-            var buletins = await CheckBuletinsAsync(request, graoPerson.Egn);
+            var buletins = await CheckBuletinsAsync(request, personIds.Select(p => p.Id).ToList());
             _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of buletins fbbc records: {buletins.Count()}.");
             string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
 
@@ -92,7 +104,8 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             //conv.FbbcId= fbbc.Id;
 
-            var docContents = _dbContext.DDocContents.Where(cont => cont.DDocuments.Where(d => d.FbbcId == fbbc.Id && d.EcrisMsgId != null).Any()
+            var docContents = _dbContext.DDocContents.Where(cont => cont.DDocuments.Where(d => d.FbbcId == fbbc.Id //&& d.EcrisMsgId != null
+                                                                     ).Any()
                                                                      && cont.MimeType == "application/xml").Select(cont => cont.Content);
             if (docContents != null)
             {
@@ -116,22 +129,29 @@ namespace MJ_CAIS.EcrisObjectsServices
 
         }
 
-        private async Task<List<Fbbc>> CheckFBBCAsync(RequestMessageType request, string personID)
+        private async Task<List<Fbbc>> CheckFBBCAsync(RequestMessageType request, List<string> personIDs)
         {
 
             //всички ekris msg за човека, за които има фббц запис
-            var ecrisMsgs = _dbContext.EEcrisMessages.Where(e => e.FbbcId != null && e.EEcrisIdentifications.Any(ei => ei.Approved == 1 && ei.GraoPersonId == personID))
-                 .Select(e => e.Id).ToList();
+            //var ecrisMsgs = _dbContext.EEcrisMessages.Where(e => e.FbbcId != null && e.EEcrisIdentifications.Any(ei => ei.Approved == 1 && ei.GraoPersonId == personID))
+            //     .Select(e => e.Id).ToList();
 
             //имат връзка с ecris msg, първи получен fbbc за convictionID,fbbc - не е изтрито
             return await _dbContext.Fbbcs.Where(f => //f.PersonId == personID &&
+                                  personIDs.Contains(f.PersonId) &&
                                  f.StatusCode == FbbcConstants.FBBCStatus.Active
-                                && ecrisMsgs.Contains(f.Id)).GroupBy(f => f.EcrisConvId).Select(g => g.OrderBy(f => f.ReceiveDate).First()).ToListAsync();
+                                 //дали да се гледат и по ConvictionID?
+                                //&& ecrisMsgs.Contains(f.Id)
+                                )
+                //EcrisConvId е уникално => само по 1 запис ще има 
+                //.GroupBy(f => f.EcrisConvId)
+                //.Select(g => g.OrderBy(f => f.ReceiveDate).FirstOrDefault())
+                  .ToListAsync();
 
         }
 
 
-        private async Task<List<BBulletin>> CheckBuletinsAsync(RequestMessageType request, string personID)
+        private async Task<List<BBulletin>> CheckBuletinsAsync(RequestMessageType request, List<string> personIDs)
         {
 
 
@@ -144,15 +164,14 @@ namespace MJ_CAIS.EcrisObjectsServices
                                 .Include(b => b.CsAuthority)
                                 .Include(b => b.BBullPersAliases)
                                 .Include(b => b.BirthCountry)
+                                .Include(b => b.BirthCity)
                                 .Include(b => b.CaseAuth)
                                 .Include(b => b.DecidingAuth)
-                                //.Include(b=>b.IdDocIssuingAuthority)
                                 .Include(b => b.IdDocCategory)
                                 //todo: id или код?! дали е този код
-                                .Where (b => b.StatusId== BulletinConstants.Status.Active)
-                               // && b.PBulletinIds(p.))
-                                //.Where(филтър по човек?!);
-                                .ToListAsync() ;
+                                .Where (b => b.StatusId== BulletinConstants.Status.Active
+                                && b.PBulletinIds.Where(pb=>personIDs.Contains(pb.PersonId)).Any())
+                               .ToListAsync() ;
 
         }
 

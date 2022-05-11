@@ -11,7 +11,6 @@ namespace MJ_CAIS.Common.Constants
         public static class EcrisMessageStatuses
         {
             public const string ForIdentification = "ForIdentification";
-
             public const string Unidentified = "Unidentified";
             public const string NotForFBBC = "NotForFBBC";
             public const string ReqWithRespUnconvicted = "ReqWithRespUnconvicted";
@@ -21,6 +20,7 @@ namespace MJ_CAIS.Common.Constants
             public const string ResponceCreated = "ResponceCreated";
             public const string ForSending = "ForSending";
             public const string Sent = "Sent";
+            public const string Identified = "Identified";
         }
         public static class EcrisInboxStatuses
         {
@@ -28,6 +28,18 @@ namespace MJ_CAIS.Common.Constants
             public const string Processed = "PROCESSED";
             public const string Error = "ERROR";
 
+        }
+        public static class EcrisOutboxStatuses
+        {
+            public const string Pending = "PENDING";
+            public const string Sent = "SENT";
+            public const string Error = "ERROR";
+
+        }
+        public static class EcrisOutboxOperations
+        {
+            public const string StoreNotification = "STORE_NOTIFICATION";
+            public const string StoreResponce = "STORE_RESPONSE";
         }
 
         public static class LanguageCodes

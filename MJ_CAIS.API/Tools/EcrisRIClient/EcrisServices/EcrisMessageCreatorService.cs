@@ -18,8 +18,8 @@ namespace EcrisIntegrationServices
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisMessageCreatorService> _logger;
-        const string ECRIS_REQUEST_CODE = "EcrisReq";
-        const string ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON = "Identified";
+        const string ECRIS_REQUEST_CODE = "EcrisRequest";
+     
         RequestService _requestService;
         public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService)
         {
@@ -56,7 +56,8 @@ namespace EcrisIntegrationServices
                         }
 
                         int insertedMessages = await _dbContext.SaveChangesAsync();
-                        _logger.LogTrace($"{insertedMessages / 3} messages inserted to db.");
+                        
+                        _logger.LogTrace($"{insertedMessages} entities inserted to db.");
                     }
                 }
                 while (numberOfMessages > 0);
@@ -80,13 +81,13 @@ namespace EcrisIntegrationServices
             //todo: кога сменяме статуса и дали не трябва винаги да връщаме първа страница?!
             var contents = await _dbContext.DDocContents.Where(cont => cont.DDocuments
                                  .Where(dd => dd.EcrisMsgId != null
-                                 && dd.EcrisMsg.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON
+                                 && dd.EcrisMsg.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.Identified
                                  && dd.EcrisMsg.MsgTypeId == ECRIS_REQUEST_CODE
                                  //todo: дали да гледаме само тези с EEcrisInboxes.Count > 0 ?
                                  ).Any() && cont.Content != null).Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
-                                 .OrderBy(c => c.CreatedOn)
-                                 .Skip(pageNumber * pageSize)
-                                 .Take(pageSize)
+                                 //.OrderBy(c => c.CreatedOn)
+                                 //.Skip(pageNumber * pageSize)
+                                 //.Take(pageSize)
                                  .ToListAsync();
 
             var result = contents?.Select(c => new { message = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c.Content)) as RequestMessageType, c.EcrisMsgId })
@@ -106,7 +107,9 @@ namespace EcrisIntegrationServices
             _logger.LogInformation($"ProcessIdentifiedNotificationsAsync started.");
             var notificationType = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
             _logger.LogTrace($"Notification type: {notificationType}.");
-            var ecrisMsgs = _dbContext.EEcrisMessages.Where(em => em.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON && em.MsgTypeId == notificationType && em.FbbcId==null);
+            var ecrisMsgs = await _dbContext.EEcrisMessages
+                                .Include(m=>m.DDocuments)
+                                .Where(em => em.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.Identified && em.MsgTypeId == notificationType && em.FbbcId==null).ToListAsync();
            
             //todo: тук каква е стойността и от къде се взема?!
             string graoIssuer = PersonConstants.IssuerType.GRAO;
@@ -119,6 +122,11 @@ namespace EcrisIntegrationServices
             if (string.IsNullOrEmpty(egnType))
             {
                 throw new Exception("Person Id type  Code== \"EGN\" does not exist.");
+            }
+            var docTypeId = (await _dbContext.FbbcDocTypes.FirstOrDefaultAsync(x => x.Code == FbbcConstants.MessageType.CodeECRIS))?.Id;
+            if (docTypeId == null)
+            {
+                throw new Exception($"Fbbc DOC Type {FbbcConstants.MessageType.CodeECRIS} is missing");
             }
             foreach (var msg in ecrisMsgs)
             {
@@ -140,15 +148,18 @@ namespace EcrisIntegrationServices
 
                    var personIds = await ServiceHelper.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
 
+                    fbbcs = await _dbContext.Fbbcs.Where(fbbc => fbbc.EcrisConvId == msg.EcrisMsgConvictionId
+                                                                                //&& personIdsId.Contains(fbbc.PersonId)
+                                                                                //&& fbbc.StatusCode == FbbcConstants.FBBCStatus.Active
+                                                                                ).ToListAsync();
+
                     string pidId = "";
                     if (personIds != null && personIds.Count>0)
                     {
                         var personIdsId = personIds.Select(x => x.Id).ToList();
                         pidId = personIds.FirstOrDefault(p => p.Pid == graoPerson.Egn && p.Issuer == graoIssuer && p.CountryId == countryBGcode && p.PidTypeId == egnType)?.Id;
 
-                        fbbcs = await _dbContext.Fbbcs.Where(fbbc => fbbc.EcrisConvId == msg.EcrisMsgConvictionId
-                                                                                    && personIdsId.Contains(fbbc.PersonId)
-                                                                                    && fbbc.StatusCode == "Active").ToListAsync();
+                    
                     }
                     else
                     {
@@ -160,7 +171,6 @@ namespace EcrisIntegrationServices
                         pid.CountryId = countryBGcode;
                         pid.PidTypeId = egnType;
                         pidId = pid.Id;
-
 
                         PPerson person = new PPerson();
                         person.Id = BaseEntity.GenerateNewId();
@@ -198,37 +208,41 @@ namespace EcrisIntegrationServices
                         f.BirthDatePrec = "YMD";
                         f.BirthPlace = msg.BirthCity;
                         f.BirtyCountryDescr = msg.BirthCountry;
-                        f.DocTypeId = msg.MsgTypeId;
+                     
+                        f.DocTypeId = docTypeId;
                         f.Egn = msg.Pin;
                         f.PersonId = pidId;
                         f.ReceiveDate = msg.MsgTimestamp;
                         //toso: какво е това?
-                        f.EcrisUpdConvTypeId = "1";
+                        //f.EcrisUpdConvTypeId = "1";
                         f.StatusCode = "Active";
 
-                        var content = msg.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml").Select(d => d.DocContent.Content).FirstOrDefault();
+                        var content = _dbContext.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml" && dd.EcrisMsgId == msg.Id).Select(d => d.DocContent.Content).FirstOrDefault();
                         NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
 
-                        f.ConvDecisionDate = ServiceHelper.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionDate);
-                        f.ConvDecFinalDate = ServiceHelper.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionFinalDate);
+                        f.ConvDecisionDate = ServiceHelper.GetDateTime(notification.NotificationMessageConviction?.ConvictionDecisionDate);
+                        f.ConvDecFinalDate = ServiceHelper.GetDateTime(notification.NotificationMessageConviction?.ConvictionDecisionFinalDate);
                         bool isFordelete = false;
-                        foreach (var d in notification.NotificationMessageConviction.ConvictionDecision)
+                        if (notification.NotificationMessageConviction?.ConvictionDecision != null)
                         {
-                            if (d.DecisionDeleteConvictionFromRegister?.Value?.ToLower() == "yes")
+                            foreach (var d in notification.NotificationMessageConviction?.ConvictionDecision)
                             {
-                                isFordelete = true;
+                                if (d.DecisionDeleteConvictionFromRegister?.Value?.ToLower() == "yes")
+                                {
+                                    isFordelete = true;
 
+                                }
                             }
                         }
                         if (isFordelete)
                         {
-                            f.StatusCode = "ForDelete";
+                            f.StatusCode = FbbcConstants.FBBCStatus.ForDelete;
                             _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, fbbc {f.Id} will be marked as deleted.");
 
                         }
                         else
                         {
-                            f.StatusCode = "Active";
+                            f.StatusCode = FbbcConstants.FBBCStatus.Active;
                         }
                         msg.FbbcId = f.Id;
                         foreach (var d in msg.DDocuments)
@@ -247,20 +261,23 @@ namespace EcrisIntegrationServices
                          f = fbbcs.First();
                          stateF = f;
                         _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, linked fbbc: {f.Id} ");
-                        var content = msg.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml").Select(d => d.DocContent.Content).FirstOrDefault();
+                        var content = _dbContext.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml" && dd.EcrisMsgId == msg.Id).Select(d => d.DocContent.Content).FirstOrDefault();
                         NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
                         bool isFordelete = false;
-                        foreach (var d in notification.NotificationMessageConviction.ConvictionDecision)
+                        if (notification.NotificationMessageConviction?.ConvictionDecision != null)
                         {
-                            if (d.DecisionDeleteConvictionFromRegister?.Value?.ToLower() == "yes")
+                            foreach (var d in notification.NotificationMessageConviction.ConvictionDecision)
                             {
-                                isFordelete = true;
+                                if (d.DecisionDeleteConvictionFromRegister?.Value?.ToLower() == "yes")
+                                {
+                                    isFordelete = true;
 
+                                }
                             }
                         }
                         if (isFordelete)
                         {
-                            f.StatusCode = "ForDelete";
+                            f.StatusCode = FbbcConstants.FBBCStatus.ForDelete;
                             _dbContext.Fbbcs.Update(f);
                             _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, fbbc {f.Id} will be marked as deleted.");
                         }
@@ -296,11 +313,15 @@ namespace EcrisIntegrationServices
                     _dbContext.DDocuments.UpdateRange(stateD);
                     NLog.LogManager.Flush();
                 }
+                finally
+                {
+                    _logger.LogTrace($"Pre - save changes.");
+                    await _dbContext.SaveChangesAsync();
+                    _logger.LogTrace($"Save changes to DB.");
+                }
 
-                            }
-            _logger.LogTrace($"Pre - save changes.");
-            await _dbContext.SaveChangesAsync();
-            _logger.LogTrace($"Save changes to DB.");
+             }
+          
 
             _logger.LogInformation($"ProcessIdentifiedNotificationsAsync ended.");
             NLog.LogManager.Flush();
