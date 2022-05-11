@@ -124,6 +124,8 @@ namespace MJ_CAIS.Services
             if (bulletin == null)
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
+            var oldBulletinStatus = bulletin.StatusId;
+
             AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
             // All active bulletins are locked for editing
@@ -141,7 +143,9 @@ namespace MJ_CAIS.Services
                 nameof(bulletin.StatusId)
             };
 
-            if (statusId != BulletinConstants.Status.Active)
+            var mustUpdatePersonAndSendData = (oldBulletinStatus == BulletinConstants.Status.NewOffice || oldBulletinStatus == BulletinConstants.Status.NewEISS) &&
+                statusId == BulletinConstants.Status.Active;
+            if (!mustUpdatePersonAndSendData)
             {
                 await dbContext.SaveChangesAsync();
                 return;
@@ -159,8 +163,8 @@ namespace MJ_CAIS.Services
             // create PBulletinId for all pids (locally added and saved in db)
 
             foreach (var piersonIdObj in person.PPersonIds)
-            {         
-               bulletin.PBulletinIds.Add(new PBulletinId
+            {
+                bulletin.PBulletinIds.Add(new PBulletinId
                 {
                     BulletinId = bulletin.Id,
                     Id = BaseEntity.GenerateNewId(),
@@ -169,7 +173,7 @@ namespace MJ_CAIS.Services
                     PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
                 });
             }
-          
+
             await dbContext.SaveChangesAsync();
 
             // ECRIS

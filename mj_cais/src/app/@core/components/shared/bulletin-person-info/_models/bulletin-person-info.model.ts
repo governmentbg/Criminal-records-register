@@ -1,6 +1,7 @@
 import { PersonAliasModel } from "../../../../models/common/person-alias.model";
 
 export class BulletinPersonInfoModel {
+  public personId: string;
   public bulletinId: string;
   public bulletinReceivedDate: Date;
   public csAuthorityName: string;

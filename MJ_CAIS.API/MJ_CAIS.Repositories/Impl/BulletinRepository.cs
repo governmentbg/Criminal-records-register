@@ -112,6 +112,8 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
                     .Include(x => x.BBullPersAliases)
+                    .Include(x=>x.PBulletinIds)
+                        .ThenInclude(x=>x.Person)
                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             return bulleint;
