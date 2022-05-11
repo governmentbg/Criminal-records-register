@@ -5,6 +5,7 @@ using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisService;
+using MJ_CAIS.EcrisObjectsServices.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.EcrisObjectsServices
 {
-    public class RequestService
+    public class RequestService : IRequestService
     {
         const string REQUEST_SUCCESSFUL = "RRT-00-00";
         const string REQUEST_DENIAL = "RRT-00-01";
@@ -34,7 +35,7 @@ namespace MJ_CAIS.EcrisObjectsServices
         public async Task<RequestResponseMessageType> GenerateResponseToRequest(RequestMessageType request)
         {
             var reqResp = CreateRequestResponseNoConvictionSuccessful(request);
-            var graoPerson = await CommonService.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
+            var graoPerson = await ServiceHelper.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
             if (graoPerson==null)
             {
                 throw new Exception("Person is not identified.");
@@ -47,6 +48,8 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 await AddFBBCToResponce(reqResp, fbbc);
                 _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, FBBC with ID {fbbc.Id} added.");
+                EEcrisReference eref = new EEcrisReference();
+             
             }
 
             var buletins = await CheckBuletinsAsync(request, graoPerson.Egn);
@@ -74,7 +77,8 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             }           
 
-            ConvictionType conv = await CommonService.GetConvictionFromBuletin(buletin, bgCode, _dbContext);
+            ConvictionType conv = await ServiceHelper.GetConvictionFromBuletin(buletin, bgCode, _dbContext);
+            conv.BuletinId = buletin.Id;
 
             convictions.Add(conv);
 
@@ -84,7 +88,9 @@ namespace MJ_CAIS.EcrisObjectsServices
         }
         private async Task AddFBBCToResponce(RequestResponseMessageType reqResp, Fbbc fbbc)
         {
-            ConvictionType conv = new ConvictionType();
+            //ConvictionType conv = new ConvictionType();
+
+            //conv.FbbcId= fbbc.Id;
 
             var docContents = _dbContext.DDocContents.Where(cont => cont.DDocuments.Where(d => d.FbbcId == fbbc.Id && d.EcrisMsgId != null).Any()
                                                                      && cont.MimeType == "application/xml").Select(cont => cont.Content);
@@ -94,13 +100,16 @@ namespace MJ_CAIS.EcrisObjectsServices
                 var notifications = await docContents.Where(c => c != null).Select(c => XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c)) as NotificationMessageType).ToListAsync();
                 if (notifications != null)
                 {
+                    var notificationsConv = notifications.Where(n => n.NotificationMessageConviction != null).ToList();
+                    notificationsConv.ForEach(n=>n.NotificationMessageConviction.FbbcId = fbbc.Id);
+                    
                     var listOfConvictions = reqResp.RequestResponseMessageConviction?.ToList();
                     if (listOfConvictions == null)
                     {
                         listOfConvictions = new List<ConvictionType>();
                     }
 
-                    listOfConvictions.AddRange(notifications.Where(n => n != null).Select(n => n.NotificationMessageConviction).ToList());
+                    listOfConvictions.AddRange(notificationsConv.Select(c=>c.NotificationMessageConviction).ToList());
                     reqResp.RequestResponseMessageConviction = listOfConvictions.ToArray();
                 }
             }

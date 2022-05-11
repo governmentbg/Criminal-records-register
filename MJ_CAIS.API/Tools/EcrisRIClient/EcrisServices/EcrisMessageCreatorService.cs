@@ -50,7 +50,7 @@ namespace EcrisIntegrationServices
                                 var reqResp = await _requestService.GenerateResponseToRequest(request);
 
                                 //todo: what is the value of convictionID?!
-                                await CommonService.AddMessageToDBContextAsync(reqResp, "","", joinSeparator,_dbContext);
+                                await ServiceHelper.AddMessageToDBContextAsync(reqResp, "","", joinSeparator,_dbContext);
                             }
 
                         }
@@ -104,18 +104,18 @@ namespace EcrisIntegrationServices
         public async Task ProcessIdentifiedNotificationsAsync()
         {
             _logger.LogInformation($"ProcessIdentifiedNotificationsAsync started.");
-            var notificationType = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+            var notificationType = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
             _logger.LogTrace($"Notification type: {notificationType}.");
             var ecrisMsgs = _dbContext.EEcrisMessages.Where(em => em.EcrisMsgStatus == ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON && em.MsgTypeId == notificationType && em.FbbcId==null);
            
             //todo: тук каква е стойността и от къде се взема?!
-            string graoIssuer = "GRAO";
-            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.Id;
+            string graoIssuer = PersonConstants.IssuerType.GRAO;
+            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2.ToUpper() == "BG"))?.Id;
             if (string.IsNullOrEmpty(countryBGcode))
             {
                 throw new Exception("Country c.Iso3166Alpha2 == \"BG\" does not exist.");
             }
-            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code== "EGN"))?.Id;
+            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code.ToUpper()== PersonConstants.PidType.Egn.ToUpper()))?.Id;
             if (string.IsNullOrEmpty(egnType))
             {
                 throw new Exception("Person Id type  Code== \"EGN\" does not exist.");
@@ -130,7 +130,7 @@ namespace EcrisIntegrationServices
                 try
                 {
                     _logger.LogTrace($"EcrisMessageID: {msg.Id}.");
-                    var graoPerson = await CommonService.GetPersonIDForEcrisMessages(msg.Id, _dbContext);
+                    var graoPerson = await ServiceHelper.GetPersonIDForEcrisMessages(msg.Id, _dbContext);
                     if (graoPerson == null)
                     {
                         throw new Exception($"{msg.Id} : Person not identified.");
@@ -138,7 +138,7 @@ namespace EcrisIntegrationServices
                     _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}");
                     List<Fbbc> fbbcs = new List<Fbbc>();
 
-                   var personIds = await CommonService.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
+                   var personIds = await ServiceHelper.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
 
                     string pidId = "";
                     if (personIds != null && personIds.Count>0)
@@ -209,8 +209,8 @@ namespace EcrisIntegrationServices
                         var content = msg.DDocuments.Where(dd => dd.DocContent.MimeType == "application/xml").Select(d => d.DocContent.Content).FirstOrDefault();
                         NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
 
-                        f.ConvDecisionDate = CommonService.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionDate);
-                        f.ConvDecFinalDate = CommonService.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionFinalDate);
+                        f.ConvDecisionDate = ServiceHelper.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionDate);
+                        f.ConvDecFinalDate = ServiceHelper.GetDateTime(notification.NotificationMessageConviction.ConvictionDecisionFinalDate);
                         bool isFordelete = false;
                         foreach (var d in notification.NotificationMessageConviction.ConvictionDecision)
                         {

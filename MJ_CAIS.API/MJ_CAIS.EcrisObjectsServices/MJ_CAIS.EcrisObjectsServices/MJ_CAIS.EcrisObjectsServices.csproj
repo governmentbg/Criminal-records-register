@@ -7,12 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj" />
+    <ProjectReference Include="..\..\MJ_CAIS.EcrisObjectsServices.Contracts\MJ_CAIS.EcrisObjectsServices.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.EcrisObjectsServices
 {
-    public class CommonService
+    public class ServiceHelper
     {
         public static async Task<string> GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType rEQ, CaisDbContext dbContext)
         {
@@ -218,9 +218,9 @@ namespace MJ_CAIS.EcrisObjectsServices
                 conv.ConvictionDecisionFinalDate = new StrictDateType();
                 conv.ConvictionDecisionFinalDate.Value = buletin.DecisionFinalDate.Value;
             }
-            if (CommonService.GetYesNoType(buletin.ConvIsTransmittable == 1) != null)
+            if (ServiceHelper.GetYesNoType(buletin.ConvIsTransmittable == 1) != null)
             {
-                conv.ConvictionIsTransmittable = CommonService.GetYesNoType(buletin.ConvIsTransmittable == 1);
+                conv.ConvictionIsTransmittable = ServiceHelper.GetYesNoType(buletin.ConvIsTransmittable == 1);
             }
 
             if (buletin.ConvRetPeriodEndDate.HasValue)
@@ -249,9 +249,9 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                
+
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0].Value = dAuth.Name;
-      
+
                 }
             }
 
@@ -265,7 +265,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             conv.ConvictionFileNumber = new RestrictedStringType50Chars();
             conv.ConvictionFileNumber.Value = buletin.CaseYear + "-" + buletin.CaseNumber;
 
-            conv.ConvictionNonCriminalRuling = CommonService.GetYesNoType(buletin.NoSanction);
+            conv.ConvictionNonCriminalRuling = ServiceHelper.GetYesNoType(buletin.NoSanction);
 
             return conv;
 
@@ -297,16 +297,18 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                 //todo: how to set these values
                 //o.OffenceCommonCategoryReference;
-                if (offence.EcrisOffCatId != null) {
+                if (offence.EcrisOffCatId != null)
+                {
                     var category = ecrisCategoies.FirstOrDefault(cat => cat.Id == offence.EcrisOffCatId);
-                    if (category != null && category.EcrisTechnId!= null) {
+                    if (category != null && category.EcrisTechnId != null)
+                    {
                         o.OffenceCommonCategoryReference = new OffenceExternalReferenceType();
                         o.OffenceCommonCategoryReference.Value = category.EcrisTechnId;
                     }
                 }
                 //todo: 'O-[0-9]{5}'
                 o.OffenceID = "O-" + i.ToString("00000");
-                o.OffenceIsContinuous = CommonService.GetYesNoType(null);
+                o.OffenceIsContinuous = ServiceHelper.GetYesNoType(null);
                 o.OffenceNumberOfOccurrences = "1";
                 o.OffenceLevelOfCompletionReference = new OffenceLevelOfCompletionExternalReferenceType();
                 //'LC-[0-9]{2}-[0A-Z]' 
@@ -314,8 +316,8 @@ namespace MJ_CAIS.EcrisObjectsServices
                 o.OffenceLevelOfParticipationReference = new OffenceLevelOfParticipationExternalReferenceType();
                 //'LP-[0-9]{2}-[0A-Z]' 
                 o.OffenceLevelOfParticipationReference.Value = "LP-00-0";
-                o.OffenceResponsibilityExemption = CommonService.GetYesNoType(null);
-                o.OffenceRecidivism = CommonService.GetYesNoType(null);
+                o.OffenceResponsibilityExemption = ServiceHelper.GetYesNoType(null);
+                o.OffenceRecidivism = ServiceHelper.GetYesNoType(null);
                 ////////
 
                 o.OffencePlace = new PlaceType();
@@ -361,20 +363,20 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                 if (offence.OffEndDate.HasValue)
                 {
-                    o.OffenceEndDate = CommonService.GetDateTypeFromDateAndPrecission(offence.OffEndDate.Value, offence.OffEndDatePrec);
+                    o.OffenceEndDate = ServiceHelper.GetDateTypeFromDateAndPrecission(offence.OffEndDate.Value, offence.OffEndDatePrec);
 
 
                 }
-             
+
                 if (offence.OffStartDate.HasValue)
                 {
-                    o.OffenceStartDate = CommonService.GetDateTypeFromDateAndPrecission(offence.OffStartDate.Value, offence.OffStartDatePrec);
+                    o.OffenceStartDate = ServiceHelper.GetDateTypeFromDateAndPrecission(offence.OffStartDate.Value, offence.OffStartDatePrec);
 
                 }
-               
+
                 o.OffenceApplicableLegalProvisions = offence.LegalProvisions;
-               
-        
+
+
                 if (!string.IsNullOrEmpty(offence.Remarks))
                 {
                     o.Remarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
@@ -409,7 +411,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                 d.DecisionRemarks[0] = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation();
                 d.DecisionRemarks[0].Value = decision.Descr;
                 //todo: каква е стойността на това поле
-                d.DecisionDeleteConvictionFromRegister = CommonService.GetYesNoType(false);
+                d.DecisionDeleteConvictionFromRegister = ServiceHelper.GetYesNoType(false);
                 if (string.IsNullOrEmpty(decision.DecisionChTypeId))
                 {
                     var changeType = decisionChTypes.FirstOrDefault(d => d.Id == decision.DecisionChTypeId);
@@ -429,14 +431,14 @@ namespace MJ_CAIS.EcrisObjectsServices
                         d.DecisionDecidingAuthority = new DecidingAuthorityType();
                         d.DecisionDecidingAuthority.DecidingAuthorityCode = new RestrictedStringType50Chars();
                         d.DecisionDecidingAuthority.DecidingAuthorityCode.Value = authority.Code;
-                        d.DecisionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[3];
+                        d.DecisionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                         d.DecisionDecidingAuthority.DecidingAuthorityName[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                        d.DecisionDecidingAuthority.DecidingAuthorityName[1] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                        d.DecisionDecidingAuthority.DecidingAuthorityName[2] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
+                        //d.DecisionDecidingAuthority.DecidingAuthorityName[1] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
+                        //d.DecisionDecidingAuthority.DecidingAuthorityName[2] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
 
                         d.DecisionDecidingAuthority.DecidingAuthorityName[0].Value = authority.Name;
-                        d.DecisionDecidingAuthority.DecidingAuthorityName[1].Value = authority.NameEn;
-                        d.DecisionDecidingAuthority.DecidingAuthorityName[2].Value = authority.DisplayName;
+                        //d.DecisionDecidingAuthority.DecidingAuthorityName[1].Value = authority.NameEn;
+                        //d.DecisionDecidingAuthority.DecidingAuthorityName[2].Value = authority.DisplayName;
                     }
                 }
 
@@ -463,12 +465,12 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 SanctionType s = new SanctionType();
                 i++;
-               
+
                 s.SanctionAmountOfIndividualFine = new PositiveDecimalType();
                 s.SanctionAmountOfIndividualFine.PositiveDecimalUnit = sanction.FineAmount?.ToString();
 
                 //todo: какви стойности да добавя тук?!
-                s.SanctionID = "S-"+ i.ToString("00000");
+                s.SanctionID = "S-" + i.ToString("00000");
                 s.SanctionTypeReference = new SanctionNatureExternalReferenceType();
                 //'N-[0-9]{2}-[0A-Z]{1}'
                 s.SanctionTypeReference.Value = "N-00-0";
@@ -476,10 +478,10 @@ namespace MJ_CAIS.EcrisObjectsServices
                 s.SanctionAlternativeTypeReference = new SanctionAlternativeTypeExternalReferenceType();
                 //SAT-[0-9]{2}-[A-Z]{1}
                 s.SanctionAlternativeTypeReference.Value = "SAT-00-Z";
-                s.SanctionIsSpecificToMinor = CommonService.GetYesNoType(null);
+                s.SanctionIsSpecificToMinor = ServiceHelper.GetYesNoType(null);
 
-              
-              
+
+
 
                 var category = categories.Where(cat => cat.Id == sanction.SanctCategoryId).FirstOrDefault();
                 if (category != null)
@@ -489,20 +491,22 @@ namespace MJ_CAIS.EcrisObjectsServices
                     s.NationalCategoryTitle[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
                     s.NationalCategoryTitle[0].Value = category.Name;
                 }
-                s.Remarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
-                s.Remarks[0] = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation();
-                s.Remarks[0].Value = sanction.Descr;
-
+                if (!string.IsNullOrEmpty(sanction.Descr))
+                {
+                    s.Remarks = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation[1];
+                    s.Remarks[0] = new UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation();
+                    s.Remarks[0].Value = sanction.Descr;
+                }
 
                 var ecrisCategory = ecrisStanctCategs.Where(cat => cat.Id == sanction.EcrisSanctCategId).FirstOrDefault();
-                if (ecrisCategory != null&& ecrisCategory.EcrisTechnId!=null)
+                if (ecrisCategory != null && ecrisCategory.EcrisTechnId != null)
                 {
 
-                    s.SanctionCommonCategoryReference = new SanctionExternalReferenceType(); 
+                    s.SanctionCommonCategoryReference = new SanctionExternalReferenceType();
                     s.SanctionCommonCategoryReference.Value = ecrisCategory.EcrisTechnId;
                 }
 
-                      result.Add(s);
+                result.Add(s);
             }
 
 
@@ -522,14 +526,14 @@ namespace MJ_CAIS.EcrisObjectsServices
                 names = m.EEcrisMsgNames.FirstOrDefault();
             }
             m.BulletinId = buletinID;
-            DDocument d = CommonService.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, dbContext);
+            DDocument d = ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, dbContext);
             if (!string.IsNullOrEmpty(buletinID))
             {
                 d.BulletinId = buletinID;
             }
             d.EcrisMsg = m;
             m.DDocuments.Add(d);
-            DDocContent content = CommonService.GetDDocContent(XmlUtils.SerializeToXml(msg));
+            DDocContent content = ServiceHelper.GetDDocContent(XmlUtils.SerializeToXml(msg));
 
             d.DocContent = content;
             content.DDocuments.Add(d);
@@ -560,7 +564,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             if (msg.MessageType == EcrisMessageType.RRS)
             {
                 person = ((RequestResponseMessageType)msg).MessagePerson;
-                m.MsgTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, dbContext);
+                m.MsgTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, dbContext);
                 if (((RequestResponseMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;
@@ -582,7 +586,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             if (msg.MessageType == EcrisMessageType.NOT)
             {
                 person = ((NotificationMessageType)msg).MessagePerson;
-                m.MsgTypeId = await CommonService.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, dbContext);
+                m.MsgTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, dbContext);
                 if (((NotificationMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;
@@ -591,7 +595,8 @@ namespace MJ_CAIS.EcrisObjectsServices
                 {
                     m.Urgent = false;
                 };
-                m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.NotificationCreated;
+                // m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.NotificationCreated;
+                m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForSending;
             }
             //има данни в msg.MessageShortViewPerson.PersonAlias - те интересуват ли ни?!
             ////има данни и за майка и баща - биха били полезни за идентификацията
@@ -727,7 +732,6 @@ namespace MJ_CAIS.EcrisObjectsServices
                 return null;
             }
         }
-
 
 
 

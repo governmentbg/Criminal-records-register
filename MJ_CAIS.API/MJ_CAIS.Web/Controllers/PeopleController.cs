@@ -21,8 +21,20 @@ namespace MJ_CAIS.Web.Controllers
 
         [HttpGet("")]
         public async Task<IActionResult> GetAll(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit = false)
-        {         
+        {
             var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, isPageInit);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}")]
+        public new async Task<IActionResult> Get(string aId)
+        {
+            var result = await this._personService.SelectWithBirthInfoAsync(aId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             return Ok(result);
         }
 

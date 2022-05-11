@@ -40,6 +40,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebPortal.Internal"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebSetup", "MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj", "{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.EcrisObjectsServices", "MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj", "{27DE12F0-4C7B-4176-BD0A-67CB55F944BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.EcrisObjectsServices.Contracts", "MJ_CAIS.EcrisObjectsServices.Contracts\MJ_CAIS.EcrisObjectsServices.Contracts.csproj", "{5D6578BE-63DF-4055-99DA-11658BF172BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +114,14 @@ Global
 		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27DE12F0-4C7B-4176-BD0A-67CB55F944BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DE12F0-4C7B-4176-BD0A-67CB55F944BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DE12F0-4C7B-4176-BD0A-67CB55F944BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27DE12F0-4C7B-4176-BD0A-67CB55F944BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D6578BE-63DF-4055-99DA-11658BF172BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D6578BE-63DF-4055-99DA-11658BF172BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D6578BE-63DF-4055-99DA-11658BF172BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D6578BE-63DF-4055-99DA-11658BF172BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

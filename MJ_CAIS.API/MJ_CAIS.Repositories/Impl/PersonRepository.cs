@@ -16,6 +16,23 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
+        public override async Task<PPerson> SelectAsync(string id)
+        {
+            return await this._dbContext.PPeople.AsNoTracking()
+                .Include(x => x.PPersonIds)
+                .FirstAsync(x => x.Id == id);
+        }
+
+        public async Task<PPerson> SelectWithBirthInfoAsync(string id)
+        {
+            return await this._dbContext.PPeople.AsNoTracking()
+                .Include(x => x.PPersonIds)
+                .Include(x => x.BirthCountry)
+                .Include(x => x.BirthCity)
+                   .ThenInclude(x => x.Municipality)
+                .FirstAsync(x => x.Id == id);
+        }
+
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)
         {
             DataSet ds = new DataSet();
@@ -150,7 +167,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             person.Id = dataRow["person_id"]?.ToString();
             person.Pid = dataRow["pid"]?.ToString();
-            person.PidTypeName = dataRow["pid_type_name"]?.ToString();       
+            person.PidTypeName = dataRow["pid_type_name"]?.ToString();
             person.FirstName = dataRow["firstname"]?.ToString();
             person.SurName = dataRow["surname"]?.ToString();
             person.FamilyName = dataRow["familyname"]?.ToString();

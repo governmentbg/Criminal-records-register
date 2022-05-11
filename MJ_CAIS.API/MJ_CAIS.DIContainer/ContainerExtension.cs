@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MJ_CAIS.DataAccess;
+using MJ_CAIS.EcrisObjectsServices;
+using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Repositories.Impl;
 using MJ_CAIS.Services;
@@ -27,8 +29,11 @@ namespace MJ_CAIS.DIContainer
             var repositoryTypes = typeof(BulletinRepository).Assembly.GetClassTypes("Repository");
             var interfaceRepositoryTypes = typeof(IBulletinRepository).Assembly.GetInterfaceTypes("Repository");
 
-
             AddTransientTypes(services, repositoryTypes, interfaceRepositoryTypes);
+
+            var servicesTypesECRIS = typeof(NotificationService).Assembly.GetClassTypes("Service");
+            var interfaceTypesECRIS = typeof(INotificationService).Assembly.GetInterfaceTypes("Service");
+            AddTransientTypes(services, servicesTypesECRIS, interfaceTypesECRIS);
         }
 
         private static List<Type> GetClassTypes(this Assembly assembly, string endingName)
