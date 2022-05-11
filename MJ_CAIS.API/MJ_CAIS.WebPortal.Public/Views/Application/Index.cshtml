@@ -20,8 +20,8 @@
         .AutoGenerateLayouts(false)
         .Columns(column =>
         {
+            column.For(x => x.RegistrationNumber).HeaderText("Registration Number").Width("90%");
             column.Unbound("buttons").Width("8%");
-            column.For(x => x.RegistrationNumber).HeaderText("Registration Number").Width("10%");
         })
         .Features(feature =>
         {
@@ -41,7 +41,7 @@
                 .Type(OpType.Remote);
                 //.SetFilterToLower();
         })
-        .DataSourceUrl(Url.Action("GetApplications", "Application"))
+        .DataSourceUrl(Url.Action("GetUserApplications", "Application"))
         .Render())
     </div>
 </div>
