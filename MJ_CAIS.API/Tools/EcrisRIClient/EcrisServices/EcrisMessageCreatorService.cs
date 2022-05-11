@@ -32,15 +32,15 @@ namespace EcrisIntegrationServices
             _logger.LogInformation($"Creation of responces started. PageSize: {pageSize}; joinSeparator: {joinSeparator}.");
             try
             {
-                var pageNumber = 0;
+                //var pageNumber = 0;
                 var numberOfMessages = 0;
-                do
-                {
-                    _logger.LogTrace($"Page {pageNumber}.");
-                    var messages = await GetRequestForReplyingIdentifiedPeople(pageNumber, pageSize);
-                    pageNumber++;
-                    numberOfMessages = messages.Count();
-                    _logger.LogTrace($"{numberOfMessages} messages selected.");
+                //do
+                //{
+                    //_logger.LogTrace($"Page {pageNumber}.");
+                    var messages = await GetRequestForReplyingIdentifiedPeople();
+                   // pageNumber++;
+                   numberOfMessages = messages.Count();
+                   _logger.LogTrace($"{numberOfMessages} messages selected.");
                     if (numberOfMessages != 0)
                     {
                         foreach (var request in messages)
@@ -49,18 +49,24 @@ namespace EcrisIntegrationServices
                             {
                                 var reqResp = await _requestService.GenerateResponseToRequest(request);
 
-                                //todo: what is the value of convictionID?!
-                                await ServiceHelper.AddMessageToDBContextAsync(reqResp, "","", joinSeparator,_dbContext);
-                            }
+                            var reqMsg=_dbContext.EEcrisMessages.First(mes => mes.Id == request.EcrisMsgId);
+                            reqMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ReplyCreated;
+                           
 
+                              //todo: what is the value of convictionID?!
+                              await ServiceHelper.AddMessageToDBContextAsync(reqResp, "","", joinSeparator,_dbContext, request.EcrisMsgId);
+                            _dbContext.EEcrisMessages.Update(reqMsg);
+
+                            }
+                            int insertedMessages = await _dbContext.SaveChangesAsync();
+
+                            _logger.LogTrace($"Request ID {request.EcrisMsgId}: {insertedMessages} entities inserted to db.");
                         }
 
-                        int insertedMessages = await _dbContext.SaveChangesAsync();
                         
-                        _logger.LogTrace($"{insertedMessages} entities inserted to db.");
                     }
-                }
-                while (numberOfMessages > 0);
+                //}
+                //while (numberOfMessages > 0);
 
 
             }
@@ -76,7 +82,7 @@ namespace EcrisIntegrationServices
         }
 
               
-        private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople(int pageNumber, int pageSize)
+        private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople()
         {
             //todo: кога сменяме статуса и дали не трябва винаги да връщаме първа страница?!
             var contents = await _dbContext.DDocContents.Where(cont => cont.DDocuments
@@ -84,7 +90,7 @@ namespace EcrisIntegrationServices
                                  && dd.EcrisMsg.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.Identified
                                  && dd.EcrisMsg.MsgTypeId == ECRIS_REQUEST_CODE
                                  //todo: дали да гледаме само тези с EEcrisInboxes.Count > 0 ?
-                                 ).Any() && cont.Content != null).Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
+                                 ).Any() && cont.Content != null).Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn})
                                  //.OrderBy(c => c.CreatedOn)
                                  //.Skip(pageNumber * pageSize)
                                  //.Take(pageSize)

@@ -36,7 +36,7 @@ namespace MJ_CAIS.EcrisObjectsServices
         {
             var reqResp = CreateRequestResponseNoConvictionSuccessful(request);
             var graoPerson = await ServiceHelper.GetPersonIDForEcrisMessages(request.EcrisMsgId, _dbContext);
-            if (graoPerson==null)
+            if (graoPerson == null)
             {
                 throw new Exception("Person is not identified.");
             }
@@ -52,27 +52,30 @@ namespace MJ_CAIS.EcrisObjectsServices
                 throw new Exception("Person Id type  Code== \"EGN\" does not exist.");
             }
             var personIds = await ServiceHelper.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
-
-            var fbbcs = await CheckFBBCAsync(request, personIds.Select(p=>p.Id).ToList());
-
-            _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of find fbbc records: {fbbcs.Count()}.");
-
-            foreach (var fbbc in fbbcs)
+            if (personIds != null)
             {
-                await AddFBBCToResponce(reqResp, fbbc);
-                _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, FBBC with ID {fbbc.Id} added.");
-                            
-            }
 
-            var buletins = await CheckBuletinsAsync(request, personIds.Select(p => p.Id).ToList());
-            _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of buletins fbbc records: {buletins.Count()}.");
-            string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
+                var fbbcs = await CheckFBBCAsync(request, personIds.Select(p => p.Id).ToList());
 
-            //todo: if needed load nomenclatures for all vallues here
-            foreach (var buletin in buletins)
-            {
-                await AddBulletinToResponce(reqResp, buletin,bgCode);
-                _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, BBulletin with ID {buletin.Id} added.");
+                _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of find fbbc records: {fbbcs.Count()}.");
+
+                foreach (var fbbc in fbbcs)
+                {
+                    await AddFBBCToResponce(reqResp, fbbc);
+                    _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, FBBC with ID {fbbc.Id} added.");
+
+                }
+
+                var buletins = await CheckBuletinsAsync(request, personIds.Select(p => p.Id).ToList());
+                _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, number of buletins fbbc records: {buletins.Count()}.");
+                string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
+
+                //todo: if needed load nomenclatures for all vallues here
+                foreach (var buletin in buletins)
+                {
+                    await AddBulletinToResponce(reqResp, buletin, bgCode);
+                    _logger.LogTrace($"EcrisMessageID: {request.EcrisMsgId}, BBulletin with ID {buletin.Id} added.");
+                }
             }
 
             return reqResp;
@@ -87,12 +90,15 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 convictions = new List<ConvictionType>();
 
-            }           
+            }
 
             ConvictionType conv = await ServiceHelper.GetConvictionFromBuletin(buletin, bgCode, _dbContext);
             conv.BuletinId = buletin.Id;
-
-            convictions.Add(conv);
+            if (!convictions.Where(c => c.ConvictionID == conv.ConvictionID).Any())
+            {
+                convictions.Add(conv);
+            }
+          
 
             reqResp.RequestResponseMessageConviction = convictions.ToArray();
 
@@ -114,15 +120,20 @@ namespace MJ_CAIS.EcrisObjectsServices
                 if (notifications != null)
                 {
                     var notificationsConv = notifications.Where(n => n.NotificationMessageConviction != null).ToList();
-                    notificationsConv.ForEach(n=>n.NotificationMessageConviction.FbbcId = fbbc.Id);
-                    
+                    notificationsConv.ForEach(n => n.NotificationMessageConviction.FbbcId = fbbc.Id);
+
                     var listOfConvictions = reqResp.RequestResponseMessageConviction?.ToList();
                     if (listOfConvictions == null)
                     {
                         listOfConvictions = new List<ConvictionType>();
                     }
-
-                    listOfConvictions.AddRange(notificationsConv.Select(c=>c.NotificationMessageConviction).ToList());
+                    foreach (var conviction in notificationsConv.Select(c => c.NotificationMessageConviction).ToList())
+                    {
+                        if (!listOfConvictions.Where(c => c.ConvictionID == conviction.ConvictionID).Any())
+                        {
+                            listOfConvictions.Add(conviction);
+                        }
+                    }
                     reqResp.RequestResponseMessageConviction = listOfConvictions.ToArray();
                 }
             }
@@ -140,12 +151,12 @@ namespace MJ_CAIS.EcrisObjectsServices
             return await _dbContext.Fbbcs.Where(f => //f.PersonId == personID &&
                                   personIDs.Contains(f.PersonId) &&
                                  f.StatusCode == FbbcConstants.FBBCStatus.Active
-                                 //дали да се гледат и по ConvictionID?
+                                //дали да се гледат и по ConvictionID?
                                 //&& ecrisMsgs.Contains(f.Id)
                                 )
-                //EcrisConvId е уникално => само по 1 запис ще има 
-                //.GroupBy(f => f.EcrisConvId)
-                //.Select(g => g.OrderBy(f => f.ReceiveDate).FirstOrDefault())
+                  //EcrisConvId е уникално => само по 1 запис ще има 
+                  //.GroupBy(f => f.EcrisConvId)
+                  //.Select(g => g.OrderBy(f => f.ReceiveDate).FirstOrDefault())
                   .ToListAsync();
 
         }
@@ -169,9 +180,9 @@ namespace MJ_CAIS.EcrisObjectsServices
                                 .Include(b => b.DecidingAuth)
                                 .Include(b => b.IdDocCategory)
                                 //todo: id или код?! дали е този код
-                                .Where (b => b.StatusId== BulletinConstants.Status.Active
-                                && b.PBulletinIds.Where(pb=>personIDs.Contains(pb.PersonId)).Any())
-                               .ToListAsync() ;
+                                .Where(b => b.StatusId == BulletinConstants.Status.Active
+                               && b.PBulletinIds.Where(pb => personIDs.Contains(pb.PersonId)).Any())
+                               .ToListAsync();
 
         }
 

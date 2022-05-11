@@ -517,10 +517,10 @@ namespace MJ_CAIS.EcrisObjectsServices
             return result.ToArray();
         }
 
-        public static async Task AddMessageToDBContextAsync(AbstractMessageType msg, string? convictionID, string buletinID, string joinSeparator, CaisDbContext dbContext)
+        public static async Task AddMessageToDBContextAsync(AbstractMessageType msg, string? convictionID, string buletinID, string joinSeparator, CaisDbContext dbContext, string requestMsgId)
         {
 
-            EEcrisMessage m = await CreateEcrisMessageAsync(msg, convictionID, joinSeparator, dbContext);
+            EEcrisMessage m = await CreateEcrisMessageAsync(msg, convictionID, joinSeparator, dbContext, requestMsgId);
 
             var names = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == "bg");
             if (names == null)

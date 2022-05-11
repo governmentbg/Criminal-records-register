@@ -21,6 +21,7 @@ namespace MJ_CAIS.Common.Constants
             public const string ForSending = "ForSending";
             public const string Sent = "Sent";
             public const string Identified = "Identified";
+            public const string ReplyCreated = "ReplyCreated";
         }
         public static class EcrisInboxStatuses
         {

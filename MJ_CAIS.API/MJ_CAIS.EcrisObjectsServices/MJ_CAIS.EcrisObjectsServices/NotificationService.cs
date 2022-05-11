@@ -45,7 +45,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
 
-            await ServiceHelper.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId,bulletin.Id, joinSeparator,_dbContext);
+            await ServiceHelper.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId,bulletin.Id, joinSeparator,_dbContext, "");
 
 
 
