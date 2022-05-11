@@ -14,6 +14,7 @@ using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -53,11 +54,9 @@ namespace MJ_CAIS.Services
 
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
-            // todo: get person data
             var result = new BulletinBaseDTO();
-            result.Person.Firstname = "Test";
-            result.Person.Familyname = "create from person form";
-            result.Person.Id = personId;
+            var person = await _personService.SelectAsync(personId);
+            result.Person = person ?? new PersonDTO();
             return result;
         }
 

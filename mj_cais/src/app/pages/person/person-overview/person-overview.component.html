@@ -167,8 +167,7 @@
       <mat-menu #menu="matMenu">
         <button
           mat-menu-item
-          [routerLink]="['/pages/']"
-          [queryParams]="{ personId: cell.rowData.id }"
+          [routerLink]="['/pages/people/preview',cell.rowData.id]"
         >
           <span class="ml-1">Детайли</span>
         </button>
