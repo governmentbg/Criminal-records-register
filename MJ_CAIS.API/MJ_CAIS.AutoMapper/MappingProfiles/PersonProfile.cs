@@ -15,6 +15,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.BirthPlace.CityId));
 
             CreateMap<PPerson, PersonDTO>()
+               .ForPath(d => d.Id, opt => opt.MapFrom(src => src.Id))
                .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
                .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId))
@@ -40,7 +41,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                            src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
                            BulletinConstants.Type.Unspecified));
 
-            CreateMap<AApplication, PersonApplicationGridDTO>();          
+            CreateMap<AApplication, PersonApplicationGridDTO>();
+            CreateMap<Fbbc, PersonFbbcsGridDTO>();           
         }
     }
 }

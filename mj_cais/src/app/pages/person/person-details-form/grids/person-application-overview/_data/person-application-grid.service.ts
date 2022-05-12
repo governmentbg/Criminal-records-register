@@ -2,6 +2,8 @@ import { Injectable, Injector } from "@angular/core";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
 import { PersonApplicationGridModel } from "../_models/person-bulletin-grid.model";
 
+const currentEndpoint = "people/applications";
+
 @Injectable({
   providedIn: "root",
 })
@@ -10,6 +12,10 @@ export class PersonApplicationGridService extends CaisCrudService<
   string
 > {
   constructor(injector: Injector) {
-    super(PersonApplicationGridModel, injector, "people/applications");
+    super(PersonApplicationGridModel, injector, currentEndpoint);
+  }
+
+  public setPersonId(personId: string) {
+    this.updateUrl(`${currentEndpoint}?personId=${personId}`);
   }
 }

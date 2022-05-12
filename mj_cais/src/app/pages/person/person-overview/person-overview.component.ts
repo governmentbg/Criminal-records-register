@@ -38,7 +38,6 @@ export class PersonOverviewComponent extends RemoteGridWithStatePersistance<
     } 
 
     //$filter=contains(bulletinType,%20%27as%27)%20and%20contains(createdOn,%20%272%27)
-    debugger;
     let count = 0;
     let filterQuery = "";
 

@@ -198,7 +198,7 @@ namespace MJ_CAIS.Services
             return null;
         }
 
-        public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions)
+        public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
         {
             var entityQuery = dbContext.BBulletins.AsNoTracking()
                 .ProjectTo<PersonBulletinGridDTO>(mapperConfiguration);
@@ -208,7 +208,7 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions)
+        public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId)
         {
             var entityQuery = dbContext.AApplications.AsNoTracking()
                 .ProjectTo<PersonApplicationGridDTO>(mapperConfiguration);
@@ -217,7 +217,17 @@ namespace MJ_CAIS.Services
             this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
             return pageResult;
         }
-        
+
+        public async Task<IgPageResult<PersonFbbcsGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcsGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = dbContext.Fbbcs.AsNoTracking()
+                .ProjectTo<PersonFbbcsGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<PersonFbbcsGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
+            return pageResult;
+        }
+
         private PersonDTO MapPerson(PPerson personDb)
         {
             var person = mapper.Map<PPerson, PersonDTO>(personDb);

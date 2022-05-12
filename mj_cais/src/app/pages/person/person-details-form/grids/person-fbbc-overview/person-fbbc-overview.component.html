@@ -20,16 +20,13 @@
   <igx-grid-toolbar>
     <igx-grid-toolbar-actions>
       <div class="ml-auto">
-
         <a
           nbButton
           matRipple
           [status]="'success'"
-          [routerLink]="['/pages/bulletins/create']"
-          [queryParams]="{ personId: personId}"
+          [routerLink]="['/pages/fbbcs/create']"
         >
-        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
-          Добавяне 
+          <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Добавяне
         </a>
       </div>
     </igx-grid-toolbar-actions>
@@ -48,63 +45,41 @@
   </igx-column>
 
   <igx-column
-    field="bulletinType"
-    header="Тип"
+    field="receiveDate"
+    header="Дата на получаване"
     [sortable]="true"
-    [dataType]="'string'"
+    [dataType]="'Date'"
+    [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="statusName"
-    header="Статус"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 
-  <igx-column
-    field="createdOn"
-    header="Дата на създаване"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDate(cell.value)">
-      {{ this.dateFormatService.displayDate(cell.value) }}
-    </span>
-  </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="registrationNumber"
-    header="Номер на бюлетин"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
+  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
 
   <igx-column
-    field="alphabeticalIndex"
-    header="Входящ номер в азб. указател"
+    field="birthDate"
+    header="Дата на раждане"
     [sortable]="true"
-    [dataType]="'string'"
+    [dataType]="'date'"
+    [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 
   <igx-column
-    field="firstName"
+    field="firstname"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -115,7 +90,7 @@
   </igx-column>
 
   <igx-column
-    field="surName"
+    field="surname"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
@@ -126,8 +101,19 @@
   </igx-column>
 
   <igx-column
-    field="familyName"
+    field="familyname"
     header="Фамилия"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="docType"
+    header="Източник"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -146,13 +132,18 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+        [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
+      <a
+        [title]="'Редактиране'"
+        [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="pen"></nb-icon>
+      </a>
     </ng-template>
   </igx-column>
-
   <ng-template #pager let-grid>
     <div class="tl-paginator">
       <cais-grid-pager
