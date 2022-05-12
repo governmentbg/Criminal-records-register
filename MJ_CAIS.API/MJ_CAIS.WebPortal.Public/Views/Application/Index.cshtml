@@ -20,8 +20,8 @@
         .AutoGenerateLayouts(false)
         .Columns(column =>
         {
-            column.For(x => x.RegistrationNumber).HeaderText("Registration Number").Width("90%");
-            column.Unbound("buttons").Width("8%");
+            column.For(x => x.RegistrationNumber).HeaderText("Регистрационен номер").Width("90%");
+            column.Unbound("buttons").HeaderText("").Width("8%");
         })
         .Features(feature =>
         {
