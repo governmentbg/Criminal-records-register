@@ -48,6 +48,7 @@ import { PostLoginComponent } from "./auth/post-login";
 import { PersonDetailsFormComponent } from './person/person-details-form/person-details-form.component';
 import { PersonBulletinOverviewComponent } from './person/person-details-form/grids/person-bulletin-overview/person-bulletin-overview.component';
 import { PersonApplicationOverviewComponent } from './person/person-details-form/grids/person-application-overview/person-application-overview.component';
+import { PersonFbbcOverviewComponent } from './person/person-details-form/grids/person-fbbc-overview/person-fbbc-overview.component';
 
 @NgModule({
   imports: [
@@ -101,7 +102,8 @@ import { PersonApplicationOverviewComponent } from './person/person-details-form
     PostLoginComponent,
     PersonDetailsFormComponent,
     PersonBulletinOverviewComponent,
-    PersonApplicationOverviewComponent
+    PersonApplicationOverviewComponent,
+    PersonFbbcOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

@@ -37,6 +37,7 @@ export class PersonModel {
   public nationalities: MultipleChooseModel = new MultipleChooseModel();
 
   constructor(init?: Partial<PersonModel>) {
+    this.id = init?.id ?? null;
     this.firstname = init?.firstname ?? null;
     this.contextType = init?.contextType ?? null;
     this.surname = init?.surname ?? null;

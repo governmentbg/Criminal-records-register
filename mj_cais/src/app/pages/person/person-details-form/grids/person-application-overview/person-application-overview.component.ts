@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from "@angular/core";
+import { Component, Injector} from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { PersonApplicationGridService } from "./_data/person-application-grid.service";
@@ -19,6 +19,8 @@ export class PersonApplicationOverviewComponent extends RemoteGridWithStatePersi
     public dateFormatService: DateFormatService
   ) {
     super("application-bulletins-search", service, injector);
+    let personId = this.activatedRoute.snapshot.params["ID"];
+    this.service.setPersonId(personId);
   }
 
   ngOnInit() {
