@@ -1,4 +1,5 @@
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MJ_CAIS.WebPortal.Public.Utils.Mappings;
 using MJ_CAIS.WebSetup;
 using MJ_CAIS.WebSetup.Setup;
@@ -13,11 +14,23 @@ namespace MJ_CAIS.WebPortal.Public
             builder.Services.AddAutoMapper(typeof(ConvictionProfile).Assembly);
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                    options.SlidingExpiration = true;
+                    options.AccessDeniedPath = "/Forbidden/";
+                    options.LoginPath = "/Account/Login";
+                });
+
             var app = builder.Build();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            var cookiePolicyOptions = new CookiePolicyOptions();
+            app.UseCookiePolicy(cookiePolicyOptions);
 
             WebSetupConfig.CustomConfigureApp(app);
 

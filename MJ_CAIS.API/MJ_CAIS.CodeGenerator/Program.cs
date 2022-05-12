@@ -11,14 +11,14 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "EEcrisMessage",
-                SingleName = "EcrisMessage",
-                MultipleName = "EcrisMessages",
-                AngularModuleName = "ecris",
+                EntityName = "GUser",
+                SingleName = "User",
+                MultipleName = "Users",
+                AngularModuleName = "user",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
-            ClassGenerator.GenerateDTO(projectPath, parameters);
+            //ClassGenerator.GenerateDTO(projectPath, parameters);
             //ClassGenerator.GenerateGridDTO(projectPath, parameters);
             //ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
             //ClassGenerator.GenerateRepository(projectPath, parameters);

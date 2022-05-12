@@ -1,0 +1,22 @@
+﻿@using MJ_CAIS.WebPortal.Public.Controllers
+
+@{
+    var text = ViewData["IsAuthenticated"];
+    bool isAuthenticated = Convert.ToBoolean(text);
+    string test = "";
+}
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    @if (isAuthenticated)
+    {
+        @*<ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Application" asp-action="Index">Заявления</a>
+            </li>
+        </ul>*@
+        <ul class="nav navbar-nav ml-md--auto">
+            <li class="dropdown"><partial name="_UserMenu"></li>
+        </ul>
+    }
+</div>
+

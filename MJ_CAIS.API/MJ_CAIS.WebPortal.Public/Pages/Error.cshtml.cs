@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace MJ_CAIS.WebPortal.Public.Pages
 {
-    // TODO: remove asp page, and 
+    // TODO: remove asp page, and make controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel

@@ -61,6 +61,24 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Здравейте,.
+        /// </summary>
+        public static string lblGreetingUser {
+            get {
+                return ResourceManager.GetString("lblGreetingUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Изход.
+        /// </summary>
+        public static string lblLogout {
+            get {
+                return ResourceManager.GetString("lblLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Моля, свържете се с администратор..
         /// </summary>
         public static string MsgContactYourAdministrator {

@@ -1,10 +1,12 @@
 ﻿using Infragistics.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
 {
+    [Authorize]
     public class ApplicationController : BaseController
     {
         [HttpGet]

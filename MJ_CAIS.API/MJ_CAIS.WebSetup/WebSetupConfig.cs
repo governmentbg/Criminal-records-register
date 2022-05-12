@@ -35,17 +35,18 @@ namespace MJ_CAIS.WebSetup
                 conf.ImplicitlyValidateChildProperties = true;
             });
 
-            builder.Services.AddAuthorization();
-            builder.Services
-                .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration.GetValue<string>("Authentication:TokenIssuer");
-                    options.ApiName = configuration.GetValue<string>("Authentication:APIName");
-                    options.ApiSecret = configuration.GetValue<string>("Authentication:APISecret"); ;
-                    options.EnableCaching = false; // Do not cache credentials - always rely on identity server
-                 });
-            IdentityModelEventSource.ShowPII = true;
+            // Temporary moved to main Web project until authentication is the same
+            //builder.Services.AddAuthorization();
+            //builder.Services
+            //    .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //    .AddIdentityServerAuthentication(options =>
+            //    {
+            //        options.Authority = configuration.GetValue<string>("Authentication:TokenIssuer");
+            //        options.ApiName = configuration.GetValue<string>("Authentication:APIName");
+            //        options.ApiSecret = configuration.GetValue<string>("Authentication:APISecret"); ;
+            //        options.EnableCaching = false; // Do not cache credentials - always rely on identity server
+            //     });
+            //IdentityModelEventSource.ShowPII = true;
 
             return builder;
         }
