@@ -60,7 +60,7 @@ namespace EcrisRIClient
             return ((BaseEcrisRiWSOutputDataType)resp.LogoutWSOutput.WSData).ActionExecutionInformation;
         }
 
-        public async Task<string> GetInboxFolderIdentifier(string sessionId, string searchFolderName)
+        public async Task<List<string>> GetInboxFolderIdentifier(string sessionId, string searchFolderName, bool includeSubfolders)
         {
             var client = new storagePortv10Client(storagePortv10Client.EndpointConfiguration.storageServicePort, _endPointAddressMessageStorage);
             var request = new BaseEcrisRiWSInputType();
@@ -69,15 +69,38 @@ namespace EcrisRIClient
             request.WSMetaData = new SessionIdContainingWSMetaDataType() { MetaDataTimeStamp = DateTime.Now, SessionId = sessionId };
             var resp = await client.getFoldersAsync(request);
             var foldersList = ((GetFoldersWSOutputDataType)resp.GetFoldersWSOutput.WSData).FolderList;
+            List<string> result = new List<string>();
             for (int i = 0; i < foldersList.Length; i++)
             {
                 if (foldersList[i].FolderName == searchFolderName)
                 {
-                    return foldersList[i].FolderIdentifier;
+                    if (includeSubfolders)
+                    {
+                        result = GetFolderIdsFromParentFolder(foldersList[i]);
+                    }
+                    else
+                    {
+                        result.Add(foldersList[i].FolderIdentifier);
+                    }
+                    break;
                 }
             }
 
-            return string.Empty;
+            return result;
+        }
+
+        private List<string> GetFolderIdsFromParentFolder(FolderType f)
+        {
+            List<string> result = new List<string>();
+            result.Add(f.FolderIdentifier);
+            if (f.FolderContainedFolders != null)
+            {
+                foreach (var folder in f.FolderContainedFolders)
+                {
+                    result.AddRange(GetFolderIdsFromParentFolder(folder));
+                }
+            }
+            return result;
         }
 
         //public async Task<List<MessageShortViewType>> GetMessagesForFolder(string sessionId, string folderId, DateTime lastSuccessDate)
@@ -128,7 +151,7 @@ namespace EcrisRIClient
         //    return wsData.MessageShortViewList;
         //}
 
-   
+
         public async Task<MJ_CAIS.DTO.EcrisService.SearchWSOutputDataType> ExecutePreparedQuery(string sessionID, MJ_CAIS.DTO.EcrisService.QueryType query, int pageNumber, string itemsPerPage)
         {
 

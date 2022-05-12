@@ -28,20 +28,20 @@ namespace EcrisIntegrationServices
             _logger = logger;
         }
 
-        public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage,  string endpointAuth, string endpointStorage, string endPointAddressSearch, bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
+        public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage,  string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders,  bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
         {
             _logger.LogInformation($"Synchronization of requests started.Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramRequestSynch: {paramRequestSynch}.");
-            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.REQ, skipDataExtraction, paramRequestSynch, endpointAuth, endpointStorage, endPointAddressSearch, joinSeparator);
+            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.REQ, skipDataExtraction, paramRequestSynch, endpointAuth, endpointStorage, endPointAddressSearch, includeSubfolders, joinSeparator);
             _logger.LogInformation("Synchronization of requests ended.");
         }
-        public async Task SynchNotifications(string username, string password, string searchFolderName, string itemsPerPage, string endpointAuth, string endpointStorage, string endPointAddressSearch, bool skipDataExtraction = false, string joinSeparator = " ", string paramNotificationSynch = PARAM_NOTIFICATION_NAME)
+        public async Task SynchNotifications(string username, string password, string searchFolderName, string itemsPerPage, string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders, bool skipDataExtraction = false, string joinSeparator = " ", string paramNotificationSynch = PARAM_NOTIFICATION_NAME)
         {
             _logger.LogInformation($"Synchronization of notifications started. Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramNotificationSynch: {paramNotificationSynch}.)");
-            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.NOT, skipDataExtraction, paramNotificationSynch,   endpointAuth,  endpointStorage,  endPointAddressSearch, joinSeparator);
+            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.NOT, skipDataExtraction, paramNotificationSynch,   endpointAuth,  endpointStorage,  endPointAddressSearch, includeSubfolders, joinSeparator);
             _logger.LogInformation("Synchronization of notifications ended.");
         }
 
-        private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch,string  endpointAuth, string endpointStorage, string endPointAddressSearch,string joinSeparator = " ")
+        private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch,string  endpointAuth, string endpointStorage, string endPointAddressSearch,bool includeSubfolders, string joinSeparator = " ")
         {
             bool isLoggedIn = false;
             string sessionID = "";
@@ -53,8 +53,14 @@ namespace EcrisIntegrationServices
                 sessionID = await client.GetActiveSessionId();
                 isLoggedIn = true;
                 _logger.LogTrace($"{messageType.ToString()}: EcrisClient logged in.");
-                var inboxFolderId = await client.GetInboxFolderIdentifier(sessionID, searchFolderName);
-                _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {inboxFolderId}.");
+                var inboxFolderId = await client.GetInboxFolderIdentifier(sessionID, searchFolderName, includeSubfolders);
+                inboxFolderId = inboxFolderId.Where(p => !string.IsNullOrEmpty(p.Trim())).ToList();
+                if (inboxFolderId.Count == 0)
+                {
+                    throw new Exception($"Folder {searchFolderName} does not exist.");
+                }
+
+                _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {string.Join(", ",inboxFolderId)}.");
                 MJ_CAIS.DTO.EcrisService.QueryType query;
                 DateTime lastUpdatedTime;
                 string docTypeCode = "";
@@ -166,7 +172,7 @@ namespace EcrisIntegrationServices
 
 
 
-        private MJ_CAIS.DTO.EcrisService.QueryType GetRequestsQuery(string searchFolderID, DateTime fromDate)
+        private MJ_CAIS.DTO.EcrisService.QueryType GetRequestsQuery(List<string> searchFolderID, DateTime fromDate)
         {
 
             var query = GetBaseQuery(searchFolderID, fromDate);
@@ -181,7 +187,7 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private MJ_CAIS.DTO.EcrisService.QueryType GetNotificationsQuery(string searchFolderID, DateTime fromDate)
+        private MJ_CAIS.DTO.EcrisService.QueryType GetNotificationsQuery(List<string> searchFolderID, DateTime fromDate)
         {
 
             //EcrisMessageTypeOrAliasMessageType.REQ
@@ -197,11 +203,12 @@ namespace EcrisIntegrationServices
             return query;
 
         }
-        private MJ_CAIS.DTO.EcrisService.QueryType GetBaseQuery(string searchFolderID, DateTime fromDate)
+        private MJ_CAIS.DTO.EcrisService.QueryType GetBaseQuery(List<string> searchFolderID, DateTime fromDate)
         {
             MJ_CAIS.DTO.EcrisService.QueryType query = new MJ_CAIS.DTO.EcrisService.QueryType();
             query.QueryParameters = new MJ_CAIS.DTO.EcrisService.QueryTypeQueryParameters();
-            query.QueryParameters.FolderQueryParameter = new string[] { searchFolderID };
+            query.QueryParameters.FolderQueryParameter = searchFolderID.Where(p=>!string.IsNullOrEmpty(p)).ToArray();
+            
 
             var period = new MJ_CAIS.DTO.EcrisService.StrictDateRange();
             period.FromDate = new MJ_CAIS.DTO.EcrisService.StrictDateType()

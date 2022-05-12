@@ -47,7 +47,12 @@ namespace EcrisServices
                     _logger.LogTrace($" EcrisClient created.");
                     sessionID = await client.GetActiveSessionId();
                     _logger.LogTrace($" EcrisClient logged in.");
-                    var folderId = await client.GetInboxFolderIdentifier(sessionID, folderName);
+                    var folderIds = await client.GetInboxFolderIdentifier(sessionID, folderName, false);
+                    if (folderIds.Count != 1)
+                    {
+                        throw new Exception($"Folder {folderName} does not exist.");
+                    }
+                    var folderId = folderIds[0];
                     _logger.LogTrace($" Folder {folderName} identified as {folderId}.");
                     var notificationTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
                     var responseTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
