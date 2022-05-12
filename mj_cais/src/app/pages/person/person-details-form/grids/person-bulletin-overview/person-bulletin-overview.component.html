@@ -20,16 +20,14 @@
   <igx-grid-toolbar>
     <igx-grid-toolbar-actions>
       <div class="ml-auto">
-
         <a
           nbButton
           matRipple
           [status]="'success'"
           [routerLink]="['/pages/bulletins/create']"
-          [queryParams]="{ personId: personId}"
+          [queryParams]="{ personId: personId }"
         >
-        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
-          Добавяне 
+          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добавяне
         </a>
       </div>
     </igx-grid-toolbar-actions>
@@ -74,11 +72,11 @@
     [sortable]="true"
     [dataType]="'string'"
   >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDate(cell.value)">
-      {{ this.dateFormatService.displayDate(cell.value) }}
-    </span>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
   </igx-column>
 
   <igx-column
@@ -95,6 +93,16 @@
   <igx-column
     field="alphabeticalIndex"
     header="Входящ номер в азб. указател"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="bulletinAuthorityName"
+    header="Бюро съдимост"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -133,6 +141,19 @@
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 

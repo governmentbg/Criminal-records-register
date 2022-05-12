@@ -103,13 +103,6 @@ namespace MJ_CAIS.Services
             return await Task.FromResult(pageResult);
         }
 
-        //public override async Task<string> InsertAsync(PersonDTO aInDto)
-        //{
-        //    var personId = await CreatePersonAsync(aInDto);
-        //    await dbContext.SaveChangesAsync();
-        //    return personId;
-        //}
-
         public async Task<PPerson> CreatePersonAsync(PersonDTO aInDto)
         {
             var pids = new List<PPersonId>();
@@ -200,30 +193,26 @@ namespace MJ_CAIS.Services
 
         public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = dbContext.BBulletins.AsNoTracking()
-                .ProjectTo<PersonBulletinGridDTO>(mapperConfiguration);
-            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
-            var pageResult = new IgPageResult<PersonBulletinGridDTO>();
-            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
-            return pageResult;
+            var entityQuery = await _personRepository.GetBulletinByPersonIdAsync(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
         public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = dbContext.AApplications.AsNoTracking()
-                .ProjectTo<PersonApplicationGridDTO>(mapperConfiguration);
-            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
-            var pageResult = new IgPageResult<PersonApplicationGridDTO>();
-            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
-            return pageResult;
+            var entityQuery = await _personRepository.GetApplicationsByPersonIdAsync(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
-        public async Task<IgPageResult<PersonFbbcsGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcsGridDTO> aQueryOptions, string personId)
+        public async Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = dbContext.Fbbcs.AsNoTracking()
-                .ProjectTo<PersonFbbcsGridDTO>(mapperConfiguration);
+            var entityQuery = await _personRepository.GetFbbcByPersonIdAsync(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
+        private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)
+        {
             var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
-            var pageResult = new IgPageResult<PersonFbbcsGridDTO>();
+            var pageResult = new IgPageResult<T>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
             return pageResult;
         }
