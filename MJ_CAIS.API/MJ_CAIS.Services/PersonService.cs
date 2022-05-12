@@ -1,20 +1,18 @@
 using AutoMapper;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.DTO.Person;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts;
-using System.Collections.Generic;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
-using MJ_CAIS.Services.Contracts.Utils;
-using System.Text.RegularExpressions;
-using Oracle.ManagedDataAccess.Client;
-using System.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using MJ_CAIS.Common.Constants;
-using MJ_CAIS.Common.Enums;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Enums;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Person;
+using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services.Contracts.Utils;
+using System.Data;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
@@ -157,7 +155,7 @@ namespace MJ_CAIS.Services
             }
 
             // identifiers of a person who exists in the database and the specific pids are attached to it
-            var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x=>x.PersonId);
+            var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x => x.PersonId);
 
             // when person is only one 
             // update of this one person with the personal data
@@ -186,7 +184,7 @@ namespace MJ_CAIS.Services
 
                 // existing and new pids
                 var existingPidsInDb = mapper.MapToEntityList<PPersonId, PPersonIdsH>(existingPerson.PPersonIds.ToList(), true, true);
-                var newPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.Where(x=>x.EntityState == EntityStateEnum.Added).ToList(), true,true);
+                var newPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.Where(x => x.EntityState == EntityStateEnum.Added).ToList(), true, true);
                 existingPidsInDb.AddRange(newPids);
                 personHistoryToBeAdded.PPersonIdsHes = existingPidsInDb;
 
@@ -200,6 +198,26 @@ namespace MJ_CAIS.Services
             return null;
         }
 
+        public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions)
+        {
+            var entityQuery = dbContext.BBulletins.AsNoTracking()
+                .ProjectTo<PersonBulletinGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<PersonBulletinGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
+            return pageResult;
+        }
+
+        public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions)
+        {
+            var entityQuery = dbContext.AApplications.AsNoTracking()
+                .ProjectTo<PersonApplicationGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<PersonApplicationGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
+            return pageResult;
+        }
+        
         private PersonDTO MapPerson(PPerson personDb)
         {
             var person = mapper.Map<PPerson, PersonDTO>(personDb);

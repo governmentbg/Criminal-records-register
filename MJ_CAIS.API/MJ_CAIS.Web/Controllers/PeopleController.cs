@@ -38,6 +38,20 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("bulletins")]
+        public async Task<IActionResult> GetAllBulletins(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions)
+        {
+            var result = await this._personService.SelectPersonBulletinAllWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
+        [HttpGet("applications")]
+        public async Task<IActionResult> GetAllApplications(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions)
+        {
+            var result = await this._personService.SelectPersonApplicationAllWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
         //[HttpPost("")]
         //public new async Task<IActionResult> Post([FromBody] PersonDTO aInDto)
         //{

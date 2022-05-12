@@ -7,154 +7,163 @@
     ></cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Имена на кирилица: </span>
-            <span>
-              {{ model.firstname }} {{ model.surname }} {{ model.familyname }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Имена на латиница: </span>
-            <span>
-              {{ model.firstnameLat }} {{ model.surnameLat }}
-              {{ model.familynameLat }}
-            </span>
-          </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Имена на кирилица: </span>
+          <span>
+            {{ model.firstname }} {{ model.surname }} {{ model.familyname }}
+          </span>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Имена на латиница: </span>
+          <span>
+            {{ model.firstnameLat }} {{ model.surnameLat }}
+            {{ model.familynameLat }}
+          </span>
+        </div>
+      </div>
+    </div>
 
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Пол: </span>
-            <ng-container *ngIf="model.sex == 1">
-              <span>
-                Мъж
-              </span>
-            </ng-container>
-            <ng-container *ngIf="model.sex == 2">
-              <span>
-                Жена
-              </span>
-            </ng-container>
-            <ng-container *ngIf="model.sex == 0">
-              <span>
-                Неизвестен
-              </span>
-            </ng-container>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Дата на раждане: </span>
-            <span>
-              {{ model.birthDate | date }}
-            </span>
-          </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Пол: </span>
+          <ng-container *ngIf="model.sex == 1">
+            <span> Мъж </span>
+          </ng-container>
+          <ng-container *ngIf="model.sex == 2">
+            <span> Жена </span>
+          </ng-container>
+          <ng-container *ngIf="model.sex == 0">
+            <span> Неизвестен </span>
+          </ng-container>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">ЕГН: </span>
-            <span>
-              {{ model.egn }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">ЛНЧ: </span>
-            <span>
-              {{ model.lnch }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">ЛН: </span>
-            <span>
-              {{ model.ln }}
-            </span>
-          </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Дата на раждане: </span>
+          <span>
+            {{ model.birthDate | date }}
+          </span>
         </div>
       </div>
-      <div class="cais-display-form-group">
-        <div class="label">Място на раждане</div>
-      </div>
-      <hr />
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Държава: </span>
-            <span>
-              {{ model.birthPlace.country.displayName }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Област: </span>
-            <span>
-              {{ model.birthPlace.districtDisplayName }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Община: </span>
-            <span>
-              {{ model.birthPlace.municipalityDisplayName }}
-            </span>
-          </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЕГН: </span>
+          <span>
+            {{ model.egn }}
+          </span>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЛНЧ: </span>
+          <span>
+            {{ model.lnch }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЛН: </span>
+          <span>
+            {{ model.ln }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="cais-display-form-group">
+      <div class="label">Място на раждане</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Държава: </span>
+          <span>
+            {{ model.birthPlace.country.displayName }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Област: </span>
+          <span>
+            {{ model.birthPlace.districtDisplayName }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Община: </span>
+          <span>
+            {{ model.birthPlace.municipalityDisplayName }}
+          </span>
+        </div>
+      </div>
+    </div>
 
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Населено място: </span>
-            <span>
-              {{ model.birthPlace.cityDisplayName }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Oписание в случай на друг адрес: </span>
-            <span>
-              {{ model.birthPlace.foreignCountryAddress }}
-            </span>
-          </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Населено място: </span>
+          <span>
+            {{ model.birthPlace.cityDisplayName }}
+          </span>
         </div>
       </div>
-      <div class="cais-display-form-group">
-        <div class="label">Родители</div>
-      </div>
-      <hr />
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Майка: </span>
-            <span>
-              {{ model.motherFirstname }} {{ model.motherSurname }}
-              {{ model.motherFamilyname }} {{ model.motherFullname }}
-            </span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span class="label">Баща: </span>
-            <span>
-              {{ model.fatherFirstname }} {{ model.fatherSurname }}
-              {{ model.fatherFamilyname }} {{ model.fatherFullname }}
-            </span>
-          </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Oписание в случай на друг адрес: </span>
+          <span>
+            {{ model.birthPlace.foreignCountryAddress }}
+          </span>
         </div>
       </div>
+    </div>
+    <div class="cais-display-form-group">
+      <div class="label">Родители</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Майка: </span>
+          <span>
+            {{ model.motherFirstname }} {{ model.motherSurname }}
+            {{ model.motherFamilyname }} {{ model.motherFullname }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Баща: </span>
+          <span>
+            {{ model.fatherFirstname }} {{ model.fatherSurname }}
+            {{ model.fatherFamilyname }} {{ model.fatherFullname }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <nb-tabset #nbtabset>
+      <nb-tab tabTitle="Бюлетин">
+        <cais-person-bulletin-overview></cais-person-bulletin-overview>
+      </nb-tab>
+      <nb-tab tabTitle="Свидетелства">
+       <cais-person-application-overview></cais-person-application-overview>
+      </nb-tab>
+      <nb-tab tabTitle="Сведения за осъждане в чужбина">
+      </nb-tab>
+      <nb-tab tabTitle="Напомнителни записи">
+      </nb-tab>
+      <nb-tab tabTitle="Справки">
+      </nb-tab>
+    </nb-tabset>
   </nb-card-body>
 </nb-card>

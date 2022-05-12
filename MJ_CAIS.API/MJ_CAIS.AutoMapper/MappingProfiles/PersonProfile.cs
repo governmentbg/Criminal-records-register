@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Person;
 
@@ -30,6 +31,16 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                 .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
                 .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId));
+
+            CreateMap<BBulletin, PersonBulletinGridDTO>()
+               .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name))
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.Status.Name))
+                .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
+                           src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
+                           src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
+                           BulletinConstants.Type.Unspecified));
+
+            CreateMap<AApplication, PersonApplicationGridDTO>();          
         }
     }
 }
