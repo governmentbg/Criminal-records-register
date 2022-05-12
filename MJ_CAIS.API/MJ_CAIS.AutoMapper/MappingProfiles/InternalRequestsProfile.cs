@@ -37,7 +37,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
                            src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
                            src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
-                           BulletinConstants.Type.Unspecified));
+                           BulletinConstants.Type.Unspecified))
+                .ForMember(d => d.PersonId, opt => opt.MapFrom(src => src.PBulletinIds.FirstOrDefault().Person.PersonId));
+
+                
 
             CreateMap<InternalRequestDTO, BInternalRequest>();
         }

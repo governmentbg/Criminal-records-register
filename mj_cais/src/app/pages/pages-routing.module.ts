@@ -238,8 +238,8 @@ const routes: Routes = [
         path: "people/preview/:ID",
         component: PersonDetailsFormComponent,
         resolve: { dbData: PersonDetailsResolver },
-        data: { edit: true, preview: true },    
-        // canActivate: [AuthGuard],
+        data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],    
       },
       {
         path: "miscellaneous",

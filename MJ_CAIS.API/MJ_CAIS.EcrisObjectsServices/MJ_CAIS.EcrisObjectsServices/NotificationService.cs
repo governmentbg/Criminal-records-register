@@ -45,7 +45,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
 
-            await ServiceHelper.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId,bulletin.Id, joinSeparator,_dbContext);
+            await ServiceHelper.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId,bulletin.Id, joinSeparator,_dbContext, "");
 
 
 
@@ -166,18 +166,11 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
 
-            msg.MessagePerson.PersonFatherForename = new NameTextType[1];
-            msg.MessagePerson.PersonFatherForename[0] = new NameTextType();
-            msg.MessagePerson.PersonFatherForename[0].Value = bulletin.FatherFirstname;
-            msg.MessagePerson.PersonFatherSecondSurname = new NameTextType[1];
-            msg.MessagePerson.PersonFatherSecondSurname[0]=new NameTextType();
-            msg.MessagePerson.PersonFatherSecondSurname[0].Value = bulletin.FatherFamilyname;
-            msg.MessagePerson.PersonFatherSurname = new NameTextType[1];
-            msg.MessagePerson.PersonFatherSurname[0] = new NameTextType();
-            msg.MessagePerson.PersonFatherSurname[0].Value = bulletin.FatherSurname;
-            //msg.MessagePerson.PersonFormerForename;
-            //msg.MessagePerson.PersonFormerSecondSurname;
-            //msg.MessagePerson.PersonFormerSurname;
+            msg.MessagePerson.PersonFatherForename = ServiceHelper.GetNameTextType(new List<string?>() { bulletin.FatherFirstname }, new List<string>())?.ToArray();          
+            msg.MessagePerson.PersonFatherSecondSurname = ServiceHelper.GetNameTextType(new List<string?>() { bulletin.FatherFamilyname }, new List<string>())?.ToArray();      
+            msg.MessagePerson.PersonFatherSurname = ServiceHelper.GetNameTextType(new List<string?>() { bulletin.FatherSurname }, new List<string>())?.ToArray();
+         
+            
 
             msg.MessagePerson.PersonIdentificationDocument = new IdentificationDocumentType[1];
             msg.MessagePerson.PersonIdentificationDocument[0] = new IdentificationDocumentType();

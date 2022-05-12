@@ -1,8 +1,16 @@
 <div class="inner-card-header">
   <div class="float-left">Данни за лице</div>
-  <div class="float-rigth">
-    <button nbButton size="small">Преглед</button>
-  </div>
+  <ng-container *ngIf="model.personId">
+    <div class="float-rigth">
+      <button
+        nbButton
+        size="small"
+        [routerLink]="['/pages/people/preview', model.personId]"
+      >
+        Преглед
+      </button>
+    </div>
+  </ng-container>
 </div>
 <div class="inner-card-body">
   <div class="row mb-3">
@@ -168,15 +176,17 @@
 </div>
 <div class="inner-card-header">
   <div class="float-left">Данни за бюлетин</div>
-  <div class="float-rigth">
-    <button
-      nbButton
-      size="small"
-      [routerLink]="['/pages/bulletins/preview', model.bulletinId]"
-    >
-      Преглед
-    </button>
-  </div>
+  <ng-container *ngIf="model.bulletinId">
+    <div class="float-rigth">
+      <button
+        nbButton
+        size="small"
+        [routerLink]="['/pages/bulletins/preview', model.bulletinId]"
+      >
+        Преглед
+      </button>
+    </div>
+  </ng-container>
 </div>
 <div class="inner-card-body">
   <div class="row mb-3">

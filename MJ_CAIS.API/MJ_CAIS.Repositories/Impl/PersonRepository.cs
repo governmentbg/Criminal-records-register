@@ -169,6 +169,8 @@ namespace MJ_CAIS.Repositories.Impl
             person.Pid = dataRow["pid"]?.ToString();
             person.PidTypeName = dataRow["pid_type_name"]?.ToString();
             person.FirstName = dataRow["firstname"]?.ToString();
+            var isParsedDate = DateTime.TryParse(dataRow["birth_date"]?.ToString(), out DateTime birthDate);
+            person.BirthDate = isParsedDate ? birthDate : null;
             person.SurName = dataRow["surname"]?.ToString();
             person.FamilyName = dataRow["familyname"]?.ToString();
             person.FullName = dataRow["fullname"]?.ToString();

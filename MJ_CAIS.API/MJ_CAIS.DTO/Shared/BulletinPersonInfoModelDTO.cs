@@ -2,7 +2,8 @@
 {
     public class BulletinPersonInfoModelDTO
     {
-        public string BulletinId { get; set; }
+        public string? PersonId { get; set; }
+        public string? BulletinId { get; set; }
         public DateTime? BulletinReceivedDate { get; set; }
         public string CsAuthorityName { get; set; }
         public string BulletinType { get; set; }

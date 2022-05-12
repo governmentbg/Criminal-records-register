@@ -124,6 +124,8 @@ namespace MJ_CAIS.Services
             if (bulletin == null)
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
+            var oldBulletinStatus = bulletin.StatusId;
+
             AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
             // All active bulletins are locked for editing
@@ -134,8 +136,16 @@ namespace MJ_CAIS.Services
             }
 
             bulletin.StatusId = statusId;
+            bulletin.EntityState = EntityStateEnum.Modified;
+            bulletin.ModifiedProperties = new List<string>
+            {
+                nameof(bulletin.Locked),
+                nameof(bulletin.StatusId)
+            };
 
-            if (statusId != BulletinConstants.Status.Active)
+            var mustUpdatePersonAndSendData = (oldBulletinStatus == BulletinConstants.Status.NewOffice || oldBulletinStatus == BulletinConstants.Status.NewEISS) &&
+                statusId == BulletinConstants.Status.Active;
+            if (!mustUpdatePersonAndSendData)
             {
                 await dbContext.SaveChangesAsync();
                 return;
@@ -154,17 +164,14 @@ namespace MJ_CAIS.Services
 
             foreach (var piersonIdObj in person.PPersonIds)
             {
-                piersonIdObj.PBulletinIds = new List<PBulletinId>
+                bulletin.PBulletinIds.Add(new PBulletinId
                 {
-                    new PBulletinId
-                    {
-                        BulletinId = bulletin.Id,
-                        Id = BaseEntity.GenerateNewId(),
-                        EntityState = EntityStateEnum.Added,
-                        CreatedOn = DateTime.Now,
-                        PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
-                    }
-                };
+                    BulletinId = bulletin.Id,
+                    Id = BaseEntity.GenerateNewId(),
+                    EntityState = EntityStateEnum.Added,
+                    CreatedOn = DateTime.Now,
+                    PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
+                });
             }
 
             await dbContext.SaveChangesAsync();
@@ -182,7 +189,7 @@ namespace MJ_CAIS.Services
                 catch (Exception ex)
                 {
                     // todo:
-                    // ако не може да се изпрати съобщението ??
+                    // пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ??
                 }
             }
         }

@@ -1,7 +1,7 @@
 <div [formGroup]="formModel.group">
   <div class="row">
     <div class="form-group col-md-4">
-      <label for="date" class="label"> Дата </label>
+      <label for="date" class="label"> {{label || 'Дата'}} </label>
       <ng-select
         #autoControl
         formControlName="precision"
