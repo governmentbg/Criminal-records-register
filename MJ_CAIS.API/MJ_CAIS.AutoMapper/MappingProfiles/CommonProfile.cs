@@ -41,6 +41,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<LookupDTO, GCountry>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id));
+
+            CreateMap<PPersonIdType, BaseNomenclatureDTO>();
         }
     }
 }

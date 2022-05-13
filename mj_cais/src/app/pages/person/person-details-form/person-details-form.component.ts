@@ -19,12 +19,13 @@ export class PersonDetailsFormComponent
     super(service, injector);
   }
 
+  public personId: string;
   public model: PersonModel;
   public PersonContextEnum = PersonContextEnum;
 
   ngOnInit(): void {
-    debugger;
     this.model = this.dbData.element as any;
+    this.personId = this.model.id;
   }
 
   buildFormImpl(): FormGroup {

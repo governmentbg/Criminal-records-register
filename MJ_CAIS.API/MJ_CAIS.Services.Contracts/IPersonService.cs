@@ -12,5 +12,11 @@ namespace MJ_CAIS.Services.Contracts
         Task<PPerson> CreatePersonAsync(PersonDTO aInDto);
 
         Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
+
+        Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId);
+
+        Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId);
+
+        Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId);
     }
 }

@@ -11,5 +11,11 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<PPersonId> GetPersonIdAsyn(string pid, string pidType,string personId);
 
         Task<PPerson> SelectWithBirthInfoAsync(string id);
+
+        Task<IQueryable<PersonBulletinGridDTO>> GetBulletinByPersonIdAsync(string personId);
+
+        Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId);
+
+        Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId);
     }
 }

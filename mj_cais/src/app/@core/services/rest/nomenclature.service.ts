@@ -214,4 +214,8 @@ export class NomenclatureService extends CaisCrudService<
       `${this.url}/a-srvc-res-rcpt-methods`
     );
   }
+
+  public getPidTypes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/pid-types`);
+  }
 }

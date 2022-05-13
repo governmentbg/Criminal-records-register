@@ -53,7 +53,10 @@ namespace EcrisToCAISExporter
                 bool synchRequests = config.GetValue<bool>("SynchronizationSettings:synchRequests");
                 bool synchNotifications = config.GetValue<bool>("SynchronizationSettings:synchNotifications");
                 string pageSize = config.GetValue<string>("SynchronizationSettings:pageSize");
-                string folderName = config.GetValue<string>("SynchronizationSettings:folderName");
+                string folderNameRequests = config.GetValue<string>("SynchronizationSettings:folderNameRequests");
+                bool folderRequestsIncludeSubfolders = config.GetValue<bool>("SynchronizationSettings:folderRequestsIncludeSubfolders");
+                string folderNameNotifications = config.GetValue<string>("SynchronizationSettings:folderNameNotifications");
+                bool folderNotificationsIncludeSubfolders = config.GetValue<bool>("SynchronizationSettings:folderNotificationsIncludeSubfolders");
                 string paramRequestSynch = config.GetValue<string>("SynchronizationSettings:paramRequestSynch");
                 string paramNotificationSynch = config.GetValue<string>("SynchronizationSettings:paramNotificationSynch");
                 //todo: repeat?check if exists?
@@ -66,7 +69,7 @@ namespace EcrisToCAISExporter
                     {
                         var ecrisTOService = host.Services.GetService<EcrisToCAISService>();
 
-                        await ecrisTOService.SynchRequests(username, password, folderName, pageSize,endpointAuth,endpointStore,endpointSearch, skipDataExtractionForRequests, joinSeparator, paramRequestSynch);
+                        await ecrisTOService.SynchRequests(username, password, folderNameRequests, pageSize,endpointAuth,endpointStore,endpointSearch, folderRequestsIncludeSubfolders, skipDataExtractionForRequests, joinSeparator, paramRequestSynch);
                     }
                     //});
                     //var t2 = Task.Run(async () =>
@@ -74,7 +77,7 @@ namespace EcrisToCAISExporter
                     if (synchNotifications)
                     {
                         var ecrisTOService = host.Services.GetService<EcrisToCAISService>();
-                        await ecrisTOService.SynchNotifications(username, password, folderName, pageSize, endpointAuth, endpointStore, endpointSearch, skipDataExtractionForNotifications, joinSeparator, paramNotificationSynch);
+                        await ecrisTOService.SynchNotifications(username, password, folderNameNotifications, pageSize, endpointAuth, endpointStore, endpointSearch, folderNotificationsIncludeSubfolders,skipDataExtractionForNotifications, joinSeparator, paramNotificationSynch);
                     }
                     //});
 

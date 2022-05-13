@@ -1,4 +1,4 @@
-import { AddressModel } from "../../../../../../@core/components/forms/address-form/model/address.model";
+import { AddressModel } from "../../../../../../@core/components/forms/address-form/_model/address.model";
 import { LookupModel } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.model";
 
 export class BulletinOffenceModel {

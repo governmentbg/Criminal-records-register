@@ -1,4 +1,4 @@
-import { AddressModel } from "../../address-form/model/address.model";
+import { AddressModel } from "../../address-form/_model/address.model";
 import { MultipleChooseModel } from "../../inputs/multiple-choose/models/multiple-choose.model";
 
 export class PersonModel {
@@ -37,6 +37,7 @@ export class PersonModel {
   public nationalities: MultipleChooseModel = new MultipleChooseModel();
 
   constructor(init?: Partial<PersonModel>) {
+    this.id = init?.id ?? null;
     this.firstname = init?.firstname ?? null;
     this.contextType = init?.contextType ?? null;
     this.surname = init?.surname ?? null;

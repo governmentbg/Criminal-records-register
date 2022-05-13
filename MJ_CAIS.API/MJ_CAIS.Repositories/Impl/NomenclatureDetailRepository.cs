@@ -58,13 +58,20 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.APurposes.AsNoTracking();
         }
+
         public IQueryable<APaymentMethod> GetAllAPaymentMethods()
         {
             return _dbContext.APaymentMethods.AsNoTracking();
         }
+
         public IQueryable<ASrvcResRcptMeth> GetSrvcResRcptMethods()
         {
             return _dbContext.ASrvcResRcptMeths.AsNoTracking();
+        }
+
+        public IQueryable<PPersonIdType> GetPidTypes()
+        {
+            return _dbContext.PPersonIdTypes.AsNoTracking();
         }
     }
 }

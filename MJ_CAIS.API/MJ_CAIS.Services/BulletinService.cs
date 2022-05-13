@@ -70,6 +70,7 @@ namespace MJ_CAIS.Services
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
             // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = BulletinConstants.Status.NewOffice;
+            bulletin.Id = BaseEntity.GenerateNewId();
 
             await UpdateBulletinAsync(aInDto, bulletin, null);
             await dbContext.SaveChangesAsync();

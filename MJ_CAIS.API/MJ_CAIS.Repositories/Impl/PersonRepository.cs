@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -31,6 +32,101 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.BirthCity)
                    .ThenInclude(x => x.Municipality)
                 .FirstAsync(x => x.Id == id);
+        }
+
+        public async Task<IQueryable<PersonBulletinGridDTO>> GetBulletinByPersonIdAsync(string personId)
+        {
+            var query = (from bulletin in _dbContext.BBulletins.AsNoTracking()
+                         join bulletinAuth in _dbContext.GCsAuthorities.AsNoTracking() on bulletin.CsAuthorityId equals bulletinAuth.Id
+                                 into bulletinAuthLeft
+                         from bulletinAuth in bulletinAuthLeft.DefaultIfEmpty()
+
+                         join bulletinStatuses in _dbContext.BBulletinStatuses.AsNoTracking() on bulletin.StatusId equals bulletinStatuses.Code
+                                     into bulletinStatusesLeft
+                         from bulletinStatuses in bulletinStatusesLeft.DefaultIfEmpty()
+
+                         join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
+                                   into bulletinPersonLeft
+                         from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
+
+                         join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
+                                     into personIdsLeft
+                         from personIds in personIdsLeft.DefaultIfEmpty()
+
+                         join personIdType in _dbContext.PPersonIdTypes.AsNoTracking() on personIds.PidTypeId equals personIdType.Code
+                                   into personIdTypeLeft
+                         from personIdType in personIdTypeLeft.DefaultIfEmpty()
+
+                         where personIds.PersonId == personId
+                         select new PersonBulletinGridDTO
+                         {
+                             Id = bulletin.Id,
+                             AlphabeticalIndex = bulletin.AlphabeticalIndex,
+                             BulletinType = bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
+                                                        bulletin.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
+                                                             BulletinConstants.Type.Unspecified,
+                             BulletinAuthorityName = bulletinAuth.Name,
+                             CreatedOn = bulletinAuth.CreatedOn,
+                             FamilyName = bulletin.Familyname,
+                             FirstName = bulletin.Firstname,
+                             RegistrationNumber = bulletin.RegistrationNumber,
+                             StatusName = bulletinStatuses.Name,
+                             SurName = bulletin.Surname,
+                             BirthDate = bulletin.BirthDate
+                         }).Distinct();
+
+            return await Task.FromResult(query);
+        }
+
+
+        public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
+        {
+            var query = (from application in _dbContext.AApplications.AsNoTracking()
+
+                         join appPersonId in _dbContext.PAppIds.AsNoTracking() on application.Id equals appPersonId.ApplicationId
+                                   into appPersonIdLeft
+                         from appPersonId in appPersonIdLeft.DefaultIfEmpty()
+
+                         join personIds in _dbContext.PPersonIds.AsNoTracking() on appPersonId.PersonId equals personIds.Id
+                                     into personIdsLeft
+                         from personIds in personIdsLeft.DefaultIfEmpty()
+
+                         where personIds.PersonId == personId
+
+                         select new PersonApplicationGridDTO
+                         {
+                             Id = application.Id,
+                             RegistrationNumber = application.RegistrationNumber,
+                             Firstname = application.Firstname,
+                             Surname = application.Surname,
+                             Familyname = application.Familyname,
+                         }).Distinct();
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId)
+        {
+            var query = from fbbc in _dbContext.Fbbcs.AsNoTracking()
+
+                        join personIds in _dbContext.PPersonIds.AsNoTracking() on fbbc.PersonId equals personIds.Id
+                                    into personIdsLeft
+                        from personIds in personIdsLeft.DefaultIfEmpty()
+
+                        where personIds.PersonId == personId
+                        select new PersonFbbcGridDTO
+                        {
+                            Id = fbbc.Id,
+                            Surname = fbbc.Surname,
+                            Firstname = fbbc.Firstname,
+                            Familyname = fbbc.Familyname,
+                            BirthDate = fbbc.BirthDate,
+                            DestroyedDate = fbbc.DestroyedDate,
+                            Egn = fbbc.Egn,
+                            ReceiveDate = fbbc.ReceiveDate
+                        };
+
+            return await Task.FromResult(query);
         }
 
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)

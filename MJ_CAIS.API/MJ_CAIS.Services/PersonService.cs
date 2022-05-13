@@ -1,20 +1,18 @@
 using AutoMapper;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.DTO.Person;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts;
-using System.Collections.Generic;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
-using MJ_CAIS.Services.Contracts.Utils;
-using System.Text.RegularExpressions;
-using Oracle.ManagedDataAccess.Client;
-using System.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using MJ_CAIS.Common.Constants;
-using MJ_CAIS.Common.Enums;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Enums;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Person;
+using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services.Contracts.Utils;
+using System.Data;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
@@ -81,13 +79,13 @@ namespace MJ_CAIS.Services
                 {
                     // group 1 fullmatch, group 1 prop name, group 2 prop value
                     if (match.Groups?.Count == null || match.Groups?.Count < 3) continue;
-                    var propName = match.Groups[1].Value?.ToLower();
-                    var propValue = match.Groups[2].Value?.ToLower();
+                    var propName = match.Groups[1].Value?.ToUpper();
+                    var propValue = match.Groups[2].Value?.ToUpper();
 
                     var propInfo = searchObj.GetType().GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                     if (propInfo != null)
                     {
-                        if (propName.ToLower() == nameof(searchObj.BirthDateDisplay).ToLower())
+                        if (propName.ToUpper() == nameof(searchObj.BirthDateDisplay).ToUpper())
                         {
                             var isParsed = DateTime.TryParse(propValue, out DateTime paresedDate);
                             if (isParsed) searchObj.BirthDate = paresedDate;
@@ -104,13 +102,6 @@ namespace MJ_CAIS.Services
 
             return await Task.FromResult(pageResult);
         }
-
-        //public override async Task<string> InsertAsync(PersonDTO aInDto)
-        //{
-        //    var personId = await CreatePersonAsync(aInDto);
-        //    await dbContext.SaveChangesAsync();
-        //    return personId;
-        //}
 
         public async Task<PPerson> CreatePersonAsync(PersonDTO aInDto)
         {
@@ -157,7 +148,7 @@ namespace MJ_CAIS.Services
             }
 
             // identifiers of a person who exists in the database and the specific pids are attached to it
-            var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x=>x.PersonId);
+            var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x => x.PersonId);
 
             // when person is only one 
             // update of this one person with the personal data
@@ -186,7 +177,7 @@ namespace MJ_CAIS.Services
 
                 // existing and new pids
                 var existingPidsInDb = mapper.MapToEntityList<PPersonId, PPersonIdsH>(existingPerson.PPersonIds.ToList(), true, true);
-                var newPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.Where(x=>x.EntityState == EntityStateEnum.Added).ToList(), true,true);
+                var newPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.Where(x => x.EntityState == EntityStateEnum.Added).ToList(), true, true);
                 existingPidsInDb.AddRange(newPids);
                 personHistoryToBeAdded.PPersonIdsHes = existingPidsInDb;
 
@@ -195,9 +186,63 @@ namespace MJ_CAIS.Services
                 return personToUpdate;
             }
 
+            // всички хора и техните аидита трябва да се прехвърлят към историята 
+
+            // get all person realted to this pids
+            // pid saved in db or locally added
+            //var pidsIds = pids.Select(x=>x.Id).ToList();
+            //var existingPersons = await dbContext.PPeople
+            //        .AsNoTracking()
+            //        .Include(x => x.PPersonIds)
+            //        .Where(x => pidsIds.Contains(x.Id))
+            //        .ToListAsync();
+
+            //// create new person entity with all pids 
+            //var newPerson = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
+            //newPerson.Id = BaseEntity.GenerateNewId();
+            //newPerson.CreatedOn = DateTime.UtcNow; // todo: remove
+            //var allPidsToBeAdded = existingPersons.SelectMany(x => x.PPersonIds)
+            //    .Select(x=> new PPersonId
+            //    {
+            //        Id = BaseEntity.GenerateNewId(),
+            //        Pid = x.Pid,
+            //        CountryId = x.CountryId,
+            //        PidTypeId  = x.PidTypeId,
+            //        Issuer = x.Issuer,
+            //        PersonId = newPerson.Id,
+            //        CreatedOn = DateTime.UtcNow,
+            //        EntityState = EntityStateEnum.Added
+            //    });
+
             //todo: more then one person object
             // more then one person
             return null;
+        }
+
+        public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = await _personRepository.GetBulletinByPersonIdAsync(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
+        public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = await _personRepository.GetApplicationsByPersonIdAsync(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
+        public async Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = await _personRepository.GetFbbcByPersonIdAsync(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
+        private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)
+        {
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<T>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
+            return pageResult;
         }
 
         private PersonDTO MapPerson(PPerson personDb)

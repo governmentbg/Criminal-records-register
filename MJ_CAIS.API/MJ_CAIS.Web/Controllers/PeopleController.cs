@@ -30,19 +30,30 @@ namespace MJ_CAIS.Web.Controllers
         public new async Task<IActionResult> Get(string aId)
         {
             var result = await this._personService.SelectWithBirthInfoAsync(aId);
-            if (result == null)
-            {
-                return NotFound();
-            }
+            if (result == null) return NotFound();
 
             return Ok(result);
         }
 
-        //[HttpPost("")]
-        //public new async Task<IActionResult> Post([FromBody] PersonDTO aInDto)
-        //{
-        //    throw new NotImplementedException();
-        //    return await base.Post(aInDto);
-        //}
+        [HttpGet("bulletins")]
+        public async Task<IActionResult> GetAllBulletins(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonBulletinAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
+        [HttpGet("applications")]
+        public async Task<IActionResult> GetAllApplications(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonApplicationAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
+        [HttpGet("fbbcs")]
+        public async Task<IActionResult> GetAllFbbcs(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
+        {           
+            var result = await this._personService.SelectPersonFbbcAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
     }
 }
