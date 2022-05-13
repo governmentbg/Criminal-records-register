@@ -11,9 +11,9 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "GUser",
-                SingleName = "User",
-                MultipleName = "Users",
+                EntityName = "GraoPerson",
+                SingleName = "GraoPerson",
+                MultipleName = "GraoPersons",
                 AngularModuleName = "user",
             };
 
@@ -24,7 +24,7 @@ namespace MJ_CAIS.CodeGenerator
             //ClassGenerator.GenerateRepository(projectPath, parameters);
             //ClassGenerator.GenerateInterface(projectPath, parameters);
             //ClassGenerator.GenerateService(projectPath, parameters);
-            //ClassGenerator.GenerateController(projectPath, parameters);
+            ClassGenerator.GenerateController(projectPath, parameters);
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
             //ClassGenerator.GenerateAngularFormModel(projectPath, parameters);

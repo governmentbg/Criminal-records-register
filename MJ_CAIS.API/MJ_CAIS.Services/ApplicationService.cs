@@ -1,10 +1,9 @@
 using AutoMapper;
 using MJ_CAIS.DataAccess;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
+using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
-using System.Collections.Generic;
 
 namespace MJ_CAIS.Services
 {
