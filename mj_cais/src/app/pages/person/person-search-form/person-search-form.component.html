@@ -17,18 +17,18 @@
             Търсене
           </button>
         </div>
-        <div>
+        <!-- <div *ngIf="isRemindPersonForm">
           <button
             nbButton
             matRipple
-            [status]="'success'"           
+            [status]="'success'"
             type="button"
             class="ml-2"
             style="min-width: 100px"
           >
             Запази
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </nb-card-header>
@@ -107,14 +107,16 @@
           </cais-date-precision>
         </div>
       </div>
-      <div class="font-weight-bold">Място на раждане</div>
-      <hr />
-      <div class="form-group col-md-12">
-        <cais-address-form
-          [parentForm]="fullForm.birthPlace"
-          [showDescWhenIsNativeAddress]="true"
-        ></cais-address-form>
-      </div>
+      <!-- <ng-container *ngIf="isRemindPersonForm">
+        <div class="font-weight-bold">Място на раждане</div>
+        <hr />
+        <div class="form-group col-md-12">
+          <cais-address-form
+            [parentForm]="fullForm.birthPlace"
+            [showDescWhenIsNativeAddress]="true"
+          ></cais-address-form>
+        </div>
+      </ng-container> -->
     </form>
     <cais-person-search-overview
       #personGridForm
