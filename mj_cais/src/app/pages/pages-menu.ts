@@ -118,6 +118,25 @@ export class PagesMenu {
           },
         ],
       },
+      {
+        title: "Администрация",
+        icon: { icon: "cog", pack: "fa" },
+        expanded: true,
+        children: [
+          {
+            title: "Потребители",
+            link: "/pages/users",
+          },
+          {
+            title: "Външни потребители",
+            link: "/pages/users-external",
+          },
+          {
+            title: "Публични потребители",
+            link: "/pages/users-public",
+          },
+        ],
+      },
     ];
 
     return dashboardMenu;

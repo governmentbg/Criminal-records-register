@@ -1,8 +1,9 @@
+using MJ_CAIS.DTO.Common;
+
 namespace MJ_CAIS.DTO.User
 {
-    public class UserDTO
+    public class UserDTO : BaseDTO
     {
-        public int Id { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
@@ -12,5 +13,6 @@ namespace MJ_CAIS.DTO.User
         public string? CsAuthorityId { get; set; }
         public string? Position { get; set; }
         public decimal? Version { get; set; }
+        public MultipleChooseDTO Roles { get; set; } = new MultipleChooseDTO();
     }
 }

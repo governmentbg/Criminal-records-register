@@ -38,11 +38,17 @@ import { PersonDetailsResolver } from "./person/person-details-form/_data/person
 import { PersonRemindFormComponent } from "./person/person-remind-form/person-remind-form.component";
 import { PersonSearchFormComponent } from "./person/person-search-form/person-search-form.component";
 import { PersonSearchResolver } from "./person/person-search-form/_data/person-search.resolver";
+import { UsersOverviewComponent } from "./users/users-overview/users-overview.component";
+import { UsersExternalOverviewComponent } from "./users-external/users-external-overview/users-external-overview.component";
+import { UsersCitizenOverviewComponent } from "./users-public/users-citizen-overview/users-citizen-overview.component";
+import { UsersFormComponent } from "./users/users-form/users-form.component";
+import { UserResolver } from "./users/users-form/_data/user.resolver";
 
 const routes: Routes = [
   {
     path: "",
     component: PagesComponent,
+    // canActivateChild: [AuthGuard],
     children: [
       {
         path: "home",
@@ -249,6 +255,43 @@ const routes: Routes = [
         path: "people/remind/:ID",
         component: PersonRemindFormComponent,
         resolve: { dbData: PersonSearchResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "users",
+        component: UsersOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "users/create",
+        component: UsersFormComponent,
+        resolve: { dbData: UserResolver }
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "users/edit/:ID",
+        component: UsersFormComponent,
+        resolve: { dbData: UserResolver },
+        data: { edit: true },
+        // canActivate: [AuthGuard],    
+      },
+      {
+        path: "users/preview/:ID",
+        component: UsersFormComponent,
+        resolve: { dbData: UserResolver },
+        data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],    
+      },
+      {
+        path: "users-external",
+        component: UsersExternalOverviewComponent,
+     
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "users-public",
+        component: UsersCitizenOverviewComponent,
+     
         // canActivate: [AuthGuard],
       },
       {

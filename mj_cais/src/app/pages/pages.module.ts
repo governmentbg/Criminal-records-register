@@ -51,6 +51,10 @@ import { PersonFbbcOverviewComponent } from './person/person-details-form/grids/
 import { PersonRemindFormComponent } from "./person/person-remind-form/person-remind-form.component";
 import { PersonSearchFormComponent } from './person/person-search-form/person-search-form.component';
 import { PersonSearchOverviewComponent } from './person/person-search-form/grids/person-search-overview/person-search-overview.component';
+import { UsersOverviewComponent } from './users/users-overview/users-overview.component';
+import { UsersExternalOverviewComponent } from './users-external/users-external-overview/users-external-overview.component';
+import { UsersCitizenOverviewComponent } from './users-public/users-citizen-overview/users-citizen-overview.component';
+import { UsersFormComponent } from './users/users-form/users-form.component';
 
 @NgModule({
   imports: [
@@ -107,7 +111,11 @@ import { PersonSearchOverviewComponent } from './person/person-search-form/grids
     PersonFbbcOverviewComponent,
     PersonRemindFormComponent,
     PersonSearchFormComponent,
-    PersonSearchOverviewComponent
+    PersonSearchOverviewComponent,
+    UsersOverviewComponent,
+    UsersExternalOverviewComponent,
+    UsersCitizenOverviewComponent,
+    UsersFormComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

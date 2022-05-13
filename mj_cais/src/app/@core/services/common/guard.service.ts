@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { NbAuthResult, NbAuthService } from '@nebular/auth';
 import { LocalStorageService } from '@tl/tl-common';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
 
     private destroy$ = new Subject<void>();
     
@@ -14,6 +14,9 @@ export class AuthGuard implements CanActivate {
     private authService: NbAuthService,
     private localStorageService: LocalStorageService,
     private router: Router) {
+  }
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    return this.canActivate();
   }
 
   canActivate() {

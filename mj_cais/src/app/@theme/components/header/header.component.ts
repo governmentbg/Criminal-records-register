@@ -13,6 +13,7 @@ import { map, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { NbAuthOAuth2Token, NbAuthResult, NbAuthService, NbTokenService } from "@nebular/auth";
 import { HttpParams } from "@angular/common/http";
+import { NGXLogger } from "ngx-logger";
 
 @Component({
   selector: "ngx-header",
@@ -38,8 +39,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = "default";
 
   userMenu = [
-    { title: "Profile" },
-    { title: "Log out", data: { id: 'logout' } }
+    // { title: "Profile" },
+    { title: "Изход", data: { id: 'logout' } }
   ];
 
   constructor(
@@ -49,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private breakpointService: NbMediaBreakpointsService,
     private authService: NbAuthService,
     private tokenService: NbTokenService,
+    private logger: NGXLogger,
     @Inject(NB_WINDOW) protected window: any
   ) {}
 
@@ -74,25 +76,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((themeName) => (this.currentTheme = themeName));
+
+    this.authService.onTokenChange()
+    .pipe(
+      map( tkn => this.logger.info(tkn.getPayload())),
+      takeUntil(this.destroy$)
+    ).subscribe();
       
-     this.menuService.onItemClick()
-      .subscribe((menu: NbMenuBag) => {
-        if (menu.item.data?.id === 'logout') {
-          this.authService.getToken().subscribe( (token: NbAuthOAuth2Token) => {
-            const t = token.getPayload();
-            this.authService.logout('eauth')
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((authResult: NbAuthResult) => {   
-              if (authResult.isSuccess()){
-                let params = new HttpParams();
-                params = params.set('id_token_hint', t.id_token);
-                params = params.set('post_logout_redirect_uri', window.location.origin);
-                this.window.location.href = `${window.location.origin}/auth/connect/endsession?${params.toString()}`;
-              }           
-            });
+    this.menuService.onItemClick()
+    .subscribe((menu: NbMenuBag) => {
+      if (menu.item.data?.id === 'logout') {
+        this.authService.getToken().subscribe( (token: NbAuthOAuth2Token) => {
+          const t = token.getPayload();
+          this.authService.logout('eauth')
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((authResult: NbAuthResult) => {   
+            if (authResult.isSuccess()){
+              let params = new HttpParams();
+              params = params.set('id_token_hint', t.id_token);
+              params = params.set('post_logout_redirect_uri', window.location.origin);
+              this.window.location.href = `${window.location.origin}/auth/connect/endsession?${params.toString()}`;
+            }           
           });
-        }
-	    });
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
