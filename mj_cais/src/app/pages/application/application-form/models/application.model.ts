@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AddressModel } from "../../../../@core/components/forms/address-form/model/address.model";
+import { AddressModel } from "../../../../@core/components/forms/address-form/_model/address.model";
 
 export class ApplicationModel {
   public id: string = null;

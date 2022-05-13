@@ -32,10 +32,12 @@ import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { ApplicationFormComponent } from "./application/application-form/application-form.component";
 import { ApplicationResolver } from "./application/application-form/data/application.resolver";
-import { PersonOverviewComponent } from "./person/person-overview/person-overview.component";
 import { AuthGuard } from "../@core/services/common/guard.service";
 import { PersonDetailsFormComponent } from "./person/person-details-form/person-details-form.component";
 import { PersonDetailsResolver } from "./person/person-details-form/_data/person-details.resolver";
+import { PersonRemindFormComponent } from "./person/person-remind-form/person-remind-form.component";
+import { PersonSearchFormComponent } from "./person/person-search-form/person-search-form.component";
+import { PersonSearchResolver } from "./person/person-search-form/_data/person-search.resolver";
 
 const routes: Routes = [
   {
@@ -100,7 +102,7 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
-        path: "internal-requests/:ID",// this id is bulletin id
+        path: "internal-requests/:ID", // this id is bulletin id
         component: InternalRequestOverviewComponent,
         // canActivate: [AuthGuard],
       },
@@ -231,7 +233,9 @@ const routes: Routes = [
       },
       {
         path: "people",
-        component: PersonOverviewComponent,
+        component: PersonSearchFormComponent,
+        resolve: { dbData: PersonSearchResolver },
+
         // canActivate: [AuthGuard],
       },
       {
@@ -239,7 +243,13 @@ const routes: Routes = [
         component: PersonDetailsFormComponent,
         resolve: { dbData: PersonDetailsResolver },
         data: { edit: true, preview: true },
-        // canActivate: [AuthGuard],    
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "people/remind/:ID",
+        component: PersonRemindFormComponent,
+        resolve: { dbData: PersonSearchResolver },
+        // canActivate: [AuthGuard],
       },
       {
         path: "miscellaneous",

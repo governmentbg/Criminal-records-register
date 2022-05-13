@@ -106,5 +106,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = _nomenclatureDetailService.GetSanctionCategories();
             return Ok(result);
         }
+
+        [HttpGet("pid-types")]
+        public IActionResult GetPidTypes()
+        {
+            var result = _nomenclatureDetailService.GetPidTypes();
+            return Ok(result);
+        }
     }
 }

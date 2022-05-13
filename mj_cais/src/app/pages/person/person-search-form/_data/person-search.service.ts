@@ -1,15 +1,15 @@
 import { Injectable, Injector } from "@angular/core";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { PersonGridModel } from "../_models/person.grid.model";
+import { PersonSearchModel } from "../_models/person-search.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class PersonGridService extends CaisCrudService<
-  PersonGridModel,
+export class PersonSearchService extends CaisCrudService<
+  PersonSearchModel,
   string
 > {
   constructor(injector: Injector) {
-    super(PersonGridModel, injector, "people");
+    super(PersonSearchModel, injector, "people/search");
   }
 }

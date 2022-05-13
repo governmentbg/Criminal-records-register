@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
-import { AddressForm } from "../../../../../../@core/components/forms/address-form/model/address.form";
+import { AddressForm } from "../../../../../../@core/components/forms/address-form/_model/address.form";
 import { DatePrecisionModelForm } from "../../../../../../@core/components/forms/inputs/date-precision/_models/date-precision.form";
 import { LookupForm } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.form";
 

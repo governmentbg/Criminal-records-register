@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AddressForm } from "../../address-form/model/address.form";
+import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
 
@@ -7,7 +7,7 @@ export class PersonForm {
   public group: FormGroup;
 
   public id: FormControl;
-  // appling validation rules,
+  // applying validation rules,
   // showing or hiding form controls
   // depends on context type
   public contextType: FormControl;

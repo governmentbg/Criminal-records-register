@@ -88,6 +88,13 @@ namespace MJ_CAIS.Services
                 });
         }
 
+        public IQueryable<BaseNomenclatureDTO> GetPidTypes()
+        {
+            return _nomenclatureDetailRepository
+                  .GetPidTypes()
+                  .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
         public async Task<IgPageResult<CountryDTO>> GetCountriesAsync(ODataQueryOptions<CountryDTO> aQueryOptions)
         {
             var entityQuery = _nomenclatureDetailRepository.GetCountries();

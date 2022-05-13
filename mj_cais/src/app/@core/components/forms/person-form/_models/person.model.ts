@@ -1,4 +1,4 @@
-import { AddressModel } from "../../address-form/model/address.model";
+import { AddressModel } from "../../address-form/_model/address.model";
 import { MultipleChooseModel } from "../../inputs/multiple-choose/models/multiple-choose.model";
 
 export class PersonModel {

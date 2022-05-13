@@ -43,12 +43,14 @@ import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { BulletinStatusHistoryOverviewComponent } from './bulletin/bulletin-form/tabs/bulletin-status-history-overview/bulletin-status-history-overview.component';
 import { ApplicationFormComponent } from './application/application-form/application-form.component';
-import { PersonOverviewComponent } from './person/person-overview/person-overview.component';
 import { PostLoginComponent } from "./auth/post-login";
 import { PersonDetailsFormComponent } from './person/person-details-form/person-details-form.component';
 import { PersonBulletinOverviewComponent } from './person/person-details-form/grids/person-bulletin-overview/person-bulletin-overview.component';
 import { PersonApplicationOverviewComponent } from './person/person-details-form/grids/person-application-overview/person-application-overview.component';
 import { PersonFbbcOverviewComponent } from './person/person-details-form/grids/person-fbbc-overview/person-fbbc-overview.component';
+import { PersonRemindFormComponent } from "./person/person-remind-form/person-remind-form.component";
+import { PersonSearchFormComponent } from './person/person-search-form/person-search-form.component';
+import { PersonSearchOverviewComponent } from './person/person-search-form/grids/person-search-overview/person-search-overview.component';
 
 @NgModule({
   imports: [
@@ -98,12 +100,14 @@ import { PersonFbbcOverviewComponent } from './person/person-details-form/grids/
     BulletinNewOfficeOverviewComponent,
     BulletinStatusHistoryOverviewComponent,
     ApplicationFormComponent,
-    PersonOverviewComponent,
     PostLoginComponent,
     PersonDetailsFormComponent,
     PersonBulletinOverviewComponent,
     PersonApplicationOverviewComponent,
-    PersonFbbcOverviewComponent
+    PersonFbbcOverviewComponent,
+    PersonRemindFormComponent,
+    PersonSearchFormComponent,
+    PersonSearchOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

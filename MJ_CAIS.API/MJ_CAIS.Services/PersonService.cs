@@ -79,13 +79,13 @@ namespace MJ_CAIS.Services
                 {
                     // group 1 fullmatch, group 1 prop name, group 2 prop value
                     if (match.Groups?.Count == null || match.Groups?.Count < 3) continue;
-                    var propName = match.Groups[1].Value?.ToLower();
-                    var propValue = match.Groups[2].Value?.ToLower();
+                    var propName = match.Groups[1].Value?.ToUpper();
+                    var propValue = match.Groups[2].Value?.ToUpper();
 
                     var propInfo = searchObj.GetType().GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                     if (propInfo != null)
                     {
-                        if (propName.ToLower() == nameof(searchObj.BirthDateDisplay).ToLower())
+                        if (propName.ToUpper() == nameof(searchObj.BirthDateDisplay).ToUpper())
                         {
                             var isParsed = DateTime.TryParse(propValue, out DateTime paresedDate);
                             if (isParsed) searchObj.BirthDate = paresedDate;
@@ -185,6 +185,34 @@ namespace MJ_CAIS.Services
                 dbContext.ApplyChanges(personHistoryToBeAdded, new List<BaseEntity>(), true);
                 return personToUpdate;
             }
+
+            // всички хора и техните аидита трябва да се прехвърлят към историята 
+
+            // get all person realted to this pids
+            // pid saved in db or locally added
+            //var pidsIds = pids.Select(x=>x.Id).ToList();
+            //var existingPersons = await dbContext.PPeople
+            //        .AsNoTracking()
+            //        .Include(x => x.PPersonIds)
+            //        .Where(x => pidsIds.Contains(x.Id))
+            //        .ToListAsync();
+
+            //// create new person entity with all pids 
+            //var newPerson = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
+            //newPerson.Id = BaseEntity.GenerateNewId();
+            //newPerson.CreatedOn = DateTime.UtcNow; // todo: remove
+            //var allPidsToBeAdded = existingPersons.SelectMany(x => x.PPersonIds)
+            //    .Select(x=> new PPersonId
+            //    {
+            //        Id = BaseEntity.GenerateNewId(),
+            //        Pid = x.Pid,
+            //        CountryId = x.CountryId,
+            //        PidTypeId  = x.PidTypeId,
+            //        Issuer = x.Issuer,
+            //        PersonId = newPerson.Id,
+            //        CreatedOn = DateTime.UtcNow,
+            //        EntityState = EntityStateEnum.Added
+            //    });
 
             //todo: more then one person object
             // more then one person

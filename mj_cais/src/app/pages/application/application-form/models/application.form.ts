@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AddressForm } from "../../../../@core/components/forms/address-form/model/address.form";
+import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
 
 export class ApplicationForm {
   public group: FormGroup;

@@ -16,7 +16,7 @@ import { NomenclatureService } from "../../../services/rest/nomenclature.service
 import { AutocompleteComponent } from "../inputs/autocomplete/autocomplete.component";
 import { CountryDialogComponent } from "./dialog/country-dialog/country-dialog.component";
 import { CountryGridModel } from "./dialog/_models/country-grid.model";
-import { AddressForm } from "./model/address.form";
+import { AddressForm } from "./_model/address.form";
 
 @Component({
   selector: "cais-address-form",
@@ -138,14 +138,14 @@ export class AddressFormComponent implements OnInit {
       .getMunicipalities(districtId)
       .subscribe((items) => {
         this.municipalities = items;
-        this.parentForm.municipalityId.setValidators([Validators.required]);
+        //this.parentForm.municipalityId.setValidators([Validators.required]);
       });
   }
 
   private setCities(municipalityId: string) {
     this.nomenclatureService.getCities(municipalityId).subscribe((items) => {
       this.cities = items;
-      this.parentForm.cityId.setValidators([Validators.required]);
+      //this.parentForm.cityId.setValidators([Validators.required]);
     });
   }
 

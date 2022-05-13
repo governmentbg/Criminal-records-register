@@ -1,0 +1,148 @@
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  [paginationTemplate]="pager"
+  [allowFiltering]="false"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+>
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>Лица</igx-grid-toolbar-title>
+  </igx-grid-toolbar>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column field="pid" header="Идентификатор" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="pidTypeName"
+    header="Тип идентификатор"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="firstName" header="Име" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="surName" header="Презиме" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="familyName" header="Фамилия" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="fullName" header="Пълно име" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    dataType="Date"
+    [formatter]="this.dateFormatService.formatDate"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column width="150px" header="" [filterable]="false" [pinned]="true">
+    <ng-template igxCell let-cell="cell">
+      <ng-container *ngIf="!isRemindPersonForm">
+        <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
+          <nb-icon pack="fa" icon="bars"></nb-icon>
+        </a>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/people/preview', cell.rowData.id]"
+          >
+            <span class="ml-1">Детайли</span>
+          </button>
+
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/bulletins/create']"
+            [queryParams]="{ personId: cell.rowData.id }"
+          >
+            <span class="ml-1">Бюлетин</span>
+          </button>
+
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/']"
+            [queryParams]="{ personId: cell.rowData.id }"
+          >
+            <span class="ml-1">Свидетелство</span>
+          </button>
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/people/remind', cell.rowData.id]"
+          >
+            <span class="ml-1">Напомнителен запис</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+      <ng-container *ngIf="isRemindPersonForm">
+        <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
+          <nb-icon pack="fa" icon="bars"></nb-icon>
+        </a>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/people/preview', cell.rowData.id]"
+          >
+            <span class="ml-1">Детайли</span>
+          </button>
+
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/people/connect', cell.rowData.id]"
+            [queryParams]="{ existingPersonId: existingPersonId }"
+          >
+            <span class="ml-1">Свържи с това лице</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </ng-template>
+  </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>

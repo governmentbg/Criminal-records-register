@@ -20,8 +20,13 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<GCountry> GetCountries();
 
         IQueryable<BSanctionCategory> GetSanctionCategories();
+
         IQueryable<APurpose> GetAllAPurposes();
+
         IQueryable<APaymentMethod> GetAllAPaymentMethods();
+
         IQueryable<ASrvcResRcptMeth> GetSrvcResRcptMethods();
+
+        IQueryable<PPersonIdType> GetPidTypes();
     }
 }
