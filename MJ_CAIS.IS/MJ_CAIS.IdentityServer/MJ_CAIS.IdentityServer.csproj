@@ -26,6 +26,8 @@
   
   <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.IdentityServer.AdminAppCredentials\MJ_CAIS.IdentityServer.CAISAppCredentials.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.IdentityServer.CAISCitizensCredentials\MJ_CAIS.IdentityServer.CAISCitizensCredentials.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.IdentityServer.CAISExternalCredentials\MJ_CAIS.IdentityServer.CAISExternalCredentials.csproj" />
   </ItemGroup>
   
   <ItemGroup>

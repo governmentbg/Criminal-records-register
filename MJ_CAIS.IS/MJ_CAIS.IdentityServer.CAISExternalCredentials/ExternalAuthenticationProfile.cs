@@ -1,22 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MJ_CAIS.IdentityServer.CAISAppCredentials;
 using System.ComponentModel.Composition;
 using TechnoLogica.Authentication.Common;
 
-namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
+namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 {
     [Export(typeof(IAuthenticationProfile))]
-    public class AdminAuthenticationProfile : IAuthenticationProfile
+    public class ExternalAuthenticationProfile : IAuthenticationProfile
     {
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<CaisDbContext>(options =>
                  options.UseOracle(configuration.GetConnectionString("CaisConnectionString"), opt => opt.UseOracleSQLCompatibility("11")));
 
-            services.AddTransient<IProfileClientService, AdminProfileService>();
-            services.AddTransient<IProfileClientService, LocalAdminProfileService>();
+            services.AddTransient<IProfileClientService, ExternalProfileService>();
+            services.AddTransient<IProfileClientService, LocalExternalProfileService>();
 
         }
     }

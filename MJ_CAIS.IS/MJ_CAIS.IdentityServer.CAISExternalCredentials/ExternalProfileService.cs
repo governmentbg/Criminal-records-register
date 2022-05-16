@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using TechnoLogica.Authentication.Common;
 using Microsoft.Extensions.Configuration;
-using MJ_CAIS.IdentityServer.CAISAppCredentials;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
-using IdentityModel;
+using Microsoft.EntityFrameworkCore;
 
-namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
+namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 {
-    public class AdminProfileService : IProfileClientService
+    public class ExternalProfileService : IProfileClientService
     {
-        public virtual string ClientId => "cais-angular";
+        public virtual string ClientId => "cais-external";
 
         protected CaisDbContext CaisDbContext { get; set; }
 
-        public AdminProfileService(
-            CaisDbContext caisDbContext, 
+        public ExternalProfileService(
+            CaisDbContext caisDbContext,
             IConfiguration configuration)
         {
             CaisDbContext = caisDbContext;
@@ -52,16 +50,16 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
 
         public async Task<UserInfo> FindByUsername(string scheme, string username)
         {
-            var res = 
-            (from u in CaisDbContext.GUsers
-            where u.Egn == username
-            select new UserInfo()
-            {
-                Name = $"{u.Firstname} {u.Surname} {u.Familyname}",
-                SubjectId = u.Id,
-                Active = u.Active,
-                Username = u.Egn
-            }).FirstOrDefault();
+            var res =
+            (from u in CaisDbContext.GUsersExt
+             where u.Egn == username
+             select new UserInfo()
+             {
+                 Name = u.Name,
+                 SubjectId = u.Id,
+                 Active = u.Active,
+                 Username = u.Egn
+             }).FirstOrDefault();
             return res;
         }
 
@@ -74,34 +72,32 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
         {
             var userID = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "sub").Value;
             var user =
-                CaisDbContext.GUsers
+                CaisDbContext.GUsersExt
                 .AsNoTracking()
-                .Include(u => u.GUserRoles)
                 .Where(u => u.Id == userID)
                 .Select(u => new
                 {
-                    u.Firstname,
-                    u.Surname,
-                    u.Familyname,
-                    u.CsAuthorityId,
                     u.Position,
-                    u.Egn,
-                    Roles = u.GUserRoles.Select( r => r.Role.Code).Distinct()
+                    u.AdministrationId,
+                    u.IsAdmin,
+                    u.Name,
+                    u.Active,
+                    u.Egn
                 })
                 .FirstOrDefault();
             if (user != null)
             {
-                context.IssuedClaims.Add(new Claim("FullName", $"{user.Firstname} {user.Surname} {user.Familyname}"));
-                if (!string.IsNullOrEmpty(user.CsAuthorityId))
+                context.IssuedClaims.Add(new Claim("Name", user.Name));
+                if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
-                    context.IssuedClaims.Add(new Claim("AuthorityId", user.CsAuthorityId));
+                    context.IssuedClaims.Add(new Claim("AdministrationId", user.AdministrationId));
                 }
-                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "normal"));
-                foreach ( var role in user.Roles)
-                { 
-                    context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
+                if (user.IsAdmin.HasValue && user.IsAdmin.Value)
+                {
+                    context.IssuedClaims.Add(new Claim("isAdmin", "true"));
                 }
             }
+            throw new NotImplementedException();
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
@@ -109,7 +105,7 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
             var subject = context.Subject ?? throw new ArgumentNullException(nameof(context.Subject));
 
             var subjectId = subject.Claims.Where(x => x.Type == "sub").FirstOrDefault().Value;
-            var user = CaisDbContext.GUsers.Where(u => u.Id == subjectId).FirstOrDefault();
+            var user = CaisDbContext.GUsersExt.Where(u => u.Id == subjectId).FirstOrDefault();
             context.IsActive = user != null;
         }
     }
@@ -117,14 +113,14 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
     /// <summary>
     /// For Test purposes
     /// </summary>
-    public class LocalAdminProfileService : AdminProfileService
+    public class LocalExternalProfileService : ExternalProfileService
     {
-        public override string ClientId => "cais-angular-local";
+        public override string ClientId => "cais-external-local";
 
-        public LocalAdminProfileService(
-            CaisDbContext daisDbContext, 
+        public LocalExternalProfileService(
+            CaisDbContext daisDbContext,
             IConfiguration configuration) : base(
-                daisDbContext, 
+                daisDbContext,
                 configuration)
         {
         }
