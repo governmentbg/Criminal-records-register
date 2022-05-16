@@ -57,6 +57,7 @@ import { UsersCitizenOverviewComponent } from './users-public/users-citizen-over
 import { UsersFormComponent } from './users/users-form/users-form.component';
 import { NgxPermissionsModule } from "ngx-permissions";
 import { AdministrationsExternalComponent } from './administrations-external/administrations-external.component';
+import { ApplicationNewOverviewComponent } from './application/application-overview/application-new-overview/application-new-overview.component';
 
 @NgModule({
   imports: [
@@ -119,7 +120,8 @@ import { AdministrationsExternalComponent } from './administrations-external/adm
     UsersExternalOverviewComponent,
     UsersCitizenOverviewComponent,
     UsersFormComponent,
-    AdministrationsExternalComponent
+    AdministrationsExternalComponent,
+    ApplicationNewOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

@@ -33,6 +33,20 @@
           </nb-list>
         </nb-card-body>
       </nb-card>
+      <nb-card accent="info">
+        <nb-card-header>Свидетелства</nb-card-header>
+        <nb-card-body>
+          <nb-list>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications']">
+                <!-- Нови заявления ({{ model.bulletinNewOfficeCount }}) -->
+                Нови заявления ({{ model.bulletinNewOfficeCount }})
+              </a>
+            </nb-list-item>
+          
+          </nb-list>
+        </nb-card-body>
+      </nb-card>
     </div>
     <div class="col-md-6">
       <div class="row col-md-12">

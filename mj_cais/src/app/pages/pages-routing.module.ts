@@ -44,6 +44,7 @@ import { UsersCitizenOverviewComponent } from "./users-public/users-citizen-over
 import { UsersFormComponent } from "./users/users-form/users-form.component";
 import { UserResolver } from "./users/users-form/_data/user.resolver";
 import { NgxPermissionsGuard } from "ngx-permissions";
+import { ApplicationNewOverviewComponent } from "./application/application-overview/application-new-overview/application-new-overview.component";
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
       {
         path: "home",
         component: HomeComponent,
+      },
+      {
+        path: "applications",
+        component: ApplicationNewOverviewComponent,
+        // canActivate: [AuthGuard],
       },
       {
         path: "bulletins",

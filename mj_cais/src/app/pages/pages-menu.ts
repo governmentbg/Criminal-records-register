@@ -67,6 +67,16 @@ export class PagesMenu {
         ],
       },
       {
+        title: "Свидетелства",
+        icon: { icon: "file-alt", pack: "fa" },
+        children: [
+          {
+            title: "Нови заявления",
+            link: "/pages/applications",
+          },
+        ],
+      },
+      {
         title: "За решение от съдия",
         icon: "message-circle-outline",
         children: [
