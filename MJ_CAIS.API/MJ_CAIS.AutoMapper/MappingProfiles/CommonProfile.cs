@@ -43,6 +43,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<PPersonIdType, BaseNomenclatureDTO>();
+            CreateMap<GDecidingAuthority, BaseNomenclatureDTO>();
         }
     }
 }

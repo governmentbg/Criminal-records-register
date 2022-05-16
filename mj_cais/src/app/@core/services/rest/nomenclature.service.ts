@@ -117,6 +117,12 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
+  public getDecidingAuthoritiesForBulletins(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/deciding-authorities`
+    );
+  }
+
   public getOffenceCategories(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/b_offence_categories`

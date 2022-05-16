@@ -113,5 +113,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = _nomenclatureDetailService.GetPidTypes();
             return Ok(result);
         }
+
+        [HttpGet("deciding-authorities")]
+        public async  Task<IActionResult> GetDecidingAuthorities()
+        {
+            var result = await _nomenclatureDetailService.GetDecidingAuthoritiesForBulletinsAsync();
+            return Ok(result);
+        }
     }
 }

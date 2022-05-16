@@ -137,7 +137,7 @@
               [label]="'Вид наказание'"
               [inputFormControl]="bulletinSanctionForm.sanctCategoryId"
               [parentGroup]="bulletinSanctionForm.group"
-              [items]="dbData.sanctionCategories"
+              [items]="sanctionCategoriesOptions"
               [inputName]="'sanctCategoryId'"
               (selectionChanged)="onSanctionCategoryChange($event)"
             >

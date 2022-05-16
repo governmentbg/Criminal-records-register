@@ -28,5 +28,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<ASrvcResRcptMeth> GetSrvcResRcptMethods();
 
         IQueryable<PPersonIdType> GetPidTypes();
+
+        Task<IQueryable<GDecidingAuthority>> GetDecidingAuthoritiesForBulletinsAsync();
     }
 }
