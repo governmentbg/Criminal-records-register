@@ -238,7 +238,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             return pidDb;
         }
-
+        
         [Obsolete($"Use {nameof(InsertAsync)} with additional parameter personH instead.", true)]
         public override Task<PPerson> InsertAsync(PPerson entity)
         {

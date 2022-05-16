@@ -9,7 +9,7 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit);
 
-        Task<PPerson> CreatePersonAsync(PersonDTO aInDto);
+        Task<PPerson> CreatePersonAsync(PersonDTO aInDto, bool autoMergePeople = false);
 
         Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
 
