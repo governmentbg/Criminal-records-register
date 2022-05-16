@@ -48,6 +48,15 @@ namespace MJ_CAIS.Repositories.Impl
             return _dbContext.BSanctionCategories.AsNoTracking();
         }
 
+        public async Task<IQueryable<GDecidingAuthority>> GetDecidingAuthoritiesForBulletinsAsync()
+        {
+            var query = _dbContext.GDecidingAuthorities.AsNoTracking()
+                .Where(x=>x.ActiveForBulletins.HasValue && x.ActiveForBulletins.Value)
+                .OrderBy(x=>x.OrderNumber);
+
+            return await Task.FromResult(query);
+        }
+
         public IQueryable<GCountry> GetCountries()
         {
             return _dbContext.GCountries.AsNoTracking()

@@ -50,7 +50,7 @@ export class BulletinResolver implements Resolve<any> {
       idDocumentCategoryTypes:
         this.nomenclatureService.getIdDocumentCategoryTypes(),
       decisionTypes: this.nomenclatureService.getDecisionTypes(),
-      decidingAuthorities: this.nomenclatureService.getDecidingAuthorities(),
+      decidingAuthorities: this.nomenclatureService.getDecidingAuthoritiesForBulletins(),
       caseTypes: this.nomenclatureService.getCaseTypes(),
       offences: this.service.getOffences(bulletineId),
       ecrisOffCategories: this.nomenclatureService.getEcrisOffCategories(),

@@ -33,5 +33,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetSrvcResRcptMethods();
 
         IQueryable<BaseNomenclatureDTO> GetPidTypes();
+
+        Task<IQueryable<BaseNomenclatureDTO>> GetDecidingAuthoritiesForBulletinsAsync();
     }
 }

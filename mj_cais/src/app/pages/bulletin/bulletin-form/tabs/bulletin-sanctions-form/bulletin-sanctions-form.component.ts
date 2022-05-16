@@ -20,6 +20,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   @Input() bulletinSanctionsTransactions: string;
   @Input() dbData: any;
   @Input() isForPreview: boolean;
+  @Input() decisionDateInput: any;
 
   @ViewChild("sanctionsGrid", {
     read: IgxGridComponent,
@@ -44,12 +45,14 @@ export class BulletinSanctionsFormComponent implements OnInit {
 
   public sanctionProbCategoriesOptions: BaseNomenclatureModel[];
   public sanctionProbMeasuresOptions: BaseNomenclatureModel[];
+  public sanctionCategoriesOptions: BaseNomenclatureModel[];
 
   constructor(public dateFormatService: DateFormatService) {}
 
   ngOnInit(): void {
     this.sanctionProbCategoriesOptions = this.dbData.sanctionProbCategories;
     this.sanctionProbMeasuresOptions = this.dbData.sanctionProbMeasures;
+    this.sanctionCategoriesOptions = this.dbData.sanctionCategories;
   }
 
   ngAfterViewInit(): void {
@@ -102,6 +105,20 @@ export class BulletinSanctionsFormComponent implements OnInit {
     // clear grid and old transactions
     this.clearProbationData();
     this.showOrHidBySanctionCategory("");
+
+    // filter sanction category
+    // by decision date
+    let decisionDate = new Date(this.decisionDateInput.value);
+    if (decisionDate) {
+      this.sanctionCategoriesOptions = this.dbData.sanctionCategories.filter(
+        (x) =>
+          new Date(x.validFrom) <= decisionDate &&
+          new Date(x.validTo) >= decisionDate
+      );
+    } else {
+      this.sanctionCategoriesOptions = this.dbData.sanctionCategories;
+    }
+
     this.dialog.open();
   }
 

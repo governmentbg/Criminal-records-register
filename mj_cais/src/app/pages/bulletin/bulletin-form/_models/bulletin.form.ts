@@ -77,7 +77,7 @@ export class BulletinForm {
   }
 
   private initNonEditableObj(): void {
-    //this.group.disable();
+    this.person = new PersonForm(PersonContextEnum.Bulletin, true);
     this.registrationNumber.disable();
     this.csAuthorityName.disable();
     this.sequentialIndex.disable();
@@ -110,6 +110,8 @@ export class BulletinForm {
   }
 
   private initForEditNewEISS(): void {
+    this.person = new PersonForm(PersonContextEnum.Bulletin, true);
+
     this.registrationNumber.setValidators(Validators.maxLength(100));
     this.csAuthorityName.disable();
     this.sequentialIndex.setValidators(Validators.required);
@@ -149,6 +151,7 @@ export class BulletinForm {
   private initUnlocked(): void {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid);
+    this.person = new PersonForm(PersonContextEnum.Bulletin, false);
     this.registrationNumber.setValidators(Validators.maxLength(100));
     this.csAuthorityName.disable();
     this.sequentialIndex.setValidators(Validators.required);
@@ -251,7 +254,6 @@ export class BulletinForm {
     this.createdByPosition = new FormControl(null);
     this.approvedByNames = new FormControl(null);
     this.approvedByPosition = new FormControl(null);
-    this.person = new PersonForm(PersonContextEnum.Bulletin, true);
 
     this.decisionTypeId = new FormControl(null);
     this.decisionNumber = new FormControl(null);

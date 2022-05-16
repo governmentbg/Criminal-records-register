@@ -88,6 +88,14 @@ namespace MJ_CAIS.Services
                 });
         }
 
+        public async Task<IQueryable<BaseNomenclatureDTO>> GetDecidingAuthoritiesForBulletinsAsync()
+        {
+            var query = await _nomenclatureDetailRepository
+                .GetDecidingAuthoritiesForBulletinsAsync();
+
+            return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);        
+        }
+
         public IQueryable<BaseNomenclatureDTO> GetPidTypes()
         {
             return _nomenclatureDetailRepository

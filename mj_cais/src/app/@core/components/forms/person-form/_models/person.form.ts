@@ -44,7 +44,7 @@ export class PersonForm {
   public fatherFullname: FormControl;
   public personAlias: FormControl;
 
-  constructor(context: string, hasValidation: boolean = true) {
+  constructor(context: string, isDisabled: boolean = true) {
     this.id = new FormControl(null);
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
@@ -78,8 +78,7 @@ export class PersonForm {
     this.fatherSurname = new FormControl(null);
     this.fatherFamilyname = new FormControl(null);
     this.fatherFullname = new FormControl(null);
-
-    if (!hasValidation) {
+    if (isDisabled) {
       this.birthPlace = new AddressForm(false, true);
       this.birthPlace.group.disable();
     } else {
