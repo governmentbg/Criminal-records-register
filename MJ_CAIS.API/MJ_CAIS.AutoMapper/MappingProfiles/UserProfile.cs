@@ -18,7 +18,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.Roles.SelectedForeignKeys, opt => opt.MapFrom(src => src.GUserRoles.Select(x => x.RoleId)));
             CreateMap<UserDTO, GUser>();
             CreateMap<GUser, UserGridDTO>()
-                .ForMember( d=> d.AuthorityName, opt => opt.MapFrom( src => src.CsAuthority.Name));
+                .ForMember( d => d.AuthorityName, opt => opt.MapFrom( src => src.CsAuthority.Name))
+                .ForMember( d => d.Roles, opt => opt.MapFrom( src => src.GUserRoles.Select( s=> s.Role.Name)));
         }
     }
 }

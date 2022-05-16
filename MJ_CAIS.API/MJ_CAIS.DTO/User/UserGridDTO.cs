@@ -8,8 +8,8 @@ namespace MJ_CAIS.DTO.User
         public bool? Active { get; set; }
         public string? Email { get; set; }
         public string? Egn { get; set; }
-        public string? CsAuthorityId { get; set; }
         public string? AuthorityName { get; set; }
         public string? Position { get; set; }
+        public string[] Roles { get; set; }
     }
 }

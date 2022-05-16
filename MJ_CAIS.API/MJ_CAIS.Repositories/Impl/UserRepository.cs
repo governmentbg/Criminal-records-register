@@ -7,9 +7,12 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class UserRepository : BaseAsyncRepository<GUser, CaisDbContext>, IUserRepository
     {
-        public UserRepository(CaisDbContext dbContext) : base(dbContext)
+        IUserContext userContext;
+        public UserRepository(CaisDbContext dbContext, IUserContext _userContext) : base(dbContext)
         {
+            this.userContext = _userContext;
         }
+
         public virtual async Task<GUser> SelectAsync(string id)
         {
             var result = await this._dbContext.Set<GUser>()
@@ -24,7 +27,9 @@ namespace MJ_CAIS.Repositories.Impl
             var result = this._dbContext.Set<GUser>()
                 .Include(u => u.CsAuthority)
                 .Include(u => u.GUserRoles)
+                .Include(u => u.GUserRoles).ThenInclude( ur => ur.Role)
                 .AsNoTracking();
+            result = userContext.FilterByAuthority(result);
             return result;
         }
     }

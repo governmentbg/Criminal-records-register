@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNet.OData.Formatter;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DIContainer;
+using MJ_CAIS.WebSetup.Utils;
 
 namespace MJ_CAIS.WebSetup.Setup
 {
@@ -80,6 +83,13 @@ namespace MJ_CAIS.WebSetup.Setup
         public static void UseCentralRoutePrefix(this MvcOptions opts, string prefix)
         {
             opts.UseCentralRoutePrefix(new RouteAttribute(prefix));
+        }
+        public static void ConfigureUserContext(this IServiceCollection services)
+        {
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IUserContext>(
+                s => new UserContext(s.GetService<IHttpContextAccessor>().HttpContext.User)
+            );
         }
     }
 }

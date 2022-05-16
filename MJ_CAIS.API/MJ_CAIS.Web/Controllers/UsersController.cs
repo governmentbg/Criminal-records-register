@@ -9,7 +9,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("users")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public class UsersController : BaseApiCrudController<UserDTO, UserDTO, UserGridDTO, GUser, string>
     {
         private readonly IUserService _userService;

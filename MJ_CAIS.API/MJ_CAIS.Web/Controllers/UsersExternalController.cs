@@ -9,7 +9,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("users-external")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public class UsersExternalController : BaseApiCrudController<UserExternalDTO, UserExternalDTO, UserExternalGridDTO, GUsersExt, string>
     {
         public UsersExternalController(IUserExternalService baseService) : base(baseService)

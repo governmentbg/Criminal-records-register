@@ -27,6 +27,7 @@ namespace MJ_CAIS.WebSetup
             builder.Services.ConfigureCors();
             builder.Services.ConfigureDependencies(configuration);
             builder.Services.ConfigureOData();
+            builder.Services.ConfigureUserContext();
             builder.Services.AddMvc(opt => opt.EnableEndpointRouting = false);
 
             builder.Services.AddFluentValidation(conf =>

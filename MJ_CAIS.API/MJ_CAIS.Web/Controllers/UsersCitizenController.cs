@@ -9,7 +9,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("users-citizen")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public class UsersCitizenController : BaseApiCrudController<UserCitizenDTO, UserCitizenDTO, UserCitizenGridDTO, GUsersCitizen, string>
     {
         public UsersCitizenController(IUserCitizenService baseService) : base(baseService)
