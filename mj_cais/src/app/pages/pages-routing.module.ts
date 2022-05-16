@@ -43,11 +43,13 @@ import { UsersExternalOverviewComponent } from "./users-external/users-external-
 import { UsersCitizenOverviewComponent } from "./users-public/users-citizen-overview/users-citizen-overview.component";
 import { UsersFormComponent } from "./users/users-form/users-form.component";
 import { UserResolver } from "./users/users-form/_data/user.resolver";
+import { NgxPermissionsGuard } from "ngx-permissions";
 
 const routes: Routes = [
   {
     path: "",
     component: PagesComponent,
+    // canActivate: [AuthGuard],
     // canActivateChild: [AuthGuard],
     children: [
       {
@@ -260,39 +262,68 @@ const routes: Routes = [
       {
         path: "users",
         component: UsersOverviewComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['Admin', 'GlobalAdmin']
+          }
+        }
       },
       {
         path: "users/create",
         component: UsersFormComponent,
-        resolve: { dbData: UserResolver }
-        // canActivate: [AuthGuard],
+        resolve: { dbData: UserResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['Admin', 'GlobalAdmin']
+          }
+        }
       },
       {
         path: "users/edit/:ID",
         component: UsersFormComponent,
         resolve: { dbData: UserResolver },
-        data: { edit: true },
-        // canActivate: [AuthGuard],    
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          edit: true,
+          permissions: {
+            only: ['Admin', 'GlobalAdmin']
+          }
+        }  
       },
       {
         path: "users/preview/:ID",
         component: UsersFormComponent,
         resolve: { dbData: UserResolver },
-        data: { edit: true, preview: true },
-        // canActivate: [AuthGuard],    
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          edit: true,
+          preview: true, 
+          permissions: {
+            only: ['Admin', 'GlobalAdmin']
+          }
+        }  
       },
       {
         path: "users-external",
         component: UsersExternalOverviewComponent,
-     
-        // canActivate: [AuthGuard],
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['Admin', 'GlobalAdmin']
+          }
+        }  
       },
       {
         path: "users-public",
         component: UsersCitizenOverviewComponent,
-     
-        // canActivate: [AuthGuard],
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['Admin', 'GlobalAdmin']
+          }
+        }  
       },
       {
         path: "miscellaneous",

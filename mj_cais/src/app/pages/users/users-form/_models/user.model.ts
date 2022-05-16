@@ -11,6 +11,7 @@ export class UserModel {
     public position: string = null;
     public csAuthorityId: string = null;
     public roles: MultipleChooseModel = new MultipleChooseModel();
+    public version: number = null;
   
     constructor(init?: Partial<UserModel>) {
       this.id = init?.id ?? null;
@@ -23,6 +24,7 @@ export class UserModel {
       this.position = init?.position ?? null;
       this.csAuthorityId = init?.csAuthorityId ?? null;
       this.roles = init?.roles ?? null;
+      this.version = init?.version ?? null;
     }
   }
     

@@ -49,6 +49,7 @@ import {
 } from "@nebular/auth";
 import { AuthGuard } from "./@core/services/common/guard.service";
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxPermissionsModule } from "ngx-permissions";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -92,6 +93,7 @@ registerLocaleData(localeBg);
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     ThemeModule.forRoot(),
+    NgxPermissionsModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

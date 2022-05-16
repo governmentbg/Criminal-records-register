@@ -4,7 +4,10 @@ import {
   changei18n,
   getCurrentResourceStrings,
 } from "@infragistics/igniteui-angular";
+import { NbAuthService } from "@nebular/auth";
 import { TranslateService } from "@ngx-translate/core";
+import { NgxPermissionsService } from "ngx-permissions";
+import { map, of, switchMap, tap } from "rxjs";
 
 @Component({
   selector: "ngx-app",
@@ -18,7 +21,11 @@ import { TranslateService } from "@ngx-translate/core";
     <router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
-  constructor(private http: HttpClient, translate: TranslateService) {
+  constructor(
+    private http: HttpClient, 
+    private permissionsService: NgxPermissionsService,
+    private authService: NbAuthService,
+    translate: TranslateService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang("bg");
 
@@ -37,5 +44,22 @@ export class AppComponent implements OnInit {
         }
         changei18n(currentRS);
       });
+      
+    this.authService.onTokenChange().pipe(
+      switchMap((tkn) => {
+        return tkn.isValid()
+          ? this.http.get("/auth/connect/userinfo")
+          : of({});
+      }),
+      tap((data: any) => {
+        if (Array.isArray(data?.role)) {
+          this.permissionsService.loadPermissions(data.role);
+        } else if (data?.role) {
+          this.permissionsService.loadPermissions([data.role]);
+        } else {
+          this.permissionsService.loadPermissions([]);
+        }
+      })
+    ).subscribe();    
   }
 }

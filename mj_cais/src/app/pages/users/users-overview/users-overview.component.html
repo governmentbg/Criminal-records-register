@@ -46,17 +46,19 @@
     </ng-template>
   </igx-column>
 
-  <igx-column
-    field="authorityName"
-    header="Бюро съдимост"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+  <ng-template [ngxPermissionsOnly]="['GlobalAdmin']">
+    <igx-column
+      field="authorityName"
+      header="Бюро съдимост"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+  </ng-template>
 
   <igx-column
     field="firstname"
@@ -117,6 +119,7 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
+
   <igx-column
     field="active"
     header="Активен"
@@ -126,6 +129,17 @@
   >
     <ng-template igxCell let-cell="cell">
       <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>   
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="roles"
+    header="Роли"
+    [sortable]="true"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
 

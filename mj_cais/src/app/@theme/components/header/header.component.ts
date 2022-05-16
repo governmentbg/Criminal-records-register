@@ -9,10 +9,10 @@ import {
   NB_WINDOW,
 } from "@nebular/theme";
 
-import { map, takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
+import { map, switchMap, takeUntil } from "rxjs/operators";
+import { of, Subject } from "rxjs";
 import { NbAuthOAuth2Token, NbAuthResult, NbAuthService, NbTokenService } from "@nebular/auth";
-import { HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { NGXLogger } from "ngx-logger";
 
 @Component({
@@ -51,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: NbAuthService,
     private tokenService: NbTokenService,
     private logger: NGXLogger,
+    private httpClient: HttpClient,
     @Inject(NB_WINDOW) protected window: any
   ) {}
 
@@ -77,11 +78,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe((themeName) => (this.currentTheme = themeName));
 
-    this.authService.onTokenChange()
-    .pipe(
-      map( tkn => this.logger.info(tkn.getPayload())),
-      takeUntil(this.destroy$)
-    ).subscribe();
+      this.authService.isAuthenticated().pipe(
+        switchMap((isAuthenticated) => {
+          return isAuthenticated
+            ? this.httpClient.get("/auth/connect/userinfo")
+            : of({});
+        }),
+        map((data: any) => data?.Name)
+      ).subscribe( name => this.user = {name: name});    
       
     this.menuService.onItemClick()
     .subscribe((menu: NbMenuBag) => {

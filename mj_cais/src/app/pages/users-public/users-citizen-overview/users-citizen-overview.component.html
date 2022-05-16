@@ -58,6 +58,18 @@
   </igx-column>
 
   <igx-column
+    field="email"
+    header="EMail"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
     width="100px"
     header=""
     [sortable]="false"

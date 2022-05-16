@@ -21,7 +21,6 @@ import {
   NbSelectModule,
 } from "@nebular/theme";
 import { TlCommonModule } from "@tl/tl-common";
-import { NgxPermissionsModule } from "ngx-permissions";
 import { FileUploadModule } from "ng2-file-upload";
 import { HammerModule } from "@angular/platform-browser";
 
@@ -42,7 +41,6 @@ import { HammerModule } from "@angular/platform-browser";
     NbDatepickerModule,
     NbAutocompleteModule,
     NbCheckboxModule,
-    NgxPermissionsModule.forRoot(),
     IgxActionStripModule,
     IgxComboModule,
     IgxDialogModule,
@@ -65,7 +63,6 @@ import { HammerModule } from "@angular/platform-browser";
     ReactiveFormsModule,
     NbAutocompleteModule,
     NbCheckboxModule,
-    NgxPermissionsModule,
     IgxActionStripModule,
     IgxComboModule,
     IgxDialogModule,

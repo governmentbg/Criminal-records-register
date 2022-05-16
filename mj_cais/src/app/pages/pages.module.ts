@@ -55,6 +55,8 @@ import { UsersOverviewComponent } from './users/users-overview/users-overview.co
 import { UsersExternalOverviewComponent } from './users-external/users-external-overview/users-external-overview.component';
 import { UsersCitizenOverviewComponent } from './users-public/users-citizen-overview/users-citizen-overview.component';
 import { UsersFormComponent } from './users/users-form/users-form.component';
+import { NgxPermissionsModule } from "ngx-permissions";
+import { AdministrationsExternalComponent } from './administrations-external/administrations-external.component';
 
 @NgModule({
   imports: [
@@ -67,7 +69,8 @@ import { UsersFormComponent } from './users/users-form/users-form.component';
     SharedModule,
     CoreModule.forRoot(),
     MatMenuModule,
-    NbToggleModule
+    NbToggleModule,
+    NgxPermissionsModule.forChild(),
   ],
   declarations: [
     PagesComponent,
@@ -115,7 +118,8 @@ import { UsersFormComponent } from './users/users-form/users-form.component';
     UsersOverviewComponent,
     UsersExternalOverviewComponent,
     UsersCitizenOverviewComponent,
-    UsersFormComponent
+    UsersFormComponent,
+    AdministrationsExternalComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

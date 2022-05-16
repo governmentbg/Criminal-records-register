@@ -1,7 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { NbTokenService } from '@nebular/auth';
+import { NbAuthService, NbTokenService } from '@nebular/auth';
 import { NbMenuItem } from '@nebular/theme';
-import { takeWhile } from 'rxjs';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { of, switchMap, takeWhile, tap } from 'rxjs';
 import { PagesMenu } from './pages-menu';
 
 @Component({
@@ -15,24 +17,25 @@ import { PagesMenu } from './pages-menu';
   `,
 })
 export class PagesComponent {
-  menu: NbMenuItem[];
+  menu: NbMenuItem[] = [];
   loggedIn: boolean = true;
 
   constructor(
     private pagesMenu: PagesMenu,
-    private tokenService: NbTokenService
+    private tokenService: NbTokenService,
+    private permissionsService: NgxPermissionsService
   ) {
-    this.initMenu();
 
     this.tokenService
       .tokenChange()
       .pipe(takeWhile(() => this.loggedIn))
-      .subscribe(() => {
+      .subscribe((tkn) => {
         this.initMenu();
       });
   }
 
-  initMenu() {
-    this.menu = this.pagesMenu.getMenuItems();
+  initMenu() {   
+    this.permissionsService.permissions$.subscribe( perm =>       
+      this.menu = this.pagesMenu.getMenuItems(Object.keys(perm)));   
   }
 }

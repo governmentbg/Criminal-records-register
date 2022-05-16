@@ -7,8 +7,8 @@ export class UserGridModel {
   public email: string = null;
   public egn: string = null;
   public position: string = null;
-  public csAuthorityId: string = null;
   public authorityName: string = null;
+  public roles: string[] = [];
 
   constructor(init?: Partial<UserGridModel>) {
     this.id = init?.id ?? null;
@@ -19,8 +19,10 @@ export class UserGridModel {
     this.email = init?.email ?? null;
     this.egn = init?.egn ?? null;
     this.position = init?.position ?? null;
-    this.csAuthorityId = init?.csAuthorityId ?? null;
     this.authorityName = init?.authorityName ?? null;
+    if(init?.roles){
+      this.roles.push(...init.roles);
+    }
   }
 }
   

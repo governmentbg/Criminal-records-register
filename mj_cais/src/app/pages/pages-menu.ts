@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class PagesMenu {
+
   constructor(iconsLibrary: NbIconLibraries) {
     iconsLibrary.registerFontPack("fa", {
       packClass: "fa",
@@ -18,7 +19,11 @@ export class PagesMenu {
     });
   }
 
-  getMenuItems(): NbMenuItem[] {
+  hasRole(roles: string[], role: string): boolean {
+    return roles.indexOf(role) === -1;
+  }
+
+  getMenuItems(roles: string[]): NbMenuItem[] {
     const dashboardMenu: NbMenuItem[] = [
       {
         title: "",
@@ -122,6 +127,7 @@ export class PagesMenu {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
         expanded: true,
+        hidden: this.hasRole(roles, 'Admin'),
         children: [
           {
             title: "Потребители",
@@ -130,6 +136,10 @@ export class PagesMenu {
           {
             title: "Външни потребители",
             link: "/pages/users-external",
+          },
+          {
+            title: "Външни администрации",
+            link: "/pages/administrations-external",
           },
           {
             title: "Публични потребители",
