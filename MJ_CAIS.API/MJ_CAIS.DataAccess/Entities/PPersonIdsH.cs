@@ -9,7 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string PidTypeId { get; set; } = null!;
         public string? Issuer { get; set; }
         public string? CountryId { get; set; }
-        public string PersonId { get; set; } = null!;
+        public string? PersonId { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }

@@ -17,11 +17,13 @@ namespace MJ_CAIS.DataAccess
         {
         }
 
+        public virtual DbSet<AAppBulletin> AAppBulletins { get; set; } = null!;
         public virtual DbSet<AAppCitizenship> AAppCitizenships { get; set; } = null!;
         public virtual DbSet<AAppPersAlias> AAppPersAliases { get; set; } = null!;
         public virtual DbSet<AApplication> AApplications { get; set; } = null!;
         public virtual DbSet<AApplicationStatus> AApplicationStatuses { get; set; } = null!;
         public virtual DbSet<AApplicationType> AApplicationTypes { get; set; } = null!;
+        public virtual DbSet<ACertificate> ACertificates { get; set; } = null!;
         public virtual DbSet<APaymentMethod> APaymentMethods { get; set; } = null!;
         public virtual DbSet<APurpose> APurposes { get; set; } = null!;
         public virtual DbSet<ASrvcResRcptMeth> ASrvcResRcptMeths { get; set; } = null!;
@@ -96,12 +98,82 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<PPersonIdType> PPersonIdTypes { get; set; } = null!;
         public virtual DbSet<PPersonIdsH> PPersonIdsHes { get; set; } = null!;
         public virtual DbSet<PPersonOld> PPersonOlds { get; set; } = null!;
+        public virtual DbSet<WApplication> WApplications { get; set; } = null!;
+        public virtual DbSet<WApplicationStatus> WApplicationStatuses { get; set; } = null!;
+        public virtual DbSet<WStatusH> WStatusHes { get; set; } = null!;
+        public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("MJ_CAIS");
+
+            modelBuilder.Entity<AAppBulletin>(entity =>
+            {
+                entity.ToTable("A_APP_BULLETINS");
+
+                entity.HasIndex(e => e.BulletinId, "XIF2A_APP_BULLETINS");
+
+                entity.HasIndex(e => e.CertificateId, "XIF3A_APP_BULLETINS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Approved)
+                    .HasPrecision(1)
+                    .HasColumnName("APPROVED");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.CertificateId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CERTIFICATE_ID");
+
+                entity.Property(e => e.ConvictionText)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("CONVICTION_TEXT");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.OrderNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ORDER_NUMBER");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Bulletin)
+                    .WithMany(p => p.AAppBulletins)
+                    .HasForeignKey(d => d.BulletinId)
+                    .HasConstraintName("FK_A_APP_BULLETINS_B_BULLETINS");
+
+                entity.HasOne(d => d.Certificate)
+                    .WithMany(p => p.AAppBulletins)
+                    .HasForeignKey(d => d.CertificateId)
+                    .HasConstraintName("FK_A_APP_BULLETINS_A_CERTIFICA");
+            });
 
             modelBuilder.Entity<AAppCitizenship>(entity =>
             {
@@ -434,6 +506,11 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
 
+                entity.Property(e => e.WApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("W_APPLICATION_ID");
+
                 entity.HasOne(d => d.ApplicationType)
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.ApplicationTypeId)
@@ -485,6 +562,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
+
+                entity.Property(e => e.StatusType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_TYPE");
             });
 
             modelBuilder.Entity<AApplicationType>(entity =>
@@ -523,6 +605,76 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+            });
+
+            modelBuilder.Entity<ACertificate>(entity =>
+            {
+                entity.ToTable("A_CERTIFICATES");
+
+                entity.HasIndex(e => e.ApplicationId, "XIF1A_CERTIFICATES");
+
+                entity.HasIndex(e => e.StatusCode, "XIF2A_CERTIFICATES");
+
+                entity.HasIndex(e => e.FirstSignerId, "XIF3A_CERTIFICATES");
+
+                entity.HasIndex(e => e.SecondSignerId, "XIF4A_CERTIFICATES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.AccessCode1)
+                    .HasMaxLength(100)
+                    .HasColumnName("ACCESS_CODE1");
+
+                entity.Property(e => e.AccessCode2)
+                    .HasMaxLength(100)
+                    .HasColumnName("ACCESS_CODE2");
+
+                entity.Property(e => e.ApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("APPLICATION_ID");
+
+                entity.Property(e => e.FirstSignerId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FIRST_SIGNER_ID");
+
+                entity.Property(e => e.RegistrationNumber)
+                    .HasMaxLength(100)
+                    .HasColumnName("REGISTRATION_NUMBER");
+
+                entity.Property(e => e.SecondSignerId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SECOND_SIGNER_ID");
+
+                entity.Property(e => e.StatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_CODE");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.ACertificates)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("FK_A_CERTIFICATES_A_APPLICATIO");
+
+                entity.HasOne(d => d.FirstSigner)
+                    .WithMany(p => p.ACertificateFirstSigners)
+                    .HasForeignKey(d => d.FirstSignerId)
+                    .HasConstraintName("FK_A_CERTIFICATES_G_USERS_1");
+
+                entity.HasOne(d => d.SecondSigner)
+                    .WithMany(p => p.ACertificateSecondSigners)
+                    .HasForeignKey(d => d.SecondSignerId)
+                    .HasConstraintName("FK_A_CERTIFICATES_G_USERS_2");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.ACertificates)
+                    .HasForeignKey(d => d.StatusCode)
+                    .HasConstraintName("FK_A_CERTIFICATES_A_APP_STATUS");
             });
 
             modelBuilder.Entity<APaymentMethod>(entity =>
@@ -690,6 +842,8 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.ApplicationId, "XIF2A_STATUS_H");
 
+                entity.HasIndex(e => e.CertificateId, "XIF3A_STATUS_H");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -699,6 +853,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("APPLICATION_ID");
+
+                entity.Property(e => e.CertificateId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CERTIFICATE_ID");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
@@ -5633,6 +5792,117 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VERSION");
             });
 
+            modelBuilder.Entity<WApplication>(entity =>
+            {
+                entity.ToTable("W_APPLICATIONS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.ClientIp)
+                    .HasMaxLength(500)
+                    .HasColumnName("CLIENT_IP");
+            });
+
+            modelBuilder.Entity<WApplicationStatus>(entity =>
+            {
+                entity.ToTable("W_APPLICATION_STATUSES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<WStatusH>(entity =>
+            {
+                entity.ToTable("W_STATUS_H");
+
+                entity.HasIndex(e => e.StatusId, "XIF1W_STATUS_H");
+
+                entity.HasIndex(e => e.ApplicationId, "XIF2W_STATUS_H");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.ApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("APPLICATION_ID");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.ReportOrder)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("REPORT_ORDER");
+
+                entity.Property(e => e.StatusId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_ID");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.WStatusHes)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("FK_W_STATUS_H_W_APPLICATIONS");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.WStatusHes)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_W_STATUS_H_W_APPLICATION_ST");
+            });
+
+            modelBuilder.Entity<WWebRequest>(entity =>
+            {
+                entity.ToTable("W_WEB_REQUESTS");
+
+                entity.HasIndex(e => e.ApplicationId, "XIF1W_WEB_REQUESTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.ApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("APPLICATION_ID");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.WWebRequests)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("FK_W_WEB_REQUESTS_W_APPLICATIO");
+            });
+
             modelBuilder.Entity<ZImportFbbc>(entity =>
             {
                 entity.ToTable("Z_IMPORT_FBBC");
@@ -5937,6 +6207,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("BIRTH_DATE");
 
+                entity.Property(e => e.BirthDateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("BIRTH_DATE_DATE");
+
                 entity.Property(e => e.Birthcountry)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("BIRTHCOUNTRY");
@@ -6133,6 +6407,11 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("MSG_TIMESTAMP");
 
+                entity.Property(e => e.NameLangCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NAME_LANG_CODE");
+
                 entity.Property(e => e.Nationality1Code)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -6142,6 +6421,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("NATIONALITY2_CODE");
+
+                entity.Property(e => e.Nationality3Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NATIONALITY3_CODE");
 
                 entity.Property(e => e.NjrCountry)
                     .HasMaxLength(2)

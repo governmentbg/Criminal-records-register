@@ -70,5 +70,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Nationality1Code { get; set; }
         public string? Nationality2Code { get; set; }
         public string? EcrisMsgConvictionId { get; set; }
+        public string? NameLangCode { get; set; }
+        public string? Nationality3Code { get; set; }
+        public DateTime? BirthDateDate { get; set; }
     }
 }
