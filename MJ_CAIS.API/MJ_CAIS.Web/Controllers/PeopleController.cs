@@ -51,9 +51,17 @@ namespace MJ_CAIS.Web.Controllers
 
         [HttpGet("fbbcs")]
         public async Task<IActionResult> GetAllFbbcs(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
-        {           
+        {
             var result = await this._personService.SelectPersonFbbcAllWithPaginationAsync(aQueryOptions, personId);
             return Ok(result);
         }
+
+        [HttpPost("{aId}/connect/{personToBeConnected}")]
+        public async Task<IActionResult> ConnectPeople(string aId, string personToBeConnected)
+        {
+            await this._personService.ConnectPeopleAsync(aId, personToBeConnected);
+            return Ok();
+        }
+
     }
 }

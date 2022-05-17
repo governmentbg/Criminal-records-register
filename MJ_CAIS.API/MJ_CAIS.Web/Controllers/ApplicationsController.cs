@@ -1,3 +1,4 @@
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DataAccess.Entities;
@@ -16,6 +17,13 @@ namespace MJ_CAIS.Web.Controllers
         public ApplicationsController(IApplicationService applicationService) : base(applicationService)
         {
             _applicationService = applicationService;
+        }
+
+        [HttpGet("")]
+        public virtual async Task<IActionResult> GetAll(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
+        {
+            var result = await this._applicationService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
+            return Ok(result);
         }
 
         [HttpPost("")]

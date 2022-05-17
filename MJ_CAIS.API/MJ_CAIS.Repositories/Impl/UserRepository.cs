@@ -13,16 +13,36 @@ namespace MJ_CAIS.Repositories.Impl
             this.userContext = _userContext;
         }
 
-        public virtual async Task<GUser> SelectAsync(string id)
+        public override async Task<GUser> SelectAsync(string id)
         {
             var result = await this._dbContext.Set<GUser>()
                 .Include( u => u.GUserRoles)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
-            return result;
+            if (!userContext.IsGlobalAdmin && userContext.CsAuthorityId != result?.CsAuthorityId)
+            {
+                return null;
+            }
+            else
+            {
+                return result;
+            }
+        }
+        public override async Task<GUser> UpdateAsync(GUser entity)
+        {
+            //if (userContext.IsGlobalAdmin)
+            //{
+            //}
+            //else if (userContext.CsAuthorityId != entity?.CsAuthorityId)
+            //{
+            //    return null;
+            //}
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public virtual IQueryable<GUser> SelectAllAsync()
+        public override IQueryable<GUser> SelectAllAsync()
         {
             var result = this._dbContext.Set<GUser>()
                 .Include(u => u.CsAuthority)

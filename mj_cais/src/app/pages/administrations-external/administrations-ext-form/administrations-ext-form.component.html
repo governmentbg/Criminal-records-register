@@ -1,0 +1,31 @@
+<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+    <nb-card-header class="card-header-shadow">
+      <cais-card-header
+        [label]="displayTitle"
+        [onSaveFunction]="submitFunction"
+        [onCancelFunction]="globalCancelFunction"
+      ></cais-card-header>
+    </nb-card-header>
+    <nb-card-body class="overflow-scroll">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Име'"
+              [inputFormControl]="fullForm.name"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Описание'"
+              [inputFormControl]="fullForm.descr"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>

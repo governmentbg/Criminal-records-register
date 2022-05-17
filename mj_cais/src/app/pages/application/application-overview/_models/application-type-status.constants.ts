@@ -1,4 +1,4 @@
 export enum ApplicationTypeStatusConstants {
-  NewApplication = "NewApplication", // Ново заявление
+  NewApplication = "1", // Ново заявление
   Cancelled = "Cancelled", // Анулирано
 }
