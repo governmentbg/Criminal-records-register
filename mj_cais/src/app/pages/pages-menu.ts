@@ -149,7 +149,7 @@ export class PagesMenu {
           },
           {
             title: "Външни администрации",
-            link: "/pages/administrations-external",
+            link: "/pages/administrations-ext",
           },
           {
             title: "Публични потребители",

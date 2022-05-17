@@ -45,6 +45,11 @@ import { UsersFormComponent } from "./users/users-form/users-form.component";
 import { UserResolver } from "./users/users-form/_data/user.resolver";
 import { NgxPermissionsGuard } from "ngx-permissions";
 import { ApplicationNewOverviewComponent } from "./application/application-overview/application-new-overview/application-new-overview.component";
+import { AdministrationsExtOverviewComponent } from "./administrations-external/administrations-ext-overview/administrations-ext-overview.component";
+import { AdministrationsExtFormmComponent } from "./administrations-external/administrations-ext-form/administrations-ext-form.component";
+import { AdministrationsExtResolver } from "./administrations-external/administrations-ext-form/_data/administrations-ext.resolver";
+import { UsersExternalFormComponent } from "./users-external/users-external-form/users-external-form.component";
+import { UsersExternalResolver } from "./users-external/users-external-form/_data/users-external.resolver";
 
 const routes: Routes = [
   {
@@ -312,12 +317,95 @@ const routes: Routes = [
         }  
       },
       {
+        path: "administrations-ext",
+        component: AdministrationsExtOverviewComponent,
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['GlobalAdmin']
+          }
+        }
+      },
+      {
+        path: "administrations-ext/create",
+        component: AdministrationsExtFormmComponent,
+        resolve: { dbData: AdministrationsExtResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['GlobalAdmin']
+          }
+        }
+      },
+      {
+        path: "administrations-ext/edit/:ID",
+        component: AdministrationsExtFormmComponent,
+        resolve: { dbData: AdministrationsExtResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          edit: true,
+          permissions: {
+            only: ['GlobalAdmin']
+          }
+        }  
+      },
+      {
+        path: "administrations-ext/preview/:ID",
+        component: AdministrationsExtFormmComponent,
+        resolve: { dbData: AdministrationsExtResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          edit: true,
+          preview: true, 
+          permissions: {
+            only: ['GlobalAdmin']
+          }
+        }  
+      },
+      {
         path: "users-external",
         component: UsersExternalOverviewComponent,
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['Admin', 'GlobalAdmin']
+            only: ['GlobalAdmin']
+          }
+        }  
+      },
+      
+      {
+        path: "users-external/create",
+        component: UsersExternalFormComponent,
+        resolve: { dbData: UsersExternalResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ['GlobalAdmin']
+          }
+        }
+      },
+      {
+        path: "users-external/edit/:ID",
+        component: UsersExternalFormComponent,
+        resolve: { dbData: UsersExternalResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          edit: true,
+          permissions: {
+            only: ['GlobalAdmin']
+          }
+        }  
+      },
+      {
+        path: "users-external/preview/:ID",
+        component: UsersExternalFormComponent,
+        resolve: { dbData: UsersExternalResolver },
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          edit: true,
+          preview: true, 
+          permissions: {
+            only: ['GlobalAdmin']
           }
         }  
       },
