@@ -17,7 +17,7 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
   constructor(
     service: PersonSearchGridService,
     injector: Injector,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
   ) {
     super("people-search", service, injector);
   }
@@ -25,7 +25,7 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
   @Input() searchForm: PersonSearchForm;
   @Input() isRemindPersonForm: boolean;
   @Input() existingPersonId: string;
-  
+
   ngOnInit() {
     this.service.updateUrl(`people?isPageInit=true`);
     super.ngOnInit();
@@ -57,8 +57,10 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
       formObj["cityId"] = this.searchForm.birthPlace.cityId.value;
       formObj["countryId"] = this.searchForm.birthPlace.country.id.value;
       formObj["districtId"] = this.searchForm.birthPlace.districtId.value;
-      formObj["municipalityId"] = this.searchForm.birthPlace.municipalityId.value;
-      formObj["foreignCountryAddress"] = this.searchForm.birthPlace.foreignCountryAddress.value;
+      formObj["municipalityId"] =
+        this.searchForm.birthPlace.municipalityId.value;
+      formObj["foreignCountryAddress"] =
+        this.searchForm.birthPlace.foreignCountryAddress.value;
     }
 
     formObj.birthPlace = null;
@@ -77,4 +79,19 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
     this.service.updateUrl(`people?${filterQuery}`);
     super.ngOnInit();
   };
+
+  public connectPeople(existingPersonId, personToBeConnected) {
+    this.service.connectPeople(existingPersonId, personToBeConnected).subscribe(
+      (res) => {
+        this.router.navigateByUrl("people/preview/" + existingPersonId);
+      },
+
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastService.showMessage(
+          "Възникна грешка при сливането на данни за лицата:" + errorText
+        );
+      }
+    );
+  }
 }

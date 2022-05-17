@@ -143,12 +143,13 @@ namespace MJ_CAIS.Services
 
             // when create person from bulletin, app or fbbc
             // outo marge is not allowed
-            // user will be notified for existing pids connetcted to onother person
+            // user will be notified for existing pids connetcted to another person
             if (!autoMergePeople)
             {
                 return CreateNewPerson(aInDto, pids, personId);
             }
 
+            // !!! Automatic merging of more than one person will not be used at this stage
             // get all person realted to this pids
             // pids saved in db or locally added
             var personIds = pids.Select(x => x.PersonId).ToList();
@@ -158,40 +159,32 @@ namespace MJ_CAIS.Services
                     .Where(x => personIds.Contains(x.Id))
                     .ToListAsync();
 
-            // get last added or modified person object
-            var lastPerson = existingPersons.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
-            var lastPersonId = lastPerson?.Id;
-
-            // locally added pids
-            var pidsToBeAdded = pids.Where(x => x.EntityState == EntityStateEnum.Added).ToList();
-            // move connections to this person
-            foreach (var person in existingPersons)
-            {
-                //just add unchanged entity for history object
-                if (person.Id == lastPersonId)
-                {
-                    pidsToBeAdded.AddRange(person.PPersonIds);
-                    continue;
-                }
-
-                foreach (var personPidId in person.PPersonIds)
-                {
-                    personPidId.PersonId = lastPersonId;
-                    personPidId.EntityState = EntityStateEnum.Modified;
-                    personPidId.ModifiedProperties = new List<string> { nameof(personPidId.PersonId) };
-                }
-
-                // pids from other person
-                pidsToBeAdded.AddRange(person.PPersonIds);
-
-                // remove other people 
-                dbContext.PPeople.Remove(person);
-            }
-
-            lastPerson.PPersonIds = pidsToBeAdded;
+            var personToUpdate = MargePeople(pids, existingPersons);
 
             // call logic for only one person
-            return UpdatePersonDataWhenHasOnePerson(aInDto, lastPerson);
+            return UpdatePersonDataWhenHasOnePerson(aInDto, personToUpdate);
+        }
+
+        /// <summary>
+        /// The method is executed by manually merging one person with another through a user interface
+        /// </summary>
+        /// <param name="aId"></param>
+        /// <param name="personToBeConnected"></param>
+        /// <returns></returns>
+        public async Task ConnectPeopleAsync(string aId, string personToBeConnected)
+        {
+            var people = await dbContext.PPeople
+                               .AsNoTracking()
+                               .Include(x => x.PPersonIds)
+                               .Where(x => x.Id == aId || x.Id == personToBeConnected)
+                               .ToListAsync();
+
+            var persomToUpdate = MargePeople(new List<PPersonId>(), people);
+            persomToUpdate.EntityState = EntityStateEnum.Modified;
+
+            // call logic for only one person
+            UpdatePersonDataWhenHasOnePerson(persomToUpdate);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
@@ -306,12 +299,28 @@ namespace MJ_CAIS.Services
             // update person with new data
             var personToUpdate = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
             personToUpdate.Id = existingPerson.Id;
-            personToUpdate.UpdatedOn = DateTime.UtcNow; // todo: remove
-
             // àll identifiers, both new and old are added
             // so that when the object returns to a registry
             // it can add connection to the those pids
             personToUpdate.PPersonIds = existingPerson.PPersonIds;
+
+            return UpdatePersonDataWhenHasOnePerson(personToUpdate);
+        }
+
+        /// <summary>
+        /// The method is executed when a person with the specified identifiers is found. (ONLY ONE!)
+        /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
+        /// <param name="personToUpdate">Person with updated data</param>
+        /// <returns>Updated person includes the identifiers</returns>
+        private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate)
+        {
+            if (personToUpdate.ModifiedProperties == null)
+            {
+                personToUpdate.ModifiedProperties = new List<string>() { nameof(personToUpdate.UpdatedOn) };
+            }
+
+            // update person with new data
+            personToUpdate.UpdatedOn = DateTime.UtcNow; // todo: remove       
 
             // create person history object with old data
             var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);
@@ -324,6 +333,49 @@ namespace MJ_CAIS.Services
             dbContext.ApplyChanges(personToUpdate, new List<BaseEntity>(), true);
             dbContext.ApplyChanges(personHistoryToBeAdded, new List<BaseEntity>(), true);
             return personToUpdate;
+        }
+
+        /// <summary>
+        /// Merge information of more than one person in one object.
+        /// Move identifier and delete people
+        /// </summary>
+        /// <param name="pids"></param>
+        /// <param name="existingPersons"></param>
+        /// <returns></returns>
+        private PPerson MargePeople(List<PPersonId> pids, List<PPerson> existingPersons)
+        {
+            // get last added or modified person object
+            var lastPerson = existingPersons.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
+            var lastPersonId = lastPerson?.Id;
+
+            // locally added pids
+            var pidsToBeAdded = pids.Where(x => x.EntityState == EntityStateEnum.Added).ToList();
+            // move connections to this person
+            foreach (var person in existingPersons)
+            {
+                //just add unchanged entity for history object
+                if (person.Id == lastPersonId)
+                {
+                    pidsToBeAdded.AddRange(person.PPersonIds);
+                    continue;
+                }
+
+                foreach (var personPidId in person.PPersonIds)
+                {
+                    personPidId.PersonId = lastPersonId;
+                    personPidId.EntityState = EntityStateEnum.Modified;
+                    personPidId.ModifiedProperties = new List<string> { nameof(personPidId.PersonId) };
+                }
+
+                // pids from other person
+                pidsToBeAdded.AddRange(person.PPersonIds);
+
+                // remove other people 
+                dbContext.PPeople.Remove(person);
+            }
+
+            lastPerson.PPersonIds = pidsToBeAdded;
+            return lastPerson;
         }
 
         #endregion

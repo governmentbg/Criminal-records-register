@@ -12,4 +12,11 @@ export class PersonSearchGridService extends CaisCrudService<
   constructor(injector: Injector) {
     super(PersonSearchGridModel, injector, "people");
   }
+
+  public connectPeople(aId: string, personToBeConnected: string) {
+    return this.http.post<any>(
+      `${this.baseUrl}/api/people/${aId}/connect/${personToBeConnected}`,
+      []
+    );
+  }
 }
