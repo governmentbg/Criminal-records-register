@@ -14,6 +14,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public decimal? Version { get; set; }
+        public string? CertificateId { get; set; }
 
         public virtual AApplication? Application { get; set; }
         public virtual AApplicationStatus StatusCodeNavigation { get; set; } = null!;

@@ -1,5 +1,4 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
@@ -103,120 +102,89 @@ namespace MJ_CAIS.Services
             return await Task.FromResult(pageResult);
         }
 
-        public async Task<PPerson> CreatePersonAsync(PersonDTO aInDto)
+        /// <summary>
+        /// Generate P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
+        /// SaveChanges is not called !!!
+        /// </summary>
+        /// <param name="aInDto">New person data</param>
+        /// <param name="autoMergePeople">Auto merge people when has more then one person with those pids</param>
+        /// <returns></returns>
+        public async Task<PPerson> CreatePersonAsync(PersonDTO aInDto, bool autoMergePeople = false)
         {
-            var pids = new List<PPersonId>();
             var personId = BaseEntity.GenerateNewId();
-            // todo: make one call 
-            if (!string.IsNullOrEmpty(aInDto.Egn))
-            {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn, personId));
-            }
+            var pids = await GetPidsAsync(aInDto, personId);
 
-            if (!string.IsNullOrEmpty(aInDto.Lnch))
+            var pidsDoNotExistExist = pids.All(x => x.EntityState == EntityStateEnum.Added);
+            // must create new person object if pids do not exist in db
+            if (pidsDoNotExistExist)
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch, personId));
-            }
-
-            if (!string.IsNullOrEmpty(aInDto.Ln))
-            {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln, personId));
-            }
-
-            if (!string.IsNullOrEmpty(aInDto.AfisNumber))
-            {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber, personId));
-            }
-            // todo: 
-            // must create new person object
-            if (pids.All(x => x.EntityState == EntityStateEnum.Added))
-            {
-                // add person with pids
-                var person = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
-                person.CreatedOn = DateTime.UtcNow; // todo: remove
-                person.Id = personId;
-                person.PPersonIds = pids;
-
-                // add person history object with pids
-                var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
-                personH.CreatedOn = DateTime.UtcNow; // todo: remove
-                personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
-
-                dbContext.ApplyChanges(person, new List<BaseEntity>(), true);
-                dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
-                return person;
+                return CreateNewPerson(aInDto, pids, personId);
             }
 
             // identifiers of a person who exists in the database and the specific pids are attached to it
             var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x => x.PersonId);
+            var onlyOnePersonExist = existingPersonsIds.Count() == 1;
 
             // when person is only one 
             // update of this one person with the personal data
-            // from the primary register (bulletin, fbbc, application or person form)
-            if (existingPersonsIds.Count() == 1)
+            // from the primary register (bulletin, fbbc, application or person form)           
+            if (onlyOnePersonExist)
             {
                 var personToBeUpdatedId = existingPersonsIds.First();
                 var existingPerson = await dbContext.PPeople
-                    .AsNoTracking()
-                    .Include(x => x.PPersonIds)
-                    .FirstOrDefaultAsync(x => x.Id == personToBeUpdatedId);
-
-                // update person with new data
-                var personToUpdate = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
-                personToUpdate.Id = existingPerson.Id;
-                personToUpdate.UpdatedOn = DateTime.UtcNow; // todo: remove
-
-                // add new identifiers if any
-                // да се добавят към всички и новите, за да може да се върнат на обкета 
-                // който се ъпдейтва и там да се добавят връзките
-                personToUpdate.PPersonIds = pids;//.Where(x => x.EntityState == EntityStateEnum.Added).ToList();
-
-                // create person history object with old data
-                var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);
-                personHistoryToBeAdded.Id = BaseEntity.GenerateNewId();
-
-                // existing and new pids
-                var existingPidsInDb = mapper.MapToEntityList<PPersonId, PPersonIdsH>(existingPerson.PPersonIds.ToList(), true, true);
-                var newPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.Where(x => x.EntityState == EntityStateEnum.Added).ToList(), true, true);
-                existingPidsInDb.AddRange(newPids);
-                personHistoryToBeAdded.PPersonIdsHes = existingPidsInDb;
-
-                dbContext.ApplyChanges(personToUpdate, new List<BaseEntity>(), true);
-                dbContext.ApplyChanges(personHistoryToBeAdded, new List<BaseEntity>(), true);
-                return personToUpdate;
+                                .AsNoTracking()
+                                .Include(x => x.PPersonIds)
+                                .FirstOrDefaultAsync(x => x.Id == personToBeUpdatedId);
+                // all pids
+                pids.AddRange(existingPerson.PPersonIds.ToList());
+                existingPerson.PPersonIds = pids;
+                return UpdatePersonDataWhenHasOnePerson(aInDto, existingPerson);
             }
 
-            // всички хора и техните аидита трябва да се прехвърлят към историята 
+            // when create person from bulletin, app or fbbc
+            // outo marge is not allowed
+            // user will be notified for existing pids connetcted to another person
+            if (!autoMergePeople)
+            {
+                return CreateNewPerson(aInDto, pids, personId);
+            }
 
+            // !!! Automatic merging of more than one person will not be used at this stage
             // get all person realted to this pids
-            // pid saved in db or locally added
-            //var pidsIds = pids.Select(x=>x.Id).ToList();
-            //var existingPersons = await dbContext.PPeople
-            //        .AsNoTracking()
-            //        .Include(x => x.PPersonIds)
-            //        .Where(x => pidsIds.Contains(x.Id))
-            //        .ToListAsync();
+            // pids saved in db or locally added
+            var personIds = pids.Select(x => x.PersonId).ToList();
+            var existingPersons = await dbContext.PPeople
+                    .AsNoTracking()
+                    .Include(x => x.PPersonIds)
+                    .Where(x => personIds.Contains(x.Id))
+                    .ToListAsync();
 
-            //// create new person entity with all pids 
-            //var newPerson = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
-            //newPerson.Id = BaseEntity.GenerateNewId();
-            //newPerson.CreatedOn = DateTime.UtcNow; // todo: remove
-            //var allPidsToBeAdded = existingPersons.SelectMany(x => x.PPersonIds)
-            //    .Select(x=> new PPersonId
-            //    {
-            //        Id = BaseEntity.GenerateNewId(),
-            //        Pid = x.Pid,
-            //        CountryId = x.CountryId,
-            //        PidTypeId  = x.PidTypeId,
-            //        Issuer = x.Issuer,
-            //        PersonId = newPerson.Id,
-            //        CreatedOn = DateTime.UtcNow,
-            //        EntityState = EntityStateEnum.Added
-            //    });
+            var personToUpdate = MargePeople(pids, existingPersons);
 
-            //todo: more then one person object
-            // more then one person
-            return null;
+            // call logic for only one person
+            return UpdatePersonDataWhenHasOnePerson(aInDto, personToUpdate);
+        }
+
+        /// <summary>
+        /// The method is executed by manually merging one person with another through a user interface
+        /// </summary>
+        /// <param name="aId"></param>
+        /// <param name="personToBeConnected"></param>
+        /// <returns></returns>
+        public async Task ConnectPeopleAsync(string aId, string personToBeConnected)
+        {
+            var people = await dbContext.PPeople
+                               .AsNoTracking()
+                               .Include(x => x.PPersonIds)
+                               .Where(x => x.Id == aId || x.Id == personToBeConnected)
+                               .ToListAsync();
+
+            var persomToUpdate = MargePeople(new List<PPersonId>(), people);
+            persomToUpdate.EntityState = EntityStateEnum.Modified;
+
+            // call logic for only one person
+            UpdatePersonDataWhenHasOnePerson(persomToUpdate);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
@@ -256,5 +224,160 @@ namespace MJ_CAIS.Services
             person.AfisNumber = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.AfisNumber)?.Pid;
             return person;
         }
+
+        #region Create person helpers
+
+        /// <summary>
+        /// Get P_PERSON_ID object by pids from dto. 
+        /// When pid exist entity state is unchanged, 
+        /// if pid does not exist P_PERSON_ID object is created with state Added
+        /// </summary>
+        /// <param name="aInDto"></param>
+        /// <param name="personId"></param>
+        /// <returns></returns>
+        private async Task<List<PPersonId>> GetPidsAsync(PersonDTO aInDto, string personId)
+        {
+            var pids = new List<PPersonId>();
+            // todo: make one call 
+            if (!string.IsNullOrEmpty(aInDto.Egn))
+            {
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn, personId));
+            }
+
+            if (!string.IsNullOrEmpty(aInDto.Lnch))
+            {
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch, personId));
+            }
+
+            if (!string.IsNullOrEmpty(aInDto.Ln))
+            {
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln, personId));
+            }
+
+            if (!string.IsNullOrEmpty(aInDto.AfisNumber))
+            {
+                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber, personId));
+            }
+
+            return pids;
+        }
+
+        /// <summary>
+        /// The method is executed when no identifiers are found in the database
+        /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
+        /// </summary>
+        /// <param name="aInDto">Person data</param>
+        /// <param name="pids">Identifiers</param>
+        /// <param name="personId">Person identifier</param>
+        /// <returns>The newly created person includes the identifiers</returns>
+        private PPerson CreateNewPerson(PersonDTO aInDto, List<PPersonId> pids, string personId)
+        {
+            // add person with pids
+            var person = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
+            person.CreatedOn = DateTime.UtcNow; // todo: remove
+            person.Id = personId;
+            person.PPersonIds = pids;
+
+            // add person history object with pids
+            var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
+            personH.CreatedOn = DateTime.UtcNow; // todo: remove
+            personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
+
+            dbContext.ApplyChanges(person, new List<BaseEntity>(), true);
+            dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
+            return person;
+        }
+
+        /// <summary>
+        /// The method is executed when a person with the specified identifiers is found. (ONLY ONE!)
+        /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
+        /// <param name="aInDto">Person data</param>
+        /// <param name="existingPerson">Data about the person from the database</param>
+        /// <returns>Updated person includes the identifierss</returns>
+        private PPerson UpdatePersonDataWhenHasOnePerson(PersonDTO aInDto, PPerson existingPerson)
+        {
+            // update person with new data
+            var personToUpdate = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
+            personToUpdate.Id = existingPerson.Id;
+            // аll identifiers, both new and old are added
+            // so that when the object returns to a registry
+            // it can add connection to the those pids
+            personToUpdate.PPersonIds = existingPerson.PPersonIds;
+
+            return UpdatePersonDataWhenHasOnePerson(personToUpdate);
+        }
+
+        /// <summary>
+        /// The method is executed when a person with the specified identifiers is found. (ONLY ONE!)
+        /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
+        /// <param name="personToUpdate">Person with updated data</param>
+        /// <returns>Updated person includes the identifiers</returns>
+        private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate)
+        {
+            if (personToUpdate.ModifiedProperties == null)
+            {
+                personToUpdate.ModifiedProperties = new List<string>() { nameof(personToUpdate.UpdatedOn) };
+            }
+
+            // update person with new data
+            personToUpdate.UpdatedOn = DateTime.UtcNow; // todo: remove       
+
+            // create person history object with old data
+            var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);
+            personHistoryToBeAdded.Id = BaseEntity.GenerateNewId();
+
+            // existing and new pids
+            var allPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.ToList(), true, true);
+            personHistoryToBeAdded.PPersonIdsHes = allPids;
+
+            dbContext.ApplyChanges(personToUpdate, new List<BaseEntity>(), true);
+            dbContext.ApplyChanges(personHistoryToBeAdded, new List<BaseEntity>(), true);
+            return personToUpdate;
+        }
+
+        /// <summary>
+        /// Merge information of more than one person in one object.
+        /// Move identifier and delete people
+        /// </summary>
+        /// <param name="pids"></param>
+        /// <param name="existingPersons"></param>
+        /// <returns></returns>
+        private PPerson MargePeople(List<PPersonId> pids, List<PPerson> existingPersons)
+        {
+            // get last added or modified person object
+            var lastPerson = existingPersons.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
+            var lastPersonId = lastPerson?.Id;
+
+            // locally added pids
+            var pidsToBeAdded = pids.Where(x => x.EntityState == EntityStateEnum.Added).ToList();
+            // move connections to this person
+            foreach (var person in existingPersons)
+            {
+                //just add unchanged entity for history object
+                if (person.Id == lastPersonId)
+                {
+                    pidsToBeAdded.AddRange(person.PPersonIds);
+                    continue;
+                }
+
+                foreach (var personPidId in person.PPersonIds)
+                {
+                    personPidId.PersonId = lastPersonId;
+                    personPidId.EntityState = EntityStateEnum.Modified;
+                    personPidId.ModifiedProperties = new List<string> { nameof(personPidId.PersonId) };
+                }
+
+                // pids from other person
+                pidsToBeAdded.AddRange(person.PPersonIds);
+
+                // remove other people 
+                dbContext.PPeople.Remove(person);
+            }
+
+            lastPerson.PPersonIds = pidsToBeAdded;
+            return lastPerson;
+        }
+
+        #endregion
     }
 }

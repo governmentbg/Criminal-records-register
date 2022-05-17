@@ -9,7 +9,7 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit);
 
-        Task<PPerson> CreatePersonAsync(PersonDTO aInDto);
+        Task<PPerson> CreatePersonAsync(PersonDTO aInDto, bool autoMergePeople = false);
 
         Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
 
@@ -18,5 +18,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId);
 
         Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId);
+
+        Task ConnectPeopleAsync(string aId, string personToBeConnected);
     }
 }

@@ -25,7 +25,7 @@
         nbButton
         matRipple
         [status]="'success'"
-        [routerLink]="['/pages/users/create']"
+        [routerLink]="['/pages/users-external/create']"
       >
       <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
         Добавяне 
@@ -59,8 +59,8 @@
   </igx-column>
 
   <igx-column
-    field="name"
-    header="Имeна"
+    field="position"
+    header="Позиция"
     [sortable]="true"
     [dataType]="'string'"
     [hidden]="false"
@@ -71,8 +71,8 @@
   </igx-column>
 
   <igx-column
-    field="position"
-    header="Позиция"
+    field="name"
+    header="Имeна"
     [sortable]="true"
     [dataType]="'string'"
     [hidden]="false"
@@ -93,9 +93,23 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
+  
+  <igx-column
+    field="email"
+    header="EMail"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  
   <igx-column
     field="active"
     header="Активен"
+    width="80px"
     [sortable]="true"
     [dataType]="'boolean'"
     [hidden]="false"
@@ -108,6 +122,7 @@
   <igx-column
     field="isAdmin"
     header="Администратор"
+    width="80px"
     [sortable]="true"
     [dataType]="'boolean'"
     [hidden]="false"

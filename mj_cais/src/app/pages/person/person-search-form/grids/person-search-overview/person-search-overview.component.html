@@ -112,25 +112,20 @@
         </mat-menu>
       </ng-container>
       <ng-container *ngIf="isRemindPersonForm">
-        <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
-          <nb-icon pack="fa" icon="bars"></nb-icon>
+        <a
+          [title]="'Преглед на лицето'"
+          [routerLink]="['/pages/people/preview', cell.rowData.id]"
+        >
+          <nb-icon pack="fa" icon="eye"></nb-icon>
         </a>
-        <mat-menu #menu="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/people/preview', cell.rowData.id]"
-          >
-            <span class="ml-1">Детайли</span>
-          </button>
 
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/people/connect', cell.rowData.id]"
-            [queryParams]="{ existingPersonId: existingPersonId }"
-          >
-            <span class="ml-1">Свържи с това лице</span>
-          </button>
-        </mat-menu>
+        <button
+          igxButton="icon"
+          [title]="'Свържи с това лице'"
+          (click)="connectPeople(existingPersonId, cell.rowData.id)"
+        >
+          <i class="fas fa-link"></i>
+        </button>
       </ng-container>
     </ng-template>
   </igx-column>

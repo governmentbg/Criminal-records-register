@@ -7,6 +7,8 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public BBulletin()
         {
+            AAppBulletins = new HashSet<AAppBulletin>();
+            BBulEvents = new HashSet<BBulEvent>();
             BBullPersAliases = new HashSet<BBullPersAlias>();
             BBulletinStatusHes = new HashSet<BBulletinStatusH>();
             BDecisions = new HashSet<BDecision>();
@@ -104,6 +106,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual BDecisionType? DecisionType { get; set; }
         public virtual BIdDocCategory? IdDocCategory { get; set; }
         public virtual BBulletinStatus? Status { get; set; }
+        public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }
+        public virtual ICollection<BBulEvent> BBulEvents { get; set; }
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }
         public virtual ICollection<BBulletinStatusH> BBulletinStatusHes { get; set; }
         public virtual ICollection<BDecision> BDecisions { get; set; }
