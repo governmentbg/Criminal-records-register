@@ -28,6 +28,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<APurpose> APurposes { get; set; } = null!;
         public virtual DbSet<ASrvcResRcptMeth> ASrvcResRcptMeths { get; set; } = null!;
         public virtual DbSet<AStatusH> AStatusHes { get; set; } = null!;
+        public virtual DbSet<BBulEvent> BBulEvents { get; set; } = null!;
         public virtual DbSet<BBullPersAlias> BBullPersAliases { get; set; } = null!;
         public virtual DbSet<BBulletin> BBulletins { get; set; } = null!;
         public virtual DbSet<BBulletinStatus> BBulletinStatuses { get; set; } = null!;
@@ -38,6 +39,8 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<BDecisionType> BDecisionTypes { get; set; } = null!;
         public virtual DbSet<BEcrisOffCategory> BEcrisOffCategories { get; set; } = null!;
         public virtual DbSet<BEcrisStanctCateg> BEcrisStanctCategs { get; set; } = null!;
+        public virtual DbSet<BEventStatus> BEventStatuses { get; set; } = null!;
+        public virtual DbSet<BEventType> BEventTypes { get; set; } = null!;
         public virtual DbSet<BFormOfGuilt> BFormOfGuilts { get; set; } = null!;
         public virtual DbSet<BIdDocCategory> BIdDocCategories { get; set; } = null!;
         public virtual DbSet<BInternalRequest> BInternalRequests { get; set; } = null!;
@@ -896,6 +899,88 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.StatusCode)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_A_STATUS_H_A_APPLICATION_ST");
+            });
+
+            modelBuilder.Entity<BBulEvent>(entity =>
+            {
+                entity.ToTable("B_BUL_EVENTS");
+
+                entity.HasIndex(e => e.EventType, "XIF1B_BUL_EVENTS");
+
+                entity.HasIndex(e => e.BulletinId, "XIF2B_BUL_EVENTS");
+
+                entity.HasIndex(e => e.StatusCode, "XIF3B_BUL_EVENTS");
+
+                entity.HasIndex(e => e.DocId, "XIF4B_BUL_EVENTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.DocId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DOC_ID");
+
+                entity.Property(e => e.EventType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("EVENT_TYPE");
+
+                entity.Property(e => e.Remarks).HasColumnName("REMARKS");
+
+                entity.Property(e => e.StatusCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_CODE");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Bulletin)
+                    .WithMany(p => p.BBulEvents)
+                    .HasForeignKey(d => d.BulletinId)
+                    .HasConstraintName("FK_B_BUL_EVENTS_B_BULLETINS");
+
+                entity.HasOne(d => d.Doc)
+                    .WithMany(p => p.BBulEvents)
+                    .HasForeignKey(d => d.DocId)
+                    .HasConstraintName("FK_B_BUL_EVENTS_D_DOCUMENTS");
+
+                entity.HasOne(d => d.EventTypeNavigation)
+                    .WithMany(p => p.BBulEvents)
+                    .HasForeignKey(d => d.EventType)
+                    .HasConstraintName("FK_B_BUL_EVENTS_B_EVENT_TYPES");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.BBulEvents)
+                    .HasForeignKey(d => d.StatusCode)
+                    .HasConstraintName("FK_B_BUL_EVENTS_B_EVENT_STATUS");
             });
 
             modelBuilder.Entity<BBullPersAlias>(entity =>
@@ -1806,6 +1891,40 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+            });
+
+            modelBuilder.Entity<BEventStatus>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKB_EVENT_STATUSES");
+
+                entity.ToTable("B_EVENT_STATUSES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<BEventType>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKB_EVENT_TYPES");
+
+                entity.ToTable("B_EVENT_TYPES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
             });
 
             modelBuilder.Entity<BFormOfGuilt>(entity =>

@@ -5,6 +5,11 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class DDocument : BaseEntity
     {
+        public DDocument()
+        {
+            BBulEvents = new HashSet<BBulEvent>();
+        }
+
         public string? Name { get; set; }
         public string? DocTypeId { get; set; }
         public string? EcrisMsgId { get; set; }
@@ -27,5 +32,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual DDocType? DocType { get; set; }
         public virtual EEcrisMessage? EcrisMsg { get; set; }
         public virtual Fbbc? Fbbc { get; set; }
+        public virtual ICollection<BBulEvent> BBulEvents { get; set; }
     }
 }
