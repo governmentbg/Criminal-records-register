@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using MJ_CAIS.WebSetup.Utils;
 using System.Security.Claims;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
@@ -23,10 +22,19 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
             ViewData["Culture"] = this.Culture;
             ViewData["IsAuthenticated"] = CurrentUser != null && CurrentUser.IsAuthenticated;
+            ViewData["Controller"] = this;
 
             base.OnActionExecuting(filterContext);
         }
 
-        public ClaimsIdentity CurrentUser => User?.Identity as ClaimsIdentity; // TODO: CaisIdentity
+        public ClaimsIdentity CurrentUser => User?.Identity as ClaimsIdentity;
+
+        public string? CurrentUserName => CurrentUser.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value;
+
+        public string? CurrentRoleName => CurrentUser.FindFirst(ClaimsIdentity.DefaultRoleClaimType)?.Value;
+
+        public string? CurrentUserID => CurrentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        public string? CurrentEgnIdentifier => CurrentUser.FindFirst("EgnIdentifier")?.Value;
     }
 }

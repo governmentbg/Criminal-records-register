@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DTO.Application.Public;
+using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
@@ -9,6 +10,13 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
     [Authorize]
     public class ApplicationController : BaseController
     {
+        private readonly IApplicationService _applicationService;
+
+        public ApplicationController(IApplicationService applicationService)
+        {
+            _applicationService = applicationService;
+        }
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -18,14 +26,9 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
         [HttpGet]
         [GridDataSourceAction]
-        public ActionResult GetUserApplications()
+        public async Task<ActionResult> GetUserApplications()
         {
-            var result = new List<PublicApplicationGridDTO>
-            {
-                new PublicApplicationGridDTO { Id = "aaa", RegistrationNumber = "123" },
-                new PublicApplicationGridDTO { Id = "bbb", RegistrationNumber = "124" },
-                new PublicApplicationGridDTO { Id = "ccc", RegistrationNumber = "125" },
-            }.AsQueryable();
+            var result = _applicationService.SelectPublicApplications(CurrentUserID);
             return View(result);
         }
     }
