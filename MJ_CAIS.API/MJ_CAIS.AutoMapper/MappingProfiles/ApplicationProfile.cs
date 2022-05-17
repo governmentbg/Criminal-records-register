@@ -13,7 +13,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     public class ApplicationProfile : Profile
     {
         public ApplicationProfile()
+
         {
+            CreateMap<AApplication, ApplicationGridDTO>();
+              
+                
+
             CreateMap<AApplication, ApplicationDTO>()
                 .ForPath(d => d.Address.Country, opt => opt.MapFrom(src => new LookupDTO
                 {
