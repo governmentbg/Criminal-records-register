@@ -8,5 +8,7 @@ namespace MJ_CAIS.Services.Contracts
     public interface IBulletinEventService : IBaseAsyncService<BulletinEventDTO, BulletinEventDTO, BulletinEventGridDTO, BBulEvent, string>
     {
         Task<IgPageResult<BulletinEventGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinEventGridDTO> aQueryOptions, string groupCode, string? statusId);
+
+        Task ChangeStatusAsync(string aInDto, string statusId);
     }
 }

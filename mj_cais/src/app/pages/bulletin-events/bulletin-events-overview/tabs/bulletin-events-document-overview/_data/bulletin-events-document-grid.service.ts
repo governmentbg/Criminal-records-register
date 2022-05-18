@@ -1,4 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
+import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
 import { BulletinEventsGridModel } from "../../../_models/bulletin-events-grid.model";
 import { BulletinEventGroupTypeEnum } from "../../../_models/bulletin-events-group-type.enum";
@@ -23,5 +24,10 @@ export class BulletinEventsDocumentGridService extends CaisCrudService<
     }
 
     this.updateUrl(url);
+  }
+  // todo: може да се изнесе в общ сервиз, 
+  //но някои от обстоятелствата ще имат допълнителни фунции
+  public changeStatus(aId: string, statusId: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/api/bulletin-events/${aId}/change-status/${statusId}`, {});
   }
 }

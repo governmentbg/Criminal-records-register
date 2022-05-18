@@ -23,6 +23,7 @@ export class BulletinEventsArticleOverviewComponent extends RemoteGridWithStateP
     this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New);
   }
 
+  public BulletinEventsStatusTypeEnum = BulletinEventsStatusTypeEnum;
   public hideStatus: boolean = true;
 
   ngOnInit() {
@@ -38,5 +39,28 @@ export class BulletinEventsArticleOverviewComponent extends RemoteGridWithStateP
 
     this.hideStatus = !isChacked;
     this.ngOnInit();
+  }
+
+ public changeStatus(id: string, status: BulletinEventsStatusTypeEnum) {
+    this.service.changeStatus(id, status).subscribe(
+      (res) => {
+        let message =
+          status == BulletinEventsStatusTypeEnum.Approved
+            ? "Потвърдено"
+            : "Отхвърлено";
+        this.toastr.showToast("success", `Успешно ${message} обстоятелство`);
+        this.ngOnInit();
+      },
+      (error) => {
+        let title = this.dangerMessage;
+        let errorText = error.status + " " + error.statusText;
+        if (error.error && error.error.customMessage) {
+          title = error.error.customMessage;
+          errorText = "";
+        }
+
+        this.toastr.showBodyToast("danger", title, errorText);
+      }
+    );
   }
 }

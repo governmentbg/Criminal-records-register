@@ -25,5 +25,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._bulletinEventService.SelectAllWithPaginationAsync(aQueryOptions, groupCode, statusId);
             return Ok(result);
         }
+
+        [HttpPut("{aId}/change-status/{statusId}")]
+        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        {
+            await this._bulletinEventService.ChangeStatusAsync(aId, statusId);
+            return Ok();
+        }
     }
 }
