@@ -7,6 +7,7 @@ using NLog.Web;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
+using TL.JasperReports.Integration;
 
 namespace AutomaticStepsExecutor
 {
@@ -29,6 +30,7 @@ namespace AutomaticStepsExecutor
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton(typeofExecutor))
                     .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
+                    .ConfigureServices(services => services.AddSingleton<JasperReportsClient>())
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();

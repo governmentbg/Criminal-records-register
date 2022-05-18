@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
+    <ProjectReference Include="..\..\TL.JasperReports.Integration\TL.JasperReports.Integration.csproj" />
   </ItemGroup>
 
   <ItemGroup>
