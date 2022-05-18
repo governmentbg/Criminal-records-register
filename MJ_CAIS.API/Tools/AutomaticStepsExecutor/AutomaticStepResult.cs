@@ -2,9 +2,9 @@
 {
     public class AutomaticStepResult
     {
-        int NumberOfProcessedEntities { get; set; }
-        int NumberOfFailedEntities { get; set; }
-        int NumberOfSuccessfulEntities { get; set; }
+        public int NumberOfProcessedEntities { get; set; }
+        public int NumberOfFailedEntities { get; set; }
+        public int NumberOfSuccessfulEntities { get; set; }
 
 
         public string? GetLogInfo()

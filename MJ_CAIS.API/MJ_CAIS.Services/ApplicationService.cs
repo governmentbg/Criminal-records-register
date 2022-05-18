@@ -1,4 +1,6 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
@@ -20,6 +22,71 @@ namespace MJ_CAIS.Services
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
+        }
+
+        public async Task GenerateCertificateFromApplication(AApplication application, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsForPurpose)
+        {
+            var pids = await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
+            if (pids.Count > 0)
+            {
+                var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
+                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).ToListAsync();
+                if (bulletins.Count > 0)
+                {
+                    ProcessApplicationWithBulletins(application, bulletins, certificateWithBulletinStatusID);
+                    return;
+
+                }
+            }
+            ProcessApplicationWithoutBulletins(application, certificateWithoutBulletinStatusID);
+
+        }
+
+
+        private void ProcessApplicationWithoutBulletins(AApplication application, string statusID)
+        {
+            ACertificate cert = CreateCertificate(application.Id, statusID);
+            application.ACertificates.Add(cert);
+            dbContext.ACertificates.Add(cert);
+            dbContext.AApplications.Update(application);
+
+        }
+
+        private ACertificate CreateCertificate(string applicationId, string certificateStatus)
+        {
+
+            ACertificate cert = new ACertificate();
+            cert.Id = BaseEntity.GenerateNewId();
+            cert.ApplicationId = applicationId;
+            cert.StatusCode = certificateStatus;
+            //дали тук да се попълват?!
+            cert.RegistrationNumber = Guid.NewGuid().ToString();
+            cert.AccessCode1 = Guid.NewGuid().ToString();
+            // cert.AccessCode2 = Guid.NewGuid().ToString();
+            return cert;
+        }
+
+        private void ProcessApplicationWithBulletins(AApplication application, List<BBulletin> bulletins, string statusID)
+        {
+            ACertificate cert = CreateCertificate(application.Id, ApplicationConstants.ApplicationStatuses.BulletinsForPurpose);
+            int orderNumber = 0;
+            cert.AAppBulletins= bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
+            {
+                orderNumber++;
+                return new AAppBulletin()
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    BulletinId = b.Id,
+                    CertificateId = cert.Id,
+                    ConvictionText = b.ConvRemarks,
+                    OrderNumber = orderNumber              
+                };
+            }).ToList();
+            
+            application.ACertificates.Add(cert);
+            dbContext.ACertificates.Add(cert);
+            dbContext.AAppBulletins.AddRange(cert.AAppBulletins);
+            dbContext.AApplications.Update(application);
         }
     }
 }

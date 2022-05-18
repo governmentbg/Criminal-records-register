@@ -6,6 +6,7 @@ using NLog;
 using NLog.Web;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 
 namespace AutomaticStepsExecutor
 {
@@ -24,8 +25,10 @@ namespace AutomaticStepsExecutor
                 var typeofExecutor = Type.GetType(executorClass);
 
                 IHost host = Host.CreateDefaultBuilder()
+                   
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton(typeofExecutor))
+                    .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
@@ -33,6 +36,7 @@ namespace AutomaticStepsExecutor
 
                     })
                     .UseNLog()
+               
                     .Build();
 
 
