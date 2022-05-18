@@ -64,6 +64,10 @@ export class PagesMenu {
             title: "Подлежащи на реабилитация",
             link: "/pages/bulletins-for-rehabilitation",
           },
+          {
+            title: "Настъпили обстоятелства",
+            link: "/pages/bulletin-events",
+          },
         ],
       },
       {

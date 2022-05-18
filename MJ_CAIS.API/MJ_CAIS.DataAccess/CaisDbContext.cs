@@ -256,6 +256,26 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
+                entity.Property(e => e.Familyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILYNAME");
+
+                entity.Property(e => e.Firstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FIRSTNAME");
+
+                entity.Property(e => e.Fullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FULLNAME");
+
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(200)
+                    .HasColumnName("SURNAME");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(200)
+                    .HasColumnName("TYPE");
+
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
                     .HasColumnName("UPDATED_BY");
@@ -414,6 +434,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("FULLNAME");
 
+                entity.Property(e => e.FullnameLat)
+                    .HasMaxLength(200)
+                    .HasColumnName("FULLNAME_LAT");
+
                 entity.Property(e => e.IsLocal)
                     .HasPrecision(1)
                     .HasColumnName("IS_LOCAL");
@@ -449,14 +473,10 @@ namespace MJ_CAIS.DataAccess
 
                 entity.Property(e => e.Purpose).HasColumnName("PURPOSE");
 
-                entity.Property(e => e.PurposeCountry).HasColumnName("PURPOSE_COUNTRY");
-
                 entity.Property(e => e.PurposeId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("PURPOSE_ID");
-
-                entity.Property(e => e.PurposePosition).HasColumnName("PURPOSE_POSITION");
 
                 entity.Property(e => e.RegistrationNumber)
                     .HasMaxLength(100)
@@ -808,6 +828,8 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
@@ -1921,6 +1943,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("CODE");
+
+                entity.Property(e => e.GroupCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("GROUP_CODE");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)

@@ -37,8 +37,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FatherFamilyname { get; set; }
         public string? MotherFullname { get; set; }
         public string? FatherFullname { get; set; }
-        public string? PurposeCountry { get; set; }
-        public string? PurposePosition { get; set; }
         public string? SrvcResRcptMethId { get; set; }
         public string? AddrName { get; set; }
         public string? AddrStr { get; set; }
@@ -71,6 +69,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UserId { get; set; }
         public string? UserExtId { get; set; }
         public string? WApplicationId { get; set; }
+        public string? FullnameLat { get; set; }
 
         public virtual AApplicationType? ApplicationType { get; set; }
         public virtual GCity? BirthCity { get; set; }

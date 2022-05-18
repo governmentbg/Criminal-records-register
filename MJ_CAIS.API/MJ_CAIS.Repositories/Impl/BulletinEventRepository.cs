@@ -12,7 +12,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string type)
+        public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId)
         {
             var query = from bullEvents in _dbContext.BBulEvents.AsNoTracking()
                         join eventTypes in _dbContext.BEventTypes.AsNoTracking() on bullEvents.EventType equals eventTypes.Code
@@ -21,19 +21,26 @@ namespace MJ_CAIS.Repositories.Impl
                         join bulletin in _dbContext.BBulletins.AsNoTracking() on bullEvents.BulletinId equals bulletin.Id
                                 into bulletinLeft
                         from bulletin in bulletinLeft.DefaultIfEmpty()
-                        where eventType.Code == type
+
+                        join eventStatus in _dbContext.BEventStatuses.AsNoTracking() on bullEvents.StatusCode equals eventStatus.Code
+                              into eventStatusLeft
+                        from eventStatus in eventStatusLeft.DefaultIfEmpty()
+
+                        where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) &&
+                        eventType.GroupCode == groupCode
                         select new BulletinEventGridDTO
                         {
                             Id = bullEvents.Id,
+                            EventType = eventType.Name,
+                            StatusCode = eventStatus.Code,
+                            StatusName = eventStatus.Name,
                             RegistrationNumber = bulletin.RegistrationNumber,
+                            BulletinId = bulletin.Id,
                             BirthDate = bulletin.BirthDate,
                             CreatedOn = bullEvents.CreatedOn,
                             Description = bullEvents.Description,
-                            Egn = bulletin.Egn,
-                            Ln = bulletin.Ln,
-                            Lnch = bulletin.Lnch,
-                            EventType = eventType.Name,
-                            PersonName = bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname
+                            Identifier = bulletin.Egn + " / " + bulletin.Lnch + " / " + bulletin.Ln,
+                            PersonName = bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname,
                         };
 
             return await Task.FromResult(query);

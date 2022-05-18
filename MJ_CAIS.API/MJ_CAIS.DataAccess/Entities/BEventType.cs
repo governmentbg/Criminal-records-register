@@ -12,6 +12,7 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public string Code { get; set; } = null!;
         public string? Name { get; set; }
+        public string? GroupCode { get; set; }
 
         public virtual ICollection<BBulEvent> BBulEvents { get; set; }
     }

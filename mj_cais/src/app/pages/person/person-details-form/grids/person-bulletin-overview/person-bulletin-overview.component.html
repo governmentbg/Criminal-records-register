@@ -70,7 +70,7 @@
     field="createdOn"
     header="Дата на създаване"
     [sortable]="true"
-    [dataType]="'string'"
+    [dataType]="'date'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">
@@ -148,7 +148,7 @@
     field="birthDate"
     header="Дата на раждане"
     [sortable]="true"
-    [dataType]="'string'"
+    [dataType]="'date'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">

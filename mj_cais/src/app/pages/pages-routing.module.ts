@@ -50,6 +50,7 @@ import { AdministrationsExtFormmComponent } from "./administrations-external/adm
 import { AdministrationsExtResolver } from "./administrations-external/administrations-ext-form/_data/administrations-ext.resolver";
 import { UsersExternalFormComponent } from "./users-external/users-external-form/users-external-form.component";
 import { UsersExternalResolver } from "./users-external/users-external-form/_data/users-external.resolver";
+import { BulletinEventsOverviewComponent } from "./bulletin-events/bulletin-events-overview/bulletin-events-overview.component";
 
 const routes: Routes = [
   {
@@ -113,6 +114,11 @@ const routes: Routes = [
         component: BulletinFormComponent,
         resolve: { dbData: BulletinResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletin-events",
+        component: BulletinEventsOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {
@@ -276,9 +282,9 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['Admin', 'GlobalAdmin']
-          }
-        }
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users/create",
@@ -287,9 +293,9 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['Admin', 'GlobalAdmin']
-          }
-        }
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users/edit/:ID",
@@ -299,9 +305,9 @@ const routes: Routes = [
         data: {
           edit: true,
           permissions: {
-            only: ['Admin', 'GlobalAdmin']
-          }
-        }  
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users/preview/:ID",
@@ -310,11 +316,11 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           edit: true,
-          preview: true, 
+          preview: true,
           permissions: {
-            only: ['Admin', 'GlobalAdmin']
-          }
-        }  
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "administrations-ext",
@@ -322,9 +328,9 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "administrations-ext/create",
@@ -333,9 +339,9 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "administrations-ext/edit/:ID",
@@ -345,9 +351,9 @@ const routes: Routes = [
         data: {
           edit: true,
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }  
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "administrations-ext/preview/:ID",
@@ -356,11 +362,11 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           edit: true,
-          preview: true, 
+          preview: true,
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }  
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users-external",
@@ -368,11 +374,11 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }  
+            only: ["GlobalAdmin"],
+          },
+        },
       },
-      
+
       {
         path: "users-external/create",
         component: UsersExternalFormComponent,
@@ -380,9 +386,9 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users-external/edit/:ID",
@@ -392,9 +398,9 @@ const routes: Routes = [
         data: {
           edit: true,
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }  
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users-external/preview/:ID",
@@ -403,11 +409,11 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           edit: true,
-          preview: true, 
+          preview: true,
           permissions: {
-            only: ['GlobalAdmin']
-          }
-        }  
+            only: ["GlobalAdmin"],
+          },
+        },
       },
       {
         path: "users-public",
@@ -415,9 +421,9 @@ const routes: Routes = [
         canActivate: [NgxPermissionsGuard],
         data: {
           permissions: {
-            only: ['Admin', 'GlobalAdmin']
-          }
-        }  
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "miscellaneous",
