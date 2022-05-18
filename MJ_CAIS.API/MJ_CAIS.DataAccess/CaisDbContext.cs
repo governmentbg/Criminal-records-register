@@ -1944,6 +1944,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("CODE");
 
+                entity.Property(e => e.GroupCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("GROUP_CODE");
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
