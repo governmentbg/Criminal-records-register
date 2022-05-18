@@ -1,8 +1,9 @@
-using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MJ_CAIS.WebPortal.Public.Utils.Mappings;
 using MJ_CAIS.WebSetup;
-using MJ_CAIS.WebSetup.Setup;
+using MJ_CAIS.WebSetup.Utils;
+using System.Security.Principal;
 
 namespace MJ_CAIS.WebPortal.Public
 {
@@ -21,6 +22,7 @@ namespace MJ_CAIS.WebPortal.Public
                     options.SlidingExpiration = true;
                     options.AccessDeniedPath = "/Forbidden/";
                     options.LoginPath = "/Account/Login";
+                    options.Cookie.Name = "CaisPublicPortal";
                 });
 
             var app = builder.Build();

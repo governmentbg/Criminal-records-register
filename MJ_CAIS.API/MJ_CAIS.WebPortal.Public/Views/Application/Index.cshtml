@@ -20,7 +20,11 @@
         .AutoGenerateLayouts(false)
         .Columns(column =>
         {
-            column.For(x => x.RegistrationNumber).HeaderText("Регистрационен номер").Width("90%");
+            column.For(x => x.RegistrationNumber).HeaderText("Регистрационен номер").Width("20%");
+            column.For(x => x.StatusName).HeaderText("Статус").Width("20%");
+            column.For(x => x.ApplicantName).HeaderText("Име").Width("25%");
+            column.For(x => x.Purpose).HeaderText("Цел").Width("25%");
+            column.For(x => x.CreatedOn).HeaderText("Създадено на").Width("15%");
             column.Unbound("buttons").HeaderText("").Width("8%");
         })
         .Features(feature =>

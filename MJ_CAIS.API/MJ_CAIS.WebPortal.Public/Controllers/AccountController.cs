@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MJ_CAIS.DTO.User;
+using MJ_CAIS.DTO.UserCitizen;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebSetup.Utils;
 using System.Security.Claims;
@@ -13,11 +14,11 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly IUserService _userService;
+        private readonly IUserCitizenService _userCitizenService;
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserCitizenService userCitizenService)
         {
-            _userService = userService;
+            _userCitizenService = userCitizenService;
         }
 
         [HttpGet]
@@ -37,57 +38,24 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             var returnUrl = "";
 
-            var userDTO = new UserDTO
+            var userDTO = new UserCitizenDTO
             {
                 Egn = "9701010101",
-                Firstname = "Иван",
-                Surname = "Иванов",
-                Familyname = "Петров",
+                Name = "Иван Иванов Петров",
                 Email = "ivan.ivanov@test.bg",
-                Active = true,
             };
 
             if (ModelState.IsValid)
             {
-                var user = await _userService.AuthenticatePublicUser(userDTO);
-
+                var user = await _userCitizenService.AuthenticatePublicUser(userDTO);
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim("EgnIdentifier", user.Egn),
                 };
 
-                var claimsIdentity = new ClaimsIdentity(
-                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                var authProperties = new AuthenticationProperties
-                {
-                    //AllowRefresh = <bool>,
-                    // Refreshing the authentication session should be allowed.
-
-                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                    // The time at which the authentication ticket expires. A 
-                    // value set here overrides the ExpireTimeSpan option of 
-                    // CookieAuthenticationOptions set with AddCookie.
-
-                    //IsPersistent = true,
-                    // Whether the authentication session is persisted across 
-                    // multiple requests. When used with cookies, controls
-                    // whether the cookie's lifetime is absolute (matching the
-                    // lifetime of the authentication ticket) or session-based.
-
-                    //IssuedUtc = <DateTimeOffset>,
-                    // The time at which the authentication ticket was issued.
-
-                    //RedirectUri = <string>
-                    // The full path or absolute URI to be used as an http 
-                    // redirect response value.
-                };
-
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    authProperties);
+                await SingInWithHttpContext(claims);
 
                 return LocalRedirect(GetLocalUrl(returnUrl));
             }
@@ -114,6 +82,39 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             {
                 return Url.Action("Index", "Application");
             }
+        }
+
+        private async Task SingInWithHttpContext(List<Claim> claims)
+        {
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                //AllowRefresh = <bool>,
+                // Refreshing the authentication session should be allowed.
+
+                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                // The time at which the authentication ticket expires. A 
+                // value set here overrides the ExpireTimeSpan option of 
+                // CookieAuthenticationOptions set with AddCookie.
+
+                //IsPersistent = true,
+                // Whether the authentication session is persisted across 
+                // multiple requests. When used with cookies, controls
+                // whether the cookie's lifetime is absolute (matching the
+                // lifetime of the authentication ticket) or session-based.
+
+                //IssuedUtc = <DateTimeOffset>,
+                // The time at which the authentication ticket was issued.
+
+                //RedirectUri = <string>
+                // The full path or absolute URI to be used as an http 
+                // redirect response value.
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
         }
     }
 }

@@ -5,6 +5,5 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IUserService : IBaseAsyncService<UserDTO, UserDTO, UserGridDTO, GUser, string>
     {
-        Task<UserDTO> AuthenticatePublicUser(UserDTO userDTO);
     }
 }

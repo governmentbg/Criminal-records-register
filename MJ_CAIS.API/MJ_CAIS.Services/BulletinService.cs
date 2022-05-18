@@ -177,6 +177,13 @@ namespace MJ_CAIS.Services
 
             await dbContext.SaveChangesAsync();
 
+            // if person is bulgarian citizen
+            var skipEcris = bulletin.BPersNationalities != null && 
+                bulletin.BPersNationalities.Count == 1 && 
+                bulletin.BPersNationalities.First().CountryId == BG;
+
+            if (skipEcris) return;
+
             // ECRIS
             var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id);
             var isForECRIS = dbContext.EEcrisAuthorities.AsNoTracking().Any(x => personNationalities.Contains(x.CountryId));
@@ -190,7 +197,6 @@ namespace MJ_CAIS.Services
                 catch (Exception ex)
                 {
                     // todo:
-                    // ��� �� ���� �� �� ������� ����������� ??
                 }
             }
         }
