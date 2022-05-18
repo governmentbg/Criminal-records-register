@@ -10,5 +10,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IgPageResult<BulletinEventGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinEventGridDTO> aQueryOptions, string groupCode, string? statusId);
 
         Task ChangeStatusAsync(string aInDto, string statusId);
+
+        Task GenereteEventAsyn(string personId);
     }
 }

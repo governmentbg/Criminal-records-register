@@ -78,7 +78,6 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
-
         public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
         {
             var query = (from application in _dbContext.AApplications.AsNoTracking()

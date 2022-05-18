@@ -136,8 +136,9 @@ namespace MJ_CAIS.Services
                                 .Include(x => x.PPersonIds)
                                 .FirstOrDefaultAsync(x => x.Id == personToBeUpdatedId);
                 // all pids
-                pids.AddRange(existingPerson.PPersonIds.ToList());
-                existingPerson.PPersonIds = pids;
+                var allPids = existingPerson.PPersonIds.ToList();
+                allPids.AddRange(pids.Where(x => x.EntityState == EntityStateEnum.Added));
+                existingPerson.PPersonIds = allPids;
                 return UpdatePersonDataWhenHasOnePerson(aInDto, existingPerson);
             }
 
