@@ -60,6 +60,7 @@ import { ApplicationNewOverviewComponent } from './application/application-overv
 import { AdministrationsExtFormmComponent } from './administrations-external/administrations-ext-form/administrations-ext-form.component';
 import { AdministrationsExtOverviewComponent } from './administrations-external/administrations-ext-overview/administrations-ext-overview.component';
 import { UsersExternalFormComponent } from './users-external/users-external-form/users-external-form.component';
+import { ApplicationWaitingPaymentComponent } from './application/application-overview/application-waiting-payment/application-waiting-payment.component';
 
 @NgModule({
   imports: [
@@ -125,7 +126,8 @@ import { UsersExternalFormComponent } from './users-external/users-external-form
     ApplicationNewOverviewComponent,
     AdministrationsExtFormmComponent,
     AdministrationsExtOverviewComponent,
-    UsersExternalFormComponent
+    UsersExternalFormComponent,
+    ApplicationWaitingPaymentComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })
