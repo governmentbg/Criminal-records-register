@@ -63,10 +63,12 @@ export class BulletinFormComponent
   public isDocumentsEditable: boolean;
   //#endregion
 
+  public isNoSanctionCheck: boolean = false;
   public isBulletinPersonAliasEditable = false;
   public showForUpdate: boolean = false;
   public setEditToBeForPreview: boolean = false;
   public PersonContextEnum = PersonContextEnum;
+
   constructor(
     service: BulletinService,
     public injector: Injector,
@@ -84,6 +86,7 @@ export class BulletinFormComponent
     this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(), locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
+    this.isNoSanctionCheck = this.fullForm.noSanction.value;
     this.initAllowedButtons(bulletinStatusId);
 
     this.formFinishedLoading.emit();
@@ -105,12 +108,18 @@ export class BulletinFormComponent
 
     this.fullForm.offancesTransactions.setValue(offancesTransactions);
 
-    let sanctionsTransactions =
-      this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
-        true
-      );
+    // if noSanction is false
+    // todo: remove sanction saved in db ???
+    if (this.bulletineSanctionsForm.sanctionGrid) {
+      let sanctionsTransactions =
+        this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
+          true
+        );
 
-    this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
+      this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
+    } else {
+      this.fullForm.sanctionsTransactions.setValue([]);
+    }
 
     let decisionsTransactions =
       this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
@@ -121,6 +130,21 @@ export class BulletinFormComponent
 
     this.validateAndSave(this.fullForm);
   };
+
+  //override submit function
+  //todo
+  // onSubmitSuccess(data: any) {
+  //   // if (data?.id) {
+  //   //   const url = `pages/bulletins/preview/${data.id}`;
+  //   //   this.router.navigateByUrl(url);
+  //   // } else {
+  //   //   super.reloadCurrentRoute();
+  //   // }
+  // }
+
+  public onNoSanctionChange(event: any) {
+    this.isNoSanctionCheck = event.target.checked;
+  }
 
   //#region Актуализация на бюлетин
 

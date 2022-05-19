@@ -56,6 +56,7 @@ export class InternalRequestFormComponent
   onSubmitSuccess(data: any) {
     this.router.navigateByUrl(this.BULLETIN_OVERVIEW_URL);
   }
+  
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
   }

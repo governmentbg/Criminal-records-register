@@ -12,7 +12,7 @@ import { SanctionCategoryType } from "../../_models/sanction-category-type-const
 import { BulletinSanctionForm } from "./_models/bulletin-sanction.form";
 
 @Component({
-  selector: "cais-bulletin-sanctions-form",
+  selector: "cais-bulletin-sanctions-form[isNoSanction]",
   templateUrl: "./bulletin-sanctions-form.component.html",
   styleUrls: ["./bulletin-sanctions-form.component.scss"],
 })
@@ -21,7 +21,8 @@ export class BulletinSanctionsFormComponent implements OnInit {
   @Input() dbData: any;
   @Input() isForPreview: boolean;
   @Input() decisionDateInput: any;
-
+  @Input() isNoSanction: boolean = false;
+  
   @ViewChild("sanctionsGrid", {
     read: IgxGridComponent,
   })

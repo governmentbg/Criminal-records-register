@@ -326,7 +326,9 @@
                   align-items: center;
                 "
               >
-                <nb-checkbox [formControl]="fullForm.noSanction"
+                <nb-checkbox 
+                (change)="onNoSanctionChange($event)"
+                [formControl]="fullForm.noSanction"
                   >Деецът не е наказан съгласно НК
                 </nb-checkbox>
               </div>
@@ -360,6 +362,7 @@
             [dbData]="dbData"
             [isForPreview]="!isSanctionsEditable"
             [decisionDateInput]="fullForm.decisionDate"
+            [isNoSanction]="isNoSanctionCheck"
           >
           </cais-bulletin-sanctions-form>
         </nb-tab>

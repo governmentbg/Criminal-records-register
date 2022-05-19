@@ -126,7 +126,6 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();
         }
 
-
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
