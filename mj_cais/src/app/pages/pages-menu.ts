@@ -78,6 +78,10 @@ export class PagesMenu {
             title: "Нови заявления",
             link: "/pages/applications",
           },
+          {
+            title: "Потвърждение за плащане",
+            link: "/pages/applications-waiting-payment",
+          },
         ],
       },
       {
