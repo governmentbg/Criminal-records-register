@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TL.JasperReports.Integration" Version="22.138.40192" />
+    <PackageReference Include="TL.Signer" Version="22.76.38469" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
     <ProjectReference Include="..\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services\MJ_CAIS.Services.csproj" />
   </ItemGroup>
 

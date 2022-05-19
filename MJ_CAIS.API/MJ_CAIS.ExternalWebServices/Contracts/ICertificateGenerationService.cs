@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.ExternalWebServices.Contracts
 {
-    internal interface ICertificateGenerationService : IBaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string>
+    public interface ICertificateGenerationService : IBaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string>
     {
     }
 }

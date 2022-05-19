@@ -22,14 +22,15 @@ namespace MJ_CAIS.ExternalWebServices
     public class CertificateGenerationService : BaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string, CaisDbContext>, ICertificateGenerationService
     {
         private readonly ICertificateRepository _certificateRepository;
-          private readonly IJasperReportsClient _jasperReportsClient;
+        private readonly IJasperReportsClient _jasperReportsClient;
         private readonly IPdfSigner _pdfSignerService;
         private const string CERTIFICATE_NAME = "TODO";
-        public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository, IJasperReportsClient jasperClient, IPdfSigner pdfSignerService)
+        public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository, IJasperReportsClient jasperClient,
+            IPdfSigner pdfSignerService)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
-            _jasperReportsClient = jasperClient;
+           _jasperReportsClient = jasperClient;
             _pdfSignerService = pdfSignerService;
         }
 

@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
+    <ProjectReference Include="..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

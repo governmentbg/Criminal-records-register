@@ -27,12 +27,10 @@ namespace AutomaticStepsExecutor
                 var typeofExecutor = Type.GetType(executorClass);
 
                 IHost host = Host.CreateDefaultBuilder()
-                   
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton(typeofExecutor))
-                    .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
-                    .ConfigureServices(services => services.AddSingleton<JasperReportsClient>())
-                    .ConfigureServices(services => services.AddSingleton<PdfSigner>())
+                    .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))              
+                  
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MJ_CAIS.ExternalWebServices.Contracts;
 
 namespace AutomaticStepsExecutor
 {
@@ -13,8 +14,8 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<CertificateCreatorService> _logger;
-        private readonly ICertificateService _certificateService;
-        public CertificateCreatorService(CaisDbContext dbContext, ILogger<CertificateCreatorService> logger, ICertificateService certificateService)
+        private readonly ICertificateGenerationService _certificateService;
+        public CertificateCreatorService(CaisDbContext dbContext, ILogger<CertificateCreatorService> logger, ICertificateGenerationService certificateService)
         {
             _dbContext = dbContext;
             _logger = logger;

@@ -4,11 +4,16 @@ using Microsoft.Extensions.DependencyInjection;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.EcrisObjectsServices;
 using MJ_CAIS.EcrisObjectsServices.Contracts;
+using MJ_CAIS.ExternalWebServices;
+using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Repositories.Impl;
 using MJ_CAIS.Services;
 using MJ_CAIS.Services.Contracts;
 using System.Reflection;
+using TL.JasperReports.Integration;
+using TL.JasperReports.Integration.Interfaces;
+using TL.Signer;
 
 namespace MJ_CAIS.DIContainer
 {
@@ -34,6 +39,14 @@ namespace MJ_CAIS.DIContainer
             var servicesTypesECRIS = typeof(NotificationService).Assembly.GetClassTypes("Service");
             var interfaceTypesECRIS = typeof(INotificationService).Assembly.GetInterfaceTypes("Service");
             AddTransientTypes(services, servicesTypesECRIS, interfaceTypesECRIS);
+
+
+            services.AddJasperReporting();
+            services.AddSingleton<IPdfSigner, PdfSigner>();
+            services.AddTransient<ICertificateGenerationService, CertificateGenerationService>();
+            //var servicesTypesExternal = typeof(CertificateGenerationService).Assembly.GetClassTypes("Service");
+            //var interfaceTypesExternal = typeof(ICertificateGenerationService).Assembly.GetInterfaceTypes("Service");
+            //AddTransientTypes(services, servicesTypesExternal, interfaceTypesExternal);
         }
 
         private static List<Type> GetClassTypes(this Assembly assembly, string endingName)
