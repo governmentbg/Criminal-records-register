@@ -4,9 +4,9 @@
     {
         public string? Id { get; set; }
         public string? Type { get; set; }
-        public byte? DecisionDurationYears { get; set; }
-        public byte? DecisionDurationMonths { get; set; }
-        public byte? DecisionDurationDays { get; set; }
-        public byte? DecisionDurationHours { get; set; }
+        public byte? SuspentionDurationYears { get; set; }
+        public byte? SuspentionDurationMonths { get; set; }
+        public byte? SuspentionDurationDays { get; set; }
+        public byte? SuspentionDurationHours { get; set; }
     }
 }
