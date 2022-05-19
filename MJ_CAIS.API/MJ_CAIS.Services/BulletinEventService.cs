@@ -79,10 +79,10 @@ namespace MJ_CAIS.Services
             // крайната дата преди която трябва да е вписан бюлетин
             // в който да не е чекнат Постановено изтърпяване на предходна условна присъда
             var periodEndDate = bulletin.DecisionDate.Value;
-            periodEndDate = periodEndDate.AddHours(sanction.DecisionDurationHours ?? 0);
-            periodEndDate = periodEndDate.AddDays(sanction.DecisionDurationDays ?? 0);
-            periodEndDate = periodEndDate.AddMonths(sanction.DecisionDurationMonths ?? 0);
-            periodEndDate = periodEndDate.AddYears(sanction.DecisionDurationYears ?? 0);
+            periodEndDate = periodEndDate.AddHours(sanction.SuspentionDurationHours ?? 0);
+            periodEndDate = periodEndDate.AddDays(sanction.SuspentionDurationDays ?? 0);
+            periodEndDate = periodEndDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
+            periodEndDate = periodEndDate.AddYears(sanction.SuspentionDurationYears ?? 0);
 
             // Има бюлетин в периода на изпитателния срок на предходния бюлетин и не е маркирано
             // "Постановено изтърпяване на предходна условна присъда" в осъждането

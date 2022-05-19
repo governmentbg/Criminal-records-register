@@ -184,10 +184,10 @@ namespace MJ_CAIS.Services
 
             await dbContext.SaveChangesAsync();
 
-            if (isActiveBulletin)
-            {
-                await _bulletinEventService.GenereteEventAsyn(person.Id);
-            }
+            //if (isActiveBulletin)
+            //{
+            //    await _bulletinEventService.GenereteEventAsyn(person.Id);
+            //}
 
             // if person is bulgarian citizen
             var skipEcris = bulletin.BPersNationalities != null && 
