@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,14 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="NLog" Version="4.7.15" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
+    <PackageReference Include="TL.JasperReports.Integration" Version="22.138.40192" />
+    <PackageReference Include="TL.Signer" Version="22.76.38469" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
     <ProjectReference Include="..\..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
+    <ProjectReference Include="..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

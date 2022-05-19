@@ -108,8 +108,8 @@ export class BulletinSanctionsFormComponent implements OnInit {
 
     // filter sanction category
     // by decision date
-    let decisionDate = new Date(this.decisionDateInput.value);
-    if (decisionDate) {
+    if (this.decisionDateInput.value) {
+      let decisionDate = new Date(this.decisionDateInput.value);
       this.sanctionCategoriesOptions = this.dbData.sanctionCategories.filter(
         (x) =>
           new Date(x.validFrom) <= decisionDate &&
@@ -278,7 +278,6 @@ export class BulletinSanctionsFormComponent implements OnInit {
     allSavedTransactions,
     probationsObjToAdd
   ) {
-    debugger;
     let deleteTransactions = [];
     allSavedTransactions.forEach((savedTransaction) => {
       // when update saved element in db

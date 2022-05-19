@@ -61,6 +61,9 @@ import { AdministrationsExtFormmComponent } from './administrations-external/adm
 import { AdministrationsExtOverviewComponent } from './administrations-external/administrations-ext-overview/administrations-ext-overview.component';
 import { UsersExternalFormComponent } from './users-external/users-external-form/users-external-form.component';
 import { ApplicationWaitingPaymentComponent } from './application/application-overview/application-waiting-payment/application-waiting-payment.component';
+import { BulletinEventsOverviewComponent } from './bulletin-events/bulletin-events-overview/bulletin-events-overview.component';
+import { BulletinEventsArticleOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-article-overview/bulletin-events-article-overview.component';
+import { BulletinEventsDocumentOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
 
 @NgModule({
   imports: [
@@ -127,7 +130,10 @@ import { ApplicationWaitingPaymentComponent } from './application/application-ov
     AdministrationsExtFormmComponent,
     AdministrationsExtOverviewComponent,
     UsersExternalFormComponent,
-    ApplicationWaitingPaymentComponent
+    ApplicationWaitingPaymentComponent,
+    BulletinEventsOverviewComponent,
+    BulletinEventsArticleOverviewComponent,
+    BulletinEventsDocumentOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

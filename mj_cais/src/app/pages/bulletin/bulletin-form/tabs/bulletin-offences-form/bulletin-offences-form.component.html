@@ -72,7 +72,7 @@
       field="offStartDate"
       [sortable]="true"
       header="Начална дата на извършване на деянието"
-      dataType="Date"
+      dataType="date"
       [formatter]="this.dateFormatService.formatDate"
     >
       <ng-template igxCell let-cell="cell">
@@ -85,7 +85,7 @@
       field="offEndDate"
       [sortable]="true"
       header="Крайна дата на извършване на деянието"
-      dataType="Date"
+      dataType="date"
       [formatter]="this.dateFormatService.formatDate"
     >
       <ng-template igxCell let-cell="cell">

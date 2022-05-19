@@ -358,6 +358,7 @@
               >
               <div class="col-md-3 duration-container">
                 <cais-input
+                  [label]="'Години'"
                   [type]="'number'"
                   [inputFormControl]="
                     bulletinSanctionForm.decisionDurationYears
@@ -369,6 +370,7 @@
               </div>
               <div class="col-md-3 duration-container">
                 <cais-input
+                  [label]="'Месеци'"
                   [type]="'number'"
                   [inputFormControl]="
                     bulletinSanctionForm.decisionDurationMonths
@@ -380,6 +382,7 @@
               </div>
               <div class="col-md-3 duration-container">
                 <cais-input
+                  [label]="'Дни'"
                   [type]="'number'"
                   [inputFormControl]="bulletinSanctionForm.decisionDurationDays"
                   [parentGroup]="bulletinSanctionForm.group"
@@ -389,6 +392,7 @@
               </div>
               <div class="col-md-3 duration-container">
                 <cais-input
+                  [label]="'Часове'"
                   [type]="'number'"
                   [inputFormControl]="
                     bulletinSanctionForm.decisionDurationHours
@@ -400,33 +404,18 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="
-                  'Приспадането и зачитането на предварителното задържане по чл. 59, ал. 1 НК'
-                "
-                [inputFormControl]="bulletinSanctionForm.detenctionDescr"
-                [parentGroup]="bulletinSanctionForm.group"
-                [inputName]="'detenctionDescr'"
-                [rows]="'1'"
-                [inputType]="'TextArea'"
-              >
-              </cais-input>
-            </div>
-          </div>
         </ng-container>
         <ng-container *ngIf="showPrisonData">
-          <div class="font-weight-bold">Отлагане на изпълнението</div>
+          <div class="font-weight-bold">
+            Освобождаването от изтърпяване на наказанието и неналагането на
+            наказание съгласно НК, както и условното осъждане по чл. 66 ал.1 или
+            чл.69, ал1 НК, при което се посочва и изпитателният срок
+          </div>
           <hr />
 
           <div class="form-group col-md-6 ml-2 row">
             <label class="nb-theme-default label duration-label">
-              Освобождаването от изтърпяване на наказанието и неналагането на
-              наказание съгласно НК, както и условното осъждане по по чл. 66
-              ал.1 или чл.69 ал.1 НК, при което се посочва и изпитателният
-              срок</label
+              Продължителност</label
             >
             <div class="col-md-3 duration-container" style="margin-left: -16px">
               <cais-input
@@ -459,6 +448,22 @@
                 [inputFormControl]="bulletinSanctionForm.suspentionDurationDays"
                 [parentGroup]="bulletinSanctionForm.group"
                 [inputName]="'suspentionDurationDays'"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="
+                  'Приспадането и зачитането на предварителното задържане по чл. 59, ал. 1 НК'
+                "
+                [inputFormControl]="bulletinSanctionForm.detenctionDescr"
+                [parentGroup]="bulletinSanctionForm.group"
+                [inputName]="'detenctionDescr'"
+                [rows]="'1'"
+                [inputType]="'TextArea'"
               >
               </cais-input>
             </div>

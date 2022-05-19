@@ -1,0 +1,182 @@
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [sortStrategy]="noopSortStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  (onSortingDone)="sortingDone($event)"
+  (onFilteringDone)="filteringDone($event)"
+  (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
+  [allowFiltering]="true"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+>
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>Нови уведомления </igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <nb-toggle
+          (checkedChange)="onShowAllBulletinEventsChange($event)"
+          status="info"
+          labelPosition="left"
+          >Всички
+          <div class="22"></div
+        ></nb-toggle>
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="true"
+    [dataType]="'number'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="eventType"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="statusName"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="hideStatus"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="createdOn"
+    header="Дата на създаване"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="registrationNumber"
+    header="Номер на бюлетин"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="identifier"
+    header="ЕГН/ЛНЧ/ЛН"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="personName"
+    header="Лице"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="description"
+    header="Описание"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    width="150px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a
+        *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
+        [title]="'Редакция на бюлетин'"
+        [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]"
+      >
+        <nb-icon pack="fa" icon="pen"></nb-icon>
+      </a>
+      <a
+        *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
+        [title]="'Потвърди'"
+        (click)="
+          changeStatus(cell.rowData.id, BulletinEventsStatusTypeEnum.Approved)
+        "
+      >
+        <nb-icon pack="fa" icon="check"></nb-icon>
+      </a>
+      <a
+        *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
+        [title]="'Отхвърли'"
+        (click)="
+          changeStatus(cell.rowData.id, BulletinEventsStatusTypeEnum.Rejected)
+        "
+      >
+        <i class="fas fa-times"></i>
+      </a>
+    </ng-template>
+  </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>

@@ -1,0 +1,23 @@
+<nb-card class="card-single-page-height">
+  <nb-card-header class="card-header-shadow">
+    <div class="d-flex" style="justify-content: space-between">
+      <div class="d-flex align-items-center">
+        <div style="font-weight: bold; font-size: 22px">
+          Настъпили обстоятелства
+        </div>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <nb-tabset #nbtabset>
+      <nb-tab
+        tabTitle="Уведомяване за настъпили обстоятелства по чл. 30, чл.22"
+      >
+        <cais-bulletin-events-article-overview></cais-bulletin-events-article-overview>
+      </nb-tab>
+      <nb-tab tabTitle="Уведомяване за променен съдебен статус на осъдено лице">
+        <cais-bulletin-events-document-overview></cais-bulletin-events-document-overview>
+      </nb-tab>
+    </nb-tabset>
+  </nb-card-body>
+</nb-card>

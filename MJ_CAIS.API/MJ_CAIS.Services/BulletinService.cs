@@ -23,13 +23,19 @@ namespace MJ_CAIS.Services
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IPersonService _personService;
         private readonly INotificationService _notificationService;
+        private readonly IBulletinEventService _bulletinEventService;
 
-        public BulletinService(IMapper mapper, IBulletinRepository bulletinRepository, IPersonService personService, INotificationService notificationService)
+        public BulletinService(IMapper mapper, 
+            IBulletinRepository bulletinRepository, 
+            IPersonService personService, 
+            INotificationService notificationService,
+            IBulletinEventService bulletinEventService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
             _personService = personService;
             _notificationService = notificationService;
+            _bulletinEventService = bulletinEventService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -131,7 +137,8 @@ namespace MJ_CAIS.Services
 
             // All active bulletins are locked for editing
             // only decisions can be added
-            if (statusId == BulletinConstants.Status.Active)
+            var isActiveBulletin = statusId == BulletinConstants.Status.Active;
+            if (isActiveBulletin)
             {
                 bulletin.Locked = true;
             }
@@ -176,6 +183,11 @@ namespace MJ_CAIS.Services
             }
 
             await dbContext.SaveChangesAsync();
+
+            //if (isActiveBulletin)
+            //{
+            //    await _bulletinEventService.GenereteEventAsyn(person.Id);
+            //}
 
             // if person is bulgarian citizen
             var skipEcris = bulletin.BPersNationalities != null && 

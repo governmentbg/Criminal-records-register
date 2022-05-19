@@ -17,6 +17,14 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? SecondSignerId { get; set; }
         public string? AccessCode1 { get; set; }
         public string? AccessCode2 { get; set; }
+        public string? DocId { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? ValidTo { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public decimal? Version { get; set; }
 
         public virtual AApplication? Application { get; set; }
         public virtual GUser? FirstSigner { get; set; }

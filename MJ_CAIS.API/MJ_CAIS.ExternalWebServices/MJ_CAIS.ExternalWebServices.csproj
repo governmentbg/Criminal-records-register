@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -14,15 +14,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.8.*" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.8.*" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.*" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.8.*" />
+    <PackageReference Include="TL.JasperReports.Integration" Version="22.138.40192" />
+    <PackageReference Include="TL.Signer" Version="22.76.38469" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj" />
     <ProjectReference Include="..\MJ_CAIS.DataAccess\MJ_CAIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.Services\MJ_CAIS.Services.csproj" />
   </ItemGroup>
 
 </Project>

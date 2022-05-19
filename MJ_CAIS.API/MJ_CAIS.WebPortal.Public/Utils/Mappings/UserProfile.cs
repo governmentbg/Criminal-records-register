@@ -8,8 +8,8 @@ namespace MJ_CAIS.WebPortal.Public.Utils.Mappings
     {
         public UserProfile()
         {
-            CreateMap<UserDTO, GUser>();
-            CreateMap<GUser, UserDTO>();
+            CreateMap<UserDTO, GUsersCitizen>();
+            CreateMap<GUsersCitizen, UserDTO>();
         }
     }
 }

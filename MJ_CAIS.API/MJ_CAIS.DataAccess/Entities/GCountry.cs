@@ -16,10 +16,10 @@ namespace MJ_CAIS.DataAccess.Entities
             FbbcBirthCountries = new HashSet<Fbbc>();
             FbbcCountries = new HashSet<Fbbc>();
             GCities = new HashSet<GCity>();
-            GCountrySubdivisions = new HashSet<GCountrySubdivision>();
             PPeople = new HashSet<PPerson>();
             PPersonHs = new HashSet<PPersonH>();
             PPersonIds = new HashSet<PPersonId>();
+            WApplications = new HashSet<WApplication>();
         }
 
         public string? EcrisTechnId { get; set; }
@@ -47,9 +47,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<Fbbc> FbbcBirthCountries { get; set; }
         public virtual ICollection<Fbbc> FbbcCountries { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
-        public virtual ICollection<GCountrySubdivision> GCountrySubdivisions { get; set; }
         public virtual ICollection<PPerson> PPeople { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }
         public virtual ICollection<PPersonId> PPersonIds { get; set; }
+        public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }
