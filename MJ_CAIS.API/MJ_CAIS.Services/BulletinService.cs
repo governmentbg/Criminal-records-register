@@ -25,9 +25,9 @@ namespace MJ_CAIS.Services
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
 
-        public BulletinService(IMapper mapper, 
-            IBulletinRepository bulletinRepository, 
-            IPersonService personService, 
+        public BulletinService(IMapper mapper,
+            IBulletinRepository bulletinRepository,
+            IPersonService personService,
             INotificationService notificationService,
             IBulletinEventService bulletinEventService)
             : base(mapper, bulletinRepository)
@@ -159,28 +159,7 @@ namespace MJ_CAIS.Services
                 return;
             }
 
-            // when status is set to active
-            // save data for person and its identifers
-
-            // get person data from bulletin
-            var personDto = mapper.Map<BBulletin, PersonDTO>(bulletin);
-            // preate person object, apply changes
-            var person = await _personService.CreatePersonAsync(personDto);
-
-            // create realtion between person identifier and bulletin
-            // create PBulletinId for all pids (locally added and saved in db)
-
-            foreach (var piersonIdObj in person.PPersonIds)
-            {
-                bulletin.PBulletinIds.Add(new PBulletinId
-                {
-                    BulletinId = bulletin.Id,
-                    Id = BaseEntity.GenerateNewId(),
-                    EntityState = EntityStateEnum.Added,
-                    CreatedOn = DateTime.Now,
-                    PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
-                });
-            }
+            await CreatePersonFromBulletinAsync(bulletin);
 
             await dbContext.SaveChangesAsync();
 
@@ -190,8 +169,8 @@ namespace MJ_CAIS.Services
             //}
 
             // if person is bulgarian citizen
-            var skipEcris = bulletin.BPersNationalities != null && 
-                bulletin.BPersNationalities.Count == 1 && 
+            var skipEcris = bulletin.BPersNationalities != null &&
+                bulletin.BPersNationalities.Count == 1 &&
                 bulletin.BPersNationalities.First().CountryId == BG;
 
             if (skipEcris) return;
@@ -323,6 +302,15 @@ namespace MJ_CAIS.Services
 
             UpdateStatusByDecisions(entity, oldStatus);
 
+            // if no sanction is selected
+            // change bulletin status
+            if (entity.NoSanction == true)
+            {
+                entity.StatusId = BulletinConstants.Status.NoSanction;
+                await CreatePersonFromBulletinAsync(entity);
+            }
+
+            // save old status
             if (entity.EntityState == EntityStateEnum.Modified)
             {
                 var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id);
@@ -342,6 +330,35 @@ namespace MJ_CAIS.Services
 
             var passedNavigationProperties = new List<BaseEntity>();
             dbContext.ApplyChanges(entity, passedNavigationProperties, true);
+        }
+
+        /// <summary>
+        /// Creates a person from a bulletin and a link between them
+        /// </summary>
+        private async Task CreatePersonFromBulletinAsync(BBulletin bulletin)
+        {
+            // when status is set to Active or NoSanction
+            // save data for person and its identifers
+
+            // get person data from bulletin
+            var personDto = mapper.Map<BBulletin, PersonDTO>(bulletin);
+            // preate person object, apply changes
+            var person = await _personService.CreatePersonAsync(personDto);
+
+            // create realtion between person identifier and bulletin
+            // create PBulletinId for all pids (locally added and saved in db)
+
+            foreach (var piersonIdObj in person.PPersonIds)
+            {
+                bulletin.PBulletinIds.Add(new PBulletinId
+                {
+                    BulletinId = bulletin.Id,
+                    Id = BaseEntity.GenerateNewId(),
+                    EntityState = EntityStateEnum.Added,
+                    CreatedOn = DateTime.Now,
+                    PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
+                });
+            }
         }
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)

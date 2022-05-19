@@ -52,11 +52,11 @@ namespace AutomaticStepsExecutor
             int numberOfFailedEntities = 0;
             if (entities.Count > 0)
             {
-                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsForPurpose ||
-                                                   a.Code == ApplicationConstants.ApplicationStatuses.CertificateReady).ToListAsync();
+                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+                                                   a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady).ToListAsync();
                 if (statuses.Count != 2)
                 {
-                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.BulletinsForPurpose}, {ApplicationConstants.ApplicationStatuses.CertificateReady}");
+                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
 
                 }
 
@@ -66,7 +66,7 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var application = (AApplication)entity;
-                        await _applicationService.GenerateCertificateFromApplication(application, ApplicationConstants.ApplicationStatuses.CertificateReady, ApplicationConstants.ApplicationStatuses.BulletinsForPurpose);
+                        await _applicationService.GenerateCertificateFromApplication(application, ApplicationConstants.ApplicationStatuses.CertificateContentReady, ApplicationConstants.ApplicationStatuses.BulletinsCheck);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
@@ -88,7 +88,7 @@ namespace AutomaticStepsExecutor
         public async Task<List<BaseEntity>> SelectEntitiesAsync()
         {
             var result = await Task.FromResult( _dbContext.AApplications
-                               .Where(aa=>aa.StatusCode==ApplicationConstants.ApplicationStatuses.HasBulletins)
+                               .Where(aa=>aa.StatusCode==ApplicationConstants.ApplicationStatuses.ApprovedApplication)
                                .ToList<BaseEntity>());
             return result;
         }

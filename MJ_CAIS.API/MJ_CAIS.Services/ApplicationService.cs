@@ -68,7 +68,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public async Task GenerateCertificateFromApplication(AApplication application, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsForPurpose)
+        public async Task GenerateCertificateFromApplication(AApplication application, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
         {
             var pids = await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
             if (pids.Count > 0)
@@ -112,7 +112,7 @@ namespace MJ_CAIS.Services
 
         private void ProcessApplicationWithBulletins(AApplication application, List<BBulletin> bulletins, string statusID)
         {
-            ACertificate cert = CreateCertificate(application.Id, ApplicationConstants.ApplicationStatuses.BulletinsForPurpose);
+            ACertificate cert = CreateCertificate(application.Id, statusID);
             int orderNumber = 0;
             cert.AAppBulletins= bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
             {
