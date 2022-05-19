@@ -16,3 +16,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.cais-header .btn-outline-secondary {
+    margin-left: 5px;
+}
+
+.cais-header h3, 
+.cais-header h4{
+    margin-bottom: 0;
+}
+
+hr {
+    margin: 10px 0;
+}
+
+label.required:after {
+    color: red;
+    content: ' *';
+    display: inline;
+}

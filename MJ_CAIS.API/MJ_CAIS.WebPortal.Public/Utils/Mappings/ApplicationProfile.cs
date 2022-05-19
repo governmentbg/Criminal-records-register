@@ -4,11 +4,10 @@ using MJ_CAIS.WebPortal.Public.Models.Conviction;
 
 namespace MJ_CAIS.WebPortal.Public.Utils.Mappings
 {
-    public class ConvictionProfile : Profile
+    public class ApplicationProfile : Profile
     {
-        public ConvictionProfile()
+        public ApplicationProfile()
         {
-            // TODO: change entity
             CreateMap<AApplication, ConvictionCodeDisplayModel>()
                 .ForMember(d => d.Identifier, opt => opt.MapFrom(src => src.Egn ?? src.Lnch ?? src.Ln));
         }

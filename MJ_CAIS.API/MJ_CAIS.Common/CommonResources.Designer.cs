@@ -115,6 +115,15 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Невалидна електронна поща.
+        /// </summary>
+        public static string MsgEmailInvalid {
+            get {
+                return ResourceManager.GetString("MsgEmailInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Страницата, която се опитвате да достъпите, не е намерена. (HTTP Status Code: 404).
         /// </summary>
         public static string MsgError404 {
@@ -165,6 +174,15 @@ namespace MJ_CAIS.Common {
         public static string MsgOperationException {
             get {
                 return ResourceManager.GetString("MsgOperationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Полето &quot;{0}&quot; е задължително.
+        /// </summary>
+        public static string MsgRequired {
+            get {
+                return ResourceManager.GetString("MsgRequired", resourceCulture);
             }
         }
         
