@@ -7,20 +7,12 @@ using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
 {
-    public class RehabilitationRepository<TContext> : IRehabilitationRepository<TContext>
-        where TContext : CaisDbContext
+    public class RehabilitationRepository : BaseAsyncRepository<BBulletin, CaisDbContext>, IRehabilitationRepository
     {
-        protected readonly TContext _dbContext;
-
-        protected RehabilitationRepository(TContext dbContext)
+        public RehabilitationRepository(CaisDbContext dbContext) : base(dbContext)
         {
-            this._dbContext = dbContext;
         }
 
-        public TContext GetDbContext()
-        {
-            return this._dbContext;
-        }
 
         public async Task<IQueryable<BulletinForRehabilitationDTO>> GetBulletinByPersonIdAsync(string personId)
         {

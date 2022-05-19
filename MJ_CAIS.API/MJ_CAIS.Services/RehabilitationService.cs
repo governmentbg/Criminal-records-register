@@ -1,15 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 
 namespace MJ_CAIS.Services
 {
-    public class RehabilitationService<TContext> : IRehabilitationService
-                where TContext : DbContext
+    public class RehabilitationService : BaseAsyncService<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string, CaisDbContext>, IRehabilitationService
     {
-        protected IRehabilitationRepository<TContext> _rehabilitationRepository;
+        private readonly IRehabilitationRepository _rehabilitationRepository;
 
-        public RehabilitationService(IRehabilitationRepository<TContext> rehabilitationRepository)
+        public RehabilitationService(IMapper mapper, IRehabilitationRepository rehabilitationRepository)
+            : base(mapper, rehabilitationRepository)
         {
             _rehabilitationRepository = rehabilitationRepository;
         }
@@ -40,5 +44,10 @@ namespace MJ_CAIS.Services
                 }
             }
         }
+
+        protected override bool IsChildRecord(string aId, List<string> aParentsList)
+        {
+            return false;
+         }
     }
 }

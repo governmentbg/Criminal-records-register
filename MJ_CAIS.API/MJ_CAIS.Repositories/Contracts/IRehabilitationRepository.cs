@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Rehabilitation;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
-    public interface IRehabilitationRepository<TContext>
-        where TContext : DbContext
+    public interface IRehabilitationRepository : IBaseAsyncRepository<BBulletin, string, CaisDbContext>
     {
-        TContext GetDbContext();
-
         Task<IQueryable<BulletinForRehabilitationDTO>> GetBulletinByPersonIdAsync(string personId);
 
         Task UpdateForRehabilitationAsync(string bulletinId, DateTime rehabilitationDate, bool changeStatus);
