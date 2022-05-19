@@ -14,9 +14,13 @@
         /// </summary>
         public DateTime? DecisionFinalDate { get; set; }
 
+        public DateTime? RehabilitationDate { get; set; }
+    
         public string? Status { get; set; }
 
         public IEnumerable<SanctionForRehabilitationDTO> Sanctions { get; set; }
+
+        public IEnumerable<DateTime?> OffencesEndDates { get; set; }
     }
 
     public class SanctionForRehabilitationDTO

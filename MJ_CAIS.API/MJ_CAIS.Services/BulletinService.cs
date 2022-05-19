@@ -24,20 +24,20 @@ namespace MJ_CAIS.Services
         private readonly IPersonService _personService;
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
-        //private readonly IRehabilitationService _rehabilitationService;
+        private readonly IRehabilitationService _rehabilitationService;
 
         public BulletinService(IMapper mapper,
             IBulletinRepository bulletinRepository,
             IPersonService personService,
             INotificationService notificationService,
-            IBulletinEventService bulletinEventService)
-            //IRehabilitationService rehabilitationService)
+            IBulletinEventService bulletinEventService,
+            IRehabilitationService rehabilitationService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
             _personService = personService;
             _notificationService = notificationService;
-            //_rehabilitationService = rehabilitationService;
+            _rehabilitationService = rehabilitationService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -173,7 +173,7 @@ namespace MJ_CAIS.Services
             if (isActiveBulletin)
             {
                 // await _bulletinEventService.GenereteEventAsyn(personId);
-               // await _rehabilitationService.ApplyRehabilitation(bulletin.Id, personId);
+                await _rehabilitationService.ApplyRehabilitation(bulletin.Id, personId);
             }
 
             // if person is bulgarian citizen
