@@ -26,7 +26,6 @@ namespace MJ_CAIS.DIContainer
 
             services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
-
             var servicesTypes = typeof(BulletinService).Assembly.GetClassTypes("Service");
             var interfaceTypes = typeof(IBulletinService).Assembly.GetInterfaceTypes("Service");
             AddTransientTypes(services, servicesTypes, interfaceTypes);
@@ -39,7 +38,6 @@ namespace MJ_CAIS.DIContainer
             var servicesTypesECRIS = typeof(NotificationService).Assembly.GetClassTypes("Service");
             var interfaceTypesECRIS = typeof(INotificationService).Assembly.GetInterfaceTypes("Service");
             AddTransientTypes(services, servicesTypesECRIS, interfaceTypesECRIS);
-
 
             services.AddJasperReporting();
             services.AddSingleton<IPdfSigner, PdfSigner>();
