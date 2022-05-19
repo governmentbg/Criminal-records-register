@@ -5,11 +5,9 @@ export class ApplicationGridModel {
   public firstname: string;
   public surname: string;
   public familyname: string;
-  public fullname: string;
-  public firstnameLat: string;
-  public surnameLat: string;
-  public familynameLat: string;
   public applicationTypeId: string;
+  public birthDate: Date;
+  public birthPlaceOther: string;
 
   constructor(init?: Partial<ApplicationGridModel>) {
     if (init) {
@@ -19,10 +17,8 @@ export class ApplicationGridModel {
       this.firstname = init.firstname ?? null;
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;
-      this.fullname = init.fullname ?? null;
-      this.firstnameLat = init.firstnameLat ?? null;
-      this.surnameLat = init.surnameLat ?? null;
-      this.familynameLat = init.familynameLat ?? null;
+      this.birthDate = init.birthDate ?? null;
+      this.birthPlaceOther = init.birthPlaceOther ?? null;
       this.applicationTypeId = init.applicationTypeId ?? null;
     }
   }

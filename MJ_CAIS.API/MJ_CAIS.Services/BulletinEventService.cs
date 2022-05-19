@@ -58,6 +58,9 @@ namespace MJ_CAIS.Services
             // the event is not applicable
             if (uniqueBulletins.Count < 2) return;
 
+            // ако няма извършени престъпления в останалите бюлетини
+            if (!uniqueBulletins.SelectMany(x => x.OffencesEndDates).Any()) return;
+
             //nkz_lishavane_ot_svoboda
             var bulletinWithSanctionOfTypeLos = bulletins
                 .Where(x => x.Sanctions
@@ -78,16 +81,17 @@ namespace MJ_CAIS.Services
 
             // крайната дата преди която трябва да е вписан бюлетин
             // в който да не е чекнат Постановено изтърпяване на предходна условна присъда
+            // и в него да има престъпление с крайна дата влизаща в периода
             var periodEndDate = bulletin.DecisionDate.Value;
-            periodEndDate = periodEndDate.AddHours(sanction.DecisionDurationHours ?? 0);
-            periodEndDate = periodEndDate.AddDays(sanction.DecisionDurationDays ?? 0);
-            periodEndDate = periodEndDate.AddMonths(sanction.DecisionDurationMonths ?? 0);
-            periodEndDate = periodEndDate.AddYears(sanction.DecisionDurationYears ?? 0);
+            periodEndDate = periodEndDate.AddHours(sanction.SuspentionDurationHours ?? 0);
+            periodEndDate = periodEndDate.AddDays(sanction.SuspentionDurationDays ?? 0);
+            periodEndDate = periodEndDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
+            periodEndDate = periodEndDate.AddYears(sanction.SuspentionDurationYears ?? 0);
 
-            // Има бюлетин в периода на изпитателния срок на предходния бюлетин и не е маркирано
-            // "Постановено изтърпяване на предходна условна присъда" в осъждането
-            var bulletinForEvents = uniqueBulletins.Where(x => x.DecisionDate.HasValue && x.DecisionDate.Value >= bulletin.DecisionDate &&
-            x.DecisionDate.Value <= periodEndDate && x.Id != bulletin.Id &&
+            // има престъпление с крайна дата влизаща в периода на изпитателния срок и
+            // не е маркирано "Постановено изтърпяване на предходна условна присъда" в осъждането
+            var bulletinForEvents = uniqueBulletins.Where(x => x.OffencesEndDates.Any(d=> d >= bulletin.DecisionDate &&
+            d <= periodEndDate) && x.Id != bulletin.Id &&
              (!x.PrevSuspSent.HasValue || x.PrevSuspSent == false));
 
             var bulletinIds = uniqueBulletins.Select(x => x.Id).ToList();
