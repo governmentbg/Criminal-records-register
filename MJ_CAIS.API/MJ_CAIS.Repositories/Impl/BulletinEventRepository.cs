@@ -49,32 +49,33 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<BulletinSancttionsEventDTO>> GetBulletinByPersonIdAsync(string personId)
         {
             var query = from bulletin in _dbContext.BBulletins.AsNoTracking()
-                                            
-                         join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
-                                   into bulletinPersonLeft
-                         from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
 
-                         join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
-                                     into personIdsLeft
-                         from personIds in personIdsLeft.DefaultIfEmpty()
+                        join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
+                                  into bulletinPersonLeft
+                        from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
 
-                         where personIds.PersonId == personId
-                         select  
-                         new BulletinSancttionsEventDTO
-                         {
-                             Id = bulletin.Id,
-                             DecisionDate = bulletin.DecisionDate,
-                             PrevSuspSent = bulletin.PrevSuspSent,
-                             Sanctions = bulletin.BSanctions.Select(x=> new SanctionEventDTO
-                             {
-                                 Id=x.Id,
-                                 SuspentionDurationDays = x.SuspentionDurationDays,
-                                 SuspentionDurationHours = x.SuspentionDurationHours,
-                                 SuspentionDurationMonths = x.SuspentionDurationMonths,
-                                 SuspentionDurationYears = x.SuspentionDurationYears,
-                                 Type = x.SanctCategoryId
-                             })
-                         };
+                        join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
+                                    into personIdsLeft
+                        from personIds in personIdsLeft.DefaultIfEmpty()
+
+                        where personIds.PersonId == personId
+                        select
+                        new BulletinSancttionsEventDTO
+                        {
+                            Id = bulletin.Id,
+                            DecisionDate = bulletin.DecisionDate,
+                            PrevSuspSent = bulletin.PrevSuspSent,
+                            Sanctions = bulletin.BSanctions.Select(x => new SanctionEventDTO
+                            {
+                                Id = x.Id,
+                                SuspentionDurationDays = x.SuspentionDurationDays,
+                                SuspentionDurationHours = x.SuspentionDurationHours,
+                                SuspentionDurationMonths = x.SuspentionDurationMonths,
+                                SuspentionDurationYears = x.SuspentionDurationYears,
+                                Type = x.SanctCategoryId
+                            }),
+                            OffencesEndDates = bulletin.BOffences.Select(x => x.OffEndDate)
+                        };
 
             return await Task.FromResult(query);
         }
