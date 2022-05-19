@@ -1,0 +1,47 @@
+﻿@using System.Collections.Generic;
+@using Infragistics.Web.Mvc;
+
+@{
+    string culture = ViewData["Culture"] as string;
+
+    var data = (IEnumerable<object>)ViewData["Data"];
+    bool isRequired = ViewData["IsRequired"] != null ? bool.Parse(ViewData["IsRequired"].ToString()) : false;
+    string changeHandler = ViewData["ChangeHandler"]?.ToString();
+    string renderedHandler = ViewData["RenderedHandler"]?.ToString();
+    string requiredMessage = ViewData["RequiredMessage"]?.ToString();
+    bool disabled = ViewData["Readonly"] != null ? bool.Parse(ViewData["Readonly"].ToString()) : false;
+
+    var htmlAttributes = new Dictionary<string, object>();
+
+    if (ViewData["Attributes"] != null)
+    {
+        htmlAttributes = ViewData["Attributes"] as Dictionary<string, object>;
+    }
+}
+
+@functions {
+    // when function is in other scope, different than global
+    string IgFunctionCall(string functionName)
+    {
+        return string.Format("{0}(evt, ui);", functionName);
+    }
+}
+
+<partial name="_InfragisticsLoader">
+
+@(Html.Infragistics()
+    .ComboFor(model => model, data)
+    .HtmlAttributes(htmlAttributes)
+    .Disabled(disabled)
+    .ValidatorOptions(options => options
+        .Required(isRequired, requiredMessage)
+        .OnSubmit(true)
+        .MessageTarget(ViewData.TemplateInfo.HtmlFieldPrefix)
+    )
+    .Language(culture)
+    .VisibleItemsCount(10)
+    .AddClientEvent("selectionChanged", IgFunctionCall(changeHandler))
+    .AddClientEvent("rendered", IgFunctionCall(renderedHandler))
+    .DataBind()
+    .Render()
+)
