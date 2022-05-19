@@ -10,22 +10,30 @@ namespace MJ_CAIS.Common.Constants
     {
         public static class ApplicationStatuses
         {
-            public const string New = "New";
-            public const string Duplicate = "Duplicate";
-            public const string RegistersChecks = "RegistersChecks";
-            public const string TaxCheck = "TaxCheck";
-            public const string Payment = "Payment";
+     
+            public const string NewId= "NewId";
+            public const string FillApplication = "FillApplication";
             public const string Canceled = "Canceled";
-            public const string HasBulletins = "HasBulletins";
-            public const string BulletinsReview = "BulletinsReview";
-            public const string BulletinsChecks = "BulletinsChecks";
+            public const string CheckTaxFree = "CheckTaxFree";
+            public const string CheckPayment = "CheckPayment";
+            public const string ApprovedApplication = "ApprovedApplication";
+            public const string BulletinsCheck = "BulletinsCheck";
             public const string BulletinsRehabilitation = "BulletinsRehabilitation";
-            public const string BulletinsForPurpose = "BulletinsForPurpose";
-            public const string CertificateReady = "CertificateReady";
-            public const string CertificatePrint = "CertificatePrint";
+            public const string BulletinsSelection = "BulletinsSelection";
+            public const string CertificateContentReady = "CertificateContentReady";
+            public const string CertificateServerSign = "CertificateServerSign";
+            public const string CertificateUserSign = "CertificateUserSign";
             public const string CertificateEDelivery = "CertificateEDelivery";
-            public const string CertificateSentMain = "CertificateSentMain";
+            public const string CertificateSentMail = "CertificateSentMail";
+            public const string CertificatePaperPrint = "CertificatePaperPrint";
             public const string Delivered = "Delivered";
+            public const string NewWebApplication = "NewWebApplication";
+            public const string WebDuplicateCheck = "WebDuplicateCheck";
+            public const string WebRegistersChecks = "WebRegistersChecks";
+            public const string WebCanceled = "WebCanceled";
+            public const string WebCheckTaxFree = "WebCheckTaxFree";
+            public const string WebCheckPayment = "WebCheckPayment";
+            public const string WebApprovedApplication = "WebApprovedApplication";
         }
     }
 }

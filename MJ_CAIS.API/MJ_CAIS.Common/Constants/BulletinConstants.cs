@@ -12,6 +12,7 @@
             public const string ForRehabilitation = "ForRehabilitation"; //	Подлежащ на реабилитация на лицето
             public const string Rehabilitated = "Rehabilitated"; //	Извършена реабилитация
             public const string ReplacedAct425 = "ReplacedAct425"; // Постановен съдебен акт по чл. 425 НПК
+            public const string NoSanction = "NoSanction"; // Без наказание
         }
 
         public static class Type
