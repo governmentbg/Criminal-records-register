@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public APaymentMethod()
         {
             AApplications = new HashSet<AApplication>();
+            WApplications = new HashSet<WApplication>();
         }
 
         public string? Code { get; set; }
@@ -23,5 +24,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? Version { get; set; }
 
         public virtual ICollection<AApplication> AApplications { get; set; }
+        public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }

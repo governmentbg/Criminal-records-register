@@ -7,11 +7,14 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GCsAuthority()
         {
-            AApplications = new HashSet<AApplication>();
+            AApplicationCsAuthorities = new HashSet<AApplication>();
+            AApplicationCsAuthorityBirths = new HashSet<AApplication>();
             BBulletins = new HashSet<BBulletin>();
             DCsDocRegisters = new HashSet<DCsDocRegister>();
             GCities = new HashSet<GCity>();
             GUsers = new HashSet<GUser>();
+            WApplicationCsAuthorities = new HashSet<WApplication>();
+            WApplicationCsAuthorityBirths = new HashSet<WApplication>();
         }
 
         public string? Name { get; set; }
@@ -27,10 +30,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? Version { get; set; }
 
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
-        public virtual ICollection<AApplication> AApplications { get; set; }
+        public virtual ICollection<AApplication> AApplicationCsAuthorities { get; set; }
+        public virtual ICollection<AApplication> AApplicationCsAuthorityBirths { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<DCsDocRegister> DCsDocRegisters { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<GUser> GUsers { get; set; }
+        public virtual ICollection<WApplication> WApplicationCsAuthorities { get; set; }
+        public virtual ICollection<WApplication> WApplicationCsAuthorityBirths { get; set; }
     }
 }

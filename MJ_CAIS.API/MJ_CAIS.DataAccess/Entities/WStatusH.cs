@@ -12,10 +12,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public decimal? Version { get; set; }
-        public string? StatusId { get; set; }
+        public string? StatusCode { get; set; }
         public string? ApplicationId { get; set; }
 
-        public virtual WApplication? Application { get; set; }
-        public virtual WApplicationStatus? Status { get; set; }
+        public virtual WApplicationStatus? StatusCodeNavigation { get; set; }
     }
 }

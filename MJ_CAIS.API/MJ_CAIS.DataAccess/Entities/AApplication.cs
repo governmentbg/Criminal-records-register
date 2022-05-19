@@ -58,7 +58,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
         public string? PaymentMethodId { get; set; }
         public bool? FromCosul { get; set; }
-        public string? DocContentId { get; set; }
         public string? StatusCode { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? BirthDatePrecision { get; set; }
@@ -70,11 +69,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UserExtId { get; set; }
         public string? WApplicationId { get; set; }
         public string? FullnameLat { get; set; }
+        public string? CsAuthorityBirthId { get; set; }
 
         public virtual AApplicationType? ApplicationType { get; set; }
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
+        public virtual GCsAuthority? CsAuthorityBirth { get; set; }
         public virtual APaymentMethod? PaymentMethod { get; set; }
         public virtual APurpose? PurposeNavigation { get; set; }
         public virtual ASrvcResRcptMeth? SrvcResRcptMeth { get; set; }

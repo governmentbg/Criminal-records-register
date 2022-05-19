@@ -13,6 +13,7 @@ namespace MJ_CAIS.DataAccess.Entities
             Fbbcs = new HashSet<Fbbc>();
             PPeople = new HashSet<PPerson>();
             PPersonHs = new HashSet<PPersonH>();
+            WApplications = new HashSet<WApplication>();
         }
 
         public string? EcrisTechnId { get; set; }
@@ -41,5 +42,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<Fbbc> Fbbcs { get; set; }
         public virtual ICollection<PPerson> PPeople { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }
+        public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }

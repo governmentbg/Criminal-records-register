@@ -14,6 +14,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string Code { get; set; } = null!;
         public string? Name { get; set; }
         public string? StatusType { get; set; }
+        public string? Descr { get; set; }
 
         public virtual ICollection<ACertificate> ACertificates { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }

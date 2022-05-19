@@ -18,7 +18,6 @@
     <ProjectReference Include="..\MJ_CAIS.EcrisObjectsServices.Contracts\MJ_CAIS.EcrisObjectsServices.Contracts.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Repositories\MJ_CAIS.Repositories.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj" />
-    <ProjectReference Include="..\TL.JasperReports.Integration\TL.JasperReports.Integration.csproj" />
   </ItemGroup>
 
 </Project>

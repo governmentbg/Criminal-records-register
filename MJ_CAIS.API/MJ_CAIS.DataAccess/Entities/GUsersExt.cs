@@ -5,6 +5,11 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class GUsersExt : BaseEntity
     {
+        public GUsersExt()
+        {
+            WApplications = new HashSet<WApplication>();
+        }
+
         public string? Egn { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
@@ -19,5 +24,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? Version { get; set; }
 
         public virtual GExtAdministration? Administration { get; set; }
+        public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }

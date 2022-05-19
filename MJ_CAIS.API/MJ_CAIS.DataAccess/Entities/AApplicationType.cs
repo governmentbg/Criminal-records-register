@@ -9,6 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             AApplications = new HashSet<AApplication>();
             DDocRegisters = new HashSet<DDocRegister>();
+            WApplications = new HashSet<WApplication>();
         }
 
         public string? Code { get; set; }
@@ -21,5 +22,6 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<DDocRegister> DDocRegisters { get; set; }
+        public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 using TL.JasperReports.Integration;
+using TL.Signer;
 
 namespace AutomaticStepsExecutor
 {
@@ -31,6 +32,7 @@ namespace AutomaticStepsExecutor
                     .ConfigureServices(services => services.AddSingleton(typeofExecutor))
                     .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
                     .ConfigureServices(services => services.AddSingleton<JasperReportsClient>())
+                    .ConfigureServices(services => services.AddSingleton<PdfSigner>())
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();

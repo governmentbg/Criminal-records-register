@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Common", "..\..\MJ_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DTO", "..\..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj", "{364171AC-CB46-41D4-AA57-5D3D64268B70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TL.JasperReports.Integration", "..\..\TL.JasperReports.Integration\TL.JasperReports.Integration.csproj", "{780C6E05-E4E5-4A53-8BE1-AAD05A7C294D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices", "..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj", "{E24277E5-77B3-4EC9-8B02-0F2544A6D593}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{364171AC-CB46-41D4-AA57-5D3D64268B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{364171AC-CB46-41D4-AA57-5D3D64268B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{364171AC-CB46-41D4-AA57-5D3D64268B70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{780C6E05-E4E5-4A53-8BE1-AAD05A7C294D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{780C6E05-E4E5-4A53-8BE1-AAD05A7C294D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{780C6E05-E4E5-4A53-8BE1-AAD05A7C294D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{780C6E05-E4E5-4A53-8BE1-AAD05A7C294D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E24277E5-77B3-4EC9-8B02-0F2544A6D593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E24277E5-77B3-4EC9-8B02-0F2544A6D593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E24277E5-77B3-4EC9-8B02-0F2544A6D593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E24277E5-77B3-4EC9-8B02-0F2544A6D593}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
