@@ -7,18 +7,20 @@
     ></cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
-    <form autocomplete="off">
-      <div class="row">        
-        <div  class="form-group col-md-12">
-          <cais-autocomplete
-            [label]="'Бюро съдимост'"
-            [inputFormControl]="fullForm.csAuthorityId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'csAuthorityId'"
-            [items]="dbData.csAuthorities"
-          ></cais-autocomplete>
+    <form autocomplete="off">      
+      <ng-template [ngxPermissionsOnly]="['GlobalAdmin']">
+        <div class="row">        
+          <div  class="form-group col-md-12">
+            <cais-autocomplete
+              [label]="'Бюро съдимост'"
+              [inputFormControl]="fullForm.csAuthorityId"
+              [parentGroup]="fullForm.group"
+              [inputName]="'csAuthorityId'"
+              [items]="dbData.csAuthorities"
+            ></cais-autocomplete>
+          </div>
         </div>
-      </div>
+      </ng-template>
       <div class="row">
         <div class="form-group col-md-4">
           <cais-input
