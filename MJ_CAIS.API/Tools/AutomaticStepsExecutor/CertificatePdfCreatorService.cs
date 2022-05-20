@@ -54,15 +54,18 @@ namespace AutomaticStepsExecutor
             int numberOfFailedEntities = 0;
             if (entities.Count > 0)
             {
-                //todo: като се добави ID някой ден в таблицата да се връща ИД
-                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign).ToListAsync();
-                if (statuses.Count() != 1)
-                {
-                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}");
+                ////todo: като се добави ID някой ден в таблицата да се връща ИД
+                //var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign).ToListAsync();
+                //if (statuses.Count() != 1)
+                //{
+                //    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}");
 
-                }
+                //}
 
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
+                //todo: get mail data
+                string mailSubject = "";
+                string mailBody = "";
 
                 foreach (IBaseIdEntity entity in entities)
                 {
@@ -70,7 +73,7 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var certificate = (ACertificate)entity;
-                        await _certificateService.CreateCertificate(certificate, webPortalUrl, statuses.First().Code);
+                        await _certificateService.CreateCertificate(certificate,mailSubject, mailBody, webPortalUrl);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
