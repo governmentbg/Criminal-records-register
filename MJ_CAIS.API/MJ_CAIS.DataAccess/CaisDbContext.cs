@@ -69,6 +69,8 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisMsgStatus> EEcrisMsgStatuses { get; set; } = null!;
         public virtual DbSet<EEcrisOutbox> EEcrisOutboxes { get; set; } = null!;
         public virtual DbSet<EEcrisReference> EEcrisReferences { get; set; } = null!;
+        public virtual DbSet<EEdeliveryMsg> EEdeliveryMsgs { get; set; } = null!;
+        public virtual DbSet<EEmailEvent> EEmailEvents { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
         public virtual DbSet<ERegixCache> ERegixCaches { get; set; } = null!;
         public virtual DbSet<ESynchronizationParameter> ESynchronizationParameters { get; set; } = null!;
@@ -612,6 +614,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.SrvcResRcptMethId)
                     .HasConstraintName("FK_A_APPLICATIONS_A_SRVC_RES_R");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.AApplications)
+                    .HasForeignKey(d => d.StatusCode)
+                    .HasConstraintName("FK_A_APPLICATIONS_A_APP_STATUS");
 
                 entity.HasOne(d => d.SuidNavigation)
                     .WithMany(p => p.AApplicationSuidNavigations)
@@ -3857,6 +3864,138 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.EEcrisReferences)
                     .HasForeignKey(d => d.FbbcId)
                     .HasConstraintName("FK_E_ECRIS_REFERENCES_FBBC");
+            });
+
+            modelBuilder.Entity<EEdeliveryMsg>(entity =>
+            {
+                entity.ToTable("E_EDELIVERY_MSGS");
+
+                entity.HasIndex(e => e.CertificateId, "XIF1E_EDELIVERY_MSGS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Attempts)
+                    .HasPrecision(4)
+                    .HasColumnName("ATTEMPTS");
+
+                entity.Property(e => e.CertificateId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CERTIFICATE_ID");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.EmailAddress)
+                    .HasMaxLength(100)
+                    .HasColumnName("EMAIL_ADDRESS");
+
+                entity.Property(e => e.Error).HasColumnName("ERROR");
+
+                entity.Property(e => e.HasError)
+                    .HasPrecision(1)
+                    .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.ReferenceNumber)
+                    .HasMaxLength(100)
+                    .HasColumnName("REFERENCE_NUMBER");
+
+                entity.Property(e => e.SentDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SENT_DATE");
+
+                entity.Property(e => e.StackTrace)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("STACK_TRACE");
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(200)
+                    .HasColumnName("STATUS");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Certificate)
+                    .WithMany(p => p.EEdeliveryMsgs)
+                    .HasForeignKey(d => d.CertificateId)
+                    .HasConstraintName("FK_E_EDELIVERY_MSGS_A_CERTIFIC");
+            });
+
+            modelBuilder.Entity<EEmailEvent>(entity =>
+            {
+                entity.ToTable("E_EMAIL_EVENTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Attempts)
+                    .HasPrecision(4)
+                    .HasColumnName("ATTEMPTS");
+
+                entity.Property(e => e.Body)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("BODY");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.EmailAddress)
+                    .HasMaxLength(100)
+                    .HasColumnName("EMAIL_ADDRESS");
+
+                entity.Property(e => e.EmailStatus)
+                    .HasMaxLength(200)
+                    .HasColumnName("EMAIL_STATUS");
+
+                entity.Property(e => e.Error).HasColumnName("ERROR");
+
+                entity.Property(e => e.HasError)
+                    .HasPrecision(1)
+                    .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.SentDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SENT_DATE");
+
+                entity.Property(e => e.StackTrace)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("STACK_TRACE");
+
+                entity.Property(e => e.Subject)
+                    .HasMaxLength(500)
+                    .HasColumnName("SUBJECT");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<EIsinDatum>(entity =>

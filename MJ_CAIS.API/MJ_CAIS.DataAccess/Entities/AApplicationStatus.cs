@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public AApplicationStatus()
         {
+            AApplications = new HashSet<AApplication>();
             ACertificates = new HashSet<ACertificate>();
             AStatusHes = new HashSet<AStatusH>();
         }
@@ -16,6 +17,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? StatusType { get; set; }
         public string? Descr { get; set; }
 
+        public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<ACertificate> ACertificates { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }
     }

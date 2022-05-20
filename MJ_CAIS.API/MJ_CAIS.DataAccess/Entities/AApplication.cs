@@ -87,6 +87,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual APaymentMethod? PaymentMethod { get; set; }
         public virtual APurpose? PurposeNavigation { get; set; }
         public virtual ASrvcResRcptMeth? SrvcResRcptMeth { get; set; }
+        public virtual AApplicationStatus? StatusCodeNavigation { get; set; }
         public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
         public virtual ICollection<AAppPersAlias> AAppPersAliases { get; set; }

@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public ACertificate()
         {
             AAppBulletins = new HashSet<AAppBulletin>();
+            EEdeliveryMsgs = new HashSet<EEdeliveryMsg>();
         }
 
         public string Id { get; set; } = null!;
@@ -31,5 +32,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GUser? SecondSigner { get; set; }
         public virtual AApplicationStatus? StatusCodeNavigation { get; set; }
         public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }
+        public virtual ICollection<EEdeliveryMsg> EEdeliveryMsgs { get; set; }
     }
 }
