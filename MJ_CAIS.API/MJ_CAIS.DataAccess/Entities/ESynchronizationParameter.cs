@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class ESynchronizationParameter : BaseEntity
+    public partial class ESynchronizationParameter : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string Name { get; set; } = null!;
         public DateTime? LastDate { get; set; }
         public decimal? LastId { get; set; }
@@ -12,6 +13,5 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
     }
 }

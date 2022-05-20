@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCsAuthority : BaseEntity, IBaseNomenclature
+    public partial class GCsAuthority : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public GCsAuthority()
         {
@@ -17,6 +17,7 @@ namespace MJ_CAIS.DataAccess.Entities
             WApplicationCsAuthorityBirths = new HashSet<WApplication>();
         }
 
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? DecidingAuthId { get; set; }
         public bool? IsCentral { get; set; }
@@ -27,7 +28,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
         public virtual ICollection<AApplication> AApplicationCsAuthorities { get; set; }

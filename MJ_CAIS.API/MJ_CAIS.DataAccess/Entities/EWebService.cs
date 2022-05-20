@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EWebService : BaseEntity
+    public partial class EWebService : BaseEntity, IBaseIdEntity
     {
         public EWebService()
         {
             EWebRequests = new HashSet<EWebRequest>();
         }
 
+        public string Id { get; set; } = null!;
         public string? TypeCode { get; set; }
         public string? Name { get; set; }
         public string? WebServiceName { get; set; }
@@ -17,7 +18,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
     }

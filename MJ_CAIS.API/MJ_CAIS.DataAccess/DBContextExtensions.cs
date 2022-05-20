@@ -8,7 +8,7 @@ namespace MJ_CAIS.DataAccess
 {
     public static class DBContextExtensions
     {
-        private static string TrackableValidationMessage = $"Parameter should be {nameof(BaseEntity)}";
+        private static string TrackableValidationMessage = $"Parameter should be {nameof(IBaseIdEntity)}";
 
         public static IQueryable<T> GetAsNoTracking<T>(this DbContext dbContext, Expression<Func<DbContext, DbSet<T>>> expression) where T : BaseEntity
         {
@@ -17,8 +17,14 @@ namespace MJ_CAIS.DataAccess
             return result;
         }
 
-        public static void ApplyChanges<T>(this DbContext dbContext, ICollection<T> listEntries, List<BaseEntity> passedNavigationProperties, bool applyToAllLevels = false) where T : BaseEntity
+        public static void ApplyChanges<T>(this DbContext dbContext, ICollection<T> listEntries, List<IBaseIdEntity> passedNavigationProperties = null, bool applyToAllLevels = false) 
+            where T : class, IBaseIdEntity
         {
+            if (passedNavigationProperties == null)
+            {
+                passedNavigationProperties = new List<IBaseIdEntity>();
+            }
+
             for (int i = listEntries.Count - 1; i >= 0; i--)
             {
                 T entity = listEntries.ElementAt(i);
@@ -26,7 +32,7 @@ namespace MJ_CAIS.DataAccess
             }
         }
 
-        private static void ChangeEntityState<T>(this DbContext dbContext, T entity) where T : BaseEntity
+        private static void ChangeEntityState<T>(this DbContext dbContext, T entity) where T : class, IBaseIdEntity
         {
             EntityEntry<T> entry = dbContext.Entry(entity);
 
@@ -53,7 +59,8 @@ namespace MJ_CAIS.DataAccess
             }
         }
 
-        private static void ChangeEntityStateAsDeleted<T>(this DbContext dbContext, T entity) where T : BaseEntity
+        private static void ChangeEntityStateAsDeleted<T>(this DbContext dbContext, T entity) 
+            where T : class, IBaseIdEntity
         {
             var entityAsDeletable = entity as IDeletableEntity;
             entityAsDeletable.IsDeleted = true;
@@ -63,7 +70,8 @@ namespace MJ_CAIS.DataAccess
             dbContext.ChangeEntityState(entity);
         }
 
-        public static void ApplyChanges<T>(this DbContext dbContext, T entity, List<BaseEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true) where T : BaseEntity
+        public static void ApplyChanges<T>(this DbContext dbContext, T entity, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true) 
+            where T : class, IBaseIdEntity
         {
             if (entity == null) return;
 
@@ -92,9 +100,9 @@ namespace MJ_CAIS.DataAccess
             if (applyToAllLevels)
             {
                 var childCollections = entity.GetDependencies();
-                foreach (List<BaseEntity> children in childCollections)
+                foreach (List<IBaseIdEntity> children in childCollections)
                 {
-                    foreach (BaseEntity child in children)
+                    foreach (var child in children)
                     {
                         dbContext.ApplyChanges(child, passedNavigationProperties, applyToAllLevels, false);
                     }
@@ -102,10 +110,11 @@ namespace MJ_CAIS.DataAccess
             }
         }
 
-        private static void ApplyChangesNavigationProperties<T>(this DbContext dbContext, T entity, List<BaseEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true) where T : BaseEntity
+        private static void ApplyChangesNavigationProperties<T>(this DbContext dbContext, T entity, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true) 
+            where T : IBaseIdEntity
         {
             var navigationValues = GetNavigationDependencies(entity);
-            foreach (BaseEntity item in navigationValues)
+            foreach (var item in navigationValues)
             {
                 if (!passedNavigationProperties.Contains(item))
                 {
@@ -115,18 +124,19 @@ namespace MJ_CAIS.DataAccess
             }
         }
 
-        public static void SaveEntity<T>(this DbContext dbContext, T entity, bool applyToAllLevels = false) where T : BaseEntity
+        public static void SaveEntity<T>(this DbContext dbContext, T entity, bool applyToAllLevels = false) where T : class, IBaseIdEntity
         {
             if (entity == null) return;
-            if (!(entity is BaseEntity)) throw new ArgumentException(TrackableValidationMessage, nameof(entity));
+            if (!(entity is IBaseIdEntity)) throw new ArgumentException(TrackableValidationMessage, nameof(entity));
 
-            var passedNavigationProperties = new List<BaseEntity>();
+            var passedNavigationProperties = new List<IBaseIdEntity>();
 
-            dbContext.ApplyChanges<T>(entity, passedNavigationProperties, applyToAllLevels);
+            dbContext.ApplyChanges(entity, passedNavigationProperties, applyToAllLevels);
             dbContext.SaveChanges();
         }
 
-        public static async Task SaveEntityAsync<T>(this DbContext dbContext, T entity, bool applyToAllLevels = false) where T : BaseEntity
+        public static async Task SaveEntityAsync<T>(this DbContext dbContext, T entity, bool applyToAllLevels = false) 
+            where T : class, IBaseIdEntity
         {
             if (entity == null) return;
             if (!(entity is BaseEntity))
@@ -134,27 +144,29 @@ namespace MJ_CAIS.DataAccess
                 throw new ArgumentException(TrackableValidationMessage, nameof(entity));
             }
 
-            var passedNavigationProperties = new List<BaseEntity>();
+            var passedNavigationProperties = new List<IBaseIdEntity>();
 
-            dbContext.ApplyChanges<T>(entity, passedNavigationProperties, applyToAllLevels);
+            dbContext.ApplyChanges(entity, passedNavigationProperties, applyToAllLevels);
             await dbContext.SaveChangesAsync();
         }
 
-        public static void SaveEntityList<T>(this DbContext dbContext, ICollection<T> entityList, bool applyToAllLevels = false) where T : BaseEntity
+        public static void SaveEntityList<T>(this DbContext dbContext, ICollection<T> entityList, bool applyToAllLevels = false) 
+            where T : class, IBaseIdEntity
         {
             if (entityList == null || entityList.Count == 0) return;
-            if (!typeof(T).IsSubclassOf(typeof(BaseEntity)))
+            if (!typeof(T).IsSubclassOf(typeof(IBaseIdEntity)))
             {
                 throw new ArgumentException(TrackableValidationMessage, nameof(entityList));
             }
 
-            var passedNavigationProperties = new List<BaseEntity>();
+            var passedNavigationProperties = new List<IBaseIdEntity>();
 
-            dbContext.ApplyChanges<T>(entityList, passedNavigationProperties, applyToAllLevels);
+            dbContext.ApplyChanges(entityList, passedNavigationProperties, applyToAllLevels);
             dbContext.SaveChanges();
         }
 
-        public static async Task SaveEntityListAsync<T>(this DbContext dbContext, ICollection<T> entityList, bool applyToAllLevels = false) where T : BaseEntity
+        public static async Task SaveEntityListAsync<T>(this DbContext dbContext, ICollection<T> entityList, bool applyToAllLevels = false) 
+            where T : class, IBaseIdEntity
         {
             if (entityList == null || entityList.Count == 0) return;
             if (!typeof(T).IsSubclassOf(typeof(BaseEntity)))
@@ -162,26 +174,26 @@ namespace MJ_CAIS.DataAccess
                 throw new ArgumentException(TrackableValidationMessage, nameof(entityList));
             }
 
-            var passedNavigationProperties = new List<BaseEntity>();
+            var passedNavigationProperties = new List<IBaseIdEntity>();
 
-            dbContext.ApplyChanges<T>(entityList, passedNavigationProperties, applyToAllLevels);
+            dbContext.ApplyChanges(entityList, passedNavigationProperties, applyToAllLevels);
             await dbContext.SaveChangesAsync();
         }
 
-        private static List<List<BaseEntity>> GetDependencies<T>(this T entity) where T : class
+        private static List<List<IBaseIdEntity>> GetDependencies<T>(this T entity) where T : class
         {
-            var dependents = new List<List<BaseEntity>>();
+            var dependents = new List<List<IBaseIdEntity>>();
 
             var properties = entity.GetType()
                 .GetProperties()
-                .Where(p => typeof(IEnumerable<BaseEntity>).IsAssignableFrom(p.PropertyType) && !typeof(string).IsAssignableFrom(p.PropertyType));
+                .Where(p => typeof(IEnumerable<IBaseIdEntity>).IsAssignableFrom(p.PropertyType) && !typeof(string).IsAssignableFrom(p.PropertyType));
 
             foreach (var property in properties)
             {
                 var values = property.GetValue(entity) as IEnumerable;
                 if (values == null) continue;
 
-                IEnumerable<BaseEntity> entityList = from object value in values select value as BaseEntity;
+                IEnumerable<IBaseIdEntity> entityList = from object value in values select value as IBaseIdEntity;
                 if (entityList != null)
                 {
                     dependents.Add(entityList.ToList());
@@ -191,17 +203,17 @@ namespace MJ_CAIS.DataAccess
             return dependents;
         }
 
-        public static List<BaseEntity> GetNavigationDependencies(BaseEntity entity)
+        public static List<IBaseIdEntity> GetNavigationDependencies(IBaseIdEntity entity)
         {
-            var dependents = new List<BaseEntity>();
+            var dependents = new List<IBaseIdEntity>();
 
             var properties = entity.GetType()
                 .GetProperties()
-                .Where(p => typeof(BaseEntity).IsAssignableFrom(p.PropertyType));
+                .Where(p => typeof(IBaseIdEntity).IsAssignableFrom(p.PropertyType));
 
             foreach (var property in properties)
             {
-                var values = property.GetValue(entity) as BaseEntity;
+                var values = property.GetValue(entity) as IBaseIdEntity;
                 if (values == null) continue;
 
                 dependents.Add(values);

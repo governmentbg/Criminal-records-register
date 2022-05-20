@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EIsinDatum : BaseEntity
+    public partial class EIsinDatum : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? IdentifierType { get; set; }
         public string? Identifier { get; set; }
         public string? Firstname { get; set; }
@@ -39,7 +40,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? WebRequestId { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual EWebRequest? WebRequest { get; set; }

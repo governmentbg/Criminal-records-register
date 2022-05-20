@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class DDocument : BaseEntity
+    public partial class DDocument : BaseEntity, IBaseIdEntity
     {
         public DDocument()
         {
             BBulEvents = new HashSet<BBulEvent>();
         }
 
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? DocTypeId { get; set; }
         public string? EcrisMsgId { get; set; }
@@ -25,7 +26,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual DDocContent? DocContent { get; set; }

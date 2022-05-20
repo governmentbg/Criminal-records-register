@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class ACertificate : BaseEntity
+    public partial class ACertificate : BaseEntity, IBaseIdEntity
     {
         public ACertificate()
         {
             AAppBulletins = new HashSet<AAppBulletin>();
         }
 
+        public string Id { get; set; } = null!;
         public string? ApplicationId { get; set; }
         public string? StatusCode { get; set; }
         public string? RegistrationNumber { get; set; }
@@ -24,7 +25,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual AApplication? Application { get; set; }
         public virtual GUser? FirstSigner { get; set; }
