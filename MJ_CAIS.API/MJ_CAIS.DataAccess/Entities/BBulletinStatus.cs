@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBulletinStatus
+    public partial class BBulletinStatus : BaseEntity
     {
         public BBulletinStatus()
         {

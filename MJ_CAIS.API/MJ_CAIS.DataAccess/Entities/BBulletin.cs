@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBulletin : BaseEntity
+    public partial class BBulletin : BaseEntity, IBaseIdEntity
     {
         public BBulletin()
         {
@@ -22,7 +22,7 @@ namespace MJ_CAIS.DataAccess.Entities
             EWebRequests = new HashSet<EWebRequest>();
             PBulletinIds = new HashSet<PBulletinId>();
         }
-
+        public string Id { get; set; } = null!;
         public decimal? Version { get; set; }
         public string? CsAuthorityId { get; set; }
         public string? RegistrationNumber { get; set; }

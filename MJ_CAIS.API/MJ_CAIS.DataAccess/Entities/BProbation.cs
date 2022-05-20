@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BProbation : BaseEntity
+    public partial class BProbation : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? SanctProbCategId { get; set; }
         public string? SanctProbMeasureId { get; set; }
         public decimal? SanctProbValue { get; set; }

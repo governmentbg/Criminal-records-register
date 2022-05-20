@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class Fbbc : BaseEntity
+    public partial class Fbbc : BaseEntity, IBaseIdEntity
     {
         public Fbbc()
         {
             DDocuments = new HashSet<DDocument>();
             EEcrisReferences = new HashSet<EEcrisReference>();
         }
-
+        public string Id { get; set; } = null!;
         public string? CountryId { get; set; }
         public string? DocTypeId { get; set; }
         public string? SanctionTypeId { get; set; }

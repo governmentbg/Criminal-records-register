@@ -336,7 +336,7 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(entity, nameof(entity.Locked));
             }
 
-            var passedNavigationProperties = new List<BaseEntity>();
+            var passedNavigationProperties = new List<IBaseIdEntity>();
             dbContext.ApplyChanges(entity, passedNavigationProperties, true);
         }
 

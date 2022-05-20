@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBulEvent : BaseEntity
+    public partial class BBulEvent : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? EventType { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }

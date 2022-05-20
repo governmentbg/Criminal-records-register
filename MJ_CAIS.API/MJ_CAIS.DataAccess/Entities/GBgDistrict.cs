@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GBgDistrict : BaseEntity, IBaseNomenclature
+    public partial class GBgDistrict : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public GBgDistrict()
         {
             GBgMunicipalities = new HashSet<GBgMunicipality>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? NameEn { get; set; }
         public string? Code { get; set; }

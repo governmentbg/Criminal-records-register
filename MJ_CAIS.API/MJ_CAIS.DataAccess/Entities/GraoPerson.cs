@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GraoPerson : BaseEntity
+    public partial class GraoPerson : BaseEntity, IBaseIdEntity
     {
         public GraoPerson()
         {
             EEcrisIdentifications = new HashSet<EEcrisIdentification>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Egn { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }

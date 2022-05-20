@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class APurpose : BaseEntity
+    public partial class APurpose : BaseEntity, IBaseIdEntity
     {
         public APurpose()
         {
             AApplications = new HashSet<AApplication>();
             WApplications = new HashSet<WApplication>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }

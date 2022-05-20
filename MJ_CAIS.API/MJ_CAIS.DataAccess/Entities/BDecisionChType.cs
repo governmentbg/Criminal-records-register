@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BDecisionChType : BaseEntity, IBaseNomenclature
+    public partial class BDecisionChType : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public BDecisionChType()
         {
             BDecisions = new HashSet<BDecision>();
         }
-
+        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Category { get; set; }
         public DateTime? ValidFrom { get; set; }

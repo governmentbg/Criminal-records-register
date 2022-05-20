@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class AApplicationType : BaseEntity
+    public partial class AApplicationType : BaseEntity, IBaseIdEntity
     {
         public AApplicationType()
         {
@@ -11,7 +11,7 @@ namespace MJ_CAIS.DataAccess.Entities
             DDocRegisters = new HashSet<DDocRegister>();
             WApplications = new HashSet<WApplication>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public decimal? Version { get; set; }

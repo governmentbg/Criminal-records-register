@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BInternalRequest : BaseEntity
+    public partial class BInternalRequest : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? RegNumber { get; set; }
         public string? Description { get; set; }
         public string? BulletinId { get; set; }

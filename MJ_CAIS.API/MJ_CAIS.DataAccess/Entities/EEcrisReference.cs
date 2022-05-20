@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisReference : BaseEntity
+    public partial class EEcrisReference : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? EcrisMsgId { get; set; }
         public string? BulletinId { get; set; }
         public string? FbbcId { get; set; }

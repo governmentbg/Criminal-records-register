@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class DDocRegister : BaseEntity
+    public partial class DDocRegister : BaseEntity, IBaseIdEntity
     {
         public DDocRegister()
         {
             DCsDocRegisters = new HashSet<DCsDocRegister>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public decimal? RegisterIndex { get; set; }
         public bool? IsLocal { get; set; }

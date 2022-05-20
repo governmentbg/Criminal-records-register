@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class WStatusH : BaseEntity
+    public partial class WStatusH : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? Descr { get; set; }
         public decimal? ReportOrder { get; set; }
         public string? CreatedBy { get; set; }

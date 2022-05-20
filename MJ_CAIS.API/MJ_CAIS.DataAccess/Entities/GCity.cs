@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCity : BaseEntity, IBaseNomenclature
+    public partial class GCity : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public GCity()
         {
@@ -15,7 +15,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PPersonHs = new HashSet<PPersonH>();
             WApplications = new HashSet<WApplication>();
         }
-
+        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Name { get; set; }
         public string? NameEn { get; set; }

@@ -284,8 +284,8 @@ namespace MJ_CAIS.Services
             personH.CreatedOn = DateTime.UtcNow; // todo: remove
             personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
-            dbContext.ApplyChanges(person, new List<BaseEntity>(), true);
-            dbContext.ApplyChanges(personH, new List<BaseEntity>(), true);
+            dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);
+            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
             return person;
         }
 
@@ -331,8 +331,8 @@ namespace MJ_CAIS.Services
             var allPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.ToList(), true, true);
             personHistoryToBeAdded.PPersonIdsHes = allPids;
 
-            dbContext.ApplyChanges(personToUpdate, new List<BaseEntity>(), true);
-            dbContext.ApplyChanges(personHistoryToBeAdded, new List<BaseEntity>(), true);
+            dbContext.ApplyChanges(personToUpdate, new List<IBaseIdEntity>(), true);
+            dbContext.ApplyChanges(personHistoryToBeAdded, new List<IBaseIdEntity>(), true);
             return personToUpdate;
         }
 

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GExtAdministration : BaseEntity
+    public partial class GExtAdministration : BaseEntity, IBaseIdEntity
     {
         public GExtAdministration()
         {
             GUsersExts = new HashSet<GUsersExt>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? Descr { get; set; }
         public DateTime? CreatedOn { get; set; }

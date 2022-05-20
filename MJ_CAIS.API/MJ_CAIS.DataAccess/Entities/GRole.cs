@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GRole : BaseEntity
+    public partial class GRole : BaseEntity, IBaseIdEntity
     {
         public GRole()
         {
             GUserRoles = new HashSet<GUserRole>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public DateTime? CreatedOn { get; set; }

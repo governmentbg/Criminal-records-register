@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EWebRequest : BaseEntity
+    public partial class EWebRequest : BaseEntity, IBaseIdEntity
     {
         public EWebRequest()
         {
             EIsinData = new HashSet<EIsinDatum>();
         }
-
+        public string Id { get; set; } = null!;
         public string? RequestXml { get; set; }
         public string? ResponseXml { get; set; }
         public string? RemoteAddress { get; set; }

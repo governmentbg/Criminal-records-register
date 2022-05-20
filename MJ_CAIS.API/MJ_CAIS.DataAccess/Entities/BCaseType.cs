@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BCaseType : BaseEntity, IBaseNomenclature
+    public partial class BCaseType : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public BCaseType()
         {
             BBulletins = new HashSet<BBulletin>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? Code { get; set; }
         public DateTime? ValidFrom { get; set; }

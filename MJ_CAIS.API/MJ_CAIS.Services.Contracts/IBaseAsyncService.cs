@@ -6,7 +6,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IBaseAsyncService<TInDTO, TOutDTO, TGridDTO, TEntity, TPk>
     {
-        Task SaveEntityAsync(BaseEntity entity, bool applyToAllLevels = true);
+        Task SaveEntityAsync(IBaseIdEntity entity, bool applyToAllLevels = true);
 
         Task<List<TGridDTO>> SelectAllAsync(ODataQueryOptions<TGridDTO> aQueryOptions);
 

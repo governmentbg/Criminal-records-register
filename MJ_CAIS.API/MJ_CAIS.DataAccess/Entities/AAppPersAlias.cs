@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class AAppPersAlias : BaseEntity
+    public partial class AAppPersAlias : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? ApplicationId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }

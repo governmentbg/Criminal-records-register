@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GDecidingAuthority : BaseEntity, IBaseNomenclature
+    public partial class GDecidingAuthority : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public GDecidingAuthority()
         {
@@ -13,7 +13,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BDecisions = new HashSet<BDecision>();
             GCsAuthorities = new HashSet<GCsAuthority>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? NameEn { get; set; }

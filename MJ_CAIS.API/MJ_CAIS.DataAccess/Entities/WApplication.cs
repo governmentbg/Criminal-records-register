@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class WApplication : BaseEntity
+    public partial class WApplication : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? ClientIp { get; set; }
         public string? RegistrationNumber { get; set; }
         public string? Purpose { get; set; }

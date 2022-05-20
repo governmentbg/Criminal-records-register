@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BSanction : BaseEntity
+    public partial class BSanction : BaseEntity, IBaseIdEntity
     {
         public BSanction()
         {
             BProbations = new HashSet<BProbation>();
         }
-
+        public string Id { get; set; } = null!;
         public string? SanctCategoryId { get; set; }
         public string? Descr { get; set; }
         public string? EcrisSanctCategId { get; set; }

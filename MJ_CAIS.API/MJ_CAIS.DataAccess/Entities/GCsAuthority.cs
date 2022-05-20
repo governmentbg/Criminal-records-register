@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GCsAuthority : BaseEntity, IBaseNomenclature
+    public partial class GCsAuthority : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public GCsAuthority()
         {
@@ -16,7 +16,7 @@ namespace MJ_CAIS.DataAccess.Entities
             WApplicationCsAuthorities = new HashSet<WApplication>();
             WApplicationCsAuthorityBirths = new HashSet<WApplication>();
         }
-
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? DecidingAuthId { get; set; }
         public bool? IsCentral { get; set; }

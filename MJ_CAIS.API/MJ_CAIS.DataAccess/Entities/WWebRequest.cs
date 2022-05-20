@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class WWebRequest : BaseEntity
+    public partial class WWebRequest : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? ApplicationId { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

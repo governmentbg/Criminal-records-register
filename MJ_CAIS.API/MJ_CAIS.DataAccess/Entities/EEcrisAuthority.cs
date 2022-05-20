@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisAuthority : BaseEntity, IBaseNomenclature
+    public partial class EEcrisAuthority : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public EEcrisAuthority()
         {
             EEcrisMessageFromAuths = new HashSet<EEcrisMessage>();
             EEcrisMessageToAuths = new HashSet<EEcrisMessage>();
         }
-
+        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Iso31662Number { get; set; }
         public string? MemberStateCode { get; set; }

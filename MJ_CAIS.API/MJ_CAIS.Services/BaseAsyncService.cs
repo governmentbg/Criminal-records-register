@@ -18,7 +18,7 @@ namespace MJ_CAIS.Services
     public abstract class BaseAsyncService<TInDTO, TOutDTO, TGridDTO, TEntity, TPk, TContext> : IBaseAsyncService<TInDTO, TOutDTO, TGridDTO, TEntity, TPk>
         where TInDTO : class
         where TOutDTO : class
-        where TEntity : BaseEntity
+        where TEntity : class, IBaseIdEntity
         where TContext : DbContext
     {
         private const int MAX_PAGE_SIZE = 25;
@@ -85,7 +85,7 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        public virtual async Task SaveEntityAsync(BaseEntity entity, bool applyToAllLevels = true)
+        public virtual async Task SaveEntityAsync(IBaseIdEntity entity, bool applyToAllLevels = true)
         {
             await dbContext.SaveEntityAsync(entity, applyToAllLevels);
         }

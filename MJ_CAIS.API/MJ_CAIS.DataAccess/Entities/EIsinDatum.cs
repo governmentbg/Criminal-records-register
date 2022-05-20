@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EIsinDatum : BaseEntity
+    public partial class EIsinDatum : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? IdentifierType { get; set; }
         public string? Identifier { get; set; }
         public string? Firstname { get; set; }

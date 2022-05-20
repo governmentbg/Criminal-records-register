@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class PPersonId : BaseEntity
+    public partial class PPersonId : BaseEntity, IBaseIdEntity
     {
         public PPersonId()
         {
@@ -11,7 +11,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PAppIds = new HashSet<PAppId>();
             PBulletinIds = new HashSet<PBulletinId>();
         }
-
+        public string Id { get; set; } = null!;
         public string? PidTypeId { get; set; }
         public string? Pid { get; set; }
         public string? Issuer { get; set; }

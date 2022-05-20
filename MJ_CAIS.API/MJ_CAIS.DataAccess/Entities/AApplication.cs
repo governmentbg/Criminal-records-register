@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class AApplication : BaseEntity
+    public partial class AApplication : BaseEntity, IBaseIdEntity
     {
         public AApplication()
         {
@@ -14,6 +14,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PAppIds = new HashSet<PAppId>();
         }
 
+        public string Id { get; set; } = null!;
         public string? RegistrationNumber { get; set; }
         public string? Purpose { get; set; }
         public string? Firstname { get; set; }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class DCsDocRegister : BaseEntity
+    public partial class DCsDocRegister : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public decimal? RegisterIndex { get; set; }
         public string? CsAuthorityId { get; set; }
         public string? DocRegisterId { get; set; }
