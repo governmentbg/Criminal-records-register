@@ -109,6 +109,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
+        public virtual DbSet<EEmailEvent> EmailEvents { get; set; } = null!;
     
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
