@@ -12,6 +12,7 @@ namespace MJ_CAIS.DataAccess.Entities
             ACertificates = new HashSet<ACertificate>();
             AStatusHes = new HashSet<AStatusH>();
             PAppIds = new HashSet<PAppId>();
+            DDocuments = new HashSet<DDocument>();
         }
 
         public string? RegistrationNumber { get; set; }
@@ -84,5 +85,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<ACertificate> ACertificates { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }
         public virtual ICollection<PAppId> PAppIds { get; set; }
+        public virtual ICollection<DDocument> DDocuments { get; set; }
     }
 }
