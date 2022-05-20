@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Rehabilitation;
@@ -66,12 +67,19 @@ namespace MJ_CAIS.Repositories.Impl
                 RehabilitationDate = rehabilitationDate,
             };
 
+            bulletin.EntityState = EntityStateEnum.Modified;
+            bulletin.ModifiedProperties = new List<string>
+            {
+                nameof(bulletin.RehabilitationDate),
+            };
+
             if (!string.IsNullOrEmpty(status))
             {
                 bulletin.StatusId = status;
+                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
             }
 
-            _dbContext.Update(bulletin);
+            _dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
         }
 
         public async Task SaveChangesAsync()

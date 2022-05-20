@@ -70,6 +70,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisOutbox> EEcrisOutboxes { get; set; } = null!;
         public virtual DbSet<EEcrisReference> EEcrisReferences { get; set; } = null!;
         public virtual DbSet<EEdeliveryMsg> EEdeliveryMsgs { get; set; } = null!;
+        public virtual DbSet<EEmailEvent> EEmailEvents { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
         public virtual DbSet<ERegixCache> ERegixCaches { get; set; } = null!;
         public virtual DbSet<ESynchronizationParameter> ESynchronizationParameters { get; set; } = null!;
@@ -108,7 +109,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
-        public virtual DbSet<ЕEmailEvent> ЕEmailEvents { get; set; } = null!;
+        public virtual DbSet<�EmailEvent> �EmailEvents { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -3866,74 +3867,6 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_E_ECRIS_REFERENCES_FBBC");
             });
 
-            modelBuilder.Entity<EEdeliveryMsg>(entity =>
-            {
-                entity.ToTable("E_EDELIVERY_MSGS");
-
-                entity.HasIndex(e => e.CertificateId, "XIF1E_EDELIVERY_MSGS");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.Attempts)
-                    .HasPrecision(4)
-                    .HasColumnName("ATTEMPTS");
-
-                entity.Property(e => e.CertificateId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("CERTIFICATE_ID");
-
-                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.EmailAddress)
-                    .HasMaxLength(100)
-                    .HasColumnName("EMAIL_ADDRESS");
-
-                entity.Property(e => e.Error).HasColumnName("ERROR");
-
-                entity.Property(e => e.HasError)
-                    .HasPrecision(1)
-                    .HasColumnName("HAS_ERROR");
-
-                entity.Property(e => e.ReferenceNumber)
-                    .HasMaxLength(100)
-                    .HasColumnName("REFERENCE_NUMBER");
-
-                entity.Property(e => e.SentDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("SENT_DATE");
-
-                entity.Property(e => e.StackTrace)
-                    .HasColumnType("CLOB")
-                    .HasColumnName("STACK_TRACE");
-
-                entity.Property(e => e.Status)
-                    .HasMaxLength(200)
-                    .HasColumnName("STATUS");
-
-                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-
-                entity.HasOne(d => d.Certificate)
-                    .WithMany(p => p.EEdeliveryMsgs)
-                    .HasForeignKey(d => d.CertificateId)
-                    .HasConstraintName("FK_E_EDELIVERY_MSGS_A_CERTIFIC");
-            });
-
             modelBuilder.Entity<EIsinDatum>(entity =>
             {
                 entity.ToTable("E_ISIN_DATA");
@@ -7206,9 +7139,9 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("XML_DATA");
             });
 
-            modelBuilder.Entity<ЕEmailEvent>(entity =>
+            modelBuilder.Entity<�EmailEvent>(entity =>
             {
-                entity.ToTable("Е_EMAIL_EVENTS");
+                entity.ToTable("�_EMAIL_EVENTS");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)

@@ -3,6 +3,8 @@ resources:
 queue:
   name: MJCAIS
 steps:
+- checkout: self
+  persistCredentials: true
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
   name: npmrc
@@ -42,3 +44,10 @@ steps:
   inputs:
     artifactName: 'MJ-CAIS-Angular'
     PathtoPublish: '$(Build.Repository.LocalPath)\mj_cais\dist'
+- powershell: |
+    Write-Host "Tagging Build: $env:BuildNumber"
+
+    git tag Angular-$env:BuildNumber
+    git push origin Angular-$env:BuildNumber
+  env:
+    BuildNumber: 1.$(Build.BuildNumber)
