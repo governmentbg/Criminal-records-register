@@ -137,83 +137,83 @@ namespace MJ_CAIS.Services
         }
 
 
-        //public async Task<IQueryable<ApplicationDocumentDTO>> GetDocumentsByApplicationIdAsync(string aId)
-        //{
-        //    var result = dbContext.DDocuments
-        //        .AsNoTracking()
-        //        .Include(x => x.DocType)
-        //        .Include(x => x.DocContent)
-        //        .Where(x => x.FbbcId == aId)
-        //        .ProjectTo<ApplicationDocumentDTO>(mapper.ConfigurationProvider);
+        public async Task<IQueryable<ApplicationDocumentDTO>> GetDocumentsByApplicationIdAsync(string aId)
+        {
+            var result = dbContext.DDocuments
+                .AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.DocContent)
+                .Where(x => x.FbbcId == aId)
+                .ProjectTo<ApplicationDocumentDTO>(mapper.ConfigurationProvider);
 
-        //    return await Task.FromResult(result);
-        //}
+            return await Task.FromResult(result);
+        }
 
-        //public async Task InsertApplicationDocumentAsync(string applicationId, ApplicationDocumentDTO aInDto)
-        //{
-        //    if (aInDto == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(aInDto));
-        //    }
+        public async Task InsertApplicationDocumentAsync(string applicationId, ApplicationDocumentDTO aInDto)
+        {
+            if (aInDto == null)
+            {
+                throw new ArgumentNullException(nameof(aInDto));
+            }
 
-        //    if (aInDto.DocumentContent?.Length == 0)
-        //    {
-        //        throw new ArgumentNullException("Document is empty");
-        //    }
+            if (aInDto.DocumentContent?.Length == 0)
+            {
+                throw new ArgumentNullException("Document is empty");
+            }
 
-        //    var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
-        //        Guid.NewGuid().ToString() : aInDto.DocumentContentId;
+            var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
+                Guid.NewGuid().ToString() : aInDto.DocumentContentId;
 
-        //    var document = mapper.Map<ApplicationDocumentDTO, DDocument>(aInDto);
-        //    document.ApplicationId = applicationId;
-        //    document.DocContentId = docContentId;
+            var document = mapper.Map<ApplicationDocumentDTO, DDocument>(aInDto);
+            document.ApplicationId = applicationId;
+            document.DocContentId = docContentId;
 
-        //    var documentContent = new DDocContent()
-        //    {
-        //        Id = docContentId,
-        //        Content = aInDto.DocumentContent,
-        //        MimeType = aInDto.MimeType
-        //    };
+            var documentContent = new DDocContent()
+            {
+                Id = docContentId,
+                Content = aInDto.DocumentContent,
+                MimeType = aInDto.MimeType
+            };
 
-        //    dbContext.Add(document);
-        //    dbContext.Add(documentContent);
-        //    await dbContext.SaveChangesAsync();
-        //}
+            dbContext.Add(document);
+            dbContext.Add(documentContent);
+            await dbContext.SaveChangesAsync();
+        }
 
-        //public async Task DeleteDocumentAsync(string documentId)
-        //{
-        //    var document = await dbContext.Set<DDocument>().AsNoTracking()
-        //        .Include(x => x.DocContent)
-        //        .FirstOrDefaultAsync(x => x.Id == documentId);
+        public async Task DeleteDocumentAsync(string documentId)
+        {
+            var document = await dbContext.Set<DDocument>().AsNoTracking()
+                .Include(x => x.DocContent)
+                .FirstOrDefaultAsync(x => x.Id == documentId);
 
-        //    if (document == null)
-        //    {
-        //        throw new ArgumentException($"Document with id: {documentId} is missing");
-        //    }
+            if (document == null)
+            {
+                throw new ArgumentException($"Document with id: {documentId} is missing");
+            }
 
-        //    document.EntityState = EntityStateEnum.Deleted;
-        //    if (document.DocContent != null)
-        //    {
-        //        document.DocContent.EntityState = EntityStateEnum.Deleted;
-        //    }
+            document.EntityState = EntityStateEnum.Deleted;
+            if (document.DocContent != null)
+            {
+                document.DocContent.EntityState = EntityStateEnum.Deleted;
+            }
 
-        //    await dbContext.SaveEntityAsync(document, true);
-        //}
+            await dbContext.SaveEntityAsync(document, true);
+        }
 
-        //public async Task<ApplicationDocumentDTO> GetDocumentContentAsync(string documentId)
-        //{
-        //    var document = await dbContext.Set<DDocument>().AsNoTracking()
-        //        .Include(x => x.DocContent)
-        //        .FirstOrDefaultAsync(x => x.Id == documentId);
+        public async Task<ApplicationDocumentDTO> GetDocumentContentAsync(string documentId)
+        {
+            var document = await dbContext.Set<DDocument>().AsNoTracking()
+                .Include(x => x.DocContent)
+                .FirstOrDefaultAsync(x => x.Id == documentId);
 
-        //    if (document == null || document.DocContent == null) return null;
+            if (document == null || document.DocContent == null) return null;
 
-        //    return new ApplicationDocumentDTO
-        //    {
-        //        Name = document.Name,
-        //        DocumentContent = document.DocContent.Content,
-        //        MimeType = document.DocContent.MimeType
-        //    };
-        //}
+            return new ApplicationDocumentDTO
+            {
+                Name = document.Name,
+                DocumentContent = document.DocContent.Content,
+                MimeType = document.DocContent.MimeType
+            };
+        }
     }
 }

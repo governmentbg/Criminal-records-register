@@ -8,6 +8,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { ApplicationDocumentModel } from "../models/application-document.model";
 import { ApplicationModel } from "../models/application.model";
 import { ApplicationService } from "./application.service";
 
@@ -31,13 +32,15 @@ export class ApplicationResolver implements Resolve<any> {
       purposeIds: this.nomenclatureService.getPurposes(),
       paymentMethodIds: this.nomenclatureService.getPaymentMethods(),
       srvcResRcptMethIds: this.nomenclatureService.getSrvcResRcptMethods(),
+      documents: this.service.getDocuments(applicationId),
     };
     return forkJoin(result);
   }
 }
 
 export class ApplicationResolverData extends BaseResolverData<ApplicationModel> {
-    purposeIds: Observable<BaseNomenclatureModel[]>;
-    paymentMethodIds: Observable<BaseNomenclatureModel[]>;
-    srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
+    public purposeIds: Observable<BaseNomenclatureModel[]>;
+    public paymentMethodIds: Observable<BaseNomenclatureModel[]>;
+    public srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
+    public documents: Observable<ApplicationDocumentModel[]>;
 }

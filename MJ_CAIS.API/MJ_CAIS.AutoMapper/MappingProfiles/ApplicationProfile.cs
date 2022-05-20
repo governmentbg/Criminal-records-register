@@ -21,12 +21,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<ApplicationDTO, AApplication>();
 
-            // CreateMap<ApplicationDocumentDTO, DDocument>()
-            //  .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
-            //  .ForMember(d => d.DocContent, opt => opt.Ignore());
-            // CreateMap<DDocument, ApplicationDocumentDTO>()
-            //     .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
-            //  .ForMember(d => d.DocumentContent, opt => opt.Ignore());
+            CreateMap<ApplicationDocumentDTO, DDocument>()
+             .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
+             .ForMember(d => d.DocContent, opt => opt.Ignore());
+            CreateMap<DDocument, ApplicationDocumentDTO>()
+                .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
+             .ForMember(d => d.DocumentContent, opt => opt.Ignore());
 
         }
     }

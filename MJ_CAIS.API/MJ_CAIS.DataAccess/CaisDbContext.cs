@@ -109,6 +109,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
+    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -7275,6 +7276,70 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.XmlData)
                     .HasColumnType("CLOB")
                     .HasColumnName("XML_DATA");
+            });
+
+            modelBuilder.Entity<EEmailEvent>(entity =>
+            {
+                entity.ToTable("E_EMAIL_EVENTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Attempts)
+                    .HasPrecision(4)
+                    .HasColumnName("ATTEMPTS");
+
+                entity.Property(e => e.Body)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("BODY");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.EmailAddress)
+                    .HasMaxLength(100)
+                    .HasColumnName("EMAIL_ADDRESS");
+
+                entity.Property(e => e.EmailStatus)
+                    .HasMaxLength(200)
+                    .HasColumnName("EMAIL_STATUS");
+
+                entity.Property(e => e.Error).HasColumnName("ERROR");
+
+                entity.Property(e => e.HasError)
+                    .HasPrecision(1)
+                    .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.SentDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SENT_DATE");
+
+                entity.Property(e => e.StackTrace)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("STACK_TRACE");
+
+                entity.Property(e => e.Subject)
+                    .HasMaxLength(500)
+                    .HasColumnName("SUBJECT");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             OnModelCreatingPartial(modelBuilder);

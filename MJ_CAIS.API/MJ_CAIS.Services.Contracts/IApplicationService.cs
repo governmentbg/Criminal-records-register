@@ -13,9 +13,9 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
 
         Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId);
-        // Task<IQueryable<ApplicationDocumentDTO>> GetDocumentsByApplicationIdAsync(string aId);
-        // Task InsertApplicationDocumentAsync(string applicationId, ApplicationDocumentDTO aInDto);
-        // Task DeleteDocumentAsync(string documentId);
-        // Task<ApplicationDocumentDTO> GetDocumentContentAsync(string documentId);
+        Task<IQueryable<ApplicationDocumentDTO>> GetDocumentsByApplicationIdAsync(string aId);
+        Task InsertApplicationDocumentAsync(string applicationId, ApplicationDocumentDTO aInDto);
+        Task DeleteDocumentAsync(string documentId);
+        Task<ApplicationDocumentDTO> GetDocumentContentAsync(string documentId);
     }
 }
