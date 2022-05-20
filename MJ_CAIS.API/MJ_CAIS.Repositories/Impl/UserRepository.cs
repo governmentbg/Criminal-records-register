@@ -28,19 +28,6 @@ namespace MJ_CAIS.Repositories.Impl
                 return result;
             }
         }
-        public override async Task<GUser> UpdateAsync(GUser entity)
-        {
-            //if (userContext.IsGlobalAdmin)
-            //{
-            //}
-            //else if (userContext.CsAuthorityId != entity?.CsAuthorityId)
-            //{
-            //    return null;
-            //}
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-            return entity;
-        }
 
         public override IQueryable<GUser> SelectAllAsync()
         {

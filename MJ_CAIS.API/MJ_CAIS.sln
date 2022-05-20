@@ -22,6 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{581769BD-1AA6-4AC3-BE0F-DCBD441D6943}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		azure-devops.yaml = azure-devops.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DIContainer", "MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj", "{2B70984B-1DAF-4CB9-82C0-50A0759C8A93}"

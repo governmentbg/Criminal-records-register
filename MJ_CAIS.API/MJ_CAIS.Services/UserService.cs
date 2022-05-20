@@ -11,11 +11,13 @@ namespace MJ_CAIS.Services
     public class UserService : BaseAsyncService<UserDTO, UserDTO, UserGridDTO, GUser, string, CaisDbContext>, IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserContext _userContext;
 
-        public UserService(IMapper mapper, IUserRepository userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository, IUserContext userContext)
             : base(mapper, userRepository)
         {
             _userRepository = userRepository;
+            _userContext = userContext;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -27,6 +29,10 @@ namespace MJ_CAIS.Services
         {
             this.ValidateData(aInDto);
             GUser entity = mapper.MapToEntity<UserDTO, GUser>(aInDto, isAdded: true);
+            if (!_userContext.IsGlobalAdmin)
+            {
+                entity.CsAuthorityId = _userContext.CsAuthorityId;
+            }
             this.TransformDataOnInsert(entity);
             entity.GUserRoles = CaisMapper.MapMultipleChooseToEntityList<GUserRole, string, string>(aInDto.Roles, nameof(GUserRole.Id), nameof(GUserRole.RoleId));
             await this.SaveEntityAsync(entity);
@@ -45,6 +51,10 @@ namespace MJ_CAIS.Services
             this.ValidateData(aInDto);
 
             GUser entity = mapper.MapToEntity<UserDTO, GUser>(aInDto, isAdded: false);
+            if (!_userContext.IsGlobalAdmin && entity.CsAuthorityId != _userContext.CsAuthorityId)
+            {
+                throw new Exception("Updating user part of another authority is not allowed!");
+            }
             entity.GUserRoles  = CaisMapper.MapMultipleChooseToEntityList<GUserRole, string, string>(aInDto.Roles, nameof(GUserRole.Id), nameof(GUserRole.RoleId));
 
             await this.SaveEntityAsync(entity);

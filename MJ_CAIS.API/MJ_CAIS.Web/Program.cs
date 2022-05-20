@@ -12,10 +12,13 @@ namespace MJ_CAIS.Web
         {
             // Most configurations are in Web.Setup project
             var builder = WebSetupConfig.CustomConfigureBuilder(args);
-            builder.Services.AddControllers(opt =>
+            if (!builder.Environment.IsEnvironment("tl"))
             {
-                opt.UseCentralRoutePrefix(new RouteAttribute("api"));
-            });
+                builder.Services.AddControllers(opt =>
+                {
+                    opt.UseCentralRoutePrefix(new RouteAttribute("api"));
+                });
+            }
 
             // TODO: at some point in time move back to WebSetupConfig
             // For now, different authentication for web projects

@@ -1,0 +1,37 @@
+resources:
+- repo: self
+queue:
+  name: MJCAIS
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - MJ_CAIS.API
+steps:
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(Build.Repository.LocalPath)/MJ_CAIS.API/**/*.sln' 
+    feedsToUse: 'select'
+    vstsFeed: 'TechnoLogica.Common'
+- task: MSBuild@1
+  displayName: 'Publish project MJ_CAIS.Web.proj'
+  inputs:
+    solution: '$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\MJ_CAIS.Web.csproj'
+    msbuildLocationMethod: location
+    msbuildLocation: 'C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin'
+    msbuildArguments: '/p:DeployOnBuild=true /p:PublishProfile="$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\Properties\PublishProfiles\FolderProfile.pubxml"'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+        $productVersion = Get-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish\MJ_CAIS.Web.dll |Select-Object -ExpandProperty VersionInfo|Select-Object -ExpandProperty ProductVersion
+        Remove-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish\*.ver        
+        New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish -Name "$productVersion.ver" -ItemType "file"
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: MJ_CAIS.Web'
+  inputs:
+    artifactName: 'MJ_CAIS.Web'
+    PathtoPublish: '$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish\'
