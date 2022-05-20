@@ -30,7 +30,7 @@ steps:
   inputs:
     workingDir: '$(Build.Repository.LocalPath)\mj_cais'
     command: 'custom'
-    customCommand: 'run build:tl'
+    customCommand: 'run-script build:tl'
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
