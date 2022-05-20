@@ -19,7 +19,7 @@ steps:
 - task: MSBuild@1
   displayName: 'Publish project MJ_CAIS.IdentityServer.proj'
   inputs:
-    project: '$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\MJ_CAIS.IdentityServer.csproj'
+    solution: '$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\MJ_CAIS.IdentityServer.csproj'
     msbuildLocationMethod: location
     msbuildLocation: 'C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin'
     msbuildArguments: '/p:DeployOnBuild=true /p:PublishProfile="$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\Properties\PublishProfiles\FolderProfile.pubxml"'
