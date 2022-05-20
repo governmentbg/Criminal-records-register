@@ -12,7 +12,7 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
 {
     public class CitizensProfileService : IProfileClientService
     {
-        public virtual string ClientId => "cais-citizens";
+        public virtual string ClientId => "cais-public";
 
         protected CaisDbContext CaisDbContext { get; set; }
 
@@ -56,16 +56,25 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
              where u.Egn == username
              select new UserInfo()
              {
-                 Name = u.Name,
+                 Name = u.Name ?? u.Egn,
                  SubjectId = u.Id,
-                 Username = u.Egn
+                 Username = u.Egn,
+                 Active = true
              }).FirstOrDefault();
             return res;
         }
 
-        public Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
+        public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            throw new NotImplementedException();
+            CaisDbContext.GUsersCitizen.Add(new Entities.GUsersCitizen()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Egn = userName,
+                Name = name,
+                Email = email
+            });
+            await CaisDbContext.SaveChangesAsync();
+            return new UserRegistrationResult() { Succeeded = true };
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)

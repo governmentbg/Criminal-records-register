@@ -7,14 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.IdentityServer", "M
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{646D94B9-E495-45AB-9C47-AEF67A0ACDB5}"
 	ProjectSection(SolutionItems) = preProject
+		azure-devops.yaml = azure-devops.yaml
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.IdentityServer.CAISAppCredentials", "MJ_CAIS.IdentityServer.AdminAppCredentials\MJ_CAIS.IdentityServer.CAISAppCredentials.csproj", "{5B634558-4482-4590-9F1F-BF7C3B0B6702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.IdentityServer.CAISCitizensCredentials", "MJ_CAIS.IdentityServer.CAISCitizensCredentials\MJ_CAIS.IdentityServer.CAISCitizensCredentials.csproj", "{370CCCB6-563E-4EB1-A209-34325EDB4645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.IdentityServer.CAISCitizensCredentials", "MJ_CAIS.IdentityServer.CAISCitizensCredentials\MJ_CAIS.IdentityServer.CAISCitizensCredentials.csproj", "{370CCCB6-563E-4EB1-A209-34325EDB4645}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.IdentityServer.CAISExternalCredentials", "MJ_CAIS.IdentityServer.CAISExternalCredentials\MJ_CAIS.IdentityServer.CAISExternalCredentials.csproj", "{4260492E-0E62-400D-81B3-3D6C5ACBA80A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.IdentityServer.CAISExternalCredentials", "MJ_CAIS.IdentityServer.CAISExternalCredentials\MJ_CAIS.IdentityServer.CAISExternalCredentials.csproj", "{4260492E-0E62-400D-81B3-3D6C5ACBA80A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

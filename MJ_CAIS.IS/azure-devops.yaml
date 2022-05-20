@@ -1,0 +1,29 @@
+resources:
+- repo: self
+queue:
+  name: MJCAIS
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - MJ_CAIS.IS
+steps:
+- task: MSBuild@1
+  displayName: 'Publish project MJ_CAIS.IdentityServer.proj'
+  inputs:
+    project: '$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\MJ_CAIS.IdentityServer.csproj'
+    msbuildArguments: '/p:DeployOnBuild=true /p:PublishProfile="$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\Properties\PublishProfiles\FolderProfile.pubxml"'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+        $productVersion = Get-Item $(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish\MJ_CAIS.IdentityServer.dll |Select-Object -ExpandProperty VersionInfo|Select-Object -ExpandProperty ProductVersion
+        Remove-Item $(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish\*.ver        
+        New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish -Name "$productVersion.ver" -ItemType "file"
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: MJ_CAIS.IdentityServer'
+  inputs:
+    artifactName: 'MJ_CAIS.IdentityServer.dll'
+    PathtoPublish: '$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish\'

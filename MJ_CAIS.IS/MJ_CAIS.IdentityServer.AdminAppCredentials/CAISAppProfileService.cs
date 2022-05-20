@@ -67,9 +67,9 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
             return res;
         }
 
-        public Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
+        public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            throw new NotImplementedException();
+            return new UserRegistrationResult() { Succeeded = false, Errors =  new List<UserRegistrationError>() { new UserRegistrationError() { Description = "User registration not allowed", Code="UserRegistrationNotAllowed" } } };
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
