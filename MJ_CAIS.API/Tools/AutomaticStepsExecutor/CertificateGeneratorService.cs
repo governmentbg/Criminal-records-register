@@ -59,14 +59,19 @@ namespace AutomaticStepsExecutor
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
 
                 }
-
+                var certificateValidityMonths = (await _dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS))?.ValueNumber;
+                if (certificateValidityMonths == null)
+                {
+                    throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
+                }
+                
                 foreach (BaseEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
                     {
                         var application = (AApplication)entity;
-                        await _applicationService.GenerateCertificateFromApplication(application, ApplicationConstants.ApplicationStatuses.CertificateContentReady, ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+                        await _applicationService.GenerateCertificateFromApplication(application,(int)certificateValidityMonths, ApplicationConstants.ApplicationStatuses.CertificateContentReady, ApplicationConstants.ApplicationStatuses.BulletinsCheck);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }

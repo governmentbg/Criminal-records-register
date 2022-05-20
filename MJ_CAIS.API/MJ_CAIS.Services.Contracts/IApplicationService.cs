@@ -9,7 +9,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IApplicationService : IBaseAsyncService<ApplicationDTO, ApplicationDTO, ApplicationDTO, AApplication, string>
     {
-        public Task GenerateCertificateFromApplication(AApplication application,string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+        public Task GenerateCertificateFromApplication(AApplication application, int certificateValidityMonths = 6, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck);
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
 
         Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId);
