@@ -857,6 +857,10 @@ namespace MJ_CAIS.DataAccess
 
                 entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
 
+                entity.Property(e => e.ForSecondSignature)
+                    .HasPrecision(1)
+                    .HasColumnName("FOR_SECOND_SIGNATURE");
+
                 entity.Property(e => e.InstructionsForFiles).HasColumnName("INSTRUCTIONS_FOR_FILES");
 
                 entity.Property(e => e.Name)
@@ -1532,15 +1536,40 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.DecisionTypeId)
                     .HasConstraintName("FK_B_BULLETINS_B_DECISION_TYPE");
 
+                entity.HasOne(d => d.EgnNavigation)
+                    .WithMany(p => p.BBulletinEgnNavigations)
+                    .HasForeignKey(d => d.EgnId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_EGN");
+
                 entity.HasOne(d => d.IdDocCategory)
                     .WithMany(p => p.BBulletins)
                     .HasForeignKey(d => d.IdDocCategoryId)
                     .HasConstraintName("FK_B_BULLETINS_B_ID_DOC_CATEGO");
 
+                entity.HasOne(d => d.IdDocNumberNavigation)
+                    .WithMany(p => p.BBulletinIdDocNumberNavigations)
+                    .HasForeignKey(d => d.IdDocNumberId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER__ID_DOC");
+
+                entity.HasOne(d => d.LnNavigation)
+                    .WithMany(p => p.BBulletinLnNavigations)
+                    .HasForeignKey(d => d.LnId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_LN");
+
+                entity.HasOne(d => d.LnchNavigation)
+                    .WithMany(p => p.BBulletinLnchNavigations)
+                    .HasForeignKey(d => d.LnchId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_LNCH");
+
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.BBulletins)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_B_BULLETINS_B_BULLETIN_STAT");
+
+                entity.HasOne(d => d.SuidNavigation)
+                    .WithMany(p => p.BBulletinSuidNavigations)
+                    .HasForeignKey(d => d.SuidId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_SUID");
             });
 
             modelBuilder.Entity<BBulletinStatus>(entity =>
@@ -5465,6 +5494,12 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("BIRTHPLACE_TEXT");
 
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
@@ -5492,6 +5527,16 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<PAppId>(entity =>

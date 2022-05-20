@@ -21,6 +21,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FathersNames { get; set; }
         public string? BirthplaceText { get; set; }
         public string Id { get; set; } = null!;
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }
     }

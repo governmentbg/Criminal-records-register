@@ -24,6 +24,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
         public string? InstructionsForFiles { get; set; }
+        public bool? ForSecondSignature { get; set; }
 
         public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<WApplication> WApplications { get; set; }

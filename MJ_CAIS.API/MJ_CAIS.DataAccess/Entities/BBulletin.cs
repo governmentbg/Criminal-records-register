@@ -110,8 +110,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
         public virtual BDecisionType? DecisionType { get; set; }
+        public virtual PPersonId? EgnNavigation { get; set; }
         public virtual BIdDocCategory? IdDocCategory { get; set; }
+        public virtual PPersonId? IdDocNumberNavigation { get; set; }
+        public virtual PPersonId? LnNavigation { get; set; }
+        public virtual PPersonId? LnchNavigation { get; set; }
         public virtual BBulletinStatus? Status { get; set; }
+        public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }
         public virtual ICollection<BBulEvent> BBulEvents { get; set; }
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }
