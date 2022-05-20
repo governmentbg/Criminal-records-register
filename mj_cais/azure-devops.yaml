@@ -2,6 +2,13 @@ resources:
 - repo: self
 queue:
   name: MJCAIS
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - mj_cais
 steps:
 - checkout: self
   persistCredentials: true
