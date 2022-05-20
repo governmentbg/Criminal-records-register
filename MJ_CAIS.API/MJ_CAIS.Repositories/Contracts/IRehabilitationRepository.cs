@@ -11,5 +11,7 @@ namespace MJ_CAIS.Repositories.Contracts
         void UpdateRehabilitationData(string bulletinId, DateTime? rehabilitationDate, string? status);
 
         Task SaveChangesAsync();
+
+        Task<string> GetPersonIdByBulletinIdAsync(string bulleintId);
     }
 }

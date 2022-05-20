@@ -5,6 +5,8 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IRehabilitationService : IBaseAsyncService<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string>
     {
-        Task ApplyRehabilitationAsync(BBulletin currentAttachedBull, string personId);
+        Task ApplyRehabilitationOnChangeStatusAsync(BBulletin currentAttachedBull, string personId);
+
+        Task ApplyRehabilitationOnUpdateAsync(BBulletin currentAttachedBull);
     }
 }

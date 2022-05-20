@@ -14,7 +14,6 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-
         public async Task<IQueryable<BulletinForRehabilitationDTO>> GetBulletinByPersonIdAsync(string personId)
         {
             var query = (from bulletin in _dbContext.BBulletins.AsNoTracking()
@@ -39,15 +38,39 @@ namespace MJ_CAIS.Repositories.Impl
                             RehabilitationDate = bulletin.RehabilitationDate,
                             Sanctions = bulletin.BSanctions.Select(x => new SanctionForRehabilitationDTO
                             {
-                                SuspentionDurationDays = x.SuspentionDurationDays,
-                                SuspentionDurationMonths = x.SuspentionDurationMonths,
-                                SuspentionDurationYears = x.SuspentionDurationYears,
-                                Type = x.SanctCategoryId
+                                SuspentionDuration = new Duration
+                                {
+                                    Years = x.SuspentionDurationYears,
+                                    Months = x.SuspentionDurationMonths,
+                                    Days = x.SuspentionDurationDays,
+                                },
+                                Type = x.SanctCategoryId,
+                                PropbationDurations = x.BProbations.Select(p => new Duration
+                                {
+                                    Years = p.DecisionDurationYears,
+                                    Months = p.DecisionDurationMonths,
+                                    Days = p.DecisionDurationDays,
+                                    Hours = p.DecisionDurationHours,
+                                })
+                            }),
+                            Decisions = bulletin.BDecisions.Select(x => new DecisionForRehabilitationDTO
+                            {
+                                Type = x.DecisionChTypeId,
+                                ChangeDate = x.ChangeDate,
                             }),
                             OffencesEndDates = bulletin.BOffences.Select(o => o.OffEndDate)
                         }).GroupBy(x => x.Id).Select(x => x.FirstOrDefault());
 
             return await Task.FromResult(query);
+        }
+
+        public async Task<string> GetPersonIdByBulletinIdAsync(string bulleintId)
+        {
+            var result = await _dbContext.PBulletinIds.AsNoTracking()
+                        .Include(x => x.Person)
+                        .FirstOrDefaultAsync(x => x.BulletinId == bulleintId);
+
+            return result?.Person?.PersonId;
         }
 
         /// <summary>

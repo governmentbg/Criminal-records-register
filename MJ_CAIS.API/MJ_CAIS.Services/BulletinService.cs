@@ -116,10 +116,10 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();
 
             // изчисления за реабилитация
-            // да се лсучват след запис на данните, 
+            // да се случват след запис на данните, 
             // защото може да има сливане на лица 
             // което е от значение при изчисление на дата за реабилитация
-
+            await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletin);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace MJ_CAIS.Services
 
             if (isActiveBulletin)
             {
-                await _rehabilitationService.ApplyRehabilitationAsync(bulletin, personId);
+                await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
                 // await _bulletinEventService.GenereteEventAsyn(personId);
             }
 
@@ -315,7 +315,9 @@ namespace MJ_CAIS.Services
             if (entity.NoSanction == true)
             {
                 entity.StatusId = BulletinConstants.Status.NoSanction;
-                await CreatePersonFromBulletinAsync(entity);
+                // if new person is created 
+                // set new person id
+                aInDto.Person.Id =  await CreatePersonFromBulletinAsync(entity);
             }
 
             // save old status
