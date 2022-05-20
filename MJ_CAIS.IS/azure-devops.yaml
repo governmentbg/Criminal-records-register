@@ -10,6 +10,12 @@ trigger:
     include:
     - MJ_CAIS.IS
 steps:
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(Build.Repository.LocalPath)/MJ_CAIS.IS/**/*.sln' 
+    feedsToUse: 'select'
+    vstsFeed: 'TechnoLogica.Common'
 - task: MSBuild@1
   displayName: 'Publish project MJ_CAIS.IdentityServer.proj'
   inputs:
