@@ -1,3 +1,7 @@
+trigger:
+  tags: 
+    exclude:
+      - *
 resources:
 - repo: self
 queue:
