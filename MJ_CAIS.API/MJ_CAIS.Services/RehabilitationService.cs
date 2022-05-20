@@ -26,20 +26,20 @@ namespace MJ_CAIS.Services
         /// Algorithm for rehabilitation
         /// https://bg.wikipedia.org/wiki/%D0%A0%D0%B5%D0%B0%D0%B1%D0%B8%D0%BB%D0%B8%D1%82%D0%B0%D1%86%D0%B8%D1%8F
         /// </summary>
-        public async Task ApplyRehabilitation(string bulletinId, string personId)
+        public async Task ApplyRehabilitationAsync(BBulletin currentAttachedBull, string personId)
         {
             var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
-            var firstPoinIsApplyed = await ApplyFirstPoinAsync(bulletins, bulletinId);
+            var firstPoinIsApplyed = await ApplyFirstPoinAsync(bulletins, currentAttachedBull);
             if (firstPoinIsApplyed) return;
         }
 
-        private async Task<bool> ApplyFirstPoinAsync(List<BulletinForRehabilitationDTO> bulletins, string currentBulletinId)
+        private async Task<bool> ApplyFirstPoinAsync(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
         {
             var isProposedForRehabilitation = false;
 
-            var currentBulletin = bulletins.FirstOrDefault(x => x.Id == currentBulletinId);
+            var currentBulletin = bulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
             if (currentBulletin == null || !currentBulletin.DecisionFinalDate.HasValue) return isProposedForRehabilitation;
 
             var startDate = currentBulletin.DecisionFinalDate.Value;
@@ -60,7 +60,13 @@ namespace MJ_CAIS.Services
                 endDate = endDate.AddDays(sanction.SuspentionDurationDays ?? 0);
 
                 var status = endDate <= DateTime.UtcNow ? BulletinConstants.Status.ForRehabilitation : null;
-                _rehabilitationRepository.UpdateRehabilitationData(currentBulletinId, endDate, status);
+
+                // this entity is attached to context
+                currentAttachedBull.RehabilitationDate = endDate;
+                // todo: if change status save it in history table
+                if (!string.IsNullOrEmpty(status)) currentAttachedBull.StatusId = status;
+
+                //_rehabilitationRepository.UpdateRehabilitationData(bulletinId,endDate,status);
                 await _rehabilitationRepository.SaveChangesAsync();
                 return true;
             }
@@ -68,7 +74,7 @@ namespace MJ_CAIS.Services
             var currentBullOffEndDates = currentBulletin.OffencesEndDates;
 
             var bulletinWithRehabilitationDate = bulletins
-                .Where(x => x.Id != currentBulletinId && x.RehabilitationDate.HasValue)
+                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
                 .ToList();
 
             foreach (var currentBull in bulletinWithRehabilitationDate)
@@ -83,12 +89,14 @@ namespace MJ_CAIS.Services
                     // if there is a offence during the conditional release,
                     // the date of rehabilitation for this bulletin is deleted
                     // todo:?? should the status of the bulletin be changed if it has already been proposed for rehabilitation
+                    // this is another bulletin not attached to context
                     _rehabilitationRepository.UpdateRehabilitationData(currentBull.Id, null, null);
+                    isProposedForRehabilitation = false;
                 }
             }
 
             await _rehabilitationRepository.SaveChangesAsync();
-            return false;
+            return isProposedForRehabilitation;
         }
 
     }
