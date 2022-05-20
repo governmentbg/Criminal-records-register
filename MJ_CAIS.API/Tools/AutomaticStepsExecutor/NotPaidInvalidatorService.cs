@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace AutomaticStepsExecutor
 {
-    public class NotPaidInvalidator : IAutomaticStepService
+    public class NotPaidInvalidatorService : IAutomaticStepService
     {
         private CaisDbContext _dbContext;
-        private readonly ILogger<NotPaidInvalidator> _logger;
+        private readonly ILogger<NotPaidInvalidatorService> _logger;
 
-        public NotPaidInvalidator(CaisDbContext dbContext, ILogger<NotPaidInvalidator> logger)
+        public NotPaidInvalidatorService(CaisDbContext dbContext, ILogger<NotPaidInvalidatorService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -44,7 +44,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<BaseEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
         {
             AutomaticStepResult result = new AutomaticStepResult();
             int numberOfProcesedEntities = 0;
@@ -78,26 +78,23 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<BaseEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
         {
-            var systemParametrs = await _dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS
-                                                               || x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS).ToListAsync();
+            var systemParametrs = await _dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ToListAsync();
 
-            if (systemParametrs.Count != 2 || systemParametrs.Any(x => x.ValueNumber == null))
+            if (systemParametrs.Count != 1 || systemParametrs.Any(x => x.ValueNumber == null))
             {
-                throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS} and {SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS} are not set.");
+                throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS} and {SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS} are not set.");
             }
             var systemParamValidityPeriodOnDesk = (int)systemParametrs.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ValueNumber;
-            var systemParamValidityPeriodWeb = (int)systemParametrs.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS).ValueNumber;
+            //var systemParamValidityPeriodWeb = (int)systemParametrs.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS).ValueNumber;
             var startDateOnDesk = DateTime.UtcNow.AddDays(-systemParamValidityPeriodOnDesk).Date;
-            var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb).Date;
+            //var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb).Date;
             var result = await Task.FromResult(_dbContext.AApplications
                                 .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment
-                                //todo: проверка по application type вместо WApplicationId ?!
-                                && ((aa.CreatedOn < startDateOnDesk && aa.WApplicationId == null)
-                                    || (aa.CreatedOn < startDateWeb && aa.WApplicationId != null))
-                                )
-                                .ToList<BaseEntity>());
+                                                           && aa.CreatedOn < startDateOnDesk)//((aa.CreatedOn < startDateOnDesk && aa.WApplicationId == null)
+                                                                 //|| (aa.CreatedOn < startDateWeb && aa.WApplicationId != null))
+                                                           .ToList<IBaseIdEntity>());
             return result;
         }
     }

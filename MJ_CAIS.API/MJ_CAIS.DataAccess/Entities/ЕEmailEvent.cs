@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEmailEvent : BaseEntity, IBaseIdEntity
+    public partial class ЕEmailEvent : BaseEntity, IBaseIdEntity
     {
         public string Id { get; set; } = null!;
         public string? EmailAddress { get; set; }
@@ -19,6 +19,5 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public string? CertificateId { get; set; }
     }
 }
