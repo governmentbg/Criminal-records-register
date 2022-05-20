@@ -69,6 +69,26 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
+        path: "applications/create",
+        component: ApplicationFormComponent,
+        resolve: { dbData: ApplicationResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "applications/edit/:ID",
+        component: ApplicationFormComponent,
+        resolve: { dbData: ApplicationResolver },
+        data: { edit: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "applications/preview/:ID",
+        component: ApplicationFormComponent,
+        resolve: { dbData: ApplicationResolver },
+        data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
         path: "bulletins",
         component: BulletinActiveOverviewComponent,
         // canActivate: [AuthGuard],
@@ -248,12 +268,6 @@ const routes: Routes = [
       {
         path: "isin-data/preview/:ID",
         component: IsinDataPreviewFormComponent,
-        // canActivate: [AuthGuard],
-      },
-      {
-        path: "applications/create",
-        component: ApplicationFormComponent,
-        resolve: { dbData: ApplicationResolver },
         // canActivate: [AuthGuard],
       },
       {

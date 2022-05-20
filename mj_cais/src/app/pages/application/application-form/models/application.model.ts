@@ -18,7 +18,7 @@ export class ApplicationModel {
   public lnch: string = null;
   public personId: string = null;
   public applicantName: string = null;
-  public address: AddressModel = new AddressModel();
+  public address: string = null;
   public motherFirstname: string = null;
   public motherSurname: string = null;
   public motherFamilyname: string = null;
@@ -56,6 +56,7 @@ export class ApplicationModel {
   public userCitizenId: string = null;
   public userId: string = null;
   public userExtId: string = null;
+  public birthAddress: AddressModel = new AddressModel();
 
   constructor(init?: Partial<ApplicationModel>) {
     if (init) {
@@ -75,7 +76,7 @@ export class ApplicationModel {
       this.lnch = init.lnch ?? null;
       this.personId = init.personId ?? null;
       this.applicantName = init.applicantName ?? null;
-      this.address = init.address ?? new AddressModel();
+      this.address = init.address ?? null;
       this.motherFirstname = init.motherFirstname ?? null;
       this.motherSurname = init.motherSurname ?? null;
       this.motherFamilyname = init.motherFamilyname ?? null;
@@ -113,6 +114,7 @@ export class ApplicationModel {
       this.userCitizenId = init.userCitizenId ?? null;
       this.userId = init.userId ?? null;
       this.userExtId = init.userExtId ?? null;
+      this.birthAddress = init.birthAddress ?? new AddressModel();
     }
   }
 }

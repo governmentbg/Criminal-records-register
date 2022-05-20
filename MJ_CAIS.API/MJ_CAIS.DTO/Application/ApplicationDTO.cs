@@ -19,7 +19,7 @@ namespace MJ_CAIS.DTO.Application
         public string? Lnch { get; set; }
         public string? PersonId { get; set; }
         public string? ApplicantName { get; set; }
-        public AddressDTO Address { get; set; } = new AddressDTO();
+        public string? Address { get; set; }
         public string? MotherFirstname { get; set; }
         public string? MotherSurname { get; set; }
         public string? MotherFamilyname { get; set; }

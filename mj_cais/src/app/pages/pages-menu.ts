@@ -128,16 +128,6 @@ export class PagesMenu {
         link: "/pages/isin-new",
       },
       {
-        title: "Административни услуги",
-        icon: { icon: "file-alt", pack: "fa" },
-        children: [
-          {
-            title: "Свидетелства",
-            link: "/pages/applications/create",
-          },
-        ],
-      },
-      {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
         expanded: true,

@@ -57,7 +57,8 @@ export class ApplicationForm {
   public userCitizenId: FormControl;
   public userId: FormControl;
   public userExtId: FormControl;
-  public address: AddressForm;
+  public address: FormControl;
+  public birthAddress: AddressForm;
 
   constructor() {
     this.id = new FormControl(null);
@@ -76,7 +77,7 @@ export class ApplicationForm {
     this.lnch = new FormControl(null);
     this.personId = new FormControl(null);
     this.applicantName = new FormControl(null);
-    this.address = new AddressForm();
+    this.address = new FormControl(null);
     this.motherFirstname = new FormControl(null);
     this.motherSurname = new FormControl(null);
     this.motherFamilyname = new FormControl(null);
@@ -114,6 +115,7 @@ export class ApplicationForm {
     this.userCitizenId = new FormControl(null);
     this.userId = new FormControl(null);
     this.userExtId = new FormControl(null);
+    this.birthAddress = new AddressForm();
 
     this.group = new FormGroup({
       id: this.id,
@@ -132,7 +134,7 @@ export class ApplicationForm {
       lnch: this.lnch,
       personId: this.personId,
       applicantName: this.applicantName,
-      address: this.address.group,
+      address: this.address,
       motherFirstname: this.motherFirstname,
       motherSurname: this.motherSurname,
       motherFamilyname: this.motherFamilyname,
@@ -170,6 +172,7 @@ export class ApplicationForm {
       userCitizenId: this.userCitizenId,
       userId: this.userId,
       userExtId: this.userExtId,
+      birthAddress: this.birthAddress.group,
     });
   }
 }

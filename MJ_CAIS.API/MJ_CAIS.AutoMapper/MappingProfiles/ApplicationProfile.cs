@@ -16,22 +16,17 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
         {
             CreateMap<AApplication, ApplicationGridDTO>();
-              
-                
+         
+            CreateMap<AApplication, ApplicationDTO>();
 
-            CreateMap<AApplication, ApplicationDTO>()
-                .ForPath(d => d.Address.Country, opt => opt.MapFrom(src => new LookupDTO
-                {
-                    Id = src.BirthCountry.Id,
-                    DisplayName = src.BirthCountry.Name
-                }))
-                .ForPath(d => d.Address.CityId, opt => opt.MapFrom(src => src.BirthCityId))
-                .ForPath(d => d.Address.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
-                .ForPath(d => d.Address.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null));
+            CreateMap<ApplicationDTO, AApplication>();
 
-            CreateMap<ApplicationDTO, AApplication>()
-                .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Address.Country.Id))
-                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Address.CityId));
+            // CreateMap<ApplicationDocumentDTO, DDocument>()
+            //  .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
+            //  .ForMember(d => d.DocContent, opt => opt.Ignore());
+            // CreateMap<DDocument, ApplicationDocumentDTO>()
+            //     .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
+            //  .ForMember(d => d.DocumentContent, opt => opt.Ignore());
 
         }
     }

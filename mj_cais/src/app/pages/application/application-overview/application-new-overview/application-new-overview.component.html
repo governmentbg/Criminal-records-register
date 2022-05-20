@@ -133,14 +133,14 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+        [routerLink]="['/pages/applications/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
         *ngIf="hideStatus"
         [title]="'Редактиране'"
-        [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
+        [routerLink]="['/pages/applications/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>

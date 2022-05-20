@@ -29,6 +29,7 @@ export class ApplicationFormComponent
     public dateFormatService: DateFormatService
   ) {
     super(service, injector);
+    this.backUrl = "pages/applications";
     this.setDisplayTitle("Свидетелство");
   }
 
