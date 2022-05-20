@@ -109,7 +109,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
-        public virtual DbSet<�EmailEvent> �EmailEvents { get; set; } = null!;
+        public virtual DbSet<EEmailEvent> EmailEvents { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -7139,7 +7139,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("XML_DATA");
             });
 
-            modelBuilder.Entity<�EmailEvent>(entity =>
+            modelBuilder.Entity<EEmailEvent>(entity =>
             {
                 entity.ToTable("�_EMAIL_EVENTS");
 
