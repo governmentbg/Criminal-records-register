@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BDecisionType : BaseEntity, IBaseNomenclature
+    public partial class BDecisionType : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
         public BDecisionType()
         {
@@ -11,6 +11,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BDecisions = new HashSet<BDecision>();
         }
 
+        public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? Code { get; set; }
         public DateTime? ValidFrom { get; set; }
@@ -20,7 +21,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BDecision> BDecisions { get; set; }

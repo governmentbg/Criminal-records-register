@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class ERegixCache : BaseEntity
+    public partial class ERegixCache : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? RequestXml { get; set; }
         public string? ResponseXml { get; set; }
         public string? Firstname { get; set; }
@@ -17,7 +18,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
         public string? FirstnameLat { get; set; }
         public string? SurnameLat { get; set; }
         public string? FamilynameLat { get; set; }

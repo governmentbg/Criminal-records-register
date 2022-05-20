@@ -135,7 +135,7 @@ export class PagesMenu {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
         expanded: true,
-        hidden: this.hasRole(roles, 'Admin'),
+        hidden: this.hasRole(roles, 'Admin') && this.hasRole(roles, 'GlobalAdmin'),
         children: [
           {
             title: "Потребители",
@@ -144,14 +144,17 @@ export class PagesMenu {
           {
             title: "Външни потребители",
             link: "/pages/users-external",
+            hidden: this.hasRole(roles, 'GlobalAdmin')
           },
           {
             title: "Външни администрации",
             link: "/pages/administrations-ext",
+            hidden: this.hasRole(roles, 'GlobalAdmin')
           },
           {
             title: "Публични потребители",
             link: "/pages/users-public",
+            hidden: this.hasRole(roles, 'GlobalAdmin')
           },
         ],
       },

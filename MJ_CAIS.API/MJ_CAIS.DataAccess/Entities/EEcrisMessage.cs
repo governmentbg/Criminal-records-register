@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisMessage : BaseEntity
+    public partial class EEcrisMessage : BaseEntity, IBaseIdEntity
     {
         public EEcrisMessage()
         {
@@ -18,6 +18,7 @@ namespace MJ_CAIS.DataAccess.Entities
             InverseRequestMsg = new HashSet<EEcrisMessage>();
         }
 
+        public string Id { get; set; } = null!;
         public string? RequestMsgId { get; set; }
         public string? FromAuthId { get; set; }
         public string? ToAuthId { get; set; }
@@ -40,7 +41,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Pin { get; set; }
         public DateTime? Deadline { get; set; }
         public bool? Urgent { get; set; }
-        public decimal? Version { get; set; }
         public string? BulletinId { get; set; }
 
         public virtual EEcrisMsgStatus? EcrisMsgStatusNavigation { get; set; }

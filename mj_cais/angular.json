@@ -24,6 +24,7 @@
               "src/assets",
               "src/favicon.ico",
               "src/favicon.png",
+              "src/web.config",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
@@ -78,6 +79,27 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "tl": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.tl.ts"
                 }
               ]
             }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class WApplication : BaseEntity
+    public partial class WApplication : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? ClientIp { get; set; }
         public string? RegistrationNumber { get; set; }
         public string? Purpose { get; set; }
@@ -42,7 +43,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? AddrEmail { get; set; }
         public string? Description { get; set; }
         public bool? IsLocal { get; set; }
-        public decimal? Version { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }

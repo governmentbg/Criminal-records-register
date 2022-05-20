@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBulletin : BaseEntity
+    public partial class BBulletin : BaseEntity, IBaseIdEntity
     {
         public BBulletin()
         {
@@ -23,7 +23,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PBulletinIds = new HashSet<PBulletinId>();
         }
 
-        public decimal? Version { get; set; }
+        public string Id { get; set; } = null!;
         public string? CsAuthorityId { get; set; }
         public string? RegistrationNumber { get; set; }
         public decimal? SequentialIndex { get; set; }
@@ -95,6 +95,12 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
         public string? ConvRemarks { get; set; }
+        public string? Suid { get; set; }
+        public string? EgnId { get; set; }
+        public string? LnchId { get; set; }
+        public string? LnId { get; set; }
+        public string? SuidId { get; set; }
+        public string? IdDocNumberId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -104,8 +110,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
         public virtual BDecisionType? DecisionType { get; set; }
+        public virtual PPersonId? EgnNavigation { get; set; }
         public virtual BIdDocCategory? IdDocCategory { get; set; }
+        public virtual PPersonId? IdDocNumberNavigation { get; set; }
+        public virtual PPersonId? LnNavigation { get; set; }
+        public virtual PPersonId? LnchNavigation { get; set; }
         public virtual BBulletinStatus? Status { get; set; }
+        public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }
         public virtual ICollection<BBulEvent> BBulEvents { get; set; }
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }

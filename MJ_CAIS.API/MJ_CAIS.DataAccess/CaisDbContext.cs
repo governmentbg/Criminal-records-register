@@ -69,6 +69,8 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisMsgStatus> EEcrisMsgStatuses { get; set; } = null!;
         public virtual DbSet<EEcrisOutbox> EEcrisOutboxes { get; set; } = null!;
         public virtual DbSet<EEcrisReference> EEcrisReferences { get; set; } = null!;
+        public virtual DbSet<EEdeliveryMsg> EEdeliveryMsgs { get; set; } = null!;
+        public virtual DbSet<EEmailEvent> EEmailEvents { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
         public virtual DbSet<ERegixCache> ERegixCaches { get; set; } = null!;
         public virtual DbSet<ESynchronizationParameter> ESynchronizationParameters { get; set; } = null!;
@@ -107,6 +109,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
+        public virtual DbSet<�EmailEvent> �EmailEvents { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -392,6 +395,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
 
+                entity.Property(e => e.EgnId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("EGN_ID");
+
                 entity.Property(e => e.Email).HasColumnName("EMAIL");
 
                 entity.Property(e => e.Familyname)
@@ -446,9 +454,19 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("LN");
 
+                entity.Property(e => e.LnId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("LN_ID");
+
                 entity.Property(e => e.Lnch)
                     .HasMaxLength(100)
                     .HasColumnName("LNCH");
+
+                entity.Property(e => e.LnchId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("LNCH_ID");
 
                 entity.Property(e => e.MotherFamilyname)
                     .HasMaxLength(200)
@@ -495,6 +513,15 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("STATUS_CODE");
+
+                entity.Property(e => e.Suid)
+                    .HasMaxLength(100)
+                    .HasColumnName("SUID");
+
+                entity.Property(e => e.SuidId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SUID_ID");
 
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
@@ -559,6 +586,21 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.CsAuthorityId)
                     .HasConstraintName("FK_A_APPLICATIONS_G_CS_AUTHORI");
 
+                entity.HasOne(d => d.EgnNavigation)
+                    .WithMany(p => p.AApplicationEgnNavigations)
+                    .HasForeignKey(d => d.EgnId)
+                    .HasConstraintName("FK_A_APPLICATIONS_P_PER_ID_EGN");
+
+                entity.HasOne(d => d.LnNavigation)
+                    .WithMany(p => p.AApplicationLnNavigations)
+                    .HasForeignKey(d => d.LnId)
+                    .HasConstraintName("FK_A_APPLICATIONS_P_PER_ID_LN");
+
+                entity.HasOne(d => d.LnchNavigation)
+                    .WithMany(p => p.AApplicationLnchNavigations)
+                    .HasForeignKey(d => d.LnchId)
+                    .HasConstraintName("FK_A_APPLICATIONS_P_PER_ID_LNC");
+
                 entity.HasOne(d => d.PaymentMethod)
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.PaymentMethodId)
@@ -573,6 +615,16 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.SrvcResRcptMethId)
                     .HasConstraintName("FK_A_APPLICATIONS_A_SRVC_RES_R");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.AApplications)
+                    .HasForeignKey(d => d.StatusCode)
+                    .HasConstraintName("FK_A_APPLICATIONS_A_APP_STATUS");
+
+                entity.HasOne(d => d.SuidNavigation)
+                    .WithMany(p => p.AApplicationSuidNavigations)
+                    .HasForeignKey(d => d.SuidId)
+                    .HasConstraintName("FK_A_APPLICATIONS_P_PER_ID_SUI");
             });
 
             modelBuilder.Entity<AApplicationStatus>(entity =>
@@ -812,6 +864,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("CREATED_ON");
 
                 entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.ForSecondSignature)
+                    .HasPrecision(1)
+                    .HasColumnName("FOR_SECOND_SIGNATURE");
 
                 entity.Property(e => e.InstructionsForFiles).HasColumnName("INSTRUCTIONS_FOR_FILES");
 
@@ -1271,6 +1327,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
 
+                entity.Property(e => e.EgnId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("EGN_ID");
+
                 entity.Property(e => e.Familyname)
                     .HasMaxLength(200)
                     .HasColumnName("FAMILYNAME");
@@ -1330,6 +1391,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("ID_DOC_NUMBER");
 
+                entity.Property(e => e.IdDocNumberId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID_DOC_NUMBER_ID");
+
                 entity.Property(e => e.IdDocTypeDescr).HasColumnName("ID_DOC_TYPE_DESCR");
 
                 entity.Property(e => e.IdDocValidDate)
@@ -1344,9 +1410,19 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .HasColumnName("LN");
 
+                entity.Property(e => e.LnId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("LN_ID");
+
                 entity.Property(e => e.Lnch)
                     .HasMaxLength(100)
                     .HasColumnName("LNCH");
+
+                entity.Property(e => e.LnchId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("LNCH_ID");
 
                 entity.Property(e => e.Locked)
                     .HasPrecision(1)
@@ -1398,6 +1474,15 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("STATUS_ID");
+
+                entity.Property(e => e.Suid)
+                    .HasMaxLength(100)
+                    .HasColumnName("SUID");
+
+                entity.Property(e => e.SuidId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SUID_ID");
 
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
@@ -1459,15 +1544,40 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.DecisionTypeId)
                     .HasConstraintName("FK_B_BULLETINS_B_DECISION_TYPE");
 
+                entity.HasOne(d => d.EgnNavigation)
+                    .WithMany(p => p.BBulletinEgnNavigations)
+                    .HasForeignKey(d => d.EgnId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_EGN");
+
                 entity.HasOne(d => d.IdDocCategory)
                     .WithMany(p => p.BBulletins)
                     .HasForeignKey(d => d.IdDocCategoryId)
                     .HasConstraintName("FK_B_BULLETINS_B_ID_DOC_CATEGO");
 
+                entity.HasOne(d => d.IdDocNumberNavigation)
+                    .WithMany(p => p.BBulletinIdDocNumberNavigations)
+                    .HasForeignKey(d => d.IdDocNumberId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER__ID_DOC");
+
+                entity.HasOne(d => d.LnNavigation)
+                    .WithMany(p => p.BBulletinLnNavigations)
+                    .HasForeignKey(d => d.LnId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_LN");
+
+                entity.HasOne(d => d.LnchNavigation)
+                    .WithMany(p => p.BBulletinLnchNavigations)
+                    .HasForeignKey(d => d.LnchId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_LNCH");
+
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.BBulletins)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_B_BULLETINS_B_BULLETIN_STAT");
+
+                entity.HasOne(d => d.SuidNavigation)
+                    .WithMany(p => p.BBulletinSuidNavigations)
+                    .HasForeignKey(d => d.SuidId)
+                    .HasConstraintName("FK_B_BULLETINS_P_PER_ID_SUID");
             });
 
             modelBuilder.Entity<BBulletinStatus>(entity =>
@@ -4413,6 +4523,15 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("STATUS_CODE");
 
+                entity.Property(e => e.Suid)
+                    .HasMaxLength(100)
+                    .HasColumnName("SUID");
+
+                entity.Property(e => e.SuidId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SUID_ID");
+
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME");
@@ -4448,7 +4567,7 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_FBBC_FBBC_DOC_TYPES");
 
                 entity.HasOne(d => d.Person)
-                    .WithMany(p => p.Fbbcs)
+                    .WithMany(p => p.FbbcPeople)
                     .HasForeignKey(d => d.PersonId)
                     .HasConstraintName("FK_FBBC_P_PERSON_IDS");
 
@@ -4461,6 +4580,10 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.Fbbcs)
                     .HasForeignKey(d => d.StatusCode)
                     .HasConstraintName("FK_FBBC_FBBC_STATUSES");
+
+                entity.HasOne(d => d.SuidNavigation)
+                    .WithMany(p => p.FbbcSuidNavigations)
+                    .HasForeignKey(d => d.SuidId);
             });
 
             modelBuilder.Entity<FbbcDocType>(entity =>
@@ -5379,6 +5502,12 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("BIRTHPLACE_TEXT");
 
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
@@ -5406,6 +5535,16 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Surname)
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<PAppId>(entity =>
@@ -6998,6 +7137,70 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.XmlData)
                     .HasColumnType("CLOB")
                     .HasColumnName("XML_DATA");
+            });
+
+            modelBuilder.Entity<�EmailEvent>(entity =>
+            {
+                entity.ToTable("�_EMAIL_EVENTS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Attempts)
+                    .HasPrecision(4)
+                    .HasColumnName("ATTEMPTS");
+
+                entity.Property(e => e.Body)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("BODY");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.EmailAddress)
+                    .HasMaxLength(100)
+                    .HasColumnName("EMAIL_ADDRESS");
+
+                entity.Property(e => e.EmailStatus)
+                    .HasMaxLength(200)
+                    .HasColumnName("EMAIL_STATUS");
+
+                entity.Property(e => e.Error).HasColumnName("ERROR");
+
+                entity.Property(e => e.HasError)
+                    .HasPrecision(1)
+                    .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.SentDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SENT_DATE");
+
+                entity.Property(e => e.StackTrace)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("STACK_TRACE");
+
+                entity.Property(e => e.Subject)
+                    .HasMaxLength(500)
+                    .HasColumnName("SUBJECT");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             OnModelCreatingPartial(modelBuilder);

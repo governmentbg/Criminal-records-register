@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBulletinStatusH : BaseEntity
+    public partial class BBulletinStatusH : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? BulletinId { get; set; }
         public string? NewStatusCode { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -14,7 +15,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Descr { get; set; }
         public bool? Locked { get; set; }
         public string? OldStatusCode { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual BBulletinStatus? NewStatusCodeNavigation { get; set; }

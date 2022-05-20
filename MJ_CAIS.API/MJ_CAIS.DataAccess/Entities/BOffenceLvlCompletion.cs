@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BOffenceLvlCompletion : BaseEntity, IBaseNomenclature
+    public partial class BOffenceLvlCompletion : BaseEntity, IBaseIdEntity, IBaseNomenclature
     {
+        public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Category { get; set; }
         public string? Name { get; set; }

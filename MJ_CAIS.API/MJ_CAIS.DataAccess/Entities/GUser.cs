@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GUser : BaseEntity, ICsAuthorityIdFilter
+    public partial class GUser : BaseEntity, IBaseIdEntity
     {
         public GUser()
         {
@@ -12,6 +12,7 @@ namespace MJ_CAIS.DataAccess.Entities
             GUserRoles = new HashSet<GUserRole>();
         }
 
+        public string Id { get; set; } = null!;
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
@@ -24,7 +25,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual ICollection<ACertificate> ACertificateFirstSigners { get; set; }

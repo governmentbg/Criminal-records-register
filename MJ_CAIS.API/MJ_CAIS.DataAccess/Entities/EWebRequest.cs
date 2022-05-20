@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EWebRequest : BaseEntity
+    public partial class EWebRequest : BaseEntity, IBaseIdEntity
     {
         public EWebRequest()
         {
             EIsinData = new HashSet<EIsinDatum>();
         }
 
+        public string Id { get; set; } = null!;
         public string? RequestXml { get; set; }
         public string? ResponseXml { get; set; }
         public string? RemoteAddress { get; set; }
@@ -30,7 +31,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? ApplicationId { get; set; }
         public string? EcrisMsgId { get; set; }
         public string? WebServiceId { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual EEcrisMessage? EcrisMsg { get; set; }

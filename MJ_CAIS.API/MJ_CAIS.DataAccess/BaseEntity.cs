@@ -15,7 +15,9 @@ namespace MJ_CAIS.DataAccess
             this.PrimaryKeyName = primaryKeyName;
         }
 
-        public string Id { get; set; } = null!;
+        //public string Id { get; set; } = null!;
+
+        public decimal? Version { get; set; }
 
         [NotMapped]
         public EntityStateEnum EntityState { get; set; }

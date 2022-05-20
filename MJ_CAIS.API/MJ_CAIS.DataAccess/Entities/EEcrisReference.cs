@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class EEcrisReference : BaseEntity
+    public partial class EEcrisReference : BaseEntity, IBaseIdEntity
     {
+        public string Id { get; set; } = null!;
         public string? EcrisMsgId { get; set; }
         public string? BulletinId { get; set; }
         public string? FbbcId { get; set; }
@@ -12,7 +13,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual EEcrisMessage? EcrisMsg { get; set; }

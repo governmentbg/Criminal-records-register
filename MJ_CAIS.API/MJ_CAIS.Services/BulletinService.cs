@@ -172,8 +172,8 @@ namespace MJ_CAIS.Services
 
             if (isActiveBulletin)
             {
+                await _rehabilitationService.ApplyRehabilitationAsync(bulletin, personId);
                 // await _bulletinEventService.GenereteEventAsyn(personId);
-                await _rehabilitationService.ApplyRehabilitation(bulletin.Id, personId);
             }
 
             // if person is bulgarian citizen
@@ -336,7 +336,7 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(entity, nameof(entity.Locked));
             }
 
-            var passedNavigationProperties = new List<BaseEntity>();
+            var passedNavigationProperties = new List<IBaseIdEntity>();
             dbContext.ApplyChanges(entity, passedNavigationProperties, true);
         }
 
@@ -366,6 +366,8 @@ namespace MJ_CAIS.Services
                     CreatedOn = DateTime.Now,
                     PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
                 });
+
+                dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
             }
 
             return person.Id;
@@ -438,7 +440,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = DateTime.UtcNow,
                 };
 
-                dbContext.BBulletinStatusHes.Add(satusHistory);
+                dbContext.ApplyChanges(satusHistory, new List<IBaseIdEntity>());
                 return true;
             }
 

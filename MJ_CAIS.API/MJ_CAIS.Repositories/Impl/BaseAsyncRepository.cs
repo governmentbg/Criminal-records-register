@@ -5,7 +5,7 @@ using MJ_CAIS.Repositories.Contracts;
 namespace MJ_CAIS.Repositories.Impl
 {
     public abstract class BaseAsyncRepository<TEntity, TContext> : IBaseAsyncRepository<TEntity, string, TContext>
-        where TEntity : BaseEntity, new()
+        where TEntity : class, IBaseIdEntity, new()
         where TContext : CaisDbContext
     {
         protected readonly TContext _dbContext;
