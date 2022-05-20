@@ -42,3 +42,10 @@ steps:
   inputs:
     artifactName: 'MJ-CAIS-Angular'
     PathtoPublish: '$(Build.Repository.LocalPath)\mj_cais\dist'
+- powershell: |
+    Write-Host "Tagging Build: $env:BuildNumber"
+
+    git tag Angular-$env:BuildNumber
+    git push origin Angular-$env:BuildNumber
+  env:
+    BuildNumber: 1.$(Build.BuildNumber)
