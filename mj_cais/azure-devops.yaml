@@ -1,0 +1,10 @@
+resources:
+- repo: self
+queue:
+  name: MJCAIS
+steps:
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: '$(Build.Repository.LocalPath)\mj_cais'
+    command: 'install'
