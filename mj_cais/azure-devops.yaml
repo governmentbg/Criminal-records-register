@@ -36,7 +36,7 @@ steps:
     targetType: 'inline'
     script: |
       Remove-Item $(Build.Repository.LocalPath)\mj_cais\dist\*.ver
-      New-Item -Path $(Build.Repository.LocalPath)\mj_cais\dist -Name "1.$(Build.BuildNumber).ver"
+      New-Item -Path $(Build.Repository.LocalPath)\mj_cais\dist -Name "1.$(Build.BuildNumber).ver" -ItemType "file"
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: MJ-CAIS-Angular'
   inputs:
