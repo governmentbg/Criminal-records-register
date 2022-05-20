@@ -1,7 +1,7 @@
 import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
+import { BaseModel } from "../../../../@core/models/common/base.model";
 
-export class BulletinModel {
-  public id: string = null;
+export class BulletinModel extends BaseModel {
   public registrationNumber: string = null;
   public csAuthorityName: string = null;
   public sequentialIndex: number = null;
@@ -37,7 +37,7 @@ export class BulletinModel {
   public locked: boolean = null;
 
   constructor(init?: Partial<BulletinModel>) {
-    this.id = init?.id ?? null;
+    super(init);
     this.registrationNumber = init?.registrationNumber ?? null;
     this.csAuthorityName = init?.csAuthorityName ?? null;
     this.sequentialIndex = init?.sequentialIndex ?? null;

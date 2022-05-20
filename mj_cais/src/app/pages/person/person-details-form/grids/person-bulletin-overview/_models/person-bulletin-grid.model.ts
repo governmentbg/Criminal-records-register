@@ -1,5 +1,6 @@
-export class PersonBulletinGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../../../@core/models/common/base.model";
+
+export class PersonBulletinGridModel extends BaseModel {
   public bulletinType: string = null;
   public statusName: string = null;
   public createdOn: Date = null;
@@ -12,7 +13,7 @@ export class PersonBulletinGridModel {
   public birthDate: Date = null;
 
   constructor(init?: Partial<PersonBulletinGridModel>) {
-    this.id = init?.id ?? null;
+    super(init);
     this.bulletinType = init?.bulletinType ?? null;
     this.statusName = init?.statusName ?? null;
     this.createdOn = init?.createdOn ?? null;

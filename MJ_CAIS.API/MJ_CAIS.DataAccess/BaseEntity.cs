@@ -1,4 +1,5 @@
 ﻿using MJ_CAIS.Common.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MJ_CAIS.DataAccess
@@ -17,6 +18,7 @@ namespace MJ_CAIS.DataAccess
 
         //public string Id { get; set; } = null!;
 
+        [ConcurrencyCheck]
         public decimal? Version { get; set; }
 
         [NotMapped]

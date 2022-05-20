@@ -1,9 +1,10 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { BaseForm } from "../../../../@core/models/common/base.form";
 
-export class EcrisMessageForm {
+export class EcrisMessageForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
+
   public requestMsgId: FormControl;
   public fromAuthId: FormControl;
   public toAuthId: FormControl;
@@ -25,8 +26,7 @@ export class EcrisMessageForm {
   public msgTypeId: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
+    super();
     this.requestMsgId = new FormControl(null);
     this.fromAuthId = new FormControl(null);
     this.toAuthId = new FormControl(null);
@@ -49,6 +49,7 @@ export class EcrisMessageForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       requestMsgId: this.requestMsgId,
       fromAuthId: this.fromAuthId,
       toAuthId: this.toAuthId,

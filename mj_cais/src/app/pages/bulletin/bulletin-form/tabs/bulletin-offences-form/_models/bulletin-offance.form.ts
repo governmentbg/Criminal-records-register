@@ -3,10 +3,10 @@ import { Guid } from "guid-typescript";
 import { AddressForm } from "../../../../../../@core/components/forms/address-form/_model/address.form";
 import { DatePrecisionModelForm } from "../../../../../../@core/components/forms/inputs/date-precision/_models/date-precision.form";
 import { LookupForm } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.form";
+import { BaseForm } from "../../../../../../@core/models/common/base.form";
 
-export class BulletinOffenceForm {
+export class BulletinOffenceForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
   public offenceCategory: LookupForm;
   public formOfGuiltId: FormControl;
   public formOfGuiltName: FormControl;
@@ -20,8 +20,7 @@ export class BulletinOffenceForm {
   // public testDate: DatePrecisionModelForm;
 
   constructor() {
-    var guid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
+    super();
     this.offenceCategory = new LookupForm(true);
     this.formOfGuiltId = new FormControl(null, [Validators.required]);
     this.formOfGuiltName = new FormControl(null);
@@ -36,6 +35,7 @@ export class BulletinOffenceForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       offenceCategory: this.offenceCategory.group,
       formOfGuiltId: this.formOfGuiltId,
       formOfGuiltName: this.formOfGuiltName,

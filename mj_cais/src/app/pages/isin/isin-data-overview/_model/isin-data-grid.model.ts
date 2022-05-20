@@ -1,11 +1,12 @@
-export class IsinDataGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class IsinDataGridModel extends BaseModel {
   public msgDateTime: Date = null;
   public identifier: string = null;
   public birthDate: Date = null;
   public birthCountryName: string = null;
   public personName: string = null;
-  public nationalities: string [] = null;
+  public nationalities: string[] = null;
   public decisionInfo: string = null;
   public caseInfo: string = null;
   public sanctionEndDate: Date = null;
@@ -13,8 +14,8 @@ export class IsinDataGridModel {
   public bulletinId: string = null;
 
   constructor(init?: Partial<IsinDataGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.msgDateTime = init.msgDateTime ?? null;
       this.identifier = init.identifier ?? null;
       this.birthDate = init.birthDate ?? null;

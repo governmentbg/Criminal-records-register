@@ -1,5 +1,6 @@
-export class IsinBulletinGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../../../@core/models/common/base.model";
+
+export class IsinBulletinGridModel extends BaseModel {
   public bulletinType: string = null;
   public registrationNumber: string = null;
   public birthDate: Date = null;
@@ -14,8 +15,8 @@ export class IsinBulletinGridModel {
   public decisionAuthName: string = null;
 
   constructor(init?: Partial<IsinBulletinGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.bulletinType = init.bulletinType ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.birthDate = init.birthDate ?? null;

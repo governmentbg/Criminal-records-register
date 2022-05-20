@@ -1,12 +1,12 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { BaseForm } from "../../../../models/common/base.form";
 import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
 
-export class PersonForm {
+export class PersonForm extends BaseForm {
   public group: FormGroup;
 
-  public id: FormControl;
   // applying validation rules,
   // showing or hiding form controls
   // depends on context type
@@ -45,7 +45,7 @@ export class PersonForm {
   public personAlias: FormControl;
 
   constructor(context: string, isDisabled: boolean = true) {
-    this.id = new FormControl(null);
+    super();
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
@@ -146,6 +146,7 @@ export class PersonForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       contextType: this.contextType,
       firstname: this.firstname,
       surname: this.surname,

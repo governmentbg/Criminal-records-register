@@ -1,5 +1,6 @@
-export class ApplicationGridModel {
-  public id: string;
+import { BaseModel } from "../../../../../@core/models/common/base.model";
+
+export class ApplicationGridModel extends BaseModel {
   public registrationNumber: string;
   public purpose: string;
   public firstname: string;
@@ -10,8 +11,8 @@ export class ApplicationGridModel {
   public birthPlaceOther: string;
 
   constructor(init?: Partial<ApplicationGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.purpose = init.purpose ?? null;
       this.firstname = init.firstname ?? null;

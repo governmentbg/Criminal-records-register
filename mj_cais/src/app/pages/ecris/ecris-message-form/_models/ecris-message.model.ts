@@ -1,5 +1,6 @@
-export class EcrisMessageModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class EcrisMessageModel extends BaseModel {
   public requestMsgId: string = null;
   public fromAuthId: string = null;
   public toAuthId: string = null;
@@ -21,8 +22,8 @@ export class EcrisMessageModel {
   public msgTypeId: string = null;
 
   constructor(init?: Partial<EcrisMessageModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.requestMsgId = init.requestMsgId ?? null;
       this.fromAuthId = init.fromAuthId ?? null;
       this.toAuthId = init.toAuthId ?? null;

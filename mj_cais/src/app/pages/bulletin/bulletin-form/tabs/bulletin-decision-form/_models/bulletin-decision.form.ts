@@ -1,9 +1,8 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Guid } from "guid-typescript";
+import { BaseForm } from "../../../../../../@core/models/common/base.form";
 
-export class BulletinDecisionForm {
+export class BulletinDecisionForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
   public decisionChTypeId: FormControl;
   public decisionChTypeName: FormControl;
   public decisionEcli: FormControl;
@@ -18,8 +17,7 @@ export class BulletinDecisionForm {
   public changeDate: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
+    super();
     this.decisionChTypeId = new FormControl(null, [Validators.maxLength(50)]);
     this.decisionChTypeName = new FormControl(null);
     this.decisionEcli = new FormControl(null, [Validators.maxLength(100)]);
@@ -35,6 +33,7 @@ export class BulletinDecisionForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       decisionChTypeId: this.decisionChTypeId,
       decisionChTypeName: this.decisionChTypeName,
       decisionEcli: this.decisionEcli,
@@ -46,7 +45,7 @@ export class BulletinDecisionForm {
       decisionTypeId: this.decisionTypeId,
       decisionTypeName: this.decisionTypeName,
       descr: this.descr,
-      changeDate: this.changeDate
+      changeDate: this.changeDate,
     });
   }
 }

@@ -1,5 +1,6 @@
-export class FbbcGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class FbbcGridModel extends BaseModel {
   public receiveDate: Date = null;
   public egn: string = null;
   public birthDate: Date = null;
@@ -12,8 +13,8 @@ export class FbbcGridModel {
   public destroyedDate: Date = null;
 
   constructor(init?: Partial<FbbcGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.receiveDate = init.receiveDate ?? null;
       this.egn = init.egn ?? null;
       this.birthDate = init.birthDate ?? null;

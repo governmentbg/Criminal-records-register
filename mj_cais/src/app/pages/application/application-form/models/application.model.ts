@@ -1,8 +1,8 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressModel } from "../../../../@core/components/forms/address-form/_model/address.model";
+import { BaseModel } from "../../../../@core/models/common/base.model";
 
-export class ApplicationModel {
-  public id: string = null;
+export class ApplicationModel extends BaseModel {
   public registrationNumber: string = null;
   public purpose: string = null;
   public firstname: string = null;
@@ -59,8 +59,8 @@ export class ApplicationModel {
   public birthAddress: AddressModel = new AddressModel();
 
   constructor(init?: Partial<ApplicationModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.purpose = init.purpose ?? null;
       this.firstname = init.firstname ?? null;

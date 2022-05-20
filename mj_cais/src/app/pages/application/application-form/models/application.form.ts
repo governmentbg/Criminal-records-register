@@ -1,10 +1,10 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
+import { BaseForm } from "../../../../@core/models/common/base.form";
 
-export class ApplicationForm {
+export class ApplicationForm extends BaseForm {
   public group: FormGroup;
 
-  public id: FormControl;
   public registrationNumber: FormControl;
   public purpose: FormControl;
   public firstname: FormControl;
@@ -43,7 +43,6 @@ export class ApplicationForm {
   public applicationTypeId: FormControl;
   public csAuthorityId: FormControl;
   public isLocal: FormControl;
-  public version: FormControl;
   public purposeId: FormControl;
   public paymentMethodId: FormControl;
   public fromCosul: FormControl;
@@ -61,7 +60,7 @@ export class ApplicationForm {
   public birthAddress: AddressForm;
 
   constructor() {
-    this.id = new FormControl(null);
+    super();
     this.registrationNumber = new FormControl(null);
     this.purpose = new FormControl(null);
     this.firstname = new FormControl(null);
@@ -101,7 +100,6 @@ export class ApplicationForm {
     this.applicationTypeId = new FormControl(null);
     this.csAuthorityId = new FormControl(null);
     this.isLocal = new FormControl(null);
-    this.version = new FormControl(null);
     this.purposeId = new FormControl(null);
     this.paymentMethodId = new FormControl(null);
     this.fromCosul = new FormControl(null);
@@ -119,6 +117,7 @@ export class ApplicationForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       registrationNumber: this.registrationNumber,
       purpose: this.purpose,
       firstname: this.firstname,
@@ -158,7 +157,6 @@ export class ApplicationForm {
       applicationTypeId: this.applicationTypeId,
       csAuthorityId: this.csAuthorityId,
       isLocal: this.isLocal,
-      version: this.version,
       purposeId: this.purposeId,
       paymentMethodId: this.paymentMethodId,
       fromCosul: this.fromCosul,

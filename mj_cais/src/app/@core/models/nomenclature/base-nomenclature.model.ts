@@ -6,6 +6,7 @@ export class BaseNomenclatureModel {
   public type: string = null;
   public validFrom: Date = null;
   public validTo: Date = null;
+  public version: number = null;
 
   constructor(init?: Partial<BaseNomenclatureModel>) {
     this.id = init?.id ?? null;
@@ -15,5 +16,6 @@ export class BaseNomenclatureModel {
     this.type = init?.type ?? null;
     this.validFrom = init?.validFrom ?? null;
     this.validTo = init?.validTo ?? null;
+    this.version = init?.version ?? null;
   }
 }

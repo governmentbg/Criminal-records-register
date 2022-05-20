@@ -1,5 +1,6 @@
-export class UserGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class UserGridModel extends BaseModel {
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
@@ -11,7 +12,7 @@ export class UserGridModel {
   public roles: string[] = [];
 
   constructor(init?: Partial<UserGridModel>) {
-    this.id = init?.id ?? null;
+    super(init);
     this.firstname = init?.firstname ?? null;
     this.surname = init?.surname ?? null;
     this.familyname = init?.familyname ?? null;
@@ -20,9 +21,8 @@ export class UserGridModel {
     this.egn = init?.egn ?? null;
     this.position = init?.position ?? null;
     this.authorityName = init?.authorityName ?? null;
-    if(init?.roles){
+    if (init?.roles) {
       this.roles.push(...init.roles);
     }
   }
 }
-  

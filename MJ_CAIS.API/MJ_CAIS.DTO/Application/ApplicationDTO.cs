@@ -43,7 +43,6 @@ namespace MJ_CAIS.DTO.Application
         public string? ApplicationTypeId { get; set; }
         public string? CsAuthorityId { get; set; }
         public bool? IsLocal { get; set; }
-        public decimal? Version { get; set; }
         public string? PurposeId { get; set; }
         public string? PaymentMethodId { get; set; }
         public bool? FromCosul { get; set; }

@@ -1,5 +1,6 @@
-export class EcrisMessageGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class EcrisMessageGridModel extends BaseModel {
   public docTypeId: string = null;
   public docTypeName: string = null;
   public identifier: string = null;
@@ -18,8 +19,8 @@ export class EcrisMessageGridModel {
   public nationality2Code: string = null;
 
   constructor(init?: Partial<EcrisMessageGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.docTypeId = init.docTypeId ?? null;
       this.docTypeName = init.docTypeName ?? null;
       this.identifier = init.identifier ?? null;

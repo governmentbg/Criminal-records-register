@@ -1,5 +1,6 @@
-export class CountryGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../../models/common/base.model";
+
+export class CountryGridModel extends BaseModel {
   public iso31662Code: string = null;
   public usedForNationality: boolean = null;
   public remark: string = null;
@@ -9,8 +10,8 @@ export class CountryGridModel {
   public validTo: Date = null;
 
   constructor(init?: Partial<CountryGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id;
       this.iso31662Code = init.iso31662Code;
       this.usedForNationality = init.usedForNationality;
       this.remark = init.remark;
