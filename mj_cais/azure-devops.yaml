@@ -3,6 +3,8 @@ resources:
 queue:
   name: MJCAIS
 steps:
+- checkout: self
+  persistCredentials: true
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
   name: npmrc
