@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace AutomaticStepsExecutor
 {
-    public class PaymentChecker : IAutomaticStepService
+    public class PaymentCheckerService : IAutomaticStepService
     {
         private CaisDbContext _dbContext;
-        private readonly ILogger<PaymentChecker> _logger;
+        private readonly ILogger<PaymentCheckerService> _logger;
 
-        public PaymentChecker(CaisDbContext dbContext, ILogger<PaymentChecker> logger)
+        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -30,13 +30,13 @@ namespace AutomaticStepsExecutor
        
         }
 
-        public async Task<List<BaseEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
         {
             var result = await Task.FromResult(_dbContext.WApplications
                                .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebCheckPayment
                                                       
                                )
-                               .ToList<BaseEntity>());
+                               .ToList<IBaseIdEntity>());
             return result;
 
         }
@@ -51,7 +51,7 @@ namespace AutomaticStepsExecutor
        
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<BaseEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
         {
             AutomaticStepResult result = new AutomaticStepResult();
             int numberOfProcesedEntities = 0;
@@ -73,7 +73,7 @@ namespace AutomaticStepsExecutor
                 }
                 var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb.Value).Date;
 
-                foreach (BaseEntity entity in entities)
+                foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
@@ -84,7 +84,7 @@ namespace AutomaticStepsExecutor
                         bool isPaid = false;
                         if (isPaid)
                         {
-                            AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext);
+                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext);
                             //todo: must add some FK for payment?!
                         }
                         else

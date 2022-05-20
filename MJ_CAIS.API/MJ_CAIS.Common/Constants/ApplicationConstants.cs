@@ -23,8 +23,7 @@ namespace MJ_CAIS.Common.Constants
             public const string CertificateContentReady = "CertificateContentReady";
             public const string CertificateServerSign = "CertificateServerSign";
             public const string CertificateUserSign = "CertificateUserSign";
-            public const string CertificateEDelivery = "CertificateEDelivery";
-            public const string CertificateSentMail = "CertificateSentMail";
+            public const string CertificateForDelivery = "CertificateForDelivery";
             public const string CertificatePaperPrint = "CertificatePaperPrint";
             public const string Delivered = "Delivered";
             public const string NewWebApplication = "NewWebApplication";
@@ -37,5 +36,19 @@ namespace MJ_CAIS.Common.Constants
             //todo: add to db
             public const string CertificateUserSigned = "CertificateUserSigned";
         }
+        public static class ApplicationTypes
+        {
+            public const string InternalCode5 = "5";
+        }
+        public static class PaymentMethodsCodes
+        {
+            public const string Free = "Free";
+        }
+
+        public static class ReceivingMethods
+        {
+            public const string EDelivery = "EDelivery";
+        }
+
     }
 }

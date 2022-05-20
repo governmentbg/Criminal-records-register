@@ -13,12 +13,12 @@ using MJ_CAIS.DataAccess.Entities;
 
 namespace AutomaticStepsExecutor
 {
-    public class CertificateCreatorService : IAutomaticStepService
+    public class CertificatePdfCreatorService : IAutomaticStepService
     {
         private CaisDbContext _dbContext;
-        private readonly ILogger<CertificateCreatorService> _logger;
+        private readonly ILogger<CertificatePdfCreatorService> _logger;
         private readonly ICertificateGenerationService _certificateService;
-        public CertificateCreatorService(CaisDbContext dbContext, ILogger<CertificateCreatorService> logger, ICertificateGenerationService certificateService)
+        public CertificatePdfCreatorService(CaisDbContext dbContext, ILogger<CertificatePdfCreatorService> logger, ICertificateGenerationService certificateService)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -46,7 +46,7 @@ namespace AutomaticStepsExecutor
             
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<BaseEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
         {
             AutomaticStepResult result = new AutomaticStepResult();
             int numberOfProcesedEntities = 0;
@@ -64,7 +64,7 @@ namespace AutomaticStepsExecutor
 
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
 
-                foreach (BaseEntity entity in entities)
+                foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
@@ -88,12 +88,15 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<BaseEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
         {
             var result = await Task.FromResult(_dbContext.ACertificates
                               .Include(c=>c.AAppBulletins)
+                              .Include(c=>c.Application)
+                              .Include(c=>c.Application.Purpose)
+                              .Include(c => c.Application.SrvcResRcptMeth)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
-                              .ToList<BaseEntity>());
+                              .ToList<IBaseIdEntity>());
             return result;
 
         }

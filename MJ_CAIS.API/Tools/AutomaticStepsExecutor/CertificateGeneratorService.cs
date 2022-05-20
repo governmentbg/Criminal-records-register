@@ -44,7 +44,7 @@ namespace AutomaticStepsExecutor
          
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<BaseEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
         {
             AutomaticStepResult result = new AutomaticStepResult();
             int numberOfProcesedEntities = 0;
@@ -65,7 +65,7 @@ namespace AutomaticStepsExecutor
                     throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
                 }
                 
-                foreach (BaseEntity entity in entities)
+                foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
@@ -90,11 +90,11 @@ namespace AutomaticStepsExecutor
         }
 
 
-        public async Task<List<BaseEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
         {
             var result = await Task.FromResult( _dbContext.AApplications
                                .Where(aa=>aa.StatusCode==ApplicationConstants.ApplicationStatuses.ApprovedApplication)
-                               .ToList<BaseEntity>());
+                               .ToList<IBaseIdEntity>());
             return result;
         }
     }
