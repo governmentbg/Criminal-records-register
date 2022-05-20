@@ -12,6 +12,7 @@ trigger:
 steps:
 - task: MSBuild@1
   displayName: 'Publish project MJ_CAIS.IdentityServer.proj'
+  msbuildLocation: 'C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin'
   inputs:
     project: '$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\MJ_CAIS.IdentityServer.csproj'
     msbuildArguments: '/p:DeployOnBuild=true /p:PublishProfile="$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\Properties\PublishProfiles\FolderProfile.pubxml"'
