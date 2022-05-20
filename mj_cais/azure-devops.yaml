@@ -3,6 +3,17 @@ resources:
 queue:
   name: MJCAIS
 steps:
+- task: DownloadSecureFile@1
+  displayName: 'Download secure file'
+  name: npmrc
+  inputs:
+    secureFile: '7a753d55-2a9d-41f7-8c94-a894d64b99b3'
+- task: PowerShell@2
+  displayName: 'Copy secure file (.npmrc) to angular folder'
+  inputs:
+    targetType: 'inline'
+    script: |
+      cp $(npmrc.secureFilePath) $(Build.Repository.LocalPath)\mj_cais\.npmrc
 - task: Npm@1
   displayName: 'npm install'
   inputs:
