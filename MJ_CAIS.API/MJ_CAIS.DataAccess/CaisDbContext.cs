@@ -3938,6 +3938,8 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("E_EMAIL_EVENTS");
 
+                entity.HasIndex(e => e.CertificateId, "XIF1E_EMAIL_EVENTS");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -3950,6 +3952,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Body)
                     .HasColumnType("CLOB")
                     .HasColumnName("BODY");
+
+                entity.Property(e => e.CertificateId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CERTIFICATE_ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)

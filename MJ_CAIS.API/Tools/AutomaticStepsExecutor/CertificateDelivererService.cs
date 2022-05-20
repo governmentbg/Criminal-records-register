@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace AutomaticStepsExecutor
 {
-    public class CertificateDeliverer : IAutomaticStepService
+    public class CertificateDelivererService : IAutomaticStepService
     {
         private CaisDbContext _dbContext;
-        private readonly ILogger<CertificateDeliverer> _logger;
+        private readonly ILogger<CertificateDelivererService> _logger;
     
-        public CertificateDeliverer(CaisDbContext dbContext, ILogger<CertificateDeliverer> logger)
+        public CertificateDelivererService(CaisDbContext dbContext, ILogger<CertificateDelivererService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -25,14 +25,14 @@ namespace AutomaticStepsExecutor
         
         }
 
-        public async Task<List<BaseEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
         {
             var result = await Task.FromResult(_dbContext.AApplications
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateServerSign
                               || aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateUserSigned
                               //todo: да гледаме ли срок на плащането, ако не е платено в срок?!                             
                               )
-                              .ToList<BaseEntity>());
+                              .ToList<IBaseIdEntity>());
             return result;
 
         }
@@ -47,7 +47,7 @@ namespace AutomaticStepsExecutor
            
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<BaseEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
         {
             return null;
         }

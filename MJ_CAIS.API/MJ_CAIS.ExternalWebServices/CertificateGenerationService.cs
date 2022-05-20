@@ -56,13 +56,16 @@ namespace MJ_CAIS.ExternalWebServices
 
             byte[] contentCertificate;
             string checkUrl = await GetURLForQRCodeAsync(certificate.AccessCode1, webportalUrl);
+            bool containsBulletins = false;
             if (certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() == 0)
             {
                 contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_without_conviction);
+                containsBulletins = false;
             }
             else
             {
                 contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction);
+                containsBulletins = true;
             }
             bool isExistingDoc = false;
             bool isExistingContent = false;
@@ -120,7 +123,45 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
                   
             certificate.DocId = doc.Id;
-            certificate.StatusCode = statusCode;
+            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.InternalCode5)
+            {
+                //ako не е електронно -> за печат
+                certificate.StatusCode = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint;
+
+            }
+            else
+            {
+                if (containsBulletins || certificate.Application.PurposeNavigation.ForSecondSignature == true)
+                {
+                    //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
+                    certificate.StatusCode = statusCode;
+                }
+                else
+                {
+                    //todo: за доставка
+                    certificate.Application.StatusCode = ApplicationConstants.ApplicationStatuses.CertificateForDelivery;
+
+                    if(certificate.Application.SrvcResRcptMeth?.Code == ApplicationConstants.ReceivingMethods.EDelivery)
+                    {
+                        EEdeliveryMsg msg = new EEdeliveryMsg();
+                        msg.Id = BaseEntity.GenerateNewId();
+                        msg.EmailAddress = certificate.Application.Email;
+                        msg.CertificateId = certificate.Id;
+                        msg.Certificate = certificate;
+                        dbContext.EEdeliveryMsgs.Add(msg);
+                    }
+
+                    EEmailEvent mail = new EEmailEvent();
+                    mail.Id = BaseEntity.GenerateNewId();
+                    mail.EmailAddress = certificate.Application.Email;
+                    mail.Body = GetBodyForCertificateMail(certificate);
+                    mail.Subject = GetSubjectForCertificateMail(certificate) ;
+                    mail.CertificateId = certificate.Id;
+                    dbContext.EEmailEvents.Add(mail); 
+
+                }
+            }
+
             if (isExistingContent)
             {
                 dbContext.DDocContents.Update(content);
@@ -140,6 +181,16 @@ namespace MJ_CAIS.ExternalWebServices
 
             return contentCertificate;
 
+        }
+
+        private string? GetBodyForCertificateMail(ACertificate certificate)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string? GetSubjectForCertificateMail(ACertificate certificate)
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, JasperReportsNames reportName)
