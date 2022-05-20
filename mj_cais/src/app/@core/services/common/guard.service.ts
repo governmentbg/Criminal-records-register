@@ -6,6 +6,7 @@ import { LocalStorageService } from '@tl/tl-common';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { Observable, of, Subject } from 'rxjs';
 import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -24,48 +25,52 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   canActivate() {
-    const navigation = this.router.getCurrentNavigation();
-    let url = '/';
-    if (navigation) {
-      url = navigation.extractedUrl.toString();
-    }
-    return this.authService.isAuthenticatedOrRefresh()
-      .pipe(
-        switchMap( authenticated =>{
-          if (authenticated){
-            return this.permissionsService.permissions$.pipe(
-              switchMap(
-                roles =>{
-                  const hasRoles = Object.keys(roles).length !== 0;
-                  if (!hasRoles){
-                      return this.http.get("/auth/connect/userinfo").pipe(map((data: any) => {
-                        if (Array.isArray(data?.role)) {
-                          this.permissionsService.loadPermissions(data.role);
-                        } else if (data?.role) {
-                          this.permissionsService.loadPermissions([data.role]);
-                        }
-                        return true;
-                      })
-                    );
-                  } else {
-                    return of(true);
+    if (!environment.production){
+      return of(true);
+    } else {
+      const navigation = this.router.getCurrentNavigation();
+      let url = '/';
+      if (navigation) {
+        url = navigation.extractedUrl.toString();
+      }
+      return this.authService.isAuthenticatedOrRefresh()
+        .pipe(
+          switchMap( authenticated =>{
+            if (authenticated){
+              return this.permissionsService.permissions$.pipe(
+                switchMap(
+                  roles =>{
+                    const hasRoles = Object.keys(roles).length !== 0;
+                    if (!hasRoles){
+                        return this.http.get("/auth/connect/userinfo").pipe(map((data: any) => {
+                          if (Array.isArray(data?.role)) {
+                            this.permissionsService.loadPermissions(data.role);
+                          } else if (data?.role) {
+                            this.permissionsService.loadPermissions([data.role]);
+                          }
+                          return true;
+                        })
+                      );
+                    } else {
+                      return of(true);
+                    }
                   }
-                }
-              )
-            );
-          }else{
-            return of(false);
-          }
-        }),
-        tap(authenticated => {
-          if (!authenticated) {
-            this.localStorageService.write('redirect-custom', url);
-            this.authService.authenticate('eauth')
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((authResult: NbAuthResult) => {
-            });
-          }
-        })
-      );
+                )
+              );
+            }else{
+              return of(false);
+            }
+          }),
+          tap(authenticated => {
+            if (!authenticated) {
+              this.localStorageService.write('redirect-custom', url);
+              this.authService.authenticate('eauth')
+              .pipe(takeUntil(this.destroy$))
+              .subscribe((authResult: NbAuthResult) => {
+              });
+            }
+          })
+        );
+    }
   }
 }
