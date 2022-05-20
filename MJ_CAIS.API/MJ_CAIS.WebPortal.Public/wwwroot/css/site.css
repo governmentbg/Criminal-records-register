@@ -35,3 +35,8 @@ label.required:after {
     content: ' *';
     display: inline;
 }
+
+div.ui-igcombo-wrapper {
+    min-width: 260px;
+    width: 100%;
+}

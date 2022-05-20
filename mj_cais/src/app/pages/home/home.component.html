@@ -43,6 +43,13 @@
                 Нови заявления ({{ model.bulletinNewOfficeCount }})
               </a>
             </nb-list-item>
+
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications-waiting-payment']">
+                <!-- Нови заявления ({{ model.bulletinNewOfficeCount }}) -->
+                Потвърждение за плащане ({{ model.bulletinNewOfficeCount }})
+              </a>
+            </nb-list-item>
           
           </nb-list>
         </nb-card-body>

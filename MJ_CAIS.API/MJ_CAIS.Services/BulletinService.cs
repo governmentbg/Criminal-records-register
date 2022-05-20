@@ -24,18 +24,20 @@ namespace MJ_CAIS.Services
         private readonly IPersonService _personService;
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
+        private readonly IRehabilitationService _rehabilitationService;
 
         public BulletinService(IMapper mapper,
             IBulletinRepository bulletinRepository,
             IPersonService personService,
             INotificationService notificationService,
-            IBulletinEventService bulletinEventService)
+            IBulletinEventService bulletinEventService,
+            IRehabilitationService rehabilitationService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
             _personService = personService;
             _notificationService = notificationService;
-            _bulletinEventService = bulletinEventService;
+            _rehabilitationService = rehabilitationService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -82,7 +84,6 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();
 
             return bulletin.Id;
-
         }
 
         /// <summary>
@@ -113,6 +114,12 @@ namespace MJ_CAIS.Services
 
             await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
             await dbContext.SaveChangesAsync();
+
+            // изчисления за реабилитация
+            // да се лсучват след запис на данните, 
+            // защото може да има сливане на лица 
+            // което е от значение при изчисление на дата за реабилитация
+
         }
 
         /// <summary>
@@ -159,14 +166,15 @@ namespace MJ_CAIS.Services
                 return;
             }
 
-            await CreatePersonFromBulletinAsync(bulletin);
+            var personId = await CreatePersonFromBulletinAsync(bulletin);
 
             await dbContext.SaveChangesAsync();
 
-            //if (isActiveBulletin)
-            //{
-            //    await _bulletinEventService.GenereteEventAsyn(person.Id);
-            //}
+            if (isActiveBulletin)
+            {
+                // await _bulletinEventService.GenereteEventAsyn(personId);
+                await _rehabilitationService.ApplyRehabilitation(bulletin.Id, personId);
+            }
 
             // if person is bulgarian citizen
             var skipEcris = bulletin.BPersNationalities != null &&
@@ -335,7 +343,7 @@ namespace MJ_CAIS.Services
         /// <summary>
         /// Creates a person from a bulletin and a link between them
         /// </summary>
-        private async Task CreatePersonFromBulletinAsync(BBulletin bulletin)
+        private async Task<string> CreatePersonFromBulletinAsync(BBulletin bulletin)
         {
             // when status is set to Active or NoSanction
             // save data for person and its identifers
@@ -359,6 +367,8 @@ namespace MJ_CAIS.Services
                     PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
                 });
             }
+
+            return person.Id;
         }
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)

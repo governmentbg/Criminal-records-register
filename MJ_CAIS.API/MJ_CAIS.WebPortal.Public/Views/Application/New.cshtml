@@ -1,6 +1,7 @@
 ﻿@using Infragistics.Web.Mvc
 @using MJ_CAIS.WebPortal.Public.Controllers
 @using MJ_CAIS.WebPortal.Public.Models.Application
+@using MJ_CAIS.WebSetup.Utils.CustomHtmlHelpers
 @model ApplicationEditModel
 
 @{
@@ -35,11 +36,21 @@
 
             <div class="form-group mt-2">
                 <div class="col-md-4">
-                    <label asp-for="Email" class="control-label">Електронна поща</label>
+                    <label asp-for="Email" class="control-label"></label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
+
+            <div class="form-group mt-2">
+                <div class="col-md-4">
+                    <label asp-for="PurposeId" class="control-label"></label>
+                    @Html.TLDropDownListFor(model => model.PurposeId, Model.PurposeTypes, required: true)
+                    <span asp-validation-for="PurposeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            
         </div>
     </div>
 </form>

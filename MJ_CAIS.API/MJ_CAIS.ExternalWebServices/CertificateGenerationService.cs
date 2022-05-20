@@ -64,24 +64,78 @@ namespace MJ_CAIS.ExternalWebServices
             {
                 contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction);
             }
+            bool isExistingDoc = false;
+            bool isExistingContent = false;
+            DDocument doc;
+            if (!string.IsNullOrEmpty(certificate.DocId))
+            {
+                var currentDocument = await dbContext.DDocuments.FirstOrDefaultAsync(d => d.Id == certificate.DocId);
+                if (currentDocument != null)
+                {
+                    doc = currentDocument;
+                    isExistingDoc = true;
+                }
+                else
+                {
+                    doc = new DDocument();
+                    doc.Id = BaseEntity.GenerateNewId();
+                    doc.Name = "Свидетелство за съдимост";
+                }
 
-            DDocument doc = new DDocument();
+            }
+            else { 
+            doc = new DDocument();
             doc.Id = BaseEntity.GenerateNewId();
             doc.Name = "Свидетелство за съдимост";
+            }
 
-            DDocContent content = new DDocContent();
-            content.Id = BaseEntity.GenerateNewId();
+            DDocContent content;
+            if (!isExistingDoc||doc.DocContentId==null)
+            {
+                content = new DDocContent();
+                content.Id = BaseEntity.GenerateNewId();
+          
+            }
+            else
+            {
+                var currentContent = await dbContext.DDocContents.FirstOrDefaultAsync(d => d.Id == doc.DocContentId);
+                if (currentContent != null)
+                {
+                    content = currentContent;
+                    isExistingContent = true;
+                }
+                else
+                {
+                    content = new DDocContent();
+                    content.Id = BaseEntity.GenerateNewId();
+                }
+
+            }
             content.MimeType = "application/pdf";
             content.Content = contentCertificate;
             content.Bytes = content.Content.Length;
+
 
             doc.DocContentId = content.Id;
             doc.DocContent = content;
                   
             certificate.DocId = doc.Id;
             certificate.StatusCode = statusCode;
-            dbContext.DDocContents.Add(content);
-            dbContext.DDocuments.Add(doc);
+            if (isExistingContent)
+            {
+                dbContext.DDocContents.Update(content);
+            }
+            else
+            {
+                dbContext.DDocContents.Add(content);
+            }
+            if (isExistingDoc) {
+                dbContext.DDocuments.Update(doc);
+            }
+            else
+            {
+                dbContext.DDocuments.Add(doc);
+            }
             dbContext.ACertificates.Update(certificate);
 
             return contentCertificate;

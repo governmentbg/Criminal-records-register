@@ -51,6 +51,7 @@ import { AdministrationsExtResolver } from "./administrations-external/administr
 import { UsersExternalFormComponent } from "./users-external/users-external-form/users-external-form.component";
 import { UsersExternalResolver } from "./users-external/users-external-form/_data/users-external.resolver";
 import { BulletinEventsOverviewComponent } from "./bulletin-events/bulletin-events-overview/bulletin-events-overview.component";
+import { ApplicationWaitingPaymentComponent } from "./application/application-overview/application-waiting-payment/application-waiting-payment.component";
 
 const routes: Routes = [
   {
@@ -86,6 +87,11 @@ const routes: Routes = [
         component: ApplicationFormComponent,
         resolve: { dbData: ApplicationResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "applications-waiting-payment",
+        component: ApplicationWaitingPaymentComponent,
         // canActivate: [AuthGuard],
       },
       {

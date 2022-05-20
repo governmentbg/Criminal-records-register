@@ -68,7 +68,7 @@ namespace MJ_CAIS.Repositories.Impl
                             Sanctions = bulletin.BSanctions.Select(x => new SanctionEventDTO
                             {
                                 Id = x.Id,
-                                SuspentionDurationDays = x.SuspentionDurationDays,
+                                SuspentionDurationDays = x.SuspentionDurationDays, // todo без часове
                                 SuspentionDurationHours = x.SuspentionDurationHours,
                                 SuspentionDurationMonths = x.SuspentionDurationMonths,
                                 SuspentionDurationYears = x.SuspentionDurationYears,

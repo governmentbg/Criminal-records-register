@@ -69,7 +69,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public async Task GenerateCertificateFromApplication(AApplication application, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
+        public async Task GenerateCertificateFromApplication(AApplication application,int certificateValidityMonths =6, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
         {
             var pids = await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
             if (pids.Count > 0)
@@ -78,26 +78,26 @@ namespace MJ_CAIS.Services
                                  && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).ToListAsync();
                 if (bulletins.Count > 0)
                 {
-                    ProcessApplicationWithBulletins(application, bulletins, certificateWithBulletinStatusID);
+                    ProcessApplicationWithBulletins(application, bulletins, certificateWithBulletinStatusID, certificateValidityMonths);
                     return;
 
                 }
             }
-            ProcessApplicationWithoutBulletins(application, certificateWithoutBulletinStatusID);
+            ProcessApplicationWithoutBulletins(application, certificateWithoutBulletinStatusID, certificateValidityMonths);
 
         }
 
 
-        private void ProcessApplicationWithoutBulletins(AApplication application, string statusID)
+        private void ProcessApplicationWithoutBulletins(AApplication application, string statusID, int certificateValidityMonths)
         {
-            ACertificate cert = CreateCertificate(application.Id, statusID);
+            ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
 
         }
 
-        private ACertificate CreateCertificate(string applicationId, string certificateStatus)
+        private ACertificate CreateCertificate(string applicationId, string certificateStatus, int certificateValidityMonths)
         {
 
             ACertificate cert = new ACertificate();
@@ -107,13 +107,15 @@ namespace MJ_CAIS.Services
             //дали тук да се попълват?!
             cert.RegistrationNumber = Guid.NewGuid().ToString();
             cert.AccessCode1 = Guid.NewGuid().ToString();
+            cert.ValidFrom = DateTime.UtcNow;
+            cert.ValidTo = DateTime.UtcNow.AddMonths(certificateValidityMonths);
             // cert.AccessCode2 = Guid.NewGuid().ToString();
             return cert;
         }
 
-        private void ProcessApplicationWithBulletins(AApplication application, List<BBulletin> bulletins, string statusID)
+        private void ProcessApplicationWithBulletins(AApplication application, List<BBulletin> bulletins, string statusID, int certificateValidityMonths)
         {
-            ACertificate cert = CreateCertificate(application.Id, statusID);
+            ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
             int orderNumber = 0;
             cert.AAppBulletins= bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
             {
