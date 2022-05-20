@@ -7,7 +7,7 @@ steps:
   displayName: 'Download secure file'
   name: npmrc
   inputs:
-    secureFile: '7a753d55-2a9d-41f7-8c94-a894d64b99b3'
+    secureFile: '.npmrc'
 - task: PowerShell@2
   displayName: 'Copy secure file (.npmrc) to angular folder'
   inputs:
