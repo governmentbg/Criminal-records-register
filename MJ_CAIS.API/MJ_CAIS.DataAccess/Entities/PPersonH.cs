@@ -9,7 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             PPersonIdsHes = new HashSet<PPersonIdsH>();
         }
-        public string Id { get; set; } = null!;
+
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
@@ -22,7 +22,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
         public string? BirthCountryId { get; set; }
         public string? BirthCityId { get; set; }
         public string? MotherFirstname { get; set; }
@@ -33,6 +32,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FatherSurname { get; set; }
         public string? FatherFamilyname { get; set; }
         public string? FatherFullname { get; set; }
+        public string Id { get; set; } = null!;
         public string? FirstnameLat { get; set; }
         public string? SurnameLat { get; set; }
         public string? FamilynameLat { get; set; }

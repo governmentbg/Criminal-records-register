@@ -10,6 +10,7 @@ namespace MJ_CAIS.DataAccess.Entities
             AApplications = new HashSet<AApplication>();
             WApplications = new HashSet<WApplication>();
         }
+
         public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? Code { get; set; }
@@ -19,7 +20,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
         public string? Descr { get; set; }
 
         public virtual ICollection<AApplication> AApplications { get; set; }

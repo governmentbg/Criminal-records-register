@@ -18,7 +18,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
         public string? FirstnameLat { get; set; }
         public string? SurnameLat { get; set; }
         public string? FamilynameLat { get; set; }

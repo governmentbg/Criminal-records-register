@@ -1,4 +1,5 @@
 ﻿using MJ_CAIS.CodeGenerator.Utils;
+using MJ_CAIS.DataAccess;
 using System.Text;
 
 namespace MJ_CAIS.EntityTransform
@@ -56,7 +57,10 @@ namespace MJ_CAIS.EntityTransform
             var entityName = Path.GetFileNameWithoutExtension(path);
 
             var idText = "public string Id { get; set; }";
-            var hasId = lines.Any(x => x.Contains(idText) || x.Contains(Constants.BaseEntityName));
+            var versionText = "public decimal? Version { get; set; }";
+
+            var hasId = lines.Any(x => x.Contains(idText));
+            var hasVersion = lines.Any(x => x.Contains(versionText) || x.Contains(Constants.BaseEntityName));
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -69,20 +73,32 @@ namespace MJ_CAIS.EntityTransform
                         line = line.Substring(0, index).TrimEnd();
                     }
 
-                    var baseClassText = hasId ? Constants.BaseEntityName : "";
-                    var interfaces = nomenclatures.Contains(entityName) ? $", {Constants.NomenclatureInterfaceName}" : "";
-                    if (baseClassText == "" && interfaces == "")
+                    var extends = new List<string>();
+                    if (hasVersion)
                     {
-                        continue;
+                        extends.Add(Constants.BaseEntityName);
                     }
-                    else
+
+                    if (hasId)
                     {
-                        lines[i] = $"{line} : {baseClassText}{interfaces}";
-                        continue;
+                        extends.Add(nameof(IBaseIdEntity));
                     }
+
+                    if (nomenclatures.Contains(entityName))
+                    {
+                        extends.Add(Constants.NomenclatureInterfaceName);
+                    }
+
+                    if (extends.Any())
+                    {
+                        var extendsText = string.Join(", ", extends);
+                        lines[i] = $"{line} : {extendsText}";
+                    }
+
+                    continue;
                 }
 
-                if (line.Contains(idText))
+                if (line.Contains(versionText))
                 {
                     lines.RemoveAt(i);
                     i--;

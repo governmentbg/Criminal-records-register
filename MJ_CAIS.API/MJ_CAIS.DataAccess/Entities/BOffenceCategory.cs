@@ -9,6 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             BOffences = new HashSet<BOffence>();
         }
+
         public string Id { get; set; } = null!;
         public string? Name { get; set; }
         public string? Code { get; set; }
@@ -20,7 +21,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual ICollection<BOffence> BOffences { get; set; }
     }

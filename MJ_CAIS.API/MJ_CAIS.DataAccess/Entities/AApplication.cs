@@ -51,7 +51,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? ApplicationTypeId { get; set; }
         public string? CsAuthorityId { get; set; }
         public bool? IsLocal { get; set; }
-        public decimal? Version { get; set; }
         public string? PurposeId { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -71,15 +70,24 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? WApplicationId { get; set; }
         public string? FullnameLat { get; set; }
         public string? CsAuthorityBirthId { get; set; }
+        public string? Suid { get; set; }
+        public string? EgnId { get; set; }
+        public string? LnchId { get; set; }
+        public string? LnId { get; set; }
+        public string? SuidId { get; set; }
 
         public virtual AApplicationType? ApplicationType { get; set; }
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual GCsAuthority? CsAuthorityBirth { get; set; }
+        public virtual PPersonId? EgnNavigation { get; set; }
+        public virtual PPersonId? LnNavigation { get; set; }
+        public virtual PPersonId? LnchNavigation { get; set; }
         public virtual APaymentMethod? PaymentMethod { get; set; }
         public virtual APurpose? PurposeNavigation { get; set; }
         public virtual ASrvcResRcptMeth? SrvcResRcptMeth { get; set; }
+        public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
         public virtual ICollection<AAppPersAlias> AAppPersAliases { get; set; }
         public virtual ICollection<ACertificate> ACertificates { get; set; }

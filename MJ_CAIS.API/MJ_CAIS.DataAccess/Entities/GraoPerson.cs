@@ -9,7 +9,7 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             EEcrisIdentifications = new HashSet<EEcrisIdentification>();
         }
-        public string Id { get; set; } = null!;
+
         public string? Egn { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
@@ -20,6 +20,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? MothersNames { get; set; }
         public string? FathersNames { get; set; }
         public string? BirthplaceText { get; set; }
+        public string Id { get; set; } = null!;
 
         public virtual ICollection<EEcrisIdentification> EEcrisIdentifications { get; set; }
     }

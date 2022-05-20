@@ -22,8 +22,8 @@ namespace MJ_CAIS.DataAccess.Entities
             EWebRequests = new HashSet<EWebRequest>();
             PBulletinIds = new HashSet<PBulletinId>();
         }
+
         public string Id { get; set; } = null!;
-        public decimal? Version { get; set; }
         public string? CsAuthorityId { get; set; }
         public string? RegistrationNumber { get; set; }
         public decimal? SequentialIndex { get; set; }
@@ -95,6 +95,12 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
         public string? ConvRemarks { get; set; }
+        public string? Suid { get; set; }
+        public string? EgnId { get; set; }
+        public string? LnchId { get; set; }
+        public string? LnId { get; set; }
+        public string? SuidId { get; set; }
+        public string? IdDocNumberId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

@@ -21,6 +21,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PPersonIds = new HashSet<PPersonId>();
             WApplications = new HashSet<WApplication>();
         }
+
         public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Iso31662Number { get; set; }
@@ -36,7 +37,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
         public virtual ICollection<AApplication> AApplications { get; set; }

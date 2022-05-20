@@ -11,7 +11,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
         public string? CallContext { get; set; }
         public string? ApiServiceCallId { get; set; }
-        public decimal? Version { get; set; }
         public string? WebRequestId { get; set; }
         public string? RequestXml { get; set; }
         public string? ResponseXml { get; set; }

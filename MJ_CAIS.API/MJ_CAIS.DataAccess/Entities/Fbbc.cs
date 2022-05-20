@@ -10,6 +10,7 @@ namespace MJ_CAIS.DataAccess.Entities
             DDocuments = new HashSet<DDocument>();
             EEcrisReferences = new HashSet<EEcrisReference>();
         }
+
         public string Id { get; set; } = null!;
         public string? CountryId { get; set; }
         public string? DocTypeId { get; set; }
@@ -54,9 +55,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public decimal? SequentialIndex { get; set; }
         public DateTime? DestroyedDate { get; set; }
         public string? PersonId { get; set; }
-        public decimal? Version { get; set; }
         public string? StatusCode { get; set; }
         public decimal? OldId { get; set; }
+        public string? Suid { get; set; }
+        public string? SuidId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -65,6 +67,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual PPersonId? Person { get; set; }
         public virtual FbbcSanctType? SanctionType { get; set; }
         public virtual FbbcStatus? StatusCodeNavigation { get; set; }
+        public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<DDocument> DDocuments { get; set; }
         public virtual ICollection<EEcrisReference> EEcrisReferences { get; set; }
     }

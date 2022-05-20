@@ -10,6 +10,7 @@ namespace MJ_CAIS.DataAccess.Entities
             EEcrisMessageFromAuths = new HashSet<EEcrisMessage>();
             EEcrisMessageToAuths = new HashSet<EEcrisMessage>();
         }
+
         public string Id { get; set; } = null!;
         public string? EcrisTechnId { get; set; }
         public string? Iso31662Number { get; set; }
@@ -23,7 +24,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual ICollection<EEcrisMessage> EEcrisMessageFromAuths { get; set; }
         public virtual ICollection<EEcrisMessage> EEcrisMessageToAuths { get; set; }

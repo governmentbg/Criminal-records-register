@@ -43,7 +43,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? AddrEmail { get; set; }
         public string? Description { get; set; }
         public bool? IsLocal { get; set; }
-        public decimal? Version { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }

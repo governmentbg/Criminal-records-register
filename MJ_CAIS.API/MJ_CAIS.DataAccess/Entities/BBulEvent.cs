@@ -11,7 +11,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
         public string? Description { get; set; }
         public string? BulletinId { get; set; }
         public string? StatusCode { get; set; }

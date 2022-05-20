@@ -23,7 +23,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? FormOfGuiltId { get; set; }
-        public decimal? Version { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual BEcrisOffCategory? EcrisOffCat { get; set; }
