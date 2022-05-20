@@ -33,5 +33,5 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: MJ_CAIS.IdentityServer'
   inputs:
-    artifactName: 'MJ_CAIS.IdentityServer.dll'
+    artifactName: 'MJ_CAIS.IdentityServer'
     PathtoPublish: '$(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish\'
