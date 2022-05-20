@@ -12,6 +12,7 @@
     "start": "ng serve --port 4000 --proxy-config proxy.conf.json ",
     "build": "ng build",
     "build:prod": "npm run build -- --configuration production --aot",
+    "build:tl": "npm run build -- --configuration tl --aot",
     "test": "ng test",
     "test:coverage": "rimraf coverage && npm run test -- --code-coverage",
     "test-sample": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points --tsconfig \"./src/tsconfig.app.json\""
