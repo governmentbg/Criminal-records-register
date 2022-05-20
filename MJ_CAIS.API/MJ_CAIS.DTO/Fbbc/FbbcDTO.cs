@@ -47,7 +47,6 @@ namespace MJ_CAIS.DTO.Fbbc
         public decimal? SequentialIndex { get; set; }
         public DateTime? DestroyedDate { get; set; }
         public string? PersonId { get; set; }
-        public decimal? Version { get; set; }
         public AddressDTO Address { get; set; } = new AddressDTO();
         public string? StatusCode { get; set; }
         public decimal? OldId { get; set; }

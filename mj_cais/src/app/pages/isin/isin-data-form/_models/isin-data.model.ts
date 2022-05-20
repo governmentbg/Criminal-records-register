@@ -1,5 +1,6 @@
-export class IsinDataModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class IsinDataModel extends BaseModel {
   public msgDateTime: Date = null;
   public status: string = null;
   public identifier: string = null;
@@ -28,8 +29,8 @@ export class IsinDataModel {
   public sanctionEndDate: Date = null;
 
   constructor(init?: Partial<IsinDataModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.msgDateTime = init.msgDateTime ?? null;
       this.status = init.status ?? null;
       this.identifier = init.identifier ?? null;

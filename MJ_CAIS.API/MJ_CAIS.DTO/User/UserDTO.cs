@@ -12,7 +12,6 @@ namespace MJ_CAIS.DTO.User
         public string? Egn { get; set; }
         public string? CsAuthorityId { get; set; }
         public string? Position { get; set; }
-        public decimal? Version { get; set; }
         public MultipleChooseDTO Roles { get; set; } = new MultipleChooseDTO();
     }
 }

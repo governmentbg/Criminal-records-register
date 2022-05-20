@@ -1,9 +1,9 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { BaseForm } from "../../../../../models/common/base.form";
 
-export class PersonAliasForm {
+export class PersonAliasForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -13,8 +13,7 @@ export class PersonAliasForm {
   public typeCode: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
+    super();
     this.firstname = new FormControl(null, [Validators.max(200)]);
     this.surname = new FormControl(null, [Validators.max(200)]);
     this.familyname = new FormControl(null, [Validators.max(200)]);
@@ -25,6 +24,7 @@ export class PersonAliasForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,

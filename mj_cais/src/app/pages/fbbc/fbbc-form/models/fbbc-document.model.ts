@@ -1,7 +1,7 @@
 import { Byte } from "@angular/compiler/src/util";
+import { BaseModel } from "../../../../@core/models/common/base.model";
 
-export class FbbcDocumentModel {
-  public id: string = null;
+export class FbbcDocumentModel extends BaseModel {
   public name: string = null;
   public descr: string = null;
   public docTypeId: string = null;
@@ -10,8 +10,8 @@ export class FbbcDocumentModel {
   public documentContentId: string = null;
 
   constructor(init?: Partial<FbbcDocumentModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.name = init.name ?? null;
       this.descr = init.descr ?? null;
       this.docTypeId = init.docTypeId ?? null;

@@ -1,11 +1,11 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
 import { LookupForm } from "../../../../@core/components/forms/inputs/lookup/models/lookup.form";
+import { BaseForm } from "../../../../@core/models/common/base.form";
 
-export class FbbcForm {
+export class FbbcForm extends BaseForm {
   public group: FormGroup;
 
-  public id: FormControl;
   //public countryId: FormControl;
   public countryLookup: LookupForm;
   public docTypeId: FormControl;
@@ -55,7 +55,7 @@ export class FbbcForm {
   public oldId: FormControl;
 
   constructor() {
-    this.id = new FormControl(null);
+    super();
     // this.countryId = new FormControl(null);
     this.countryLookup = new LookupForm(false);
     this.docTypeId = new FormControl(null);
@@ -106,6 +106,7 @@ export class FbbcForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       // countryId: this.countryId,
       countryLookup: this.countryLookup.group,
       docTypeId: this.docTypeId,
@@ -149,10 +150,9 @@ export class FbbcForm {
       sequentialIndex: this.sequentialIndex,
       destroyedDate: this.destroyedDate,
       personId: this.personId,
-      version: this.version,
       address: this.address.group,
       statusCode: this.statusCode,
-      oldId: this.oldId
+      oldId: this.oldId,
     });
   }
 }

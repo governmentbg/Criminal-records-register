@@ -1,8 +1,8 @@
 import { AddressModel } from "../../../../@core/components/forms/address-form/_model/address.model";
 import { LookupModel } from "../../../../@core/components/forms/inputs/lookup/models/lookup.model";
+import { BaseModel } from "../../../../@core/models/common/base.model";
 
-export class FbbcModel {
-  public id: string = null;
+export class FbbcModel extends BaseModel {
   public countryLookup: LookupModel;
   public docTypeId: string = null;
   public sanctionTypeId: string = null;
@@ -52,9 +52,8 @@ export class FbbcModel {
   public oldId: number = null;
 
   constructor(init?: Partial<FbbcModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
-      // this.id = init.id ?? null;
       this.countryLookup = init.countryLookup ?? null;
       this.docTypeId = init.docTypeId ?? null;
       this.sanctionTypeId = init.sanctionTypeId ?? null;

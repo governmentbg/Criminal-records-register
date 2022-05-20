@@ -1,5 +1,6 @@
-export class BulletinEventsGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class BulletinEventsGridModel extends BaseModel {
   public bulletinId: string = null;
   public eventType: string = null;
   public statusCode: string = null;
@@ -10,9 +11,9 @@ export class BulletinEventsGridModel {
   public birthDate: Date = null;
   public personName: string = null;
   public description: string = null;
-  
+
   constructor(init?: Partial<BulletinEventsGridModel>) {
-    this.id = init?.id ?? null;
+    super(init);
     this.bulletinId = init?.bulletinId ?? null;
     this.eventType = init?.eventType ?? null;
     this.statusCode = init?.statusCode ?? null;

@@ -2,12 +2,12 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
 import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
+import { BaseForm } from "../../../../@core/models/common/base.form";
 import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin-status-type.constants";
 
-export class BulletinForm {
+export class BulletinForm extends BaseForm {
   public group: FormGroup;
 
-  public id: FormControl;
   public registrationNumber: FormControl;
   public csAuthorityName: FormControl;
   public sequentialIndex: FormControl;
@@ -48,6 +48,7 @@ export class BulletinForm {
   public decisionsTransactions: FormControl;
 
   constructor(bulletinStstus: string, isEdit: boolean, locked: boolean) {
+    super();
     this.initFormControls(locked);
     // няма рестрикции при добавяне на бюлетин
     // редакция на бюлетин от служирел БС преди актуализация
@@ -197,6 +198,7 @@ export class BulletinForm {
   private initGroup(): void {
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       registrationNumber: this.registrationNumber,
       csAuthorityName: this.csAuthorityName,
       sequentialIndex: this.sequentialIndex,

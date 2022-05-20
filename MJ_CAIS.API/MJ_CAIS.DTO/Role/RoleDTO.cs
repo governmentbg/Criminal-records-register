@@ -14,6 +14,5 @@ namespace MJ_CAIS.DTO.Role
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
     }
 }

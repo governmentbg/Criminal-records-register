@@ -1,5 +1,6 @@
-export class InternalRequestModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class InternalRequestModel extends BaseModel {
   public regNumber: string = null;
   public requestDate: Date = null;
   public description: string = null;
@@ -9,8 +10,8 @@ export class InternalRequestModel {
   public reqStatusName: string = null;
 
   constructor(init?: Partial<InternalRequestModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.regNumber = init.regNumber ?? null;
       this.requestDate = init.requestDate ?? null;
       this.description = init.description ?? null;

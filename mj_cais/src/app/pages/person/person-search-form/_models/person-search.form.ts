@@ -1,11 +1,11 @@
 import { FormControl, FormGroup } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
 import { DatePrecisionModelForm } from "../../../../@core/components/forms/inputs/date-precision/_models/date-precision.form";
+import { BaseForm } from "../../../../@core/models/common/base.form";
 
-export class PersonSearchForm {
+export class PersonSearchForm extends BaseForm {
   public group: FormGroup;
 
-  public id: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -17,7 +17,7 @@ export class PersonSearchForm {
   public birthPlace: AddressForm;
 
   constructor() {
-    this.id = new FormControl(null);
+    super();
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
     this.familyname = new FormControl(null);
@@ -30,6 +30,7 @@ export class PersonSearchForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,

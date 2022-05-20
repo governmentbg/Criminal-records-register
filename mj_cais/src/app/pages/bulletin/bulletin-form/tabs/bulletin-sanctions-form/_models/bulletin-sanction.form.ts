@@ -1,9 +1,10 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { BaseForm } from "../../../../../../@core/models/common/base.form";
 
-export class BulletinSanctionForm {
+export class BulletinSanctionForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
+
   public sanctCategoryId: FormControl;
   public sanctCategoryName: FormControl;
   public ecrisSanctCategId: FormControl;
@@ -22,8 +23,7 @@ export class BulletinSanctionForm {
   public probations: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
+    super();
     this.sanctCategoryId = new FormControl(null);
     this.sanctCategoryName = new FormControl(null);
     this.ecrisSanctCategId = new FormControl(null);
@@ -43,6 +43,7 @@ export class BulletinSanctionForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       sanctCategoryId: this.sanctCategoryId,
       sanctCategoryName: this.sanctCategoryName,
       ecrisSanctCategId: this.ecrisSanctCategId,
@@ -58,7 +59,7 @@ export class BulletinSanctionForm {
       suspentionDurationMonths: this.suspentionDurationMonths,
       suspentionDurationDays: this.suspentionDurationDays,
       probationsTransactions: this.probationsTransactions,
-      probations: this.probations
+      probations: this.probations,
     });
   }
 }

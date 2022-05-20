@@ -5,14 +5,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MJ_CAIS.WebPortal.Public.Models.Application
 {
-    public class ApplicationEditModel
+    public class ApplicationEditModel : BaseViewModel
     {
         public ApplicationEditModel()
         {
             this.PurposeTypes = new List<SelectListItem>();
         }
-
-        public string Id { get; set; }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblEgn))]
         public string? Egn { get; set; }
@@ -31,8 +29,6 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblPurpose))]
         public string? Purpose { get; set; }
-
-        public decimal? Version { get; set; }
 
         public List<SelectListItem> PurposeTypes { get; set; }
     }

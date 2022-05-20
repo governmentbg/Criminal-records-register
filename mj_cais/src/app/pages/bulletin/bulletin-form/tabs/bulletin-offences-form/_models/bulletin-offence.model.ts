@@ -1,8 +1,8 @@
 import { AddressModel } from "../../../../../../@core/components/forms/address-form/_model/address.model";
 import { LookupModel } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.model";
+import { BaseModel } from "../../../../../../@core/models/common/base.model";
 
-export class BulletinOffenceModel {
-  public id: string = null;
+export class BulletinOffenceModel extends BaseModel {
   public offenceCategory: LookupModel;
   public remarks: string = null;
   public ecrisOffCatId: string = null;
@@ -15,7 +15,7 @@ export class BulletinOffenceModel {
   public legalProvisions: string = null;
 
   constructor(init?: Partial<BulletinOffenceModel>) {
-    this.id = init?.id ?? null;
+    super(init);
     this.offenceCategory = init?.offenceCategory ?? null;
     this.remarks = init?.remarks ?? null;
     this.ecrisOffCatId = init?.ecrisOffCatId ?? null;

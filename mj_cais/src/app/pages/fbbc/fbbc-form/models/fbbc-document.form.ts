@@ -1,9 +1,10 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { BaseForm } from "../../../../@core/models/common/base.form";
 
-export class FbbcDocumentForm {
+export class FbbcDocumentForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
+
   public fbbcId: FormControl;
   public name: FormControl;
   public descr: FormControl;
@@ -14,9 +15,8 @@ export class FbbcDocumentForm {
   public mimeType: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
+    super();
     var documentContentGuid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
     this.name = new FormControl(null, [Validators.required]);
     this.descr = new FormControl(null);
     this.docTypeId = new FormControl(null);
@@ -29,6 +29,7 @@ export class FbbcDocumentForm {
 
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       name: this.name,
       descr: this.descr,
       docTypeId: this.docTypeId,

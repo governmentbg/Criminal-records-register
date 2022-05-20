@@ -1,5 +1,6 @@
-export class BulletinGridModel {
-  public id: string = null;
+import { BaseModel } from "../../../../@core/models/common/base.model";
+
+export class BulletinGridModel extends BaseModel {
   public registrationNumber: string = null;
   public firstName: string = null;
   public surName: string = null;
@@ -17,8 +18,8 @@ export class BulletinGridModel {
   public bulletinType: string = null;
 
   constructor(init?: Partial<BulletinGridModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.registrationNumber = init.registrationNumber ?? null;
       this.firstName = init.firstName ?? null;
       this.surName = init.surName ?? null;

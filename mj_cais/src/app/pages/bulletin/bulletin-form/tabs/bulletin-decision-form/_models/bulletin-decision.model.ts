@@ -1,5 +1,6 @@
-export class BulletinDecisionModel {
-  public id: string = null;
+import { BaseModel } from "../../../../../../@core/models/common/base.model";
+
+export class BulletinDecisionModel extends BaseModel {
   public decisionChTypeId: string = null;
   public decisionChTypeName: string = null;
   public decisionEcli: string = null;
@@ -14,8 +15,8 @@ export class BulletinDecisionModel {
   public changeDate: Date = null;
 
   constructor(init?: Partial<BulletinDecisionModel>) {
+    super(init);
     if (init) {
-      this.id = init.id ?? null;
       this.decisionChTypeId = init.decisionChTypeId ?? null;
       this.decisionChTypeName = init.decisionChTypeName ?? null;
       this.decisionEcli = init.decisionEcli ?? null;

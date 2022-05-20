@@ -10,7 +10,6 @@ namespace MJ_CAIS.DTO.ExtAdministration
     {
         public string? Name { get; set; }
         public string? Descr { get; set; }
-        public decimal? Version { get; set; }
 
     }
 }

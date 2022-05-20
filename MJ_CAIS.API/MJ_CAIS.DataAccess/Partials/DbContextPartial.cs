@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,14 +58,64 @@ namespace MJ_CAIS.DataAccess
         /// <returns></returns>
         public override int SaveChanges()
         {
-            this.SimpleAudit();
-            return base.SaveChanges();
+            IDbContextTransaction dbTransaction = null;
+            try
+            {
+                dbTransaction = this.Database.BeginTransaction();
+
+                var trackedEntities = this.ChangeTracker.Entries()
+                    .Where(t => t.State == EntityState.Added || t.State == EntityState.Modified)
+                    .ToList();
+
+                this.SimpleAudit();
+                var result = base.SaveChanges();
+
+                this.UpdateVersions(trackedEntities);
+                base.SaveChanges();
+
+                dbTransaction.Commit();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                dbTransaction.Rollback();
+                throw;
+            }
+            finally
+            {
+                dbTransaction.Dispose();
+            }
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            this.SimpleAudit();
-            return base.SaveChangesAsync(cancellationToken);
+            IDbContextTransaction dbTransaction = null;
+            try
+            {
+                dbTransaction = await this.Database.BeginTransactionAsync(cancellationToken);
+
+                var trackedEntities = this.ChangeTracker.Entries()
+                    .Where(t => t.State == EntityState.Added || t.State == EntityState.Modified)
+                    .ToList();
+
+                this.SimpleAudit();
+                var result = await base.SaveChangesAsync(cancellationToken);
+
+                this.UpdateVersions(trackedEntities);
+                await base.SaveChangesAsync(cancellationToken);
+
+                await dbTransaction.CommitAsync(cancellationToken);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                await dbTransaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+            finally
+            {
+                await dbTransaction.DisposeAsync();
+            }
         }
 
         private void SimpleAudit()
@@ -87,6 +139,20 @@ namespace MJ_CAIS.DataAccess
                 {
                     entity.Property("UpdatedBy").CurrentValue = CurrentUserId;
                     entity.Property("UpdatedOn").CurrentValue = DateTime.UtcNow;
+                }
+            }
+        }
+
+        private void UpdateVersions(List<EntityEntry> trackedEntities)
+        {
+            foreach (var entity in trackedEntities)
+            {
+                if (entity.Entity.GetType().GetProperty("Version") != null)
+                {
+                    var version = entity.Property("Version").CurrentValue;
+                    decimal nextVersion = version == null ? 1 : Convert.ToDecimal(version) + 1;
+
+                    entity.Property("Version").CurrentValue = nextVersion;
                 }
             }
         }

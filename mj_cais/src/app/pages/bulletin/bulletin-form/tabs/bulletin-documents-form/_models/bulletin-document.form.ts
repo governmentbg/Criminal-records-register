@@ -1,10 +1,11 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
+import { BaseForm } from "../../../../../../@core/models/common/base.form";
 import { DocumentTypeEnum } from "./document-type-constants";
 
-export class BulletinDocumentForm {
+export class BulletinDocumentForm extends BaseForm {
   public group: FormGroup;
-  public id: FormControl;
+
   public bulletinId: FormControl;
   public name: FormControl;
   public descr: FormControl;
@@ -16,9 +17,8 @@ export class BulletinDocumentForm {
   public createdOn: FormControl;
 
   constructor() {
-    var guid = Guid.create().toString();
+    super();
     var documentContentGuid = Guid.create().toString();
-    this.id = new FormControl(guid, [Validators.required]);
     this.name = new FormControl(null, [
       Validators.required,
       Validators.maxLength(200),
@@ -36,6 +36,7 @@ export class BulletinDocumentForm {
     this.createdOn = new FormControl(Date.now);
     this.group = new FormGroup({
       id: this.id,
+      version: this.version,
       name: this.name,
       descr: this.descr,
       docTypeId: this.docTypeId,
@@ -43,7 +44,7 @@ export class BulletinDocumentForm {
       documentContent: this.documentContent,
       documentContentId: this.documentContentId,
       mimeType: this.mimeType,
-      createdOn:this.createdOn
+      createdOn: this.createdOn,
     });
   }
 }
