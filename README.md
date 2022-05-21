@@ -1,12 +1,10 @@
-# Министерство на правосъдието - ЦАИС "Съдебен статус"
-
-## [DEV приложение в ТЛ](https://mj-cais.technologica.com/)
+# [DEV приложение в ТЛ](https://mj-cais.technologica.com/)
 Необходимо е в hosts файла да се съдържащ следния запис (и VPN към TL):
 ```
 172.31.12.87 mj-cais.technologica.com
 ```
 
-## Builds
+# Builds
 
 |Project|Status|
 |--------|------|
