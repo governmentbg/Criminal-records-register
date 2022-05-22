@@ -2,7 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MJ_CAIS.IdentityServer.CAISAppCredentials;
+using Oracle.EntityFrameworkCore.Infrastructure;
+using Serilog;
+using System;
 using System.ComponentModel.Composition;
+using System.Linq;
 using TechnoLogica.Authentication.Common;
 
 namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
@@ -12,8 +16,10 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
     {
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<CaisDbContext>(options =>
-                 options.UseOracle(configuration.GetConnectionString("CaisConnectionString"), opt => opt.UseOracleSQLCompatibility("11")));
+            var connectionString = configuration.GetConnectionString("CaisConnectionString");
+            var oracleCompatibility = configuration.GetValue<string>("OracleSQLCompatibility");
+
+            services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
             services.AddTransient<IProfileClientService, CAISAppProfileService>();
             services.AddTransient<IProfileClientService, LocalAdminProfileService>();

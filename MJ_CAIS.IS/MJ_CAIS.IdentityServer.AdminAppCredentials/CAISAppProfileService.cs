@@ -76,22 +76,24 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
         {
             Log.Logger.Information(context.Caller);
             var userID = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "sub").Value;
-            var user =
-                CaisDbContext.GUsers
-                .AsNoTracking()
-                .Include(u => u.GUserRoles)
-                .Where(u => u.Id == userID)
-                .Select(u => new
-                {
-                    u.Firstname,
-                    u.Surname,
-                    u.Familyname,
-                    u.CsAuthorityId,
-                    u.Position,
-                    u.Egn,
-                    Roles = u.GUserRoles.Select( r => r.Role.Code).Distinct()
-                })
-                .FirstOrDefault();
+            var userInfo =
+
+                (from u in CaisDbContext.GUsers
+                 join ur in CaisDbContext.GUserRoles on u.Id equals ur.UserId
+                 join r in CaisDbContext.GRoles on ur.RoleId equals r.Id
+                 where u.Id == userID
+                 select new
+                 {
+                     u.Firstname,
+                     u.Surname,
+                     u.Familyname,
+                     u.CsAuthorityId,
+                     u.Position,
+                     u.Egn,
+                     RoleCode = r.Code
+                 }).ToList();
+
+            var user = userInfo.FirstOrDefault();
             if (user != null)
             {
                 context.IssuedClaims.Add(new Claim("Name", $"{user.Firstname} {user.Familyname}"));
@@ -99,7 +101,7 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
                 {
                     context.IssuedClaims.Add(new Claim("CsAuthorityId", user.CsAuthorityId));
                 }
-                foreach ( var role in user.Roles)
+                foreach ( var role in userInfo.Select( u => u.RoleCode))
                 { 
                     context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
                 }

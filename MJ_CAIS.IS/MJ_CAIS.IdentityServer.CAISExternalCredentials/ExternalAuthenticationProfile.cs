@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Oracle.EntityFrameworkCore.Infrastructure;
+using Serilog;
+using System;
 using System.ComponentModel.Composition;
 using TechnoLogica.Authentication.Common;
 
@@ -11,8 +14,10 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
     {
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<CaisDbContext>(options =>
-                 options.UseOracle(configuration.GetConnectionString("CaisConnectionString"), opt => opt.UseOracleSQLCompatibility("11")));
+            var connectionString = configuration.GetConnectionString("CaisConnectionString");
+            var oracleCompatibility = configuration.GetValue<string>("OracleSQLCompatibility");
+
+            services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
             services.AddTransient<IProfileClientService, ExternalProfileService>();
             services.AddTransient<IProfileClientService, LocalExternalProfileService>();

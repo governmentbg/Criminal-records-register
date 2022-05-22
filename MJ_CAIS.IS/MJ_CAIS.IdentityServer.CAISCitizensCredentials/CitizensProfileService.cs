@@ -88,13 +88,15 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
                 {
                     u.Name,
                     u.Egn,
-                    u.Email
+                    u.Email,
+                    u.Id
                 })
                 .FirstOrDefault();
             if (user != null)
             {
-                context.IssuedClaims.Add(new Claim("FullName", user.Name));
-                context.IssuedClaims.Add(new Claim("EGN", user.Egn));
+                context.IssuedClaims.Add(new Claim("EgnIdentifier", user.Egn));
+                context.IssuedClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));                
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
             }
         }

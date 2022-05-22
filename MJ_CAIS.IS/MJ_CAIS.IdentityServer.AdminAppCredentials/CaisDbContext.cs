@@ -24,16 +24,9 @@ namespace MJ_CAIS.IdentityServer.CAISAppCredentials
         public virtual DbSet<GUserRoles> GUserRoles { get; set; }
         public virtual DbSet<GUsers> GUsers { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:DefaultSchema", "MJ_CAIS");
+            modelBuilder.HasDefaultSchema("MJ_CAIS");
 
             modelBuilder.Entity<GRoles>(entity =>
             {
