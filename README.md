@@ -1,7 +1,11 @@
-# [DEV приложение в ТЛ](https://mj-cais.technologica.com/)
-Необходимо е в hosts файла да се съдържащ следния запис (и VPN към TL):
+# DEV приложения в ТЛ
+
+## [https://mj-cais.technologica.com/](https://mj-cais.technologica.com/)
+## [https://mj-cais-public.technologica.com/](https://mj-cais-public.technologica.com/)
+Необходимо е в hosts файла да се съдържа следния запис (и VPN към TL):
 ```
 172.31.12.87 mj-cais.technologica.com
+172.31.12.87 mj-cais-public.technologica.com
 ```
 
 # Builds
