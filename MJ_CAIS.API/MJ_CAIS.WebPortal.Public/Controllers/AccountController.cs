@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -22,7 +23,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [RedirectAuthenticatedRequests("Index", "Application")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Login(string returnUrl = null)
@@ -63,13 +64,18 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             return View();
         }
 
-        [HttpPost]
+
+            [HttpPost]
         public async Task<ActionResult> LogOff()
         {
             // Clear the existing external cookie
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return new SignOutResult(new[]
+                    {
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        OpenIdConnectDefaults.AuthenticationScheme
+                    },
+                    new AuthenticationProperties() { RedirectUri = "/"}
+                );
         }
 
         private string GetLocalUrl(string returnUrl)

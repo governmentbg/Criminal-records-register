@@ -30,7 +30,7 @@ namespace MJ_CAIS.Web
                 {
                     options.Authority = configuration.GetValue<string>("Authentication:TokenIssuer");
                     options.ApiName = configuration.GetValue<string>("Authentication:APIName");
-                    options.ApiSecret = configuration.GetValue<string>("Authentication:APISecret"); ;
+                    options.ApiSecret = configuration.GetValue<string>("Authentication:APISecret");
                     options.EnableCaching = false; // Do not cache credentials - always rely on identity server
                 });
             IdentityModelEventSource.ShowPII = true;
