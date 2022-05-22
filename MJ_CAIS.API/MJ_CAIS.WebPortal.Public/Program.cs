@@ -35,6 +35,7 @@ namespace MJ_CAIS.WebPortal.Public
                     options.Authority = configuration.GetValue<string>("Authentication:TokenIssuer");
                     options.ClientId = configuration.GetValue<string>("Authentication:ClientId");
                     options.ClientSecret = configuration.GetValue<string>("Authentication:ClientSecret");
+                    options.AuthenticationMethod = OpenIdConnectRedirectBehavior.FormPost;
 
                     // code flow + PKCE (PKCE is turned on by default)
                     options.ResponseType = "code";
