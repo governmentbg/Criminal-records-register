@@ -19,7 +19,7 @@ export class PagesMenu {
     });
   }
 
-  hasRole(roles: string[], role: string): boolean {
+  hasNoRole(roles: string[], role: string): boolean {
     return roles.indexOf(role) === -1;
   }
 
@@ -135,7 +135,7 @@ export class PagesMenu {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
         expanded: true,
-        hidden: this.hasRole(roles, 'Admin') && this.hasRole(roles, 'GlobalAdmin'),
+        hidden: this.hasNoRole(roles, 'Admin') && this.hasNoRole(roles, 'GlobalAdmin'),
         children: [
           {
             title: "Потребители",
@@ -144,17 +144,17 @@ export class PagesMenu {
           {
             title: "Външни потребители",
             link: "/pages/users-external",
-            hidden: this.hasRole(roles, 'GlobalAdmin')
+            hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
           {
             title: "Външни администрации",
             link: "/pages/administrations-ext",
-            hidden: this.hasRole(roles, 'GlobalAdmin')
+            hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
           {
             title: "Публични потребители",
             link: "/pages/users-public",
-            hidden: this.hasRole(roles, 'GlobalAdmin')
+            hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
         ],
       },

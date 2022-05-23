@@ -275,13 +275,11 @@ namespace MJ_CAIS.Services
         {
             // add person with pids
             var person = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
-            person.CreatedOn = DateTime.UtcNow; // todo: remove
             person.Id = personId;
             person.PPersonIds = pids;
 
             // add person history object with pids
             var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
-            personH.CreatedOn = DateTime.UtcNow; // todo: remove
             personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
             dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);

@@ -19,8 +19,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Bulletin.Id));
 
             CreateMap<BInternalRequest, InternalRequestDTO>()
-             .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name));
-
+             .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
+             .ForMember(d => d.BulletinVersion, opt => opt.MapFrom(src => src.Bulletin.Version))
+             .ForMember(d => d.BulletinStatusId, opt => opt.MapFrom(src => src.Bulletin.StatusId));
+             
             CreateMap<BBulletin, BulletinPersonInfoModelDTO>()
                 .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(d => d.BulletinReceivedDate, opt => opt.MapFrom(src => src.BulletinReceivedDate))

@@ -129,26 +129,22 @@ namespace MJ_CAIS.Services
             {
                 var bulletinDTO = bulletins.First();
 
-                if (!bulletinDTO.Decisions.Any(x=> x.Type == "DCH-00-N")) return appliedChanges;
+                if (!bulletinDTO.Decisions.Any(x => x.Type == "DCH-00-N")) return appliedChanges;
 
-                // todo: би трябвало наказанието да е едно ?? 
+                // todo: 
                 var sanctionLos = bulletinDTO.Sanctions
-                    .Where(x => x.Type == "nkz_lishavane_ot_svoboda")
-                    .ToList();
-                var hasSanctionLos = sanctionLos.Any();
-                var losIdInPeriod = hasSanctionLos && sanctionLos
-                    .All(x => IsInDurationInYears(x.SuspentionDuration, 3));
+                    .FirstOrDefault(x => x.Type == "nkz_lishavane_ot_svoboda");
 
-                var sanctionProb = bulletinDTO.Sanctions
-                    .Where(x => x.Type == "nkz_lprobacia");
-                var hasSanctionProd = sanctionProb.Any();
-                var propbIsInPeriod = hasSanctionProd && sanctionProb
-                    .SelectMany(x => x.PropbationDurations)
+                var losIdInPeriod = sanctionLos != null && IsInDurationInYears(sanctionLos.SuspentionDuration, 3);
+
+                var sanctionProb = bulletinDTO.Sanctions.FirstOrDefault(x => x.Type == "nkz_lprobacia");
+
+                var propbIsInPeriod = sanctionProb != null && sanctionProb.PropbationDurations
                     .All(x => IsInDurationInYears(x, 3));
 
                 // first bulletin for the person in which probation OR imprisonment is introduced up to three years
-                var isSuccess = (losIdInPeriod && !hasSanctionProd) ||
-                                (propbIsInPeriod && !hasSanctionLos);
+                var isSuccess = (losIdInPeriod && sanctionProb == null) ||
+                                (propbIsInPeriod && sanctionLos == null);
                 if (isSuccess)
                 {
                     var endDate = bulletinDTO
@@ -160,12 +156,37 @@ namespace MJ_CAIS.Services
                     if (endDate != null)
                     {
                         endDate = endDate.Value.AddYears(3);
+
                         await SaveRehabilitationDataAsync(currentAttachedBull, endDate);
+                        appliedChanges = true;
+                    }
+                }
+
+                var bulletinWithRehabilitationDate = bulletins
+                    .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                    .ToList();
+
+                // да не се проверяват останалите варианти за реабилитация
+                // в случай че има повече от един бюлетин
+                // но за нито един няма предполагаема дата на реабилитация 
+                if (bulletinWithRehabilitationDate.Count == 0) return true;
+
+                var anotherBulls = bulletins.Where(x => x.Id != currentAttachedBull.Id);
+
+                var hasSanctionOfType = anotherBulls.SelectMany(x => x.Sanctions)
+                       .Any(s => s.Type == "nkz_dojiv_zatvor" || s.Type == "nkz_dojiv_zatvor_bez_zamiana" || s.Type == "nkz_lishavane_ot_svoboda");
+
+                foreach (var bull in anotherBulls)
+                {                 
+                    if (hasSanctionOfType && bull.RehabilitationDate.HasValue)
+                    {
+                        _rehabilitationRepository.UpdateRehabilitationData(bull.Id, null, null);
                         appliedChanges = true;
                     }
                 }
             }
 
+            await _rehabilitationRepository.SaveChangesAsync();
             return appliedChanges;
         }
 
@@ -186,7 +207,6 @@ namespace MJ_CAIS.Services
                     OldStatusCode = bulletin.StatusId,
                     NewStatusCode = status,
                     EntityState = EntityStateEnum.Added,
-                    CreatedOn = DateTime.UtcNow,
                 };
 
                 dbContext.ApplyChanges(satusHistory, new List<IBaseIdEntity>());
