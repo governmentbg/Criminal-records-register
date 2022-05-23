@@ -10,6 +10,8 @@ trigger:
     include:
     - MJ_CAIS.IS
 steps:
+- checkout: self
+  persistCredentials: true
 - task: NuGetCommand@2
   inputs:
     command: 'restore'
