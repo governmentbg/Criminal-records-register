@@ -10,13 +10,11 @@ export class BulletinStatusHistoryModel extends BaseModel {
 
   constructor(init?: Partial<BulletinStatusHistoryModel>) {
     super(init);
-    if (init) {
-      this.oldStatus = init.oldStatus ?? null;
-      this.newStatus = init.newStatus ?? null;
-      this.createdOn = init.createdOn ?? null;
-      this.createdBy = init.createdBy ?? null;
-      this.locked = init.locked ?? null;
-      this.descr = init.descr ?? null;
-    }
+    this.oldStatus = init?.oldStatus ?? null;
+    this.newStatus = init?.newStatus ?? null;
+    this.createdOn = init?.createdOn ?? null;
+    this.createdBy = init?.createdBy ?? null;
+    this.locked = init?.locked ?? null;
+    this.descr = init?.descr ?? null;
   }
 }

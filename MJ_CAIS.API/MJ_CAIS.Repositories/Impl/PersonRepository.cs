@@ -231,7 +231,6 @@ namespace MJ_CAIS.Repositories.Impl
                     Issuer = issuerType,
                     EntityState = EntityStateEnum.Added,
                     PersonId = personId,
-                    CreatedOn = DateTime.Now,
                 };
             }
 

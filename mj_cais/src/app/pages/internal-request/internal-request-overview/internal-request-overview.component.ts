@@ -19,20 +19,31 @@ export class InternalRequestOverviewComponent extends RemoteGridWithStatePersist
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("internal-requests-search", service, injector);   
+    super("internal-requests-search", service, injector);
   }
 
   public showEditButton = false;
   public IRStatusTypeEnum = IRStatusTypeEnum;
-  
+  public hideStatus: boolean = true;
+  public reqTypeText: string = 'Нови';
+
   ngOnInit() {
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
-    if (bulletinId) {
-      this.service.updateUrl(`internal-requests?bulletinId=${bulletinId}`);
-    }else{
-      this.service.updateUrl(`internal-requests`);
-      this.showEditButton = true;
-    }
+    this.showEditButton = bulletinId ? false : true;
+    this.service.updateStatusUrl(IRStatusTypeEnum.New, bulletinId);
+    super.ngOnInit();
+  }
+
+  onShowAllRequests(isChacked: boolean) {
+    this.hideStatus = !isChacked;
+    this.reqTypeText = isChacked ? 'Всички' : 'Нови';
+
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    let status = isChacked ? null : IRStatusTypeEnum.New;
+
+    this.showEditButton = bulletinId ? false : true;
+    this.service.updateStatusUrl(status, bulletinId);
+
     super.ngOnInit();
   }
 }
