@@ -30,6 +30,8 @@ steps:
         $productVersion = Get-Item $(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish\MJ_CAIS.IdentityServer.dll |Select-Object -ExpandProperty VersionInfo|Select-Object -ExpandProperty ProductVersion
         Remove-Item $(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish\*.ver        
         New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.IS\MJ_CAIS.IdentityServer\bin\release\publish -Name "$productVersion.ver" -ItemType "file"
+        git tag IdentityServer-$productVersion
+        git push origin IdentityServer-$productVersion
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: MJ_CAIS.IdentityServer'
   inputs:

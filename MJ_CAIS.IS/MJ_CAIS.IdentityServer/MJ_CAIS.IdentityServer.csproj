@@ -4,10 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Deterministic>false</Deterministic>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
         
   <ItemGroup>
