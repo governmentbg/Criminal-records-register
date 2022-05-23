@@ -22,8 +22,12 @@ export class InternalRequestFormComponent
   implements OnInit
 {
   private readonly PREVIEW_ACTION = "preview";
+  
   private readonly BULLETIN_OVERVIEW_URL =
     "/pages/bulletins-for-rehabilitation";
+    private readonly INTERNAL_REQUEST_OVERVIEW_URL =
+    "/pages/internal-requests";
+
   public isCreate: boolean;
 
   constructor(service: InternalRequestService, public injector: Injector) {
@@ -54,7 +58,11 @@ export class InternalRequestFormComponent
 
   //override submit function
   onSubmitSuccess(data: any) {
-    this.router.navigateByUrl(this.BULLETIN_OVERVIEW_URL);
+    if(!this.isEdit()){
+      this.router.navigateByUrl(this.BULLETIN_OVERVIEW_URL);
+    }else{
+      this.router.navigateByUrl(this.INTERNAL_REQUEST_OVERVIEW_URL);
+    }
   }
   
   buildFormImpl(): FormGroup {

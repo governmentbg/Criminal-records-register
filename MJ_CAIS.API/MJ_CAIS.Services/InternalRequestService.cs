@@ -35,13 +35,18 @@ namespace MJ_CAIS.Services
         /// <param name="aQueryOptions"></param>
         /// <param name="bulletinId"></param>
         /// <returns></returns>
-        public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? bulletinId)
+        public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? statusId, string? bulletinId)
         {
             var entityQuery = this.GetSelectAllQueriable();
 
             if (!string.IsNullOrEmpty(bulletinId))
             {
                 entityQuery = entityQuery.Where(x => x.BulletinId == bulletinId);
+            }
+
+            if (!string.IsNullOrEmpty(statusId))
+            {
+                entityQuery = entityQuery.Where(x => x.ReqStatusCode == statusId);
             }
 
             var baseQuery = entityQuery.ProjectTo<InternalRequestGridDTO>(mapperConfiguration);
@@ -84,9 +89,10 @@ namespace MJ_CAIS.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 BulletinId = entity.BulletinId,
-                OldStatusCode = BulletinConstants.Status.ForRehabilitation,
+                OldStatusCode = aInDto.BulletinStatusId,
                 NewStatusCode = bulletinStatus,
                 EntityState = EntityStateEnum.Added,
+                Locked = true,
             };
 
             bulletin.BInternalRequests = new List<BInternalRequest>() { entity };

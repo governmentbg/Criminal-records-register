@@ -8,7 +8,8 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IInternalRequestService : IBaseAsyncService<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, BInternalRequest, string>
     {
-        Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? bulletinId);
+        Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? statusId, string? bulletinId);
+
         Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId);
     }
 }
