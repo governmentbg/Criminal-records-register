@@ -49,9 +49,9 @@ namespace AutomaticStepsExecutor
 
                 using (host)
                 {
-                    IPrintDocumentService s = host.Services.GetService<IPrintDocumentService>();
-                    var resultPdf = await s.PrintApplication("aaaa-bbbb-cccc");
-                    System.IO.File.WriteAllBytes("hello.pdf", resultPdf);
+                   // IPrintDocumentService s = host.Services.GetService<IPrintDocumentService>();
+                   // var resultPdf = await s.PrintApplication("aaaa-bbbb-cccc");
+                   // System.IO.File.WriteAllBytes("hello.pdf", resultPdf);
 
 
                     IAutomaticStepService service = (IAutomaticStepService)host.Services.GetService(typeofExecutor);
