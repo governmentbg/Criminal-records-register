@@ -52,13 +52,13 @@ namespace MJ_CAIS.ExternalWebServices
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {certificateID} does not exist.");
             }
-            //todo:get patterns for mail:
+            //todo:get patterns for mail if needed:
             return await CreateCertificate(certificate, null, null, await GetWebPortalAddress());
 
         }
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string? webportalUrl = null, string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
-            , string statusCodeCertificateForDeliveryn = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+            , string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
             , string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
         {
 
@@ -148,25 +148,9 @@ namespace MJ_CAIS.ExternalWebServices
                 else
                 {
                     //todo: за доставка
-                    certificate.StatusCode = statusCodeCertificateForDeliveryn;
+                    certificate.StatusCode = statusCodeCertificateForDelivery;
 
-                    if (certificate.Application.SrvcResRcptMeth?.Code == ApplicationConstants.ReceivingMethods.EDelivery)
-                    {
-                        EEdeliveryMsg msg = new EEdeliveryMsg();
-                        msg.Id = BaseEntity.GenerateNewId();
-                        msg.EmailAddress = certificate.Application.Email;
-                        msg.CertificateId = certificate.Id;
-                        msg.Certificate = certificate;
-                        dbContext.EEdeliveryMsgs.Add(msg);
-                    }
-
-                    EEmailEvent mail = new EEmailEvent();
-                    mail.Id = BaseEntity.GenerateNewId();
-                    mail.EmailAddress = certificate.Application.Email;
-                    mail.Body = GetBodyForCertificateMail(certificate, mailBodyPattern);
-                    mail.Subject = GetSubjectForCertificateMail(certificate, mailSubjectPattern);
-                    mail.CertificateId = certificate.Id;
-                    dbContext.EEmailEvents.Add(mail);
+                    await DeliverCertificateAsync(certificate, mailBodyPattern,mailSubjectPattern,webportalUrl);                 
 
                 }
             }
@@ -193,14 +177,44 @@ namespace MJ_CAIS.ExternalWebServices
 
         }
 
-        private string? GetBodyForCertificateMail(ACertificate certificate, string mailBodyPattern)
+        public async Task DeliverCertificateAsync(ACertificate certificate, string mailBodyPattern, string mailSubjectPattern,string webportalUrl)
         {
-            throw new NotImplementedException();
+            if (certificate.Application.SrvcResRcptMeth?.Code == ApplicationConstants.ReceivingMethods.EDelivery)
+            {
+                EEdeliveryMsg msg = new EEdeliveryMsg();
+                msg.Id = BaseEntity.GenerateNewId();
+                msg.EmailAddress = certificate.Application.Email;
+                msg.CertificateId = certificate.Id;
+                msg.Certificate = certificate;
+                dbContext.EEdeliveryMsgs.Add(msg);
+            }
+
+            EEmailEvent mail = new EEmailEvent();
+            mail.Id = BaseEntity.GenerateNewId();
+            mail.EmailAddress = certificate.Application.Email;
+            mail.Body = await GetBodyForCertificateMailAsync(certificate, mailBodyPattern, webportalUrl);
+            mail.Subject = GetSubjectForCertificateMail(certificate, mailSubjectPattern);
+            mail.CertificateId = certificate.Id;
+            dbContext.EEmailEvents.Add(mail);
+        }
+
+        private async Task<string?> GetBodyForCertificateMailAsync(ACertificate certificate, string mailBodyPattern, string webportalUrl)
+        {
+            Dictionary<string, string> placeholdersAndValues = new Dictionary<string, string>();
+            placeholdersAndValues.Add("application_registration_number", certificate.Application.RegistrationNumber);
+            string cerificateDownloadUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl); 
+            placeholdersAndValues.Add("certificate_download_url", cerificateDownloadUrl);
+            return ReplaceTextInTemplate(mailBodyPattern, placeholdersAndValues);
+
         }
 
         private string? GetSubjectForCertificateMail(ACertificate certificate, string mailSubjectPattern)
         {
-            throw new NotImplementedException();
+            Dictionary<string, string> placeholdersAndValues = new Dictionary<string, string>();
+
+            placeholdersAndValues.Add("application_registration_number", certificate.Application.RegistrationNumber);
+
+            return ReplaceTextInTemplate(mailSubjectPattern, placeholdersAndValues);
         }
 
         private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, JasperReportsNames reportName)
@@ -236,9 +250,40 @@ namespace MJ_CAIS.ExternalWebServices
             }
             return $"{url}/{CertificateConstants.UrlsInPublicSites.VIEW_CERTIFICATE_URL}/{accessCode1}";
         }
+
+        private async Task<string> GetURLForAccessAsync(string? accessCode1, string webportalUrl)
+        {
+            var url = webportalUrl;
+            if (string.IsNullOrEmpty(webportalUrl))
+            {
+                url = await GetWebPortalAddress();
+                if (url == null)
+                {
+                    //todo:resources & EH
+                    throw new Exception("Web portal URL is not set.");
+                }
+            }
+            return $"{url}/{CertificateConstants.UrlsInPublicSites.GET_CERTIFICATE_URL}/{accessCode1}";
+        }
         public async Task<string?> GetWebPortalAddress()
         {
             return (await dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.WEB_PORTAL_URL))?.ValueString;
+        }
+
+        private string ReplaceTextInTemplate(string htmlCode, Dictionary<string, string> placeholdersAndValues)
+        {
+
+            if (placeholdersAndValues == null)
+            {
+                return htmlCode;
+            }
+
+            foreach (var placeHolder in placeholdersAndValues)
+            {
+                string placeholderName = string.Format("[{0}]", placeHolder.Key);
+                htmlCode = htmlCode.Replace(placeholderName, placeHolder.Value);
+            }
+            return htmlCode;
         }
 
 

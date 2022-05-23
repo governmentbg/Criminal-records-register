@@ -15,6 +15,10 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<WApplicationProcessorService> _logger;
+        public const string Pending = "Pending";
+        public const string Accepted = "Accepted";
+        public const string Rejected = "Rejected";
+
 
         public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger)
         {
@@ -30,12 +34,13 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
             var result = await Task.FromResult(_dbContext.WApplications
                       //todo: дали е този статус?! include WWebRequests
                       .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebRegistersChecks)
-
+                        .OrderBy(a => a.CreatedOn)
+                        .Take(pageSize)
                       .ToList<IBaseIdEntity>());
             return result;
 
@@ -80,8 +85,15 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var wapplication = (WApplication)entity;
+                        var checkRegixSuccess = await SuccessfullCheckInRegisters(wapplication);
+                        //ако още не са преминали проверките - skip
+                        if (checkRegixSuccess == Pending)
+                        {
+                            continue;
+                        }
                         //при неуспешни проверки в регистрите се анулира
-                        if (!(await SuccessfullCheckInRegisters(wapplication)))
+
+                        if (checkRegixSuccess == Rejected)
                         {
                             wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
                             _dbContext.WApplications.Update(wapplication);
@@ -89,6 +101,7 @@ namespace AutomaticStepsExecutor
                             numberOfSuccessEntities++;
                             continue;
                         }
+                       
                         //ако е служебно заявление,влиза в цаис за обработка
                         if (wapplication.ApplicationTypeId == internalApplicationType.Id)
                         {
@@ -127,8 +140,10 @@ namespace AutomaticStepsExecutor
 
         }
 
-        private async Task<bool> SuccessfullCheckInRegisters(WApplication wapplication)
+        private async Task<string> SuccessfullCheckInRegisters(WApplication wapplication)
         {
+            //        return r.requests.Any(
+            //rq => (rq.Status == RegixRequestEnumStatuses.Pending || rq.Status == RegixRequestEnumStatuses.Rejected) && rq.Attempts < 5)
             throw new NotImplementedException();
         }
 

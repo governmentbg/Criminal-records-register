@@ -78,7 +78,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
             var systemParametrs = await _dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ToListAsync();
 
@@ -93,8 +93,9 @@ namespace AutomaticStepsExecutor
             var result = await Task.FromResult(_dbContext.AApplications
                                 .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment
                                                            && aa.CreatedOn < startDateOnDesk)//((aa.CreatedOn < startDateOnDesk && aa.WApplicationId == null)
-                                                                 //|| (aa.CreatedOn < startDateWeb && aa.WApplicationId != null))
-                                                           .ToList<IBaseIdEntity>());
+                                                                                             //|| (aa.CreatedOn < startDateWeb && aa.WApplicationId != null))
+                                                             .OrderBy(a => a.CreatedOn)
+                              .Take(pageSize).ToList<IBaseIdEntity>());
             return result;
         }
     }
