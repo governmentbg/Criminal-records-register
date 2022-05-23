@@ -30,6 +30,8 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblPurpose))]
         public string? Purpose { get; set; }
 
+        public string? ClientIp { get; set; }
+
         public List<SelectListItem> PurposeTypes { get; set; }
     }
 }
