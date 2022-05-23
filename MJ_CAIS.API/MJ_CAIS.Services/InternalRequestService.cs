@@ -4,6 +4,7 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
@@ -70,15 +71,28 @@ namespace MJ_CAIS.Services
             var bulletinStatus = entity.ReqStatusCode == InternalRequestStatusTypeConstants.Approved ?
                 BulletinConstants.Status.Rehabilitated : BulletinConstants.Status.Active;
 
-            entity.Bulletin = new BBulletin
+            var bulletin = new BBulletin
             {
                 Id = entity.BulletinId,
                 StatusId = bulletinStatus,
-                EntityState = Common.Enums.EntityStateEnum.Modified,
-                ModifiedProperties = new List<string> { nameof(BBulletin.StatusId) }
+                EntityState = EntityStateEnum.Modified,
+                Version = aInDto.BulletinVersion,
+                ModifiedProperties = new List<string> { nameof(BBulletin.StatusId), nameof(BBulletin.Version) },
             };
 
-            await SaveEntityAsync(entity, true);
+            var satusHistory = new BBulletinStatusH
+            {
+                Id = Guid.NewGuid().ToString(),
+                BulletinId = entity.BulletinId,
+                OldStatusCode = BulletinConstants.Status.ForRehabilitation,
+                NewStatusCode = bulletinStatus,
+                EntityState = EntityStateEnum.Added,
+            };
+
+            bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
+            bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { satusHistory };
+
+            await dbContext.SaveEntityAsync(bulletin, true);
         }
 
         /// <summary>

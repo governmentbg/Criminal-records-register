@@ -8,6 +8,7 @@ export class InternalRequestModel extends BaseModel {
   public reqStatusCode: string = null;
   public responseDescr: string = null;
   public reqStatusName: string = null;
+  public bulletinVersion: number = null;
 
   constructor(init?: Partial<InternalRequestModel>) {
     super(init);
@@ -19,6 +20,7 @@ export class InternalRequestModel extends BaseModel {
       this.reqStatusCode = init.reqStatusCode ?? null;
       this.responseDescr = init.responseDescr ?? null;
       this.reqStatusName = init.reqStatusName ?? null;
+      this.bulletinVersion = init.bulletinVersion ?? null;
     }
   }
 }
