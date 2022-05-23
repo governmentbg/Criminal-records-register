@@ -21,6 +21,17 @@ namespace MJ_CAIS.WebPortal.Public
 
             var configuration = builder.Configuration;
 
+            // TODO: left for simple testing, should be removed soon
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options =>
+            //    {
+            //        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            //        options.SlidingExpiration = true;
+            //        options.AccessDeniedPath = "/Forbidden/";
+            //        options.LoginPath = "/Account/Login";
+            //        options.Cookie.Name = "CaisPublicPortal";
+            //    });
+
             builder.Services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

@@ -65,7 +65,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
 
-            [HttpPost]
+        [HttpPost]
         public async Task<ActionResult> LogOff()
         {
             // Clear the existing external cookie
