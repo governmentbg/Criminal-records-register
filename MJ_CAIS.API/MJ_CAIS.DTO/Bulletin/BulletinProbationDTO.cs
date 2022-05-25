@@ -1,8 +1,7 @@
 ﻿namespace MJ_CAIS.DTO.Bulletin
 {
-    public class BulletinProbationDTO
+    public class BulletinProbationDTO : BaseDTO
     {
-        public string? Id { get; set; }
         public string? SanctionId { get; set; }
         public string? SanctProbCategId { get; set; }
         public string? SanctProbMeasureId { get; set; }

@@ -113,12 +113,19 @@ namespace MJ_CAIS.Services
             }
 
             await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
-            await dbContext.SaveChangesAsync();
 
-            // изчисления за реабилитация
-            // да се случват след запис на данните, 
-            // защото може да има сливане на лица 
-            // което е от значение при изчисление на дата за реабилитация
+            try
+            {
+                await dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            // todo: if status ?
             await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletin);
         }
 
@@ -139,7 +146,6 @@ namespace MJ_CAIS.Services
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
             var oldBulletinStatus = bulletin.StatusId;
-
             AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
 
             // All active bulletins are locked for editing
@@ -155,7 +161,8 @@ namespace MJ_CAIS.Services
             bulletin.ModifiedProperties = new List<string>
             {
                 nameof(bulletin.Locked),
-                nameof(bulletin.StatusId)
+                nameof(bulletin.StatusId),
+                nameof(bulletin.Version)
             };
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == BulletinConstants.Status.NewOffice || oldBulletinStatus == BulletinConstants.Status.NewEISS) &&
@@ -168,12 +175,14 @@ namespace MJ_CAIS.Services
 
             var personId = await CreatePersonFromBulletinAsync(bulletin);
 
+            // Attempt to save changes to the database
             await dbContext.SaveChangesAsync();
+
 
             if (isActiveBulletin)
             {
-                await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
                 // await _bulletinEventService.GenereteEventAsyn(personId);
+                await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
             }
 
             // if person is bulgarian citizen
@@ -317,7 +326,7 @@ namespace MJ_CAIS.Services
                 entity.StatusId = BulletinConstants.Status.NoSanction;
                 // if new person is created 
                 // set new person id
-                aInDto.Person.Id =  await CreatePersonFromBulletinAsync(entity);
+                aInDto.Person.Id = await CreatePersonFromBulletinAsync(entity);
             }
 
             // save old status
@@ -358,14 +367,14 @@ namespace MJ_CAIS.Services
             // create realtion between person identifier and bulletin
             // create PBulletinId for all pids (locally added and saved in db)
 
-            foreach (var piersonIdObj in person.PPersonIds)
+            foreach (var personIdObj in person.PPersonIds)
             {
                 bulletin.PBulletinIds.Add(new PBulletinId
                 {
                     BulletinId = bulletin.Id,
                     Id = BaseEntity.GenerateNewId(),
                     EntityState = EntityStateEnum.Added,
-                    PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
+                    PersonId = personIdObj.Id // table P_PERSON_IDS not P_PERSON,
                 });
 
                 dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
@@ -379,9 +388,8 @@ namespace MJ_CAIS.Services
             if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
                 bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
             {
-                // nothing of the main object is edited
-                // only decisions added
-                bulletin.ModifiedProperties = new List<string>();
+                // only version of the main object must be updated
+                bulletin.ModifiedProperties = new List<string>() { nameof(bulletin.Version) };
             }
             else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
             {
@@ -395,6 +403,7 @@ namespace MJ_CAIS.Services
                         nameof(bulletin.EcrisConvictionId),
                         nameof(bulletin.BulletinType),
                         nameof(bulletin.BulletinReceivedDate),
+                        nameof(bulletin.Version),
                     };
             }
         }

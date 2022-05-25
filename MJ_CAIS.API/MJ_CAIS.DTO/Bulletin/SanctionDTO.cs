@@ -2,9 +2,8 @@
 
 namespace MJ_CAIS.DTO.Bulletin
 {
-    public class SanctionDTO
+    public class SanctionDTO : BaseDTO
     {
-        public string Id { get; set; } = null!;
         public string? SanctCategoryId { get; set; }
         public string? SanctCategoryName { get; set; }
         public string? EcrisSanctCategId { get; set; }

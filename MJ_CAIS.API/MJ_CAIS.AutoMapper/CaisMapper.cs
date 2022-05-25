@@ -3,6 +3,7 @@ using MJ_CAIS.Common;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
+using MJ_CAIS.DTO;
 using MJ_CAIS.DTO.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -65,6 +66,12 @@ namespace MJ_CAIS.AutoMapperContainer
             if (isAdded)
             {
                 entity.EntityState = EntityStateEnum.Added;
+
+                var versionPropertyInfo = entity.GetType().GetProperty(nameof(BaseEntity.Version));
+                if (versionPropertyInfo != null && versionPropertyInfo.PropertyType == typeof(decimal?))
+                {
+                    versionPropertyInfo.SetValue(entity, null);
+                }
 
                 var navigationProperties = DBContextExtensions.GetNavigationDependencies(entity);
                 foreach (var property in navigationProperties)
@@ -134,7 +141,7 @@ namespace MJ_CAIS.AutoMapperContainer
         }
 
         public static EntityType MapTransaction<ViewModelType, EntityType>(this IMapper mapper, TransactionDTO<ViewModelType> transaction, string entityPKName = "Id")
-            where ViewModelType : class
+            where ViewModelType : BaseDTO
             where EntityType : class, IBaseIdEntity
         {
             EntityType entity = null;
@@ -153,7 +160,7 @@ namespace MJ_CAIS.AutoMapperContainer
                     break;
 
                 case TransactionTypesEnum.DELETE:
-                    entity = CreateDummyEntity<EntityType>(transaction.Id, entityPKName);
+                    entity = CreateDummyEntity<EntityType>(transaction.Id, entityPKName, transaction.NewValue?.Version);
                     entity.EntityState = EntityStateEnum.Deleted;
                     break;
 
@@ -165,7 +172,7 @@ namespace MJ_CAIS.AutoMapperContainer
         }
 
         public static List<EntityType> MapTransactions<ViewModelType, EntityType>(this IMapper mapper, List<TransactionDTO<ViewModelType>> transList, string entityPKName = "Id")
-            where ViewModelType : class
+            where ViewModelType : BaseDTO
             where EntityType : class, IBaseIdEntity
         {
             if (transList == null) return null;
@@ -215,38 +222,48 @@ namespace MJ_CAIS.AutoMapperContainer
             return entitiesForUpdate;
         }
 
-
-        private static EntityType CreateDummyEntity<EntityType>(string transactionRowID, string entityPKName) where EntityType : IBaseIdEntity
+        private static EntityType CreateDummyEntity<EntityType>(string transactionRowID, string entityPKName, decimal? version) where EntityType : IBaseIdEntity
         {
             EntityType entity = Activator.CreateInstance<EntityType>();
-            var entityProperty = entity.GetType().GetProperty(entityPKName);
-            if (entityProperty == null)
+            var pkPropertyInfo = entity.GetType().GetProperty(entityPKName);
+            if (pkPropertyInfo == null)
             {
                 throw new ArgumentNullException(entityPKName, "Entity type does not have explicitly given property");
             }
 
-            Type propertyType = entityProperty.PropertyType;
-            if (propertyType.Equals(typeof(decimal)))
+            Type pkPropertyType = pkPropertyInfo.PropertyType;
+            if (pkPropertyType.Equals(typeof(decimal)))
             {
                 decimal rowID = decimal.Parse(transactionRowID);
-                entityProperty.SetValue(entity, rowID);
+                pkPropertyInfo.SetValue(entity, rowID);
             }
 
-            if (propertyType.Equals(typeof(int)))
+            if (pkPropertyType.Equals(typeof(int)))
             {
                 int rowID = int.Parse(transactionRowID);
-                entityProperty.SetValue(entity, rowID);
+                pkPropertyInfo.SetValue(entity, rowID);
             }
 
-            if (propertyType.Equals(typeof(long)))
+            if (pkPropertyType.Equals(typeof(long)))
             {
                 long rowID = long.Parse(transactionRowID);
-                entityProperty.SetValue(entity, rowID);
+                pkPropertyInfo.SetValue(entity, rowID);
             }
 
-            if (propertyType.Equals(typeof(string)))
+            if (pkPropertyType.Equals(typeof(string)))
             {
-                entityProperty.SetValue(entity, transactionRowID);
+                pkPropertyInfo.SetValue(entity, transactionRowID);
+            }
+
+            var versionPropertyInfo = entity.GetType().GetProperty(nameof(BaseEntity.Version));
+            if (versionPropertyInfo == null)
+            {
+                throw new ArgumentNullException(nameof(BaseEntity.Version), "Entity type does not have explicitly given property");
+            }
+
+            if (versionPropertyInfo.PropertyType == typeof(decimal?))
+            {
+                versionPropertyInfo.SetValue(entity, version);
             }
 
             return entity;

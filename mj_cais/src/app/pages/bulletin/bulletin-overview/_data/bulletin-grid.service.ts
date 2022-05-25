@@ -1,3 +1,4 @@
+import { HttpParams } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
@@ -27,5 +28,18 @@ export class BulletinGridService extends CaisCrudService<
       this.baseUrl + `/api/bulletins/${aId}/change-status/${statusId}`,
       {}
     );
+  }  
+  
+  // override
+  public addOrderBy(params?: HttpParams): HttpParams {
+    if (!params) {
+      params = new HttpParams();
+    }
+
+    if (!params.has('$orderby')) {
+      params = params.append('$orderby', 'createdOn desc');
+    }
+
+    return params;
   }
 }

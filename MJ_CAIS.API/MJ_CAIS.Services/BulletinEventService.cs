@@ -42,7 +42,8 @@ namespace MJ_CAIS.Services
             bulletinEvent.EntityState = EntityStateEnum.Modified;
             bulletinEvent.ModifiedProperties = new List<string>
             {
-                nameof(bulletinEvent.StatusCode)
+                nameof(bulletinEvent.StatusCode),
+                nameof(bulletinEvent.Version),
             };
 
             await dbContext.SaveChangesAsync();

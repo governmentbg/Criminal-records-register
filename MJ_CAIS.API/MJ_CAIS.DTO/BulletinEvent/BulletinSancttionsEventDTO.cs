@@ -1,8 +1,7 @@
 ﻿namespace MJ_CAIS.DTO.BulletinEvent
 {
-    public class BulletinSancttionsEventDTO
+    public class BulletinSancttionsEventDTO : BaseDTO
     {
-        public string? Id { get; set; }
 
         public bool? PrevSuspSent { get; set; }
 

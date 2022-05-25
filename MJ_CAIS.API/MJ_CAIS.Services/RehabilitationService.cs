@@ -33,13 +33,17 @@ namespace MJ_CAIS.Services
             var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
-            // when status is changed from newoffice to active or neweiss to active
-            // only first point may be applied
-            await ApplyFirstPoinAsync(bulletins, currentAttachedBull);
+
+            var isFirstPointApplied = await ApplyFirstPoinAsync(bulletins, currentAttachedBull);
+            if (isFirstPointApplied) return;
+
+            var isSecondPointApplied = await ApplySecondPoinAsync(bulletins, currentAttachedBull);
+            if (isSecondPointApplied) return;
+
         }
 
         /// <summary>
-        /// When has edit of active bulletin
+        /// When has edit on active bulletin
         /// </summary>
         /// <param name="currentAttachedBull"></param>
         /// <returns></returns>
@@ -104,12 +108,16 @@ namespace MJ_CAIS.Services
                     // the date of rehabilitation for this bulletin is deleted
                     // todo:?? should the status of the bulletin be changed if it has already been proposed for rehabilitation
                     // this is another bulletin not attached to context
-                    _rehabilitationRepository.UpdateRehabilitationData(currentBull.Id, null, null);
+                    _rehabilitationRepository.UpdateRehabilitationData(currentBull.Id, currentBull.Version, null, null);
                     appliedChanges = true;
                 }
             }
 
-            await _rehabilitationRepository.SaveChangesAsync();
+            if (appliedChanges)
+            {
+                await _rehabilitationRepository.SaveChangesAsync();
+            }
+
             return appliedChanges;
         }
 
@@ -137,7 +145,7 @@ namespace MJ_CAIS.Services
 
                 var losIdInPeriod = sanctionLos != null && IsInDurationInYears(sanctionLos.SuspentionDuration, 3);
 
-                var sanctionProb = bulletinDTO.Sanctions.FirstOrDefault(x => x.Type == "nkz_lprobacia");
+                var sanctionProb = bulletinDTO.Sanctions.FirstOrDefault(x => x.Type == "nkz_probacia");
 
                 var propbIsInPeriod = sanctionProb != null && sanctionProb.PropbationDurations
                     .All(x => IsInDurationInYears(x, 3));
@@ -162,31 +170,46 @@ namespace MJ_CAIS.Services
                     }
                 }
 
-                var bulletinWithRehabilitationDate = bulletins
-                    .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
-                    .ToList();
+                return appliedChanges;
+            }
 
-                // да не се проверяват останалите варианти за реабилитация
-                // в случай че има повече от един бюлетин
-                // но за нито един няма предполагаема дата на реабилитация 
-                if (bulletinWithRehabilitationDate.Count == 0) return true;
+            var bulletinWithRehabilitationDate = bulletins
+                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .ToList();
 
-                var anotherBulls = bulletins.Where(x => x.Id != currentAttachedBull.Id);
+            // да не се проверяват останалите варианти за реабилитация
+            // в случай че има повече от един бюлетин
+            // но за нито един няма предполагаема дата на реабилитация 
+            if (bulletinWithRehabilitationDate.Count == 0) return true;
 
-                var hasSanctionOfType = anotherBulls.SelectMany(x => x.Sanctions)
-                       .Any(s => s.Type == "nkz_dojiv_zatvor" || s.Type == "nkz_dojiv_zatvor_bez_zamiana" || s.Type == "nkz_lishavane_ot_svoboda");
+            var anotherBulls = bulletins.Where(x => x.Id != currentAttachedBull.Id);
 
-                foreach (var bull in anotherBulls)
-                {                 
-                    if (hasSanctionOfType && bull.RehabilitationDate.HasValue)
-                    {
-                        _rehabilitationRepository.UpdateRehabilitationData(bull.Id, null, null);
-                        appliedChanges = true;
-                    }
+            var hasSanctionOfType = anotherBulls.SelectMany(x => x.Sanctions)
+                   .Any(s => s.Type == "nkz_dojiv_zatvor" || s.Type == "nkz_dojiv_zatvor_bez_zamiana" || s.Type == "nkz_lishavane_ot_svoboda");
+
+
+            // offences end date
+            var currentBullOffEndDates = bulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id)?.OffencesEndDates;
+
+
+            foreach (var bull in anotherBulls)
+            {
+                var hasOffencInPeriod = currentBullOffEndDates
+                 .Any(offEndDate => offEndDate >= bull.DecisionFinalDate &&
+                                    offEndDate <= bull.RehabilitationDate);
+
+                if (hasSanctionOfType && hasOffencInPeriod && bull.RehabilitationDate.HasValue)
+                {
+                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
+                    appliedChanges = true;
                 }
             }
 
-            await _rehabilitationRepository.SaveChangesAsync();
+            if (appliedChanges)
+            {
+                await _rehabilitationRepository.SaveChangesAsync();
+            }
+
             return appliedChanges;
         }
 
