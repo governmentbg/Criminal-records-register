@@ -2,7 +2,7 @@ import { PersonModel } from "../../../../@core/components/forms/person-form/_mod
 import { BaseModel } from "../../../../@core/models/common/base.model";
 
 export class BulletinModel extends BaseModel {
-  public registrationNumber: string = null;
+  public registrationNumberDisplay: string = null;
   public csAuthorityName: string = null;
   public sequentialIndex: number = null;
   public statusId: string = null;
@@ -38,7 +38,7 @@ export class BulletinModel extends BaseModel {
 
   constructor(init?: Partial<BulletinModel>) {
     super(init);
-    this.registrationNumber = init?.registrationNumber ?? null;
+    this.registrationNumberDisplay = init?.registrationNumberDisplay ?? null;
     this.csAuthorityName = init?.csAuthorityName ?? null;
     this.sequentialIndex = init?.sequentialIndex ?? null;
     this.statusId = init?.statusId ?? null;

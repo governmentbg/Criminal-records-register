@@ -28,19 +28,19 @@ namespace MJ_CAIS.Services
         }
 
         private async Task<string> GetRegisterNumber(string authorityID, string registerCode)
-        {   
+        {
             var paramDate = new OracleParameter("P_DATE", OracleDbType.Date, DateTime.UtcNow.Date, System.Data.ParameterDirection.Input);
             var paramAuthority = new OracleParameter("P_CS_AUTH_ID", OracleDbType.Varchar2, authorityID, System.Data.ParameterDirection.Input);
-            var paramRegisterCode = new OracleParameter("P_REGISTER_CODE", OracleDbType.Varchar2,registerCode, System.Data.ParameterDirection.Input);
-    
-            //todo: как да махна размера?!
-            var paramResult = new OracleParameter("P_OUT_REG_NUMBER", OracleDbType.NVarchar2,100);
-            paramResult.Direction = System.Data.ParameterDirection.Output;
-            
+            var paramRegisterCode = new OracleParameter("P_REGISTER_CODE", OracleDbType.Varchar2, registerCode, System.Data.ParameterDirection.Input);
 
-            await dbContext.Database.ExecuteSqlRawAsync("BEGIN GET_REGISTRATION_NUMBER(:P_DATE, :P_CS_AUTH_ID, :P_REGISTER_CODE, :P_OUT_REG_NUMBER); END;", 
+            //todo: как да махна размера?!
+            var paramResult = new OracleParameter("P_OUT_REG_NUMBER", OracleDbType.NVarchar2, 100);
+            paramResult.Direction = System.Data.ParameterDirection.Output;
+
+
+            await dbContext.Database.ExecuteSqlRawAsync("BEGIN GET_REGISTRATION_NUMBER(:P_DATE, :P_CS_AUTH_ID, :P_REGISTER_CODE, :P_OUT_REG_NUMBER); END;",
                                     paramDate, paramAuthority, paramRegisterCode, paramResult);
-            
+
             return paramResult.Value.ToString();
 
         }
@@ -93,6 +93,21 @@ namespace MJ_CAIS.Services
         {
             return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.BulletinUndefined);
 
+        }
+
+        public async Task<string> GetRegisterNumberForBulletin(string authorityID, string bulletinType)
+        {
+            if (bulletinType == nameof(BulletinConstants.Type.Bulletin78A))
+            {
+                return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.Bulletin78a);
+            }
+
+            if (bulletinType == nameof(BulletinConstants.Type.ConvictionBulletin))
+            {
+                return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.Bulletin);
+            }
+
+            return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.BulletinUndefined);
         }
     }
 }

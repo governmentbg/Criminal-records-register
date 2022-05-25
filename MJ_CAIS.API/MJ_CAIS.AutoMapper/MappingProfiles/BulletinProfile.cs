@@ -50,10 +50,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.FatherFullname, opt => opt.MapFrom(src => src.Person.FatherFullname))
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Person.BirthPlace.ForeignCountryAddress))
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Person.BirthPlace.Country.Id))
-                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId));
+                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId))
+                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore());
 
             CreateMap<BulletinEditDTO, BBulletin>()
-                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
+                .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
                 .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Person.Surname))
                 .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Person.Familyname))
                 .ForMember(d => d.Fullname, opt => opt.MapFrom(src => src.Person.Fullname))
@@ -83,9 +84,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.FatherFullname, opt => opt.MapFrom(src => src.Person.FatherFullname))
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Person.BirthPlace.ForeignCountryAddress))
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Person.BirthPlace.Country.Id))
-                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId));
+                .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId))
+                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore());
 
             CreateMap<BBulletin, BulletinBaseDTO>()
+                .ForMember(d => d.RegistrationNumberDisplay, opt => opt.MapFrom(src => src.RegistrationNumber))
                 .ForPath(d => d.Person.Firstname, opt => opt.MapFrom(src => src.Firstname))
                 .ForPath(d => d.Person.Surname, opt => opt.MapFrom(src => src.Surname))
                 .ForPath(d => d.Person.Familyname, opt => opt.MapFrom(src => src.Familyname))

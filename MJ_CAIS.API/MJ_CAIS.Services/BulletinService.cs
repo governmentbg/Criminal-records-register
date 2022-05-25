@@ -26,6 +26,7 @@ namespace MJ_CAIS.Services
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
         private readonly IRehabilitationService _rehabilitationService;
+        private readonly IRegisterTypeService _registerTypeService;
         private readonly IUserContext _userContext;
 
         public BulletinService(IMapper mapper,
@@ -34,7 +35,8 @@ namespace MJ_CAIS.Services
             INotificationService notificationService,
             IBulletinEventService bulletinEventService,
             IRehabilitationService rehabilitationService,
-            IUserContext userContext)
+            IUserContext userContext,
+            IRegisterTypeService registerTypeService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
@@ -43,6 +45,7 @@ namespace MJ_CAIS.Services
             _bulletinEventService = bulletinEventService;
             _rehabilitationService = rehabilitationService;
             _userContext = userContext;
+            _registerTypeService = registerTypeService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -84,6 +87,10 @@ namespace MJ_CAIS.Services
             // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
+
+            var authId = !string.IsNullOrEmpty(bulletin?.BulletinAuthorityId) ? bulletin?.BulletinAuthorityId:  "111"; // todo remove: only for testing
+            var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletin.BulletinType);
+            bulletin.RegistrationNumber = regNumber;
 
             await UpdateBulletinAsync(aInDto, bulletin, null);
             await _bulletinRepository.SaveChangesAsync();
