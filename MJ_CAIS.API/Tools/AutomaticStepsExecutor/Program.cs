@@ -9,6 +9,8 @@ using System.Reflection;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 using TL.JasperReports.Integration;
 using TL.Signer;
+using MJ_CAIS.ExternalWebServices.Contracts;
+using MJ_CAIS.ExternalWebServices;
 
 namespace AutomaticStepsExecutor
 {
@@ -42,13 +44,15 @@ namespace AutomaticStepsExecutor
                     .Build();
 
 
-               
-            
-            
+                var pageSize = config.GetValue<int>("AutomaticStepsExecutor:PageSize");
+
+
                 using (host)
                 {
+                   // IPrintDocumentService s = host.Services.GetService<IPrintDocumentService>();
+                   // var resultPdf = await s.PrintApplication("aaaa-bbbb-cccc");
+                   // System.IO.File.WriteAllBytes("hello.pdf", resultPdf);
 
-                
 
                     IAutomaticStepService service = (IAutomaticStepService)host.Services.GetService(typeofExecutor);
 
@@ -59,7 +63,7 @@ namespace AutomaticStepsExecutor
                         await service.PreSelectAsync();
                         logger.Trace("PreSelect ended.");
                         logger.Trace("Select started.");
-                        var entities = await service.SelectEntitiesAsync();
+                        var entities = await service.SelectEntitiesAsync(pageSize);
                         logger.Trace($"Select ended. {entities.Count} selected.");
                         logger.Trace("PostSelect started.");
                         await service.PostSelectAsync();

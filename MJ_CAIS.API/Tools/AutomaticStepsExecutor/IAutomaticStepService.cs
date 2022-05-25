@@ -10,7 +10,7 @@ namespace AutomaticStepsExecutor
     public interface IAutomaticStepService
     {
         public  Task PreSelectAsync();      
-        public  Task<List<IBaseIdEntity>> SelectEntitiesAsync();
+        public  Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize);
         public  Task PostSelectAsync();
         public  Task PreProcessAsync();
         public  Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities);

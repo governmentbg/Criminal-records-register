@@ -42,6 +42,7 @@ namespace MJ_CAIS.DIContainer
             services.AddJasperReporting();
             services.AddSingleton<IPdfSigner, PdfSigner>();
             services.AddTransient<ICertificateGenerationService, CertificateGenerationService>();
+            services.AddTransient<IPrintDocumentService, PrintDocumentService>();
             //var servicesTypesExternal = typeof(CertificateGenerationService).Assembly.GetClassTypes("Service");
             //var interfaceTypesExternal = typeof(ICertificateGenerationService).Assembly.GetInterfaceTypes("Service");
             //AddTransientTypes(services, servicesTypesExternal, interfaceTypesExternal);

@@ -43,10 +43,9 @@ namespace MJ_CAIS.WebSetup.Setup
 
         public static void ConfigureDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddHttpContextAccessor();
 
-            // services.AddSingleton<JwtManager>(); // TODO: 
+            services.AddScoped<RequestUtils>();
 
             ContainerExtension.Initialize(services, configuration);
 

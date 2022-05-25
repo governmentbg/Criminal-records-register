@@ -365,7 +365,6 @@ namespace MJ_CAIS.Services
                     BulletinId = bulletin.Id,
                     Id = BaseEntity.GenerateNewId(),
                     EntityState = EntityStateEnum.Added,
-                    CreatedOn = DateTime.Now,
                     PersonId = piersonIdObj.Id // table P_PERSON_IDS not P_PERSON
                 });
 
@@ -439,7 +438,6 @@ namespace MJ_CAIS.Services
                     OldStatusCode = oldStatus,
                     NewStatusCode = newStatus,
                     EntityState = EntityStateEnum.Added,
-                    CreatedOn = DateTime.UtcNow,
                 };
 
                 dbContext.ApplyChanges(satusHistory, new List<IBaseIdEntity>());

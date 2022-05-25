@@ -1,0 +1,1 @@
+﻿Вашето заявление [{application_registration_number}] е обработено успешно

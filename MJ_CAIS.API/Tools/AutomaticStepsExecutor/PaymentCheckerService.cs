@@ -30,12 +30,14 @@ namespace AutomaticStepsExecutor
        
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
             var result = await Task.FromResult(_dbContext.WApplications
                                .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebCheckPayment
                                                       
                                )
+                                 .OrderBy(a => a.CreatedOn)
+                              .Take(pageSize)
                                .ToList<IBaseIdEntity>());
             return result;
 

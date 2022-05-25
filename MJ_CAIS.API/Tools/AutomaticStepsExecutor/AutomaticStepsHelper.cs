@@ -94,13 +94,19 @@ namespace AutomaticStepsExecutor
                                      Id = BaseEntity.GenerateNewId(),
                                      PersonId = x.Id
                                  }).ToListAsync();
-
-
          
 
             dbContext.AApplications.Add(appl);
             dbContext.PAppIds.AddRange(appl.PAppIds);
             dbContext.WApplications.Update(wapplication);
         }
-    }
+
+    
+
+        public static string GetTextFromFile(string fileName)
+        {
+            string htmlCode = File.ReadAllText(fileName, Encoding.Default);
+            return htmlCode;
+        }
+        }
 }

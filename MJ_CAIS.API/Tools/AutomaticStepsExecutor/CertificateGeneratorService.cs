@@ -17,7 +17,8 @@ namespace AutomaticStepsExecutor
         private CaisDbContext _dbContext;
         private readonly ILogger<CertificateGeneratorService> _logger;
         private readonly IApplicationService _applicationService;
-        public CertificateGeneratorService(CaisDbContext dbContext, ILogger<CertificateGeneratorService> logger, IApplicationService applicationService) {
+        public CertificateGeneratorService(CaisDbContext dbContext, ILogger<CertificateGeneratorService> logger, IApplicationService applicationService)
+        {
             _dbContext = dbContext;
             _logger = logger;
             _applicationService = applicationService;
@@ -26,22 +27,22 @@ namespace AutomaticStepsExecutor
         }
         public async Task PostProcessAsync()
         {
-           
+
         }
 
         public async Task PostSelectAsync()
         {
-         
+
         }
 
         public async Task PreProcessAsync()
         {
-          
+
         }
 
         public async Task PreSelectAsync()
         {
-         
+
         }
 
         public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
@@ -64,14 +65,14 @@ namespace AutomaticStepsExecutor
                 {
                     throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
                 }
-                
+
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
                     {
                         var application = (AApplication)entity;
-                        await _applicationService.GenerateCertificateFromApplication(application,(int)certificateValidityMonths, ApplicationConstants.ApplicationStatuses.CertificateContentReady, ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+                        await _applicationService.GenerateCertificateFromApplication(application, (int)certificateValidityMonths, ApplicationConstants.ApplicationStatuses.CertificateContentReady, ApplicationConstants.ApplicationStatuses.BulletinsCheck);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
@@ -90,10 +91,12 @@ namespace AutomaticStepsExecutor
         }
 
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
-            var result = await Task.FromResult( _dbContext.AApplications
-                               .Where(aa=>aa.StatusCode==ApplicationConstants.ApplicationStatuses.ApprovedApplication)
+            var result = await Task.FromResult(_dbContext.AApplications
+                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication)
+                                 .OrderBy(a => a.CreatedOn)
+                                 .Take(pageSize)
                                .ToList<IBaseIdEntity>());
             return result;
         }

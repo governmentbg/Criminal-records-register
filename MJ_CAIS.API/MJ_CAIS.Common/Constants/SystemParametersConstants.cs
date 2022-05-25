@@ -20,6 +20,10 @@ namespace MJ_CAIS.Common.Constants
             public const string TERM_FOR_PAYMENT_WEB_DAYS = "TERM_FOR_PAYMENT_WEB_DAYS";
             //колко дни се очаква плащане за заявления подадени на гише
             public const string TERM_FOR_PAYMENT_DESK_DAYS = "TERM_FOR_PAYMENT_DESK_DAYS";
+            //email body file name
+            public const string DELIVERY_MAIL_BODY_FILENAME = "DELIVERY_MAIL_BODY_FILENAME";
+            //email subject file name
+            public const string DELIVERY_MAIL_SUBJECT_FILENAME = "DELIVERY_MAIL_SUBJECT_FILENAME";
         }
     }
 }

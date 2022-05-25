@@ -115,7 +115,6 @@ namespace MJ_CAIS.Services
                 {
                     BulletinId = bullId,
                     Id = BaseEntity.GenerateNewId(),
-                    CreatedOn = DateTime.UtcNow,
                     StatusCode = "New",
                     EventType = "Article2211",
                     EntityState = EntityStateEnum.Added

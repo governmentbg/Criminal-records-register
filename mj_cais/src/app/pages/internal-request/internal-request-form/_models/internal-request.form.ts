@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { BaseForm } from "../../../../@core/models/common/base.form";
 
 export class InternalRequestForm extends BaseForm {
@@ -13,7 +13,9 @@ export class InternalRequestForm extends BaseForm {
   public reqStatusCode: FormControl;
   public responseDescr: FormControl;
   public reqStatusName: FormControl;
-
+  public bulletinVersion: FormControl;
+  public bulletinStatusId: FormControl;
+  
   constructor() {
     super();
     this.regNumber = new FormControl(null);
@@ -25,6 +27,8 @@ export class InternalRequestForm extends BaseForm {
     this.reqStatusCode = new FormControl(null);
     this.responseDescr = new FormControl(null);
     this.reqStatusName = new FormControl(null);
+    this.bulletinVersion = new FormControl(null);
+    this.bulletinStatusId = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -39,6 +43,8 @@ export class InternalRequestForm extends BaseForm {
       reqStatusCode: this.reqStatusCode,
       responseDescr: this.responseDescr,
       reqStatusName: this.reqStatusName,
+      bulletinVersion: this.bulletinVersion,
+      bulletinStatusId: this.bulletinStatusId,
     });
   }
 }

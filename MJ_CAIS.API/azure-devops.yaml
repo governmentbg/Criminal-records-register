@@ -10,6 +10,8 @@ trigger:
     include:
     - MJ_CAIS.API
 steps:
+- checkout: self
+  persistCredentials: true
 - task: NuGetCommand@2
   inputs:
     command: 'restore'
@@ -30,6 +32,8 @@ steps:
         $productVersion = Get-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish\MJ_CAIS.Web.dll |Select-Object -ExpandProperty VersionInfo|Select-Object -ExpandProperty ProductVersion
         Remove-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish\*.ver        
         New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.Web\bin\Release\net6.0\publish -Name "$productVersion.ver" -ItemType "file"
+        git tag Web-$productVersion
+        git push origin Web-$productVersion
 - task: MSBuild@1
   displayName: 'Publish project MJ_CAIS.WebPortal.Public.proj'
   inputs:
@@ -44,6 +48,8 @@ steps:
         $productVersion = Get-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.Public\bin\Release\net6.0\publish\MJ_CAIS.WebPortal.Public.dll |Select-Object -ExpandProperty VersionInfo|Select-Object -ExpandProperty ProductVersion
         Remove-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.Public\bin\Release\net6.0\publish\*.ver        
         New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.Public\bin\Release\net6.0\publish -Name "$productVersion.ver" -ItemType "file"
+        git tag WebPortal-Public-$productVersion
+        git push origin WebPortal-Public-$productVersion
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: MJ_CAIS.Web'
   inputs:

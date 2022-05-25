@@ -26,6 +26,7 @@ namespace MJ_CAIS.Common.Constants
             public const string CertificateForDelivery = "CertificateForDelivery";
             public const string CertificatePaperPrint = "CertificatePaperPrint";
             public const string Delivered = "Delivered";
+            // TODO: remove web statuses:
             public const string NewWebApplication = "NewWebApplication";
             public const string WebDuplicateCheck = "WebDuplicateCheck";
             public const string WebRegistersChecks = "WebRegistersChecks";
@@ -33,9 +34,22 @@ namespace MJ_CAIS.Common.Constants
             public const string WebCheckTaxFree = "WebCheckTaxFree";
             public const string WebCheckPayment = "WebCheckPayment";
             public const string WebApprovedApplication = "WebApprovedApplication";
+
             //todo: add to db
             public const string CertificateUserSigned = "CertificateUserSigned";
         }
+
+        public static class ApplicationWebStatuses
+        {
+            public const string NewWebApplication = "NewWebApplication";
+            public const string WebDuplicateCheck = "WebDuplicateCheck";
+            public const string WebRegistersChecks = "WebRegistersChecks";
+            public const string WebCanceled = "WebCanceled";
+            public const string WebCheckTaxFree = "WebCheckTaxFree";
+            public const string WebCheckPayment = "WebCheckPayment";
+            public const string WebApprovedApplication = "WebApprovedApplication";
+        }
+
         public static class ApplicationTypes
         {
             public const string InternalCode5 = "5";

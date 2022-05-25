@@ -64,8 +64,14 @@ namespace AutomaticStepsExecutor
 
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
                 //todo: get mail data
-                string mailSubject = "";
-                string mailBody = "";
+                var sysParamsForMail = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
+                || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ToListAsync();
+                if (sysParamsForMail.Count != 2 || sysParamsForMail.Any(x=>string.IsNullOrEmpty(x.ValueString)))
+                {
+                    throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME} and {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME} are not set.");
+                }
+                string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s=>s.Code== SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
+                string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
 
                 foreach (IBaseIdEntity entity in entities)
                 {
@@ -73,7 +79,7 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var certificate = (ACertificate)entity;
-                        await _certificateService.CreateCertificate(certificate,mailSubject, mailBody, webPortalUrl);
+                        await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, webPortalUrl);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
@@ -91,7 +97,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync()
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
             var result = await Task.FromResult(_dbContext.ACertificates
                               .Include(c=>c.AAppBulletins)
@@ -99,6 +105,8 @@ namespace AutomaticStepsExecutor
                               .Include(c=>c.Application.Purpose)
                               .Include(c => c.Application.SrvcResRcptMeth)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
+                              .OrderBy(a => a.CreatedOn)
+                              .Take(pageSize)
                               .ToList<IBaseIdEntity>());
             return result;
 
