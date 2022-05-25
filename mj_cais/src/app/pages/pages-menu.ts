@@ -83,8 +83,8 @@ export class PagesMenu {
             link: "/pages/applications-waiting-payment",
           },
           {
-            title: "Потвърждение за плащане",
-            link: "/pages/applications-waiting-payment",
+            title: "Oсвободени от плащане",
+            link: "/pages/application-tax-free",
           },
         ],
       },

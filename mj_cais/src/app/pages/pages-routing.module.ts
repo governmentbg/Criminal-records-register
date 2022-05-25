@@ -52,6 +52,7 @@ import { UsersExternalFormComponent } from "./users-external/users-external-form
 import { UsersExternalResolver } from "./users-external/users-external-form/_data/users-external.resolver";
 import { BulletinEventsOverviewComponent } from "./bulletin-events/bulletin-events-overview/bulletin-events-overview.component";
 import { ApplicationWaitingPaymentComponent } from "./application/application-overview/application-waiting-payment/application-waiting-payment.component";
+import { ApplicationTaxFreeOverviewComponent } from "./application/application-overview/application-tax-free-overview/application-tax-free-overview.component";
 
 const routes: Routes = [
   {
@@ -92,6 +93,11 @@ const routes: Routes = [
       {
         path: "applications-waiting-payment",
         component: ApplicationWaitingPaymentComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-tax-free",
+        component: ApplicationTaxFreeOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {
