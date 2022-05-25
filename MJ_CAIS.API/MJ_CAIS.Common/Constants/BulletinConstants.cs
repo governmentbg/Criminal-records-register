@@ -86,5 +86,13 @@
         {
             public const string New = "New";      
         }
+
+        public static class CaseType
+        {
+            /// <summary>
+            /// Наказателно дело от общ характер
+            /// </summary>
+            public const string NOXD = "sign_noxd";
+        }
     }
 }

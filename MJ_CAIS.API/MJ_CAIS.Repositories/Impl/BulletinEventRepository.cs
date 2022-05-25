@@ -69,6 +69,8 @@ namespace MJ_CAIS.Repositories.Impl
                             PrevSuspSent = bulletin.PrevSuspSent,
                             StatusId = bulletin.StatusId,
                             Version = bulletin.Version,
+                            BulletinType = bulletin.BulletinType,
+                            CaseType = bulletin.CaseTypeId,
                             Sanctions = bulletin.BSanctions.Select(x => new SanctionEventDTO
                             {
                                 Id = x.Id,

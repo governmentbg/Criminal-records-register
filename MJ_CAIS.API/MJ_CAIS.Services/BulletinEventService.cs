@@ -49,6 +49,7 @@ namespace MJ_CAIS.Services
 
             await dbContext.SaveChangesAsync();
         }
+
         /// <summary>
         /// Check for events
         /// http://tfstl:8080/tfs/DefaultCollection/MJ-CAIS/_workitems/edit/45537
@@ -111,6 +112,12 @@ namespace MJ_CAIS.Services
             if (article2211 == null || !article2211.Any)
             {
                 CheckForArticle2211(bulletins, currentAttachedBulletin);
+            }
+
+            var article3000 = existingEvents.FirstOrDefault(x => x.Type == EventType.Article3000);
+            if (article3000 == null || !article3000.Any)
+            {
+                CheckForArticle3000(bulletins, currentAttachedBulletin);
             }
         }
 
@@ -180,6 +187,17 @@ namespace MJ_CAIS.Services
             if (!mustAddEvent) return;
 
             AddEventToBulletin(currentBulletin, EventType.Article2212);
+        }
+
+        private static void CheckForArticle3000(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        {
+            var mustAddEvent = currentBulletin.BulletinType == nameof(Common.Constants.BulletinConstants.Type.Bulletin78A)  &&
+                bulletins.Any(x => x.Id != currentBulletin.Id &&
+                (x.BulletinType == nameof(Common.Constants.BulletinConstants.Type.Bulletin78A) || x.CaseType == CaseType.NOXD));
+
+            if (!mustAddEvent) return;
+
+            AddEventToBulletin(currentBulletin, EventType.Article3000);
         }
 
         private static void AddEventToBulletin(BBulletin currentBulletin, string eventType)
