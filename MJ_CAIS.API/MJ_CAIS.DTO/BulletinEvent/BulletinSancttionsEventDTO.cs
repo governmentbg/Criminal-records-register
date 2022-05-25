@@ -2,6 +2,7 @@
 {
     public class BulletinSancttionsEventDTO : BaseDTO
     {
+        public string? StatusId { get; set; }
 
         public bool? PrevSuspSent { get; set; }
 

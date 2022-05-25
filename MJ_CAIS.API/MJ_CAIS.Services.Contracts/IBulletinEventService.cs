@@ -11,6 +11,8 @@ namespace MJ_CAIS.Services.Contracts
 
         Task ChangeStatusAsync(string aInDto, string statusId);
 
-        Task GenereteEventAsyn(string personId);
+        Task GenereteEventWhenChangeStatusOfBullAsyn(BBulletin currentAttachedBulletin, string personId);
+
+        Task GenereteEventWhenUpdateBullAsyn(BBulletin currentAttachedBulletin);
     }
 }

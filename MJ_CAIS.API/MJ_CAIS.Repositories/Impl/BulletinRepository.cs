@@ -131,5 +131,10 @@ namespace MJ_CAIS.Repositories.Impl
 
             return await Task.FromResult(query);
         }
+
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

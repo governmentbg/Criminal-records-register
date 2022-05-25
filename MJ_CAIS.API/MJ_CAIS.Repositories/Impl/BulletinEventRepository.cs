@@ -3,6 +3,7 @@ using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.BulletinEvent;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -48,36 +49,48 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<BulletinSancttionsEventDTO>> GetBulletinByPersonIdAsync(string personId)
         {
-            var query = from bulletin in _dbContext.BBulletins.AsNoTracking()
+            var query = (from bulletin in _dbContext.BBulletins.AsNoTracking()
 
-                        join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
-                                  into bulletinPersonLeft
-                        from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
+                         join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
+                                   into bulletinPersonLeft
+                         from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
 
-                        join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
-                                    into personIdsLeft
-                        from personIds in personIdsLeft.DefaultIfEmpty()
+                         join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
+                                     into personIdsLeft
+                         from personIds in personIdsLeft.DefaultIfEmpty()
 
-                        where personIds.PersonId == personId
-                        select
+                         where personIds.PersonId == personId && (bulletin.StatusId == BulletinConstants.Status.Active ||
+                                bulletin.StatusId == BulletinConstants.Status.ForRehabilitation || bulletin.StatusId == BulletinConstants.Status.NoSanction)
+                         select
                         new BulletinSancttionsEventDTO
                         {
                             Id = bulletin.Id,
                             DecisionDate = bulletin.DecisionDate,
                             PrevSuspSent = bulletin.PrevSuspSent,
+                            StatusId = bulletin.StatusId,
+                            Version = bulletin.Version,
                             Sanctions = bulletin.BSanctions.Select(x => new SanctionEventDTO
                             {
                                 Id = x.Id,
-                                SuspentionDurationDays = x.SuspentionDurationDays, // todo без часове
+                                SuspentionDurationDays = x.SuspentionDurationDays,
                                 SuspentionDurationHours = x.SuspentionDurationHours,
                                 SuspentionDurationMonths = x.SuspentionDurationMonths,
                                 SuspentionDurationYears = x.SuspentionDurationYears,
                                 Type = x.SanctCategoryId
                             }),
                             OffencesEndDates = bulletin.BOffences.Select(x => x.OffEndDate)
-                        };
+                        }).GroupBy(x => x.Id).Select(x => x.FirstOrDefault());
 
             return await Task.FromResult(query);
+        }
+
+        public async Task<string> GetPersonIdByBulletinIdAsync(string bulleintId)
+        {
+            var result = await _dbContext.PBulletinIds.AsNoTracking()
+                        .Include(x => x.Person)
+                        .FirstOrDefaultAsync(x => x.BulletinId == bulleintId);
+
+            return result?.Person?.PersonId;
         }
     }
 }

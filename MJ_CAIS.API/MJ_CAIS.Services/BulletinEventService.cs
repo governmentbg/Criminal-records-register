@@ -8,6 +8,7 @@ using MJ_CAIS.DTO.BulletinEvent;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
+using static MJ_CAIS.Common.Constants.BulletinConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -48,82 +49,149 @@ namespace MJ_CAIS.Services
 
             await dbContext.SaveChangesAsync();
         }
+        /// <summary>
+        /// Check for events
+        /// http://tfstl:8080/tfs/DefaultCollection/MJ-CAIS/_workitems/edit/45537
+        /// </summary>
+        /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
+        /// <param name="personId">Person identifier</param>
+        /// <returns></returns>
+        public async Task GenereteEventWhenUpdateBullAsyn(BBulletin currentAttachedBulletin)
+        {
+            var personId = await _bulletinEventRepository.GetPersonIdByBulletinIdAsync(currentAttachedBulletin.Id);
+            if (string.IsNullOrEmpty(personId)) return;
 
-        public async Task GenereteEventAsyn(string personId)
+            var bulletinsQuery = await _bulletinEventRepository.GetBulletinByPersonIdAsync(personId);
+            var bulletins = await bulletinsQuery.ToListAsync();
+
+            // if person has one bulletin 
+            // the event is not applicable
+            if (bulletins.Count == 1) return;
+
+            var existingEvents = dbContext.BBulEvents
+                                .AsNoTracking()
+                                .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == EventType.Article2212);
+
+            currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
+
+            if (existingEvents) return;
+
+            CheckForArticle2212(bulletins, currentAttachedBulletin);
+        }
+
+        /// <summary>
+        /// Check for events
+        /// http://tfstl:8080/tfs/DefaultCollection/MJ-CAIS/_workitems/edit/45537
+        /// </summary>
+        /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
+        /// <param name="personId">Person identifier</param>
+        /// <returns></returns>
+        public async Task GenereteEventWhenChangeStatusOfBullAsyn(BBulletin currentAttachedBulletin, string personId)
         {
             var bulletinsQuery = await _bulletinEventRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
-            var uniqueBulletins = bulletins.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();
 
-            // if person has one or zero bulletin 
+            // if person has one bulletin 
             // the event is not applicable
-            if (uniqueBulletins.Count < 2) return;
+            if (bulletins.Count == 1) return;
 
-            // ако няма извършени престъпления в останалите бюлетини
-            if (!uniqueBulletins.SelectMany(x => x.OffencesEndDates).Any()) return;
+            var existingEvents = dbContext.BBulEvents
+                                .AsNoTracking()
+                                .Where(x => x.BulletinId == currentAttachedBulletin.Id)
+                                .GroupBy(x => x.EventType)
+                                .Select(x => new
+                                {
+                                    Type = x.Key,
+                                    Any = x.Any()
+                                });
 
-            //nkz_lishavane_ot_svoboda
-            var bulletinWithSanctionOfTypeLos = bulletins
+            currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
+
+            var article2211 = existingEvents.FirstOrDefault(x => x.Type == EventType.Article2211);
+            if (article2211 == null || !article2211.Any)
+            {
+                CheckForArticle2211(bulletins, currentAttachedBulletin);
+            }
+        }
+
+        /// <summary>
+        /// Current bulletin must has at least one offences with end date and PrevSuspSent must be false.
+        /// Another bulletin must has sanction of type nkz_lishavane_ot_svoboda with date in offence period 
+        /// </summary>
+        /// <param name="bulletins">All bulletins of the person</param>
+        /// <param name="currentBulletin">Updated bulletin attached to the context</param>
+        private static void CheckForArticle2211(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        {
+            // PrevSuspSent must be false
+            if (currentBulletin.PrevSuspSent == true) return;
+
+            var currentBullOffencesEndDates = bulletins.FirstOrDefault(x => x.Id == currentBulletin.Id)?.OffencesEndDates;
+            if (currentBullOffencesEndDates == null || !currentBullOffencesEndDates.Any()) return;
+
+            var anotherBulletins = bulletins.Where(x => x.Id != currentBulletin.Id);
+
+            // has sanction of type
+            var bulletinWithSanctionOfTypeLos = anotherBulletins
                 .Where(x => x.Sanctions
-                .Any(x => x.Type == "nkz_lishavane_ot_svoboda"))
+                .Any(x => x.Type == SanctionType.Imprisonment))
                 .ToList();
 
-            // todo: какво се случва ако имаме повече от един бюлетин
-            // в който има наказание лишаване от свобода 
-            if (bulletinWithSanctionOfTypeLos.Count != 1) return;
+            if (bulletinWithSanctionOfTypeLos.Count == 0) return;
 
-            var bulletin = bulletinWithSanctionOfTypeLos.First();
+            var mustAddEvent = false;
 
-            //todo: възможно ли е да има повече от едно наказание в бюлетин
-            // което да е от тип ЛОС
-            var sanction = bulletin.Sanctions.FirstOrDefault(x => x.Type == "nkz_lishavane_ot_svoboda");
-
-            if (!bulletin.DecisionDate.HasValue) return;
-
-            // крайната дата преди която трябва да е вписан бюлетин
-            // в който да не е чекнат Постановено изтърпяване на предходна условна присъда
-            // и в него да има престъпление с крайна дата влизаща в периода
-            var periodEndDate = bulletin.DecisionDate.Value;
-            periodEndDate = periodEndDate.AddHours(sanction.SuspentionDurationHours ?? 0);
-            periodEndDate = periodEndDate.AddDays(sanction.SuspentionDurationDays ?? 0);
-            periodEndDate = periodEndDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
-            periodEndDate = periodEndDate.AddYears(sanction.SuspentionDurationYears ?? 0);
-
-            // има престъпление с крайна дата влизаща в периода на изпитателния срок и
-            // не е маркирано "Постановено изтърпяване на предходна условна присъда" в осъждането
-            var bulletinForEvents = uniqueBulletins.Where(x => x.OffencesEndDates.Any(d=> d >= bulletin.DecisionDate &&
-            d <= periodEndDate) && x.Id != bulletin.Id &&
-             (!x.PrevSuspSent.HasValue || x.PrevSuspSent == false));
-
-            var bulletinIds = uniqueBulletins.Select(x => x.Id).ToList();
-
-            var existingEvents = await dbContext.BBulEvents
-                .AsNoTracking()
-                .Where(x => bulletinIds.Contains(x.BulletinId) && x.EventType == "Article2211")
-                .Select(x => x.BulletinId)
-                .ToListAsync();
-
-            var events = new List<BBulEvent>();
-            foreach (var bullId in bulletinIds)
+            foreach (var bullWithSanc in bulletinWithSanctionOfTypeLos)
             {
-                // вече има добавен евент или това е бюлетина с наказанието
-                if (existingEvents.Any(x => x == bullId) || bullId == bulletin.Id)
-                {
-                    continue;
-                }
+                // we cannot calculate the period
+                if (!bullWithSanc.DecisionDate.HasValue) continue;
 
-                events.Add(new BBulEvent
+                var periodStart = bullWithSanc.DecisionDate.Value;
+
+                foreach (var sanction in bullWithSanc.Sanctions)
                 {
-                    BulletinId = bullId,
-                    Id = BaseEntity.GenerateNewId(),
-                    StatusCode = "New",
-                    EventType = "Article2211",
-                    EntityState = EntityStateEnum.Added
-                });
+                    var periodEndDate = periodStart;
+                    periodEndDate = periodEndDate.AddHours(sanction.SuspentionDurationHours ?? 0);
+                    periodEndDate = periodEndDate.AddDays(sanction.SuspentionDurationDays ?? 0);
+                    periodEndDate = periodEndDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
+                    periodEndDate = periodEndDate.AddYears(sanction.SuspentionDurationYears ?? 0);
+
+                    var isInPeriod = currentBullOffencesEndDates.Any(x => x >= periodStart && x <= periodEndDate);
+
+                    if (isInPeriod)
+                    {
+                        mustAddEvent = true;
+                    }
+                }
             }
 
-            dbContext.BBulEvents.AddRange(events);
-            await dbContext.SaveChangesAsync();
+            if (!mustAddEvent) return;
+
+            AddEventToBulletin(currentBulletin, EventType.Article2211);
+        }
+
+        /// <summary>
+        /// Is a "No Sanction" bulletin introduced for the second time
+        /// </summary>
+        private static void CheckForArticle2212(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        {
+            var mustAddEvent = currentBulletin.StatusId == Status.NoSanction &&
+                bulletins.Any(x => x.Id != currentBulletin.Id && x.StatusId == Status.NoSanction);
+
+            if (!mustAddEvent) return;
+
+            AddEventToBulletin(currentBulletin, EventType.Article2212);
+        }
+
+        private static void AddEventToBulletin(BBulletin currentBulletin, string eventType)
+        {
+            currentBulletin.BBulEvents.Add(new BBulEvent
+            {
+                BulletinId = currentBulletin.Id,
+                Id = BaseEntity.GenerateNewId(),
+                StatusCode = EventStatusType.New,
+                EventType = eventType,
+                EntityState = EntityStateEnum.Added
+            });
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

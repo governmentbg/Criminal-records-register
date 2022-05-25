@@ -37,6 +37,7 @@ namespace MJ_CAIS.Services
             _bulletinRepository = bulletinRepository;
             _personService = personService;
             _notificationService = notificationService;
+            _bulletinEventService = bulletinEventService;
             _rehabilitationService = rehabilitationService;
         }
 
@@ -81,7 +82,13 @@ namespace MJ_CAIS.Services
             bulletin.Id = BaseEntity.GenerateNewId();
 
             await UpdateBulletinAsync(aInDto, bulletin, null);
-            await dbContext.SaveChangesAsync();
+            await _bulletinRepository.SaveChangesAsync();
+
+            if (bulletin.StatusId == BulletinConstants.Status.NoSanction)
+            {
+                await _bulletinEventService.GenereteEventWhenUpdateBullAsyn(bulletin);
+                await _bulletinRepository.SaveChangesAsync();
+            }
 
             return bulletin.Id;
         }
@@ -103,30 +110,30 @@ namespace MJ_CAIS.Services
             if (bulletinDb == null)
                 throw new ArgumentException($"Bulletin with id {aInDto.Id} is missing");
 
-            var bulletin = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
+            var bulletinToUpdate = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
 
             // if the bulletin is locked for editing,
             // we add property according to the status
             if (bulletinDb.Locked.HasValue && bulletinDb.Locked.Value)
             {
-                SetModifiedPropertiesByStatus(bulletinDb, bulletin);
+                SetModifiedPropertiesByStatus(bulletinDb, bulletinToUpdate);
             }
 
-            await UpdateBulletinAsync(aInDto, bulletin, bulletinDb.StatusId);
+            await UpdateBulletinAsync(aInDto, bulletinToUpdate, bulletinDb.StatusId);
+            await _bulletinRepository.SaveChangesAsync();
 
-            try
+            if (bulletinToUpdate.StatusId == BulletinConstants.Status.NoSanction)
             {
-                await dbContext.SaveChangesAsync();
-
+                await _bulletinEventService.GenereteEventWhenUpdateBullAsyn(bulletinToUpdate);
             }
-            catch (Exception ex)
+
+            if (bulletinToUpdate.StatusId == BulletinConstants.Status.Active || bulletinToUpdate.StatusId == BulletinConstants.Status.ForRehabilitation)
             {
-
-                throw;
+                await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletinToUpdate);
+                await _bulletinRepository.SaveChangesAsync();
             }
 
-            // todo: if status ?
-            await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletin);
+            await _bulletinRepository.SaveChangesAsync();
         }
 
         /// <summary>
@@ -169,20 +176,23 @@ namespace MJ_CAIS.Services
                 statusId == BulletinConstants.Status.Active;
             if (!mustUpdatePersonAndSendData)
             {
-                await dbContext.SaveChangesAsync();
+                await _bulletinRepository.SaveChangesAsync();
                 return;
             }
 
             var personId = await CreatePersonFromBulletinAsync(bulletin);
 
             // Attempt to save changes to the database
-            await dbContext.SaveChangesAsync();
-
+            await _bulletinRepository.SaveChangesAsync();
 
             if (isActiveBulletin)
             {
-                // await _bulletinEventService.GenereteEventAsyn(personId);
+                // only apply changes to the context
+                await _bulletinEventService.GenereteEventWhenChangeStatusOfBullAsyn(bulletin, personId);
                 await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
+
+                // save data in db
+                await _bulletinRepository.SaveChangesAsync();
             }
 
             // if person is bulgarian citizen
@@ -266,7 +276,7 @@ namespace MJ_CAIS.Services
 
             dbContext.Add(document);
             dbContext.Add(documentContent);
-            await dbContext.SaveChangesAsync();
+            await _bulletinRepository.SaveChangesAsync();
         }
 
         public async Task DeleteDocumentAsync(string documentId)

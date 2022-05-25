@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -8,6 +7,7 @@ using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Rehabilitation;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
+using static MJ_CAIS.Common.Constants.BulletinConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -24,7 +24,8 @@ namespace MJ_CAIS.Services
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         /// <summary>
-        /// Then change status from NewOffice/NewEISS to Active
+        /// When change status from NewOffice/NewEISS to Active
+        /// Applying changes of bulletin, without calling dbContext => SaveChanges
         /// Algorithm for rehabilitation
         /// https://bg.wikipedia.org/wiki/%D0%A0%D0%B5%D0%B0%D0%B1%D0%B8%D0%BB%D0%B8%D1%82%D0%B0%D1%86%D0%B8%D1%8F
         /// </summary>
@@ -33,17 +34,16 @@ namespace MJ_CAIS.Services
             var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
-
             var isFirstPointApplied = await ApplyFirstPoinAsync(bulletins, currentAttachedBull);
             if (isFirstPointApplied) return;
 
             var isSecondPointApplied = await ApplySecondPoinAsync(bulletins, currentAttachedBull);
             if (isSecondPointApplied) return;
-
         }
 
         /// <summary>
         /// When has edit on active bulletin
+        /// Applying changes of bulletin, without calling dbContext => SaveChanges
         /// </summary>
         /// <param name="currentAttachedBull"></param>
         /// <returns></returns>
@@ -76,7 +76,7 @@ namespace MJ_CAIS.Services
                 // get sanctions of the bulletin 
                 // if the bulletin does not contain sanctions of this type,
                 // point 1 may not apply
-                var sanction = bulletins.First().Sanctions.FirstOrDefault(x => x.Type == "nkz_lishavane_ot_svoboda");
+                var sanction = bulletins.First().Sanctions.FirstOrDefault(x => x.Type == SanctionType.Imprisonment);
                 if (sanction == null) return appliedChanges;
 
                 var endDate = startDate.AddYears(sanction.SuspentionDuration.Years ?? 0);
@@ -113,11 +113,6 @@ namespace MJ_CAIS.Services
                 }
             }
 
-            if (appliedChanges)
-            {
-                await _rehabilitationRepository.SaveChangesAsync();
-            }
-
             return appliedChanges;
         }
 
@@ -137,15 +132,15 @@ namespace MJ_CAIS.Services
             {
                 var bulletinDTO = bulletins.First();
 
-                if (!bulletinDTO.Decisions.Any(x => x.Type == "DCH-00-N")) return appliedChanges;
+                if (!bulletinDTO.Decisions.Any(x => x.Type == DecisionType.EndOfPenalty)) return appliedChanges;
 
                 // todo: 
                 var sanctionLos = bulletinDTO.Sanctions
-                    .FirstOrDefault(x => x.Type == "nkz_lishavane_ot_svoboda");
+                    .FirstOrDefault(x => x.Type == SanctionType.Imprisonment);
 
                 var losIdInPeriod = sanctionLos != null && IsInDurationInYears(sanctionLos.SuspentionDuration, 3);
 
-                var sanctionProb = bulletinDTO.Sanctions.FirstOrDefault(x => x.Type == "nkz_probacia");
+                var sanctionProb = bulletinDTO.Sanctions.FirstOrDefault(x => x.Type == SanctionType.Probation);
 
                 var propbIsInPeriod = sanctionProb != null && sanctionProb.PropbationDurations
                     .All(x => IsInDurationInYears(x, 3));
@@ -157,7 +152,8 @@ namespace MJ_CAIS.Services
                 {
                     var endDate = bulletinDTO
                         .Decisions
-                        .Where(x => x.Type == "DCH-00-N") // todo: крайн на изтърпяването на наказанието или помилване
+                        .Where(x => x.Type == DecisionType.EndOfPenalty ||
+                                    x.Type == DecisionType.Pardon)
                         .OrderBy(x => x.ChangeDate)
                         .FirstOrDefault()?.ChangeDate;
 
@@ -185,12 +181,12 @@ namespace MJ_CAIS.Services
             var anotherBulls = bulletins.Where(x => x.Id != currentAttachedBull.Id);
 
             var hasSanctionOfType = anotherBulls.SelectMany(x => x.Sanctions)
-                   .Any(s => s.Type == "nkz_dojiv_zatvor" || s.Type == "nkz_dojiv_zatvor_bez_zamiana" || s.Type == "nkz_lishavane_ot_svoboda");
-
+                   .Any(s => s.Type == SanctionType.LifeImprisonment ||
+                             s.Type == SanctionType.LifeImprisonmentWithoutParole ||
+                             s.Type == SanctionType.Imprisonment);
 
             // offences end date
             var currentBullOffEndDates = bulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id)?.OffencesEndDates;
-
 
             foreach (var bull in anotherBulls)
             {
@@ -205,11 +201,6 @@ namespace MJ_CAIS.Services
                 }
             }
 
-            if (appliedChanges)
-            {
-                await _rehabilitationRepository.SaveChangesAsync();
-            }
-
             return appliedChanges;
         }
 
@@ -217,7 +208,7 @@ namespace MJ_CAIS.Services
 
         private async Task SaveRehabilitationDataAsync(BBulletin bulletin, DateTime? rehabilitationDate)
         {
-            var status = rehabilitationDate <= DateTime.UtcNow ? BulletinConstants.Status.ForRehabilitation : null;// todo: ?
+            var status = rehabilitationDate <= DateTime.UtcNow ? Status.ForRehabilitation : null;// todo: ?
 
             // this entity is attached to context
             bulletin.RehabilitationDate = rehabilitationDate;
@@ -235,8 +226,6 @@ namespace MJ_CAIS.Services
                 dbContext.ApplyChanges(satusHistory, new List<IBaseIdEntity>());
                 bulletin.StatusId = status;
             }
-
-            await _rehabilitationRepository.SaveChangesAsync();
         }
 
         private static bool IsInDurationInYears(Duration duration, int maxYear)

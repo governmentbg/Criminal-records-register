@@ -21,5 +21,70 @@
             public const string Bulletin78A = "по чл.78а";
             public const string Unspecified = "неопределен";
         }
+
+
+        public static class SanctionType
+        {
+            /// <summary>
+            /// Лишаване от свобода
+            /// </summary>
+            public const string Imprisonment = "nkz_lishavane_ot_svoboda";
+
+            /// <summary>
+            /// Пробация
+            /// </summary>
+            public const string Probation = "nkz_probacia";
+
+            /// <summary>
+            /// Доживотен затвор
+            /// </summary>
+            public const string LifeImprisonment = "nkz_dojiv_zatvor";
+
+            /// <summary>
+            /// Доживотен затвор без замяна
+            /// </summary>
+            public const string LifeImprisonmentWithoutParole = "nkz_dojiv_zatvor_bez_zamiana";
+        }
+
+        public static class DecisionType
+        {
+            /// <summary>
+            /// Край на изтърпяването на наказанието
+            /// </summary>
+            public const string EndOfPenalty = "DCH-00-N";
+
+            /// <summary>
+            /// Помилване
+            /// </summary>
+            public const string Pardon = "DCH-00-O";         
+        }
+
+        public static class EventType
+        {
+            /// <summary>
+            /// по чл.22, чл. 1, изр. 1
+            /// </summary>
+            public const string Article2211 = "Article2211";
+
+            /// <summary>
+            /// по чл.22, чл. 1, изр. 2
+            /// </summary>
+            public const string Article2212 = "Article2212";
+
+            /// <summary>
+            /// по чл.30
+            /// </summary>
+            public const string Article3000 = "Article3000";
+
+            /// <summary>
+            /// добавен документ
+            /// </summary>
+            public const string NewDocument = "NewDocument";
+        }
+
+        public static class EventStatusType
+        {
+            public const string New = "New";      
+        }
     }
 }

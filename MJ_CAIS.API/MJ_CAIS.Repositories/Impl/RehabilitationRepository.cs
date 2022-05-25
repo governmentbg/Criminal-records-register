@@ -107,11 +107,6 @@ namespace MJ_CAIS.Repositories.Impl
 
             _dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
         }
-
-        public async Task SaveChangesAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
     }
 }
 
