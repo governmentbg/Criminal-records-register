@@ -3,4 +3,5 @@ export enum ApplicationTypeStatusConstants {
   Cancelled = "Cancelled", // Анулирано
   CheckPayment = "CheckPayment", // Очаква потвърждение за плащане
   CheckTaxFree = "CheckTaxFree", // Освободени от плащане
+  BulletinsCheck = "BulletinsCheck", // За обработка
 }

@@ -86,6 +86,10 @@ export class PagesMenu {
             title: "Oсвободени от плащане",
             link: "/pages/application-tax-free",
           },
+          {
+            title: "За обработка",
+            link: "/pages/application-for-check",
+          },
         ],
       },
       {

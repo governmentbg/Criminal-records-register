@@ -53,6 +53,7 @@ import { UsersExternalResolver } from "./users-external/users-external-form/_dat
 import { BulletinEventsOverviewComponent } from "./bulletin-events/bulletin-events-overview/bulletin-events-overview.component";
 import { ApplicationWaitingPaymentComponent } from "./application/application-overview/application-waiting-payment/application-waiting-payment.component";
 import { ApplicationTaxFreeOverviewComponent } from "./application/application-overview/application-tax-free-overview/application-tax-free-overview.component";
+import { ApplicationForCheckComponent } from "./application/application-overview/application-for-check/application-for-check.component";
 
 const routes: Routes = [
   {
@@ -98,6 +99,11 @@ const routes: Routes = [
       {
         path: "application-tax-free",
         component: ApplicationTaxFreeOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-for-check",
+        component: ApplicationForCheckComponent,
         // canActivate: [AuthGuard],
       },
       {
