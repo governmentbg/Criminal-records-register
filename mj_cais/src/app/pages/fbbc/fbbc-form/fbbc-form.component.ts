@@ -67,7 +67,6 @@ export class FbbcFormComponent
   submitFunction = () => {
     this.fullForm.docTypeId.enable();
     if (this.isForCreate || this.isForEdit) {
-      this.fullForm.docTypeId.setValue(DocTypeConstants.ecris);
       this.fullForm.statusCode.setValue(FbbcStatusTypeEnum.Active);
     }
     this.validateAndSave(this.fullForm);
