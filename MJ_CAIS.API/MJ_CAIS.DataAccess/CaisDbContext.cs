@@ -69,6 +69,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisMsgStatus> EEcrisMsgStatuses { get; set; } = null!;
         public virtual DbSet<EEcrisOutbox> EEcrisOutboxes { get; set; } = null!;
         public virtual DbSet<EEcrisReference> EEcrisReferences { get; set; } = null!;
+        public virtual DbSet<EEcrisTcn> EEcrisTcns { get; set; } = null!;
         public virtual DbSet<EEdeliveryMsg> EEdeliveryMsgs { get; set; } = null!;
         public virtual DbSet<EEmailEvent> EEmailEvents { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
@@ -85,6 +86,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GCity> GCities { get; set; } = null!;
         public virtual DbSet<GCountry> GCountries { get; set; } = null!;
         public virtual DbSet<GCsAuthority> GCsAuthorities { get; set; } = null!;
+        public virtual DbSet<GDecidingAuthoritiesTmp> GDecidingAuthoritiesTmps { get; set; } = null!;
         public virtual DbSet<GDecidingAuthority> GDecidingAuthorities { get; set; } = null!;
         public virtual DbSet<GExtAdministration> GExtAdministrations { get; set; } = null!;
         public virtual DbSet<GNomenclature> GNomenclatures { get; set; } = null!;
@@ -109,8 +111,6 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
-        public virtual DbSet<EEmailEvent> EmailEvents { get; set; } = null!;
-    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -814,6 +814,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("CREATED_ON");
 
                 entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.IsForDesk)
+                    .HasPrecision(1)
+                    .HasColumnName("IS_FOR_DESK");
 
                 entity.Property(e => e.IsForWeb)
                     .HasPrecision(1)
@@ -1855,6 +1859,10 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Category)
                     .HasMaxLength(200)
                     .HasColumnName("CATEGORY");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(100)
+                    .HasColumnName("CODE");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)
@@ -3276,6 +3284,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)
                     .HasColumnName("CREATED_BY");
@@ -3866,6 +3879,57 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.EEcrisReferences)
                     .HasForeignKey(d => d.FbbcId)
                     .HasConstraintName("FK_E_ECRIS_REFERENCES_FBBC");
+            });
+
+            modelBuilder.Entity<EEcrisTcn>(entity =>
+            {
+                entity.ToTable("E_ECRIS_TCN");
+
+                entity.HasIndex(e => e.BulletinId, "XIF1E_ECRIS_TCN");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Action)
+                    .HasMaxLength(200)
+                    .HasColumnName("ACTION");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Bulletin)
+                    .WithMany(p => p.EEcrisTcns)
+                    .HasForeignKey(d => d.BulletinId)
+                    .HasConstraintName("FK_E_ECRIS_TCN_B_BULLETINS");
             });
 
             modelBuilder.Entity<EEdeliveryMsg>(entity =>
@@ -5112,6 +5176,10 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
+                entity.Property(e => e.Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("CODE");
+
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)
                     .HasColumnName("CREATED_BY");
@@ -5164,14 +5232,11 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_G_CS_AUTHORITIES_G_DECIDING");
             });
 
-            modelBuilder.Entity<GDecidingAuthority>(entity =>
+            modelBuilder.Entity<GDecidingAuthoritiesTmp>(entity =>
             {
-                entity.ToTable("G_DECIDING_AUTHORITIES");
+                entity.HasNoKey();
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
+                entity.ToTable("G_DECIDING_AUTHORITIES_TMP");
 
                 entity.Property(e => e.ActiveForBulletins)
                     .HasPrecision(1)
@@ -5192,6 +5257,103 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.DisplayName)
                     .HasMaxLength(500)
                     .HasColumnName("DISPLAY_NAME");
+
+                entity.Property(e => e.EisppCode)
+                    .HasMaxLength(200)
+                    .HasColumnName("EISPP_CODE");
+
+                entity.Property(e => e.EisppId)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("EISPP_ID");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.IsGroup)
+                    .HasPrecision(1)
+                    .HasColumnName("IS_GROUP");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.NameEn)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME_EN");
+
+                entity.Property(e => e.OldId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("OLD_ID");
+
+                entity.Property(e => e.OrderNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ORDER_NUMBER");
+
+                entity.Property(e => e.ParentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PARENT_ID");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.Property(e => e.Visible)
+                    .HasPrecision(1)
+                    .HasColumnName("VISIBLE");
+            });
+
+            modelBuilder.Entity<GDecidingAuthority>(entity =>
+            {
+                entity.ToTable("G_DECIDING_AUTHORITIES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.ActiveForBulletins)
+                    .HasPrecision(1)
+                    .HasColumnName("ACTIVE_FOR_BULLETINS");
+
+                entity.Property(e => e.Code)
+                    .HasPrecision(10)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.DisplayName)
+                    .HasMaxLength(500)
+                    .HasColumnName("DISPLAY_NAME");
+
+                entity.Property(e => e.EcliCode)
+                    .HasMaxLength(200)
+                    .HasColumnName("ECLI_CODE");
 
                 entity.Property(e => e.EisppCode)
                     .HasMaxLength(200)
@@ -7279,69 +7441,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("XML_DATA");
             });
 
-            modelBuilder.Entity<EEmailEvent>(entity =>
-            {
-                entity.ToTable("E_EMAIL_EVENTS");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.Attempts)
-                    .HasPrecision(4)
-                    .HasColumnName("ATTEMPTS");
-
-                entity.Property(e => e.Body)
-                    .HasColumnType("CLOB")
-                    .HasColumnName("BODY");
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(200)
-                    .HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.EmailAddress)
-                    .HasMaxLength(100)
-                    .HasColumnName("EMAIL_ADDRESS");
-
-                entity.Property(e => e.EmailStatus)
-                    .HasMaxLength(200)
-                    .HasColumnName("EMAIL_STATUS");
-
-                entity.Property(e => e.Error).HasColumnName("ERROR");
-
-                entity.Property(e => e.HasError)
-                    .HasPrecision(1)
-                    .HasColumnName("HAS_ERROR");
-
-                entity.Property(e => e.SentDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("SENT_DATE");
-
-                entity.Property(e => e.StackTrace)
-                    .HasColumnType("CLOB")
-                    .HasColumnName("STACK_TRACE");
-
-                entity.Property(e => e.Subject)
-                    .HasMaxLength(500)
-                    .HasColumnName("SUBJECT");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(200)
-                    .HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-            });
+            modelBuilder.HasSequence("DOC_REG_COMMON_SEQ");
 
             OnModelCreatingPartial(modelBuilder);
         }

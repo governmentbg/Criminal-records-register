@@ -14,6 +14,7 @@ using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
+using static MJ_CAIS.Common.Constants.BulletinConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
@@ -25,13 +26,15 @@ namespace MJ_CAIS.Services
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
         private readonly IRehabilitationService _rehabilitationService;
+        private readonly IUserContext _userContext;
 
         public BulletinService(IMapper mapper,
             IBulletinRepository bulletinRepository,
             IPersonService personService,
             INotificationService notificationService,
             IBulletinEventService bulletinEventService,
-            IRehabilitationService rehabilitationService)
+            IRehabilitationService rehabilitationService,
+            IUserContext userContext)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
@@ -39,6 +42,7 @@ namespace MJ_CAIS.Services
             _notificationService = notificationService;
             _bulletinEventService = bulletinEventService;
             _rehabilitationService = rehabilitationService;
+            _userContext = userContext;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -78,13 +82,13 @@ namespace MJ_CAIS.Services
         {
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
             // entry of a bulletin is possible only by an employee 
-            bulletin.StatusId = BulletinConstants.Status.NewOffice;
+            bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
 
             await UpdateBulletinAsync(aInDto, bulletin, null);
             await _bulletinRepository.SaveChangesAsync();
 
-            if (bulletin.StatusId == BulletinConstants.Status.NoSanction)
+            if (bulletin.StatusId == Status.NoSanction)
             {
                 await _bulletinEventService.GenereteEventWhenUpdateBullAsyn(bulletin);
                 await _bulletinRepository.SaveChangesAsync();
@@ -122,12 +126,12 @@ namespace MJ_CAIS.Services
             await UpdateBulletinAsync(aInDto, bulletinToUpdate, bulletinDb.StatusId);
             await _bulletinRepository.SaveChangesAsync();
 
-            if (bulletinToUpdate.StatusId == BulletinConstants.Status.NoSanction)
+            if (bulletinToUpdate.StatusId == Status.NoSanction)
             {
                 await _bulletinEventService.GenereteEventWhenUpdateBullAsyn(bulletinToUpdate);
             }
 
-            if (bulletinToUpdate.StatusId == BulletinConstants.Status.Active || bulletinToUpdate.StatusId == BulletinConstants.Status.ForRehabilitation)
+            if (bulletinToUpdate.StatusId == Status.Active || bulletinToUpdate.StatusId == Status.ForRehabilitation)
             {
                 await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletinToUpdate);
                 await _bulletinRepository.SaveChangesAsync();
@@ -157,7 +161,7 @@ namespace MJ_CAIS.Services
 
             // All active bulletins are locked for editing
             // only decisions can be added
-            var isActiveBulletin = statusId == BulletinConstants.Status.Active;
+            var isActiveBulletin = statusId == Status.Active;
             if (isActiveBulletin)
             {
                 bulletin.Locked = true;
@@ -172,8 +176,8 @@ namespace MJ_CAIS.Services
                 nameof(bulletin.Version)
             };
 
-            var mustUpdatePersonAndSendData = (oldBulletinStatus == BulletinConstants.Status.NewOffice || oldBulletinStatus == BulletinConstants.Status.NewEISS) &&
-                statusId == BulletinConstants.Status.Active;
+            var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
+                statusId == Status.Active;
             if (!mustUpdatePersonAndSendData)
             {
                 await _bulletinRepository.SaveChangesAsync();
@@ -274,8 +278,26 @@ namespace MJ_CAIS.Services
                 MimeType = aInDto.MimeType
             };
 
+            // add an event when a user from another authority attaches a document
+            //var bulletinAuthId = await _bulletinRepository.GetBulletinAuthIdAsync(bulletinId);
+            //var currentUserAuth = _userContext.CsAuthorityId;
+            //if (bulletinAuthId != currentUserAuth)
+            //{
+            //    var bullEvent = new BBulEvent
+            //    {
+            //        BulletinId = bulletinId,
+            //        Id = BaseEntity.GenerateNewId(),
+            //        StatusCode = EventStatusType.New,
+            //        EventType = EventType.NewDocument,
+            //        EntityState = EntityStateEnum.Added
+            //    };
+
+            //    dbContext.Add(bullEvent);
+            //}
+
             dbContext.Add(document);
             dbContext.Add(documentContent);
+
             await _bulletinRepository.SaveChangesAsync();
         }
 
@@ -333,7 +355,7 @@ namespace MJ_CAIS.Services
             // change bulletin status
             if (entity.NoSanction == true)
             {
-                entity.StatusId = BulletinConstants.Status.NoSanction;
+                entity.StatusId = Status.NoSanction;
                 // if new person is created 
                 // set new person id
                 aInDto.Person.Id = await CreatePersonFromBulletinAsync(entity);
@@ -351,7 +373,7 @@ namespace MJ_CAIS.Services
 
             // it is locked each time
             // unless the statue is NewOffice or NewEISS
-            if (entity.StatusId != BulletinConstants.Status.NewOffice)
+            if (entity.StatusId != Status.NewOffice)
             {
                 entity.Locked = true;
                 UpdateModifiedProperties(entity, nameof(entity.Locked));
@@ -395,13 +417,13 @@ namespace MJ_CAIS.Services
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)
         {
-            if (bulletinDb.StatusId != BulletinConstants.Status.NewEISS ||
-                bulletinDb.StatusId != BulletinConstants.Status.NewOffice)
+            if (bulletinDb.StatusId != Status.NewEISS ||
+                bulletinDb.StatusId != Status.NewOffice)
             {
                 // only version of the main object must be updated
                 bulletin.ModifiedProperties = new List<string>() { nameof(bulletin.Version) };
             }
-            else if (bulletinDb.StatusId == BulletinConstants.Status.NewEISS)
+            else if (bulletinDb.StatusId == Status.NewEISS)
             {
                 // when updating a bulletin in NewEISS status
                 // only registration information is changed
@@ -431,12 +453,12 @@ namespace MJ_CAIS.Services
 
             if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
             {
-                entityToSave.StatusId = BulletinConstants.Status.Rehabilitated;
+                entityToSave.StatusId = Status.Rehabilitated;
             }
 
             if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == judicialAnnulmentId))
             {
-                entityToSave.StatusId = BulletinConstants.Status.ReplacedAct425;
+                entityToSave.StatusId = Status.ReplacedAct425;
             }
         }
 
@@ -541,7 +563,7 @@ namespace MJ_CAIS.Services
 
             if (bulletin.DeleteDate.HasValue && bulletin.DeleteDate <= DateTime.Now)
             {
-                bulletin.StatusId = BulletinConstants.Status.ForDestruction;
+                bulletin.StatusId = Status.ForDestruction;
                 UpdateModifiedProperties(bulletin, nameof(bulletin.StatusId));
             }
         }

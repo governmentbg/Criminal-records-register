@@ -33,6 +33,14 @@ namespace MJ_CAIS.Repositories.Impl
             return bulletin;
         }
 
+        public async Task<string> GetBulletinAuthIdAsync(string aId)
+        {
+            var bulletin = await _dbContext.BBulletins.AsNoTracking()               
+               .FirstOrDefaultAsync(x => x.Id == aId);
+
+            return bulletin?.CsAuthorityId;
+        }
+
         public async Task<DDocument> SelectDocumentAsync(string documentId)
         {
             return await _dbContext.DDocuments.AsNoTracking()

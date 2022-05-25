@@ -3,19 +3,10 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class GDecidingAuthority : BaseEntity, IBaseIdEntity, IBaseNomenclature
+    public partial class GDecidingAuthoritiesTmp : BaseEntity, IBaseIdEntity
     {
-        public GDecidingAuthority()
-        {
-            BBulletinBulletinAuthorities = new HashSet<BBulletin>();
-            BBulletinCaseAuths = new HashSet<BBulletin>();
-            BBulletinDecidingAuths = new HashSet<BBulletin>();
-            BDecisions = new HashSet<BDecision>();
-            GCsAuthorities = new HashSet<GCsAuthority>();
-        }
-
         public string Id { get; set; } = null!;
-        public int? Code { get; set; }
+        public string? Code { get; set; }
         public string? Name { get; set; }
         public string? NameEn { get; set; }
         public decimal? EisppId { get; set; }
@@ -33,12 +24,5 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public string? EcliCode { get; set; }
-
-        public virtual ICollection<BBulletin> BBulletinBulletinAuthorities { get; set; }
-        public virtual ICollection<BBulletin> BBulletinCaseAuths { get; set; }
-        public virtual ICollection<BBulletin> BBulletinDecidingAuths { get; set; }
-        public virtual ICollection<BDecision> BDecisions { get; set; }
-        public virtual ICollection<GCsAuthority> GCsAuthorities { get; set; }
     }
 }
