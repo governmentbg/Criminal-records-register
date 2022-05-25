@@ -21,7 +21,7 @@ export class ApplicationForCheckComponent extends RemoteGridWithStatePersistance
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("application-search", service, injector);
+    super("application-for-check-search", service, injector);
     this.service.updateUrlStatus(ApplicationTypeStatusConstants.BulletinsCheck);
   }
 

@@ -21,7 +21,7 @@ export class ApplicationWaitingPaymentComponent extends RemoteGridWithStatePersi
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("application-search", service, injector);
+    super("application-waiting-payment-search", service, injector);
     this.service.updateUrlStatus(ApplicationTypeStatusConstants.CheckPayment);
   }
 

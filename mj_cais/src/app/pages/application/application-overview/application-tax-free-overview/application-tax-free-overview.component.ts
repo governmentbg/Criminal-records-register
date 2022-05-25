@@ -21,7 +21,7 @@ constructor(
   injector: Injector,
   public dateFormatService: DateFormatService
 ) {
-  super("application-search", service, injector);
+  super("application-tax-free-search", service, injector);
   this.service.updateUrlStatus(ApplicationTypeStatusConstants.CheckTaxFree);
 }
 
