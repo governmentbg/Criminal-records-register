@@ -64,6 +64,7 @@ import { ApplicationWaitingPaymentComponent } from './application/application-ov
 import { BulletinEventsOverviewComponent } from './bulletin-events/bulletin-events-overview/bulletin-events-overview.component';
 import { BulletinEventsArticleOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-article-overview/bulletin-events-article-overview.component';
 import { BulletinEventsDocumentOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
+import { ApplicationTaxFreeOverviewComponent } from './application/application-overview/application-tax-free-overview/application-tax-free-overview.component';
 
 @NgModule({
   imports: [
@@ -133,7 +134,8 @@ import { BulletinEventsDocumentOverviewComponent } from './bulletin-events/bulle
     ApplicationWaitingPaymentComponent,
     BulletinEventsOverviewComponent,
     BulletinEventsArticleOverviewComponent,
-    BulletinEventsDocumentOverviewComponent
+    BulletinEventsDocumentOverviewComponent,
+    ApplicationTaxFreeOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

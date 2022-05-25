@@ -54,7 +54,7 @@ namespace MJ_CAIS.Services
             var entityQuery = this.GetSelectAllQueriable();
             if (!string.IsNullOrEmpty(statusId))
             {
-                entityQuery = entityQuery.Where(x => x.ApplicationTypeId == statusId);
+                entityQuery = entityQuery.Where(x => x.StatusCode == statusId);
             }
 
             var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);

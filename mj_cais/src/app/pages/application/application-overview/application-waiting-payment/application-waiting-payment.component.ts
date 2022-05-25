@@ -22,7 +22,7 @@ export class ApplicationWaitingPaymentComponent extends RemoteGridWithStatePersi
     public dateFormatService: DateFormatService
   ) {
     super("application-search", service, injector);
-    this.service.updateUrlStatus(ApplicationTypeStatusConstants.PaymentCheck);
+    this.service.updateUrlStatus(ApplicationTypeStatusConstants.CheckPayment);
   }
 
   ngOnInit(): void {

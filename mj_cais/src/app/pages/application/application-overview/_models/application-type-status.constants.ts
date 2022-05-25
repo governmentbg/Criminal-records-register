@@ -1,5 +1,6 @@
 export enum ApplicationTypeStatusConstants {
-  NewApplication = "1", // Ново заявление
+  NewId	= "NewId", // Ново заявление
   Cancelled = "Cancelled", // Анулирано
-  PaymentCheck = "5", // Очаква потвърждение за плащане
+  CheckPayment = "CheckPayment", // Очаква потвърждение за плащане
+  CheckTaxFree = "CheckTaxFree", // Освободени от плащане
 }

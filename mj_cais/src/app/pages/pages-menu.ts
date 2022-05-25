@@ -82,6 +82,10 @@ export class PagesMenu {
             title: "Потвърждение за плащане",
             link: "/pages/applications-waiting-payment",
           },
+          {
+            title: "Потвърждение за плащане",
+            link: "/pages/applications-waiting-payment",
+          },
         ],
       },
       {

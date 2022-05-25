@@ -24,7 +24,7 @@ export class ApplicationNewOverviewComponent extends RemoteGridWithStatePersista
     public dateFormatService: DateFormatService
   ) {
     super("application-search", service, injector);
-    this.service.updateUrlStatus(ApplicationTypeStatusConstants.NewApplication);
+    this.service.updateUrlStatus(ApplicationTypeStatusConstants.NewId);
   }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class ApplicationNewOverviewComponent extends RemoteGridWithStatePersista
       this.service.updateUrlStatus();
     } else {
       this.service.updateUrlStatus(
-        ApplicationTypeStatusConstants.NewApplication
+        ApplicationTypeStatusConstants.NewId
       );
     }
     this.hideStatus = !isChacked;
