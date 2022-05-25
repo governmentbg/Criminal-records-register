@@ -136,7 +136,7 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
 
             certificate.DocId = doc.Id;
-            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.InternalCode5)
+            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebInternalCertificate)
             {
                 //ako не е електронно -> за печат
                 certificate.StatusCode = statusCodeCertificatePaperPrint;

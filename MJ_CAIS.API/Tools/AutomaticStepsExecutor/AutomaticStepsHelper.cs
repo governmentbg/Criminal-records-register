@@ -12,9 +12,19 @@ namespace AutomaticStepsExecutor
 {
     public class AutomaticStepsHelper
     {
-       public static async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, CaisDbContext dbContext)
+       public static async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, CaisDbContext dbContext, MJ_CAIS.Services.Contracts.IRegisterTypeService _registerTypeService)
         {
             wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
+            string regNumber ="";
+           
+            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(wapplication.CsAuthorityId);
+            }
+            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            {
+                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebInternal(wapplication.CsAuthorityId);
+            }
             AApplication appl = new AApplication()
             {
                 Id = BaseEntity.GenerateNewId(),
@@ -65,10 +75,10 @@ namespace AutomaticStepsExecutor
                 UserCitizenId = wapplication.UserCitizenId,
                 UserExtId = wapplication.UserExtId,
                 UserId = wapplication.UserId,
-                WApplicationId = wapplication.Id,
-                //todo: get registration number
-                RegistrationNumber = "123445",
-                ApplicationType = wapplication.ApplicationType
+                WApplicationId = wapplication.Id,    
+                RegistrationNumber = regNumber,
+                ApplicationType = wapplication.ApplicationType,
+                ApplicationTypeId = wapplication.ApplicationType.Id
 
             };
             //foreach (var v in wapplication.AAppCitizenships)

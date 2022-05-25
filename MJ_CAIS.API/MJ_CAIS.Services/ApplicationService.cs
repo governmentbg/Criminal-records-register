@@ -16,11 +16,13 @@ namespace MJ_CAIS.Services
     public class ApplicationService : BaseAsyncService<ApplicationDTO, ApplicationDTO, ApplicationDTO, AApplication, string, CaisDbContext>, IApplicationService
     {
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IRegisterTypeService _registerTypeService;
 
-        public ApplicationService(IMapper mapper, IApplicationRepository applicationRepository)
+        public ApplicationService(IMapper mapper, IApplicationRepository applicationRepository, IRegisterTypeService registerTypeService)
             : base(mapper, applicationRepository)
         {
             _applicationRepository = applicationRepository;
+            _registerTypeService = registerTypeService;
         }
 
         public virtual async Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
@@ -52,19 +54,19 @@ namespace MJ_CAIS.Services
                                  && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).ToListAsync();
                 if (bulletins.Count > 0)
                 {
-                    ProcessApplicationWithBulletins(application, bulletins, certificateWithBulletinStatusID, certificateValidityMonths);
+                   await  ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatusID, certificateValidityMonths);
                     return;
 
                 }
             }
-            ProcessApplicationWithoutBulletins(application, certificateWithoutBulletinStatusID, certificateValidityMonths);
+            await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatusID, certificateValidityMonths);
 
         }
 
 
-        private void ProcessApplicationWithoutBulletins(AApplication application, string statusID, int certificateValidityMonths)
+        private async Task ProcessApplicationWithoutBulletinsAsync(AApplication application, string statusID, int certificateValidityMonths)
         {
-            ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
+            ACertificate cert = await CreateCertificateAsync(application.Id, statusID, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
@@ -72,15 +74,27 @@ namespace MJ_CAIS.Services
 
         }
 
-        private ACertificate CreateCertificate(string applicationId, string certificateStatus, int certificateValidityMonths)
+        private async Task<ACertificate> CreateCertificateAsync(string applicationId, string certificateStatus, int certificateValidityMonths, string csAuthorityId,string applicationTypeCode)
         {
 
             ACertificate cert = new ACertificate();
             cert.Id = BaseEntity.GenerateNewId();
             cert.ApplicationId = applicationId;
             cert.StatusCode = certificateStatus;
-            //дали тук да се попълват?!
-            cert.RegistrationNumber = Guid.NewGuid().ToString();
+           
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.DeskCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateOnDesk(csAuthorityId);
+            }
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(csAuthorityId);
+            }
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWebInternal(csAuthorityId);
+            }
+
             cert.AccessCode1 = Guid.NewGuid().ToString();
             cert.ValidFrom = DateTime.UtcNow;
             cert.ValidTo = DateTime.UtcNow.AddMonths(certificateValidityMonths);
@@ -88,9 +102,9 @@ namespace MJ_CAIS.Services
             return cert;
         }
 
-        private void ProcessApplicationWithBulletins(AApplication application, List<BBulletin> bulletins, string statusID, int certificateValidityMonths)
+        private async Task ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins, string statusID, int certificateValidityMonths)
         {
-            ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
+            ACertificate cert = await CreateCertificateAsync(application.Id, statusID, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             int orderNumber = 0;
             cert.AAppBulletins= bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
             {

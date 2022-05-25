@@ -2,6 +2,7 @@
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,18 +16,17 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<WApplicationProcessorService> _logger;
+        private readonly IRegisterTypeService _registerTypeService;
         public const string Pending = "Pending";
         public const string Accepted = "Accepted";
         public const string Rejected = "Rejected";
 
 
-        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger)
+        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService)
         {
             _dbContext = dbContext;
             _logger = logger;
-
-
-
+            _registerTypeService = registerTypeService;
         }
 
         public async Task PreSelectAsync()
@@ -65,10 +65,10 @@ namespace AutomaticStepsExecutor
             if (entities.Count > 0)
             {
 
-                var internalApplicationType = await _dbContext.AApplicationTypes.FirstOrDefaultAsync(x => x.Code == ApplicationConstants.ApplicationTypes.InternalCode5);
+                var internalApplicationType = await _dbContext.AApplicationTypes.FirstOrDefaultAsync(x => x.Code == ApplicationConstants.ApplicationTypes.WebInternalCertificate);
                 if (internalApplicationType == null)
                 {
-                    throw new Exception($"Code \"{ApplicationConstants.ApplicationTypes.InternalCode5}\" for internal applications is not set.");
+                    throw new Exception($"Code \"{ApplicationConstants.ApplicationTypes.WebInternalCertificate}\" for internal applications is not set.");
 
                 }
 
@@ -105,7 +105,7 @@ namespace AutomaticStepsExecutor
                         //ако е служебно заявление,влиза в цаис за обработка
                         if (wapplication.ApplicationTypeId == internalApplicationType.Id)
                         {
-                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext);
+                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService);
                             await _dbContext.SaveChangesAsync();
                             numberOfSuccessEntities++;
                             continue;

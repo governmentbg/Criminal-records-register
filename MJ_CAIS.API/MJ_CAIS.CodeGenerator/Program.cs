@@ -11,10 +11,10 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "ACertificate",
-                SingleName = "Certificate",
-                MultipleName = "Certificates",
-                AngularModuleName = "certificate",
+                EntityName = "DRegisterType",
+                SingleName = "RegisterType",
+                MultipleName = "RegisterTypes",
+                AngularModuleName = "register-types",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
@@ -24,7 +24,7 @@ namespace MJ_CAIS.CodeGenerator
             ClassGenerator.GenerateRepository(projectPath, parameters);
             ClassGenerator.GenerateInterface(projectPath, parameters);
             ClassGenerator.GenerateService(projectPath, parameters);
-            ClassGenerator.GenerateController(projectPath, parameters);
+            //ClassGenerator.GenerateController(projectPath, parameters);
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
             //ClassGenerator.GenerateAngularFormModel(projectPath, parameters);

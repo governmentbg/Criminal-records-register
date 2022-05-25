@@ -2,6 +2,7 @@
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,13 +16,13 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<PaymentCheckerService> _logger;
+        private readonly IRegisterTypeService _registerTypeService;
 
-        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger)
+        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService)
         {
             _dbContext = dbContext;
             _logger = logger;
-
-
+            _registerTypeService = registerTypeService;
 
         }
 
@@ -75,6 +76,8 @@ namespace AutomaticStepsExecutor
                 }
                 var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb.Value).Date;
 
+            
+
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
@@ -86,7 +89,7 @@ namespace AutomaticStepsExecutor
                         bool isPaid = false;
                         if (isPaid)
                         {
-                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext);
+                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService);
                             //todo: must add some FK for payment?!
                         }
                         else
