@@ -65,6 +65,7 @@ namespace MJ_CAIS.Services
         private void ProcessApplicationWithoutBulletins(AApplication application, string statusID, int certificateValidityMonths)
         {
             ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
+            application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
@@ -103,7 +104,8 @@ namespace MJ_CAIS.Services
                     OrderNumber = orderNumber              
                 };
             }).ToList();
-            
+            application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
+
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AAppBulletins.AddRange(cert.AAppBulletins);

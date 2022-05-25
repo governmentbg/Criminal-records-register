@@ -14,10 +14,10 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
     {
         Task<byte[]> CreateCertificate(string certificateID);
         Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
-              string mailBodyPattern, string? webportalUrl = null, string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
-              , string statusCodeCertificateForDeliveryn = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-              , string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
-        //todo: да се измести някъде на по-общо място
+            string mailBodyPattern, string signingCertificateName, string? webportalUrl = null, string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
+            , string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+            , string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
+         //todo: да се измести някъде на по-общо място
         Task<string?> GetWebPortalAddress();
         Task DeliverCertificateAsync(ACertificate certificate, string mailBodyPattern, string mailSubjectPattern, string webportalUrl);
 

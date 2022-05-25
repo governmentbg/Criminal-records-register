@@ -63,23 +63,27 @@ namespace AutomaticStepsExecutor
                 //}
 
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
+              
                 //todo: get mail data
-                var sysParamsForMail = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
-                || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ToListAsync();
-                if (sysParamsForMail.Count != 2 || sysParamsForMail.Any(x=>string.IsNullOrEmpty(x.ValueString)))
+                var sysParams = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
+                || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME
+                || s.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToListAsync();
+                if (sysParams.Count != 3 || sysParams.Any(x=>string.IsNullOrEmpty(x.ValueString)))
                 {
-                    throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME} and {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME} are not set.");
+                    throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME}," +
+                        $" {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME} " +
+                        $"and {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} are not set.");
                 }
-                string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s=>s.Code== SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
-                string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
-
+                string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(sysParams.First(s=>s.Code== SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
+                string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(sysParams.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
+                string signingCertificateName = sysParams.First(s => s.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ValueString;
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
                     {
                         var certificate = (ACertificate)entity;
-                        await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, webPortalUrl);
+                        await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, webPortalUrl);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
@@ -100,10 +104,10 @@ namespace AutomaticStepsExecutor
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
             var result = await Task.FromResult(_dbContext.ACertificates
-                              .Include(c=>c.AAppBulletins)
-                              .Include(c=>c.Application)
-                              .Include(c=>c.Application.Purpose)
-                              .Include(c => c.Application.SrvcResRcptMeth)
+                                    .Include(c => c.AAppBulletins)
+                                    .Include(c => c.Application)
+                                    .Include(c => c.Application.Purpose)
+                                    .Include(c => c.Application.SrvcResRcptMeth)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                               .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)

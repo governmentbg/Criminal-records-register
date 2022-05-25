@@ -13,9 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TL.JasperReports.Integration;
-using TL.JasperReports.Integration.Enums;
-using TL.JasperReports.Integration.Interfaces;
 using TL.Signer;
 
 namespace MJ_CAIS.ExternalWebServices
@@ -23,16 +20,17 @@ namespace MJ_CAIS.ExternalWebServices
     public class CertificateGenerationService : BaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string, CaisDbContext>, ICertificateGenerationService
     {
         private readonly ICertificateRepository _certificateRepository;
-        private readonly IJasperReportsClient _jasperReportsClient;
         private readonly IPdfSigner _pdfSignerService;
+        private readonly IPrintDocumentService _printerService;
 
-        public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository, IJasperReportsClient jasperClient,
-            IPdfSigner pdfSignerService)
+        public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository, 
+            IPdfSigner pdfSignerService, IPrintDocumentService printerService)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
-            _jasperReportsClient = jasperClient;
+         
             _pdfSignerService = pdfSignerService;
+            _printerService = printerService;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -44,20 +42,26 @@ namespace MJ_CAIS.ExternalWebServices
             var certificate = await dbContext.ACertificates
                                     .Include(c => c.AAppBulletins)
                                     .Include(c => c.Application)
-                                    .Include(c => c.Application.Purpose)
-                                    .Include(c => c.Application.SrvcResRcptMeth)
+                                    .Include(c => c.Application).ThenInclude(c1=>c1.Purpose)
+                                    .Include(c => c.Application).ThenInclude(c1=>c1.SrvcResRcptMeth)
                                     .FirstOrDefaultAsync(x => x.Id == certificateID);
             if (certificate == null)
             {
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {certificateID} does not exist.");
             }
+            var signingCertificateName = (await dbContext.GSystemParameters
+                                    .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+            if (string.IsNullOrEmpty(signingCertificateName))
+            {//todo: EH & resources
+                throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
+            }
             //todo:get patterns for mail if needed:
-            return await CreateCertificate(certificate, null, null, await GetWebPortalAddress());
+            return await CreateCertificate(certificate, null, null, signingCertificateName, await GetWebPortalAddress());
 
         }
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
-            string mailBodyPattern, string? webportalUrl = null, string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
+            string mailBodyPattern, string signingCertificateName, string? webportalUrl = null, string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
             , string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
             , string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
         {
@@ -67,12 +71,12 @@ namespace MJ_CAIS.ExternalWebServices
             bool containsBulletins = false;
             if (certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() == 0)
             {
-                contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_without_conviction);
+                contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_without_conviction, signingCertificateName);
                 containsBulletins = false;
             }
             else
             {
-                contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction);
+                contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction, signingCertificateName);
                 containsBulletins = true;
             }
             bool isExistingDoc = false;
@@ -217,12 +221,12 @@ namespace MJ_CAIS.ExternalWebServices
             return ReplaceTextInTemplate(mailSubjectPattern, placeholdersAndValues);
         }
 
-        private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, JasperReportsNames reportName)
+        private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, JasperReportsNames reportName, string signingCertificateName)
         {
-            Dictionary<string, string> inputs = new Dictionary<string, string> { { "certificate_id", certificateID }, { "check_url", checkUrl } };
-            byte[] fileArray = await Task.FromResult(_jasperReportsClient.RunReportBuffered(GetUrlOfCertificateReport(reportName), OutputFormats.pdf, inputs).Result);
-
-            fileArray = _pdfSignerService.SignPdf(fileArray, SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME);
+            byte[] fileArray = await _printerService.PrintCertificate(certificateID,checkUrl,reportName);
+            //todo: кои полета да се добавят за валидиране?!
+            fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
+                new Dictionary<string, string>() { { "certificate_id", certificateID} });
 
             return fileArray;
 
