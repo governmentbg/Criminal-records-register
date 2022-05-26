@@ -27,7 +27,7 @@
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/isin-identified']">
-                За отразяване от ИСИН ({{ model.isinIdentifiedCount }})
+                Данни за изтърпени наказания ({{ model.isinIdentifiedCount }})
               </a>
             </nb-list-item>
           </nb-list>
@@ -89,12 +89,12 @@
       </div>
       <div class="row col-md-12">
         <nb-card accent="info" class="col-md-12">
-          <nb-card-header>ISIN</nb-card-header>
+          <nb-card-header>Изтърпени наказания</nb-card-header>
           <nb-card-body>
             <nb-list>
               <nb-list-item>
                 <a [routerLink]="['/pages/isin-new']">
-                  Получени съобщения от ИСИН ({{ model.isinNewCount }})
+                  Новопостъпили данни за изтърпени наказания ({{ model.isinNewCount }})
                 </a>
               </nb-list-item>
             </nb-list>

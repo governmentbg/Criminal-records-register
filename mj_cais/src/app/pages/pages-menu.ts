@@ -53,7 +53,7 @@ export class PagesMenu {
             link: "/pages/bulletins-new-eiss",
           },
           {
-            title: "За отразяване от ИСИН",
+            title: "Данни за изтърпени наказания",
             link: "/pages/isin-identified",
           },
           {

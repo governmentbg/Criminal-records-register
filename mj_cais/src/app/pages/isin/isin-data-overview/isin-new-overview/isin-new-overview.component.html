@@ -49,7 +49,29 @@
       </span>
     </ng-template>
   </igx-column>
+  <igx-column
+    field="sourceType"
+    header="Вид източник"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'8%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
 
+  <igx-column
+    field="sanctionType"
+    header="Вид наказание"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'8%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
   <igx-column
     field="identifier"
     header="ЕГН/ЛНЧ"
