@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public BBulletin()
         {
             AAppBulletins = new HashSet<AAppBulletin>();
+            ARepBulletins = new HashSet<ARepBulletin>();
             BBulEvents = new HashSet<BBulEvent>();
             BBullPersAliases = new HashSet<BBullPersAlias>();
             BBulletinStatusHes = new HashSet<BBulletinStatusH>();
@@ -102,6 +103,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? LnId { get; set; }
         public string? SuidId { get; set; }
         public string? IdDocNumberId { get; set; }
+        public bool? EuCitizen { get; set; }
+        public bool? TcnCitizen { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -119,6 +122,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual BBulletinStatus? Status { get; set; }
         public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }
+        public virtual ICollection<ARepBulletin> ARepBulletins { get; set; }
         public virtual ICollection<BBulEvent> BBulEvents { get; set; }
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }
         public virtual ICollection<BBulletinStatusH> BBulletinStatusHes { get; set; }

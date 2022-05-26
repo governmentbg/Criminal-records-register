@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Home;
@@ -138,6 +139,19 @@ namespace MJ_CAIS.Repositories.Impl
                 });
 
             return await Task.FromResult(query);
+        }
+
+        public void CreateEcrisTcn(string bulletinId, string action)
+        {
+            var ecrisTcn = new EEcrisTcn
+            {
+                Id = BaseEntity.GenerateNewId(),
+                BulletinId = bulletinId,
+                Status = BulletinConstants.EventStatusType.New,
+                Action = action
+            };
+
+            _dbContext.Add(ecrisTcn);
         }
 
         public async Task SaveChangesAsync()
