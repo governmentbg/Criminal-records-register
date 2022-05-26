@@ -22,6 +22,8 @@
 
         public string? CaseType { get; set; }
 
+        public DateTime? BirthDate { get; set; }
+
         public IEnumerable<SanctionForRehabilitationDTO> Sanctions { get; set; }
 
         public IEnumerable<DecisionForRehabilitationDTO> Decisions { get; set; }
