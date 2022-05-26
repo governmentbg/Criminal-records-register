@@ -51,14 +51,18 @@ namespace MJ_CAIS.Services
                 BulletinNewEISSCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.NewEISS)?.Count ?? 0,
                 BulletinForRehabilitationCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.ForRehabilitation)?.Count ?? 0,
                 BulletinForDestructionCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.ForDestruction)?.Count ?? 0,
+              
                 IsinNewCount = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.New)?.Count ?? 0,
                 IsinIdentifiedCount = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.Identified)?.Count ?? 0,
+               
                 EcrisForIdentificationCount = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ForIdentification)?.Count ?? 0,
                 EcrisWaitingForCSAuthorityCount = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ReqWaitingForCSAuthority)?.Count ?? 0,
+              
                 BulletinEventArticle2211Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2211)?.Count ?? 0,
                 BulletinEventArticle2212Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2212)?.Count ?? 0,
                 BulletinEventArticle3000Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article3000)?.Count ?? 0,
                 BulletinEventNewDocumentCount = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.NewDocument)?.Count ?? 0,
+               
                 ApplicationNewIdCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.NewId)?.Count ?? 0,
                 ApplicationCheckPaymentCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.CheckPayment)?.Count ?? 0,
                 ApplicationCheckTaxFreeCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0,

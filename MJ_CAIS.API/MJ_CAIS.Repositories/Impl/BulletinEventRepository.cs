@@ -99,8 +99,12 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.BBulEvents.AsNoTracking()
-                .Where(x=>x.StatusCode == BulletinEventConstants.Status.New)
-                .GroupBy(x => x.EventType )
+                .Where(x => x.StatusCode == BulletinEventConstants.Status.New &&
+                          (x.EventType == BulletinEventConstants.Type.Article2211 ||
+                           x.EventType == BulletinEventConstants.Type.Article2212 ||
+                           x.EventType == BulletinEventConstants.Type.Article3000 ||
+                           x.EventType == BulletinEventConstants.Type.NewDocument))
+                .GroupBy(x => x.EventType)
                 .Select(x => new ObjectStatusCountDTO
                 {
                     Status = x.Key,

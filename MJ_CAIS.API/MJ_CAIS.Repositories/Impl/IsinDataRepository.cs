@@ -3,6 +3,7 @@ using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.Home;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -15,6 +16,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.EIsinData.AsNoTracking()
+                .Where(x => x.Status == IsinDataConstants.Status.New || x.Status == IsinDataConstants.Status.Identified)
                 .GroupBy(x => x.Status)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -24,20 +26,5 @@ namespace MJ_CAIS.Repositories.Impl
 
             return await Task.FromResult(query);
         }
-
-        // todo: remove
-        //public override IQueryable<EIsinDatum> SelectAllAsync()
-        //{ 
-        //    return _dbContext.EIsinData.AsNoTracking()
-        //        .Include(x => x.IsinMsg);
-        //}
-
-        //public override async Task<EIsinDatum> SelectAsync(string id)
-        //{
-        //    return await _dbContext.EIsinData
-        //        .AsNoTracking()
-        //        .Include(x => x.IsinMsg)
-        //        .FirstOrDefaultAsync(x => x.Id == id);
-        //}
     }
 }
