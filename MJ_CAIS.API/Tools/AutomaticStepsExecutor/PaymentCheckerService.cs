@@ -17,13 +17,15 @@ namespace AutomaticStepsExecutor
         private CaisDbContext _dbContext;
         private readonly ILogger<PaymentCheckerService> _logger;
         private readonly IRegisterTypeService _registerTypeService;
-
-        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService)
+        private readonly IApplicationService _applicationService;
+        private readonly IApplicationWebService _applicationWebService;
+        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _registerTypeService = registerTypeService;
-
+            _applicationService = applicationService;
+            _applicationWebService = applicationWebService;
         }
 
         public async Task PreSelectAsync()
@@ -69,6 +71,18 @@ namespace AutomaticStepsExecutor
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication }");
 
                 }
+                var statusApprovedApplication = statuses.First();
+
+                var webStatuses= await _dbContext.WApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.WebApprovedApplication
+                                            || a.Code == ApplicationConstants.ApplicationStatuses.WebCanceled).ToListAsync();
+                if (webStatuses.Count != 2)
+                {
+                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.WebApprovedApplication} , {ApplicationConstants.ApplicationStatuses.WebCanceled}");
+
+                }
+                var statusWebApprovedApplication = webStatuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.WebApprovedApplication);
+                var statusWebCancel = webStatuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.WebCanceled);
+
                 var systemParamValidityPeriodWeb = (int?)_dbContext.GSystemParameters.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS)?.ValueNumber;
                 if (systemParamValidityPeriodWeb == null)
                 {
@@ -89,14 +103,15 @@ namespace AutomaticStepsExecutor
                         bool isPaid = false;
                         if (isPaid)
                         {
-                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService);
+                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, statusWebApprovedApplication,  statusApprovedApplication );
                             //todo: must add some FK for payment?!
                         }
                         else
                         {
                             if(wapplication.CreatedOn.Value.Date< startDateWeb)
                             {
-                                wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
+                                _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
+                                //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
                             }
                             _dbContext.WApplications.Update(wapplication);
                         }

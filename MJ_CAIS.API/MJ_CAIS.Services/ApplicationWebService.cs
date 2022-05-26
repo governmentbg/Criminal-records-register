@@ -32,7 +32,14 @@ namespace MJ_CAIS.Services
         protected override void TransformDataOnInsert(WApplication entity)
         {
             entity.ApplicationTypeId = GetWebApplicationTypeId();
-            entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
+           var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
+            if (statusNew == null)
+            {
+                //todo: resources & EH
+                throw new Exception($"Status {ApplicationWebStatuses.NewWebApplication} does not exist.");
+            }
+            SetWApplicationStatus(entity, statusNew, "Ново заявление", false);
+            //entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
             entity.UserId = dbContext.CurrentUserId; // Should be nullable ???
             entity.UserCitizenId = dbContext.CurrentUserId;
             entity.WApplicationId = "-"; // TODO: remove, no such column
@@ -69,5 +76,34 @@ namespace MJ_CAIS.Services
         {
             return false;
         }
+
+        public  void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
+        {
+            wapplication.StatusCode = newStatus.Code;
+            wapplication.StatusCodeNavigation = newStatus;
+            WStatusH wStatusH = new WStatusH();
+            wStatusH.Descr = description;
+            wStatusH.StatusCode = newStatus.Code;
+            wStatusH.StatusCodeNavigation = newStatus;
+            if (wapplication.WStatusHes == null)
+            {
+                wapplication.WStatusHes = new List<WStatusH>();
+            }
+            wStatusH.ReportOrder = wapplication.WStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
+            wStatusH.Id = BaseEntity.GenerateNewId();
+            wStatusH.ApplicationId = wapplication.Id;
+            wStatusH.Application = wapplication;
+
+            wapplication.WStatusHes.Add(wStatusH);
+            if (addToContext)
+            {
+                dbContext.WStatusHes.Add(wStatusH);
+                dbContext.WApplications.Update(wapplication);
+            }
+
+
+
+        }
+
     }
 }

@@ -15,6 +15,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? StatusCode { get; set; }
         public string? ApplicationId { get; set; }
 
+        public virtual WApplication? Application { get; set; }
         public virtual WApplicationStatus? StatusCodeNavigation { get; set; }
     }
 }

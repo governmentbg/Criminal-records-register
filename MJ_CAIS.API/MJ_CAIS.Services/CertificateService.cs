@@ -15,13 +15,13 @@ namespace MJ_CAIS.Services
     public class CertificateService : BaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string, CaisDbContext>, ICertificateService
     {
         private readonly ICertificateRepository _certificateRepository;
-      //  private readonly IJasperReportsClient _jasperReportsClient;
 
-        public CertificateService(IMapper mapper, ICertificateRepository certificateRepository)//, IJasperReportsClient jasperClient)
+
+        public CertificateService(IMapper mapper, ICertificateRepository certificateRepository)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
-            //_jasperReportsClient = jasperClient;
+         
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -29,6 +29,29 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-     
+        public  void SetCertificateStatus(ACertificate certificate,  AApplicationStatus newStatus, string description)
+        {
+            certificate.StatusCode = newStatus.Code;
+            certificate.StatusCodeNavigation = newStatus;
+            AStatusH aStatusH = new AStatusH();
+            aStatusH.Descr = description;
+            aStatusH.StatusCode = newStatus.Code;
+            aStatusH.StatusCodeNavigation = newStatus;
+            if (certificate.AStatusHes == null)
+            {
+                certificate.AStatusHes = new List<AStatusH>();
+            }
+            aStatusH.ReportOrder = certificate.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
+            aStatusH.Id = BaseEntity.GenerateNewId();
+            aStatusH.CertificateId = certificate.Id;
+
+            certificate.AStatusHes.Add(aStatusH);
+            dbContext.AStatusHes.Add(aStatusH);
+            dbContext.ACertificates.Update(certificate);
+
+
+        }
+
+
     }
 }

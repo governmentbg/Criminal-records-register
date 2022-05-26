@@ -54,13 +54,16 @@ namespace AutomaticStepsExecutor
             int numberOfFailedEntities = 0;
             if (entities.Count > 0)
             {
-                ////todo: като се добави ID някой ден в таблицата да се връща ИД
-                //var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign).ToListAsync();
-                //if (statuses.Count() != 1)
-                //{
-                //    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}");
-
-                //}
+                var statuses = await _dbContext.AApplicationStatuses.Where(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
+            || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+            || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint).ToListAsync();
+                if (statuses.Count != 3)
+                {
+                    throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}");
+                }
+                var statusCertificateServerSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign);
+                var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
+                var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
 
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
               
@@ -83,7 +86,8 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var certificate = (ACertificate)entity;
-                        await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, webPortalUrl);
+                        await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, 
+                                                                    statusCertificateServerSign, statusForDelivery, statusCertificatePaperprint,  webPortalUrl);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
