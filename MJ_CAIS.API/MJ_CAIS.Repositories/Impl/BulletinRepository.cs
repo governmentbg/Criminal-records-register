@@ -147,7 +147,7 @@ namespace MJ_CAIS.Repositories.Impl
             {
                 Id = BaseEntity.GenerateNewId(),
                 BulletinId = bulletinId,
-                Status = BulletinConstants.EventStatusType.New,
+                Status = BulletinEventConstants.Status.New,
                 Action = action
             };
 

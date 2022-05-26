@@ -12,14 +12,20 @@ namespace MJ_CAIS.Services
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IIsinDataRepository _isinDataRepository;
         private readonly IEcrisMessageRepository _ecrisMessageRepository;
+        private readonly IBulletinEventRepository _bulletinEventRepository;
+        private readonly IApplicationRepository _applicationRepository;
 
         public HomeService(IBulletinRepository bulletinRepository, 
             IIsinDataRepository isinDataRepository,
-            IEcrisMessageRepository ecrisMessageRepository)
+            IEcrisMessageRepository ecrisMessageRepository,
+            IBulletinEventRepository bulletinEventRepository,
+            IApplicationRepository applicationRepository)
         {
             _bulletinRepository = bulletinRepository;
             _isinDataRepository = isinDataRepository;
             _ecrisMessageRepository = ecrisMessageRepository;
+            _bulletinEventRepository = bulletinEventRepository;
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<ObjectsCountDTO> GetCountAsync()
@@ -33,6 +39,12 @@ namespace MJ_CAIS.Services
             var ercisStatusCountQuery = await _ecrisMessageRepository.GetStatusCountAsync();
             var ercisStatuses = await ercisStatusCountQuery.ToListAsync();
 
+            var bulletinEventStatusesCountQuery = await _bulletinEventRepository.GetStatusCountAsync();
+            var bulletinStatusesEvent = await bulletinEventStatusesCountQuery.ToListAsync();
+
+            var applicationStatusesCountQuery = await _applicationRepository.GetStatusCountAsync();
+            var applicationStatuses = await applicationStatusesCountQuery.ToListAsync();
+
             var result = new ObjectsCountDTO()
             {
                 BulletinNewOfficeCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.NewOffice)?.Count ?? 0,
@@ -43,6 +55,14 @@ namespace MJ_CAIS.Services
                 IsinIdentifiedCount = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.Identified)?.Count ?? 0,
                 EcrisForIdentificationCount = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ForIdentification)?.Count ?? 0,
                 EcrisWaitingForCSAuthorityCount = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ReqWaitingForCSAuthority)?.Count ?? 0,
+                BulletinEventArticle2211Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2211)?.Count ?? 0,
+                BulletinEventArticle2212Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2212)?.Count ?? 0,
+                BulletinEventArticle3000Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article3000)?.Count ?? 0,
+                BulletinEventNewDocumentCount = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.NewDocument)?.Count ?? 0,
+                ApplicationNewIdCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.NewId)?.Count ?? 0,
+                ApplicationCheckPaymentCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.CheckPayment)?.Count ?? 0,
+                ApplicationCheckTaxFreeCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0,
+                ApplicationBulletinsCheckCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.BulletinsCheck)?.Count ?? 0,
             };
 
             return result;
