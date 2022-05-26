@@ -360,7 +360,11 @@ namespace MJ_CAIS.Services
             // change bulletin status
             if (entity.NoSanction == true)
             {
-                entity.StatusId = Status.NoSanction;
+                entity.StatusId = Status.NoSanction;            
+            }
+
+            if(entity.StatusId == Status.NoSanction || entity.StatusId == Status.ForDestruction)
+            {
                 // if new person is created 
                 // set new person id
                 aInDto.Person.Id = await CreatePersonFromBulletinAsync(entity);

@@ -24,7 +24,7 @@ export class NomenclatureService extends CaisCrudService<
       return of(this.cachedCountries);
     }
 
-    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g_countries`);
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/countries-ordered`);
   }
 
   public saveCountries(countries: BaseNomenclatureModel[]) {

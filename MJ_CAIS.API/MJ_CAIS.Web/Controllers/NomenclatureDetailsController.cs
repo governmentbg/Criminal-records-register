@@ -100,6 +100,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("countries-ordered")]
+        public IActionResult GetCountriesOrdered()
+        {
+            var result = _nomenclatureDetailService.GetCountriesOrdered();
+            return Ok(result);
+        }
+
         [HttpGet("sanction-categories")]
         public IActionResult GetSanctionCategories()
         {
@@ -115,7 +122,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("deciding-authorities")]
-        public async  Task<IActionResult> GetDecidingAuthorities()
+        public async Task<IActionResult> GetDecidingAuthorities()
         {
             var result = await _nomenclatureDetailService.GetDecidingAuthoritiesForBulletinsAsync();
             return Ok(result);
