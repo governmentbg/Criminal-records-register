@@ -37,6 +37,7 @@ namespace MJ_CAIS.Repositories.Impl
                             Status = bulletin.StatusId,
                             RehabilitationDate = bulletin.RehabilitationDate,
                             Version = bulletin.Version,
+                            CaseType = bulletin.CaseTypeId,
                             Sanctions = bulletin.BSanctions.Select(x => new SanctionForRehabilitationDTO
                             {
                                 SuspentionDuration = new Duration

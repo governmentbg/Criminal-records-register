@@ -44,6 +44,36 @@
             /// Доживотен затвор без замяна
             /// </summary>
             public const string LifeImprisonmentWithoutParole = "nkz_dojiv_zatvor_bez_zamiana";
+
+            /// <summary>
+            /// Глоба
+            /// </summary>
+            public const string Fine = "nkz_globa";
+
+            /// <summary>
+            /// Обществено порицание
+            /// </summary>
+            public const string PublicDisfavor = "nkz_poricanie";
+
+            /// <summary>
+            /// Лишаване от право за заемане на длъжност
+            /// </summary>
+            public const string DisqualificationPosition = "nkz_lishavane_ot_dlajnost";
+
+            /// <summary>
+            /// Лишаване от право за упражняване на професия
+            /// </summary>
+            public const string DisqualificationProfession = "nkz_lishavane_ot_pravo_profesia";
+
+            /// <summary>
+            /// Лишаване от право на местоживеене
+            /// </summary>
+            public const string DisqualificationPlace = "nkz_lishavane_ot_pravo_mestojiv";
+
+            /// <summary>
+            /// Лишаване от право на ордени и др. отличия
+            /// </summary>
+            public const string DisqualificationMedal = "nkz_lishavane_ot_pravo_nagradi";          
         }
 
         public static class DecisionType

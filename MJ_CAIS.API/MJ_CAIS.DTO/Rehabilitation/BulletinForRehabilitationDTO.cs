@@ -20,6 +20,8 @@
 
         public decimal? Version { get; set; }
 
+        public string? CaseType { get; set; }
+
         public IEnumerable<SanctionForRehabilitationDTO> Sanctions { get; set; }
 
         public IEnumerable<DecisionForRehabilitationDTO> Decisions { get; set; }
