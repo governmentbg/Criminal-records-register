@@ -94,7 +94,7 @@ namespace AutomaticStepsExecutor
                         var application = (AApplication)entity;
                         if (application.ApplicationType.Code == ApplicationConstants.ApplicationTypes.ConvictionRequest)
                         {
-                           var report =  await _reportService.GenerateReportFromApplication(application, applicationStatus, (int)certificateValidityMonths);
+                            var report = await _reportService.GenerateReportFromApplication(application, applicationStatus, (int)certificateValidityMonths);
                             await _dbContext.SaveChangesAsync();
                             await _reportGenerationService.CreateReport(report, signingCertificateName);
                             await _dbContext.SaveChangesAsync();
@@ -104,7 +104,7 @@ namespace AutomaticStepsExecutor
                             await _applicationService.GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
                             await _dbContext.SaveChangesAsync();
                         }
-                      
+
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -131,7 +131,9 @@ namespace AutomaticStepsExecutor
                                              .Include(a => a.SuidNavigation)
                                              .Include(a => a.ApplicationType)
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
-                                            && !aa.ACertificates.Any())
+                                 //това е краен статус, затова търсим само такива, за които няма генерирани репорти или сертификати
+                                            && ((aa.ApplicationType.Code == ApplicationConstants.ApplicationTypes.ConvictionRequest && !aa.AReports.Any())
+                                               || (aa.ApplicationType.Code != ApplicationConstants.ApplicationTypes.ConvictionRequest && !aa.ACertificates.Any())))
                                  .OrderBy(a => a.CreatedOn)
                                  .Take(pageSize)
                                .ToList<IBaseIdEntity>());
