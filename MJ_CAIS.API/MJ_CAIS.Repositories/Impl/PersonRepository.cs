@@ -81,27 +81,6 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
         {
-            //var query = (from application in _dbContext.AApplications.AsNoTracking()
-
-            //             //join appPersonId in _dbContext.PAppIds.AsNoTracking() on application.egn.Id equals appPersonId.ApplicationId
-            //             //          into appPersonIdLeft
-            //             //from appPersonId in appPersonIdLeft.DefaultIfEmpty()
-
-            //             join personIds in _dbContext.PPersonIds.AsNoTracking() on application.EgnId equals personIds.Id
-
-            //                         into personIdsLeft
-            //             from personIds in personIdsLeft.DefaultIfEmpty()
-
-            //             where personIds.PersonId == personId
-
-            //             select new PersonApplicationGridDTO
-            //             {
-            //                 Id = application.Id,
-            //                 RegistrationNumber = application.RegistrationNumber,
-            //                 Firstname = application.Firstname,
-            //                 Surname = application.Surname,
-            //                 Familyname = application.Familyname,
-            //             }).Distinct();
             var query = _dbContext.AApplications.Where(a => a.EgnNavigation.PersonId == personId
                                                             || a.LnNavigation.PersonId == personId
                                                             || a.LnchNavigation.PersonId == personId
@@ -201,11 +180,11 @@ namespace MJ_CAIS.Repositories.Impl
         /// Get PersonId object by pid value and pid type
         /// The personId is set only if the object does not exist in the database
         /// </summary>
-        /// <param name="pid">Indetifier</param>
+        /// <param name="pid">Identifier</param>
         /// <param name="pidType">Identifier type (EGN, LNCH, LN, AfisNumber)</param>
         /// <param name="personId">Identifier of the person to which the object will be added </param>
         /// <returns></returns>
-        public async Task<PPersonId> GetPersonIdAsyn(string pid, string pidType, string personId)
+        public async Task<PPersonId> GetPersonIdAsync(string pid, string pidType, string personId)
         {
             var issuerType = string.Empty;
             switch (pidType)
@@ -249,7 +228,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             return pidDb;
         }
-        
+
         [Obsolete($"Use {nameof(InsertAsync)} with additional parameter personH instead.", true)]
         public override Task<PPerson> InsertAsync(PPerson entity)
         {

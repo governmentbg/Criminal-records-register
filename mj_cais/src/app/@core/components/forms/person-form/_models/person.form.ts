@@ -102,7 +102,6 @@ export class PersonForm {
         ]);
         this.fullname.setValidators(Validators.maxLength(200));
         this.fullnameLat.setValidators(Validators.maxLength(200));
-        this.sex.setValidators(Validators.required);
         this.motherFullname.setValidators(Validators.maxLength(200));
         this.fatherFullname.setValidators(Validators.maxLength(200));
       }

@@ -44,6 +44,7 @@ export class BulletinModel extends BaseModel {
     this.statusId = init?.statusId ?? null;
     this.statusIdDisplay = init?.statusId ?? null;
     this.alphabeticalIndex = init?.alphabeticalIndex ?? null;
+    this.ecrisConvictionId = init?.ecrisConvictionId ?? null;  
     this.bulletinReceivedDate = init?.bulletinReceivedDate ?? null;
     this.bulletinType = init?.bulletinType ?? null;
     this.bulletinAuthorityId = init?.bulletinAuthorityId ?? null;
