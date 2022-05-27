@@ -132,6 +132,17 @@ namespace MJ_CAIS.Services
             }
 
             await UpdateBulletinAsync(aInDto, bulletinToUpdate, oldBulletinStatus);
+
+            if (bulletinToUpdate.StatusId == Status.NewEISS && string.IsNullOrEmpty(bulletinDb.RegistrationNumber))
+            {
+                // todo remove: only for testing ? 
+                var authId = !string.IsNullOrEmpty(bulletinToUpdate?.BulletinAuthorityId) ? bulletinToUpdate?.BulletinAuthorityId : "111";
+                var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletinToUpdate.BulletinType);
+                bulletinToUpdate.RegistrationNumber = regNumber;
+                bulletinToUpdate.ModifiedProperties.Add(nameof(bulletinToUpdate.RegistrationNumber));
+            }
+
+            // save entities before check for events and reabilitaion
             await _bulletinRepository.SaveChangesAsync();
 
             if (bulletinToUpdate.StatusId == Status.NoSanction)
@@ -142,7 +153,6 @@ namespace MJ_CAIS.Services
             if (bulletinToUpdate.StatusId == Status.Active || bulletinToUpdate.StatusId == Status.ForRehabilitation)
             {
                 await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletinToUpdate);
-                await _bulletinRepository.SaveChangesAsync();
             }
 
             await _bulletinRepository.SaveChangesAsync();
@@ -417,7 +427,7 @@ namespace MJ_CAIS.Services
                     EntityState = EntityStateEnum.Added,
                     PersonId = personIdObj.Id // table P_PERSON_IDS not P_PERSON,
                 });
-               
+
                 if (personIdObj.PidTypeId == PidType.Suid)
                 {
                     bulletin.Suid = personIdObj.Pid;
