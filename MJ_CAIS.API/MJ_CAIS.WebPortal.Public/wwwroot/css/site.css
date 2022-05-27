@@ -40,3 +40,34 @@ div.ui-igcombo-wrapper {
     min-width: 260px;
     width: 100%;
 }
+
+.cais-headerbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 0px;
+}
+
+.cais-logo-wrapper {
+    height: 55px
+}
+
+.cais-logo {
+    height: 100%;
+}
+
+.cais-header-text {
+    padding-left: 20px;
+    border-left: 2px solid;
+}
+
+.cais-header-text .main-header {
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 22px;
+}
+
+header .container-fluid {
+    box-shadow: 5px 4px 13px 14px rgb(0 0 0 / 3%);
+}
