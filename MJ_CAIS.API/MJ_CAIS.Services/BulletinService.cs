@@ -426,7 +426,7 @@ namespace MJ_CAIS.Services
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)
         {
-            if (bulletinDb.StatusId != Status.NewEISS ||
+            if (bulletinDb.StatusId != Status.NewEISS &&
                 bulletinDb.StatusId != Status.NewOffice)
             {
                 // only version of the main object must be updated
