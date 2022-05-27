@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using MJ_CAIS.BulletinModel;
+using MJ_CAIS.IntegrationModel;
 
 namespace MJ_CAIS.ExternalServicesHost
 {
@@ -13,9 +13,11 @@ namespace MJ_CAIS.ExternalServicesHost
     public interface IEISSIntegrationService
     {
         [OperationContract]
-        void SendData(SendDataRequestType value);
+        void SendBulletinsData(SendBulletinsDataRequestType value);
 
-       
+        [OperationContract]
+        void SendFinesData(SendFineDataRequestType value);
+
     }
 
 }

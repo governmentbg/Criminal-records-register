@@ -1,0 +1,1330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://cais.mjs.bg/BulletinModel-v1.0" targetNamespace="http://cais.mjs.bg/BulletinModel-v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="FormOfGuiltType">
+		<xs:annotation>
+			<xs:documentation>Форма на вината</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="intentionally">
+				<xs:annotation>
+					<xs:documentation>Умишлено</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="recklessly">
+				<xs:annotation>
+					<xs:documentation>Непредпазливо</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DecisionChangeTypeType">
+		<xs:annotation>
+			<xs:documentation>Категории допълнителни сведения</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="8"/>
+			<xs:pattern value="DCH-[0-9]{2}-[A-Z]"/>
+			<xs:enumeration value="DCH-00-R">
+				<xs:annotation>
+					<xs:documentation>Реабилитация</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-N">
+				<xs:annotation>
+					<xs:documentation>Край на изтърпяването на наказанието</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-E">
+				<xs:annotation>
+					<xs:documentation>Замяна на наказание/мярка</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-I">
+				<xs:annotation>
+					<xs:documentation>Последващо определяне на едно общо наказание</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-Q">
+				<xs:annotation>
+					<xs:documentation>Допуснато условно предсрочно освобождаване</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-S">
+				<xs:annotation>
+					<xs:documentation>Отмяна на условно предсрочно освобождаване</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-Y">
+				<xs:annotation>
+					<xs:documentation>Постановен съдебен акт по чл. 425 НПК</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-88-B">
+				<xs:annotation>
+					<xs:documentation>Отменена кумулация</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-X">
+				<xs:annotation>
+					<xs:documentation>Друго</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-88-A">
+				<xs:annotation>
+					<xs:documentation>Погасено по давност по наказание – изтича срока чл. 82 от НК</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-P">
+				<xs:annotation>
+					<xs:documentation>Амнистия</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DCH-00-O">
+				<xs:annotation>
+					<xs:documentation>Помилване</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdentificationDocumentCategoryType">
+		<xs:annotation>
+			<xs:documentation>Категории документ за самоличност</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="9"/>
+			<xs:pattern value="ID-[0-9]{2}-[0-9]{3}"/>
+			<xs:enumeration value="ID-00-001">
+				<xs:annotation>
+					<xs:documentation>Лична карта - National identity card</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-002">
+				<xs:annotation>
+					<xs:documentation>Удостоверение за гражданска регистраци - Civil register certificate</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-003">
+				<xs:annotation>
+					<xs:documentation>Паспорт - Passport</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-004">
+				<xs:annotation>
+					<xs:documentation>Шофьорска книжка - Driving licence</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-005">
+				<xs:annotation>
+					<xs:documentation>Карта за социално осигуряване - Social security card</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-006">
+				<xs:annotation>
+					<xs:documentation>Временна лична карта - Temporary identity card</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-007">
+				<xs:annotation>
+					<xs:documentation>Разрешение за пребиваване - Residence permit</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ID-00-999">
+				<xs:annotation>
+					<xs:documentation>Друг документ за самоличност - Other identification document</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SexType">
+		<xs:annotation>
+			<xs:documentation>The definition of types of human genders, based on the ISO 5218 standard. The values are restricted to 0 = unknown, 1 = male and 2 = female.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:int">
+			<xs:enumeration value="0">
+				<xs:annotation>
+					<xs:documentation>unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="1">
+				<xs:annotation>
+					<xs:documentation>male</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="2">
+				<xs:annotation>
+					<xs:documentation>female</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DecisionTypeCategories">
+		<xs:annotation>
+			<xs:documentation>Вид на акта- Присъда;Решение;Определение;Споразумение</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Присъда">
+				<xs:annotation>
+					<xs:documentation>Присъда</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Решение">
+				<xs:annotation>
+					<xs:documentation>Решение</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Определение">
+				<xs:annotation>
+					<xs:documentation>Определение</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Споразумение">
+				<xs:annotation>
+					<xs:documentation>Споразумение</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Неопределено">
+				<xs:annotation>
+					<xs:documentation>Неопределено</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CaseType">
+		<xs:annotation>
+			<xs:documentation>Вид на делото - Наказателно от общ характер;Наказателно от частен характер;Наказателно административен характер;Частно наказателно дело;Административно наказателно дело</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="НОХД"/>
+			<xs:enumeration value="НЧХД"/>
+			<xs:enumeration value="НАХД"/>
+			<xs:enumeration value="НЧД"/>
+			<xs:enumeration value="АНД"/>
+			<xs:enumeration value="Неизвестно"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BulletinTypesType">
+		<xs:annotation>
+			<xs:documentation>Вид на бюлетин</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ConvictionBulletin">
+				<xs:annotation>
+					<xs:documentation>Бюлетин за съдимост</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Bulletin78A">
+				<xs:annotation>
+					<xs:documentation>Бюлетин за наложени административни наказания по чл. 78а от НК</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unspecified">
+				<xs:annotation>
+					<xs:documentation>Неоопределен</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NameTypesType">
+		<xs:annotation>
+			<xs:documentation>Вид на име</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="nickname">
+				<xs:annotation>
+					<xs:documentation>псевдоним</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="previous">
+				<xs:annotation>
+					<xs:documentation>предишно име</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="maiden">
+				<xs:annotation>
+					<xs:documentation>моминско име</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CallContext">
+		<xs:sequence>
+			<xs:element name="ServiceURI" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор на инстанцията на административната услуга или процедура в администрацията (например: номер на преписка)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Вид на услугата, във връзка с която се извиква операцията</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EmployeeIdentifier" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатор на служител на администрацията</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EmployeeNames" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на служител на администрацията, иментата на служителя, чийто индентификатор е подаден в EmployeeIdentifier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EmployeeAditionalIdentifier" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Опционален допълнителен идентификатор на служител от администрация – например номер на служебната карта или друг индентификатор от информационната система - клиент</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EmployeePosition" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Длъжност или позиция на служителя в администрацията</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdministrationOId" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификационен код на администрация (oID от eAuth)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdministrationName" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на администрацията, ползваща системата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ResponsiblePersonIdentifier" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Опционален идентификатор на човека отговорен за справката. Тук трябва да се слага стойност, когато заявките не се инициират ръчно от конкретен служител, а се генерират автоматично от информационна система. Това може да бъде ръководител на звено в Администрацията, ползваща съответната справка в информационната система-клиент.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LawReason" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Контекст на правното основание. Правното основание може да произтича директно от нормативната уредба или да бъде базирано на сключено споразумение. Тук се описва правно основание или се цитира регистрирано такова.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remark" type="xs:string" nillable="true" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Допълнително поле в свободен текст</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CriminalRecordsRequestType">
+		<xs:sequence>
+			<xs:element name="IdentifierType" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Вид идентификатор</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатор на лице</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CriminalRecordsPersonDataType">
+		<xs:sequence>
+			<xs:element name="NamesBg" type="PersonNameType">
+				<xs:annotation>
+					<xs:documentation>Имена на кирилица</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NamesEn" type="PersonNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на латиница</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Sex" type="SexType">
+				<xs:annotation>
+					<xs:documentation>Пол</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentityNumber" type="PersonIdentityNumberType">
+				<xs:annotation>
+					<xs:documentation>Идентификатори на лицето</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthDate" type="DateType">
+				<xs:annotation>
+					<xs:documentation>Дата на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthPlace" type="PlaceType">
+				<xs:annotation>
+					<xs:documentation>Място на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonNationality" type="CountryType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Гражданство</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MotherNames" type="PersonNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на майка</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FatherNames" type="PersonNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на баща</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AFISNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AFIS номер</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CriminalRecordsPersonDataListType">
+		<xs:sequence>
+			<xs:element name="PersonData" type="CriminalRecordsPersonDataType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Данни за лицето</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OffenceCommonCategoryType">
+		<xs:annotation>
+			<xs:documentation>КАТЕГОРИИТЕ НАКАЗУЕМИ ДЕЯНИЯ</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OffenceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Код по номенклатурата от Наредба 8 - Приложение 8 - 3.ОБЩА ТАБЛИЦА НА КАТЕГОРИИТЕ НАКАЗУЕМИ ДЕЯНИЯ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Наименование по номенклатурата от Наредба 8 - Приложение 8 - 3.ОБЩА ТАБЛИЦА НА КАТЕГОРИИТЕ НАКАЗУЕМИ ДЕЯНИЯ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionCommonCategoryType">
+		<xs:annotation>
+			<xs:documentation>КАТЕГОРИИТЕ НАКАЗАНИЯ И МЕРКИ</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SanctionCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Код по номенклатурата в Наредба 8: Приложение 8 - 4.ОБЩА ТАБЛИЦА НА КАТЕГОРИИТЕ НАКАЗАНИЯ И МЕРКИ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionText" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Текст по номенклатурата в Наредба 8: Приложение 8 - 4.ОБЩА ТАБЛИЦА НА КАТЕГОРИИТЕ НАКАЗАНИЯ И МЕРКИ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CityType">
+		<xs:annotation>
+			<xs:documentation>Данни за населено място</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EKATTECode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>ЕКАТТЕ код на населено място( само за населени места в България)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CityName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Наименование на населено място</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CountryType">
+		<xs:annotation>
+			<xs:documentation>Данни да държава</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CountryISONumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Трицифрен код на държава по ISO-3166-1</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountryISOAlpha3" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Трибуквен код на държава по ISO-3166-1</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountryName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Наименование на държава</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MonthDayType">
+		<xs:annotation>
+			<xs:documentation>A proxy for day and month information; the month is mandatory and the day optional</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DateMonth" type="xs:gMonth">
+				<xs:annotation>
+					<xs:documentation>Месец</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateDay" type="xs:gDay" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Ден</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DateType">
+		<xs:annotation>
+			<xs:documentation>A proxy type for defining dates that allow empty day or month information for dates that are only partly defined.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DateYear" type="xs:gYear" default="1800">
+				<xs:annotation>
+					<xs:documentation>Година</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateMonthDay" type="MonthDayType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Месец/Ден</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonNameType">
+		<xs:annotation>
+			<xs:documentation>Структура за имена на лице</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FirstName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Собствено име</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SurName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Презиме</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FamilyName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фамилия</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FullName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Пълно име</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PrevNames">
+		<xs:annotation>
+			<xs:documentation>Други имена и/или псевдоним на лицето (имената на лицето, преди да встъпи в брак (ако е настъпила промяна в тях); предходните имена на лицето при извършена промяна на име по реда на Закона за гражданската регистрация, както и други използвани имена на лицето)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Names" type="PersonNameType">
+				<xs:annotation>
+					<xs:documentation>Имена</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NameType" type="NameTypesType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Вид на името</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthDate" type="DateType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthPlace" type="PlaceType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Място на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Sex" type="SexType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Пол</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentityNumber" type="PersonIdentityNumberType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентификатори на лицето</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonIdentityNumberType">
+		<xs:annotation>
+			<xs:documentation>ЕГН/ЛН/ЛНЧ на лице</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EGN" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ЕГН</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LN" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Личен номер</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LNCh" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ЛНЧ - Личен номер на чужденец</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SUID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Вътрешен системен идентификатор на лица за ЦАИС Съдебен статус, ползва се при липса на друг(за нерегистрирани чужденци)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OfficialPersonType">
+		<xs:annotation>
+			<xs:documentation>Структура за имена/длъжност на длъжностно лице</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Names" type="PersonNameType">
+				<xs:annotation>
+					<xs:documentation>Имена</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Position" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Длъжност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentificationDocumentType">
+		<xs:annotation>
+			<xs:documentation>Структура на документ за самоличност</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IdentificationDocumentCategoryReference" type="IdentificationDocumentCategoryType">
+				<xs:annotation>
+					<xs:documentation>Категории документ за самоличност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentificationDocumentType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Вид на документ за самоличност-описание в случай на Друг</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentificationDocumentNumber" type="xs:string" default="UNKNOWN">
+				<xs:annotation>
+					<xs:documentation>номер на документ за самоличност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentificationDocumentIssuingAuthority" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>орган по издаването на документ за самоличност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentificationDocumentIssuingDate" type="DateType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>дата на издаване на документ за самоличност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentificationDocumentValidUntil" type="DateType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>дата на валидност на документ за самоличност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlaceType">
+		<xs:annotation>
+			<xs:documentation>This type represents a physical location and is used for transmitting information such as the birth place of a person or the place of an address.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Country" type="CountryType">
+				<xs:annotation>
+					<xs:documentation>Държава</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="City" type="CityType">
+				<xs:annotation>
+					<xs:documentation>Населено място</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Descr" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Описание, в случай на друго</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecidingAuthorityType">
+		<xs:annotation>
+			<xs:documentation>The authority issuing a conviction.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DecidingAuthorityCodeEIK" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код по Единен информационен код на съдилищата(от правилника за администрацията в съдилищата) </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecidingAuthorityCodeEISPP" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на съда(код на ЕИСПП)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecidingAuthorityName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Наименование на съда</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConvictionStatusAuthorityType">
+		<xs:annotation>
+			<xs:documentation>Бюро съдимост</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на бюро съдимост</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наимвнование на бюро съдимост</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionActType">
+		<xs:annotation>
+			<xs:documentation>Данни за акта на съда</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FileNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Номер на акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionDate" type="xs:date" default="1800-01-01">
+				<xs:annotation>
+					<xs:documentation>Дата на акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionFinalDate" type="xs:date" default="1800-01-01">
+				<xs:annotation>
+					<xs:documentation>Дата на вилизане в сила на акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecidingAuthority" type="DecidingAuthorityType">
+				<xs:annotation>
+					<xs:documentation>Съд, издал акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ECLI" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ECLI номер</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionType" type="DecisionTypeCategories">
+				<xs:annotation>
+					<xs:documentation>Вид на акта- Присъда;Решение;Определение;Споразумение</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CriminalCaseType">
+		<xs:annotation>
+			<xs:documentation>Данни за делото</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CaseType" type="CaseType">
+				<xs:annotation>
+					<xs:documentation>Вид дело</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>дело - номер</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseYear" type="xs:gYear">
+				<xs:annotation>
+					<xs:documentation>дело - година</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseAuthority" type="DecidingAuthorityType">
+				<xs:annotation>
+					<xs:documentation>Съд на делото</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OffenceType">
+		<xs:annotation>
+			<xs:documentation>Данни за престъплението</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OffenceId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Вътрешен идентификатор на престъпление, уникално за бюлетина</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Код съгласно националното право(код по ЕИСПП)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryTitle" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Категория от национален класификатор-деяние съгласно националното право(текст)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remarks" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Oписание на деянието</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceCommonCategoryReference" type="OffenceCommonCategoryType" nillable="false">
+				<xs:annotation>
+					<xs:documentation>Обща категория от Annex A of the Council Decision 2009/316/JHA.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceApplicableLegalProvisions" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Правна квалификация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceStartDate" type="DateType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Начална дата на престъплението</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceEndDate" type="DateType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Крайна дата на престъплението</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffencePlace" type="PlaceType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Място на престъплението</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FormOfGuilt" type="FormOfGuiltType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Форма на вината(умишлено, непредпазливо)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WithoutSanction" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Не се наказва</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConvictionSanction" type="SanctionType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Наказания</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OffenceRefType">
+		<xs:annotation>
+			<xs:documentation>Указател към престъпление в бюлетина</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OffenceId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Вътрешен идентификатор на престъпление</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Код съгласно националното право(код по ЕИСПП)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryTitle" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Категория от национален класификатор-деяние съгласно националното право(текст)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceEndDate" type="DateType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Крайна дата на престъплението</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionRefType">
+		<xs:annotation>
+			<xs:documentation>Указател към наказание в бюлетина</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SanctionId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Вътрешен идентификатор на наказанието</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код по Национален класификатор - Видове наказания (чл. 37 НК)-Код по ЕИСПП</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryTitle" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Национален класификатор - Видове наказания (чл. 37 НК) - Наименование </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffenceRef" type="OffenceRefType">
+				<xs:annotation>
+					<xs:documentation>Престъпление, за което е наложено наказанието</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionChangeАmnesty">
+		<xs:annotation>
+			<xs:documentation>Допълнително сведение-Амнистия</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OffenceRef" type="OffenceRefType">
+				<xs:annotation>
+					<xs:documentation>Престъплението, за което лицето е осъдено, е амнистирано</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionChangeRehabilitation">
+		<xs:annotation>
+			<xs:documentation>Допълнително сведение- Реабилитация</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OffenceRef" type="OffenceRefType">
+				<xs:annotation>
+					<xs:documentation>Престъплението, за което лицето е осъдено, е реабилитирано</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionChangeReleaseOnParole">
+		<xs:annotation>
+			<xs:documentation>Допълнително сведение- Допуснато условно предсрочно освобождаване</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Sanction" type="SanctionRefType">
+				<xs:annotation>
+					<xs:documentation>Наказание, за което е било допуснато условно предсрочно освобождаване</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Duration" type="xs:duration">
+				<xs:annotation>
+					<xs:documentation>Срок на условното предсрочно освобождаване </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionChangeRevocationReleaseOnParole">
+		<xs:annotation>
+			<xs:documentation>Допълнително сведение -Oтменено допуснато условно предсрочно освобождаване</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ReleaseOnParoleDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата на допуснато условоно предсрочно освобождаване, което е отменено</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionChangeType">
+		<xs:annotation>
+			<xs:documentation>Допълнителни сведения</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DecisionChangeTypeReference" type="DecisionChangeTypeType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Категории допълнителни сведения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Decision" type="DecisionActType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Данни за съдебен акт</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DecisionRemarks" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Забележки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ValidFrom" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата влизане в сила на сведението</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReceiveDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата на получаване на информация за сведението</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionTypeFine">
+		<xs:annotation>
+			<xs:documentation>Наказание-глоба</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SanctionAmountOfIndividualFine" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>размер на наложеното наказание - глоба, в лв.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionTypeProbation">
+		<xs:annotation>
+			<xs:documentation>Наказание-пробация</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ProbationCategoryCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на вид пробационна мярка от Стандарти на ЕИСПП - Номенклатури за характеристики на информационните обекти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProbationCategoryTitle" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименовани на вид пробационна мярка от Стандарти на ЕИСПП - Номенклатури за характеристики на информационните обекти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProbationValue" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Количество на пробационна мярка</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProbationMeasureCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на мерна единица за количество на пробационна мярка от Стандарти на ЕИСПП - Номенклатури за характеристики на информационните обекти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ProbationMeasureTitle" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на мерна единица за количество на пробационна мярка от Стандарти на ЕИСПП - Номенклатури за характеристики на информационните обекти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionSentencedPeriod" type="xs:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Продължителност на наложеното наказание</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionTypePrison">
+		<xs:annotation>
+			<xs:documentation>Наказание-ЛОС</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SanctionSentencedPeriod" type="xs:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Срок на наложеното наказание</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionSuspension" type="xs:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Освобождаването от изтърпяване на наказанието и неналагането на наказание съгласно НК, както и условното осъждане по чл. 66 ал.1 или чл.69, ал1 НК, при което се посочва и изпитателният срок</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DetentionDescription" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>приспадането и зачитането на предварителното задържане по чл. 59, ал. 1 НК</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionTypeOther">
+		<xs:annotation>
+			<xs:documentation>Наказание-други</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SanctionSentencedPeriodLength" type="xs:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Продължителност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SanctionType">
+		<xs:annotation>
+			<xs:documentation>Наказание</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SanctionId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Вътрешен идентификатор на наказание, уникален за това осъждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код по Национален класификатор - Видове наказания (чл. 37 НК)-Код по ЕИСПП</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NationalCategoryTitle" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Национален класификатор - Видове наказания (чл. 37 НК) - Наименование </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remarks" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Описание</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionCommonCategoryReference" type="SanctionCommonCategoryType" nillable="false">
+				<xs:annotation>
+					<xs:documentation>Обща категория - The category of the sanction as defined by Annex B of the Council Decision 2009/316/JHA.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<!--xs:element name="SanctionActivityCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на Активност по наказание от Стандарти на ЕИСПП - Номенклатури за характеристики на информационните обекти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionActivityTitle" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на Активност по наказание от Стандарти на ЕИСПП - Номенклатури за характеристики на информационните обекти</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionActivityDescr" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Описание на Активност по наказание</xs:documentation>
+				</xs:annotation>
+			</xs:element-->
+			<xs:element name="Fine" type="SanctionTypeFine" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наказание от вид глоба</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Probation" type="SanctionTypeProbation" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Наказание от вид Пробация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Prison" type="SanctionTypePrison" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наказание от вид ЛОС</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Other" type="SanctionTypeOther" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Приложимо за другите видове наказания</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonType">
+		<xs:annotation>
+			<xs:documentation>Данни за осъдено лице</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NamesBg" type="PersonNameType">
+				<xs:annotation>
+					<xs:documentation>Имена на кирилица</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NamesEn" type="PersonNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на латиница</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PreviousNames" type="PrevNames" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Псевдоним и/или друго/и използвано/и име/на на осъденото лице</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Sex" type="SexType">
+				<xs:annotation>
+					<xs:documentation>Пол</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IdentityNumber" type="PersonIdentityNumberType">
+				<xs:annotation>
+					<xs:documentation>Идентификатори на лицето</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthDate" type="DateType">
+				<xs:annotation>
+					<xs:documentation>Дата на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthPlace" type="PlaceType">
+				<xs:annotation>
+					<xs:documentation>Място на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonNationality" type="CountryType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Гражданство</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonIdentificationDocument" type="IdentificationDocumentType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Данни за документ за самоличност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MotherNames" type="PersonNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на майка</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FatherNames" type="PersonNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на баща</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AFISNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AFIS номер</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConvictionType">
+		<xs:annotation>
+			<xs:documentation>Осъждане - This type contains all the information on the decision of a competent authority relative to the conviction of a natural person, including the offences committed and the sanctions to which the person has been sentenced.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Decision" type="DecisionActType">
+				<xs:annotation>
+					<xs:documentation>Данни за акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CriminalCase" type="CriminalCaseType">
+				<xs:annotation>
+					<xs:documentation>Данни за делото</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConvictionRemarks" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Извлечение от акта на съда</xs:documentation>
+				</xs:annotation>
+				<!-- END -->
+			</xs:element>
+			<xs:element name="ConvictionOffence" type="OffenceType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Престъпление</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServingPrevSuspendedSentence" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>постановено изтърпяване на предходна условна присъда</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServingPrevSuspendedSentenceActNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер на акта на предходната условна присъда</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConvictionDecisions" type="DecisionChangeType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Допълнителни сведения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EcrisConvictionId" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id на осъждане в ECRIS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IssuerData">
+		<xs:annotation>
+			<xs:documentation>Данни при съставяне на бюлетина</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BulletinCreateDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата на съставяне на бюлетина</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BulletinCreatorPerson" type="OfficialPersonType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на съставил</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BulletinApproverPerson" type="OfficialPersonType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имена на проверил и длъжност</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BulletinCreatorAuthority" type="DecidingAuthorityType">
+				<xs:annotation>
+					<xs:documentation>Съд, създал бюлетина</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RegistrationData">
+		<xs:annotation>
+			<xs:documentation>Данни при регистрация на бюлетина в БС по месторождение на лицето</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RegistrationNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер на бюлетин</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BulletinAlphabeticalIndex" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Входящ номер на бюлетина към азбучния указател</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BulletinReceivedDate" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Датата на постъпване на хартиения бюлетин</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConvictionStatusAuthority" type="ConvictionStatusAuthorityType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Бюро съдимост, в което се съхранява бюлетина</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BulletinType">
+		<xs:annotation>
+			<xs:documentation>Тип описващ бюлетин за съдимост</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Type" type="BulletinTypesType">
+				<xs:annotation>
+					<xs:documentation>Вид на бюлетин</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Person" type="PersonType" nillable="false">
+				<xs:annotation>
+					<xs:documentation>Лични данни за осъденото лице</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Conviction" type="ConvictionType">
+				<xs:annotation>
+					<xs:documentation>Данни за осъждането</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IssuerData" type="IssuerData">
+				<xs:annotation>
+					<xs:documentation>Данни при съставяне на бюлетина</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RegistrationData" type="RegistrationData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Данни при регистрация на бюлетина в БС по месторождение на лицето</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BulletinsList">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="Bulletin" type="BulletinType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Bulletin" type="BulletinType">
+		<xs:annotation>
+			<xs:documentation>Бюлетин за съдимост</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>
