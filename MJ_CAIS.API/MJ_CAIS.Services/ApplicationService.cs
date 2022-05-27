@@ -28,7 +28,8 @@ namespace MJ_CAIS.Services
             var entityQuery = this.GetSelectAllQueriable();
             if (!string.IsNullOrEmpty(statusId))
             {
-                entityQuery = entityQuery.Where(x => x.StatusCode == statusId);
+                var statues = statusId.Split(','); 
+                entityQuery = entityQuery.Where(x => statues.Contains( x.StatusCode));
             }
 
             var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);

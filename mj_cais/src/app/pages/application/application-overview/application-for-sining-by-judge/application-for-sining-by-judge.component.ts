@@ -7,38 +7,25 @@ import { ApplicationGridModel } from "../_models/application-overview/applicatio
 import { ApplicationTypeStatusConstants } from "../_models/application-type-status.constants";
 
 @Component({
-  selector: "cais-application-new-overview",
-  templateUrl: "./application-new-overview.component.html",
-  styleUrls: ["./application-new-overview.component.scss"],
+  selector: "cais-application-for-sining-by-judge",
+  templateUrl: "./application-for-sining-by-judge.component.html",
+  styleUrls: ["./application-for-sining-by-judge.component.scss"],
 })
-export class ApplicationNewOverviewComponent extends RemoteGridWithStatePersistance<
+export class ApplicationForSiningByJudgeComponent extends RemoteGridWithStatePersistance<
   ApplicationGridModel,
   ApplicationGridService
 > {
-  public hideStatus: boolean = true;
-
   constructor(
     private dialogService: NbDialogService,
     service: ApplicationGridService,
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("application-search", service, injector);
-    this.service.updateUrlStatus(ApplicationTypeStatusConstants.NewId);
+    super("application-for-signing-by-judge", service, injector);
+    this.service.updateUrlStatus(ApplicationTypeStatusConstants.ForSigning);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-  }
-
-  onShowAllApplicationsChange(isChacked: boolean) {
-    if (isChacked) {
-      //removed filter entirely
-      this.service.updateUrlStatus();
-    } else {
-      this.service.updateUrlStatus(ApplicationTypeStatusConstants.NewId);
-    }
-    this.hideStatus = !isChacked;
-    this.ngOnInit();
   }
 }
