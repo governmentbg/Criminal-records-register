@@ -29,14 +29,16 @@
           <div class="font-weight-bold">Данни за бюлетин</div>
           <hr />
           <div class="row">
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Номер'"
-                [inputFormControl]="fullForm.registrationNumber"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
-            </div>
+            <ng-container *ngIf="isEdit()">
+              <div class="form-group col-md-6">
+                <cais-input
+                  [type]="'text'"
+                  [label]="'Номер'"
+                  [inputFormControl]="fullForm.registrationNumberDisplay"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
+            </ng-container>
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
@@ -326,9 +328,9 @@
                   align-items: center;
                 "
               >
-                <nb-checkbox 
-                (change)="onNoSanctionChange($event)"
-                [formControl]="fullForm.noSanction"
+                <nb-checkbox
+                  (change)="onNoSanctionChange($event)"
+                  [formControl]="fullForm.noSanction"
                   >Деецът не е наказан съгласно НК
                 </nb-checkbox>
               </div>

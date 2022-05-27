@@ -52,7 +52,15 @@ namespace MJ_CAIS.Common.Constants
 
         public static class ApplicationTypes
         {
-            public const string InternalCode5 = "5";
+            //todo: дали това са им имената
+// 4	Заявление за електронно свидетелство за съдимост
+//5	Заявление за електронно служебно свидетелство за съдимост
+//6	Заявление за Свидетелство за съдимост
+//7	Заявление за Справка за съдимост
+            public const string WebCertificate = "4";
+            public const string WebInternalCertificate = "5";
+            public const string DeskCertificate = "6";
+            public const string ConvictionRequest = "7";
         }
         public static class PaymentMethodsCodes
         {

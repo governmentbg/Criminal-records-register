@@ -40,6 +40,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? WebRequestId { get; set; }
+        public string? SourceType { get; set; }
+        public string? SanctionType { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual EWebRequest? WebRequest { get; set; }

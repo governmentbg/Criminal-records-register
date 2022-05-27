@@ -31,6 +31,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.BirthCountry)
                 .Include(x => x.BirthCity)
                    .ThenInclude(x => x.Municipality)
+                   .ThenInclude(x => x.District)
                 .FirstAsync(x => x.Id == id);
         }
 

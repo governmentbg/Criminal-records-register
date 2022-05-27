@@ -9,6 +9,8 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             ACertificateFirstSigners = new HashSet<ACertificate>();
             ACertificateSecondSigners = new HashSet<ACertificate>();
+            AReportFirstSigners = new HashSet<AReport>();
+            AReportSecondSigners = new HashSet<AReport>();
             GUserRoles = new HashSet<GUserRole>();
         }
 
@@ -29,6 +31,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual ICollection<ACertificate> ACertificateFirstSigners { get; set; }
         public virtual ICollection<ACertificate> ACertificateSecondSigners { get; set; }
+        public virtual ICollection<AReport> AReportFirstSigners { get; set; }
+        public virtual ICollection<AReport> AReportSecondSigners { get; set; }
         public virtual ICollection<GUserRole> GUserRoles { get; set; }
     }
 }

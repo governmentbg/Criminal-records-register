@@ -247,7 +247,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                     conv.ConvictionDecidingAuthority.DecidingAuthorityCode = new RestrictedStringType50Chars();
                     //todo: кой идентификатор да се пише тук
-                    conv.ConvictionDecidingAuthority.DecidingAuthorityCode.Value = dAuth.Code;
+                   // conv.ConvictionDecidingAuthority.DecidingAuthorityCode.Value = dAuth.Code; // todo
 
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
@@ -432,7 +432,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                     {
                         d.DecisionDecidingAuthority = new DecidingAuthorityType();
                         d.DecisionDecidingAuthority.DecidingAuthorityCode = new RestrictedStringType50Chars();
-                        d.DecisionDecidingAuthority.DecidingAuthorityCode.Value = authority.Code;
+                       // d.DecisionDecidingAuthority.DecidingAuthorityCode.Value = authority.Code; // todo:
                         d.DecisionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                         d.DecisionDecidingAuthority.DecidingAuthorityName[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
                         //d.DecisionDecidingAuthority.DecidingAuthorityName[1] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();

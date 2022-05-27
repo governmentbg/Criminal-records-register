@@ -1,8 +1,7 @@
 ﻿namespace MJ_CAIS.DTO.Bulletin
 {
-    public class DocumentDTO
+    public class DocumentDTO : BaseDTO
     {
-        public string Id { get; set; }
         public string? Name { get; set; }
         public string? Descr { get; set; }
         public string? DocTypeId { get; set; }

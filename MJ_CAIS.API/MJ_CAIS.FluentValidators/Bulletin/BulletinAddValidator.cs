@@ -92,7 +92,6 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             //RuleFor(x => x.MotherFirstname).HasMaxLength(200);
             //RuleFor(x => x.MotherFullname).HasMaxLength(200);
             //RuleFor(x => x.MotherSurname).HasMaxLength(200);
-            RuleFor(x => x.RegistrationNumber).HasMaxLength(100);
             RuleFor(x => x.StatusId).HasMaxLength(50);
             //RuleFor(x => x.Surname).HasMaxLength(200);
         }

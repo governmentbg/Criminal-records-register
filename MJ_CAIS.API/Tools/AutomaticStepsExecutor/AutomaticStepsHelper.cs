@@ -12,9 +12,21 @@ namespace AutomaticStepsExecutor
 {
     public class AutomaticStepsHelper
     {
-       public static async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, CaisDbContext dbContext)
+        public static async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, CaisDbContext dbContext, MJ_CAIS.Services.Contracts.IRegisterTypeService _registerTypeService,
+            MJ_CAIS.Services.Contracts.IApplicationService _applicationService, MJ_CAIS.Services.Contracts.IApplicationWebService _webApplicetionService, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus )
         {
-            wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
+            //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
+            _webApplicetionService.SetWApplicationStatus(wapplication, wapplicationStatus, "Одобрено електронно заявление");
+            string regNumber = "";
+
+            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(wapplication.CsAuthorityId);
+            }
+            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            {
+                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebInternal(wapplication.CsAuthorityId);
+            }
             AApplication appl = new AApplication()
             {
                 Id = BaseEntity.GenerateNewId(),
@@ -59,18 +71,21 @@ namespace AutomaticStepsExecutor
                 PurposeId = wapplication.PurposeId,
                 Sex = wapplication.Sex,
                 SrvcResRcptMethId = wapplication.SrvcResRcptMethId,
-                StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication,
+               // StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication,
                 Surname = wapplication.Surname,
                 SurnameLat = wapplication.SurnameLat,
                 UserCitizenId = wapplication.UserCitizenId,
                 UserExtId = wapplication.UserExtId,
                 UserId = wapplication.UserId,
                 WApplicationId = wapplication.Id,
-                //todo: get registration number
-                RegistrationNumber = "123445",
-                ApplicationType = wapplication.ApplicationType
+                RegistrationNumber = regNumber,
+                ApplicationType = wapplication.ApplicationType,
+                ApplicationTypeId = wapplication.ApplicationType.Id
 
             };
+
+            _applicationService.SetApplicationStatus(appl, applicationStatus, "Прехвърлено от електронно заявление");
+
             //foreach (var v in wapplication.AAppCitizenships)
             //{
             //    var newObj = new AAppCitizenship()
@@ -94,19 +109,23 @@ namespace AutomaticStepsExecutor
                                      Id = BaseEntity.GenerateNewId(),
                                      PersonId = x.Id
                                  }).ToListAsync();
-         
+
 
             dbContext.AApplications.Add(appl);
             dbContext.PAppIds.AddRange(appl.PAppIds);
             dbContext.WApplications.Update(wapplication);
         }
 
-    
+
 
         public static string GetTextFromFile(string fileName)
         {
             string htmlCode = File.ReadAllText(fileName, Encoding.Default);
             return htmlCode;
         }
-        }
+
+       
+
+
+    }
 }

@@ -32,7 +32,7 @@ export class FbbcFormComponent
   public isForEdit: boolean = false;
   public isForCreate: boolean = false;
   public bgCountryId = CommonConstants.bgCountryId;
-  public docType = DocTypeConstants.ecris;
+  public docType = DocTypeConstants.ECRIS;
 
   constructor(
     service: FbbcService,
@@ -67,7 +67,7 @@ export class FbbcFormComponent
   submitFunction = () => {
     this.fullForm.docTypeId.enable();
     if (this.isForCreate || this.isForEdit) {
-      this.fullForm.docTypeId.setValue(DocTypeConstants.ecris);
+      this.fullForm.docTypeId.setValue(DocTypeConstants.CBSHandwritten);
       this.fullForm.statusCode.setValue(FbbcStatusTypeEnum.Active);
     }
     this.validateAndSave(this.fullForm);

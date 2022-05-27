@@ -298,6 +298,7 @@ namespace MJ_CAIS.Services
             // update person with new data
             var personToUpdate = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
             personToUpdate.Id = existingPerson.Id;
+            personToUpdate.Version = existingPerson.Version;
             // àll identifiers, both new and old are added
             // so that when the object returns to a registry
             // it can add connection to the those pids
@@ -315,7 +316,11 @@ namespace MJ_CAIS.Services
         {
             if (personToUpdate.ModifiedProperties == null)
             {
-                personToUpdate.ModifiedProperties = new List<string>() { nameof(personToUpdate.UpdatedOn) };
+                personToUpdate.ModifiedProperties = new List<string>()
+                {
+                    nameof(personToUpdate.UpdatedOn),
+                    nameof(personToUpdate.Version)
+                };
             }
 
             // update person with new data
@@ -363,7 +368,11 @@ namespace MJ_CAIS.Services
                 {
                     personPidId.PersonId = lastPersonId;
                     personPidId.EntityState = EntityStateEnum.Modified;
-                    personPidId.ModifiedProperties = new List<string> { nameof(personPidId.PersonId) };
+                    personPidId.ModifiedProperties = new List<string> 
+                    {
+                        nameof(personPidId.PersonId), 
+                        nameof(personPidId.Version)
+                    };
                 }
 
                 // pids from other person

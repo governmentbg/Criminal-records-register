@@ -18,6 +18,12 @@
 
         public string? Status { get; set; }
 
+        public decimal? Version { get; set; }
+
+        public string? CaseType { get; set; }
+
+        public DateTime? BirthDate { get; set; }
+
         public IEnumerable<SanctionForRehabilitationDTO> Sanctions { get; set; }
 
         public IEnumerable<DecisionForRehabilitationDTO> Decisions { get; set; }

@@ -16,11 +16,15 @@ namespace MJ_CAIS.Services
     public class ApplicationService : BaseAsyncService<ApplicationDTO, ApplicationDTO, ApplicationDTO, AApplication, string, CaisDbContext>, IApplicationService
     {
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IRegisterTypeService _registerTypeService;
+        private readonly ICertificateService _certificateService;
 
-        public ApplicationService(IMapper mapper, IApplicationRepository applicationRepository)
+        public ApplicationService(IMapper mapper, IApplicationRepository applicationRepository, IRegisterTypeService registerTypeService, ICertificateService certificateService)
             : base(mapper, applicationRepository)
         {
             _applicationRepository = applicationRepository;
+            _registerTypeService = registerTypeService;
+            _certificateService = certificateService;
         }
 
         public virtual async Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
@@ -44,7 +48,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public async Task GenerateCertificateFromApplication(AApplication application,int certificateValidityMonths =6, string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
+        public async Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6)            //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
         {
             var pids = await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
             if (pids.Count > 0)
@@ -53,34 +57,50 @@ namespace MJ_CAIS.Services
                                  && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).ToListAsync();
                 if (bulletins.Count > 0)
                 {
-                    ProcessApplicationWithBulletins(application, bulletins, certificateWithBulletinStatusID, certificateValidityMonths);
+                   await  ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus, certificateValidityMonths, applicationStatus);
                     return;
 
                 }
             }
-            ProcessApplicationWithoutBulletins(application, certificateWithoutBulletinStatusID, certificateValidityMonths);
+            await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus, certificateValidityMonths, applicationStatus);
 
         }
 
 
-        private void ProcessApplicationWithoutBulletins(AApplication application, string statusID, int certificateValidityMonths)
+        private async Task ProcessApplicationWithoutBulletinsAsync(AApplication application, AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
-            ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
+            ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
+            //todo: add resources
+            SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
 
         }
 
-        private ACertificate CreateCertificate(string applicationId, string certificateStatus, int certificateValidityMonths)
+        private async Task<ACertificate> CreateCertificateAsync(string applicationId, AApplicationStatus aStatus, int certificateValidityMonths, string csAuthorityId,string applicationTypeCode)
         {
 
             ACertificate cert = new ACertificate();
             cert.Id = BaseEntity.GenerateNewId();
             cert.ApplicationId = applicationId;
-            cert.StatusCode = certificateStatus;
-            //дали тук да се попълват?!
-            cert.RegistrationNumber = Guid.NewGuid().ToString();
+            _certificateService.SetCertificateStatus(cert, aStatus, "Създаване на сертификат");
+         
+           
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.DeskCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateOnDesk(csAuthorityId);
+            }
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(csAuthorityId);
+            }
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWebInternal(csAuthorityId);
+            }
+
             cert.AccessCode1 = Guid.NewGuid().ToString();
             cert.ValidFrom = DateTime.UtcNow;
             cert.ValidTo = DateTime.UtcNow.AddMonths(certificateValidityMonths);
@@ -88,9 +108,9 @@ namespace MJ_CAIS.Services
             return cert;
         }
 
-        private void ProcessApplicationWithBulletins(AApplication application, List<BBulletin> bulletins, string statusID, int certificateValidityMonths)
+        private async Task ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins, AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
-            ACertificate cert = CreateCertificate(application.Id, statusID, certificateValidityMonths);
+            ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             int orderNumber = 0;
             cert.AAppBulletins= bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
             {
@@ -104,7 +124,9 @@ namespace MJ_CAIS.Services
                     OrderNumber = orderNumber              
                 };
             }).ToList();
-            
+            //todo: add resources
+            SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AAppBulletins.AddRange(cert.AAppBulletins);
@@ -189,6 +211,29 @@ namespace MJ_CAIS.Services
                 DocumentContent = document.DocContent.Content,
                 MimeType = document.DocContent.MimeType
             };
+        }
+        public  void SetApplicationStatus(AApplication application,  AApplicationStatus newStatus, string description)
+        {
+            application.StatusCode = newStatus.Code;
+            application.StatusCodeNavigation = newStatus;
+            AStatusH aStatusH = new AStatusH();
+            aStatusH.Descr = description;
+            aStatusH.StatusCode = newStatus.Code;
+            aStatusH.StatusCodeNavigation = newStatus;
+            if (application.AStatusHes == null)
+            {
+                application.AStatusHes = new List<AStatusH>();
+            }
+            aStatusH.ReportOrder = application.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
+            aStatusH.Id = BaseEntity.GenerateNewId();
+            aStatusH.ApplicationId = application.Id;
+            aStatusH.Application = application;
+
+            application.AStatusHes.Add(aStatusH);
+            dbContext.AStatusHes.Add(aStatusH);
+            dbContext.AApplications.Update(application);
+
+
         }
     }
 }

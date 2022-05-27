@@ -4,9 +4,10 @@ import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
 
-export class PersonForm extends BaseForm {
+export class PersonForm {
   public group: FormGroup;
-
+  public id: FormControl;
+  public version: FormControl;
   // applying validation rules,
   // showing or hiding form controls
   // depends on context type
@@ -45,7 +46,8 @@ export class PersonForm extends BaseForm {
   public personAlias: FormControl;
 
   constructor(context: string, isDisabled: boolean = true) {
-    super();
+    this.id = new FormControl(null);
+    this.version = new FormControl(null);
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);

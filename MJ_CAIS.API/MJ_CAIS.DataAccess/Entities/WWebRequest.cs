@@ -24,5 +24,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public bool? IsFromCache { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
+
+        public virtual WApplication? Application { get; set; }
     }
 }

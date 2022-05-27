@@ -1,4 +1,5 @@
-﻿using MJ_CAIS.DataAccess.Entities;
+﻿using MJ_CAIS.Common.Enums;
+using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.Services.Contracts;
 using System;
@@ -12,5 +13,6 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
     public interface IPrintDocumentService 
     {
         Task<byte[]> PrintApplication(string applicationID);
+        Task<byte[]> PrintCertificate(string certificateID, string checkUrl, JasperReportsNames reportName);
     }
 }

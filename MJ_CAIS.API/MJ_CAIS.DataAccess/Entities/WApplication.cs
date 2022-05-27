@@ -5,6 +5,13 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class WApplication : BaseEntity, IBaseIdEntity
     {
+        public WApplication()
+        {
+            APayments = new HashSet<APayment>();
+            WStatusHes = new HashSet<WStatusH>();
+            WWebRequests = new HashSet<WWebRequest>();
+        }
+
         public string Id { get; set; } = null!;
         public string? ClientIp { get; set; }
         public string? RegistrationNumber { get; set; }
@@ -74,5 +81,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual WApplicationStatus? StatusCodeNavigation { get; set; }
         public virtual GUsersCitizen? UserCitizen { get; set; }
         public virtual GUsersExt? UserExt { get; set; }
+        public virtual ICollection<APayment> APayments { get; set; }
+        public virtual ICollection<WStatusH> WStatusHes { get; set; }
+        public virtual ICollection<WWebRequest> WWebRequests { get; set; }
     }
 }

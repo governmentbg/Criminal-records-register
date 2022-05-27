@@ -35,5 +35,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetPidTypes();
 
         Task<IQueryable<BaseNomenclatureDTO>> GetDecidingAuthoritiesForBulletinsAsync();
+
+        IQueryable<BaseNomenclatureDTO> GetCountriesOrdered();
     }
 }

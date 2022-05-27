@@ -8,9 +8,7 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<IQueryable<BulletinForRehabilitationDTO>> GetBulletinByPersonIdAsync(string personId);
 
-        void UpdateRehabilitationData(string bulletinId, DateTime? rehabilitationDate, string? status);
-
-        Task SaveChangesAsync();
+        void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate, string? status);
 
         Task<string> GetPersonIdByBulletinIdAsync(string bulleintId);
     }

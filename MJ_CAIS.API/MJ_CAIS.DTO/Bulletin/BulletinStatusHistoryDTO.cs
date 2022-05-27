@@ -1,8 +1,7 @@
 ﻿namespace MJ_CAIS.DTO.Bulletin
 {
-    public class BulletinStatusHistoryDTO
+    public class BulletinStatusHistoryDTO : BaseDTO
     {
-        public string Id { get; set; }
         public string? NewStatus { get; set; }
         public string? OldStatus { get; set; }
         public DateTime? CreatedOn { get; set; }

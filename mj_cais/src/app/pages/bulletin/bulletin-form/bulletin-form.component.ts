@@ -86,6 +86,11 @@ export class BulletinFormComponent
     this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(), locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
+    if(!this.isEdit()){
+      this.fullForm.person.nationalities.selectedForeignKeys.patchValue(["CO-00-100-BGR"]);
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
+    }
+
     this.isNoSanctionCheck = this.fullForm.noSanction.value;
     this.initAllowedButtons(bulletinStatusId);
 

@@ -11,6 +11,9 @@ using TL.JasperReports.Integration;
 using TL.Signer;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.ExternalWebServices;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services;
 
 namespace AutomaticStepsExecutor
 {
@@ -49,9 +52,15 @@ namespace AutomaticStepsExecutor
 
                 using (host)
                 {
-                   // IPrintDocumentService s = host.Services.GetService<IPrintDocumentService>();
-                   // var resultPdf = await s.PrintApplication("aaaa-bbbb-cccc");
-                   // System.IO.File.WriteAllBytes("hello.pdf", resultPdf);
+                    //PrintDocumentService s = (PrintDocumentService)host.Services.GetService<IPrintDocumentService>();
+                    //var fileArray = await s.PrintApplication("aaaa-bbbb-cccc");
+                    //var _pdfSigner = host.Services.GetService<IPdfSigner>();
+                    //fileArray = _pdfSigner.SignPdf(fileArray, "cais.mjs.bg", new Dictionary<string, string>()
+                    //{ { "application_id", "aaaa-bbbb-cccc"} });
+
+                    //System.IO.File.WriteAllBytes("hello.pdf", fileArray);
+                    // IRegisterTypeService s = (RegisterTypeService)host.Services.GetService<IRegisterTypeService>();
+                    //var regNum = await  s.GetRegisterNumberForApplicationWeb("532");
 
 
                     IAutomaticStepService service = (IAutomaticStepService)host.Services.GetService(typeofExecutor);

@@ -4,8 +4,12 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class DocTypeConstants {
-  static get ecris() {
+  static get ECRIS() {
     return "5";
+  }
+
+  static get CBSHandwritten() {
+    return "2";
   }
 
   public static defaultDialogConfig = {

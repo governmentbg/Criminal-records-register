@@ -36,6 +36,9 @@ namespace MJ_CAIS.Repositories.Impl
                             DecisionFinalDate = bulletin.DecisionFinalDate,
                             Status = bulletin.StatusId,
                             RehabilitationDate = bulletin.RehabilitationDate,
+                            Version = bulletin.Version,
+                            CaseType = bulletin.CaseTypeId,
+                            BirthDate = bulletin.BirthDate,
                             Sanctions = bulletin.BSanctions.Select(x => new SanctionForRehabilitationDTO
                             {
                                 SuspentionDuration = new Duration
@@ -82,18 +85,20 @@ namespace MJ_CAIS.Repositories.Impl
         /// if a crime was committed during the probation period</param>
         /// <param name="status">The status may be missing if you do not need to change the status of bulletin</param>
         /// <returns></returns>
-        public void UpdateRehabilitationData(string bulletinId, DateTime? rehabilitationDate, string? status)
+        public void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate, string? status)
         {
             var bulletin = new BBulletin
             {
                 Id = bulletinId,
                 RehabilitationDate = rehabilitationDate,
+                Version = bulletinVersion
             };
 
             bulletin.EntityState = EntityStateEnum.Modified;
             bulletin.ModifiedProperties = new List<string>
             {
                 nameof(bulletin.RehabilitationDate),
+                nameof(bulletin.Version),
             };
 
             if (!string.IsNullOrEmpty(status))
@@ -103,11 +108,6 @@ namespace MJ_CAIS.Repositories.Impl
             }
 
             _dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

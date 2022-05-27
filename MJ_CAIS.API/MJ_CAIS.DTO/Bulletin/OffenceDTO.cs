@@ -2,9 +2,8 @@
 
 namespace MJ_CAIS.DTO.Bulletin
 {
-    public class OffenceDTO
+    public class OffenceDTO : BaseDTO
     {
-        public string Id { get; set; }
         public LookupDTO OffenceCategory { get; set; } = new LookupDTO();
         public string? FormOfGuiltId { get; set; }
         public string? Remarks { get; set; }

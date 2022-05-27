@@ -1,8 +1,7 @@
 ﻿namespace MJ_CAIS.DTO.Bulletin
 {
-    public class DecisionDTO
+    public class DecisionDTO : BaseDTO
     {
-        public string Id { get; set; } = null!;
         public string? DecisionChTypeId { get; set; }
         public string? DecisionChTypeName { get; set; }
         public string? DecisionEcli { get; set; }

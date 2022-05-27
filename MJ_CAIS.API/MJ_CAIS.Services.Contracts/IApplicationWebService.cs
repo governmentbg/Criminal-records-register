@@ -8,5 +8,6 @@ namespace MJ_CAIS.Services.Contracts
     {
         string GetWebApplicationTypeId();
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
+        public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true);
     }
 }

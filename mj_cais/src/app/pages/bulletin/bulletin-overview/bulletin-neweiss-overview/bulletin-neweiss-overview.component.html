@@ -49,11 +49,11 @@
     [sortable]="true"
     [dataType]="'date'"
   >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDate(cell.value)">
-      {{ this.dateFormatService.displayDate(cell.value) }}
-    </span>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
   </igx-column>
 
   <igx-column
@@ -142,6 +142,12 @@
         [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
+      </a>
+      <a
+        [title]="'Актуализирай'"
+        (click)="openUpdateConfirmationDialog(cell.rowData.id)"
+      >
+        <i class="fas fa-check"></i>
       </a>
     </ng-template>
   </igx-column>

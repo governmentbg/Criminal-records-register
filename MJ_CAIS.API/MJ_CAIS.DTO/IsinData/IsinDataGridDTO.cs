@@ -13,6 +13,8 @@ namespace MJ_CAIS.DTO.IsinData
         public DateTime? SanctionEndDate { get; set; }  
         public DateTime? SanctionStartDate { get; set; }
         public string? BulletinId { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
+        public string? SourceType { get; set; }
+        public string? SanctionType { get; set; }
     }
 }

@@ -23,5 +23,11 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync();
 
         Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync();
+
+        Task SaveChangesAsync();
+
+        Task<string> GetBulletinAuthIdAsync(string aId);
+
+        void CreateEcrisTcn(string bulletinId, string action);
     }
 }

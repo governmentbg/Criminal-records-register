@@ -1,3 +1,4 @@
+import { HttpParams } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
@@ -25,9 +26,26 @@ export class BulletinEventsDocumentGridService extends CaisCrudService<
 
     this.updateUrl(url);
   }
-  // todo: може да се изнесе в общ сервиз, 
+
+  // todo: може да се изнесе в общ сервиз,
   //но някои от обстоятелствата ще имат допълнителни фунции
   public changeStatus(aId: string, statusId: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}/api/bulletin-events/${aId}/change-status/${statusId}`, {});
+    return this.http.put(
+      `${this.baseUrl}/api/bulletin-events/${aId}/change-status/${statusId}`,
+      {}
+    );
+  }
+
+  // override
+  public addOrderBy(params?: HttpParams): HttpParams {
+    if (!params) {
+      params = new HttpParams();
+    }
+
+    if (!params.has("$orderby")) {
+      params = params.append("$orderby", "createdOn desc");
+    }
+
+    return params;
   }
 }
