@@ -4,6 +4,7 @@ import { MultipleChooseModel } from "../../inputs/multiple-choose/models/multipl
 
 export class PersonModel extends BaseModel {
   public contextType: string = null;
+  public suid: string = null;
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
@@ -38,6 +39,7 @@ export class PersonModel extends BaseModel {
   constructor(init?: Partial<PersonModel>) {
     super(init);
     this.firstname = init?.firstname ?? null;
+    this.suid = init?.suid ?? null;
     this.contextType = init?.contextType ?? null;
     this.surname = init?.surname ?? null;
     this.familyname = init?.familyname ?? null;

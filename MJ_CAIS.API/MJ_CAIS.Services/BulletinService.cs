@@ -360,10 +360,10 @@ namespace MJ_CAIS.Services
             // change bulletin status
             if (entity.NoSanction == true)
             {
-                entity.StatusId = Status.NoSanction;            
+                entity.StatusId = Status.NoSanction;
             }
 
-            if(entity.StatusId == Status.NoSanction || entity.StatusId == Status.ForDestruction)
+            if (entity.StatusId == Status.NoSanction || entity.StatusId == Status.ForDestruction)
             {
                 // if new person is created 
                 // set new person id
@@ -417,6 +417,11 @@ namespace MJ_CAIS.Services
                     EntityState = EntityStateEnum.Added,
                     PersonId = personIdObj.Id // table P_PERSON_IDS not P_PERSON,
                 });
+               
+                if (personIdObj.PidTypeId == PidType.Suid)
+                {
+                    bulletin.Suid = personIdObj.Pid;
+                }
 
                 dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
             }
