@@ -49,7 +49,11 @@ namespace MJ_CAIS.Services
         }
 
         public async Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6)            //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
-        {
+        {   //трябва да са попълнени следните стойности:
+            //       .Include(a => a.EgnNavigation)
+            //       .Include(a => a.LnchNavigation)
+            //       .Include(a => a.LnNavigation)
+            //       .Include(a => a.SuidNavigation)
             var pids = new List<string>();
             if (application.EgnId != null && application.EgnNavigation!=null) {
                 pids.Add(application.EgnNavigation.PersonId);
@@ -63,6 +67,11 @@ namespace MJ_CAIS.Services
             if (application.LnId != null && application.LnNavigation != null)
             {
                 pids.Add(application.LnNavigation.PersonId);
+
+            }
+            if (application.SuidId != null && application.SuidNavigation != null)
+            {
+                pids.Add(application.SuidNavigation.PersonId);
 
             }
             //await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
@@ -227,7 +236,7 @@ namespace MJ_CAIS.Services
                 MimeType = document.DocContent.MimeType
             };
         }
-        public  void SetApplicationStatus(AApplication application,  AApplicationStatus newStatus, string description)
+        public  void SetApplicationStatus(AApplication application,  AApplicationStatus newStatus, string description, bool includeInDbContext = true)
         {
             application.StatusCode = newStatus.Code;
             application.StatusCodeNavigation = newStatus;
@@ -245,8 +254,11 @@ namespace MJ_CAIS.Services
             aStatusH.Application = application;
 
             application.AStatusHes.Add(aStatusH);
-            dbContext.AStatusHes.Add(aStatusH);
-            dbContext.AApplications.Update(application);
+            if (includeInDbContext)
+            {
+                dbContext.AStatusHes.Add(aStatusH);
+                dbContext.AApplications.Update(application);
+            }
 
 
         }

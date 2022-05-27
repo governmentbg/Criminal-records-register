@@ -105,6 +105,7 @@ namespace MJ_CAIS.Repositories.Impl
             var query = _dbContext.AApplications.Where(a => a.EgnNavigation.PersonId == personId
                                                             || a.LnNavigation.PersonId == personId
                                                             || a.LnchNavigation.PersonId == personId
+                                                            || a.SuidNavigation.PersonId == personId
                                                             ).Select(application => new PersonApplicationGridDTO
                                                             {
                                                                 Id = application.Id,

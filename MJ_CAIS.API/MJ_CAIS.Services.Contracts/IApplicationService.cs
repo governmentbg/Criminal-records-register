@@ -14,6 +14,6 @@ namespace MJ_CAIS.Services.Contracts
         Task InsertApplicationDocumentAsync(string applicationId, ApplicationDocumentDTO aInDto);
         Task DeleteDocumentAsync(string documentId);
         Task<ApplicationDocumentDTO> GetDocumentContentAsync(string documentId);
-        public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description);
+        public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description, bool includeInDbContext = true);
     }
 }
