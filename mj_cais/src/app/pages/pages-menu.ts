@@ -82,13 +82,14 @@ export class PagesMenu {
             title: "Потвърждение за плащане",
             link: "/pages/applications-waiting-payment",
           },
-          {
-            title: "Oсвободени от плащане",
-            link: "/pages/application-tax-free",
-          },
+        
           {
             title: "За обработка",
             link: "/pages/application-for-check",
+          },
+          {
+            title: "За подпис",
+            link: "/pages/application-for-signing",
           },
         ],
       },
@@ -99,6 +100,14 @@ export class PagesMenu {
           {
             title: "Заявки за реабилитация",
             link: "/pages/internal-requests",
+          },
+          {
+            title: "Oсвободени от плащане",
+            link: "/pages/application-tax-free",
+          },
+          {
+            title: "За подпис от съдия",
+            link: "/pages/application-for-signing-by-judge",
           },
         ],
       },

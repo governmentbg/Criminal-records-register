@@ -15,7 +15,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public ApplicationProfile()
 
         {
-            CreateMap<AApplication, ApplicationGridDTO>();
+            CreateMap<AApplication, ApplicationGridDTO>()
+                .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
          
             CreateMap<AApplication, ApplicationDTO>();
 

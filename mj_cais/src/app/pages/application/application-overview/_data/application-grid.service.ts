@@ -14,6 +14,12 @@ export class ApplicationGridService extends CaisCrudService<
   }
 
   public updateUrlStatus(statusId?: string) {
-    this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
+    if(statusId){
+      this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
+    }else{
+      this.updateUrl(`${currentEndpoint}`);
+    }
   }
+
+  
 }

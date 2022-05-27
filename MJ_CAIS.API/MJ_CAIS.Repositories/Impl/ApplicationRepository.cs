@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -13,6 +14,17 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
+        public override IQueryable<AApplication> SelectAllAsync()
+        {
+            var result = this._dbContext
+                .Set<AApplication>()
+                .Include(x => x.CsAuthorityBirth)
+                .AsNoTracking();
+
+            return result;
+        }
+
+       
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.AApplications.AsNoTracking()
