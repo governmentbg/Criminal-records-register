@@ -7,7 +7,7 @@ namespace MJ_CAIS.DTO.Bulletin
     {
         #region Bulletin main data
 
-        public string? RegistrationNumber { get; set; }
+        public string? RegistrationNumberDisplay { get; set; }
         public string? CsAuthorityName { get; set; }
         public decimal? SequentialIndex { get; set; }
         public string? StatusId { get; set; }

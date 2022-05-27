@@ -43,6 +43,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<PPersonIdType, BaseNomenclatureDTO>();
             CreateMap<GDecidingAuthority, BaseNomenclatureDTO>();
+
+            CreateMap<GCountry, BaseNomenclatureDTO>();
         }
     }
 }

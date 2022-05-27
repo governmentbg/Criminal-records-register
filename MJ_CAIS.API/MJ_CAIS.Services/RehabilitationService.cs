@@ -34,11 +34,17 @@ namespace MJ_CAIS.Services
             var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
-            var isFirstPointApplied = await ApplyFirstPoinAsync(bulletins, currentAttachedBull);
+            var isFirstPointApplied = ApplyFirstPoint(bulletins, currentAttachedBull);
             if (isFirstPointApplied) return;
 
-            var isSecondPointApplied = await ApplySecondPoinAsync(bulletins, currentAttachedBull);
+            var isSecondPointApplied = ApplySecondPoint(bulletins, currentAttachedBull);
             if (isSecondPointApplied) return;
+
+            var isThirdPointApplied = ApplyThirdPoint(bulletins, currentAttachedBull);
+            if (isThirdPointApplied) return;
+
+            var isFourthPointApplied = ApplyFourthPoint(bulletins, currentAttachedBull);
+            if (isFourthPointApplied) return;
         }
 
         /// <summary>
@@ -55,24 +61,31 @@ namespace MJ_CAIS.Services
             var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
-            var appliedChangesSecondPoint = await ApplySecondPoinAsync(bulletins, currentAttachedBull);
+            var appliedChangesSecondPoint = ApplySecondPoint(bulletins, currentAttachedBull);
             if (appliedChangesSecondPoint) return;
+
+            var isThirdPointApplied = ApplyThirdPoint(bulletins, currentAttachedBull);
+            if (isThirdPointApplied) return;
+
+            var isFourthPointApplied = ApplyFourthPoint(bulletins, currentAttachedBull);
+            if (isFourthPointApplied) return;          
         }
 
-        private async Task<bool> ApplyFirstPoinAsync(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
+        private bool ApplyFirstPoint(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
         {
             var appliedChanges = false;
 
             var currentBulletin = bulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
             if (currentBulletin == null || !currentBulletin.DecisionFinalDate.HasValue) return appliedChanges;
 
-            var startDate = currentBulletin.DecisionFinalDate.Value;
 
             // the person's first bulletin with an estimated date
             // on which the person would potentially receive rehabilitation for that bulletin
             // this is the first condition from the first point
             if (bulletins.Count == 1)
             {
+                var startDate = currentBulletin.DecisionFinalDate.Value;
+
                 // get sanctions of the bulletin 
                 // if the bulletin does not contain sanctions of this type,
                 // point 1 may not apply
@@ -83,7 +96,7 @@ namespace MJ_CAIS.Services
                 endDate = endDate.AddMonths(sanction.SuspentionDuration.Months ?? 0);
                 endDate = endDate.AddDays(sanction.SuspentionDuration.Days ?? 0);
 
-                await SaveRehabilitationDataAsync(currentAttachedBull, endDate);
+                SetRehabilitationData(currentAttachedBull, endDate);
 
                 appliedChanges = true;
                 return appliedChanges;
@@ -97,10 +110,18 @@ namespace MJ_CAIS.Services
 
             foreach (var currentBull in bulletinWithRehabilitationDate)
             {
-                // todo: start date ?? 
+                var currentBullStartDate = currentBulletin.DecisionFinalDate.Value;
+
+                var sanction = bulletins.First().Sanctions.FirstOrDefault(x => x.Type == SanctionType.Imprisonment);
+                if (sanction == null) continue;
+
+                var currentBullEndDate = currentBullStartDate.AddYears(sanction.SuspentionDuration.Years ?? 0);
+                currentBullEndDate = currentBullEndDate.AddMonths(sanction.SuspentionDuration.Months ?? 0);
+                currentBullEndDate = currentBullEndDate.AddDays(sanction.SuspentionDuration.Days ?? 0);
+
                 var removeRehabilitation = currentBullOffEndDates
-                    .Any(offEndDate => offEndDate >= currentBull.DecisionFinalDate &&
-                                       offEndDate <= currentBull.RehabilitationDate);
+                    .Any(offEndDate => offEndDate >= currentBullStartDate &&
+                                       offEndDate <= currentBullEndDate);
 
                 if (removeRehabilitation)
                 {
@@ -122,7 +143,7 @@ namespace MJ_CAIS.Services
         /// <param name="bulletins">All bulletin of the person</param>
         /// <param name="currentAttachedBull">Currently edited bulletin attached to the dbContext object</param>
         /// <returns></returns>
-        private async Task<bool> ApplySecondPoinAsync(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
+        private bool ApplySecondPoint(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
         {
             var appliedChanges = false;
 
@@ -161,7 +182,7 @@ namespace MJ_CAIS.Services
                     {
                         endDate = endDate.Value.AddYears(3);
 
-                        await SaveRehabilitationDataAsync(currentAttachedBull, endDate);
+                        SetRehabilitationData(currentAttachedBull, endDate);
                         appliedChanges = true;
                     }
                 }
@@ -172,11 +193,6 @@ namespace MJ_CAIS.Services
             var bulletinWithRehabilitationDate = bulletins
                 .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
                 .ToList();
-
-            // да не се проверяват останалите варианти за реабилитация
-            // в случай че има повече от един бюлетин
-            // но за нито един няма предполагаема дата на реабилитация 
-            if (bulletinWithRehabilitationDate.Count == 0) return true;
 
             var anotherBulls = bulletins.Where(x => x.Id != currentAttachedBull.Id);
 
@@ -204,9 +220,172 @@ namespace MJ_CAIS.Services
             return appliedChanges;
         }
 
+        /// <summary>
+        /// Apply of point 3 of the rehabilitation rules
+        /// </summary>
+        /// <param name="bulletins">All bulletin of the person</param>
+        /// <param name="currentAttachedBull">Currently edited bulletin attached to the dbContext object</param>
+        /// <returns></returns>
+        private bool ApplyThirdPoint(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
+        {
+            var appliedChanges = false;
+
+            // if this is the first bulletin
+            // we can calculate data on rehabilitation
+            if (bulletins.Count == 1)
+            {
+                var bulletinDTO = bulletins.First();
+
+                if (!bulletinDTO.Decisions.Any(x => x.Type == DecisionType.EndOfPenalty)) return appliedChanges;
+
+                var sanctionOfType = bulletinDTO.Sanctions
+                    .FirstOrDefault(x => x.Type == SanctionType.Fine ||
+                                         x.Type == SanctionType.PublicDisfavor ||
+                                         x.Type == SanctionType.DisqualificationPosition ||
+                                         x.Type == SanctionType.DisqualificationProfession ||
+                                         x.Type == SanctionType.DisqualificationPlace ||
+                                         x.Type == SanctionType.DisqualificationMedal);
+
+                if(sanctionOfType ==null) return appliedChanges;
+
+                var endDate = bulletinDTO
+                    .Decisions
+                    .Where(x => x.Type == DecisionType.EndOfPenalty)
+                    .OrderBy(x => x.ChangeDate)
+                    .FirstOrDefault()?.ChangeDate;
+
+                if (endDate != null)
+                {
+                    endDate = endDate.Value.AddYears(1);
+
+                    SetRehabilitationData(currentAttachedBull, endDate);
+                    appliedChanges = true;
+                }
+
+                return appliedChanges;
+            }
+
+            var currentBulletinDto = bulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
+            if (currentBulletinDto == null) return appliedChanges;
+
+            if (currentBulletinDto.CaseType != CaseType.NOXD || !currentBulletinDto.OffencesEndDates.Any()) return appliedChanges;
+
+            var bulletinWithRehabilitationDate = bulletins
+                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .ToList();
+
+            foreach (var bull in bulletinWithRehabilitationDate)
+            {
+                // this is start date
+                var decisionEndDate = bull
+                    .Decisions
+                    .Where(x => x.Type == DecisionType.EndOfPenalty)
+                    .OrderBy(x => x.ChangeDate)
+                    .FirstOrDefault()?.ChangeDate;
+
+                if (!decisionEndDate.HasValue) continue;
+
+                var endDate = decisionEndDate.Value.AddYears(1);
+
+                var hasOffencInPeriod = currentBulletinDto.OffencesEndDates
+                 .Any(d => d >= decisionEndDate && d <= endDate);
+
+                if (hasOffencInPeriod)
+                {
+                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
+                    appliedChanges = true;
+                }
+            }
+
+            return appliedChanges;
+        }
+
+        /// <summary>
+        /// Apply of point 4 of the rehabilitation rules
+        /// </summary>
+        /// <param name="bulletins">All bulletin of the person</param>
+        /// <param name="currentAttachedBull">Currently edited bulletin attached to the dbContext object</param>
+        /// <returns></returns>
+        private bool ApplyFourthPoint(List<BulletinForRehabilitationDTO> bulletins, BBulletin currentAttachedBull)
+        {
+            var appliedChanges = false;
+
+            // if this is the first bulletin
+            // we can calculate data on rehabilitation
+            if (bulletins.Count == 1)
+            {
+                var bulletinDTO = bulletins.First();
+                if (!bulletinDTO.Decisions.Any(x => x.Type == DecisionType.EndOfPenalty)) return appliedChanges;
+
+                // todo?? more then one 
+                var offenceEndDate = bulletinDTO.OffencesEndDates.FirstOrDefault();
+
+                if (!offenceEndDate.HasValue || !bulletinDTO.BirthDate.HasValue) return appliedChanges;
+
+                int age = new DateTime((offenceEndDate.Value - bulletinDTO.BirthDate.Value).Ticks).Year;
+
+                if (age > 18) return appliedChanges;
+
+                var endDate = bulletinDTO
+                    .Decisions
+                    .Where(x => x.Type == DecisionType.EndOfPenalty && x.ChangeDate.HasValue)
+                    .OrderBy(x => x.ChangeDate)
+                    .FirstOrDefault()?.ChangeDate;
+
+                if (!endDate.HasValue) return appliedChanges;
+
+                endDate = endDate.Value.AddYears(2);
+
+                SetRehabilitationData(currentAttachedBull, endDate);
+                appliedChanges = true;
+
+                return appliedChanges;
+            }
+
+            var currentBulletinDto = bulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
+            if (currentBulletinDto == null) return appliedChanges;
+
+            var check = currentBulletinDto.CaseType != CaseType.NOXD ||
+                !currentBulletinDto.OffencesEndDates.Any() ||
+                !currentBulletinDto.Sanctions.Any(x => x.Type == SanctionType.Imprisonment);
+
+            if (!check) return appliedChanges;
+
+            var bulletinWithRehabilitationDate = bulletins
+                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .ToList();
+
+            foreach (var bull in bulletinWithRehabilitationDate)
+            {
+                // this is start date
+                var decisionEndDate = bull
+                    .Decisions
+                    .Where(x => x.Type == DecisionType.EndOfPenalty)
+                    .OrderBy(x => x.ChangeDate)
+                    .FirstOrDefault()?.ChangeDate;
+
+                if (!decisionEndDate.HasValue) continue;
+
+                var endDate = decisionEndDate.Value.AddYears(1);
+
+                var hasOffencInPeriod = currentBulletinDto.OffencesEndDates
+                 .Any(d => d >= decisionEndDate && d <= endDate);
+
+                if (hasOffencInPeriod)
+                {
+                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
+                    appliedChanges = true;
+                }
+            }
+
+            return appliedChanges;
+        }
+
+
+
         #region Helpers
 
-        private async Task SaveRehabilitationDataAsync(BBulletin bulletin, DateTime? rehabilitationDate)
+        private void SetRehabilitationData(BBulletin bulletin, DateTime? rehabilitationDate)
         {
             var status = rehabilitationDate <= DateTime.UtcNow ? Status.ForRehabilitation : null;// todo: ?
 

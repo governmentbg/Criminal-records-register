@@ -18,7 +18,6 @@ namespace MJ_CAIS.DataAccess.Entities
             BBulletinSuidNavigations = new HashSet<BBulletin>();
             FbbcPeople = new HashSet<Fbbc>();
             FbbcSuidNavigations = new HashSet<Fbbc>();
-            PAppIds = new HashSet<PAppId>();
             PBulletinIds = new HashSet<PBulletinId>();
         }
 
@@ -47,7 +46,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BBulletin> BBulletinSuidNavigations { get; set; }
         public virtual ICollection<Fbbc> FbbcPeople { get; set; }
         public virtual ICollection<Fbbc> FbbcSuidNavigations { get; set; }
-        public virtual ICollection<PAppId> PAppIds { get; set; }
         public virtual ICollection<PBulletinId> PBulletinIds { get; set; }
     }
 }

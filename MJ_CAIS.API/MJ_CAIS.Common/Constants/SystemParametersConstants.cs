@@ -24,6 +24,9 @@ namespace MJ_CAIS.Common.Constants
             public const string DELIVERY_MAIL_BODY_FILENAME = "DELIVERY_MAIL_BODY_FILENAME";
             //email subject file name
             public const string DELIVERY_MAIL_SUBJECT_FILENAME = "DELIVERY_MAIL_SUBJECT_FILENAME";
+            // 'Максимален брой опити до успешно извикване на Regix',
+            public const string REGIX_NUMBER_OF_ATTEMPTS = "REGIX_NUMBER_OF_ATTEMPTS";
+   
         }
     }
 }

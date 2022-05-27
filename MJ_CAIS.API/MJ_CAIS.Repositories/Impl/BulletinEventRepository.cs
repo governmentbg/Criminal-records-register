@@ -4,6 +4,7 @@ using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.BulletinEvent;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DTO.Home;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -93,6 +94,24 @@ namespace MJ_CAIS.Repositories.Impl
                         .FirstOrDefaultAsync(x => x.BulletinId == bulleintId);
 
             return result?.Person?.PersonId;
+        }
+
+        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        {
+            var query = _dbContext.BBulEvents.AsNoTracking()
+                .Where(x => x.StatusCode == BulletinEventConstants.Status.New &&
+                          (x.EventType == BulletinEventConstants.Type.Article2211 ||
+                           x.EventType == BulletinEventConstants.Type.Article2212 ||
+                           x.EventType == BulletinEventConstants.Type.Article3000 ||
+                           x.EventType == BulletinEventConstants.Type.NewDocument))
+                .GroupBy(x => x.EventType)
+                .Select(x => new ObjectStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count()
+                });
+
+            return await Task.FromResult(query);
         }
     }
 }

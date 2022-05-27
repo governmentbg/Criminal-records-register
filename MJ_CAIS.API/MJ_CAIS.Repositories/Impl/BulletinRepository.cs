@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Home;
@@ -35,7 +36,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<string> GetBulletinAuthIdAsync(string aId)
         {
-            var bulletin = await _dbContext.BBulletins.AsNoTracking()               
+            var bulletin = await _dbContext.BBulletins.AsNoTracking()
                .FirstOrDefaultAsync(x => x.Id == aId);
 
             return bulletin?.CsAuthorityId;
@@ -120,8 +121,8 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
                     .Include(x => x.BBullPersAliases)
-                    .Include(x=>x.PBulletinIds)
-                        .ThenInclude(x=>x.Person)
+                    .Include(x => x.PBulletinIds)
+                        .ThenInclude(x => x.Person)
                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             return bulleint;
@@ -130,6 +131,10 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
+                .Where(x => x.StatusId == BulletinConstants.Status.NewOffice || 
+                            x.StatusId == BulletinConstants.Status.NewEISS ||
+                            x.StatusId == BulletinConstants.Status.ForRehabilitation ||
+                            x.StatusId == BulletinConstants.Status.ForDestruction)
                 .GroupBy(x => x.StatusId)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -138,6 +143,19 @@ namespace MJ_CAIS.Repositories.Impl
                 });
 
             return await Task.FromResult(query);
+        }
+
+        public void CreateEcrisTcn(string bulletinId, string action)
+        {
+            var ecrisTcn = new EEcrisTcn
+            {
+                Id = BaseEntity.GenerateNewId(),
+                BulletinId = bulletinId,
+                Status = BulletinEventConstants.Status.New,
+                Action = action
+            };
+
+            _dbContext.Add(ecrisTcn);
         }
 
         public async Task SaveChangesAsync()

@@ -33,11 +33,10 @@ export class ApplicationNewOverviewComponent extends RemoteGridWithStatePersista
 
   onShowAllApplicationsChange(isChacked: boolean) {
     if (isChacked) {
+      //removed filter entirely
       this.service.updateUrlStatus();
     } else {
-      this.service.updateUrlStatus(
-        ApplicationTypeStatusConstants.NewId
-      );
+      this.service.updateUrlStatus(ApplicationTypeStatusConstants.NewId);
     }
     this.hideStatus = !isChacked;
     this.ngOnInit();

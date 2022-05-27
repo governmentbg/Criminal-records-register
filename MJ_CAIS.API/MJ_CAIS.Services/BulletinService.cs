@@ -26,6 +26,7 @@ namespace MJ_CAIS.Services
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
         private readonly IRehabilitationService _rehabilitationService;
+        private readonly IRegisterTypeService _registerTypeService;
         private readonly IUserContext _userContext;
 
         public BulletinService(IMapper mapper,
@@ -34,7 +35,8 @@ namespace MJ_CAIS.Services
             INotificationService notificationService,
             IBulletinEventService bulletinEventService,
             IRehabilitationService rehabilitationService,
-            IUserContext userContext)
+            IUserContext userContext,
+            IRegisterTypeService registerTypeService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
@@ -43,6 +45,7 @@ namespace MJ_CAIS.Services
             _bulletinEventService = bulletinEventService;
             _rehabilitationService = rehabilitationService;
             _userContext = userContext;
+            _registerTypeService = registerTypeService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -85,6 +88,10 @@ namespace MJ_CAIS.Services
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
 
+            var authId = !string.IsNullOrEmpty(bulletin?.BulletinAuthorityId) ? bulletin?.BulletinAuthorityId : "111"; // todo remove: only for testing
+            var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletin.BulletinType);
+            bulletin.RegistrationNumber = regNumber;
+
             await UpdateBulletinAsync(aInDto, bulletin, null);
             await _bulletinRepository.SaveChangesAsync();
 
@@ -114,6 +121,7 @@ namespace MJ_CAIS.Services
             if (bulletinDb == null)
                 throw new ArgumentException($"Bulletin with id {aInDto.Id} is missing");
 
+            var oldBulletinStatus = bulletinDb.StatusId;
             var bulletinToUpdate = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
 
             // if the bulletin is locked for editing,
@@ -123,7 +131,7 @@ namespace MJ_CAIS.Services
                 SetModifiedPropertiesByStatus(bulletinDb, bulletinToUpdate);
             }
 
-            await UpdateBulletinAsync(aInDto, bulletinToUpdate, bulletinDb.StatusId);
+            await UpdateBulletinAsync(aInDto, bulletinToUpdate, oldBulletinStatus);
             await _bulletinRepository.SaveChangesAsync();
 
             if (bulletinToUpdate.StatusId == Status.NoSanction)
@@ -138,6 +146,16 @@ namespace MJ_CAIS.Services
             }
 
             await _bulletinRepository.SaveChangesAsync();
+
+            try
+            {
+                await SendMessageToECRISAsync(bulletinToUpdate.EuCitizen, bulletinToUpdate.TcnCitizen, bulletinToUpdate.Id, oldBulletinStatus, bulletinToUpdate.StatusId);
+            }
+            catch (Exception ex)
+            {
+                // todo
+                throw;
+            }
         }
 
         /// <summary>
@@ -157,13 +175,14 @@ namespace MJ_CAIS.Services
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
             var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(bulletin.StatusId, statusId, aInDto);
+            AddBulletinStatusH(oldBulletinStatus, statusId, aInDto);
 
             // All active bulletins are locked for editing
             // only decisions can be added
             var isActiveBulletin = statusId == Status.Active;
             if (isActiveBulletin)
             {
+                await SetDataForNationalitiesAsync(bulletin);
                 bulletin.Locked = true;
             }
 
@@ -194,32 +213,18 @@ namespace MJ_CAIS.Services
                 // only apply changes to the context
                 await _bulletinEventService.GenereteEventWhenChangeStatusOfBullAsyn(bulletin, personId);
                 await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
-
                 // save data in db
                 await _bulletinRepository.SaveChangesAsync();
             }
 
-            // if person is bulgarian citizen
-            var skipEcris = bulletin.BPersNationalities != null &&
-                bulletin.BPersNationalities.Count == 1 &&
-                bulletin.BPersNationalities.First().CountryId == BG;
-
-            if (skipEcris) return;
-
-            // ECRIS
-            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id);
-            var isForECRIS = dbContext.EEcrisAuthorities.AsNoTracking().Any(x => personNationalities.Contains(x.CountryId));
-
-            if (isForECRIS)
+            try
             {
-                try
-                {
-                    await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
-                }
-                catch (Exception ex)
-                {
-                    // todo:
-                }
+                await SendMessageToECRISAsync(bulletin.EuCitizen, bulletin.TcnCitizen, bulletin.Id, oldBulletinStatus, bulletin.StatusId);
+            }
+            catch (Exception ex)
+            {
+                // todo
+                throw;
             }
         }
 
@@ -355,7 +360,11 @@ namespace MJ_CAIS.Services
             // change bulletin status
             if (entity.NoSanction == true)
             {
-                entity.StatusId = Status.NoSanction;
+                entity.StatusId = Status.NoSanction;            
+            }
+
+            if(entity.StatusId == Status.NoSanction || entity.StatusId == Status.ForDestruction)
+            {
                 // if new person is created 
                 // set new person id
                 aInDto.Person.Id = await CreatePersonFromBulletinAsync(entity);
@@ -417,7 +426,7 @@ namespace MJ_CAIS.Services
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)
         {
-            if (bulletinDb.StatusId != Status.NewEISS ||
+            if (bulletinDb.StatusId != Status.NewEISS &&
                 bulletinDb.StatusId != Status.NewOffice)
             {
                 // only version of the main object must be updated
@@ -578,6 +587,67 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
 
+        /// <summary>
+        /// Set data for nationalities.
+        /// If person is EU Citizen message to ecris must be sent
+        /// If person is not EU Citizen message to ecris tcn must be sent
+        /// The person may be bouth
+        /// </summary>
+        /// <param name="bulletin"></param>
+        /// <returns></returns>
+        private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
+        {
+            // if person is bulgarian citizen
+            var skipEcris = bulletin.BPersNationalities != null &&
+                bulletin.BPersNationalities.Count == 1 &&
+                bulletin.BPersNationalities.First().CountryId == BG;
+
+            if (skipEcris) return;
+
+            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id);
+            var isEuCitizen = await dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));
+
+            if (isEuCitizen)
+            {
+                bulletin.EuCitizen = true;
+            }
+
+            // todo: Except 
+            var createEcrisTcn = personNationalities.Except(dbContext.EEcrisAuthorities.AsNoTracking().Select(x => x.CountryId)).Any();
+            if (createEcrisTcn)
+            {
+                bulletin.TcnCitizen = true;
+            }
+        }
+
+        private async Task SendMessageToECRISAsync(bool? isEuCitizen, bool? isTcnCitizen, string bulletinId, string bOldStatus, string bNewStatus)
+        {
+            if (isEuCitizen == true)
+            {
+                await this._notificationService.CreateNotificationFromBulletin(bulletinId);
+            }
+
+            if (isTcnCitizen == true)
+            {
+                string? tcnAction;
+                if ((bOldStatus == Status.NewEISS || bOldStatus == Status.NewOffice) && bNewStatus == Status.Active)
+                {
+                    tcnAction = ECRISConstants.EcrisTcnActionType.Create;
+
+                }
+                else if (bNewStatus == Status.Deleted)
+                {
+                    tcnAction = ECRISConstants.EcrisTcnActionType.Delete;
+                }
+                else
+                {
+                    tcnAction = ECRISConstants.EcrisTcnActionType.Update;
+                }
+
+                _bulletinRepository.CreateEcrisTcn(bulletinId, tcnAction);
+                await _bulletinRepository.SaveChangesAsync();
+            }
+        }
 
         #endregion
     }

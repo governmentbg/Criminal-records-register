@@ -130,6 +130,13 @@ namespace MJ_CAIS.Services
                             PersonName = isin.Firstname + " " + isin.Surname + " " + isin.Familyname,
                             SanctionEndDate = isin.SanctionEndDate,
                             SanctionStartDate = isin.SanctionStartDate,
+                            SourceType = isin.SourceType,
+                            Version = isin.Version,
+                            Status = isin.Status,
+                            SanctionType = isin.SanctionType == IsinDataConstants.SanctionType.Fine ? IsinDataConstants.SanctionTypeDisplay.Fine :
+                                       (isin.SanctionType == IsinDataConstants.SanctionType.Probation ? IsinDataConstants.SanctionTypeDisplay.Probation :
+                                        (isin.SanctionType == IsinDataConstants.SanctionType.Prison ? IsinDataConstants.SanctionTypeDisplay.Prison :
+                                         null))
                         };
 
             return query;

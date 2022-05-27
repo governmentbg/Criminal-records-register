@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -71,7 +72,7 @@ namespace MJ_CAIS.Services
 
             var existingEvents = dbContext.BBulEvents
                                 .AsNoTracking()
-                                .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == EventType.Article2212);
+                                .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == BulletinEventConstants.Type.Article2212);
 
             currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
 
@@ -108,13 +109,13 @@ namespace MJ_CAIS.Services
 
             currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
 
-            var article2211 = existingEvents.FirstOrDefault(x => x.Type == EventType.Article2211);
+            var article2211 = existingEvents.FirstOrDefault(x => x.Type == BulletinEventConstants.Type.Article2211);
             if (article2211 == null || !article2211.Any)
             {
                 CheckForArticle2211(bulletins, currentAttachedBulletin);
             }
 
-            var article3000 = existingEvents.FirstOrDefault(x => x.Type == EventType.Article3000);
+            var article3000 = existingEvents.FirstOrDefault(x => x.Type == BulletinEventConstants.Type.Article3000);
             if (article3000 == null || !article3000.Any)
             {
                 CheckForArticle3000(bulletins, currentAttachedBulletin);
@@ -173,7 +174,7 @@ namespace MJ_CAIS.Services
 
             if (!mustAddEvent) return;
 
-            AddEventToBulletin(currentBulletin, EventType.Article2211);
+            AddEventToBulletin(currentBulletin, BulletinEventConstants.Type.Article2211);
         }
 
         /// <summary>
@@ -186,7 +187,7 @@ namespace MJ_CAIS.Services
 
             if (!mustAddEvent) return;
 
-            AddEventToBulletin(currentBulletin, EventType.Article2212);
+            AddEventToBulletin(currentBulletin, BulletinEventConstants.Type.Article2212);
         }
 
         private static void CheckForArticle3000(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
@@ -197,7 +198,7 @@ namespace MJ_CAIS.Services
 
             if (!mustAddEvent) return;
 
-            AddEventToBulletin(currentBulletin, EventType.Article3000);
+            AddEventToBulletin(currentBulletin, BulletinEventConstants.Type.Article3000);
         }
 
         private static void AddEventToBulletin(BBulletin currentBulletin, string eventType)
@@ -206,7 +207,7 @@ namespace MJ_CAIS.Services
             {
                 BulletinId = currentBulletin.Id,
                 Id = BaseEntity.GenerateNewId(),
-                StatusCode = EventStatusType.New,
+                StatusCode = BulletinEventConstants.Status.New,
                 EventType = eventType,
                 EntityState = EntityStateEnum.Added
             });

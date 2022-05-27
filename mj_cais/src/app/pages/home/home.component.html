@@ -16,8 +16,8 @@
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-for-rehabilitation']">
-                За реабилитация ({{ model.bulletinForRehabilitationCount }})
+              <a [routerLink]="['/pages/isin-identified']">
+                Данни за изтърпени наказания ({{ model.isinIdentifiedCount }})
               </a>
             </nb-list-item>
             <nb-list-item>
@@ -26,49 +26,87 @@
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/isin-identified']">
-                За отразяване от ИСИН ({{ model.isinIdentifiedCount }})
+              <a [routerLink]="['/pages/bulletins-for-rehabilitation']">
+                За реабилитация ({{ model.bulletinForRehabilitationCount }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/bulletin-events']">
+                Настъпили обстоятелства по по чл.22, чл. 1, изр. 1 ({{
+                  model.bulletinEventArticle2211Count
+                }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/bulletin-events']">
+                Настъпили обстоятелства по по чл.22, чл. 1, изр. 2 ({{
+                  model.bulletinEventArticle2212Count
+                }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/bulletin-events']">
+                Настъпили обстоятелства по чл.30 ({{
+                  model.bulletinEventArticle3000Count
+                }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/bulletin-events']">
+                Уведомяване за променен съдебен статус на осъдено лице ({{
+                  model.bulletinEventNewDocumentCount
+                }})
               </a>
             </nb-list-item>
           </nb-list>
         </nb-card-body>
       </nb-card>
-      <nb-card accent="info">
-        <nb-card-header>Свидетелства</nb-card-header>
+      <nb-card accent="info" class="col-md-12">
+        <nb-card-header>Изтърпени наказания</nb-card-header>
         <nb-card-body>
           <nb-list>
             <nb-list-item>
-              <a [routerLink]="['/pages/applications']">
-                <!-- Нови заявления ({{ model.bulletinNewOfficeCount }}) -->
-                Нови заявления ({{ model.bulletinNewOfficeCount }})
+              <a [routerLink]="['/pages/isin-new']">
+                Новопостъпили данни за изтърпени наказания ({{
+                  model.isinNewCount
+                }})
               </a>
             </nb-list-item>
-
-            <nb-list-item>
-              <a [routerLink]="['/pages/applications-waiting-payment']">
-                <!-- Нови заявления ({{ model.bulletinNewOfficeCount }}) -->
-                Потвърждение за плащане ({{ model.bulletinNewOfficeCount }})
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/application-tax-free']">
-                <!-- Нови заявления ({{ model.bulletinNewOfficeCount }}) -->
-                Oсвободени от плащане ({{ model.bulletinNewOfficeCount }})
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/application-for-check']">
-                <!-- Нови заявления ({{ model.bulletinNewOfficeCount }}) -->
-                За обработка ({{ model.bulletinNewOfficeCount }})
-              </a>
-            </nb-list-item>
-          
           </nb-list>
         </nb-card-body>
       </nb-card>
     </div>
     <div class="col-md-6">
       <div class="row col-md-12">
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>Свидетелства</nb-card-header>
+          <nb-card-body>
+            <nb-list>
+              <nb-list-item>
+                <a [routerLink]="['/pages/applications']">
+                  Нови заявления ({{ model.applicationNewIdCount }})
+                </a>
+              </nb-list-item>
+  
+              <nb-list-item>
+                <a [routerLink]="['/pages/applications-waiting-payment']">
+                  Потвърждение за плащане ({{ model.applicationCheckPaymentCount }})
+                </a>
+              </nb-list-item>
+              <nb-list-item>
+                <a [routerLink]="['/pages/application-tax-free']">
+                  Oсвободени от плащане ({{ model.applicationCheckTaxFreeCount }})
+                </a>
+              </nb-list-item>
+              <nb-list-item>
+                <a [routerLink]="['/pages/application-for-check']">
+                  За обработка ({{ model.applicationBulletinsCheckCount }})
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>ECRIS</nb-card-header>
           <nb-card-body>
@@ -81,20 +119,6 @@
               <nb-list-item>
                 <a [routerLink]="['/pages/ecris-req-waiting']">
                   Запитвания ({{ model.ecrisWaitingForCSAuthorityCount }})
-                </a>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
-        </nb-card>
-      </div>
-      <div class="row col-md-12">
-        <nb-card accent="info" class="col-md-12">
-          <nb-card-header>ISIN</nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <a [routerLink]="['/pages/isin-new']">
-                  Получени съобщения от ИСИН ({{ model.isinNewCount }})
                 </a>
               </nb-list-item>
             </nb-list>

@@ -17,6 +17,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CertificateId { get; set; }
 
         public virtual AApplication? Application { get; set; }
+        public virtual ACertificate? Certificate { get; set; }
         public virtual AApplicationStatus StatusCodeNavigation { get; set; } = null!;
     }
 }

@@ -10,8 +10,8 @@ namespace MJ_CAIS.DataAccess.Entities
             AAppCitizenships = new HashSet<AAppCitizenship>();
             AAppPersAliases = new HashSet<AAppPersAlias>();
             ACertificates = new HashSet<ACertificate>();
+            APayments = new HashSet<APayment>();
             AStatusHes = new HashSet<AStatusH>();
-            PAppIds = new HashSet<PAppId>();
         }
 
         public string Id { get; set; } = null!;
@@ -92,7 +92,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
         public virtual ICollection<AAppPersAlias> AAppPersAliases { get; set; }
         public virtual ICollection<ACertificate> ACertificates { get; set; }
+        public virtual ICollection<APayment> APayments { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }
-        public virtual ICollection<PAppId> PAppIds { get; set; }
     }
 }

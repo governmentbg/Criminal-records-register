@@ -8,7 +8,7 @@ import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin
 export class BulletinForm extends BaseForm {
   public group: FormGroup;
 
-  public registrationNumber: FormControl;
+  public registrationNumberDisplay: FormControl;
   public csAuthorityName: FormControl;
   public sequentialIndex: FormControl;
   public statusIdDisplay: FormControl;
@@ -79,7 +79,6 @@ export class BulletinForm extends BaseForm {
 
   private initNonEditableObj(): void {
     this.person = new PersonForm(PersonContextEnum.Bulletin, true);
-    this.registrationNumber.disable();
     this.csAuthorityName.disable();
     this.sequentialIndex.disable();
     this.statusIdDisplay.disable();
@@ -113,12 +112,10 @@ export class BulletinForm extends BaseForm {
   private initForEditNewEISS(): void {
     this.person = new PersonForm(PersonContextEnum.Bulletin, true);
 
-    this.registrationNumber.setValidators(Validators.maxLength(100));
     this.csAuthorityName.disable();
     this.sequentialIndex.setValidators(Validators.required);
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.setValidators([
-      Validators.required,
       Validators.maxLength(100),
     ]);
     this.ecrisConvictionId.setValidators(Validators.maxLength(50));
@@ -153,12 +150,10 @@ export class BulletinForm extends BaseForm {
     var guid = Guid.create().toString();
     this.id = new FormControl(guid);
     this.person = new PersonForm(PersonContextEnum.Bulletin, false);
-    this.registrationNumber.setValidators(Validators.maxLength(100));
     this.csAuthorityName.disable();
     this.sequentialIndex.setValidators(Validators.required);
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.setValidators([
-      Validators.required,
       Validators.maxLength(100),
     ]);
     this.ecrisConvictionId.setValidators(Validators.maxLength(50));
@@ -168,11 +163,6 @@ export class BulletinForm extends BaseForm {
     ]);
     this.bulletinAuthorityId.setValidators(Validators.maxLength(50));
     this.bulletinCreateDate.setValidators(Validators.required);
-    this.createdByNames.setValidators(Validators.required);
-    this.createdByPosition.setValidators(Validators.maxLength(200));
-    this.approvedByNames.setValidators(Validators.required);
-    this.approvedByPosition.setValidators(Validators.required);
-
     this.decisionTypeId.setValidators(Validators.maxLength(200));
     this.decisionNumber.setValidators([
       Validators.required,
@@ -199,7 +189,7 @@ export class BulletinForm extends BaseForm {
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
-      registrationNumber: this.registrationNumber,
+      registrationNumberDisplay: this.registrationNumberDisplay,
       csAuthorityName: this.csAuthorityName,
       sequentialIndex: this.sequentialIndex,
       statusId: this.statusId,
@@ -241,7 +231,8 @@ export class BulletinForm extends BaseForm {
 
   private initFormControls(locked: boolean): void {
     this.id = new FormControl(null);
-    this.registrationNumber = new FormControl(null);
+    this.registrationNumberDisplay = new FormControl(null);
+    this.registrationNumberDisplay.disable();
     this.csAuthorityName = new FormControl(null);
     this.sequentialIndex = new FormControl(null);
     this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewOffice);

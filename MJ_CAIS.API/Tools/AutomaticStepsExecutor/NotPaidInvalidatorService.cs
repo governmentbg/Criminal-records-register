@@ -2,6 +2,7 @@
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,11 +16,13 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<NotPaidInvalidatorService> _logger;
+        private readonly IApplicationService _applicationService;
 
-        public NotPaidInvalidatorService(CaisDbContext dbContext, ILogger<NotPaidInvalidatorService> logger)
+        public NotPaidInvalidatorService(CaisDbContext dbContext, ILogger<NotPaidInvalidatorService> logger, IApplicationService applicationService)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _applicationService = applicationService;
 
 
 
@@ -63,7 +66,7 @@ namespace AutomaticStepsExecutor
                 entities.ForEach(x =>
                   {
                       var application = (AApplication)x;
-                      application.StatusCode = statuses.First().Code;
+                    _applicationService.SetApplicationStatus(application, statuses.First(), "Автоматично анулиране - неплатено.");
 
                   });
 

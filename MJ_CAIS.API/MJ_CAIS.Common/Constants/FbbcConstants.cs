@@ -13,9 +13,9 @@
 
         public static class MessageTypeDescription
         {
-            public const string CodePolice = "Получени от ЦД \"Криминална полиция\"";
-            public const string CodeCBSHandwritten = "ЦБС - получени по факс/писмо, ръчно въведени в ЦБС";
-            public const string CodeCDKP = "Данни, получени от ЦД \"КП\", редактирани в ЦБС";
+            public const string CodePolice = "От ЦД\"КП\"";
+            public const string CodeCBSHandwritten = "ЦБС - ръчно въведени";
+            public const string CodeCDKP = "От ЦД\"КП\", редактирани в ЦБС";
             public const string CodeNJR = "NJR";
             public const string CodeECRIS = "ECRIS";
         }
@@ -25,7 +25,7 @@
             public const string Active = "Active";
             public const string Deleted = "Deleted";
             public const string ForDelete = "ForDelete";
-         
+
         }
     }
 }

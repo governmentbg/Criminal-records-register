@@ -8,6 +8,7 @@ using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services;
+using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +23,17 @@ namespace MJ_CAIS.ExternalWebServices
         private readonly ICertificateRepository _certificateRepository;
         private readonly IPdfSigner _pdfSignerService;
         private readonly IPrintDocumentService _printerService;
+        private readonly ICertificateService _certificateService;
 
         public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository, 
-            IPdfSigner pdfSignerService, IPrintDocumentService printerService)
+            IPdfSigner pdfSignerService, IPrintDocumentService printerService, ICertificateService certificateService)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
          
             _pdfSignerService = pdfSignerService;
             _printerService = printerService;
+            _certificateService = certificateService;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -56,14 +59,25 @@ namespace MJ_CAIS.ExternalWebServices
             {//todo: EH & resources
                 throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
             }
+            var statuses = await dbContext.AApplicationStatuses.Where(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
+           || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+           || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint).ToListAsync();
+            if (statuses.Count!=3)
+            {
+                throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}" );
+            }
+            var statusCertificateServerSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign);
+            var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
+            var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
             //todo:get patterns for mail if needed:
-            return await CreateCertificate(certificate, null, null, signingCertificateName, await GetWebPortalAddress());
+            return await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery,statusCertificatePaperprint , await GetWebPortalAddress());
 
         }
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
-            string mailBodyPattern, string signingCertificateName, string? webportalUrl = null, string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
-            , string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-            , string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
+            string mailBodyPattern, string signingCertificateName,  AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
+            //string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
+            //, string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+            //, string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
         {
 
             byte[] contentCertificate;
@@ -139,7 +153,8 @@ namespace MJ_CAIS.ExternalWebServices
             if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebInternalCertificate)
             {
                 //ako не е електронно -> за печат
-                certificate.StatusCode = statusCodeCertificatePaperPrint;
+                _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
+               // certificate.StatusCode = statusCodeCertificatePaperPrint;
 
             }
             else
@@ -147,12 +162,14 @@ namespace MJ_CAIS.ExternalWebServices
                 if (containsBulletins || certificate.Application.PurposeNavigation.ForSecondSignature == true)
                 {
                     //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
-                    certificate.StatusCode = statusCodeCertificateServerSign;
+                    _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
+                    //certificate.StatusCode = statusCodeCertificateServerSign;
                 }
                 else
                 {
                     //todo: за доставка
-                    certificate.StatusCode = statusCodeCertificateForDelivery;
+                    _certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне на заявител");
+                    //certificate.StatusCode = statusCodeCertificateForDelivery;
 
                     await DeliverCertificateAsync(certificate, mailBodyPattern,mailSubjectPattern,webportalUrl);                 
 

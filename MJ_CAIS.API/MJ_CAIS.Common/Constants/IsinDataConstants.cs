@@ -9,5 +9,19 @@
             public const string Unidentified = "Unidentified"; // Невъзможен за разпознаване;
             public const string Closed = "Closed"; // Приключила обработка
         }
+
+        public static class SanctionType
+        {
+            public const string Fine = "Fine";
+            public const string Prison = "Prison"; 
+            public const string Probation = "Probation"; 
+        }
+
+        public static class SanctionTypeDisplay
+        {
+            public const string Fine = "Глоба";
+            public const string Prison = "Затвор";
+            public const string Probation = "Пробация";
+        }
     }
 }

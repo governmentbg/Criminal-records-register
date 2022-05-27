@@ -66,6 +66,8 @@ import { BulletinEventsArticleOverviewComponent } from './bulletin-events/bullet
 import { BulletinEventsDocumentOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
 import { ApplicationTaxFreeOverviewComponent } from './application/application-overview/application-tax-free-overview/application-tax-free-overview.component';
 import { ApplicationForCheckComponent } from './application/application-overview/application-for-check/application-for-check.component';
+import { ApplicationForSigningComponent } from './application/application-overview/application-for-signing/application-for-signing.component';
+import { ApplicationForSiningByJudgeComponent } from './application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component';
 
 @NgModule({
   imports: [
@@ -137,7 +139,9 @@ import { ApplicationForCheckComponent } from './application/application-overview
     BulletinEventsArticleOverviewComponent,
     BulletinEventsDocumentOverviewComponent,
     ApplicationTaxFreeOverviewComponent,
-    ApplicationForCheckComponent
+    ApplicationForCheckComponent,
+    ApplicationForSigningComponent,
+    ApplicationForSiningByJudgeComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

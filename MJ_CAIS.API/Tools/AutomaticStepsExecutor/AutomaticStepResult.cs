@@ -18,7 +18,7 @@
                 result += ";";
 
             }
-            return "";
+            return result;
         }
     }
 }

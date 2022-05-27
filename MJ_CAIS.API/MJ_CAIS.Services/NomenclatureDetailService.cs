@@ -93,7 +93,7 @@ namespace MJ_CAIS.Services
             var query = await _nomenclatureDetailRepository
                 .GetDecidingAuthoritiesForBulletinsAsync();
 
-            return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);        
+            return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
         public IQueryable<BaseNomenclatureDTO> GetPidTypes()
@@ -112,7 +112,7 @@ namespace MJ_CAIS.Services
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
         }
-        
+
         public IQueryable<BaseNomenclatureDTO> GetAllAPurposes()
         {
             return _nomenclatureDetailRepository
@@ -132,7 +132,16 @@ namespace MJ_CAIS.Services
             return _nomenclatureDetailRepository
                 .GetSrvcResRcptMethods()
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
-        }        
+        }
+
+        public IQueryable<BaseNomenclatureDTO> GetCountriesOrdered()
+        {
+            return _nomenclatureDetailRepository
+                .GetCountries()
+                .OrderBy(x => x.Iso31662Code)
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;

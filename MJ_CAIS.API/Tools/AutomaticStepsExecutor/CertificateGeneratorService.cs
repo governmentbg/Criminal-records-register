@@ -54,10 +54,11 @@ namespace AutomaticStepsExecutor
             if (entities.Count > 0)
             {
                 var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
-                                                   a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady).ToListAsync();
-                if (statuses.Count != 2)
+                                                   a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
+                                                   || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToListAsync();
+                if (statuses.Count != 3)
                 {
-                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
+                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
 
                 }
                 var certificateValidityMonths = (await _dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS))?.ValueNumber;
@@ -66,13 +67,16 @@ namespace AutomaticStepsExecutor
                     throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
                 }
 
+                var applicationStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
+                var certificateContentReadyStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady);
+                var bulletinCheckStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck);
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
                     {
                         var application = (AApplication)entity;
-                        await _applicationService.GenerateCertificateFromApplication(application, (int)certificateValidityMonths, ApplicationConstants.ApplicationStatuses.CertificateContentReady, ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+                        await _applicationService.GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
@@ -94,6 +98,10 @@ namespace AutomaticStepsExecutor
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
         {
             var result = await Task.FromResult(_dbContext.AApplications
+                                             .Include(a => a.EgnNavigation)
+                                             .Include(a => a.LnchNavigation)
+                                             .Include(a => a.LnNavigation)
+                                             .Include(a => a.SuidNavigation)
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
                                             && !aa.ACertificates.Any())
                                  .OrderBy(a => a.CreatedOn)

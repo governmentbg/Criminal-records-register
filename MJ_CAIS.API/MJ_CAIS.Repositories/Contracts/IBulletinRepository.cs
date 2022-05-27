@@ -27,5 +27,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task SaveChangesAsync();
 
         Task<string> GetBulletinAuthIdAsync(string aId);
+
+        void CreateEcrisTcn(string bulletinId, string action);
     }
 }

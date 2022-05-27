@@ -160,7 +160,7 @@ namespace MJ_CAIS.Services
                     .Where(x => personIds.Contains(x.Id))
                     .ToListAsync();
 
-            var personToUpdate = MargePeople(pids, existingPersons);
+            var personToUpdate = MergePeople(pids, existingPersons);
 
             // call logic for only one person
             return UpdatePersonDataWhenHasOnePerson(aInDto, personToUpdate);
@@ -180,7 +180,7 @@ namespace MJ_CAIS.Services
                                .Where(x => x.Id == aId || x.Id == personToBeConnected)
                                .ToListAsync();
 
-            var persomToUpdate = MargePeople(new List<PPersonId>(), people);
+            var persomToUpdate = MergePeople(new List<PPersonId>(), people);
             persomToUpdate.EntityState = EntityStateEnum.Modified;
 
             // call logic for only one person
@@ -242,22 +242,22 @@ namespace MJ_CAIS.Services
             // todo: make one call 
             if (!string.IsNullOrEmpty(aInDto.Egn))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn, personId));
+                pids.Add(await _personRepository.GetPersonIdAsync(aInDto.Egn, PidType.Egn, personId));
             }
 
             if (!string.IsNullOrEmpty(aInDto.Lnch))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch, personId));
+                pids.Add(await _personRepository.GetPersonIdAsync(aInDto.Lnch, PidType.Lnch, personId));
             }
 
             if (!string.IsNullOrEmpty(aInDto.Ln))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln, personId));
+                pids.Add(await _personRepository.GetPersonIdAsync(aInDto.Ln, PidType.Ln, personId));
             }
 
             if (!string.IsNullOrEmpty(aInDto.AfisNumber))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber, personId));
+                pids.Add(await _personRepository.GetPersonIdAsync(aInDto.AfisNumber, PidType.AfisNumber, personId));
             }
 
             return pids;
@@ -312,6 +312,7 @@ namespace MJ_CAIS.Services
         /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
         /// <param name="personToUpdate">Person with updated data</param>
         /// <returns>Updated person includes the identifiers</returns>
+        /// </summary>
         private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate)
         {
             if (personToUpdate.ModifiedProperties == null)
@@ -346,7 +347,7 @@ namespace MJ_CAIS.Services
         /// <param name="pids"></param>
         /// <param name="existingPersons"></param>
         /// <returns></returns>
-        private PPerson MargePeople(List<PPersonId> pids, List<PPerson> existingPersons)
+        private PPerson MergePeople(List<PPersonId> pids, List<PPerson> existingPersons)
         {
             // get last added or modified person object
             var lastPerson = existingPersons.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
