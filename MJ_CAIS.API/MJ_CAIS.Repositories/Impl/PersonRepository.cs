@@ -81,26 +81,38 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
         {
-            var query = (from application in _dbContext.AApplications.AsNoTracking()
+            //var query = (from application in _dbContext.AApplications.AsNoTracking()
 
-                         join appPersonId in _dbContext.PAppIds.AsNoTracking() on application.Id equals appPersonId.ApplicationId
-                                   into appPersonIdLeft
-                         from appPersonId in appPersonIdLeft.DefaultIfEmpty()
+            //             //join appPersonId in _dbContext.PAppIds.AsNoTracking() on application.egn.Id equals appPersonId.ApplicationId
+            //             //          into appPersonIdLeft
+            //             //from appPersonId in appPersonIdLeft.DefaultIfEmpty()
 
-                         join personIds in _dbContext.PPersonIds.AsNoTracking() on appPersonId.PersonId equals personIds.Id
-                                     into personIdsLeft
-                         from personIds in personIdsLeft.DefaultIfEmpty()
+            //             join personIds in _dbContext.PPersonIds.AsNoTracking() on application.EgnId equals personIds.Id
 
-                         where personIds.PersonId == personId
+            //                         into personIdsLeft
+            //             from personIds in personIdsLeft.DefaultIfEmpty()
 
-                         select new PersonApplicationGridDTO
-                         {
-                             Id = application.Id,
-                             RegistrationNumber = application.RegistrationNumber,
-                             Firstname = application.Firstname,
-                             Surname = application.Surname,
-                             Familyname = application.Familyname,
-                         }).Distinct();
+            //             where personIds.PersonId == personId
+
+            //             select new PersonApplicationGridDTO
+            //             {
+            //                 Id = application.Id,
+            //                 RegistrationNumber = application.RegistrationNumber,
+            //                 Firstname = application.Firstname,
+            //                 Surname = application.Surname,
+            //                 Familyname = application.Familyname,
+            //             }).Distinct();
+            var query = _dbContext.AApplications.Where(a => a.EgnNavigation.PersonId == personId
+                                                            || a.LnNavigation.PersonId == personId
+                                                            || a.LnchNavigation.PersonId == personId
+                                                            ).Select(application => new PersonApplicationGridDTO
+                                                            {
+                                                                Id = application.Id,
+                                                                RegistrationNumber = application.RegistrationNumber,
+                                                                Firstname = application.Firstname,
+                                                                Surname = application.Surname,
+                                                                Familyname = application.Familyname,
+                                                            }).Distinct();
 
             return await Task.FromResult(query);
         }

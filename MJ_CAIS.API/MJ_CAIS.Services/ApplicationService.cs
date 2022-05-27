@@ -49,7 +49,22 @@ namespace MJ_CAIS.Services
 
         public async Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6)            //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
         {
-            var pids = await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
+            var pids = new List<string>();
+            if (application.EgnId != null && application.EgnNavigation!=null) {
+                pids.Add(application.EgnNavigation.PersonId);
+
+            }
+            if (application.LnchId != null && application.LnchNavigation != null)
+            {
+                pids.Add(application.LnchNavigation.PersonId);
+
+            }
+            if (application.LnId != null && application.LnNavigation != null)
+            {
+                pids.Add(application.LnNavigation.PersonId);
+
+            }
+            //await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
             if (pids.Count > 0)
             {
                 var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
@@ -71,7 +86,7 @@ namespace MJ_CAIS.Services
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             //todo: add resources
             SetApplicationStatus(application, aStatus, "Създаване на сертификат");
-            application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
+          //  application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);

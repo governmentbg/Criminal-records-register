@@ -104,7 +104,6 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GUsersCitizen> GUsersCitizens { get; set; } = null!;
         public virtual DbSet<GUsersExt> GUsersExts { get; set; } = null!;
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
-        public virtual DbSet<PAppId> PAppIds { get; set; } = null!;
         public virtual DbSet<PBulletinId> PBulletinIds { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
         public virtual DbSet<PPersonH> PPersonHs { get; set; } = null!;
@@ -6382,59 +6381,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
-            });
-
-            modelBuilder.Entity<PAppId>(entity =>
-            {
-                entity.ToTable("P_APP_IDS");
-
-                entity.HasIndex(e => e.ApplicationId, "XIF1P_APP_IDS");
-
-                entity.HasIndex(e => e.PersonId, "XIF2P_APP_IDS");
-
-                entity.HasIndex(e => new { e.ApplicationId, e.PersonId }, "XUKP_APP_IDS")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.ApplicationId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("APPLICATION_ID");
-
-                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.PersonId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("PERSON_ID");
-
-                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-
-                entity.HasOne(d => d.Application)
-                    .WithMany(p => p.PAppIds)
-                    .HasForeignKey(d => d.ApplicationId)
-                    .HasConstraintName("FK_P_APP_IDS_A_APPLICATIONS");
-
-                entity.HasOne(d => d.Person)
-                    .WithMany(p => p.PAppIds)
-                    .HasForeignKey(d => d.PersonId)
-                    .HasConstraintName("FK_P_APP_IDS_P_PERSON_IDS");
             });
 
             modelBuilder.Entity<PBulletinId>(entity =>
