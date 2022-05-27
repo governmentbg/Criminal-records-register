@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-
-namespace MJ_CAIS.DataAccess.Entities
+namespace MJ_CAIS.DTO.Report
 {
-    public partial class AReport : BaseEntity, IBaseIdEntity
+    public class ReportDTO : BaseDTO
     {
-        public AReport()
-        {
-            ARepBulletins = new HashSet<ARepBulletin>();
-        }
-
         public string Id { get; set; } = null!;
         public string? RegistrationNumber { get; set; }
         public string? CServiceUri { get; set; }
@@ -29,18 +21,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? SecondSignerId { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public string? UpdatedBy { get; set; }
-        public DateTime? UpdatedOn { get; set; }
         public decimal? ApiServiceCallId { get; set; }
         public string? DocId { get; set; }
-        public string? ApplicationId { get; set; }
-
-        public virtual AApplication? Application { get; set; }
-        public virtual DDocument? Doc { get; set; }
-        public virtual GUser? FirstSigner { get; set; }
-        public virtual GUser? SecondSigner { get; set; }
-        public virtual ICollection<ARepBulletin> ARepBulletins { get; set; }
     }
 }

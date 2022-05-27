@@ -2,6 +2,7 @@
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,15 @@ namespace AutomaticStepsExecutor
         private CaisDbContext _dbContext;
         private readonly ILogger<CertificateGeneratorService> _logger;
         private readonly IApplicationService _applicationService;
-        public CertificateGeneratorService(CaisDbContext dbContext, ILogger<CertificateGeneratorService> logger, IApplicationService applicationService)
+        private readonly IReportService _reportService;
+        private readonly IReportGenerationService _reportGenerationService;
+        public CertificateGeneratorService(CaisDbContext dbContext, ILogger<CertificateGeneratorService> logger, IApplicationService applicationService, IReportService reportService, IReportGenerationService reportGenerationService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _applicationService = applicationService;
-
+            _reportService = reportService;
+            _reportGenerationService = reportGenerationService;
 
         }
         public async Task PostProcessAsync()
@@ -61,23 +65,46 @@ namespace AutomaticStepsExecutor
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
 
                 }
-                var certificateValidityMonths = (await _dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS))?.ValueNumber;
+                var systemParameters = await _dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+                                                    || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToListAsync();
+                if (systemParameters.Count != 2)
+                {
+                    throw new Exception($"Application statuses do not exist. Statuses: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
+
+                }
+                var certificateValidityMonths = systemParameters.First(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS).ValueNumber;
                 if (certificateValidityMonths == null)
                 {
                     throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
                 }
-
+                var signingCertificateName = systemParameters.First(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ValueString;
+                if (signingCertificateName == null)
+                {
+                    throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} not set.");
+                }
                 var applicationStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
                 var certificateContentReadyStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady);
                 var bulletinCheckStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
                     {
                         var application = (AApplication)entity;
-                        await _applicationService.GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
-                        await _dbContext.SaveChangesAsync();
+                        if (application.ApplicationType.Code == ApplicationConstants.ApplicationTypes.ConvictionRequest)
+                        {
+                           var report =  await _reportService.GenerateReportFromApplication(application, applicationStatus, (int)certificateValidityMonths);
+                            await _dbContext.SaveChangesAsync();
+                            await _reportGenerationService.CreateReport(report, signingCertificateName);
+                            await _dbContext.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            await _applicationService.GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
+                            await _dbContext.SaveChangesAsync();
+                        }
+                      
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -102,6 +129,7 @@ namespace AutomaticStepsExecutor
                                              .Include(a => a.LnchNavigation)
                                              .Include(a => a.LnNavigation)
                                              .Include(a => a.SuidNavigation)
+                                             .Include(a => a.ApplicationType)
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
                                             && !aa.ACertificates.Any())
                                  .OrderBy(a => a.CreatedOn)

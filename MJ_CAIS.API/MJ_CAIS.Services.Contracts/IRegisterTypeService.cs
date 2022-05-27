@@ -20,5 +20,6 @@ namespace MJ_CAIS.Services.Contracts
         Task<string>  GetRegisterNumberForBulletinUndefined(string authorityID);
 
         Task<string> GetRegisterNumberForBulletin(string authorityID, string bulletinType);
+        Task<string> GetRegisterNumberForReport(string authorityID);
     }
 }

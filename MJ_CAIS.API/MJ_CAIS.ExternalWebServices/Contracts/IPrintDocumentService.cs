@@ -14,5 +14,6 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
     {
         Task<byte[]> PrintApplication(string applicationID);
         Task<byte[]> PrintCertificate(string certificateID, string checkUrl, JasperReportsNames reportName);
+        Task<byte[]> PrintReport(string reportId, JasperReportsNames reportName);
     }
 }

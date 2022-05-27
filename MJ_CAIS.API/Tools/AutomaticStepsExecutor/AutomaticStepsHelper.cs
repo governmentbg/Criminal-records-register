@@ -86,8 +86,11 @@ namespace AutomaticStepsExecutor
 
             _applicationService.SetApplicationStatus(appl, applicationStatus, "Прехвърлено от електронно заявление");
 
-           appl.EgnId = (await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
-                                                        && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn)).Id;
+           var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
+                                                        && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
+
+            appl.EgnId = idpid?.Id;
+            appl.EgnNavigation = idpid;
 
             //foreach (var v in wapplication.AAppCitizenships)
             //{

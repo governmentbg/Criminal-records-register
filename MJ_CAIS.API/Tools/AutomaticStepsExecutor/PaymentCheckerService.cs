@@ -100,7 +100,7 @@ namespace AutomaticStepsExecutor
                         var wapplication = (WApplication)entity;
                         //todo: check payment
                         //todo: да гледаме ли срок на плащането, ако не е платено в срок, но все пак е платено какво става?!  
-                        bool isPaid = false;
+                        bool isPaid = CheckPayment(wapplication);
                         if (isPaid)
                         {
                            await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, statusWebApprovedApplication,  statusApprovedApplication );
@@ -131,6 +131,11 @@ namespace AutomaticStepsExecutor
 
             return result;
 
+        }
+
+        private bool CheckPayment(WApplication wapplication)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task PostProcessAsync()

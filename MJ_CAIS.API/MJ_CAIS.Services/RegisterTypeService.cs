@@ -94,7 +94,11 @@ namespace MJ_CAIS.Services
             return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.BulletinUndefined);
 
         }
+        public async Task<string> GetRegisterNumberForReport(string authorityID)
+        {
+            return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.ConvictionRequest);
 
+        }
         public async Task<string> GetRegisterNumberForBulletin(string authorityID, string bulletinType)
         {
             if (bulletinType == nameof(BulletinConstants.Type.Bulletin78A))

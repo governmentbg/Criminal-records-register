@@ -78,7 +78,7 @@ namespace MJ_CAIS.Services
             if (pids.Count > 0)
             {
                 var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
-                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).ToListAsync();
+                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).Distinct().ToListAsync();
                 if (bulletins.Count > 0)
                 {
                    await  ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus, certificateValidityMonths, applicationStatus);
