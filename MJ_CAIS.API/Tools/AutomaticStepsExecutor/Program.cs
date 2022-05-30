@@ -14,6 +14,7 @@ using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services;
+using MJ_CAIS.DataAccess;
 
 namespace AutomaticStepsExecutor
 {
@@ -34,8 +35,12 @@ namespace AutomaticStepsExecutor
                 IHost host = Host.CreateDefaultBuilder()
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton(typeofExecutor))
-                    .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))              
-                  
+                    .ConfigureServices(services => services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
+                    .ConfigureServices(services => services.AddSingleton<IUserContext>(new UserContext() {
+                        UserId = config.GetValue<string>("ContextUser:UserId"),
+                        UserName = config.GetValue<string>("ContextUser:UserName")
+                    }))
+
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
