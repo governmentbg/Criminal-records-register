@@ -1,7 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../../../../environments/environment";
-import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { EcrisMessageGridModel } from "../../../ecris/ecris-message-overivew/_models/ecris-message-grid.model";
 import { FbbcDocumentModel } from "../models/fbbc-document.model";
@@ -13,6 +11,12 @@ export class FbbcService extends CaisCrudService<FbbcModel, string> {
     super(FbbcModel, injector, "fbbcs");
   }
 
+  public getWithPersonData(personId: string): Observable<FbbcModel> {
+    return this.http.get<FbbcModel>(
+      `${this.url}/create?personId=${personId}`
+    );
+  }
+  
   public getEcrisMessages(id: string): Observable<EcrisMessageGridModel[]> {
     return this.http.get<EcrisMessageGridModel[]>(
       `${this.url}/${id}/ecris-messages`

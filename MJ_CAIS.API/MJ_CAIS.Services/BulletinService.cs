@@ -71,7 +71,7 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
-            var person = await _personService.SelectAsync(personId);
+            var person = await _personService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
         }

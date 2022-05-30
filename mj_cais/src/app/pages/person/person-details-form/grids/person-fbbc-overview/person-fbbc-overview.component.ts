@@ -13,14 +13,17 @@ export class PersonFbbcOverviewComponent extends RemoteGridWithStatePersistance<
   PersonFbbcGridModel,
   PersonFbbcGridService
 > {
+  public personId: string;
+
   constructor(
     public service: PersonFbbcGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService
   ) {
     super("person-fbbc-search", service, injector);
-    let personId = this.activatedRoute.snapshot.params["ID"];
-    this.service.setPersonId(personId);
+    let personIdParams = this.activatedRoute.snapshot.params["ID"];
+    this.personId = personIdParams;
+    this.service.setPersonId(personIdParams);
   }
 
   ngOnInit() {

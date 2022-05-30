@@ -57,7 +57,13 @@ export class FbbcFormComponent
 
   ngOnInit(): void {
     this.fullForm = new FbbcForm();
+    let generatedId = this.fullForm.id.value;
+
     this.fullForm.group.patchValue(this.dbData.element);
+    if(!this.fullForm.id.value){
+      this.fullForm.id.patchValue(generatedId);
+    }
+
     this.formFinishedLoading.emit();
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
     this.isForCreate = this.activatedRoute.snapshot.outlet === "primary";

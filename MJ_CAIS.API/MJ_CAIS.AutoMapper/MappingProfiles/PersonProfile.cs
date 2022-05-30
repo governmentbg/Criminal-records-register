@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Fbbc;
 using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
@@ -16,13 +15,16 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<PPerson, PersonDTO>()
                .ForPath(d => d.Id, opt => opt.MapFrom(src => src.Id))
-               .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
-               .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
-               .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId))
-               .ForPath(d => d.BirthPlace.Country.DisplayName, opt => opt.MapFrom(src => src.BirthCountry.Name))
-               .ForPath(d => d.BirthPlace.CityDisplayName, opt => opt.MapFrom(src => src.BirthCity.Name))
-               .ForPath(d => d.BirthPlace.MunicipalityDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.Name))
-               .ForPath(d => d.BirthPlace.DistrictDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.District.Name));
+                .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
+                .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
+                .ForPath(d => d.BirthPlace.Country.DisplayName, opt => opt.MapFrom(src => src.BirthCountry.Name))
+                .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId))
+                .ForPath(d => d.BirthPlace.CityDisplayName, opt => opt.MapFrom(src => src.BirthCity.Name))
+                .ForPath(d => d.BirthPlace.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
+                .ForPath(d => d.BirthPlace.MunicipalityDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.Name))
+                .ForPath(d => d.BirthPlace.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
+                .ForPath(d => d.BirthPlace.DistrictDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.District.Name))
+                .ForPath(d => d.BirthPlace.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null));
 
             CreateMap<PPerson, PPersonH>();
             CreateMap<PPersonId, PPersonIdsH>();

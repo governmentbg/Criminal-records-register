@@ -67,6 +67,14 @@ namespace MJ_CAIS.Services
             await UpdatePersonAsync(aInDto, entity);
         }
 
+        public async Task<FbbcDTO> SelectWithPersonDataAsync(string personId)
+        {
+            var result = new FbbcDTO();
+            var person = await _personService.SelectWithBirthInfoAsync(personId);
+            result.Person = person ?? new PersonDTO();
+            return result;
+        }
+
         public async Task<IQueryable<EcrisMessageGridDTO>> GetEcrisMessagesByFbbcIdAsync(string aId)
         {
             var result = dbContext.EEcrisMessages.AsNoTracking()
