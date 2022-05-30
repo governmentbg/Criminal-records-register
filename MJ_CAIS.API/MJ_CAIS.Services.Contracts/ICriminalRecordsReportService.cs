@@ -1,23 +1,18 @@
-﻿using System;
+﻿using MJ_CAIS.DTO.ExternalServicesHost;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using MJ_CAIS.DTO.ExternalServicesHost;
 
-namespace MJ_CAIS.ExternalServicesHost
+namespace MJ_CAIS.Services.Contracts
 {
-    [ServiceContract]
-    public interface  ICriminalRecordsReportService
+    public interface ICriminalRecordsReportService
     {
-        [OperationContract]
         CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value);
 
-        [OperationContract]
         CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value);
-        
-        [OperationContract]
+
         PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
     }
 }

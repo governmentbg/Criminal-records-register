@@ -1,4 +1,5 @@
-﻿using MJ_CAIS.DTO.ExternalServicesHost;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,24 @@ namespace MJ_CAIS.ExternalServicesHost
 {
     public class CriminalRecordsReportService : ICriminalRecordsReportService
     {
-        public CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value)
+        MJ_CAIS.Services.Contracts.ICriminalRecordsReportService _criminalRecordsReportSrvc;
+        public CriminalRecordsReportService()
         {
-            throw new NotImplementedException();
+            _criminalRecordsReportSrvc = Program.Services.GetService< MJ_CAIS.Services.Contracts.ICriminalRecordsReportService>();
         }
 
-        public PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value)
+        public CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType request)
         {
-            throw new NotImplementedException();
+            return _criminalRecordsReportSrvc.GetCriminalRecordsReport(request);
+        }
+        public CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType request)
+        {
+            return _criminalRecordsReportSrvc.GetCriminalRecordsReportPDF(request);
+        }
+
+        public PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType request)
+        {
+            return _criminalRecordsReportSrvc.PersonIdentifierSearch(request);
         }
     }
 }
