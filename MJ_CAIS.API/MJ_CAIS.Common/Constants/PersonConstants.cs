@@ -34,7 +34,7 @@
             /// <summary>
             ///  Вътрешен системен идентификатор (добавя се при миграция на данни)
             /// </summary>
-            public const string SystemGeneratedPid = "SYS";
+            public const string Suid = "SYS";
         }
 
         public static class IssuerType

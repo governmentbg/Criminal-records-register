@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://cs.mjs.bg/EISSServicesModel-v1.0" xmlns:bul="http://cais.mjs.bg/BulletinModel-v1.0" targetNamespace="http://cs.mjs.bg/EISSServicesModel-v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://cais.mjs.bg/BulletinModel-v1.0" schemaLocation="BulletinModel_v1.0_v11.xsd"/>
+	<xs:complexType name="ConvictionDataType">
+		<xs:sequence>
+			<xs:element name="ActTypeCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Вид на акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер на акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата на акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActFinalDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Влиза в сила</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActDecidingAuthorityCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на съд, издал акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActDecidingAuthorityName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на съд, издал акта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>дело номер</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseYear" type="xs:gYear" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>дело година</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseTypeCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>вид</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseDecidingAuthorityCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код на съд на дело</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CaseDecidingAuthorityName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Наименование на съд на дело</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LegalProvisions" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Правно основание(по чл.)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remarks" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Описание и бележки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ExcecutionEndDate" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата, на която е платена глобата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SanctionType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Fine, Prison,Probation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonDataType">
+		<xs:sequence>
+			<xs:element name="IdentifierType" type="xs:string"/>
+			<xs:element name="Identifier" type="xs:string"/>
+			<xs:element name="FirstName" type="xs:string"/>
+			<xs:element name="SurName" type="xs:string" minOccurs="0"/>
+			<xs:element name="FamilyName" type="xs:string"/>
+			<xs:element name="BirthDate" type="xs:date"/>
+			<xs:element name="Sex" type="xs:string" minOccurs="0"/>
+			<xs:element name="CountryCode1" type="xs:string" minOccurs="0"/>
+			<xs:element name="CountryName1" type="xs:string" minOccurs="0"/>
+			<xs:element name="CountryCode2" type="xs:string" minOccurs="0"/>
+			<xs:element name="CountryName2" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthCountryCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthCountryName" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthPlace" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FineData">
+		<xs:sequence>
+			<xs:element name="PersonData" type="PersonDataType" minOccurs="0"/>
+			<xs:element name="ConvictionData" type="ConvictionDataType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FineDataListType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="Fine" type="FineData"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SendFineDataRequestType">
+		<xs:sequence>
+			<xs:element name="FineDataList" type="FineDataListType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SendFineDataRequest" type="SendFineDataRequestType"/>
+	<xs:complexType name="SendBulletinsDataRequestType">
+		<xs:sequence>
+			<xs:element name="BulletinsList" type="bul:BulletinsList">
+				<xs:annotation>
+					<xs:documentation>Списък с бюлетини</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SendBulletinsDataRequest" type="SendBulletinsDataRequestType">
+		<xs:annotation>
+			<xs:documentation>Входни параметри за изпращане на нови бюлетини за период</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>

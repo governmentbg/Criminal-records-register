@@ -44,7 +44,14 @@ namespace MJ_CAIS.ExternalWebServices
             return fileArray;
         }
 
-            private string GetUrlOfCertificateReport(JasperReportsNames reportName)
+        public async Task<byte[]> PrintReport(string reportId,  JasperReportsNames reportName)
+        {
+            Dictionary<string, string> inputs = new Dictionary<string, string> { { "report_id", reportId }};
+            byte[] fileArray = await Task.FromResult(_jasperReportsClient.RunReportBuffered(GetUrlOfCertificateReport(reportName), OutputFormats.pdf, inputs).Result);
+            return fileArray;
+        }
+
+        private string GetUrlOfCertificateReport(JasperReportsNames reportName)
         {
 
             return $"{CertificateConstants.UrlsInJasper.REPORTS_URL}/{reportName}";

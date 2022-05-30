@@ -34,7 +34,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public decimal? ApiServiceCallId { get; set; }
+        public string? DocId { get; set; }
+        public string? ApplicationId { get; set; }
 
+        public virtual AApplication? Application { get; set; }
+        public virtual DDocument? Doc { get; set; }
         public virtual GUser? FirstSigner { get; set; }
         public virtual GUser? SecondSigner { get; set; }
         public virtual ICollection<ARepBulletin> ARepBulletins { get; set; }

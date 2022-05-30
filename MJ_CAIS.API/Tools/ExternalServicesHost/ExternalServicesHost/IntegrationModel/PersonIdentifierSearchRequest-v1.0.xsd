@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://cais.mjs.bg/PersonIdentifierSearchRequest-v1.0" xmlns:bul="http://cais.mjs.bg/BulletinModel-v1.0" targetNamespace="http://cais.mjs.bg/PersonIdentifierSearchRequest-v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://cais.mjs.bg/BulletinModel-v1.0" schemaLocation="BulletinModel_v1.0_v11.xsd"/>
+	<xs:complexType name="PersonIdentifierSearchExtendedRequestType">
+		<xs:sequence>
+			<xs:element name="PersonIdentifierSearchRequest" type="PersonIdentifierSearchRequestType"/>
+			<xs:element name="CallContext" type="bul:CallContext">
+				<xs:annotation>
+					<xs:documentation>Служебна информация</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PersonIdentifierSearchExtendedRequest" type="PersonIdentifierSearchExtendedRequestType">
+		<xs:annotation>
+			<xs:documentation>Справка за съдимост - заявка</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="PersonIdentifierSearchRequestType">
+		<xs:sequence>
+			<xs:element name="Firstame" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Име</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Surname" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Презиме</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Familyname" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Фамилия</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Fullname" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>За търсене в пълно име</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Birthdate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthDatePrec" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Точност на дата на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BirthCountry" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Държава на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Birthplace" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Място на раждане</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PersonIdentifierSearchRequest" type="PersonIdentifierSearchRequestType">
+		<xs:annotation>
+			<xs:documentation>Справка за идентификатор на лице</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>

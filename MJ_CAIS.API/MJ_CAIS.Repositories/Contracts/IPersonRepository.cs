@@ -8,7 +8,7 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber);
 
-        Task<PPersonId> GetPersonIdAsyn(string pid, string pidType,string personId);
+        Task<List<PPersonId>> GetPersonIdsAsync(List<PersonIdTypeDTO> personIds, string personId);
 
         Task<PPerson> SelectWithBirthInfoAsync(string id);
 

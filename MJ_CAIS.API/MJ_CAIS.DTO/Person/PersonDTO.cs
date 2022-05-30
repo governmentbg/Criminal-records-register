@@ -23,6 +23,7 @@ namespace MJ_CAIS.DTO.Person
         public AddressDTO BirthPlace { get; set; } = new AddressDTO();
         public MultipleChooseDTO Nationalities { get; set; } = new MultipleChooseDTO();
         public string? AfisNumber { get; set; }
+        public string? Suid { get; set; }
         public string? IdDocNumber { get; set; }
         public string? IdDocCategoryId { get; set; }
         public string? IdDocTypeDescr { get; set; }

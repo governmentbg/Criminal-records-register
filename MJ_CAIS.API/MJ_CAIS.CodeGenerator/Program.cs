@@ -11,10 +11,10 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "DRegisterType",
-                SingleName = "RegisterType",
-                MultipleName = "RegisterTypes",
-                AngularModuleName = "register-types",
+                EntityName = "AReport",
+                SingleName = "Report",
+                MultipleName = "Reports",
+                AngularModuleName = "reports",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();

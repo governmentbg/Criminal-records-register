@@ -79,6 +79,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEdeliveryMsg> EEdeliveryMsgs { get; set; } = null!;
         public virtual DbSet<EEmailEvent> EEmailEvents { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
+        public virtual DbSet<EPayment> EPayments { get; set; } = null!;
         public virtual DbSet<EPaymentNotification> EPaymentNotifications { get; set; } = null!;
         public virtual DbSet<ERegixCache> ERegixCaches { get; set; } = null!;
         public virtual DbSet<ESynchronizationParameter> ESynchronizationParameters { get; set; } = null!;
@@ -104,7 +105,6 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GUsersCitizen> GUsersCitizens { get; set; } = null!;
         public virtual DbSet<GUsersExt> GUsersExts { get; set; } = null!;
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
-        public virtual DbSet<PAppId> PAppIds { get; set; } = null!;
         public virtual DbSet<PBulletinId> PBulletinIds { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
         public virtual DbSet<PPersonH> PPersonHs { get; set; } = null!;
@@ -684,6 +684,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.Price)
+                    .HasColumnType("NUMBER(18,2)")
+                    .HasColumnName("PRICE");
+
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
                     .HasColumnName("UPDATED_BY");
@@ -806,6 +810,8 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.WApplicationId, "XIF2A_PAYMENTS");
 
+                entity.HasIndex(e => e.EPaymentId, "XIF3A_PAYMENTS");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -822,14 +828,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
-                entity.Property(e => e.RegistrationNumber)
-                    .HasMaxLength(100)
-                    .HasColumnName("REGISTRATION_NUMBER");
-
-                entity.Property(e => e.Status)
+                entity.Property(e => e.EPaymentId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("STATUS");
+                    .HasColumnName("E_PAYMENT_ID");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
@@ -850,6 +852,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.APayments)
                     .HasForeignKey(d => d.ApplicationId)
                     .HasConstraintName("FK_A_PAYMENTS_A_APPLICATIONS");
+
+                entity.HasOne(d => d.EPayment)
+                    .WithMany(p => p.APayments)
+                    .HasForeignKey(d => d.EPaymentId)
+                    .HasConstraintName("FK_A_PAYMENTS_E_PAYMENTS");
 
                 entity.HasOne(d => d.WApplication)
                     .WithMany(p => p.APayments)
@@ -1082,6 +1089,10 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.SecondSignerId, "XIF2A_REPORTS");
 
+                entity.HasIndex(e => e.DocId, "XIF3A_REPORTS");
+
+                entity.HasIndex(e => e.ApplicationId, "XIF4A_REPORTS");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -1090,6 +1101,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.ApiServiceCallId)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("API_SERVICE_CALL_ID");
+
+                entity.Property(e => e.ApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("APPLICATION_ID");
 
                 entity.Property(e => e.CAdministrationName).HasColumnName("C_ADMINISTRATION_NAME");
 
@@ -1118,6 +1134,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.DocId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DOC_ID");
 
                 entity.Property(e => e.FirstSignerId)
                     .HasMaxLength(50)
@@ -1159,6 +1180,16 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.AReports)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("FK_A_REPORTS_A_APPLICATIONS");
+
+                entity.HasOne(d => d.Doc)
+                    .WithMany(p => p.AReports)
+                    .HasForeignKey(d => d.DocId)
+                    .HasConstraintName("FK_A_REPORTS_D_DOCUMENTS");
 
                 entity.HasOne(d => d.FirstSigner)
                     .WithMany(p => p.AReportFirstSigners)
@@ -4732,6 +4763,58 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_E_ISIN_DATA_E_WEB_REQUESTS");
             });
 
+            modelBuilder.Entity<EPayment>(entity =>
+            {
+                entity.ToTable("E_PAYMENTS");
+
+                entity.HasIndex(e => e.InvoiceNumber, "XUKE_PAYMENTS")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Amount)
+                    .HasColumnType("NUMBER(18,2)")
+                    .HasColumnName("AMOUNT");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.InvoiceNumber)
+                    .HasMaxLength(200)
+                    .HasColumnName("INVOICE_NUMBER");
+
+                entity.Property(e => e.MerchantId)
+                    .HasMaxLength(200)
+                    .HasColumnName("MERCHANT_ID");
+
+                entity.Property(e => e.PaymentDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("PAYMENT_DATE");
+
+                entity.Property(e => e.PaymentStatus)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PAYMENT_STATUS");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+            });
+
             modelBuilder.Entity<EPaymentNotification>(entity =>
             {
                 entity.ToTable("E_PAYMENT_NOTIFICATIONS");
@@ -4747,23 +4830,13 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
-                entity.Property(e => e.LogDate)
-                    .HasColumnType("DATE")
-                    .HasColumnName("LOG_DATE");
+                entity.Property(e => e.DecodedText).HasColumnName("DECODED_TEXT");
 
-                entity.Property(e => e.NotificatonData)
-                    .HasColumnType("CLOB")
-                    .HasColumnName("NOTIFICATON_DATA");
+                entity.Property(e => e.EncodedText).HasColumnName("ENCODED_TEXT");
 
-                entity.Property(e => e.PaymentId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("PAYMENT_ID");
+                entity.Property(e => e.LogDate).HasColumnName("LOG_DATE");
 
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("STATUS");
+                entity.Property(e => e.PaymentId).HasColumnName("PAYMENT_ID");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
@@ -6382,59 +6455,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
-            });
-
-            modelBuilder.Entity<PAppId>(entity =>
-            {
-                entity.ToTable("P_APP_IDS");
-
-                entity.HasIndex(e => e.ApplicationId, "XIF1P_APP_IDS");
-
-                entity.HasIndex(e => e.PersonId, "XIF2P_APP_IDS");
-
-                entity.HasIndex(e => new { e.ApplicationId, e.PersonId }, "XUKP_APP_IDS")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.ApplicationId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("APPLICATION_ID");
-
-                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.PersonId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("PERSON_ID");
-
-                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-
-                entity.HasOne(d => d.Application)
-                    .WithMany(p => p.PAppIds)
-                    .HasForeignKey(d => d.ApplicationId)
-                    .HasConstraintName("FK_P_APP_IDS_A_APPLICATIONS");
-
-                entity.HasOne(d => d.Person)
-                    .WithMany(p => p.PAppIds)
-                    .HasForeignKey(d => d.PersonId)
-                    .HasConstraintName("FK_P_APP_IDS_P_PERSON_IDS");
             });
 
             modelBuilder.Entity<PBulletinId>(entity =>

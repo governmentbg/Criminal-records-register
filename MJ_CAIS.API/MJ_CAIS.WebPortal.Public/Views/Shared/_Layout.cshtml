@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MJ_CAIS.WebPortal.Public.styles.css" asp-append-version="true" />
-    
+
     <script src="~/lib/modernizr/modernizr.min.js" asp-append-version="true"></script>
     <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
 
@@ -23,18 +23,28 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">ЦАИС Публичен Портал</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <partial name="_ContextualMenu">
+        <div class="container-fluid">
+            <div class="cais-headerbar">
+                <div class="cais-logo-wrapper">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                        <img src="@Url.Content("~/images/logo.png")" class="cais-logo" />
+                    </a>
+                </div>
+                <div class="pull-right cais-header-text">
+                    <div class="row main-header">
+                        Република България
+                    </div>
+                    <div class="row" style="font-size: 14px;">
+                        Министерство на правосъдието  
+                    </div>
+                    <div class="row" style="line-height: 10px;  font-size: 14px;">
+                        ЦАИС "Съдебен статус"
+                    </div>
+                </div>
             </div>
-        </nav>
+        </div>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

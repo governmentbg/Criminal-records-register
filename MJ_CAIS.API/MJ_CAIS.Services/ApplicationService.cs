@@ -49,12 +49,36 @@ namespace MJ_CAIS.Services
         }
 
         public async Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6)            //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
-        {
-            var pids = await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
+        {   //трябва да са попълнени следните стойности:
+            //       .Include(a => a.EgnNavigation)
+            //       .Include(a => a.LnchNavigation)
+            //       .Include(a => a.LnNavigation)
+            //       .Include(a => a.SuidNavigation)
+            var pids = new List<string>();
+            if (application.EgnId != null && application.EgnNavigation!=null) {
+                pids.Add(application.EgnNavigation.PersonId);
+
+            }
+            if (application.LnchId != null && application.LnchNavigation != null)
+            {
+                pids.Add(application.LnchNavigation.PersonId);
+
+            }
+            if (application.LnId != null && application.LnNavigation != null)
+            {
+                pids.Add(application.LnNavigation.PersonId);
+
+            }
+            if (application.SuidId != null && application.SuidNavigation != null)
+            {
+                pids.Add(application.SuidNavigation.PersonId);
+
+            }
+            //await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
             if (pids.Count > 0)
             {
                 var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
-                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).ToListAsync();
+                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).Distinct().ToListAsync();
                 if (bulletins.Count > 0)
                 {
                    await  ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus, certificateValidityMonths, applicationStatus);
@@ -72,7 +96,7 @@ namespace MJ_CAIS.Services
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             //todo: add resources
             SetApplicationStatus(application, aStatus, "Създаване на сертификат");
-            application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
+          //  application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
@@ -212,7 +236,7 @@ namespace MJ_CAIS.Services
                 MimeType = document.DocContent.MimeType
             };
         }
-        public  void SetApplicationStatus(AApplication application,  AApplicationStatus newStatus, string description)
+        public  void SetApplicationStatus(AApplication application,  AApplicationStatus newStatus, string description, bool includeInDbContext = true)
         {
             application.StatusCode = newStatus.Code;
             application.StatusCodeNavigation = newStatus;
@@ -230,8 +254,11 @@ namespace MJ_CAIS.Services
             aStatusH.Application = application;
 
             application.AStatusHes.Add(aStatusH);
-            dbContext.AStatusHes.Add(aStatusH);
-            dbContext.AApplications.Update(application);
+            if (includeInDbContext)
+            {
+                dbContext.AStatusHes.Add(aStatusH);
+                dbContext.AApplications.Update(application);
+            }
 
 
         }

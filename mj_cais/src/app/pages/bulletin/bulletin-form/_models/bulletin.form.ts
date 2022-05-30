@@ -116,7 +116,6 @@ export class BulletinForm extends BaseForm {
     this.sequentialIndex.setValidators(Validators.required);
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.setValidators([
-      Validators.required,
       Validators.maxLength(100),
     ]);
     this.ecrisConvictionId.setValidators(Validators.maxLength(50));
@@ -155,7 +154,6 @@ export class BulletinForm extends BaseForm {
     this.sequentialIndex.setValidators(Validators.required);
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.setValidators([
-      Validators.required,
       Validators.maxLength(100),
     ]);
     this.ecrisConvictionId.setValidators(Validators.maxLength(50));
@@ -165,11 +163,6 @@ export class BulletinForm extends BaseForm {
     ]);
     this.bulletinAuthorityId.setValidators(Validators.maxLength(50));
     this.bulletinCreateDate.setValidators(Validators.required);
-    this.createdByNames.setValidators(Validators.required);
-    this.createdByPosition.setValidators(Validators.maxLength(200));
-    this.approvedByNames.setValidators(Validators.required);
-    this.approvedByPosition.setValidators(Validators.required);
-
     this.decisionTypeId.setValidators(Validators.maxLength(200));
     this.decisionNumber.setValidators([
       Validators.required,

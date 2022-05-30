@@ -1,28 +1,30 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+   /* background-color: rgb(242,247,255);*/
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
-}
+    margin-bottom: 60px;
+/*    background-color: rgb(242,247,255);
+*/}
 
 .cais-header .btn-outline-secondary {
     margin-left: 5px;
 }
 
-.cais-header h3, 
-.cais-header h4{
+.cais-header h3,
+.cais-header h4 {
     margin-bottom: 0;
 }
 
@@ -40,3 +42,51 @@ div.ui-igcombo-wrapper {
     min-width: 260px;
     width: 100%;
 }
+
+.cais-headerbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 0px;
+}
+
+.cais-logo-wrapper {
+    height: 55px
+}
+
+.cais-logo {
+    height: 100%;
+}
+
+.cais-header-text {
+    padding-left: 20px;
+    border-left: 2px solid;
+}
+
+    .cais-header-text .main-header {
+        font-size: 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        line-height: 22px;
+    }
+
+header .container-fluid {
+    box-shadow: 5px 4px 13px 14px rgb(0 0 0 / 3%);
+    background-color: #ffff;
+}
+
+footer {
+    background-color: #ffff;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #0054a4 /*#364b98*/;
+    border-color: #0054a4 /*#364b98*/;
+}
+
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #103150 /*rgb(118,142,240)*/;
+        border-color: #103150  /* rgb(118,142,240)*/;
+    }

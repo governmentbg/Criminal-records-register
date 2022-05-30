@@ -86,6 +86,12 @@ namespace AutomaticStepsExecutor
 
             _applicationService.SetApplicationStatus(appl, applicationStatus, "Прехвърлено от електронно заявление");
 
+           var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
+                                                        && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
+
+            appl.EgnId = idpid?.Id;
+            appl.EgnNavigation = idpid;
+
             //foreach (var v in wapplication.AAppCitizenships)
             //{
             //    var newObj = new AAppCitizenship()
@@ -100,19 +106,19 @@ namespace AutomaticStepsExecutor
             //todo: какво е това
             // appl.AAppPersAliases
 
-            appl.PAppIds = await dbContext.PPersonIds.Where(x => (x.PidTypeId == PersonConstants.PidType.Egn && x.Issuer == PersonConstants.IssuerType.GRAO && x.Pid == appl.Egn)
-                                            || (x.PidTypeId == PersonConstants.PidType.Lnch && x.Issuer == PersonConstants.IssuerType.MVR && x.Pid == appl.Lnch)
-                                            || (x.PidTypeId == PersonConstants.PidType.Ln && x.Issuer == PersonConstants.IssuerType.CAIS && x.Pid == appl.Ln))
-                                 .Select(x => new PAppId
-                                 {
-                                     ApplicationId = appl.Id,
-                                     Id = BaseEntity.GenerateNewId(),
-                                     PersonId = x.Id
-                                 }).ToListAsync();
+            //appl.PAppIds = await dbContext.PPersonIds.Where(x => (x.PidTypeId == PersonConstants.PidType.Egn && x.Issuer == PersonConstants.IssuerType.GRAO && x.Pid == appl.Egn)
+            //                                || (x.PidTypeId == PersonConstants.PidType.Lnch && x.Issuer == PersonConstants.IssuerType.MVR && x.Pid == appl.Lnch)
+            //                                || (x.PidTypeId == PersonConstants.PidType.Ln && x.Issuer == PersonConstants.IssuerType.CAIS && x.Pid == appl.Ln))
+            //                     .Select(x => new PAppId
+            //                     {
+            //                         ApplicationId = appl.Id,
+            //                         Id = BaseEntity.GenerateNewId(),
+            //                         PersonId = x.Id
+            //                     }).ToListAsync();
 
 
             dbContext.AApplications.Add(appl);
-            dbContext.PAppIds.AddRange(appl.PAppIds);
+           // dbContext.PAppIds.AddRange(appl.PAppIds);
             dbContext.WApplications.Update(wapplication);
         }
 
