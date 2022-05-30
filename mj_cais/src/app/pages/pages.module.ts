@@ -66,6 +66,8 @@ import { BulletinEventsArticleOverviewComponent } from './bulletin-events/bullet
 import { BulletinEventsDocumentOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
 import { ApplicationTaxFreeOverviewComponent } from './application/application-overview/application-tax-free-overview/application-tax-free-overview.component';
 import { ApplicationForCheckComponent } from './application/application-overview/application-for-check/application-for-check.component';
+import { EcrisTcnFormComponent } from './ecris-tcn/ecris-tcn-form/ecris-tcn-form.component';
+import { EcrisTcnOverviewComponent } from './ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component';
 import { ApplicationForSigningComponent } from './application/application-overview/application-for-signing/application-for-signing.component';
 import { ApplicationForSiningByJudgeComponent } from './application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component';
 import { BulletinAdministrationOverviewComponent } from './bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component';
@@ -141,6 +143,8 @@ import { BulletinAdministrationOverviewComponent } from './bulletin-administrati
     BulletinEventsDocumentOverviewComponent,
     ApplicationTaxFreeOverviewComponent,
     ApplicationForCheckComponent,
+    EcrisTcnFormComponent,
+    EcrisTcnOverviewComponent,
     ApplicationForSigningComponent,
     ApplicationForSiningByJudgeComponent,
     BulletinAdministrationOverviewComponent

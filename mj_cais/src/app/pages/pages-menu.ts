@@ -141,6 +141,10 @@ export class PagesMenu {
             title: "Запитвания",
             link: "/pages/ecris-req-waiting",
           },
+          {
+            title: "ECRIS-TCN",
+            link: "/pages/ecris-tcns",
+          },
         ],
       },
       {

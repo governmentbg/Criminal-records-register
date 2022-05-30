@@ -55,6 +55,7 @@ import { ApplicationWaitingPaymentComponent } from "./application/application-ov
 import { ApplicationTaxFreeOverviewComponent } from "./application/application-overview/application-tax-free-overview/application-tax-free-overview.component";
 import { ApplicationForCheckComponent } from "./application/application-overview/application-for-check/application-for-check.component";
 import { BulletinAdministrationOverviewComponent } from "./bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component";
+import { EcrisTcnOverviewComponent } from "./ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component";
 
 const routes: Routes = [
   {
@@ -272,6 +273,11 @@ const routes: Routes = [
         component: EcrisReqWaitingFormComponent,
         resolve: { dbData: EcrisReqWaitingResolver },
         data: { edit: true, preview: true },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "ecris-tcns",
+        component: EcrisTcnOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {
