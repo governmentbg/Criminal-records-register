@@ -1,4 +1,5 @@
 import { Component, Injector, Input, OnInit } from "@angular/core";
+import { NgxSpinnerService } from "ngx-spinner";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { PersonSearchForm } from "../../_models/person-search.form";
@@ -18,6 +19,7 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
     service: PersonSearchGridService,
     injector: Injector,
     public dateFormatService: DateFormatService,
+    private spinner: NgxSpinnerService
   ) {
     super("people-search", service, injector);
   }
@@ -38,6 +40,12 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
       return;
     }
 
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 500);
+    
     //$filter=contains(bulletinType,%20%27as%27)%20and%20contains(createdOn,%20%272%27)
     let count = 0;
     let filterQuery = "";

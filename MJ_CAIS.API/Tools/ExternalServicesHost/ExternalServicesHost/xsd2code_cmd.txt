@@ -1,0 +1,6 @@
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\Tools\ExternalServicesHost\ExternalServicesHost\BulletinModel_v1.0_v11.xsd" "MJ_CAIS.IntegrationModel" /c Array /sc+ /pl Net40 /xa+ /eit+
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\Tools\ExternalServicesHost\ExternalServicesHost\CriminalRecordsReportRequest-v1.0.xsd" "MJ_CAIS.IntegrationModel" /c Array /sc+ /pl Net40 /xa+ /eit+
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\Tools\ExternalServicesHost\ExternalServicesHost\CriminalRecordsReportResponse-v1.0.xsd" "MJ_CAIS.IntegrationModel" /c Array /sc+ /pl Net40 /xa+ /eit+
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\Tools\ExternalServicesHost\ExternalServicesHost\PersonIdentifierSearchRequest-v1.0.xsd" "MJ_CAIS.IntegrationModel" /c Array /sc+ /pl Net40 /xa+ /eit+
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\Tools\ExternalServicesHost\ExternalServicesHost\PersonIdentifierSearchResponse-v1.0.xsd" "MJ_CAIS.IntegrationModel" /c Array /sc+ /pl Net40 /xa+ /eit+
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\Tools\ExternalServicesHost\ExternalServicesHost\EISSServicesModel_v1.xsd" "MJ_CAIS.IntegrationModel" /c Array /sc+ /pl Net40 /xa+ /eit+

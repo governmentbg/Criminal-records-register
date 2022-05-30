@@ -71,7 +71,7 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
-            var person = await _personService.SelectAsync(personId);
+            var person = await _personService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
         }
@@ -132,6 +132,17 @@ namespace MJ_CAIS.Services
             }
 
             await UpdateBulletinAsync(aInDto, bulletinToUpdate, oldBulletinStatus);
+
+            if (bulletinToUpdate.StatusId == Status.NewEISS && string.IsNullOrEmpty(bulletinDb.RegistrationNumber))
+            {
+                // todo remove: only for testing ? 
+                var authId = !string.IsNullOrEmpty(bulletinToUpdate?.BulletinAuthorityId) ? bulletinToUpdate?.BulletinAuthorityId : "111";
+                var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletinToUpdate.BulletinType);
+                bulletinToUpdate.RegistrationNumber = regNumber;
+                bulletinToUpdate.ModifiedProperties.Add(nameof(bulletinToUpdate.RegistrationNumber));
+            }
+
+            // save entities before check for events and reabilitaion
             await _bulletinRepository.SaveChangesAsync();
 
             if (bulletinToUpdate.StatusId == Status.NoSanction)
@@ -142,7 +153,6 @@ namespace MJ_CAIS.Services
             if (bulletinToUpdate.StatusId == Status.Active || bulletinToUpdate.StatusId == Status.ForRehabilitation)
             {
                 await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletinToUpdate);
-                await _bulletinRepository.SaveChangesAsync();
             }
 
             await _bulletinRepository.SaveChangesAsync();
@@ -360,10 +370,10 @@ namespace MJ_CAIS.Services
             // change bulletin status
             if (entity.NoSanction == true)
             {
-                entity.StatusId = Status.NoSanction;            
+                entity.StatusId = Status.NoSanction;
             }
 
-            if(entity.StatusId == Status.NoSanction || entity.StatusId == Status.ForDestruction)
+            if (entity.StatusId == Status.NoSanction || entity.StatusId == Status.ForDestruction)
             {
                 // if new person is created 
                 // set new person id
@@ -418,6 +428,11 @@ namespace MJ_CAIS.Services
                     PersonId = personIdObj.Id // table P_PERSON_IDS not P_PERSON,
                 });
 
+                if (personIdObj.PidTypeId == PidType.Suid)
+                {
+                    bulletin.Suid = personIdObj.Pid;
+                }
+
                 dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
             }
 
@@ -426,7 +441,7 @@ namespace MJ_CAIS.Services
 
         private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)
         {
-            if (bulletinDb.StatusId != Status.NewEISS ||
+            if (bulletinDb.StatusId != Status.NewEISS &&
                 bulletinDb.StatusId != Status.NewOffice)
             {
                 // only version of the main object must be updated

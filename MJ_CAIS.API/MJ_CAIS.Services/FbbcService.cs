@@ -11,6 +11,9 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DTO.EcrisMessage;
+using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.DTO.Person;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -18,12 +21,14 @@ namespace MJ_CAIS.Services
     {
         private readonly IFbbcRepository _fbbcRepository;
         private readonly IEcrisMessageRepository _ecrisMessageRepository;
+        private readonly IPersonService _personService;
 
-        public FbbcService(IMapper mapper, IFbbcRepository fbbcRepository, IEcrisMessageRepository ecrisMessageRepository)
+        public FbbcService(IMapper mapper, IFbbcRepository fbbcRepository, IEcrisMessageRepository ecrisMessageRepository, IPersonService personService)
             : base(mapper, fbbcRepository)
         {
             _fbbcRepository = fbbcRepository;
             _ecrisMessageRepository = ecrisMessageRepository;
+            _personService = personService;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -33,12 +38,41 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<FbbcGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<FbbcGridDTO> aQueryOptions, string statusId)
         {
-            var entityQuery = this.GetSelectAllQueriable().Where(x => x.StatusCode == statusId);
-            var baseQuery = entityQuery.ProjectTo<FbbcGridDTO>(mapperConfiguration);
-            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var entityQuery = await _fbbcRepository.SelectByStatusCodeAsync(statusId);
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
             var pageResult = new IgPageResult<FbbcGridDTO>();
-            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
             return pageResult;
+        }
+
+        public override async Task<string> InsertAsync(FbbcDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<FbbcDTO, Fbbc>(aInDto, true);
+            await this.SaveEntityAsync(entity);
+
+            dbContext.Entry(entity).State = EntityState.Detached;
+            entity.Version = 1;
+            entity.EntityState = EntityStateEnum.Modified;
+            entity.ModifiedProperties = new List<string> { nameof(entity.Version) };
+
+            await UpdatePersonAsync(aInDto, entity);
+            return entity.Id;
+        }
+
+        public override async Task UpdateAsync(string aId, FbbcDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<FbbcDTO, Fbbc>(aInDto, false);
+            await dbContext.SaveEntityAsync(entity);
+
+            await UpdatePersonAsync(aInDto, entity);
+        }
+
+        public async Task<FbbcDTO> SelectWithPersonDataAsync(string personId)
+        {
+            var result = new FbbcDTO();
+            var person = await _personService.SelectWithBirthInfoAsync(personId);
+            result.Person = person ?? new PersonDTO();
+            return result;
         }
 
         public async Task<IQueryable<EcrisMessageGridDTO>> GetEcrisMessagesByFbbcIdAsync(string aId)
@@ -68,12 +102,12 @@ namespace MJ_CAIS.Services
             {
                 throw new ArgumentNullException(nameof(aInDto));
             }
-                
+
             if (aInDto.DocumentContent?.Length == 0)
             {
                 throw new ArgumentNullException("Documetn is empty");
             }
-            
+
             var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
                 Guid.NewGuid().ToString() : aInDto.DocumentContentId;
 
@@ -138,7 +172,7 @@ namespace MJ_CAIS.Services
             {
                 throw new ArgumentException($"Fbbc with id: {aInDto} is missing");
             }
-            
+
             fbbc.StatusCode = statusId;
 
             if (statusId == EntityStateEnum.Deleted.ToString())
@@ -146,6 +180,41 @@ namespace MJ_CAIS.Services
                 fbbc.DestroyedDate = DateTime.Now;
             }
 
+            await dbContext.SaveChangesAsync();
+        }
+
+        private async Task UpdatePersonAsync(FbbcDTO aInDto, Fbbc entity)
+        {
+
+            var personDto = aInDto.Person;
+            // preate person object, apply changes
+            var person = await _personService.CreatePersonAsync(personDto);
+
+            foreach (var personIdObj in person.PPersonIds)
+            {
+                //personIdObj.Id = BaseEntity.GenerateNewId();
+                //personIdObj.EntityState = EntityStateEnum.Added;
+
+                if (personIdObj.PidTypeId == PidType.Egn)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.PersonId));
+                    entity.PersonId = personIdObj.Id;
+                    entity.Person = personIdObj;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.Suid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.SuidId));
+                    entity.ModifiedProperties.Add(nameof(entity.Suid));
+                    entity.Suid = personIdObj.Pid;
+                    entity.SuidId = personIdObj.Id;
+                    entity.SuidNavigation = personIdObj;
+                }
+
+                dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+            }
+
+            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
             await dbContext.SaveChangesAsync();
         }
     }

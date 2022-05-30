@@ -14,6 +14,7 @@ using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services;
+using MJ_CAIS.DataAccess;
 
 namespace AutomaticStepsExecutor
 {
@@ -34,8 +35,12 @@ namespace AutomaticStepsExecutor
                 IHost host = Host.CreateDefaultBuilder()
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton(typeofExecutor))
-                    .ConfigureServices(services=>services.AddAutoMapper(typeof(ApplicationProfile).Assembly))              
-                  
+                    .ConfigureServices(services => services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
+                    .ConfigureServices(services => services.AddSingleton<IUserContext>(new UserContext() {
+                        UserId = config.GetValue<string>("ContextUser:UserId"),
+                        UserName = config.GetValue<string>("ContextUser:UserName")
+                    }))
+
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
@@ -69,22 +74,25 @@ namespace AutomaticStepsExecutor
                     {
 
                         logger.Trace("PreSelect started.");
-                        await service.PreSelectAsync();
+                        await service.PreSelectAsync(config);
                         logger.Trace("PreSelect ended.");
                         logger.Trace("Select started.");
-                        var entities = await service.SelectEntitiesAsync(pageSize);
+                        var entities = await service.SelectEntitiesAsync(pageSize, config);
                         logger.Trace($"Select ended. {entities.Count} selected.");
                         logger.Trace("PostSelect started.");
-                        await service.PostSelectAsync();
+                        await service.PostSelectAsync(config);
                         logger.Trace("PostSelect ended.");
                         logger.Trace("PreProcess started.");
-                        await service.PreProcessAsync();
+                        await service.PreProcessAsync(config);
                         logger.Trace("PreProcess ended.");
-                        logger.Trace("ProcessEntitiesAsync started.");
-                        var result = await service.ProcessEntitiesAsync(entities);
-                        logger.Trace($"ProcessEntitiesAsync ended. {result.GetLogInfo()}");
+                        if (entities.Count > 0)
+                        {
+                            logger.Trace("ProcessEntitiesAsync started.");
+                            var result = await service.ProcessEntitiesAsync(entities, config);
+                            logger.Trace($"ProcessEntitiesAsync ended. {result.GetLogInfo()}");
+                        }
                         logger.Trace("PostProcess started.");
-                        await service.PostProcessAsync();
+                        await service.PostProcessAsync(config);
                         logger.Trace("PostProcess ended.");
                     }
                     else

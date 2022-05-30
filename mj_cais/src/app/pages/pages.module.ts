@@ -68,6 +68,8 @@ import { ApplicationTaxFreeOverviewComponent } from './application/application-o
 import { ApplicationForCheckComponent } from './application/application-overview/application-for-check/application-for-check.component';
 import { EcrisTcnFormComponent } from './ecris-tcn/ecris-tcn-form/ecris-tcn-form.component';
 import { EcrisTcnOverviewComponent } from './ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component';
+import { ApplicationForSigningComponent } from './application/application-overview/application-for-signing/application-for-signing.component';
+import { ApplicationForSiningByJudgeComponent } from './application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component';
 
 @NgModule({
   imports: [
@@ -141,7 +143,9 @@ import { EcrisTcnOverviewComponent } from './ecris-tcn/ecris-tcn-overview/ecris-
     ApplicationTaxFreeOverviewComponent,
     ApplicationForCheckComponent,
     EcrisTcnFormComponent,
-    EcrisTcnOverviewComponent
+    EcrisTcnOverviewComponent,
+    ApplicationForSigningComponent,
+    ApplicationForSiningByJudgeComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

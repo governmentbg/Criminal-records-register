@@ -1,5 +1,4 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { BaseForm } from "../../../../models/common/base.form";
 import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
@@ -7,6 +6,7 @@ import { PersonContextEnum } from "./person-context-enum";
 export class PersonForm {
   public group: FormGroup;
   public id: FormControl;
+  public suid: FormControl;
   public version: FormControl;
   // applying validation rules,
   // showing or hiding form controls
@@ -25,6 +25,7 @@ export class PersonForm {
   public birthDate: FormControl;
   public birthPlace: AddressForm;
   public egn: FormControl;
+  public egnDisplay: FormControl;
   public lnch: FormControl;
   public ln: FormControl;
   public nationalities: MultipleChooseForm;
@@ -47,6 +48,8 @@ export class PersonForm {
 
   constructor(context: string, isDisabled: boolean = true) {
     this.id = new FormControl(null);
+    this.suid = new FormControl(null);
+    this.suid.disable();
     this.version = new FormControl(null);
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
@@ -62,6 +65,7 @@ export class PersonForm {
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
     this.egn = new FormControl(null);
+    this.egnDisplay = new FormControl(null);
     this.lnch = new FormControl(null);
     this.ln = new FormControl(null);
     this.nationalities = new MultipleChooseForm();
@@ -102,7 +106,6 @@ export class PersonForm {
         ]);
         this.fullname.setValidators(Validators.maxLength(200));
         this.fullnameLat.setValidators(Validators.maxLength(200));
-        this.sex.setValidators(Validators.required);
         this.motherFullname.setValidators(Validators.maxLength(200));
         this.fatherFullname.setValidators(Validators.maxLength(200));
       }
@@ -123,18 +126,20 @@ export class PersonForm {
         this.idDocCategoryId.setValidators(Validators.maxLength(50));
       }
 
-      this.firstnameLat.setValidators([
-        Validators.required,
-        Validators.maxLength(200),
-      ]);
-      this.surnameLat.setValidators([
-        Validators.required,
-        Validators.maxLength(200),
-      ]);
-      this.familynameLat.setValidators([
-        Validators.required,
-        Validators.maxLength(200),
-      ]);
+      if (context == PersonContextEnum.Bulletin) {
+        this.firstnameLat.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+        this.surnameLat.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+        this.familynameLat.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+      }
 
       this.birthDate.setValidators(Validators.required);
       this.birthPlace = new AddressForm(false);
@@ -148,6 +153,7 @@ export class PersonForm {
 
     this.group = new FormGroup({
       id: this.id,
+      suid: this.suid,
       version: this.version,
       contextType: this.contextType,
       firstname: this.firstname,
@@ -164,6 +170,7 @@ export class PersonForm {
       birthDate: this.birthDate,
       birthPlace: this.birthPlace.group,
       egn: this.egn,
+      egnDisplay: this.egnDisplay,
       lnch: this.lnch,
       ln: this.ln,
       nationalities: this.nationalities.group,

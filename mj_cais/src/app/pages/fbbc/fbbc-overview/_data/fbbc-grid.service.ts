@@ -1,7 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { FbbcGridModel } from "../models/fbbc-grid.model";
+import { FbbcGridModel } from "../_models/fbbc-grid.model";
 
 const currentEndpoint = "fbbcs";
 @Injectable({ providedIn: "root" })

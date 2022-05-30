@@ -81,50 +81,39 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
         {
-            var query = (from application in _dbContext.AApplications.AsNoTracking()
-
-                         join appPersonId in _dbContext.PAppIds.AsNoTracking() on application.Id equals appPersonId.ApplicationId
-                                   into appPersonIdLeft
-                         from appPersonId in appPersonIdLeft.DefaultIfEmpty()
-
-                         join personIds in _dbContext.PPersonIds.AsNoTracking() on appPersonId.PersonId equals personIds.Id
-                                     into personIdsLeft
-                         from personIds in personIdsLeft.DefaultIfEmpty()
-
-                         where personIds.PersonId == personId
-
-                         select new PersonApplicationGridDTO
-                         {
-                             Id = application.Id,
-                             RegistrationNumber = application.RegistrationNumber,
-                             Firstname = application.Firstname,
-                             Surname = application.Surname,
-                             Familyname = application.Familyname,
-                         }).Distinct();
+            var query = _dbContext.AApplications.Where(a => a.EgnNavigation.PersonId == personId
+                                                            || a.LnNavigation.PersonId == personId
+                                                            || a.LnchNavigation.PersonId == personId
+                                                            || a.SuidNavigation.PersonId == personId
+                                                            ).Select(application => new PersonApplicationGridDTO
+                                                            {
+                                                                Id = application.Id,
+                                                                RegistrationNumber = application.RegistrationNumber,
+                                                                Firstname = application.Firstname,
+                                                                Surname = application.Surname,
+                                                                Familyname = application.Familyname,
+                                                            }).Distinct();
 
             return await Task.FromResult(query);
         }
 
         public async Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId)
         {
-            var query = from fbbc in _dbContext.Fbbcs.AsNoTracking()
-
-                        join personIds in _dbContext.PPersonIds.AsNoTracking() on fbbc.PersonId equals personIds.Id
-                                    into personIdsLeft
-                        from personIds in personIdsLeft.DefaultIfEmpty()
-
-                        where personIds.PersonId == personId
-                        select new PersonFbbcGridDTO
-                        {
-                            Id = fbbc.Id,
-                            Surname = fbbc.Surname,
-                            Firstname = fbbc.Firstname,
-                            Familyname = fbbc.Familyname,
-                            BirthDate = fbbc.BirthDate,
-                            DestroyedDate = fbbc.DestroyedDate,
-                            Egn = fbbc.Egn,
-                            ReceiveDate = fbbc.ReceiveDate
-                        };
+            var query = _dbContext.Fbbcs.AsNoTracking()
+                .Include(x => x.Person)
+                .Include(x => x.SuidNavigation)
+                .Where(x => x.Person.PersonId == personId || x.SuidNavigation.PersonId == personId)
+                .Select(fbbc => new PersonFbbcGridDTO
+                {
+                    Id = fbbc.Id,
+                    Surname = fbbc.Surname,
+                    Firstname = fbbc.Firstname,
+                    Familyname = fbbc.Familyname,
+                    BirthDate = fbbc.BirthDate,
+                    DestroyedDate = fbbc.DestroyedDate,
+                    Egn = fbbc.Egn,
+                    ReceiveDate = fbbc.ReceiveDate
+                });
 
             return await Task.FromResult(query);
         }
@@ -153,6 +142,8 @@ namespace MJ_CAIS.Repositories.Impl
                     cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, searchObj.BirthDatePrec, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_size", OracleDbType.Int32, pageSize, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_number", OracleDbType.Int32, pageNumber, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_id_type", OracleDbType.Varchar2, searchObj.PidType, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_sex", OracleDbType.Int32, searchObj.Sex, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
 
                     OracleDataAdapter resultDataSet = new OracleDataAdapter(cmd);
@@ -185,59 +176,51 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
-        /// <summary>
-        /// Get PersonId object by pid value and pid type
+        /// Get PersonIds by pid value and pid type
         /// The personId is set only if the object does not exist in the database
         /// </summary>
-        /// <param name="pid">Indetifier</param>
+        /// <param name="pid">Identifier</param>
         /// <param name="pidType">Identifier type (EGN, LNCH, LN, AfisNumber)</param>
         /// <param name="personId">Identifier of the person to which the object will be added </param>
         /// <returns></returns>
-        public async Task<PPersonId> GetPersonIdAsyn(string pid, string pidType, string personId)
+        public async Task<List<PPersonId>> GetPersonIdsAsync(List<PersonIdTypeDTO> personIds, string personId)
         {
-            var issuerType = string.Empty;
-            switch (pidType)
-            {
-                case PidType.Egn:
-                    issuerType = IssuerType.GRAO;
-                    break;
-                case PidType.Lnch:
-                    issuerType = IssuerType.MVR;
-                    break;
-                case PidType.Ln:
-                    issuerType = IssuerType.EU;
-                    break;
-                case PidType.AfisNumber:
-                    issuerType = IssuerType.MVR;
-                    break;
-            }
+            var result = new List<PPersonId>();
 
-            var pidDb = await _dbContext.PPersonIds
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x =>
-                        x.Pid.ToLower() == pid.ToLower() &&
-                        x.PidTypeId == pidType &&
-                        x.Issuer == issuerType &&
-                        x.CountryId == BG);
-
-            // pid does not exist
-            if (pidDb == null)
+            // todo: make one call
+            foreach (var currentPid in personIds)
             {
-                return new PPersonId
+                var pidDb = await _dbContext.PPersonIds
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(x =>
+                                        x.Pid.ToLower() == currentPid.Pid.ToLower() &&
+                                        x.PidTypeId == currentPid.Type &&
+                                        x.Issuer == currentPid.Issuer &&
+                                        x.CountryId == BG);
+                // pid does not exist
+                if (pidDb == null)
                 {
-                    Id = BaseEntity.GenerateNewId(),
-                    Pid = pid,
-                    PidTypeId = pidType,
-                    CountryId = BG,
-                    Issuer = issuerType,
-                    EntityState = EntityStateEnum.Added,
-                    PersonId = personId,
-                };
+                    result.Add(new PPersonId
+                    {
+                        Id = BaseEntity.GenerateNewId(),
+                        Pid = currentPid.Pid,
+                        PidTypeId = currentPid.Type,
+                        CountryId = BG,
+                        Issuer = currentPid.Issuer,
+                        EntityState = EntityStateEnum.Added,
+                        PersonId = personId,
+                    });
+                }
+                else
+                {
+                    result.Add(pidDb);
+                }
+
             }
 
-            return pidDb;
+            return result;
         }
-        
+
         [Obsolete($"Use {nameof(InsertAsync)} with additional parameter personH instead.", true)]
         public override Task<PPerson> InsertAsync(PPerson entity)
         {

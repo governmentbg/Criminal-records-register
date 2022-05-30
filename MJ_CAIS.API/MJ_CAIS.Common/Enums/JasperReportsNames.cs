@@ -10,6 +10,7 @@ namespace MJ_CAIS.Common.Enums
     {
         Certificate_with_conviction,
         Certificate_without_conviction,
-        Application_Report
+        Application_Report,
+        Conviction_Report
     }
 }

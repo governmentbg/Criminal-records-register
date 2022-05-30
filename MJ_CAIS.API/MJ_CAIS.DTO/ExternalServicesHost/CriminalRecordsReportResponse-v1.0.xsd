@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://cais.mjs.bg/CriminalRecordsReportResponse-v1.0" xmlns:bul="http://cais.mjs.bg/BulletinModel-v1.0" targetNamespace="http://cais.mjs.bg/CriminalRecordsReportResponse-v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://cais.mjs.bg/BulletinModel-v1.0" schemaLocation="BulletinModel_v1.0_v11.xsd"/>
+	<xs:complexType name="ReportResultType">
+		<xs:sequence>
+			<xs:element name="PersonData" type="bul:CriminalRecordsPersonDataType">
+				<xs:annotation>
+					<xs:documentation>Данни за лицето</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BulletinsList" type="bul:BulletinsList">
+				<xs:annotation>
+					<xs:documentation>Списък с осъждания</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CriminalRecordsReportType">
+		<xs:sequence>
+			<xs:element name="ReportCriteria" type="bul:CriminalRecordsRequestType">
+				<xs:annotation>
+					<xs:documentation>Приложени критерии за търсене</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReportResult" type="ReportResultType">
+				<xs:annotation>
+					<xs:documentation>Резултат от справката</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReportDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата на справката</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="CriminalRecordsReport" type="CriminalRecordsReportType">
+		<xs:annotation>
+			<xs:documentation>Справка за съдимост</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>

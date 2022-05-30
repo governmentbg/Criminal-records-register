@@ -89,6 +89,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<BBulletin, BulletinBaseDTO>()
                 .ForMember(d => d.RegistrationNumberDisplay, opt => opt.MapFrom(src => src.RegistrationNumber))
+                .ForPath(d => d.Person.Suid, opt => opt.MapFrom(src => src.Suid))
                 .ForPath(d => d.Person.Firstname, opt => opt.MapFrom(src => src.Firstname))
                 .ForPath(d => d.Person.Surname, opt => opt.MapFrom(src => src.Surname))
                 .ForPath(d => d.Person.Familyname, opt => opt.MapFrom(src => src.Familyname))

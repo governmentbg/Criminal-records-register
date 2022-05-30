@@ -8,11 +8,11 @@
 
 <div class="text-center mb-3">
     <h1 class="mt-2 text-center">Публичен портал</h1>
-    <h4 class="mt-2 text-center">Централизирана автоматизирана информационна система "Електронни обществени поръчки" (ЦАИС ЕОП)</h4>
+    <h4 class="mt-2 text-center">ЦАИС "Съдебен статус"</h4>
 </div>
 
 <div class="row text-center">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Проверка на електронно свидетелство</h5>
@@ -20,10 +20,12 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <form asp-controller="Conviction" asp-action="ViewByCode" method="post" autocomplete="off">
-                        <label for="Code">Код за достъп:</label>
-                        <input asp-for="Code" class="form-control" style="max-width: 300px; display: inline-block;" />
-                        <div class="mt-2">
-                            <button type="submit" class="btn btn-primary">Проверка</button>
+                        <div class="row mb-3 mt-3" style="align-items: center;">
+                            <label for="Code" class="col-md-3">Код за достъп:</label>
+                            <input asp-for="Code" class="form-control" style="max-width: 300px; display: inline-block;" />
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Проверка</button>
+                            </div>
                         </div>
                     </form>
                 </li>
@@ -31,14 +33,14 @@
         </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Заявления и справки</h5>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <div class="mb-3">
+                    <div class="mb-3 mt-3">
                         <a class="btn btn-primary col-md-3" asp-controller="Account" asp-action="Login">
                             Вход с КЕП
                         </a>

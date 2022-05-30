@@ -105,6 +105,19 @@
     field="birthDate"
     header="Дата на раждане"
     [sortable]="true"
+    [dataType]="'date'"
+  >
+  <ng-template igxCell let-cell="cell">
+    <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+      {{ this.dateFormatService.displayDateTime(cell.value) }}
+    </span>
+  </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="birthPlaceOther"
+    header="Място на раждане"
+    [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
@@ -113,8 +126,8 @@
   </igx-column>
 
   <igx-column
-    field="birthPlaceOther"
-    header="Място на раждане"
+    field="csAuthorityBirth"
+    header="БС - месторождение"
     [sortable]="true"
     [dataType]="'string'"
   >

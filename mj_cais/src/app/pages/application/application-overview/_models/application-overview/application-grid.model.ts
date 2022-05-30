@@ -9,6 +9,7 @@ export class ApplicationGridModel extends BaseModel {
   public StatusCode: string;
   public birthDate: Date;
   public birthPlaceOther: string;
+  public csAuthorityBirth: string;
 
   constructor(init?: Partial<ApplicationGridModel>) {
     super(init);
@@ -21,6 +22,7 @@ export class ApplicationGridModel extends BaseModel {
       this.birthDate = init.birthDate ?? null;
       this.birthPlaceOther = init.birthPlaceOther ?? null;
       this.StatusCode = init.StatusCode ?? null;
+      this.csAuthorityBirth = init.csAuthorityBirth ?? null;
     }
   }
 }

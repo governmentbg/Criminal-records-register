@@ -15,5 +15,6 @@ namespace MJ_CAIS.Services.Contracts
         Task DeleteDocumentAsync(string documentId);
         Task<FbbcDocumentDTO> GetDocumentContentAsync(string documentId);
         Task ChangeStatusAsync(string aInDto, string statusId);
+        Task<FbbcDTO> SelectWithPersonDataAsync(string personId);
     }
 }

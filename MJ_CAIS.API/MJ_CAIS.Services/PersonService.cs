@@ -11,6 +11,8 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Data;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
@@ -160,7 +162,7 @@ namespace MJ_CAIS.Services
                     .Where(x => personIds.Contains(x.Id))
                     .ToListAsync();
 
-            var personToUpdate = MargePeople(pids, existingPersons);
+            var personToUpdate = MergePeople(pids, existingPersons);
 
             // call logic for only one person
             return UpdatePersonDataWhenHasOnePerson(aInDto, personToUpdate);
@@ -180,7 +182,7 @@ namespace MJ_CAIS.Services
                                .Where(x => x.Id == aId || x.Id == personToBeConnected)
                                .ToListAsync();
 
-            var persomToUpdate = MargePeople(new List<PPersonId>(), people);
+            var persomToUpdate = MergePeople(new List<PPersonId>(), people);
             persomToUpdate.EntityState = EntityStateEnum.Modified;
 
             // call logic for only one person
@@ -238,27 +240,35 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         private async Task<List<PPersonId>> GetPidsAsync(PersonDTO aInDto, string personId)
         {
-            var pids = new List<PPersonId>();
-            // todo: make one call 
-            if (!string.IsNullOrEmpty(aInDto.Egn))
+            var pidsFromForm = new List<PersonIdTypeDTO>();
+
+            if (!string.IsNullOrEmpty(aInDto?.Egn))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Egn, PidType.Egn, personId));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Egn, PidType.Egn, IssuerType.GRAO));
             }
 
-            if (!string.IsNullOrEmpty(aInDto.Lnch))
+            if (!string.IsNullOrEmpty(aInDto?.Lnch))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Lnch, PidType.Lnch, personId));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Lnch, PidType.Lnch, IssuerType.MVR));
             }
 
-            if (!string.IsNullOrEmpty(aInDto.Ln))
+            if (!string.IsNullOrEmpty(aInDto?.Ln))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.Ln, PidType.Ln, personId));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Ln, PidType.Ln, IssuerType.EU));
             }
 
-            if (!string.IsNullOrEmpty(aInDto.AfisNumber))
+            if (!string.IsNullOrEmpty(aInDto?.AfisNumber))
             {
-                pids.Add(await _personRepository.GetPersonIdAsyn(aInDto.AfisNumber, PidType.AfisNumber, personId));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber, PidType.AfisNumber, IssuerType.MVR));
             }
+
+            if (pidsFromForm.Count == 0)
+            {
+                var suid = GenereteSuid(aInDto);
+                pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CAIS));
+            }
+
+            var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, personId);
 
             return pids;
         }
@@ -312,6 +322,7 @@ namespace MJ_CAIS.Services
         /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
         /// <param name="personToUpdate">Person with updated data</param>
         /// <returns>Updated person includes the identifiers</returns>
+        /// </summary>
         private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate)
         {
             if (personToUpdate.ModifiedProperties == null)
@@ -346,7 +357,7 @@ namespace MJ_CAIS.Services
         /// <param name="pids"></param>
         /// <param name="existingPersons"></param>
         /// <returns></returns>
-        private PPerson MargePeople(List<PPersonId> pids, List<PPerson> existingPersons)
+        private PPerson MergePeople(List<PPersonId> pids, List<PPerson> existingPersons)
         {
             // get last added or modified person object
             var lastPerson = existingPersons.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
@@ -368,9 +379,9 @@ namespace MJ_CAIS.Services
                 {
                     personPidId.PersonId = lastPersonId;
                     personPidId.EntityState = EntityStateEnum.Modified;
-                    personPidId.ModifiedProperties = new List<string> 
+                    personPidId.ModifiedProperties = new List<string>
                     {
-                        nameof(personPidId.PersonId), 
+                        nameof(personPidId.PersonId),
                         nameof(personPidId.Version)
                     };
                 }
@@ -384,6 +395,60 @@ namespace MJ_CAIS.Services
 
             lastPerson.PPersonIds = pidsToBeAdded;
             return lastPerson;
+        }
+
+        private string GenereteSuid(PersonDTO person)
+        {
+            string? birthCountryIsoNumber = null;
+            string? birthDateText = null;
+
+            if (person.BirthPlace?.Country?.Id != null)
+            {
+                birthCountryIsoNumber = dbContext.GCountries
+                    .AsNoTracking()
+                    .FirstOrDefault(x => x.Id == person.BirthPlace.Country.Id)?.Iso31662Number;
+            }
+
+            if (person.BirthDate.HasValue)
+            {
+                birthDateText = ((DateTime)person.BirthDate).ToString("yyyyMMdd");
+            }
+
+            var nullText = "NULL";
+            var personString = "{\"Firstname\"=\"" + person.Firstname ?? nullText +
+            "\",\"Surname\"=\"" + person.Surname ?? nullText +
+            "\",\"Familyname\"=\"" + person.Familyname ?? nullText +
+            "\",\"Fullname\"=\"" + person.Fullname ?? nullText +
+            "\",\"Sex\"=\"" + person.Sex ?? nullText +
+            "\",\"BirthDate\"=\"" + birthDateText ?? nullText +
+            "\",\"BirthCountry\"=\"" + birthCountryIsoNumber ?? nullText +
+            "\",\"BirthCity\"=\"" + person.BirthPlace?.CityId ?? nullText +
+            "\",\"BirthPlaceOther\"=\"" + person.BirthPlace?.ForeignCountryAddress ?? nullText +
+            "\",\"MotherFirstname\"=\"" + person.MotherFirstname ?? nullText +
+            "\",\"MotherSurname\"=\"" + person.MotherSurname ?? nullText +
+            "\",\"MotherFamilyname\"=\"" + person.MotherFamilyname ?? nullText +
+            "\",\"MotherFullname\"=\"" + person.MotherFullname ?? nullText +
+            "\",\"FatherFirstname\"=\"" + person.FatherFirstname ?? nullText +
+            "\",\"FatherSurname\"=\"" + person.FatherSurname ?? nullText +
+            "\",\"FatherFamilyname\"=\"" + person.FatherFamilyname ?? nullText +
+            "\",\"FatherFullname\"=\"" + person.FatherFullname ?? nullText +
+            "\",\"FirstnameLat\"=\"" + person.FirstnameLat ?? nullText +
+            "\",\"SurnameLat\"=\"" + person.SurnameLat ?? nullText +
+            "\",\"FamilynameLat\"=\"" + person.FamilynameLat ?? nullText +
+            "\",\"FullnameLat\"=\"" + person.FullnameLat ?? nullText +
+            "\"}";
+
+            SHA1 mySHA1 = SHA1.Create();
+            var result = mySHA1.ComputeHash(Encoding.UTF8.GetBytes(personString));
+            var hash = new StringBuilder();
+            foreach (byte a in result)
+            {
+                var h = a.ToString("X2");
+                hash.Append(h);
+            }
+
+            var suid = birthDateText + birthCountryIsoNumber + hash.ToString().Substring(0, 10) + person.Sex;
+            return suid;
         }
 
         #endregion

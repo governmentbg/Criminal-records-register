@@ -25,12 +25,12 @@ namespace AutomaticStepsExecutor
             _certificateService = certificateService;
         }
 
-        public async Task PreSelectAsync()
+        public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
         
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
             var result = await Task.FromResult(_dbContext.ACertificates
                                     .Include(a=>a.Application)
@@ -46,17 +46,17 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task PostSelectAsync()
+        public async Task PostSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
           
         }
 
-        public async Task PreProcessAsync()
+        public async Task PreProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
            
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities, Microsoft.Extensions.Configuration.IConfiguration config)
         {
             AutomaticStepResult result = new AutomaticStepResult();
             int numberOfProcesedEntities = 0;
@@ -105,7 +105,7 @@ namespace AutomaticStepsExecutor
             return result;
         }
 
-        public async Task PostProcessAsync()
+        public async Task PostProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
           
         }
