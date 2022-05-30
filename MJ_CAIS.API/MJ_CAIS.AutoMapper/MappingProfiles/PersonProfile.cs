@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Fbbc;
 using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles

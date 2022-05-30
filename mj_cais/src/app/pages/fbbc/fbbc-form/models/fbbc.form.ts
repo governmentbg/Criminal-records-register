@@ -1,36 +1,23 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
 import { LookupForm } from "../../../../@core/components/forms/inputs/lookup/models/lookup.form";
+import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
+import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
 import { BaseForm } from "../../../../@core/models/common/base.form";
 
 export class FbbcForm extends BaseForm {
   public group: FormGroup;
 
-  //public countryId: FormControl;
   public countryLookup: LookupForm;
   public docTypeId: FormControl;
   public sanctionTypeId: FormControl;
   public receiveDate: FormControl;
   public issueDate: FormControl;
   public countryDescr: FormControl;
-  public egn: FormControl;
-  public firstname: FormControl;
-  public surname: FormControl;
-  public familyname: FormControl;
-  public birthPlace: FormControl;
-  public birthCityId: FormControl;
-  public birtyCountryDescr: FormControl;
-  public birthCountryId: FormControl;
-  public birthDate: FormControl;
+  public person: PersonForm;
   public offenceStartDate: FormControl;
   public offenceEndDate: FormControl;
   public annotation: FormControl;
-  public motherFirstname: FormControl;
-  public motherSurname: FormControl;
-  public motherFamilyname: FormControl;
-  public fatherFirstname: FormControl;
-  public fatherSurname: FormControl;
-  public fatherFamilyname: FormControl;
   public gdkpNumber: FormControl;
   public gdkpDate: FormControl;
   public gdkpCaseNumber: FormControl;
@@ -56,31 +43,16 @@ export class FbbcForm extends BaseForm {
 
   constructor() {
     super();
-    // this.countryId = new FormControl(null);
     this.countryLookup = new LookupForm(false);
     this.docTypeId = new FormControl(null);
     this.sanctionTypeId = new FormControl(null);
     this.receiveDate = new FormControl(null);
     this.issueDate = new FormControl(null);
     this.countryDescr = new FormControl(null);
-    this.egn = new FormControl(null);
-    this.firstname = new FormControl(null);
-    this.surname = new FormControl(null);
-    this.familyname = new FormControl(null);
-    this.birthPlace = new FormControl(null);
-    this.birthCityId = new FormControl(null);
-    this.birtyCountryDescr = new FormControl(null);
-    this.birthCountryId = new FormControl(null);
-    this.birthDate = new FormControl(null);
+    this.person = new PersonForm(PersonContextEnum.Fbbc,false);
     this.offenceStartDate = new FormControl(null);
     this.offenceEndDate = new FormControl(null);
     this.annotation = new FormControl(null);
-    this.motherFirstname = new FormControl(null);
-    this.motherSurname = new FormControl(null);
-    this.motherFamilyname = new FormControl(null);
-    this.fatherFirstname = new FormControl(null);
-    this.fatherSurname = new FormControl(null);
-    this.fatherFamilyname = new FormControl(null);
     this.gdkpNumber = new FormControl(null);
     this.gdkpDate = new FormControl(null);
     this.gdkpCaseNumber = new FormControl(null);
@@ -114,24 +86,10 @@ export class FbbcForm extends BaseForm {
       receiveDate: this.receiveDate,
       issueDate: this.issueDate,
       countryDescr: this.countryDescr,
-      egn: this.egn,
-      firstname: this.firstname,
-      surname: this.surname,
-      familyname: this.familyname,
-      birthPlace: this.birthPlace,
-      birthCityId: this.birthCityId,
-      birtyCountryDescr: this.birtyCountryDescr,
-      birthCountryId: this.birthCountryId,
-      birthDate: this.birthDate,
+      person:this.person.group,
       offenceStartDate: this.offenceStartDate,
       offenceEndDate: this.offenceEndDate,
       annotation: this.annotation,
-      motherFirstname: this.motherFirstname,
-      motherSurname: this.motherSurname,
-      motherFamilyname: this.motherFamilyname,
-      fatherFirstname: this.fatherFirstname,
-      fatherSurname: this.fatherSurname,
-      fatherFamilyname: this.fatherFamilyname,
       gdkpNumber: this.gdkpNumber,
       gdkpDate: this.gdkpDate,
       gdkpCaseNumber: this.gdkpCaseNumber,

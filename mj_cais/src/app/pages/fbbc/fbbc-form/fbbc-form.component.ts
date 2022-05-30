@@ -6,13 +6,14 @@ import { FbbcService } from "./data/fbbc.service";
 import { FbbcResolverData } from "./data/fbbc.resolver";
 import { FormGroup } from "@angular/forms";
 import { FbbcDocumentFormComponent } from "./grids/fbbc-document-form/fbbc-document-form.component";
-import { FbbcStatusTypeEnum } from "../fbbc-overview/data/fbbc-status-type.constants";
+import { FbbcStatusTypeEnum } from "../fbbc-overview/_data/fbbc-status-type.constants";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { DocTypeConstants } from "../../../@core/constants/doc-type.constants";
 import { NbDialogService } from "@nebular/theme";
 import { CountryGridModel } from "../../../@core/components/forms/address-form/dialog/_models/country-grid.model";
 import { CountryDialogComponent } from "../../../@core/components/forms/address-form/dialog/country-dialog/country-dialog.component";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
+import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -33,7 +34,8 @@ export class FbbcFormComponent
   public isForCreate: boolean = false;
   public bgCountryId = CommonConstants.bgCountryId;
   public docType = DocTypeConstants.ECRIS;
-
+  public PersonContextEnum = PersonContextEnum;
+  
   constructor(
     service: FbbcService,
     public injector: Injector,

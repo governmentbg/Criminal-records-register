@@ -25,6 +25,7 @@ export class PersonForm {
   public birthDate: FormControl;
   public birthPlace: AddressForm;
   public egn: FormControl;
+  public egnDisplay: FormControl;
   public lnch: FormControl;
   public ln: FormControl;
   public nationalities: MultipleChooseForm;
@@ -64,6 +65,7 @@ export class PersonForm {
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
     this.egn = new FormControl(null);
+    this.egnDisplay = new FormControl(null);
     this.lnch = new FormControl(null);
     this.ln = new FormControl(null);
     this.nationalities = new MultipleChooseForm();
@@ -124,18 +126,20 @@ export class PersonForm {
         this.idDocCategoryId.setValidators(Validators.maxLength(50));
       }
 
-      this.firstnameLat.setValidators([
-        Validators.required,
-        Validators.maxLength(200),
-      ]);
-      this.surnameLat.setValidators([
-        Validators.required,
-        Validators.maxLength(200),
-      ]);
-      this.familynameLat.setValidators([
-        Validators.required,
-        Validators.maxLength(200),
-      ]);
+      if (context == PersonContextEnum.Bulletin) {
+        this.firstnameLat.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+        this.surnameLat.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+        this.familynameLat.setValidators([
+          Validators.required,
+          Validators.maxLength(200),
+        ]);
+      }
 
       this.birthDate.setValidators(Validators.required);
       this.birthPlace = new AddressForm(false);
@@ -166,6 +170,7 @@ export class PersonForm {
       birthDate: this.birthDate,
       birthPlace: this.birthPlace.group,
       egn: this.egn,
+      egnDisplay: this.egnDisplay,
       lnch: this.lnch,
       ln: this.ln,
       nationalities: this.nationalities.group,

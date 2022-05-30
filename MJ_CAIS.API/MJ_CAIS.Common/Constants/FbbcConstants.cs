@@ -11,15 +11,6 @@
             public const string CodeECRIS = "5"; // ECRIS
         }
 
-        public static class MessageTypeDescription
-        {
-            public const string CodePolice = "От ЦД\"КП\"";
-            public const string CodeCBSHandwritten = "ЦБС - ръчно въведени";
-            public const string CodeCDKP = "От ЦД\"КП\", редактирани в ЦБС";
-            public const string CodeNJR = "NJR";
-            public const string CodeECRIS = "ECRIS";
-        }
-
         public static class FBBCStatus
         {
             public const string Active = "Active";

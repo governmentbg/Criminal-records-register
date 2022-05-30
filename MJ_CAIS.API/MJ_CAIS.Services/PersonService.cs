@@ -268,7 +268,7 @@ namespace MJ_CAIS.Services
                 pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CAIS));
             }
 
-            var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, aInDto.Id);
+            var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, personId);
 
             return pids;
         }

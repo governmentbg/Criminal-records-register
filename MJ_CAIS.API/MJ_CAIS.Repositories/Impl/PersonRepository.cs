@@ -99,24 +99,21 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId)
         {
-            var query = from fbbc in _dbContext.Fbbcs.AsNoTracking()
-
-                        join personIds in _dbContext.PPersonIds.AsNoTracking() on fbbc.PersonId equals personIds.Id
-                                    into personIdsLeft
-                        from personIds in personIdsLeft.DefaultIfEmpty()
-
-                        where personIds.PersonId == personId
-                        select new PersonFbbcGridDTO
-                        {
-                            Id = fbbc.Id,
-                            Surname = fbbc.Surname,
-                            Firstname = fbbc.Firstname,
-                            Familyname = fbbc.Familyname,
-                            BirthDate = fbbc.BirthDate,
-                            DestroyedDate = fbbc.DestroyedDate,
-                            Egn = fbbc.Egn,
-                            ReceiveDate = fbbc.ReceiveDate
-                        };
+            var query = _dbContext.Fbbcs.AsNoTracking()
+                .Include(x => x.Person)
+                .Include(x => x.SuidNavigation)
+                .Where(x => x.Person.PersonId == personId || x.SuidNavigation.PersonId == personId)
+                .Select(fbbc => new PersonFbbcGridDTO
+                {
+                    Id = fbbc.Id,
+                    Surname = fbbc.Surname,
+                    Firstname = fbbc.Firstname,
+                    Familyname = fbbc.Familyname,
+                    BirthDate = fbbc.BirthDate,
+                    DestroyedDate = fbbc.DestroyedDate,
+                    Egn = fbbc.Egn,
+                    ReceiveDate = fbbc.ReceiveDate
+                });
 
             return await Task.FromResult(query);
         }
