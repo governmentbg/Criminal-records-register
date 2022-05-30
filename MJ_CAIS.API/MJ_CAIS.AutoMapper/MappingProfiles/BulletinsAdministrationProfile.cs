@@ -16,6 +16,16 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                     src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
                     src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
                     src.BulletinType == nameof(BulletinConstants.Type.Unspecified) ? BulletinConstants.Type.Unspecified : null));
+
+            CreateMap<BBulletin, BulletinAdministrationDTO>()
+                .ForMember(d => d.CsAuthorityName, opt => opt.MapFrom(src => src.CsAuthority.Name))
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.Status.Name))
+                .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name))
+                .ForMember(d => d.BulletinTypeName, opt => opt.MapFrom(src =>
+                    src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
+                    src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
+                    src.BulletinType == nameof(BulletinConstants.Type.Unspecified) ? BulletinConstants.Type.Unspecified : null));
+
         }
     }
 }

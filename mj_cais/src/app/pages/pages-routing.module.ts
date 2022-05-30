@@ -56,6 +56,7 @@ import { ApplicationTaxFreeOverviewComponent } from "./application/application-o
 import { ApplicationForCheckComponent } from "./application/application-overview/application-for-check/application-for-check.component";
 import { BulletinAdministrationOverviewComponent } from "./bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component";
 import { EcrisTcnOverviewComponent } from "./ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component";
+import { BulletinAdministrationFormComponent } from "./bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component";
 
 const routes: Routes = [
   {
@@ -164,6 +165,11 @@ const routes: Routes = [
       {
         path: "bulletins-administration",
         component: BulletinAdministrationOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-administration/preview/:ID",
+        component: BulletinAdministrationFormComponent,
         // canActivate: [AuthGuard],
       },
       {

@@ -129,21 +129,15 @@
     [filterable]="false"
     [pinned]="true"
   >
-    <!-- <ng-template igxCell let-cell="cell">
+     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+        [routerLink]="['/pages/bulletins-administration/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <a
-        *ngIf="hideStatus"
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
-    </ng-template> -->
+
+    </ng-template> 
   </igx-column>
 
   <ng-template #pager let-grid>

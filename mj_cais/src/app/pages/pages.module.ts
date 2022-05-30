@@ -71,6 +71,7 @@ import { EcrisTcnOverviewComponent } from './ecris-tcn/ecris-tcn-overview/ecris-
 import { ApplicationForSigningComponent } from './application/application-overview/application-for-signing/application-for-signing.component';
 import { ApplicationForSiningByJudgeComponent } from './application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component';
 import { BulletinAdministrationOverviewComponent } from './bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component';
+import { BulletinAdministrationFormComponent } from './bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component';
 
 @NgModule({
   imports: [
@@ -147,7 +148,8 @@ import { BulletinAdministrationOverviewComponent } from './bulletin-administrati
     EcrisTcnOverviewComponent,
     ApplicationForSigningComponent,
     ApplicationForSiningByJudgeComponent,
-    BulletinAdministrationOverviewComponent
+    BulletinAdministrationOverviewComponent,
+    BulletinAdministrationFormComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

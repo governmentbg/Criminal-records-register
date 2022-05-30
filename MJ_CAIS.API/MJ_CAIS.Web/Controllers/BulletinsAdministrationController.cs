@@ -25,5 +25,11 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._bulletinAdministrationService.SelectAllWithPaginationAsync(aQueryOptions);
             return Ok(result);
         }
+
+        [HttpGet("{aId}")]
+        public new async Task<IActionResult> Get(string aId)
+        {
+            return await base.Get(aId);
+        }
     }
 }

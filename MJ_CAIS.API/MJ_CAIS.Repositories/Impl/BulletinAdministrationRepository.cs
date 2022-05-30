@@ -18,5 +18,18 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+
+        public override async Task<BBulletin> SelectAsync(string id)
+        {
+            var query = await _dbContext.BBulletins
+                .AsNoTracking()
+                .Include(x => x.CsAuthority)
+                .Include(x => x.Status)
+                .Include(x => x.BulletinAuthority)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return query;
+        }
     }
 }
