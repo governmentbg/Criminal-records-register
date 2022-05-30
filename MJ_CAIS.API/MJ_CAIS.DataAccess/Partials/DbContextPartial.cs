@@ -14,12 +14,14 @@ namespace MJ_CAIS.DataAccess
     public partial class CaisDbContext : DbContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
         private string? _currentUserId = null;
 
-        public CaisDbContext(DbContextOptions<CaisDbContext> options, IHttpContextAccessor httpContextAccessor) 
+        public CaisDbContext(DbContextOptions<CaisDbContext> options, IHttpContextAccessor httpContextAccessor, IUserContext userContext) 
             : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
         public string? CurrentUserId
@@ -41,6 +43,10 @@ namespace MJ_CAIS.DataAccess
                         {
                             _currentUserId = claimId.Value;
                         }
+                    }
+                    else if (!string.IsNullOrEmpty(_userContext.UserId))
+                    {
+                        _currentUserId = _userContext.UserId;
                     }
                     else
                     {
