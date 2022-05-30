@@ -69,22 +69,25 @@ namespace AutomaticStepsExecutor
                     {
 
                         logger.Trace("PreSelect started.");
-                        await service.PreSelectAsync();
+                        await service.PreSelectAsync(config);
                         logger.Trace("PreSelect ended.");
                         logger.Trace("Select started.");
-                        var entities = await service.SelectEntitiesAsync(pageSize);
+                        var entities = await service.SelectEntitiesAsync(pageSize, config);
                         logger.Trace($"Select ended. {entities.Count} selected.");
                         logger.Trace("PostSelect started.");
-                        await service.PostSelectAsync();
+                        await service.PostSelectAsync(config);
                         logger.Trace("PostSelect ended.");
                         logger.Trace("PreProcess started.");
-                        await service.PreProcessAsync();
+                        await service.PreProcessAsync(config);
                         logger.Trace("PreProcess ended.");
-                        logger.Trace("ProcessEntitiesAsync started.");
-                        var result = await service.ProcessEntitiesAsync(entities);
-                        logger.Trace($"ProcessEntitiesAsync ended. {result.GetLogInfo()}");
+                        if (entities.Count > 0)
+                        {
+                            logger.Trace("ProcessEntitiesAsync started.");
+                            var result = await service.ProcessEntitiesAsync(entities, config);
+                            logger.Trace($"ProcessEntitiesAsync ended. {result.GetLogInfo()}");
+                        }
                         logger.Trace("PostProcess started.");
-                        await service.PostProcessAsync();
+                        await service.PostProcessAsync(config);
                         logger.Trace("PostProcess ended.");
                     }
                     else

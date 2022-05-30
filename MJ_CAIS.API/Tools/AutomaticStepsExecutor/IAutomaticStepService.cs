@@ -9,12 +9,12 @@ namespace AutomaticStepsExecutor
 {
     public interface IAutomaticStepService
     {
-        public  Task PreSelectAsync();      
-        public  Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize);
-        public  Task PostSelectAsync();
-        public  Task PreProcessAsync();
-        public  Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities);
-        public  Task PostProcessAsync();
+        public  Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config);      
+        public  Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config);
+        public  Task PostSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config);
+        public  Task PreProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config);
+        public  Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities, Microsoft.Extensions.Configuration.IConfiguration config);
+        public  Task PostProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config);
 
 
     }
