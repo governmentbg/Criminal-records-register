@@ -7,7 +7,7 @@ import { RemoteGridWithStatePersistance } from "../../../../@core/directives/rem
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { BulletinGridService } from "../_data/bulletin-grid.service";
 import { BulletinGridModel } from "../_models/bulletin-grid.model";
-import { BulletinStatusTypeEnum } from "../_models/bulletin-status-type.constants";
+import { BulletinStatusTypeEnum } from "../_models/bulletin-status-type.enum";
 
 @Component({
   selector: "cais-bulletin-newoffice-overview",

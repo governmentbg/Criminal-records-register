@@ -6,6 +6,7 @@ namespace MJ_CAIS.DTO.BulletinAdministration
         public string? CsAuthorityName { get; set; }
         public decimal? SequentialIndex { get; set; }
         public string? StatusName { get; set; }
+        public string? StatusId { get; set; }
         public string? AlphabeticalIndex { get; set; }
         public string? EcrisConvictionId { get; set; }
         public DateTime? BulletinReceivedDate { get; set; }

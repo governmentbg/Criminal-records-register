@@ -31,5 +31,12 @@ namespace MJ_CAIS.Web.Controllers
         {
             return await base.Get(aId);
         }
+
+        [HttpPut("{aId}")]
+        public async Task<IActionResult> Put(string aId, [FromBody] UnlockBulletinModelDTO aInDto)
+        {
+            //await this._bulletinAdministrationService.UpdateBulletinAsync(aInDto);
+            return Ok();
+        }
     }
 }

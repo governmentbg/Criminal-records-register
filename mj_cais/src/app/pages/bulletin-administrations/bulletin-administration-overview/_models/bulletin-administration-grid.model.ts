@@ -7,6 +7,7 @@ export class BulletinAdministrationGridModel extends BaseModel {
   public surName: string = null;
   public familyName: string = null;
   public statusName: string = null;
+  public statusId: string = null;
   public createdOn: Date = null;
   public alphabeticalIndex: string = null;
   public bulletinAuthorityName: string = null;
@@ -21,6 +22,7 @@ export class BulletinAdministrationGridModel extends BaseModel {
     this.surName = init?.surName ?? null;
     this.familyName = init?.familyName ?? null;
     this.statusName = init?.statusName ?? null;
+    this.statusId = init?.statusId ?? null;
     this.createdOn = init?.createdOn ?? null;
     this.alphabeticalIndex = init?.alphabeticalIndex ?? null;
     this.bulletinAuthorityName = init?.bulletinAuthorityName ?? null;

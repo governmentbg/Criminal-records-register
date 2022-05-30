@@ -3,7 +3,7 @@ import { Guid } from "guid-typescript";
 import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
 import { BaseForm } from "../../../../@core/models/common/base.form";
-import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin-status-type.constants";
+import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin-status-type.enum";
 
 export class BulletinForm extends BaseForm {
   public group: FormGroup;
