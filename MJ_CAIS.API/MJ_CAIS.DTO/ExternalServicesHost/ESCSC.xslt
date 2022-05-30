@@ -25,7 +25,23 @@
 									</td>
 									<td align="right">
 										<span>
-											<xsl:text>ВАЖИ ЗА СРОК ОТ ШЕСТ МЕСЕЦА! </xsl:text>
+											<xsl:text>Дата на изготвяне: </xsl:text>
+										</span>
+										<xsl:for-each select="n1:ReportDate">
+											<span style="font-weight:bold; ">
+												<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
+												<xsl:text>.</xsl:text>
+												<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
+												<xsl:text>.</xsl:text>
+												<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+												<xsl:text> </xsl:text>
+												<xsl:value-of select="format-number(number(substring(string(string(.)), 12, 2)), '00', 'format1')"/>
+												<xsl:text>:</xsl:text>
+												<xsl:value-of select="format-number(number(substring(string(string(.)), 15, 2)), '00', 'format1')"/>
+											</span>
+										</xsl:for-each>
+										<span>
+											<xsl:text>&#160;</xsl:text>
 										</span>
 									</td>
 								</tr>
@@ -36,30 +52,90 @@
 										</span>
 									</td>
 									<td align="right">
-										<span>
-											<xsl:text>Дата на издаване: </xsl:text>
-										</span>
-										<xsl:for-each select="n1:ReportDate">
+										<xsl:for-each select="n1:ReportResult">
 											<span>
-												<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
-												<xsl:text>.</xsl:text>
-												<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
-												<xsl:text>.</xsl:text>
-												<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+												<xsl:text>Валидност от-до:</xsl:text>
 											</span>
-											<span>
-												<xsl:text> г.</xsl:text>
-											</span>
+											<xsl:for-each select="n1:ValidFrom">
+												<span style="font-weight:bold; ">
+													<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
+													<xsl:text>.</xsl:text>
+													<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
+													<xsl:text>.</xsl:text>
+													<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+												</span>
+												<span>
+													<xsl:text> г.</xsl:text>
+												</span>
+											</xsl:for-each>
+											<xsl:for-each select="n1:ValidTo">
+												<span>
+													<xsl:text> - </xsl:text>
+												</span>
+												<span style="font-weight:bold; ">
+													<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
+													<xsl:text>.</xsl:text>
+													<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
+													<xsl:text>.</xsl:text>
+													<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+												</span>
+												<span>
+													<xsl:text> г.</xsl:text>
+												</span>
+											</xsl:for-each>
 										</xsl:for-each>
 									</td>
 								</tr>
 								<tr>
 									<td>
 										<span>
-											<xsl:text>Регистрационен №: 22040400156</xsl:text>
+											<xsl:text>Регистрационен №: </xsl:text>
 										</span>
+										<xsl:for-each select="n1:ReportResult">
+											<xsl:for-each select="n1:RegistrationNumber">
+												<span style="font-weight:bold; ">
+													<xsl:apply-templates/>
+												</span>
+											</xsl:for-each>
+										</xsl:for-each>
 									</td>
-									<td align="right"/>
+									<td align="right" height="20">
+										<xsl:for-each select="n1:ReportCriteria">
+											<span>
+												<xsl:text>Идентификатор за лице: </xsl:text>
+											</span>
+											<xsl:for-each select="bul:IdentifierType">
+												<xsl:choose>
+													<xsl:when test=". =&apos;EGN&apos;">
+														<span>
+															<xsl:text>ЕГН</xsl:text>
+														</span>
+													</xsl:when>
+													<xsl:when test=". =&apos;LNCH&apos;">
+														<span>
+															<xsl:text>ЛНЧ</xsl:text>
+														</span>
+													</xsl:when>
+													<xsl:when test=". =&apos;SUID&apos;">
+														<span>
+															<xsl:text>Системен идентификатор</xsl:text>
+														</span>
+													</xsl:when>
+													<xsl:otherwise>
+														<xsl:apply-templates/>
+													</xsl:otherwise>
+												</xsl:choose>
+											</xsl:for-each>
+											<xsl:for-each select="bul:PID">
+												<span>
+													<xsl:text>: </xsl:text>
+												</span>
+												<span style="font-weight:bold; ">
+													<xsl:apply-templates/>
+												</span>
+											</xsl:for-each>
+										</xsl:for-each>
+									</td>
 								</tr>
 								<tr>
 									<td style="padding-top:0.75in; " align="center" colspan="2">
@@ -124,7 +200,7 @@
 															<tr>
 																<td align="left" width="200px">
 																	<span>
-																		<xsl:text>Имена на кирилица:</xsl:text>
+																		<xsl:text>ИМЕНА НА КИРИЛИЦА:</xsl:text>
 																	</span>
 																</td>
 																<td align="left">
@@ -171,7 +247,7 @@
 															<tr>
 																<td align="left" width="200px">
 																	<span>
-																		<xsl:text>Имена на латиница:</xsl:text>
+																		<xsl:text>ИМЕНА НА ЛАТИНИЦА:</xsl:text>
 																	</span>
 																</td>
 																<td align="left">
@@ -218,7 +294,7 @@
 															<tr>
 																<td align="left" width="200px">
 																	<span>
-																		<xsl:text>Пол:</xsl:text>
+																		<xsl:text>ПОЛ:</xsl:text>
 																	</span>
 																</td>
 																<td align="left">
@@ -234,7 +310,7 @@
 															<tr>
 																<td align="left" width="200px">
 																	<span>
-																		<xsl:text>Идентификатор/и:</xsl:text>
+																		<xsl:text>ИДЕНТИФИКАТОРИ:</xsl:text>
 																	</span>
 																</td>
 																<td align="left">
@@ -362,10 +438,11 @@
 														</span>
 													</xsl:when>
 													<xsl:otherwise>
-														<span style="font-weight:bold; ">
-															<xsl:text>Е ОСЪЖДАНО </xsl:text>
-														</span>
-														<br/>
+														<div style="text-align:center; ">
+															<span style="font-weight:bold; ">
+																<xsl:text>Е ОСЪЖДАНО</xsl:text>
+															</span>
+														</div>
 														<ol>
 															<xsl:for-each select="bul:Bulletin">
 																<li>
@@ -375,26 +452,34 @@
 																	<xsl:for-each select="bul:Conviction">
 																		<xsl:for-each select="bul:CriminalCase">
 																			<xsl:for-each select="bul:CaseNumber">
-																				<xsl:apply-templates/>
+																				<span style="font-weight:bold; ">
+																					<xsl:apply-templates/>
+																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseYear">
 																				<span>
 																					<xsl:text>/</xsl:text>
 																				</span>
-																				<xsl:apply-templates/>
+																				<span style="font-weight:bold; ">
+																					<xsl:apply-templates/>
+																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseType">
 																				<span>
 																					<xsl:text>&#160;</xsl:text>
 																				</span>
-																				<xsl:apply-templates/>
+																				<span style="font-weight:bold; ">
+																					<xsl:apply-templates/>
+																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseAuthority">
 																				<xsl:for-each select="bul:DecidingAuthorityName">
 																					<span>
 																						<xsl:text>, на </xsl:text>
 																					</span>
-																					<xsl:apply-templates/>
+																					<span style="font-weight:bold; ">
+																						<xsl:apply-templates/>
+																					</span>
 																				</xsl:for-each>
 																			</xsl:for-each>
 																		</xsl:for-each>
@@ -402,19 +487,23 @@
 																	<xsl:for-each select="bul:Conviction">
 																		<xsl:for-each select="bul:Decision">
 																			<xsl:for-each select="bul:DecisionType">
-																				<xsl:apply-templates/>
+																				<span style="font-weight:bold; ">
+																					<xsl:apply-templates/>
+																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:FileNumber">
 																				<span>
 																					<xsl:text>&#160;</xsl:text>
 																				</span>
-																				<xsl:apply-templates/>
+																				<span style="font-weight:bold; ">
+																					<xsl:apply-templates/>
+																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:DecisionDate">
 																				<span>
 																					<xsl:text> / </xsl:text>
 																				</span>
-																				<span>
+																				<span style="font-weight:bold; ">
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
 																					<xsl:text>.</xsl:text>
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
@@ -427,14 +516,16 @@
 																					<span>
 																						<xsl:text> на </xsl:text>
 																					</span>
-																					<xsl:apply-templates/>
+																					<span style="font-weight:bold; ">
+																						<xsl:apply-templates/>
+																					</span>
 																				</xsl:for-each>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:DecisionFinalDate">
 																				<span style="text-align:left; ">
 																					<xsl:text>, в сила от </xsl:text>
 																				</span>
-																				<span>
+																				<span style="font-weight:bold; ">
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
 																					<xsl:text>.</xsl:text>
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
@@ -445,40 +536,54 @@
 																		</xsl:for-each>
 																		<xsl:for-each select="bul:ConvictionRemarks">
 																			<div>
-																				<xsl:apply-templates/>
+																				<span style="font-weight:bold; ">
+																					<xsl:apply-templates/>
+																				</span>
 																			</div>
 																		</xsl:for-each>
 																		<ul start="0">
 																			<xsl:for-each select="bul:ConvictionOffence">
 																				<li>
 																					<xsl:for-each select="bul:OffenceId">
-																						<xsl:apply-templates/>
+																						<span style="font-weight:bold; ">
+																							<xsl:apply-templates/>
+																						</span>
 																					</xsl:for-each>
 																					<xsl:for-each select="bul:NationalCategoryTitle">
-																						<xsl:apply-templates/>
+																						<span style="font-weight:bold; ">
+																							<xsl:apply-templates/>
+																						</span>
 																					</xsl:for-each>
 																					<xsl:for-each select="bul:OffenceCommonCategoryReference">
 																						<xsl:for-each select="bul:OffenceName">
 																							<span>
 																								<xsl:text>, </xsl:text>
 																							</span>
-																							<xsl:apply-templates/>
+																							<span style="font-weight:bold; ">
+																								<xsl:apply-templates/>
+																							</span>
 																						</xsl:for-each>
 																					</xsl:for-each>
 																					<xsl:for-each select="bul:Remarks">
 																						<div>
-																							<xsl:apply-templates/>
+																							<span style="font-weight:bold; ">
+																								<xsl:apply-templates/>
+																							</span>
 																						</div>
 																					</xsl:for-each>
 																					<xsl:for-each select="bul:OffenceApplicableLegalProvisions">
 																						<div>
-																							<xsl:apply-templates/>
+																							<span style="font-weight:bold; ">
+																								<xsl:apply-templates/>
+																							</span>
 																						</div>
 																					</xsl:for-each>
 																					<xsl:for-each select="bul:OffencePlace">
 																						<xsl:for-each select="bul:Country">
 																							<xsl:for-each select="bul:CountryName">
-																								<xsl:apply-templates/>
+																								<span style="font-weight:bold; ">
+																									<xsl:apply-templates/>
+																								</span>
 																								<span>
 																									<xsl:text>; </xsl:text>
 																								</span>
@@ -486,14 +591,18 @@
 																						</xsl:for-each>
 																						<xsl:for-each select="bul:City">
 																							<xsl:for-each select="bul:CityName">
-																								<xsl:apply-templates/>
+																								<span style="font-weight:bold; ">
+																									<xsl:apply-templates/>
+																								</span>
 																								<span>
 																									<xsl:text>; </xsl:text>
 																								</span>
 																							</xsl:for-each>
 																						</xsl:for-each>
 																						<xsl:for-each select="bul:Descr">
-																							<xsl:apply-templates/>
+																							<span style="font-weight:bold; ">
+																								<xsl:apply-templates/>
+																							</span>
 																							<span>
 																								<xsl:text>; </xsl:text>
 																							</span>
@@ -585,53 +694,288 @@
 																							<li>
 																								<div>
 																									<xsl:for-each select="bul:SanctionId">
-																										<xsl:apply-templates/>
+																										<span style="font-weight:bold; ">
+																											<xsl:apply-templates/>
+																										</span>
 																									</xsl:for-each>
 																									<xsl:for-each select="bul:NationalCategoryTitle">
 																										<span>
 																											<xsl:text>&#160;</xsl:text>
 																										</span>
-																										<xsl:apply-templates/>
+																										<span style="font-weight:bold; ">
+																											<xsl:apply-templates/>
+																										</span>
 																									</xsl:for-each>
 																									<xsl:for-each select="bul:Remarks">
 																										<span>
 																											<xsl:text>&#160;</xsl:text>
 																										</span>
-																										<xsl:apply-templates/>
+																										<span style="font-weight:bold; ">
+																											<xsl:apply-templates/>
+																										</span>
 																									</xsl:for-each>
 																									<xsl:for-each select="bul:SanctionCommonCategoryReference">
 																										<xsl:for-each select="bul:SanctionText">
 																											<span>
 																												<xsl:text>&#160;</xsl:text>
 																											</span>
-																											<xsl:apply-templates/>
+																											<span style="font-weight:bold; ">
+																												<xsl:apply-templates/>
+																											</span>
 																										</xsl:for-each>
 																									</xsl:for-each>
 																									<xsl:for-each select="bul:Fine">
 																										<xsl:for-each select="bul:SanctionAmountOfIndividualFine">
+																											<span>
+																												<xsl:text>&#160;</xsl:text>
+																											</span>
 																											<span style="text-align:left; ">
 																												<xsl:text>в размер на </xsl:text>
 																											</span>
-																											<xsl:apply-templates/>
+																											<span style="font-weight:bold; ">
+																												<xsl:apply-templates/>
+																											</span>
 																											<span>
 																												<xsl:text> лв.</xsl:text>
 																											</span>
 																										</xsl:for-each>
 																									</xsl:for-each>
-																									<span>
-																										<xsl:text>&#160;</xsl:text>
-																									</span>
-																									<span style="text-align:left; ">
-																										<xsl:text>за срок от [Срок-години] години, [Срок-месеци] месеци,&#160; [Срок-дни] дни, [Срок-часове] часове</xsl:text>
-																									</span>
-																									<br/>
-																									<span style="text-align:left; ">
-																										<xsl:text>Освобождаването от изтърпяване на наказанието и неналагането на наказание съгласно НК, както и условното осъждане по чл. 66 ал.1 или чл.69, ал1 НК за срок от [Срок-години] години, [Срок-месеци] месеци,&#160; [Срок-дни] дни</xsl:text>
-																									</span>
-																									<br/>
-																									<span style="text-align:left; ">
-																										<xsl:text>[Приспадането и зачитането на предварителното задържане] [Вид пробационна мярка] – [Количество] [Мерна единица] за срок от [Срок-години] години, [Срок-месеци] месеци,&#160; [Срок-дни] дни, [Срок-часове] часове</xsl:text>
-																									</span>
+																									<xsl:for-each select="bul:Probation">
+																										<div>
+																											<xsl:for-each select="bul:ProbationCategoryTitle">
+																												<span style="font-weight:bold; ">
+																													<xsl:apply-templates/>
+																												</span>
+																											</xsl:for-each>
+																											<xsl:for-each select="bul:ProbationValue">
+																												<span>
+																													<xsl:text> - </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:apply-templates/>
+																												</span>
+																											</xsl:for-each>
+																											<xsl:for-each select="bul:ProbationMeasureTitle">
+																												<span>
+																													<xsl:text>&#160;</xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:apply-templates/>
+																												</span>
+																											</xsl:for-each>
+																											<xsl:for-each select="bul:SanctionSentencedPeriod">
+																												<span>
+																													<xsl:text>&#160;</xsl:text>
+																												</span>
+																												<span style="text-align:left; ">
+																													<xsl:text>за срок от</xsl:text>
+																												</span>
+																												<span>
+																													<xsl:text>&#160; </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationYear">
+																														<xsl:call-template name="DurationToYear">
+																															<xsl:with-param name="sDuration" select="string(string(.))"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationYear), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> г. </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationMonth">
+																														<xsl:call-template name="DurationToMonth">
+																															<xsl:with-param name="sDuration" select="string(.)"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationMonth), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> м. </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationDay">
+																														<xsl:call-template name="DurationToDay">
+																															<xsl:with-param name="sDuration" select="string(.)"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationDay), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> д. </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationHour">
+																														<xsl:call-template name="DurationToHour">
+																															<xsl:with-param name="sDuration" select="string(.)"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationHour), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> ч.</xsl:text>
+																												</span>
+																											</xsl:for-each>
+																										</div>
+																									</xsl:for-each>
+																									<xsl:for-each select="bul:Prison">
+																										<div>
+																											<xsl:for-each select="bul:SanctionSentencedPeriod">
+																												<span>
+																													<xsl:text>&#160;</xsl:text>
+																												</span>
+																												<span style="text-align:left; ">
+																													<xsl:text>за срок от</xsl:text>
+																												</span>
+																												<span>
+																													<xsl:text>&#160; </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationYear">
+																														<xsl:call-template name="DurationToYear">
+																															<xsl:with-param name="sDuration" select="string(string(.))"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationYear), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> г. </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationMonth">
+																														<xsl:call-template name="DurationToMonth">
+																															<xsl:with-param name="sDuration" select="string(.)"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationMonth), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> м. </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationDay">
+																														<xsl:call-template name="DurationToDay">
+																															<xsl:with-param name="sDuration" select="string(.)"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationDay), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> д. </xsl:text>
+																												</span>
+																												<span style="font-weight:bold; ">
+																													<xsl:variable name="sDurationHour">
+																														<xsl:call-template name="DurationToHour">
+																															<xsl:with-param name="sDuration" select="string(.)"/>
+																														</xsl:call-template>
+																													</xsl:variable>
+																													<xsl:value-of select="format-number(number($sDurationHour), '0', 'format1')"/>
+																												</span>
+																												<span>
+																													<xsl:text> ч.</xsl:text>
+																												</span>
+																											</xsl:for-each>
+																											<xsl:for-each select="bul:SanctionSuspension">
+																												<div>
+																													<span style="text-align:left; ">
+																														<xsl:text>Освобождаването от изтърпяване на наказанието и неналагането на наказание съгласно НК, както и условното осъждане по чл. 66 ал.1 или чл.69, ал1 НК за срок от </xsl:text>
+																													</span>
+																													<span>
+																														<xsl:text>&#160;</xsl:text>
+																													</span>
+																													<span style="text-align:left; ">
+																														<xsl:text>за срок от</xsl:text>
+																													</span>
+																													<span>
+																														<xsl:text>&#160; </xsl:text>
+																													</span>
+																													<span style="font-weight:bold; ">
+																														<xsl:variable name="sDurationYear">
+																															<xsl:call-template name="DurationToYear">
+																																<xsl:with-param name="sDuration" select="string(string(.))"/>
+																															</xsl:call-template>
+																														</xsl:variable>
+																														<xsl:value-of select="format-number(number($sDurationYear), '0', 'format1')"/>
+																													</span>
+																													<span>
+																														<xsl:text> г. </xsl:text>
+																													</span>
+																													<span style="font-weight:bold; ">
+																														<xsl:variable name="sDurationMonth">
+																															<xsl:call-template name="DurationToMonth">
+																																<xsl:with-param name="sDuration" select="string(.)"/>
+																															</xsl:call-template>
+																														</xsl:variable>
+																														<xsl:value-of select="format-number(number($sDurationMonth), '0', 'format1')"/>
+																													</span>
+																													<span>
+																														<xsl:text> м. </xsl:text>
+																													</span>
+																													<span style="font-weight:bold; ">
+																														<xsl:variable name="sDurationDay">
+																															<xsl:call-template name="DurationToDay">
+																																<xsl:with-param name="sDuration" select="string(.)"/>
+																															</xsl:call-template>
+																														</xsl:variable>
+																														<xsl:value-of select="format-number(number($sDurationDay), '0', 'format1')"/>
+																													</span>
+																													<span>
+																														<xsl:text> д.</xsl:text>
+																													</span>
+																												</div>
+																											</xsl:for-each>
+																											<xsl:for-each select="bul:DetentionDescription">
+																												<span style="font-weight:bold; ">
+																													<xsl:apply-templates/>
+																												</span>
+																											</xsl:for-each>
+																										</div>
+																									</xsl:for-each>
+																									<xsl:for-each select="bul:Other">
+																										<xsl:for-each select="bul:SanctionSentencedPeriodLength">
+																											<span style="text-align:left; ">
+																												<xsl:text>за срок от</xsl:text>
+																											</span>
+																											<span>
+																												<xsl:text>&#160; </xsl:text>
+																											</span>
+																											<span style="font-weight:bold; ">
+																												<xsl:variable name="sDurationYear">
+																													<xsl:call-template name="DurationToYear">
+																														<xsl:with-param name="sDuration" select="string(string(.))"/>
+																													</xsl:call-template>
+																												</xsl:variable>
+																												<xsl:value-of select="format-number(number($sDurationYear), '0', 'format1')"/>
+																											</span>
+																											<span>
+																												<xsl:text> г. </xsl:text>
+																											</span>
+																											<span style="font-weight:bold; ">
+																												<xsl:variable name="sDurationMonth">
+																													<xsl:call-template name="DurationToMonth">
+																														<xsl:with-param name="sDuration" select="string(.)"/>
+																													</xsl:call-template>
+																												</xsl:variable>
+																												<xsl:value-of select="format-number(number($sDurationMonth), '0', 'format1')"/>
+																											</span>
+																											<span>
+																												<xsl:text> м. </xsl:text>
+																											</span>
+																											<span style="font-weight:bold; ">
+																												<xsl:variable name="sDurationDay">
+																													<xsl:call-template name="DurationToDay">
+																														<xsl:with-param name="sDuration" select="string(.)"/>
+																													</xsl:call-template>
+																												</xsl:variable>
+																												<xsl:value-of select="format-number(number($sDurationDay), '0', 'format1')"/>
+																											</span>
+																											<span>
+																												<xsl:text> д. </xsl:text>
+																											</span>
+																										</xsl:for-each>
+																									</xsl:for-each>
 																								</div>
 																							</li>
 																						</ul>
@@ -649,14 +993,111 @@
 										</xsl:for-each>
 									</td>
 								</tr>
-								<tr>
-									<td style="padding-bottom:0.1in; " align="center" colspan="2"/>
-								</tr>
 							</tbody>
 						</table>
 					</xsl:for-each>
 				</xsl:for-each>
 			</body>
 		</html>
+	</xsl:template>
+	<xsl:template name="DurationToYear">
+		<xsl:param name="sDuration"/>
+		<xsl:variable name="sDate">
+			<xsl:choose>
+				<xsl:when test="contains(string($sDuration), 'T')">
+					<xsl:value-of select="substring-before(string($sDuration), 'T')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="string($sDuration)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="sYear" select="substring-before(substring-after($sDate, 'P'), 'Y')"/>
+		<xsl:choose>
+			<xsl:when test="string-length($sYear)=0">
+				<xsl:value-of select="'0'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat(substring-before(string($sDuration), 'P'), $sYear)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<xsl:template name="DurationToMonth">
+		<xsl:param name="sDuration"/>
+		<xsl:variable name="sDate">
+			<xsl:choose>
+				<xsl:when test="contains(string($sDuration), 'T')">
+					<xsl:value-of select="substring-before(string($sDuration), 'T')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="string($sDuration)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="sMonth">
+			<xsl:choose>
+				<xsl:when test="contains($sDate, 'Y')">
+					<xsl:value-of select="substring-before(substring-after($sDate, 'Y'), 'M')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="substring-before(substring-after($sDate, 'P'), 'M')"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="string-length($sMonth)=0">
+				<xsl:value-of select="'0'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat(substring-before(string($sDuration), 'P'), $sMonth)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<xsl:template name="DurationToDay">
+		<xsl:param name="sDuration"/>
+		<xsl:variable name="sDate">
+			<xsl:choose>
+				<xsl:when test="contains(string($sDuration), 'T')">
+					<xsl:value-of select="substring-before(string($sDuration), 'T')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="string($sDuration)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="sDay">
+			<xsl:choose>
+				<xsl:when test="contains($sDate, 'M')">
+					<xsl:value-of select="substring-before(substring-after($sDate, 'M'), 'D')"/>
+				</xsl:when>
+				<xsl:when test="contains($sDate, 'Y')">
+					<xsl:value-of select="substring-before(substring-after($sDate, 'Y'), 'D')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="substring-before(substring-after($sDate, 'P'), 'D')"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="string-length($sDay)=0">
+				<xsl:value-of select="'0'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat(substring-before(string($sDuration), 'P'), $sDay)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<xsl:template name="DurationToHour">
+		<xsl:param name="sDuration"/>
+		<xsl:variable name="sTime" select="substring-after(string($sDuration), 'T')"/>
+		<xsl:variable name="sHour" select="substring-before($sTime, 'H')"/>
+		<xsl:choose>
+			<xsl:when test="string-length($sHour)=0">
+				<xsl:value-of select="'0'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat(substring-before(string($sDuration), 'P'), $sHour)"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
