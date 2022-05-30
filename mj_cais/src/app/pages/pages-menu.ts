@@ -175,6 +175,11 @@ export class PagesMenu {
           },
         ],
       },
+      {
+        title: "Управление на бюлетини",
+        icon: { icon: "cog", pack: "fa" },
+        link: "/pages/bulletins-administration",    
+      },
     ];
 
     return dashboardMenu;

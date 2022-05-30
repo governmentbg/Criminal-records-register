@@ -54,6 +54,7 @@ import { BulletinEventsOverviewComponent } from "./bulletin-events/bulletin-even
 import { ApplicationWaitingPaymentComponent } from "./application/application-overview/application-waiting-payment/application-waiting-payment.component";
 import { ApplicationTaxFreeOverviewComponent } from "./application/application-overview/application-tax-free-overview/application-tax-free-overview.component";
 import { ApplicationForCheckComponent } from "./application/application-overview/application-for-check/application-for-check.component";
+import { BulletinAdministrationOverviewComponent } from "./bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component";
 
 const routes: Routes = [
   {
@@ -157,6 +158,11 @@ const routes: Routes = [
       {
         path: "bulletin-events",
         component: BulletinEventsOverviewComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "bulletins-administration",
+        component: BulletinAdministrationOverviewComponent,
         // canActivate: [AuthGuard],
       },
       {

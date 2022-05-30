@@ -68,6 +68,7 @@ import { ApplicationTaxFreeOverviewComponent } from './application/application-o
 import { ApplicationForCheckComponent } from './application/application-overview/application-for-check/application-for-check.component';
 import { ApplicationForSigningComponent } from './application/application-overview/application-for-signing/application-for-signing.component';
 import { ApplicationForSiningByJudgeComponent } from './application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component';
+import { BulletinAdministrationOverviewComponent } from './bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component';
 
 @NgModule({
   imports: [
@@ -141,7 +142,8 @@ import { ApplicationForSiningByJudgeComponent } from './application/application-
     ApplicationTaxFreeOverviewComponent,
     ApplicationForCheckComponent,
     ApplicationForSigningComponent,
-    ApplicationForSiningByJudgeComponent
+    ApplicationForSiningByJudgeComponent,
+    BulletinAdministrationOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })
