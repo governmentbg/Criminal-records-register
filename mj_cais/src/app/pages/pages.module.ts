@@ -66,6 +66,8 @@ import { BulletinEventsArticleOverviewComponent } from './bulletin-events/bullet
 import { BulletinEventsDocumentOverviewComponent } from './bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
 import { ApplicationTaxFreeOverviewComponent } from './application/application-overview/application-tax-free-overview/application-tax-free-overview.component';
 import { ApplicationForCheckComponent } from './application/application-overview/application-for-check/application-for-check.component';
+import { EcrisTcnFormComponent } from './ecris-tcn/ecris-tcn-form/ecris-tcn-form.component';
+import { EcrisTcnOverviewComponent } from './ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component';
 
 @NgModule({
   imports: [
@@ -137,7 +139,9 @@ import { ApplicationForCheckComponent } from './application/application-overview
     BulletinEventsArticleOverviewComponent,
     BulletinEventsDocumentOverviewComponent,
     ApplicationTaxFreeOverviewComponent,
-    ApplicationForCheckComponent
+    ApplicationForCheckComponent,
+    EcrisTcnFormComponent,
+    EcrisTcnOverviewComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })
