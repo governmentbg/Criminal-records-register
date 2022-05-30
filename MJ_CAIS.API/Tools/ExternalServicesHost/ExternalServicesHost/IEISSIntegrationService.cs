@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using MJ_CAIS.IntegrationModel;
+using MJ_CAIS.DTO.ExternalServicesHost;
 
 namespace MJ_CAIS.ExternalServicesHost
 {
