@@ -141,6 +141,10 @@ export class PagesMenu {
             title: "Запитвания",
             link: "/pages/ecris-req-waiting",
           },
+          {
+            title: "ECRIS-TCN",
+            link: "/pages/ecris-tcns",
+          },
         ],
       },
       {
@@ -174,6 +178,11 @@ export class PagesMenu {
             hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
         ],
+      },
+      {
+        title: "Управление на бюлетини",
+        icon: { icon: "cog", pack: "fa" },
+        link: "/pages/bulletins-administration",    
       },
     ];
 
