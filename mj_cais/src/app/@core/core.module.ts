@@ -49,6 +49,7 @@ import { DatePrecisionComponent } from "./components/forms/inputs/date-precision
 import { HttpClient } from "@angular/common/http";
 import { PersonFormComponent } from "./components/forms/person-form/person-form.component";
 import { PersonAliasFormComponent } from "./components/forms/person-form/person-alias-form/person-alias-form.component";
+import { ConfirmTemplateDialogComponent } from './components/dialogs/confirm-template-dialog/confirm-template-dialog.component';
 
 const socialLinks = [
   {
@@ -153,7 +154,7 @@ const COMPONENTS = [
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
   ],
-  declarations: [...COMPONENTS],
+  declarations: [...COMPONENTS, ConfirmTemplateDialogComponent],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
   ],

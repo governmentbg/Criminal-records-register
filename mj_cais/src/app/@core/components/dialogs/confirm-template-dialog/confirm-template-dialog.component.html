@@ -1,0 +1,28 @@
+<nb-card>
+    <nb-card-header>Сигурни ли сте?</nb-card-header>
+    <nb-card-body>
+      <ng-container *ngIf="showHeder">
+        <h5 class="mt-0">{{title}}</h5>
+      </ng-container>
+      {{confirmMessage}}
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-6">
+          <button
+            nbButton
+            matRipple
+            fullWidth
+            status="success"
+            (click)="success()"
+          >
+            Да
+          </button>
+        </div>
+        <div class="col-6">
+          <button nbButton matRipple fullWidth (click)="dismiss()">Не</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+  
