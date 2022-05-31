@@ -29,8 +29,7 @@ namespace MJ_CAIS.ExternalWebServices
             IPdfSigner pdfSignerService, IPrintDocumentService printerService, ICertificateService certificateService)
             : base(mapper, certificateRepository)
         {
-            _certificateRepository = certificateRepository;
-         
+            _certificateRepository = certificateRepository;         
             _pdfSignerService = pdfSignerService;
             _printerService = printerService;
             _certificateService = certificateService;
@@ -45,8 +44,9 @@ namespace MJ_CAIS.ExternalWebServices
             var certificate = await dbContext.ACertificates
                                     .Include(c => c.AAppBulletins)
                                     .Include(c => c.Application)
-                                    .Include(c => c.Application).ThenInclude(c1=>c1.Purpose)
-                                    .Include(c => c.Application).ThenInclude(c1=>c1.SrvcResRcptMeth)
+                                    .ThenInclude(appl => appl.PurposeNavigation)
+                                    .Include(c => c.Application.SrvcResRcptMeth)
+                                    .Include(c => c.AStatusHes)
                                     .FirstOrDefaultAsync(x => x.Id == certificateID);
             if (certificate == null)
             {
@@ -81,7 +81,7 @@ namespace MJ_CAIS.ExternalWebServices
         {
 
             byte[] contentCertificate;
-            string checkUrl = await GetURLForQRCodeAsync(certificate.AccessCode1, webportalUrl);
+            string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             bool containsBulletins = false;
             if (certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() == 0)
             {
@@ -249,28 +249,28 @@ namespace MJ_CAIS.ExternalWebServices
 
         }
 
-        private string GetUrlOfCertificateReport(JasperReportsNames reportName)
-        {
+        //private string GetUrlOfCertificateReport(JasperReportsNames reportName)
+        //{
 
-            return $"{CertificateConstants.UrlsInJasper.REPORTS_URL}/{reportName}";
-        }
+        //    return $"{CertificateConstants.UrlsInJasper.REPORTS_URL}/{reportName}";
+        //}
 
 
 
-        private async Task<string> GetURLForQRCodeAsync(string? accessCode1, string webportalUrl)
-        {
-            var url = webportalUrl;
-            if (string.IsNullOrEmpty(webportalUrl))
-            {
-                url = await GetWebPortalAddress();
-                if (url == null)
-                {
-                    //todo:resources & EH
-                    throw new Exception("Web portal URL is not set.");
-                }
-            }
-            return $"{url}/{CertificateConstants.UrlsInPublicSites.VIEW_CERTIFICATE_URL}/{accessCode1}";
-        }
+        //private async Task<string> GetURLForQRCodeAsync(string? accessCode1, string webportalUrl)
+        //{
+        //    var url = webportalUrl;
+        //    if (string.IsNullOrEmpty(webportalUrl))
+        //    {
+        //        url = await GetWebPortalAddress();
+        //        if (url == null)
+        //        {
+        //            //todo:resources & EH
+        //            throw new Exception("Web portal URL is not set.");
+        //        }
+        //    }
+        //    return $"{url}/{CertificateConstants.UrlsInPublicSites.VIEW_CERTIFICATE_URL}/{accessCode1}";
+        //}
 
         private async Task<string> GetURLForAccessAsync(string? accessCode1, string webportalUrl)
         {
@@ -301,7 +301,7 @@ namespace MJ_CAIS.ExternalWebServices
 
             foreach (var placeHolder in placeholdersAndValues)
             {
-                string placeholderName = string.Format("[{0}]", placeHolder.Key);
+                string placeholderName = $"[{{{placeHolder.Key}}}]";
                 htmlCode = htmlCode.Replace(placeholderName, placeHolder.Value);
             }
             return htmlCode;

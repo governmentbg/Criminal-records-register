@@ -89,7 +89,7 @@ namespace AutomaticStepsExecutor
                        var file =  await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, 
                                                                     statusCertificateServerSign, statusForDelivery, statusCertificatePaperprint,  webPortalUrl);
                         await _dbContext.SaveChangesAsync();
-                       // System.IO.File.WriteAllBytes($"certificate{certificate.Id}.pdf", file);
+                      //  System.IO.File.WriteAllBytes($"certificate_{certificate.Id}.pdf", file);
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -113,6 +113,7 @@ namespace AutomaticStepsExecutor
                                     .Include(c => c.Application)
                                     .ThenInclude(appl => appl.PurposeNavigation)                            
                                     .Include(c=>c.Application.SrvcResRcptMeth)
+                                    .Include(c=>c.AStatusHes)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                               .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)

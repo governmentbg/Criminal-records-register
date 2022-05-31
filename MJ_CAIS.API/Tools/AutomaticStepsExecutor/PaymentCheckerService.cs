@@ -112,10 +112,12 @@ namespace AutomaticStepsExecutor
                             {
                                 _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
                                 //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
-                            }
-                            _dbContext.WApplications.Update(wapplication);
-                        }
+                                _dbContext.WApplications.Update(wapplication);
 
+                            }
+                          
+                        }
+                     
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }

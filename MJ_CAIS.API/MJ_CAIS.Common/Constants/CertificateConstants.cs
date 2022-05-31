@@ -11,8 +11,8 @@ namespace MJ_CAIS.Common.Constants
         public static class UrlsInPublicSites
         {
             //todo:fill data
-            public static string VIEW_CERTIFICATE_URL = "";
-            public static string GET_CERTIFICATE_URL = "";
+           // public static string VIEW_CERTIFICATE_URL = "cartificates";
+            public static string GET_CERTIFICATE_URL = "certificates";
         }
         public static class UrlsInJasper
         {
