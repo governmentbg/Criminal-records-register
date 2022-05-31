@@ -22,7 +22,7 @@
     <igx-grid-toolbar-actions>
       <div class="ml-auto">
         <nb-toggle
-          (checkedChange)="onShowAllApplicationsChange($event)"
+          (checkedChange)="onShowAllEcrisTcnsChange($event)"
           status="info"
           labelPosition="left"
           >Всички записи</nb-toggle
@@ -153,12 +153,12 @@
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <!-- <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/ecris-tcns/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a> -->
+      <a [title]="'Обработен'" (click)="changeToApproved(cell.rowData.id)">
+        <i class="fas fa-check"></i>
+      </a>
+      <a [title]="'Откажи'" (click)="changeToCancelled(cell.rowData.id)">
+        <i class="fas fa-times"></i>
+      </a>
     </ng-template>
   </igx-column>
 
