@@ -1493,12 +1493,6 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         
         private bool formOfGuiltFieldSpecified;
         
-        private bool withoutSanctionField;
-        
-        private bool withoutSanctionFieldSpecified;
-        
-        private SanctionType[] convictionSanctionField;
-        
         /// <summary>
         /// Вътрешен идентификатор на престъпление, уникално за бюлетина
         /// </summary>
@@ -1646,44 +1640,6 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
             }
             set {
                 this.formOfGuiltFieldSpecified = value;
-            }
-        }
-        
-        /// <summary>
-        /// Не се наказва
-        /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
-        [System.ComponentModel.DescriptionAttribute("Не се наказва")]
-        public bool WithoutSanction {
-            get {
-                return this.withoutSanctionField;
-            }
-            set {
-                this.withoutSanctionField = value;
-            }
-        }
-        
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool WithoutSanctionSpecified {
-            get {
-                return this.withoutSanctionFieldSpecified;
-            }
-            set {
-                this.withoutSanctionFieldSpecified = value;
-            }
-        }
-        
-        /// <summary>
-        /// Наказания
-        /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute("ConvictionSanction", Order=11)]
-        [System.ComponentModel.DescriptionAttribute("Наказания")]
-        public SanctionType[] ConvictionSanction {
-            get {
-                return this.convictionSanctionField;
-            }
-            set {
-                this.convictionSanctionField = value;
             }
         }
     }
@@ -2047,6 +2003,12 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         
         private OffenceType[] convictionOffenceField;
         
+        private bool withoutSanctionField;
+        
+        private bool withoutSanctionFieldSpecified;
+        
+        private SanctionType[] convictionSanctionField;
+        
         private bool servingPrevSuspendedSentenceField;
         
         private bool servingPrevSuspendedSentenceFieldSpecified;
@@ -2114,9 +2076,47 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         }
         
         /// <summary>
-        /// постановено изтърпяване на предходна условна присъда
+        /// Не се наказва
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [System.ComponentModel.DescriptionAttribute("Не се наказва")]
+        public bool WithoutSanction {
+            get {
+                return this.withoutSanctionField;
+            }
+            set {
+                this.withoutSanctionField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool WithoutSanctionSpecified {
+            get {
+                return this.withoutSanctionFieldSpecified;
+            }
+            set {
+                this.withoutSanctionFieldSpecified = value;
+            }
+        }
+        
+        /// <summary>
+        /// Наказания
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute("ConvictionSanction", Order=5)]
+        [System.ComponentModel.DescriptionAttribute("Наказания")]
+        public SanctionType[] ConvictionSanction {
+            get {
+                return this.convictionSanctionField;
+            }
+            set {
+                this.convictionSanctionField = value;
+            }
+        }
+        
+        /// <summary>
+        /// постановено изтърпяване на предходна условна присъда
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         [System.ComponentModel.DescriptionAttribute("постановено изтърпяване на предходна условна присъда")]
         public bool ServingPrevSuspendedSentence {
             get {
@@ -2140,7 +2140,7 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         /// <summary>
         /// Номер на акта на предходната условна присъда
         /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         [System.ComponentModel.DescriptionAttribute("Номер на акта на предходната условна присъда")]
         public string ServingPrevSuspendedSentenceActNumber {
             get {
@@ -2154,7 +2154,7 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         /// <summary>
         /// Допълнителни сведения
         /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute("ConvictionDecisions", Order=6)]
+        [System.Xml.Serialization.XmlElementAttribute("ConvictionDecisions", Order=8)]
         [System.ComponentModel.DescriptionAttribute("Допълнителни сведения")]
         public DecisionChangeType[] ConvictionDecisions {
             get {
@@ -2168,7 +2168,7 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         /// <summary>
         /// Id на осъждане в ECRIS
         /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
         [System.ComponentModel.DescriptionAttribute("Id на осъждане в ECRIS")]
         public string EcrisConvictionId {
             get {

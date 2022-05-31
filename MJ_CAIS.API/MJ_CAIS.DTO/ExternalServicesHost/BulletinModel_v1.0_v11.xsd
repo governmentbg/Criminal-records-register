@@ -842,16 +842,6 @@
 					<xs:documentation>Форма на вината(умишлено, непредпазливо)</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="WithoutSanction" type="xs:boolean" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>Не се наказва</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="ConvictionSanction" type="SanctionType" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Наказания</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OffenceRefType">
@@ -1234,6 +1224,16 @@
 			<xs:element name="ConvictionOffence" type="OffenceType" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Престъпление</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WithoutSanction" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Не се наказва</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConvictionSanction" type="SanctionType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Наказания</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ServingPrevSuspendedSentence" type="xs:boolean" minOccurs="0">
