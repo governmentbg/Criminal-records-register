@@ -11,6 +11,7 @@ namespace MJ_CAIS.DTO.EcrisTcn
         public string? Surname { get; set; }
         public string? Familyname { get; set; }
         public DateTime? BirthDate { get; set; }
-        public string? BirthCountryName { get; set; }
+        public string? BirthPlace { get; set; }
+        public string? BulletinId { get; set; }
     }
 }
