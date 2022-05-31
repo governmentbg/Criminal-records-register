@@ -184,8 +184,6 @@ namespace MJ_CAIS.Services
             if (bulletin == null)
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
-            var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(oldBulletinStatus, statusId, aInDto);
 
             // All active bulletins are locked for editing
             // only decisions can be added
@@ -204,6 +202,10 @@ namespace MJ_CAIS.Services
                 nameof(bulletin.StatusId),
                 nameof(bulletin.Version)
             };
+
+
+            var oldBulletinStatus = bulletin.StatusId;
+            AddBulletinStatusH(oldBulletinStatus, statusId, aInDto, bulletin.Locked);
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
                 statusId == Status.Active;
@@ -383,7 +385,7 @@ namespace MJ_CAIS.Services
             // save old status
             if (entity.EntityState == EntityStateEnum.Modified)
             {
-                var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id);
+                var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id, entity.Locked);
                 if (isAddedHistory)
                 {
                     UpdateModifiedProperties(entity, nameof(entity.StatusId));
@@ -492,20 +494,21 @@ namespace MJ_CAIS.Services
         /// <param name="oldStatus">Previous status</param>
         /// <param name="newStatus">New status</param>
         /// <param name="bulletinId">ID</param>
-        private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
+        private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId, bool? isLocked)
         {
             if (!string.IsNullOrEmpty(oldStatus) && oldStatus != newStatus)
             {
-                var satusHistory = new BBulletinStatusH
+                var statusHistory = new BBulletinStatusH
                 {
                     Id = Guid.NewGuid().ToString(),
                     BulletinId = bulletinId,
                     OldStatusCode = oldStatus,
                     NewStatusCode = newStatus,
                     EntityState = EntityStateEnum.Added,
+                    Locked = isLocked
                 };
 
-                dbContext.ApplyChanges(satusHistory, new List<IBaseIdEntity>());
+                dbContext.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
                 return true;
             }
 

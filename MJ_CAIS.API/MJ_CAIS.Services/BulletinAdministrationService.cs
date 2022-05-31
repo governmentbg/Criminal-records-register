@@ -1,4 +1,5 @@
 using AutoMapper;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.BulletinAdministration;
@@ -16,10 +17,41 @@ namespace MJ_CAIS.Services
         {
             _bulletinAdministrationRepository = bulletinAdministrationRepository;
         }
-
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
+        }
+
+        public async Task UnlockBulletinAsync(UnlockBulletinModelDTO aInDto)
+        {
+            var bulletin = await _bulletinAdministrationRepository.GetBulletinByIdAsync(aInDto.BulletinId);
+
+            if (bulletin == null) throw new ArgumentNullException($"Bulletin with id {aInDto.BulletinId} does not exist");
+
+            bulletin.EntityState = EntityStateEnum.Modified;
+            bulletin.ModifiedProperties = new List<string> { nameof(bulletin.Locked), nameof(bulletin.Version) };
+            bulletin.Locked = false;
+
+            if (bulletin.StatusId != aInDto.Status)
+            {
+                bulletin.StatusId = aInDto.Status;
+                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
+            }
+
+            var statusHis = new BBulletinStatusH()
+            {
+                Id = BaseEntity.GenerateNewId(),
+                EntityState = EntityStateEnum.Added,
+                BulletinId = bulletin.Id,
+                Descr = aInDto.Description,
+                NewStatusCode = aInDto.Status,
+                OldStatusCode = bulletin.StatusId,
+                Locked = false,
+            };
+
+            dbContext.ApplyChanges(statusHis, new List<IBaseIdEntity>());
+            dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
+            await dbContext.SaveChangesAsync();
         }
     }
 }

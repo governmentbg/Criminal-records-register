@@ -31,5 +31,11 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+
+        public async Task<BBulletin> GetBulletinByIdAsync(string id)
+        {
+            var bulletin = await _dbContext.BBulletins.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return bulletin;
+        }
     }
 }

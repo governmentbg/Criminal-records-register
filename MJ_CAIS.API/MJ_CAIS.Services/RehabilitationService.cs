@@ -391,20 +391,20 @@ namespace MJ_CAIS.Services
 
             // this entity is attached to context
             bulletin.RehabilitationDate = rehabilitationDate;
-            if (!string.IsNullOrEmpty(status))
-            {
-                var satusHistory = new BBulletinStatusH
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    BulletinId = bulletin.Id,
-                    OldStatusCode = bulletin.StatusId,
-                    NewStatusCode = status,
-                    EntityState = EntityStateEnum.Added,
-                };
+            if (string.IsNullOrEmpty(status)) return;
 
-                dbContext.ApplyChanges(satusHistory, new List<IBaseIdEntity>());
-                bulletin.StatusId = status;
-            }
+            var statusHistory = new BBulletinStatusH
+            {
+                Id = Guid.NewGuid().ToString(),
+                BulletinId = bulletin.Id,
+                OldStatusCode = bulletin.StatusId,
+                NewStatusCode = status,
+                EntityState = EntityStateEnum.Added,
+                Locked = bulletin.Locked
+            };
+
+            dbContext.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
+            bulletin.StatusId = status;
         }
 
         private static bool IsInDurationInYears(Duration duration, int maxYear)

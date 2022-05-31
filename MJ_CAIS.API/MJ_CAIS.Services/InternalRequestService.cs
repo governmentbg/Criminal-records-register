@@ -85,7 +85,7 @@ namespace MJ_CAIS.Services
                 ModifiedProperties = new List<string> { nameof(BBulletin.StatusId), nameof(BBulletin.Version) },
             };
 
-            var satusHistory = new BBulletinStatusH
+            var statusHistory = new BBulletinStatusH
             {
                 Id = Guid.NewGuid().ToString(),
                 BulletinId = entity.BulletinId,
@@ -96,7 +96,7 @@ namespace MJ_CAIS.Services
             };
 
             bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
-            bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { satusHistory };
+            bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { statusHistory };
 
             await dbContext.SaveEntityAsync(bulletin, true);
         }
