@@ -10,6 +10,7 @@ namespace MJ_CAIS.Web.Controllers
 {
     [Route("ecris-tcns")]
     [AllowAnonymous]
+    //[Authorize(Roles = "CentralAuth")]
     public class EcrisTcnsController : BaseApiCrudController<EcrisTcnDTO, EcrisTcnDTO, EcrisTcnGridDTO, EEcrisTcn, string>
     {
         private readonly IEcrisTcnService _ecrisTcnService;

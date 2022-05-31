@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
-import { EcrisTcnTypeStatusConstants } from "../ecris-tcn-form/models/ecris-tcn-type-status.constants";
+import { EcrisTcnTypeStatusConstants } from "./models/ecris-tcn-type-status.constants";
 import { EcrisTcnGridService } from "./data/ecris-tcn-grid.service";
 import { EcrisTcnGridModel } from "./models/ecris-tcn-grid.model";
 

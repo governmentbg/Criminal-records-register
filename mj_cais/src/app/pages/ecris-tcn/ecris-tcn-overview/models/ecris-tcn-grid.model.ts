@@ -10,7 +10,8 @@ export class EcrisTcnGridModel extends BaseModel {
   public surname: string = null;
   public familyname: string = null;
   public birthDate: Date = null;
-  public birthCountryName: string = null;
+  public birthPlace: string = null;
+  public bulletinId: string = null;
 
   constructor(init?: Partial<EcrisTcnGridModel>) {
     super(init);
@@ -24,7 +25,8 @@ export class EcrisTcnGridModel extends BaseModel {
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;
       this.birthDate = init.birthDate ?? null;
-      this.birthCountryName = init.birthCountryName ?? null;
+      this.birthPlace = init.birthPlace ?? null;
+      this.bulletinId = init.bulletinId ?? null;
     }
   }
 }

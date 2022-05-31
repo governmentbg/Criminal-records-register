@@ -144,6 +144,7 @@ export class PagesMenu {
           {
             title: "ECRIS-TCN",
             link: "/pages/ecris-tcns",
+            // hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
         ],
       },
