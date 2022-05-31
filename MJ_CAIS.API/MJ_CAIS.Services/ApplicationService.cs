@@ -78,7 +78,7 @@ namespace MJ_CAIS.Services
             if (pids.Count > 0)
             {
                 var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
-                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).Distinct().ToListAsync();
+                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId))).ToListAsync();
                 if (bulletins.Count > 0)
                 {
                    await  ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus, certificateValidityMonths, applicationStatus);
@@ -136,7 +136,7 @@ namespace MJ_CAIS.Services
         {
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             int orderNumber = 0;
-            cert.AAppBulletins= bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
+            cert.AAppBulletins= bulletins.OrderByDescending(b => b.CreatedOn.HasValue? b.CreatedOn.Value.Date : DateTime.Now).ThenByDescending(b=>b.DecisionDate).Select(b =>
             {
                 orderNumber++;
                 return new AAppBulletin()

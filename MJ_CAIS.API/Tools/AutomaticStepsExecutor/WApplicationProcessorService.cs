@@ -6,7 +6,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;

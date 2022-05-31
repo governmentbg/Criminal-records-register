@@ -42,7 +42,7 @@ namespace MJ_CAIS.Services
             if (application.EgnId != null && application.EgnNavigation != null)
             {
                 pids.Add(application.EgnNavigation.PersonId);
-
+        
             }
             if (application.LnchId != null && application.LnchNavigation != null)
             {
@@ -70,7 +70,7 @@ namespace MJ_CAIS.Services
             if (pids.Count > 0)
             {
                 var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
-                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.PersonId))).Distinct().ToListAsync();
+                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId))).Select(b=> new { b.Id, b.DecisionDate}).Distinct().ToListAsync();
                 if (bulletins.Count > 0)
                 {
                     rep.ARepBulletins = bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
@@ -80,7 +80,7 @@ namespace MJ_CAIS.Services
                         {
                             Id = BaseEntity.GenerateNewId(),
                             BulletinId = b.Id,
-                            Bulletin = b,
+                            //Bulletin = b,
                             ReportId = rep.Id,
                             Report = rep
 
