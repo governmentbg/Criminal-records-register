@@ -23,13 +23,21 @@ export class PersonFormComponent implements OnInit {
   public isBulletinContext: boolean;
   public isPersonContext: boolean;
   public isApplicationContext: boolean;
+  public showEgnDisplay: boolean;
 
   ngOnInit(): void {
     // when form is init context type must be set
-   
+
     this.isFbbcContext = this.contextType == PersonContextEnum.Fbbc;
-    this.isBulletinContext =  this.contextType == PersonContextEnum.Bulletin;
-    this.isPersonContext =  this.contextType == PersonContextEnum.Person;
-    this.isApplicationContext =  this.contextType == PersonContextEnum.Application;
+    this.isBulletinContext = this.contextType == PersonContextEnum.Bulletin;
+    this.isPersonContext = this.contextType == PersonContextEnum.Person;
+    this.isApplicationContext =
+      this.contextType == PersonContextEnum.Application;
+
+    if (this.isFbbcContext && this.personForm.egn.value) {
+      this.personForm.egnDisplay.patchValue(this.personForm.egn.value);
+      this.personForm.egnDisplay.disable();
+      this.showEgnDisplay = true;
+    }
   }
 }

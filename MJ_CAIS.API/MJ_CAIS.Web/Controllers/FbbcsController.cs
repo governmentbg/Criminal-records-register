@@ -39,6 +39,15 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("create")]
+        public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
+        {
+            var result = await this._fbbcService.SelectWithPersonDataAsync(personId);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
         [HttpPost("")]
         public new async Task<IActionResult> Post([FromBody] FbbcDTO aInDto)
         {

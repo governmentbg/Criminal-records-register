@@ -1,4 +1,5 @@
 using MJ_CAIS.DTO.Common;
+using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.DTO.Fbbc
 {
@@ -10,25 +11,10 @@ namespace MJ_CAIS.DTO.Fbbc
         public DateTime? ReceiveDate { get; set; }
         public DateTime? IssueDate { get; set; }
         public string? CountryDescr { get; set; }
-        public string? Egn { get; set; }
-        public string? Firstname { get; set; }
-        public string? Surname { get; set; }
-        public string? Familyname { get; set; }
-        public string? BirthPlace { get; set; }
-        public string? BirthCityId { get; set; }
-        public string? BirtyCountryDescr { get; set; }
-        public string? BirthCountryId { get; set; }
-        public DateTime? BirthDate { get; set; }
-        public string? BirthDatePrec { get; set; }
+        public PersonDTO  Person { get; set; }      
         public DateTime? OffenceStartDate { get; set; }
         public DateTime? OffenceEndDate { get; set; }
-        public string? Annotation { get; set; }
-        public string? MotherFirstname { get; set; }
-        public string? MotherSurname { get; set; }
-        public string? MotherFamilyname { get; set; }
-        public string? FatherFirstname { get; set; }
-        public string? FatherSurname { get; set; }
-        public string? FatherFamilyname { get; set; }
+        public string? Annotation { get; set; }     
         public string? GdkpNumber { get; set; }
         public string? GdkpDate { get; set; }
         public string? GdkpCaseNumber { get; set; }
@@ -47,7 +33,6 @@ namespace MJ_CAIS.DTO.Fbbc
         public decimal? SequentialIndex { get; set; }
         public DateTime? DestroyedDate { get; set; }
         public string? PersonId { get; set; }
-        public AddressDTO Address { get; set; } = new AddressDTO();
         public string? StatusCode { get; set; }
         public decimal? OldId { get; set; }
     }

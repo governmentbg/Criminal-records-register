@@ -29,27 +29,27 @@ namespace AutomaticStepsExecutor
             _reportGenerationService = reportGenerationService;
 
         }
-        public async Task PostProcessAsync()
+        public async Task PostProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
 
         }
 
-        public async Task PostSelectAsync()
+        public async Task PostSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
 
         }
 
-        public async Task PreProcessAsync()
+        public async Task PreProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
 
         }
 
-        public async Task PreSelectAsync()
+        public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
 
         }
 
-        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities)
+        public async Task<AutomaticStepResult> ProcessEntitiesAsync(List<IBaseIdEntity> entities, Microsoft.Extensions.Configuration.IConfiguration config)
         {
             AutomaticStepResult result = new AutomaticStepResult();
             int numberOfProcesedEntities = 0;
@@ -122,7 +122,7 @@ namespace AutomaticStepsExecutor
         }
 
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
             var result = await Task.FromResult(_dbContext.AApplications
                                              .Include(a => a.EgnNavigation)

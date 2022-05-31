@@ -2,7 +2,7 @@ import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { BulletinGridModel } from "../../../bulletin/bulletin-overview/_models/bulletin-grid.model";
-import { FbbcGridModel } from "../../../fbbc/fbbc-overview/models/fbbc-grid.model";
+import { FbbcGridModel } from "../../../fbbc/fbbc-overview/_models/fbbc-grid.model";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
 
 @Injectable({ providedIn: "root" })

@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="EO.Pdf" Version="20.3.63" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.12" />
     <PackageReference Include="Microsoft.AspNetCore.OData.Versioning.ApiExplorer" Version="5.0.0" />
+    <PackageReference Include="TL.Signer" Version="22.76.38469" />
   </ItemGroup>
 
   <ItemGroup>

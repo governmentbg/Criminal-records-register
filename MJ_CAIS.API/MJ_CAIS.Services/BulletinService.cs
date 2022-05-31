@@ -71,7 +71,7 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
-            var person = await _personService.SelectAsync(personId);
+            var person = await _personService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
         }
@@ -88,7 +88,7 @@ namespace MJ_CAIS.Services
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
 
-            var authId = !string.IsNullOrEmpty(bulletin?.BulletinAuthorityId) ? bulletin?.BulletinAuthorityId : "111"; // todo remove: only for testing
+            var authId = !string.IsNullOrEmpty(bulletin?.CsAuthorityId) ? bulletin?.CsAuthorityId : "111"; // todo remove: only for testing
             var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletin.BulletinType);
             bulletin.RegistrationNumber = regNumber;
 
@@ -136,7 +136,7 @@ namespace MJ_CAIS.Services
             if (bulletinToUpdate.StatusId == Status.NewEISS && string.IsNullOrEmpty(bulletinDb.RegistrationNumber))
             {
                 // todo remove: only for testing ? 
-                var authId = !string.IsNullOrEmpty(bulletinToUpdate?.BulletinAuthorityId) ? bulletinToUpdate?.BulletinAuthorityId : "111";
+                var authId = !string.IsNullOrEmpty(bulletinToUpdate?.CsAuthorityId) ? bulletinToUpdate?.CsAuthorityId : "111";
                 var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletinToUpdate.BulletinType);
                 bulletinToUpdate.RegistrationNumber = regNumber;
                 bulletinToUpdate.ModifiedProperties.Add(nameof(bulletinToUpdate.RegistrationNumber));

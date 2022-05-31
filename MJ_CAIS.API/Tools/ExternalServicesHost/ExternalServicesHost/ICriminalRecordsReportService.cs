@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
-using MJ_CAIS.IntegrationModel;
 using System.Threading.Tasks;
+using MJ_CAIS.DTO.ExternalServicesHost;
 
 namespace MJ_CAIS.ExternalServicesHost
 {
@@ -14,6 +14,9 @@ namespace MJ_CAIS.ExternalServicesHost
         [OperationContract]
         CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value);
 
+        [OperationContract]
+        CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value);
+        
         [OperationContract]
         PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
     }
