@@ -5,5 +5,6 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IBulletinAdministrationRepository : IBaseAsyncRepository<BBulletin, string, CaisDbContext>
     {
+        Task<BBulletin> GetBulletinByIdAsync(string id);
     }
 }

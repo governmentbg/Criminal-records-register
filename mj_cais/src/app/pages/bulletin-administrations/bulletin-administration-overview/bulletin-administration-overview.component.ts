@@ -1,11 +1,9 @@
 import { Component, Injector, OnInit, ViewChild } from "@angular/core";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
-import { Observable } from "rxjs";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { NomenclatureService } from "../../../@core/services/rest/nomenclature.service";
-import { BulletinStatusTypeEnum } from "../../bulletin/bulletin-overview/_models/bulletin-status-type.enum";
 import { BulletinAdministrationGridService } from "./_data/bulletin-administration-grid.service";
 import { BulletinAdministrationGridModel } from "./_models/bulletin-administration-grid.model";
 import { UnlockBulletinForm } from "./_models/unlock-bulletin.form";
@@ -43,27 +41,26 @@ export class BulletinAdministrationOverviewComponent extends RemoteGridWithState
     super.ngOnInit();
   }
 
-  onOpenDialog(bulletinId: string, currentStatus: string) {
-    debugger;
+  onOpenDialog(bulletinId: string, currentStatus: string, version: number) {
     this.ulockBulletinForm.status.patchValue(currentStatus);
+    this.ulockBulletinForm.version.patchValue(version);
     this.ulockBulletinForm.bulletinId.patchValue(bulletinId);
     this.dialog.open();
   }
 
-  onUnlockBulletin(bulletinId: string) {
+  onUnlockBulletin() {
     if (!this.ulockBulletinForm.group.valid) {
       this.ulockBulletinForm.group.markAllAsTouched();
       return;
     }
 
-    let model = this.ulockBulletinForm;
-    let submitAction: Observable<UnlockBulletinForm>;
-    this.service.unlockBulletin(bulletinId, model);
+    let bulletinId = this.ulockBulletinForm.bulletinId.value;
+    let model = this.ulockBulletinForm.group.value;
 
-    submitAction.subscribe({
+    this.service.unlockBulletin(bulletinId, model).subscribe({
       next: (data) => {
         this.toastr.showToast("success", this.successMessage);
-
+        this.onCloseDilog();
         setTimeout(() => {
           this.grid.deleteRow(bulletinId);
         }, 500);

@@ -92,7 +92,7 @@ export class BulletinFormComponent
     }
 
     this.isNoSanctionCheck = this.fullForm.noSanction.value;
-    this.initAllowedButtons(bulletinStatusId);
+    this.initAllowedButtons(bulletinStatusId,locked);
 
     this.formFinishedLoading.emit();
   }
@@ -193,10 +193,10 @@ export class BulletinFormComponent
 
   //#endregion
 
-  private initAllowedButtons(bulletinStatusId: string) {
+  private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
     let isGridsEditable =
       (!this.isForPreview &&
-        bulletinStatusId == BulletinStatusTypeEnum.NewOffice) ||
+       (bulletinStatusId == BulletinStatusTypeEnum.NewOffice || isLocked == false)) ||
       this.currentAction == EActions.CREATE;
 
     this.isBulletinPersonAliasEditable = isGridsEditable;
@@ -207,7 +207,7 @@ export class BulletinFormComponent
 
     this.isDecisionEditable =
       (!this.isForPreview &&
-        bulletinStatusId == BulletinStatusTypeEnum.Active) ||
+       ( bulletinStatusId == BulletinStatusTypeEnum.Active || isLocked == false)) ||
       bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
 
     let hideUpdateButton =
