@@ -662,7 +662,7 @@
 			<xs:documentation>The authority issuing a conviction.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="DecidingAuthorityCodeEIK" minOccurs="0">
+			<xs:element name="DecidingAuthorityCodeEIK" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Код по Единен информационен код на съдилищата(от правилника за администрацията в съдилищата) </xs:documentation>
 				</xs:annotation>

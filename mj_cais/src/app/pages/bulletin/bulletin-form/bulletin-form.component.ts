@@ -9,7 +9,7 @@ import { BulletinOffencesFormComponent } from "./tabs/bulletin-offences-form/bul
 import { BulletinSanctionsFormComponent } from "./tabs/bulletin-sanctions-form/bulletin-sanctions-form.component";
 import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bulletin-decision-form.component";
 import { BulletinDocumentFormComponent } from "./tabs/bulletin-documents-form/bulletin-document-form.component";
-import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.constants";
+import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.enum";
 import { EActions } from "@tl/tl-common";
 import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CommonConstants } from "../../../@core/constants/common.constants";

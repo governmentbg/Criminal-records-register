@@ -15,6 +15,9 @@ namespace MJ_CAIS.ExternalServicesHost
         CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value);
 
         [OperationContract]
+        CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value);
+        
+        [OperationContract]
         PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
     }
 }
