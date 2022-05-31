@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using EO.Pdf;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.ExternalServicesHost;
+using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
@@ -17,64 +14,52 @@ namespace MJ_CAIS.Services
     public class CriminalRecordsReportService : ICriminalRecordsReportService
     {
         private readonly IPdfSigner _pdfSignerService;
+        private readonly IBulletinRepository _bulletinRepository;
+        private readonly IMapper _mapper;
 
-        public CriminalRecordsReportService(IMapper mapper, IPdfSigner pdfSignerService)
+        public CriminalRecordsReportService(IMapper mapper, IPdfSigner pdfSignerService, IBulletinRepository bulletinRepository)
         {
+            _mapper = mapper;
             _pdfSignerService = pdfSignerService;
+            _bulletinRepository = bulletinRepository;
         }
 
-        public CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value)
+        public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value)
         {
-            return new CriminalRecordsReportType()
+            var personDb = await _bulletinRepository.GetPersonIdByPidAsync(value.CriminalRecordsRequest.PID, value.CriminalRecordsRequest.IdentifierType.ToString());
+            var person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
+
+            var pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == value.CriminalRecordsRequest.PID && x.PidType.Code == value.CriminalRecordsRequest.IdentifierType.ToString())?.Id;
+            var bulletins = await _bulletinRepository.GetBulletinsByPidIdAsync(pidId);
+            var bulletinsList = await bulletins.ToListAsync();
+
+            var bullArray = new BulletinType[bulletinsList.Count];
+
+            for (int i = 0; i < bulletinsList.Count; i++)
+            {
+                bullArray[i] = _mapper.Map<BulletinType>(bulletinsList[i]);
+            }
+
+            var result = new CriminalRecordsReportType()
             {
                 ReportCriteria = value.CriminalRecordsRequest,
                 ReportDate = DateTime.UtcNow,
-                ReportResult = new ReportResultType()
+                ReportResult = new ReportResultType
                 {
-                    PersonData = new CriminalRecordsPersonDataType()
+                    PersonData = person,
+                    BulletinsList = new BulletinsList
                     {
-                        AFISNumber = "",
-                        BirthDate = new DateType()
-                        {
-                            DateMonthDay = new MonthDayType()
-                            {
-                                DateDay = "1",
-                                DateMonth = "9"
-                            },
-                            DateYear = "1983"
-                        },
-                        BirthPlace = new PlaceType()
-                        {
-                            City = new CityType()
-                            {
-                                CityName = "София",
-                                EKATTECode  = "68134"
-                            },
-                            Country = new CountryType()
-                            {
-                                CountryName = "България"
-                            }
-
-                        },
-                        
-                    },
-                    BulletinsList = new BulletinsList()
-                    {
-                        Bulletin = new BulletinType[]
-                        {
-                            new BulletinType()
-                            {
-                                
-                            }
-                        }
+                        Bulletin = bullArray,
                     }
                 }
             };
+
+            return result;
         }
 
-        public CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value)
+        public async Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDFAsync(CriminalRecordsExtendedRequestType value)
         {
-            var response = GetCriminalRecordsReport(value);
+            var response = await GetCriminalRecordsReportAsync(value);
             var xslt = GetTransformation();
             var html = ApplyTransformation(XmlSerialize(response), xslt);
             var pdf = ConvertToPDFAndSign(html, "cais.mjs.bg");
@@ -142,5 +127,5 @@ namespace MJ_CAIS.Services
                 return signedPDF;
             }
         }
-}
+    }
 }

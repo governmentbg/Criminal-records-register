@@ -124,7 +124,7 @@ namespace MJ_CAIS.Services
             }
 
             // identifiers of a person who exists in the database and the specific pids are attached to it
-            var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x => x.PersonId);
+            var existingPersonsIds = pids.Where(x => x.EntityState != EntityStateEnum.Added).Select(x => x.PersonId).Distinct();
             var onlyOnePersonExist = existingPersonsIds.Count() == 1;
 
             // when person is only one 

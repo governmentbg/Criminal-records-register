@@ -184,6 +184,11 @@ namespace MJ_CAIS.Services
             if (bulletin == null)
                 throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
 
+            var oldBulletinStatus = bulletin.StatusId;
+            AddBulletinStatusH(oldBulletinStatus, statusId, aInDto, bulletin.Locked);
+
+            var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
+                statusId == Status.Active;
 
             // All active bulletins are locked for editing
             // only decisions can be added
@@ -204,11 +209,6 @@ namespace MJ_CAIS.Services
             };
 
 
-            var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(oldBulletinStatus, statusId, aInDto, bulletin.Locked);
-
-            var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
-                statusId == Status.Active;
             if (!mustUpdatePersonAndSendData)
             {
                 await _bulletinRepository.SaveChangesAsync();

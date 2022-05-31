@@ -9,9 +9,9 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface ICriminalRecordsReportService
     {
-        CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value);
+        Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value);
 
-        CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value);
+        Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDFAsync(CriminalRecordsExtendedRequestType value);
 
         PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
     }
