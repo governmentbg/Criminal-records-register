@@ -33,6 +33,9 @@ export class ApplicationResolver implements Resolve<any> {
       paymentMethodIds: this.nomenclatureService.getPaymentMethods(),
       srvcResRcptMethIds: this.nomenclatureService.getSrvcResRcptMethods(),
       documents: this.service.getDocuments(applicationId),
+      personAlias: this.service.getPersonAlias(applicationId),
+      personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
+      countries: this.nomenclatureService.getCountries(),
     };
     return forkJoin(result);
   }

@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
+import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { ApplicationResolverData } from "./data/application.resolver";
@@ -22,6 +23,8 @@ export class ApplicationFormComponent
   >
   implements OnInit
 {
+  public PersonContextEnum = PersonContextEnum;
+
   constructor(
     service: ApplicationService,
     public injector: Injector,

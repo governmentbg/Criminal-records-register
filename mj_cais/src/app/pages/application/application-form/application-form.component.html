@@ -83,7 +83,18 @@
           <div class="font-weight-bold m-2">
             Информация, събрана по служебен път
           </div>
-          <div
+          <cais-person-form
+          [personForm]="fullForm.person"
+          [isEditable]="true"
+          [personAliasTypes]="dbData.personAliasTypes"
+          [genderTypes]="dbData.genderTypes"
+          [countries]="dbData.countries"
+          [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
+          [personAliasGridData]="dbData.personAlias"
+          [contextType]="PersonContextEnum.Application"
+        >
+        </cais-person-form>
+          <!-- <div
             class="ml-4 mr-4"
             style="border: 1px solid #e5e5e5; padding: 30px; border-radius: 5px"
           >
@@ -233,7 +244,7 @@
                 ></cais-input>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="font-weight-bold">Плащане</div>
           <hr />
           <div class="row">

@@ -1,5 +1,7 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
+import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
+import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
 import { BaseForm } from "../../../../@core/models/common/base.form";
 
 export class ApplicationForm extends BaseForm {
@@ -58,6 +60,7 @@ export class ApplicationForm extends BaseForm {
   public userExtId: FormControl;
   public address: FormControl;
   public birthAddress: AddressForm;
+  public person: PersonForm;
 
   constructor() {
     super();
@@ -114,6 +117,8 @@ export class ApplicationForm extends BaseForm {
     this.userId = new FormControl(null);
     this.userExtId = new FormControl(null);
     this.birthAddress = new AddressForm();
+    this.person = new PersonForm(PersonContextEnum.Application, false);
+    
 
     this.group = new FormGroup({
       id: this.id,
@@ -171,6 +176,7 @@ export class ApplicationForm extends BaseForm {
       userId: this.userId,
       userExtId: this.userExtId,
       birthAddress: this.birthAddress.group,
+      person: this.person.group
     });
   }
 }

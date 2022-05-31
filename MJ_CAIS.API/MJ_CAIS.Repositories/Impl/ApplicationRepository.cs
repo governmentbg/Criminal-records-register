@@ -24,7 +24,14 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
-       
+
+        public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
+        {
+            return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
+                .Where(x => x.ApplicationId == aId));
+        }
+
+
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.AApplications.AsNoTracking()

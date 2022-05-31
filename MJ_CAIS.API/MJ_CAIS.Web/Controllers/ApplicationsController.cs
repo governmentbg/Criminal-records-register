@@ -76,6 +76,13 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
+        [HttpGet("{aId}/person-alias")]
+        public async Task<IActionResult> GetPersonAlias(string aId)
+        {
+            var result = await this._applicationService.GetDocumentsByApplicationIdAsync(aId);
+            return Ok(result);
+        }
+
         private string getContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
