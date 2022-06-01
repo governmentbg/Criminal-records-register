@@ -18,6 +18,33 @@
 			</xs:enumeration>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="IdentifierType">
+		<xs:annotation>
+			<xs:documentation>Вид идентификатор</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EGN">
+				<xs:annotation>
+					<xs:documentation>ЕГН</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LNCH">
+				<xs:annotation>
+					<xs:documentation>ЛНЧ</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LN">
+				<xs:annotation>
+					<xs:documentation>ЛН</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SUID">
+				<xs:annotation>
+					<xs:documentation>Системно ID</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="DecisionChangeTypeType">
 		<xs:annotation>
 			<xs:documentation>Категории допълнителни сведения</xs:documentation>
@@ -308,7 +335,7 @@
 	</xs:complexType>
 	<xs:complexType name="CriminalRecordsRequestType">
 		<xs:sequence>
-			<xs:element name="IdentifierType" type="xs:string" minOccurs="0">
+			<xs:element name="IdentifierType" type="IdentifierType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Вид идентификатор</xs:documentation>
 				</xs:annotation>
@@ -815,16 +842,6 @@
 					<xs:documentation>Форма на вината(умишлено, непредпазливо)</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="WithoutSanction" type="xs:boolean" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>Не се наказва</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="ConvictionSanction" type="SanctionType" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Наказания</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OffenceRefType">
@@ -1207,6 +1224,16 @@
 			<xs:element name="ConvictionOffence" type="OffenceType" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Престъпление</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WithoutSanction" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Не се наказва</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConvictionSanction" type="SanctionType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Наказания</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ServingPrevSuspendedSentence" type="xs:boolean" minOccurs="0">

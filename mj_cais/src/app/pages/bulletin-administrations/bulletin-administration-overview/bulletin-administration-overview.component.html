@@ -65,6 +65,17 @@
     </ng-template>
   </igx-column>
   <igx-column
+    field="version"
+    header="Версия"
+    [sortable]="false"
+    [dataType]="'number'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
     field="createdOn"
     header="Дата на създаване"
     [sortable]="true"
@@ -151,7 +162,7 @@
       </a>
       <a
         [title]="'Отключване'"
-        (click)="onOpenDialog(cell.rowData.id, cell.rowData.statusId)"
+        (click)="onOpenDialog(cell.rowData.id, cell.rowData.statusId, cell.rowData.version)"
       >
         <i class="fas fa-unlock-alt"></i>
       </a>
@@ -184,6 +195,7 @@
                 nbButton
                 matRipple
                 [status]="'success'"
+                (click)="onUnlockBulletin()"
                 type="button"
                 class="ml-2"
               >
@@ -222,9 +234,9 @@
             <cais-input
               [type]="'text'"
               [label]="'Мотиви'"
-              [inputFormControl]="ulockBulletinForm.descr"
+              [inputFormControl]="ulockBulletinForm.description"
               [parentGroup]="ulockBulletinForm.group"
-              [inputName]="'descr'"
+              [inputName]="'description'"
               [rows]="'3'"
               [inputType]="'TextArea'"
             >

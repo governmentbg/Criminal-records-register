@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Common.Constants;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess.Entities;
 
 namespace AutomaticStepsExecutor
@@ -86,9 +86,10 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var certificate = (ACertificate)entity;
-                        await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, 
+                       var file =  await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, 
                                                                     statusCertificateServerSign, statusForDelivery, statusCertificatePaperprint,  webPortalUrl);
                         await _dbContext.SaveChangesAsync();
+                      //  System.IO.File.WriteAllBytes($"certificate_{certificate.Id}.pdf", file);
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -110,8 +111,9 @@ namespace AutomaticStepsExecutor
             var result = await Task.FromResult(_dbContext.ACertificates
                                     .Include(c => c.AAppBulletins)
                                     .Include(c => c.Application)
-                                    .Include(c => c.Application.Purpose)
-                                    .Include(c => c.Application.SrvcResRcptMeth)
+                                    .ThenInclude(appl => appl.PurposeNavigation)                            
+                                    .Include(c=>c.Application.SrvcResRcptMeth)
+                                    .Include(c=>c.AStatusHes)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                               .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)

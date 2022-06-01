@@ -29,5 +29,9 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<string> GetBulletinAuthIdAsync(string aId);
 
         void CreateEcrisTcn(string bulletinId, string action);
+
+        Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType);
+
+        Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId);
     }
 }

@@ -131,7 +131,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
-                .Where(x => x.StatusId == BulletinConstants.Status.NewOffice || 
+                .Where(x => x.StatusId == BulletinConstants.Status.NewOffice ||
                             x.StatusId == BulletinConstants.Status.NewEISS ||
                             x.StatusId == BulletinConstants.Status.ForRehabilitation ||
                             x.StatusId == BulletinConstants.Status.ForDestruction)
@@ -162,5 +162,56 @@ namespace MJ_CAIS.Repositories.Impl
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType)
+        {
+            var personId = await _dbContext.PPersonIds.AsNoTracking()
+                .Include(x=>x.PidType)
+                .Where(p => p.Pid == pid && p.PidType.Code == pidType)
+                .FirstOrDefaultAsync();
+
+            if (personId == null) return null;
+
+            var result = await _dbContext.PPeople.AsNoTracking()
+                   .Include(x => x.PPersonIds).ThenInclude(x => x.PBulletinIds)
+                   .Include(x => x.PPersonIds).ThenInclude(x => x.PidType)
+                   .Include(x => x.BirthCity)
+                   .Include(x => x.BirthCountry)
+                   .FirstOrDefaultAsync(x=>x.Id == personId.PersonId);
+
+            return result;
+        }
+
+        public async Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId)
+        {
+            var result = _dbContext.BBulletins.AsNoTracking()
+                    .Include(x => x.PBulletinIds)
+                    .Include(x => x.BirthCity)
+                    .Include(x => x.BirthCountry)
+                    .Include(x => x.DecidingAuth)
+                    .Include(x => x.DecisionType)
+                    .Include(x => x.CaseType)
+                    .Include(x => x.CaseAuth)
+
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffenceCat)
+                    .Include(x => x.BOffences).ThenInclude(x => x.EcrisOffCat)
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffPlaceCountry)
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffPlaceCity)
+
+                    .Include(x => x.BSanctions).ThenInclude(x => x.SanctCategory)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.EcrisSanctCateg)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.BProbations).ThenInclude(x => x.SanctProbCateg)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.BProbations).ThenInclude(x => x.SanctProbMeasure)
+
+                    .Include(x => x.BDecisions).ThenInclude(x => x.DecisionAuth)
+                    .Include(x => x.BulletinAuthority)
+                    .Include(x => x.CsAuthority)
+                    .Include(x => x.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+                    .Where(x => x.PBulletinIds.Any(x => x.PersonId == pidId));
+
+            return await Task.FromResult(result);
+        }
+
     }
 }

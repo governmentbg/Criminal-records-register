@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -6,7 +8,7 @@ using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,16 +59,16 @@ namespace AutomaticStepsExecutor
             int numberOfFailedEntities = 0;
             if (entities.Count > 0)
             {
-                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+                var statuses = await Task.FromResult( _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
                                                    a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
-                                                   || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToListAsync();
+                                                   || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToList());
                 if (statuses.Count != 3)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
 
                 }
-                var systemParameters = await _dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
-                                                    || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToListAsync();
+                var systemParameters = await Task.FromResult(_dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+                                                    || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToList());
                 if (systemParameters.Count != 2)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
@@ -96,8 +98,9 @@ namespace AutomaticStepsExecutor
                         {
                             var report = await _reportService.GenerateReportFromApplication(application, applicationStatus, (int)certificateValidityMonths);
                             await _dbContext.SaveChangesAsync();
-                            await _reportGenerationService.CreateReport(report, signingCertificateName);
+                            var file = await _reportGenerationService.CreateReport(report, signingCertificateName);                      
                             await _dbContext.SaveChangesAsync();
+                            //System.IO.File.WriteAllBytes($"hello{application.Id}.pdf", file);
                         }
                         else
                         {
@@ -124,19 +127,24 @@ namespace AutomaticStepsExecutor
 
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
-            var result = await Task.FromResult(_dbContext.AApplications
-                                             .Include(a => a.EgnNavigation)
-                                             .Include(a => a.LnchNavigation)
-                                             .Include(a => a.LnNavigation)
-                                             .Include(a => a.SuidNavigation)
-                                             .Include(a => a.ApplicationType)
+            var result = await Task.FromResult(
+                                  _dbContext.AApplications
+                                           .Include(a => a.EgnNavigation)
+                                           .Include(a => a.LnchNavigation)
+                                           .Include(a => a.LnNavigation)
+                                           .Include(a => a.SuidNavigation)
+                                           .Include(a => a.ApplicationType)
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
                                  //това е краен статус, затова търсим само такива, за които няма генерирани репорти или сертификати
                                             && ((aa.ApplicationType.Code == ApplicationConstants.ApplicationTypes.ConvictionRequest && !aa.AReports.Any())
                                                || (aa.ApplicationType.Code != ApplicationConstants.ApplicationTypes.ConvictionRequest && !aa.ACertificates.Any())))
+
                                  .OrderBy(a => a.CreatedOn)
                                  .Take(pageSize)
-                               .ToList<IBaseIdEntity>());
+
+                                 .ToList()
+                                 
+            .ToList<IBaseIdEntity>());
             return result;
         }
     }

@@ -2,9 +2,11 @@ import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
-import { EcrisTcnTypeStatusConstants } from "../ecris-tcn-form/models/ecris-tcn-type-status.constants";
+import { EcrisTcnTypeStatusConstants } from "./models/ecris-tcn-type-status.constants";
 import { EcrisTcnGridService } from "./data/ecris-tcn-grid.service";
 import { EcrisTcnGridModel } from "./models/ecris-tcn-grid.model";
+import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 
 @Component({
   selector: "cais-ecris-tcn-overview",
@@ -31,7 +33,7 @@ export class EcrisTcnOverviewComponent extends RemoteGridWithStatePersistance<
     super.ngOnInit();
   }
 
-  onShowAllApplicationsChange(isChacked: boolean) {
+  onShowAllEcrisTcnsChange(isChacked: boolean) {
     if (isChacked) {
       this.service.updateUrlStatus();
     } else {
@@ -40,4 +42,35 @@ export class EcrisTcnOverviewComponent extends RemoteGridWithStatePersistance<
     this.hideStatus = !isChacked;
     this.ngOnInit();
   }
+
+  changeToApproved = (id: string) => {
+    debugger;
+    this.dialogService
+      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.service
+            .changeStatus(id, EcrisTcnTypeStatusConstants.Approved)
+            .subscribe(
+              (res) => this.deleteRowHandler(id),
+              (error) => this.errorHandler(error)
+            );
+        }
+      });
+  };
+
+  changeToCancelled = (id: string) => {
+    this.dialogService
+      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.service
+            .changeStatus(id, EcrisTcnTypeStatusConstants.Cancelled)
+            .subscribe(
+              (res) => this.deleteRowHandler(id),
+              (error) => this.errorHandler(error)
+            );
+        }
+      });
+  };
 }

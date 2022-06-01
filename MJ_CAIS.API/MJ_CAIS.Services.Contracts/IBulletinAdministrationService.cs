@@ -5,5 +5,6 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IBulletinAdministrationService : IBaseAsyncService<BulletinAdministrationDTO, BulletinAdministrationDTO, BulletinAdministrationGridDTO, BBulletin, string>
     {
+        Task UnlockBulletinAsync(UnlockBulletinModelDTO aInDto);
     }
 }

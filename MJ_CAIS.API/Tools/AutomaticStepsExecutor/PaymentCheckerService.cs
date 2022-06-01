@@ -5,7 +5,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,10 +112,12 @@ namespace AutomaticStepsExecutor
                             {
                                 _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
                                 //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
-                            }
-                            _dbContext.WApplications.Update(wapplication);
-                        }
+                                _dbContext.WApplications.Update(wapplication);
 
+                            }
+                          
+                        }
+                     
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }

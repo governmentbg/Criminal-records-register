@@ -22,7 +22,7 @@
     <igx-grid-toolbar-actions>
       <div class="ml-auto">
         <nb-toggle
-          (checkedChange)="onShowAllApplicationsChange($event)"
+          (checkedChange)="onShowAllEcrisTcnsChange($event)"
           status="info"
           labelPosition="left"
           >Всички записи</nb-toggle
@@ -96,7 +96,6 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
   <igx-column
     field="surname"
     header="Презиме"
@@ -107,7 +106,6 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
   <igx-column
     field="familyname"
     header="Фамилия"
@@ -131,7 +129,7 @@
   </igx-column>
 
   <igx-column
-    field="birthCountryName"
+    field="birthPlace"
     header="Място на раждане"
     [sortable]="true"
     [dataType]="'string'"
@@ -151,16 +149,16 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletin/preview', cell.rowData.id]"
+        [routerLink]="['/pages/bulletins/preview', cell.rowData.bulletinId]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <!-- <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/applications/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a> -->
+      <a [title]="'Обработен'" (click)="changeToApproved(cell.rowData.id)">
+        <i class="fas fa-check"></i>
+      </a>
+      <a [title]="'Откажи'" (click)="changeToCancelled(cell.rowData.id)">
+        <i class="fas fa-times"></i>
+      </a>
     </ng-template>
   </igx-column>
 
