@@ -4,10 +4,7 @@ using Microsoft.Extensions.Hosting;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DIContainer;
-using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.DbServices;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.Services.Contracts;
 
 namespace ExecuteWebRequests
 {
@@ -18,7 +15,7 @@ namespace ExecuteWebRequests
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             IHost host = Host.CreateDefaultBuilder()
                 .ConfigureServices(services => ContainerExtension.Initialize(services, config))
-                .ConfigureServices(services => services.AddSingleton<RegixService>())
+                .ConfigureServices(services => services.AddTransient<IRegixService, RegixService>())
                 .Build();
 
             using (host)
@@ -26,14 +23,14 @@ namespace ExecuteWebRequests
                 var dbContext = host.Services.GetService<CaisDbContext>();
 
 
-                var regixService = host.Services.GetService<RegixService>();
-                var webRequests = regixService.GetRequestsForExecution();
+                var regixService = host.Services.GetService<IRegixService>();
+                var webRequests = regixService.GetRequestsForAsyncExecution();
 
                 foreach (var webRequest in webRequests)
                 {
                     if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
                     {
-                        regixService.ExecutePersonDataSearch(webRequest, "SERVICE_URI");
+                        regixService.ExecutePersonDataSearch(webRequest, "SERVICE_URI"); // TODO: change
                     }
                 }
             }
