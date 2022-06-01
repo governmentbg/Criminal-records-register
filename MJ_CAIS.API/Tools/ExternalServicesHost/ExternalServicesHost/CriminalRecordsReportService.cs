@@ -16,18 +16,18 @@ namespace MJ_CAIS.ExternalServicesHost
             _criminalRecordsReportSrvc = Program.Services.GetService< MJ_CAIS.Services.Contracts.ICriminalRecordsReportService>();
         }
 
-        public CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType request)
+        public async Task<CriminalRecordsReportType> GetCriminalRecordsReport(CriminalRecordsExtendedRequestType request)
         {
-            return _criminalRecordsReportSrvc.GetCriminalRecordsReport(request);
+            return await _criminalRecordsReportSrvc.GetCriminalRecordsReportAsync(request);
         }
-        public CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType request)
+        public async Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType request)
         {
-            return _criminalRecordsReportSrvc.GetCriminalRecordsReportPDF(request);
+            return await _criminalRecordsReportSrvc.GetCriminalRecordsReportPDFAsync(request);
         }
 
-        public PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType request)
+        public async Task<PersonIdentifierSearchResponseType> PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType request)
         {
-            return _criminalRecordsReportSrvc.PersonIdentifierSearch(request);
+            return await _criminalRecordsReportSrvc.PersonIdentifierSearchAsync(request);
         }
     }
 }

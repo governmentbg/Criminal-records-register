@@ -14,7 +14,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId)
+        public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId, string? bulletinId)
         {
             var query = from bullEvents in _dbContext.BBulEvents.AsNoTracking()
                         join eventTypes in _dbContext.BEventTypes.AsNoTracking() on bullEvents.EventType equals eventTypes.Code
@@ -28,7 +28,8 @@ namespace MJ_CAIS.Repositories.Impl
                               into eventStatusLeft
                         from eventStatus in eventStatusLeft.DefaultIfEmpty()
 
-                        where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) &&
+                        where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) && 
+                        (string.IsNullOrEmpty(bulletinId) || bullEvents.BulletinId == bulletinId) &&
                         eventType.GroupCode == groupCode
                         select new BulletinEventGridDTO
                         {

@@ -2,9 +2,31 @@
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://cs.mjs.bg/EISSServicesModel-v1.0" xmlns:bul="http://cais.mjs.bg/BulletinModel-v1.0" targetNamespace="http://cs.mjs.bg/EISSServicesModel-v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="http://cais.mjs.bg/BulletinModel-v1.0" schemaLocation="BulletinModel_v1.0_v11.xsd"/>
+	<xs:simpleType name="SanctionEnumType">
+		<xs:annotation>
+			<xs:documentation>Вид наказание</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Fine">
+				<xs:annotation>
+					<xs:documentation>Глоба</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Prison">
+				<xs:annotation>
+					<xs:documentation>ЛОС</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Probation">
+				<xs:annotation>
+					<xs:documentation>Пробационна мярка</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="ConvictionDataType">
 		<xs:sequence>
-			<xs:element name="ActTypeCode" type="xs:string" minOccurs="0">
+			<xs:element name="ActTypeCode" type="bul:DecisionTypeCategories" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Вид на акта</xs:documentation>
 				</xs:annotation>
@@ -44,7 +66,7 @@
 					<xs:documentation>дело година</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="CaseTypeCode" type="xs:string" minOccurs="0">
+			<xs:element name="CaseTypeCode" type="bul:CaseType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>вид</xs:documentation>
 				</xs:annotation>
@@ -74,7 +96,7 @@
 					<xs:documentation>Дата, на която е платена глобата</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="SanctionType" minOccurs="0">
+			<xs:element name="SanctionType" type="SanctionEnumType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Fine, Prison,Probation</xs:documentation>
 				</xs:annotation>
@@ -83,13 +105,13 @@
 	</xs:complexType>
 	<xs:complexType name="PersonDataType">
 		<xs:sequence>
-			<xs:element name="IdentifierType" type="xs:string"/>
+			<xs:element name="IdentifierType" type="bul:IdentifierType"/>
 			<xs:element name="Identifier" type="xs:string"/>
 			<xs:element name="FirstName" type="xs:string"/>
 			<xs:element name="SurName" type="xs:string" minOccurs="0"/>
 			<xs:element name="FamilyName" type="xs:string"/>
 			<xs:element name="BirthDate" type="xs:date"/>
-			<xs:element name="Sex" type="xs:string" minOccurs="0"/>
+			<xs:element name="Sex" type="bul:SexType" minOccurs="0"/>
 			<xs:element name="CountryCode1" type="xs:string" minOccurs="0"/>
 			<xs:element name="CountryName1" type="xs:string" minOccurs="0"/>
 			<xs:element name="CountryCode2" type="xs:string" minOccurs="0"/>

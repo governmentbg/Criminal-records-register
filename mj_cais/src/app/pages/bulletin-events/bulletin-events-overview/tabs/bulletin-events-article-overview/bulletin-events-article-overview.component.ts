@@ -1,4 +1,4 @@
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, Input } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { BulletinEventsGridModel } from "../../_models/bulletin-events-grid.model";
@@ -19,26 +19,28 @@ export class BulletinEventsArticleOverviewComponent extends RemoteGridWithStateP
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("bulletins-events-article--search", service, injector);
-    this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New);
+    super("bulletins-events-article-search", service, injector);
   }
 
+  @Input() bulletinId: string;
   public BulletinEventsStatusTypeEnum = BulletinEventsStatusTypeEnum;
   public hideStatus: boolean = true;
 
   ngOnInit() {
+    this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New, this.bulletinId);
     super.ngOnInit();
   }
 
   onShowAllBulletinEventsChange(isChacked: boolean) {
+    debugger;
     if (isChacked) {
-      this.service.updateEventStatusUrl();
+      this.service.updateEventStatusUrl(null, this.bulletinId);
     } else {
-      this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New);
+      this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New, this.bulletinId);
     }
 
     this.hideStatus = !isChacked;
-    this.ngOnInit();
+    super.ngOnInit();
   }
 
  public changeStatus(id: string, status: BulletinEventsStatusTypeEnum) {

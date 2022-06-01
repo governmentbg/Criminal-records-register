@@ -49,8 +49,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? AddrEmail { get; set; }
         public string? Description { get; set; }
         public string? Email { get; set; }
-        public string? ApplicationTypeId { get; set; }
-        public string? CsAuthorityId { get; set; }
+        public string ApplicationTypeId { get; set; } = null!;
+        public string CsAuthorityId { get; set; } = null!;
         public bool? IsLocal { get; set; }
         public string? PurposeId { get; set; }
         public string? CreatedBy { get; set; }
@@ -77,10 +77,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? LnId { get; set; }
         public string? SuidId { get; set; }
 
-        public virtual AApplicationType? ApplicationType { get; set; }
+        public virtual AApplicationType ApplicationType { get; set; } = null!;
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
-        public virtual GCsAuthority? CsAuthority { get; set; }
+        public virtual GCsAuthority CsAuthority { get; set; } = null!;
         public virtual GCsAuthority? CsAuthorityBirth { get; set; }
         public virtual PPersonId? EgnNavigation { get; set; }
         public virtual PPersonId? LnNavigation { get; set; }
