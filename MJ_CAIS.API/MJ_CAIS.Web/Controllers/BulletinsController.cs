@@ -7,6 +7,7 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.DTO.ExternalServicesHost;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -15,11 +16,13 @@ namespace MJ_CAIS.Web.Controllers
     public class BulletinsController : BaseApiCrudController<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string>
     {
         private readonly IBulletinService _bulletinService;
+        private readonly ICriminalRecordsReportService _test;
 
-        public BulletinsController(IBulletinService bulletinService)
+        public BulletinsController(IBulletinService bulletinService, ICriminalRecordsReportService test)
             : base(bulletinService)
         {
             _bulletinService = bulletinService;
+            _test = test;
         }
 
         [HttpGet("")]
@@ -80,6 +83,17 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/offences")]
         public async Task<IActionResult> GetOffences(string aId)
         {
+            var objTest = new CriminalRecordsExtendedRequestType
+            {
+                CriminalRecordsRequest = new CriminalRecordsRequestType
+                {
+                    PID = "9636362525",
+                    IdentifierType = IdentifierType.EGN
+                }
+            };
+    
+            var test = _test.GetCriminalRecordsReportAsync(objTest);
+
             var result = await this._bulletinService.GetOffencesByBulletinIdAsync(aId);
             return Ok(result);
         }

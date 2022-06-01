@@ -369,7 +369,7 @@
           </cais-bulletin-sanctions-form>
         </nb-tab>
 
-        <nb-tab tabTitle="Доп. сведения">
+        <nb-tab tabTitle="Доп. сведения" *ngIf="isEdit() || isForPreview">
           <cais-bulletin-decision-form
             #bulletineDecisions
             [bulletinDecisionsTransactions]="fullForm.decisionsTransactions"
@@ -378,12 +378,26 @@
           >
           </cais-bulletin-decision-form>
         </nb-tab>
-
-        <nb-tab tabTitle="Уведомления">
-          <span>Content #7</span>
+        <nb-tab tabTitle="Уведомления" *ngIf="isEdit() || isForPreview">
+          <nb-tabset #nbtabset>
+            <nb-tab
+              tabTitle="Уведомяване за настъпили обстоятелства по чл. 30, чл.22"
+            >
+              <cais-bulletin-events-article-overview
+                [bulletinId]="fullForm.id.value"
+              ></cais-bulletin-events-article-overview>
+            </nb-tab>
+            <nb-tab
+              tabTitle="Уведомяване за променен съдебен статус на осъдено лице"
+            >
+              <cais-bulletin-events-document-overview
+                [bulletinId]="fullForm.id.value"
+              ></cais-bulletin-events-document-overview>
+            </nb-tab>
+          </nb-tabset>
         </nb-tab>
 
-        <nb-tab tabTitle="Документи">
+        <nb-tab tabTitle="Документи" *ngIf="isEdit() || isForPreview">
           <cais-bulletin-document-form
             #bulletineDocuments
             [bulletinForm]="fullForm"
@@ -393,10 +407,12 @@
           >
           </cais-bulletin-document-form>
         </nb-tab>
-        <nb-tab tabTitle="ИСИН">
+
+        <nb-tab tabTitle="Изтърпени наказания" *ngIf="isEdit() || isForPreview">
           <cais-bulletin-isin-form></cais-bulletin-isin-form>
         </nb-tab>
-        <nb-tab tabTitle="Одит">
+
+        <nb-tab tabTitle="Одит" *ngIf="isEdit() || isForPreview">
           <cais-bulletin-status-history-overview
             [historyData]="dbData.bulletinStatusHistoryData"
           >

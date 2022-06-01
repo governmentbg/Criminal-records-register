@@ -18,10 +18,14 @@ export class BulletinEventsDocumentGridService extends CaisCrudService<
     super(BulletinEventsGridModel, injector, currentEndpoint);
   }
 
-  public updateEventStatusUrl(statusId?: string) {
+  public updateEventStatusUrl(statusId?: string, bulletinId?: string) {
     let url = `${currentEndpoint}?groupCode=${BulletinEventGroupTypeEnum.Document}`;
     if (statusId) {
       url += `&statusId=${statusId}`;
+    }
+
+    if (bulletinId) {
+      url += `&bulletinId=${bulletinId}`;
     }
 
     this.updateUrl(url);

@@ -23,9 +23,9 @@ namespace MJ_CAIS.Services
             _bulletinEventRepository = bulletinEventRepository;
         }
 
-        public virtual async Task<IgPageResult<BulletinEventGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinEventGridDTO> aQueryOptions, string groupCode, string? statusId)
+        public virtual async Task<IgPageResult<BulletinEventGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinEventGridDTO> aQueryOptions, string groupCode, string? statusId, string? bulletinId)
         {
-            var baseQuery = await _bulletinEventRepository.SelectAllByTypeAsync(groupCode, statusId);
+            var baseQuery = await _bulletinEventRepository.SelectAllByTypeAsync(groupCode, statusId, bulletinId);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<BulletinEventGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
