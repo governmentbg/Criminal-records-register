@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MJ_CAIS.Common.Constants;
-using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.RegiX;
 using System.Xml;
 using TechnoLogica.RegiX.GraoNBDAdapter;
 
@@ -26,152 +26,120 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
         public List<EWebRequest> GetRequestsForAsyncExecution()
         {
+            int attempts = GetRegixAttempts();
             var result = _dbContext.EWebRequests.Include(x => x.WebService)
+                .Where(x => x.IsAsync == true || x.IsAsync == null)
                 .Where(x => x.Status == WebRequestStatusConstants.Pending || x.Status == WebRequestStatusConstants.Rejected)
-                .Where(x => x.Attempts < 5) // TODO: from parameter
+                .Where(x => x.Attempts < attempts)
                 .ToList();
 
             return result;
         }
 
-        /// <summary>
-        /// Извиква заявка от regix синхронно
-        /// </summary>
-        /// <returns></returns>
-        public PersonDataResponseType CallPersonDataSearch(string egn, 
-            string serviceURI,
+        public (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
             string? bulletinId = null,
             string? applicationId = null,
             string? ecrisMsgId = null)
         {
-            var request = new PersonDataRequestType { EGN = egn };
-            var requestXml = XmlUtils.SerializeToXml(request);
+            var isAsync = false;
+            var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
 
-            var webRequestEntity = CreateWebRequest(bulletinId, applicationId, ecrisMsgId);
-            webRequestEntity.RequestXml = requestXml;
-            webRequestEntity.WebServiceId = GetOperation(WebServiceEnumConstants.REGIX_PersonDataSearch).Id;
-            // TODO: add flag for sync
-
+            var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, ecrisMsgId);
             _dbContext.SaveEntity(webRequestEntity);
-            var response = ExecutePersonDataSearch(webRequestEntity, serviceURI);
-            return response;
+            var response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
+            return (response, webRequestEntity);
         }
 
         /// <summary>
-        /// Изпълнява заявка от таблицата с web requests, асинхронното приложение го извиква
+        /// Изпълнява заявка от таблицата с web requests
         /// </summary>
         /// <param name="request"></param>
         /// <param name="serviceURI"></param>
-        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string serviceURI)
+        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName)
         {
-            string? resultXml;
-
             var requestDeserialized = XmlUtils.DeserializeXml<PersonDataRequestType>(request.RequestXml);
-            var operation = GetOperation(WebServiceEnumConstants.REGIX_PersonDataSearch).WebServiceName;
+            var citizenEgn = requestDeserialized.EGN;
 
-            var cachedResponse = CheckForCachedResponse(requestDeserialized.EGN, operation);
+            CallRegix(request, webServiceName, citizenEgn);
+
+            PersonDataResponseType responseObject = null;
+            if (request.HasError != true)
+            {
+                responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
+                AddOrUpdateCache(request, citizenEgn);
+            }
+            
+            _dbContext.SaveChanges();
+            return responseObject;
+        }
+
+        private void CallRegix(EWebRequest request, string webServiceName, string citizenEgn)
+        {
+            var cachedResponse = CheckForCachedResponse(citizenEgn, webServiceName);
             if (cachedResponse != null)
             {
-                resultXml = cachedResponse.ResponseXml;
+                request.ResponseXml = cachedResponse.ResponseXml;
                 request.IsFromCache = true;
             }
             else
             {
                 request.Attempts += 1;
-                var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, operation, serviceURI, requestDeserialized.EGN);
-                resultXml = resultData.Data.Response.Any.OuterXml;
-            }
+                request.IsFromCache = false;
 
-            var responseObject = GetPersonDataFromResponse(resultXml);
-
-            AddOrUpdateCache(requestDeserialized.EGN
-                , request.RequestXml
-                , resultXml
-                , operation
-                , responseObject.PersonNames.FirstName.ToString()
-                , responseObject.PersonNames.SurName.ToString()
-                , responseObject.PersonNames.FamilyName.ToString());
-
-            request.ResponseXml = resultXml;
-            request.Status = WebRequestStatusConstants.Accepted;
-
-            _dbContext.SaveChanges();
-
-            return responseObject;
-        }
-
-        private EWebRequest CreateWebRequest(string? bulletinId = null, string? applicationId = null, string? ecrisMsgId = null)
-        {
-            var result = new EWebRequest()
-            {
-                BulletinId = bulletinId,
-                ApplicationId = applicationId,
-                EcrisMsgId = ecrisMsgId,
-                Status = WebRequestStatusConstants.Pending,
-                EntityState = EntityStateEnum.Added,
-            };
-
-            return result;
-        }
-
-        private void AddOrUpdateCache(string egn
-            , string requestXml
-            , string responseXml
-            , string operation
-            , string firstName
-            , string surname
-            , string familyName)
-        {
-            var oldCachedResponse = _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == operation);
-            if (oldCachedResponse == null)
-            {
-                _dbContext.ERegixCaches.Add(new ERegixCache()
+                try
                 {
-                    Id = BaseEntity.GenerateNewId(),
-                    Egn = egn,
-                    RequestXml = requestXml,
-                    ResponseXml = responseXml,
-                    Firstname = firstName,
-                    Surname = surname,
-                    Familyname = familyName,
-                    WebServiceName = operation,
-                    ExecutionDate = DateTime.Now,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = nameof(ExternalWebServices),
-                });
+                    var callContext = CreateCallContext(request);
+                    var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName, callContext, citizenEgn);
+                    request.ResponseXml = resultData.Data.Response.Any.OuterXml;
+                }
+                catch (Exception ex)
+                {
+                    request.HasError = true;
+                    request.Error = ex.Message;
+                    request.StackTrace = ex.StackTrace;
+                }
             }
-            else
-            {
-                oldCachedResponse.RequestXml = requestXml;
-                oldCachedResponse.ResponseXml = responseXml;
-                oldCachedResponse.ExecutionDate = DateTime.Now;
-                oldCachedResponse.Firstname = firstName;
-                oldCachedResponse.Surname = surname;
-                oldCachedResponse.Familyname = familyName;
-            }
+
+            request.ExecutionDate = DateTime.Now;
+            request.Status = request.HasError == true ?
+                WebRequestStatusConstants.Rejected :
+                WebRequestStatusConstants.Accepted;
         }
 
-        private ERegixCache CheckForCachedResponse(string egn, string operation)
+        private ERegixCache CheckForCachedResponse(string egn, string webServiceName)
         {
-            // TODO: get from system parameter
-            var daysCache = _config.GetValue<int>("ProjectSettings:DaysCache");
+            var daysCache = GetRegixDaysCache();
             var yesterday = DateTime.Now.AddDays(-daysCache);
 
             var cachedResponse = _dbContext.ERegixCaches
-                .FirstOrDefault(r => r.Egn == egn && r.ExecutionDate > yesterday && r.WebServiceName == operation);
+                .FirstOrDefault(r => r.Egn == egn && r.ExecutionDate > yesterday && r.WebServiceName == webServiceName);
             return cachedResponse;
         }
 
-        private PersonDataResponseType GetPersonDataFromResponse(string? xml)
+        private void AddOrUpdateCache(EWebRequest request, string egn)
         {
-            var doc = new XmlDocument();
-            doc.LoadXml(xml);
-            doc.DocumentElement.SetAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-            var responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(doc.OuterXml);
-            return responseObject;
+            var operation = request.WebService.WebServiceName;
+            var regixCache = _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == operation);
+            if (regixCache == null)
+            {
+                regixCache = new ERegixCache()
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    Egn = egn,
+                };
+
+                _dbContext.ERegixCaches.Add(regixCache);
+            }
+
+            regixCache.RequestXml = request.RequestXml;
+            regixCache.ResponseXml = request.ResponseXml;
+            regixCache.WebServiceName = operation;
+            regixCache.ExecutionDate = DateTime.Now;
+
+            // TODO: based on operation, parse different objects and fill data
         }
 
-        private (string Id, string WebServiceName) GetOperation(string typeCode)
+        private (string Id, string WebServiceName) GetOperationByType(string typeCode)
         {
             // Singleton pattern
             if (webServiceTypes == null)
@@ -186,6 +154,50 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
 
             return webServiceTypes[typeCode];
+        }
+
+        private int GetRegixAttempts()
+        {
+            var maxNumberOfAttempts = _dbContext.GSystemParameters.AsNoTracking()
+                .FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.REGIX_NUMBER_OF_ATTEMPTS)
+                ?.ValueNumber;
+
+            int result = maxNumberOfAttempts != null ? (int)maxNumberOfAttempts : 5;
+            return result;
+        }
+
+        private int GetRegixDaysCache()
+        {
+            var maxNumberOfAttempts = _dbContext.GSystemParameters.AsNoTracking()
+                .FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.REGIX_NUMBER_OF_ATTEMPTS)
+                ?.ValueNumber;
+
+            int result = maxNumberOfAttempts != null ? (int)maxNumberOfAttempts : 5;
+            return result;
+        }
+
+        private CallContext CreateCallContext(EWebRequest request)
+        {
+            // Default value
+            string serviceURI = "ЦАИС_" + DateTime.Now.Date.ToString("dd-MM-yyyy");
+
+            if (request.ApplicationId != null)
+            {
+                serviceURI = "Във връзка със заявление: " + request.ApplicationId;
+            }
+            else if (request.BulletinId != null)
+            {
+                serviceURI = "Във връзка с бюлетин: " + request.BulletinId;
+            }
+            else if (request.EcrisMsgId != null)
+            {
+                serviceURI = "Във връзка със съобщение от ЕКРИС: " + request.EcrisMsgId;
+            }
+
+            var callContext = _client.CreateSampleCallContext(serviceURI);
+            // TODO: fill other data for user that created the web request
+
+            return callContext;
         }
     }
 }

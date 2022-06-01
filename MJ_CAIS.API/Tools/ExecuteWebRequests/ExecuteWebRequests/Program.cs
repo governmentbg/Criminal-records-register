@@ -30,7 +30,7 @@ namespace ExecuteWebRequests
                 {
                     if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
                     {
-                        regixService.ExecutePersonDataSearch(webRequest, "SERVICE_URI"); // TODO: change
+                        regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
                     }
                 }
             }

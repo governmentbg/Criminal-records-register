@@ -14,7 +14,7 @@ namespace MJ_CAIS.ExternalWebServices
             this.config = config;
         }
 
-        public ServiceResultData CallRegixExecuteSynchronous(string xml, string operation, string serviceURI, string citizenEGN)
+        public ServiceResultData CallRegixExecuteSynchronous(string xml, string webServiceName, CallContext callContext, string citizenEGN)
         {
             var coreUrl = config.GetValue<string>("RegiX:CoreUrl");
             var client = new RegiXEntryPointClient(EndpointConfiguration.WSHttpBinding_IRegiXEntryPoint, coreUrl);
@@ -27,7 +27,7 @@ namespace MJ_CAIS.ExternalWebServices
             {
                 request = new ServiceRequestData
                 {
-                    Operation = operation,
+                    Operation = webServiceName,
                     Argument = doc.DocumentElement,
                     CitizenEGN = citizenEGN,
                     EmployeeEGN = config.GetValue<string>("RegiX:EmployeeEGN"),
@@ -36,8 +36,22 @@ namespace MJ_CAIS.ExternalWebServices
                 }
             };
 
+            request.request.CallContext = callContext;
+            var response = client.ExecuteSynchronous(request);
+            if (!response.ExecuteSynchronousResult.HasError)
+            {
+                return response.ExecuteSynchronousResult;
+            }
+            else
+            {
+                throw new Exception(response.ExecuteSynchronousResult.Error);
+            }
+        }
+   
+        public CallContext CreateSampleCallContext(string serviceURI)
+        {
             var section = config.GetSection("RegiX:CallContext");
-            request.request.CallContext = new CallContext()
+            var callContext = new CallContext()
             {
                 ServiceURI = serviceURI,
                 AdministrationName = section.GetValue<string>("AdministrationName"),
@@ -52,16 +66,7 @@ namespace MJ_CAIS.ExternalWebServices
                 ResponsiblePersonIdentifier = section.GetValue<string>("ResponsiblePersonIdentifier"),
             };
 
-            var response = client.ExecuteSynchronous(request);
-            if (!response.ExecuteSynchronousResult.HasError)
-            {
-                return response.ExecuteSynchronousResult;
-            }
-            else
-            {
-                throw new Exception(response.ExecuteSynchronousResult.Error);
-            }
+            return callContext;
         }
-   
     }
 }
