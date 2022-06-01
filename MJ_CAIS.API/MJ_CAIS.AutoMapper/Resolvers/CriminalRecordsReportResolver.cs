@@ -35,38 +35,38 @@ namespace MJ_CAIS.AutoMapperContainer.Resolvers
             return result;
         }
 
-        public static DateTime? GetDateTimeFromDateType(DateType dateType)
-        {
-            var isYearParsed = int.TryParse(dateType.DateYear,  out int yearParsed);
-            var isMonthParsed = int.TryParse(dateType.DateMonthDay.DateMonth,  out int monthParsed);
-            var isDayParsed = int.TryParse(dateType.DateMonthDay.DateDay,  out int daysParsed);
+        //public static DateTime? GetDateTimeFromDateType(DateType dateType)
+        //{
+        //    var isYearParsed = int.TryParse(dateType.DateYear,  out int yearParsed);
+        //    var isMonthParsed = int.TryParse(dateType.DateMonthDay.DateMonth,  out int monthParsed);
+        //    var isDayParsed = int.TryParse(dateType.DateMonthDay.DateDay,  out int daysParsed);
 
-            if (!isYearParsed && !isMonthParsed && !isDayParsed) return null;
+        //    if (!isYearParsed && !isMonthParsed && !isDayParsed) return null;
 
-            var year = isYearParsed ? yearParsed : new DateTime().Year;
-            var month = isMonthParsed ? monthParsed : 1;
-            var day = isDayParsed ? daysParsed : 1;
+        //    var year = isYearParsed ? yearParsed : new DateTime().Year;
+        //    var month = isMonthParsed ? monthParsed : 1;
+        //    var day = isDayParsed ? daysParsed : 1;
 
-            return new DateTime(year, month, day);          
-        }
+        //    return new DateTime(year, month, day);          
+        //}
 
-        public static string GetDatePrecFromDateType(DateType dateType)
-        {
-            var isFulleDate = !string.IsNullOrEmpty(dateType.DateYear) &&
-                    dateType.DateMonthDay != null &&
-                    !string.IsNullOrEmpty(dateType.DateMonthDay.DateMonth) &&
-                    !string.IsNullOrEmpty(dateType.DateMonthDay.DateDay);
+        //public static string GetDatePrecFromDateType(DateType dateType)
+        //{
+        //    var isFulleDate = !string.IsNullOrEmpty(dateType.DateYear) &&
+        //            dateType.DateMonthDay != null &&
+        //            !string.IsNullOrEmpty(dateType.DateMonthDay.DateMonth) &&
+        //            !string.IsNullOrEmpty(dateType.DateMonthDay.DateDay);
 
-            if (isFulleDate) return DatePrecisionType.YMD;
+        //    if (isFulleDate) return DatePrecisionType.YMD;
 
-            var isYearAndMonth = !string.IsNullOrEmpty(dateType.DateYear) &&
-                    dateType.DateMonthDay != null &&
-                    !string.IsNullOrEmpty(dateType.DateMonthDay.DateMonth);
+        //    var isYearAndMonth = !string.IsNullOrEmpty(dateType.DateYear) &&
+        //            dateType.DateMonthDay != null &&
+        //            !string.IsNullOrEmpty(dateType.DateMonthDay.DateMonth);
 
-            if (isYearAndMonth) return DatePrecisionType.YM;
+        //    if (isYearAndMonth) return DatePrecisionType.YM;
 
-            return DatePrecisionType.Y;          
-        }
+        //    return DatePrecisionType.Y;          
+        //}
 
         public static string GetPeriodFromNumbers(int? years, int? months, int? days, int? hours)
         {
