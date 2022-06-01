@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
@@ -34,6 +35,65 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                 .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
                 .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId));
+
+
+            CreateMap<List<PPerson>, PersonIdentifierSearchResponseType>()
+                .ConvertUsing(src =>
+                    new PersonIdentifierSearchResponseType()
+                    {
+                        ReportResult = 
+                          src.Select(p => new CriminalRecordsPersonDataType()
+                          {
+                              AFISNumber = p.PPersonIds.Where(pid => pid.PidType.Code == "AFIS").Select(pid => pid.Pid).FirstOrDefault(),
+                              Sex = Convert.ToInt32(p.Sex),
+                              NamesBg = new PersonNameType()
+                              {
+                                  FirstName = p.Firstname,
+                                  SurName = p.Surname,
+                                  FamilyName = p.Familyname,
+                                  FullName = p.Fullname,
+                              },
+                              NamesEn = new PersonNameType()
+                              {
+                                  FirstName = p.FirstnameLat,
+                                  SurName = p.SurnameLat,
+                                  FamilyName = p.FamilynameLat,
+                                  FullName = p.FullnameLat
+                              },
+                              BirthDate = (p.BirthDate != null) ? new DateType()
+                              {
+                                  DateYear = p.BirthDate.HasValue ? p.BirthDate.Value.Year.ToString() : "",
+                                  DateMonthDay = new MonthDayType()
+                                  {
+                                      DateDay = p.BirthDate.HasValue ? p.BirthDate.Value.Day.ToString() : "",
+                                      DateMonth = p.BirthDate.HasValue ? p.BirthDate.Value.Month.ToString() : ""
+                                  }
+                              } : null,
+                              BirthPlace = (p.BirthCity != null || p.BirthCountry != null) ? new PlaceType()
+                              {
+                                  City = (p.BirthCity != null) ? new CityType()
+                                  {
+                                      CityName = p.BirthCity.Name,
+                                      EKATTECode = p.BirthCity.EkatteCode
+                                  }: null,
+                                  Country = (p.BirthCountry != null) ? new CountryType()
+                                  {
+                                      CountryName = p.BirthCountry.Name,
+                                      CountryISONumber = p.BirthCountry.Iso31662Number,
+                                      CountryISOAlpha3 = p.BirthCountry.Iso31662Code
+                                  }: null,
+                                  Descr = p.BirthPlaceOther //???
+                              }: null,
+                              IdentityNumber = new PersonIdentityNumberType()
+                              {
+                                  EGN = p.PPersonIds.Where(pid => pid.PidType.Code == "EGN").Select( pid => pid.Pid).FirstOrDefault(),
+                                  LN = p.PPersonIds.Where(pid => pid.PidType.Code == "LNCH").Select(pid => pid.Pid).FirstOrDefault(),
+                                  LNCh = p.PPersonIds.Where(pid => pid.PidType.Code == "LN").Select(pid => pid.Pid).FirstOrDefault(),
+                                  SUID = p.PPersonIds.Where(pid => pid.PidType.Code == "SYS").Select(pid => pid.Pid).FirstOrDefault()
+                              }
+                          }).ToArray()
+                    }
+                );
         }
     }
 }
