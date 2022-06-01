@@ -83,27 +83,35 @@ namespace MJ_CAIS.Services
         {
             var dbContext = _personRepository.GetDbContext();
 
-            var firstname = value.PersonIdentifierSearchRequest.Firstame;
-            var surname = value.PersonIdentifierSearchRequest.Surname;
-            var familyname = value.PersonIdentifierSearchRequest.Familyname;
-            var birthCountry = value.PersonIdentifierSearchRequest.BirthCountry;
+            var firstname = value.PersonIdentifierSearchRequest.Firstame?.ToUpper();
+            var surname = value.PersonIdentifierSearchRequest.Surname?.ToUpper();
+            var familyname = value.PersonIdentifierSearchRequest.Familyname?.ToUpper();
+            var birthCountry = value.PersonIdentifierSearchRequest.BirthCountry?.ToUpper();
             var birthdate = value.PersonIdentifierSearchRequest.Birthdate;
             var birthDatePrec = value.PersonIdentifierSearchRequest.BirthDatePrec;
-            var birthplace = value.PersonIdentifierSearchRequest.Birthplace;
-            var fullname = value.PersonIdentifierSearchRequest.Fullname;
+            var birthplace = value.PersonIdentifierSearchRequest.Birthplace?.ToUpper();
+            var fullname = value.PersonIdentifierSearchRequest.Fullname?.ToUpper();
+            var birthdateFrom = new DateTime(birthdate.Year, birthdate.Month, 1);
+            var birthdateTo = birthdateFrom.AddMonths(1).AddDays(-1);
+            var birthdateYear = birthdate.Year;
 
             var personIds =
                 (
                 from ph in dbContext.PPersonHs.Include( p => p.BirthCountry).Include(p => p.BirthCity)
                 join phids in dbContext.PPersonIdsHes on ph.Id equals phids.PersonHId
                 join pids in dbContext.PPersonIds on new { phids.Pid, phids.PidTypeId } equals new { pids.Pid, pids.PidTypeId }
-               where (string.IsNullOrEmpty(firstname) || ph.Surname.Contains(firstname)) &&
-                     (string.IsNullOrEmpty(surname) || ph.Firstname.Contains(surname)) &&
-                     (string.IsNullOrEmpty(familyname) || ph.Familyname.Contains(familyname)) &&
-                     (string.IsNullOrEmpty(birthCountry) || ph.BirthCountry.Name.Contains(birthCountry)) &&
-                     (string.IsNullOrEmpty(birthplace) || ph.BirthCity.Name.Contains(birthplace)) &&
-                     ph.BirthDate.Equals(birthdate) &&
-                     (string.IsNullOrEmpty(birthDatePrec) || ph.BirthDatePrec.Equals(birthDatePrec))
+               where (string.IsNullOrEmpty(firstname) || ph.Firstname.ToUpper().Contains(firstname)) &&
+                     (string.IsNullOrEmpty(surname) || ph.Surname.ToUpper().Contains(surname)) &&
+                     (string.IsNullOrEmpty(familyname) || ph.Familyname.ToUpper().Contains(familyname)) &&
+                     (string.IsNullOrEmpty(fullname) || ph.Fullname.ToUpper().Contains(fullname)) &&
+                     (string.IsNullOrEmpty(birthCountry) || ph.BirthCountry.Name.ToUpper().Contains(birthCountry)) &&
+                     (string.IsNullOrEmpty(birthplace) || ph.BirthCity.Name.ToUpper().Contains(birthplace)) &&
+                     (
+                        (!string.IsNullOrEmpty(birthDatePrec) && birthDatePrec.Equals("YM") && ph.BirthDate >= birthdateFrom && ph.BirthDate <= birthdateTo) ||
+                        (!string.IsNullOrEmpty(birthDatePrec) && birthDatePrec.Equals("Y") && ph.BirthDate.Value.Year == birthdateYear) ||
+                        ph.BirthDate.Equals(birthdate)
+                    )
+
                 select pids.PersonId
                 ).Distinct().Take(100);
 
