@@ -28,15 +28,22 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}")]
-        public new async Task<IActionResult> Get(string aId)
+        public virtual async Task<IActionResult> Get(string aId)
         {
             return await base.Get(aId);
         }
 
         [HttpPost("")]
-        public new async Task<IActionResult> Post([FromBody] ApplicationDTO aInDto)
+        public  virtual async Task<IActionResult> Post([FromBody] ApplicationDTO aInDto)
         {
             return await base.Post(aInDto);
+        }
+
+        [HttpPut("{aId}")]
+        public virtual async Task<IActionResult> Put(string aId, [FromBody] ApplicationDTO aInDto)
+        {
+            await this.baseService.UpdateAsync(aId, aInDto);
+            return Ok();
         }
 
         [HttpGet("{aId}/documents")]
@@ -75,6 +82,21 @@ namespace MJ_CAIS.Web.Controllers
 
             return File(content, mimeType, fileName);
         }
+
+        [HttpGet("{aId}/person-alias")]
+        public async Task<IActionResult> GetPersonAlias(string aId)
+        {
+            var result = await this._applicationService.SelectApplicationPersAliasByApplicationIdAsync(aId);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}/application-history")]
+        public async Task<IActionResult> GetAppplicationHistory(string aId)
+        {
+            var result = await this._applicationService.SelectApplicationPersStatusHAsync(aId);
+            return Ok(result);
+        }
+        
 
         private string getContentType(string fileName)
         {

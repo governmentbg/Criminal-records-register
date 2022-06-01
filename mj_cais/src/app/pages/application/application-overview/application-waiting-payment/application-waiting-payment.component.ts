@@ -1,5 +1,8 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
+import { ConfirmDialogComponent } from "../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { ConfirmTemplateDialogComponent } from "../../../../@core/components/dialogs/confirm-template-dialog/confirm-template-dialog.component";
+import { CommonConstants } from "../../../../@core/constants/common.constants";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { ApplicationGridService } from "../_data/application-grid.service";
@@ -27,5 +30,15 @@ export class ApplicationWaitingPaymentComponent extends RemoteGridWithStatePersi
 
   ngOnInit(): void {
     super.ngOnInit();
+  }
+
+  public confirmPayment(): void {
+      //TODO: 
+      this.dialogService
+      .open(ConfirmTemplateDialogComponent, { context: {
+        title: 'Потвърждаване на плащенето',
+       
+      },closeOnBackdropClick: false })
+      .onClose.subscribe((result) => {});
   }
 }

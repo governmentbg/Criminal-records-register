@@ -11,19 +11,19 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "AReport",
-                SingleName = "Report",
-                MultipleName = "Reports",
+                EntityName = "AStatusH",
+                SingleName = "AStatusH",
+                MultipleName = "AStatusesH",
                 AngularModuleName = "reports",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
-            ClassGenerator.GenerateDTO(projectPath, parameters);
-            ClassGenerator.GenerateGridDTO(projectPath, parameters);
-            ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
-            ClassGenerator.GenerateRepository(projectPath, parameters);
-            ClassGenerator.GenerateInterface(projectPath, parameters);
-            ClassGenerator.GenerateService(projectPath, parameters);
+ClassGenerator.GenerateDTO(projectPath, parameters);
+            //ClassGenerator.GenerateGridDTO(projectPath, parameters);
+           // ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
+            //ClassGenerator.GenerateRepository(projectPath, parameters);
+            //ClassGenerator.GenerateInterface(projectPath, parameters);
+            //ClassGenerator.GenerateService(projectPath, parameters);
             //ClassGenerator.GenerateController(projectPath, parameters);
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);

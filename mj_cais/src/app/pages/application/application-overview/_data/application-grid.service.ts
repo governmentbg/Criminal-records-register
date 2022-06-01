@@ -20,6 +20,4 @@ export class ApplicationGridService extends CaisCrudService<
       this.updateUrl(`${currentEndpoint}`);
     }
   }
-
-  
 }

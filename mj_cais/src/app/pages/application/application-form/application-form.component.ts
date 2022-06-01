@@ -1,12 +1,13 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
+import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
-import { ApplicationResolverData } from "./data/application.resolver";
-import { ApplicationService } from "./data/application.service";
-import { ApplicationForm } from "./models/application.form";
-import { ApplicationModel } from "./models/application.model";
+import { ApplicationResolverData } from "./_data/application.resolver";
+import { ApplicationService } from "./_data/application.service";
+import { ApplicationForm } from "./_models/application.form";
+import { ApplicationModel } from "./_models/application.model";
 
 @Component({
   selector: "cais-application-form",
@@ -22,6 +23,8 @@ export class ApplicationFormComponent
   >
   implements OnInit
 {
+  public PersonContextEnum = PersonContextEnum;
+
   constructor(
     service: ApplicationService,
     public injector: Injector,
@@ -44,10 +47,13 @@ export class ApplicationFormComponent
   }
 
   createInputObject(object: ApplicationModel) {
-    return new ApplicationModel(object);
+
+    return  object;
   }
 
   submitFunction = () => {
+    this.fullForm.applicationTypeId.setValue('6'); 
+    this.fullForm.csAuthorityId.setValue('562'); 
     this.validateAndSave(this.fullForm);
   };
 }

@@ -1,32 +1,15 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AddressModel } from "../../../../@core/components/forms/address-form/_model/address.model";
+import { PersonModel } from "../../../../@core/components/forms/person-form/_models/person.model";
 import { BaseModel } from "../../../../@core/models/common/base.model";
 
 export class ApplicationModel extends BaseModel {
   public registrationNumber: string = null;
   public purpose: string = null;
-  public firstname: string = null;
-  public surname: string = null;
-  public familyname: string = null;
-  public fullname: string = null;
-  public firstnameLat: string = null;
-  public surnameLat: string = null;
-  public familynameLat: string = null;
-  public sex: number = null;
-  public egn: string = null;
-  public ln: string = null;
-  public lnch: string = null;
+
   public personId: string = null;
   public applicantName: string = null;
   public address: string = null;
-  public motherFirstname: string = null;
-  public motherSurname: string = null;
-  public motherFamilyname: string = null;
-  public fatherFirstname: string = null;
-  public fatherSurname: string = null;
-  public fatherFamilyname: string = null;
-  public motherFullname: string = null;
-  public fatherFullname: string = null;
+
   public purposeCountry: string = null;
   public purposePosition: string = null;
   public srvcResRcptMethId: string = null;
@@ -57,34 +40,17 @@ export class ApplicationModel extends BaseModel {
   public userId: string = null;
   public userExtId: string = null;
   public birthAddress: AddressModel = new AddressModel();
+  public person: PersonModel;
 
   constructor(init?: Partial<ApplicationModel>) {
     super(init);
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;
       this.purpose = init.purpose ?? null;
-      this.firstname = init.firstname ?? null;
-      this.surname = init.surname ?? null;
-      this.familyname = init.familyname ?? null;
-      this.fullname = init.fullname ?? null;
-      this.firstnameLat = init.firstnameLat ?? null;
-      this.surnameLat = init.surnameLat ?? null;
-      this.familynameLat = init.familynameLat ?? null;
-      this.sex = init.sex ?? null;
-      this.egn = init.egn ?? null;
-      this.ln = init.ln ?? null;
-      this.lnch = init.lnch ?? null;
       this.personId = init.personId ?? null;
+      this.person = init.person ?? null;
       this.applicantName = init.applicantName ?? null;
       this.address = init.address ?? null;
-      this.motherFirstname = init.motherFirstname ?? null;
-      this.motherSurname = init.motherSurname ?? null;
-      this.motherFamilyname = init.motherFamilyname ?? null;
-      this.fatherFirstname = init.fatherFirstname ?? null;
-      this.fatherSurname = init.fatherSurname ?? null;
-      this.fatherFamilyname = init.fatherFamilyname ?? null;
-      this.motherFullname = init.motherFullname ?? null;
-      this.fatherFullname = init.fatherFullname ?? null;
       this.purposeCountry = init.purposeCountry ?? null;
       this.purposePosition = init.purposePosition ?? null;
       this.srvcResRcptMethId = init.srvcResRcptMethId ?? null;

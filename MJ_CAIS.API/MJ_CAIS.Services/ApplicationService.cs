@@ -7,6 +7,8 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -89,8 +91,6 @@ namespace MJ_CAIS.Services
             await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus, certificateValidityMonths, applicationStatus);
 
         }
-
-
         private async Task ProcessApplicationWithoutBulletinsAsync(AApplication application, AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
@@ -156,7 +156,6 @@ namespace MJ_CAIS.Services
             dbContext.AAppBulletins.AddRange(cert.AAppBulletins);
             dbContext.AApplications.Update(application);
         }
-
 
         public async Task<IQueryable<ApplicationDocumentDTO>> GetDocumentsByApplicationIdAsync(string aId)
         {
@@ -261,6 +260,24 @@ namespace MJ_CAIS.Services
             }
 
 
+        }
+
+        public async Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
+        {
+            var result = await _applicationRepository.SelectApplicationPersAliasByApplicationIdAsync(aId);
+            return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider); //AAppPersAlias
+        }
+
+        public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
+        {
+            var result = await _applicationRepository.SelectApplicationCertificateByApplicationIdAsync(aId);
+            return result.ProjectTo<ACertificate>(mapper.ConfigurationProvider); 
+        }
+
+        public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
+        {
+            var result = await _applicationRepository.SelectApplicationPersStatusHAsync(aId);
+            return result;
         }
     }
 }

@@ -83,17 +83,6 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/offences")]
         public async Task<IActionResult> GetOffences(string aId)
         {
-            //var objTest = new CriminalRecordsExtendedRequestType
-            //{
-            //    CriminalRecordsRequest = new CriminalRecordsRequestType
-            //    {
-            //        PID = "9636362525",
-            //        IdentifierType = IdentifierType.EGN
-            //    }
-            //};
-    
-           // var test = _test.GetCriminalRecordsReportAsync(objTest);
-
             var result = await this._bulletinService.GetOffencesByBulletinIdAsync(aId);
             return Ok(result);
         }
