@@ -213,18 +213,18 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(result);
         }
 
-        public void SaveBulletins(List<BBulletin> bulletins)
+        public async Task SaveBulletinsAsync(List<BBulletin> bulletins)
         {
             _dbContext.BBulletins.AddRange(bulletins);
-            _dbContext.SaveChanges();
+           await  _dbContext.SaveChangesAsync();
         }
 
-        public Dictionary<string, string> GetAuthIdByEkkate(List<string> ekatteCodes)
+        public async Task<Dictionary<string, string>> GetAuthIdByEkkateAsync(List<string> ekatteCodes)
         {
-            var result = _dbContext.GCities.AsNoTracking()
+            var result = await _dbContext.GCities.AsNoTracking()
                 .Where(x => ekatteCodes.Contains(x.EkatteCode))
                 .Select(x => new KeyValuePair<string, string>(x.EkatteCode, x.CsAuthorityId))
-                .ToDictionary(x => x.Key, x => x.Value);
+                .ToDictionaryAsync(x => x.Key, x => x.Value);
 
             return result;
         }
