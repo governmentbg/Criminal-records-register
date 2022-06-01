@@ -3,7 +3,7 @@ import { BaseModel } from "../../../../../../@core/models/common/base.model";
 export class ApplicationStatusHistoryModel extends BaseModel {
   public descr: string = null;
   public updatedBy: string = null;
-  public updatedOn: Date = null;
+  public createdOn: Date = null;
   public statusCode: string = null;
 
 
@@ -11,7 +11,7 @@ export class ApplicationStatusHistoryModel extends BaseModel {
     super(init);
     this.descr = init?.descr ?? null;
     this.updatedBy = init?.updatedBy ?? null;
-    this.updatedOn = init?.updatedOn ?? null;
+    this.createdOn = init?.createdOn ?? null;
     this.statusCode = init?.statusCode ?? null;
   }
 }

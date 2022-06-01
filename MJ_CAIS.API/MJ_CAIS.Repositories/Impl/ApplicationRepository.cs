@@ -36,7 +36,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var query = from aStatusH in _dbContext.AStatusHes.AsNoTracking()
                 join status in _dbContext.AApplicationStatuses.AsNoTracking() on aStatusH.StatusCode equals status.Code
-                join users in _dbContext.GUsers.AsNoTracking() on aStatusH.UpdatedBy equals users.Id
+                join users in _dbContext.GUsers.AsNoTracking() on aStatusH.CreatedBy equals users.Id
                     into astatusHLeft
                 from user in astatusHLeft.DefaultIfEmpty()
                  where (string.IsNullOrEmpty(aId) || aStatusH.ApplicationId == aId)
@@ -45,12 +45,18 @@ namespace MJ_CAIS.Repositories.Impl
                     Id = aStatusH.Id,
                     Descr = aStatusH.Descr,
                     UpdatedBy = user.Firstname + " " + user.Familyname,
-                    UpdatedOn = aStatusH.UpdatedOn,
+                    CreatedOn = aStatusH.CreatedOn,
                     StatusCode = status.Name,
                 };
 
             return await Task.FromResult(query);
 
+        }
+
+        public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
+        {
+            return await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
+                .Where(x => x.ApplicationId == aId));
         }
 
 

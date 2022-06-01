@@ -47,10 +47,13 @@ export class ApplicationFormComponent
   }
 
   createInputObject(object: ApplicationModel) {
-    return new ApplicationModel(object);
+
+    return  object;
   }
 
   submitFunction = () => {
+    this.fullForm.applicationTypeId.setValue('6'); 
+    this.fullForm.csAuthorityId.setValue('562'); 
     this.validateAndSave(this.fullForm);
   };
 }

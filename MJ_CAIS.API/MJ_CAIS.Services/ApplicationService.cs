@@ -268,6 +268,12 @@ namespace MJ_CAIS.Services
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider); //AAppPersAlias
         }
 
+        public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
+        {
+            var result = await _applicationRepository.SelectApplicationCertificateByApplicationIdAsync(aId);
+            return result.ProjectTo<ACertificate>(mapper.ConfigurationProvider); 
+        }
+
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
         {
             var result = await _applicationRepository.SelectApplicationPersStatusHAsync(aId);

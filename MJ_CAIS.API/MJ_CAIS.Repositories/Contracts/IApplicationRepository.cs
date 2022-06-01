@@ -10,5 +10,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync();
         Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId);
         Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId);
+        Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId);
     }
 }

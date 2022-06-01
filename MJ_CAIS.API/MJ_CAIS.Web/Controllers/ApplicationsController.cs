@@ -28,15 +28,22 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}")]
-        public new async Task<IActionResult> Get(string aId)
+        public virtual async Task<IActionResult> Get(string aId)
         {
             return await base.Get(aId);
         }
 
         [HttpPost("")]
-        public new async Task<IActionResult> Post([FromBody] ApplicationDTO aInDto)
+        public  virtual async Task<IActionResult> Post([FromBody] ApplicationDTO aInDto)
         {
             return await base.Post(aInDto);
+        }
+
+        [HttpPut("{aId}")]
+        public virtual async Task<IActionResult> Put(string aId, [FromBody] ApplicationDTO aInDto)
+        {
+            await this.baseService.UpdateAsync(aId, aInDto);
+            return Ok();
         }
 
         [HttpGet("{aId}/documents")]

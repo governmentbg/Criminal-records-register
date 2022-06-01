@@ -8,28 +8,11 @@ namespace MJ_CAIS.DTO.Application
         public PersonDTO Person { get; set; } = new PersonDTO();
         public string? RegistrationNumber { get; set; }
         public string? Purpose { get; set; }
-        //public string? Firstname { get; set; }
-        //public string? Surname { get; set; }
-        //public string? Familyname { get; set; }
-        //public string? Fullname { get; set; }
-        //public string? FirstnameLat { get; set; }
-        //public string? SurnameLat { get; set; }
-        //public string? FamilynameLat { get; set; }
-        //public decimal? Sex { get; set; }
-        //public string? Egn { get; set; }
-        //public string? Ln { get; set; }
-        //public string? Lnch { get; set; }
+    
         public string? PersonId { get; set; }
         public string? ApplicantName { get; set; }
         public string? Address { get; set; }
-        //public string? MotherFirstname { get; set; }
-        //public string? MotherSurname { get; set; }
-        //public string? MotherFamilyname { get; set; }
-        //public string? FatherFirstname { get; set; }
-        //public string? FatherSurname { get; set; }
-        //public string? FatherFamilyname { get; set; }
-        //public string? MotherFullname { get; set; }
-        //public string? FatherFullname { get; set; }
+       
         public string? PurposeCountry { get; set; }
         public string? PurposePosition { get; set; }
         public string? SrvcResRcptMethId { get; set; }
