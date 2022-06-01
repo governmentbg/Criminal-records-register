@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using EO.Pdf;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -16,12 +18,14 @@ namespace MJ_CAIS.Services
         private readonly IPdfSigner _pdfSignerService;
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IMapper _mapper;
+        private readonly IPersonRepository _personRepository;
 
-        public CriminalRecordsReportService(IMapper mapper, IPdfSigner pdfSignerService, IBulletinRepository bulletinRepository)
+        public CriminalRecordsReportService(IMapper mapper, IPdfSigner pdfSignerService, IBulletinRepository bulletinRepository, IPersonRepository personRepository)
         {
             _mapper = mapper;
             _pdfSignerService = pdfSignerService;
             _bulletinRepository = bulletinRepository;
+            _personRepository = personRepository;
         }
 
         public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value)
@@ -75,9 +79,44 @@ namespace MJ_CAIS.Services
             return File.ReadAllText(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + @"ExternalServicesHost\ESCSC.xslt");
         }
 
-        public PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value)
+        public async Task<PersonIdentifierSearchResponseType> PersonIdentifierSearchAsync(PersonIdentifierSearchExtendedRequestType value)
         {
-            throw new NotImplementedException();
+            var dbContext = _personRepository.GetDbContext();
+
+            var firstname = value.PersonIdentifierSearchRequest.Firstame;
+            var surname = value.PersonIdentifierSearchRequest.Surname;
+            var familyname = value.PersonIdentifierSearchRequest.Familyname;
+            var birthCountry = value.PersonIdentifierSearchRequest.BirthCountry;
+            var birthdate = value.PersonIdentifierSearchRequest.Birthdate;
+            var birthDatePrec = value.PersonIdentifierSearchRequest.BirthDatePrec;
+            var birthplace = value.PersonIdentifierSearchRequest.Birthplace;
+            var fullname = value.PersonIdentifierSearchRequest.Fullname;
+
+            var personIds =
+                (
+                from ph in dbContext.PPersonHs.Include( p => p.BirthCountry).Include(p => p.BirthCity)
+                join phids in dbContext.PPersonIdsHes on ph.Id equals phids.PersonHId
+                join pids in dbContext.PPersonIds on new { phids.Pid, phids.PidTypeId } equals new { pids.Pid, pids.PidTypeId }
+               where (string.IsNullOrEmpty(firstname) || ph.Surname.Contains(firstname)) &&
+                     (string.IsNullOrEmpty(surname) || ph.Firstname.Contains(surname)) &&
+                     (string.IsNullOrEmpty(familyname) || ph.Familyname.Contains(familyname)) &&
+                     (string.IsNullOrEmpty(birthCountry) || ph.BirthCountry.Name.Contains(birthCountry)) &&
+                     (string.IsNullOrEmpty(birthplace) || ph.BirthCity.Name.Contains(birthplace)) &&
+                     ph.BirthDate.Equals(birthdate) &&
+                     (string.IsNullOrEmpty(birthDatePrec) || ph.BirthDatePrec.Equals(birthDatePrec))
+                select pids.PersonId
+                ).Distinct().Take(100);
+
+            var res = await 
+                (from p in dbContext.PPeople.Include(p => p.BirthCity).Include(p => p.BirthCountry).Include(p => p.PPersonIds).ThenInclude(pid => pid.PidType)
+                where personIds.Contains(p.Id)
+                select p).ToListAsync();
+
+            var result = _mapper.Map<List<PPerson>, PersonIdentifierSearchResponseType>(res);
+
+            result.ReportCriteria = value.PersonIdentifierSearchRequest;
+            result.ReportDate = DateTime.UtcNow;
+            return result;
         }
 
         public static string ApplyTransformation(string xmlString, string xslt)
@@ -98,6 +137,7 @@ namespace MJ_CAIS.Services
 
             return transformedResult;
         }
+
         public static string XmlSerialize(object obj)
         {
             if (obj != null)
@@ -116,6 +156,7 @@ namespace MJ_CAIS.Services
                 return string.Empty;
             }
         }
+
         public byte[] ConvertToPDFAndSign(string html, string signingCertificateName)
         {
             using (MemoryStream ms = new MemoryStream())

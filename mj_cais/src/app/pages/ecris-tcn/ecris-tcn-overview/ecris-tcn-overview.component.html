@@ -49,7 +49,9 @@
     [dataType]="'date'"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 
@@ -124,7 +126,9 @@
     [dataType]="'date'"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 

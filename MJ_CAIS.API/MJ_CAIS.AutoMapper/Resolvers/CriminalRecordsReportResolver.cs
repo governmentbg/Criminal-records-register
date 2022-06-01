@@ -25,20 +25,13 @@ namespace MJ_CAIS.AutoMapperContainer.Resolvers
             var dateValue = date.Value;
 
             var result = new DateType();
-            result.DateYear = dateValue.ToString("yyyy");
-
-            if (datePrecision == DatePrecisionType.YM)
+            result.Date = dateValue;
+            if(!string.IsNullOrEmpty(datePrecision))
             {
-                result.DateMonthDay = new MonthDayType();
-                result.DateMonthDay.DateMonth = dateValue.ToString("--MM");
+                result.DatePrecision = Enum.Parse<DatePrecisionEnum>(datePrecision);
             }
-            else if (datePrecision == DatePrecisionType.YMD)
-            {
-                result.DateMonthDay = new MonthDayType();
-                result.DateMonthDay.DateMonth = dateValue.ToString("--MM");
-                result.DateMonthDay.DateDay = dateValue.ToString("---dd");
-            }
-
+            result.DatePrecisionSpecified = string.IsNullOrEmpty(datePrecision);
+                        
             return result;
         }
 

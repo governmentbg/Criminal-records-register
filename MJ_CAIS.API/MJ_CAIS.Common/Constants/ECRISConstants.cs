@@ -55,6 +55,13 @@ namespace MJ_CAIS.Common.Constants
             public const string Update = "UPDATE";
             public const string Delete = "DELETE";
         }
+
+        public static class EcrisTcnStatus
+        {
+            public const string New = "Нов";
+            public const string Approved = "Обработен";
+            public const string Canceled = "Отказан";
+        }
     }
 }
 
