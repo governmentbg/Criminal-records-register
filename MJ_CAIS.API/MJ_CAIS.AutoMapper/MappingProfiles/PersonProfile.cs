@@ -62,12 +62,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                               },
                               BirthDate = (p.BirthDate != null) ? new DateType()
                               {
-                                  DateYear = p.BirthDate.HasValue ? p.BirthDate.Value.Year.ToString() : "",
-                                  DateMonthDay = new MonthDayType()
-                                  {
-                                      DateDay = p.BirthDate.HasValue ? p.BirthDate.Value.Day.ToString() : "",
-                                      DateMonth = p.BirthDate.HasValue ? p.BirthDate.Value.Month.ToString() : ""
-                                  }
+                                   Date = p.BirthDate.Value,
+                                   DatePrecision = p.BirthDatePrec != null ? Enum.Parse<DatePrecisionEnum>( p.BirthDatePrec) : DatePrecisionEnum.YMD,
+                                   DatePrecisionSpecified = (p.BirthDatePrec != null)
                               } : null,
                               BirthPlace = (p.BirthCity != null || p.BirthCountry != null) ? new PlaceType()
                               {
