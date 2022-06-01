@@ -974,19 +974,19 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     public enum DecisionTypeCategories {
         
         /// <remarks/>
-        Присъда,
+        dkp_prisada,
         
         /// <remarks/>
-        Решение,
+        dkp_reshenie,
         
         /// <remarks/>
-        Определение,
+        dkp_opredelenie,
         
         /// <remarks/>
-        Споразумение,
+        dkp_sporazumenie,
         
         /// <remarks/>
-        Неопределено,
+        dkp_null,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
@@ -1970,22 +1970,22 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     public enum CaseType {
         
         /// <remarks/>
-        НОХД,
+        sign_noxd,
         
         /// <remarks/>
-        НЧХД,
+        sign_ncxd,
         
         /// <remarks/>
-        НАХД,
+        sign_naxd,
         
         /// <remarks/>
-        НЧД,
+        sign_ncd,
         
         /// <remarks/>
-        АНД,
+        sign_and,
         
         /// <remarks/>
-        Неизвестно,
+        sign_null,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
