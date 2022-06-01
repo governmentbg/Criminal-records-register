@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -73,6 +75,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
              .ForPath(d => d.Person.BirthPlace.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
              .ForPath(d => d.Person.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => src.AAppCitizenships.Select(x => x.Id)))
              .ForPath(d => d.Person.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.AAppCitizenships.Select(x => x.CountryId)));
+
+
+            CreateMap<AAppPersAlias, PersonAliasDTO>()
+                .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type));
+
 
             CreateMap<ApplicationDocumentDTO, DDocument>()
              .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))

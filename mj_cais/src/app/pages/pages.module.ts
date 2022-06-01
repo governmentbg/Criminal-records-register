@@ -72,6 +72,7 @@ import { ApplicationForSigningComponent } from './application/application-overvi
 import { ApplicationForSiningByJudgeComponent } from './application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component';
 import { BulletinAdministrationOverviewComponent } from './bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component';
 import { BulletinAdministrationFormComponent } from './bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component';
+import { ApplicationStatusHistoryComponent } from './application/application-form/tabs/application-status-history/application-status-history.component';
 
 @NgModule({
   imports: [
@@ -149,7 +150,8 @@ import { BulletinAdministrationFormComponent } from './bulletin-administrations/
     ApplicationForSigningComponent,
     ApplicationForSiningByJudgeComponent,
     BulletinAdministrationOverviewComponent,
-    BulletinAdministrationFormComponent
+    BulletinAdministrationFormComponent,
+    ApplicationStatusHistoryComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

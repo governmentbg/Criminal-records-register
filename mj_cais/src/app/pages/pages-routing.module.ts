@@ -31,7 +31,7 @@ import { IsinDataPreviewFormComponent } from "./isin/isin-data-form/isin-data-pr
 import { HomeComponent } from "./home/home.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin/bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
 import { ApplicationFormComponent } from "./application/application-form/application-form.component";
-import { ApplicationResolver } from "./application/application-form/data/application.resolver";
+import { ApplicationResolver } from "./application/application-form/_data/application.resolver";
 import { AuthGuard } from "../@core/services/common/guard.service";
 import { PersonDetailsFormComponent } from "./person/person-details-form/person-details-form.component";
 import { PersonDetailsResolver } from "./person/person-details-form/_data/person-details.resolver";

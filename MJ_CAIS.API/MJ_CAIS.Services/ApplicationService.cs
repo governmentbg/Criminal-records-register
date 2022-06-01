@@ -7,6 +7,7 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -264,7 +265,13 @@ namespace MJ_CAIS.Services
         public async Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
         {
             var result = await _applicationRepository.SelectApplicationPersAliasByApplicationIdAsync(aId);
-            return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
+            return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider); //AAppPersAlias
+        }
+
+        public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
+        {
+            var result = await _applicationRepository.SelectApplicationPersStatusHAsync(aId);
+            return result;
         }
     }
 }

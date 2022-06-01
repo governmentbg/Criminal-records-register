@@ -79,9 +79,17 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/person-alias")]
         public async Task<IActionResult> GetPersonAlias(string aId)
         {
-            var result = await this._applicationService.GetDocumentsByApplicationIdAsync(aId);
+            var result = await this._applicationService.SelectApplicationPersAliasByApplicationIdAsync(aId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/application-history")]
+        public async Task<IActionResult> GetAppplicationHistory(string aId)
+        {
+            var result = await this._applicationService.SelectApplicationPersStatusHAsync(aId);
+            return Ok(result);
+        }
+        
 
         private string getContentType(string fileName)
         {

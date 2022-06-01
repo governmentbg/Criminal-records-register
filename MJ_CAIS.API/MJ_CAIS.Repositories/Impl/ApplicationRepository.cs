@@ -5,6 +5,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Home;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DTO.AStatusH;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -29,6 +30,27 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
                 .Where(x => x.ApplicationId == aId));
+        }
+
+        public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
+        {
+            var query = from aStatusH in _dbContext.AStatusHes.AsNoTracking()
+                join status in _dbContext.AApplicationStatuses.AsNoTracking() on aStatusH.StatusCode equals status.Code
+                join users in _dbContext.GUsers.AsNoTracking() on aStatusH.UpdatedBy equals users.Id
+                    into astatusHLeft
+                from user in astatusHLeft.DefaultIfEmpty()
+                 where (string.IsNullOrEmpty(aId) || aStatusH.ApplicationId == aId)
+                select new AStatusHGridDTO()
+                {
+                    Id = aStatusH.Id,
+                    Descr = aStatusH.Descr,
+                    UpdatedBy = user.Firstname + " " + user.Familyname,
+                    UpdatedOn = aStatusH.UpdatedOn,
+                    StatusCode = status.Name,
+                };
+
+            return await Task.FromResult(query);
+
         }
 
 

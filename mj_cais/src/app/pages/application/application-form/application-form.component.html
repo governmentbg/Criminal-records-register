@@ -84,16 +84,16 @@
             Информация, събрана по служебен път
           </div>
           <cais-person-form
-          [personForm]="fullForm.person"
-          [isEditable]="true"
-          [personAliasTypes]="dbData.personAliasTypes"
-          [genderTypes]="dbData.genderTypes"
-          [countries]="dbData.countries"
-          [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
-          [personAliasGridData]="dbData.personAlias"
-          [contextType]="PersonContextEnum.Application"
-        >
-        </cais-person-form>
+            [personForm]="fullForm.person"
+            [isEditable]="true"
+            [personAliasTypes]="dbData.personAliasTypes"
+            [genderTypes]="dbData.genderTypes"
+            [countries]="dbData.countries"
+            [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
+            [personAliasGridData]="dbData.personAlias"
+            [contextType]="PersonContextEnum.Application"
+          >
+          </cais-person-form>
           <!-- <div
             class="ml-4 mr-4"
             style="border: 1px solid #e5e5e5; padding: 30px; border-radius: 5px"
@@ -345,10 +345,13 @@
           >
           </cais-fbbc-document-form>
         </nb-tab>
-        <nb-tab tabTitle="Свидетелство(чисто)"></nb-tab>
         <nb-tab tabTitle="Свидетелство"></nb-tab>
-        <nb-tab tabTitle="История на статусите"></nb-tab>
-        <nb-tab tabTitle="Документи"></nb-tab>
+        <nb-tab tabTitle="История на статусите">
+          <cais-application-status-history
+            [historyData]="dbData.applicationStatusHistoryData"
+          >
+          </cais-application-status-history>
+        </nb-tab>
         <nb-tab tabTitle="Проверка в регистри"></nb-tab>
       </nb-tabset>
     </form>

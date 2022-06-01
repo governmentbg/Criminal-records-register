@@ -5,8 +5,9 @@ import { PersonAliasCodeConstants, PersonAliasNameConstants } from "../../../../
 import { PersonAliasModel } from "../../../../@core/models/common/person-alias.model";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { ApplicationDocumentModel } from "../models/application-document.model";
-import { ApplicationModel } from "../models/application.model";
+import { ApplicationStatusHistoryModel } from "../tabs/application-status-history/_models/application-status-history.model";
+import { ApplicationDocumentModel } from "../_models/application-document.model";
+import { ApplicationModel } from "../_models/application.model";
 
 @Injectable({ providedIn: "root" })
 export class ApplicationService extends CaisCrudService<
@@ -30,6 +31,14 @@ export class ApplicationService extends CaisCrudService<
     return this.http.post<ApplicationDocumentModel>(
       `${this.url}/${fbbcId}/documents`,
       model
+    );
+  }
+
+  public getApplicationStatusHistoryData(
+    id: string
+  ): Observable<ApplicationStatusHistoryModel[]> {
+    return this.http.get<ApplicationStatusHistoryModel[]>(
+      `${this.url}/${id}/application-history`
     );
   }
 
