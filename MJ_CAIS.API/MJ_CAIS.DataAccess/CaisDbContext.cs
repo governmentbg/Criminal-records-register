@@ -572,6 +572,7 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.ApplicationType)
                     .WithMany(p => p.AApplications)
                     .HasForeignKey(d => d.ApplicationTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_A_APPLICATIONS_A_APPLICATIO");
 
                 entity.HasOne(d => d.BirthCity)
@@ -592,6 +593,7 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.CsAuthority)
                     .WithMany(p => p.AApplicationCsAuthorities)
                     .HasForeignKey(d => d.CsAuthorityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_A_APPLICATIONS_G_CS_AUTHORI");
 
                 entity.HasOne(d => d.EgnNavigation)
@@ -1331,7 +1333,7 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("A_STATUS_H");
 
-                entity.HasIndex(e => new { e.StatusCode, e.ApplicationId, e.ReportOrder }, "XAK1A_STATUS_H")
+                entity.HasIndex(e => new { e.StatusCode, e.ApplicationId, e.ReportOrder, e.CertificateId }, "XAK1A_STATUS_H")
                     .IsUnique();
 
                 entity.HasIndex(e => e.StatusCode, "XIF1A_STATUS_H");
@@ -5042,6 +5044,10 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.HasError)
                     .HasPrecision(1)
                     .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.IsAsync)
+                    .HasPrecision(1)
+                    .HasColumnName("IS_ASYNC");
 
                 entity.Property(e => e.IsFromCache)
                     .HasPrecision(1)
