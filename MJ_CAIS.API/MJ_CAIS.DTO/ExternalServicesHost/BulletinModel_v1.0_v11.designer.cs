@@ -974,19 +974,19 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     public enum DecisionTypeCategories {
         
         /// <remarks/>
-        Присъда,
+        dkp_prisada,
         
         /// <remarks/>
-        Решение,
+        dkp_reshenie,
         
         /// <remarks/>
-        Определение,
+        dkp_opredelenie,
         
         /// <remarks/>
-        Споразумение,
+        dkp_sporazumenie,
         
         /// <remarks/>
-        Неопределено,
+        dkp_null,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
@@ -1651,81 +1651,64 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://cais.mjs.bg/BulletinModel-v1.0", IsNullable=true)]
     public partial class DateType {
         
-        private string dateYearField;
+        private System.DateTime dateField;
         
-        private MonthDayType dateMonthDayField;
+        private DatePrecisionEnum datePrecisionField;
         
-        public DateType() {
-            this.dateYearField = "1800";
-        }
+        private bool datePrecisionFieldSpecified;
         
         /// <summary>
-        /// Година
+        /// Дата
         /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="gYear", Order=0)]
-        [System.ComponentModel.DescriptionAttribute("Година")]
-        public string DateYear {
+        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=0)]
+        [System.ComponentModel.DescriptionAttribute("Дата")]
+        public System.DateTime Date {
             get {
-                return this.dateYearField;
+                return this.dateField;
             }
             set {
-                this.dateYearField = value;
+                this.dateField = value;
             }
         }
         
         /// <summary>
-        /// Месец/Ден
+        /// Точност на датата
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        [System.ComponentModel.DescriptionAttribute("Месец/Ден")]
-        public MonthDayType DateMonthDay {
+        [System.ComponentModel.DescriptionAttribute("Точност на датата")]
+        public DatePrecisionEnum DatePrecision {
             get {
-                return this.dateMonthDayField;
+                return this.datePrecisionField;
             }
             set {
-                this.dateMonthDayField = value;
+                this.datePrecisionField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DatePrecisionSpecified {
+            get {
+                return this.datePrecisionFieldSpecified;
+            }
+            set {
+                this.datePrecisionFieldSpecified = value;
             }
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
     [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://cais.mjs.bg/BulletinModel-v1.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://cais.mjs.bg/BulletinModel-v1.0", IsNullable=true)]
-    public partial class MonthDayType {
+    public enum DatePrecisionEnum {
         
-        private string dateMonthField;
+        /// <remarks/>
+        Y,
         
-        private string dateDayField;
+        /// <remarks/>
+        YM,
         
-        /// <summary>
-        /// Месец
-        /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="gMonth", Order=0)]
-        [System.ComponentModel.DescriptionAttribute("Месец")]
-        public string DateMonth {
-            get {
-                return this.dateMonthField;
-            }
-            set {
-                this.dateMonthField = value;
-            }
-        }
-        
-        /// <summary>
-        /// Ден
-        /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="gDay", Order=1)]
-        [System.ComponentModel.DescriptionAttribute("Ден")]
-        public string DateDay {
-            get {
-                return this.dateDayField;
-            }
-            set {
-                this.dateDayField = value;
-            }
-        }
+        /// <remarks/>
+        YMD,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
@@ -1970,22 +1953,22 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     public enum CaseType {
         
         /// <remarks/>
-        НОХД,
+        sign_noxd,
         
         /// <remarks/>
-        НЧХД,
+        sign_ncxd,
         
         /// <remarks/>
-        НАХД,
+        sign_naxd,
         
         /// <remarks/>
-        НЧД,
+        sign_ncd,
         
         /// <remarks/>
-        АНД,
+        sign_and,
         
         /// <remarks/>
-        Неизвестно,
+        sign_null,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
@@ -2986,6 +2969,46 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
             }
             set {
                 this.personDataField = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://cais.mjs.bg/BulletinModel-v1.0")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace="http://cais.mjs.bg/BulletinModel-v1.0", IsNullable=true)]
+    public partial class MonthDayType {
+        
+        private string dateMonthField;
+        
+        private string dateDayField;
+        
+        /// <summary>
+        /// Месец
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gMonth", Order=0)]
+        [System.ComponentModel.DescriptionAttribute("Месец")]
+        public string DateMonth {
+            get {
+                return this.dateMonthField;
+            }
+            set {
+                this.dateMonthField = value;
+            }
+        }
+        
+        /// <summary>
+        /// Ден
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="gDay", Order=1)]
+        [System.ComponentModel.DescriptionAttribute("Ден")]
+        public string DateDay {
+            get {
+                return this.dateDayField;
+            }
+            set {
+                this.dateDayField = value;
             }
         }
     }

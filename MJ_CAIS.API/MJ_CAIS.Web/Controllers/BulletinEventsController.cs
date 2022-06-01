@@ -20,9 +20,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<BulletinEventGridDTO> aQueryOptions, string groupCode, string? statusId)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<BulletinEventGridDTO> aQueryOptions, string groupCode, string? statusId, string? bulletinId)
         {
-            var result = await this._bulletinEventService.SelectAllWithPaginationAsync(aQueryOptions, groupCode, statusId);
+            var result = await this._bulletinEventService.SelectAllWithPaginationAsync(aQueryOptions, groupCode, statusId,bulletinId);
             return Ok(result);
         }
 

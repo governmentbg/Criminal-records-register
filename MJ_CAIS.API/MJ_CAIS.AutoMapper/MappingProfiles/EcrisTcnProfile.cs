@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisTcn;
 using System;
@@ -21,6 +22,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                         src.Bulletin.Egn +
                         (!string.IsNullOrEmpty(src.Bulletin.Egn) && !string.IsNullOrEmpty(src.Bulletin.Lnch) ? " / " + src.Bulletin.Lnch : src.Bulletin.Lnch) +
                         (!string.IsNullOrEmpty(src.Bulletin.Egn) && !string.IsNullOrEmpty(src.Bulletin.Lnch) && !string.IsNullOrEmpty(src.Bulletin.Ln) ? " / " + src.Bulletin.Ln : src.Bulletin.Ln)))
+                .ForMember(d => d.Status, opt => opt.MapFrom(src =>
+                        src.Status == nameof(ECRISConstants.EcrisTcnStatus.New) ? ECRISConstants.EcrisTcnStatus.New :
+                        src.Status == nameof(ECRISConstants.EcrisTcnStatus.Approved) ? ECRISConstants.EcrisTcnStatus.Approved :
+                        src.Status == nameof(ECRISConstants.EcrisTcnStatus.Canceled) ? ECRISConstants.EcrisTcnStatus.Canceled : null))
                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Bulletin.Firstname))
                 .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Bulletin.Surname))
                 .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Bulletin.Familyname))

@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by mazuki (darksiderg) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://cais.mjs.bg/BulletinModel-v1.0" targetNamespace="http://cais.mjs.bg/BulletinModel-v1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="DatePrecisionEnum">
+		<xs:annotation>
+			<xs:documentation>Точност на дата</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Y">
+				<xs:annotation>
+					<xs:documentation>Година</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="YM">
+				<xs:annotation>
+					<xs:documentation>Година, месец</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="YMD">
+				<xs:annotation>
+					<xs:documentation>Точна дата</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="FormOfGuiltType">
 		<xs:annotation>
 			<xs:documentation>Форма на вината</xs:documentation>
@@ -190,27 +212,27 @@
 			<xs:documentation>Вид на акта- Присъда;Решение;Определение;Споразумение</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="Присъда">
+			<xs:enumeration value="dkp_prisada">
 				<xs:annotation>
 					<xs:documentation>Присъда</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="Решение">
+			<xs:enumeration value="dkp_reshenie">
 				<xs:annotation>
 					<xs:documentation>Решение</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="Определение">
+			<xs:enumeration value="dkp_opredelenie">
 				<xs:annotation>
 					<xs:documentation>Определение</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="Споразумение">
+			<xs:enumeration value="dkp_sporazumenie">
 				<xs:annotation>
 					<xs:documentation>Споразумение</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="Неопределено">
+			<xs:enumeration value="dkp_null">
 				<xs:annotation>
 					<xs:documentation>Неопределено</xs:documentation>
 				</xs:annotation>
@@ -222,12 +244,36 @@
 			<xs:documentation>Вид на делото - Наказателно от общ характер;Наказателно от частен характер;Наказателно административен характер;Частно наказателно дело;Административно наказателно дело</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="НОХД"/>
-			<xs:enumeration value="НЧХД"/>
-			<xs:enumeration value="НАХД"/>
-			<xs:enumeration value="НЧД"/>
-			<xs:enumeration value="АНД"/>
-			<xs:enumeration value="Неизвестно"/>
+			<xs:enumeration value="sign_noxd">
+				<xs:annotation>
+					<xs:documentation>НОХД</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="sign_ncxd">
+				<xs:annotation>
+					<xs:documentation>НЧХД</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="sign_naxd">
+				<xs:annotation>
+					<xs:documentation>НАХД</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="sign_ncd">
+				<xs:annotation>
+					<xs:documentation>НЧД</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="sign_and">
+				<xs:annotation>
+					<xs:documentation>АНД</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="sign_null">
+				<xs:annotation>
+					<xs:documentation>Неизвестно</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="BulletinTypesType">
@@ -505,14 +551,14 @@
 			<xs:documentation>A proxy type for defining dates that allow empty day or month information for dates that are only partly defined.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="DateYear" type="xs:gYear" default="1800">
+			<xs:element name="Date" type="xs:date">
 				<xs:annotation>
-					<xs:documentation>Година</xs:documentation>
+					<xs:documentation>Дата</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="DateMonthDay" type="MonthDayType" minOccurs="0">
+			<xs:element name="DatePrecision" type="DatePrecisionEnum" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Месец/Ден</xs:documentation>
+					<xs:documentation>Точност на датата</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>

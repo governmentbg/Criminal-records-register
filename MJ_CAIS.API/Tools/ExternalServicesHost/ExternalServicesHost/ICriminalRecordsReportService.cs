@@ -9,15 +9,16 @@ using MJ_CAIS.DTO.ExternalServicesHost;
 namespace MJ_CAIS.ExternalServicesHost
 {
     [ServiceContract]
+    [XmlSerializerFormat]
     public interface  ICriminalRecordsReportService
     {
         [OperationContract]
-        CriminalRecordsReportType GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value);
+        Task<CriminalRecordsReportType> GetCriminalRecordsReport(CriminalRecordsExtendedRequestType value);
 
         [OperationContract]
-        CriminalRecordsPDFResult GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value);
+        Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDF(CriminalRecordsExtendedRequestType value);
         
         [OperationContract]
-        PersonIdentifierSearchResponseType PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
+        Task<PersonIdentifierSearchResponseType> PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
     }
 }

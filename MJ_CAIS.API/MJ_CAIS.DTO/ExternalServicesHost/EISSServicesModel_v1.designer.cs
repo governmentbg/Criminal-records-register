@@ -92,7 +92,7 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0", IsNullable=true)]
     public partial class PersonDataType {
         
-        private string identifierTypeField;
+        private IdentifierType identifierTypeField;
         
         private string identifierField;
         
@@ -104,7 +104,9 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         
         private System.DateTime birthDateField;
         
-        private string sexField;
+        private int sexField;
+        
+        private bool sexFieldSpecified;
         
         private string countryCode1Field;
         
@@ -121,7 +123,7 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         private string birthPlaceField;
         
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public string IdentifierType {
+        public IdentifierType IdentifierType {
             get {
                 return this.identifierTypeField;
             }
@@ -181,12 +183,22 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         }
         
         [System.Xml.Serialization.XmlElementAttribute(Order=6)]
-        public string Sex {
+        public int Sex {
             get {
                 return this.sexField;
             }
             set {
                 this.sexField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool SexSpecified {
+            get {
+                return this.sexFieldSpecified;
+            }
+            set {
+                this.sexFieldSpecified = value;
             }
         }
         
@@ -265,34 +277,12 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0")]
-    [System.Xml.Serialization.XmlRootAttribute("SendBulletinsDataRequest", Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0", IsNullable=false)]
-    public partial class SendBulletinsDataRequestType {
-        
-        private BulletinsList bulletinsListField;
-        
-        /// <summary>
-        /// Списък с бюлетини
-        /// </summary>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        [System.ComponentModel.DescriptionAttribute("Списък с бюлетини")]
-        public BulletinsList BulletinsList {
-            get {
-                return this.bulletinsListField;
-            }
-            set {
-                this.bulletinsListField = value;
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0", IsNullable=true)]
     public partial class ConvictionDataType {
         
-        private string actTypeCodeField;
+        private DecisionTypeCategories actTypeCodeField;
+        
+        private bool actTypeCodeFieldSpecified;
         
         private string actNumberField;
         
@@ -312,7 +302,9 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         
         private string caseYearField;
         
-        private string caseTypeCodeField;
+        private CaseType caseTypeCodeField;
+        
+        private bool caseTypeCodeFieldSpecified;
         
         private string caseDecidingAuthorityCodeField;
         
@@ -326,19 +318,31 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         
         private bool excecutionEndDateFieldSpecified;
         
-        private object sanctionTypeField;
+        private SanctionEnumType sanctionTypeField;
+        
+        private bool sanctionTypeFieldSpecified;
         
         /// <summary>
         /// Вид на акта
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         [System.ComponentModel.DescriptionAttribute("Вид на акта")]
-        public string ActTypeCode {
+        public DecisionTypeCategories ActTypeCode {
             get {
                 return this.actTypeCodeField;
             }
             set {
                 this.actTypeCodeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ActTypeCodeSpecified {
+            get {
+                return this.actTypeCodeFieldSpecified;
+            }
+            set {
+                this.actTypeCodeFieldSpecified = value;
             }
         }
         
@@ -465,12 +469,22 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute(Order=8)]
         [System.ComponentModel.DescriptionAttribute("вид")]
-        public string CaseTypeCode {
+        public CaseType CaseTypeCode {
             get {
                 return this.caseTypeCodeField;
             }
             set {
                 this.caseTypeCodeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool CaseTypeCodeSpecified {
+            get {
+                return this.caseTypeCodeFieldSpecified;
+            }
+            set {
+                this.caseTypeCodeFieldSpecified = value;
             }
         }
         
@@ -559,12 +573,61 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         /// </summary>
         [System.Xml.Serialization.XmlElementAttribute(Order=14)]
         [System.ComponentModel.DescriptionAttribute("Fine, Prison,Probation")]
-        public object SanctionType {
+        public SanctionEnumType SanctionType {
             get {
                 return this.sanctionTypeField;
             }
             set {
                 this.sanctionTypeField = value;
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool SanctionTypeSpecified {
+            get {
+                return this.sanctionTypeFieldSpecified;
+            }
+            set {
+                this.sanctionTypeFieldSpecified = value;
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0")]
+    public enum SanctionEnumType {
+        
+        /// <remarks/>
+        Fine,
+        
+        /// <remarks/>
+        Prison,
+        
+        /// <remarks/>
+        Probation,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0")]
+    [System.Xml.Serialization.XmlRootAttribute("SendBulletinsDataRequest", Namespace="http://cs.mjs.bg/EISSServicesModel-v1.0", IsNullable=false)]
+    public partial class SendBulletinsDataRequestType {
+        
+        private BulletinsList bulletinsListField;
+        
+        /// <summary>
+        /// Списък с бюлетини
+        /// </summary>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [System.ComponentModel.DescriptionAttribute("Списък с бюлетини")]
+        public BulletinsList BulletinsList {
+            get {
+                return this.bulletinsListField;
+            }
+            set {
+                this.bulletinsListField = value;
             }
         }
     }
