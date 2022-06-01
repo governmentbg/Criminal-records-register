@@ -33,5 +33,9 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType);
 
         Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId);
+
+        void SaveBulletins(List<BBulletin> bulletins);
+
+        Dictionary<string, string> GetAuthIdByEkkate(List<string> ekatteCodes);
     }
 }

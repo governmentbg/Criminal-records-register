@@ -166,7 +166,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType)
         {
             var personId = await _dbContext.PPersonIds.AsNoTracking()
-                .Include(x=>x.PidType)
+                .Include(x => x.PidType)
                 .Where(p => p.Pid == pid && p.PidType.Code == pidType)
                 .FirstOrDefaultAsync();
 
@@ -177,7 +177,7 @@ namespace MJ_CAIS.Repositories.Impl
                    .Include(x => x.PPersonIds).ThenInclude(x => x.PidType)
                    .Include(x => x.BirthCity)
                    .Include(x => x.BirthCountry)
-                   .FirstOrDefaultAsync(x=>x.Id == personId.PersonId);
+                   .FirstOrDefaultAsync(x => x.Id == personId.PersonId);
 
             return result;
         }
@@ -213,5 +213,20 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(result);
         }
 
+        public void SaveBulletins(List<BBulletin> bulletins)
+        {
+            _dbContext.BBulletins.AddRange(bulletins);
+            _dbContext.SaveChanges();
+        }
+
+        public Dictionary<string, string> GetAuthIdByEkkate(List<string> ekatteCodes)
+        {
+            var result = _dbContext.GCities.AsNoTracking()
+                .Where(x => ekatteCodes.Contains(x.EkatteCode))
+                .Select(x => new KeyValuePair<string, string>(x.EkatteCode, x.CsAuthorityId))
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            return result;
+        }
     }
 }
