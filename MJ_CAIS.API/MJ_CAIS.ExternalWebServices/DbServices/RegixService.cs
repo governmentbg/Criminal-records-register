@@ -91,6 +91,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     var callContext = CreateCallContext(request);
                     var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName, callContext, citizenEgn);
                     request.ResponseXml = resultData.Data.Response.Any.OuterXml;
+                    request.ResponseXml = AddXmlSchema(request.ResponseXml);
                 }
                 catch (Exception ex)
                 {
@@ -138,7 +139,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             // TODO: based on operation, parse different objects and fill data
         }
-
+        
         private (string Id, string WebServiceName) GetOperationByType(string typeCode)
         {
             // Singleton pattern
@@ -199,5 +200,29 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             return callContext;
         }
+
+        private string AddXmlSchema(string xml)
+        {
+            if (string.IsNullOrEmpty(xml))
+            {
+                return xml;
+            }
+
+            try
+            {
+                // Fixing bug with schema validation
+                var doc1 = new XmlDocument();
+                doc1.LoadXml(xml);
+                doc1.DocumentElement.SetAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+                var resultXml = doc1.OuterXml;
+
+                return resultXml;
+            }
+            catch (Exception)
+            {
+                return xml;
+            }
+        }
+
     }
 }

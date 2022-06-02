@@ -22,7 +22,6 @@ namespace ExecuteWebRequests
             {
                 var dbContext = host.Services.GetService<CaisDbContext>();
 
-
                 var regixService = host.Services.GetService<IRegixService>();
                 var webRequests = regixService.GetRequestsForAsyncExecution();
 

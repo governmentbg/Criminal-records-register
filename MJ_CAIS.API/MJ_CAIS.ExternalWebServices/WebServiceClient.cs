@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MJ_CAIS.Common.Helpers;
 using MJ_CAIS.RegiX;
+using System.Security.Cryptography.X509Certificates;
+using System.ServiceModel;
 using System.Xml;
-using static MJ_CAIS.RegiX.RegiXEntryPointClient;
 
 namespace MJ_CAIS.ExternalWebServices
 {
@@ -17,7 +19,12 @@ namespace MJ_CAIS.ExternalWebServices
         public ServiceResultData CallRegixExecuteSynchronous(string xml, string webServiceName, CallContext callContext, string citizenEGN)
         {
             var coreUrl = config.GetValue<string>("RegiX:CoreUrl");
-            var client = new RegiXEntryPointClient(EndpointConfiguration.WSHttpBinding_IRegiXEntryPoint, coreUrl);
+
+            var binding = new WSHttpBinding(SecurityMode.Transport);
+            binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
+
+            var client = new RegiXEntryPointClient(binding, new EndpointAddress(coreUrl));
+            client.ClientCredentials.ClientCertificate.Certificate = GetRegixCertificate();
 
             var doc = new XmlDocument();
             doc.PreserveWhitespace = false;
@@ -67,6 +74,19 @@ namespace MJ_CAIS.ExternalWebServices
             };
 
             return callContext;
+        }
+
+        private X509Certificate2 GetRegixCertificate()
+        {
+            var section = config.GetSection("RegiX:CertificateData");
+
+            var storeName = section.GetValue<StoreName>("storeName");
+            var storeLocation = section.GetValue<StoreLocation>("storeLocation");
+            var x509FindType = section.GetValue<X509FindType>("x509FindType");
+            var findValue = section.GetValue<string>("findValue");
+
+            var cert = CertificateHelper.GetX509Certificate2(storeName, storeLocation, x509FindType, findValue);
+            return cert;
         }
     }
 }
