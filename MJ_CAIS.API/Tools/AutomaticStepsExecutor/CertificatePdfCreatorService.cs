@@ -56,14 +56,16 @@ namespace AutomaticStepsExecutor
             {
                 var statuses = await _dbContext.AApplicationStatuses.Where(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
             || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-            || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint).ToListAsync();
-                if (statuses.Count != 3)
+            || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
+            || x.Code == ApplicationConstants.ApplicationStatuses.Delivered).ToListAsync();
+                if (statuses.Count != 4)
                 {
-                    throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}");
+                    throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, {ApplicationConstants.ApplicationStatuses.Delivered}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}");
                 }
                 var statusCertificateServerSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign);
                 var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
                 var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
+                var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
 
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
               
@@ -87,7 +89,7 @@ namespace AutomaticStepsExecutor
                     {
                         var certificate = (ACertificate)entity;
                        var file =  await _certificateService.CreateCertificate(certificate, mailSubjectTemplate, mailBodyTemplate, signingCertificateName, 
-                                                                    statusCertificateServerSign, statusForDelivery, statusCertificatePaperprint,  webPortalUrl);
+                                                                    statusCertificateServerSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint,   webPortalUrl);
                         await _dbContext.SaveChangesAsync();
                       //  System.IO.File.WriteAllBytes($"certificate_{certificate.Id}.pdf", file);
                         numberOfSuccessEntities++;
