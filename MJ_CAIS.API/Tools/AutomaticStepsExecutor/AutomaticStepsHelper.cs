@@ -1,6 +1,7 @@
 ﻿using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Person;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,7 +14,7 @@ namespace AutomaticStepsExecutor
     public class AutomaticStepsHelper
     {
         public static async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, CaisDbContext dbContext, MJ_CAIS.Services.Contracts.IRegisterTypeService _registerTypeService,
-            MJ_CAIS.Services.Contracts.IApplicationService _applicationService, MJ_CAIS.Services.Contracts.IApplicationWebService _webApplicetionService, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus )
+            MJ_CAIS.Services.Contracts.IApplicationService _applicationService, MJ_CAIS.Services.Contracts.IApplicationWebService _webApplicetionService, MJ_CAIS.Services.Contracts.IPersonService personService, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus )
         {
             //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
             _webApplicetionService.SetWApplicationStatus(wapplication, wapplicationStatus, "Одобрено електронно заявление");
@@ -86,11 +87,33 @@ namespace AutomaticStepsExecutor
 
             _applicationService.SetApplicationStatus(appl, applicationStatus, "Прехвърлено от електронно заявление");
 
-           var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
-                                                        && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
+            PersonDTO personDto = new PersonDTO();
 
-            appl.EgnId = idpid?.Id;
-            appl.EgnNavigation = idpid;
+            personDto.Egn = wapplication.Egn;
+            personDto.Firstname = wapplication.Firstname;
+            personDto.Surname = wapplication.Surname;
+            personDto.Familyname = wapplication.Familyname;
+            personDto.BirthDate = wapplication.BirthDate;
+            personDto.FirstnameLat = wapplication.FirstnameLat;
+            personDto.SurnameLat = wapplication.SurnameLat;
+            personDto.FamilynameLat = wapplication.FamilynameLat;
+            personDto.FatherFamilyname = wapplication.FatherFamilyname;
+            personDto.FatherFirstname = wapplication.FatherFirstname;
+            personDto.FatherFullname = wapplication.FatherFullname;
+            personDto.FatherSurname = wapplication.FatherSurname;
+            personDto.MotherFirstname = wapplication.MotherFirstname;
+            personDto.MotherSurname = wapplication.MotherSurname;
+            personDto.MotherFamilyname = wapplication.MotherFamilyname;
+            personDto.MotherFullname = wapplication.MotherFullname;
+            personDto.Sex = wapplication.Sex;
+
+            var person = await personService.CreatePersonAsync(personDto);
+
+           // var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
+           //                                             && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
+
+            appl.EgnId = person.PPersonIds.First(x=>x.PidType.Code==PersonConstants.PidType.Egn).Id;
+            appl.EgnNavigation = person.PPersonIds.First(x => x.PidType.Code == PersonConstants.PidType.Egn);
 
             //foreach (var v in wapplication.AAppCitizenships)
             //{

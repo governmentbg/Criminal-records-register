@@ -20,18 +20,20 @@ namespace AutomaticStepsExecutor
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IApplicationService _applicationService;
         private readonly IApplicationWebService _applicationWebService;
+        private readonly IPersonService _personSevice;
         public const string Pending = "Pending";
         public const string Accepted = "Accepted";
         public const string Rejected = "Rejected";
 
 
-        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService)
+        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personSevice)
         {
             _dbContext = dbContext;
             _logger = logger;
             _registerTypeService = registerTypeService;
             _applicationService = applicationService;
             _applicationWebService = applicationWebService;
+            _personSevice = personSevice;
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -142,7 +144,7 @@ namespace AutomaticStepsExecutor
                         //ако е служебно заявление,влиза в цаис за обработка
                         if (wapplication.ApplicationTypeId == internalApplicationType.Id)
                         {
-                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService, statusWebApprovedApplication, statusApprovedApplication);
+                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
                             await _dbContext.SaveChangesAsync();
                             numberOfSuccessEntities++;
                             continue;
