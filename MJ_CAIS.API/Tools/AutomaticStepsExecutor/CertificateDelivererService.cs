@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MJ_CAIS.Services.Contracts;
 
 namespace AutomaticStepsExecutor
 {
@@ -16,12 +17,14 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<CertificateDelivererService> _logger;
-        private readonly ICertificateGenerationService _certificateService;
+        private readonly ICertificateGenerationService _certificateGenerationService;
+        private readonly ICertificateService _certificateService;
 
-        public CertificateDelivererService(CaisDbContext dbContext, ILogger<CertificateDelivererService> logger, ICertificateGenerationService certificateService)
+        public CertificateDelivererService(CaisDbContext dbContext, ILogger<CertificateDelivererService> logger, ICertificateGenerationService certificateGenerationService, ICertificateService certificateService)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _certificateGenerationService = _certificateGenerationService;
             _certificateService = certificateService;
         }
 
@@ -64,15 +67,14 @@ namespace AutomaticStepsExecutor
             int numberOfFailedEntities = 0;
             if (entities.Count > 0)
             {
-                ////todo: като се добави ID някой ден в таблицата да се връща ИД
-                //var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign).ToListAsync();
-                //if (statuses.Count() != 1)
-                //{
-                //    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}");
+                var statuses = await Task.FromResult(_dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.Delivered ).ToList());
+                if (statuses.Count != 1)
+                {
+                    throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.Delivered}");
 
-                //}
-
-                var webPortalUrl = await _certificateService.GetWebPortalAddress();
+                }
+                var statusCertificateDelivered = statuses.First();
+                var webPortalUrl = await _certificateGenerationService.GetWebPortalAddress();
                 //todo: get mail data
                 var sysParamsForMail = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
                 || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ToListAsync();
@@ -82,14 +84,15 @@ namespace AutomaticStepsExecutor
                 }
                 string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
                 string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
-
+             
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
                     try
                     {
                         var certificate = (ACertificate)entity;
-                        await _certificateService.DeliverCertificateAsync(certificate,  mailBodyTemplate, mailSubjectTemplate, webPortalUrl);
+                        await _certificateGenerationService.DeliverCertificateAsync(certificate,  mailBodyTemplate, mailSubjectTemplate, webPortalUrl);
+                        _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }

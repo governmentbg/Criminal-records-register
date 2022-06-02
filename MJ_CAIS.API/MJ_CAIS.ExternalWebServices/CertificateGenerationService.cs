@@ -61,20 +61,22 @@ namespace MJ_CAIS.ExternalWebServices
             }
             var statuses = await dbContext.AApplicationStatuses.Where(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
            || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-           || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint).ToListAsync();
-            if (statuses.Count!=3)
+           || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
+           || x.Code == ApplicationConstants.ApplicationStatuses.Delivered).ToListAsync();
+            if (statuses.Count!=4)
             {
                 throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}" );
             }
             var statusCertificateServerSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign);
             var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
             var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
+            var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
             //todo:get patterns for mail if needed:
-            return await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery,statusCertificatePaperprint , await GetWebPortalAddress());
+            return await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery, statusCertificateDelivered,statusCertificatePaperprint,  await GetWebPortalAddress());
 
         }
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
-            string mailBodyPattern, string signingCertificateName,  AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
+            string mailBodyPattern, string signingCertificateName,  AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
             //string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
             //, string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
             //, string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
@@ -171,7 +173,9 @@ namespace MJ_CAIS.ExternalWebServices
                     _certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне на заявител");
                     //certificate.StatusCode = statusCodeCertificateForDelivery;
 
-                    await DeliverCertificateAsync(certificate, mailBodyPattern,mailSubjectPattern,webportalUrl);                 
+                    await DeliverCertificateAsync(certificate, mailBodyPattern,mailSubjectPattern,webportalUrl);
+
+                    _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
 
                 }
             }
@@ -284,7 +288,9 @@ namespace MJ_CAIS.ExternalWebServices
                     throw new Exception("Web portal URL is not set.");
                 }
             }
-            return $"{url}/{CertificateConstants.UrlsInPublicSites.GET_CERTIFICATE_URL}/{accessCode1}";
+
+            return new Uri(new Uri(new Uri(url), CertificateConstants.UrlsInPublicSites.GET_CERTIFICATE_URL), accessCode1).ToString();
+
         }
         public async Task<string?> GetWebPortalAddress()
         {
