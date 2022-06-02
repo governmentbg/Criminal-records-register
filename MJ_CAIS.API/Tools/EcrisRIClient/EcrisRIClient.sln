@@ -23,7 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DTO", "..\..\MJ_CAI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcrisMessageCreator", "..\EcrisMessageCreator\EcrisMessageCreator\EcrisMessageCreator.csproj", "{004EFB67-90BC-438C-ACBA-79BF1D91D3B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MJ_CAIS.EcrisObjectsServices", "..\..\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj", "{0A69E708-EDD3-49ED-B008-D3E67853DCD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.EcrisObjectsServices", "..\..\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj", "{0A69E708-EDD3-49ED-B008-D3E67853DCD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Services", "..\..\MJ_CAIS.Services\MJ_CAIS.Services.csproj", "{33AF94F4-4999-499D-AEC5-0CC0ED3B6CDE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Services.Contracts", "..\..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj", "{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +79,14 @@ Global
 		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A69E708-EDD3-49ED-B008-D3E67853DCD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33AF94F4-4999-499D-AEC5-0CC0ED3B6CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33AF94F4-4999-499D-AEC5-0CC0ED3B6CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33AF94F4-4999-499D-AEC5-0CC0ED3B6CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33AF94F4-4999-499D-AEC5-0CC0ED3B6CDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
