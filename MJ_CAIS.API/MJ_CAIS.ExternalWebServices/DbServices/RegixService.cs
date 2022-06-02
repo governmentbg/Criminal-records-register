@@ -66,11 +66,41 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (request.HasError != true)
             {
                 responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
-                AddOrUpdateCache(request, citizenEgn);
+                var cache = AddOrUpdateCache(request, citizenEgn);
+                PopulateObjects(request, cache);
             }
             
             _dbContext.SaveChanges();
             return responseObject;
+        }
+
+        private async void PopulateObjects(EWebRequest request, ERegixCache cache)
+        {
+            if (!string.IsNullOrEmpty(request.ApplicationId))
+            {
+              var application = await _dbContext.AApplications.FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
+                if (application != null)
+                {
+                    application.Firstname = cache.Firstname;
+                    application.FirstnameLat = cache.FirstnameLat; ;
+                    application.Surname = cache.Surname;
+                    application.SurnameLat = cache.SurnameLat;
+                    application.Familyname = cache.Familyname;
+                    application.FamilynameLat = cache.FamilynameLat;
+                    application.Egn= cache.Egn;
+                    application.Lnch = cache.Lnch;
+                    application.BirthDate = cache.BirthDate;
+                    application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " "+ cache.BirthCityName + " " +cache.BirthPlace;
+                    var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
+                    if (country != null)
+                    {
+                        application.BirthCountry = country;
+                        application.BirthCountryId = country.Id;
+                    }
+                    _dbContext.AApplications.Update(application);
+                      
+                }
+            }
         }
 
         private void CallRegix(EWebRequest request, string webServiceName, string citizenEgn)
@@ -116,7 +146,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return cachedResponse;
         }
 
-        private void AddOrUpdateCache(EWebRequest request, string egn)
+        private ERegixCache AddOrUpdateCache(EWebRequest request, string egn)
         {
             var operation = request.WebService.WebServiceName;
             var regixCache = _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == operation);
@@ -137,6 +167,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             regixCache.ExecutionDate = DateTime.Now;
 
             // TODO: based on operation, parse different objects and fill data
+
+            return regixCache;
         }
 
         private (string Id, string WebServiceName) GetOperationByType(string typeCode)

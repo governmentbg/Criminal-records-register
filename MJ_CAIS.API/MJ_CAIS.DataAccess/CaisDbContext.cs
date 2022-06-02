@@ -5085,10 +5085,20 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
 
+                entity.Property(e => e.WApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("W_APPLICATION_ID");
+
                 entity.Property(e => e.WebServiceId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("WEB_SERVICE_ID");
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.EWebRequests)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .HasConstraintName("FK_E_WEB_REQUESTS_A_APPL");
 
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.EWebRequests)
@@ -5099,6 +5109,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.EWebRequests)
                     .HasForeignKey(d => d.EcrisMsgId)
                     .HasConstraintName("FK_E_WEB_REQUESTS_E_ECRIS_MESS");
+
+                entity.HasOne(d => d.WApplication)
+                    .WithMany(p => p.EWebRequests)
+                    .HasForeignKey(d => d.WApplicationId)
+                    .HasConstraintName("FK_E_WEB_REQUESTS_W_APPL");
 
                 entity.HasOne(d => d.WebService)
                     .WithMany(p => p.EWebRequests)

@@ -45,7 +45,7 @@ namespace AutomaticStepsExecutor
         {
             var result = await Task.FromResult(_dbContext.WApplications
                             .Include(a => a.ApplicationType)
-                            .Include(a => a.WWebRequests)
+                            .Include(a => a.EWebRequests)
                             .Include(a => a.WStatusHes)
                       //todo: дали е този статус?! 
                       .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebRegistersChecks)
@@ -200,11 +200,11 @@ namespace AutomaticStepsExecutor
         private string SuccessfullCheckInRegisters(WApplication wapplication, int maxNumberOfAttempts)
         {
 
-            if (wapplication.WWebRequests.Any(rq => (rq.Status == Pending || rq.Status == Rejected) && rq.Attempts < maxNumberOfAttempts))
+            if (wapplication.EWebRequests.Any(rq => (rq.Status == Pending || rq.Status == Rejected) && rq.Attempts < maxNumberOfAttempts))
                 return Pending;
-            if (wapplication.WWebRequests.Any(rq => rq.Status == Rejected && rq.Attempts == maxNumberOfAttempts))
+            if (wapplication.EWebRequests.Any(rq => rq.Status == Rejected && rq.Attempts == maxNumberOfAttempts))
                 return Rejected;
-            if (wapplication.WWebRequests.All(rq => rq.Status == Accepted))
+            if (wapplication.EWebRequests.All(rq => rq.Status == Accepted))
                 return Accepted;
 
             return Pending;
