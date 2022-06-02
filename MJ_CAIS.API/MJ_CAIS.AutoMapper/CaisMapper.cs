@@ -201,6 +201,7 @@ namespace MJ_CAIS.AutoMapperContainer
                 {
                     var entity = Activator.CreateInstance<TEntityType>();
                     entity.EntityState = EntityStateEnum.Deleted;
+                    entity.GetType().GetProperty(nameof(BaseEntity.Version))?.SetValue(entity, 1m); //todo? if has update 
                     entity.GetType().GetProperty(pkName)?.SetValue(entity, item);
                     entitiesForUpdate.Add(entity);
                 }

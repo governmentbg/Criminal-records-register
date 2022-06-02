@@ -30,7 +30,7 @@ namespace MJ_CAIS.DataAccess
             {
                 if (_currentUserId == null)
                 {
-                    var identity = _httpContextAccessor.HttpContext?.User?.Identity;
+                    var identity = _httpContextAccessor?.HttpContext?.User?.Identity;
                     if (identity != null)
                     {
                         var claims = _httpContextAccessor.HttpContext?.User?.Claims;
@@ -44,7 +44,7 @@ namespace MJ_CAIS.DataAccess
                             _currentUserId = claimId.Value;
                         }
                     }
-                    else if (!string.IsNullOrEmpty(_userContext.UserId))
+                    else if (!string.IsNullOrEmpty(_userContext?.UserId))
                     {
                         _currentUserId = _userContext.UserId;
                     }

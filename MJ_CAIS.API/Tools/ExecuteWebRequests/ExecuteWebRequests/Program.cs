@@ -22,7 +22,6 @@ namespace ExecuteWebRequests
             {
                 var dbContext = host.Services.GetService<CaisDbContext>();
 
-
                 var regixService = host.Services.GetService<IRegixService>();
                 var webRequests = regixService.GetRequestsForAsyncExecution();
 
@@ -30,7 +29,7 @@ namespace ExecuteWebRequests
                 {
                     if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
                     {
-                        regixService.ExecutePersonDataSearch(webRequest, "SERVICE_URI"); // TODO: change
+                        regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
                     }
                 }
             }

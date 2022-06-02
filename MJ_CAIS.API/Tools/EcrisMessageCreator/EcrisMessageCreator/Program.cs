@@ -16,6 +16,7 @@ using System.IO;
 using System.Threading.Tasks;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.EcrisObjectsServices;
+using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 
 namespace EcrisMessageCreator
 {
@@ -30,10 +31,10 @@ namespace EcrisMessageCreator
 
 
                 IHost host = Host.CreateDefaultBuilder()
+                    .ConfigureServices(services => services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton<RequestService>())
-                    .ConfigureServices(services => services.AddSingleton<EcrisMessageCreatorService>())
-                        
+                    .ConfigureServices(services => services.AddSingleton<EcrisMessageCreatorService>())                        
                     .ConfigureServices(services => services.AddSingleton<NotificationService>())
                     .ConfigureLogging(logging =>
                     {

@@ -7,12 +7,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
     {
         List<EWebRequest> GetRequestsForAsyncExecution();
 
-        PersonDataResponseType CallPersonDataSearch(string egn,
-            string serviceURI,
+        (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
             string? bulletinId = null,
             string? applicationId = null,
             string? ecrisMsgId = null);
 
-        PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string serviceURI);
+        PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName);
     }
 }

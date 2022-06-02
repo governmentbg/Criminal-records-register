@@ -35,12 +35,22 @@
                         Република България
                     </div>
                     <div class="row" style="font-size: 14px;">
-                        Министерство на правосъдието  
-                    </div>
-                    <div class="row" style="line-height: 10px;  font-size: 14px;">
-                        ЦАИС "Съдебен статус"
+                        Министерство на правосъдието
                     </div>
                 </div>
+            </div>
+            <div class="cais-navbar">
+                <nav class="navbar navbar-expand-lg">
+                   <h1>ЦАИС "Съдебен статус"</h1>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon cais-nav-icon">
+                            <i class="fa fa-bars fa-lg"></i>
+                        </span>
+                    </button>
+
+                    @Html.Partial("_ContextualMenu")
+                </nav>
             </div>
         </div>
     </header>

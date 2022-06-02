@@ -5,7 +5,9 @@ using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisService;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.EcrisObjectsServices;
+using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +21,16 @@ namespace EcrisIntegrationServices
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisMessageCreatorService> _logger;
         const string ECRIS_REQUEST_CODE = "EcrisRequest";
-     
+        private readonly IPersonService _personService;
+
+
         RequestService _requestService;
-        public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService)
+        public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService, IPersonService personService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _requestService = requestService;
+            _personService = personService;
         }
         public async Task CreateResponsesToRequests(int pageSize, string joinSeparator)
         {
@@ -152,51 +157,38 @@ namespace EcrisIntegrationServices
                     _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}");
                     List<Fbbc> fbbcs = new List<Fbbc>();
 
-                   var personIds = await ServiceHelper.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
+                   //var personIds = await ServiceHelper.GetPersonIDsByEGN(graoPerson.Egn, _dbContext, graoIssuer, countryBGcode, egnType);
 
                     fbbcs = await _dbContext.Fbbcs.Where(fbbc => fbbc.EcrisConvId == msg.EcrisMsgConvictionId
                                                                                 //&& personIdsId.Contains(fbbc.PersonId)
                                                                                 //&& fbbc.StatusCode == FbbcConstants.FBBCStatus.Active
                                                                                 ).ToListAsync();
 
-                    string pidId = "";
-                    if (personIds != null && personIds.Count>0)
-                    {
-                        var personIdsId = personIds.Select(x => x.Id).ToList();
-                        pidId = personIds.FirstOrDefault(p => p.Pid == graoPerson.Egn && p.Issuer == graoIssuer && p.CountryId == countryBGcode && p.PidTypeId == egnType)?.Id;
+                    //string pidId = "";
+                    //if (personIds != null && personIds.Count>0)
+                    //{
+                    //    var personIdsId = personIds.Select(x => x.Id).ToList();
+                    //    pidId = personIds.FirstOrDefault(p => p.Pid == graoPerson.Egn && p.Issuer == graoIssuer && p.CountryId == countryBGcode && p.PidTypeId == egnType)?.Id;
 
                     
-                    }
-                    else
-                    {
+                    //}
+                    //else
+                    //{
                         //todo: create person
-                        PPersonId pid =  new PPersonId();
-                        pid.Id = BaseEntity.GenerateNewId();
-                        pid.Pid = graoPerson.Egn;
-                        pid.Issuer = graoIssuer;
-                        pid.CountryId = countryBGcode;
-                        pid.PidTypeId = egnType;
-                        pidId = pid.Id;
+                        PersonDTO personDto = new PersonDTO();                 
+                    
+                        personDto.Egn = graoPerson.Egn;
+                        personDto.Firstname = graoPerson.Firstname;
+                        personDto.Surname = graoPerson.Surname;
+                        personDto.Familyname = graoPerson.Familyname;
+                        personDto.BirthDate = graoPerson.BirthDate;
+                        personDto.FatherFullname = graoPerson.FathersNames;
+                        personDto.MotherFullname = graoPerson.MothersNames;
+                        personDto.Sex = graoPerson.Sex;
 
-                        PPerson person = new PPerson();
-                        person.Id = BaseEntity.GenerateNewId();
-                        person.Firstname = graoPerson.Firstname;
-                        person.Surname = graoPerson.Surname;
-                        person.Familyname = graoPerson.Familyname;
-                        person.BirthDate = graoPerson.BirthDate;
-                        person.FatherFullname = graoPerson.FathersNames;
-                        person.MotherFullname = graoPerson.MothersNames;
-                        person.Sex = graoPerson.Sex;
-                        //todo: birth place?!
-                        person.PPersonIds = new List<PPersonId>();
-                        person.PPersonIds.Add(pid);
+                        var person = await _personService.CreatePersonAsync(personDto);
 
-                        pid.PersonId = person.Id;
-
-                        _dbContext.PPeople.Add(person);
-                        _dbContext.PPersonIds.Add(pid);
-
-                    }
+// }
                     if (fbbcs.Count() == 0)
                     {
                         isNewF=true;
@@ -210,14 +202,14 @@ namespace EcrisIntegrationServices
                         f.EcrisConvId = msg.EcrisMsgConvictionId;
                         f.Familyname = graoPerson.Familyname;
                         f.Firstname = graoPerson.Firstname;
-                        f.BirthDate = msg.BirthDate;
+                        f.BirthDate = graoPerson.BirthDate;// msg.BirthDate;
                         f.BirthDatePrec = "YMD";
                         f.BirthPlace = msg.BirthCity;
                         f.BirtyCountryDescr = msg.BirthCountry;
                      
                         f.DocTypeId = docTypeId;
-                        f.Egn = msg.Pin;
-                        f.PersonId = pidId;
+                        f.Egn = graoPerson.Egn;// msg.Pin;
+                        f.PersonId = person.PPersonIds.First().Id;
                         f.ReceiveDate = msg.MsgTimestamp;
                         //toso: какво е това?
                         //f.EcrisUpdConvTypeId = "1";

@@ -19,13 +19,15 @@ namespace AutomaticStepsExecutor
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IApplicationService _applicationService;
         private readonly IApplicationWebService _applicationWebService;
-        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService)
+        private readonly IPersonService _personService;
+        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _registerTypeService = registerTypeService;
             _applicationService = applicationService;
             _applicationWebService = applicationWebService;
+            _personService = personService;
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -103,7 +105,7 @@ namespace AutomaticStepsExecutor
                         bool isPaid = CheckPayment(wapplication);
                         if (isPaid)
                         {
-                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, statusWebApprovedApplication,  statusApprovedApplication );
+                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
                             //todo: must add some FK for payment?!
                         }
                         else

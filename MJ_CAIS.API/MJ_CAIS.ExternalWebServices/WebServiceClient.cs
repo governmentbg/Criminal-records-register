@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MJ_CAIS.Common.Helpers;
 using MJ_CAIS.RegiX;
+using System.Security.Cryptography.X509Certificates;
+using System.ServiceModel;
 using System.Xml;
-using static MJ_CAIS.RegiX.RegiXEntryPointClient;
 
 namespace MJ_CAIS.ExternalWebServices
 {
@@ -14,10 +16,15 @@ namespace MJ_CAIS.ExternalWebServices
             this.config = config;
         }
 
-        public ServiceResultData CallRegixExecuteSynchronous(string xml, string operation, string serviceURI, string citizenEGN)
+        public ServiceResultData CallRegixExecuteSynchronous(string xml, string webServiceName, CallContext callContext, string citizenEGN)
         {
             var coreUrl = config.GetValue<string>("RegiX:CoreUrl");
-            var client = new RegiXEntryPointClient(EndpointConfiguration.WSHttpBinding_IRegiXEntryPoint, coreUrl);
+
+            var binding = new WSHttpBinding(SecurityMode.Transport);
+            binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
+
+            var client = new RegiXEntryPointClient(binding, new EndpointAddress(coreUrl));
+            client.ClientCredentials.ClientCertificate.Certificate = GetRegixCertificate();
 
             var doc = new XmlDocument();
             doc.PreserveWhitespace = false;
@@ -27,7 +34,7 @@ namespace MJ_CAIS.ExternalWebServices
             {
                 request = new ServiceRequestData
                 {
-                    Operation = operation,
+                    Operation = webServiceName,
                     Argument = doc.DocumentElement,
                     CitizenEGN = citizenEGN,
                     EmployeeEGN = config.GetValue<string>("RegiX:EmployeeEGN"),
@@ -36,8 +43,22 @@ namespace MJ_CAIS.ExternalWebServices
                 }
             };
 
+            request.request.CallContext = callContext;
+            var response = client.ExecuteSynchronous(request);
+            if (!response.ExecuteSynchronousResult.HasError)
+            {
+                return response.ExecuteSynchronousResult;
+            }
+            else
+            {
+                throw new Exception(response.ExecuteSynchronousResult.Error);
+            }
+        }
+   
+        public CallContext CreateSampleCallContext(string serviceURI)
+        {
             var section = config.GetSection("RegiX:CallContext");
-            request.request.CallContext = new CallContext()
+            var callContext = new CallContext()
             {
                 ServiceURI = serviceURI,
                 AdministrationName = section.GetValue<string>("AdministrationName"),
@@ -52,16 +73,20 @@ namespace MJ_CAIS.ExternalWebServices
                 ResponsiblePersonIdentifier = section.GetValue<string>("ResponsiblePersonIdentifier"),
             };
 
-            var response = client.ExecuteSynchronous(request);
-            if (!response.ExecuteSynchronousResult.HasError)
-            {
-                return response.ExecuteSynchronousResult;
-            }
-            else
-            {
-                throw new Exception(response.ExecuteSynchronousResult.Error);
-            }
+            return callContext;
         }
-   
+
+        private X509Certificate2 GetRegixCertificate()
+        {
+            var section = config.GetSection("RegiX:CertificateData");
+
+            var storeName = section.GetValue<StoreName>("storeName");
+            var storeLocation = section.GetValue<StoreLocation>("storeLocation");
+            var x509FindType = section.GetValue<X509FindType>("x509FindType");
+            var findValue = section.GetValue<string>("findValue");
+
+            var cert = CertificateHelper.GetX509Certificate2(storeName, storeLocation, x509FindType, findValue);
+            return cert;
+        }
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using MJ_CAIS.DTO.ExternalServicesHost;
 using System.ServiceModel;
-using System.Text;
-using MJ_CAIS.DTO.ExternalServicesHost;
+using System.Threading.Tasks;
 
 namespace MJ_CAIS.ExternalServicesHost
 {
@@ -14,11 +10,9 @@ namespace MJ_CAIS.ExternalServicesHost
     public interface IEISSIntegrationService
     {
         [OperationContract]
-        void SendBulletinsData(SendBulletinsDataRequestType value);
+        Task SendBulletinsData(SendBulletinsDataRequestType value);
 
         [OperationContract]
-        void SendFinesData(SendFineDataRequestType value);
-
+        Task SendFinesData(SendFineDataRequestType value);
     }
-
 }

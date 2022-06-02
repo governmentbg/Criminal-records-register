@@ -20,18 +20,20 @@ namespace AutomaticStepsExecutor
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IApplicationService _applicationService;
         private readonly IApplicationWebService _applicationWebService;
+        private readonly IPersonService _personSevice;
         public const string Pending = "Pending";
         public const string Accepted = "Accepted";
         public const string Rejected = "Rejected";
 
 
-        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService)
+        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personSevice)
         {
             _dbContext = dbContext;
             _logger = logger;
             _registerTypeService = registerTypeService;
             _applicationService = applicationService;
             _applicationWebService = applicationWebService;
+            _personSevice = personSevice;
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -43,7 +45,7 @@ namespace AutomaticStepsExecutor
         {
             var result = await Task.FromResult(_dbContext.WApplications
                             .Include(a => a.ApplicationType)
-                            .Include(a => a.WWebRequests)
+                            .Include(a => a.EWebRequests)
                             .Include(a => a.WStatusHes)
                       //todo: дали е този статус?! 
                       .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebRegistersChecks)
@@ -142,7 +144,7 @@ namespace AutomaticStepsExecutor
                         //ако е служебно заявление,влиза в цаис за обработка
                         if (wapplication.ApplicationTypeId == internalApplicationType.Id)
                         {
-                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService, statusWebApprovedApplication, statusApprovedApplication);
+                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
                             await _dbContext.SaveChangesAsync();
                             numberOfSuccessEntities++;
                             continue;
@@ -198,11 +200,11 @@ namespace AutomaticStepsExecutor
         private string SuccessfullCheckInRegisters(WApplication wapplication, int maxNumberOfAttempts)
         {
 
-            if (wapplication.WWebRequests.Any(rq => (rq.Status == Pending || rq.Status == Rejected) && rq.Attempts < maxNumberOfAttempts))
+            if (wapplication.EWebRequests.Any(rq => (rq.Status == Pending || rq.Status == Rejected) && rq.Attempts < maxNumberOfAttempts))
                 return Pending;
-            if (wapplication.WWebRequests.Any(rq => rq.Status == Rejected && rq.Attempts == maxNumberOfAttempts))
+            if (wapplication.EWebRequests.Any(rq => rq.Status == Rejected && rq.Attempts == maxNumberOfAttempts))
                 return Rejected;
-            if (wapplication.WWebRequests.All(rq => rq.Status == Accepted))
+            if (wapplication.EWebRequests.All(rq => rq.Status == Accepted))
                 return Accepted;
 
             return Pending;

@@ -52,8 +52,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForPath(d => d.Conviction.Decision.DecisionFinalDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
                .ForPath(d => d.Conviction.Decision.DecidingAuthority, opt => opt.MapFrom(src => src.DecidingAuth))
                .ForPath(d => d.Conviction.Decision.ECLI, opt => opt.MapFrom(src => src.DecisionEcli))
-               .ForPath(d => d.Conviction.Decision.DecisionType, opt => opt.MapFrom(src => src.DecisionType.Name))
-               .ForPath(d => d.Conviction.CriminalCase.CaseType, opt => opt.MapFrom(src => src.CaseType.Name))
+               .ForPath(d => d.Conviction.Decision.DecisionType, opt => opt.MapFrom(src => src.DecisionType.Code))
+               .ForPath(d => d.Conviction.CriminalCase.CaseType, opt => opt.MapFrom(src => src.CaseType.Code))
                .ForPath(d => d.Conviction.CriminalCase.CaseNumber, opt => opt.MapFrom(src => src.CaseNumber))
                .ForPath(d => d.Conviction.CriminalCase.CaseYear, opt => opt.MapFrom(src => src.CaseTypeId))
                .ForPath(d => d.Conviction.CriminalCase.CaseAuthority, opt => opt.MapFrom(src => src.CaseAuth))
@@ -78,101 +78,114 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForPath(d => d.RegistrationData.BulletinReceivedDate, opt => opt.MapFrom(src => src.BulletinReceivedDate))
                .ForPath(d => d.RegistrationData.BulletinReceivedDateSpecified, opt => opt.MapFrom(src => src.BulletinReceivedDate.HasValue))
                .ForPath(d => d.RegistrationData.ConvictionStatusAuthority.Name, opt => opt.MapFrom(src => src.CsAuthority.Name))
-               .ForPath(d => d.RegistrationData.ConvictionStatusAuthority.Code, opt => opt.MapFrom(src => src.CsAuthority.Code))
-               .ReverseMap()
-               .ForMember(d => d.BulletinType, opt => opt.MapFrom(src => src.Type.ToString()))
-               .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.NamesBg.FirstName))
-               .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Person.NamesBg.SurName))
-               .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Person.NamesBg.FamilyName))
-               .ForMember(d => d.Fullname, opt => opt.MapFrom(src => src.Person.NamesBg.FullName))
-               .ForMember(d => d.FirstnameLat, opt => opt.MapFrom(src => src.Person.NamesEn.FirstName))
-               .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Person.NamesEn.SurName))
-               .ForMember(d => d.FamilynameLat, opt => opt.MapFrom(src => src.Person.NamesEn.FamilyName))
-               .ForMember(d => d.FullnameLat, opt => opt.MapFrom(src => src.Person.NamesEn.FullName))
-               .ForMember(d => d.Sex, opt => opt.MapFrom(src => src.Person.Sex))
-               .ForMember(d => d.Egn, opt => opt.MapFrom(src => src.Person.IdentityNumber.EGN))
-               .ForMember(d => d.Lnch, opt => opt.MapFrom(src => src.Person.IdentityNumber.LNCh))
-               .ForMember(d => d.Ln, opt => opt.MapFrom(src => src.Person.IdentityNumber.LN))
-               .ForMember(d => d.Suid, opt => opt.MapFrom(src => src.Person.IdentityNumber.SUID))
-               //.ForMember(d => d.BirthDate, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDateTimeFromDateType(src.Person.BirthDate)))
-               //.ForMember(d => d.BirthDatePrecision, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDatePrecFromDateType(src.Person.BirthDate)))
-               .ForMember(d => d.BirthCountry, opt => opt.MapFrom(src => src.Person.BirthPlace.Country))
-               .ForMember(d => d.BirthCity, opt => opt.MapFrom(src => src.Person.BirthPlace.City))
-               .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Person.BirthPlace.Descr))
-               .ForMember(d => d.BPersNationalities, opt => opt.MapFrom(src => src.Person.PersonNationality))
-               .ForMember(d => d.IdDocCategoryId, opt => opt.MapFrom(src => CriminalRecordsReportResolver.EnumToString(src.Person.PersonIdentificationDocument.IdentificationDocumentCategoryReference)))
-               .ForMember(d => d.IdDocTypeDescr, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentType1))
-               .ForMember(d => d.IdDocNumber, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentNumber))
-               .ForMember(d => d.IdDocIssuingAuthority, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingAuthority))
-               //.ForMember(d => d.IdDocIssuingDate, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDateTimeFromDateType(src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingDate)))
-               //.ForMember(d => d.IdDocIssuingDatePrec, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDatePrecFromDateType(src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingDate)))
-              // .ForMember(d => d.IdDocValidDate, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDateTimeFromDateType(src.Person.PersonIdentificationDocument.IdentificationDocumentValidUntil)))
-               //.ForMember(d => d.IdDocValidDatePrec, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDatePrecFromDateType(src.Person.PersonIdentificationDocument.IdentificationDocumentValidUntil)))
-               .ForMember(d => d.MotherFirstname, opt => opt.MapFrom(src => src.Person.MotherNames.FirstName))
-               .ForMember(d => d.MotherSurname, opt => opt.MapFrom(src => src.Person.MotherNames.SurName))
-               .ForMember(d => d.MotherFamilyname, opt => opt.MapFrom(src => src.Person.MotherNames.FamilyName))
-               .ForMember(d => d.MotherFullname, opt => opt.MapFrom(src => src.Person.MotherNames.FullName))
-               .ForMember(d => d.FatherFirstname, opt => opt.MapFrom(src => src.Person.FatherNames.FirstName))
-               .ForMember(d => d.FatherSurname, opt => opt.MapFrom(src => src.Person.FatherNames.SurName))
-               .ForMember(d => d.FatherFamilyname, opt => opt.MapFrom(src => src.Person.FatherNames.FamilyName))
-               .ForMember(d => d.FatherFullname, opt => opt.MapFrom(src => src.Person.FatherNames.FullName))
-               .ForMember(d => d.AfisNumber, opt => opt.MapFrom(src => src.Person.AFISNumber))
-               .ForMember(d => d.DecisionNumber, opt => opt.MapFrom(src => src.Conviction.Decision.FileNumber))
-               .ForMember(d => d.DecisionDate, opt => opt.MapFrom(src => src.Conviction.Decision.DecisionDate))
-               .ForMember(d => d.DecisionFinalDate, opt => opt.MapFrom(src => src.Conviction.Decision.DecisionFinalDate))
-               .ForMember(d => d.DecidingAuth, opt => opt.MapFrom(src => src.Conviction.Decision.DecidingAuthority))
-               .ForMember(d => d.DecisionEcli, opt => opt.MapFrom(src => src.Conviction.Decision.ECLI))
-               .ForPath(d => d.DecisionType.Name, opt => opt.MapFrom(src => src.Conviction.Decision.DecisionType))
-               .ForPath(d => d.CaseType.Name, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseType))
-               .ForMember(d => d.CaseNumber, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseNumber))
-               .ForMember(d => d.CaseTypeId, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseYear))
-               .ForMember(d => d.CaseAuth, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseAuthority))
-               .ForMember(d => d.ConvRemarks, opt => opt.MapFrom(src => src.Conviction.ConvictionRemarks))
-               .ForMember(d => d.BOffences, opt => opt.MapFrom(src => src.Conviction.ConvictionOffence))
-               .ForMember(d => d.NoSanction, opt => opt.MapFrom(src => src.Conviction.WithoutSanction))
-               .ForMember(d => d.BSanctions, opt => opt.MapFrom(src => src.Conviction.ConvictionSanction))
-               .ForMember(d => d.PrevSuspSent, opt => opt.MapFrom(src => src.Conviction.ServingPrevSuspendedSentence))
-               .ForMember(d => d.PrevSuspSentDescr, opt => opt.MapFrom(src => src.Conviction.ServingPrevSuspendedSentenceActNumber))
-               .ForMember(d => d.BDecisions, opt => opt.MapFrom(src => src.Conviction.ConvictionDecisions))
-               .ForMember(d => d.EcrisConvictionId, opt => opt.MapFrom(src => src.Conviction.EcrisConvictionId))
-               .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.IssuerData.BulletinCreateDate))
-               .ForMember(d => d.CreatedByNames, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorPerson.Names.FullName))
-               .ForMember(d => d.CreatedByPosition, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorPerson.Position))
-               .ForMember(d => d.ApprovedByNames, opt => opt.MapFrom(src => src.IssuerData.BulletinApproverPerson.Names.FullName))
-               .ForMember(d => d.ApprovedByPosition, opt => opt.MapFrom(src => src.IssuerData.BulletinApproverPerson.Position))
-               .ForMember(d => d.BulletinAuthority, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorAuthority))
-               .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.RegistrationData.RegistrationNumber))
-               .ForMember(d => d.AlphabeticalIndex, opt => opt.MapFrom(src => src.RegistrationData.BulletinAlphabeticalIndex))
-               .ForMember(d => d.BulletinReceivedDate, opt => opt.MapFrom(src => src.RegistrationData.BulletinReceivedDate))
-               .ForPath(d => d.CsAuthority.Name, opt => opt.MapFrom(src => src.RegistrationData.ConvictionStatusAuthority.Name))
-               .ForPath(d => d.CsAuthority.Code, opt => opt.MapFrom(src => src.RegistrationData.ConvictionStatusAuthority.Code));
+               .ForPath(d => d.RegistrationData.ConvictionStatusAuthority.Code, opt => opt.MapFrom(src => src.CsAuthority.Code));
+
+            CreateMap<BulletinType, BBulletin>()
+              .ForMember(d => d.BulletinType, opt => opt.MapFrom(src => src.Type.ToString()))
+              .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.NamesBg.FirstName))
+              .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Person.NamesBg.SurName))
+              .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Person.NamesBg.FamilyName))
+              .ForMember(d => d.Fullname, opt => opt.MapFrom(src => src.Person.NamesBg.FullName))
+              .ForMember(d => d.FirstnameLat, opt => opt.MapFrom(src => src.Person.NamesEn.FirstName))
+              .ForMember(d => d.SurnameLat, opt => opt.MapFrom(src => src.Person.NamesEn.SurName))
+              .ForMember(d => d.FamilynameLat, opt => opt.MapFrom(src => src.Person.NamesEn.FamilyName))
+              .ForMember(d => d.FullnameLat, opt => opt.MapFrom(src => src.Person.NamesEn.FullName))
+              .ForMember(d => d.Sex, opt => opt.MapFrom(src => src.Person.Sex))
+              .ForMember(d => d.Egn, opt => opt.MapFrom(src => src.Person.IdentityNumber.EGN))
+              .ForMember(d => d.Lnch, opt => opt.MapFrom(src => src.Person.IdentityNumber.LNCh))
+              .ForMember(d => d.Ln, opt => opt.MapFrom(src => src.Person.IdentityNumber.LN))
+              .ForMember(d => d.Suid, opt => opt.MapFrom(src => src.Person.IdentityNumber.SUID))
+              .ForMember(d => d.BirthDate, opt => opt.MapFrom(src => src.Person.BirthDate.Date))
+              .ForMember(dest => dest.BirthDatePrecision, opt =>
+              {
+                  opt.PreCondition(src => src.Person.BirthDate.DatePrecisionSpecified);
+                  opt.MapFrom(src => src.Person.BirthDate.DatePrecision.ToString());
+              })
+              .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.City.EKATTECode))
+              .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Person.BirthPlace.Descr))
+              .ForMember(d => d.IdDocCategoryId, opt => opt.MapFrom(src => CriminalRecordsReportResolver.EnumToString(src.Person.PersonIdentificationDocument.IdentificationDocumentCategoryReference)))
+              .ForMember(d => d.IdDocTypeDescr, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentType1))
+              .ForMember(d => d.IdDocNumber, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentNumber))
+              .ForMember(d => d.IdDocIssuingAuthority, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingAuthority))
+              .ForMember(d => d.IdDocIssuingDate, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingDate.Date))
+              .ForMember(dest => dest.IdDocIssuingDatePrec, opt =>
+              {
+                  opt.PreCondition(src => src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingDate.DatePrecisionSpecified);
+                  opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentIssuingDate.DatePrecision.ToString());
+              })
+              .ForMember(d => d.IdDocValidDate, opt => opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentValidUntil.Date))
+               .ForMember(dest => dest.IdDocValidDatePrec, opt =>
+               {
+                   opt.PreCondition(src => src.Person.PersonIdentificationDocument.IdentificationDocumentValidUntil.DatePrecisionSpecified);
+                   opt.MapFrom(src => src.Person.PersonIdentificationDocument.IdentificationDocumentValidUntil.DatePrecision.ToString());
+               })
+              .ForMember(d => d.MotherFirstname, opt => opt.MapFrom(src => src.Person.MotherNames.FirstName))
+              .ForMember(d => d.MotherSurname, opt => opt.MapFrom(src => src.Person.MotherNames.SurName))
+              .ForMember(d => d.MotherFamilyname, opt => opt.MapFrom(src => src.Person.MotherNames.FamilyName))
+              .ForMember(d => d.MotherFullname, opt => opt.MapFrom(src => src.Person.MotherNames.FullName))
+              .ForMember(d => d.FatherFirstname, opt => opt.MapFrom(src => src.Person.FatherNames.FirstName))
+              .ForMember(d => d.FatherSurname, opt => opt.MapFrom(src => src.Person.FatherNames.SurName))
+              .ForMember(d => d.FatherFamilyname, opt => opt.MapFrom(src => src.Person.FatherNames.FamilyName))
+              .ForMember(d => d.FatherFullname, opt => opt.MapFrom(src => src.Person.FatherNames.FullName))
+              .ForMember(d => d.AfisNumber, opt => opt.MapFrom(src => src.Person.AFISNumber))
+              .ForMember(d => d.DecisionNumber, opt => opt.MapFrom(src => src.Conviction.Decision.FileNumber))
+              .ForMember(d => d.DecisionDate, opt => opt.MapFrom(src => src.Conviction.Decision.DecisionDate))
+              .ForMember(d => d.DecisionFinalDate, opt => opt.MapFrom(src => src.Conviction.Decision.DecisionFinalDate))
+              .ForMember(d => d.DecisionEcli, opt => opt.MapFrom(src => src.Conviction.Decision.ECLI))
+              .ForMember(d => d.DecisionTypeId, opt => opt.MapFrom(src => src.Conviction.Decision.DecisionType))
+              .ForMember(d => d.CaseTypeId, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseType))
+              .ForMember(d => d.CaseNumber, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseNumber))
+              .ForMember(d => d.CaseYear, opt => opt.MapFrom(src => src.Conviction.CriminalCase.CaseYear))
+              .ForMember(d => d.ConvRemarks, opt => opt.MapFrom(src => src.Conviction.ConvictionRemarks))
+              .ForMember(dest => dest.NoSanction, opt =>
+              {
+                  opt.PreCondition(src => src.Conviction.WithoutSanctionSpecified);
+                  opt.MapFrom(src => src.Conviction.WithoutSanction);
+              })
+              .ForMember(d => d.BSanctions, opt => opt.MapFrom(src => src.Conviction.ConvictionSanction))
+              .ForMember(dest => dest.PrevSuspSent, opt =>
+              {
+                  opt.PreCondition(src => src.Conviction.ServingPrevSuspendedSentenceSpecified);
+                  opt.MapFrom(src => src.Conviction.ServingPrevSuspendedSentence);
+              })
+              .ForMember(d => d.PrevSuspSentDescr, opt => opt.MapFrom(src => src.Conviction.ServingPrevSuspendedSentenceActNumber))
+              .ForMember(d => d.EcrisConvictionId, opt => opt.MapFrom(src => src.Conviction.EcrisConvictionId))
+              .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.IssuerData.BulletinCreateDate))
+              .ForMember(d => d.CreatedByNames, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorPerson.Names.FullName))
+              .ForMember(d => d.CreatedByPosition, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorPerson.Position))
+              .ForMember(d => d.ApprovedByNames, opt => opt.MapFrom(src => src.IssuerData.BulletinApproverPerson.Names.FullName))
+              .ForMember(d => d.ApprovedByPosition, opt => opt.MapFrom(src => src.IssuerData.BulletinApproverPerson.Position))
+              .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.RegistrationData.RegistrationNumber))
+              .ForMember(d => d.AlphabeticalIndex, opt => opt.MapFrom(src => src.RegistrationData.BulletinAlphabeticalIndex))
+              .ForMember(dest => dest.BulletinReceivedDate, opt =>
+              {
+                  opt.PreCondition(src => src.RegistrationData?.BulletinReceivedDateSpecified == true);
+                  opt.MapFrom(src => src.RegistrationData.BulletinReceivedDate);
+              })
+              .ForPath(d => d.CsAuthorityId, opt => opt.MapFrom(src => src.RegistrationData.ConvictionStatusAuthority.Code));// todo
 
             CreateMap<GCountry, CountryType>()
                 .ForMember(d => d.CountryISONumber, opt => opt.MapFrom(src => src.Iso31662Number))
                 .ForMember(d => d.CountryISOAlpha3, opt => opt.MapFrom(src => src.Iso3166Alpha2))
-                .ForMember(d => d.CountryName, opt => opt.MapFrom(src => src.Name))
-                .ReverseMap();
+                .ForMember(d => d.CountryName, opt => opt.MapFrom(src => src.Name));
 
             CreateMap<GCity, CityType>()
                .ForMember(d => d.EKATTECode, opt => opt.MapFrom(src => src.EkatteCode))
-               .ForMember(d => d.CityName, opt => opt.MapFrom(src => src.Name))
-               .ReverseMap();
+               .ForMember(d => d.CityName, opt => opt.MapFrom(src => src.Name));
 
             CreateMap<BPersNationality, CountryType>()
                 .ForMember(d => d.CountryISOAlpha3, opt => opt.MapFrom(src => src.Country.Iso3166Alpha2))
                 .ForMember(d => d.CountryName, opt => opt.MapFrom(src => src.Country.Name))
-                .ForMember(d => d.CountryISONumber, opt => opt.MapFrom(src => src.Country.Iso31662Number))
-                .ReverseMap()
-                .ForPath(d => d.Country.Iso3166Alpha2, opt => opt.MapFrom(src => src.CountryISOAlpha3))
-                .ForPath(d => d.Country.Name, opt => opt.MapFrom(src => src.CountryName))
-                .ForPath(d => d.Country.Iso31662Number, opt => opt.MapFrom(src => src.CountryISONumber))
-                .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added));
+                .ForMember(d => d.CountryISONumber, opt => opt.MapFrom(src => src.Country.Iso31662Number));
+
+            CreateMap<CountryType, BPersNationality>()
+                .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added))
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => DataAccess.BaseEntity.GenerateNewId()));
 
             CreateMap<GDecidingAuthority, DecidingAuthorityType>()
                 .ForMember(d => d.DecidingAuthorityName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(d => d.DecidingAuthorityCodeEIK, opt => opt.MapFrom(src => src.Code))
-                .ForMember(d => d.DecidingAuthorityCodeEISPP, opt => opt.MapFrom(src => src.EisppCode))
-                .ReverseMap();
+                .ForMember(d => d.DecidingAuthorityCodeEISPP, opt => opt.MapFrom(src => src.EisppCode));
 
             CreateMap<BOffence, OffenceType>()
                //.ForMember(d => d.OffenceId, opt => opt.MapFrom(src => src.OffenceId)) // todo 
@@ -188,22 +201,33 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForPath(d => d.OffencePlace.City, opt => opt.MapFrom(src => src.OffPlaceCity))
                .ForPath(d => d.OffencePlace.Descr, opt => opt.MapFrom(src => src.OffPlaceDescr))
                .ForMember(d => d.FormOfGuilt, opt => opt.MapFrom(src => src.FormOfGuiltId))
-               .ForMember(d => d.FormOfGuiltSpecified, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.FormOfGuiltId)))
-               .ReverseMap()
-               .ForPath(d => d.OffenceCat.Code, opt => opt.MapFrom(src => src.NationalCategoryCode))
-               .ForPath(d => d.OffenceCat.Name, opt => opt.MapFrom(src => src.NationalCategoryTitle))
-               .ForPath(d => d.EcrisOffCat.Id, opt => opt.MapFrom(src => src.OffenceCommonCategoryReference.OffenceCode))
-               .ForPath(d => d.EcrisOffCat.Name, opt => opt.MapFrom(src => src.OffenceCommonCategoryReference.OffenceName))
+               .ForMember(d => d.FormOfGuiltSpecified, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.FormOfGuiltId)));
+
+            CreateMap<OffenceType, BOffence>()
+                .ForPath(d => d.OffenceCatId, opt => opt.MapFrom(src => src.NationalCategoryCode))
+               .ForPath(d => d.EcrisOffCatId, opt => opt.MapFrom(src => src.OffenceCommonCategoryReference.OffenceCode))
                .ForMember(d => d.LegalProvisions, opt => opt.MapFrom(src => src.OffenceApplicableLegalProvisions))
-               //.ForMember(d => d.OffStartDate, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDateTimeFromDateType(src.OffenceStartDate)))
-               //.ForMember(d => d.OffStartDatePrec, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDatePrecFromDateType(src.OffenceStartDate)))
-               //.ForMember(d => d.OffEndDate, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDateTimeFromDateType(src.OffenceEndDate)))
-              // .ForMember(d => d.OffEndDatePrec, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDatePrecFromDateType(src.OffenceEndDate)))
-               .ForMember(d => d.OffPlaceCountry, opt => opt.MapFrom(src => src.OffencePlace.Country))
-               .ForPath(d => d.OffPlaceCity, opt => opt.MapFrom(src => src.OffencePlace.City))
-               .ForPath(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffencePlace.Descr))
-               .ForMember(d => d.FormOfGuiltId, opt => opt.MapFrom(src => src.FormOfGuilt.ToString()))
-               .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added));
+               .ForMember(d => d.OffStartDate, opt => opt.MapFrom(src => src.OffenceStartDate.Date))
+               .ForMember(dest => dest.OffStartDatePrec, opt =>
+               {
+                   opt.PreCondition(src => src.OffenceStartDate.DatePrecisionSpecified);
+                   opt.MapFrom(src => src.OffenceStartDate.DatePrecision.ToString());
+               })
+               .ForMember(d => d.OffEndDate, opt => opt.MapFrom(src => src.OffenceEndDate.Date))
+               .ForMember(dest => dest.OffEndDatePrec, opt =>
+               {
+                   opt.PreCondition(src => src.OffenceEndDate.DatePrecisionSpecified);
+                   opt.MapFrom(src => src.OffenceEndDate.DatePrecision.ToString());
+               })
+               .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffencePlace.City.EKATTECode))
+               .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffencePlace.Descr))
+                .ForMember(dest => dest.FormOfGuiltId, opt =>
+                {
+                    opt.PreCondition(src => src.FormOfGuiltSpecified);
+                    opt.MapFrom(src => src.FormOfGuilt.ToString());
+                })
+               .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added))
+               .ForMember(d => d.Id, opt => opt.MapFrom(src => DataAccess.BaseEntity.GenerateNewId()));
 
             CreateMap<BSanction, SanctionType>()
               //.ForMember(d => d.SanctionId, opt => opt.MapFrom(src => src.SanctionId)) // todo
@@ -217,13 +241,18 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForPath(d => d.Prison.SanctionSentencedPeriod, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetPeriodFromNumbers(src.DecisionDurationYears, src.DecisionDurationMonths, src.DecisionDurationDays, src.DecisionDurationHours)))
               .ForPath(d => d.Prison.SanctionSuspension, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetPeriodFromNumbers(src.SuspentionDurationYears, src.SuspentionDurationMonths, src.SuspentionDurationDays, src.SuspentionDurationHours)))
               .ForPath(d => d.Prison.DetentionDescription, opt => opt.MapFrom(src => src.DetenctionDescr))
-              .ForPath(d => d.Other.SanctionSentencedPeriodLength, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetPeriodFromNumbers(src.DecisionDurationYears, src.DecisionDurationMonths, src.DecisionDurationDays, src.DecisionDurationHours)))
-              .ReverseMap()
-              .ForPath(d => d.SanctCategory.Code, opt => opt.MapFrom(src => src.NationalCategoryCode))
-              .ForPath(d => d.SanctCategory.Name, opt => opt.MapFrom(src => src.NationalCategoryTitle))
-              .ForPath(d => d.EcrisSanctCateg.Category, opt => opt.MapFrom(src => src.SanctionCommonCategoryReference.SanctionCode))
-              .ForPath(d => d.EcrisSanctCateg.Name, opt => opt.MapFrom(src => src.SanctionCommonCategoryReference.SanctionText))
+              .ForPath(d => d.Other.SanctionSentencedPeriodLength, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetPeriodFromNumbers(src.DecisionDurationYears, src.DecisionDurationMonths, src.DecisionDurationDays, src.DecisionDurationHours)));
+
+
+            CreateMap<SanctionType, BSanction>()
+              .ForPath(d => d.SanctCategoryId, opt => opt.MapFrom(src => src.NationalCategoryCode))
+              .ForPath(d => d.EcrisSanctCategId, opt => opt.MapFrom(src => src.SanctionCommonCategoryReference.SanctionCode))
               .ForPath(d => d.FineAmount, opt => opt.MapFrom(src => src.Fine.SanctionAmountOfIndividualFine))
+               .ForMember(dest => dest.FineAmount, opt =>
+               {
+                   opt.PreCondition(src => src.Fine.SanctionAmountOfIndividualFineSpecified);
+                   opt.MapFrom(src => src.Fine.SanctionAmountOfIndividualFine);
+               })
               .ForMember(d => d.BProbations, opt => opt.MapFrom(src => src.Probation))
               .ForMember(d => d.DecisionDurationYears, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.Prison.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationYearPattern)))
               .ForMember(d => d.DecisionDurationMonths, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.Prison.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationMonthPattern)))
@@ -238,7 +267,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.DecisionDurationMonths, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.Other.SanctionSentencedPeriodLength, CriminalRecordsReportResolver.DurationMonthPattern)))
               .ForMember(d => d.DecisionDurationDays, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.Other.SanctionSentencedPeriodLength, CriminalRecordsReportResolver.DurationDayPattern)))
               .ForMember(d => d.DecisionDurationHours, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.Other.SanctionSentencedPeriodLength, CriminalRecordsReportResolver.DurationHourPattern)))
-              .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added));
+              .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added))
+              .ForMember(d => d.Id, opt => opt.MapFrom(src => DataAccess.BaseEntity.GenerateNewId()));
 
             CreateMap<BProbation, SanctionTypeProbation>()
                 //.ForMember(d => d.SanctionId, opt => opt.MapFrom(src => src.SanctionId)) // todo
@@ -248,18 +278,18 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.ProbationValueSpecified, opt => opt.MapFrom(src => src.SanctProbValue.HasValue))
                 .ForMember(d => d.ProbationMeasureCode, opt => opt.MapFrom(src => src.SanctProbMeasure.Code))
                 .ForMember(d => d.ProbationMeasureTitle, opt => opt.MapFrom(src => src.SanctProbMeasure.Name))
-                .ForMember(d => d.SanctionSentencedPeriod, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetPeriodFromNumbers(src.DecisionDurationYears, src.DecisionDurationMonths, src.DecisionDurationDays, src.DecisionDurationHours)))
-                .ReverseMap()
-                .ForPath(d => d.SanctProbCateg.Code, opt => opt.MapFrom(src => src.ProbationCategoryCode))
-                .ForPath(d => d.SanctProbCateg.Name, opt => opt.MapFrom(src => src.ProbationCategoryTitle))
-                .ForPath(d => d.SanctProbValue, opt => opt.MapFrom(src => src.ProbationValue))
-                .ForPath(d => d.SanctProbMeasure.Code, opt => opt.MapFrom(src => src.ProbationMeasureCode))
-                .ForPath(d => d.SanctProbMeasure.Name, opt => opt.MapFrom(src => src.ProbationMeasureTitle))
+                .ForMember(d => d.SanctionSentencedPeriod, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetPeriodFromNumbers(src.DecisionDurationYears, src.DecisionDurationMonths, src.DecisionDurationDays, src.DecisionDurationHours)));
+
+            CreateMap<SanctionTypeProbation, BProbation>()
+                .ForMember(d => d.SanctProbCategId, opt => opt.MapFrom(src => src.ProbationCategoryCode))
+                .ForMember(d => d.SanctProbValue, opt => opt.MapFrom(src => src.ProbationValue))
+                .ForMember(d => d.SanctProbCategId, opt => opt.MapFrom(src => src.ProbationMeasureCode))
                 .ForMember(d => d.DecisionDurationYears, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationYearPattern)))
                 .ForMember(d => d.DecisionDurationMonths, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationMonthPattern)))
                 .ForMember(d => d.DecisionDurationDays, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationDayPattern)))
                 .ForMember(d => d.DecisionDurationHours, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationHourPattern)))
-                .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added));
+                .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added))
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => DataAccess.BaseEntity.GenerateNewId()));
 
             CreateMap<BDecision, DecisionChangeType>()
                 .ForMember(d => d.DecisionChangeTypeReference, opt => opt.MapFrom(src => CriminalRecordsReportResolver.StringToEnum<DecisionChangeTypeType>(src.DecisionChTypeId)))
@@ -273,18 +303,19 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.ValidFrom, opt => opt.MapFrom(src => src.DecisionDate))
                 .ForMember(d => d.ValidFromSpecified, opt => opt.MapFrom(src => src.DecisionDate.HasValue))
                 .ForMember(d => d.ReceiveDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
-                .ForMember(d => d.ReceiveDateSpecified, opt => opt.MapFrom(src => src.DecisionFinalDate.HasValue))
-                .ReverseMap()
-                .ForMember(d => d.DecisionChTypeId, opt => opt.MapFrom(src => CriminalRecordsReportResolver.EnumToString(src.DecisionChangeTypeReference)))
-                .ForMember(d => d.DecisionNumber, opt => opt.MapFrom(src => src.Decision.FileNumber))
-                .ForMember(d => d.DecisionFinalDate, opt => opt.MapFrom(src => src.Decision.DecisionFinalDate))
-                .ForMember(d => d.DecisionDate, opt => opt.MapFrom(src => src.Decision.DecisionDate))
-                .ForMember(d => d.DecisionAuth, opt => opt.MapFrom(src => src.Decision.DecidingAuthority))
-                .ForMember(d => d.DecisionEcli, opt => opt.MapFrom(src => src.Decision.ECLI))
-                .ForMember(d => d.Descr, opt => opt.MapFrom(src => src.DecisionRemarks))
-                .ForMember(d => d.DecisionDate, opt => opt.MapFrom(src => src.ValidFrom))
-                .ForMember(d => d.DecisionFinalDate, opt => opt.MapFrom(src => src.ReceiveDate))
-                .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added));
+                .ForMember(d => d.ReceiveDateSpecified, opt => opt.MapFrom(src => src.DecisionFinalDate.HasValue));
+
+            CreateMap<DecisionChangeType, BDecision>()
+            .ForMember(d => d.DecisionChTypeId, opt => opt.MapFrom(src => CriminalRecordsReportResolver.EnumToString(src.DecisionChangeTypeReference)))
+            .ForMember(d => d.DecisionNumber, opt => opt.MapFrom(src => src.Decision.FileNumber))
+            .ForMember(d => d.DecisionFinalDate, opt => opt.MapFrom(src => src.Decision.DecisionFinalDate))
+            .ForMember(d => d.DecisionDate, opt => opt.MapFrom(src => src.Decision.DecisionDate))
+            .ForMember(d => d.DecisionEcli, opt => opt.MapFrom(src => src.Decision.ECLI))
+            .ForMember(d => d.Descr, opt => opt.MapFrom(src => src.DecisionRemarks))
+            .ForMember(d => d.DecisionDate, opt => opt.MapFrom(src => src.ValidFrom))
+            .ForMember(d => d.DecisionFinalDate, opt => opt.MapFrom(src => src.ReceiveDate))
+            .ForMember(d => d.EntityState, opt => opt.MapFrom(src => EntityStateEnum.Added))
+            .ForMember(d => d.Id, opt => opt.MapFrom(src => DataAccess.BaseEntity.GenerateNewId()));
 
             CreateMap<PPerson, CriminalRecordsPersonDataType>()
                 .ForPath(d => d.NamesBg.FirstName, opt => opt.MapFrom(src => src.Firstname))
