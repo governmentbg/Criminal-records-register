@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public WApplication()
         {
             APayments = new HashSet<APayment>();
+            EWebRequests = new HashSet<EWebRequest>();
             WStatusHes = new HashSet<WStatusH>();
             WWebRequests = new HashSet<WWebRequest>();
         }
@@ -82,6 +83,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GUsersCitizen? UserCitizen { get; set; }
         public virtual GUsersExt? UserExt { get; set; }
         public virtual ICollection<APayment> APayments { get; set; }
+        public virtual ICollection<EWebRequest> EWebRequests { get; set; }
         public virtual ICollection<WStatusH> WStatusHes { get; set; }
         public virtual ICollection<WWebRequest> WWebRequests { get; set; }
     }
