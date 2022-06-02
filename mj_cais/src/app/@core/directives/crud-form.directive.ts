@@ -119,11 +119,12 @@ export abstract class CrudForm<
       this.scrollToValidationError();
     } else {
       this.formObject = form.group.value;
+
       this.saveAndNavigate();
     }
   }
 
-  private saveAndNavigate() {
+  protected saveAndNavigate() {
     let model = this.formObject;
     let submitAction: Observable<T>;
     if (this.isEdit()) {

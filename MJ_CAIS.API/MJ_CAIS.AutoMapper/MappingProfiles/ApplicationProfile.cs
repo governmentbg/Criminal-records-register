@@ -15,8 +15,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
          
             CreateMap<AApplication, ApplicationDTO>();
+            CreateMap<ACertificate, ACertificate>();
 
-            CreateMap<ApplicationDTO, AApplication>()
+            CreateMap<ApplicationInDTO, AApplication>()
                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
                 .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Person.Surname))
                 .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Person.Familyname))
@@ -44,7 +45,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId));
                 
 
-            CreateMap<AApplication, ApplicationDTO>()
+            CreateMap<AApplication, ApplicationOutDTO>()
              .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.RegistrationNumber))
              .ForPath(d => d.Person.Suid, opt => opt.MapFrom(src => src.Suid))
              .ForPath(d => d.Person.Firstname, opt => opt.MapFrom(src => src.Firstname))
@@ -80,6 +81,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<AAppPersAlias, PersonAliasDTO>()
                 .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type));
+
+            CreateMap<PersonAliasDTO, AAppPersAlias>()
+                .ForMember(d => d.Type, opt => opt.MapFrom(src => src.TypeCode));
 
 
             CreateMap<ApplicationDocumentDTO, DDocument>()

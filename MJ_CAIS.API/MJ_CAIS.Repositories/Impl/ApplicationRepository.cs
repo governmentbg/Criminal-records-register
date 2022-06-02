@@ -26,6 +26,14 @@ namespace MJ_CAIS.Repositories.Impl
         }
 
 
+        public override async Task<AApplication> SelectAsync(string id)
+        {
+            var result = await this._dbContext.Set<AApplication>().Include(x => x.AAppCitizenships).AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return result;
+        }
+
+
         public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
         {
             return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()

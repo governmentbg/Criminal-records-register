@@ -5,6 +5,20 @@
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
     >
+    <div>
+      <button
+        *ngIf="!isForPreview"
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="finalEdit()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px"
+      >
+        Актуализирай
+      </button>
+    </div>
     </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">

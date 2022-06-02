@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
@@ -15,7 +16,7 @@ using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services
 {
-    public class ApplicationService : BaseAsyncService<ApplicationDTO, ApplicationDTO, ApplicationDTO, AApplication, string, CaisDbContext>, IApplicationService
+    public class ApplicationService : BaseAsyncService<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string, CaisDbContext>, IApplicationService
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly IRegisterTypeService _registerTypeService;
@@ -43,6 +44,22 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<ApplicationGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
+        }
+
+        public async Task UpdateAsync(string aId,ApplicationInDTO aInDto)
+        {
+            var applicationDb = await dbContext.AApplications.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == aInDto.Id);
+
+            if (applicationDb == null)
+                throw new ArgumentException($"Application with id {aInDto.Id} is missing");
+            this.ValidateData(aInDto);
+
+            var applicationToUpdate = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, false);
+
+            await UpdateApplicationAsync(aInDto, applicationToUpdate);
+
+            await this.SaveEntityAsync(applicationToUpdate);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -90,6 +107,19 @@ namespace MJ_CAIS.Services
             }
             await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus, certificateValidityMonths, applicationStatus);
 
+        }
+        private async Task UpdateApplicationAsync(ApplicationInDTO aInDto, AApplication entity)
+        {
+            await UpdateTransactionsAsync(aInDto, entity);
+
+            var passedNavigationProperties = new List<IBaseIdEntity>();
+            dbContext.ApplyChanges(entity, passedNavigationProperties, true);
+        }
+
+        private async Task UpdateTransactionsAsync(ApplicationInDTO aInDto, AApplication entity)
+        {
+            entity.AAppPersAliases = mapper.MapTransactions<PersonAliasDTO, AAppPersAlias>(aInDto.Person.PersonAliasTransactions);
+            entity.AAppCitizenships = CaisMapper.MapMultipleChooseToEntityList<AAppCitizenship, string, string>(aInDto.Person.Nationalities, nameof(AAppCitizenship.Id), nameof(AAppCitizenship.CountryId));
         }
         private async Task ProcessApplicationWithoutBulletinsAsync(AApplication application, AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {

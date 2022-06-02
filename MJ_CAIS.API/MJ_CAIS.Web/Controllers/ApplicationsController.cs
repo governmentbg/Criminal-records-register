@@ -11,7 +11,7 @@ namespace MJ_CAIS.Web.Controllers
 {
     [Route("applications")]
     [AllowAnonymous]
-    public class ApplicationsController : BaseApiCrudController<ApplicationDTO, ApplicationDTO, ApplicationDTO, AApplication, string>
+    public class ApplicationsController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
 
@@ -34,15 +34,21 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        public  virtual async Task<IActionResult> Post([FromBody] ApplicationDTO aInDto)
+        public  virtual async Task<IActionResult> Post([FromBody] ApplicationInDTO aInDto)
+        {
+            return await base.Post(aInDto);
+        }
+
+        [HttpPut("finalEdit")]
+        public virtual async Task<IActionResult> FinalEdit([FromBody] ApplicationInDTO aInDto)
         {
             return await base.Post(aInDto);
         }
 
         [HttpPut("{aId}")]
-        public virtual async Task<IActionResult> Put(string aId, [FromBody] ApplicationDTO aInDto)
+        public virtual async Task<IActionResult> Put(string aId, [FromBody] ApplicationInDTO aInDto)
         {
-            await this.baseService.UpdateAsync(aId, aInDto);
+            await this._applicationService.UpdateAsync(aId, aInDto);
             return Ok();
         }
 
@@ -96,7 +102,14 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._applicationService.SelectApplicationPersStatusHAsync(aId);
             return Ok(result);
         }
-        
+
+        [HttpGet("{aId}/application-certificate")]
+        public async Task<IActionResult> GetAppplicationCertificate(string aId)
+        {
+            var result = await this._applicationService.SelectApplicationCertificateByApplicationIdAsync(aId);
+            return Ok(result);
+        }
+
 
         private string getContentType(string fileName)
         {
