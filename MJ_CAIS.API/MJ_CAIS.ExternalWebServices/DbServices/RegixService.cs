@@ -101,6 +101,31 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                       
                 }
             }
+            if (!string.IsNullOrEmpty(request.WApplicationId))
+            {
+                var wapplication = await _dbContext.WApplications.FirstOrDefaultAsync(a => a.Id == request.WApplicationId);
+                if (wapplication != null)
+                {
+                    wapplication.Firstname = cache.Firstname;
+                    wapplication.FirstnameLat = cache.FirstnameLat; ;
+                    wapplication.Surname = cache.Surname;
+                    wapplication.SurnameLat = cache.SurnameLat;
+                    wapplication.Familyname = cache.Familyname;
+                    wapplication.FamilynameLat = cache.FamilynameLat;
+                    wapplication.Egn = cache.Egn;
+                    wapplication.Lnch = cache.Lnch;
+                    wapplication.BirthDate = cache.BirthDate;
+                    wapplication.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " + cache.BirthCityName + " " + cache.BirthPlace;
+                    var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
+                    if (country != null)
+                    {
+                        wapplication.BirthCountry = country;
+                        wapplication.BirthCountryId = country.Id;
+                    }
+                    _dbContext.WApplications.Update(wapplication);
+
+                }
+            }
         }
 
         private void CallRegix(EWebRequest request, string webServiceName, string citizenEgn)
