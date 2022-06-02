@@ -1,4 +1,5 @@
-﻿using MJ_CAIS.DTO.ExternalServicesHost;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using System.Threading.Tasks;
 
 namespace MJ_CAIS.ExternalServicesHost
@@ -8,9 +9,9 @@ namespace MJ_CAIS.ExternalServicesHost
     {
         private readonly Services.Contracts.IEISSIntegrationService _eISSIntegrationService;
 
-        public EISSIntegrationService(Services.Contracts.IEISSIntegrationService eISSIntegrationService)
+        public EISSIntegrationService()
         {
-            _eISSIntegrationService = eISSIntegrationService;
+            _eISSIntegrationService = Program.Services.GetService<MJ_CAIS.Services.Contracts.IEISSIntegrationService>(); 
         }
 
         public async Task SendBulletinsData(SendBulletinsDataRequestType value)
