@@ -39,12 +39,13 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         public (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
             string? bulletinId = null,
             string? applicationId = null,
+            string? wApplicationId = null,
             string? ecrisMsgId = null)
         {
             var isAsync = false;
             var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
 
-            var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, ecrisMsgId);
+            var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
             _dbContext.SaveEntity(webRequestEntity);
             var response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
             return (response, webRequestEntity);
@@ -242,6 +243,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (request.ApplicationId != null)
             {
                 serviceURI = "Във връзка със заявление: " + request.ApplicationId;
+            }
+            else if (request.WApplicationId != null)
+            {
+                serviceURI = "Във връзка с електронно заявление: " + request.WApplicationId;
             }
             else if (request.BulletinId != null)
             {

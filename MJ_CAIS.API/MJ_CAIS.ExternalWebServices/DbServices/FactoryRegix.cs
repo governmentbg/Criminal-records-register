@@ -13,25 +13,31 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string webServiceId,
             string? bulletinId = null,
             string? applicationId = null,
+            string? wApplicationId = null,
             string? ecrisMsgId = null)
         {
             var request = new PersonDataRequestType { EGN = egn };
             var requestXml = XmlUtils.SerializeToXml(request);
 
-            var webRequestEntity = CreateWebRequest(isAsync, bulletinId, applicationId, ecrisMsgId);
+            var webRequestEntity = CreateWebRequest(isAsync, bulletinId, applicationId, wApplicationId, ecrisMsgId);
             webRequestEntity.RequestXml = requestXml;
             webRequestEntity.WebServiceId = webServiceId;
 
             return webRequestEntity;
         }
 
-        private static EWebRequest CreateWebRequest(bool isAsync, string? bulletinId = null, string? applicationId = null, string? ecrisMsgId = null)
+        private static EWebRequest CreateWebRequest(bool isAsync, 
+            string? bulletinId = null, 
+            string? applicationId = null,
+            string? wApplicationId = null,
+            string? ecrisMsgId = null)
         {
             var result = new EWebRequest()
             {
                 Id = EWebRequest.GenerateNewId(),
                 BulletinId = bulletinId,
                 ApplicationId = applicationId,
+                WApplicationId = wApplicationId,
                 EcrisMsgId = ecrisMsgId,
                 IsAsync = isAsync,
                 Status = WebRequestStatusConstants.Pending,

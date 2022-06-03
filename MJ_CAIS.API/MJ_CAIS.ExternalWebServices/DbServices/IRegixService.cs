@@ -10,6 +10,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
             string? bulletinId = null,
             string? applicationId = null,
+            string? wApplicationId = null,
             string? ecrisMsgId = null);
 
         PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName);
