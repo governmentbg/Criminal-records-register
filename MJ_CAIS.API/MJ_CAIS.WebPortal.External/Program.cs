@@ -1,6 +1,6 @@
 using MJ_CAIS.WebSetup;
 
-namespace MJ_CAIS.WebPortal.Internal
+namespace MJ_CAIS.WebPortal.External
 {
     public class Program
     {
