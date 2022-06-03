@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.WebPortal.Public.Models;
@@ -18,6 +19,18 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
         [RedirectAuthenticatedRequests("Index", "Application")]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Info()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult GeneralCondition()
         {
             return View();
         }

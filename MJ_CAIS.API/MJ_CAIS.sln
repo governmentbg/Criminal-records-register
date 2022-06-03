@@ -37,13 +37,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebPortal.Public", "MJ_CAIS.WebPortal.Public\MJ_CAIS.WebPortal.Public.csproj", "{25518EA5-3F59-474C-A79B-83A79E45919E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebPortal.Internal", "MJ_CAIS.WebPortal.Internal\MJ_CAIS.WebPortal.Internal.csproj", "{AC6EAA06-7170-4AD2-88E7-ED44D638213D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebPortal.External", "MJ_CAIS.WebPortal.External\MJ_CAIS.WebPortal.External.csproj", "{AC6EAA06-7170-4AD2-88E7-ED44D638213D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.WebSetup", "MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj", "{A75E6EDF-FF13-44DA-AF7E-16928F7B4B62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.EcrisObjectsServices", "MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices\MJ_CAIS.EcrisObjectsServices.csproj", "{27DE12F0-4C7B-4176-BD0A-67CB55F944BA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.EcrisObjectsServices.Contracts", "MJ_CAIS.EcrisObjectsServices.Contracts\MJ_CAIS.EcrisObjectsServices.Contracts.csproj", "{5D6578BE-63DF-4055-99DA-11658BF172BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{C7E0CF24-0725-4917-AAB0-5177F3244354}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Infragistics.Web.AspNetCore.dll = Libraries\Infragistics.Web.AspNetCore.dll
+		Libraries\Infragistics.Web.Documents.Core.dll = Libraries\Infragistics.Web.Documents.Core.dll
+		Libraries\Infragistics.Web.Documents.Excel.dll = Libraries\Infragistics.Web.Documents.Excel.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

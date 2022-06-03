@@ -17,7 +17,7 @@
     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
         <ul class="navbar-nav flex-grow-1">
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Application" asp-action="Index">Заявления</a>
+                <a class="nav-link" asp-controller="Application" asp-action="Index">Заявления</a>
             </li>
         </ul>
     </div>
@@ -26,9 +26,10 @@
         <ul class="nav navbar-nav">
             <li class="dropdown">
                 <form asp-controller="Account" asp-action="Logoff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
-                    <span>@CommonResources.lblGreetingUser @controller.CurrentUserName</span>
-                    <a class="btn-logout dropdown-item" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout" class="ml-3">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>@CommonResources.lblLogout
+                    @*<span>@CommonResources.lblGreetingUser @controller.CurrentUserName</span>*@
+                    <span>ЕГН: @controller.CurrentEgnIdentifier</span>
+                    <a class="btn-logout" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout" class="ml-3">
+                        <i class="fas fa-sign-out-alt"></i>@*@CommonResources.lblLogout*@
                     </a>
                 </form>
             </li>

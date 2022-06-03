@@ -788,6 +788,11 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.ApplicationId)
                     .HasConstraintName("FK_A_CERTIFICATES_A_APPLICATIO");
 
+                entity.HasOne(d => d.Doc)
+                    .WithMany(p => p.ACertificates)
+                    .HasForeignKey(d => d.DocId)
+                    .HasConstraintName("FK_A_CERTIFICATES_D_DOCUMENT");
+
                 entity.HasOne(d => d.FirstSigner)
                     .WithMany(p => p.ACertificateFirstSigners)
                     .HasForeignKey(d => d.FirstSignerId)

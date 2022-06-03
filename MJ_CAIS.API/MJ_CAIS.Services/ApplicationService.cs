@@ -69,6 +69,53 @@ namespace MJ_CAIS.Services
             return false;
         }
 
+        public async Task<string> GenerateCertificateFromApplication(string id)
+        {
+            var statuses = await Task.FromResult(dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+                                               a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
+                                               || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToList());
+            if (statuses.Count != 3)
+            {
+                throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
+
+            }
+            var systemParameters = await Task.FromResult(dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+                                                 || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToList());
+            if (systemParameters.Count != 2)
+            {
+                throw new Exception($"Application statuses do not exist. Statuses: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
+
+            }
+            var certificateValidityMonths = systemParameters.First(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS).ValueNumber;
+            if (certificateValidityMonths == null)
+            {
+                throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
+            }
+            var signingCertificateName = systemParameters.First(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ValueString;
+            if (signingCertificateName == null)
+            {
+                throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} not set.");
+            }
+            var applicationStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
+            var certificateContentReadyStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady);
+            var bulletinCheckStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+            var application = await dbContext.AApplications
+                                           .Include(a => a.EgnNavigation)
+                                           .Include(a => a.LnchNavigation)
+                                           .Include(a => a.LnNavigation)
+                                           .Include(a => a.SuidNavigation)
+                                           .Include(a => a.ApplicationType)
+                                 .FirstOrDefaultAsync(aa => aa.Id == id);
+            if (application == null)
+            {
+                throw new Exception($"Application with id = {id} does not exist.");
+            }
+            await GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
+
+            await dbContext.SaveChangesAsync();
+
+            return application.ACertificates.First().Id;
+        }
         public async Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6)            //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
         {   //трябва да са попълнени следните стойности:
             //       .Include(a => a.EgnNavigation)
@@ -109,6 +156,8 @@ namespace MJ_CAIS.Services
             }
             await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus, certificateValidityMonths, applicationStatus);
 
+          
+
         }
         private async Task UpdateApplicationAsync(ApplicationInDTO aInDto, AApplication entity)
         {
@@ -132,7 +181,7 @@ namespace MJ_CAIS.Services
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
-
+           
         }
 
         private async Task<ACertificate> CreateCertificateAsync(string applicationId, AApplicationStatus aStatus, int certificateValidityMonths, string csAuthorityId,string applicationTypeCode)

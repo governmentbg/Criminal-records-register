@@ -66,7 +66,9 @@ namespace AutomaticStepsExecutor
                     //System.IO.File.WriteAllBytes("hello.pdf", fileArray);
                     // IRegisterTypeService s = (RegisterTypeService)host.Services.GetService<IRegisterTypeService>();
                     //var regNum = await  s.GetRegisterNumberForApplicationWeb("532");
-
+                    //ICertificateService s = (ICertificateService)host.Services.GetService<ICertificateService>();
+                    //var cert =  await s.GetCertificateDocumentContent("8936d0c7-9b34-4e56-9d6a-587104fd313e");
+                    //System.IO.File.WriteAllBytes("cert8936d0c7-9b34-4e56-9d6a-587104fd313e.pdf", cert.Content);
 
                     IAutomaticStepService service = (IAutomaticStepService)host.Services.GetService(typeofExecutor);
 
