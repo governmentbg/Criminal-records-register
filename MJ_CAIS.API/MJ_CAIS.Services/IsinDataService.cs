@@ -17,12 +17,14 @@ namespace MJ_CAIS.Services
     {
         private readonly IIsinDataRepository _isinDataRepository;
         private readonly IBulletinRepository _bulletinRepository;
+        private readonly IUserContext _userContext;
 
-        public IsinDataService(IMapper mapper, IIsinDataRepository isinDataRepository, IBulletinRepository bulletinRepository)
+        public IsinDataService(IMapper mapper, IIsinDataRepository isinDataRepository, IBulletinRepository bulletinRepository, IUserContext userContext)
             : base(mapper, isinDataRepository)
         {
             _isinDataRepository = isinDataRepository;
             _bulletinRepository = bulletinRepository;
+            _userContext = userContext;
         }
 
         public virtual async Task<IgPageResult<IsinDataGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<IsinDataGridDTO> aQueryOptions, string? status, string? bulletinId)
@@ -105,6 +107,10 @@ namespace MJ_CAIS.Services
                                   into isinMessageLeft
                         from isinMessage in isinMessageLeft.DefaultIfEmpty()
 
+                        join bulletins in dbContext.BBulletins.AsNoTracking() on isin.BulletinId equals bulletins.Id
+                                  into bulletinsLeft
+                        from bulletins in bulletinsLeft.DefaultIfEmpty()
+
                         join decisionTypes in dbContext.BDecisionTypes.AsNoTracking() on isin.DecisionTypeId equals decisionTypes.Code
                                     into isinDecisionLeft
                         from isinDecision in isinDecisionLeft.DefaultIfEmpty()
@@ -112,9 +118,6 @@ namespace MJ_CAIS.Services
                         join caseTypes in dbContext.BCaseTypes.AsNoTracking() on isin.CaseTypeId equals caseTypes.Code
                         into isinCaseLeft
                         from isinCase in isinCaseLeft.DefaultIfEmpty()
-
-                        where (isin.BulletinId == bulletinId && !string.IsNullOrEmpty(bulletinId)) ||
-                           (isin.Status == status && !string.IsNullOrEmpty(status))
 
                         select new IsinDataGridDTO
                         {
@@ -136,9 +139,23 @@ namespace MJ_CAIS.Services
                             SanctionType = isin.SanctionType == IsinDataConstants.SanctionType.Fine ? IsinDataConstants.SanctionTypeDisplay.Fine :
                                        (isin.SanctionType == IsinDataConstants.SanctionType.Probation ? IsinDataConstants.SanctionTypeDisplay.Probation :
                                         (isin.SanctionType == IsinDataConstants.SanctionType.Prison ? IsinDataConstants.SanctionTypeDisplay.Prison :
-                                         null))
+                                         null)),
+                            CsAuthorityId = bulletins.CsAuthorityId
                         };
 
+            if (!string.IsNullOrEmpty(bulletinId))
+            {
+                query = query.Where(x => x.BulletinId == bulletinId);
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(x => x.Status == status);
+                if (status == IsinDataConstants.Status.Identified)
+                {
+                    query = query.Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
+                }
+            }
             return query;
         }
 

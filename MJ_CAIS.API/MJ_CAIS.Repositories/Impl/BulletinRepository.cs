@@ -9,15 +9,24 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class BulletinRepository : BaseAsyncRepository<BBulletin, CaisDbContext>, IBulletinRepository
     {
-        public BulletinRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public BulletinRepository(CaisDbContext dbContext, IUserContext userContext)
+            : base(dbContext)
         {
+            this._userContext = userContext;
         }
 
         public override IQueryable<BBulletin> SelectAllAsync()
         {
-            return this._dbContext.BBulletins.AsNoTracking()
+            var query = this._dbContext.BBulletins
                                 .Include(x => x.Status)
-                                .Include(x => x.BulletinAuthority);
+                                .Include(x => x.BulletinAuthority)
+                                .AsNoTracking();
+
+            query = _userContext.FilterByAuthority(query);
+
+            return query;
         }
 
         public override async Task<BBulletin> SelectAsync(string aId)
@@ -216,7 +225,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task SaveBulletinsAsync(List<BBulletin> bulletins)
         {
             _dbContext.BBulletins.AddRange(bulletins);
-           await  _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Dictionary<string, string>> GetAuthIdByEkkateAsync(List<string> ekatteCodes)
