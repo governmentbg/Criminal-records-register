@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Installed from local nuget (first local install and license) -->
+    <PackageReference Include="Infragistics.Web.AspNetCore" Version="6.21.1.7" />
+    <PackageReference Include="Infragistics.Web.Documents.Excel" Version="21.1.74" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj" />
   </ItemGroup>
 
