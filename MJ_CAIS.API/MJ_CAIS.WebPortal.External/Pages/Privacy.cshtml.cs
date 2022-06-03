@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MJ_CAIS.WebPortal.Internal.Pages
+namespace MJ_CAIS.WebPortal.External.Pages
 {
     public class PrivacyModel : PageModel
     {
