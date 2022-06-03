@@ -45,6 +45,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.EcrisObjectsService
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.EcrisObjectsServices.Contracts", "MJ_CAIS.EcrisObjectsServices.Contracts\MJ_CAIS.EcrisObjectsServices.Contracts.csproj", "{5D6578BE-63DF-4055-99DA-11658BF172BE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{C7E0CF24-0725-4917-AAB0-5177F3244354}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Infragistics.Web.AspNetCore.dll = Libraries\Infragistics.Web.AspNetCore.dll
+		Libraries\Infragistics.Web.Documents.Core.dll = Libraries\Infragistics.Web.Documents.Core.dll
+		Libraries\Infragistics.Web.Documents.Excel.dll = Libraries\Infragistics.Web.Documents.Excel.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
