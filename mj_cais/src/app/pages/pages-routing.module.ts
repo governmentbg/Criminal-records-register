@@ -165,12 +165,22 @@ const routes: Routes = [
       {
         path: "bulletins-administration",
         component: BulletinAdministrationOverviewComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "bulletins-administration/preview/:ID",
         component: BulletinAdministrationFormComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: ["Admin", "GlobalAdmin"],
+          },
+        },
       },
       {
         path: "internal-requests",
