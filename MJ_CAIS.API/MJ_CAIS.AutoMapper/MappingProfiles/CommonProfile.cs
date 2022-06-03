@@ -45,6 +45,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<GDecidingAuthority, BaseNomenclatureDTO>();
 
             CreateMap<GCountry, BaseNomenclatureDTO>();
+
+            // todo: remove this, use grid with pagination
+            CreateMap<GUser, BaseNomenclatureDTO>()
+               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+               .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Firstname + " " + src.Familyname));
         }
     }
 }

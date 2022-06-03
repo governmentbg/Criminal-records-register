@@ -39,6 +39,7 @@ export class ApplicationResolver implements Resolve<any> {
       genderTypes: this.nomenclatureService.getGenderTypes(),
       applicationStatusHistoryData:
         this.service.getApplicationStatusHistoryData(applicationId),
+      users: this.nomenclatureService.getUsers(),
     };
     return forkJoin(result);
   }
@@ -49,4 +50,5 @@ export class ApplicationResolverData extends BaseResolverData<ApplicationModel> 
     public paymentMethodIds: Observable<BaseNomenclatureModel[]>;
     public srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
     public documents: Observable<ApplicationDocumentModel[]>;
+    public users: Observable<BaseNomenclatureModel[]>;
 }

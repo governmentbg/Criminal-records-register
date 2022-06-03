@@ -1,28 +1,25 @@
 using AutoMapper;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.DTO.Certificate;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts;
-using System.Collections.Generic;
-
-using MJ_CAIS.Common.Constants;
-using System.Text;
-using MJ_CAIS.Common.Enums;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Certificate;
+using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.Services.Contracts;
 
 namespace MJ_CAIS.Services
 {
     public class CertificateService : BaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string, CaisDbContext>, ICertificateService
     {
         private readonly ICertificateRepository _certificateRepository;
-
+        private readonly IMapper _mapper;
 
         public CertificateService(IMapper mapper, ICertificateRepository certificateRepository)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
-         
+            _mapper = mapper;
+
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -30,7 +27,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public  void SetCertificateStatus(ACertificate certificate,  AApplicationStatus newStatus, string description)
+        public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description)
         {
             certificate.StatusCode = newStatus.Code;
             certificate.StatusCodeNavigation = newStatus;
@@ -64,5 +61,12 @@ namespace MJ_CAIS.Services
             return content;
         }
 
+        public async Task SaveSignerDataAsync(CertificateSignerDTO aInDto)
+        {
+            var entity = _mapper.MapToEntity<CertificateSignerDTO, ACertificate>(aInDto, false);
+
+            var dbContext = _certificateRepository.GetDbContext();
+            await dbContext.SaveEntityAsync(entity);
+        }
     }
 }

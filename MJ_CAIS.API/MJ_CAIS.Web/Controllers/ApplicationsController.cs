@@ -109,8 +109,7 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._applicationService.SelectApplicationCertificateByApplicationIdAsync(aId);
             return Ok(result);
         }
-
-
+      
         private string getContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();

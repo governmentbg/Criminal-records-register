@@ -96,6 +96,14 @@ namespace MJ_CAIS.Services
             return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
+        public async Task<IQueryable<BaseNomenclatureDTO>> GetGUsersAsync()
+        {
+            var query = await _nomenclatureDetailRepository
+                .GetGUsersAsync();
+
+            return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
         public IQueryable<BaseNomenclatureDTO> GetPidTypes()
         {
             return _nomenclatureDetailRepository

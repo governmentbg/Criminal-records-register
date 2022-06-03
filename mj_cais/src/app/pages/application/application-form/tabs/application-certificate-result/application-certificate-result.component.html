@@ -1,1 +1,60 @@
-<p>application-certificate-result works!</p>
+
+<form autocomplete="off">
+  <div class="row" style="align-items: center;">
+    <div class="form-group col-md-6">
+      <cais-autocomplete
+        [label]="'Подписващ1'"
+        [inputFormControl]="fullForm.firstSignerId"
+        [parentGroup]="fullForm.group"
+        [inputName]="'firstSignerId'"
+        [items]="users"
+      >
+      </cais-autocomplete>
+    </div>
+    <!-- <div class="form-group col-md-6" style="padding-right: 50px">
+      <button
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="generateCertificate()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px; float:right"
+      >
+        Генерирай свидетелство
+      </button>
+    </div> -->
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <cais-autocomplete
+        [label]="'Подписващ2'"
+        [inputFormControl]="fullForm.secondSignerId"
+        [parentGroup]="fullForm.group"
+        [inputName]="'secondSignerId'"
+        [items]="users"
+      >
+      </cais-autocomplete>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <cais-input
+        [type]="'date'"
+        [label]="'Дата на валидно от'"
+        [inputFormControl]="fullForm.validFrom"
+        [parentGroup]="fullForm.group"
+      ></cais-input>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <cais-input
+        [type]="'date'"
+        [label]="'Дата на валидно до'"
+        [inputFormControl]="fullForm.validTo"
+        [parentGroup]="fullForm.group"
+      ></cais-input>
+    </div>
+  </div>
+</form>

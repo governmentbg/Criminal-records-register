@@ -7,5 +7,6 @@ namespace MJ_CAIS.Services.Contracts
     {
         public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description);
         Task<DDocContent> GetCertificateDocumentContent(string accessCode);
+        Task SaveSignerDataAsync(CertificateSignerDTO aInDto);
     }
 }

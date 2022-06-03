@@ -30,5 +30,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<PPersonIdType> GetPidTypes();
 
         Task<IQueryable<GDecidingAuthority>> GetDecidingAuthoritiesForBulletinsAsync();
+
+        Task<IQueryable<GUser>> GetGUsersAsync();
     }
 }
