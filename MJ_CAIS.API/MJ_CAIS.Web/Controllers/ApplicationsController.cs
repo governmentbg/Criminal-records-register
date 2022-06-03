@@ -6,6 +6,7 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
+using MJ_CAIS.ExternalWebServices.DbServices;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -14,10 +15,12 @@ namespace MJ_CAIS.Web.Controllers
     public class ApplicationsController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
+        private readonly ISearchByIdentifierService _searchByIdentifierService;
 
-        public ApplicationsController(IApplicationService applicationService) : base(applicationService)
+        public ApplicationsController(IApplicationService applicationService, ISearchByIdentifierService searchByIdentifierService) : base(applicationService)
         {
             _applicationService = applicationService;
+            _searchByIdentifierService = searchByIdentifierService;
         }
 
         [HttpGet("")]
@@ -33,6 +36,13 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("searchByIdentifier/{aId}")]
+        public virtual async Task<IActionResult> SearchByIdentifier(string aId)
+        {
+            this._searchByIdentifierService.SearchByIdentifier(aId);
+            return await base.Get(aId);
+        }
+
         [HttpPost("")]
         public  virtual async Task<IActionResult> Post([FromBody] ApplicationInDTO aInDto)
         {
@@ -40,9 +50,10 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("finalEdit")]
-        public virtual async Task<IActionResult> FinalEdit([FromBody] ApplicationInDTO aInDto)
+        public virtual async Task<IActionResult> FinalEdit(string aId, [FromBody] ApplicationInDTO aInDto)
         {
-            return await base.Post(aInDto);
+            await this._applicationService.UpdateAsync(aId, aInDto);
+            return Ok();
         }
 
         [HttpPut("{aId}")]

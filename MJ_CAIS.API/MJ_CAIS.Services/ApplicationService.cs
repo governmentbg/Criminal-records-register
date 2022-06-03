@@ -62,6 +62,8 @@ namespace MJ_CAIS.Services
             await this.SaveEntityAsync(applicationToUpdate);
         }
 
+     
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;

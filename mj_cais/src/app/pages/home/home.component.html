@@ -79,7 +79,26 @@
     <div class="col-md-6">
       <div class="row col-md-12">
         <nb-card accent="info" class="col-md-12">
-          <nb-card-header>Свидетелства</nb-card-header>
+          <nb-card-header
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <div>Свидетелства</div>
+            <a
+              nbButton
+              matRipple
+              [status]="'success'"
+              [routerLink]="['/pages/applications-request']"
+              
+              type="button"
+              style="min-width: 100px"
+            >
+              Ново заявление
+            </a>
+          </nb-card-header>
           <nb-card-body>
             <nb-list>
               <nb-list-item>
@@ -87,15 +106,19 @@
                   Нови заявления ({{ model.applicationNewIdCount }})
                 </a>
               </nb-list-item>
-  
+
               <nb-list-item>
                 <a [routerLink]="['/pages/applications-waiting-payment']">
-                  Потвърждение за плащане ({{ model.applicationCheckPaymentCount }})
+                  Потвърждение за плащане ({{
+                    model.applicationCheckPaymentCount
+                  }})
                 </a>
               </nb-list-item>
               <nb-list-item>
                 <a [routerLink]="['/pages/application-tax-free']">
-                  Oсвободени от плащане ({{ model.applicationCheckTaxFreeCount }})
+                  Oсвободени от плащане ({{
+                    model.applicationCheckTaxFreeCount
+                  }})
                 </a>
               </nb-list-item>
               <nb-list-item>

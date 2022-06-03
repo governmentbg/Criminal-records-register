@@ -1,0 +1,42 @@
+<nb-card>
+  <nb-card-header>Ново заявление за свидетелство</nb-card-header>
+  <nb-card-body class="example-items-rows">
+    <button
+      nbButton
+      fullWidth 
+      matRipple
+      [status]="'basic'"
+      (click)="searchByEGN()"
+      type="button"
+      class="mb-2"
+      style="min-width: 100px"
+    >
+      Нови заявление за български гражданин по ЕГН
+    </button>
+    <button
+      nbButton
+      fullWidth 
+      matRipple
+      [status]="'basic'"
+      (click)="searchByLNCH()"
+      type="button"
+      class="mb-2"
+      style="min-width: 100px"
+    >
+      Нови заявление за български гражданин по ЛНЧ
+    </button>
+
+    <button
+      nbButton
+      fullWidth 
+      matRipple
+      [status]="'basic'"
+      (click)="searchForForeigner()"
+      type="button"
+      class="mb-2"
+      style="min-width: 100px"
+    >
+      Нови заявление за чужденец
+    </button>
+  </nb-card-body>
+</nb-card>

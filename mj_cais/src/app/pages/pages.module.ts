@@ -73,6 +73,8 @@ import { BulletinAdministrationOverviewComponent } from './bulletin-administrati
 import { BulletinAdministrationFormComponent } from './bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component';
 import { ApplicationStatusHistoryComponent } from './application/application-form/tabs/application-status-history/application-status-history.component';
 import { ApplicationCertificateResultComponent } from './application/application-form/tabs/application-certificate-result/application-certificate-result.component';
+import { ApplicationRequestComponent } from './application/application-request/application-request.component';
+import { SearchByEgnDialogComponent } from './application/application-request/search-by-egn-dialog/search-by-egn-dialog.component';
 
 @NgModule({
   imports: [
@@ -151,7 +153,9 @@ import { ApplicationCertificateResultComponent } from './application/application
     BulletinAdministrationOverviewComponent,
     BulletinAdministrationFormComponent,
     ApplicationStatusHistoryComponent,
-    ApplicationCertificateResultComponent
+    ApplicationCertificateResultComponent,
+    ApplicationRequestComponent,
+    SearchByEgnDialogComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })
