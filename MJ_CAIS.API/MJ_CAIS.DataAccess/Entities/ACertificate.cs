@@ -29,6 +29,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public virtual AApplication? Application { get; set; }
+        public virtual DDocument? Doc { get; set; }
         public virtual GUser? FirstSigner { get; set; }
         public virtual GUser? SecondSigner { get; set; }
         public virtual AApplicationStatus? StatusCodeNavigation { get; set; }

@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public DDocument()
         {
+            ACertificates = new HashSet<ACertificate>();
             AReports = new HashSet<AReport>();
             BBulEvents = new HashSet<BBulEvent>();
         }
@@ -33,6 +34,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual DDocType? DocType { get; set; }
         public virtual EEcrisMessage? EcrisMsg { get; set; }
         public virtual Fbbc? Fbbc { get; set; }
+        public virtual ICollection<ACertificate> ACertificates { get; set; }
         public virtual ICollection<AReport> AReports { get; set; }
         public virtual ICollection<BBulEvent> BBulEvents { get; set; }
     }

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MJ_CAIS.WebPortal.Public.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />
 
     <script src="~/lib/modernizr/modernizr.min.js" asp-append-version="true"></script>
     <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
@@ -41,7 +42,7 @@
             </div>
             <div class="cais-navbar">
                 <nav class="navbar navbar-expand-lg">
-                   <h1>ЦАИС "Съдебен статус"</h1>
+                    <h1>ЦАИС "Съдебен статус"</h1>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon cais-nav-icon">
@@ -62,8 +63,37 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - Публичен портал на ЦАИС
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between">
+            <div class="row col-md-12" style="justify-content: space-between;">
+                <div class="col-sm-2 cais-footer-link">
+                    <div class="row">
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Info">
+                            Информация за услуа "Издаване на електронно свидетелство за съдимост"
+                        </a>
+                        <a class="navbar-brand" asp-controller="Home" asp-action="GeneralCondition">
+                            Общи условия
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-2 cais-footer-text">
+                    <p>
+                        Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект: <br />
+                        „Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“, <br />
+                        финансиран по Оперативна програма „Добро управление“, чрез ЕСФ. <br />
+                    </p>
+                </div>
+
+                <div class="col-sm-1 cais-footer-img-container">
+                    <ul class="list-unstyled d-flex">
+                        <li class="ms-2">
+                            <img src="@Url.Content("~/images/eu-logo.png")" class="eu-logo">
+                            <img src="@Url.Content("~/images/eu-logo2.png")" class="eu-logo">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
     </footer>
 

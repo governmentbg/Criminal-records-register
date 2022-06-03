@@ -178,13 +178,13 @@ export class PagesMenu {
             link: "/pages/users-public",
             hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
+          {
+            title: "Управление на бюлетини",
+            link: "/pages/bulletins-administration",    
+            hidden: this.hasNoRole(roles, 'GlobalAdmin')
+          }
         ],
-      },
-      {
-        title: "Управление на бюлетини",
-        icon: { icon: "cog", pack: "fa" },
-        link: "/pages/bulletins-administration",    
-      },
+      },   
     ];
 
     return dashboardMenu;
