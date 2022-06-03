@@ -153,7 +153,8 @@ namespace MJ_CAIS.Services
                 query = query.Where(x => x.Status == status);
                 if (status == IsinDataConstants.Status.Identified)
                 {
-                    query = query.Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
+                    // todo: add authorization
+                    //query = query.Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
                 }
             }
             return query;

@@ -34,7 +34,7 @@ namespace MJ_CAIS.Repositories.Impl
 
                         where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) && 
                         (string.IsNullOrEmpty(bulletinId) || bullEvents.BulletinId == bulletinId) &&
-                        eventType.GroupCode == groupCode && bulletin.CsAuthorityId == _userContext.CsAuthorityId
+                        eventType.GroupCode == groupCode //&& bulletin.CsAuthorityId == _userContext.CsAuthorityId
                         select new BulletinEventGridDTO
                         {
                             Id = bullEvents.Id,

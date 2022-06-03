@@ -9,7 +9,6 @@ namespace MJ_CAIS.FluentValidators.Bulletin
         {
             RuleFor(x => x.FormOfGuiltId).NotEmpty();
             RuleFor(x => x.Remarks).NotEmpty();
-            RuleFor(x => x.OffStartDate).NotEmpty();
             RuleFor(x => x.OffEndDate).NotEmpty();
             RuleFor(x => x.EcrisOffCatId).HasMaxLength(50);
         }

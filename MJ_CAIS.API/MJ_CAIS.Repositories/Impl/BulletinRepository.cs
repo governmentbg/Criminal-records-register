@@ -24,7 +24,7 @@ namespace MJ_CAIS.Repositories.Impl
                                 .Include(x => x.BulletinAuthority)
                                 .AsNoTracking();
 
-            query = _userContext.FilterByAuthority(query);
+           // query = _userContext.FilterByAuthority(query);
 
             return query;
         }
