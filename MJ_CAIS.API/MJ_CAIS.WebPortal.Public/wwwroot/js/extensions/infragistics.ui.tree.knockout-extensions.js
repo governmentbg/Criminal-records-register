@@ -1,7 +1,7 @@
 /*!@license
- * Infragistics.Web.ClientUI igTree KnockoutJS extension 20.1.22
+ * Infragistics.Web.ClientUI igTree KnockoutJS extension 21.1.11
  *
- * Copyright (c) 2011-2020 Infragistics Inc.
+ * Copyright (c) 2011-2021 Infragistics Inc.
  *
  * http://www.infragistics.com/
  *

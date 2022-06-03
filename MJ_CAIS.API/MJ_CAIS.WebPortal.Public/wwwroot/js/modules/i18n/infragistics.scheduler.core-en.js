@@ -1,7 +1,7 @@
 /*!@license
-* Infragistics.Web.ClientUI infragistics.scheduler.core.js resources 20.1.20201.212
+* Infragistics.Web.ClientUI infragistics.scheduler.core.js resources 21.1.20211.72
 *
-* Copyright (c) 2011-2020 Infragistics Inc.
+* Copyright (c) 2011-2021 Infragistics Inc.
 *
 * http://www.infragistics.com/
 *

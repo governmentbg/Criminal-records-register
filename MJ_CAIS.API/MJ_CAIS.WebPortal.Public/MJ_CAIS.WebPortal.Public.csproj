@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Infragistics.Web.AspNetCore" Version="6.20.1.15" />
-    <PackageReference Include="Infragistics.Web.Documents.Excel" Version="20.1.215" />
+    <PackageReference Include="Infragistics.Web.AspNetCore" Version="6.21.1.7" />
+    <PackageReference Include="Infragistics.Web.Documents.Excel" Version="21.1.74" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" />
   </ItemGroup>
 

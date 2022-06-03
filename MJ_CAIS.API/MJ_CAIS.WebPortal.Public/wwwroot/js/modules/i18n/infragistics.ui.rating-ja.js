@@ -1,9 +1,9 @@
 /*!@license
-* Infragistics.Web.ClientUI Rating localization resources 20.1.22
+* Infragistics.Web.ClientUI Rating localization resources 21.1.11
 *
-* Copyright (c) 2011-2020 Infragistics Inc.
+* Copyright (c) 2011-2021 Infragistics Inc.
 *
 * http://www.infragistics.com/
 *
 */
-(function(factory){if(typeof define==="function"&&define.amd){define(["jquery"],factory)}else{return factory(jQuery)}})(function($){$.ig=$.ig||{};$.ig.Rating=$.ig.Rating||{};$.ig.locale=$.ig.locale||{};$.ig.locale.ja=$.ig.locale.ja||{};$.ig.locale.ja.Rating={setOptionError:"\u6b21\u306e\u30aa\u30d7\u30b7\u30e7\u30f3\u306f\u30e9\u30f3\u30bf\u30a4\u30e0\u3067\u5909\u66f4\u3067\u304d\u307e\u305b\u3093: "};$.ig.Rating.locale=$.ig.Rating.locale||$.ig.locale.ja.Rating;return $.ig.locale.ja.Rating});
+(function(factory){if(typeof define==="function"&&define.amd){define(["jquery"],factory)}else{return factory(jQuery)}})(function($){$.ig=$.ig||{};$.ig.Rating=$.ig.Rating||{};$.ig.locale=$.ig.locale||{};$.ig.locale.ja=$.ig.locale.ja||{};$.ig.locale.ja.Rating={setOptionError:"次のオプションはランタイムで変更できません: "};$.ig.Rating.locale=$.ig.Rating.locale||$.ig.locale.ja.Rating;return $.ig.locale.ja.Rating});
