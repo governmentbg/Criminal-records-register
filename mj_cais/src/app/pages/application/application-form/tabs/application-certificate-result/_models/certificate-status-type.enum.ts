@@ -3,4 +3,5 @@ export enum CertificateStatuTypeEnum {
   BulletinsCheck = "BulletinsCheck", // Проверка на бюлетини от служител - БС по заявяване
   CertificatePaperPrint = "CertificatePaperPrint",
   Delivered= "Delivered",
+  BulletinsSelection = "BulletinsSelection"
 }

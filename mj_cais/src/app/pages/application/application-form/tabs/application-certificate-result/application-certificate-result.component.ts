@@ -34,7 +34,6 @@ export class ApplicationCertificateResultComponent
 
   public CertificateStatuTypeEnum = CertificateStatuTypeEnum;
   public showCertContentReady: boolean;
-  public showBulletinsCheck: boolean;
   public bulletinsCheckData: BulletinCheckGridModel[] = [];
   public certificateStatus: string;
 
@@ -48,23 +47,24 @@ export class ApplicationCertificateResultComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
-    this.certificateStatus = this.model.statusCode;
+    this.model.statusCode = this.model.statusCode;
     if (this.model) {
       if (
-        this.certificateStatus ==
+        this.model.statusCode ==
         CertificateStatuTypeEnum.CertificateContentReady
       ) {
         this.showCertContentReady = true;
       } else if (
-        this.certificateStatus ==
+        this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
-        this.certificateStatus == CertificateStatuTypeEnum.Delivered
+          this.model.statusCode == CertificateStatuTypeEnum.Delivered
       ) {
         this.showCertContentReady = true;
         this.fullForm.group.disable();
       }
 
-      if (this.showBulletinsCheck) {
+      if (this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck
+        ||this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection) {
         this.service
           .getBulletinsCheck(this.fullForm.id.value)
           .subscribe((response) => {
@@ -100,7 +100,6 @@ export class ApplicationCertificateResultComponent
         this.service.downloadSertificate(id).subscribe((response: any) => {
           this.model.statusCode =
             CertificateStatuTypeEnum.CertificatePaperPrint;
-          this.certificateStatus = this.model.statusCode;
           this.fullForm.group.disable();
           let blob = new Blob([response.body]);
           window.URL.createObjectURL(blob);
@@ -139,7 +138,7 @@ export class ApplicationCertificateResultComponent
 
   printCertificate() {
     this.service
-      .downloadSertificate(this.certificateStatus)
+      .downloadSertificate(this.model.statusCode)
       .subscribe((response: any) => {
         this.fullForm.group.disable();
         let blob = new Blob([response.body]);
@@ -167,8 +166,18 @@ export class ApplicationCertificateResultComponent
       };
   }
 
-  sendRequestToJudge() {
+  sendBulltinsForSelection() {
     debugger;
     var selectedItesm = this.bulletinsCheckGrid.selectedRows;
+    this.service
+      .sendBulletinsForSelection(this.model.id, selectedItesm)
+      .subscribe((response: any) => {
+        this.model.statusCode =
+            CertificateStatuTypeEnum.BulletinsSelection;
+      }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+      };
   }
 }

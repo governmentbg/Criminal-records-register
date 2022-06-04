@@ -117,6 +117,11 @@ const routes: Routes = [
         // canActivate: [AuthGuard],
       },
       {
+        path: "application-for-signing-by-judge",
+        component: ApplicationForSiningByJudgeComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
         path: "bulletins",
         component: BulletinActiveOverviewComponent,
         // canActivate: [AuthGuard],

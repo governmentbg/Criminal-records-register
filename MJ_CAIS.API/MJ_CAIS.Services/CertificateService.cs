@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Certificate;
@@ -86,6 +87,27 @@ namespace MJ_CAIS.Services
             var result = mapper.ProjectTo<BulletinCheckDTO>(query, mapperConfiguration);
 
             return result;
+        }
+
+        public async Task SetBulletinsForSelection(string aId, string[] ids)
+        {
+            var dbContext = _certificateRepository.GetDbContext();
+
+            var certificate = await dbContext.ACertificates
+                .FirstOrDefaultAsync(a => a.Id == aId);
+
+            if (certificate == null) throw new ArgumentException("Certificate does not exist");
+            certificate.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsSelection;
+
+            var bulletinsForSelection = dbContext.AAppBulletins
+                .Where(x => ids.Contains(x.BulletinId));
+
+            foreach (var item in bulletinsForSelection)
+            {
+                item.Approved = true;
+            }
+
+            await dbContext.SaveChangesAsync();
         }
     }
 }

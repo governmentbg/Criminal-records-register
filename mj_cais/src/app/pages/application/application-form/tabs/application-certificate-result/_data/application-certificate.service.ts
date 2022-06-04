@@ -41,4 +41,14 @@ export class ApplicationCertificateService extends CaisCrudService<
       `${this.url}/${id}/bulletins-check`
     );
   }
+
+  public sendBulletinsForSelection(
+    id:string,
+    ids: string[],
+  ): Observable<any> {
+    return this.http.put<ApplicationCertificateResultModel>(
+      `${this.url}/${id}/bulletins-selcetion`,
+      ids
+    );
+  }
 }

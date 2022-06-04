@@ -14,7 +14,7 @@
       <div class="form-group col-md-6" style="padding-right: 50px">
         <ng-container
           *ngIf="
-            certificateStatus ==
+          this.model.statusCode ==
             CertificateStatuTypeEnum.CertificateContentReady
           "
         >
@@ -33,7 +33,7 @@
         </ng-container>
         <!-- <ng-container
           *ngIf="
-            certificateStatus == CertificateStatuTypeEnum.CertificatePaperPrint
+            this.model.statusCode == CertificateStatuTypeEnum.CertificatePaperPrint
           "
         >
           <button
@@ -50,7 +50,7 @@
           </button>
         </ng-container>
         <ng-container
-          *ngIf="certificateStatus == CertificateStatuTypeEnum.Delivered"
+          *ngIf="this.model.statusCode == CertificateStatuTypeEnum.Delivered"
         >
           <button
             *ngIf="!this.isForPreview"
@@ -102,7 +102,7 @@
   </form>
 </ng-container>
 
-<ng-container *ngIf="showBulletinsCheck">
+<ng-container >
   <div class="row">
     <div class="form-group col-md-6">
       <button
@@ -123,7 +123,7 @@
         nbButton
         matRipple
         [status]="'success'"
-        (click)="sendRequestToJudge()"
+        (click)="sendBulltinsForSelection()"
         type="button"
         class="ml-2"
         style="min-width: 100px; float: right"
@@ -141,7 +141,7 @@
     [allowFiltering]="true"
     [cellSelection]="'none'"
     [rowSelection]="'multiple'"
-    [selectedRows]="selectedRows"
+    [selectedRows]="[]"
     [hideRowSelectors]="false"
   >
     <igx-column
@@ -156,7 +156,7 @@
     <igx-column
       field="registrationNumber"
       header="Номер"
-      [dataType]="number"
+      [dataType]="'number'"
       [sortable]="true"
     >
     </igx-column>

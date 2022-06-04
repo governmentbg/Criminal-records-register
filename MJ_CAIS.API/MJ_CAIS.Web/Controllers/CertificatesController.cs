@@ -58,5 +58,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._certificateService.GetBulletinsCheckByIdAsync(appId);
             return Ok(result);
         }
+
+        [HttpPut("{aId}/bulletins-selcetion")]
+        public async Task<IActionResult> BulletinsSelection(string aId, [FromBody] string[] ids)
+        {
+            await this._certificateService.SetBulletinsForSelection(aId, ids);
+            return Ok();
+        }
     }
 }
