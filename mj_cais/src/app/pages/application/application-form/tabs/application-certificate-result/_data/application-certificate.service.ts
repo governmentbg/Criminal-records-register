@@ -2,6 +2,7 @@ import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
 import { ApplicationCertificateResultModel } from "../_models/application-certificate-result.model";
+import { BulletinCheckGridModel } from "../_models/bulletin-check-grid.model";
 
 @Injectable({
   providedIn: "root",
@@ -32,6 +33,12 @@ export class ApplicationCertificateService extends CaisCrudService<
   public getCertificateByAppId(appId: string) {
     return this.http.get<ApplicationCertificateResultModel>(
       `${this.url}/by-application/${appId}`
+    );
+  }
+
+  public getBulletinsCheck(id: string): Observable<BulletinCheckGridModel[]> {
+    return this.http.get<BulletinCheckGridModel[]>(
+      `${this.url}/${id}/bulletins-check`
     );
   }
 }

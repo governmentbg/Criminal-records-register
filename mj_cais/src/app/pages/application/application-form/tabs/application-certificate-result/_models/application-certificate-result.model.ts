@@ -8,6 +8,7 @@ export class ApplicationCertificateResultModel extends BaseModel {
   public secondSignerId: string = null;
   public validFrom: Date = null;
   public validTo: Date = null;
+  public currentUserAuthId: Date = null;
 
   constructor(init?: Partial<ApplicationCertificateResultModel>) {
     super(init);
@@ -18,5 +19,6 @@ export class ApplicationCertificateResultModel extends BaseModel {
     this.secondSignerId = init?.secondSignerId ?? null;
     this.validFrom = init?.validFrom ?? null;
     this.validTo = init?.validTo ?? null;
+    this.currentUserAuthId = init?.currentUserAuthId ?? null;
   }
 }

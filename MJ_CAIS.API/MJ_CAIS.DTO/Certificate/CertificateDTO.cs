@@ -2,6 +2,7 @@ namespace MJ_CAIS.DTO.Certificate
 {
     public class CertificateDTO : BaseDTO
     {
+        public string? CurrentUserAuthId { get; set; }
         public string? ApplicationId { get; set; }
         public string? StatusCode { get; set; }
         public string? RegistrationNumber { get; set; }

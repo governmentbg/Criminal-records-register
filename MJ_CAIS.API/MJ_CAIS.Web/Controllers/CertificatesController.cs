@@ -46,9 +46,16 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("by-application/{appId}")]
-        public async Task<IActionResult> GetBulletinPersonInfo(string appId)
+        public async Task<IActionResult> GetByApplication(string appId)
         {
             var result = await this._certificateService.GetByApplicationIdAsync(appId);
+            return Ok(result);
+        }
+
+        [HttpGet("{appId}/bulletins-check")]
+        public async Task<IActionResult> GetBulletinsCheck(string appId)
+        {
+            var result = await this._certificateService.GetBulletinsCheckByIdAsync(appId);
             return Ok(result);
         }
     }

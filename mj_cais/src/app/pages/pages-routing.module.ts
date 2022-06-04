@@ -57,6 +57,7 @@ import { ApplicationForCheckComponent } from "./application/application-overview
 import { BulletinAdministrationOverviewComponent } from "./bulletin-administrations/bulletin-administration-overview/bulletin-administration-overview.component";
 import { EcrisTcnOverviewComponent } from "./ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component";
 import { BulletinAdministrationFormComponent } from "./bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component";
+import { ApplicationForSiningByJudgeComponent } from "./application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component";
 
 const routes: Routes = [
   {
@@ -107,6 +108,11 @@ const routes: Routes = [
       {
         path: "application-for-check",
         component: ApplicationForCheckComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-for-signing",
+        component: ApplicationForSiningByJudgeComponent,
         // canActivate: [AuthGuard],
       },
       {

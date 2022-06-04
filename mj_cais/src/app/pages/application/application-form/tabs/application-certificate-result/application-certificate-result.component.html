@@ -1,6 +1,4 @@
-<ng-container
-  *ngIf="showCertContentReady"
->
+<ng-container *ngIf="showCertContentReady">
   <form autocomplete="off">
     <div class="row" style="align-items: center">
       <div class="form-group col-md-6">
@@ -60,4 +58,128 @@
       </div>
     </div>
   </form>
+</ng-container>
+
+<ng-container *ngIf="showBulletinsCheck">
+  <div class="row">
+    <div class="form-group col-md-6">
+      <button
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="sendRequestToJudge()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px; float: left"
+      >
+        Изпрати заявка за реабилитация
+      </button>
+    </div>
+    <div class="form-group col-md-6">
+      <button
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="sendRequestToJudge()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px; float: right"
+      >
+        Изпрати за избор на бюл. от съдия
+      </button>
+    </div>
+  </div>
+
+  <igx-grid
+    #bulletinsCheckGrid
+    [height]="null"
+    [data]="bulletinsCheckData"
+    [primaryKey]="'id'"
+    [allowFiltering]="true"
+    [cellSelection]="'none'"
+    [rowSelection]="'multiple'"
+    [selectedRows]="selectedRows"
+    [hideRowSelectors]="false"
+  >
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="false"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+    </igx-column>
+
+    <igx-column
+      field="registrationNumber"
+      header="Номер"
+      [dataType]="number"
+      [sortable]="true"
+    >
+    </igx-column>
+
+    <!-- <igx-column
+      field="bulletinReceivedDate"
+      [sortable]="true"
+      header="Дата на регистрация"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column> -->
+    <igx-column
+      field="statusId"
+      header="Идентификатор на статус"
+      [hidden]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="statusName"
+      header="Статус"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
+      field="bulletinAuthorityId"
+      header="Идентификатор на съда"
+      [hidden]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="bulletinAuthorityName"
+      header="Съд"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      width="100px"
+      header=""
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <a
+          style="color: black; margin-right: 30px"
+          [title]="'Преглед'"
+          [routerLink]="['/pages/bulletins/preview/', cell.rowData.id]"
+        >
+          <nb-icon pack="fa" icon="eye"></nb-icon>
+        </a>
+        <a
+          *ngIf="model.currentUserAuthId == cell.rowData.bulletinAuthorityId"
+          style="color: black"
+          [title]="'Редактиране'"
+          [routerLink]="['/pages/bulletins/edit/', cell.rowData.id]"
+        >
+          <nb-icon pack="fa" icon="pen"></nb-icon>
+        </a>
+      </ng-template>
+    </igx-column>
+  </igx-grid>
 </ng-container>

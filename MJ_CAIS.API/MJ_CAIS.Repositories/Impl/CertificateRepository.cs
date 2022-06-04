@@ -21,5 +21,16 @@ namespace MJ_CAIS.Repositories.Impl
 
             return certificate;
         }
+
+        public async Task<IQueryable<AAppBulletin>> GetBulletinsCheckByIdAsync(string certId)
+        {
+            var query = _dbContext.AAppBulletins
+              .Include(x => x.Bulletin).ThenInclude(x => x.Status)
+              .Include(x => x.Bulletin).ThenInclude(x => x.CsAuthority)
+              .Include(x => x.Certificate)
+              .Where(x => x.CertificateId == certId);
+
+            return await Task.FromResult(query);
+        }
     }
 }

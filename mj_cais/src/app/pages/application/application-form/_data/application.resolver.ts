@@ -43,7 +43,7 @@ export class ApplicationResolver implements Resolve<any> {
       applicationStatusHistoryData:
         this.service.getApplicationStatusHistoryData(applicationId),
       users: this.nomenclatureService.getUsers(),
-      certificate: this.certificateService.getCertificateByAppId(applicationId)
+      certificate: this.certificateService.getCertificateByAppId(applicationId),
     };
     return forkJoin(result);
   }

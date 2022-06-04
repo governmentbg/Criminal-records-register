@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from "@angular/core";
+import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../../../@core/directives/crud-form.directive";
 import { ApplicationCertificateService } from "./_data/application-certificate.service";
@@ -7,6 +7,8 @@ import { ApplicationCertificateResultModel } from "./_models/application-certifi
 import * as fileSaver from "file-saver";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CertificateStatuTypeEnum } from "./_models/certificate-status-type.enum";
+import { BulletinCheckGridModel } from "./_models/bulletin-check-grid.model";
+import { IgxGridComponent } from "@infragistics/igniteui-angular";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -25,8 +27,15 @@ export class ApplicationCertificateResultComponent
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
   
+  @ViewChild("bulletinsCheckGrid", {
+    read: IgxGridComponent,
+  })
+  public bulletinsCheckGrid: IgxGridComponent;
+
   public CertificateStatuTypeEnum = CertificateStatuTypeEnum;
   public showCertContentReady: boolean;
+  public showBulletinsCheck: boolean;
+  public bulletinsCheckData: BulletinCheckGridModel[] = [];
 
   constructor(
     service: ApplicationCertificateService,
@@ -39,6 +48,15 @@ export class ApplicationCertificateResultComponent
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
     this.showCertContentReady = this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady;
+    this.showBulletinsCheck = this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck;
+
+    if(this.showBulletinsCheck){
+      this.service.getBulletinsCheck(this.fullForm.id.value)
+      .subscribe(response=>{
+        this.bulletinsCheckData = response;
+      });
+    }
+
     this.formFinishedLoading.emit();
   }
 
@@ -95,4 +113,10 @@ export class ApplicationCertificateResultComponent
         };
     }
   }
+
+  sendRequestToJudge(){
+    debugger;
+    var selectedItesm =  this.bulletinsCheckGrid.selectedRows
+  }
+
 }

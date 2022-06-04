@@ -12,14 +12,15 @@ namespace MJ_CAIS.Services
     public class CertificateService : BaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string, CaisDbContext>, ICertificateService
     {
         private readonly ICertificateRepository _certificateRepository;
+        private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
 
-        public CertificateService(IMapper mapper, ICertificateRepository certificateRepository)
+        public CertificateService(IMapper mapper, ICertificateRepository certificateRepository, IUserContext userContext)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
             _mapper = mapper;
-
+            _userContext = userContext;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -72,9 +73,18 @@ namespace MJ_CAIS.Services
         public async Task<CertificateDTO> GetByApplicationIdAsync(string appId)
         {
             var certificate = await _certificateRepository.GetByApplicationIdAsync(appId);
-            if(certificate == null) return null;
+            if (certificate == null) return null;
 
-            var result = mapper.Map<ACertificate,CertificateDTO>(certificate);
+            var result = mapper.Map<ACertificate, CertificateDTO>(certificate);
+            result.CurrentUserAuthId = _userContext.CsAuthorityId;
+            return result;
+        }
+
+        public async Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string certId)
+        {
+            var query = await _certificateRepository.GetBulletinsCheckByIdAsync(certId);
+            var result = mapper.ProjectTo<BulletinCheckDTO>(query, mapperConfiguration);
+
             return result;
         }
     }
