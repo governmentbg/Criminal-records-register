@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
+import { ApplicationTypeStatusConstants } from "../application-overview/_models/application-type-status.constants";
 import { ApplicationResolverData } from "./_data/application.resolver";
 import { ApplicationService } from "./_data/application.service";
 import { ApplicationForm } from "./_models/application.form";
@@ -25,6 +26,8 @@ export class ApplicationFormComponent
   implements OnInit
 {
   public PersonContextEnum = PersonContextEnum;
+  public applicationStatus: string;
+  public ApplicationTypeStatusConstants = ApplicationTypeStatusConstants;
   private isFinalEdit: boolean;
 
   constructor(
@@ -46,6 +49,14 @@ export class ApplicationFormComponent
         "CO-00-100-BGR",
       ]);
       this.fullForm.person.nationalities.isChanged.patchValue(true);
+    }
+
+    this.applicationStatus = this.fullForm.statusCode.value;
+    if (
+      this.fullForm.statusCode.value ==
+      ApplicationTypeStatusConstants.ApprovedApplication
+    ) {
+      this.fullForm.group.disable();
     }
     this.formFinishedLoading.emit();
   }

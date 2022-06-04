@@ -57,9 +57,11 @@ export class ApplicationCertificateResultComponent
           this.bulletinsCheckData = response;
         });
       }
-  
     }
    
+    if(this.isForPreview){
+      this.fullForm.group.disable();
+    }
     this.formFinishedLoading.emit();
   }
 
