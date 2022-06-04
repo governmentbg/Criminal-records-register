@@ -35,8 +35,8 @@ namespace MJ_CAIS.Services
             var entityQuery = this.GetSelectAllQueriable();
             if (!string.IsNullOrEmpty(statusId))
             {
-                var statues = statusId.Split(','); 
-                entityQuery = entityQuery.Where(x => statues.Contains( x.StatusCode));
+                var statues = statusId.Split(',');
+                entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode));
             }
 
             var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);
@@ -46,7 +46,15 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public async Task UpdateAsync(string aId,ApplicationInDTO aInDto)
+        public override async Task<string> InsertAsync(ApplicationInDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, true);
+            await UpdateTransactionsAsync(aInDto, entity);
+            await dbContext.SaveEntityAsync(entity,true);
+            return entity.Id;
+        }
+
+        public async Task UpdateAsync(ApplicationInDTO aInDto, bool isFinal)
         {
             var applicationDb = await dbContext.AApplications.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == aInDto.Id);
@@ -60,6 +68,11 @@ namespace MJ_CAIS.Services
             await UpdateApplicationAsync(aInDto, applicationToUpdate);
 
             await this.SaveEntityAsync(applicationToUpdate);
+
+            if (isFinal)
+            {
+               await GenerateCertificateFromApplication(applicationDb.Id);
+            }
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -121,7 +134,8 @@ namespace MJ_CAIS.Services
             //       .Include(a => a.LnNavigation)
             //       .Include(a => a.SuidNavigation)
             var pids = new List<string>();
-            if (application.EgnId != null && application.EgnNavigation!=null) {
+            if (application.EgnId != null && application.EgnNavigation != null)
+            {
                 pids.Add(application.EgnNavigation.PersonId);
 
             }
@@ -147,14 +161,14 @@ namespace MJ_CAIS.Services
                                  && b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId))).ToListAsync();
                 if (bulletins.Count > 0)
                 {
-                   await  ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus, certificateValidityMonths, applicationStatus);
+                    await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus, certificateValidityMonths, applicationStatus);
                     return;
 
                 }
             }
             await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus, certificateValidityMonths, applicationStatus);
 
-          
+
 
         }
         private async Task UpdateApplicationAsync(ApplicationInDTO aInDto, AApplication entity)
@@ -175,22 +189,22 @@ namespace MJ_CAIS.Services
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             //todo: add resources
             SetApplicationStatus(application, aStatus, "Създаване на сертификат");
-          //  application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
+            //  application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
-           
+
         }
 
-        private async Task<ACertificate> CreateCertificateAsync(string applicationId, AApplicationStatus aStatus, int certificateValidityMonths, string csAuthorityId,string applicationTypeCode)
+        private async Task<ACertificate> CreateCertificateAsync(string applicationId, AApplicationStatus aStatus, int certificateValidityMonths, string csAuthorityId, string applicationTypeCode)
         {
 
             ACertificate cert = new ACertificate();
             cert.Id = BaseEntity.GenerateNewId();
             cert.ApplicationId = applicationId;
             _certificateService.SetCertificateStatus(cert, aStatus, "Създаване на сертификат");
-         
-           
+
+
             if (applicationTypeCode == ApplicationConstants.ApplicationTypes.DeskCertificate)
             {
                 cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateOnDesk(csAuthorityId);
@@ -215,18 +229,18 @@ namespace MJ_CAIS.Services
         {
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             int orderNumber = 0;
-            cert.AAppBulletins= bulletins.OrderByDescending(b => b.CreatedOn.HasValue? b.CreatedOn.Value.Date : DateTime.Now).ThenByDescending(b=>b.DecisionDate).Select(b =>
-            {
-                orderNumber++;
-                return new AAppBulletin()
+            cert.AAppBulletins = bulletins.OrderByDescending(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now).ThenByDescending(b => b.DecisionDate).Select(b =>
                 {
-                    Id = BaseEntity.GenerateNewId(),
-                    BulletinId = b.Id,
-                    CertificateId = cert.Id,
-                    ConvictionText = b.ConvRemarks,
-                    OrderNumber = orderNumber              
-                };
-            }).ToList();
+                    orderNumber++;
+                    return new AAppBulletin()
+                    {
+                        Id = BaseEntity.GenerateNewId(),
+                        BulletinId = b.Id,
+                        CertificateId = cert.Id,
+                        ConvictionText = b.ConvRemarks,
+                        OrderNumber = orderNumber
+                    };
+                }).ToList();
             //todo: add resources
             SetApplicationStatus(application, aStatus, "Създаване на сертификат");
 
@@ -314,7 +328,7 @@ namespace MJ_CAIS.Services
                 MimeType = document.DocContent.MimeType
             };
         }
-        public  void SetApplicationStatus(AApplication application,  AApplicationStatus newStatus, string description, bool includeInDbContext = true)
+        public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description, bool includeInDbContext = true)
         {
             application.StatusCode = newStatus.Code;
             application.StatusCodeNavigation = newStatus;
@@ -350,7 +364,7 @@ namespace MJ_CAIS.Services
         public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
         {
             var result = await _applicationRepository.SelectApplicationCertificateByApplicationIdAsync(aId);
-            return result.ProjectTo<ACertificate>(mapper.ConfigurationProvider); 
+            return result.ProjectTo<ACertificate>(mapper.ConfigurationProvider);
         }
 
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)

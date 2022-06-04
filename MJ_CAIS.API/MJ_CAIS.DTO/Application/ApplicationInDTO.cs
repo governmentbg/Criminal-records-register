@@ -6,12 +6,10 @@ namespace MJ_CAIS.DTO.Application
     {
         public PersonDTO Person { get; set; } = new PersonDTO();
         public string? RegistrationNumber { get; set; }
-        public string? Purpose { get; set; }
-    
+        public string? Purpose { get; set; }  
         public string? PersonId { get; set; }
         public string? ApplicantName { get; set; }
         public string? Address { get; set; }
-       
         public string? PurposeCountry { get; set; }
         public string? PurposePosition { get; set; }
         public string? SrvcResRcptMethId { get; set; }
@@ -23,8 +21,7 @@ namespace MJ_CAIS.DTO.Application
         public string? AddrPhone { get; set; }
         public string? AddrEmail { get; set; }
         public string? Description { get; set; }
-        public string? Email { get; set; }
-      
+        public string? Email { get; set; }   
         public bool? IsLocal { get; set; }
         public string? PurposeId { get; set; }
         public string? PaymentMethodId { get; set; }
@@ -39,5 +36,7 @@ namespace MJ_CAIS.DTO.Application
         public string? UserCitizenId { get; set; }
         public string? UserId { get; set; }
         public string? UserExtId { get; set; }
+        public string? ApplicationTypeId { get; set; }
+        public string? CsAuthorityId { get; set; }    
     }
 }

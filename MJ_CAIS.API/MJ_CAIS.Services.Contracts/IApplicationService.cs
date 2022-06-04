@@ -9,6 +9,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IApplicationService : IBaseAsyncService<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
+        Task UpdateAsync(ApplicationInDTO aInDto, bool isFinal);
         Task<string> GenerateCertificateFromApplication(string id);
         Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6);
         Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId);

@@ -25,6 +25,7 @@ export class ApplicationFormComponent
   implements OnInit
 {
   public PersonContextEnum = PersonContextEnum;
+  private isFinalEdit: boolean;
 
   constructor(
     service: ApplicationService,
@@ -34,7 +35,7 @@ export class ApplicationFormComponent
   ) {
     super(service, injector);
     this.backUrl = "pages/applications";
-    this.setDisplayTitle("Свидетелство");
+    this.setDisplayTitle("свидетелство");
   }
 
   ngOnInit(): void {
@@ -54,18 +55,22 @@ export class ApplicationFormComponent
   submitFunction = () => {
     // this.fullForm.applicationTypeId.setValue('6'); //Взима се от контекста
     // this.fullForm.csAuthorityId.setValue('562');  //Взима се от контекста
+    this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
 
-  public finalEdit(){
+  public finalEdit() {
+    this.isFinalEdit = true;
     this.validateAndSave(this.fullForm);
   }
+
   protected saveAndNavigate() {
-    
     let model = this.formObject;
     let submitAction: Observable<ApplicationModel>;
-    if (this.isEdit()) {
+    if (this.isFinalEdit) {
       submitAction = this.service.updateFinal(this.formObject.id, model);
+    } else if (this.isEdit()) {
+      submitAction = this.service.update(this.formObject.id, model);
     } else {
       submitAction = this.service.save(model);
     }
@@ -107,5 +112,4 @@ export class ApplicationFormComponent
       },
     });
   }
-
 }

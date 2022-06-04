@@ -43,7 +43,7 @@ export class ApplicationService extends CaisCrudService<
   }
 
   public updateFinal(id: string, t: ApplicationModel): Observable<ApplicationModel> {
-    return this.http.put<ApplicationModel>(this.url + '/finalEdit', t, {});
+    return this.http.put<ApplicationModel>(this.url + `/final-edit/${id}`, t, {});
   }
 
   public downloadDocument(applicationId: string, documentId: string) {

@@ -47,16 +47,19 @@ export class ApplicationCertificateResultComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
-    this.showCertContentReady = this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady;
-    this.showBulletinsCheck = this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck;
-
-    if(this.showBulletinsCheck){
-      this.service.getBulletinsCheck(this.fullForm.id.value)
-      .subscribe(response=>{
-        this.bulletinsCheckData = response;
-      });
+    if(this.model){
+      this.showCertContentReady = this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady;
+      this.showBulletinsCheck = this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck;
+  
+      if(this.showBulletinsCheck){
+        this.service.getBulletinsCheck(this.fullForm.id.value)
+        .subscribe(response=>{
+          this.bulletinsCheckData = response;
+        });
+      }
+  
     }
-
+   
     this.formFinishedLoading.emit();
   }
 

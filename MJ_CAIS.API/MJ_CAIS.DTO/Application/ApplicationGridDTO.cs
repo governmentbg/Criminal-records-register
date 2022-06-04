@@ -21,5 +21,8 @@ namespace MJ_CAIS.DTO.Application
         public string? BirthCityId { get; set; }
 
         public string? CsAuthorityBirth { get; set; }
+
+        public DateTime? CreatedOn { get; set; }
+
     }
 }
