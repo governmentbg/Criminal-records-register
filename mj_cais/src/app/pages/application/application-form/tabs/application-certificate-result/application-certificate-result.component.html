@@ -12,18 +12,59 @@
         </cais-autocomplete>
       </div>
       <div class="form-group col-md-6" style="padding-right: 50px">
-        <button
-          *ngIf="!this.isForPreview"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="generateCertificate()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px; float: right"
+        <ng-container
+          *ngIf="
+            certificateStatus ==
+            CertificateStatuTypeEnum.CertificateContentReady
+          "
         >
-          Генерирай свидетелство
-        </button>
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="generateCertificate()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px; float: right"
+          >
+            Генерирай свидетелство
+          </button>
+        </ng-container>
+        <!-- <ng-container
+          *ngIf="
+            certificateStatus == CertificateStatuTypeEnum.CertificatePaperPrint
+          "
+        >
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="printCertificate()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px; float: right"
+          >
+            Разпечатай свидетелство
+          </button>
+        </ng-container>
+        <ng-container
+          *ngIf="certificateStatus == CertificateStatuTypeEnum.Delivered"
+        >
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="printCertificate()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px; float: right"
+          >
+            Връчено на заявителя
+          </button>
+        </ng-container> -->
       </div>
     </div>
     <div class="row">

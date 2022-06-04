@@ -26,7 +26,7 @@ export class ApplicationCertificateResultComponent
 {
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
-  
+
   @ViewChild("bulletinsCheckGrid", {
     read: IgxGridComponent,
   })
@@ -36,6 +36,7 @@ export class ApplicationCertificateResultComponent
   public showCertContentReady: boolean;
   public showBulletinsCheck: boolean;
   public bulletinsCheckData: BulletinCheckGridModel[] = [];
+  public certificateStatus: string;
 
   constructor(
     service: ApplicationCertificateService,
@@ -47,19 +48,32 @@ export class ApplicationCertificateResultComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
-    if(this.model){
-      this.showCertContentReady = this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady;
-      this.showBulletinsCheck = this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck;
-  
-      if(this.showBulletinsCheck){
-        this.service.getBulletinsCheck(this.fullForm.id.value)
-        .subscribe(response=>{
-          this.bulletinsCheckData = response;
-        });
+    this.certificateStatus = this.model.statusCode;
+    if (this.model) {
+      if (
+        this.certificateStatus ==
+        CertificateStatuTypeEnum.CertificateContentReady
+      ) {
+        this.showCertContentReady = true;
+      } else if (
+        this.certificateStatus ==
+          CertificateStatuTypeEnum.CertificatePaperPrint ||
+        this.certificateStatus == CertificateStatuTypeEnum.Delivered
+      ) {
+        this.showCertContentReady = true;
+        this.fullForm.group.disable();
+      }
+
+      if (this.showBulletinsCheck) {
+        this.service
+          .getBulletinsCheck(this.fullForm.id.value)
+          .subscribe((response) => {
+            this.bulletinsCheckData = response;
+          });
       }
     }
-   
-    if(this.isForPreview){
+
+    if (this.isForPreview) {
       this.fullForm.group.disable();
     }
     this.formFinishedLoading.emit();
@@ -84,6 +98,10 @@ export class ApplicationCertificateResultComponent
       let id = this.fullForm.id.value;
       this.service.saveSignerData(id, model).subscribe((response: any) => {
         this.service.downloadSertificate(id).subscribe((response: any) => {
+          this.model.statusCode =
+            CertificateStatuTypeEnum.CertificatePaperPrint;
+          this.certificateStatus = this.model.statusCode;
+          this.fullForm.group.disable();
           let blob = new Blob([response.body]);
           window.URL.createObjectURL(blob);
 
@@ -119,9 +137,38 @@ export class ApplicationCertificateResultComponent
     }
   }
 
-  sendRequestToJudge(){
-    debugger;
-    var selectedItesm =  this.bulletinsCheckGrid.selectedRows
+  printCertificate() {
+    this.service
+      .downloadSertificate(this.certificateStatus)
+      .subscribe((response: any) => {
+        this.fullForm.group.disable();
+        let blob = new Blob([response.body]);
+        window.URL.createObjectURL(blob);
+
+        let header = response.headers.get("Content-Disposition");
+        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+        let fileName = "download";
+
+        var matches = filenameRegex.exec(header);
+        if (matches != null && matches[1]) {
+          fileName = matches[1].replace(/['"]/g, "");
+        }
+
+        fileSaver.saveAs(blob, fileName);
+      }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Грешка при печат на свидетелство:",
+          errorText
+        );
+      };
   }
 
+  sendRequestToJudge() {
+    debugger;
+    var selectedItesm = this.bulletinsCheckGrid.selectedRows;
+  }
 }

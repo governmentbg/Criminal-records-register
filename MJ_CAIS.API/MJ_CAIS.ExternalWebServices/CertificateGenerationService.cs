@@ -72,8 +72,10 @@ namespace MJ_CAIS.ExternalWebServices
             var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
             var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
             //todo:get patterns for mail if needed:
-            return await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery, statusCertificateDelivered,statusCertificatePaperprint,  await GetWebPortalAddress());
+            var content = await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery, statusCertificateDelivered,statusCertificatePaperprint,  await GetWebPortalAddress());
 
+            await dbContext.SaveChangesAsync();
+            return content;
         }
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName,  AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
