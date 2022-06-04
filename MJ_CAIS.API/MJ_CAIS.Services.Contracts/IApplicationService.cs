@@ -21,5 +21,6 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId);
         Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId);
         public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description, bool includeInDbContext = true);
+        Task<IgPageResult<ApplicationGridDTO>> SelectAllCertWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId);
     }
 }

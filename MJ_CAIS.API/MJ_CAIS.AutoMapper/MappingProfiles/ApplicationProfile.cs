@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
-using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
@@ -13,7 +12,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<AApplication, ApplicationGridDTO>()
                 .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
-         
+
             CreateMap<AApplication, ApplicationDTO>();
 
             CreateMap<ApplicationInDTO, AApplication>()

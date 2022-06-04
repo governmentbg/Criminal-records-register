@@ -25,11 +25,20 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
+        public async Task<IQueryable<ACertificate>> SelectAllCertificateAsync()
+        {
+            var result = this._dbContext.ACertificates
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.CsAuthorityBirth)
+                .AsNoTracking();
+
+            return await Task.FromResult(result);
+        }
 
         public override async Task<AApplication> SelectAsync(string id)
         {
             var result = await this._dbContext.Set<AApplication>()
-                .Include(x=>x.ACertificates)
+                .Include(x => x.ACertificates)
                 .Include(x => x.AAppCitizenships).AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
             return result;
@@ -45,19 +54,19 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
         {
             var query = from aStatusH in _dbContext.AStatusHes.AsNoTracking()
-                join status in _dbContext.AApplicationStatuses.AsNoTracking() on aStatusH.StatusCode equals status.Code
-                join users in _dbContext.GUsers.AsNoTracking() on aStatusH.CreatedBy equals users.Id
-                    into astatusHLeft
-                from user in astatusHLeft.DefaultIfEmpty()
-                 where (string.IsNullOrEmpty(aId) || aStatusH.ApplicationId == aId)
-                select new AStatusHGridDTO()
-                {
-                    Id = aStatusH.Id,
-                    Descr = aStatusH.Descr,
-                    UpdatedBy = user.Firstname + " " + user.Familyname,
-                    CreatedOn = aStatusH.CreatedOn,
-                    StatusCode = status.Name,
-                };
+                        join status in _dbContext.AApplicationStatuses.AsNoTracking() on aStatusH.StatusCode equals status.Code
+                        join users in _dbContext.GUsers.AsNoTracking() on aStatusH.CreatedBy equals users.Id
+                            into astatusHLeft
+                        from user in astatusHLeft.DefaultIfEmpty()
+                        where (string.IsNullOrEmpty(aId) || aStatusH.ApplicationId == aId)
+                        select new AStatusHGridDTO()
+                        {
+                            Id = aStatusH.Id,
+                            Descr = aStatusH.Descr,
+                            UpdatedBy = user.Firstname + " " + user.Familyname,
+                            CreatedOn = aStatusH.CreatedOn,
+                            StatusCode = status.Name,
+                        };
 
             return await Task.FromResult(query);
 

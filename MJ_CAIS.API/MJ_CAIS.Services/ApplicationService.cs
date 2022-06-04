@@ -46,11 +46,27 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
+        public async Task<IgPageResult<ApplicationGridDTO>> SelectAllCertWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
+        {
+            var entityQuery = await this._applicationRepository.SelectAllCertificateAsync();
+            if (!string.IsNullOrEmpty(statusId))
+            {
+                var statues = statusId.Split(',');
+                entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode));
+            }
+
+            var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<ApplicationGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
+        }      
+
         public override async Task<string> InsertAsync(ApplicationInDTO aInDto)
         {
             var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, true);
             await UpdateTransactionsAsync(aInDto, entity);
-            await dbContext.SaveEntityAsync(entity,true);
+            await dbContext.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
@@ -67,12 +83,15 @@ namespace MJ_CAIS.Services
 
             await UpdateApplicationAsync(aInDto, applicationToUpdate);
 
-            await this.SaveEntityAsync(applicationToUpdate);
-
             if (isFinal)
             {
-               await GenerateCertificateFromApplication(applicationDb.Id);
+                var regNumber = await _registerTypeService.GetRegisterNumberForApplicationOnDesk(applicationDb.CsAuthorityId);
+                applicationToUpdate.RegistrationNumber = regNumber;
+                await GenerateCertificateFromApplication(applicationDb.Id);
+                return;
             }
+
+            await this.SaveEntityAsync(applicationToUpdate);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

@@ -32,6 +32,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("certificates")]
+        public virtual async Task<IActionResult> GetAllByCertificateStatus(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
+        {
+            var result = await this._applicationService.SelectAllCertWithPaginationAsync(aQueryOptions, statusId);
+            return Ok(result);
+        }
+
         [HttpGet("{aId}")]
         public virtual async Task<IActionResult> Get(string aId)
         {

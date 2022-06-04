@@ -22,6 +22,14 @@ export class ApplicationGridService extends CaisCrudService<
     }
   }
 
+  public updateUrlStatusForCert(statusId?: string) {
+    if(statusId){
+      this.updateUrl(`${currentEndpoint}/certificates?statusId=${statusId}`);
+    }else{
+      this.updateUrl(`${currentEndpoint}/certificates`);
+    }
+  }
+  
    // override
    public addOrderBy(params?: HttpParams): HttpParams {
     if (!params) {
