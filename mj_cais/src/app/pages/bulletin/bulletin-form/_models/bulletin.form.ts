@@ -113,7 +113,6 @@ export class BulletinForm extends BaseForm {
     this.person = new PersonForm(PersonContextEnum.Bulletin, true);
 
     this.csAuthorityName.disable();
-    this.sequentialIndex.setValidators(Validators.required);
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.setValidators([
       Validators.maxLength(100),
@@ -151,7 +150,6 @@ export class BulletinForm extends BaseForm {
     this.id = new FormControl(guid);
     this.person = new PersonForm(PersonContextEnum.Bulletin, false);
     this.csAuthorityName.disable();
-    this.sequentialIndex.setValidators(Validators.required);
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.setValidators([
       Validators.maxLength(100),
@@ -162,7 +160,6 @@ export class BulletinForm extends BaseForm {
       Validators.maxLength(50),
     ]);
     this.bulletinAuthorityId.setValidators(Validators.maxLength(50));
-    this.bulletinCreateDate.setValidators(Validators.required);
     this.decisionTypeId.setValidators(Validators.maxLength(200));
     this.decisionNumber.setValidators([
       Validators.required,

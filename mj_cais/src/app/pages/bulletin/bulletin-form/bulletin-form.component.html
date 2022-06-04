@@ -114,7 +114,7 @@
           <div class="row">
             <div class="form-group col-md-6">
               <cais-autocomplete
-                [label]="'Съд изготвил бюлетината'"
+                [label]="'Съд изготвил бюлетина'"
                 [inputFormControl]="fullForm.bulletinAuthorityId"
                 [parentGroup]="fullForm.group"
                 [inputName]="'bulletinAuthorityId'"
@@ -369,7 +369,7 @@
           </cais-bulletin-sanctions-form>
         </nb-tab>
 
-        <nb-tab tabTitle="Доп. сведения" *ngIf="isEdit() || isForPreview">
+        <nb-tab tabTitle="Доп. сведения">
           <cais-bulletin-decision-form
             #bulletineDecisions
             [bulletinDecisionsTransactions]="fullForm.decisionsTransactions"

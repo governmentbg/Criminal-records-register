@@ -71,6 +71,10 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
+            var dbContext = _bulletinRepository.GetDbContext();
+            var authId = _userContext.CsAuthorityId ?? "660"; // todo: remove
+            var auth = await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
+            result.CsAuthorityName = auth?.Name;
             var person = await _personService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
@@ -88,7 +92,8 @@ namespace MJ_CAIS.Services
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
 
-            var authId = !string.IsNullOrEmpty(bulletin?.CsAuthorityId) ? bulletin?.CsAuthorityId : "660"; // todo remove: only for testing
+            var authId = _userContext.CsAuthorityId ?? "660"; // todo remove: only for testing
+            bulletin.CsAuthorityId = authId;
             var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletin.BulletinType);
             bulletin.RegistrationNumber = regNumber;
 
