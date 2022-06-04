@@ -359,15 +359,14 @@
           >
           </cais-fbbc-document-form>
         </nb-tab>
-        <ng-container *ngIf="isEdit()">
-          <nb-tab tabTitle="Свидетелство">
-            <cais-application-certificate-result
-              [model]="dbData.certificate"
-              [users]="dbData.users"
-            >
-            </cais-application-certificate-result>
-          </nb-tab>
-        </ng-container>
+
+        <nb-tab tabTitle="Свидетелство">
+          <cais-application-certificate-result
+            [model]="dbData.certificate"
+            [users]="dbData.users"
+          >
+          </cais-application-certificate-result>
+        </nb-tab>
 
         <nb-tab tabTitle="История на статусите">
           <cais-application-status-history
