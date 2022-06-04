@@ -23,7 +23,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("{aId}/save-signer-data")]
-        public async Task<IActionResult> SaveSignerData(string aId, [FromBody] CertificateSignerDTO aInDto)
+        public async Task<IActionResult> SaveSignerData(string aId, [FromBody] CertificateDTO aInDto)
         {
             await this._certificateService.SaveSignerDataAsync(aInDto);
             return Ok();
@@ -43,6 +43,13 @@ namespace MJ_CAIS.Web.Controllers
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
             return File(content, mimeType, fileName);
+        }
+
+        [HttpGet("by-application/{appId}")]
+        public async Task<IActionResult> GetBulletinPersonInfo(string appId)
+        {
+            var result = await this._certificateService.GetByApplicationIdAsync(appId);
+            return Ok(result);
         }
     }
 }

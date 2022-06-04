@@ -360,7 +360,9 @@
           </cais-fbbc-document-form>
         </nb-tab>
         <nb-tab tabTitle="Свидетелство">
-          <cais-application-certificate-result [users]="dbData.users">
+          <cais-application-certificate-result 
+          [model]="dbData.certificate"
+          [users]="dbData.users">
           </cais-application-certificate-result>
         </nb-tab>
         <nb-tab tabTitle="История на статусите">

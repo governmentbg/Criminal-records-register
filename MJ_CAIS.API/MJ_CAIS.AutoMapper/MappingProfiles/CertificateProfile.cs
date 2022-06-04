@@ -8,7 +8,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public CertificateProfile()
         {
-            CreateMap<CertificateSignerDTO, ACertificate>();
+            CreateMap<ACertificate, CertificateDTO>()
+                .ReverseMap();
         }
     }
 }

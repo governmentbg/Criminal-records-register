@@ -18,8 +18,6 @@ export class ApplicationCertificateService extends CaisCrudService<
     id: string,
     model: ApplicationCertificateResultModel
   ): Observable<any> {
-    model.version = 2;
-    model.id = '5aacead1-8495-47be-8c24-7e26f2833343';
     return this.http.put<ApplicationCertificateResultModel>(
       `${this.url}/${id}/save-signer-data`,
       model
@@ -29,5 +27,11 @@ export class ApplicationCertificateService extends CaisCrudService<
   public downloadSertificate(id: string) {
     let url = `${this.url}/${id}/certificate-content`;
     return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+  public getCertificateByAppId(appId: string) {
+    return this.http.get<ApplicationCertificateResultModel>(
+      `${this.url}/by-application/${appId}`
+    );
   }
 }

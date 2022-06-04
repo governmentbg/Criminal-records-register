@@ -1,12 +1,12 @@
 import { Component, Injector, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { Observable } from "rxjs";
 import { CrudForm } from "../../../../../@core/directives/crud-form.directive";
 import { ApplicationCertificateService } from "./_data/application-certificate.service";
 import { ApplicationCertificateResultForm } from "./_models/application-certificate-result.form";
 import { ApplicationCertificateResultModel } from "./_models/application-certificate-result.model";
 import * as fileSaver from "file-saver";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
+import { CertificateStatuTypeEnum } from "./_models/certificate-status-type.enum";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -25,6 +25,9 @@ export class ApplicationCertificateResultComponent
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
   
+  public CertificateStatuTypeEnum = CertificateStatuTypeEnum;
+  public showCertContentReady: boolean;
+
   constructor(
     service: ApplicationCertificateService,
     public injector: Injector
@@ -35,6 +38,7 @@ export class ApplicationCertificateResultComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
+    this.showCertContentReady = this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady;
     this.formFinishedLoading.emit();
   }
 
@@ -53,9 +57,8 @@ export class ApplicationCertificateResultComponent
 
       this.scrollToValidationError();
     } else {
-      debugger;
       let model = this.fullForm.group.value;
-      let id = "5aacead1-8495-47be-8c24-7e26f2833343"; // this.formObject.id
+      let id = this.fullForm.id.value;
       this.service.saveSignerData(id, model).subscribe((response: any) => {
         this.service.downloadSertificate(id).subscribe((response: any) => {
           let blob = new Blob([response.body]);

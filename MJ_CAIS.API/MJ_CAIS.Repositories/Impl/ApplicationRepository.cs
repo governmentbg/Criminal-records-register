@@ -28,7 +28,9 @@ namespace MJ_CAIS.Repositories.Impl
 
         public override async Task<AApplication> SelectAsync(string id)
         {
-            var result = await this._dbContext.Set<AApplication>().Include(x => x.AAppCitizenships).AsNoTracking()
+            var result = await this._dbContext.Set<AApplication>()
+                .Include(x=>x.ACertificates)
+                .Include(x => x.AAppCitizenships).AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }

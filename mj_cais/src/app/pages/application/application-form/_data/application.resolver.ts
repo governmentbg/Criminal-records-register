@@ -8,6 +8,8 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { ApplicationCertificateService } from "../tabs/application-certificate-result/_data/application-certificate.service";
+import { ApplicationCertificateResultModel } from "../tabs/application-certificate-result/_models/application-certificate-result.model";
 import { ApplicationDocumentModel } from "../_models/application-document.model";
 import { ApplicationModel } from "../_models/application.model";
 import { ApplicationService } from "./application.service";
@@ -16,7 +18,8 @@ import { ApplicationService } from "./application.service";
 export class ApplicationResolver implements Resolve<any> {
   constructor(
     private nomenclatureService: NomenclatureService,
-    private service: ApplicationService
+    private service: ApplicationService,
+    private certificateService: ApplicationCertificateService
   ) {}
 
   resolve(
@@ -40,6 +43,7 @@ export class ApplicationResolver implements Resolve<any> {
       applicationStatusHistoryData:
         this.service.getApplicationStatusHistoryData(applicationId),
       users: this.nomenclatureService.getUsers(),
+      certificate: this.certificateService.getCertificateByAppId(applicationId)
     };
     return forkJoin(result);
   }
@@ -51,4 +55,5 @@ export class ApplicationResolverData extends BaseResolverData<ApplicationModel> 
     public srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
     public documents: Observable<ApplicationDocumentModel[]>;
     public users: Observable<BaseNomenclatureModel[]>;
+    public certificate: Observable<ApplicationCertificateResultModel>;
 }

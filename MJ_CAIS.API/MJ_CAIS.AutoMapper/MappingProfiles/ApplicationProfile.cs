@@ -15,7 +15,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
          
             CreateMap<AApplication, ApplicationDTO>();
-            CreateMap<ACertificate, ACertificate>();
 
             CreateMap<ApplicationInDTO, AApplication>()
                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
@@ -43,7 +42,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                     opt => opt.MapFrom(src => src.Person.BirthPlace.ForeignCountryAddress))
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Person.BirthPlace.Country.Id))
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId));
-                
+
 
             CreateMap<AApplication, ApplicationOutDTO>()
              .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.RegistrationNumber))
@@ -77,7 +76,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
              .ForPath(d => d.Person.BirthPlace.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
              .ForPath(d => d.Person.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => src.AAppCitizenships.Select(x => x.Id)))
              .ForPath(d => d.Person.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.AAppCitizenships.Select(x => x.CountryId)));
-
 
             CreateMap<AAppPersAlias, PersonAliasDTO>()
                 .ForMember(d => d.TypeCode, opt => opt.MapFrom(src => src.Type));

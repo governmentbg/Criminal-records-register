@@ -61,12 +61,21 @@ namespace MJ_CAIS.Services
             return content;
         }
 
-        public async Task SaveSignerDataAsync(CertificateSignerDTO aInDto)
+        public async Task SaveSignerDataAsync(CertificateDTO aInDto)
         {
-            var entity = _mapper.MapToEntity<CertificateSignerDTO, ACertificate>(aInDto, false);
+            var entity = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
 
             var dbContext = _certificateRepository.GetDbContext();
             await dbContext.SaveEntityAsync(entity);
+        }
+
+        public async Task<CertificateDTO> GetByApplicationIdAsync(string appId)
+        {
+            var certificate = await _certificateRepository.GetByApplicationIdAsync(appId);
+            if(certificate == null) return null;
+
+            var result = mapper.Map<ACertificate,CertificateDTO>(certificate);
+            return result;
         }
     }
 }
