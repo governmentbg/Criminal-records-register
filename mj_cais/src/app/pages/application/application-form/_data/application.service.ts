@@ -24,6 +24,12 @@ export class ApplicationService extends CaisCrudService<
     );
   }
 
+  public getWithPersonData(personId: string): Observable<ApplicationModel> {
+    return this.http.get<ApplicationModel>(
+      `${this.url}/create?personId=${personId}`
+    );
+  }
+
   public saveDocument(
     fbbcId: string,
     model: ApplicationDocumentModel

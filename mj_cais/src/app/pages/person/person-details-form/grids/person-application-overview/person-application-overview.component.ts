@@ -13,14 +13,17 @@ export class PersonApplicationOverviewComponent extends RemoteGridWithStatePersi
   PersonApplicationGridModel,
   PersonApplicationGridService
 > {
+  public personId: string;
+
   constructor(
     public service: PersonApplicationGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService
   ) {
     super("application-bulletins-search", service, injector);
-    let personId = this.activatedRoute.snapshot.params["ID"];
-    this.service.setPersonId(personId);
+    let personIdParams = this.activatedRoute.snapshot.params["ID"];
+    this.personId = personIdParams;
+    this.service.setPersonId(personIdParams);
   }
 
   ngOnInit() {

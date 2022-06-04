@@ -32,6 +32,15 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("create")]
+        public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
+        {
+            var result = await this._applicationService.SelectWithPersonDataAsync(personId);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
         [HttpGet("certificates")]
         public virtual async Task<IActionResult> GetAllByCertificateStatus(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
         {

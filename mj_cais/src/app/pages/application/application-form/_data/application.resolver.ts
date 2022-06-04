@@ -28,7 +28,16 @@ export class ApplicationResolver implements Resolve<any> {
   ): Observable<any> {
     let applicationId = route.params["ID"];
     let isEdit = route.data["edit"];
-    let element = isEdit ? this.service.find(applicationId) : of(null);
+    let personId = route.queryParams["personId"];
+    let element: any = of(null);
+
+    if (isEdit) {
+      element = this.service.find(applicationId);
+    } else if (personId) {
+      element = this.service.getWithPersonData(personId);
+    } else {
+      element = of(null);
+    }
 
     let result: ApplicationResolverData = {
       element: element,

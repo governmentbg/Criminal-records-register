@@ -9,10 +9,12 @@ using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -21,13 +23,22 @@ namespace MJ_CAIS.Services
         private readonly IApplicationRepository _applicationRepository;
         private readonly IRegisterTypeService _registerTypeService;
         private readonly ICertificateService _certificateService;
+        private readonly IUserContext _userContext;
+        private readonly IPersonService _personService;
 
-        public ApplicationService(IMapper mapper, IApplicationRepository applicationRepository, IRegisterTypeService registerTypeService, ICertificateService certificateService)
+        public ApplicationService(IMapper mapper,
+            IApplicationRepository applicationRepository,
+            IRegisterTypeService registerTypeService,
+            ICertificateService certificateService,
+            IUserContext userContext,
+            IPersonService personService)
             : base(mapper, applicationRepository)
         {
             _applicationRepository = applicationRepository;
             _registerTypeService = registerTypeService;
             _certificateService = certificateService;
+            _userContext = userContext;
+            _personService = personService;
         }
 
         public virtual async Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
@@ -60,7 +71,18 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<ApplicationGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
-        }      
+        }
+
+        public async Task<ApplicationOutDTO> SelectWithPersonDataAsync(string personId)
+        {
+            var result = new ApplicationOutDTO();
+            result.Id = BaseEntity.GenerateNewId();
+            var authId = _userContext.CsAuthorityId ?? "660"; // todo: remove
+            result.CsAuthorityId = authId;
+            var person = await _personService.SelectWithBirthInfoAsync(personId);
+            result.Person = person ?? new PersonDTO();
+            return result;
+        }
 
         public override async Task<string> InsertAsync(ApplicationInDTO aInDto)
         {
@@ -79,19 +101,57 @@ namespace MJ_CAIS.Services
                 throw new ArgumentException($"Application with id {aInDto.Id} is missing");
             this.ValidateData(aInDto);
 
-            var applicationToUpdate = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, false);
+            var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, false);
 
-            await UpdateApplicationAsync(aInDto, applicationToUpdate);
+            await UpdateApplicationAsync(aInDto, entity);
 
             if (isFinal)
             {
                 var regNumber = await _registerTypeService.GetRegisterNumberForApplicationOnDesk(applicationDb.CsAuthorityId);
-                applicationToUpdate.RegistrationNumber = regNumber;
+                entity.RegistrationNumber = regNumber;
+                await UpdatePersonDataAsync(aInDto, entity);
+
                 await GenerateCertificateFromApplication(applicationDb.Id);
                 return;
             }
 
-            await this.SaveEntityAsync(applicationToUpdate);
+            await this.SaveEntityAsync(entity);
+        }
+
+        private async Task UpdatePersonDataAsync(ApplicationInDTO aInDto, AApplication entity)
+        {
+            var person = await _personService.CreatePersonAsync(aInDto.Person);
+            foreach (var personIdObj in person.PPersonIds)
+            {
+                if (personIdObj.PidTypeId == PidType.Egn)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.Egn));
+                    entity.EgnNavigation = personIdObj;
+                }
+                else if (personIdObj.PidTypeId == PidType.Lnch)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.Lnch));
+                    entity.LnchNavigation = personIdObj;
+                }
+                else if (personIdObj.PidTypeId == PidType.Ln)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.Ln));
+                    entity.LnNavigation = personIdObj;
+                }
+                else if (personIdObj.PidTypeId == PidType.Suid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.SuidId));
+                    entity.ModifiedProperties.Add(nameof(entity.Suid));
+                    entity.Suid = personIdObj.Pid;
+                    entity.SuidId = personIdObj.Id;
+                    entity.SuidNavigation = personIdObj;
+                }
+
+                dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+            }
+
+            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+            await dbContext.SaveChangesAsync();
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

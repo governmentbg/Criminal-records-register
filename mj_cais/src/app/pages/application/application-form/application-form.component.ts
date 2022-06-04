@@ -41,6 +41,12 @@ export class ApplicationFormComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationForm();
     this.fullForm.group.patchValue(this.dbData.element);
+    if (!this.isEdit()) {
+      this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
+        "CO-00-100-BGR",
+      ]);
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
+    }
     this.formFinishedLoading.emit();
   }
 
@@ -53,6 +59,7 @@ export class ApplicationFormComponent
   }
 
   submitFunction = () => {
+    debugger;
     // this.fullForm.applicationTypeId.setValue('6'); //Взима се от контекста
     // this.fullForm.csAuthorityId.setValue('562');  //Взима се от контекста
     this.isFinalEdit = false;
@@ -60,6 +67,7 @@ export class ApplicationFormComponent
   };
 
   public finalEdit() {
+    debugger;
     this.isFinalEdit = true;
     this.validateAndSave(this.fullForm);
   }

@@ -198,7 +198,6 @@ namespace MJ_CAIS.Services
                 if (personIdObj.PidTypeId == PidType.Egn)
                 {
                     entity.ModifiedProperties.Add(nameof(entity.PersonId));
-                    entity.PersonId = personIdObj.Id;
                     entity.Person = personIdObj;
 
                 }
