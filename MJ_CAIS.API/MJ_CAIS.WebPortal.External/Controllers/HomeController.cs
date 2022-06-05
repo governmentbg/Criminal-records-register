@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.WebSetup.Utils;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
@@ -11,7 +12,7 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             _logger = logger;
         }
 
-        //[RedirectAuthenticatedRequests("Index", "Application")] // TODO: uncomment
+        [RedirectAuthenticatedRequests("Index", "Application")]
         public IActionResult Index()
         {
             return View();

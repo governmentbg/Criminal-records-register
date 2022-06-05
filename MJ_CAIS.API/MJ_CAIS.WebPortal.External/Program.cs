@@ -2,6 +2,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using MJ_CAIS.WebPortal.External.Utils.Mappings;
 using MJ_CAIS.WebSetup;
 
 namespace MJ_CAIS.WebPortal.External
@@ -11,10 +12,21 @@ namespace MJ_CAIS.WebPortal.External
         public static void Main(string[] args)
         {
             var builder = WebSetupConfig.CustomConfigureBuilder(args);
-            //builder.Services.AddAutoMapper(typeof(ApplicationProfile).Assembly);
+            builder.Services.AddAutoMapper(typeof(ApplicationProfile).Assembly);
             builder.Services.AddControllersWithViews();
 
             var configuration = builder.Configuration;
+
+            // TODO: cookie login, should be removed soon
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                    options.SlidingExpiration = true;
+                    options.AccessDeniedPath = "/Forbidden/";
+                    options.LoginPath = "/Account/Login";
+                    options.Cookie.Name = "CaisExternalPortal";
+                });
 
             // TODO: 
             //builder.Services.AddAuthentication(options =>

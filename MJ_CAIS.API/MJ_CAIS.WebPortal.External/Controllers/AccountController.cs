@@ -3,34 +3,34 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using MJ_CAIS.DTO.User;
-using MJ_CAIS.DTO.UserCitizen;
+using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebSetup.Utils;
 using System.Security.Claims;
 
-namespace MJ_CAIS.WebPortal.Public.Controllers
+namespace MJ_CAIS.WebPortal.External.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly IUserCitizenService _userCitizenService;
+        private readonly IUserExternalService _userExternalService;
 
-        public AccountController(IUserCitizenService userCitizenService)
+        public AccountController(IUserExternalService userExternalService)
         {
-            _userCitizenService = userCitizenService;
+            _userExternalService = userExternalService;
         }
 
+        // TODO: Cookie login, should be removed later
         [HttpGet]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [RedirectAuthenticatedRequests("Index", "Application")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            return View();
+            return RedirectToAction("Index", "Home", new { returnUrl });
         }
 
+        // TODO: Cookie login, should be removed later
         [HttpPost]
         [AllowAnonymous]
         [RedirectAuthenticatedRequests("Index", "Application")]
@@ -39,16 +39,19 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             var returnUrl = "";
 
-            var userDTO = new UserCitizenDTO
+            var userDTO = new UserExternalDTO
             {
-                Egn = "9701010101",
-                Name = "Иван Иванов Петров",
+                Egn = "9201010101",
+                Name = "Пеътр Иванов Петров",
                 Email = "ivan.ivanov@test.bg",
+                Active = true,
+                IsAdmin = true,
+                Position = "Тестов Админстратор",
             };
 
             if (ModelState.IsValid)
             {
-                var user = await _userCitizenService.AuthenticatePublicUserAsync(userDTO);
+                var user = await _userExternalService.AuthenticateExternalUserAsync(userDTO);
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -64,6 +67,13 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             return View();
         }
 
+        // TODO: Cookie login, should be removed later
+        [HttpPost]
+        public async Task<ActionResult> CookieLogOff()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
 
         [HttpPost]
         public async Task<ActionResult> LogOff()
@@ -74,7 +84,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         OpenIdConnectDefaults.AuthenticationScheme
                     },
-                    new AuthenticationProperties() { RedirectUri = "/"}
+                    new AuthenticationProperties() { RedirectUri = "/" }
                 );
         }
 

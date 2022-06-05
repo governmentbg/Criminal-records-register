@@ -1,7 +1,9 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application.External;
 using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -22,26 +24,46 @@ namespace MJ_CAIS.Services
         public string GetWebApplicationTypeId()
         {
             // TODO: use code, and filter by code!
-            const string name = "Заявление за електронно свидетелство за съдимост";
+            const string name = "Р—Р°СЏРІР»РµРЅРёРµ Р·Р° РµР»РµРєС‚СЂРѕРЅРЅРѕ СЃРІРёРґРµС‚РµР»СЃС‚РІРѕ Р·Р° СЃСЉРґРёРјРѕСЃС‚";
             var result = dbContext.AApplicationTypes.AsNoTracking()
                 .FirstOrDefault(x => x.Name == name);
 
             return result.Id;
         }
 
+        public async Task<string> InsertPublicAsync(PublicApplicationDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
+            this.TransformDataOnInsert(entity);
+
+            entity.UserCitizenId = dbContext.CurrentUserId;
+
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
+        }
+
+        public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
+            this.TransformDataOnInsert(entity);
+
+            entity.UserExtId = dbContext.CurrentUserId;
+
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
+        }
+
         protected override void TransformDataOnInsert(WApplication entity)
         {
             entity.ApplicationTypeId = GetWebApplicationTypeId();
-           var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
+            var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
             if (statusNew == null)
             {
                 //todo: resources & EH
                 throw new Exception($"Status {ApplicationWebStatuses.NewWebApplication} does not exist.");
             }
-            SetWApplicationStatus(entity, statusNew, "Ново заявление", false);
-            //entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
-            entity.UserId = dbContext.CurrentUserId; // Should be nullable ???
-            entity.UserCitizenId = dbContext.CurrentUserId;
+            SetWApplicationStatus(entity, statusNew, "РќРѕРІРѕ Р·Р°СЏРІР»РµРЅРёРµ", false);
+            entity.UserId = dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
 
             base.TransformDataOnInsert(entity);
@@ -71,13 +93,37 @@ namespace MJ_CAIS.Services
             return result;
         }
 
+        public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
+        {
+            var result =
+                from app in dbContext.WApplications.AsNoTracking()
+
+                join status in dbContext.WApplicationStatuses.AsNoTracking()
+                    on app.StatusCode equals status.Code
+
+                where app.UserExtId == userId
+                select new ExternalApplicationGridDTO
+                {
+                    Id = app.Id,
+                    RegistrationNumber = app.RegistrationNumber,
+                    ApplicantName = app.ApplicantName,
+                    Purpose = app.Purpose,
+                    PurposeId = app.PurposeId,
+                    StatusCode = app.StatusCode,
+                    StatusName = status.Name,
+                    CreatedOn = app.CreatedOn,
+                };
+
+            return result;
+        }
+
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
         }
 
-        public  void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
+        public void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
             wapplication.StatusCodeNavigation = newStatus;
@@ -100,9 +146,6 @@ namespace MJ_CAIS.Services
                 dbContext.WStatusHes.Add(wStatusH);
                 dbContext.WApplications.Update(wapplication);
             }
-
-
-
         }
 
     }

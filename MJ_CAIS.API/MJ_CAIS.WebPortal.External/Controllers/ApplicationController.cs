@@ -5,16 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.AutoMapperContainer;
-using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application.External;
 using MJ_CAIS.Services.Contracts;
-using MJ_CAIS.WebPortal.Public.Models.Application;
-using MJ_CAIS.WebSetup.Utils;
-using Microsoft.AspNetCore.Builder;
-using static MJ_CAIS.Common.Constants.ApplicationConstants;
-using MJ_CAIS.DTO.Application.Public;
+using MJ_CAIS.WebPortal.External.Models.Application;
 
-namespace MJ_CAIS.WebPortal.Public.Controllers
+namespace MJ_CAIS.WebPortal.External.Controllers
 {
     [Authorize]
     public class ApplicationController : BaseController
@@ -22,17 +17,14 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly IMapper _mapper;
         private readonly IApplicationWebService _applicationWebService;
         private readonly INomenclatureDetailService _nomenclatureDetailService;
-        private readonly RequestUtils _requestUtils;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
-                                     INomenclatureDetailService nomenclatureDetailService,
-                                     RequestUtils requestUtils)
+                                     INomenclatureDetailService nomenclatureDetailService)
         {
             _mapper = mapper;
             _applicationWebService = applicationWebService;
             _nomenclatureDetailService = nomenclatureDetailService;
-            _requestUtils = requestUtils;
         }
 
         [HttpGet]
@@ -46,7 +38,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         public async Task<ActionResult> New()
         {
             var viewModel = new ApplicationEditModel();
-            viewModel.Egn = CurrentEgnIdentifier;
 
             await FillDataForEditModel(viewModel);
             return View(viewModel);
@@ -61,11 +52,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 return View(viewModel);
             }
 
-            viewModel.Egn = CurrentEgnIdentifier;
-            viewModel.ClientIp = _requestUtils.GetClientIpAddress(HttpContext);
-
-            var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
-            await _applicationWebService.InsertPublicAsync(itemToUpdate);
+            var itemToUpdate = _mapper.Map<ExternalApplicationDTO>(viewModel);
+            await _applicationWebService.InsertExternalAsync(itemToUpdate);
 
             return RedirectToAction(nameof(Index));
         }
@@ -74,7 +62,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         [GridDataSourceAction]
         public async Task<ActionResult> GetUserApplications()
         {
-            var result = _applicationWebService.SelectPublicApplications(CurrentUserID);
+            var result = _applicationWebService.SelectExternalApplications(CurrentUserID);
             return View(result);
         }
 

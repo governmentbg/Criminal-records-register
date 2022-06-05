@@ -5,7 +5,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IUserCitizenService : IBaseAsyncService<UserCitizenDTO, UserCitizenDTO, UserCitizenGridDTO, GUsersCitizen, string>
     {
-        Task<GUsersCitizen> AuthenticatePublicUser(UserCitizenDTO userDTO);
+        Task<GUsersCitizen> AuthenticatePublicUserAsync(UserCitizenDTO userDTO);
         Task<GUsersCitizen> GetUserCitizenByEgnAsync(string egn);
     }
 }

@@ -25,11 +25,11 @@
     <div class="navbar-collapse collapse flex-grow-0" id="navbarSupportedContent">
         <ul class="nav navbar-nav">
             <li class="dropdown">
-                <form asp-controller="Account" asp-action="Logoff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
+                <form asp-controller="Account" asp-action="CookieLogOff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
                     @*<span>@CommonResources.lblGreetingUser @controller.CurrentUserName</span>*@
                     <span>ЕГН: @controller.CurrentEgnIdentifier</span>
                     <a class="btn-logout" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout" class="ml-3">
-                        <i class="fas fa-sign-out-alt"></i>@*@CommonResources.lblLogout*@
+                        <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </form>
             </li>
