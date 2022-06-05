@@ -1,18 +1,23 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MJ_CAIS.Common.Exceptions;
 using System.Diagnostics;
 
 namespace MJ_CAIS.WebPortal.External.Pages
 {
+    // TODO: remove asp page, and make controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
     {
-        public string? RequestId { get; set; }
+        private ILogger<ErrorModel> _logger;
+
+        public string FormatedMessage { get; set; }
+
+        public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-        private readonly ILogger<ErrorModel> _logger;
 
         public ErrorModel(ILogger<ErrorModel> logger)
         {
@@ -22,6 +27,23 @@ namespace MJ_CAIS.WebPortal.External.Pages
         public void OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            var exceptionResult = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            var error = exceptionResult.Error;
+            _logger.LogError(error, error.Message);
+
+            this.FormatedMessage = ExceptionUtils.GetFormatedLastError(error);
+        }
+
+        public void OnPost()
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            var exceptionResult = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            var error = exceptionResult.Error;
+            _logger.LogError(error, error.Message);
+
+            this.FormatedMessage = ExceptionUtils.GetFormatedLastError(error);
         }
     }
 }
