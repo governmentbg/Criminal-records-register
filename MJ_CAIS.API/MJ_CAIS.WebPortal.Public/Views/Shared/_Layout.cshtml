@@ -25,13 +25,17 @@
 <body>
     <header>
         <div class="container-fluid">
+            @* TODO: fix with flex *@
+            <h4 style="float: right;padding-top: 20px;padding-right: 20px;">
+                Публичен портал
+            </h4>
             <div class="cais-headerbar">
                 <div class="cais-logo-wrapper">
                     <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                         <img src="@Url.Content("~/images/logo.png")" class="cais-logo" />
                     </a>
                 </div>
-                <div class="pull-right cais-header-text">
+                <div class="cais-header-text">
                     <div class="row main-header">
                         Република България
                     </div>
