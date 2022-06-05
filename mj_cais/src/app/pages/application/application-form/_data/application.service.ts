@@ -31,11 +31,11 @@ export class ApplicationService extends CaisCrudService<
   }
 
   public saveDocument(
-    fbbcId: string,
+    appId: string,
     model: ApplicationDocumentModel
   ): Observable<any> {
     return this.http.post<ApplicationDocumentModel>(
-      `${this.url}/${fbbcId}/documents`,
+      `${this.url}/${appId}/documents`,
       model
     );
   }

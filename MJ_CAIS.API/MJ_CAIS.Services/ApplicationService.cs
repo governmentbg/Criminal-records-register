@@ -335,7 +335,7 @@ namespace MJ_CAIS.Services
                 .AsNoTracking()
                 .Include(x => x.DocType)
                 .Include(x => x.DocContent)
-                .Where(x => x.FbbcId == aId)
+                .Where(x => x.ApplicationId == aId)
                 .ProjectTo<ApplicationDocumentDTO>(mapper.ConfigurationProvider);
 
             return await Task.FromResult(result);

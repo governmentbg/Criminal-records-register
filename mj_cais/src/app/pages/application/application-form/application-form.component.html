@@ -204,9 +204,9 @@
               ></cais-input>
             </div>
           </div>
-          <cais-fbbc-document-form
+          <cais-application-document-form
             #applicationDocuments
-            [fbbcForm]="fullForm"
+            [appForm]="fullForm"
             [showAddDeleteButton]="
               (fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
@@ -216,7 +216,7 @@
             [documents]="dbData.documents"
             [dbData]="dbData"
           >
-          </cais-fbbc-document-form>
+          </cais-application-document-form>
         </nb-tab>
 
         <nb-tab tabTitle="Свидетелство">
