@@ -49,7 +49,6 @@ namespace MJ_CAIS.Services
             dbContext.AStatusHes.Add(aStatusH);
             dbContext.ACertificates.Update(certificate);
 
-
         }
 
         public async Task<DDocContent> GetCertificateDocumentContent(string accessCode)
@@ -78,7 +77,7 @@ namespace MJ_CAIS.Services
             var dbContext = _certificateRepository.GetDbContext();
             dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
 
-            await SetBulletinsForSelection(aInDto.Id,aInDto.SelectedBulletinsIds);
+            await SetBulletinsForSelectionAsync(aInDto.Id, aInDto.SelectedBulletinsIds);
         }
 
         public async Task<CertificateDTO> GetByApplicationIdAsync(string appId)
@@ -93,13 +92,13 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string certId, bool onlyApproved)
         {
-            var query = await _certificateRepository.GetBulletinsCheckByIdAsync(certId,onlyApproved);
+            var query = await _certificateRepository.GetBulletinsCheckByIdAsync(certId, onlyApproved);
             var result = mapper.ProjectTo<BulletinCheckDTO>(query, mapperConfiguration);
 
             return result;
         }
 
-        public async Task SetBulletinsForSelection(string aId, string[] ids)
+        public async Task SetBulletinsForSelectionAsync(string aId, string[] ids)
         {
             var dbContext = _certificateRepository.GetDbContext();
 
@@ -109,8 +108,12 @@ namespace MJ_CAIS.Services
             if (certificate == null) throw new ArgumentException("Certificate does not exist");
             certificate.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsSelection;
 
+            CreateAStatusH(certificate.ApplicationId, certificate.Id,
+                certificate.StatusCode,
+               "Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи");
+
             var allCertificateBulletins = dbContext.AAppBulletins
-                .Where(x => x.CertificateId == aId );
+                .Where(x => x.CertificateId == aId);
 
             foreach (var item in allCertificateBulletins)
             {
@@ -118,6 +121,55 @@ namespace MJ_CAIS.Services
             }
 
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task SetBulletinsForRehabilitationAsync(string aId, string[] ids)
+        {
+            var dbContext = _certificateRepository.GetDbContext();
+
+            var certificate = await dbContext.ACertificates
+                .Where(x => x.Id == aId)
+                .FirstOrDefaultAsync();
+
+            if (certificate == null) throw new ArgumentException("Certificate does not exist");
+            certificate.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsRehabilitation;
+
+            CreateAStatusH(certificate.ApplicationId, certificate.Id,
+                 certificate.StatusCode,
+                "Очаква обработка на заявка / и за реабилитация към съдия");
+
+            var request = new List<BInternalRequest>();
+            foreach (var bulletinId in ids)
+            {
+                request.Add(new BInternalRequest
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    BulletinId = bulletinId,
+                    AAppBulletinId = certificate.ApplicationId,
+                    ReqStatusCode = InternalRequestStatusTypeConstants.New,
+                    Description = "Генерирана заявка за реабилитация при обработка на свидетелство",
+                    EntityState = Common.Enums.EntityStateEnum.Added,
+                    RequestDate = DateTime.UtcNow
+                });
+            }
+
+            dbContext.ApplyChanges(request);
+            await dbContext.SaveChangesAsync();
+        }
+
+        private void CreateAStatusH(string appId, string certId, string status, string desc)
+        {
+            var result = new AStatusH
+            {
+                Id = BaseEntity.GenerateNewId(),
+                ApplicationId = appId,
+                CertificateId = certId,
+                StatusCode = status,
+                Descr = desc,
+                EntityState = Common.Enums.EntityStateEnum.Added
+            };
+
+            dbContext.ApplyChanges(result, new List<IBaseIdEntity>());
         }
     }
 }

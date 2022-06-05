@@ -60,4 +60,14 @@ export class ApplicationCertificateService extends CaisCrudService<
       ids
     );
   }
+
+  public sendBulletinsForRehabilitation(
+    id:string,
+    ids: string[],
+  ): Observable<any> {
+    return this.http.put<ApplicationCertificateResultModel>(
+      `${this.url}/${id}/bulletins-rehabilitation`,
+      ids
+    );
+  }
 }

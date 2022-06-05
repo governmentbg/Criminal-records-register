@@ -11,6 +11,7 @@ namespace MJ_CAIS.Services.Contracts
         Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto);
         Task<CertificateDTO> GetByApplicationIdAsync(string appId);
         Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string appId, bool onlyApproved);
-        Task SetBulletinsForSelection(string aId, string[] ids);
+        Task SetBulletinsForSelectionAsync(string aId, string[] ids);
+        Task SetBulletinsForRehabilitationAsync(string aId, string[] ids);
     }
 }

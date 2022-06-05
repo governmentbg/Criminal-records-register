@@ -152,6 +152,21 @@ export class ApplicationCertificateResultComponent
       };
   }
 
+  sendBulltinsForRehabilitation() {
+    debugger;
+    var selectedItesm = this.bulletinsCheckGrid.selectedRows;
+    this.service
+      .sendBulletinsForRehabilitation(this.model.id, selectedItesm)
+      .subscribe((response: any) => {
+        this.model.statusCode = CertificateStatuTypeEnum.BulletinsRehabilitation
+        this.router.navigate(["pages/application-for-check"]); 
+      }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+      };
+  }
+
   generateCertificateByJudge() {
     if (!this.fullForm.group.valid) {
       this.fullForm.group.markAllAsTouched();

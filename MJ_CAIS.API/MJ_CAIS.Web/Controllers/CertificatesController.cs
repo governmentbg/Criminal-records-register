@@ -69,7 +69,14 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("{aId}/bulletins-selcetion")]
         public async Task<IActionResult> BulletinsSelection(string aId, [FromBody] string[] ids)
         {
-            await this._certificateService.SetBulletinsForSelection(aId, ids);
+            await this._certificateService.SetBulletinsForSelectionAsync(aId, ids);
+            return Ok();
+        }
+
+        [HttpPut("{aId}/bulletins-rehabilitation")]
+        public async Task<IActionResult> BulletinsRehabilitation(string aId, [FromBody] string[] ids)
+        {
+            await this._certificateService.SetBulletinsForRehabilitationAsync(aId, ids);
             return Ok();
         }
     }
