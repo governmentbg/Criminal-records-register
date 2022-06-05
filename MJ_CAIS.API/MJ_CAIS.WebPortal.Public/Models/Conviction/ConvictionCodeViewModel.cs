@@ -4,8 +4,8 @@ namespace MJ_CAIS.WebPortal.Public.Models.Conviction
 {
     public class ConvictionCodeViewModel
     {
-        [Required]
+        [Required] // TODO: with resources
         [Display(Name = "Код за достъп")]
-        public string Code { get; set; }
+        public string Id { get; set; }
     }
 }

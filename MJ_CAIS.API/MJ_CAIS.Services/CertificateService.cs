@@ -53,12 +53,11 @@ namespace MJ_CAIS.Services
 
         public async Task<DDocContent> GetCertificateDocumentContent(string accessCode)
         {
-
             var content = await dbContext.ACertificates.Where(x => x.AccessCode1 == accessCode && x.Doc != null).Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
-            if (content == null)
-            {
-                throw new Exception("Certificate does not exist.");
-            }
+            //if (content == null)
+            //{
+            //    throw new Exception("Certificate does not exist.");
+            //}
             return content;
         }
 
