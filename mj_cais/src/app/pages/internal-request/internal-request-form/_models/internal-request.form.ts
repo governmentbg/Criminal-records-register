@@ -15,7 +15,8 @@ export class InternalRequestForm extends BaseForm {
   public reqStatusName: FormControl;
   public bulletinVersion: FormControl;
   public bulletinStatusId: FormControl;
-  
+  public aAppBulletinId: FormControl;
+
   constructor() {
     super();
     this.regNumber = new FormControl(null);
@@ -29,6 +30,7 @@ export class InternalRequestForm extends BaseForm {
     this.reqStatusName = new FormControl(null);
     this.bulletinVersion = new FormControl(null);
     this.bulletinStatusId = new FormControl(null);
+    this.aAppBulletinId = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -45,6 +47,7 @@ export class InternalRequestForm extends BaseForm {
       reqStatusName: this.reqStatusName,
       bulletinVersion: this.bulletinVersion,
       bulletinStatusId: this.bulletinStatusId,
+      aAppBulletinId: this.aAppBulletinId,
     });
   }
 }

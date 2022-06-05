@@ -13,6 +13,7 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
     public interface ICertificateGenerationService : IBaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string>
     {
         Task<byte[]> CreateCertificate(string certificateID);
+        Task<byte[]> GetCertificateContentAsync(string certificateID);
         Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
              string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null);
                //todo: да се измести някъде на по-общо място

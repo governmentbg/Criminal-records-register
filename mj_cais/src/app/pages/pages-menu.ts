@@ -78,10 +78,10 @@ export class PagesMenu {
             title: "Нови заявления",
             link: "/pages/applications",
           },
-          {
-            title: "Потвърждение за плащане",
-            link: "/pages/applications-waiting-payment",
-          },
+          // {
+          //   title: "Потвърждение за плащане",
+          //   link: "/pages/applications-waiting-payment",
+          // },
         
           {
             title: "За обработка",
@@ -101,10 +101,10 @@ export class PagesMenu {
             title: "Заявки за реабилитация",
             link: "/pages/internal-requests",
           },
-          {
-            title: "Oсвободени от плащане",
-            link: "/pages/application-tax-free",
-          },
+          // {
+          //   title: "Oсвободени от плащане",
+          //   link: "/pages/application-tax-free",
+          // },
           {
             title: "За подпис от съдия",
             link: "/pages/application-for-signing-by-judge",
@@ -127,10 +127,10 @@ export class PagesMenu {
             title: "Подлежащи на заличаване",
             link: "/pages/fbbcs-for-destruction",
           },
-          {
-            title: "Заличени",
-            link: "/pages/fbbcs-destructed",
-          },
+          // {
+          //   title: "Заличени",
+          //   link: "/pages/fbbcs-destructed",
+          // },
         ],
       },
       {

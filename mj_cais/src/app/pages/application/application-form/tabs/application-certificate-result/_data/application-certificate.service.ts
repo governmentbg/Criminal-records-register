@@ -26,7 +26,7 @@ export class ApplicationCertificateService extends CaisCrudService<
   }
   public saveSignerDataByJudge(
     id: string,
-    model: ApplicationCertificateResultModel,
+    model: ApplicationCertificateResultModel
   ): Observable<any> {
     return this.http.put<ApplicationCertificateResultModel>(
       `${this.url}/${id}/save-signer-data-by-judge`,
@@ -39,31 +39,37 @@ export class ApplicationCertificateService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
+  public downloadSertificateContent(id: string) {
+    let url = `${this.url}/${id}/certificate-content-only`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+
   public getCertificateByAppId(appId: string) {
     return this.http.get<ApplicationCertificateResultModel>(
       `${this.url}/by-application/${appId}`
     );
   }
 
-  public getBulletinsCheck(id: string, onlyApproved: boolean): Observable<BulletinCheckGridModel[]> {
+  public getBulletinsCheck(
+    id: string,
+    onlyApproved: boolean
+  ): Observable<BulletinCheckGridModel[]> {
     return this.http.get<BulletinCheckGridModel[]>(
       `${this.url}/${id}/bulletins-check/${onlyApproved}`
     );
   }
 
-  public sendBulletinsForSelection(
-    id:string,
-    ids: string[],
-  ): Observable<any> {
+  public sendBulletinsForSelection(id: string): Observable<any> {
     return this.http.put<ApplicationCertificateResultModel>(
       `${this.url}/${id}/bulletins-selcetion`,
-      ids
+      {}
     );
   }
 
   public sendBulletinsForRehabilitation(
-    id:string,
-    ids: string[],
+    id: string,
+    ids: string[]
   ): Observable<any> {
     return this.http.put<ApplicationCertificateResultModel>(
       `${this.url}/${id}/bulletins-rehabilitation`,

@@ -52,6 +52,22 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
+        [HttpGet("{aId}/certificate-content-only")]
+        public async Task<IActionResult> GetContentOnly(string aId)
+        {
+            var result = await this._certificateGenerationService.GetCertificateContentAsync(aId);
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "sertificate.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
+        }
+
         [HttpGet("by-application/{appId}")]
         public async Task<IActionResult> GetByApplication(string appId)
         {
@@ -60,16 +76,16 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{appId}/bulletins-check/{onlyApproved}")]
-        public async Task<IActionResult> GetBulletinsCheck(string appId, bool onlyApproved)
+        public async Task<IActionResult> GetBulletinsCheck(string appId)
         {
-            var result = await this._certificateService.GetBulletinsCheckByIdAsync(appId, onlyApproved);
+            var result = await this._certificateService.GetBulletinsCheckByIdAsync(appId);
             return Ok(result);
         }
 
         [HttpPut("{aId}/bulletins-selcetion")]
-        public async Task<IActionResult> BulletinsSelection(string aId, [FromBody] string[] ids)
+        public async Task<IActionResult> BulletinsSelection(string aId)
         {
-            await this._certificateService.SetBulletinsForSelectionAsync(aId, ids);
+            await this._certificateService.SetCertificateForSelectionAsync(aId);
             return Ok();
         }
 

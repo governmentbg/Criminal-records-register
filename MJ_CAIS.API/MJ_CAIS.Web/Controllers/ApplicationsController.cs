@@ -63,7 +63,7 @@ namespace MJ_CAIS.Web.Controllers
             // за справката да се направи друг метод който да вика InsertAsync
             aInDto.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // todo
             aInDto.StatusCode = ApplicationConstants.ApplicationStatuses.NewId;
-            aInDto.ApplicationTypeId = "4";
+            aInDto.ApplicationTypeId = "6";
             return await base.Post(aInDto);
         }
 
