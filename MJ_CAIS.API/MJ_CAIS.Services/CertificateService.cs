@@ -71,6 +71,16 @@ namespace MJ_CAIS.Services
             await dbContext.SaveEntityAsync(entity);
         }
 
+        public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
+        {
+            var entity = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
+
+            var dbContext = _certificateRepository.GetDbContext();
+            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+
+            await SetBulletinsForSelection(aInDto.Id,aInDto.SelectedBulletinsIds);
+        }
+
         public async Task<CertificateDTO> GetByApplicationIdAsync(string appId)
         {
             var certificate = await _certificateRepository.GetByApplicationIdAsync(appId);
@@ -81,9 +91,9 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        public async Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string certId)
+        public async Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string certId, bool onlyApproved)
         {
-            var query = await _certificateRepository.GetBulletinsCheckByIdAsync(certId);
+            var query = await _certificateRepository.GetBulletinsCheckByIdAsync(certId,onlyApproved);
             var result = mapper.ProjectTo<BulletinCheckDTO>(query, mapperConfiguration);
 
             return result;
@@ -99,12 +109,12 @@ namespace MJ_CAIS.Services
             if (certificate == null) throw new ArgumentException("Certificate does not exist");
             certificate.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsSelection;
 
-            var bulletinsForSelection = dbContext.AAppBulletins
-                .Where(x => ids.Contains(x.BulletinId));
+            var allCertificateBulletins = dbContext.AAppBulletins
+                .Where(x => x.CertificateId == aId );
 
-            foreach (var item in bulletinsForSelection)
+            foreach (var item in allCertificateBulletins)
             {
-                item.Approved = true;
+                item.Approved = ids.Contains(item.BulletinId);
             }
 
             await dbContext.SaveChangesAsync();

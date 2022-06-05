@@ -1,4 +1,9 @@
-<ng-container *ngIf="showCertContentReady">
+<ng-container
+  *ngIf="
+    this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady ||
+    this.model.statusCode == CertificateStatuTypeEnum.CertificatePaperPrint
+  "
+>
   <form autocomplete="off">
     <div class="row" style="align-items: center">
       <div class="form-group col-md-6">
@@ -12,59 +17,38 @@
         </cais-autocomplete>
       </div>
       <div class="form-group col-md-6" style="padding-right: 50px">
-        <ng-container
+        <button
           *ngIf="
+            !this.isForPreview &&
             this.model.statusCode ==
-            CertificateStatuTypeEnum.CertificateContentReady
+              CertificateStatuTypeEnum.CertificateContentReady
           "
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="generateCertificate()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
         >
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="generateCertificate()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
-          >
-            Генерирай свидетелство
-          </button>
-        </ng-container>
-        <!-- <ng-container
+          Генерирай свидетелство
+        </button>
+        <button
           *ngIf="
-            this.model.statusCode == CertificateStatuTypeEnum.CertificatePaperPrint
+            !this.isForPreview &&
+            this.model.statusCode ==
+              CertificateStatuTypeEnum.CertificatePaperPrint
           "
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="printCertificate()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
         >
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="printCertificate()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
-          >
-            Разпечатай свидетелство
-          </button>
-        </ng-container>
-        <ng-container
-          *ngIf="this.model.statusCode == CertificateStatuTypeEnum.Delivered"
-        >
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="printCertificate()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
-          >
-            Връчено на заявителя
-          </button>
-        </ng-container> -->
+          Разпечатай свидетелство
+        </button>
       </div>
     </div>
     <div class="row">
@@ -102,39 +86,39 @@
   </form>
 </ng-container>
 
-<ng-container>
-  <ng-template [ngxPermissionsOnly]="['Normal']">
-    <div class="row">
-      <div class="form-group col-md-6">
-        <button
-          *ngIf="!this.isForPreview"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="sendRequestToJudge()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px; float: left"
-        >
-          Изпрати заявка за реабилитация
-        </button>
-      </div>
-      <div class="form-group col-md-6">
-        <button
-          *ngIf="!this.isForPreview"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="sendBulltinsForSelection()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px; float: right"
-        >
-          Изпрати за избор на бюл. от съдия
-        </button>
-      </div>
+<ng-container
+  *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck"
+>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <button
+        *ngIf="!this.isForPreview"
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="sendRequestToJudge()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px; float: left"
+      >
+        Изпрати заявка за реабилитация
+      </button>
     </div>
-  </ng-template>
+    <div class="form-group col-md-6">
+      <button
+        *ngIf="!this.isForPreview"
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="sendBulltinsForSelection()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px; float: right"
+      >
+        Изпрати за избор на бюл. от съдия
+      </button>
+    </div>
+  </div>
 
   <igx-grid
     #bulletinsCheckGrid
@@ -164,7 +148,7 @@
     >
     </igx-column>
 
-   <igx-column
+    <igx-column
       field="bulletinReceivedDate"
       [sortable]="true"
       header="Дата на регистрация"
@@ -176,7 +160,7 @@
           {{ this.dateFormatService.displayDate(cell.value) }}
         </span>
       </ng-template>
-    </igx-column> 
+    </igx-column>
     <igx-column
       field="statusId"
       header="Идентификатор на статус"
@@ -228,4 +212,162 @@
       </ng-template>
     </igx-column>
   </igx-grid>
+</ng-container>
+
+<ng-container
+  *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection"
+>
+  <igx-grid
+    #bulletinsCheckGrid
+    [height]="null"
+    [data]="bulletinsCheckData"
+    [primaryKey]="'id'"
+    [allowFiltering]="true"
+    [cellSelection]="'none'"
+    [rowSelection]="isForPreview ? 'none' : 'multiple'"
+    [selectedRows]="[]"
+    [hideRowSelectors]="false"
+  >
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="false"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+    </igx-column>
+
+    <igx-column
+      field="registrationNumber"
+      header="Номер"
+      [dataType]="'string'"
+      [sortable]="true"
+    >
+    </igx-column>
+
+    <igx-column
+      field="bulletinReceivedDate"
+      [sortable]="true"
+      header="Дата на регистрация"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="statusId"
+      header="Идентификатор на статус"
+      [hidden]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="statusName"
+      header="Статус"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
+      field="bulletinAuthorityId"
+      header="Идентификатор на съда"
+      [hidden]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="bulletinAuthorityName"
+      header="Съд"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      width="100px"
+      header=""
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <a
+          style="color: black; margin-right: 30px"
+          [title]="'Преглед'"
+          [routerLink]="['/pages/bulletins/preview/', cell.rowData.id]"
+        >
+          <nb-icon pack="fa" icon="eye"></nb-icon>
+        </a>
+        <a
+          *ngIf="model.currentUserAuthId == cell.rowData.bulletinAuthorityId"
+          style="color: black"
+          [title]="'Редактиране'"
+          [routerLink]="['/pages/bulletins/edit/', cell.rowData.id]"
+        >
+          <nb-icon pack="fa" icon="pen"></nb-icon>
+        </a>
+      </ng-template>
+    </igx-column>
+  </igx-grid>
+
+  <form autocomplete="off" class="mt-2">
+    <div class="row" style="align-items: center">
+      <div class="form-group col-md-6">
+        <cais-autocomplete
+          [label]="'Подписващ1'"
+          [inputFormControl]="fullForm.firstSignerId"
+          [parentGroup]="fullForm.group"
+          [inputName]="'firstSignerId'"
+          [items]="users"
+        >
+        </cais-autocomplete>
+      </div>
+      <div class="form-group col-md-6" style="padding-right: 50px">
+        <button
+          *ngIf="!this.isForPreview"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="generateCertificateByJudge()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
+        >
+          Генерирай свидетелство
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <cais-autocomplete
+          [label]="'Подписващ2'"
+          [inputFormControl]="fullForm.secondSignerId"
+          [parentGroup]="fullForm.group"
+          [inputName]="'secondSignerId'"
+          [items]="users"
+        >
+        </cais-autocomplete>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <cais-input
+          [type]="'date'"
+          [label]="'Дата на валидно от'"
+          [inputFormControl]="fullForm.validFrom"
+          [parentGroup]="fullForm.group"
+        ></cais-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <cais-input
+          [type]="'date'"
+          [label]="'Дата на валидно до'"
+          [inputFormControl]="fullForm.validTo"
+          [parentGroup]="fullForm.group"
+        ></cais-input>
+      </div>
+    </div>
+  </form>
 </ng-container>

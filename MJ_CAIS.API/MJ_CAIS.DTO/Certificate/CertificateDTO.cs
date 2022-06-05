@@ -12,5 +12,6 @@ namespace MJ_CAIS.DTO.Certificate
         public string? AccessCode2 { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
+        public string[]? SelectedBulletinsIds { get; set; }
     }
 }

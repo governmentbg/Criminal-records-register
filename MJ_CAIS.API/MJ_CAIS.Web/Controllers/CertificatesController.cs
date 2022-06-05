@@ -29,6 +29,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
+        [HttpPut("{aId}/save-signer-data-by-judge")]
+        public async Task<IActionResult> SaveSignerDataByJudge(string aId, [FromBody] CertificateDTO aInDto)
+        {
+            await this._certificateService.SaveSignerDataByJudgeAsync(aInDto);
+            return Ok();
+        }
+
         [HttpGet("{aId}/certificate-content")]
         public async Task<IActionResult> GetContent(string aId)
         {
@@ -52,10 +59,10 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{appId}/bulletins-check")]
-        public async Task<IActionResult> GetBulletinsCheck(string appId)
+        [HttpGet("{appId}/bulletins-check/{onlyApproved}")]
+        public async Task<IActionResult> GetBulletinsCheck(string appId, bool onlyApproved)
         {
-            var result = await this._certificateService.GetBulletinsCheckByIdAsync(appId);
+            var result = await this._certificateService.GetBulletinsCheckByIdAsync(appId, onlyApproved);
             return Ok(result);
         }
 

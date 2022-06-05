@@ -36,7 +36,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.StatusCode, opt => opt.MapFrom(src => src.Application.StatusCode))
               .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Application.BirthCityId))
               .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.Application.CsAuthorityBirth.Name))
-              .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.Application.CreatedOn));
+              .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.Application.CreatedOn))
+              .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name));
         }
     }
 }

@@ -7,6 +7,6 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<ACertificate> GetByApplicationIdAsync(string appId);
 
-        Task<IQueryable<AAppBulletin>> GetBulletinsCheckByIdAsync(string certId);
+        Task<IQueryable<AAppBulletin>> GetBulletinsCheckByIdAsync(string certId, bool onlyApproved);
     }
 }

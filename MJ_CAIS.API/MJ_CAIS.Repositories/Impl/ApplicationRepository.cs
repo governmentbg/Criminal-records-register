@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Home;
-using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.Home;
+using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -28,6 +27,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<ACertificate>> SelectAllCertificateAsync()
         {
             var result = this._dbContext.ACertificates
+                .Include(x => x.StatusCodeNavigation)
                 .Include(x => x.Application)
                     .ThenInclude(x => x.CsAuthorityBirth)
                 .AsNoTracking();

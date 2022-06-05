@@ -8,7 +8,7 @@
     >
       <div>
         <button
-          *ngIf="isForPreview && showForUpdate"
+          *ngIf="showForUpdate && isEdit()"
           nbButton
           matRipple
           [status]="'success'"
@@ -39,14 +39,16 @@
                 ></cais-input>
               </div>
             </ng-container>
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Бюро съдимост, в което се съхранява'"
-                [inputFormControl]="fullForm.csAuthorityName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
-            </div>
+            <ng-container *ngIf="isEdit() || fullForm.csAuthorityName.value">
+              <div class="form-group col-md-6">
+                <cais-input
+                  [type]="'text'"
+                  [label]="'Бюро съдимост, в което се съхранява'"
+                  [inputFormControl]="fullForm.csAuthorityName"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
+            </ng-container>
           </div>
           <div class="row">
             <div class="form-group col-md-6">

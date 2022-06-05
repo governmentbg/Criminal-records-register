@@ -9,6 +9,7 @@ export class ApplicationCertificateResultModel extends BaseModel {
   public validFrom: Date = null;
   public validTo: Date = null;
   public currentUserAuthId: Date = null;
+  public selectedBulletinsIds: string[] = null;
 
   constructor(init?: Partial<ApplicationCertificateResultModel>) {
     super(init);
@@ -20,5 +21,6 @@ export class ApplicationCertificateResultModel extends BaseModel {
     this.validFrom = init?.validFrom ?? null;
     this.validTo = init?.validTo ?? null;
     this.currentUserAuthId = init?.currentUserAuthId ?? null;
+    this.selectedBulletinsIds = init?.selectedBulletinsIds ?? null;
   }
 }

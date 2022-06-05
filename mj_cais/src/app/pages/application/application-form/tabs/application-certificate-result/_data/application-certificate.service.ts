@@ -24,6 +24,15 @@ export class ApplicationCertificateService extends CaisCrudService<
       model
     );
   }
+  public saveSignerDataByJudge(
+    id: string,
+    model: ApplicationCertificateResultModel,
+  ): Observable<any> {
+    return this.http.put<ApplicationCertificateResultModel>(
+      `${this.url}/${id}/save-signer-data-by-judge`,
+      model
+    );
+  }
 
   public downloadSertificate(id: string) {
     let url = `${this.url}/${id}/certificate-content`;
@@ -36,9 +45,9 @@ export class ApplicationCertificateService extends CaisCrudService<
     );
   }
 
-  public getBulletinsCheck(id: string): Observable<BulletinCheckGridModel[]> {
+  public getBulletinsCheck(id: string, onlyApproved: boolean): Observable<BulletinCheckGridModel[]> {
     return this.http.get<BulletinCheckGridModel[]>(
-      `${this.url}/${id}/bulletins-check`
+      `${this.url}/${id}/bulletins-check/${onlyApproved}`
     );
   }
 

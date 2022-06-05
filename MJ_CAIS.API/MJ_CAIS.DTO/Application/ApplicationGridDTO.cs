@@ -17,6 +17,7 @@ namespace MJ_CAIS.DTO.Application
         public string? BirthPlaceOther { get; set; }
         
         public string? StatusCode { get; set; }
+        public string? StatusName { get; set; }
 
         public string? BirthCityId { get; set; }
 

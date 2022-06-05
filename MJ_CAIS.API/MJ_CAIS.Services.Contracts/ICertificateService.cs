@@ -8,8 +8,9 @@ namespace MJ_CAIS.Services.Contracts
         public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description);
         Task<DDocContent> GetCertificateDocumentContent(string accessCode);
         Task SaveSignerDataAsync(CertificateDTO aInDto);
+        Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto);
         Task<CertificateDTO> GetByApplicationIdAsync(string appId);
-        Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string appId);
+        Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string appId, bool onlyApproved);
         Task SetBulletinsForSelection(string aId, string[] ids);
     }
 }

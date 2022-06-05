@@ -34,7 +34,6 @@ export class ApplicationCertificateResultComponent
   public bulletinsCheckGrid: IgxGridComponent;
 
   public CertificateStatuTypeEnum = CertificateStatuTypeEnum;
-  public showCertContentReady: boolean;
   public bulletinsCheckData: BulletinCheckGridModel[] = [];
   public certificateStatus: string;
 
@@ -47,28 +46,24 @@ export class ApplicationCertificateResultComponent
   }
 
   ngOnInit(): void {
+    debugger;
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
-    this.model.statusCode = this.model.statusCode;
     if (this.model) {
       if (
         this.model.statusCode ==
-        CertificateStatuTypeEnum.CertificateContentReady
-      ) {
-        this.showCertContentReady = true;
-      } else if (
-        this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
-          this.model.statusCode == CertificateStatuTypeEnum.Delivered
+        this.model.statusCode == CertificateStatuTypeEnum.Delivered
       ) {
-        this.showCertContentReady = true;
         this.fullForm.group.disable();
       }
 
-      if (this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck
-        ||this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection) {
+      if (
+        this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck ||
+        this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
+      ) {
         this.service
-          .getBulletinsCheck(this.fullForm.id.value)
+          .getBulletinsCheck(this.fullForm.id.value,this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection)
           .subscribe((response) => {
             this.bulletinsCheckData = response;
           });
@@ -99,33 +94,7 @@ export class ApplicationCertificateResultComponent
       let model = this.fullForm.group.value;
       let id = this.fullForm.id.value;
       this.service.saveSignerData(id, model).subscribe((response: any) => {
-        this.service.downloadSertificate(id).subscribe((response: any) => {
-          this.model.statusCode =
-            CertificateStatuTypeEnum.CertificatePaperPrint;
-          this.fullForm.group.disable();
-          let blob = new Blob([response.body]);
-          window.URL.createObjectURL(blob);
-
-          let header = response.headers.get("Content-Disposition");
-          let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-
-          let fileName = "download";
-
-          var matches = filenameRegex.exec(header);
-          if (matches != null && matches[1]) {
-            fileName = matches[1].replace(/['"]/g, "");
-          }
-
-          fileSaver.saveAs(blob, fileName);
-        }),
-          (error) => {
-            var errorText = error.status + " " + error.statusText;
-            this.toastr.showBodyToast(
-              "danger",
-              "Грешка при генериране на свидетелство:",
-              errorText
-            );
-          };
+        this.downloadSertificate(id);
       }),
         (error) => {
           var errorText = error.status + " " + error.statusText;
@@ -174,12 +143,68 @@ export class ApplicationCertificateResultComponent
     this.service
       .sendBulletinsForSelection(this.model.id, selectedItesm)
       .subscribe((response: any) => {
-        this.model.statusCode =
-            CertificateStatuTypeEnum.BulletinsSelection;
+        this.model.statusCode = CertificateStatuTypeEnum.BulletinsSelection;
+        this.router.navigate(["pages/application-for-check"]); 
       }),
       (error) => {
         var errorText = error.status + " " + error.statusText;
         this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+      };
+  }
+
+  generateCertificateByJudge() {
+    if (!this.fullForm.group.valid) {
+      this.fullForm.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+
+      this.scrollToValidationError();
+      return;
+    }
+    debugger;
+    var selectedItesm = this.bulletinsCheckGrid.selectedRows;
+    let model = this.fullForm.group.value as ApplicationCertificateResultModel;
+    model.selectedBulletinsIds = selectedItesm;
+    let id = this.fullForm.id.value;
+
+    this.service.saveSignerDataByJudge(id, model).subscribe((response: any) => {
+      this.downloadSertificate(id);
+    }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Грешка при генериране на свидетелство:",
+          errorText
+        );
+      };
+  }
+
+  downloadSertificate(id) {
+    this.service.downloadSertificate(id).subscribe((response: any) => {
+      this.model.statusCode = CertificateStatuTypeEnum.CertificatePaperPrint;
+      this.fullForm.group.disable();
+      let blob = new Blob([response.body]);
+      window.URL.createObjectURL(blob);
+
+      let header = response.headers.get("Content-Disposition");
+      let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+      let fileName = "download";
+
+      var matches = filenameRegex.exec(header);
+      if (matches != null && matches[1]) {
+        fileName = matches[1].replace(/['"]/g, "");
+      }
+
+      fileSaver.saveAs(blob, fileName);
+    }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Грешка при генериране на свидетелство:",
+          errorText
+        );
       };
   }
 }

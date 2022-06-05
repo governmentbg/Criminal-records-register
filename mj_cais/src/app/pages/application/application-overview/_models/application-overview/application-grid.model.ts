@@ -6,7 +6,8 @@ export class ApplicationGridModel extends BaseModel {
   public firstname: string;
   public surname: string;
   public familyname: string;
-  public StatusCode: string;
+  public statusCode: string;
+  public statusName: string;
   public birthDate: Date;
   public birthPlaceOther: string;
   public csAuthorityBirth: string;
@@ -22,7 +23,8 @@ export class ApplicationGridModel extends BaseModel {
       this.familyname = init.familyname ?? null;
       this.birthDate = init.birthDate ?? null;
       this.birthPlaceOther = init.birthPlaceOther ?? null;
-      this.StatusCode = init.StatusCode ?? null;
+      this.statusCode = init.statusCode ?? null;
+      this.statusName = init.statusName ?? null;
       this.csAuthorityBirth = init.csAuthorityBirth ?? null;
       this.createdOn = init.createdOn ?? null;
     }
