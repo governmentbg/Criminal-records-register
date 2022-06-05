@@ -117,7 +117,7 @@ namespace MJ_CAIS.Services
             UpdateCertificateStatus(dbContext, certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
             CreateAStatusH(certificate.ApplicationId, certificate.Id,
                 certificate.StatusCode,
-               "������ �� ����� ����� �� ��������, ��������� ����� � ����� �� ����������");
+               "Очаква обработка на заявка/и за реабилитация към съдия");
 
             await dbContext.SaveChangesAsync();
         }
@@ -136,7 +136,7 @@ namespace MJ_CAIS.Services
 
             CreateAStatusH(certificate.ApplicationId, certificate.Id,
                  certificate.StatusCode,
-                "������ ��������� �� ������ / � �� ������������ ��� �����");
+                "Генерирана заявка за реабилитация при обработка на свидетелство");
 
             var request = new List<BInternalRequest>();
             foreach (var appBullId in ids)
