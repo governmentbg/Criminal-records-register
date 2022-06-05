@@ -109,7 +109,7 @@ export class ApplicationCertificateResultComponent
 
   printCertificate() {
     this.service
-      .downloadSertificate(this.model.statusCode)
+      .downloadSertificateContent(this.model.id)
       .subscribe((response: any) => {
         this.fullForm.group.disable();
         let blob = new Blob([response.body]);

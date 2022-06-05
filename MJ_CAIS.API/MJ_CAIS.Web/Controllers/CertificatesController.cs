@@ -52,6 +52,22 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
+        [HttpGet("{aId}/certificate-content-only")]
+        public async Task<IActionResult> GetContentOnly(string aId)
+        {
+            var result = await this._certificateGenerationService.GetCertificateContentAsync(aId);
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "sertificate.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
+        }
+
         [HttpGet("by-application/{appId}")]
         public async Task<IActionResult> GetByApplication(string appId)
         {

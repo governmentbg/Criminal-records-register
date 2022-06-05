@@ -39,6 +39,12 @@ export class ApplicationCertificateService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
+  public downloadSertificateContent(id: string) {
+    let url = `${this.url}/${id}/certificate-content-only`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+
   public getCertificateByAppId(appId: string) {
     return this.http.get<ApplicationCertificateResultModel>(
       `${this.url}/by-application/${appId}`

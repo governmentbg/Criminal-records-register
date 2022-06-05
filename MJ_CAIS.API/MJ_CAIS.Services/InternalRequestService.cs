@@ -115,13 +115,15 @@ namespace MJ_CAIS.Services
             var certId = currentBull.CertificateId;
 
             var bullIdsForCert = await dbContext.AAppBulletins.AsNoTracking()
-                .Where(x => x.CertificateId == certId && x.BulletinId != bulletin.Id)
+                .Where(x => x.CertificateId == certId)
                 .Select(x => x.Id).ToListAsync();
 
             if (bullIdsForCert.Any())
             {
                 var hasRequests = await dbContext.BInternalRequests.AsNoTracking()
-                    .AnyAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.New && bullIdsForCert.Contains(x.AAppBulletinId));
+                    .AnyAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.New &&
+                    x.Id != entity.Id &&
+                    bullIdsForCert.Contains(x.AAppBulletinId));
 
                 // change status of certificate
                 if (!hasRequests)

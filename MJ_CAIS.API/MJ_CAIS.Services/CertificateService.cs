@@ -136,7 +136,7 @@ namespace MJ_CAIS.Services
 
             CreateAStatusH(certificate.ApplicationId, certificate.Id,
                  certificate.StatusCode,
-                "Генерирана заявка за реабилитация при обработка на свидетелство");
+                "Очаква обработка на заявка / и за реабилитация към съдия");
 
             var request = new List<BInternalRequest>();
             foreach (var appBullId in ids)
@@ -147,7 +147,7 @@ namespace MJ_CAIS.Services
                     BulletinId = certificate.AAppBulletins.FirstOrDefault(x => x.Id == appBullId)?.BulletinId,
                     AAppBulletinId = appBullId,
                     ReqStatusCode = InternalRequestStatusTypeConstants.New,
-                    Description = "���������� ������ �� ������������ ��� ��������� �� ������������",
+                    Description = "Генерирана заявка за реабилитация при обработка на свидетелство",
                     EntityState = Common.Enums.EntityStateEnum.Added,
                     RequestDate = DateTime.UtcNow
                 });
