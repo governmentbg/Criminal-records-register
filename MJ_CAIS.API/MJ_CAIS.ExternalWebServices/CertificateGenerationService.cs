@@ -248,8 +248,8 @@ namespace MJ_CAIS.ExternalWebServices
         {
             byte[] fileArray = await _printerService.PrintCertificate(certificateID,checkUrl,reportName);
             //todo: кои полета да се добавят за валидиране?!
-            fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
-                new Dictionary<string, string>() { { "certificate_id", certificateID} });
+            //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
+            //    new Dictionary<string, string>() { { "certificate_id", certificateID} });
 
             return fileArray;
 
