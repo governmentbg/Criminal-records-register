@@ -59,6 +59,7 @@ import { EcrisTcnOverviewComponent } from "./ecris-tcn/ecris-tcn-overview/ecris-
 import { BulletinAdministrationFormComponent } from "./bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component";
 import { ApplicationForSiningByJudgeComponent } from "./application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component";
 import { ApplicationForSigningComponent } from "./application/application-overview/application-for-signing/application-for-signing.component";
+import { ApplicationBulletinsSelectionComponent } from "./application/application-overview/application-bulletins-selection/application-bulletins-selection.component";
 
 const routes: Routes = [
   {
@@ -119,6 +120,11 @@ const routes: Routes = [
       {
         path: "application-for-signing-by-judge",
         component: ApplicationForSiningByJudgeComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-bulletin-selection",
+        component: ApplicationBulletinsSelectionComponent,
         // canActivate: [AuthGuard],
       },
       {

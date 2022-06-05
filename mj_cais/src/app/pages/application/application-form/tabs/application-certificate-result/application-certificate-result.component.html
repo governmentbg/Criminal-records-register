@@ -14,7 +14,7 @@
       <div class="form-group col-md-6" style="padding-right: 50px">
         <ng-container
           *ngIf="
-          this.model.statusCode ==
+            this.model.statusCode ==
             CertificateStatuTypeEnum.CertificateContentReady
           "
         >
@@ -102,36 +102,39 @@
   </form>
 </ng-container>
 
-<ng-container >
-  <div class="row">
-    <div class="form-group col-md-6">
-      <button
-        *ngIf="!this.isForPreview"
-        nbButton
-        matRipple
-        [status]="'success'"
-        (click)="sendRequestToJudge()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px; float: left"
-      >
-        Изпрати заявка за реабилитация
-      </button>
+<ng-container>
+  <ng-template [ngxPermissionsOnly]="['Normal']">
+    <div class="row">
+      <div class="form-group col-md-6">
+        <button
+          *ngIf="!this.isForPreview"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="sendRequestToJudge()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: left"
+        >
+          Изпрати заявка за реабилитация
+        </button>
+      </div>
+      <div class="form-group col-md-6">
+        <button
+          *ngIf="!this.isForPreview"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="sendBulltinsForSelection()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
+        >
+          Изпрати за избор на бюл. от съдия
+        </button>
+      </div>
     </div>
-    <div class="form-group col-md-6">
-      <button
-        nbButton
-        matRipple
-        [status]="'success'"
-        (click)="sendBulltinsForSelection()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px; float: right"
-      >
-        Изпрати за избор на бюл. от съдия
-      </button>
-    </div>
-  </div>
+  </ng-template>
 
   <igx-grid
     #bulletinsCheckGrid
@@ -140,7 +143,7 @@
     [primaryKey]="'id'"
     [allowFiltering]="true"
     [cellSelection]="'none'"
-    [rowSelection]="'multiple'"
+    [rowSelection]="isForPreview ? 'none' : 'multiple'"
     [selectedRows]="[]"
     [hideRowSelectors]="false"
   >
@@ -156,12 +159,12 @@
     <igx-column
       field="registrationNumber"
       header="Номер"
-      [dataType]="'number'"
+      [dataType]="'string'"
       [sortable]="true"
     >
     </igx-column>
 
-    <!-- <igx-column
+   <igx-column
       field="bulletinReceivedDate"
       [sortable]="true"
       header="Дата на регистрация"
@@ -173,7 +176,7 @@
           {{ this.dateFormatService.displayDate(cell.value) }}
         </span>
       </ng-template>
-    </igx-column> -->
+    </igx-column> 
     <igx-column
       field="statusId"
       header="Идентификатор на статус"

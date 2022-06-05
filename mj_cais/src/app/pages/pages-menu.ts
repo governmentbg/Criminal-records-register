@@ -109,6 +109,10 @@ export class PagesMenu {
             title: "За подпис от съдия",
             link: "/pages/application-for-signing-by-judge",
           },
+          {
+            title: "За избор на бюлетини",
+            link: "/pages/application-bulletin-selection",
+          },
         ],
       },
       {

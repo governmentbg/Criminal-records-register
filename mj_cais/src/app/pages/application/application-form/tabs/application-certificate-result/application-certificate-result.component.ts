@@ -9,6 +9,7 @@ import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/
 import { CertificateStatuTypeEnum } from "./_models/certificate-status-type.enum";
 import { BulletinCheckGridModel } from "./_models/bulletin-check-grid.model";
 import { IgxGridComponent } from "@infragistics/igniteui-angular";
+import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -39,7 +40,8 @@ export class ApplicationCertificateResultComponent
 
   constructor(
     service: ApplicationCertificateService,
-    public injector: Injector
+    public injector: Injector,
+    public dateFormatService: DateFormatService
   ) {
     super(service, injector);
   }
