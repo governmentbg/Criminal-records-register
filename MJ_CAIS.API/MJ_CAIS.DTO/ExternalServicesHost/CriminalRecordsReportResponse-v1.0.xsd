@@ -4,7 +4,7 @@
 	<xs:import namespace="http://cais.mjs.bg/BulletinModel-v1.0" schemaLocation="BulletinModel_v1.0_v11.xsd"/>
 	<xs:complexType name="ReportResultType">
 		<xs:sequence>
-			<xs:element name="PersonData" type="bul:CriminalRecordsPersonDataType">
+			<xs:element name="PersonData" type="bul:PersonType">
 				<xs:annotation>
 					<xs:documentation>Данни за лицето</xs:documentation>
 				</xs:annotation>

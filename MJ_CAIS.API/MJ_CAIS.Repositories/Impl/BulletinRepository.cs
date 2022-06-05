@@ -237,5 +237,36 @@ namespace MJ_CAIS.Repositories.Impl
 
             return result;
         }
+
+        public async Task<IQueryable<BBulletin>> GetBulletinsForPeriodAsync(DateTime dateFrom, DateTime dateTo)
+        {
+            var result = _dbContext.BBulletins.AsNoTracking()
+                    .Include(x => x.PBulletinIds)
+                    .Include(x => x.BirthCity)
+                    .Include(x => x.BirthCountry)
+                    .Include(x => x.DecidingAuth)
+                    .Include(x => x.DecisionType)
+                    .Include(x => x.CaseType)
+                    .Include(x => x.CaseAuth)
+
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffenceCat)
+                    .Include(x => x.BOffences).ThenInclude(x => x.EcrisOffCat)
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffPlaceCountry)
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffPlaceCity)
+
+                    .Include(x => x.BSanctions).ThenInclude(x => x.SanctCategory)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.EcrisSanctCateg)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.BProbations).ThenInclude(x => x.SanctProbCateg)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.BProbations).ThenInclude(x => x.SanctProbMeasure)
+
+                    .Include(x => x.BDecisions).ThenInclude(x => x.DecisionAuth)
+                    .Include(x => x.BulletinAuthority)
+                    .Include(x => x.CsAuthority)
+                    .Include(x => x.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+                    .Where(x => x.CreatedOn >= dateFrom && x.CreatedOn <= dateTo);
+
+            return await Task.FromResult(result);
+        }
     }
 }

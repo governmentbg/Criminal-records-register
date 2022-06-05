@@ -718,12 +718,12 @@
 					<xs:documentation>Държава</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="City" type="CityType">
+			<xs:element name="City" type="CityType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Населено място</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Descr" type="xs:string">
+			<xs:element name="Descr" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Описание, в случай на друго</xs:documentation>
 				</xs:annotation>

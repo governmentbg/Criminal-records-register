@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CriminalRecordsReport xmlns="http://cais.mjs.bg/CriminalRecordsReportResponse-v1.0">
+        <ReportCriteria xmlns="http://cais.mjs.bg/CriminalRecordsReportResponse-v1.0">
+               <IdentifierType xmlns="http://cais.mjs.bg/BulletinModel-v1.0">EGN</IdentifierType>
+               <PID xmlns="http://cais.mjs.bg/BulletinModel-v1.0">8808081231</PID>
+            </ReportCriteria>
+            <ReportResult xmlns="http://cais.mjs.bg/CriminalRecordsReportResponse-v1.0">
+               <PersonData>
+                  <NamesBg xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <FirstName>Димитър</FirstName>
+                     <SurName>Димитров</SurName>
+                     <FamilyName>Димитров</FamilyName>
+                  </NamesBg>
+                  <NamesEn xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <FirstName>Dimitar</FirstName>
+                     <SurName>Dimitrov</SurName>
+                     <FamilyName>Dimitrov</FamilyName>
+                  </NamesEn>
+                  <Sex xmlns="http://cais.mjs.bg/BulletinModel-v1.0">1</Sex>
+                  <IdentityNumber xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <EGN>8808081231</EGN>
+                  </IdentityNumber>
+                  <BirthDate xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <Date>1980-05-01</Date>
+                  </BirthDate>
+                  <BirthPlace xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <Country>
+                        <CountryISONumber>100</CountryISONumber>
+                        <CountryISOAlpha3>BG</CountryISOAlpha3>
+                        <CountryName>България</CountryName>
+                     </Country>
+                     <City>
+                        <EKATTECode>68134</EKATTECode>
+                        <CityName>гр. София</CityName>
+                     </City>
+                  </BirthPlace>
+                  <MotherNames xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <FirstName>Ивайла</FirstName>
+                     <SurName>Ивайлова</SurName>
+                     <FamilyName>Ивайлова</FamilyName>
+                  </MotherNames>
+                  <FatherNames xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <FirstName>Стефан</FirstName>
+                     <SurName>Стефанов</SurName>
+                     <FamilyName>Стефанов</FamilyName>
+                  </FatherNames>
+               </PersonData>
+               <BulletinsList>
+                  <Bulletin xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <Type>ConvictionBulletin</Type>
+                     <Person>
+                        <NamesBg>
+                           <FirstName>Димитър</FirstName>
+                           <SurName>Димитров</SurName>
+                           <FamilyName>Димитров</FamilyName>
+                        </NamesBg>
+                        <NamesEn>
+                           <FirstName>Dimitar</FirstName>
+                           <SurName>Димитров</SurName>
+                           <FamilyName>Dimitrov</FamilyName>
+                        </NamesEn>
+                        <Sex>1</Sex>
+                        <IdentityNumber>
+                           <EGN>8808081231</EGN>
+                        </IdentityNumber>
+                        <BirthDate>
+                           <Date>1980-05-01</Date>
+                        </BirthDate>
+                        <BirthPlace>
+                           <Country>
+                              <CountryISONumber>100</CountryISONumber>
+                              <CountryISOAlpha3>BG</CountryISOAlpha3>
+                              <CountryName>България</CountryName>
+                           </Country>
+                           <City>
+                              <EKATTECode>68134</EKATTECode>
+                              <CityName>гр. София</CityName>
+                           </City>
+                        </BirthPlace>
+                        <PersonNationality>
+                           <CountryISONumber>100</CountryISONumber>
+                           <CountryISOAlpha3>BG</CountryISOAlpha3>
+                           <CountryName>България</CountryName>
+                        </PersonNationality>
+                        <PersonIdentificationDocument>
+                           <IdentificationDocumentCategoryReference>ID-00-001</IdentificationDocumentCategoryReference>
+                           <IdentificationDocumentNumber>6412345678</IdentificationDocumentNumber>
+                           <IdentificationDocumentIssuingAuthority>МВР-Пловдив</IdentificationDocumentIssuingAuthority>
+                           <IdentificationDocumentIssuingDate>
+                              <Date>2020-01-01</Date>
+                           </IdentificationDocumentIssuingDate>
+                           <IdentificationDocumentValidUntil>
+                              <Date>2025-01-01</Date>
+                           </IdentificationDocumentValidUntil>
+                        </PersonIdentificationDocument>
+                        <MotherNames>
+                           <FirstName>Ивайла</FirstName>
+                           <SurName>Ивайлова</SurName>
+                           <FamilyName>Ивайлова</FamilyName>
+                        </MotherNames>
+                        <FatherNames>
+                           <FirstName>Стефан</FirstName>
+                           <SurName>Стефанов</SurName>
+                           <FamilyName>Стефанов</FamilyName>
+                        </FatherNames>
+                     </Person>
+                     <Conviction>
+                        <Decision>
+                           <FileNumber>122</FileNumber>
+                           <DecisionDate>2001-01-01</DecisionDate>
+                           <DecisionFinalDate>2001-01-02</DecisionFinalDate>
+                           <DecidingAuthority>
+                              <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                              <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                              <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                           </DecidingAuthority>
+                           <ECLI>ecli-string-new</ECLI>
+                           <DecisionType>dkp_prisada</DecisionType>
+                        </Decision>
+                        <CriminalCase>
+                           <CaseType>sign_noxd</CaseType>
+                           <CaseNumber>10</CaseNumber>
+                           <CaseYear>sign_noxd</CaseYear>
+                           <CaseAuthority>
+                              <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                              <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                              <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                           </CaseAuthority>
+                        </CriminalCase>
+                        <ConvictionRemarks>Извлечение от акта</ConvictionRemarks>
+                        <ConvictionOffence>
+                           <NationalCategoryCode>10136</NationalCategoryCode>
+                           <NationalCategoryTitle>   чл.129,ал.1, Средна телесна повреда</NationalCategoryTitle>
+                           <Remarks>описание на деянието</Remarks>
+                           <OffenceCommonCategoryReference>
+                              <OffenceCode>O-00-091100</OffenceCode>
+                              <OffenceName>Посегателство срещу личния живот, различно от незаконно навлизане в частна собственост</OffenceName>
+                           </OffenceCommonCategoryReference>
+                           <OffenceApplicableLegalProvisions>чл.129,ал.1, Средна телесна повреда</OffenceApplicableLegalProvisions>
+                           <OffenceStartDate>
+                              <Date>2001-11-01</Date>
+                           </OffenceStartDate>
+                           <OffenceEndDate>
+                              <Date>2001-11-01</Date>
+                           </OffenceEndDate>
+                           <OffencePlace>
+                              <Country>
+                                 <CountryISONumber>100</CountryISONumber>
+                                 <CountryISOAlpha3>BG</CountryISOAlpha3>
+                                 <CountryName>България</CountryName>
+                              </Country>
+                              <City>
+                                 <EKATTECode>68134</EKATTECode>
+                                 <CityName>гр. София</CityName>
+                              </City>
+                              <Descr>20 км. от магистрала Хемус</Descr>
+                           </OffencePlace>
+                        </ConvictionOffence>
+                        <WithoutSanction>false</WithoutSanction>
+                        <ConvictionSanction>
+                           <NationalCategoryCode>nkz_lishavane_ot_svoboda</NationalCategoryCode>
+                           <NationalCategoryTitle>Лишаване от свобода</NationalCategoryTitle>
+                           <SanctionCommonCategoryReference>
+                              <SanctionCode>1001</SanctionCode>
+                              <SanctionText>Лишаване от свобода</SanctionText>
+                           </SanctionCommonCategoryReference>
+                           <Fine>
+                              <SanctionAmountOfIndividualFine>0</SanctionAmountOfIndividualFine>
+                           </Fine>
+                           <Prison>
+                              <SanctionSentencedPeriod>P0Y0M0DT0H</SanctionSentencedPeriod>
+                              <SanctionSuspension>P0Y0M0DT0H</SanctionSuspension>
+                              <DetentionDescription>описание в свободен текст</DetentionDescription>
+                           </Prison>
+                           <Other>
+                              <SanctionSentencedPeriodLength>P0Y0M0DT0H</SanctionSentencedPeriodLength>
+                           </Other>
+                        </ConvictionSanction>
+                        <ServingPrevSuspendedSentence>false</ServingPrevSuspendedSentence>
+                        <ConvictionDecisions>
+                           <DecisionChangeTypeReference>DCH-00-R</DecisionChangeTypeReference>
+                           <Decision>
+                              <FileNumber>212</FileNumber>
+                              <DecisionDate>2022-01-02</DecisionDate>
+                              <DecisionFinalDate>2022-01-03</DecisionFinalDate>
+                              <DecidingAuthority>
+                                 <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                                 <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                                 <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                              </DecidingAuthority>
+                              <DecisionType>dkp_prisada</DecisionType>
+                           </Decision>
+                           <DecisionRemarks>Описание на доп.сведение</DecisionRemarks>
+                           <ValidFrom>2022-01-02</ValidFrom>
+                           <ReceiveDate>2022-01-03</ReceiveDate>
+                        </ConvictionDecisions>
+                        <EcrisConvictionId>?</EcrisConvictionId>
+                     </Conviction>
+                     <IssuerData>
+                        <BulletinCreateDate>2022-06-04T11:54:20</BulletinCreateDate>
+                        <BulletinCreatorPerson>
+                           <Names/>
+                           <Position>деловодител</Position>
+                        </BulletinCreatorPerson>
+                        <BulletinApproverPerson>
+                           <Names/>
+                           <Position>деловодител</Position>
+                        </BulletinApproverPerson>
+                        <BulletinCreatorAuthority>
+                           <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                           <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                           <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                        </BulletinCreatorAuthority>
+                     </IssuerData>
+                     <RegistrationData>
+                        <RegistrationNumber>220604660301000000071</RegistrationNumber>
+                        <BulletinReceivedDate>2022-06-04T00:00:00</BulletinReceivedDate>
+                        <ConvictionStatusAuthority>
+                           <Code>660</Code>
+                           <Name>Министерство на Правосъдието</Name>
+                        </ConvictionStatusAuthority>
+                     </RegistrationData>
+                  </Bulletin>
+                  <Bulletin xmlns="http://cais.mjs.bg/BulletinModel-v1.0">
+                     <Type>ConvictionBulletin</Type>
+                     <Person>
+                        <NamesBg>
+                           <FirstName>Димитър</FirstName>
+                           <SurName>Димитров</SurName>
+                           <FamilyName>Димитров</FamilyName>
+                        </NamesBg>
+                        <NamesEn>
+                           <FirstName>Dimitar</FirstName>
+                           <SurName>Димитров</SurName>
+                           <FamilyName>Dimitrov</FamilyName>
+                        </NamesEn>
+                        <Sex>1</Sex>
+                        <IdentityNumber>
+                           <EGN>8808081231</EGN>
+                        </IdentityNumber>
+                        <BirthDate>
+                           <Date>1980-05-01</Date>
+                        </BirthDate>
+                        <BirthPlace>
+                           <Country>
+                              <CountryISONumber>100</CountryISONumber>
+                              <CountryISOAlpha3>BG</CountryISOAlpha3>
+                              <CountryName>България</CountryName>
+                           </Country>
+                           <City>
+                              <EKATTECode>68134</EKATTECode>
+                              <CityName>гр. София</CityName>
+                           </City>
+                        </BirthPlace>
+                        <PersonNationality>
+                           <CountryISONumber>100</CountryISONumber>
+                           <CountryISOAlpha3>BG</CountryISOAlpha3>
+                           <CountryName>България</CountryName>
+                        </PersonNationality>
+                        <PersonIdentificationDocument>
+                           <IdentificationDocumentCategoryReference>ID-00-001</IdentificationDocumentCategoryReference>
+                           <IdentificationDocumentNumber>6412345678</IdentificationDocumentNumber>
+                           <IdentificationDocumentIssuingAuthority>МВР-Пловдив</IdentificationDocumentIssuingAuthority>
+                           <IdentificationDocumentIssuingDate>
+                              <Date>2020-01-01</Date>
+                           </IdentificationDocumentIssuingDate>
+                           <IdentificationDocumentValidUntil>
+                              <Date>2025-01-01</Date>
+                           </IdentificationDocumentValidUntil>
+                        </PersonIdentificationDocument>
+                        <MotherNames>
+                           <FirstName>Ивайла</FirstName>
+                           <SurName>Ивайлова</SurName>
+                           <FamilyName>Ивайлова</FamilyName>
+                        </MotherNames>
+                        <FatherNames>
+                           <FirstName>Стефан</FirstName>
+                           <SurName>Стефанов</SurName>
+                           <FamilyName>Стефанов</FamilyName>
+                        </FatherNames>
+                     </Person>
+                     <Conviction>
+                        <Decision>
+                           <FileNumber>122</FileNumber>
+                           <DecisionDate>2021-01-01</DecisionDate>
+                           <DecisionFinalDate>2021-01-02</DecisionFinalDate>
+                           <DecidingAuthority>
+                              <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                              <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                              <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                           </DecidingAuthority>
+                           <ECLI>ecli-string-new</ECLI>
+                           <DecisionType>dkp_prisada</DecisionType>
+                        </Decision>
+                        <CriminalCase>
+                           <CaseType>sign_noxd</CaseType>
+                           <CaseNumber>10</CaseNumber>
+                           <CaseYear>sign_noxd</CaseYear>
+                           <CaseAuthority>
+                              <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                              <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                              <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                           </CaseAuthority>
+                        </CriminalCase>
+                        <ConvictionRemarks>Извлечение от акта</ConvictionRemarks>
+                        <ConvictionOffence>
+                           <NationalCategoryCode>10136</NationalCategoryCode>
+                           <NationalCategoryTitle>   чл.129,ал.1, Средна телесна повреда</NationalCategoryTitle>
+                           <Remarks>описание на деянието</Remarks>
+                           <OffenceCommonCategoryReference>
+                              <OffenceCode>O-00-091100</OffenceCode>
+                              <OffenceName>Посегателство срещу личния живот, различно от незаконно навлизане в частна собственост</OffenceName>
+                           </OffenceCommonCategoryReference>
+                           <OffenceApplicableLegalProvisions>чл.129,ал.1, Средна телесна повреда</OffenceApplicableLegalProvisions>
+                           <OffenceStartDate>
+                              <Date>2021-09-01</Date>
+                           </OffenceStartDate>
+                           <OffenceEndDate>
+                              <Date>2021-09-01</Date>
+                           </OffenceEndDate>
+                           <OffencePlace>
+                              <Country>
+                                 <CountryISONumber>100</CountryISONumber>
+                                 <CountryISOAlpha3>BG</CountryISOAlpha3>
+                                 <CountryName>България</CountryName>
+                              </Country>
+                              <Descr>20 км. от магистрала Хемус</Descr>
+                           </OffencePlace>
+                        </ConvictionOffence>
+                        <WithoutSanction>false</WithoutSanction>
+                        <ConvictionSanction>
+                           <NationalCategoryCode>nkz_globa</NationalCategoryCode>
+                           <NationalCategoryTitle>Глоба</NationalCategoryTitle>
+                           <SanctionCommonCategoryReference>
+                              <SanctionCode>8001</SanctionCode>
+                              <SanctionText>Глоба</SanctionText>
+                           </SanctionCommonCategoryReference>
+                           <Fine>
+                              <SanctionAmountOfIndividualFine>1000</SanctionAmountOfIndividualFine>
+                           </Fine>
+                           <Prison>
+                              <SanctionSentencedPeriod>P0Y0M0DT0H</SanctionSentencedPeriod>
+                              <SanctionSuspension>P0Y0M0DT0H</SanctionSuspension>
+                           </Prison>
+                           <Other>
+                              <SanctionSentencedPeriodLength>P0Y0M0DT0H</SanctionSentencedPeriodLength>
+                           </Other>
+                        </ConvictionSanction>
+                        <ServingPrevSuspendedSentence>true</ServingPrevSuspendedSentence>
+                        <ServingPrevSuspendedSentenceActNumber>101</ServingPrevSuspendedSentenceActNumber>
+                        <ConvictionDecisions>
+                           <DecisionChangeTypeReference>DCH-00-R</DecisionChangeTypeReference>
+                           <Decision>
+                              <FileNumber>212</FileNumber>
+                              <DecisionDate>2022-01-02</DecisionDate>
+                              <DecisionFinalDate>2022-01-03</DecisionFinalDate>
+                              <DecidingAuthority>
+                                 <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                                 <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                                 <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                              </DecidingAuthority>
+                              <DecisionType>dkp_prisada</DecisionType>
+                           </Decision>
+                           <DecisionRemarks>Описание на доп.сведение</DecisionRemarks>
+                           <ValidFrom>2022-01-02</ValidFrom>
+                           <ReceiveDate>2022-01-03</ReceiveDate>
+                        </ConvictionDecisions>
+                        <EcrisConvictionId>?</EcrisConvictionId>
+                     </Conviction>
+                     <IssuerData>
+                        <BulletinCreateDate>2022-06-03T13:57:43</BulletinCreateDate>
+                        <BulletinCreatorPerson>
+                           <Names/>
+                           <Position>деловодител</Position>
+                        </BulletinCreatorPerson>
+                        <BulletinApproverPerson>
+                           <Names/>
+                           <Position>деловодител</Position>
+                        </BulletinApproverPerson>
+                        <BulletinCreatorAuthority>
+                           <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                           <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                           <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                        </BulletinCreatorAuthority>
+                     </IssuerData>
+                     <RegistrationData>
+                        <RegistrationNumber>220603660301000000070</RegistrationNumber>
+                        <BulletinReceivedDate>2022-06-01T00:00:00</BulletinReceivedDate>
+                        <ConvictionStatusAuthority>
+                           <Code>660</Code>
+                           <Name>Министерство на Правосъдието</Name>
+                        </ConvictionStatusAuthority>
+                     </RegistrationData>
+                  </Bulletin>
+               </BulletinsList>
+               <ValidFrom>0001-01-01T00:00:00</ValidFrom>
+               <ValidTo>0001-01-01T00:00:00</ValidTo>
+            </ReportResult>
+            <ReportDate xmlns="http://cais.mjs.bg/CriminalRecordsReportResponse-v1.0">2022-06-04T12:12:10.9375173Z</ReportDate>
+      
+
+</CriminalRecordsReport>

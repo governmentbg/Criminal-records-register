@@ -29,5 +29,10 @@ namespace MJ_CAIS.ExternalServicesHost
         {
             return await _criminalRecordsReportSrvc.PersonIdentifierSearchAsync(request);
         }
+        public async Task<CriminalRecordsForPeriodResponseType> GetCriminalRecordsReportForPeriod(CriminalRecordsForPeriodRequestType request)
+        {
+            return await _criminalRecordsReportSrvc.GetCriminalRecordsReportForPeriodAsync(request);
+        }
+        
     }
 }

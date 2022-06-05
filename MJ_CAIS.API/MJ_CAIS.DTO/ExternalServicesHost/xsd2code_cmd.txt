@@ -4,3 +4,4 @@
 .\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\MJ_CAIS.DTO\ExternalServicesHost\PersonIdentifierSearchRequest-v1.0.xsd" "MJ_CAIS.DTO.ExternalServicesHost" /c Array /sc+ /pl Net40 /xa+ /eit+
 .\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\MJ_CAIS.DTO\ExternalServicesHost\PersonIdentifierSearchResponse-v1.0.xsd" "MJ_CAIS.DTO.ExternalServicesHost" /c Array /sc+ /pl Net40 /xa+ /eit+
 .\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\MJ_CAIS.DTO\ExternalServicesHost\EISSServicesModel_v1.xsd" "MJ_CAIS.DTO.ExternalServicesHost" /c Array /sc+ /pl Net40 /xa+ /eit+
+.\Xsd2Code.exe "D:\Projects\MJ_CAIS\03 Dev\app\MJ-CAIS\MJ_CAIS.API\MJ_CAIS.DTO\ExternalServicesHost\CriminalRecordsForPeriod-v1.0.xsd" "MJ_CAIS.DTO.ExternalServicesHost" /c Array /sc+ /pl Net40 /xa+ /eit+

@@ -176,5 +176,30 @@ namespace MJ_CAIS.Services
                 return signedPDF;
             }
         }
+
+        public async Task<CriminalRecordsForPeriodResponseType> GetCriminalRecordsReportForPeriodAsync(CriminalRecordsForPeriodRequestType value)
+        {
+            var bulletins = await _bulletinRepository.GetBulletinsForPeriodAsync(value.ValidFrom, value.ValidTo);
+            var bulletinsList = await bulletins.ToListAsync();
+
+            var bullArray = new BulletinType[bulletinsList.Count];
+
+            for (int i = 0; i < bulletinsList.Count; i++)
+            {
+                bullArray[i] = _mapper.Map<BulletinType>(bulletinsList[i]);
+            }
+
+            var result = new CriminalRecordsForPeriodResponseType()
+            {
+                ReportCriteria = value,
+                ReportDate = DateTime.UtcNow,
+                ReportResult = new BulletinsList
+                {
+                    Bulletin = bullArray
+                }
+            };
+
+            return result;
+        }
     }
 }
