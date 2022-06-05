@@ -138,10 +138,8 @@ export class ApplicationCertificateResultComponent
   }
 
   sendBulltinsForSelection() {
-    debugger;
-    var selectedItesm = this.bulletinsCheckGrid.selectedRows;
     this.service
-      .sendBulletinsForSelection(this.model.id, selectedItesm)
+      .sendBulletinsForSelection(this.model.id)
       .subscribe((response: any) => {
         this.model.statusCode = CertificateStatuTypeEnum.BulletinsSelection;
         this.router.navigate(["pages/application-for-check"]); 
@@ -153,7 +151,6 @@ export class ApplicationCertificateResultComponent
   }
 
   sendBulltinsForRehabilitation() {
-    debugger;
     var selectedItesm = this.bulletinsCheckGrid.selectedRows;
     this.service
       .sendBulletinsForRehabilitation(this.model.id, selectedItesm)
@@ -175,7 +172,7 @@ export class ApplicationCertificateResultComponent
       this.scrollToValidationError();
       return;
     }
-    debugger;
+
     var selectedItesm = this.bulletinsCheckGrid.selectedRows;
     let model = this.fullForm.group.value as ApplicationCertificateResultModel;
     model.selectedBulletinsIds = selectedItesm;

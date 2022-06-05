@@ -10,7 +10,8 @@ export class InternalRequestModel extends BaseModel {
   public reqStatusName: string = null;
   public bulletinVersion: number = null;
   public bulletinStatusId: number = null;
-
+  public aAppBulletinId: string = null;
+  
   constructor(init?: Partial<InternalRequestModel>) {
     super(init);
     if (init) {
@@ -23,6 +24,7 @@ export class InternalRequestModel extends BaseModel {
       this.reqStatusName = init.reqStatusName ?? null;
       this.bulletinVersion = init.bulletinVersion ?? null;
       this.bulletinStatusId = init.bulletinStatusId ?? null;
+      this.aAppBulletinId = init.aAppBulletinId ?? null;
     }
   }
 }

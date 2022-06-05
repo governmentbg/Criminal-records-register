@@ -78,7 +78,6 @@ namespace MJ_CAIS.Services
 
             var bulletin = new BBulletin
             {
-                Id = entity.BulletinId,
                 StatusId = bulletinStatus,
                 EntityState = EntityStateEnum.Modified,
                 Version = aInDto.BulletinVersion,
@@ -97,6 +96,55 @@ namespace MJ_CAIS.Services
 
             bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
             bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { statusHistory };
+
+            
+            if (string.IsNullOrEmpty(entity.AAppBulletinId))
+            {
+                bulletin.Id = entity.BulletinId;
+                await dbContext.SaveEntityAsync(bulletin, true);
+                return;
+            }
+
+            // from application form
+            var currentBull = await dbContext.AAppBulletins.AsNoTracking()
+                .Include(x => x.Certificate)
+               .FirstOrDefaultAsync(x => x.Id == entity.AAppBulletinId);
+
+            bulletin.Id = currentBull.BulletinId;
+
+            var certId = currentBull.CertificateId;
+
+            var bullIdsForCert = await dbContext.AAppBulletins.AsNoTracking()
+                .Where(x => x.CertificateId == certId && x.BulletinId != bulletin.Id)
+                .Select(x => x.Id).ToListAsync();
+
+            if (bullIdsForCert.Any())
+            {
+                var hasRequests = await dbContext.BInternalRequests.AsNoTracking()
+                    .AnyAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.New && bullIdsForCert.Contains(x.AAppBulletinId));
+
+                // change status of certificate
+                if (!hasRequests)
+                {
+                    var cert = currentBull.Certificate;
+                    cert.EntityState = EntityStateEnum.Modified;
+                    cert.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsSelection;
+                    cert.ModifiedProperties = new List<string> { nameof(cert.StatusCode), nameof(cert.Version) };
+                    dbContext.ApplyChanges(cert, new List<IBaseIdEntity>());
+
+                    var result = new AStatusH
+                    {
+                        Id = BaseEntity.GenerateNewId(),
+                        ApplicationId = cert.ApplicationId,
+                        CertificateId = certId,
+                        StatusCode = cert.StatusCode,
+                        Descr = "Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи",
+                        EntityState = EntityStateEnum.Added
+                    };
+
+                    dbContext.ApplyChanges(result, new List<IBaseIdEntity>());
+                }
+            }
 
             await dbContext.SaveEntityAsync(bulletin, true);
         }
