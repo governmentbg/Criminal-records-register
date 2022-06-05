@@ -207,7 +207,7 @@ namespace MJ_CAIS.Services
             return application.ACertificates.First().Id;
         }
         public async Task GenerateCertificateFromApplication(AApplication application, AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus, AApplicationStatus certificateWithoutBulletinStatus, int certificateValidityMonths = 6)            //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
-        {   //трябва да са попълнени следните стойности:
+        {   //С‚СЂСЏР±РІР° РґР° СЃР° РїРѕРїСЉР»РЅРµРЅРё СЃР»РµРґРЅРёС‚Рµ СЃС‚РѕР№РЅРѕСЃС‚Рё:
             //       .Include(a => a.EgnNavigation)
             //       .Include(a => a.LnchNavigation)
             //       .Include(a => a.LnNavigation)
@@ -267,7 +267,7 @@ namespace MJ_CAIS.Services
         {
             ACertificate cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths, application.CsAuthorityId, application.ApplicationType.Code);
             //todo: add resources
-            SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            SetApplicationStatus(application, aStatus, "РЎСЉР·РґР°РІР°РЅРµ РЅР° СЃРµСЂС‚РёС„РёРєР°С‚");
             //  application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
@@ -281,7 +281,7 @@ namespace MJ_CAIS.Services
             ACertificate cert = new ACertificate();
             cert.Id = BaseEntity.GenerateNewId();
             cert.ApplicationId = applicationId;
-            _certificateService.SetCertificateStatus(cert, aStatus, "Създаване на сертификат");
+            _certificateService.SetCertificateStatus(cert, aStatus, "РЎСЉР·РґР°РІР°РЅРµ РЅР° СЃРµСЂС‚РёС„РёРєР°С‚");
 
 
             if (applicationTypeCode == ApplicationConstants.ApplicationTypes.DeskCertificate)
@@ -292,9 +292,9 @@ namespace MJ_CAIS.Services
             {
                 cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(csAuthorityId);
             }
-            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebExternalCertificate)
             {
-                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWebInternal(csAuthorityId);
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWebExternal(csAuthorityId);
             }
 
             cert.AccessCode1 = Guid.NewGuid().ToString();
@@ -321,7 +321,7 @@ namespace MJ_CAIS.Services
                     };
                 }).ToList();
             //todo: add resources
-            SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            SetApplicationStatus(application, aStatus, "РЎСЉР·РґР°РІР°РЅРµ РЅР° СЃРµСЂС‚РёС„РёРєР°С‚");
 
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);

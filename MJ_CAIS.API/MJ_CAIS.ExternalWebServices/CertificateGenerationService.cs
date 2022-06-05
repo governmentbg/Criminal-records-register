@@ -154,7 +154,7 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
 
             certificate.DocId = doc.Id;
-            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate)
             {
                 //ako не е електронно -> за печат
                 _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");

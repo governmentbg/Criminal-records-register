@@ -42,7 +42,7 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             var userDTO = new UserExternalDTO
             {
                 Egn = "9201010101",
-                Name = "Пеътр Иванов Петров",
+                Name = "Петър Иванов Петров",
                 Email = "ivan.ivanov@test.bg",
                 Active = true,
                 IsAdmin = true,

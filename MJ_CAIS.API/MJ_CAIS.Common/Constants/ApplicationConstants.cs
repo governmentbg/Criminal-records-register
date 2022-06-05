@@ -58,7 +58,7 @@ namespace MJ_CAIS.Common.Constants
 //6	Заявление за Свидетелство за съдимост
 //7	Заявление за Справка за съдимост
             public const string WebCertificate = "4";
-            public const string WebInternalCertificate = "5";
+            public const string WebExternalCertificate = "5";
             public const string DeskCertificate = "6";
             public const string ConvictionRequest = "7";
         }

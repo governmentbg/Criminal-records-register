@@ -13,12 +13,19 @@ namespace MJ_CAIS.Services
 {
     public class ApplicationWebService : BaseAsyncService<PublicApplicationDTO, PublicApplicationDTO, PublicApplicationDTO, WApplication, string, CaisDbContext>, IApplicationWebService
     {
+        private readonly IUserContext _userContext;
         private readonly IApplicationWebRepository _applicationWebRepository;
+        private readonly IRegisterTypeService _registerTypeService;
 
-        public ApplicationWebService(IMapper mapper, IApplicationWebRepository applicationWebRepository)
+        public ApplicationWebService(IMapper mapper, 
+                                     IApplicationWebRepository applicationWebRepository, 
+                                     IRegisterTypeService registerTypeService,
+                                     IUserContext userContext)
             : base(mapper, applicationWebRepository)
         {
             _applicationWebRepository = applicationWebRepository;
+            _registerTypeService = registerTypeService;
+            _userContext = userContext;
         }
 
         public string GetWebApplicationTypeId()
@@ -37,6 +44,8 @@ namespace MJ_CAIS.Services
             this.TransformDataOnInsert(entity);
 
             entity.UserCitizenId = dbContext.CurrentUserId;
+            entity.ApplicationTypeId = "4";
+            entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
             await this.SaveEntityAsync(entity);
             return entity.Id;
@@ -48,6 +57,8 @@ namespace MJ_CAIS.Services
             this.TransformDataOnInsert(entity);
 
             entity.UserExtId = dbContext.CurrentUserId;
+            entity.ApplicationTypeId = "5";
+            entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
             await this.SaveEntityAsync(entity);
             return entity.Id;
@@ -65,6 +76,8 @@ namespace MJ_CAIS.Services
             SetWApplicationStatus(entity, statusNew, "Ново заявление", false);
             entity.UserId = dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
+            entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
+            entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // TODO: constant
 
             base.TransformDataOnInsert(entity);
         }

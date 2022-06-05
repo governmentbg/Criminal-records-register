@@ -16,13 +16,13 @@ namespace MJ_CAIS.Common.Constants
             //102	Заявление за ЕС
             public const string ApplicationWeb = "102";
             //103	Заявление за ЕСС
-            public const string ApplicationWebInternal = "103";
+            public const string ApplicationWebExternal = "103";
             //201	Свидетелство на гише
             public const string CertificateOnDesk = "201";
             //202	Свидетелство Електронно
             public const string CertificateWeb = "202";
             //203	Електронно служебно свидетелство
-            public const string CertificateWebInternal = "203";
+            public const string CertificateWebExternal = "203";
             //301	Бюлетин за съдимост
             public const string Bulletin = "301";
             //302	Бюлетин за 78а

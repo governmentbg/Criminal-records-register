@@ -35,6 +35,7 @@
         .AutoGenerateLayouts(false)
         .Columns(column =>
         {
+            column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
             column.For(x => x.RegistrationNumber).HeaderText("Регистрационен номер").Width("20%");
             column.For(x => x.StatusName).HeaderText("Статус").Width("20%");
             column.For(x => x.ApplicantName).HeaderText("Име").Width("25%");
