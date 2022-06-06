@@ -222,6 +222,18 @@ namespace MJ_CAIS.DataAccess
             return dependents;
         }
 
+        public static void DetachAllEntities(this DbContext dbContext)
+        {
+            var changedEntriesCopy = dbContext.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added ||
+                            e.State == EntityState.Modified ||
+                            e.State == EntityState.Deleted)
+                .ToList();
+
+            foreach (var entry in changedEntriesCopy)
+                entry.State = EntityState.Detached;
+        }
+
         private static void MarkModifiedProperies<T>(this EntityEntry<T> entityEntry) where T : class
         {
             var entity = entityEntry.Entity as BaseEntity;

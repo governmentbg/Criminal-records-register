@@ -46,6 +46,20 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
+
+        public virtual async Task<string> InsertAsync(ApplicationInDTO aInDto)
+        {
+            this.ValidateData(aInDto);
+           
+            AApplication entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, isAdded: true);
+
+            entity.CsAuthorityId = "660";
+            entity.ApplicationTypeId = "6";
+            this.TransformDataOnInsert(entity);
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
+        }
+
         public async Task UpdateAsync(string aId,ApplicationInDTO aInDto)
         {
             var applicationDb = await dbContext.AApplications.AsNoTracking()

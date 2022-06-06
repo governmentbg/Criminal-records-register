@@ -44,7 +44,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         {
             var isAsync = false;
             var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-
+            
             var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
             _dbContext.SaveEntity(webRequestEntity);
             var response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
@@ -67,7 +67,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (request.HasError != true)
             {
                 responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
-                var cache = AddOrUpdateCache(request, citizenEgn);
+                var cache = AddOrUpdateCache(request, webServiceName, citizenEgn);
                 PopulateObjects(request, cache);
             }
             
@@ -173,10 +173,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return cachedResponse;
         }
 
-        private ERegixCache AddOrUpdateCache(EWebRequest request, string egn)
+        private ERegixCache AddOrUpdateCache(EWebRequest request, string webServiceName, string egn)
         {
-            var operation = request.WebService.WebServiceName;
-            var regixCache = _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == operation);
+            var regixCache = _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == webServiceName);
             if (regixCache == null)
             {
                 regixCache = new ERegixCache()
@@ -190,7 +189,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             regixCache.RequestXml = request.RequestXml;
             regixCache.ResponseXml = request.ResponseXml;
-            regixCache.WebServiceName = operation;
+            regixCache.WebServiceName = webServiceName;
             regixCache.ExecutionDate = DateTime.Now;
 
             // TODO: based on operation, parse different objects and fill data
