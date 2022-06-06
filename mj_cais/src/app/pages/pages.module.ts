@@ -75,6 +75,7 @@ import { ApplicationStatusHistoryComponent } from './application/application-for
 import { ApplicationCertificateResultComponent } from './application/application-form/tabs/application-certificate-result/application-certificate-result.component';
 import { ApplicationBulletinsSelectionComponent } from './application/application-overview/application-bulletins-selection/application-bulletins-selection.component';
 import { ApplicationDocumentFormComponent } from './application/application-form/tabs/application-document-form/application-document-form.component';
+import { ApplicationReportFormComponent } from './application-report/application-report-form/application-report-form.component';
 
 @NgModule({
   imports: [
@@ -155,7 +156,8 @@ import { ApplicationDocumentFormComponent } from './application/application-form
     ApplicationStatusHistoryComponent,
     ApplicationCertificateResultComponent,
     ApplicationBulletinsSelectionComponent,
-    ApplicationDocumentFormComponent
+    ApplicationDocumentFormComponent,
+    ApplicationReportFormComponent
   ],
   providers: [PagesMenu, BulletinResolver],
 })

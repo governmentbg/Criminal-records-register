@@ -42,23 +42,27 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<byte[]> CreateReport(string reportID)
         {
-            var report = await dbContext.AReports                                  
-                                    .FirstOrDefaultAsync(x => x.Id == reportID);
+            var report = await dbContext.AReports
+            .FirstOrDefaultAsync(x => x.Id == reportID);
             if (report == null)
             {
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {reportID} does not exist.");
             }
             var signingCertificateName = (await dbContext.GSystemParameters
-                                    .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+            .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
             if (string.IsNullOrEmpty(signingCertificateName))
             {//todo: EH & resources
                 throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
             }
-        
-      
-            return await CreateReport(report, signingCertificateName);
 
+            var result = await CreateReport(report, signingCertificateName);
+
+
+
+            dbContext.SaveChanges();
+
+            return result;
         }
 
 
@@ -152,8 +156,8 @@ namespace MJ_CAIS.ExternalWebServices
         {
             byte[] fileArray = await _printerService.PrintReport(reportid, conviction_Report);
             //todo: кои полета да се добавят за валидиране?!
-            fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName,
-                new Dictionary<string, string>() { { "report_id", reportid } });
+            //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName,
+            //    new Dictionary<string, string>() { { "report_id", reportid } });
 
             return fileArray;
         }
