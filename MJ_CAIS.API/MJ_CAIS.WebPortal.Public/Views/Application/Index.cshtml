@@ -6,61 +6,61 @@
     ViewData["Title"] = "Заявления";
 }
 
-<partial name="_InfragisticsLoader">
+<partial name="_InfragisticsLoader" />
 
-    <div class="d-flex" style="justify-content: space-between">
-        <div class="d-flex align-items-center">
-            <h3 class="pull-left">@ViewData["Title"]</h3>
-        </div>
-        <div class="d-flex">
-            <div>
-                <a class="btn btn-primary" asp-controller="Application" asp-action="New">
-                    Ново заявление
-                </a>
-            </div>
+<div class="d-flex" style="justify-content: space-between">
+    <div class="d-flex align-items-center">
+        <h3 class="pull-left">@ViewData["Title"]</h3>
+    </div>
+    <div class="d-flex">
+        <div>
+            <a class="btn btn-primary" asp-controller="Application" asp-action="New">
+                Ново заявление
+            </a>
         </div>
     </div>
+</div>
 
-    <hr />
+<hr />
 
-    <div class="page-content scrollable-page">
-        <div class="box-content">
-            @(Html.Infragistics()
-            .Grid(Model.Applications)
-            .ID("applications")
-            .Language(ViewData["Culture"].ToString())
-            .Width("100%")
-            .PrimaryKey("Id")
-            .AutoGenerateColumns(false)
-            .AutoGenerateLayouts(false)
-            .Columns(column =>
-            {
+<div class="page-content scrollable-page">
+    <div class="box-content">
+        @(Html.Infragistics()
+        .Grid(Model.Applications)
+        .ID("applications")
+        .Language(ViewData["Culture"].ToString())
+        .Width("100%")
+        .PrimaryKey("Id")
+        .AutoGenerateColumns(false)
+        .AutoGenerateLayouts(false)
+        .Columns(column =>
+        {
+            column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
             column.For(x => x.RegistrationNumber).HeaderText("Регистрационен номер").Width("20%");
             column.For(x => x.StatusName).HeaderText("Статус").Width("20%");
             column.For(x => x.ApplicantName).HeaderText("Име").Width("25%");
             column.For(x => x.Purpose).HeaderText("Цел").Width("25%");
             column.For(x => x.CreatedOn).HeaderText("Създадено на").Width("15%");
             column.Unbound("buttons").HeaderText("").Width("8%");
-            })
-            .Features(feature =>
-            {
+        })
+        .Features(feature =>
+        {
             feature
-            .Sorting()
-            .Type(OpType.Remote);
+                .Sorting()
+                .Type(OpType.Remote);
             feature
-            .Paging()
-
-            .Type(OpType.Remote)
-            .PageSize(20)
-            .PageSizeDropDownLocation("above");
-            //.PagingHandler(OpType.Remote, pageSizeDropDownLocation: PageSizeDropDownLocation.inpager);
+                .Paging()
+                .Type(OpType.Remote)
+                .PageSize(20)
+                .PageSizeDropDownLocation("above");
+                //.PagingHandler(OpType.Remote, pageSizeDropDownLocation: PageSizeDropDownLocation.inpager);
             feature
-            .Filtering()
-            .Mode(FilterMode.Simple)
-            .Type(OpType.Remote);
-            //.SetFilterToLower();
-            })
-            .DataSourceUrl(Url.Action("GetUserApplications", "Application"))
-            .Render())
-        </div>
+                .Filtering()
+                .Mode(FilterMode.Simple)
+                .Type(OpType.Remote);
+                //.SetFilterToLower();
+        })
+        .DataSourceUrl(Url.Action("GetUserApplications", "Application"))
+        .Render())
     </div>
+</div>

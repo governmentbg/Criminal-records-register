@@ -86,13 +86,15 @@ export class BulletinFormComponent
     this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(), locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
-    if(!this.isEdit()){
-      this.fullForm.person.nationalities.selectedForeignKeys.patchValue(["CO-00-100-BGR"]);
+    if (!this.isEdit()) {
+      this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
+        "CO-00-100-BGR",
+      ]);
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
 
     this.isNoSanctionCheck = this.fullForm.noSanction.value;
-    this.initAllowedButtons(bulletinStatusId,locked);
+    this.initAllowedButtons(bulletinStatusId, locked);
 
     this.formFinishedLoading.emit();
   }
@@ -106,16 +108,18 @@ export class BulletinFormComponent
   }
 
   submitFunction = () => {
-    let offancesTransactions =
-      this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
-        true
-      );
+    if (this.bulletineOffencesForm?.offencesGrid) {
+      let offancesTransactions =
+        this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
+          true
+        );
 
-    this.fullForm.offancesTransactions.setValue(offancesTransactions);
+      this.fullForm.offancesTransactions.setValue(offancesTransactions);
+    }
 
     // if noSanction is false
     // todo: remove sanction saved in db ???
-    if (this.bulletineSanctionsForm.sanctionGrid) {
+    if (this.bulletineSanctionsForm?.sanctionGrid) {
       let sanctionsTransactions =
         this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
           true
@@ -126,13 +130,14 @@ export class BulletinFormComponent
       this.fullForm.sanctionsTransactions.setValue([]);
     }
 
-    let decisionsTransactions =
-      this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
-        true
-      );
+    if (this.bulletineDescitionForm?.decisionsGrid) {
+      let decisionsTransactions =
+        this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
+          true
+        );
 
-    this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
-
+      this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
+    }
     this.validateAndSave(this.fullForm);
   };
 
@@ -196,7 +201,8 @@ export class BulletinFormComponent
   private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
     let isGridsEditable =
       (!this.isForPreview &&
-       (bulletinStatusId == BulletinStatusTypeEnum.NewOffice || isLocked == false)) ||
+        (bulletinStatusId == BulletinStatusTypeEnum.NewOffice ||
+          isLocked == false)) ||
       this.currentAction == EActions.CREATE;
 
     this.isBulletinPersonAliasEditable = isGridsEditable;
@@ -207,7 +213,8 @@ export class BulletinFormComponent
 
     this.isDecisionEditable =
       (!this.isForPreview &&
-       ( bulletinStatusId == BulletinStatusTypeEnum.Active || isLocked == false)) ||
+        (bulletinStatusId == BulletinStatusTypeEnum.Active ||
+          isLocked == false)) ||
       bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
 
     let hideUpdateButton =

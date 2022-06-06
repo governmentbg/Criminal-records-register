@@ -16,5 +16,6 @@ namespace MJ_CAIS.DTO.IsinData
         public string? Status { get; set; }
         public string? SourceType { get; set; }
         public string? SanctionType { get; set; }
+        public string? CsAuthorityId { get; set; }
     }
 }

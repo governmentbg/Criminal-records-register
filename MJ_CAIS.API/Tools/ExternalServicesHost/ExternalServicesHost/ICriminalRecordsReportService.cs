@@ -20,5 +20,8 @@ namespace MJ_CAIS.ExternalServicesHost
         
         [OperationContract]
         Task<PersonIdentifierSearchResponseType> PersonIdentifierSearch(PersonIdentifierSearchExtendedRequestType value);
+       
+        [OperationContract]
+        Task<CriminalRecordsForPeriodResponseType> GetCriminalRecordsReportForPeriod(CriminalRecordsForPeriodRequestType request);
     }
 }

@@ -17,14 +17,12 @@ export class ApplicationDocumentForm {
     var guid = Guid.create().toString();
     var documentContentGuid = Guid.create().toString();
     this.id = new FormControl(guid, [Validators.required]);
-    this.name = new FormControl(null, [Validators.required]);
+    this.name = new FormControl(null);
     this.descr = new FormControl(null);
     this.docTypeId = new FormControl(null);
     this.docTypeName = new FormControl(null);
-    this.documentContent = new FormControl(null, [Validators.required]);
-    this.documentContentId = new FormControl(documentContentGuid, [
-      Validators.required,
-    ]);
+    this.documentContent = new FormControl(null);
+    this.documentContentId = new FormControl(documentContentGuid);
     this.mimeType = new FormControl(null);
 
     this.group = new FormGroup({

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("bulletins-administration")]
-    [Authorize(Roles = "Admin")]
+    [Authorize()]
     public class BulletinsAdministrationController : BaseApiCrudController<BulletinAdministrationDTO, BulletinAdministrationDTO, BulletinAdministrationGridDTO, BBulletin, string>
     {
         private readonly IBulletinAdministrationService _bulletinAdministrationService;

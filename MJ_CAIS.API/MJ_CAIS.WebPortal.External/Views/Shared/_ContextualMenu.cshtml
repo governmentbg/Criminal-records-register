@@ -1,0 +1,38 @@
+﻿@using MJ_CAIS.Common
+@using MJ_CAIS.WebPortal.External.Controllers
+
+@{
+    var isAuthenticated = Convert.ToBoolean(ViewData["IsAuthenticated"]);
+    var controller = ViewData["Controller"] as BaseController;
+}
+
+<style>
+    .dropdown-item.btn-logout {
+        display: inline;
+    }
+</style>
+
+@if (isAuthenticated)
+{
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+        <ul class="navbar-nav flex-grow-1">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Application" asp-action="Index">Заявления</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="navbar-collapse collapse flex-grow-0" id="navbarSupportedContent">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <form asp-controller="Account" asp-action="CookieLogOff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
+                    @*<span>@CommonResources.lblGreetingUser @controller.CurrentUserName</span>*@
+                    <span>ЕГН: @controller.CurrentEgnIdentifier</span>
+                    <a class="btn-logout" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout" class="ml-3">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </form>
+            </li>
+        </ul>
+    </div>
+}

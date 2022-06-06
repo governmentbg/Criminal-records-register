@@ -127,5 +127,13 @@ namespace MJ_CAIS.Web.Controllers
             var result = await _nomenclatureDetailService.GetDecidingAuthoritiesForBulletinsAsync();
             return Ok(result);
         }
+
+        // todo: !!! remove this, use grid with pagination
+        [HttpGet("g-users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var result = await _nomenclatureDetailService.GetGUsersAsync();
+            return Ok(result);
+        }
     }
 }

@@ -20,6 +20,14 @@ body {
 */
 }
 
+a.navbar-brand {
+    color: white;
+}
+
+    a.navbar-brand:hover {
+        color: #9dbbe0;
+    }
+
 .cais-header .btn-outline-secondary {
     margin-left: 5px;
 }

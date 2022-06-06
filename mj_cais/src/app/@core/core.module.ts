@@ -22,10 +22,6 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from "@angular/material-moment-adapter";
 import { MatInputModule } from "@angular/material/input";
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-} from "@angular-material-components/datetime-picker";
 
 import { CardHeaderComponent } from "./components/forms/card-header/card-header.component";
 import { InputComponent } from "./components/forms/inputs/input/input.component";
@@ -151,8 +147,6 @@ const COMPONENTS = [
     MatDatepickerModule,
     MatMomentDateModule,
     NbCardModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
   ],
   declarations: [...COMPONENTS, ConfirmTemplateDialogComponent],
   providers: [

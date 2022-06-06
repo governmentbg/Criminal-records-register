@@ -1,28 +1,25 @@
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.Bulletin;
+using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
-using Microsoft.AspNetCore.StaticFiles;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.DTO.ExternalServicesHost;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("bulletins")]
-    [AllowAnonymous] // TODO: remove
+    //[Authorize]
+    [AllowAnonymous]
     public class BulletinsController : BaseApiCrudController<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string>
     {
         private readonly IBulletinService _bulletinService;
-        private readonly ICriminalRecordsReportService _test;
 
-        public BulletinsController(IBulletinService bulletinService, ICriminalRecordsReportService test)
+        public BulletinsController(IBulletinService bulletinService)
             : base(bulletinService)
         {
             _bulletinService = bulletinService;
-            _test = test;
         }
 
         [HttpGet("")]

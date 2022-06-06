@@ -20,8 +20,9 @@
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
-  
-
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>За подпис</igx-grid-toolbar-title>
+  </igx-grid-toolbar>
   <igx-column
     field="id"
     header="Идентификатор"
@@ -48,6 +49,16 @@
   <igx-column
     field="purpose"
     header="Цел"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="statusName"
+    header="Статус"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -95,11 +106,11 @@
     [sortable]="true"
     [dataType]="'date'"
   >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-      {{ this.dateFormatService.displayDateTime(cell.value) }}
-    </span>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
   </igx-column>
 
   <igx-column
@@ -139,7 +150,6 @@
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
-        *ngIf="hideStatus"
         [title]="'Редактиране'"
         [routerLink]="['/pages/applications/edit', cell.rowData.id]"
       >

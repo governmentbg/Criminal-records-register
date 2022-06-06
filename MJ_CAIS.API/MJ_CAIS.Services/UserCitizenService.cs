@@ -17,7 +17,7 @@ namespace MJ_CAIS.Services
             _userCitizenRepository = userCitizenRepository;
         }
 
-        public async Task<GUsersCitizen> AuthenticatePublicUser(UserCitizenDTO userDTO)
+        public async Task<GUsersCitizen> AuthenticatePublicUserAsync(UserCitizenDTO userDTO)
         {
             var entity = await dbContext.GUsersCitizens.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Egn == userDTO.Egn);
@@ -25,6 +25,7 @@ namespace MJ_CAIS.Services
             if (entity == null)
             {
                 entity = mapper.MapToEntity<UserCitizenDTO, GUsersCitizen>(userDTO, true);
+                entity.Id = BaseEntity.GenerateNewId();
                 await dbContext.SaveEntityAsync(entity);
             }
 

@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
+import { ApplicationTypeStatusConstants } from "../application-overview/_models/application-type-status.constants";
 import { ApplicationResolverData } from "./_data/application.resolver";
 import { ApplicationService } from "./_data/application.service";
 import { ApplicationForm } from "./_models/application.form";
@@ -25,6 +26,9 @@ export class ApplicationFormComponent
   implements OnInit
 {
   public PersonContextEnum = PersonContextEnum;
+  public applicationStatus: string;
+  public ApplicationTypeStatusConstants = ApplicationTypeStatusConstants;
+  private isFinalEdit: boolean;
 
   constructor(
     service: ApplicationService,
@@ -34,12 +38,26 @@ export class ApplicationFormComponent
   ) {
     super(service, injector);
     this.backUrl = "pages/applications";
-    this.setDisplayTitle("Свидетелство");
+    this.setDisplayTitle("свидетелство");
   }
 
   ngOnInit(): void {
     this.fullForm = new ApplicationForm();
     this.fullForm.group.patchValue(this.dbData.element);
+    if (!this.isEdit()) {
+      this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
+        "CO-00-100-BGR",
+      ]);
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
+    }
+
+    this.applicationStatus = this.fullForm.statusCode.value;
+    if (
+      this.fullForm.statusCode.value ==
+      ApplicationTypeStatusConstants.ApprovedApplication
+    ) {
+      this.fullForm.group.disable();
+    }
     this.formFinishedLoading.emit();
   }
 
@@ -52,20 +70,26 @@ export class ApplicationFormComponent
   }
 
   submitFunction = () => {
+    debugger;
     // this.fullForm.applicationTypeId.setValue('6'); //Взима се от контекста
     // this.fullForm.csAuthorityId.setValue('562');  //Взима се от контекста
+    this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
 
-  public finalEdit(){
+  public finalEdit() {
+    debugger;
+    this.isFinalEdit = true;
     this.validateAndSave(this.fullForm);
   }
+
   protected saveAndNavigate() {
-    
     let model = this.formObject;
     let submitAction: Observable<ApplicationModel>;
-    if (this.isEdit()) {
+    if (this.isFinalEdit) {
       submitAction = this.service.updateFinal(this.formObject.id, model);
+    } else if (this.isEdit()) {
+      submitAction = this.service.update(this.formObject.id, model);
     } else {
       submitAction = this.service.save(model);
     }
@@ -107,5 +131,4 @@ export class ApplicationFormComponent
       },
     });
   }
-
 }

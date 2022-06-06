@@ -1,0 +1,41 @@
+﻿@using Infragistics.Web.Mvc
+
+@{
+    string culture = ViewData["Culture"] as string;
+
+    if (culture == null) { culture = "bg"; }
+    var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+}
+
+@(Html.Infragistics().Loader()
+        .ScriptPath(Url.Content("~/js"))
+        .CssPath(Url.Content("~/css"))
+        .Locale(culture)
+        .Regional(culture)
+        .Theme("bootstrap4/default")
+        .Render())
+
+<script asp-append-version="true">
+    var igVersion = "@version";
+
+     // Overriding loader function
+    $.ig._loadWorkItem.prototype._loadFeatureItem = function (widgetName, type, loadingEntity, parentWidget) {
+        var scriptData = this._loader._findWidgetScriptData(widgetName, parentWidget), i, res, len, item;
+        if (!scriptData) {
+            throw "Resource '{0}' cannot be found. Please check that the resource name is correct.".replace("{0}", widgetName)
+        }
+        res = type === "script" ? scriptData.scripts : scriptData.css;
+        res = res || [];
+
+        // !!!Important
+        // append a version to static files path
+        res = $(res).map(function (i, obj) { return obj + "?v=" + igVersion; }).toArray();
+
+        len = res.length;
+        this._loadDependency(scriptData, loadingEntity, type);
+        for (i = 0; i < len; i++) {
+            item = res[i];
+            this._queueItem(item, loadingEntity, type, scriptData.priority)
+        }
+    };
+</script>

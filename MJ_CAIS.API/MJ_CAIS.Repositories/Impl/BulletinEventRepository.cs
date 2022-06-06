@@ -10,8 +10,12 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class BulletinEventRepository : BaseAsyncRepository<BBulEvent, CaisDbContext>, IBulletinEventRepository
     {
-        public BulletinEventRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public BulletinEventRepository(CaisDbContext dbContext, IUserContext userContext) 
+            : base(dbContext)
         {
+            _userContext = userContext;
         }
 
         public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId, string? bulletinId)
@@ -30,7 +34,7 @@ namespace MJ_CAIS.Repositories.Impl
 
                         where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) && 
                         (string.IsNullOrEmpty(bulletinId) || bullEvents.BulletinId == bulletinId) &&
-                        eventType.GroupCode == groupCode
+                        eventType.GroupCode == groupCode //&& bulletin.CsAuthorityId == _userContext.CsAuthorityId
                         select new BulletinEventGridDTO
                         {
                             Id = bullEvents.Id,

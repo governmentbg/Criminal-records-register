@@ -39,6 +39,7 @@ namespace MJ_CAIS.ExternalWebServices
         {
             return false;
         }
+
         public async Task<byte[]> CreateCertificate(string certificateID)
         {
             var certificate = await dbContext.ACertificates
@@ -72,9 +73,23 @@ namespace MJ_CAIS.ExternalWebServices
             var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
             var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
             //todo:get patterns for mail if needed:
-            return await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery, statusCertificateDelivered,statusCertificatePaperprint,  await GetWebPortalAddress());
+            var content = await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery, statusCertificateDelivered,statusCertificatePaperprint,  await GetWebPortalAddress());
 
+            await dbContext.SaveChangesAsync();
+            return content;
         }
+
+        public async Task<byte[]> GetCertificateContentAsync(string certificateID)
+        {
+            var content = await dbContext.ACertificates
+                                    .Include(c => c.Doc)
+                                    .ThenInclude(d=>d.DocContent)                                  
+                                    .Where(x => x.Id == certificateID)
+                                    .Select(x=>x.Doc.DocContent.Content)
+                                    .FirstOrDefaultAsync();
+            return content;
+        }
+
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName,  AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
             //string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
@@ -152,7 +167,7 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
 
             certificate.DocId = doc.Id;
-            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate)
             {
                 //ako не е електронно -> за печат
                 _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
@@ -246,8 +261,8 @@ namespace MJ_CAIS.ExternalWebServices
         {
             byte[] fileArray = await _printerService.PrintCertificate(certificateID,checkUrl,reportName);
             //todo: кои полета да се добавят за валидиране?!
-            fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
-                new Dictionary<string, string>() { { "certificate_id", certificateID} });
+            //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
+            //    new Dictionary<string, string>() { { "certificate_id", certificateID} });
 
             return fileArray;
 

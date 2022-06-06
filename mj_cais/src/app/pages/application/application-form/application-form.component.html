@@ -4,21 +4,24 @@
       [label]="displayTitle"
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
+      [setForPreview]="
+        applicationStatus == ApplicationTypeStatusConstants.ApprovedApplication
+      "
     >
-    <div>
-      <button
-        *ngIf="!isForPreview"
-        nbButton
-        matRipple
-        [status]="'success'"
-        (click)="finalEdit()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px"
-      >
-        Окончателна редакция
-      </button>
-    </div>
+      <div>
+        <button
+          *ngIf="!isForPreview && isEdit() && applicationStatus == 'NewId'"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="finalEdit()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Актуализирай
+        </button>
+      </div>
     </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
@@ -106,159 +109,12 @@
             [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
             [personAliasGridData]="dbData.personAlias"
             [contextType]="PersonContextEnum.Application"
+            [isEditable]="
+              fullForm.statusCode.value !=
+              ApplicationTypeStatusConstants.ApprovedApplication
+            "
           >
           </cais-person-form>
-          <!-- <div
-            class="ml-4 mr-4"
-            style="border: 1px solid #e5e5e5; padding: 30px; border-radius: 5px"
-          >
-            <div class="row">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'ЕГН'"
-                  [inputFormControl]="fullForm.egn"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'ЛНЧ'"
-                  [inputFormControl]="fullForm.lnch"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'ЛН'"
-                  [inputFormControl]="fullForm.ln"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Име на кирилица'"
-                  [inputFormControl]="fullForm.firstname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Презиме на кирилица'"
-                  [inputFormControl]="fullForm.surname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Фамилия на кирилица'"
-                  [inputFormControl]="fullForm.familyname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Име на латиница'"
-                  [inputFormControl]="fullForm.firstnameLat"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Презиме на латиница'"
-                  [inputFormControl]="fullForm.surnameLat"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Фамилия на латиница'"
-                  [inputFormControl]="fullForm.familynameLat"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'date'"
-                  [label]="'Дата на раждане'"
-                  [inputFormControl]="fullForm.birthDate"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-            <div class="font-weight-bold">Място на раждане</div>
-            <hr />
-            <cais-address-form
-              [parentForm]="fullForm.birthAddress"
-            ></cais-address-form>
-
-            <div class="row">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Майка - име'"
-                  [inputFormControl]="fullForm.motherFirstname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Майка - презиме'"
-                  [inputFormControl]="fullForm.motherSurname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Майка - фамилия'"
-                  [inputFormControl]="fullForm.motherFamilyname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Баща - име'"
-                  [inputFormControl]="fullForm.fatherFirstname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Баща - презиме'"
-                  [inputFormControl]="fullForm.fatherSurname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-              <div class="form-group col-md-3">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Баща - фамилия'"
-                  [inputFormControl]="fullForm.fatherFamilyname"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </div>
-          </div> -->
           <div class="font-weight-bold">Плащане</div>
           <hr />
           <div class="row">
@@ -348,24 +204,36 @@
               ></cais-input>
             </div>
           </div>
-          <cais-fbbc-document-form
+          <cais-application-document-form
             #applicationDocuments
-            [fbbcForm]="fullForm"
+            [appForm]="fullForm"
             [showAddDeleteButton]="
-              (isEdit() && !isForPreview) || (!isEdit() && isForPreview)
+              (fullForm.statusCode.value !=
+                ApplicationTypeStatusConstants.ApprovedApplication &&
+                isEdit() && !isForPreview) ||
+              (!isEdit() && isForPreview)
             "
             [documents]="dbData.documents"
             [dbData]="dbData"
           >
-          </cais-fbbc-document-form>
+          </cais-application-document-form>
         </nb-tab>
-        <nb-tab tabTitle="Свидетелство"></nb-tab>
+
+        <nb-tab tabTitle="Свидетелство">
+          <cais-application-certificate-result
+            [model]="dbData.certificate"
+            [users]="dbData.users"
+          >
+          </cais-application-certificate-result>
+        </nb-tab>
+
         <nb-tab tabTitle="История на статусите">
           <cais-application-status-history
             [historyData]="dbData.applicationStatusHistoryData"
           >
           </cais-application-status-history>
         </nb-tab>
+
         <nb-tab tabTitle="Проверка в регистри"></nb-tab>
       </nb-tabset>
     </form>

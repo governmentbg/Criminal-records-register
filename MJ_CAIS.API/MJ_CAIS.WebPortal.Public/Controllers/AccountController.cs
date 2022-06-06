@@ -48,7 +48,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = await _userCitizenService.AuthenticatePublicUser(userDTO);
+                var user = await _userCitizenService.AuthenticatePublicUserAsync(userDTO);
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

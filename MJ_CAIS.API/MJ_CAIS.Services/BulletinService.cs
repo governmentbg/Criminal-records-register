@@ -71,6 +71,10 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
+            var dbContext = _bulletinRepository.GetDbContext();
+            var authId = _userContext.CsAuthorityId ?? "660"; // todo: remove
+            var auth = await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
+            result.CsAuthorityName = auth?.Name;
             var person = await _personService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
@@ -88,7 +92,8 @@ namespace MJ_CAIS.Services
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
 
-            var authId = !string.IsNullOrEmpty(bulletin?.CsAuthorityId) ? bulletin?.CsAuthorityId : "660"; // todo remove: only for testing
+            var authId = _userContext.CsAuthorityId ?? "660"; // todo remove: only for testing
+            bulletin.CsAuthorityId = authId;
             var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletin.BulletinType);
             bulletin.RegistrationNumber = regNumber;
 
@@ -296,21 +301,21 @@ namespace MJ_CAIS.Services
             };
 
             // add an event when a user from another authority attaches a document
-            //var bulletinAuthId = await _bulletinRepository.GetBulletinAuthIdAsync(bulletinId);
-            //var currentUserAuth = _userContext.CsAuthorityId;
-            //if (bulletinAuthId != currentUserAuth)
-            //{
-            //    var bullEvent = new BBulEvent
-            //    {
-            //        BulletinId = bulletinId,
-            //        Id = BaseEntity.GenerateNewId(),
-            //        StatusCode = EventStatusType.New,
-            //        EventType = EventType.NewDocument,
-            //        EntityState = EntityStateEnum.Added
-            //    };
+            var bulletinAuthId = await _bulletinRepository.GetBulletinAuthIdAsync(bulletinId);
+            var currentUserAuth = _userContext.CsAuthorityId;
+            if (bulletinAuthId != currentUserAuth)
+            {
+                var bullEvent = new BBulEvent
+                {
+                    BulletinId = bulletinId,
+                    Id = BaseEntity.GenerateNewId(),
+                    StatusCode = "New",
+                    EventType = "NewDocument",
+                    EntityState = EntityStateEnum.Added
+                };
 
-            //    dbContext.Add(bullEvent);
-            //}
+                dbContext.Add(bullEvent);
+            }
 
             dbContext.Add(document);
             dbContext.Add(documentContent);
@@ -622,7 +627,7 @@ namespace MJ_CAIS.Services
 
             if (skipEcris) return;
 
-            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id);
+            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id).Where(x => x != "CO-00-100-BGR"); //todo:
             var isEuCitizen = await dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));
 
             if (isEuCitizen)

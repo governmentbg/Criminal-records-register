@@ -14,5 +14,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDFAsync(CriminalRecordsExtendedRequestType value);
 
         Task<PersonIdentifierSearchResponseType> PersonIdentifierSearchAsync(PersonIdentifierSearchExtendedRequestType value);
+        Task<CriminalRecordsForPeriodResponseType> GetCriminalRecordsReportForPeriodAsync(CriminalRecordsForPeriodRequestType value);
+
     }
 }

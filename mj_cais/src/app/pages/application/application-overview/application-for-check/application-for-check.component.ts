@@ -22,7 +22,7 @@ export class ApplicationForCheckComponent extends RemoteGridWithStatePersistance
     public dateFormatService: DateFormatService
   ) {
     super("application-for-check-search", service, injector);
-    this.service.updateUrlStatus(ApplicationTypeStatusConstants.BulletinsCheck);
+    this.service.updateUrlStatusForCert(ApplicationTypeStatusConstants.BulletinsCheck);
   }
 
   ngOnInit(): void {

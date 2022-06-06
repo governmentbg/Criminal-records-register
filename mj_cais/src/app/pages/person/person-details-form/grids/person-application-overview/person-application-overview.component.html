@@ -24,7 +24,8 @@
           nbButton
           matRipple
           [status]="'success'"
-          [routerLink]="['/pages/bulletins/create']"
+          [routerLink]="['/pages/applications/create']"
+          [queryParams]="{ personId: personId }"
         >
           <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добавяне
         </a>
@@ -56,7 +57,7 @@
   </igx-column>
 
   <igx-column
-    field="firstName"
+    field="firstname"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -67,7 +68,7 @@
   </igx-column>
 
   <igx-column
-    field="surName"
+    field="surname"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
@@ -78,7 +79,7 @@
   </igx-column>
 
   <igx-column
-    field="familyName"
+    field="familyname"
     header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"
@@ -95,14 +96,14 @@
     [filterable]="false"
     [pinned]="true"
   >
-    <!-- <ng-template igxCell let-cell="cell">
+    <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+        [routerLink]="['/pages/applications/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-    </ng-template> -->
+    </ng-template>
   </igx-column>
 
   <ng-template #pager let-grid>

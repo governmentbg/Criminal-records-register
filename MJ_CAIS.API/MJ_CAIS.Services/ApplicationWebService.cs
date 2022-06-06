@@ -1,7 +1,9 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application.External;
 using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -11,38 +13,71 @@ namespace MJ_CAIS.Services
 {
     public class ApplicationWebService : BaseAsyncService<PublicApplicationDTO, PublicApplicationDTO, PublicApplicationDTO, WApplication, string, CaisDbContext>, IApplicationWebService
     {
+        private readonly IUserContext _userContext;
         private readonly IApplicationWebRepository _applicationWebRepository;
+        private readonly IRegisterTypeService _registerTypeService;
 
-        public ApplicationWebService(IMapper mapper, IApplicationWebRepository applicationWebRepository)
+        public ApplicationWebService(IMapper mapper, 
+                                     IApplicationWebRepository applicationWebRepository, 
+                                     IRegisterTypeService registerTypeService,
+                                     IUserContext userContext)
             : base(mapper, applicationWebRepository)
         {
             _applicationWebRepository = applicationWebRepository;
+            _registerTypeService = registerTypeService;
+            _userContext = userContext;
         }
 
         public string GetWebApplicationTypeId()
         {
             // TODO: use code, and filter by code!
-            const string name = "«‡ˇ‚ÎÂÌËÂ Á‡ ÂÎÂÍÚÓÌÌÓ Ò‚Ë‰ÂÚÂÎÒÚ‚Ó Á‡ Ò˙‰ËÏÓÒÚ";
+            const string name = "–ó–∞—è–≤–ª–µ–Ω–∏–µ –∑–∞ –µ–ª–µ–∫—Ç—Ä–æ–Ω–Ω–æ —Å–≤–∏–¥–µ—Ç–µ–ª—Å—Ç–≤–æ –∑–∞ —Å—ä–¥–∏–º–æ—Å—Ç";
             var result = dbContext.AApplicationTypes.AsNoTracking()
                 .FirstOrDefault(x => x.Name == name);
 
             return result.Id;
         }
 
+        public async Task<string> InsertPublicAsync(PublicApplicationDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
+            this.TransformDataOnInsert(entity);
+
+            entity.UserCitizenId = dbContext.CurrentUserId;
+            entity.ApplicationTypeId = "4";
+            entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
+
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
+        }
+
+        public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
+        {
+            var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
+            this.TransformDataOnInsert(entity);
+
+            entity.UserExtId = dbContext.CurrentUserId;
+            entity.ApplicationTypeId = "5";
+            entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
+
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
+        }
+
         protected override void TransformDataOnInsert(WApplication entity)
         {
             entity.ApplicationTypeId = GetWebApplicationTypeId();
-           var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
+            var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
             if (statusNew == null)
             {
                 //todo: resources & EH
                 throw new Exception($"Status {ApplicationWebStatuses.NewWebApplication} does not exist.");
             }
-            SetWApplicationStatus(entity, statusNew, "ÕÓ‚Ó Á‡ˇ‚ÎÂÌËÂ", false);
-            //entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
-            entity.UserId = dbContext.CurrentUserId; // Should be nullable ???
-            entity.UserCitizenId = dbContext.CurrentUserId;
+            SetWApplicationStatus(entity, statusNew, "–ù–æ–≤–æ –∑–∞—è–≤–ª–µ–Ω–∏–µ", false);
+            entity.UserId = dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
+            entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
+            entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // TODO: constant
 
             base.TransformDataOnInsert(entity);
         }
@@ -71,13 +106,37 @@ namespace MJ_CAIS.Services
             return result;
         }
 
+        public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
+        {
+            var result =
+                from app in dbContext.WApplications.AsNoTracking()
+
+                join status in dbContext.WApplicationStatuses.AsNoTracking()
+                    on app.StatusCode equals status.Code
+
+                where app.UserExtId == userId
+                select new ExternalApplicationGridDTO
+                {
+                    Id = app.Id,
+                    RegistrationNumber = app.RegistrationNumber,
+                    ApplicantName = app.ApplicantName,
+                    Purpose = app.Purpose,
+                    PurposeId = app.PurposeId,
+                    StatusCode = app.StatusCode,
+                    StatusName = status.Name,
+                    CreatedOn = app.CreatedOn,
+                };
+
+            return result;
+        }
+
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
         }
 
-        public  void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
+        public void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
             wapplication.StatusCodeNavigation = newStatus;
@@ -100,9 +159,6 @@ namespace MJ_CAIS.Services
                 dbContext.WStatusHes.Add(wStatusH);
                 dbContext.WApplications.Update(wapplication);
             }
-
-
-
         }
 
     }

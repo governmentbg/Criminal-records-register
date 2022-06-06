@@ -19,10 +19,10 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <form asp-controller="Conviction" asp-action="ViewByCode" method="post" autocomplete="off">
+                    <form asp-controller="Conviction" asp-action="ViewByCode" method="get" target="_blank" autocomplete="off">
                         <div class="row mb-3 mt-3" style="align-items: center;">
-                            <label for="Code" class="col-md-3">Код за достъп:</label>
-                            <input asp-for="Code" class="form-control" style="max-width: 300px; display: inline-block;" />
+                            <label for="Id" class="col-md-3">Код за достъп:</label>
+                            <input asp-for="Id" class="form-control" style="max-width: 300px; display: inline-block;" />
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary">Проверка</button>
                             </div>

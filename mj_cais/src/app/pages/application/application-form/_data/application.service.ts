@@ -24,12 +24,18 @@ export class ApplicationService extends CaisCrudService<
     );
   }
 
+  public getWithPersonData(personId: string): Observable<ApplicationModel> {
+    return this.http.get<ApplicationModel>(
+      `${this.url}/create?personId=${personId}`
+    );
+  }
+
   public saveDocument(
-    fbbcId: string,
+    appId: string,
     model: ApplicationDocumentModel
   ): Observable<any> {
     return this.http.post<ApplicationDocumentModel>(
-      `${this.url}/${fbbcId}/documents`,
+      `${this.url}/${appId}/documents`,
       model
     );
   }
@@ -43,7 +49,7 @@ export class ApplicationService extends CaisCrudService<
   }
 
   public updateFinal(id: string, t: ApplicationModel): Observable<ApplicationModel> {
-    return this.http.put<ApplicationModel>(this.url + '/finalEdit', t, {});
+    return this.http.put<ApplicationModel>(this.url + `/final-edit/${id}`, t, {});
   }
 
   public downloadDocument(applicationId: string, documentId: string) {

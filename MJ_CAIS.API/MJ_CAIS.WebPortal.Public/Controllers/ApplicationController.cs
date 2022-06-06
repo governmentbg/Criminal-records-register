@@ -5,14 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.AutoMapperContainer;
-using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 using MJ_CAIS.WebSetup.Utils;
-using Microsoft.AspNetCore.Builder;
-using static MJ_CAIS.Common.Constants.ApplicationConstants;
-using MJ_CAIS.DTO.Application.Public;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
 {
@@ -65,7 +61,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.ClientIp = _requestUtils.GetClientIpAddress(HttpContext);
 
             var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
-            await _applicationWebService.InsertAsync(itemToUpdate);
+            await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
             return RedirectToAction(nameof(Index));
         }

@@ -57,6 +57,13 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
+        public async Task<IQueryable<GUser>> GetGUsersAsync()
+        {
+            var query = _dbContext.GUsers.AsNoTracking();
+
+            return await Task.FromResult(query);
+        }
+
         public IQueryable<GCountry> GetCountries()
         {
             return _dbContext.GCountries.AsNoTracking()

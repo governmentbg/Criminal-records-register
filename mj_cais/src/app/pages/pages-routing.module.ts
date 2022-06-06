@@ -58,6 +58,9 @@ import { BulletinAdministrationOverviewComponent } from "./bulletin-administrati
 import { EcrisTcnOverviewComponent } from "./ecris-tcn/ecris-tcn-overview/ecris-tcn-overview.component";
 import { BulletinAdministrationFormComponent } from "./bulletin-administrations/bulletin-administration-form/bulletin-administration-form.component";
 import { ApplicationRequestComponent } from "./application/application-request/application-request.component";
+import { ApplicationForSiningByJudgeComponent } from "./application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component";
+import { ApplicationForSigningComponent } from "./application/application-overview/application-for-signing/application-for-signing.component";
+import { ApplicationBulletinsSelectionComponent } from "./application/application-overview/application-bulletins-selection/application-bulletins-selection.component";
 
 const routes: Routes = [
   {
@@ -113,6 +116,21 @@ const routes: Routes = [
       {
         path: "application-for-check",
         component: ApplicationForCheckComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-for-signing",
+        component: ApplicationForSigningComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-for-signing-by-judge",
+        component: ApplicationForSiningByJudgeComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "application-bulletin-selection",
+        component: ApplicationBulletinsSelectionComponent,
         // canActivate: [AuthGuard],
       },
       {

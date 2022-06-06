@@ -61,6 +61,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Бюро съдимост.
+        /// </summary>
+        public static string lblCsAuthorityId {
+            get {
+                return ResourceManager.GetString("lblCsAuthorityId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ЕГН.
         /// </summary>
         public static string lblEgn {

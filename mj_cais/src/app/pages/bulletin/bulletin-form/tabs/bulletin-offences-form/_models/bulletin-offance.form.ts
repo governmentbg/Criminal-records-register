@@ -28,7 +28,7 @@ export class BulletinOffenceForm extends BaseForm {
     this.ecrisOffCatId = new FormControl(null, [Validators.maxLength(50)]);
     this.ecrisOffCatName = new FormControl(null);
     this.legalProvisions = new FormControl(null);
-    this.offStartDate = new FormControl(null, [Validators.required]);
+    this.offStartDate = new FormControl(null);
     this.offEndDate = new FormControl(null, [Validators.required]); // тодо: крайна дата, ако е период
     this.offPlace = new AddressForm();
     //this.testDate = new DatePrecisionModelForm(false,false);

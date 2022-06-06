@@ -6,7 +6,8 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
-using MJ_CAIS.ExternalWebServices.DbServices;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -15,18 +16,35 @@ namespace MJ_CAIS.Web.Controllers
     public class ApplicationsController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
-        private readonly ISearchByIdentifierService _searchByIdentifierService;
+        private readonly IUserContext _userContext;
 
-        public ApplicationsController(IApplicationService applicationService, ISearchByIdentifierService searchByIdentifierService) : base(applicationService)
+        public ApplicationsController(IApplicationService applicationService, IUserContext userContext)
+            : base(applicationService)
         {
             _applicationService = applicationService;
-            _searchByIdentifierService = searchByIdentifierService;
+            _userContext = userContext;
         }
 
         [HttpGet("")]
         public virtual async Task<IActionResult> GetAll(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._applicationService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
+            return Ok(result);
+        }
+
+        [HttpGet("create")]
+        public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
+        {
+            var result = await this._applicationService.SelectWithPersonDataAsync(personId);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("certificates")]
+        public virtual async Task<IActionResult> GetAllByCertificateStatus(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
+        {
+            var result = await this._applicationService.SelectAllCertWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
         }
 
@@ -44,22 +62,29 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        public  virtual async Task<IActionResult> Post([FromBody] ApplicationInDTO aInDto)
+        public virtual async Task<IActionResult> Post([FromBody] ApplicationInDTO aInDto)
         {
+            // ����:
+            // ������ � ��������� �� ������������, � �� �������
+            // ��� ��������� �� ������� ������ �� � ���� ����
+            // �� ��������� �� �� ������� ���� ����� ����� �� ���� InsertAsync
+            aInDto.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // todo
+            aInDto.StatusCode = ApplicationConstants.ApplicationStatuses.NewId;
+            aInDto.ApplicationTypeId = "6";
             return await base.Post(aInDto);
         }
 
-        [HttpPut("finalEdit")]
+        [HttpPut("final-edit/{aId}")]
         public virtual async Task<IActionResult> FinalEdit(string aId, [FromBody] ApplicationInDTO aInDto)
         {
-            await this._applicationService.UpdateAsync(aId, aInDto);
+            await this._applicationService.UpdateAsync(aInDto, true);
             return Ok();
         }
 
         [HttpPut("{aId}")]
         public virtual async Task<IActionResult> Put(string aId, [FromBody] ApplicationInDTO aInDto)
         {
-            await this._applicationService.UpdateAsync(aId, aInDto);
+            await this._applicationService.UpdateAsync(aInDto, false);
             return Ok();
         }
 
@@ -120,7 +145,6 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._applicationService.SelectApplicationCertificateByApplicationIdAsync(aId);
             return Ok(result);
         }
-
 
         private string getContentType(string fileName)
         {

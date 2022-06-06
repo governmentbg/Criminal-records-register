@@ -98,17 +98,17 @@
 
           <button
             mat-menu-item
-            [routerLink]="['/pages/']"
+            [routerLink]="['/pages/applications/create']"
             [queryParams]="{ personId: cell.rowData.id }"
           >
             <span class="ml-1">Свидетелство</span>
           </button>
-          <!-- <button
+           <button
             mat-menu-item
             [routerLink]="['/pages/people/remind', cell.rowData.id]"
           >
             <span class="ml-1">Напомнителен запис</span>
-          </button> -->
+          </button> 
         </mat-menu>
       </ng-container>
       <ng-container *ngIf="isRemindPersonForm">

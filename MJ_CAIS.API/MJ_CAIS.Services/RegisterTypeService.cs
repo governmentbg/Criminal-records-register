@@ -48,34 +48,32 @@ namespace MJ_CAIS.Services
         public async Task<string> GetRegisterNumberForApplicationOnDesk(string authorityID)
         {
             return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.ApplicationOnDesk);
-
         }
 
         public async Task<string> GetRegisterNumberForApplicationWeb(string authorityID)
         {
             return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.ApplicationWeb);
-
         }
-        public async Task<string> GetRegisterNumberForApplicationWebInternal(string authorityID)
-        {
-            return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.ApplicationWebInternal);
 
+        public async Task<string> GetRegisterNumberForApplicationWebExternal(string authorityID)
+        {
+            return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.ApplicationWebExternal);
         }
 
         public async Task<string> GetRegisterNumberForCertificateOnDesk(string authorityID)
         {
             return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.CertificateOnDesk);
-
         }
+
         public async Task<string> GetRegisterNumberForCertificateWeb(string authorityID)
         {
             return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.CertificateWeb);
 
         }
-        public async Task<string> GetRegisterNumberForCertificateWebInternal(string authorityID)
-        {
-            return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.CertificateWebInternal);
 
+        public async Task<string> GetRegisterNumberForCertificateWebExternal(string authorityID)
+        {
+            return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.CertificateWebExternal);
         }
 
         public async Task<string> GetRegisterNumberForBulletin(string authorityID)

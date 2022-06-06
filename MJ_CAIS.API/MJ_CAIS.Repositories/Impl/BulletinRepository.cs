@@ -9,15 +9,24 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class BulletinRepository : BaseAsyncRepository<BBulletin, CaisDbContext>, IBulletinRepository
     {
-        public BulletinRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public BulletinRepository(CaisDbContext dbContext, IUserContext userContext)
+            : base(dbContext)
         {
+            this._userContext = userContext;
         }
 
         public override IQueryable<BBulletin> SelectAllAsync()
         {
-            return this._dbContext.BBulletins.AsNoTracking()
+            var query = this._dbContext.BBulletins
                                 .Include(x => x.Status)
-                                .Include(x => x.BulletinAuthority);
+                                .Include(x => x.BulletinAuthority)
+                                .AsNoTracking();
+
+           // query = _userContext.FilterByAuthority(query);
+
+            return query;
         }
 
         public override async Task<BBulletin> SelectAsync(string aId)
@@ -216,7 +225,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task SaveBulletinsAsync(List<BBulletin> bulletins)
         {
             _dbContext.BBulletins.AddRange(bulletins);
-           await  _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Dictionary<string, string>> GetAuthIdByEkkateAsync(List<string> ekatteCodes)
@@ -227,6 +236,37 @@ namespace MJ_CAIS.Repositories.Impl
                 .ToDictionaryAsync(x => x.Key, x => x.Value);
 
             return result;
+        }
+
+        public async Task<IQueryable<BBulletin>> GetBulletinsForPeriodAsync(DateTime dateFrom, DateTime dateTo)
+        {
+            var result = _dbContext.BBulletins.AsNoTracking()
+                    .Include(x => x.PBulletinIds)
+                    .Include(x => x.BirthCity)
+                    .Include(x => x.BirthCountry)
+                    .Include(x => x.DecidingAuth)
+                    .Include(x => x.DecisionType)
+                    .Include(x => x.CaseType)
+                    .Include(x => x.CaseAuth)
+
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffenceCat)
+                    .Include(x => x.BOffences).ThenInclude(x => x.EcrisOffCat)
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffPlaceCountry)
+                    .Include(x => x.BOffences).ThenInclude(x => x.OffPlaceCity)
+
+                    .Include(x => x.BSanctions).ThenInclude(x => x.SanctCategory)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.EcrisSanctCateg)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.BProbations).ThenInclude(x => x.SanctProbCateg)
+                    .Include(x => x.BSanctions).ThenInclude(x => x.BProbations).ThenInclude(x => x.SanctProbMeasure)
+
+                    .Include(x => x.BDecisions).ThenInclude(x => x.DecisionAuth)
+                    .Include(x => x.BulletinAuthority)
+                    .Include(x => x.CsAuthority)
+                    .Include(x => x.BPersNationalities)
+                        .ThenInclude(x => x.Country)
+                    .Where(x => x.CreatedOn >= dateFrom && x.CreatedOn <= dateTo);
+
+            return await Task.FromResult(result);
         }
     }
 }

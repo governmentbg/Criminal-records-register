@@ -12,7 +12,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MJ_CAIS.WebPortal.Public.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />
@@ -20,18 +20,22 @@
     <script src="~/lib/modernizr/modernizr.min.js" asp-append-version="true"></script>
     <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
 
-    <partial name="_InfragisticsLoader">
+    <partial name="_InfragisticsLoader" />
 </head>
 <body>
     <header>
         <div class="container-fluid">
+            @* TODO: fix with flex *@
+            <h4 style="float: right;padding-top: 20px;padding-right: 20px;">
+                Публичен портал
+            </h4>
             <div class="cais-headerbar">
                 <div class="cais-logo-wrapper">
                     <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                         <img src="@Url.Content("~/images/logo.png")" class="cais-logo" />
                     </a>
                 </div>
-                <div class="pull-right cais-header-text">
+                <div class="cais-header-text">
                     <div class="row main-header">
                         Република България
                     </div>
@@ -42,7 +46,7 @@
             </div>
             <div class="cais-navbar">
                 <nav class="navbar navbar-expand-lg">
-                    <h1>ЦАИС "Съдебен статус"</h1>
+                    <h1><a class="navbar-brand" asp-controller="Home" asp-action="Index">ЦАИС "Съдебен статус"</a></h1>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon cais-nav-icon">
@@ -50,7 +54,7 @@
                         </span>
                     </button>
 
-                    @Html.Partial("_ContextualMenu")
+                    <partial name="_ContextualMenu" />
                 </nav>
             </div>
         </div>
@@ -69,7 +73,7 @@
                 <div class="col-sm-2 cais-footer-link">
                     <div class="row">
                         <a class="navbar-brand" asp-controller="Home" asp-action="Info">
-                            Информация за услуа "Издаване на електронно свидетелство за съдимост"
+                            Информация за услуга "Издаване на електронно свидетелство за съдимост"
                         </a>
                         <a class="navbar-brand" asp-controller="Home" asp-action="GeneralCondition">
                             Общи условия

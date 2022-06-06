@@ -24,7 +24,9 @@ export class NomenclatureService extends CaisCrudService<
       return of(this.cachedCountries);
     }
 
-    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/countries-ordered`);
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/countries-ordered`
+    );
   }
 
   public saveCountries(countries: BaseNomenclatureModel[]) {
@@ -117,7 +119,9 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
-  public getDecidingAuthoritiesForBulletins(): Observable<BaseNomenclatureModel[]> {
+  public getDecidingAuthoritiesForBulletins(): Observable<
+    BaseNomenclatureModel[]
+  > {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/deciding-authorities`
     );
@@ -223,5 +227,10 @@ export class NomenclatureService extends CaisCrudService<
 
   public getPidTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/pid-types`);
+  }
+
+  // todo: !!! remove this, use grid with pagination
+  public getUsers(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g-users`);
   }
 }
