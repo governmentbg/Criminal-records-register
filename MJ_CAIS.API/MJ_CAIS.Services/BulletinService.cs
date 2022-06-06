@@ -301,21 +301,21 @@ namespace MJ_CAIS.Services
             };
 
             // add an event when a user from another authority attaches a document
-            //var bulletinAuthId = await _bulletinRepository.GetBulletinAuthIdAsync(bulletinId);
-            //var currentUserAuth = _userContext.CsAuthorityId;
-            //if (bulletinAuthId != currentUserAuth)
-            //{
-            //    var bullEvent = new BBulEvent
-            //    {
-            //        BulletinId = bulletinId,
-            //        Id = BaseEntity.GenerateNewId(),
-            //        StatusCode = EventStatusType.New,
-            //        EventType = EventType.NewDocument,
-            //        EntityState = EntityStateEnum.Added
-            //    };
+            var bulletinAuthId = await _bulletinRepository.GetBulletinAuthIdAsync(bulletinId);
+            var currentUserAuth = _userContext.CsAuthorityId;
+            if (bulletinAuthId != currentUserAuth)
+            {
+                var bullEvent = new BBulEvent
+                {
+                    BulletinId = bulletinId,
+                    Id = BaseEntity.GenerateNewId(),
+                    StatusCode = "New",
+                    EventType = "NewDocument",
+                    EntityState = EntityStateEnum.Added
+                };
 
-            //    dbContext.Add(bullEvent);
-            //}
+                dbContext.Add(bullEvent);
+            }
 
             dbContext.Add(document);
             dbContext.Add(documentContent);
