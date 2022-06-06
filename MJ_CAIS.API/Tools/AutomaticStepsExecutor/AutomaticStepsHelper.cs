@@ -24,9 +24,9 @@ namespace AutomaticStepsExecutor
             {
                 regNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(wapplication.CsAuthorityId);
             }
-            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebInternalCertificate)
+            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate)
             {
-                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebInternal(wapplication.CsAuthorityId);
+                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebExternal(wapplication.CsAuthorityId);
             }
             AApplication appl = new AApplication()
             {

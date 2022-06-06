@@ -303,8 +303,9 @@ namespace MJ_CAIS.ExternalWebServices
                     throw new Exception("Web portal URL is not set.");
                 }
             }
-
-            return new Uri(new Uri(new Uri(url), CertificateConstants.UrlsInPublicSites.GET_CERTIFICATE_URL), accessCode1).ToString();
+            var urlReturn = new Uri(new Uri(url), CertificateConstants.UrlsInPublicSites.GET_CERTIFICATE_URL).ToString();
+            urlReturn = urlReturn + "?Id=" + accessCode1;
+            return urlReturn;
 
         }
         public async Task<string?> GetWebPortalAddress()

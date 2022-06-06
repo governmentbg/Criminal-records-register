@@ -57,7 +57,7 @@ namespace AutomaticStepsExecutor
 
                 using (host)
                 {
-                    //PrintDocumentService s = (PrintDocumentService)host.Services.GetService<IPrintDocumentService>();
+                    CertificateGenerationService s = (CertificateGenerationService)host.Services.GetService<ICertificateGenerationService>();
                     //var fileArray = await s.PrintApplication("aaaa-bbbb-cccc");
                     //var _pdfSigner = host.Services.GetService<IPdfSigner>();
                     //fileArray = _pdfSigner.SignPdf(fileArray, "cais.mjs.bg", new Dictionary<string, string>()
@@ -67,8 +67,9 @@ namespace AutomaticStepsExecutor
                     // IRegisterTypeService s = (RegisterTypeService)host.Services.GetService<IRegisterTypeService>();
                     //var regNum = await  s.GetRegisterNumberForApplicationWeb("532");
                     //ICertificateService s = (ICertificateService)host.Services.GetService<ICertificateService>();
-                    //var cert =  await s.GetCertificateDocumentContent("8936d0c7-9b34-4e56-9d6a-587104fd313e");
-                    //System.IO.File.WriteAllBytes("cert8936d0c7-9b34-4e56-9d6a-587104fd313e.pdf", cert.Content);
+                    //var cert = await s.GetCertificateDocumentContent("e818612c-8262-4fb5-af49-c38c586ab830");
+                    //var cert = await s.CreateCertificate("e818612c-8262-4fb5-af49-c38c586ab830");
+                    //System.IO.File.WriteAllBytes("cert_e818612c-8262-4fb5-af49-c38c586ab830.pdf", cert);
 
                     IAutomaticStepService service = (IAutomaticStepService)host.Services.GetService(typeofExecutor);
 
