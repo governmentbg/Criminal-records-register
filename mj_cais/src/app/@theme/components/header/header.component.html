@@ -5,7 +5,10 @@
     </a>
     <a class="logo" href="#" (click)="navigateHome()"
       ><h1 style="font-size: 20px; font-weight: 600">
-        ЦАИС Съдебен статус
+        <img src="assets/images/logo.png" id="cais-logo" />
+        <span style="padding-left: 5px; margin-left: 5px"
+          >ЦАИС Съдебен статус</span
+        >
       </h1>
     </a>
   </div>
@@ -22,12 +25,7 @@
 
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="control-item">
-      <nb-search type="rotate-layout"></nb-search>
-    </nb-action>
-    <nb-action class="control-item" icon="email-outline"></nb-action>
-    <nb-action class="control-item" icon="bell-outline"></nb-action>
-    <nb-action class="user-action" >
+    <nb-action class="user-action">
       <nb-user
         [nbContextMenu]="userMenu"
         [onlyPicture]="userPictureOnly"
