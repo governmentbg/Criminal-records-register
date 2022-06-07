@@ -1,40 +1,46 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
 using System.Text.Json;
 
-namespace MJ_CAIS.PersonValidator
+namespace MJ_CAIS.ExternalWebServices
 {
     public class PersonValidatorClient
     {
-        private static string Host;
-        private static string ApiEndpoint;
-
-        private readonly HttpClient _httpClient;
-
-        public static PersonValidatorClient CreateClient(IConfiguration config)
+        // Singleton, HttpClient specific for person validation
+        private static HttpClient _httpClient;
+        private static HttpClient GetHttpClient(IConfiguration config)
         {
-            Host = config.GetValue<string>("PersonValidator:WebServiceUrl");
-            ApiEndpoint = config.GetValue<string>("PersonValidator:PersonApiEndpoint");
-
-            var httpClient = new HttpClient()
+            if (_httpClient == null)
             {
-                BaseAddress = new Uri(Host)
-            };
+                _httpClient = new HttpClient()
+                {
+                    BaseAddress = new Uri(Host)
+                };
 
-            ConfigureHttpClient(httpClient, Host);
+                ConfigureHttpClient(_httpClient, Host);
+            }
 
-            return new PersonValidatorClient(httpClient);
+            return _httpClient;
         }
 
-        private PersonValidatorClient(HttpClient httpClient)
+        public static string Host;
+        public static string ApiEndpoint;
+
+        private readonly IConfiguration _configuration;
+
+        public PersonValidatorClient(IConfiguration config)
         {
-            _httpClient = httpClient;
+            _configuration = config;
+            Host = config.GetValue<string>("PersonValidator:WebServiceUrl");
+            ApiEndpoint = config.GetValue<string>("PersonValidator:PersonApiEndpoint");
         }
 
         public async Task<PersonInfoResponse> GetPersonInfo(PersonInfoRequest request)
         {
+            var httpClient = GetHttpClient(_configuration);
             var postData = new FormUrlEncodedContent(request.GetKeyValuePairs());
 
-            var data = await this._httpClient.PostAsync(ApiEndpoint, postData);
+            var data = await httpClient.PostAsync(ApiEndpoint, postData);
             if (!data.IsSuccessStatusCode)
             {
                 var errorContent = await data.Content.ReadAsStringAsync();

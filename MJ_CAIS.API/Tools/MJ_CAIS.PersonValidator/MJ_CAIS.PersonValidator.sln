@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.PersonValidatorConsole", "MJ_CAIS.PersonValidatorConsole\MJ_CAIS.PersonValidatorConsole.csproj", "{FA34E3D6-CE96-43D5-8A3D-81319E861391}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices", "..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj", "{8C172277-3588-46DC-9056-628E572E9CAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FA34E3D6-CE96-43D5-8A3D-81319E861391}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA34E3D6-CE96-43D5-8A3D-81319E861391}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA34E3D6-CE96-43D5-8A3D-81319E861391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C172277-3588-46DC-9056-628E572E9CAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C172277-3588-46DC-9056-628E572E9CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C172277-3588-46DC-9056-628E572E9CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C172277-3588-46DC-9056-628E572E9CAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

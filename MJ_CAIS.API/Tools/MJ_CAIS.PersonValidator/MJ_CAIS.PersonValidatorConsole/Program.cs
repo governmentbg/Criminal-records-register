@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MJ_CAIS.ExternalWebServices;
+using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
 
 namespace MJ_CAIS.PersonValidator
 {
@@ -10,7 +12,7 @@ namespace MJ_CAIS.PersonValidator
         {
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             IHost host = Host.CreateDefaultBuilder()
-                .ConfigureServices(services => services.AddSingleton(PersonValidatorClient.CreateClient(config)))
+                .ConfigureServices(services => services.AddScoped<PersonValidatorClient>())
                 .Build();
 
             using (host)
@@ -22,7 +24,7 @@ namespace MJ_CAIS.PersonValidator
                     year = "2001",
                     month = "1",
                     day = "1",
-                    gender = GenderType.male.ToString(),
+                    gender = PersonInfoGenderType.male.ToString(),
                     fname = "tsanko",
                     sname = "tsankov",
                     lname = "cankov",
@@ -37,6 +39,7 @@ namespace MJ_CAIS.PersonValidator
                 catch (Exception ex)
                 {
                     // TODO: log error
+                    throw;
                 }
             }
         }
