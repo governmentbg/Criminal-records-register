@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace MJ_CAIS.PersonValidator
 {
@@ -7,12 +9,14 @@ namespace MJ_CAIS.PersonValidator
         public static async Task Main(string[] args)
         {
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            IHost host = Host.CreateDefaultBuilder()
+                .ConfigureServices(services => services.AddSingleton(PersonValidatorClient.CreateClient(config)))
+                .Build();
 
-            var webServiceUrl = config.GetValue<string>("WebServiceUrl");
-            var client = PersonValidatorClientFactory.Create(webServiceUrl);
-
-            try
+            using (host)
             {
+                var client = host.Services.GetService<PersonValidatorClient>();
+
                 var searchCriteria = new PersonInfoRequest
                 {
                     year = "2001",
@@ -25,13 +29,15 @@ namespace MJ_CAIS.PersonValidator
                     threshold = "0.6",
                 };
 
-                var personInfo = await client.GetPersonInfo(searchCriteria);
-                Console.WriteLine(personInfo.personData.Length);
-            }
-            catch (Exception ex)
-            {
-                // TODO: Log error
-                throw;
+                try
+                {
+                    var personInfo = await client.GetPersonInfo(searchCriteria);
+                    Console.WriteLine(personInfo.personData.Length);
+                }
+                catch (Exception ex)
+                {
+                    // TODO: log error
+                }
             }
         }
     }
