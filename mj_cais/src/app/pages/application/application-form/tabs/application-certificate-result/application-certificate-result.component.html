@@ -198,7 +198,7 @@
           <a
             style="color: black; margin-right: 30px"
             [title]="'Преглед'"
-            [routerLink]="['/pages/bulletins/preview/', cell.rowData.id]"
+            [routerLink]="['/pages/bulletins/preview/', cell.rowData.bulletinId]"
           >
             <nb-icon pack="fa" icon="eye"></nb-icon>
           </a>
@@ -206,7 +206,7 @@
             *ngIf="model.currentUserAuthId == cell.rowData.bulletinAuthorityId"
             style="color: black"
             [title]="'Редактиране'"
-            [routerLink]="['/pages/bulletins/edit/', cell.rowData.id]"
+            [routerLink]="['/pages/bulletins/edit/', cell.rowData.bulletinId]"
           >
             <nb-icon pack="fa" icon="pen"></nb-icon>
           </a>
@@ -295,7 +295,7 @@
           <a
             style="color: black; margin-right: 30px"
             [title]="'Преглед'"
-            [routerLink]="['/pages/bulletins/preview/', cell.rowData.id]"
+            [routerLink]="['/pages/bulletins/preview/', cell.rowData.bulletinId]"
           >
             <nb-icon pack="fa" icon="eye"></nb-icon>
           </a>
@@ -303,7 +303,7 @@
             *ngIf="model.currentUserAuthId == cell.rowData.bulletinAuthorityId"
             style="color: black"
             [title]="'Редактиране'"
-            [routerLink]="['/pages/bulletins/edit/', cell.rowData.id]"
+            [routerLink]="['/pages/bulletins/edit/', cell.rowData.bulletinId]"
           >
             <nb-icon pack="fa" icon="pen"></nb-icon>
           </a>

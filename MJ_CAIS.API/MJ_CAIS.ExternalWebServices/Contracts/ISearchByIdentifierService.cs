@@ -1,7 +1,12 @@
-﻿namespace MJ_CAIS.ExternalWebServices.DbServices
+﻿using MJ_CAIS.DataAccess.Entities;
+using TechnoLogica.RegiX.GraoNBDAdapter;
+
+namespace MJ_CAIS.ExternalWebServices.DbServices
 {
     public interface ISearchByIdentifierService
     {
-         void SearchByIdentifier(string id);
+        Task<(string, EWebRequest)> SearchByIdentifier(string id);
+
+        Task<(string, EWebRequest)> SearchByIdentifierLNCH(string id);
     }
 }

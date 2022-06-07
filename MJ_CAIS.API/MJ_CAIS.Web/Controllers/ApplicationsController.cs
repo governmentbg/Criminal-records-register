@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.ExternalWebServices.DbServices;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -17,12 +18,14 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly IApplicationService _applicationService;
         private readonly IUserContext _userContext;
+        private readonly ISearchByIdentifierService _searchByIdentifierService;
 
-        public ApplicationsController(IApplicationService applicationService, IUserContext userContext)
+        public ApplicationsController(IApplicationService applicationService, IUserContext userContext, ISearchByIdentifierService searchByIdentifierService)
             : base(applicationService)
         {
             _applicationService = applicationService;
             _userContext = userContext;
+            _searchByIdentifierService = searchByIdentifierService;
         }
 
         [HttpGet("")]
@@ -57,8 +60,23 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("searchByIdentifier/{aId}")]
         public virtual async Task<IActionResult> SearchByIdentifier(string aId)
         {
-            this._searchByIdentifierService.SearchByIdentifier(aId);
-            return await base.Get(aId);
+            var result =  await this._searchByIdentifierService.SearchByIdentifier(aId);
+            if (result.Item2.HasError == true)
+            {
+
+            }
+            return Ok(new {id =result.Item1});
+        }
+
+        [HttpGet("searchByIdentifierLNCH/{aId}")]
+        public virtual async Task<IActionResult> searchByIdentifierLNCH(string aId)
+        {
+            var result = await this._searchByIdentifierService.SearchByIdentifierLNCH(aId);
+            if (result.Item2.HasError == true)
+            {
+
+            }
+            return Ok(new { id = result.Item1 });
         }
 
         [HttpPost("")]

@@ -87,6 +87,9 @@ namespace MJ_CAIS.Services
         public override async Task<string> InsertAsync(ApplicationInDTO aInDto)
         {
             var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, true);
+            entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; //TODO: For test purposes (remove later)
+            entity.ApplicationTypeId = "6";//TODO: For test purposes (remove later)
+            this.TransformDataOnInsert(entity);
             await UpdateTransactionsAsync(aInDto, entity);
             await dbContext.SaveEntityAsync(entity, true);
             return entity.Id;
