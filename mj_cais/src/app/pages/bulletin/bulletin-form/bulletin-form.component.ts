@@ -209,7 +209,7 @@ export class BulletinFormComponent
     this.isOffancesEditable = isGridsEditable;
     this.isSanctionsEditable = isGridsEditable;
 
-    this.isDocumentsEditable = !this.isForPreview && this.isEdit();
+    this.isDocumentsEditable = this.isEdit();
 
     this.isDecisionEditable =
       (!this.isForPreview &&

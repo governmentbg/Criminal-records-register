@@ -99,12 +99,12 @@ namespace MJ_CAIS.Services
         }
         public async Task<string> GetRegisterNumberForBulletin(string authorityID, string bulletinType)
         {
-            if (bulletinType == nameof(BulletinConstants.Type.Bulletin78A))
+            if (bulletinType == BulletinConstants.Type.Bulletin78A)
             {
                 return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.Bulletin78a);
             }
 
-            if (bulletinType == nameof(BulletinConstants.Type.ConvictionBulletin))
+            if (bulletinType == BulletinConstants.Type.ConvictionBulletin)
             {
                 return await GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.Bulletin);
             }

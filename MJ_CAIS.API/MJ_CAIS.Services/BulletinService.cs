@@ -582,12 +582,12 @@ namespace MJ_CAIS.Services
         /// <param name="bulletin"></param>
         private void UpdateDataForDestruction(BBulletin bulletin)
         {
-            if (bulletin.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) && bulletin.BirthDate.HasValue)
+            if (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin && bulletin.BirthDate.HasValue)
             {
                 bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);
                 UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
             }
-            else if (bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) && bulletin.DecisionFinalDate.HasValue)
+            else if (bulletin.BulletinType == BulletinConstants.Type.Bulletin78A && bulletin.DecisionFinalDate.HasValue)
             {
                 bulletin.DeleteDate = bulletin.DecisionFinalDate.Value.AddYears(15);
                 UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
