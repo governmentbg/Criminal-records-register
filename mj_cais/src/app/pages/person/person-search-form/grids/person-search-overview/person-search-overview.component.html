@@ -103,12 +103,19 @@
           >
             <span class="ml-1">Свидетелство</span>
           </button>
-           <button
+          <button
+            mat-menu-item
+            [routerLink]="['/pages/reports/create']"
+            [queryParams]="{ personId: cell.rowData.id }"
+          >
+            <span class="ml-1">Справка за съдимост</span>
+          </button>
+          <button
             mat-menu-item
             [routerLink]="['/pages/people/remind', cell.rowData.id]"
           >
-            <span class="ml-1">Напомнителен запис</span>
-          </button> 
+            <span class="ml-1">Напомнителен бюлетин</span>
+          </button>
         </mat-menu>
       </ng-container>
       <ng-container *ngIf="isRemindPersonForm">

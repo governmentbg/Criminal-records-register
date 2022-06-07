@@ -94,7 +94,7 @@ export class PagesMenu {
         ],
       },
       {
-        title: "За решение от съдия",
+        title: "За решение от съдия/юрист",
         icon: "message-circle-outline",
         children: [
           {
@@ -106,7 +106,7 @@ export class PagesMenu {
           //   link: "/pages/application-tax-free",
           // },
           {
-            title: "За подпис от съдия",
+            title: "За подпис от съдия/юрист",
             link: "/pages/application-for-signing-by-judge",
           },
           {

@@ -61,6 +61,9 @@ import { ApplicationRequestComponent } from "./application/application-request/a
 import { ApplicationForSiningByJudgeComponent } from "./application/application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component";
 import { ApplicationForSigningComponent } from "./application/application-overview/application-for-signing/application-for-signing.component";
 import { ApplicationBulletinsSelectionComponent } from "./application/application-overview/application-bulletins-selection/application-bulletins-selection.component";
+import { ApplicationReportModel } from "./application-report/application-report-form/_models/application-report.model";
+import { ApplicationReportFormComponent } from "./application-report/application-report-form/application-report-form.component";
+import { ApplicationReportResolver, ApplicationReportResolverData } from "./application-report/application-report-form/_data/application-report.resolver";
 
 const routes: Routes = [
   {
@@ -87,6 +90,19 @@ const routes: Routes = [
         path: "applications/create",
         component: ApplicationFormComponent,
         resolve: { dbData: ApplicationResolver },
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "reports/create",
+        component: ApplicationReportFormComponent,
+        resolve: { dbData: ApplicationReportResolver},
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: "reports/edit/:ID",
+        component: ApplicationReportFormComponent,
+        resolve: { dbData: ApplicationReportResolver },
+        data: { edit: true },
         // canActivate: [AuthGuard],
       },
       {

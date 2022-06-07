@@ -138,11 +138,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     application.Lnch = cache.Lnch;
                     application.BirthDate = cache.BirthDate;
                     application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " "+ cache.BirthCityName + " " +cache.BirthPlace;
-                    var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == (cache.BirthCountryCode == null ? null : cache.BirthCountryCode.ToUpper()));
-                    if (country != null)
+                    if (!string.IsNullOrEmpty(cache.BirthCountryCode))
                     {
-                        application.BirthCountry = country;
-                        application.BirthCountryId = country.Id;
+                        var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
+                        if (country != null)
+                        {
+                            application.BirthCountry = country;
+                            application.BirthCountryId = country.Id;
+                        }
                     }
                     _dbContext.AApplications.Update(application);
                     //( cache.BirthCountryCode == null ? null :  cache.BirthCountryCode.ToUpper())
@@ -163,11 +166,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     wapplication.Lnch = cache.Lnch;
                     wapplication.BirthDate = cache.BirthDate;
                     wapplication.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " + cache.BirthCityName + " " + cache.BirthPlace;
-                    var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == (cache.BirthCountryCode == null ? null : cache.BirthCountryCode.ToUpper()));
-                    if (country != null)
+                    if (!string.IsNullOrEmpty(cache.BirthCountryCode))
                     {
-                        wapplication.BirthCountry = country;
-                        wapplication.BirthCountryId = country.Id;
+                        var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
+                        if (country != null)
+                        {
+                            wapplication.BirthCountry = country;
+                            wapplication.BirthCountryId = country.Id;
+                        }
                     }
                     _dbContext.WApplications.Update(wapplication);
 

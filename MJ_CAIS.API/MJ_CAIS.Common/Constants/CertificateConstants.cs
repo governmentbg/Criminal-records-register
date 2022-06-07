@@ -12,7 +12,7 @@ namespace MJ_CAIS.Common.Constants
         {
             //todo:fill data
            // public static string VIEW_CERTIFICATE_URL = "cartificates";
-            public static string GET_CERTIFICATE_URL = "certificates";
+            public static string GET_CERTIFICATE_URL = "Conviction/ViewByCode";
         }
         public static class UrlsInJasper
         {

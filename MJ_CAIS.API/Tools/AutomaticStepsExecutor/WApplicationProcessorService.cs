@@ -75,10 +75,10 @@ namespace AutomaticStepsExecutor
             if (entities.Count > 0)
             {
 
-                var internalApplicationType = await _dbContext.AApplicationTypes.FirstOrDefaultAsync(x => x.Code == ApplicationConstants.ApplicationTypes.WebInternalCertificate);
+                var internalApplicationType = await _dbContext.AApplicationTypes.FirstOrDefaultAsync(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
                 if (internalApplicationType == null)
                 {
-                    throw new Exception($"Code \"{ApplicationConstants.ApplicationTypes.WebInternalCertificate}\" for internal applications is not set.");
+                    throw new Exception($"Code \"{ApplicationConstants.ApplicationTypes.WebExternalCertificate}\" for internal applications is not set.");
 
                 }
 
