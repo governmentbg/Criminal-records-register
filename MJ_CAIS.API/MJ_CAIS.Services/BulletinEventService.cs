@@ -192,9 +192,9 @@ namespace MJ_CAIS.Services
 
         private static void CheckForArticle3000(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
         {
-            var mustAddEvent = currentBulletin.BulletinType == nameof(Common.Constants.BulletinConstants.Type.Bulletin78A)  &&
+            var mustAddEvent = currentBulletin.BulletinType ==BulletinConstants.Type.Bulletin78A  &&
                 bulletins.Any(x => x.Id != currentBulletin.Id &&
-                (x.BulletinType == nameof(Common.Constants.BulletinConstants.Type.Bulletin78A) || x.CaseType == CaseType.NOXD));
+                (x.BulletinType == BulletinConstants.Type.Bulletin78A || x.CaseType == CaseType.NOXD));
 
             if (!mustAddEvent) return;
 

@@ -12,8 +12,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public CriminalRecordsReportProfile()
         {
             CreateMap<BBulletin, BulletinType>()
-               .ForMember(d => d.Type, opt => opt.MapFrom(src => src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinTypesType.Bulletin78A :
-                    src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinTypesType.ConvictionBulletin : BulletinTypesType.Unspecified))
+               .ForMember(d => d.Type, opt => opt.MapFrom(src => src.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinTypesType.Bulletin78A :
+                    src.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinTypesType.ConvictionBulletin : BulletinTypesType.Unspecified))
                .ForPath(d => d.Person.NamesBg.FirstName, opt => opt.MapFrom(src => src.Firstname))
                .ForPath(d => d.Person.NamesBg.SurName, opt => opt.MapFrom(src => src.Surname))
                .ForPath(d => d.Person.NamesBg.FamilyName, opt => opt.MapFrom(src => src.Familyname))

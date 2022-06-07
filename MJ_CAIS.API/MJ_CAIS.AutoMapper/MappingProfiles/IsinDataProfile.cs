@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.DTO.IsinData;
@@ -22,10 +23,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.DecisionAuthName, opt => opt.MapFrom(src => src.DecidingAuth.Name))
                 .ForMember(d => d.BirthPlace, opt => opt.MapFrom(src => src.BirthCountry.Name + ", " + src.BirthCity.Name))
                 .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
-                            src.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ?
-                            BulletinConstants.Type.Bulletin78A :
-                                        src.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
-                                        BulletinConstants.Type.Unspecified));
+                            src.BulletinType == BulletinConstants.Type.Bulletin78A ?
+                            BulletinResources.Bulletin78A :
+                                        src.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                        BulletinResources.Unspecified));
 
             CreateMap<FineData, EIsinDatum>()
                 .ForMember(d => d.IdentifierType, opt => opt.MapFrom(src => src.PersonData.IdentifierType.ToString()))

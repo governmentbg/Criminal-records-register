@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Person;
@@ -63,9 +64,9 @@ namespace MJ_CAIS.Repositories.Impl
                          {
                              Id = bulletin.Id,
                              AlphabeticalIndex = bulletin.AlphabeticalIndex,
-                             BulletinType = bulletin.BulletinType == nameof(BulletinConstants.Type.Bulletin78A) ? BulletinConstants.Type.Bulletin78A :
-                                                        bulletin.BulletinType == nameof(BulletinConstants.Type.ConvictionBulletin) ? BulletinConstants.Type.ConvictionBulletin :
-                                                             BulletinConstants.Type.Unspecified,
+                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                        bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                             BulletinResources.Unspecified,
                              BulletinAuthorityName = bulletinAuth.Name,
                              CreatedOn = bulletinAuth.CreatedOn,
                              FamilyName = bulletin.Familyname,
