@@ -126,6 +126,9 @@
   <data name="lblEmail" xml:space="preserve">
     <value>Електронна поща</value>
   </data>
+  <data name="lblPaymentMethodId" xml:space="preserve">
+    <value>Начин на плащане</value>
+  </data>
   <data name="lblPurpose" xml:space="preserve">
     <value>Описание на целта</value>
   </data>

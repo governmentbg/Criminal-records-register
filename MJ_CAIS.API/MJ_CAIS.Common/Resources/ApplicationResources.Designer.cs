@@ -88,6 +88,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Начин на плащане.
+        /// </summary>
+        public static string lblPaymentMethodId {
+            get {
+                return ResourceManager.GetString("lblPaymentMethodId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Описание на целта.
         /// </summary>
         public static string lblPurpose {

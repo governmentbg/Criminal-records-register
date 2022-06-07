@@ -135,6 +135,14 @@ namespace MJ_CAIS.Services
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
+        public IQueryable<BaseNomenclatureDTO> GetWebPaymentMethods()
+        {
+            return _nomenclatureDetailRepository
+                .GetAllAPaymentMethods()
+                .Where(x => x.IsForWeb == true)
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
         public IQueryable<BaseNomenclatureDTO> GetSrvcResRcptMethods()
         {
             return _nomenclatureDetailRepository

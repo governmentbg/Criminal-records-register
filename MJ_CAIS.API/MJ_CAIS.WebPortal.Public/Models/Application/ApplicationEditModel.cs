@@ -10,6 +10,7 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         public ApplicationEditModel()
         {
             this.PurposeTypes = new List<SelectListItem>();
+            this.PaymentMethodTypes = new List<SelectListItem>();
         }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblEgn))]
@@ -30,8 +31,13 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblPurpose))]
         public string? Purpose { get; set; }
 
+        [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblPaymentMethodId))]
+        [Required(ErrorMessageResourceType = typeof(CommonResources), ErrorMessageResourceName = nameof(CommonResources.MsgRequired))]
+        public string? PaymentMethodId { get; set; }
+
         public string? ClientIp { get; set; }
 
         public List<SelectListItem> PurposeTypes { get; set; }
+        public List<SelectListItem> PaymentMethodTypes { get; set; }
     }
 }

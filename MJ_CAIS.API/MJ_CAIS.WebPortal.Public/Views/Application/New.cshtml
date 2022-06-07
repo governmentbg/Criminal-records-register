@@ -25,40 +25,65 @@
         </div>
 
         <hr />
-        <div class="row">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group mt-2">
-                <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mt-2">
                     <label asp-for="Egn" class="control-label"></label>
                     <input asp-for="Egn" class="form-control" disabled="disabled" />
                     <span asp-validation-for="Egn" class="text-danger"></span>
                 </div>
-            </div>
 
-            <div class="form-group mt-2">
-                <div class="col-md-4">
+                <div class="form-group mt-2">
                     <label asp-for="Email" class="control-label"></label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-            </div>
 
-            <div class="form-group mt-2">
-                <div class="col-md-4">
+                <div class="form-group mt-2">
                     <label asp-for="PurposeId" class="control-label"></label>
                     @Html.TLDropDownListFor(model => model.PurposeId, Model.PurposeTypes, required: true)
                     <span asp-validation-for="PurposeId" class="text-danger"></span>
                 </div>
-            </div>
 
-            <div class="form-group mt-2">
-                <div class="col-md-4">
+                <div class="form-group mt-2">
                     <label asp-for="Purpose" class="control-label"></label>
                     <textarea asp-for="Purpose" type="text" class="form-control" rows="5"></textarea>
                 </div>
             </div>
-            
+
+            <div class="col-md-8">
+                <div class="row">
+                    @*TODO:*@
+                    <div class="form-group mt-2">
+                        <label>Получаване</label>
+                        <br />
+                        <input type="checkbox" disabled="disabled" class="form-check-input" checked />
+                        От този портал
+                        <br />
+                        <input type="checkbox" class="form-check-input" />
+                        Чрез ССЕВ - Система за сигурно електронно връчване
+                    </div>
+
+                    <div class="form-group mt-2 col-md-6">
+                        <label asp-for="PaymentMethodId" class="control-label"></label>
+                        @Html.TLDropDownListFor(model => model.PaymentMethodId, Model.PaymentMethodTypes, required: true)
+                        <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="form-group mt-2">
+                    За да се обработи заявката, е необходимо в 14-дневен срок да заплатите държавна такса за издаване на 
+                    свидетелство за съдимост в размер на 3.00 лв.
+                </div>
+
+                <div>
+                    При избор на "Освободено от плащане" трябва да прикачите документ удостоверяващ това право.
+                </div>
+            </div>
+
         </div>
     </div>
 </form>
