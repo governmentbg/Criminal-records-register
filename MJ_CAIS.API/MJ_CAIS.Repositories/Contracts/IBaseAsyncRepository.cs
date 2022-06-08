@@ -7,7 +7,7 @@ namespace MJ_CAIS.Repositories.Contracts
         where TEntity : class, IBaseIdEntity
         where TContext : DbContext
     {
-        IQueryable<TEntity> SelectAllAsync();
+        IQueryable<TEntity> SelectAll();
 
         Task<TEntity> SelectAsync(TPk id);
 

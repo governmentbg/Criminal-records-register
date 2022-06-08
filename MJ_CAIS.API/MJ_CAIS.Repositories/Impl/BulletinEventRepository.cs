@@ -48,6 +48,7 @@ namespace MJ_CAIS.Repositories.Impl
                             Description = bullEvents.Description,
                             Identifier = bulletin.Egn + " / " + bulletin.Lnch + " / " + bulletin.Ln,
                             PersonName = bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname,
+                            Version = bulletin.Version
                         };
 
             return await Task.FromResult(query);
@@ -92,11 +93,11 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
-        public async Task<string> GetPersonIdByBulletinIdAsync(string bulleintId)
+        public async Task<string> GetPersonIdByBulletinIdAsync(string bulletinId)
         {
             var result = await _dbContext.PBulletinIds.AsNoTracking()
                         .Include(x => x.Person)
-                        .FirstOrDefaultAsync(x => x.BulletinId == bulleintId);
+                        .FirstOrDefaultAsync(x => x.BulletinId == bulletinId);
 
             return result?.Person?.PersonId;
         }

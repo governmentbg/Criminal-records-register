@@ -12,12 +12,14 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.DTO;
 
 namespace MJ_CAIS.Services
 {
     public abstract class BaseAsyncService<TInDTO, TOutDTO, TGridDTO, TEntity, TPk, TContext> : IBaseAsyncService<TInDTO, TOutDTO, TGridDTO, TEntity, TPk>
-        where TInDTO : class
-        where TOutDTO : class
+        where TInDTO : BaseDTO
+        where TOutDTO : BaseDTO
+        where TGridDTO : BaseGridDTO
         where TEntity : class, IBaseIdEntity
         where TContext : DbContext
     {
@@ -152,7 +154,7 @@ namespace MJ_CAIS.Services
 
         protected virtual IQueryable<TEntity> GetSelectAllQueriable()
         {
-            return this.baseAsyncRepository.SelectAllAsync();
+            return this.baseAsyncRepository.SelectAll();
         }
 
         /// <summary>

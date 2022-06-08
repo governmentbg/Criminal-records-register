@@ -11,7 +11,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public override IQueryable<BBulletin> SelectAllAsync()
+        public override IQueryable<BBulletin> SelectAll()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
                 .Where(x => x.Locked == true);

@@ -11,11 +11,13 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public override IQueryable<BInternalRequest> SelectAllAsync()
+        public override IQueryable<BInternalRequest> SelectAll()
         {
-            return this._dbContext.BInternalRequests.AsNoTracking()
+            var query = this._dbContext.BInternalRequests.AsNoTracking()
                 .Include(x => x.Bulletin)
                 .Include(x => x.ReqStatusCodeNavigation);
+
+            return query;
         }
 
         public override async Task<BInternalRequest> SelectAsync(string id)

@@ -1,9 +1,8 @@
 namespace MJ_CAIS.DTO.EcrisTcn
 {
-    public class EcrisTcnGridDTO : BaseDTO
+    public class EcrisTcnGridDTO : BaseGridDTO
     {
         public string? Action { get; set; }
-        public DateTime? CreatedOn { get; set; }
         public string? RegistrationNumber { get; set; }
         public string? Status { get; set; }
         public string? Identifier { get; set; }

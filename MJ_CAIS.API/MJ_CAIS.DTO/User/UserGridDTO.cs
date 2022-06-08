@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.User
 {
-    public class UserGridDTO : BaseDTO
+    public class UserGridDTO : BaseGridDTO
     {
         public string? Firstname { get; set; }
         public string? Surname { get; set; }

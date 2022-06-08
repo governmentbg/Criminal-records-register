@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.BulletinAdministration
 {
-    public class BulletinAdministrationGridDTO : BaseDTO
+    public class BulletinAdministrationGridDTO : BaseGridDTO
     {
         public string? RegistrationNumber { get; set; }
         public string? BulletinType { get; set; }
@@ -9,7 +9,6 @@ namespace MJ_CAIS.DTO.BulletinAdministration
         public string? FamilyName { get; set; }
         public string? StatusId { get; set; }
         public string? StatusName { get; set; }
-        public DateTime? CreatedOn { get; set; }
         public string? AlphabeticalIndex { get; set; }
         public string? BulletinAuthorityName { get; set; }
         public string? Ln { get; set; }

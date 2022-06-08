@@ -58,7 +58,7 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenereteEventWhenUpdateBullAsyn(BBulletin currentAttachedBulletin)
+        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin)
         {
             var personId = await _bulletinEventRepository.GetPersonIdByBulletinIdAsync(currentAttachedBulletin.Id);
             if (string.IsNullOrEmpty(personId)) return;
@@ -88,7 +88,7 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenereteEventWhenChangeStatusOfBullAsyn(BBulletin currentAttachedBulletin, string personId)
+        public async Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId)
         {
             var bulletinsQuery = await _bulletinEventRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();

@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.InternalRequest
 {
-    public class InternalRequestGridDTO : BaseDTO
+    public class InternalRequestGridDTO : BaseGridDTO
     {
         public string? RegNumber { get; set; }
         public DateTime? RequestDate { get; set; }

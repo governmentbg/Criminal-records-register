@@ -11,7 +11,7 @@ using static MJ_CAIS.Common.Constants.ApplicationConstants;
 
 namespace MJ_CAIS.Services
 {
-    public class ApplicationWebService : BaseAsyncService<PublicApplicationDTO, PublicApplicationDTO, PublicApplicationDTO, WApplication, string, CaisDbContext>, IApplicationWebService
+    public class ApplicationWebService : BaseAsyncService<PublicApplicationDTO, PublicApplicationDTO, PublicApplicationGridDTO, WApplication, string, CaisDbContext>, IApplicationWebService
     {
         private readonly IUserContext _userContext;
         private readonly IApplicationWebRepository _applicationWebRepository;

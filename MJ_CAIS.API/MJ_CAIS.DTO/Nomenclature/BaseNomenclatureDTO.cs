@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Nomenclature
 {
-    public class BaseNomenclatureDTO : BaseDTO
+    public class BaseNomenclatureDTO : BaseGridDTO
     {
         public string? Code { get; set; }
 

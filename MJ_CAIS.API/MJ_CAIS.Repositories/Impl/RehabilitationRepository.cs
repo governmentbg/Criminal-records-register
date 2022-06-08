@@ -91,10 +91,10 @@ namespace MJ_CAIS.Repositories.Impl
             {
                 Id = bulletinId,
                 RehabilitationDate = rehabilitationDate,
-                Version = bulletinVersion
+                Version = bulletinVersion,
+                EntityState = EntityStateEnum.Modified
             };
 
-            bulletin.EntityState = EntityStateEnum.Modified;
             bulletin.ModifiedProperties = new List<string>
             {
                 nameof(bulletin.RehabilitationDate),

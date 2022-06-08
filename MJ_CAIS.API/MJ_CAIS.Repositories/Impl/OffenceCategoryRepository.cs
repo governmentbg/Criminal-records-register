@@ -11,11 +11,13 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public override IQueryable<BOffenceCategory> SelectAllAsync()
+        public override IQueryable<BOffenceCategory> SelectAll()
         {
-            return this._dbContext.BOffenceCategories.AsNoTracking()
+            var query =  this._dbContext.BOffenceCategories.AsNoTracking()
                 .Where(x => x.OffLevel == 1)
                 .OrderBy(x => x.OrderNumber);
+
+            return query;
         }
     }
 }

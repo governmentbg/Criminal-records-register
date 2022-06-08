@@ -29,17 +29,4 @@ export class BulletinGridService extends CaisCrudService<
       {}
     );
   }  
-  
-  // override
-  public addOrderBy(params?: HttpParams): HttpParams {
-    if (!params) {
-      params = new HttpParams();
-    }
-
-    if (!params.has('$orderby')) {
-      params = params.append('$orderby', 'createdOn desc');
-    }
-
-    return params;
-  }
 }

@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../../models/common/base.model";
+import { BaseGridModel } from "../../../../../models/common/base-grid.model";
 
-export class CountryGridModel extends BaseModel {
+export class CountryGridModel extends BaseGridModel {
   public iso31662Code: string = null;
   public usedForNationality: boolean = null;
   public remark: string = null;

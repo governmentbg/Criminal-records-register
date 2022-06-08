@@ -12,18 +12,6 @@ export class CountryGridService extends CaisCrudService<
 > {
   constructor(injector: Injector) {
     super(CountryGridModel, injector, "nomenclature-details/countries");
-  }
-
-  // override
-  public addOrderBy(params?: HttpParams): HttpParams {
-    if (!params) {
-      params = new HttpParams();
-    }
-
-    if (!params.has("$orderby")) {
-      params = params.append("$orderby", "iso31662Code asc");
-    }
-
-    return params;
+    super.orderByDefaultPropName = 'iso31662Code';
   }
 }

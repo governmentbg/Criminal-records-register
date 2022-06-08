@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.model";
 
-export class BulletinCheckGridModel extends BaseModel {
+export class BulletinCheckGridModel extends BaseGridModel {
   public registrationNumber: string = null;
   public bulletinReceivedDate: string = null;
   public statusId: string = null;

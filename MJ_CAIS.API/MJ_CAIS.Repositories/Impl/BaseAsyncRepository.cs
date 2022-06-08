@@ -20,7 +20,7 @@ namespace MJ_CAIS.Repositories.Impl
             return this._dbContext;
         }
 
-        public virtual IQueryable<TEntity> SelectAllAsync()
+        public virtual IQueryable<TEntity> SelectAll()
         {
             var result = this._dbContext.Set<TEntity>().AsNoTracking();
             return result;

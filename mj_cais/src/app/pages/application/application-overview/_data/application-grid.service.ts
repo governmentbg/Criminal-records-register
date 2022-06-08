@@ -28,18 +28,5 @@ export class ApplicationGridService extends CaisCrudService<
     }else{
       this.updateUrl(`${currentEndpoint}/certificates`);
     }
-  }
-  
-   // override
-   public addOrderBy(params?: HttpParams): HttpParams {
-    if (!params) {
-      params = new HttpParams();
-    }
-
-    if (!params.has('$orderby')) {
-      params = params.append('$orderby', 'createdOn desc');
-    }
-
-    return params;
-  }
+  }  
 }

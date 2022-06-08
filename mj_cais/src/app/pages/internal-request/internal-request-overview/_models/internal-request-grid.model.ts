@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class InternalRequestGridModel extends BaseModel {
+export class InternalRequestGridModel extends BaseGridModel {
   public regNumber: string = null;
   public requestDate: string = null;
   public reqStatus: string = null;

@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.EcrisMessage
 {
-    public class GraoPersonGridDTO : BaseDTO
+    public class GraoPersonGridDTO : BaseGridDTO
     {
         public string? Egn { get; set; }
         public string? Firstname { get; set; }

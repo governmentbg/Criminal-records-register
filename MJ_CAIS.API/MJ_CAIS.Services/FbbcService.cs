@@ -187,7 +187,7 @@ namespace MJ_CAIS.Services
         {
 
             var personDto = aInDto.Person;
-            // preate person object, apply changes
+            // create person object, apply changes
             var person = await _personService.CreatePersonAsync(personDto);
 
             foreach (var personIdObj in person.PPersonIds)

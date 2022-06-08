@@ -17,14 +17,14 @@ namespace MJ_CAIS.Repositories.Impl
             this._userContext = userContext;
         }
 
-        public override IQueryable<BBulletin> SelectAllAsync()
+        public override IQueryable<BBulletin> SelectAll()
         {
             var query = this._dbContext.BBulletins
                                 .Include(x => x.Status)
                                 .Include(x => x.BulletinAuthority)
                                 .AsNoTracking();
 
-           // query = _userContext.FilterByAuthority(query);
+            // query = _userContext.FilterByAuthority(query);
 
             return query;
         }
@@ -119,7 +119,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId)
         {
-            var bulleint = await _dbContext.BBulletins.AsNoTracking()
+            var bulletin = await _dbContext.BBulletins.AsNoTracking()
                     .Include(x => x.BirthCountry)
                     .Include(x => x.CsAuthority)
                     .Include(x => x.BirthCity)
@@ -134,7 +134,7 @@ namespace MJ_CAIS.Repositories.Impl
                         .ThenInclude(x => x.Person)
                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
-            return bulleint;
+            return bulletin;
         }
 
         public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
@@ -228,7 +228,7 @@ namespace MJ_CAIS.Repositories.Impl
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Dictionary<string, string>> GetAuthIdByEkkateAsync(List<string> ekatteCodes)
+        public async Task<Dictionary<string, string>> GetAuthIdByEkatteAsync(List<string> ekatteCodes)
         {
             var result = await _dbContext.GCities.AsNoTracking()
                 .Where(x => ekatteCodes.Contains(x.EkatteCode))

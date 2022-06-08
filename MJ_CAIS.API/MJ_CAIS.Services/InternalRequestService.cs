@@ -159,8 +159,8 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
         {
-            var bulleint = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
-            return mapper.Map<BulletinPersonInfoModelDTO>(bulleint);
+            var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
+            return mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

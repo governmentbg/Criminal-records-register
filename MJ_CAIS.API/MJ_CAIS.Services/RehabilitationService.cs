@@ -250,9 +250,7 @@ namespace MJ_CAIS.Services
 
                 var endDate = bulletinDTO
                     .Decisions
-                    .Where(x => x.Type == DecisionType.EndOfPenalty)
-                    .OrderBy(x => x.ChangeDate)
-                    .FirstOrDefault()?.ChangeDate;
+                    .Where(x => x.Type == DecisionType.EndOfPenalty).MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (endDate != null)
                 {
@@ -279,18 +277,16 @@ namespace MJ_CAIS.Services
                 // this is start date
                 var decisionEndDate = bull
                     .Decisions
-                    .Where(x => x.Type == DecisionType.EndOfPenalty)
-                    .OrderBy(x => x.ChangeDate)
-                    .FirstOrDefault()?.ChangeDate;
+                    .Where(x => x.Type == DecisionType.EndOfPenalty).MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (!decisionEndDate.HasValue) continue;
 
                 var endDate = decisionEndDate.Value.AddYears(1);
 
-                var hasOffencInPeriod = currentBulletinDto.OffencesEndDates
+                var hasOffenceInPeriod = currentBulletinDto.OffencesEndDates
                  .Any(d => d >= decisionEndDate && d <= endDate);
 
-                if (hasOffencInPeriod)
+                if (hasOffenceInPeriod)
                 {
                     _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
                     appliedChanges = true;
@@ -329,8 +325,7 @@ namespace MJ_CAIS.Services
                 var endDate = bulletinDTO
                     .Decisions
                     .Where(x => x.Type == DecisionType.EndOfPenalty && x.ChangeDate.HasValue)
-                    .OrderBy(x => x.ChangeDate)
-                    .FirstOrDefault()?.ChangeDate;
+                    .MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (!endDate.HasValue) return appliedChanges;
 
@@ -361,17 +356,16 @@ namespace MJ_CAIS.Services
                 var decisionEndDate = bull
                     .Decisions
                     .Where(x => x.Type == DecisionType.EndOfPenalty)
-                    .OrderBy(x => x.ChangeDate)
-                    .FirstOrDefault()?.ChangeDate;
+                    .MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (!decisionEndDate.HasValue) continue;
 
                 var endDate = decisionEndDate.Value.AddYears(1);
 
-                var hasOffencInPeriod = currentBulletinDto.OffencesEndDates
+                var hasOffenceInPeriod = currentBulletinDto.OffencesEndDates
                  .Any(d => d >= decisionEndDate && d <= endDate);
 
-                if (hasOffencInPeriod)
+                if (hasOffenceInPeriod)
                 {
                     _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
                     appliedChanges = true;

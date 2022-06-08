@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.EcrisMessage
 {
-    public class EcrisMessageGridDTO : BaseDTO
+    public class EcrisMessageGridDTO : BaseGridDTO
     {
         public string? DocTypeId { get; set; }
         public string? DocTypeName { get; set; }

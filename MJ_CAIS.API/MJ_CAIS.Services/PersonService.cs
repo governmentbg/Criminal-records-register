@@ -145,15 +145,15 @@ namespace MJ_CAIS.Services
             }
 
             // when create person from bulletin, app or fbbc
-            // outo marge is not allowed
-            // user will be notified for existing pids connetcted to another person
+            // auto marge is not allowed
+            // user will be notified for existing pids connected to another person
             if (!autoMergePeople)
             {
                 return CreateNewPerson(aInDto, pids, personId);
             }
 
             // !!! Automatic merging of more than one person will not be used at this stage
-            // get all person realted to this pids
+            // get all person related to this pids
             // pids saved in db or locally added
             var personIds = pids.Select(x => x.PersonId).ToList();
             var existingPersons = await dbContext.PPeople
@@ -182,11 +182,11 @@ namespace MJ_CAIS.Services
                                .Where(x => x.Id == aId || x.Id == personToBeConnected)
                                .ToListAsync();
 
-            var persomToUpdate = MergePeople(new List<PPersonId>(), people);
-            persomToUpdate.EntityState = EntityStateEnum.Modified;
+            var personToUpdate = MergePeople(new List<PPersonId>(), people);
+            personToUpdate.EntityState = EntityStateEnum.Modified;
 
             // call logic for only one person
-            UpdatePersonDataWhenHasOnePerson(persomToUpdate);
+            UpdatePersonDataWhenHasOnePerson(personToUpdate);
             await dbContext.SaveChangesAsync();
         }
 
@@ -264,7 +264,7 @@ namespace MJ_CAIS.Services
 
             if (pidsFromForm.Count == 0)
             {
-                var suid = GenereteSuid(aInDto);
+                var suid = GenerateSuid(aInDto);
                 pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CAIS));
             }
 
@@ -302,7 +302,8 @@ namespace MJ_CAIS.Services
         /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
         /// <param name="aInDto">Person data</param>
         /// <param name="existingPerson">Data about the person from the database</param>
-        /// <returns>Updated person includes the identifierss</returns>
+        /// <returns>Updated person includes the identifiers</returns>
+        /// </summary>
         private PPerson UpdatePersonDataWhenHasOnePerson(PersonDTO aInDto, PPerson existingPerson)
         {
             // update person with new data
@@ -397,7 +398,7 @@ namespace MJ_CAIS.Services
             return lastPerson;
         }
 
-        private string GenereteSuid(PersonDTO person)
+        private string GenerateSuid(PersonDTO person)
         {
             string? birthCountryIsoNumber = null;
             string? birthDateText = null;
