@@ -13,5 +13,6 @@ export class CountryGridService extends CaisCrudService<
   constructor(injector: Injector) {
     super(CountryGridModel, injector, "nomenclature-details/countries");
     super.orderByDefaultPropName = 'iso31662Code';
+    super.sortOrder = 'asc';
   }
 }

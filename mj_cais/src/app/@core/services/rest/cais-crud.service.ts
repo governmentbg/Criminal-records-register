@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 })
 export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
   protected orderByDefaultPropName: string = "createdOn";
+  protected sortOrder: string = "desc";
   protected url: string;
 
   // override
@@ -17,7 +18,7 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
     }
 
     if (!params.has("$orderby")) {
-      params = params.append("$orderby", `${this.orderByDefaultPropName} desc`);
+      params = params.append("$orderby", `${this.orderByDefaultPropName} ${this.sortOrder}`);
     }
 
     return params;
