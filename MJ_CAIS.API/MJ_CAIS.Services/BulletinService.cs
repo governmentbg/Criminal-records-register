@@ -63,6 +63,21 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
+        public virtual async Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
+        {
+            var entityQuery = this.GetSelectAllQueriable();
+            if (!string.IsNullOrEmpty(statusId))
+            {
+                entityQuery = entityQuery.Where(x => x.StatusId == statusId);
+            }
+
+            var baseQuery = entityQuery.ProjectTo<BulletinGridDTO>(mapperConfiguration);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions, MAX_EXCEL_SIZE);
+
+            var result = resultQuery.ToList();
+            return result;
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
@@ -619,7 +634,7 @@ namespace MJ_CAIS.Services
         private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
         {
             // if person is bulgarian citizen
-            var skipEcris = bulletin.BPersNationalities is {Count: 1} && bulletin.BPersNationalities.First().CountryId == BG;
+            var skipEcris = bulletin.BPersNationalities is { Count: 1 } && bulletin.BPersNationalities.First().CountryId == BG;
 
             if (skipEcris) return;
 

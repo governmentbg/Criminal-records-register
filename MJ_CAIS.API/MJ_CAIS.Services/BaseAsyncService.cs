@@ -24,6 +24,7 @@ namespace MJ_CAIS.Services
         where TContext : DbContext
     {
         private const int MAX_PAGE_SIZE = 25;
+        protected const int MAX_EXCEL_SIZE = 10000;
 
         private const char QUESTION_MARK = '?';
         private const char QUERY_OPTIONS_SEPARATOR = '&';
@@ -297,7 +298,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         protected abstract bool IsChildRecord(TPk aId, List<string> aParentsList);
 
-        protected virtual async Task<IQueryable<T>> ApplyOData<T>(IQueryable<T> query, ODataQueryOptions<T> aQueryOptions)
+        protected virtual async Task<IQueryable<T>> ApplyOData<T>(IQueryable<T> query, ODataQueryOptions<T> aQueryOptions, int maxSize = MAX_PAGE_SIZE)
         {
             var queryValidator = new CustomQueryValidator<T>();
             if (aQueryOptions.Filter != null)
@@ -306,10 +307,15 @@ namespace MJ_CAIS.Services
             }
 
             IQueryable resultQuery;
-            ODataQuerySettings querySetting = new ODataQuerySettings { PageSize = MAX_PAGE_SIZE };
+            if(maxSize > MAX_EXCEL_SIZE)
+            {
+               maxSize = MAX_EXCEL_SIZE;
+            }
+
+            ODataQuerySettings querySetting = new ODataQuerySettings { PageSize = maxSize };
 
             // Ако в url, няма top option за странициране или заявения top е повече от разрешения се прилага default-ния paging
-            if (aQueryOptions.Top == null || aQueryOptions.Top.Value > MAX_PAGE_SIZE)
+            if (aQueryOptions.Top == null || aQueryOptions.Top.Value > maxSize)
             {
                 resultQuery = aQueryOptions.ApplyTo(query, querySetting);
             }
