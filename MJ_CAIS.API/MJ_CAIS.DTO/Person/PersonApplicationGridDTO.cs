@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Person
 {
-    public class PersonApplicationGridDTO : BaseDTO
+    public class PersonApplicationGridDTO : BaseGridDTO
     {
         public string? RegistrationNumber { get; set; }
         public string? Firstname { get; set; }

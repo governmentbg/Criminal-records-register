@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.NomenclatureDetail
 {
-    public class NomenclatureDetailGridDTO : BaseDTO
+    public class NomenclatureDetailGridDTO : BaseGridDTO
     {
     }
 }
