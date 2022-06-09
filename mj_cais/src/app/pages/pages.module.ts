@@ -83,16 +83,9 @@ import { SearchByEgnErrorDialogComponent } from "./application/application-reque
 @NgModule({
   imports: [
     PagesRoutingModule,
-    ThemeModule,
-    NbMenuModule,
-    NbTabsetModule,
-    NbListModule,
     MiscellaneousModule,
     SharedModule,
     CoreModule.forRoot(),
-    MatMenuModule,
-    NbToggleModule,
-    NgxPermissionsModule.forChild(),
   ],
   declarations: [
     PagesComponent,
