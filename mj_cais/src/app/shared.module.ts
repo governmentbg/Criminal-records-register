@@ -17,12 +17,19 @@ import {
   NbFormFieldModule,
   NbIconModule,
   NbInputModule,
+  NbListModule,
+  NbMenuModule,
   NbRadioModule,
   NbSelectModule,
+  NbTabsetModule,
+  NbToggleModule,
 } from "@nebular/theme";
 import { TlCommonModule } from "@tl/tl-common";
 import { FileUploadModule } from "ng2-file-upload";
 import { HammerModule } from "@angular/platform-browser";
+import { ThemeModule } from "./@theme/theme.module";
+import { MatMenuModule } from "@angular/material/menu";
+import { NgxPermissionsModule } from "ngx-permissions";
 
 @NgModule({
   declarations: [],
@@ -46,7 +53,14 @@ import { HammerModule } from "@angular/platform-browser";
     IgxDialogModule,
     FileUploadModule,
     HammerModule, 
-    IgxCalendarModule
+    IgxCalendarModule,
+    ThemeModule,
+    NbMenuModule,
+    NbTabsetModule,
+    NbListModule,
+    MatMenuModule,
+    NbToggleModule,
+    NgxPermissionsModule.forChild(),
   ],
   exports: [
     TlCommonModule,
@@ -68,7 +82,14 @@ import { HammerModule } from "@angular/platform-browser";
     IgxDialogModule,
     FileUploadModule,
     HammerModule, 
-    IgxCalendarModule
+    IgxCalendarModule,
+    ThemeModule,
+    NbMenuModule,
+    NbTabsetModule,
+    NbListModule,
+    MatMenuModule,
+    NbToggleModule,
+    NgxPermissionsModule,
   ],
 })
 export class SharedModule {}
