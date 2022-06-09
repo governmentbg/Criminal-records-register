@@ -17,7 +17,6 @@ export class SearchByEgnDialogComponent implements OnInit {
 
  
   onSubmit() {
-    debugger;
     this.ref.close(this.searchValue);
  }
 }

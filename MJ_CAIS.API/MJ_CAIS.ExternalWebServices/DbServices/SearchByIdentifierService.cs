@@ -1,4 +1,6 @@
-﻿using MJ_CAIS.DataAccess;
+﻿using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Person;
@@ -26,31 +28,48 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         }
 
 
-        public async Task<(string, EWebRequest)> SearchByIdentifier(string id)
+        public async Task<string> SearchByIdentifier(string id)
         {
-            string currentUserAuth = "660"; // _userContext.CsAuthorityId;
+            string currentUserAuth = _userContext.CsAuthorityId ?? null ?? "660";
             string registrationNumber = await this._registerTypeService.GetRegisterNumberForApplicationOnDesk(currentUserAuth);
-            ApplicationInDTO applicaiton = new ApplicationInDTO()
-                { RegistrationNumber = registrationNumber, Person = new PersonDTO() { Egn = id } };
-            string applicationId = await _applicationService.InsertAsync(applicaiton);
+            ApplicationInDTO application = new ApplicationInDTO()
+            { RegistrationNumber = registrationNumber, StatusCode = ApplicationConstants.ApplicationStatuses.NewId, Person = new PersonDTO() { Egn = id } };
+            string applicationId = await _applicationService.InsertAsync(application);
 
             _dbContext.ChangeTracker.Clear();
             (PersonDataResponseType, EWebRequest) result = this._regixService.SyncCallPersonDataSearch(id, applicationId: applicationId);
-            return (applicationId, result.Item2);
-            
+            if (result.Item1.EGN == null) //TODO: shoud be ==
+            {
+                throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
+            }
+
+            if (result.Item2.HasError == true)
+            {
+                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}");
+            }
+            return applicationId;
         }
 
-        public async Task<(string, EWebRequest)> SearchByIdentifierLNCH(string id)
+        public async Task<string> SearchByIdentifierLNCH(string id)
         {
-            string currentUserAuth = "660"; // _userContext.CsAuthorityId;
+            string currentUserAuth = _userContext.CsAuthorityId ?? null ?? "660";
             string registrationNumber = await this._registerTypeService.GetRegisterNumberForApplicationOnDesk(currentUserAuth);
             ApplicationInDTO applicaiton = new ApplicationInDTO()
-                { RegistrationNumber = registrationNumber, Person = new PersonDTO() { Egn = id } };
+            { RegistrationNumber = registrationNumber, Person = new PersonDTO() { Egn = id } };
             string applicationId = await _applicationService.InsertAsync(applicaiton);
 
             _dbContext.ChangeTracker.Clear();
             (ForeignIdentityInfoResponseType, EWebRequest) result = this._regixService.SyncCallPersonDataSearchByLNCH(id, applicationId: applicationId);
-            return (applicationId, result.Item2);
+            if (result.Item1.EGN == null) //TODO: shoud be ==
+            {
+                throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
+            }
+
+            if (result.Item2.HasError == true)
+            {
+                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}");
+            }
+            return applicationId;
 
         }
 

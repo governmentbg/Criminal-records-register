@@ -95,6 +95,14 @@ namespace MJ_CAIS.Services
             return entity.Id;
         }
 
+        public async Task ChangeApplicationStatusToCanceled(string aId)
+        {
+            AApplication repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            repoObj.StatusCode = ApplicationConstants.ApplicationStatuses.Canceled;
+            await this.baseAsyncRepository.UpdateAsync(repoObj);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(ApplicationInDTO aInDto, bool isFinal)
         {
             var applicationDb = await dbContext.AApplications.AsNoTracking()

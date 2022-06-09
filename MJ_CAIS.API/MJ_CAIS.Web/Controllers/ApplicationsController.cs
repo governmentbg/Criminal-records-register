@@ -57,26 +57,25 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("cancelApplication/{aId}")]
+        public virtual async Task<IActionResult> cancelApplicationByIdentifier(string aId)
+        {
+            await this._applicationService.ChangeApplicationStatusToCanceled(aId);
+            return Ok();
+        }
+
         [HttpGet("searchByIdentifier/{aId}")]
         public virtual async Task<IActionResult> SearchByIdentifier(string aId)
         {
-            var result =  await this._searchByIdentifierService.SearchByIdentifier(aId);
-            if (result.Item2.HasError == true)
-            {
-
-            }
-            return Ok(new {id =result.Item1});
+            var result = await this._searchByIdentifierService.SearchByIdentifier(aId);
+            return Ok(new {id = result});
         }
 
         [HttpGet("searchByIdentifierLNCH/{aId}")]
         public virtual async Task<IActionResult> searchByIdentifierLNCH(string aId)
         {
             var result = await this._searchByIdentifierService.SearchByIdentifierLNCH(aId);
-            if (result.Item2.HasError == true)
-            {
-
-            }
-            return Ok(new { id = result.Item1 });
+            return Ok(result);
         }
 
         [HttpPost("")]

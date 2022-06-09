@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Exceptions;
 using System.Net;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace MJ_CAIS.WebSetup.Setup
 {
@@ -30,23 +31,22 @@ namespace MJ_CAIS.WebSetup.Setup
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception ex)
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
+            var userId = context.User.GetUserId();
+            logger.LogError(ex, "{Message} {UserId}", ex.Message, userId);
+
+
             var (error, customMessage, statusCode) = GetError(context, ex);
 
-            var result = JsonSerializer.Serialize(new
-            {
-                error = error,
-                customMessage = customMessage
-            });
+            var result = JsonSerializer.Serialize(new { error, customMessage });
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var UserId = context.User.GetUserId();
-            logger.LogError(ex, "{Message} {UserId}", ex.Message, UserId);
+            await context.Response.WriteAsync(result);
 
-            return context.Response.WriteAsync(result);
+            //context.Response.Redirect("/Error");
         }
 
         private (string, string, HttpStatusCode) GetError(HttpContext context, Exception ex)
@@ -78,6 +78,11 @@ namespace MJ_CAIS.WebSetup.Setup
             }
 
             return (error, customMessage, statusCode);
+        }
+
+        private bool IsAjax(HttpContext context)
+        {
+            return context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
         }
     }
 }

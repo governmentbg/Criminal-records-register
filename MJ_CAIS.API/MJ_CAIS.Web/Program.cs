@@ -38,9 +38,7 @@ namespace MJ_CAIS.Web
             var app = builder.Build();
 
             WebSetupConfig.CustomConfigureApp(app);
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-
+            
             app.Run();
         }
     }

@@ -78,6 +78,7 @@ import { SearchByEgnDialogComponent } from './application/application-request/se
 import { ApplicationBulletinsSelectionComponent } from './application/application-overview/application-bulletins-selection/application-bulletins-selection.component';
 import { ApplicationDocumentFormComponent } from './application/application-form/tabs/application-document-form/application-document-form.component';
 import { ApplicationReportFormComponent } from './application-report/application-report-form/application-report-form.component';
+import { SearchByEgnErrorDialogComponent } from "./application/application-request/search-by-egn-error-dialog/search-by-egn-error-dialog.component";
 
 @NgModule({
   imports: [
@@ -159,6 +160,7 @@ import { ApplicationReportFormComponent } from './application-report/application
     ApplicationCertificateResultComponent,
     ApplicationRequestComponent,
     SearchByEgnDialogComponent,
+    SearchByEgnErrorDialogComponent,
     ApplicationBulletinsSelectionComponent,
     ApplicationDocumentFormComponent,
     ApplicationReportFormComponent
