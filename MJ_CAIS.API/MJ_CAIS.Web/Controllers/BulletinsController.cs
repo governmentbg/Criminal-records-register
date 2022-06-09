@@ -30,9 +30,10 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("getAll")]
-        public new async Task<IActionResult> GetAllNoWrap(ODataQueryOptions<BulletinGridDTO> aQueryOptions)
+        public async Task<IActionResult> GetAllNoWrap(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
-            return await base.GetAllNoWrap(aQueryOptions);
+            var result = await this._bulletinService.SelectAllNoWrapAsync(aQueryOptions, statusId);
+            return Ok(result);
         }
 
         [HttpGet("{aId}")]

@@ -14,18 +14,7 @@ export class InternalRequestGridService extends CaisCrudService<
 > {
   constructor(injector: Injector) {
     super(InternalRequestGridModel, injector, currentEndpoint);
-  }
-
-  public addOrderBy(params?: HttpParams): HttpParams {
-    if (!params) {
-      params = new HttpParams();
-    }
-
-    if (!params.has('$orderby')) {
-      params = params.append('$orderby', 'requestDate desc');
-    }
-
-    return params;
+    super.orderByDefaultPropName = 'requestDate';
   }
   
   public updateStatusUrl(statusId?: string, bulletinId?: string) {

@@ -21,7 +21,7 @@ export class BulletinTypeConstants {
     let result = new BaseNomenclatureModel();
     result.code = "Bulletin78A";
     result.id = result.code;
-    result.name = "по чл.78а";
+    result.name = "по чл.78а от НК";
     return result;
   }
 

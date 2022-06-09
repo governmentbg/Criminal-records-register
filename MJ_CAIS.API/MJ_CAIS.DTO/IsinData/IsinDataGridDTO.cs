@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.IsinData
 {
-    public class IsinDataGridDTO : BaseDTO
+    public class IsinDataGridDTO : BaseGridDTO
     {
         public DateTime? MsgDateTime { get; set; }
         public string? Identifier { get; set; }

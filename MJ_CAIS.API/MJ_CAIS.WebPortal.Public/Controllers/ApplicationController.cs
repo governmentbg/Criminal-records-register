@@ -79,6 +79,10 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var purposes = _nomenclatureDetailService.GetAllAPurposes();
             viewModel.PurposeTypes = await purposes.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
+
+            var paymentMethods = _nomenclatureDetailService.GetWebPaymentMethods();
+            viewModel.PaymentMethodTypes = await paymentMethods.ProjectTo<SelectListItem>(
+                _mapper.ConfigurationProvider).ToListAsync();
         }
     }
 }

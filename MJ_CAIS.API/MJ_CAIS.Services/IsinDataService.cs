@@ -140,7 +140,8 @@ namespace MJ_CAIS.Services
                                        (isin.SanctionType == IsinDataConstants.SanctionType.Probation ? IsinDataConstants.SanctionTypeDisplay.Probation :
                                         (isin.SanctionType == IsinDataConstants.SanctionType.Prison ? IsinDataConstants.SanctionTypeDisplay.Prison :
                                          null)),
-                            CsAuthorityId = bulletins.CsAuthorityId
+                            CsAuthorityId = bulletins.CsAuthorityId,
+                            CreatedOn = isin.CreatedOn
                         };
 
             if (!string.IsNullOrEmpty(bulletinId))

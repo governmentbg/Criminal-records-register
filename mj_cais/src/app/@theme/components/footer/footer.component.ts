@@ -5,9 +5,17 @@ import { Component } from "@angular/core";
   styleUrls: ["./footer.component.scss"],
   template: `
     <span class="created-by">
-      Created with ♥ by
-      <b><a href="https://akveo.page.link/8V2f" target="_blank">Akveo</a></b>
-      2019
+      <div class="row" style="margin-right: 20px;">
+        <p class="footer-text">
+          Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017
+          г. по проект: <br />
+          „Реализиране на Централизирана автоматизирана информационна система
+          „Съдебен статус“, <br />
+          финансиран по Оперативна програма „Добро управление“, чрез ЕСФ. <br />
+        </p>
+        <img src="assets/images/eu-logo.png" alt="eu-logo" class="eu-logo" />
+        <img src="assets/images/eu-logo2.png" alt="eu-logo" class="eu-logo" />
+      </div>
     </span>
   `,
 })

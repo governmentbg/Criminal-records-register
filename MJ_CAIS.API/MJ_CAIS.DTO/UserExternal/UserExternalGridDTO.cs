@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MJ_CAIS.DTO.UserExternal
+﻿namespace MJ_CAIS.DTO.UserExternal
 {
-    public class UserExternalGridDTO : BaseDTO
+    public class UserExternalGridDTO : BaseGridDTO
     {
         public string? Egn { get; set; }
         public string? Email { get; set; }

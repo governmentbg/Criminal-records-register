@@ -58,7 +58,7 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenereteEventWhenUpdateBullAsyn(BBulletin currentAttachedBulletin)
+        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin)
         {
             var personId = await _bulletinEventRepository.GetPersonIdByBulletinIdAsync(currentAttachedBulletin.Id);
             if (string.IsNullOrEmpty(personId)) return;
@@ -88,7 +88,7 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenereteEventWhenChangeStatusOfBullAsyn(BBulletin currentAttachedBulletin, string personId)
+        public async Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId)
         {
             var bulletinsQuery = await _bulletinEventRepository.GetBulletinByPersonIdAsync(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
@@ -192,9 +192,9 @@ namespace MJ_CAIS.Services
 
         private static void CheckForArticle3000(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
         {
-            var mustAddEvent = currentBulletin.BulletinType == nameof(Common.Constants.BulletinConstants.Type.Bulletin78A)  &&
+            var mustAddEvent = currentBulletin.BulletinType ==BulletinConstants.Type.Bulletin78A  &&
                 bulletins.Any(x => x.Id != currentBulletin.Id &&
-                (x.BulletinType == nameof(Common.Constants.BulletinConstants.Type.Bulletin78A) || x.CaseType == CaseType.NOXD));
+                (x.BulletinType == BulletinConstants.Type.Bulletin78A || x.CaseType == CaseType.NOXD));
 
             if (!mustAddEvent) return;
 

@@ -30,6 +30,8 @@ namespace MJ_CAIS.Services.Contracts
 
         IQueryable<BaseNomenclatureDTO> GetAllAPaymentMethods();
 
+        IQueryable<BaseNomenclatureDTO> GetWebPaymentMethods();
+
         IQueryable<BaseNomenclatureDTO> GetSrvcResRcptMethods();
 
         IQueryable<BaseNomenclatureDTO> GetPidTypes();

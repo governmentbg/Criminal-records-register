@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.IsinData
 {
-    public class IsinBulletinGridDTO : BaseDTO
+    public class IsinBulletinGridDTO : BaseGridDTO
     {
         public string? BulletinType { get; set; }
         public string? RegistrationNumber { get; set; }

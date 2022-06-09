@@ -35,7 +35,7 @@ namespace MJ_CAIS.Services
             var authQuery = await _nomenclatureDetailRepository.GetDecidingAuthoritiesForBulletinsAsync();
             var auths = await authQuery.ToListAsync();
 
-            var authEkatte = await _bulletinRepository.GetAuthIdByEkkateAsync(ekatteCodes);
+            var authEkatte = await _bulletinRepository.GetAuthIdByEkatteAsync(ekatteCodes);
 
             var bulletinToBeSaved = new List<BBulletin>();
             foreach (var item in value.BulletinsList.Bulletin)

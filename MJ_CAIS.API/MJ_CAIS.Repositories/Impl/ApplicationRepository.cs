@@ -14,7 +14,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public override IQueryable<AApplication> SelectAllAsync()
+        public override IQueryable<AApplication> SelectAll()
         {
             var result = this._dbContext
                 .Set<AApplication>()
@@ -66,6 +66,7 @@ namespace MJ_CAIS.Repositories.Impl
                             UpdatedBy = user.Firstname + " " + user.Familyname,
                             CreatedOn = aStatusH.CreatedOn,
                             StatusCode = status.Name,
+                            Version = aStatusH.Version,
                         };
 
             return await Task.FromResult(query);

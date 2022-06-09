@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.DTO;
 using MJ_CAIS.Services.Contracts;
 
 namespace MJ_CAIS.Web.Controllers.Common
 {
     public abstract class BaseApiCrudController<TInDTO, TOutDTO, TGridDTO, TEntity, TPk> : BaseApiController
+         where TInDTO : BaseDTO
+         where TOutDTO : BaseDTO
+         where TGridDTO : BaseGridDTO
     {
         protected IBaseAsyncService<TInDTO, TOutDTO, TGridDTO, TEntity, TPk> baseService;
 

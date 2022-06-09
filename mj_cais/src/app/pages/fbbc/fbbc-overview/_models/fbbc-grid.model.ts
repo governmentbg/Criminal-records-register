@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class FbbcGridModel extends BaseModel {
+export class FbbcGridModel extends BaseGridModel {
   public receiveDate: Date = null;
   public egn: string = null;
   public birthDate: Date = null;

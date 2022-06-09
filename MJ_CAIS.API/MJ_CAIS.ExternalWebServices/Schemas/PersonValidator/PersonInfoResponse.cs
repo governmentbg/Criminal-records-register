@@ -1,4 +1,4 @@
-﻿namespace MJ_CAIS.PersonValidator
+﻿namespace MJ_CAIS.ExternalWebServices.Schemas.PersonValidator
 {
     public class PersonInfoResponse
     {

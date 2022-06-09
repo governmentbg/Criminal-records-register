@@ -29,7 +29,7 @@ namespace MJ_CAIS.Repositories.Impl
             }
         }
 
-        public override IQueryable<GUser> SelectAllAsync()
+        public override IQueryable<GUser> SelectAll()
         {
             var result = this._dbContext.Set<GUser>()
                 .Include(u => u.CsAuthority)
@@ -37,6 +37,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(u => u.GUserRoles).ThenInclude( ur => ur.Role)
                 .AsNoTracking();
             result = userContext.FilterByAuthority(result);
+
             return result;
         }
     }

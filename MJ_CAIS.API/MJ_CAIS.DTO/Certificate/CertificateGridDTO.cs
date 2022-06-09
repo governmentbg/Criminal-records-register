@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.Certificate
 {
-    public class CertificateGridDTO : BaseDTO
+    public class CertificateGridDTO : BaseGridDTO
     {
     }
 }

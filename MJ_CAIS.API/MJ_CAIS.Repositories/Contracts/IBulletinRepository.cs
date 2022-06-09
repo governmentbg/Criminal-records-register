@@ -38,6 +38,6 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task SaveBulletinsAsync(List<BBulletin> bulletins);
 
-        Task<Dictionary<string, string>> GetAuthIdByEkkateAsync(List<string> ekatteCodes);
+        Task<Dictionary<string, string>> GetAuthIdByEkatteAsync(List<string> ekatteCodes);
     }
 }

@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class UserCitizenGridModel extends BaseModel {
+export class UserCitizenGridModel extends BaseGridModel {
   public name: string = null;
   public email: string = null;
   public egn: string = null;

@@ -35,5 +35,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<BulletinStatusHistoryDTO>> GetStatusHistoryByBulletinIdAsync(string aId);
 
         Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId);
+
+        Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId);
     }
 }

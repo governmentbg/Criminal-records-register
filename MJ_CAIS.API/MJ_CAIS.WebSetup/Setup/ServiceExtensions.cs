@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DIContainer;
+using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.WebSetup.Utils;
 
 namespace MJ_CAIS.WebSetup.Setup
@@ -46,10 +47,9 @@ namespace MJ_CAIS.WebSetup.Setup
             services.AddHttpContextAccessor();
 
             services.AddScoped<RequestUtils>();
+            services.AddScoped<PersonValidatorClient>();
 
             ContainerExtension.Initialize(services, configuration);
-
-            // services.AddTransient<IAuthenticationService, AuthenticationService<User>>(); // TODO: 
         }
 
         public static void ConfigureOData(this IServiceCollection services)

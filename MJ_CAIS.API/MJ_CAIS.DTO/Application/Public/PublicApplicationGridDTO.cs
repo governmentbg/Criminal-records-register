@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Application.Public
 {
-    public class PublicApplicationGridDTO : BaseDTO
+    public class PublicApplicationGridDTO : BaseGridDTO
     {
         public string? RegistrationNumber { get; set; }
         public string? StatusCode { get; set; }
@@ -10,6 +10,5 @@
         public string? Purpose { get; set; }
         public string? PurposeCountry { get; set; }
         public string? PurposePosition { get; set; }
-        public DateTime? CreatedOn { get; set; }
     }
 }

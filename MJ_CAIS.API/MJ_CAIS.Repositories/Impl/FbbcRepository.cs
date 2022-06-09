@@ -34,6 +34,7 @@ namespace MJ_CAIS.Repositories.Impl
                             ReceiveDate = fbbc.ReceiveDate,
                             Surname = fbbc.Surname,
                             Version = fbbc.Version,
+                            CreatedOn = fbbc.CreatedOn
                         };
 
             return await Task.FromResult(query);

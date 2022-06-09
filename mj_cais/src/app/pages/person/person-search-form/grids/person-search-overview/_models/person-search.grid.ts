@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.model";
 
-export class PersonSearchGridModel extends BaseModel {
+export class PersonSearchGridModel extends BaseGridModel {
   public pid: string = null;
   public pidType: string = null;
   public pidTypeName: string = null;

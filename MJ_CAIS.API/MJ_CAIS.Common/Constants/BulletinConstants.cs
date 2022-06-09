@@ -17,11 +17,10 @@
 
         public static class Type
         {
-            public const string ConvictionBulletin = "за съдимост";
-            public const string Bulletin78A = "по чл.78а";
-            public const string Unspecified = "неопределен";
+            public const string ConvictionBulletin = "ConvictionBulletin";
+            public const string Bulletin78A = "ConvictionBulletin";
+            public const string Unspecified = "Unspecified";
         }
-
 
         public static class SanctionType
         {

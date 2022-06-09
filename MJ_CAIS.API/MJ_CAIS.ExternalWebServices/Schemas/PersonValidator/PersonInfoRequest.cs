@@ -1,4 +1,4 @@
-﻿namespace MJ_CAIS.PersonValidator
+﻿namespace MJ_CAIS.ExternalWebServices.Schemas.PersonValidator
 {
     public class PersonInfoRequest
     {
@@ -26,7 +26,7 @@
         }
     }
 
-    public enum GenderType
+    public enum PersonInfoGenderType
     {
         male,
         female,

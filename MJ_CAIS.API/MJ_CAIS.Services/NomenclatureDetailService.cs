@@ -85,6 +85,7 @@ namespace MJ_CAIS.Services
                     Type = x.Type,
                     ValidFrom = x.ValidFrom,
                     ValidTo = x.ValidTo,
+                    CreatedOn = x.CreatedOn
                 });
         }
 
@@ -135,6 +136,14 @@ namespace MJ_CAIS.Services
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
+        public IQueryable<BaseNomenclatureDTO> GetWebPaymentMethods()
+        {
+            return _nomenclatureDetailRepository
+                .GetAllAPaymentMethods()
+                .Where(x => x.IsForWeb == true)
+                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
         public IQueryable<BaseNomenclatureDTO> GetSrvcResRcptMethods()
         {
             return _nomenclatureDetailRepository
@@ -157,7 +166,7 @@ namespace MJ_CAIS.Services
 
         private bool IsSyTable(string tableName)
         {
-            return _nomenclatureDetailRepository.SelectAllAsync().Any(x => x.TableName.ToLower() == tableName.ToLower());
+            return _nomenclatureDetailRepository.SelectAll().Any(x => x.TableName.ToLower() == tableName.ToLower());
         }
 
         private IQueryable<IBaseNomenclature> GetNomenclatureDbSet(string tableName)

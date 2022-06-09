@@ -1,6 +1,6 @@
 namespace MJ_CAIS.DTO.Fbbc
 {
-    public class FbbcGridDTO : BaseDTO
+    public class FbbcGridDTO : BaseGridDTO
     {
         public DateTime? ReceiveDate { get; set; }
         public string? Egn { get; set; }

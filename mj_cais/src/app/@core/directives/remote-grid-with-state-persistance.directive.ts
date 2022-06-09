@@ -20,7 +20,7 @@ import { CustomToastrService } from "../services/common/custom-toastr.service";
 
 @Directive()
 export class RemoteGridWithStatePersistance<
-  T extends { id: any },
+  T extends { id: any, createdOn: Date },
   CS extends CrudService<T, any>
 > extends RemoteComponentWithForm<T, CS> {
   @ViewChild(IgxGridStateDirective, { static: true })

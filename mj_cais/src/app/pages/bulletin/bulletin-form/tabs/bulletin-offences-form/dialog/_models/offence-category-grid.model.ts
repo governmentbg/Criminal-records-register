@@ -1,13 +1,12 @@
-export class OffenceCategoryGridModel {
-  public id: number = null;
+import { BaseGridModel } from "../../../../../../../@core/models/common/base-grid.model";
+
+export class OffenceCategoryGridModel extends BaseGridModel{
   public name: string = null;
   public code: string = null;
 
   constructor(init?: Partial<OffenceCategoryGridModel>) {
-    if (init) {
-      this.id = init.id;
-      this.name = init.name;
-      this.code = init.code;
-    }
+    super(init);
+      this.name = init?.name;
+      this.code = init?.code;   
   }
 }

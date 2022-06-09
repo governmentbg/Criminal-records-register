@@ -51,7 +51,7 @@ namespace MJ_CAIS.Services
                 return new List<BulletinGridDTO>().AsQueryable();
             }
 
-            var result = _bulletinRepository.SelectAllAsync()
+            var result = _bulletinRepository.SelectAll()
                 .Where(x => x.Egn == ecrisMessage.Identifier)
                 .ProjectTo<BulletinGridDTO>(mapperConfiguration);
 
@@ -69,7 +69,7 @@ namespace MJ_CAIS.Services
             var docType = _nomenclatureDetailRepository.GetAllFbbcDocTypes()
                 .FirstOrDefault(x => x.Code == EcrisFbbcMessageType);
 
-            var result = _fbcRepository.SelectAllAsync()
+            var result = _fbcRepository.SelectAll()
                 .Where(x => x.DocTypeId == docType.Id && x.Egn == ecrisMessage.Identifier)
                 .ProjectTo<FbbcGridDTO>(mapperConfiguration);
 
@@ -123,6 +123,7 @@ namespace MJ_CAIS.Services
                     BirthCountry = ecrisMsg.BirthCountry,
                     BirthCountryName = birthCountry.Name,
                     BirthCity = ecrisMsg.BirthCity,
+                    CreatedOn = ecrisMsg.CreatedOn
                     //Firstname = ecrisMsg.Firstname,
                     //Surname = ecrisMsg.Surname,
                    // Familyname = ecrisMsg.Familyname,

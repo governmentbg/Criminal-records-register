@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../../@core/models/common/base-grid.model";
 
-export class ApplicationGridModel extends BaseModel {
+export class ApplicationGridModel extends BaseGridModel {
   public registrationNumber: string;
   public purpose: string;
   public firstname: string;

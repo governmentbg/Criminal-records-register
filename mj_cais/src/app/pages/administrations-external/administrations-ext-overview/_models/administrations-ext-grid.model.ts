@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class AdministrationsExtGridModel extends BaseModel {
+export class AdministrationsExtGridModel extends BaseGridModel {
   public name: string = null;
   public descr: string = null;
 

@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class EcrisTcnGridModel extends BaseModel {
+export class EcrisTcnGridModel extends BaseGridModel {
   public action: string = null;
   public createdOn: Date = null;
   public registrationNumber: string = null;

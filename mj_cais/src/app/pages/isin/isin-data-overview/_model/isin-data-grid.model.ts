@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class IsinDataGridModel extends BaseModel {
+export class IsinDataGridModel extends BaseGridModel {
   public msgDateTime: Date = null;
   public identifier: string = null;
   public birthDate: Date = null;

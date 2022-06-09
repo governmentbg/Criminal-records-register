@@ -1,6 +1,6 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class EcrisMessageGridModel extends BaseModel {
+export class EcrisMessageGridModel extends BaseGridModel {
   public docTypeId: string = null;
   public docTypeName: string = null;
   public identifier: string = null;
