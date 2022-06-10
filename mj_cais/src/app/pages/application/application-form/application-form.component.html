@@ -10,7 +10,29 @@
     >
       <div>
         <button
-          *ngIf="!isForPreview && isEdit() && applicationStatus == 'NewId'"
+          *ngIf="
+            !isForPreview &&
+            isEdit() &&
+            (applicationStatus == 'NewId' ||
+              applicationStatus == 'FillApplication')
+          "
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="cancelApplication()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Анулирай
+        </button>
+        <button
+          *ngIf="
+            !isForPreview &&
+            isEdit() &&
+            (applicationStatus == 'NewId' ||
+              applicationStatus == 'FillApplication')
+          "
           nbButton
           matRipple
           [status]="'success'"
@@ -20,6 +42,30 @@
           style="min-width: 100px"
         >
           Окончателна редакция
+        </button>
+        <button
+          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="finalEdit()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Потвърждаване
+        </button>
+        <button
+          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="changeStatusToCheckPayment()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Отхвърляне
         </button>
       </div>
     </cais-card-header>
@@ -210,7 +256,8 @@
             [showAddDeleteButton]="
               (fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
-                isEdit() && !isForPreview) ||
+                isEdit() &&
+                !isForPreview) ||
               (!isEdit() && isForPreview)
             "
             [documents]="dbData.documents"

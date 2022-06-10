@@ -23,8 +23,8 @@ namespace MJ_CAIS.Services.Contracts
         public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description, bool includeInDbContext = true);
         Task<IgPageResult<ApplicationGridDTO>> SelectAllCertWithPaginationAsync(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId);
         Task<ApplicationOutDTO> SelectWithPersonDataAsync(string personId);
-
         Task ChangeApplicationStatusToCanceled(string aId);
+        Task ChangeApplicationStatusToCheckPayment(string aId);
 
     }
 }

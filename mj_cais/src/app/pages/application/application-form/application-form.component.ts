@@ -70,7 +70,6 @@ export class ApplicationFormComponent
   }
 
   submitFunction = () => {
-    
     // this.fullForm.applicationTypeId.setValue('6'); //Взима се от контекста
     // this.fullForm.csAuthorityId.setValue('562');  //Взима се от контекста
     this.isFinalEdit = false;
@@ -80,6 +79,18 @@ export class ApplicationFormComponent
   public finalEdit() {
     this.isFinalEdit = true;
     this.validateAndSave(this.fullForm);
+  }
+
+  public changeStatusToCheckPayment() {
+    this.service
+      .changeStatusToCheckPayment(this.objectId)
+      .subscribe((result) => {});
+  }
+
+  public cancelApplication() {
+    this.service
+      .cancelApplication(this.objectId)
+      .subscribe((result) => {});
   }
 
   protected saveAndNavigate() {

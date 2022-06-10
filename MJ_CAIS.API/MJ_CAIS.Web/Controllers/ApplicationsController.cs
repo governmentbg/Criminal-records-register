@@ -64,6 +64,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
+        [HttpGet("changeStatusToCheckPayment/{aId}")]
+        public virtual async Task<IActionResult> changeStatusToCheckPayment(string aId)
+        {
+            await this._applicationService.ChangeApplicationStatusToCheckPayment(aId);
+            return Ok();
+        }
+
         [HttpGet("searchByIdentifier/{aId}")]
         public virtual async Task<IActionResult> SearchByIdentifier(string aId)
         {

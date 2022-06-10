@@ -39,5 +39,18 @@ export class PersonFormComponent implements OnInit {
       this.personForm.egnDisplay.disable();
       this.showEgnDisplay = true;
     }
+    debugger;
+    if (this.isApplicationContext && this.personForm.egn.value !== null) {
+      this.personForm.lnch.disable();
+      this.personForm.ln.disable();
+    }
+    if (this.isApplicationContext && this.personForm.lnch.value !== null) {
+      this.personForm.egn.disable();
+      this.personForm.ln.disable();
+    }
+    if (this.isApplicationContext && this.personForm.ln.value !== null) {
+      this.personForm.egn.disable();
+      this.personForm.lnch.disable();
+    }
   }
 }

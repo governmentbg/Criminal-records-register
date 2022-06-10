@@ -103,6 +103,14 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task ChangeApplicationStatusToCheckPayment(string aId)
+        {
+            AApplication repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            repoObj.StatusCode = ApplicationConstants.ApplicationStatuses.CheckPayment;
+            await this.baseAsyncRepository.UpdateAsync(repoObj);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(ApplicationInDTO aInDto, bool isFinal)
         {
             var applicationDb = await dbContext.AApplications.AsNoTracking()
