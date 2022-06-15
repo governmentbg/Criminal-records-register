@@ -6,7 +6,6 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
-import { CoreModule } from "./@core/core.module";
 import { LoggerModule, NgxLoggerLevel } from "ngx-logger";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
@@ -50,6 +49,7 @@ import {
 import { AuthGuard } from "./@core/services/common/guard.service";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { NgxPermissionsModule } from "ngx-permissions";
+import { CoreModule } from "./@core/core.module";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -81,6 +81,7 @@ registerLocaleData(localeBg);
     AppRoutingModule,
     EditorModule,
     NgxSpinnerModule,
+    CoreModule.forRoot(),
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
     }),

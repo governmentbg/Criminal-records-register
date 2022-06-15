@@ -24,7 +24,7 @@ export class InternalRequestFormComponent
   private readonly PREVIEW_ACTION = "preview";
   
   private readonly BULLETIN_OVERVIEW_URL =
-    "/pages/bulletins-for-rehabilitation";
+    "/pages/bulletins/for-rehabilitation";
     private readonly INTERNAL_REQUEST_OVERVIEW_URL =
     "/pages/internal-requests";
 

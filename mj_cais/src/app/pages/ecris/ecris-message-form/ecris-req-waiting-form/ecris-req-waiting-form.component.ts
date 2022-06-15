@@ -22,7 +22,7 @@ export class EcrisReqWaitingFormComponent
 {
   constructor(service: EcrisMessageService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = "pages/ecris-req-waiting";
+    this.backUrl = "pages/ecris/req-waiting";
     this.setDisplayTitle("запитване");
   }
 

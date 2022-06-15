@@ -6,53 +6,53 @@
         <nb-card-body>
           <nb-list>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-new-office']">
+              <a [routerLink]="['/pages/bulletins/new-office']">
                 Нови бюлетини ({{ model.bulletinNewOfficeCount }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-new-eiss']">
+              <a [routerLink]="['/pages/bulletins/new-eiss']">
                 Нови бюлетини от ЕИСС ({{ model.bulletinNewEISSCount }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/isin-identified']">
+              <a [routerLink]="['/pages/isin/identified']">
                 Данни за изтърпени наказания ({{ model.isinIdentifiedCount }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-for-destruction']">
+              <a [routerLink]="['/pages/bulletins/for-destruction']">
                 За унищожаване ({{ model.bulletinForDestructionCount }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-for-rehabilitation']">
+              <a [routerLink]="['/pages/bulletins/for-rehabilitation']">
                 За реабилитация ({{ model.bulletinForRehabilitationCount }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletin-events']">
+              <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 1 ({{
                   model.bulletinEventArticle2211Count
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletin-events']">
+              <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 2 ({{
                   model.bulletinEventArticle2212Count
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletin-events']">
+              <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по чл.30 ({{
                   model.bulletinEventArticle3000Count
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletin-events']">
+              <a [routerLink]="['/pages/bulletins/events']">
                 Уведомяване за променен съдебен статус на осъдено лице ({{
                   model.bulletinEventNewDocumentCount
                 }})
@@ -66,7 +66,7 @@
         <nb-card-body>
           <nb-list>
             <nb-list-item>
-              <a [routerLink]="['/pages/isin-new']">
+              <a [routerLink]="['/pages/isin/new']">
                 Новопостъпили данни за изтърпени наказания ({{
                   model.isinNewCount
                 }})
@@ -91,7 +91,7 @@
               nbButton
               matRipple
               [status]="'success'"
-              [routerLink]="['/pages/applications-request']"
+              [routerLink]="['/pages/applications/request']"
               
               type="button"
               style="min-width: 100px"
@@ -108,21 +108,17 @@
               </nb-list-item>
 
               <nb-list-item>
-                <a [routerLink]="['/pages/applications-waiting-payment']">
-                  Потвърждение за плащане ({{
-                    model.applicationCheckPaymentCount
-                  }})
+                <a [routerLink]="['/pages/applications/waiting-payment']">
+                  Потвърждение за плащане ({{ model.applicationCheckPaymentCount }})
                 </a>
               </nb-list-item>
               <nb-list-item>
-                <a [routerLink]="['/pages/application-tax-free']">
-                  Oсвободени от плащане ({{
-                    model.applicationCheckTaxFreeCount
-                  }})
+                <a [routerLink]="['/pages/applications/tax-free']">
+                  Oсвободени от плащане ({{ model.applicationCheckTaxFreeCount }})
                 </a>
               </nb-list-item>
               <nb-list-item>
-                <a [routerLink]="['/pages/application-for-check']">
+                <a [routerLink]="['/pages/applications/for-check']">
                   За обработка ({{ model.applicationBulletinsCheckCount }})
                 </a>
               </nb-list-item>
@@ -135,12 +131,12 @@
           <nb-card-body>
             <nb-list>
               <nb-list-item>
-                <a [routerLink]="['/pages/ecris-identification']">
+                <a [routerLink]="['/pages/ecris/identification']">
                   За идентификация ({{ model.ecrisForIdentificationCount }})
                 </a>
               </nb-list-item>
               <nb-list-item>
-                <a [routerLink]="['/pages/ecris-req-waiting']">
+                <a [routerLink]="['/pages/ecris/req-waiting']">
                   Запитвания ({{ model.ecrisWaitingForCSAuthorityCount }})
                 </a>
               </nb-list-item>
@@ -149,31 +145,5 @@
         </nb-card>
       </div>
     </div>
-  </div>
-  <div class="row home-panel-container">
-    <!-- <div class="col-md-6">
-      <nb-card accent="info">
-        <nb-card-header>Свидетелства</nb-card-header>
-        <nb-card-body>
-          <nb-list>
-            <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-new-office']">
-                Очаква преглед на служител (8)
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-new-eiss']">
-                Очаква избор на бюлетини съобразно целта (4)
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/bulletins-for-rehabilitation']">
-                Заявки за реабилитация (9)
-              </a>
-            </nb-list-item>
-          </nb-list>
-        </nb-card-body>
-      </nb-card>
-    </div> -->
   </div>
 </ng-container>

@@ -26,7 +26,6 @@ import { MatInputModule } from "@angular/material/input";
 import { CardHeaderComponent } from "./components/forms/card-header/card-header.component";
 import { InputComponent } from "./components/forms/inputs/input/input.component";
 import { ValidationMessageComponent } from "./components/validation-message/validation-message.component";
-import { ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../shared.module";
 import { AutocompleteComponent } from "./components/forms/inputs/autocomplete/autocomplete.component";
 import { CheckboxGroupComponent } from "./components/forms/inputs/checkbox-group/checkbox-group.component";
@@ -45,7 +44,7 @@ import { DatePrecisionComponent } from "./components/forms/inputs/date-precision
 import { HttpClient } from "@angular/common/http";
 import { PersonFormComponent } from "./components/forms/person-form/person-form.component";
 import { PersonAliasFormComponent } from "./components/forms/person-form/person-alias-form/person-alias-form.component";
-import { ConfirmTemplateDialogComponent } from './components/dialogs/confirm-template-dialog/confirm-template-dialog.component';
+import { ConfirmTemplateDialogComponent } from "./components/dialogs/confirm-template-dialog/confirm-template-dialog.component";
 
 const socialLinks = [
   {
@@ -118,41 +117,13 @@ export const NB_CORE_PROVIDERS = [
   },
 ];
 
-const COMPONENTS = [
-  CardHeaderComponent,
-  InputComponent,
-  ValidationMessageComponent,
-  AutocompleteComponent,
-  CheckboxGroupComponent,
-  RadioGroupComponent,
-  GridWithTransactionsComponent,
-  ConfirmDialogComponent,
-  CaisGridPagerComponent,
-  LookupComponent,
-  MultipleChooseComponent,
-  AddressFormComponent,
-  CountryDialogComponent,
-  DatePrecisionComponent,
-  PersonFormComponent,
-  PersonAliasFormComponent,
-];
-
 @NgModule({
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    SharedModule,
-    NgSelectModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    NbCardModule,
-  ],
-  declarations: [...COMPONENTS, ConfirmTemplateDialogComponent],
+  imports: [CommonModule],
+  exports: [NbAuthModule],
+  declarations: [],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
   ],
-  exports: [NbAuthModule, SharedModule, NgSelectModule, ...COMPONENTS],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

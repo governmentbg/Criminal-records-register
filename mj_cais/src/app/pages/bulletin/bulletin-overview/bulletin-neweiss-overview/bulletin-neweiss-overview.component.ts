@@ -52,7 +52,7 @@ export class BulletinNewEissOverviewComponent extends RemoteGridWithStatePersist
                 "success",
                 this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
               );
-              this.router.navigate(["pages/bulletins"]);
+              this.router.navigate(["pages/bulletins/active"]);
             },
             (error) => {
               let title = this.dangerMessage;

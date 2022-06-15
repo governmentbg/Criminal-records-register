@@ -1,0 +1,60 @@
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ConfirmDialogComponent } from "./dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { AddressFormComponent } from "./forms/address-form/address-form.component";
+import { CountryDialogComponent } from "./forms/address-form/dialog/country-dialog/country-dialog.component";
+import { CardHeaderComponent } from "./forms/card-header/card-header.component";
+import { AutocompleteComponent } from "./forms/inputs/autocomplete/autocomplete.component";
+import { CheckboxGroupComponent } from "./forms/inputs/checkbox-group/checkbox-group.component";
+import { DatePrecisionComponent } from "./forms/inputs/date-precision/date-precision.component";
+import { InputComponent } from "./forms/inputs/input/input.component";
+import { LookupComponent } from "./forms/inputs/lookup/lookup.component";
+import { MultipleChooseComponent } from "./forms/inputs/multiple-choose/multiple-choose.component";
+import { RadioGroupComponent } from "./forms/inputs/radio-group/radio-group.component";
+import { PersonAliasFormComponent } from "./forms/person-form/person-alias-form/person-alias-form.component";
+import { PersonFormComponent } from "./forms/person-form/person-form.component";
+import { CaisGridPagerComponent } from "./grid/cais-grid-pager/cais-grid-pager.component";
+import { GridWithTransactionsComponent } from "./grid/grid-with-transactions.component";
+import { ValidationMessageComponent } from "./validation-message/validation-message.component";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatInputModule } from "@angular/material/input";
+import { NbCardModule } from "@nebular/theme";
+import { SharedModule } from "../../shared.module";
+import { ConfirmTemplateDialogComponent } from "./dialogs/confirm-template-dialog/confirm-template-dialog.component";
+
+const COMPONENTS = [
+  CardHeaderComponent,
+  InputComponent,
+  ValidationMessageComponent,
+  AutocompleteComponent,
+  CheckboxGroupComponent,
+  RadioGroupComponent,
+  GridWithTransactionsComponent,
+  ConfirmDialogComponent,
+  CaisGridPagerComponent,
+  LookupComponent,
+  MultipleChooseComponent,
+  AddressFormComponent,
+  CountryDialogComponent,
+  DatePrecisionComponent,
+  PersonFormComponent,
+  PersonAliasFormComponent,
+  ConfirmTemplateDialogComponent
+];
+
+@NgModule({
+  declarations: [...COMPONENTS],
+  exports: [...COMPONENTS, SharedModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    NgSelectModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    NbCardModule,
+  ],
+})
+export class CoreComponentModule {}
