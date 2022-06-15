@@ -26,6 +26,7 @@ import { ApplicationFormComponent } from "./application-form/application-form.co
     ApplicationCertificateResultComponent,
     ApplicationBulletinsSelectionComponent,
     ApplicationDocumentFormComponent,
+    
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
 })
