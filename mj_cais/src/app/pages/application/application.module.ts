@@ -12,6 +12,9 @@ import { ApplicationTaxFreeOverviewComponent } from "./application-overview/appl
 import { ApplicationWaitingPaymentComponent } from "./application-overview/application-waiting-payment/application-waiting-payment.component";
 import { CoreComponentModule } from "../../@core/components/core-component.module";
 import { ApplicationFormComponent } from "./application-form/application-form.component";
+import { SearchByEgnErrorDialogComponent } from "./application-request/search-by-egn-error-dialog/search-by-egn-error-dialog.component";
+import { SearchByEgnDialogComponent } from "./application-request/search-by-egn-dialog/search-by-egn-dialog.component";
+import { ApplicationRequestComponent } from "./application-request/application-request.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { ApplicationFormComponent } from "./application-form/application-form.co
     ApplicationCertificateResultComponent,
     ApplicationBulletinsSelectionComponent,
     ApplicationDocumentFormComponent,
-    
+    SearchByEgnErrorDialogComponent,
+    SearchByEgnDialogComponent,
+    ApplicationRequestComponent
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
 })

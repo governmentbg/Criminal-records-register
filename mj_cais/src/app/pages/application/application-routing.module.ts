@@ -10,11 +10,17 @@ import { ApplicationForSiningByJudgeComponent } from "./application-overview/app
 import { ApplicationNewOverviewComponent } from "./application-overview/application-new-overview/application-new-overview.component";
 import { ApplicationTaxFreeOverviewComponent } from "./application-overview/application-tax-free-overview/application-tax-free-overview.component";
 import { ApplicationWaitingPaymentComponent } from "./application-overview/application-waiting-payment/application-waiting-payment.component";
+import { ApplicationRequestComponent } from "./application-request/application-request.component";
 
 const routes: Routes = [
   {
     path: "",
     component: ApplicationNewOverviewComponent,
+  },
+  {
+    path: "request",
+    component: ApplicationRequestComponent,
+    resolve: { dbData: ApplicationResolver },
   },
   {
     path: "create",
