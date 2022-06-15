@@ -129,7 +129,6 @@ namespace MJ_CAIS.Web.Controllers
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
             return File(content, mimeType, fileName);
-
         }
 
         [HttpGet("{aId}/documents")]
