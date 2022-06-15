@@ -30,7 +30,7 @@ export class IsinBulletinOverviewComponent extends RemoteGridWithStatePersistanc
     this.service.selectBulletin(id, bulletinId).subscribe(
       (res) => {
         this.toastr.showToast("success", "Успешно идентифицирано съобщение");
-       this.router.navigateByUrl("pages/isin-new")             
+       this.router.navigateByUrl("pages/isin/new")             
 
       },
       (error) => this.errorHandler(error)  

@@ -42,31 +42,31 @@ export class PagesMenu {
         children: [
           {
             title: "Актуални бюлетини",
-            link: "/pages/bulletins",
+            link: "/pages/bulletins/active",
           },
           {
             title: "Нови бюлетини",
-            link: "/pages/bulletins-new-office",
+            link: "/pages/bulletins/new-office",
           },
           {
             title: "Нови бюлетини от ЕИСС",
-            link: "/pages/bulletins-new-eiss",
+            link: "/pages/bulletins/new-eiss",
           },
           {
             title: "Данни за изтърпени наказания",
-            link: "/pages/isin-identified",
+            link: "/pages/isin/identified",
           },
           {
             title: "За унищожаване",
-            link: "/pages/bulletins-for-destruction",
+            link: "/pages/bulletins/for-destruction",
           },
           {
             title: "Подлежащи на реабилитация",
-            link: "/pages/bulletins-for-rehabilitation",
+            link: "/pages/bulletins/for-rehabilitation",
           },
           {
             title: "Настъпили обстоятелства",
-            link: "/pages/bulletin-events",
+            link: "/pages/bulletins/events",
           },
         ],
       },
@@ -78,18 +78,17 @@ export class PagesMenu {
             title: "Нови заявления",
             link: "/pages/applications",
           },
-          // {
-          //   title: "Потвърждение за плащане",
-          //   link: "/pages/applications-waiting-payment",
-          // },
-        
+          {
+            title: "Потвърждение за плащане",
+            link: "/pages/applications/waiting-payment",
+          },       
           {
             title: "За обработка",
-            link: "/pages/application-for-check",
+            link: "/pages/applications/for-check",
           },
           {
             title: "За подпис",
-            link: "/pages/application-for-signing",
+            link: "/pages/applications/for-signing",
           },
         ],
       },
@@ -101,17 +100,17 @@ export class PagesMenu {
             title: "Заявки за реабилитация",
             link: "/pages/internal-requests",
           },
-          // {
-          //   title: "Oсвободени от плащане",
-          //   link: "/pages/application-tax-free",
-          // },
+          {
+            title: "Oсвободени от плащане",
+            link: "/pages/applications/tax-free",
+          },
           {
             title: "За подпис от съдия/юрист",
-            link: "/pages/application-for-signing-by-judge",
+            link: "/pages/applications/for-signing-by-judge",
           },
           {
             title: "За избор на бюлетини",
-            link: "/pages/application-bulletin-selection",
+            link: "/pages/applications/bulletin-selection",
           },
         ],
       },
@@ -125,12 +124,12 @@ export class PagesMenu {
           },
           {
             title: "Подлежащи на заличаване",
-            link: "/pages/fbbcs-for-destruction",
+            link: "/pages/fbbcs/for-destruction",
           },
-          // {
-          //   title: "Заличени",
-          //   link: "/pages/fbbcs-destructed",
-          // },
+          {
+            title: "Заличени",
+            link: "/pages/fbbcs/destructed",
+          },
         ],
       },
       {
@@ -139,15 +138,15 @@ export class PagesMenu {
         children: [
           {
             title: "За идентификация",
-            link: "/pages/ecris-identification",
+            link: "/pages/ecris/identification",
           },
           {
             title: "Запитвания",
-            link: "/pages/ecris-req-waiting",
+            link: "/pages/ecris/req-waiting",
           },
           {
             title: "ECRIS-TCN",
-            link: "/pages/ecris-tcns",
+            link: "/pages/ecris-tcn",
             // hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
         ],
@@ -155,7 +154,7 @@ export class PagesMenu {
       {
         title: "Изтърпени наказания",
         icon: "shuffle-2-outline",
-        link: "/pages/isin-new",
+        link: "/pages/isin/new",
       },
       {
         title: "Администрация",
@@ -184,7 +183,7 @@ export class PagesMenu {
           },
           {
             title: "Управление на бюлетини",
-            link: "/pages/bulletins-administration",    
+            link: "/pages/bulletin-administrations",    
             hidden: this.hasNoRole(roles, 'GlobalAdmin')
           }
         ],

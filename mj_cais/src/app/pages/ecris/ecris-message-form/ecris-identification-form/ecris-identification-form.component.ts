@@ -22,7 +22,7 @@ export class EcrisIdentificationFormComponent
 {
   constructor(service: EcrisMessageService, public injector: Injector) {
     super(service, injector);
-    this.backUrl = "pages/ecris-identification";
+    this.backUrl = "pages/ecris/identification";
     this.setDisplayTitle("запитване за идентификация");
   }
 

@@ -40,7 +40,7 @@ export class IsinDataPreviewFormComponent
     this.service.markAsClosed(id).subscribe(
       (res) => {
         this.toastService.showMessage("Успешно обработено съобщение");
-        this.router.navigateByUrl("isin-data");
+        this.router.navigateByUrl("isin/new");
       },
 
       (error) => {

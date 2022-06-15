@@ -142,7 +142,7 @@ export class ApplicationCertificateResultComponent
       .sendBulletinsForSelection(this.model.id)
       .subscribe((response: any) => {
         this.model.statusCode = CertificateStatuTypeEnum.BulletinsSelection;
-        this.router.navigate(["pages/application-for-check"]); 
+        this.router.navigate(["pages/applications/for-check"]); 
       }),
       (error) => {
         var errorText = error.status + " " + error.statusText;
@@ -156,7 +156,7 @@ export class ApplicationCertificateResultComponent
       .sendBulletinsForRehabilitation(this.model.id, selectedItesm)
       .subscribe((response: any) => {
         this.model.statusCode = CertificateStatuTypeEnum.BulletinsRehabilitation
-        this.router.navigate(["pages/application-for-check"]); 
+        this.router.navigate(["pages/applications/for-check"]); 
       }),
       (error) => {
         var errorText = error.status + " " + error.statusText;
