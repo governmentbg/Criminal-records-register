@@ -10,7 +10,30 @@
     >
       <div>
         <button
-          *ngIf="!isForPreview && isEdit() && applicationStatus == 'NewId'"
+          *ngIf="
+            !isForPreview &&
+            isEdit() &&
+            (applicationStatus == 'NewId' ||
+              applicationStatus == 'FillApplication')
+          "
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="cancelApplication()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Анулирай
+        </button>
+        <button
+          *ngIf="
+            (!isForPreview &&
+              isEdit() &&
+              (applicationStatus == 'NewId' ||
+                applicationStatus == 'FillApplication')) ||
+            (isForPreview && applicationStatus == 'CheckPayment')
+          "
           nbButton
           matRipple
           [status]="'success'"
@@ -19,7 +42,43 @@
           class="ml-2"
           style="min-width: 100px"
         >
-          Актуализирай
+          Окончателна редакция
+        </button>
+        <button
+          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="finalEdit()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Потвърждаване
+        </button>
+        <button
+          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="changeStatusToCheckPayment()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Отхвърляне
+        </button>
+        <button
+          *ngIf="!isForPreview"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="printApplication()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Печат
         </button>
       </div>
     </cais-card-header>
@@ -102,7 +161,6 @@
           </div>
           <cais-person-form
             [personForm]="fullForm.person"
-            [isEditable]="true"
             [personAliasTypes]="dbData.personAliasTypes"
             [genderTypes]="dbData.genderTypes"
             [countries]="dbData.countries"
@@ -111,7 +169,7 @@
             [contextType]="PersonContextEnum.Application"
             [isEditable]="
               fullForm.statusCode.value !=
-              ApplicationTypeStatusConstants.ApprovedApplication
+              ApplicationTypeStatusConstants.ApprovedApplication && !this.isForPreview
             "
           >
           </cais-person-form>
@@ -210,7 +268,8 @@
             [showAddDeleteButton]="
               (fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
-                isEdit() && !isForPreview) ||
+                isEdit() &&
+                !isForPreview) ||
               (!isEdit() && isForPreview)
             "
             [documents]="dbData.documents"

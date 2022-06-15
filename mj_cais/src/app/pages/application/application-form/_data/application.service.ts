@@ -48,12 +48,33 @@ export class ApplicationService extends CaisCrudService<
     );
   }
 
+  public cancelApplication(
+    id: string
+  ): Observable<any[]> {
+    return this.http.get<any>(
+      `${this.url}/cancelApplication/${id}`
+    );
+  }
+
+  public changeStatusToCheckPayment(
+    id: string
+  ): Observable<any[]> {
+    return this.http.get<any>(
+      `${this.url}/changeStatusToCheckPayment/${id}`
+    );
+  }
+
   public updateFinal(id: string, t: ApplicationModel): Observable<ApplicationModel> {
     return this.http.put<ApplicationModel>(this.url + `/final-edit/${id}`, t, {});
   }
 
   public downloadDocument(applicationId: string, documentId: string) {
     let url = `${this.url}/${applicationId}/documents-download/` + documentId;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+  public printApplication(applicationId: string) {
+    let url = `${this.url}/printApplication/${applicationId}`;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 

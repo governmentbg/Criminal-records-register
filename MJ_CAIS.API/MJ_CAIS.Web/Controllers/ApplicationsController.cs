@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.ExternalWebServices.DbServices;
+using MJ_CAIS.ExternalWebServices.Contracts;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -17,12 +19,16 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly IApplicationService _applicationService;
         private readonly IUserContext _userContext;
+        private readonly ISearchByIdentifierService _searchByIdentifierService;
+        private readonly IPrintDocumentService _printDocumentService;
 
-        public ApplicationsController(IApplicationService applicationService, IUserContext userContext)
+        public ApplicationsController(IApplicationService applicationService, IUserContext userContext, ISearchByIdentifierService searchByIdentifierService, IPrintDocumentService printDocumentService)
             : base(applicationService)
         {
             _applicationService = applicationService;
             _userContext = userContext;
+            _searchByIdentifierService = searchByIdentifierService;
+            _printDocumentService = printDocumentService;
         }
 
         [HttpGet("")]
@@ -54,13 +60,41 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("cancelApplication/{aId}")]
+        public virtual async Task<IActionResult> cancelApplicationByIdentifier(string aId)
+        {
+            await this._applicationService.ChangeApplicationStatusToCanceled(aId);
+            return Ok();
+        }
+
+        [HttpGet("changeStatusToCheckPayment/{aId}")]
+        public virtual async Task<IActionResult> changeStatusToCheckPayment(string aId)
+        {
+            await this._applicationService.ChangeApplicationStatusToCheckPayment(aId);
+            return Ok();
+        }
+
+        [HttpGet("searchByIdentifier/{aId}")]
+        public virtual async Task<IActionResult> SearchByIdentifier(string aId)
+        {
+            var result = await this._searchByIdentifierService.SearchByIdentifier(aId);
+            return Ok(new { id = result });
+        }
+
+        [HttpGet("searchByIdentifierLNCH/{aId}")]
+        public virtual async Task<IActionResult> searchByIdentifierLNCH(string aId)
+        {
+            var result = await this._searchByIdentifierService.SearchByIdentifierLNCH(aId);
+            return Ok(result);
+        }
+
         [HttpPost("")]
         public virtual async Task<IActionResult> Post([FromBody] ApplicationInDTO aInDto)
         {
-            // тодо:
-            // когато е създаване на свидетелство, а не справка
-            // при създаване на справка трябва да е друг типа
-            // за справката да се направи друг метод който да вика InsertAsync
+            // пїЅпїЅпїЅпїЅ:
+            // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ InsertAsync
             aInDto.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // todo
             aInDto.StatusCode = ApplicationConstants.ApplicationStatuses.NewId;
             aInDto.ApplicationTypeId = "6";
@@ -79,6 +113,23 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._applicationService.UpdateAsync(aInDto, false);
             return Ok();
+        }
+
+        [HttpGet("printApplication/{aId}")]
+        public async Task<IActionResult> PrintApplicationById(string aId)
+        {
+            var result = await this._printDocumentService.PrintApplication(aId);
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "sertificate.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
+
         }
 
         [HttpGet("{aId}/documents")]

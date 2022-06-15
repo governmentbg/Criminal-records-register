@@ -126,14 +126,8 @@
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <a
-        *ngIf="hideStatus"
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/applications/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
-      <a [title]="'Потвърди плащане'" (click)="confirmPayment()">
+    
+      <a [title]="'Потвърди плащане'" (click)="confirmPayment(cell.rowData.id)">
         <nb-icon pack="fa" icon="check"></nb-icon>
       </a>
     </ng-template>

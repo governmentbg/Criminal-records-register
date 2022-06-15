@@ -72,6 +72,7 @@ namespace MJ_CAIS.WebSetup
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
             });
 
+            //app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseExceptionHandler("/Error");
 
             app.UseStaticFiles();

@@ -14,6 +14,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<AAppBulletin, BulletinCheckDTO>()
               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+              .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.BulletinId))
               .ForMember(d => d.Version, opt => opt.MapFrom(src => src.Bulletin.Version))
               .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.Bulletin.RegistrationNumber))
               .ForMember(d => d.BulletinReceivedDate, opt => opt.MapFrom(src => src.Bulletin.BulletinReceivedDate))

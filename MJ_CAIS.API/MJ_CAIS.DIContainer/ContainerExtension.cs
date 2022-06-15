@@ -11,6 +11,7 @@ using MJ_CAIS.Repositories.Impl;
 using MJ_CAIS.Services;
 using MJ_CAIS.Services.Contracts;
 using System.Reflection;
+using MJ_CAIS.ExternalWebServices.DbServices;
 using TL.JasperReports.Integration;
 using TL.JasperReports.Integration.Interfaces;
 using TL.Signer;
@@ -44,6 +45,8 @@ namespace MJ_CAIS.DIContainer
             services.AddTransient<ICertificateGenerationService, CertificateGenerationService>();
             services.AddTransient<IPrintDocumentService, PrintDocumentService>();
             services.AddTransient<IReportGenerationService, ReportGenerationService>();
+            services.AddTransient<ISearchByIdentifierService, SearchByIdentifierService>();
+            services.AddTransient<IRegixService, RegixService>();
             //var servicesTypesExternal = typeof(CertificateGenerationService).Assembly.GetClassTypes("Service");
             //var interfaceTypesExternal = typeof(ICertificateGenerationService).Assembly.GetInterfaceTypes("Service");
             //AddTransientTypes(services, servicesTypesExternal, interfaceTypesExternal);

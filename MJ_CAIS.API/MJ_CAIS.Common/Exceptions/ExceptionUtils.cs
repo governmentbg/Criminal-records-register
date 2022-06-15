@@ -15,17 +15,15 @@ namespace MJ_CAIS.Common.Exceptions
             {
                 lastException = lastException.InnerException;
             }
-
-            string exceptionMessage = GetFullExceptionDetails(exception, false);
-            string userFriendlyMessage = GetUserFriendlyMessage(lastException, ref exceptionMessage);
-            string result = $"{userFriendlyMessage}\n{exceptionMessage}";
-            return result;
+            
+            string userFriendlyMessage = GetUserFriendlyMessage(lastException);
+            return userFriendlyMessage;
         }
 
         public static string GetFormatedErrorMessage(Exception exception, bool beautifyNewLine = true)
         {
             string exceptionMessage = GetFullExceptionDetails(exception, true);
-            string userFriendlyMessage = GetUserFriendlyMessage(exception, ref exceptionMessage);
+            string userFriendlyMessage = GetUserFriendlyMessage(exception);
             
             var exeptionName = exception.GetType().FullName;
             var time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
@@ -77,12 +75,16 @@ namespace MJ_CAIS.Common.Exceptions
             return result;
         }
 
-        private static string GetUserFriendlyMessage(Exception exception, ref string exceptionMessage)
+        private static string GetUserFriendlyMessage(Exception exception)
         {
             string userFriendlyMessage;
             if (exception is DbException || exception is DataException)
             {
                 userFriendlyMessage = CommonResources.MsgDataBaseError;
+            }
+            if (exception is BusinessLogicException)
+            {
+                userFriendlyMessage = exception.Message;
             }
             else if (exception.GetType() == typeof(ArgumentException))
             {

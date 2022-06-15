@@ -87,9 +87,28 @@ namespace MJ_CAIS.Services
         public override async Task<string> InsertAsync(ApplicationInDTO aInDto)
         {
             var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, true);
+            entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; //TODO: For test purposes (remove later)
+            entity.ApplicationTypeId = "6";//TODO: For test purposes (remove later)
+            this.TransformDataOnInsert(entity);
             await UpdateTransactionsAsync(aInDto, entity);
             await dbContext.SaveEntityAsync(entity, true);
             return entity.Id;
+        }
+
+        public async Task ChangeApplicationStatusToCanceled(string aId)
+        {
+            AApplication repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            repoObj.StatusCode = ApplicationConstants.ApplicationStatuses.Canceled;
+            await this.baseAsyncRepository.UpdateAsync(repoObj);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task ChangeApplicationStatusToCheckPayment(string aId)
+        {
+            AApplication repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            repoObj.StatusCode = ApplicationConstants.ApplicationStatuses.CheckPayment;
+            await this.baseAsyncRepository.UpdateAsync(repoObj);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(ApplicationInDTO aInDto, bool isFinal)
@@ -153,6 +172,8 @@ namespace MJ_CAIS.Services
             dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
             await dbContext.SaveChangesAsync();
         }
+
+     
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
