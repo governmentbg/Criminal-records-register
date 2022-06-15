@@ -28,6 +28,8 @@ export class PersonFormComponent implements OnInit {
   ngOnInit(): void {
     // when form is init context type must be set
 
+    let a = this.isEditable;
+
     this.isFbbcContext = this.contextType == PersonContextEnum.Fbbc;
     this.isBulletinContext = this.contextType == PersonContextEnum.Bulletin;
     this.isPersonContext = this.contextType == PersonContextEnum.Person;
@@ -39,7 +41,6 @@ export class PersonFormComponent implements OnInit {
       this.personForm.egnDisplay.disable();
       this.showEgnDisplay = true;
     }
-    debugger;
     if (this.isApplicationContext && this.personForm.egn.value !== null) {
       this.personForm.lnch.disable();
       this.personForm.ln.disable();

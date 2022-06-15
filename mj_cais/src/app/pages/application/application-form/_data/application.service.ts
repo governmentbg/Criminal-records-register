@@ -73,6 +73,11 @@ export class ApplicationService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
+  public printApplication(applicationId: string) {
+    let url = `${this.url}/printApplication/${applicationId}`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
   public getPersonAlias(id: string): Observable<PersonAliasModel[]> {
     return this.http
       .get<PersonAliasModel[]>(`${this.url}/${id}/person-alias`)

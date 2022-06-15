@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
+import * as fileSaver from "file-saver";
 import { Observable } from "rxjs";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
@@ -58,7 +59,15 @@ export class ApplicationFormComponent
     ) {
       this.fullForm.group.disable();
     }
+
+    
     this.formFinishedLoading.emit();
+    if (
+      this.fullForm.statusCode.value ==
+      ApplicationTypeStatusConstants.CheckPayment
+    ) {
+      this.fullForm.paymentMethodId.enable();
+    }
   }
 
   buildFormImpl(): FormGroup {
@@ -75,6 +84,29 @@ export class ApplicationFormComponent
     this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
+
+
+  public printApplication() {
+    this.service
+      .printApplication(this.objectId)
+      .subscribe((response) => {
+        let blob = new Blob([response.body]);
+        window.URL.createObjectURL(blob);
+
+        let header = response.headers.get("Content-Disposition");
+        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+        let fileName = "download";
+
+        var matches = filenameRegex.exec(header);
+        if (matches != null && matches[1]) {
+          fileName = matches[1].replace(/['"]/g, "");
+        }
+
+        fileSaver.saveAs(blob, fileName);
+        this.toastr.showToast("success", "Успешно разпечатан документ");
+      });
+  }
 
   public finalEdit() {
     this.isFinalEdit = true;

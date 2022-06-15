@@ -28,10 +28,11 @@
         </button>
         <button
           *ngIf="
-            !isForPreview &&
-            isEdit() &&
-            (applicationStatus == 'NewId' ||
-              applicationStatus == 'FillApplication')
+            (!isForPreview &&
+              isEdit() &&
+              (applicationStatus == 'NewId' ||
+                applicationStatus == 'FillApplication')) ||
+            (isForPreview && applicationStatus == 'CheckPayment')
           "
           nbButton
           matRipple
@@ -66,6 +67,18 @@
           style="min-width: 100px"
         >
           Отхвърляне
+        </button>
+        <button
+          *ngIf="!isForPreview"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="printApplication()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Печат
         </button>
       </div>
     </cais-card-header>
@@ -148,7 +161,6 @@
           </div>
           <cais-person-form
             [personForm]="fullForm.person"
-            [isEditable]="true"
             [personAliasTypes]="dbData.personAliasTypes"
             [genderTypes]="dbData.genderTypes"
             [countries]="dbData.countries"
@@ -157,7 +169,7 @@
             [contextType]="PersonContextEnum.Application"
             [isEditable]="
               fullForm.statusCode.value !=
-              ApplicationTypeStatusConstants.ApprovedApplication
+              ApplicationTypeStatusConstants.ApprovedApplication && !this.isForPreview
             "
           >
           </cais-person-form>

@@ -1,17 +1,6 @@
-﻿using AutoMapper;
-using MJ_CAIS.Common.Constants;
+﻿using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.ExternalWebServices.Contracts;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TL.JasperReports.Integration.Enums;
 using TL.JasperReports.Integration.Interfaces;
 

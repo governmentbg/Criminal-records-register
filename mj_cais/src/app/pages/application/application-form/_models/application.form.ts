@@ -119,6 +119,9 @@ export class ApplicationForm extends BaseForm {
     this.birthAddress = new AddressForm();
     this.person = new PersonForm(PersonContextEnum.Application, false);
     
+    //Validators
+    this.registrationNumber.disable();
+    
     this.group = new FormGroup({
       id: this.id,
       version: this.version,

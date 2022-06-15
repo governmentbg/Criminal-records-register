@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.ExternalWebServices.DbServices;
+using MJ_CAIS.ExternalWebServices.Contracts;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -19,13 +20,15 @@ namespace MJ_CAIS.Web.Controllers
         private readonly IApplicationService _applicationService;
         private readonly IUserContext _userContext;
         private readonly ISearchByIdentifierService _searchByIdentifierService;
+        private readonly IPrintDocumentService _printDocumentService;
 
-        public ApplicationsController(IApplicationService applicationService, IUserContext userContext, ISearchByIdentifierService searchByIdentifierService)
+        public ApplicationsController(IApplicationService applicationService, IUserContext userContext, ISearchByIdentifierService searchByIdentifierService, IPrintDocumentService printDocumentService)
             : base(applicationService)
         {
             _applicationService = applicationService;
             _userContext = userContext;
             _searchByIdentifierService = searchByIdentifierService;
+            _printDocumentService = printDocumentService;
         }
 
         [HttpGet("")]
@@ -75,7 +78,7 @@ namespace MJ_CAIS.Web.Controllers
         public virtual async Task<IActionResult> SearchByIdentifier(string aId)
         {
             var result = await this._searchByIdentifierService.SearchByIdentifier(aId);
-            return Ok(new {id = result});
+            return Ok(new { id = result });
         }
 
         [HttpGet("searchByIdentifierLNCH/{aId}")]
@@ -110,6 +113,23 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._applicationService.UpdateAsync(aInDto, false);
             return Ok();
+        }
+
+        [HttpGet("printApplication/{aId}")]
+        public async Task<IActionResult> PrintApplicationById(string aId)
+        {
+            var result = await this._printDocumentService.PrintApplication(aId);
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "sertificate.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
+
         }
 
         [HttpGet("{aId}/documents")]
