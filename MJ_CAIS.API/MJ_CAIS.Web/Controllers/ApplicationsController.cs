@@ -1,15 +1,15 @@
 using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.Application;
+using Microsoft.AspNetCore.StaticFiles;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
+using MJ_CAIS.ExternalWebServices.Contracts;
+using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.StaticFiles;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.Common.Constants;
-using MJ_CAIS.ExternalWebServices.DbServices;
-using MJ_CAIS.ExternalWebServices.Contracts;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -66,6 +66,8 @@ namespace MJ_CAIS.Web.Controllers
             await this._applicationService.ChangeApplicationStatusToCanceled(aId);
             return Ok();
         }
+
+
 
         [HttpGet("changeStatusToCheckPayment/{aId}")]
         public virtual async Task<IActionResult> changeStatusToCheckPayment(string aId)
@@ -172,6 +174,13 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> GetPersonAlias(string aId)
         {
             var result = await this._applicationService.SelectApplicationPersAliasByApplicationIdAsync(aId);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}/eWeb-requests")]
+        public async Task<IActionResult> GetEWebRequestsByApplicationId(string aId)
+        {
+            var result = await this._applicationService.SelectAllEWebRequestsByApplicationIdAsync(aId);
             return Ok(result);
         }
 

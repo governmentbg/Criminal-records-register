@@ -1,7 +1,7 @@
-using MJ_CAIS.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -11,16 +11,15 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-
-        public virtual IQueryable<EWebRequest> SelectAll()
+        public async Task<IQueryable<EWebRequest>> SelectAllByApplicationId(string aId)
         {
-            var result = 
-                this._dbContext
-                .Set<EWebRequest>()
-                .Include(x => x.WebService)
-                .AsNoTracking();
-
-            return result;
+            return
+                await Task.FromResult(
+                    _dbContext.Set<EWebRequest>()
+                        .Include(x => x.WebService)
+                        .Where(x => x.ApplicationId == aId)
+                        .AsNoTracking()
+                );
         }
     }
 }

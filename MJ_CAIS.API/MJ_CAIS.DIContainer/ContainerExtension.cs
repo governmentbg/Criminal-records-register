@@ -6,14 +6,13 @@ using MJ_CAIS.EcrisObjectsServices;
 using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.Contracts;
+using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Repositories.Impl;
 using MJ_CAIS.Services;
 using MJ_CAIS.Services.Contracts;
 using System.Reflection;
-using MJ_CAIS.ExternalWebServices.DbServices;
 using TL.JasperReports.Integration;
-using TL.JasperReports.Integration.Interfaces;
 using TL.Signer;
 
 namespace MJ_CAIS.DIContainer

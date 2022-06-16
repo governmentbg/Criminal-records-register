@@ -169,7 +169,8 @@
             [contextType]="PersonContextEnum.Application"
             [isEditable]="
               fullForm.statusCode.value !=
-              ApplicationTypeStatusConstants.ApprovedApplication && !this.isForPreview
+                ApplicationTypeStatusConstants.ApprovedApplication &&
+              !this.isForPreview
             "
           >
           </cais-person-form>
@@ -293,7 +294,10 @@
           </cais-application-status-history>
         </nb-tab>
 
-        <nb-tab tabTitle="Проверка в регистри"></nb-tab>
+        <nb-tab tabTitle="Проверка в регистри">
+          <cais-application-e-web-requests [historyData]="dbData.eWebRequest">
+          </cais-application-e-web-requests>
+        </nb-tab>
       </nb-tabset>
     </form>
   </nb-card-body>

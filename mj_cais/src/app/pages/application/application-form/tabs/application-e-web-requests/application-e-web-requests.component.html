@@ -1,0 +1,27 @@
+<igx-grid
+  #decisionsGrid
+  [height]="null"
+  [data]="historyData"
+  [primaryKey]="'id'"
+>
+  <igx-column
+    field="createdOn"
+    [sortable]="true"
+    header="Дата"
+    dataType="Date"
+    [formatter]="this.dateFormatService.formatDate"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="webServiceName"
+    header="Име на справката"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+</igx-grid>

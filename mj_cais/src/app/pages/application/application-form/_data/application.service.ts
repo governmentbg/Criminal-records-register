@@ -48,6 +48,14 @@ export class ApplicationService extends CaisCrudService<
     );
   }
 
+  public getApplicationEWebRequestsData(
+    id: string
+  ): Observable<ApplicationStatusHistoryModel[]> {
+    return this.http.get<ApplicationStatusHistoryModel[]>(
+      `${this.url}/${id}/eWeb-requests`
+    );
+  }
+
   public cancelApplication(
     id: string
   ): Observable<any[]> {

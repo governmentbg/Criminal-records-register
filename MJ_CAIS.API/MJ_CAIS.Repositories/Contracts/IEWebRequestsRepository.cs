@@ -5,5 +5,7 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IEWebRequestsRepository : IBaseAsyncRepository<EWebRequest, string, CaisDbContext>
     {
+
+        Task<IQueryable<EWebRequest>> SelectAllByApplicationId(string aId);
     }
 }

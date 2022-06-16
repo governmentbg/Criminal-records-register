@@ -15,6 +15,7 @@ import { ApplicationFormComponent } from "./application-form/application-form.co
 import { SearchByEgnErrorDialogComponent } from "./application-request/search-by-egn-error-dialog/search-by-egn-error-dialog.component";
 import { SearchByEgnDialogComponent } from "./application-request/search-by-egn-dialog/search-by-egn-dialog.component";
 import { ApplicationRequestComponent } from "./application-request/application-request.component";
+import { ApplicationEWebRequestsComponent } from './application-form/tabs/application-e-web-requests/application-e-web-requests.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ApplicationRequestComponent } from "./application-request/application-r
     ApplicationDocumentFormComponent,
     SearchByEgnErrorDialogComponent,
     SearchByEgnDialogComponent,
-    ApplicationRequestComponent
+    ApplicationRequestComponent,
+    ApplicationEWebRequestsComponent
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
 })

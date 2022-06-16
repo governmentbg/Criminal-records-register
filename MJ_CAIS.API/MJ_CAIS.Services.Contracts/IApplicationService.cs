@@ -2,6 +2,7 @@ using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.EWebRequest;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Services.Contracts.Utils;
 
@@ -26,5 +27,6 @@ namespace MJ_CAIS.Services.Contracts
         Task ChangeApplicationStatusToCanceled(string aId);
         Task ChangeApplicationStatusToCheckPayment(string aId);
 
+        Task<IQueryable<EWebRequestGridDTO>> SelectAllEWebRequestsByApplicationIdAsync(string aId);
     }
 }
