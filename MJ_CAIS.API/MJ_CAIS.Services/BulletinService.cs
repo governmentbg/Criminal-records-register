@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
@@ -87,7 +89,7 @@ namespace MJ_CAIS.Services
         {
             var result = new BulletinBaseDTO();
             var dbContext = _bulletinRepository.GetDbContext();
-            var authId = _userContext.CsAuthorityId ?? "660"; // todo: remove
+            var authId = _userContext.CsAuthorityId;
             var auth = await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
             result.CsAuthorityName = auth?.Name;
             var person = await _personService.SelectWithBirthInfoAsync(personId);
@@ -107,12 +109,11 @@ namespace MJ_CAIS.Services
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
 
-            var authId = _userContext.CsAuthorityId ?? "660"; // todo remove: only for testing
-            bulletin.CsAuthorityId = authId;
-            var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletin.BulletinType);
+            bulletin.CsAuthorityId = _userContext.CsAuthorityId;
+            var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(bulletin.CsAuthorityId, bulletin.BulletinType);
             bulletin.RegistrationNumber = regNumber;
 
-            await UpdateBulletinAsync(aInDto, bulletin, null);
+            await UpdateBulletinAsync(aInDto, bulletin);
             await _bulletinRepository.SaveChangesAsync();
 
             if (bulletin.StatusId == Status.NoSanction)
@@ -139,7 +140,10 @@ namespace MJ_CAIS.Services
                 .FirstOrDefaultAsync(x => x.Id == aInDto.Id);
 
             if (bulletinDb == null)
-                throw new ArgumentException($"Bulletin with id {aInDto.Id} is missing");
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto.Id));
+
+            if (bulletinDb.CsAuthorityId != _userContext.CsAuthorityId)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.editIsUnauthorized);
 
             var oldBulletinStatus = bulletinDb.StatusId;
             var bulletinToUpdate = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
@@ -155,9 +159,7 @@ namespace MJ_CAIS.Services
 
             if (bulletinToUpdate.StatusId == Status.NewEISS && string.IsNullOrEmpty(bulletinDb.RegistrationNumber))
             {
-                // todo remove: only for testing ? 
-                var authId = !string.IsNullOrEmpty(bulletinToUpdate?.CsAuthorityId) ? bulletinToUpdate?.CsAuthorityId : "660";
-                var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(authId, bulletinToUpdate.BulletinType);
+                var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(bulletinToUpdate?.CsAuthorityId, bulletinToUpdate.BulletinType);
                 bulletinToUpdate.RegistrationNumber = regNumber;
                 bulletinToUpdate.ModifiedProperties.Add(nameof(bulletinToUpdate.RegistrationNumber));
             }
@@ -194,18 +196,18 @@ namespace MJ_CAIS.Services
         /// <param name="aInDto">Bulletin ID</param>
         /// <param name="statusId">Status</param>
         /// <exception cref="ArgumentException"></exception>
-        public async Task ChangeStatusAsync(string aInDto, string statusId)
+        public async Task ChangeStatusAsync(string bulletinId, string statusId)
         {
             var bulletin = await dbContext.BBulletins
                 .Include(x => x.BPersNationalities)
                     .ThenInclude(x => x.Country)
-                .FirstOrDefaultAsync(x => x.Id == aInDto);
+                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             if (bulletin == null)
-                throw new ArgumentException($"Bulletin with id: {aInDto} is missing");
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
             var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(oldBulletinStatus, statusId, aInDto, bulletin.Locked);
+            AddBulletinStatusH(oldBulletinStatus, statusId, bulletinId, bulletin.Locked);
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
                 statusId == Status.Active;
@@ -298,7 +300,7 @@ namespace MJ_CAIS.Services
         public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
         {
             if (aInDto.DocumentContent?.Length == 0)
-                throw new ArgumentNullException("Documetn is empty");
+                throw new BusinessLogicException(BusinessLogicExceptionResources.documentIsEmpty);
 
             var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
                 Guid.NewGuid().ToString() :
@@ -324,8 +326,8 @@ namespace MJ_CAIS.Services
                 {
                     BulletinId = bulletinId,
                     Id = BaseEntity.GenerateNewId(),
-                    StatusCode = "New",
-                    EventType = "NewDocument",
+                    StatusCode = BulletinEventConstants.Status.New,
+                    EventType = BulletinEventConstants.Type.NewDocument,
                     EntityState = EntityStateEnum.Added
                 };
 
@@ -342,9 +344,7 @@ namespace MJ_CAIS.Services
         {
             var document = await _bulletinRepository.SelectDocumentAsync(documentId);
             if (document == null)
-            {
-                throw new ArgumentException($"Document with id: {documentId} is missing");
-            }
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.documentDoesNotExist, documentId));
 
             document.EntityState = EntityStateEnum.Deleted;
             if (document.DocContent != null)
@@ -380,13 +380,13 @@ namespace MJ_CAIS.Services
         /// <param name="entity"></param>
         /// <param name="oldStatus"></param>
         /// <returns></returns>
-        private async Task UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity, string oldStatus)
+        private async Task UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity, string oldStatus = null)
         {
             UpdateDataForDestruction(entity);
 
             await UpdateTransactionsAsync(aInDto, entity);
 
-            UpdateStatusByDecisions(entity, oldStatus);
+            UpdateStatusByDecisions(entity);
 
             // if no sanction is selected
             // change bulletin status
@@ -476,7 +476,6 @@ namespace MJ_CAIS.Services
                 bulletin.ModifiedProperties = new List<string>
                     {
                         nameof(bulletin.RegistrationNumber),
-                        nameof(bulletin.SequentialIndex),
                         nameof(bulletin.AlphabeticalIndex),
                         nameof(bulletin.EcrisConvictionId),
                         nameof(bulletin.BulletinType),
@@ -492,17 +491,14 @@ namespace MJ_CAIS.Services
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        private void UpdateStatusByDecisions(BBulletin entityToSave, string oldStatus)
+        private void UpdateStatusByDecisions(BBulletin entityToSave)
         {
-            const string judicialAnnulmentId = "DCH-00-Y";
-            const string rehabilitationId = "DCH-00-R";
-
-            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == rehabilitationId))
+            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == DecisionType.Rehabilitation))
             {
                 entityToSave.StatusId = Status.Rehabilitated;
             }
 
-            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == judicialAnnulmentId))
+            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == DecisionType.JudicialAnnulment))
             {
                 entityToSave.StatusId = Status.ReplacedAct425;
             }
@@ -530,7 +526,6 @@ namespace MJ_CAIS.Services
 
             dbContext.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
             return true;
-
         }
 
         private async Task UpdateTransactionsAsync(BulletinBaseDTO aInDto, BBulletin entity)

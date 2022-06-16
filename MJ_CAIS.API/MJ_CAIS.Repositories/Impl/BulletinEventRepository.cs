@@ -12,7 +12,7 @@ namespace MJ_CAIS.Repositories.Impl
     {
         private readonly IUserContext _userContext;
 
-        public BulletinEventRepository(CaisDbContext dbContext, IUserContext userContext) 
+        public BulletinEventRepository(CaisDbContext dbContext, IUserContext userContext)
             : base(dbContext)
         {
             _userContext = userContext;
@@ -32,9 +32,8 @@ namespace MJ_CAIS.Repositories.Impl
                               into eventStatusLeft
                         from eventStatus in eventStatusLeft.DefaultIfEmpty()
 
-                        where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) && 
-                        (string.IsNullOrEmpty(bulletinId) || bullEvents.BulletinId == bulletinId) &&
-                        eventType.GroupCode == groupCode //&& bulletin.CsAuthorityId == _userContext.CsAuthorityId
+                        where (string.IsNullOrEmpty(statusId) || bullEvents.StatusCode == statusId) && eventType.GroupCode == groupCode &&
+                        ((string.IsNullOrEmpty(bulletinId) && bulletin.CsAuthorityId == _userContext.CsAuthorityId) || bullEvents.BulletinId == bulletinId)
                         select new BulletinEventGridDTO
                         {
                             Id = bullEvents.Id,

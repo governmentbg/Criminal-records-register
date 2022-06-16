@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.IsinData;
@@ -18,6 +20,7 @@ namespace MJ_CAIS.Services
         private readonly IIsinDataRepository _isinDataRepository;
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IUserContext _userContext;
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         public IsinDataService(IMapper mapper, IIsinDataRepository isinDataRepository, IBulletinRepository bulletinRepository, IUserContext userContext)
             : base(mapper, isinDataRepository)
@@ -50,28 +53,28 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public async Task SelectBulletinAsync(string aInDto, string bulletinId)
+        public async Task SelectBulletinAsync(string aId, string bulletinId)
         {
             var hasBulletin = await dbContext.BBulletins
                .AnyAsync(x => x.Id == bulletinId);
 
             if (!hasBulletin)
-                throw new ArgumentException($"Bulletin with id: {bulletinId} is missing");
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
             var isinData = await dbContext.EIsinData
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
+               .FirstOrDefaultAsync(x => x.Id == aId);
 
             if (isinData == null)
-                throw new ArgumentException($"Isin message with id: {aInDto} is missing");
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.isinDataDoesNotExist, aId));
 
             isinData.Status = IsinDataConstants.Status.Identified;
             isinData.BulletinId = bulletinId;
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IsinDataPreviewDTO> SelectForPreviewAsync(string aIdDto)
+        public async Task<IsinDataPreviewDTO> SelectForPreviewAsync(string aId)
         {
-            var isin = await SelectIsinDataAsync(aIdDto);
+            var isin = await SelectIsinDataAsync(aId);
             if (isin == null) return null;
 
             var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(isin.BulletinId);
@@ -81,21 +84,16 @@ namespace MJ_CAIS.Services
             return isin;
         }
 
-        public async Task CloseAsync(string aInDto)
+        public async Task CloseAsync(string aId)
         {
             var isinData = await dbContext.EIsinData
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
+               .FirstOrDefaultAsync(x => x.Id == aId);
 
             if (isinData == null)
-                throw new ArgumentException($"Isin message with id: {aInDto} is missing");
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.isinDataDoesNotExist, aId));
 
             isinData.Status = IsinDataConstants.Status.Closed;
             await dbContext.SaveChangesAsync();
-        }
-
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
         }
 
         #region Helper methods 
@@ -154,58 +152,58 @@ namespace MJ_CAIS.Services
                 query = query.Where(x => x.Status == status);
                 if (status == IsinDataConstants.Status.Identified)
                 {
-                    // todo: add authorization
-                    //query = query.Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
+                    query = query.Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
                 }
             }
+
             return query;
         }
 
         private async Task<IsinDataPreviewDTO> SelectIsinDataAsync(string aId)
         {
-            var query = from isin in dbContext.EIsinData.AsNoTracking()
-                        join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
-                                  into isinMessageLeft
-                        from isinMessage in isinMessageLeft.DefaultIfEmpty()
+            var isinData = await (from isin in dbContext.EIsinData.AsNoTracking()
+                                  join isinMessage in dbContext.EWebRequests.AsNoTracking() on isin.WebRequestId equals isinMessage.Id
+                                            into isinMessageLeft
+                                  from isinMessage in isinMessageLeft.DefaultIfEmpty()
 
-                        join decisionTypes in dbContext.BDecisionTypes.AsNoTracking() on isin.DecisionTypeId equals decisionTypes.Code
-                                    into isinDecisionLeft
-                        from isinDecision in isinDecisionLeft.DefaultIfEmpty()
+                                  join decisionTypes in dbContext.BDecisionTypes.AsNoTracking() on isin.DecisionTypeId equals decisionTypes.Code
+                                              into isinDecisionLeft
+                                  from isinDecision in isinDecisionLeft.DefaultIfEmpty()
 
-                        join caseTypes in dbContext.BCaseTypes.AsNoTracking() on isin.CaseTypeId equals caseTypes.Code
-                        into isinCaseLeft
-                        from isinCase in isinCaseLeft.DefaultIfEmpty()
-                        where isin.Id == aId
-                        select new IsinDataPreviewDTO
-                        {
-                            Id = isin.Id,
-                            MsgDateTime = isinMessage.ExecutionDate,
-                            Status = isin.Status,
-                            Identifier = isin.Identifier,
-                            FirstName = isin.Firstname,
-                            SurName = isin.Surname,
-                            FamilyName = isin.Familyname,
-                            BirthDate = isin.Birthdate,
-                            Sex = isin.Sex,
-                            Country1Name = isin.Country1Name,
-                            Country2Name = isin.Country2Name,
-                            BirthCountryName = isin.BirthcountryName,
-                            BirthPlace = isin.BirthPlace,
-                            DecisionType = isinDecision.Name,
-                            DecisionNumber = isin.DecisionNumber,
-                            DecisionDate = isin.DecisionDate,
-                            DecisionFinalDate = isin.DecisionFinalDate,
-                            DecisionAuthName = isin.DecisionAuthName,
-                            CaseType = isinCase.Name,
-                            CaseNumber = isin.CaseNumber,
-                            CaseYear = isin.CaseYear,
-                            CaseAuthName = isin.CaseAuthName,
-                            SanctionStartDate = isin.SanctionStartDate,
-                            SanctionEndDate = isin.SanctionEndDate,
-                            BulletinId = isin.BulletinId,
-                        };
+                                  join caseTypes in dbContext.BCaseTypes.AsNoTracking() on isin.CaseTypeId equals caseTypes.Code
+                                  into isinCaseLeft
+                                  from isinCase in isinCaseLeft.DefaultIfEmpty()
+                                  where isin.Id == aId
+                                  select new IsinDataPreviewDTO
+                                  {
+                                      Id = isin.Id,
+                                      MsgDateTime = isinMessage.ExecutionDate,
+                                      Status = isin.Status,
+                                      Identifier = isin.Identifier,
+                                      FirstName = isin.Firstname,
+                                      SurName = isin.Surname,
+                                      FamilyName = isin.Familyname,
+                                      BirthDate = isin.Birthdate,
+                                      Sex = isin.Sex,
+                                      Country1Name = isin.Country1Name,
+                                      Country2Name = isin.Country2Name,
+                                      BirthCountryName = isin.BirthcountryName,
+                                      BirthPlace = isin.BirthPlace,
+                                      DecisionType = isinDecision.Name,
+                                      DecisionNumber = isin.DecisionNumber,
+                                      DecisionDate = isin.DecisionDate,
+                                      DecisionFinalDate = isin.DecisionFinalDate,
+                                      DecisionAuthName = isin.DecisionAuthName,
+                                      CaseType = isinCase.Name,
+                                      CaseNumber = isin.CaseNumber,
+                                      CaseYear = isin.CaseYear,
+                                      CaseAuthName = isin.CaseAuthName,
+                                      SanctionStartDate = isin.SanctionStartDate,
+                                      SanctionEndDate = isin.SanctionEndDate,
+                                      BulletinId = isin.BulletinId,
+                                  }).FirstOrDefaultAsync();
 
-            return await query.FirstOrDefaultAsync();
+            return isinData;
         }
 
         private IQueryable<IsinBulletinGridDTO> SelectAllBulletin()

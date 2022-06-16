@@ -9,7 +9,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("isin-data")]
-    [AllowAnonymous] // TODO: remove
+    [Authorize]
     public class IsinDataController : BaseApiCrudController<IsinDataDTO, IsinDataDTO, IsinDataGridDTO, EIsinDatum, string>
     {
         private readonly IIsinDataService _isinDataService;

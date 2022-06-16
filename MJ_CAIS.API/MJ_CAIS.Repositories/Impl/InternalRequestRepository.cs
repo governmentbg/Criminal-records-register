@@ -7,15 +7,20 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class InternalRequestRepository : BaseAsyncRepository<BInternalRequest, CaisDbContext>, IInternalRequestRepository
     {
-        public InternalRequestRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public InternalRequestRepository(CaisDbContext dbContext, IUserContext userContext) 
+            : base(dbContext)
         {
+            this._userContext = userContext;
         }
 
         public override IQueryable<BInternalRequest> SelectAll()
         {
             var query = this._dbContext.BInternalRequests.AsNoTracking()
                 .Include(x => x.Bulletin)
-                .Include(x => x.ReqStatusCodeNavigation);
+                .Include(x => x.ReqStatusCodeNavigation)
+                .Where(x => x.Bulletin.CsAuthorityId == _userContext.CsAuthorityId);
 
             return query;
         }

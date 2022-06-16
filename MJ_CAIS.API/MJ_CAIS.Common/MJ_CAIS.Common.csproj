@@ -12,6 +12,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CommonResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\BusinessLogicExceptionResources.Designer.cs">
+      <DependentUpon>BusinessLogicExceptionResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\BulletinResources.Designer.cs">
       <DependentUpon>BulletinResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -28,6 +33,10 @@
     <EmbeddedResource Update="CommonResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\BusinessLogicExceptionResources.resx">
+      <LastGenOutput>BusinessLogicExceptionResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\BulletinResources.resx">
       <LastGenOutput>BulletinResources.Designer.cs</LastGenOutput>

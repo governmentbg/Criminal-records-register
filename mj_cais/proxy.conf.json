@@ -1,12 +1,9 @@
 {
   "/auth/*": {
-    "target": "https://localhost:5001",
+    "target": "https://mj-cais.technologica.com",
     "secure": false,
     "logLevel": "debug",
     "debug": true,
-    "changeOrigin": true,
-    "pathRewrite": {
-      "^/auth/": "/"
-    }
+    "changeOrigin": true
   }
 }

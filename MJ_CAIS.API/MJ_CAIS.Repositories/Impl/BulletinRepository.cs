@@ -22,10 +22,8 @@ namespace MJ_CAIS.Repositories.Impl
             var query = this._dbContext.BBulletins
                                 .Include(x => x.Status)
                                 .Include(x => x.BulletinAuthority)
+                                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId)
                                 .AsNoTracking();
-
-            // query = _userContext.FilterByAuthority(query);
-
             return query;
         }
 

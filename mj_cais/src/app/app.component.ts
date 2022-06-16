@@ -8,6 +8,7 @@ import { NbAuthService } from "@nebular/auth";
 import { TranslateService } from "@ngx-translate/core";
 import { NgxPermissionsService } from "ngx-permissions";
 import { map, of, switchMap, tap } from "rxjs";
+import { UserAuthorityService } from "./@core/services/common/user-authority.service";
 
 @Component({
   selector: "ngx-app",
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
     private http: HttpClient, 
     private permissionsService: NgxPermissionsService,
     private authService: NbAuthService,
+    private userAuthorityService: UserAuthorityService,
     translate: TranslateService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang("bg");
@@ -58,6 +60,9 @@ export class AppComponent implements OnInit {
           this.permissionsService.loadPermissions([data.role]);
         } else {
           this.permissionsService.loadPermissions([]);
+        }
+        if (data?.CsAuthorityId){
+          this.userAuthorityService.csAuthorityId = data?.CsAuthorityId;
         }
       })
     ).subscribe();    
