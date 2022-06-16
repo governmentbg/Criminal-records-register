@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ExtAdministration;
 using MJ_CAIS.Services.Contracts;
@@ -9,7 +10,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("ext-administrations")]
-    [Authorize(Roles = "GlobalAdmin")]
+    [Authorize(Roles = RoleConstants.GlobalAdmin)]
     public class ExtAdministrationController : BaseApiCrudController<ExtAdministrationDTO, ExtAdministrationDTO, ExtAdministrationGridDTO, GExtAdministration, string>
     {
         private readonly IExtAdministrationService _extAdministrationService;

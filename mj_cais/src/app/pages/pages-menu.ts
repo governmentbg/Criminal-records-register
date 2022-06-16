@@ -1,5 +1,6 @@
 import { NbIconLibraries, NbMenuItem } from "@nebular/theme";
 import { Injectable } from "@angular/core";
+import { RoleNameEnum } from "../@core/constants/role-name.enum";
 
 @Injectable()
 export class PagesMenu {
@@ -117,6 +118,7 @@ export class PagesMenu {
       {
         title: "Осъдени в чужбина",
         icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Judge) && this.hasNoRole(roles, RoleNameEnum.Admin),
         children: [
           {
             title: "Актуални сведения",
