@@ -52,14 +52,6 @@
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'number'"
-                [label]="'Пореден номер на бюлетина за лицето'"
-                [inputFormControl]="fullForm.sequentialIndex"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
-            </div>
-            <div class="form-group col-md-6">
               <cais-autocomplete
                 [label]="'Статус'"
                 [inputFormControl]="fullForm.statusIdDisplay"
@@ -68,9 +60,6 @@
                 [items]="dbData.bulletinStatuses"
               ></cais-autocomplete>
             </div>
-          </div>
-
-          <div class="row">
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
@@ -79,6 +68,9 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
+          </div>
+
+          <div class="row">
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'text'"
@@ -87,8 +79,6 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
-          </div>
-          <div class="row">
             <div class="form-group col-md-6">
               <cais-input
                 [type]="'date'"
@@ -97,6 +87,8 @@
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
+          </div>
+          <div class="row">
             <div class="form-group col-md-6">
               <cais-autocomplete
                 [label]="'Тип'"

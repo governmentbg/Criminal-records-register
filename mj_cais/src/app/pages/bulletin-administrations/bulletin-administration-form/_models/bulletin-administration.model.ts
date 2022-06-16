@@ -3,7 +3,6 @@ import { BaseModel } from "../../../../@core/models/common/base.model";
 export class BulletinAdministrationModel extends BaseModel {
   public registrationNumber: string;
   public csAuthorityName: string;
-  public sequentialIndex: string;
   public statusName: string;
   public alphabeticalIndex: string;
   public ecrisConvictionId: string;
@@ -26,7 +25,6 @@ export class BulletinAdministrationModel extends BaseModel {
     super(init);
     this.registrationNumber = init?.registrationNumber ?? null;
     this.csAuthorityName = init?.csAuthorityName ?? null;
-    this.sequentialIndex = init?.sequentialIndex ?? null;
     this.statusName = init?.statusName ?? null;
     this.alphabeticalIndex = init?.alphabeticalIndex ?? null;
     this.ecrisConvictionId = init?.ecrisConvictionId ?? null;

@@ -9,7 +9,7 @@ using Microsoft.AspNet.OData.Query;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("internal-requests")]
-    [AllowAnonymous] // TODO: remove
+    [Authorize]
     public class InternalRequestsController : BaseApiCrudController<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, BInternalRequest, string>
     {
         private readonly IInternalRequestService _internalRequestService;
@@ -22,7 +22,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("")]
         public async Task<IActionResult> GetAll(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? statusId, string? bulletinId)
         {
-            var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, statusId,bulletinId);
+            var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, statusId, bulletinId);
             return Ok(result);
         }
 

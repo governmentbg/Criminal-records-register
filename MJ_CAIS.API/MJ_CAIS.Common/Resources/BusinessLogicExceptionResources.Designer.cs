@@ -22,14 +22,14 @@ namespace MJ_CAIS.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ApplicationResources {
+    public class BusinessLogicExceptionResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ApplicationResources() {
+        internal BusinessLogicExceptionResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MJ_CAIS.Common.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MJ_CAIS.Common.Resources.ApplicationResources", typeof(ApplicationResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MJ_CAIS.Common.Resources.BusinessLogicExceptionResources", typeof(BusinessLogicExceptionResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,47 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи.
+        ///   Looks up a localized string similar to Бюлетин с идентификатор {0} не съществува..
         /// </summary>
-        public static string descChangeStatus {
+        public static string bulletinDoesNotExist {
             get {
-                return ResourceManager.GetString("descChangeStatus", resourceCulture);
+                return ResourceManager.GetString("bulletinDoesNotExist", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Бюро съдимост.
+        ///   Looks up a localized string similar to Документ с идентификатор {0} не съществува..
         /// </summary>
-        public static string lblCsAuthorityId {
+        public static string documentDoesNotExist {
             get {
-                return ResourceManager.GetString("lblCsAuthorityId", resourceCulture);
+                return ResourceManager.GetString("documentDoesNotExist", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ЕГН.
+        ///   Looks up a localized string similar to Прикачения файл е празен..
         /// </summary>
-        public static string lblEgn {
+        public static string documentIsEmpty {
             get {
-                return ResourceManager.GetString("lblEgn", resourceCulture);
+                return ResourceManager.GetString("documentIsEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Електронна поща.
+        ///   Looks up a localized string similar to Нямате право да извършите това действие!.
         /// </summary>
-        public static string lblEmail {
+        public static string editIsUnauthorized {
             get {
-                return ResourceManager.GetString("lblEmail", resourceCulture);
+                return ResourceManager.GetString("editIsUnauthorized", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Начин на плащане.
+        ///   Looks up a localized string similar to Изтърпяно наказание с идентификатор {0} не съществува..
         /// </summary>
-        public static string lblPaymentMethodId {
+        public static string isinDataDoesNotExist {
             get {
-                return ResourceManager.GetString("lblPaymentMethodId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Описание на целта.
-        /// </summary>
-        public static string lblPurpose {
-            get {
-                return ResourceManager.GetString("lblPurpose", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Цел.
-        /// </summary>
-        public static string lblPurposeId {
-            get {
-                return ResourceManager.GetString("lblPurposeId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Регистрационен номер.
-        /// </summary>
-        public static string lblRegistrationNumber {
-            get {
-                return ResourceManager.GetString("lblRegistrationNumber", resourceCulture);
+                return ResourceManager.GetString("isinDataDoesNotExist", resourceCulture);
             }
         }
     }

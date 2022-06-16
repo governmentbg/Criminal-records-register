@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
@@ -19,6 +20,7 @@ namespace MJ_CAIS.Services
     {
         private readonly IInternalRequestRepository _internalRequestRepository;
         private readonly IBulletinRepository _bulletinRepository;
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         public InternalRequestService(IMapper mapper, IInternalRequestRepository internalRequestRepository, IBulletinRepository bulletinRepository)
             : base(mapper, internalRequestRepository)
@@ -97,7 +99,7 @@ namespace MJ_CAIS.Services
             bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
             bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { statusHistory };
 
-            
+
             if (string.IsNullOrEmpty(entity.AAppBulletinId))
             {
                 bulletin.Id = entity.BulletinId;
@@ -140,7 +142,7 @@ namespace MJ_CAIS.Services
                         ApplicationId = cert.ApplicationId,
                         CertificateId = certId,
                         StatusCode = cert.StatusCode,
-                        Descr = "Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи",
+                        Descr = ApplicationResources.descChangeStatus,
                         EntityState = EntityStateEnum.Added
                     };
 
@@ -161,11 +163,6 @@ namespace MJ_CAIS.Services
         {
             var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
             return mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
-        }
-
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
         }
     }
 }

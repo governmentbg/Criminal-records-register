@@ -85,7 +85,17 @@
             /// <summary>
             /// Помилване
             /// </summary>
-            public const string Pardon = "DCH-00-O";         
+            public const string Pardon = "DCH-00-O";
+
+            /// <summary>
+            /// Постановен съдебен акт по чл. 425 НПК
+            /// </summary>
+            public const string JudicialAnnulment = "DCH-00-Y";
+            
+            /// <summary>
+            /// Реабилитация
+            /// </summary>
+            public const string Rehabilitation = "DCH-00-R";
         }
       
         public static class CaseType

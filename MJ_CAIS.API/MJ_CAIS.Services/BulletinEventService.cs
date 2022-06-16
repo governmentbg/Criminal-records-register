@@ -3,6 +3,8 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.BulletinEvent;
@@ -16,6 +18,7 @@ namespace MJ_CAIS.Services
     public class BulletinEventService : BaseAsyncService<BulletinEventDTO, BulletinEventDTO, BulletinEventGridDTO, BBulEvent, string, CaisDbContext>, IBulletinEventService
     {
         private readonly IBulletinEventRepository _bulletinEventRepository;
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         public BulletinEventService(IMapper mapper, IBulletinEventRepository bulletinEventRepository)
             : base(mapper, bulletinEventRepository)
@@ -38,7 +41,7 @@ namespace MJ_CAIS.Services
                .FirstOrDefaultAsync(x => x.Id == aInDto);
 
             if (bulletinEvent == null)
-                throw new ArgumentException($"Bulletin event with id: {aInDto} is missing");
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto));
 
             bulletinEvent.StatusCode = statusId;
             bulletinEvent.EntityState = EntityStateEnum.Modified;
@@ -74,10 +77,9 @@ namespace MJ_CAIS.Services
                                 .AsNoTracking()
                                 .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == BulletinEventConstants.Type.Article2212);
 
-            currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
-
             if (existingEvents) return;
 
+            currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
             CheckForArticle2212(bulletins, currentAttachedBulletin);
         }
 
@@ -192,7 +194,7 @@ namespace MJ_CAIS.Services
 
         private static void CheckForArticle3000(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
         {
-            var mustAddEvent = currentBulletin.BulletinType ==BulletinConstants.Type.Bulletin78A  &&
+            var mustAddEvent = currentBulletin.BulletinType == BulletinConstants.Type.Bulletin78A &&
                 bulletins.Any(x => x.Id != currentBulletin.Id &&
                 (x.BulletinType == BulletinConstants.Type.Bulletin78A || x.CaseType == CaseType.NOXD));
 
@@ -211,11 +213,6 @@ namespace MJ_CAIS.Services
                 EventType = eventType,
                 EntityState = EntityStateEnum.Added
             });
-        }
-
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
         }
     }
 }
