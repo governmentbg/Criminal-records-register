@@ -35,7 +35,8 @@ export class PagesComponent {
   }
 
   initMenu() {   
-    this.permissionsService.permissions$.subscribe( perm =>       
-      this.menu = this.pagesMenu.getMenuItems(Object.keys(perm)));   
+    this.permissionsService.permissions$.subscribe( perm => { 
+      this.menu = this.pagesMenu.getMenuItems(Object.keys(perm)); 
+    });   
   }
 }

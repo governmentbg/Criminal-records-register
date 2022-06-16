@@ -10,7 +10,6 @@ export class BulletinForm extends BaseForm {
 
   public registrationNumberDisplay: FormControl;
   public csAuthorityName: FormControl;
-  public sequentialIndex: FormControl;
   public statusIdDisplay: FormControl;
   public statusId: FormControl;
   public alphabeticalIndex: FormControl;
@@ -80,7 +79,6 @@ export class BulletinForm extends BaseForm {
   private initNonEditableObj(): void {
     this.person = new PersonForm(PersonContextEnum.Bulletin, true);
     this.csAuthorityName.disable();
-    this.sequentialIndex.disable();
     this.statusIdDisplay.disable();
     this.alphabeticalIndex.disable();
     this.ecrisConvictionId.disable();
@@ -188,7 +186,6 @@ export class BulletinForm extends BaseForm {
       version: this.version,
       registrationNumberDisplay: this.registrationNumberDisplay,
       csAuthorityName: this.csAuthorityName,
-      sequentialIndex: this.sequentialIndex,
       statusId: this.statusId,
       statusIdDisplay: this.statusIdDisplay,
       alphabeticalIndex: this.alphabeticalIndex,
@@ -231,7 +228,6 @@ export class BulletinForm extends BaseForm {
     this.registrationNumberDisplay = new FormControl(null);
     this.registrationNumberDisplay.disable();
     this.csAuthorityName = new FormControl(null);
-    this.sequentialIndex = new FormControl(null);
     this.statusIdDisplay = new FormControl(BulletinStatusTypeEnum.NewOffice);
     this.statusId = new FormControl(BulletinStatusTypeEnum.NewOffice);
     this.alphabeticalIndex = new FormControl(null);

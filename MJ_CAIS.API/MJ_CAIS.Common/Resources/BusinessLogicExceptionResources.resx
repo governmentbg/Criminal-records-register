@@ -117,28 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="descChangeStatus" xml:space="preserve">
-    <value>Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи</value>
+  <data name="bulletinDoesNotExist" xml:space="preserve">
+    <value>Бюлетин с идентификатор {0} не съществува.</value>
   </data>
-  <data name="lblCsAuthorityId" xml:space="preserve">
-    <value>Бюро съдимост</value>
+  <data name="documentDoesNotExist" xml:space="preserve">
+    <value>Документ с идентификатор {0} не съществува.</value>
   </data>
-  <data name="lblEgn" xml:space="preserve">
-    <value>ЕГН</value>
+  <data name="documentIsEmpty" xml:space="preserve">
+    <value>Прикачения файл е празен.</value>
   </data>
-  <data name="lblEmail" xml:space="preserve">
-    <value>Електронна поща</value>
+  <data name="editIsUnauthorized" xml:space="preserve">
+    <value>Нямате право да извършите това действие!</value>
   </data>
-  <data name="lblPaymentMethodId" xml:space="preserve">
-    <value>Начин на плащане</value>
-  </data>
-  <data name="lblPurpose" xml:space="preserve">
-    <value>Описание на целта</value>
-  </data>
-  <data name="lblPurposeId" xml:space="preserve">
-    <value>Цел</value>
-  </data>
-  <data name="lblRegistrationNumber" xml:space="preserve">
-    <value>Регистрационен номер</value>
+  <data name="isinDataDoesNotExist" xml:space="preserve">
+    <value>Изтърпяно наказание с идентификатор {0} не съществува.</value>
   </data>
 </root>
