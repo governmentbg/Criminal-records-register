@@ -5,11 +5,12 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("bulletins-administration")]
-    [Authorize]
+    [Authorize(Roles = $"{RoleConstants.Admin},{RoleConstants.GlobalAdmin}")]
     public class BulletinsAdministrationController : BaseApiCrudController<BulletinAdministrationDTO, BulletinAdministrationDTO, BulletinAdministrationGridDTO, BBulletin, string>
     {
         private readonly IBulletinAdministrationService _bulletinAdministrationService;
@@ -20,7 +21,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<BulletinAdministrationGridDTO> aQueryOptions)
+        public new async Task<IActionResult> GetAll(ODataQueryOptions<BulletinAdministrationGridDTO> aQueryOptions)
         {
             var result = await this._bulletinAdministrationService.SelectAllWithPaginationAsync(aQueryOptions);
             return Ok(result);

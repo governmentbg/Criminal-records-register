@@ -10,7 +10,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("users-citizen")]
-    [Authorize(Roles = RoleConstants.Admin)]
+    [Authorize(Roles = $"{RoleConstants.Admin},{RoleConstants.GlobalAdmin}")]
     public class UsersCitizenController : BaseApiCrudController<UserCitizenDTO, UserCitizenDTO, UserCitizenGridDTO, GUsersCitizen, string>
     {
         public UsersCitizenController(IUserCitizenService baseService) : base(baseService)
