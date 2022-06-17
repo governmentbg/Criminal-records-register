@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { NgxPermissionsGuard } from "ngx-permissions";
+import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { AuthGuard } from "../../@core/services/common/guard.service";
 import { BulletinEventsOverviewComponent } from "../bulletin-events/bulletin-events-overview/bulletin-events-overview.component";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
@@ -15,50 +17,108 @@ const routes: Routes = [
   {
     path: "active",
     component: BulletinActiveOverviewComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "new-office",
     component: BulletinNewOfficeOverviewComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "new-eiss",
     component: BulletinNewEissOverviewComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "for-destruction",
     component: BulletinForDestructionOverviewComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "for-rehabilitation",
     component: BulletinForRehabilitationOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "create",
     component: BulletinFormComponent,
     resolve: { dbData: BulletinResolver },
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "edit/:ID",
     component: BulletinFormComponent,
     resolve: { dbData: BulletinResolver },
-    data: { edit: true },
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "preview/:ID",
     component: BulletinFormComponent,
     resolve: { dbData: BulletinResolver },
-    data: { edit: true, preview: true },
-    // canActivate: [AuthGuard],
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [
+          RoleNameEnum.CentralAuth,
+          RoleNameEnum.Judge,
+          RoleNameEnum.Normal,
+        ],
+      },
+    },
   },
   {
     path: "events",
     component: BulletinEventsOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [
+          RoleNameEnum.CentralAuth,
+          RoleNameEnum.Judge,
+          RoleNameEnum.Normal,
+        ],
+      },
+    },
   },
   {
     path: "",

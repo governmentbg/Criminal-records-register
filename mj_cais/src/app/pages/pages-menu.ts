@@ -40,6 +40,7 @@ export class PagesMenu {
       {
         title: "Бюлетини",
         icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
         children: [
           {
             title: "Актуални бюлетини",
@@ -157,6 +158,7 @@ export class PagesMenu {
         title: "Изтърпени наказания",
         icon: "shuffle-2-outline",
         link: "/pages/isin/new",
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
       },
       {
         title: "Администрация",
