@@ -16,7 +16,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+        only: [RoleNameEnum.CentralAuth],
       },
     },
   },
@@ -26,7 +26,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+        only: [RoleNameEnum.CentralAuth],
       },
     },
   },
@@ -36,7 +36,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+        only: [RoleNameEnum.CentralAuth],
       },
     },
   },
@@ -47,7 +47,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+        only: [RoleNameEnum.CentralAuth],
       },
     },
   },
@@ -59,7 +59,7 @@ const routes: Routes = [
     data: {
       edit: true,
       permissions: {
-        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+        only: [RoleNameEnum.CentralAuth],
       },
     },
   },
@@ -67,7 +67,18 @@ const routes: Routes = [
     path: "preview/:ID",
     component: FbbcFormComponent,
     resolve: { dbData: FbbcResolver },
-    data: { edit: true, preview: true },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [
+          RoleNameEnum.CentralAuth,
+          RoleNameEnum.Normal,
+          RoleNameEnum.Judge,
+        ],
+      },
+    },
   },
   {
     path: "",

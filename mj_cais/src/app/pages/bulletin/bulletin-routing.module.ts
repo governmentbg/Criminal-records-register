@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NgxPermissionsGuard } from "ngx-permissions";
 import { RoleNameEnum } from "../../@core/constants/role-name.enum";
-import { AuthGuard } from "../../@core/services/common/guard.service";
 import { BulletinEventsOverviewComponent } from "../bulletin-events/bulletin-events-overview/bulletin-events-overview.component";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
 import { BulletinFormComponent } from "./bulletin-form/bulletin-form.component";
@@ -20,7 +19,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -30,7 +29,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -40,7 +39,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -50,7 +49,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -60,7 +59,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -71,7 +70,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -83,7 +82,7 @@ const routes: Routes = [
     data: {
       edit: true,
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },

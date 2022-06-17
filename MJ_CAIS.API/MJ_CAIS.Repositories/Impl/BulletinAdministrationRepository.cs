@@ -7,14 +7,18 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class BulletinAdministrationRepository : BaseAsyncRepository<BBulletin, CaisDbContext>, IBulletinAdministrationRepository
     {
-        public BulletinAdministrationRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public BulletinAdministrationRepository(CaisDbContext dbContext, IUserContext userContext)
+            : base(dbContext)
         {
+            _userContext = userContext;
         }
 
         public override IQueryable<BBulletin> SelectAll()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
-                .Where(x => x.Locked == true);
+                .Where(x => x.Locked == true && _userContext.CsAuthorityId == x.CsAuthorityId);
 
             return query;
         }

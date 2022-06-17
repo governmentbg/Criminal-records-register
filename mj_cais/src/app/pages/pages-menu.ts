@@ -36,11 +36,12 @@ export class PagesMenu {
         title: "Лица",
         icon: "people-outline",
         link: "/pages/people",
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) && this.hasNoRole(roles, RoleNameEnum.Judge),
       },
       {
         title: "Бюлетини",
         icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) && this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
             title: "Актуални бюлетини",
@@ -98,7 +99,7 @@ export class PagesMenu {
       {
         title: "За решение от съдия/юрист",
         icon: "message-circle-outline",
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) && this.hasNoRole(roles, RoleNameEnum.Judge),
+        hidden: this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
             title: "Заявки за реабилитация",
@@ -121,7 +122,7 @@ export class PagesMenu {
       {
         title: "Осъдени в чужбина",
         icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.Judge) && this.hasNoRole(roles, RoleNameEnum.Admin),
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
             title: "Актуални сведения",
@@ -166,7 +167,7 @@ export class PagesMenu {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
         expanded: true,
-        hidden: this.hasNoRole(roles, 'Admin') && this.hasNoRole(roles, 'GlobalAdmin'),
+        hidden: this.hasNoRole(roles, RoleNameEnum.Admin) && this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
         children: [
           {
             title: "Потребители",
@@ -175,22 +176,21 @@ export class PagesMenu {
           {
             title: "Външни потребители",
             link: "/pages/users-external",
-            hidden: this.hasNoRole(roles, 'GlobalAdmin')
+            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin)
           },
           {
             title: "Външни администрации",
             link: "/pages/administrations-ext",
-            hidden: this.hasNoRole(roles, 'GlobalAdmin')
+            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin)
           },
           {
             title: "Публични потребители",
             link: "/pages/users-public",
-            hidden: this.hasNoRole(roles, 'GlobalAdmin')
+            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin)
           },
           {
             title: "Управление на бюлетини",
             link: "/pages/bulletin-administrations",    
-            hidden: this.hasNoRole(roles, 'GlobalAdmin')
           }
         ],
       },   

@@ -22,7 +22,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> GetAll(ODataQueryOptions<FbbcGridDTO> aQueryOptions, string statusId)
         {
             var result = await this._fbbcService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
@@ -36,7 +36,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("create")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
         {
             var result = await this._fbbcService.SelectWithPersonDataAsync(personId);
@@ -46,21 +46,21 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public new async Task<IActionResult> Post([FromBody] FbbcDTO aInDto)
         {
             return await base.Post(aInDto);
         }
 
         [HttpPut("{aId}")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public new async Task<IActionResult> Put(string aId, [FromBody] FbbcDTO aInDto)
         {
             return await base.Put(aId, aInDto);
         }
 
         [HttpDelete("{aId}")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public new async Task<IActionResult> Delete(string aId)
         {
             return await base.Delete(aId);
@@ -82,7 +82,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("{aId}/documents")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> PostDocument(string aId, [FromBody] FbbcDocumentDTO aInDto)
         {
             await this._fbbcService.InsertFbbcDocumentAsync(aId, aInDto);
@@ -90,7 +90,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpDelete("{aId}/documents/{documentId}")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
             await this._fbbcService.DeleteDocumentAsync(documentId);
@@ -114,7 +114,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("{aId}/change-status/{statusId}")]
-        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> ChangeStatus(string aId, string statusId)
         {
             await this._fbbcService.ChangeStatusAsync(aId, statusId);

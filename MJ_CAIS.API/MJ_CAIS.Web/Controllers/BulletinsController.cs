@@ -23,7 +23,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        [Authorize(Roles = RoleConstants.Normal)]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetAll(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._bulletinService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
@@ -31,7 +31,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("getAll")]
-        [Authorize(Roles = RoleConstants.Normal)]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetAllNoWrap(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._bulletinService.SelectAllNoWrapAsync(aQueryOptions, statusId);
@@ -45,7 +45,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("create")]
-        [Authorize(Roles = RoleConstants.Normal)]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
         {
             var result = await this._bulletinService.SelectWithPersonDataAsync(personId);
@@ -55,7 +55,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        [Authorize(Roles = RoleConstants.Normal)]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> Post([FromBody] BulletinAddDTO aInDto)
         {
             var id = await this._bulletinService.InsertAsync(aInDto);
@@ -63,14 +63,14 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("{aId}")]
-        [Authorize(Roles = RoleConstants.Normal)]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> Put(string aId, [FromBody] BulletinEditDTO aInDto)
         {
             await this._bulletinService.UpdateAsync(aInDto);
             return Ok();
         }
 
-        [Authorize(Roles = RoleConstants.Normal)]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         [HttpPut("{aId}/change-status/{statusId}")]
         public async Task<IActionResult> ChangeStatus(string aId, string statusId)
         {
