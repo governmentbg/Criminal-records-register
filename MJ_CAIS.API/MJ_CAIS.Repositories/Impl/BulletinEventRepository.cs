@@ -101,14 +101,15 @@ namespace MJ_CAIS.Repositories.Impl
             return result?.Person?.PersonId;
         }
 
-        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
             var query = _dbContext.BBulEvents.AsNoTracking()
-                .Where(x => x.StatusCode == BulletinEventConstants.Status.New &&
+                .Include(x=>x.Bulletin)
+                .Where(x => x.Bulletin.CsAuthorityId == _userContext.CsAuthorityId && (x.StatusCode == BulletinEventConstants.Status.New &&
                           (x.EventType == BulletinEventConstants.Type.Article2211 ||
                            x.EventType == BulletinEventConstants.Type.Article2212 ||
                            x.EventType == BulletinEventConstants.Type.Article3000 ||
-                           x.EventType == BulletinEventConstants.Type.NewDocument))
+                           x.EventType == BulletinEventConstants.Type.NewDocument)))
                 .GroupBy(x => x.EventType)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -116,7 +117,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Count = x.Count()
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
     }
 }

@@ -1,4 +1,5 @@
-export class ObjectCountModel {
+import { BaseModel } from "../../../@core/models/common/base.model";
+export class ObjectCountModel extends BaseModel {
   public bulletinNewOfficeCount: number = null;
   public bulletinNewEISSCount: number = null;
   public bulletinForRehabilitationCount: number = null;
@@ -18,6 +19,7 @@ export class ObjectCountModel {
   public applicationBulletinsCheckCount: number = null;
 
   constructor(init?: Partial<ObjectCountModel>) {
+    super(init);
     this.bulletinNewOfficeCount = init?.bulletinNewOfficeCount ?? null;
     this.bulletinNewEISSCount = init?.bulletinNewEISSCount ?? null;
     this.bulletinForRehabilitationCount =

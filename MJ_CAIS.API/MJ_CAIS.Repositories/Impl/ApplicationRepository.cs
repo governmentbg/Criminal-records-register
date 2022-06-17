@@ -10,8 +10,11 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class ApplicationRepository : BaseAsyncRepository<AApplication, CaisDbContext>, IApplicationRepository
     {
-        public ApplicationRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public ApplicationRepository(CaisDbContext dbContext, IUserContext userContext) : base(dbContext)
         {
+            _userContext = userContext;
         }
 
         public override IQueryable<AApplication> SelectAll()
@@ -79,14 +82,13 @@ namespace MJ_CAIS.Repositories.Impl
                 .Where(x => x.ApplicationId == aId));
         }
 
-
-        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
             var query = _dbContext.AApplications.AsNoTracking()
-                .Where(x => x.StatusCode == ApplicationConstants.ApplicationStatuses.NewId ||
-                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
-                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckTaxFree ||
-                            x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsCheck)
+                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (x.StatusCode == ApplicationConstants.ApplicationStatuses.NewId ||
+                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
+                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckTaxFree ||
+                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsCheck))
                 .GroupBy(x => x.StatusCode)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -94,7 +96,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Count = x.Count()
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
     }
 }

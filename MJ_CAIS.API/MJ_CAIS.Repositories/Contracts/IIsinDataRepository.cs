@@ -6,6 +6,6 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IIsinDataRepository : IBaseAsyncRepository<EIsinDatum, string, CaisDbContext>
     {
-        Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync();
+        IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
     }
 }

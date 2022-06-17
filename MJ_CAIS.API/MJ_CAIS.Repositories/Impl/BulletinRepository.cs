@@ -135,13 +135,13 @@ namespace MJ_CAIS.Repositories.Impl
             return bulletin;
         }
 
-        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
-                .Where(x => x.StatusId == BulletinConstants.Status.NewOffice ||
+                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (x.StatusId == BulletinConstants.Status.NewOffice ||
                             x.StatusId == BulletinConstants.Status.NewEISS ||
                             x.StatusId == BulletinConstants.Status.ForRehabilitation ||
-                            x.StatusId == BulletinConstants.Status.ForDestruction)
+                            x.StatusId == BulletinConstants.Status.ForDestruction))
                 .GroupBy(x => x.StatusId)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -149,7 +149,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Count = x.Count()
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public void CreateEcrisTcn(string bulletinId, string action)
