@@ -76,6 +76,7 @@ export class PagesMenu {
       {
         title: "Свидетелства",
         icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) ,
         children: [
           {
             title: "Нови заявления",

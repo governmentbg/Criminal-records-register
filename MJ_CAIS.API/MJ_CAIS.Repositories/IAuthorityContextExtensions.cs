@@ -1,10 +1,5 @@
 ﻿using MJ_CAIS.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MJ_CAIS.Repositories
 {
@@ -18,6 +13,20 @@ namespace MJ_CAIS.Repositories
                 return queryable;
             }
             else if (!string.IsNullOrEmpty(context?.CsAuthorityId))
+            {
+                return queryable.Where(t => t.CsAuthorityId == context.CsAuthorityId);
+            }
+            else
+            {
+                throw new ArgumentException("Argument should have value!", "AuthorityId");
+            }
+        }
+
+        public static IQueryable<T> FilterByAuthorityForAllRoles<T>(this IUserContext context, IQueryable<T> queryable)
+            where T : ICsAuthorityIdFilter
+        {
+
+            if (!string.IsNullOrEmpty(context?.CsAuthorityId))
             {
                 return queryable.Where(t => t.CsAuthorityId == context.CsAuthorityId);
             }
