@@ -1,6 +1,7 @@
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.IsinData;
 using MJ_CAIS.Services.Contracts;
@@ -9,7 +10,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("isin-data")]
-    [Authorize]
+    [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.CentralAuth}")]
     public class IsinDataController : BaseApiCrudController<IsinDataDTO, IsinDataDTO, IsinDataGridDTO, EIsinDatum, string>
     {
         private readonly IIsinDataService _isinDataService;
@@ -45,6 +46,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("bulletins")]
+        [Authorize(Roles = $"{RoleConstants.CentralAuth}")]
         public async Task<IActionResult> GetAllBulletins(ODataQueryOptions<IsinBulletinGridDTO> aQueryOptions)
         {
             var result = await this._isinDataService.SelectIsinBulletinAllWithPaginationAsync(aQueryOptions);
@@ -52,6 +54,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("bulletins/{aId}/select/{bulletinId}")]
+        [Authorize(Roles = $"{RoleConstants.CentralAuth}")]
         public async Task<IActionResult> SelectBulletin(string aId, string bulletinId)
         {
             await this._isinDataService.SelectBulletinAsync(aId, bulletinId);

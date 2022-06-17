@@ -1,16 +1,17 @@
-using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.Fbbc;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts;
-using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Fbbc;
+using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Web.Controllers.Common;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("fbbcs")]
-    [AllowAnonymous]
+    [Authorize]
     public class FbbcsController : BaseApiCrudController<FbbcDTO, FbbcDTO, FbbcGridDTO, Fbbc, string>
     {
         private readonly IFbbcService _fbbcService;
@@ -21,16 +22,11 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public async Task<IActionResult> GetAll(ODataQueryOptions<FbbcGridDTO> aQueryOptions, string statusId)
         {
             var result = await this._fbbcService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
-        }
-
-        [HttpGet("getAll")]
-        public new async Task<IActionResult> GetAllNoWrap(ODataQueryOptions<FbbcGridDTO> aQueryOptions)
-        {
-            return await base.GetAllNoWrap(aQueryOptions);
         }
 
         [HttpGet("{aId}")]
@@ -40,6 +36,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("create")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
         {
             var result = await this._fbbcService.SelectWithPersonDataAsync(personId);
@@ -49,24 +46,28 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public new async Task<IActionResult> Post([FromBody] FbbcDTO aInDto)
         {
             return await base.Post(aInDto);
         }
 
         [HttpPut("{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public new async Task<IActionResult> Put(string aId, [FromBody] FbbcDTO aInDto)
         {
             return await base.Put(aId, aInDto);
         }
 
         [HttpDelete("{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public new async Task<IActionResult> Delete(string aId)
         {
             return await base.Delete(aId);
         }
 
         [HttpGet("{aId}/ecris-messages")]
+        [Authorize]
         public async Task<IActionResult> GetEcrisMessages(string aId)
         {
             var result = await this._fbbcService.GetEcrisMessagesByFbbcIdAsync(aId);
@@ -81,6 +82,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("{aId}/documents")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public async Task<IActionResult> PostDocument(string aId, [FromBody] FbbcDocumentDTO aInDto)
         {
             await this._fbbcService.InsertFbbcDocumentAsync(aId, aInDto);
@@ -88,6 +90,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpDelete("{aId}/documents/{documentId}")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
             await this._fbbcService.DeleteDocumentAsync(documentId);
@@ -110,6 +113,14 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
+        [HttpPut("{aId}/change-status/{statusId}")]
+        [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.Admin}")]
+        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        {
+            await this._fbbcService.ChangeStatusAsync(aId, statusId);
+            return Ok();
+        }
+
         private string getContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
@@ -120,13 +131,6 @@ namespace MJ_CAIS.Web.Controllers
             }
 
             return contentType;
-        }
-
-        [HttpPut("{aId}/change-status/{statusId}")]
-        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
-        {
-            await this._fbbcService.ChangeStatusAsync(aId, statusId);
-            return Ok();
         }
     }
 }

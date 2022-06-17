@@ -93,7 +93,9 @@ namespace MJ_CAIS.Repositories.Impl
                                                                 Firstname = application.Firstname,
                                                                 Surname = application.Surname,
                                                                 Familyname = application.Familyname,
-                                                            }).Distinct();
+                                                                CreatedOn = application.CreatedOn
+                                                            })
+                                                            .Distinct();
 
             return await Task.FromResult(query);
         }
@@ -113,7 +115,8 @@ namespace MJ_CAIS.Repositories.Impl
                     BirthDate = fbbc.BirthDate,
                     DestroyedDate = fbbc.DestroyedDate,
                     Egn = fbbc.Egn,
-                    ReceiveDate = fbbc.ReceiveDate
+                    ReceiveDate = fbbc.ReceiveDate,
+                    CreatedOn = fbbc.CreatedOn
                 });
 
             return await Task.FromResult(query);

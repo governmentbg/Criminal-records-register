@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { NgxPermissionsGuard } from "ngx-permissions";
+import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
 import { FbbcResolver } from "./fbbc-form/data/fbbc.resolver";
 import { FbbcFormComponent } from "./fbbc-form/fbbc-form.component";
@@ -11,25 +13,55 @@ const routes: Routes = [
   {
     path: "",
     component: FbbcActiveOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+      },
+    },
   },
   {
     path: "for-destruction",
     component: FbbcForDestructionOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+      },
+    },
   },
   {
     path: "destructed",
     component: FbbcDestructedOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+      },
+    },
   },
   {
     path: "create",
     component: FbbcFormComponent,
     resolve: { dbData: FbbcResolver },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+      },
+    },
   },
   {
     path: "edit/:ID",
     component: FbbcFormComponent,
     resolve: { dbData: FbbcResolver },
-    data: { edit: true },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.Judge, RoleNameEnum.Admin],
+      },
+    },
   },
   {
     path: "preview/:ID",
