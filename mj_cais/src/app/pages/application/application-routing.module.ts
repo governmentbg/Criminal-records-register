@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { NgxPermissionsGuard } from "ngx-permissions";
+import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
 import { ApplicationFormComponent } from "./application-form/application-form.component";
 import { ApplicationResolver } from "./application-form/_data/application.resolver";
@@ -16,6 +18,12 @@ const routes: Routes = [
   {
     path: "",
     component: ApplicationNewOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "request",
@@ -42,22 +50,52 @@ const routes: Routes = [
   {
     path: "waiting-payment",
     component: ApplicationWaitingPaymentComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "tax-free",
     component: ApplicationTaxFreeOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "for-check",
     component: ApplicationForCheckComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "for-signing",
     component: ApplicationForSigningComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "for-signing-by-judge",
     component: ApplicationForSiningByJudgeComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "bulletin-selection",

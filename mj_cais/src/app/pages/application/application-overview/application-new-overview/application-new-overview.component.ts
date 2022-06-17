@@ -1,5 +1,6 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
+import { RoleNameEnum } from "../../../../@core/constants/role-name.enum";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { ApplicationGridService } from "../_data/application-grid.service";
@@ -16,6 +17,7 @@ export class ApplicationNewOverviewComponent extends RemoteGridWithStatePersista
   ApplicationGridService
 > {
   public hideStatus: boolean = true;
+  public roleNameNormal: string = RoleNameEnum.Normal;
 
   constructor(
     private dialogService: NbDialogService,

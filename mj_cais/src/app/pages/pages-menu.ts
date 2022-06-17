@@ -75,6 +75,7 @@ export class PagesMenu {
       {
         title: "Свидетелства",
         icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) ,
         children: [
           {
             title: "Нови заявления",
@@ -97,6 +98,7 @@ export class PagesMenu {
       {
         title: "За решение от съдия/юрист",
         icon: "message-circle-outline",
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) && this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
             title: "Заявки за реабилитация",

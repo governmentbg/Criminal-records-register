@@ -26,6 +26,7 @@
       <div class="ml-auto">
         <nb-toggle
           (checkedChange)="onShowAllApplicationsChange($event)"
+          *ngxPermissionsOnly= "this.roleNameNormal"
           status="info"
           labelPosition="left"
           >Всички заявления</nb-toggle
