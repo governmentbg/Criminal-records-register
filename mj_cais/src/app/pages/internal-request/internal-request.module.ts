@@ -7,8 +7,10 @@ import { CoreComponentModule } from "../../@core/components/core-component.modul
 @NgModule({
   declarations: [
     InternalRequestOverviewComponent,
-    InternalRequestFormComponent,
+    InternalRequestFormComponent
   ],
-  imports: [CoreComponentModule, InternalRequestRoutingModule],
+  imports: [
+    CoreComponentModule,
+     InternalRequestRoutingModule],
 })
 export class InternalRequestModule {}

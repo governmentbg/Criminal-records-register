@@ -10,7 +10,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("isin-data")]
-    [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.CentralAuth}")]
+    [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.CentralAuth},{RoleConstants.Judge}")]
     public class IsinDataController : BaseApiCrudController<IsinDataDTO, IsinDataDTO, IsinDataGridDTO, EIsinDatum, string>
     {
         private readonly IIsinDataService _isinDataService;

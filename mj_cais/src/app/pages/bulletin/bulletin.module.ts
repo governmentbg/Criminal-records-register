@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BulletinRoutingModule } from './bulletin-routing.module';
-import { BulletinPersonInfoComponent } from '../../@core/components/shared/bulletin-person-info/bulletin-person-info.component';
 import { BulletinFormComponent } from './bulletin-form/bulletin-form.component';
 import { BulletinDecisionFormComponent } from './bulletin-form/tabs/bulletin-decision-form/bulletin-decision-form.component';
 import { BulletinDocumentFormComponent } from './bulletin-form/tabs/bulletin-documents-form/bulletin-document-form.component';
@@ -29,7 +28,6 @@ import { BulletinEventsDocumentOverviewComponent } from '../bulletin-events/bull
     BulletinActiveOverviewComponent,
     BulletinForDestructionOverviewComponent,
     BulletinForRehabilitationOverviewComponent,
-    BulletinPersonInfoComponent,
     BulletinNewOfficeOverviewComponent,
     BulletinStatusHistoryOverviewComponent, 
     OffenceCategoryDialogComponent, 

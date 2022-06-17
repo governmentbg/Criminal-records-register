@@ -5,7 +5,7 @@
       <button
         nbButton
         size="small"
-        [routerLink]="['/pages/people/preview', model.personId]"
+        (click)="previewPerson(model.personId)"
       >
         Преглед
       </button>
@@ -178,13 +178,13 @@
   <div class="float-left">Данни за бюлетин</div>
   <ng-container *ngIf="model.bulletinId">
     <div class="float-rigth">
-      <button
+      <a
         nbButton
         size="small"
-        [routerLink]="['/pages/bulletins/preview', model.bulletinId]"
+        (click)="editBulletin(model.bulletinId)"     
       >
-        Преглед
-      </button>
+        Редакция
+      </a>
     </div>
   </ng-container>
 </div>

@@ -5,11 +5,12 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("internal-requests")]
-    [Authorize]
+    [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.CentralAuth}")]
     public class InternalRequestsController : BaseApiCrudController<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, BInternalRequest, string>
     {
         private readonly IInternalRequestService _internalRequestService;

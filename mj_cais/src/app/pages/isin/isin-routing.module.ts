@@ -25,7 +25,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Normal],
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
     },
   },
@@ -35,7 +35,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.CentralAuth, RoleNameEnum.Normal],
+        only: [RoleNameEnum.CentralAuth, RoleNameEnum.Normal,RoleNameEnum.Judge],
       },
     },
   },
@@ -45,7 +45,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.CentralAuth, RoleNameEnum.Normal],
+        only: [RoleNameEnum.CentralAuth, RoleNameEnum.Normal,RoleNameEnum.Judge],
       },
     },
   },
