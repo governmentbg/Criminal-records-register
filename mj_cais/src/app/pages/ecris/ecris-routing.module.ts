@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { NgxPermissionsGuard } from "ngx-permissions";
+import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
 import { EcrisIdentificationFormComponent } from "./ecris-message-form/ecris-identification-form/ecris-identification-form.component";
 import { EcrisIdentificationResolver } from "./ecris-message-form/ecris-identification-form/_data/ecris-identification.resolver";
@@ -12,39 +14,83 @@ const routes: Routes = [
   {
     path: "identification",
     component: EcrisIdentificationOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "identification/edit/:ID",
     component: EcrisIdentificationFormComponent,
     resolve: { dbData: EcrisIdentificationResolver },
-    data: { edit: true },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "identification/preview/:ID",
     component: EcrisIdentificationFormComponent,
     resolve: { dbData: EcrisIdentificationResolver },
-    data: { edit: true, preview: true },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "req-waiting",
     component: EcrisReqWaitingOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "req-waiting/create",
     component: EcrisReqWaitingFormComponent,
     resolve: { dbData: EcrisReqWaitingResolver },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "req-waiting/edit/:ID",
     component: EcrisReqWaitingFormComponent,
     resolve: { dbData: EcrisReqWaitingResolver },
-    data: { edit: true },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "req-waiting/preview/:ID",
     component: EcrisReqWaitingFormComponent,
     resolve: { dbData: EcrisReqWaitingResolver },
-    data: { edit: true, preview: true },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
   },
   {
     path: "",

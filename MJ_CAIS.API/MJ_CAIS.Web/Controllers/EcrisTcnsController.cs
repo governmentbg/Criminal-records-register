@@ -5,12 +5,12 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("ecris-tcns")]
-    [AllowAnonymous]
-    //[Authorize(Roles = "CentralAuth")]
+    [Authorize(Roles = RoleConstants.CentralAuth)]
     public class EcrisTcnsController : BaseApiCrudController<EcrisTcnDTO, EcrisTcnDTO, EcrisTcnGridDTO, EEcrisTcn, string>
     {
         private readonly IEcrisTcnService _ecrisTcnService;

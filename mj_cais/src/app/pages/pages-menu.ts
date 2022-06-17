@@ -137,6 +137,7 @@ export class PagesMenu {
       {
         title: "ECRIS",
         icon: "layout-outline",
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
             title: "За идентификация",
@@ -149,7 +150,6 @@ export class PagesMenu {
           {
             title: "ECRIS-TCN",
             link: "/pages/ecris-tcn",
-            // hidden: this.hasNoRole(roles, 'GlobalAdmin')
           },
         ],
       },

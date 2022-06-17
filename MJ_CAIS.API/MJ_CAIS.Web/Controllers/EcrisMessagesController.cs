@@ -1,21 +1,22 @@
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisMessage;
-using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("ecris-messages")]
-    [AllowAnonymous] // TODO: remove
+    [Authorize(Roles = RoleConstants.CentralAuth)]
     public class EcrisMessagesController : BaseApiCrudController<EcrisMessageDTO, EcrisMessageDTO, EcrisMessageGridDTO, EEcrisMessage, string>
     {
         private readonly IEcrisMessageService _ecrisMessageService;
 
-        public EcrisMessagesController(IEcrisMessageService ecrisMessageService) : base(ecrisMessageService)
+        public EcrisMessagesController(IEcrisMessageService ecrisMessageService) 
+            : base(ecrisMessageService)
         {
             _ecrisMessageService = ecrisMessageService;
         }
