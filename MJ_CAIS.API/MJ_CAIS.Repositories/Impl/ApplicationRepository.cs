@@ -10,8 +10,12 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class ApplicationRepository : BaseAsyncRepository<AApplication, CaisDbContext>, IApplicationRepository
     {
-        public ApplicationRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public ApplicationRepository(CaisDbContext dbContext, IUserContext userContext)
+            : base(dbContext)
         {
+            _userContext = userContext;
         }
 
         public override IQueryable<AApplication> SelectAll()
@@ -20,6 +24,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .Set<AApplication>()
                 .Include(x => x.CsAuthorityBirth)
                 .AsNoTracking();
+            result = _userContext.FilterByAuthorityForAllRoles(result);
 
             return result;
         }
