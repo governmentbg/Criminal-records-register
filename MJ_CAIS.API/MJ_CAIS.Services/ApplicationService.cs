@@ -86,7 +86,7 @@ namespace MJ_CAIS.Services
         {
             var result = new ApplicationOutDTO();
             result.Id = BaseEntity.GenerateNewId();
-            var authId = _userContext.CsAuthorityId ?? "660"; // todo: remove
+            var authId = _userContext.CsAuthorityId;
             result.CsAuthorityId = authId;
             var person = await _personService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
@@ -96,7 +96,7 @@ namespace MJ_CAIS.Services
         public override async Task<string> InsertAsync(ApplicationInDTO aInDto)
         {
             var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, true);
-            entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; //TODO: For test purposes (remove later)
+            entity.CsAuthorityId = _userContext.CsAuthorityId;
             entity.ApplicationTypeId = "6"; //TODO: For test purposes (remove later)
             TransformDataOnInsert(entity);
             await UpdateTransactionsAsync(aInDto, entity);

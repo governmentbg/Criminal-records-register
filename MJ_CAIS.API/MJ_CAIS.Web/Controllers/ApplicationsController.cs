@@ -125,7 +125,7 @@ namespace MJ_CAIS.Web.Controllers
             if (result == null) return NotFound();
 
             var content = result;
-            var fileName = "sertificate.pdf";
+            var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
 
             Response.Headers.Add("File-Name", fileName);
@@ -186,14 +186,14 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/application-history")]
-        public async Task<IActionResult> GetAppplicationHistory(string aId)
+        public async Task<IActionResult> GetApplicationHistory(string aId)
         {
             var result = await this._applicationService.SelectApplicationPersStatusHAsync(aId);
             return Ok(result);
         }
 
         [HttpGet("{aId}/application-certificate")]
-        public async Task<IActionResult> GetAppplicationCertificate(string aId)
+        public async Task<IActionResult> GetApplicationCertificate(string aId)
         {
             var result = await this._applicationService.SelectApplicationCertificateByApplicationIdAsync(aId);
             return Ok(result);

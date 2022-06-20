@@ -43,7 +43,7 @@ namespace MJ_CAIS.Web.Controllers
             if (result == null) return NotFound();
 
             var content = result;
-            var fileName = "sertificate.pdf";
+            var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
 
             Response.Headers.Add("File-Name", fileName);
@@ -59,7 +59,7 @@ namespace MJ_CAIS.Web.Controllers
             if (result == null) return NotFound();
 
             var content = result;
-            var fileName = "sertificate.pdf";
+            var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
 
             Response.Headers.Add("File-Name", fileName);

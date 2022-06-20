@@ -2,6 +2,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Certificate;
@@ -112,11 +114,11 @@ namespace MJ_CAIS.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == aId);
 
-            if (certificate == null) throw new ArgumentException("Certificate does not exist");
+            if (certificate == null)
+                throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
+
             UpdateCertificateStatus(dbContext, certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
-            CreateAStatusH(certificate.ApplicationId, certificate.Id,
-                certificate.StatusCode,
-               "Очаква обработка на заявка/и за реабилитация към съдия");
+            CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
             await dbContext.SaveChangesAsync();
         }
@@ -130,12 +132,12 @@ namespace MJ_CAIS.Services
                 .Where(x => x.Id == aId)
                 .FirstOrDefaultAsync();
 
-            if (certificate == null) throw new ArgumentException("Certificate does not exist");
+            if (certificate == null)
+                throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
+
             UpdateCertificateStatus(dbContext, certificate, ApplicationConstants.ApplicationStatuses.BulletinsRehabilitation);
 
-            CreateAStatusH(certificate.ApplicationId, certificate.Id,
-                 certificate.StatusCode,
-                "Очаква обработка на заявка / и за реабилитация към съдия");
+            CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
             var request = new List<BInternalRequest>();
             foreach (var appBullId in ids)
@@ -146,7 +148,7 @@ namespace MJ_CAIS.Services
                     BulletinId = certificate.AAppBulletins.FirstOrDefault(x => x.Id == appBullId)?.BulletinId,
                     AAppBulletinId = appBullId,
                     ReqStatusCode = InternalRequestStatusTypeConstants.New,
-                    Description = "Генерирана заявка за реабилитация при обработка на свидетелство",
+                    Description = CertificateResources.msgStatusForRehabilitationDesc,
                     EntityState = Common.Enums.EntityStateEnum.Added,
                     RequestDate = DateTime.UtcNow
                 });
@@ -158,7 +160,7 @@ namespace MJ_CAIS.Services
 
         private static void UpdateCertificateStatus(CaisDbContext dbContext, ACertificate? certificate, string statusCode)
         {
-            certificate.StatusCode = statusCode;    
+            certificate.StatusCode = statusCode;
             certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
             certificate.ModifiedProperties = new List<string> { nameof(certificate.StatusCode), nameof(certificate.Version) };
             dbContext.ApplyChanges(certificate, new List<IBaseIdEntity>());

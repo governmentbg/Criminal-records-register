@@ -27,6 +27,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ApplicationResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\CertificateResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CertificateResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +50,10 @@
     <EmbeddedResource Update="Resources\ApplicationResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ApplicationResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CertificateResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CertificateResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
