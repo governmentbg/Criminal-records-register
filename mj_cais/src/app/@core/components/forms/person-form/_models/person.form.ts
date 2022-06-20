@@ -128,15 +128,12 @@ export class PersonForm {
 
       if (context == PersonContextEnum.Bulletin) {
         this.firstnameLat.setValidators([
-          Validators.required,
           Validators.maxLength(200),
         ]);
         this.surnameLat.setValidators([
-          Validators.required,
           Validators.maxLength(200),
         ]);
         this.familynameLat.setValidators([
-          Validators.required,
           Validators.maxLength(200),
         ]);
       }
