@@ -17,8 +17,8 @@ namespace MJ_CAIS.Services
         private readonly IApplicationWebRepository _applicationWebRepository;
         private readonly IRegisterTypeService _registerTypeService;
 
-        public ApplicationWebService(IMapper mapper, 
-                                     IApplicationWebRepository applicationWebRepository, 
+        public ApplicationWebService(IMapper mapper,
+                                     IApplicationWebRepository applicationWebRepository,
                                      IRegisterTypeService registerTypeService,
                                      IUserContext userContext)
             : base(mapper, applicationWebRepository)
@@ -90,17 +90,21 @@ namespace MJ_CAIS.Services
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
 
+                join purposes in dbContext.APurposes.AsNoTracking()
+                on app.PurposeId equals purposes.Id into purposesLeft from purposes in purposesLeft.DefaultIfEmpty()
+
                 where app.UserCitizenId == userId
                 select new PublicApplicationGridDTO
                 {
                     Id = app.Id,
                     RegistrationNumber = app.RegistrationNumber,
-                    ApplicantName = app.ApplicantName,
                     Purpose = app.Purpose,
-                    PurposeId = app.PurposeId,
+                    PurposeTypeName = purposes.Name,
                     StatusCode = app.StatusCode,
                     StatusName = status.Name,
                     CreatedOn = app.CreatedOn,
+                    Email = app.Email,
+                    Version = app.Version,
                 };
 
             return result;
@@ -136,7 +140,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
+        public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
             wapplication.StatusCodeNavigation = newStatus;

@@ -70,6 +70,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дата на заявяване.
+        /// </summary>
+        public static string lblCreatedOn {
+            get {
+                return ResourceManager.GetString("lblCreatedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Бюро съдимост.
         /// </summary>
         public static string lblCsAuthorityId {
@@ -129,6 +138,24 @@ namespace MJ_CAIS.Common.Resources {
         public static string lblRegistrationNumber {
             get {
                 return ResourceManager.GetString("lblRegistrationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Статус.
+        /// </summary>
+        public static string lblStatus {
+            get {
+                return ResourceManager.GetString("lblStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявления.
+        /// </summary>
+        public static string titleApplications {
+            get {
+                return ResourceManager.GetString("titleApplications", resourceCulture);
             }
         }
     }

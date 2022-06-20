@@ -68,7 +68,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
         [HttpGet]
         [GridDataSourceAction]
-        public async Task<ActionResult> GetUserApplications()
+        public ActionResult GetUserApplications()
         {
             var result = _applicationWebService.SelectPublicApplications(CurrentUserID);
             return View(result);

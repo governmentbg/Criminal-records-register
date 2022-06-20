@@ -120,6 +120,9 @@
   <data name="descChangeStatus" xml:space="preserve">
     <value>Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи</value>
   </data>
+  <data name="lblCreatedOn" xml:space="preserve">
+    <value>Дата на заявяване</value>
+  </data>
   <data name="lblCsAuthorityId" xml:space="preserve">
     <value>Бюро съдимост</value>
   </data>
@@ -140,5 +143,11 @@
   </data>
   <data name="lblRegistrationNumber" xml:space="preserve">
     <value>Регистрационен номер</value>
+  </data>
+  <data name="lblStatus" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="titleApplications" xml:space="preserve">
+    <value>Заявления</value>
   </data>
 </root>
