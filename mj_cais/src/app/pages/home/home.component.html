@@ -1,83 +1,136 @@
-<ng-container *ngIf="model">
-  <div class="row home-panel-container">
-    <div class="col-md-6">
+<div class="row home-panel-container">
+  <div class="col-md-6">
+    <ng-template
+      [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]"
+    >
       <nb-card accent="info">
-        <nb-card-header>Бюлетини</nb-card-header>
+        <nb-card-header
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div>Бюлетини</div>
+          <a
+            nbButton
+            matRipple
+            [status]="'success'"
+            [routerLink]="['/pages/bulletins/create']"
+            type="button"
+            style="min-width: 100px"
+          >
+            Нов бюлетин
+          </a>
+        </nb-card-header>
         <nb-card-body>
           <nb-list>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/new-office']">
-                Нови бюлетини ({{ model.bulletinNewOfficeCount }})
+                Нови бюлетини ({{ bulletins.newOffice }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/new-eiss']">
-                Нови бюлетини от ЕИСС ({{ model.bulletinNewEISSCount }})
+                Нови бюлетини от ЕИСС ({{ bulletins.newEISS }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/isin/identified']">
-                Данни за изтърпени наказания ({{ model.isinIdentifiedCount }})
+                Данни за изтърпени наказания ({{ isin.identified }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/for-destruction']">
-                За унищожаване ({{ model.bulletinForDestructionCount }})
+                За унищожаване ({{ bulletins.forDestruction }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/for-rehabilitation']">
-                За реабилитация ({{ model.bulletinForRehabilitationCount }})
+                За реабилитация ({{ bulletins.forRehabilitation }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 1 ({{
-                  model.bulletinEventArticle2211Count
+                  bulletinEvents.article2211
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 2 ({{
-                  model.bulletinEventArticle2212Count
+                  bulletinEvents.article2212
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по чл.30 ({{
-                  model.bulletinEventArticle3000Count
+                  bulletinEvents.article3000
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Уведомяване за променен съдебен статус на осъдено лице ({{
-                  model.bulletinEventNewDocumentCount
+                  bulletinEvents.newDocument
                 }})
               </a>
             </nb-list-item>
           </nb-list>
         </nb-card-body>
       </nb-card>
+    </ng-template>
+    <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
       <nb-card accent="info" class="col-md-12">
         <nb-card-header>Изтърпени наказания</nb-card-header>
         <nb-card-body>
           <nb-list>
             <nb-list-item>
               <a [routerLink]="['/pages/isin/new']">
-                Новопостъпили данни за изтърпени наказания ({{
-                  model.isinNewCount
-                }})
+                Новопостъпили данни за изтърпени наказания ({{ isin.new }})
               </a>
             </nb-list-item>
           </nb-list>
         </nb-card-body>
       </nb-card>
-    </div>
-    <div class="col-md-6">
-      <div class="row col-md-12">
+    </ng-template>
+    <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
+      <nb-card accent="info" class="col-md-12">
+        <nb-card-header>За решение от съдия/юрист</nb-card-header>
+        <nb-card-body>
+          <nb-list>
+            <nb-list-item>
+              <a [routerLink]="['/pages/internal-requests']">
+                Нови заявки за реабилитация ({{ forJudge.internalRequests }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/tax-free']">
+                Oсвободени от плащане ({{ forJudge.taxFree }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/for-signing-by-judge']">
+                За подпис от съдия/юрист ({{ forJudge.forSigningByJudge }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/bulletin-selection']">
+                За избор на бюлетини ({{ forJudge.bulletinSelection }})
+              </a>
+            </nb-list-item>
+          </nb-list>
+        </nb-card-body>
+      </nb-card>
+    </ng-template>
+  </div>
+  <div class="col-md-6">
+    <div class="row col-md-12">
+      <ng-template
+        [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]"
+      >
         <nb-card accent="info" class="col-md-12">
           <nb-card-header
             style="
@@ -92,7 +145,6 @@
               matRipple
               [status]="'success'"
               [routerLink]="['/pages/applications/request']"
-              
               type="button"
               style="min-width: 100px"
             >
@@ -103,47 +155,49 @@
             <nb-list>
               <nb-list-item>
                 <a [routerLink]="['/pages/applications']">
-                  Нови заявления ({{ model.applicationNewIdCount }})
+                  Нови заявления ({{ applications.newId }})
                 </a>
               </nb-list-item>
 
               <nb-list-item>
                 <a [routerLink]="['/pages/applications/waiting-payment']">
-                  Потвърждение за плащане ({{ model.applicationCheckPaymentCount }})
+                  Потвърждение за плащане ({{ applications.checkPayment }})
                 </a>
               </nb-list-item>
               <nb-list-item>
                 <a [routerLink]="['/pages/applications/tax-free']">
-                  Oсвободени от плащане ({{ model.applicationCheckTaxFreeCount }})
+                  Oсвободени от плащане ({{ applications.checkTaxFree }})
                 </a>
               </nb-list-item>
               <nb-list-item>
                 <a [routerLink]="['/pages/applications/for-check']">
-                  За обработка ({{ model.applicationBulletinsCheckCount }})
+                  За обработка ({{ applications.bulletinsCheck }})
                 </a>
               </nb-list-item>
             </nb-list>
           </nb-card-body>
         </nb-card>
+      </ng-template>
 
-        <nb-card accent="info" class="col-md-12">
+      <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]"
+        ><nb-card accent="info" class="col-md-12">
           <nb-card-header>ECRIS</nb-card-header>
           <nb-card-body>
             <nb-list>
               <nb-list-item>
                 <a [routerLink]="['/pages/ecris/identification']">
-                  За идентификация ({{ model.ecrisForIdentificationCount }})
+                  За идентификация ({{ ecris.forIdentification }})
                 </a>
               </nb-list-item>
               <nb-list-item>
                 <a [routerLink]="['/pages/ecris/req-waiting']">
-                  Запитвания ({{ model.ecrisWaitingForCSAuthorityCount }})
+                  Запитвания ({{ ecris.waitingForCSAuthority }})
                 </a>
               </nb-list-item>
             </nb-list>
           </nb-card-body>
         </nb-card>
-      </div>
+      </ng-template>
     </div>
   </div>
-</ng-container>
+</div>

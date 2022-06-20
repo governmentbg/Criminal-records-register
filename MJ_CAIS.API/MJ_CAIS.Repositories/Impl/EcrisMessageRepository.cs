@@ -13,7 +13,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        public IQueryable<ObjectStatusCountDTO> GetStatusCount()
         {
             var query = _dbContext.EEcrisMessages.AsNoTracking()
                  .Where(x => x.EcrisMsgStatus == EcrisMessageStatuses.ForIdentification ||
@@ -25,7 +25,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Count = x.Count()
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
     }
 }

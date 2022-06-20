@@ -20,7 +20,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId);
 
-        Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync();
+        IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
 
         Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync();
 

@@ -9,14 +9,19 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class IsinDataRepository : BaseAsyncRepository<EIsinDatum, CaisDbContext>, IIsinDataRepository
     {
-        public IsinDataRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public IsinDataRepository(CaisDbContext dbContext,
+            IUserContext userContext) : base(dbContext)
         {
+            _userContext = userContext;
         }
 
-        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
             var query = _dbContext.EIsinData.AsNoTracking()
-                .Where(x => x.Status == IsinDataConstants.Status.New || x.Status == IsinDataConstants.Status.Identified)
+                .Include(x => x.Bulletin)
+                .Where(x => x.Bulletin.CsAuthorityId == _userContext.CsAuthorityId && x.Status == IsinDataConstants.Status.New || x.Status == IsinDataConstants.Status.Identified)
                 .GroupBy(x => x.Status)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -24,7 +29,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Count = x.Count()
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
     }
 }

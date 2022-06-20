@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -14,60 +15,118 @@ namespace MJ_CAIS.Services
         private readonly IEcrisMessageRepository _ecrisMessageRepository;
         private readonly IBulletinEventRepository _bulletinEventRepository;
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IInternalRequestRepository _internalRequestRepository;
+        private readonly IUserContext _userContext;
 
-        public HomeService(IBulletinRepository bulletinRepository, 
+        public HomeService(IBulletinRepository bulletinRepository,
             IIsinDataRepository isinDataRepository,
             IEcrisMessageRepository ecrisMessageRepository,
             IBulletinEventRepository bulletinEventRepository,
-            IApplicationRepository applicationRepository)
+            IApplicationRepository applicationRepository,
+            IInternalRequestRepository internalRequestRepository,
+            IUserContext userContext)
         {
             _bulletinRepository = bulletinRepository;
             _isinDataRepository = isinDataRepository;
             _ecrisMessageRepository = ecrisMessageRepository;
             _bulletinEventRepository = bulletinEventRepository;
             _applicationRepository = applicationRepository;
+            _internalRequestRepository = internalRequestRepository; 
+            _userContext = userContext;
         }
 
-        public async Task<ObjectsCountDTO> GetCountAsync()
+        public async Task<BulletinCountDTO> GetBulletinCountByCurrentAuthorityAsync()
         {
-            var bulletinStatusQuery = await _bulletinRepository.GetStatusCountAsync();
+            var result = new BulletinCountDTO();
+
+            var bulletinStatusQuery = _bulletinRepository.GetStatusCountByCurrentAuthority();
             var bulletinStatuses = await bulletinStatusQuery.ToListAsync();
 
-            var isinStatusQuery = await _isinDataRepository.GetStatusCountAsync();
-            var isinStatuses = await isinStatusQuery.ToListAsync();
+            result.NewOffice = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.NewOffice)?.Count ?? 0;
+            result.NewEISS = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.NewEISS)?.Count ?? 0;
+            result.ForRehabilitation = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.ForRehabilitation)?.Count ?? 0;
+            result.ForDestruction = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.ForDestruction)?.Count ?? 0;
 
-            var ercisStatusCountQuery = await _ecrisMessageRepository.GetStatusCountAsync();
-            var ercisStatuses = await ercisStatusCountQuery.ToListAsync();
+            return result;
+        }
 
-            var bulletinEventStatusesCountQuery = await _bulletinEventRepository.GetStatusCountAsync();
+        public async Task<BulletinEventCountDTO> GetBulletinEventCountByCurrentAuthorityAsync()
+        {
+            var result = new BulletinEventCountDTO();
+            var bulletinEventStatusesCountQuery = _bulletinEventRepository.GetStatusCountByCurrentAuthority();
             var bulletinStatusesEvent = await bulletinEventStatusesCountQuery.ToListAsync();
 
-            var applicationStatusesCountQuery = await _applicationRepository.GetStatusCountAsync();
+            result.Article2211 = bulletinStatusesEvent
+                .FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2211)?.Count ?? 0;
+            result.Article2212 = bulletinStatusesEvent
+                .FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2212)?.Count ?? 0;
+            result.Article3000 = bulletinStatusesEvent
+                .FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article3000)?.Count ?? 0;
+            result.NewDocument = bulletinStatusesEvent
+                .FirstOrDefault(x => x.Status == BulletinEventConstants.Type.NewDocument)?.Count ?? 0;
+
+            return result;
+        }
+
+        public async Task<IsinCountDTO> GetIsinCountByCurrentAuthorityAsync()
+        {
+            var result = new IsinCountDTO();
+            var isinStatusQuery =  _isinDataRepository.GetStatusCountByCurrentAuthority();
+            var isinStatuses = await isinStatusQuery.ToListAsync();
+
+            result.New = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.New)?.Count ?? 0;
+            result.Identified = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.Identified)?.Count ?? 0;
+
+            return result;
+        }
+
+        public async Task<EcrisCountDTO> GetEcrisCountAsync()
+        {
+            var result = new EcrisCountDTO();
+            var ercisStatusCountQuery = _ecrisMessageRepository.GetStatusCount();
+            var ercisStatuses = await ercisStatusCountQuery.ToListAsync();
+            result.ForIdentification = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ForIdentification)?.Count ?? 0;
+            result.WaitingForCSAuthority = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ReqWaitingForCSAuthority)?.Count ?? 0;
+
+            return result;
+        }
+
+        public async Task<ApplicationCountDTO> GetApplicationCountByCurrentAuthorityAsync()
+        {
+            var result = new ApplicationCountDTO();
+            var applicationStatusesCountQuery = _applicationRepository.GetStatusCountByCurrentAuthority();
             var applicationStatuses = await applicationStatusesCountQuery.ToListAsync();
 
-            var result = new ObjectsCountDTO()
-            {
-                BulletinNewOfficeCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.NewOffice)?.Count ?? 0,
-                BulletinNewEISSCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.NewEISS)?.Count ?? 0,
-                BulletinForRehabilitationCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.ForRehabilitation)?.Count ?? 0,
-                BulletinForDestructionCount = bulletinStatuses.FirstOrDefault(x => x.Status == BulletinConstants.Status.ForDestruction)?.Count ?? 0,
-              
-                IsinNewCount = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.New)?.Count ?? 0,
-                IsinIdentifiedCount = isinStatuses.FirstOrDefault(x => x.Status == IsinDataConstants.Status.Identified)?.Count ?? 0,
-               
-                EcrisForIdentificationCount = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ForIdentification)?.Count ?? 0,
-                EcrisWaitingForCSAuthorityCount = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ReqWaitingForCSAuthority)?.Count ?? 0,
-              
-                BulletinEventArticle2211Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2211)?.Count ?? 0,
-                BulletinEventArticle2212Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article2212)?.Count ?? 0,
-                BulletinEventArticle3000Count = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.Article3000)?.Count ?? 0,
-                BulletinEventNewDocumentCount = bulletinStatusesEvent.FirstOrDefault(x => x.Status == BulletinEventConstants.Type.NewDocument)?.Count ?? 0,
-               
-                ApplicationNewIdCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.NewId)?.Count ?? 0,
-                ApplicationCheckPaymentCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.CheckPayment)?.Count ?? 0,
-                ApplicationCheckTaxFreeCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0,
-                ApplicationBulletinsCheckCount = applicationStatuses.FirstOrDefault(x=>x.Status == ApplicationConstants.ApplicationStatuses.BulletinsCheck)?.Count ?? 0,
-            };
+            result.NewId = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.NewId)?.Count ?? 0;
+            result.CheckPayment = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CheckPayment)?.Count ?? 0;
+            result.CheckTaxFree = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0;
+            result.BulletinsCheck = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.BulletinsCheck)?.Count ?? 0;
+
+            return result;
+        }
+
+        public async Task<ForJudgeCountDTO> GetForJudgeCountByCurrentAuthorityAsync()
+        {
+            var result = new ForJudgeCountDTO();
+            var applicationStatusesCountQuery = _applicationRepository.GetForJudgeCountByCurrentAuthority();
+            var applicationStatuses = await applicationStatusesCountQuery.ToListAsync();
+
+            result.TaxFree = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0;
+            result.ForSigningByJudge = (applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CertificateContentReady)?.Count ?? 0) +
+                                       (applicationStatuses
+                                           .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)?.Count ?? 0);
+
+            result.BulletinSelection = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.BulletinsSelection)?.Count ?? 0;
+
+
+            result.InternalRequests = await _internalRequestRepository.GetCountOfNewRequestsAsync();
 
             return result;
         }

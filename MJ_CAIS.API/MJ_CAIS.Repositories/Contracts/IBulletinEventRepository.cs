@@ -13,6 +13,6 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<string> GetPersonIdByBulletinIdAsync(string bulletinId);
 
-        Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync();
+        IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
     }
 }

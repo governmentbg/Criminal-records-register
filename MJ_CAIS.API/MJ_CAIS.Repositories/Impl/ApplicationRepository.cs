@@ -12,8 +12,7 @@ namespace MJ_CAIS.Repositories.Impl
     {
         private readonly IUserContext _userContext;
 
-        public ApplicationRepository(CaisDbContext dbContext, IUserContext userContext)
-            : base(dbContext)
+        public ApplicationRepository(CaisDbContext dbContext, IUserContext userContext) : base(dbContext)
         {
             _userContext = userContext;
         }
@@ -84,14 +83,13 @@ namespace MJ_CAIS.Repositories.Impl
                 .Where(x => x.ApplicationId == aId));
         }
 
-
-        public async Task<IQueryable<ObjectStatusCountDTO>> GetStatusCountAsync()
+        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
             var query = _dbContext.AApplications.AsNoTracking()
-                .Where(x => x.StatusCode == ApplicationConstants.ApplicationStatuses.NewId ||
-                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
-                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckTaxFree ||
-                            x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsCheck)
+                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (x.StatusCode == ApplicationConstants.ApplicationStatuses.NewId ||
+                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
+                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckTaxFree ||
+                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsCheck))
                 .GroupBy(x => x.StatusCode)
                 .Select(x => new ObjectStatusCountDTO
                 {
@@ -99,7 +97,25 @@ namespace MJ_CAIS.Repositories.Impl
                     Count = x.Count()
                 });
 
-            return await Task.FromResult(query);
+            return query;
+        }
+
+        public IQueryable<ObjectStatusCountDTO> GetForJudgeCountByCurrentAuthority()
+        {
+            var query = _dbContext.AApplications.AsNoTracking()
+                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady ||
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsSelection))
+                .GroupBy(x => x.StatusCode)
+                .Select(x => new ObjectStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count()
+                });
+
+            return query;
         }
     }
 }

@@ -4,6 +4,7 @@ import { PagesComponent } from "./pages.component";
 import { NotFoundComponent } from "./miscellaneous/not-found/not-found.component";
 import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "../@core/services/common/guard.service";
+import { HomeResolver } from "./home/_data/home.resolver";
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
       {
         path: "home",
         component: HomeComponent,
+        resolve: { dbData: HomeResolver },
       },
       {
         path: "applications",
