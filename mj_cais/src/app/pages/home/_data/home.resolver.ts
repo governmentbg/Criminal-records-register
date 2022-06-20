@@ -12,6 +12,7 @@ import { ApplicationCountModel } from "../_models/application-count.model";
 import { BulletinCountModel } from "../_models/bulletin-count.model";
 import { BulletinEventCountModel } from "../_models/bulletin-event-count.model";
 import { EcrisCountModel } from "../_models/ecris-count.model";
+import { ForJudgeCountModel } from "../_models/for-judge-count.model";
 import { IsinCountModel } from "../_models/isin-count.model";
 import { ObjectCountModel } from "../_models/object-count.model";
 import { HomeService } from "./home.service";
@@ -38,23 +39,35 @@ export class HomeResolver implements Resolve<any> {
       bulletinEvents: of(null),
       ecris: of(null),
       isin: of(null),
+      forJudge: of(null),
     };
 
     this.permissionsService.permissions$.subscribe((perm) => {
       var roles = Object.keys(perm);
-      if(roles.indexOf(RoleNameEnum.Normal) > -1 || roles.indexOf(RoleNameEnum.Judge) > -1){
+      if (
+        roles.indexOf(RoleNameEnum.Normal) > -1 ||
+        roles.indexOf(RoleNameEnum.Judge) > -1
+      ) {
         result.bulletins = this.service.getBulletinsCount();
         result.bulletinEvents = this.service.getBulletinEventsCount();
         result.applications = this.service.getApplicationsCount();
       }
 
-      if(roles.indexOf(RoleNameEnum.Normal) > -1 || roles.indexOf(RoleNameEnum.CentralAuth) > -1){
+      if (
+        roles.indexOf(RoleNameEnum.Normal) > -1 ||
+        roles.indexOf(RoleNameEnum.CentralAuth) > -1 ||
+        roles.indexOf(RoleNameEnum.Judge) > -1
+      ) {
         result.isin = this.service.getIsinCount();
       }
 
-      if(roles.indexOf(RoleNameEnum.CentralAuth) > -1){
+      if (roles.indexOf(RoleNameEnum.CentralAuth) > -1) {
         result.ecris = this.service.getEcrisCount();
-      }     
+      }
+
+      if (roles.indexOf(RoleNameEnum.Judge) > -1) {
+        result.forJudge = this.service.getForJudgeCount();
+      }
     });
 
     return forkJoin(result);
@@ -67,4 +80,5 @@ export class HomeResolverData extends BaseResolverData<ObjectCountModel> {
   public bulletinEvents: Observable<BulletinEventCountModel>;
   public ecris: Observable<EcrisCountModel>;
   public isin: Observable<IsinCountModel>;
+  public forJudge: Observable<ForJudgeCountModel>;
 }

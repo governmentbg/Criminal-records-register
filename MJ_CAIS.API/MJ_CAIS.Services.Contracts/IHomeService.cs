@@ -13,5 +13,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<EcrisCountDTO> GetEcrisCountAsync();
 
         Task<ApplicationCountDTO> GetApplicationCountByCurrentAuthorityAsync();
+
+        Task<ForJudgeCountDTO> GetForJudgeCountByCurrentAuthorityAsync();
     }
 }

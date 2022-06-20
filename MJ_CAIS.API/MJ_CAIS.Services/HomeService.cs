@@ -15,6 +15,7 @@ namespace MJ_CAIS.Services
         private readonly IEcrisMessageRepository _ecrisMessageRepository;
         private readonly IBulletinEventRepository _bulletinEventRepository;
         private readonly IApplicationRepository _applicationRepository;
+        private readonly IInternalRequestRepository _internalRequestRepository;
         private readonly IUserContext _userContext;
 
         public HomeService(IBulletinRepository bulletinRepository,
@@ -22,6 +23,7 @@ namespace MJ_CAIS.Services
             IEcrisMessageRepository ecrisMessageRepository,
             IBulletinEventRepository bulletinEventRepository,
             IApplicationRepository applicationRepository,
+            IInternalRequestRepository internalRequestRepository,
             IUserContext userContext)
         {
             _bulletinRepository = bulletinRepository;
@@ -29,6 +31,7 @@ namespace MJ_CAIS.Services
             _ecrisMessageRepository = ecrisMessageRepository;
             _bulletinEventRepository = bulletinEventRepository;
             _applicationRepository = applicationRepository;
+            _internalRequestRepository = internalRequestRepository; 
             _userContext = userContext;
         }
 
@@ -102,6 +105,28 @@ namespace MJ_CAIS.Services
                 .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0;
             result.BulletinsCheck = applicationStatuses
                 .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.BulletinsCheck)?.Count ?? 0;
+
+            return result;
+        }
+
+        public async Task<ForJudgeCountDTO> GetForJudgeCountByCurrentAuthorityAsync()
+        {
+            var result = new ForJudgeCountDTO();
+            var applicationStatusesCountQuery = _applicationRepository.GetForJudgeCountByCurrentAuthority();
+            var applicationStatuses = await applicationStatusesCountQuery.ToListAsync();
+
+            result.TaxFree = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CheckTaxFree)?.Count ?? 0;
+            result.ForSigningByJudge = (applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CertificateContentReady)?.Count ?? 0) +
+                                       (applicationStatuses
+                                           .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)?.Count ?? 0);
+
+            result.BulletinSelection = applicationStatuses
+                .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.BulletinsSelection)?.Count ?? 0;
+
+
+            result.InternalRequests = await _internalRequestRepository.GetCountOfNewRequestsAsync();
 
             return result;
         }

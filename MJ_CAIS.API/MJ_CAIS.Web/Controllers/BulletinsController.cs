@@ -39,6 +39,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge},{RoleConstants.CentralAuth}")]
         public new async Task<IActionResult> Get(string aId)
         {
             return await base.Get(aId);

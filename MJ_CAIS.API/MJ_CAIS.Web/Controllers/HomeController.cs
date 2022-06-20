@@ -35,7 +35,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("isin-count")]
-        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.CentralAuth}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.CentralAuth},{RoleConstants.Judge}")]
         public async Task<IActionResult> IsinCounts()
         {
             var result = await this._service.GetIsinCountByCurrentAuthorityAsync();
@@ -55,6 +55,14 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> ApplicationCounts()
         {
             var result = await this._service.GetApplicationCountByCurrentAuthorityAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("for-judge-count")]
+        [Authorize(Roles = $"{RoleConstants.Judge}")]
+        public async Task<IActionResult> ForJudgeCounts()
+        {
+            var result = await this._service.GetForJudgeCountByCurrentAuthorityAsync();
             return Ok(result);
         }
     }

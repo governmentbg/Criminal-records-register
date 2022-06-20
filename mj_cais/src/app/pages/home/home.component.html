@@ -4,7 +4,25 @@
       [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]"
     >
       <nb-card accent="info">
-        <nb-card-header>Бюлетини</nb-card-header>
+        <nb-card-header
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div>Бюлетини</div>
+          <a
+            nbButton
+            matRipple
+            [status]="'success'"
+            [routerLink]="['/pages/bulletins/create']"
+            type="button"
+            style="min-width: 100px"
+          >
+            Нов бюлетин
+          </a>
+        </nb-card-header>
         <nb-card-body>
           <nb-list>
             <nb-list-item>
@@ -72,6 +90,35 @@
             <nb-list-item>
               <a [routerLink]="['/pages/isin/new']">
                 Новопостъпили данни за изтърпени наказания ({{ isin.new }})
+              </a>
+            </nb-list-item>
+          </nb-list>
+        </nb-card-body>
+      </nb-card>
+    </ng-template>
+    <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
+      <nb-card accent="info" class="col-md-12">
+        <nb-card-header>За решение от съдия/юрист</nb-card-header>
+        <nb-card-body>
+          <nb-list>
+            <nb-list-item>
+              <a [routerLink]="['/pages/internal-requests']">
+                Нови заявки за реабилитация ({{ forJudge.internalRequests }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/tax-free']">
+                Oсвободени от плащане ({{ forJudge.taxFree }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/for-signing-by-judge']">
+                За подпис от съдия/юрист ({{ forJudge.forSigningByJudge }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/bulletin-selection']">
+                За избор на бюлетини ({{ forJudge.bulletinSelection }})
               </a>
             </nb-list-item>
           </nb-list>

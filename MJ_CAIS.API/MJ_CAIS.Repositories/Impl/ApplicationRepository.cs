@@ -99,5 +99,23 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+
+        public IQueryable<ObjectStatusCountDTO> GetForJudgeCountByCurrentAuthority()
+        {
+            var query = _dbContext.AApplications.AsNoTracking()
+                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady ||
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
+                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsSelection))
+                .GroupBy(x => x.StatusCode)
+                .Select(x => new ObjectStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count()
+                });
+
+            return query;
+        }
     }
 }
