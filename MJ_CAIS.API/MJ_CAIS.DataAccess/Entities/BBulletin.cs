@@ -105,6 +105,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? IdDocNumberId { get; set; }
         public bool? EuCitizen { get; set; }
         public bool? TcnCitizen { get; set; }
+        public string? PersonIdCsc { get; set; }
+        public string? PersonIdCscId { get; set; }
+        public string? MigrationBulletinId { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -119,6 +122,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual PPersonId? IdDocNumberNavigation { get; set; }
         public virtual PPersonId? LnNavigation { get; set; }
         public virtual PPersonId? LnchNavigation { get; set; }
+        public virtual PPersonId? PersonIdCscNavigation { get; set; }
         public virtual BBulletinStatus? Status { get; set; }
         public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }

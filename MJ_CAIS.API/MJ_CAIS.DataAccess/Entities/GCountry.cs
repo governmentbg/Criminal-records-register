@@ -17,6 +17,8 @@ namespace MJ_CAIS.DataAccess.Entities
             FbbcCountries = new HashSet<Fbbc>();
             GCities = new HashSet<GCity>();
             PPeople = new HashSet<PPerson>();
+            PPersonCitizenships = new HashSet<PPersonCitizenship>();
+            PPersonHCitizenships = new HashSet<PPersonHCitizenship>();
             PPersonHs = new HashSet<PPersonH>();
             PPersonIds = new HashSet<PPersonId>();
             WApplications = new HashSet<WApplication>();
@@ -48,6 +50,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<Fbbc> FbbcCountries { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<PPerson> PPeople { get; set; }
+        public virtual ICollection<PPersonCitizenship> PPersonCitizenships { get; set; }
+        public virtual ICollection<PPersonHCitizenship> PPersonHCitizenships { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }
         public virtual ICollection<PPersonId> PPersonIds { get; set; }
         public virtual ICollection<WApplication> WApplications { get; set; }
