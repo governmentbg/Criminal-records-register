@@ -2,7 +2,9 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DTO.Fbbc;
+using MJ_CAIS.DTO.Home;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -51,6 +53,22 @@ namespace MJ_CAIS.Repositories.Impl
                .FirstOrDefaultAsync(x => x.Id == aId);
 
             return fbbc;
+        }
+
+        public IQueryable<ObjectStatusCountDTO> GetStatusCount()
+        {
+            var query = _dbContext.Fbbcs.AsNoTracking()
+                .Where(x => x.StatusCode == FbbcConstants.FBBCStatus.Active ||
+                                                                              x.StatusCode == FbbcConstants.FBBCStatus.ForDelete ||
+                                                                              x.StatusCode == FbbcConstants.FBBCStatus.Deleted)
+                .GroupBy(x => x.StatusCode)
+                .Select(x => new ObjectStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count()
+                });
+
+            return query;
         }
     }
 }

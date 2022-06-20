@@ -5,6 +5,7 @@ import { ApplicationCountModel } from "../_models/application-count.model";
 import { BulletinCountModel } from "../_models/bulletin-count.model";
 import { BulletinEventCountModel } from "../_models/bulletin-event-count.model";
 import { EcrisCountModel } from "../_models/ecris-count.model";
+import { FbbcCountModel } from "../_models/fbbc-count.model";
 import { ForJudgeCountModel } from "../_models/for-judge-count.model";
 import { IsinCountModel } from "../_models/isin-count.model";
 import { ObjectCountModel } from "../_models/object-count.model";
@@ -44,6 +45,12 @@ export class HomeService extends CaisCrudService<ObjectCountModel, string> {
   public getForJudgeCount(): Observable<ForJudgeCountModel> {
     return this.http.get<ForJudgeCountModel>(
       `${this.url}/for-judge-count`
+    );
+  }
+
+  public getFbbcCount(): Observable<FbbcCountModel> {
+    return this.http.get<FbbcCountModel>(
+      `${this.url}/fbbc-count`
     );
   }
 }

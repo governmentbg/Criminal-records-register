@@ -8,6 +8,7 @@ import { ApplicationCountModel } from "./_models/application-count.model";
 import { BulletinCountModel } from "./_models/bulletin-count.model";
 import { BulletinEventCountModel } from "./_models/bulletin-event-count.model";
 import { EcrisCountModel } from "./_models/ecris-count.model";
+import { FbbcCountModel } from "./_models/fbbc-count.model";
 import { ForJudgeCountModel } from "./_models/for-judge-count.model";
 import { IsinCountModel } from "./_models/isin-count.model";
 import { ObjectCountModel } from "./_models/object-count.model";
@@ -27,6 +28,7 @@ export class HomeComponent
   public ecris: EcrisCountModel;
   public isin: IsinCountModel;
   public forJudge: ForJudgeCountModel;
+  public fbbc: FbbcCountModel;
 
   public RoleNameEnum = RoleNameEnum;
   constructor(service: HomeService, public injector: Injector) {
@@ -40,6 +42,7 @@ export class HomeComponent
     this.ecris = this.dbData.ecris as any;
     this.isin = this.dbData.isin as any;
     this.forJudge = this.dbData.forJudge as any;
+    this.fbbc = this.dbData.fbbc as any;
   }
 
   buildFormImpl(): FormGroup {

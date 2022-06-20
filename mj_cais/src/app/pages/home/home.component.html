@@ -1,9 +1,8 @@
 <div class="row home-panel-container">
-  <div class="col-md-6">
-    <ng-template
-      [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]"
-    >
-      <nb-card accent="info">
+  <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]">
+    
+    <div class="col-md-6">
+      <nb-card accent="info" class="col-md-12">
         <nb-card-header
           style="
             display: flex;
@@ -81,22 +80,116 @@
           </nb-list>
         </nb-card-body>
       </nb-card>
-    </ng-template>
-    <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
+    </div>
+    <div class="col-md-6">
       <nb-card accent="info" class="col-md-12">
-        <nb-card-header>Изтърпени наказания</nb-card-header>
+        <nb-card-header
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div>Свидетелства</div>
+          <a
+            nbButton
+            matRipple
+            [status]="'success'"
+            [routerLink]="['/pages/applications/request']"
+            type="button"
+            style="min-width: 100px"
+          >
+            Ново заявление
+          </a>
+        </nb-card-header>
         <nb-card-body>
           <nb-list>
             <nb-list-item>
-              <a [routerLink]="['/pages/isin/new']">
-                Новопостъпили данни за изтърпени наказания ({{ isin.new }})
+              <a [routerLink]="['/pages/applications']">
+                Нови заявления ({{ applications.newId }})
+              </a>
+            </nb-list-item>
+
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/waiting-payment']">
+                Потвърждение за плащане ({{ applications.checkPayment }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/tax-free']">
+                Oсвободени от плащане ({{ applications.checkTaxFree }})
+              </a>
+            </nb-list-item>
+            <nb-list-item>
+              <a [routerLink]="['/pages/applications/for-check']">
+                За обработка ({{ applications.bulletinsCheck }})
               </a>
             </nb-list-item>
           </nb-list>
         </nb-card-body>
       </nb-card>
-    </ng-template>
-    <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
+    </div>
+  </ng-template>
+
+  <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
+      <div class="col-md-6">
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>Осъдени в чужбина</nb-card-header>
+          <nb-card-body>
+            <nb-list>
+              <nb-list-item>
+                <a [routerLink]="['/pages/fbbcs']">
+                  Актуални сведения ({{ fbbc.new }})
+                </a>
+              </nb-list-item>
+              <nb-list-item>
+                <a [routerLink]="['/pages/fbbcs/for-destruction']">
+                  Подлежащи на заличаване ({{ fbbc.forDestruction }})
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>Изтърпени наказания</nb-card-header>
+          <nb-card-body>
+            <nb-list>
+              <nb-list-item>
+                <a [routerLink]="['/pages/isin/new']">
+                  Новопостъпили данни за изтърпени наказания ({{ isin.new }})
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-md-6">
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>ECRIS</nb-card-header>
+          <nb-card-body>
+            <nb-list>
+              <nb-list-item>
+                <a [routerLink]="['/pages/ecris/identification']">
+                  За идентификация ({{ ecris.forIdentification }})
+                </a>
+              </nb-list-item>
+              <nb-list-item>
+                <a [routerLink]="['/pages/ecris/req-waiting']">
+                  Запитвания ({{ ecris.waitingForCSAuthority }})
+                </a>
+              </nb-list-item>
+              <nb-list-item>
+                <a [routerLink]="['/pages/ecris/req-waiting']">
+                  ECRIS-TCN ({{ ecris.tcn }})
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+      </div>
+  </ng-template>
+  <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
+    <div class="col-md-6">
       <nb-card accent="info" class="col-md-12">
         <nb-card-header>За решение от съдия/юрист</nb-card-header>
         <nb-card-body>
@@ -124,80 +217,6 @@
           </nb-list>
         </nb-card-body>
       </nb-card>
-    </ng-template>
-  </div>
-  <div class="col-md-6">
-    <div class="row col-md-12">
-      <ng-template
-        [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]"
-      >
-        <nb-card accent="info" class="col-md-12">
-          <nb-card-header
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            "
-          >
-            <div>Свидетелства</div>
-            <a
-              nbButton
-              matRipple
-              [status]="'success'"
-              [routerLink]="['/pages/applications/request']"
-              type="button"
-              style="min-width: 100px"
-            >
-              Ново заявление
-            </a>
-          </nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <a [routerLink]="['/pages/applications']">
-                  Нови заявления ({{ applications.newId }})
-                </a>
-              </nb-list-item>
-
-              <nb-list-item>
-                <a [routerLink]="['/pages/applications/waiting-payment']">
-                  Потвърждение за плащане ({{ applications.checkPayment }})
-                </a>
-              </nb-list-item>
-              <nb-list-item>
-                <a [routerLink]="['/pages/applications/tax-free']">
-                  Oсвободени от плащане ({{ applications.checkTaxFree }})
-                </a>
-              </nb-list-item>
-              <nb-list-item>
-                <a [routerLink]="['/pages/applications/for-check']">
-                  За обработка ({{ applications.bulletinsCheck }})
-                </a>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
-        </nb-card>
-      </ng-template>
-
-      <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]"
-        ><nb-card accent="info" class="col-md-12">
-          <nb-card-header>ECRIS</nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <a [routerLink]="['/pages/ecris/identification']">
-                  За идентификация ({{ ecris.forIdentification }})
-                </a>
-              </nb-list-item>
-              <nb-list-item>
-                <a [routerLink]="['/pages/ecris/req-waiting']">
-                  Запитвания ({{ ecris.waitingForCSAuthority }})
-                </a>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
-        </nb-card>
-      </ng-template>
     </div>
-  </div>
+  </ng-template>
 </div>
