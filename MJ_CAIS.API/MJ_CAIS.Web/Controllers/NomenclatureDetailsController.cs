@@ -10,7 +10,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("nomenclature-details")]
-    [AllowAnonymous] // TODO: remove
+    [Authorize]
     public class NomenclatureDetailsController : BaseApiCrudController<BaseNomenclatureDTO, BaseNomenclatureDTO, BaseNomenclatureDTO, GNomenclature, string>
     {
         private readonly INomenclatureDetailService _nomenclatureDetailService;

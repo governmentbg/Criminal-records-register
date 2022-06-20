@@ -1,15 +1,15 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Certificate;
+using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
-using MJ_CAIS.ExternalWebServices.Contracts;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("certificates")]
-    [AllowAnonymous]
+    [Authorize]
     public class CertificatesController : BaseApiCrudController<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string>
     {
         private readonly ICertificateService _certificateService;
@@ -82,7 +82,7 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{aId}/bulletins-selcetion")]
+        [HttpPut("{aId}/bulletins-selection")]
         public async Task<IActionResult> BulletinsSelection(string aId)
         {
             await this._certificateService.SetCertificateForSelectionAsync(aId);

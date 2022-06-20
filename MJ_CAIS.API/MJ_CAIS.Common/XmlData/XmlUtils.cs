@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace MJ_CAIS.Common.XmlData
 {
@@ -150,6 +152,35 @@ namespace MJ_CAIS.Common.XmlData
 
             var result = doc.OuterXml.Trim();
             return result;
+        }
+
+        public static string XmlTransform(string transformationContent, string documentToTransform) // xslt, xml
+        {
+            StringBuilder resultSb;
+            XslCompiledTransform xslt = new XslCompiledTransform();
+
+
+            using (var stringReader = new StringReader(transformationContent))
+            using (var reader = XmlReader.Create(stringReader))
+            {
+                xslt.Load(reader);
+            }
+
+            XPathNavigator xmlDocumentToTransform;
+            using (var stringReader = new StringReader(documentToTransform))
+            {
+                xmlDocumentToTransform = new XPathDocument(stringReader).CreateNavigator();
+            }
+
+            resultSb = new StringBuilder();
+            using (var sw = new StringWriter(resultSb))
+            using (var writer = new XmlTextWriter(sw))
+            {
+                writer.Formatting = Formatting.None;
+                xslt.Transform(xmlDocumentToTransform, null, writer, null);
+            }
+
+            return resultSb.ToString();
         }
     }
 }

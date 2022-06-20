@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.Application;
+using Microsoft.AspNetCore.StaticFiles;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
+using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.StaticFiles;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.Common.Constants;
-using MJ_CAIS.ExternalWebServices.Contracts;
 
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("reports")]
-    [AllowAnonymous]
+    [Authorize]
     public class ReportController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
@@ -69,7 +69,7 @@ namespace MJ_CAIS.Web.Controllers
             aInDto.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // todo
             aInDto.StatusCode = ApplicationConstants.ApplicationStatuses.NewId;
             aInDto.ApplicationTypeId = "7";
-            var id =  await _reportService.InsertAsync(aInDto);
+            var id = await _reportService.InsertAsync(aInDto);
             return Ok(new { id });
         }
 
@@ -149,7 +149,7 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> CreateReport(string aId)
         {
             var report = await _reportService.GenerateReportFromApplication(aId);
-      
+
             var file = await _reportGenerationService.CreateReport(report.Id);
             if (file == null) return NotFound();
 

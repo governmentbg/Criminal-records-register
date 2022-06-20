@@ -14,7 +14,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("applications")]
-    [AllowAnonymous]
+    [Authorize]
     public class ApplicationsController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
@@ -32,6 +32,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> GetAll(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._applicationService.SelectAllWithPaginationAsync(aQueryOptions, statusId);

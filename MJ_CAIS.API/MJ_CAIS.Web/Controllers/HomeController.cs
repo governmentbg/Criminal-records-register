@@ -6,7 +6,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("home")]
-    [AllowAnonymous]
+    [Authorize]
     public class HomeController : BaseApiController
     {
         private readonly IHomeService _service;

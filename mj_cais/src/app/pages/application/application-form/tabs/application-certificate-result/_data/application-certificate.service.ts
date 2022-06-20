@@ -62,7 +62,7 @@ export class ApplicationCertificateService extends CaisCrudService<
 
   public sendBulletinsForSelection(id: string): Observable<any> {
     return this.http.put<ApplicationCertificateResultModel>(
-      `${this.url}/${id}/bulletins-selcetion`,
+      `${this.url}/${id}/bulletins-selection`,
       {}
     );
   }
