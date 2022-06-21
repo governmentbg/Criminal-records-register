@@ -61,11 +61,29 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ново заявление.
+        /// </summary>
+        public static string btnNewApp {
+            get {
+                return ResourceManager.GetString("btnNewApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи.
         /// </summary>
         public static string descChangeStatus {
             get {
                 return ResourceManager.GetString("descChangeStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Данни от заявление.
+        /// </summary>
+        public static string lblAppInfo {
+            get {
+                return ResourceManager.GetString("lblAppInfo", resourceCulture);
             }
         }
         
@@ -106,6 +124,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Плащане.
+        /// </summary>
+        public static string lblIsPaid {
+            get {
+                return ResourceManager.GetString("lblIsPaid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Начин на плащане.
         /// </summary>
         public static string lblPaymentMethodId {
@@ -133,6 +160,33 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Получаване.
+        /// </summary>
+        public static string lblReceiving {
+            get {
+                return ResourceManager.GetString("lblReceiving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Чрез ССЕВ - Система за сигурно електронно връчване.
+        /// </summary>
+        public static string lblReceivingEDelivery {
+            get {
+                return ResourceManager.GetString("lblReceivingEDelivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to От този портал.
+        /// </summary>
+        public static string lblReceivingFromPortal {
+            get {
+                return ResourceManager.GetString("lblReceivingFromPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Регистрационен номер.
         /// </summary>
         public static string lblRegistrationNumber {
@@ -151,11 +205,38 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to При избор на &quot;Освободено от плащане&quot; трябва да прикачите документ удостоверяващ това право..
+        /// </summary>
+        public static string msgPaymentFreeInfo {
+            get {
+                return ResourceManager.GetString("msgPaymentFreeInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to За да се обработи заявката, е необходимо в 14-дневен срок да заплатите държавна такса за издаване на свидетелство за съдимост в размер на 3.00 лв..
+        /// </summary>
+        public static string msgPaymentInfo {
+            get {
+                return ResourceManager.GetString("msgPaymentInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Заявления.
         /// </summary>
         public static string titleApplications {
             get {
                 return ResourceManager.GetString("titleApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявление за издаване на електронно свидетелство за съдимост.
+        /// </summary>
+        public static string titleAppPreview {
+            get {
+                return ResourceManager.GetString("titleAppPreview", resourceCulture);
             }
         }
     }

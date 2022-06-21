@@ -67,6 +67,15 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult> Preview(string id)
+        {
+            var app = await _applicationWebService.GetForPreviewAsync(id);
+            var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
         [GridDataSourceAction]
         public ActionResult GetUserApplications()
         {

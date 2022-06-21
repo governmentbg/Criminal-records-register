@@ -1,11 +1,15 @@
-﻿@using Infragistics.Web.Mvc
+﻿@model ApplicationViewModel
+@using Infragistics.Web.Mvc
 @using MJ_CAIS.WebPortal.Public.Models.Application
 @using MJ_CAIS.Common.Resources
 @using MJ_CAIS.WebPortal.Public.Controllers
-@model ApplicationViewModel
+@using MJ_CAIS.WebPortal.Public.Utils;
+@using MJ_CAIS.DTO.Application.Public
 
 @{
     ViewData["Title"] = ApplicationResources.titleApplications;
+    var pkName = nameof(PublicApplicationGridDTO.Id);
+    var buttonPreviewTemplate = ButtonTemplates.PreviewButton(Url.Action(nameof(ApplicationController.Preview), "Application") + $"/${{{pkName}}}");
 }
 
 <partial name="_InfragisticsLoader" />
@@ -17,7 +21,7 @@
     <div class="d-flex">
         <div>
             <a class="btn btn-primary" asp-controller="Application" asp-action="New">
-                Ново заявление
+                @ApplicationResources.btnNewApp
             </a>
         </div>
     </div>
@@ -37,31 +41,31 @@
         .AutoGenerateLayouts(false)
         .Columns(column =>
         {
-            column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
-            column.For(x => x.RegistrationNumber).HeaderText(ApplicationResources.lblRegistrationNumber).Width("20%");
-            column.For(x => x.CreatedOn).HeaderText(ApplicationResources.lblCreatedOn).Width("15%");
-            column.For(x => x.StatusName).HeaderText(ApplicationResources.lblStatus).Width("20%");
-            column.For(x => x.PurposeTypeName).HeaderText(ApplicationResources.lblPurposeId).Width("25%");
-            column.For(x => x.Purpose).HeaderText(ApplicationResources.lblPurpose).Width("25%");
-            column.For(x => x.Email).HeaderText(ApplicationResources.lblEmail).Width("25%");
-            column.Unbound("buttons").HeaderText("").Width("8%");
+        column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
+        column.For(x => x.RegistrationNumber).HeaderText(ApplicationResources.lblRegistrationNumber).Width("20%");
+        column.For(x => x.CreatedOn).HeaderText(ApplicationResources.lblCreatedOn).Width("15%");
+        column.For(x => x.StatusName).HeaderText(ApplicationResources.lblStatus).Width("20%");
+        column.For(x => x.PurposeTypeName).HeaderText(ApplicationResources.lblPurposeId).Width("25%");
+        column.For(x => x.Purpose).HeaderText(ApplicationResources.lblPurpose).Width("25%");
+        column.For(x => x.Email).HeaderText(ApplicationResources.lblEmail).Width("25%");
+        column.Unbound("buttons").HeaderText("").Template(buttonPreviewTemplate).Width("8%");
         })
         .Features(feature =>
         {
-            feature
-                .Sorting()
-                .Type(OpType.Remote);
-            feature
-                .Paging()
-                .Type(OpType.Remote)
-                .PageSize(20)
-                .PageSizeDropDownLocation("above");
-                //.PagingHandler(OpType.Remote, pageSizeDropDownLocation: PageSizeDropDownLocation.inpager);
-            feature
-                .Filtering()
-                .Mode(FilterMode.Simple)
-                .Type(OpType.Remote);
-                //.SetFilterToLower();
+        feature
+        .Sorting()
+        .Type(OpType.Remote);
+        feature
+        .Paging()
+        .Type(OpType.Remote)
+        .PageSize(20)
+        .PageSizeDropDownLocation("above");
+        //.PagingHandler(OpType.Remote, pageSizeDropDownLocation: PageSizeDropDownLocation.inpager);
+        feature
+        .Filtering()
+        .Mode(FilterMode.Simple)
+        .Type(OpType.Remote);
+        //.SetFilterToLower();
         })
         .DataSourceUrl(Url.Action(nameof(ApplicationController.GetUserApplications), "Application"))
         .Render())

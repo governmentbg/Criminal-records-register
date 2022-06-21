@@ -8,7 +8,6 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     public class ApplicationProfile : Profile
     {
         public ApplicationProfile()
-
         {
             CreateMap<AApplication, ApplicationGridDTO>()
                 .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
@@ -86,10 +85,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<ApplicationDocumentDTO, DDocument>()
              .ForMember(d => d.DocContentId, opt => opt.MapFrom(src => src.DocumentContentId))
              .ForMember(d => d.DocContent, opt => opt.Ignore());
+
             CreateMap<DDocument, ApplicationDocumentDTO>()
                 .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
-             .ForMember(d => d.DocumentContent, opt => opt.Ignore());
-
+             .ForMember(d => d.DocumentContent, opt => opt.Ignore());          
         }
     }
 }

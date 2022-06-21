@@ -91,7 +91,8 @@ namespace MJ_CAIS.Services
                     on app.StatusCode equals status.Code
 
                 join purposes in dbContext.APurposes.AsNoTracking()
-                on app.PurposeId equals purposes.Id into purposesLeft from purposes in purposesLeft.DefaultIfEmpty()
+                on app.PurposeId equals purposes.Id into purposesLeft
+                from purposes in purposesLeft.DefaultIfEmpty()
 
                 where app.UserCitizenId == userId
                 select new PublicApplicationGridDTO
@@ -134,6 +135,37 @@ namespace MJ_CAIS.Services
             return result;
         }
 
+        public async Task<ApplicationPreviewDTO> GetForPreviewAsync(string id)
+        {
+            var result = await (from app in dbContext.WApplications.AsNoTracking()
+
+                                join status in dbContext.WApplicationStatuses.AsNoTracking()
+                                    on app.StatusCode equals status.Code
+
+                                join purposes in dbContext.APurposes.AsNoTracking()
+                                    on app.PurposeId equals purposes.Id into purposesLeft
+                                    from purposes in purposesLeft.DefaultIfEmpty()
+
+                                join paymentMethods in dbContext.APaymentMethods.AsNoTracking()
+                                    on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
+                                    from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
+
+                                select new ApplicationPreviewDTO
+                                {
+                                    Id = app.Id,
+                                    CreatedOn = app.CreatedOn,
+                                    Egn = app.Egn,
+                                    Email = app.Email,
+                                    PaymentMethodName = paymentMethods.Name,
+                                    PurposeName = purposes.Name,
+                                    Purpose = app.Purpose,
+                                    RegistrationNumber = app.RegistrationNumber,
+                                    Status = status.Name,
+                                    // IsPaid  ?? todo
+                                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
+        }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {

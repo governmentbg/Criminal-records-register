@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btnNewApp" xml:space="preserve">
+    <value>Ново заявление</value>
+  </data>
   <data name="descChangeStatus" xml:space="preserve">
     <value>Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи</value>
+  </data>
+  <data name="lblAppInfo" xml:space="preserve">
+    <value>Данни от заявление</value>
   </data>
   <data name="lblCreatedOn" xml:space="preserve">
     <value>Дата на заявяване</value>
@@ -132,6 +138,9 @@
   <data name="lblEmail" xml:space="preserve">
     <value>Електронна поща</value>
   </data>
+  <data name="lblIsPaid" xml:space="preserve">
+    <value>Плащане</value>
+  </data>
   <data name="lblPaymentMethodId" xml:space="preserve">
     <value>Начин на плащане</value>
   </data>
@@ -141,13 +150,31 @@
   <data name="lblPurposeId" xml:space="preserve">
     <value>Цел</value>
   </data>
+  <data name="lblReceiving" xml:space="preserve">
+    <value>Получаване</value>
+  </data>
+  <data name="lblReceivingEDelivery" xml:space="preserve">
+    <value>Чрез ССЕВ - Система за сигурно електронно връчване</value>
+  </data>
+  <data name="lblReceivingFromPortal" xml:space="preserve">
+    <value>От този портал</value>
+  </data>
   <data name="lblRegistrationNumber" xml:space="preserve">
     <value>Регистрационен номер</value>
   </data>
   <data name="lblStatus" xml:space="preserve">
     <value>Статус</value>
   </data>
+  <data name="msgPaymentFreeInfo" xml:space="preserve">
+    <value>При избор на "Освободено от плащане" трябва да прикачите документ удостоверяващ това право.</value>
+  </data>
+  <data name="msgPaymentInfo" xml:space="preserve">
+    <value>За да се обработи заявката, е необходимо в 14-дневен срок да заплатите държавна такса за издаване на свидетелство за съдимост в размер на 3.00 лв.</value>
+  </data>
   <data name="titleApplications" xml:space="preserve">
     <value>Заявления</value>
+  </data>
+  <data name="titleAppPreview" xml:space="preserve">
+    <value>Заявление за издаване на електронно свидетелство за съдимост</value>
   </data>
 </root>
