@@ -5,6 +5,8 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
 {
     public class ApplicationPreviewModel
     {
+        public string? Id { get; set; }
+
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblRegistrationNumber))]
         public string? RegistrationNumber { get; set; }
 
@@ -31,5 +33,7 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblStatus))]
         public string? Status { get; set; }
+    
+        public bool HasGeneratedCertificate { get; set; }
     }
 }

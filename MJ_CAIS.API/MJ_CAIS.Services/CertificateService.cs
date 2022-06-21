@@ -26,10 +26,10 @@ namespace MJ_CAIS.Services
             _userContext = userContext;
         }
 
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
-        }
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
+        public async Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId)
+            => await _certificateRepository.GetCertificateContentByWebAppIdAsync(webAppId);
 
         public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description)
         {

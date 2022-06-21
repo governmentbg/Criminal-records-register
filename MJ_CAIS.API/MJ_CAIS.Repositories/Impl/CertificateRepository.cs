@@ -37,5 +37,32 @@ namespace MJ_CAIS.Repositories.Impl
 
             return await Task.FromResult(query);
         }
+
+        public async Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId)
+        {
+            var content = await (from wApp in _dbContext.WApplications.AsNoTracking()
+
+                                 join app in _dbContext.AApplications.AsNoTracking()
+                                 on wApp.WApplicationId equals app.Id
+                                 into appLeft
+                                 from app in appLeft.DefaultIfEmpty()
+
+                                 join cert in _dbContext.ACertificates.AsNoTracking()
+                                 on app.Id equals cert.ApplicationId into certLeft
+                                 from cert in certLeft.DefaultIfEmpty()
+
+                                 join doc in _dbContext.DDocuments.AsNoTracking()
+                                 on cert.DocId equals doc.Id into docLeft
+                                 from doc in docLeft.DefaultIfEmpty()
+
+                                 join docCont in _dbContext.DDocContents.AsNoTracking()
+                                 on doc.DocContentId equals docCont.Id into docContLeft
+                                 from docCont in docContLeft.DefaultIfEmpty()
+
+                                 where wApp.Id == webAppId
+                                 select docCont.Content).FirstOrDefaultAsync();
+
+            return content;
+        }
     }
 }

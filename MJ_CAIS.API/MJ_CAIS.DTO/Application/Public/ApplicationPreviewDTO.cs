@@ -21,5 +21,7 @@
         public bool? IsPaid { get; set; }
 
         public string? Status { get; set; }
+
+        public string? StatusCode { get; set; }
     }
 }

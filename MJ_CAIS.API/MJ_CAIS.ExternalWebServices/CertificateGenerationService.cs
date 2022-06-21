@@ -9,11 +9,6 @@ using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services;
 using MJ_CAIS.Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TL.Signer;
 
 namespace MJ_CAIS.ExternalWebServices
@@ -25,11 +20,11 @@ namespace MJ_CAIS.ExternalWebServices
         private readonly IPrintDocumentService _printerService;
         private readonly ICertificateService _certificateService;
 
-        public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository, 
+        public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository,
             IPdfSigner pdfSignerService, IPrintDocumentService printerService, ICertificateService certificateService)
             : base(mapper, certificateRepository)
         {
-            _certificateRepository = certificateRepository;         
+            _certificateRepository = certificateRepository;
             _pdfSignerService = pdfSignerService;
             _printerService = printerService;
             _certificateService = certificateService;
@@ -64,16 +59,16 @@ namespace MJ_CAIS.ExternalWebServices
            || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
            || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
            || x.Code == ApplicationConstants.ApplicationStatuses.Delivered).ToListAsync();
-            if (statuses.Count!=4)
+            if (statuses.Count != 4)
             {
-                throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}" );
+                throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}");
             }
             var statusCertificateServerSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign);
             var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
             var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
             var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
             //todo:get patterns for mail if needed:
-            var content = await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign,statusForDelivery, statusCertificateDelivered,statusCertificatePaperprint,  await GetWebPortalAddress());
+            var content = await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, await GetWebPortalAddress());
 
             await dbContext.SaveChangesAsync();
             return content;
@@ -83,18 +78,18 @@ namespace MJ_CAIS.ExternalWebServices
         {
             var content = await dbContext.ACertificates
                                     .Include(c => c.Doc)
-                                    .ThenInclude(d=>d.DocContent)                                  
+                                    .ThenInclude(d => d.DocContent)
                                     .Where(x => x.Id == certificateID)
-                                    .Select(x=>x.Doc.DocContent.Content)
+                                    .Select(x => x.Doc.DocContent.Content)
                                     .FirstOrDefaultAsync();
             return content;
         }
 
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
-            string mailBodyPattern, string signingCertificateName,  AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
-            //string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
-            //, string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-            //, string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
+            string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
+        //string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
+        //, string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+        //, string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
         {
 
             byte[] contentCertificate;
@@ -171,7 +166,7 @@ namespace MJ_CAIS.ExternalWebServices
             {
                 //ako не е електронно -> за печат
                 _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
-               // certificate.StatusCode = statusCodeCertificatePaperPrint;
+                // certificate.StatusCode = statusCodeCertificatePaperPrint;
 
             }
             else
@@ -188,7 +183,7 @@ namespace MJ_CAIS.ExternalWebServices
                     _certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне на заявител");
                     //certificate.StatusCode = statusCodeCertificateForDelivery;
 
-                    await DeliverCertificateAsync(certificate, mailBodyPattern,mailSubjectPattern,webportalUrl);
+                    await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
 
                     _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
 
@@ -217,7 +212,7 @@ namespace MJ_CAIS.ExternalWebServices
 
         }
 
-        public async Task DeliverCertificateAsync(ACertificate certificate, string mailBodyPattern, string mailSubjectPattern,string webportalUrl)
+        public async Task DeliverCertificateAsync(ACertificate certificate, string mailBodyPattern, string mailSubjectPattern, string webportalUrl)
         {
             if (certificate.Application.SrvcResRcptMeth?.Code == ApplicationConstants.ReceivingMethods.EDelivery)
             {
@@ -242,7 +237,7 @@ namespace MJ_CAIS.ExternalWebServices
         {
             Dictionary<string, string> placeholdersAndValues = new Dictionary<string, string>();
             placeholdersAndValues.Add("application_registration_number", certificate.Application.RegistrationNumber);
-            string cerificateDownloadUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl); 
+            string cerificateDownloadUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             placeholdersAndValues.Add("certificate_download_url", cerificateDownloadUrl);
             return ReplaceTextInTemplate(mailBodyPattern, placeholdersAndValues);
 
@@ -259,7 +254,7 @@ namespace MJ_CAIS.ExternalWebServices
 
         private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, JasperReportsNames reportName, string signingCertificateName)
         {
-            byte[] fileArray = await _printerService.PrintCertificate(certificateID,checkUrl,reportName);
+            byte[] fileArray = await _printerService.PrintCertificate(certificateID, checkUrl, reportName);
             //todo: кои полета да се добавят за валидиране?!
             //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
             //    new Dictionary<string, string>() { { "certificate_id", certificateID} });

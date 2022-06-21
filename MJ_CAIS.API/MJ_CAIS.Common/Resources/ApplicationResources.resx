@@ -177,4 +177,7 @@
   <data name="titleAppPreview" xml:space="preserve">
     <value>Заявление за издаване на електронно свидетелство за съдимост</value>
   </data>
+  <data name="titleDownloadCertificate" xml:space="preserve">
+    <value>Свали свидетелство</value>
+  </data>
 </root>

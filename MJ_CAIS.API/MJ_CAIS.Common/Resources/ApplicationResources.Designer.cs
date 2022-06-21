@@ -239,5 +239,14 @@ namespace MJ_CAIS.Common.Resources {
                 return ResourceManager.GetString("titleAppPreview", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Свали свидетелство.
+        /// </summary>
+        public static string titleDownloadCertificate {
+            get {
+                return ResourceManager.GetString("titleDownloadCertificate", resourceCulture);
+            }
+        }
     }
 }

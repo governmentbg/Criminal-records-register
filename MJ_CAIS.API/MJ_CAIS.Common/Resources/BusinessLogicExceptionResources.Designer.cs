@@ -70,6 +70,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Свидетелството не е намерено.
+        /// </summary>
+        public static string certificateDoesNotExist {
+            get {
+                return ResourceManager.GetString("certificateDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Документ с идентификатор {0} не съществува..
         /// </summary>
         public static string documentDoesNotExist {
@@ -102,6 +111,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string isinDataDoesNotExist {
             get {
                 return ResourceManager.GetString("isinDataDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bulletinDoesNotExist.
+        /// </summary>
+        public static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
             }
         }
     }

@@ -1,10 +1,10 @@
-﻿@using Infragistics.Web.Mvc
+﻿@model ApplicationPreviewModel
+@using Infragistics.Web.Mvc
 @using MJ_CAIS.WebPortal.Public.Controllers
 @using MJ_CAIS.WebPortal.Public.Models.Application
 @using MJ_CAIS.WebSetup.Utils.CustomHtmlHelpers
 @using MJ_CAIS.Common.Resources
 @using MJ_CAIS.Common
-@model ApplicationPreviewModel
 
 @{
     var title = ApplicationResources.titleAppPreview;
@@ -57,7 +57,17 @@
             </div>
             <div class="form-group mt-2">
                 <label asp-for="Status" class="control-label fw-bold"></label>: @Model.Status
+                @if (Model.HasGeneratedCertificate)
+                {
+                    var downloadFileUrl = Url.Action(nameof(ApplicationController.DownloadCertificate)) + $"/{Model.Id}";
+
+                    <a href="@downloadFileUrl" title="@ApplicationResources.titleDownloadCertificate" class="btn btn-primary mt-3">
+                        <i class="fa fa-download"></i>@ApplicationResources.titleDownloadCertificate
+                    </a>
+                }
+
             </div>
+
         </div>
     </div>
 </div>

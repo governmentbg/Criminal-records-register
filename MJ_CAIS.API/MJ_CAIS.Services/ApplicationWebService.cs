@@ -161,6 +161,7 @@ namespace MJ_CAIS.Services
                                     Purpose = app.Purpose,
                                     RegistrationNumber = app.RegistrationNumber,
                                     Status = status.Name,
+                                    StatusCode = status.Code,
                                     // IsPaid  ?? todo
                                 }).FirstOrDefaultAsync(x => x.Id == id);
 

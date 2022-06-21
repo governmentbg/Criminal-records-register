@@ -13,5 +13,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string appId);
         Task SetBulletinsForRehabilitationAsync(string aId, string[] ids);
         Task SetCertificateForSelectionAsync(string aId);
+
+        Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId);
     }
 }
