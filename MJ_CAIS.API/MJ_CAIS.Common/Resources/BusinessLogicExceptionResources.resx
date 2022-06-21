@@ -135,7 +135,7 @@
   <data name="isinDataDoesNotExist" xml:space="preserve">
     <value>Изтърпяно наказание с идентификатор {0} не съществува.</value>
   </data>
-  <data name="String" xml:space="preserve">
-    <value>bulletinDoesNotExist</value>
+  <data name="statusDoesNotExist" xml:space="preserve">
+    <value>Статус {0} не съществува.</value>
   </data>
 </root>

@@ -180,4 +180,7 @@
   <data name="titleDownloadCertificate" xml:space="preserve">
     <value>Свали свидетелство</value>
   </data>
+  <data name="titleNewApp" xml:space="preserve">
+    <value>Ново заявление</value>
+  </data>
 </root>

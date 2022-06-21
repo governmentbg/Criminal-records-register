@@ -248,5 +248,14 @@ namespace MJ_CAIS.Common.Resources {
                 return ResourceManager.GetString("titleDownloadCertificate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ново заявление.
+        /// </summary>
+        public static string titleNewApp {
+            get {
+                return ResourceManager.GetString("titleNewApp", resourceCulture);
+            }
+        }
     }
 }

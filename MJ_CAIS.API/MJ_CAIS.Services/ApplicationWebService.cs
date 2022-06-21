@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application.External;
@@ -44,10 +46,9 @@ namespace MJ_CAIS.Services
             this.TransformDataOnInsert(entity);
 
             entity.UserCitizenId = dbContext.CurrentUserId;
-            entity.ApplicationTypeId = "4";
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity);
+            await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
@@ -57,7 +58,6 @@ namespace MJ_CAIS.Services
             this.TransformDataOnInsert(entity);
 
             entity.UserExtId = dbContext.CurrentUserId;
-            entity.ApplicationTypeId = "5";
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
             await this.SaveEntityAsync(entity);
@@ -66,20 +66,18 @@ namespace MJ_CAIS.Services
 
         protected override void TransformDataOnInsert(WApplication entity)
         {
+            base.TransformDataOnInsert(entity);
+
             entity.ApplicationTypeId = GetWebApplicationTypeId();
             var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
             if (statusNew == null)
-            {
-                //todo: resources & EH
-                throw new Exception($"Status {ApplicationWebStatuses.NewWebApplication} does not exist.");
-            }
-            SetWApplicationStatus(entity, statusNew, "Ново заявление", false);
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.NewWebApplication));
+
+            SetWApplicationStatus(entity, statusNew, ApplicationResources.titleNewApp, false);
             entity.UserId = dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
             entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
             entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // TODO: constant
-
-            base.TransformDataOnInsert(entity);
         }
 
         public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
@@ -144,11 +142,11 @@ namespace MJ_CAIS.Services
 
                                 join purposes in dbContext.APurposes.AsNoTracking()
                                     on app.PurposeId equals purposes.Id into purposesLeft
-                                    from purposes in purposesLeft.DefaultIfEmpty()
+                                from purposes in purposesLeft.DefaultIfEmpty()
 
                                 join paymentMethods in dbContext.APaymentMethods.AsNoTracking()
                                     on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
-                                    from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
+                                from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
 
                                 select new ApplicationPreviewDTO
                                 {
@@ -178,6 +176,7 @@ namespace MJ_CAIS.Services
             wapplication.StatusCode = newStatus.Code;
             wapplication.StatusCodeNavigation = newStatus;
             WStatusH wStatusH = new WStatusH();
+            wStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
             wStatusH.Descr = description;
             wStatusH.StatusCode = newStatus.Code;
             wStatusH.StatusCodeNavigation = newStatus;
@@ -185,6 +184,7 @@ namespace MJ_CAIS.Services
             {
                 wapplication.WStatusHes = new List<WStatusH>();
             }
+
             wStatusH.ReportOrder = wapplication.WStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
             wStatusH.Id = BaseEntity.GenerateNewId();
             wStatusH.ApplicationId = wapplication.Id;
@@ -197,6 +197,5 @@ namespace MJ_CAIS.Services
                 dbContext.WApplications.Update(wapplication);
             }
         }
-
     }
 }

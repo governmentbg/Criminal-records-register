@@ -115,11 +115,11 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bulletinDoesNotExist.
+        ///   Looks up a localized string similar to Статус {0} не съществува..
         /// </summary>
-        public static string String {
+        public static string statusDoesNotExist {
             get {
-                return ResourceManager.GetString("String", resourceCulture);
+                return ResourceManager.GetString("statusDoesNotExist", resourceCulture);
             }
         }
     }
