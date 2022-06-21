@@ -22,14 +22,14 @@ namespace MJ_CAIS.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class BusinessLogicExceptionResources {
+    public class CertificateResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal BusinessLogicExceptionResources() {
+        internal CertificateResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MJ_CAIS.Common.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MJ_CAIS.Common.Resources.BusinessLogicExceptionResources", typeof(BusinessLogicExceptionResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MJ_CAIS.Common.Resources.CertificateResources", typeof(CertificateResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,65 +61,29 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Бюлетин с идентификатор {0} не съществува..
+        ///   Looks up a localized string similar to Свидетелство с идентификатор {0} не съществува.
         /// </summary>
-        public static string bulletinDoesNotExist {
+        public static string msgCertificateDoesNotExist {
             get {
-                return ResourceManager.GetString("bulletinDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("msgCertificateDoesNotExist", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Свидетелството не е намерено.
+        ///   Looks up a localized string similar to Очаква обработка на заявка/и за реабилитация към съди.
         /// </summary>
-        public static string certificateDoesNotExist {
+        public static string msgStatusForRehabilitation {
             get {
-                return ResourceManager.GetString("certificateDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("msgStatusForRehabilitation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Документ с идентификатор {0} не съществува..
+        ///   Looks up a localized string similar to Генерирана заявка за реабилитация при обработка на свидетелство.
         /// </summary>
-        public static string documentDoesNotExist {
+        public static string msgStatusForRehabilitationDesc {
             get {
-                return ResourceManager.GetString("documentDoesNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Прикачения файл е празен..
-        /// </summary>
-        public static string documentIsEmpty {
-            get {
-                return ResourceManager.GetString("documentIsEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Нямате право да извършите това действие!.
-        /// </summary>
-        public static string editIsUnauthorized {
-            get {
-                return ResourceManager.GetString("editIsUnauthorized", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Изтърпяно наказание с идентификатор {0} не съществува..
-        /// </summary>
-        public static string isinDataDoesNotExist {
-            get {
-                return ResourceManager.GetString("isinDataDoesNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Статус {0} не съществува..
-        /// </summary>
-        public static string statusDoesNotExist {
-            get {
-                return ResourceManager.GetString("statusDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("msgStatusForRehabilitationDesc", resourceCulture);
             }
         }
     }

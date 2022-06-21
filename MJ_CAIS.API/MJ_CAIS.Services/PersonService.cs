@@ -265,7 +265,7 @@ namespace MJ_CAIS.Services
             if (pidsFromForm.Count == 0)
             {
                 var suid = GenerateSuid(aInDto);
-                pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CAIS));
+                pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CRR));
             }
 
             var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, personId);
@@ -416,27 +416,27 @@ namespace MJ_CAIS.Services
             }
 
             var nullText = "NULL";
-            var personString = "{\"Firstname\"=\"" + person.Firstname ?? nullText +
-            "\",\"Surname\"=\"" + person.Surname ?? nullText +
-            "\",\"Familyname\"=\"" + person.Familyname ?? nullText +
-            "\",\"Fullname\"=\"" + person.Fullname ?? nullText +
-            "\",\"Sex\"=\"" + person.Sex ?? nullText +
-            "\",\"BirthDate\"=\"" + birthDateText ?? nullText +
-            "\",\"BirthCountry\"=\"" + birthCountryIsoNumber ?? nullText +
-            "\",\"BirthCity\"=\"" + person.BirthPlace?.CityId ?? nullText +
-            "\",\"BirthPlaceOther\"=\"" + person.BirthPlace?.ForeignCountryAddress ?? nullText +
-            "\",\"MotherFirstname\"=\"" + person.MotherFirstname ?? nullText +
-            "\",\"MotherSurname\"=\"" + person.MotherSurname ?? nullText +
-            "\",\"MotherFamilyname\"=\"" + person.MotherFamilyname ?? nullText +
-            "\",\"MotherFullname\"=\"" + person.MotherFullname ?? nullText +
-            "\",\"FatherFirstname\"=\"" + person.FatherFirstname ?? nullText +
-            "\",\"FatherSurname\"=\"" + person.FatherSurname ?? nullText +
-            "\",\"FatherFamilyname\"=\"" + person.FatherFamilyname ?? nullText +
-            "\",\"FatherFullname\"=\"" + person.FatherFullname ?? nullText +
-            "\",\"FirstnameLat\"=\"" + person.FirstnameLat ?? nullText +
-            "\",\"SurnameLat\"=\"" + person.SurnameLat ?? nullText +
-            "\",\"FamilynameLat\"=\"" + person.FamilynameLat ?? nullText +
-            "\",\"FullnameLat\"=\"" + person.FullnameLat ?? nullText +
+            var personString = "{\"Firstname\"=\"" + (person.Firstname ?? nullText) +
+            "\",\"Surname\"=\"" + (person.Surname ?? nullText) +
+            "\",\"Familyname\"=\"" + (person.Familyname ?? nullText) +
+            "\",\"Fullname\"=\"" + (person.Fullname ?? nullText) +
+            "\",\"Sex\"=\"" + (person.Sex.HasValue ? person.Sex.Value : nullText) +
+            "\",\"BirthDate\"=\"" + (birthDateText ?? nullText) +
+            "\",\"BirthCountry\"=\"" + (birthCountryIsoNumber ?? nullText) +
+            "\",\"BirthCity\"=\"" + (person.BirthPlace?.CityId ?? nullText) +
+            "\",\"BirthPlaceOther\"=\"" + (person.BirthPlace?.ForeignCountryAddress ?? nullText) +
+            "\",\"MotherFirstname\"=\"" + (person.MotherFirstname ?? nullText) +
+            "\",\"MotherSurname\"=\"" + (person.MotherSurname ?? nullText) +
+            "\",\"MotherFamilyname\"=\"" + (person.MotherFamilyname ?? nullText) +
+            "\",\"MotherFullname\"=\"" + (person.MotherFullname ?? nullText) +
+            "\",\"FatherFirstname\"=\"" + (person.FatherFirstname ?? nullText) +
+            "\",\"FatherSurname\"=\"" + (person.FatherSurname ?? nullText) +
+            "\",\"FatherFamilyname\"=\"" + (person.FatherFamilyname ?? nullText) +
+            "\",\"FatherFullname\"=\"" + (person.FatherFullname ?? nullText) +
+            "\",\"FirstnameLat\"=\"" + (person.FirstnameLat ?? nullText) +
+            "\",\"SurnameLat\"=\"" + (person.SurnameLat ?? nullText) +
+            "\",\"FamilynameLat\"=\"" + (person.FamilynameLat ?? nullText) +
+            "\",\"FullnameLat\"=\"" + (person.FullnameLat ?? nullText) +
             "\"}";
 
             SHA1 mySHA1 = SHA1.Create();

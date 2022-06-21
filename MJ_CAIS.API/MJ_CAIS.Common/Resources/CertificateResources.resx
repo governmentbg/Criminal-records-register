@@ -117,25 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="bulletinDoesNotExist" xml:space="preserve">
-    <value>Бюлетин с идентификатор {0} не съществува.</value>
+  <data name="msgCertificateDoesNotExist" xml:space="preserve">
+    <value>Свидетелство с идентификатор {0} не съществува</value>
   </data>
-  <data name="certificateDoesNotExist" xml:space="preserve">
-    <value>Свидетелството не е намерено</value>
+  <data name="msgStatusForRehabilitation" xml:space="preserve">
+    <value>Очаква обработка на заявка/и за реабилитация към съди</value>
   </data>
-  <data name="documentDoesNotExist" xml:space="preserve">
-    <value>Документ с идентификатор {0} не съществува.</value>
-  </data>
-  <data name="documentIsEmpty" xml:space="preserve">
-    <value>Прикачения файл е празен.</value>
-  </data>
-  <data name="editIsUnauthorized" xml:space="preserve">
-    <value>Нямате право да извършите това действие!</value>
-  </data>
-  <data name="isinDataDoesNotExist" xml:space="preserve">
-    <value>Изтърпяно наказание с идентификатор {0} не съществува.</value>
-  </data>
-  <data name="statusDoesNotExist" xml:space="preserve">
-    <value>Статус {0} не съществува.</value>
+  <data name="msgStatusForRehabilitationDesc" xml:space="preserve">
+    <value>Генерирана заявка за реабилитация при обработка на свидетелство</value>
   </data>
 </root>

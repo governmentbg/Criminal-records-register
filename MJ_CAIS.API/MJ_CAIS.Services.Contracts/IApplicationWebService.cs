@@ -15,6 +15,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto);
 
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true);
-        
+
+        Task<ApplicationPreviewDTO> GetForPreviewAsync(string id);
     }
 }

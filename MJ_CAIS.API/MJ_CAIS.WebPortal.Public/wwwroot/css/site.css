@@ -282,3 +282,19 @@ body div.container {
 .importan-text {
     color: red;
 }
+
+.grid-button {
+    cursor: pointer;
+    color: #014f86 !important;
+    font-size: 1.2em;
+}
+
+    .grid-button:hover {
+        color: #0054a4 !important;
+        text-decoration: none;
+    }
+
+.button-margin {
+    margin-left: 5px;
+    margin-right: 5px;
+}

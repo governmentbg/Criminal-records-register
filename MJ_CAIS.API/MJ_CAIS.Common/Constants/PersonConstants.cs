@@ -57,7 +57,7 @@
             /// <summary>
             /// В случай на системно генериран идентификатор от ЦАИС
             /// </summary>
-            public const string CAIS = "CAIS";
+            public const string CRR = "CRR";
         }
     }
 }

@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application.External;
@@ -17,8 +19,8 @@ namespace MJ_CAIS.Services
         private readonly IApplicationWebRepository _applicationWebRepository;
         private readonly IRegisterTypeService _registerTypeService;
 
-        public ApplicationWebService(IMapper mapper, 
-                                     IApplicationWebRepository applicationWebRepository, 
+        public ApplicationWebService(IMapper mapper,
+                                     IApplicationWebRepository applicationWebRepository,
                                      IRegisterTypeService registerTypeService,
                                      IUserContext userContext)
             : base(mapper, applicationWebRepository)
@@ -44,10 +46,9 @@ namespace MJ_CAIS.Services
             this.TransformDataOnInsert(entity);
 
             entity.UserCitizenId = dbContext.CurrentUserId;
-            entity.ApplicationTypeId = "4";
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity);
+            await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
@@ -57,7 +58,6 @@ namespace MJ_CAIS.Services
             this.TransformDataOnInsert(entity);
 
             entity.UserExtId = dbContext.CurrentUserId;
-            entity.ApplicationTypeId = "5";
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
             await this.SaveEntityAsync(entity);
@@ -66,20 +66,18 @@ namespace MJ_CAIS.Services
 
         protected override void TransformDataOnInsert(WApplication entity)
         {
+            base.TransformDataOnInsert(entity);
+
             entity.ApplicationTypeId = GetWebApplicationTypeId();
             var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
             if (statusNew == null)
-            {
-                //todo: resources & EH
-                throw new Exception($"Status {ApplicationWebStatuses.NewWebApplication} does not exist.");
-            }
-            SetWApplicationStatus(entity, statusNew, "Ново заявление", false);
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.NewWebApplication));
+
+            SetWApplicationStatus(entity, statusNew, ApplicationResources.titleNewApp, false);
             entity.UserId = dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
             entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
             entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // TODO: constant
-
-            base.TransformDataOnInsert(entity);
         }
 
         public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
@@ -90,17 +88,22 @@ namespace MJ_CAIS.Services
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
 
+                join purposes in dbContext.APurposes.AsNoTracking()
+                on app.PurposeId equals purposes.Id into purposesLeft
+                from purposes in purposesLeft.DefaultIfEmpty()
+
                 where app.UserCitizenId == userId
                 select new PublicApplicationGridDTO
                 {
                     Id = app.Id,
                     RegistrationNumber = app.RegistrationNumber,
-                    ApplicantName = app.ApplicantName,
                     Purpose = app.Purpose,
-                    PurposeId = app.PurposeId,
+                    PurposeTypeName = purposes.Name,
                     StatusCode = app.StatusCode,
                     StatusName = status.Name,
                     CreatedOn = app.CreatedOn,
+                    Email = app.Email,
+                    Version = app.Version,
                 };
 
             return result;
@@ -130,17 +133,50 @@ namespace MJ_CAIS.Services
             return result;
         }
 
+        public async Task<ApplicationPreviewDTO> GetForPreviewAsync(string id)
+        {
+            var result = await (from app in dbContext.WApplications.AsNoTracking()
+
+                                join status in dbContext.WApplicationStatuses.AsNoTracking()
+                                    on app.StatusCode equals status.Code
+
+                                join purposes in dbContext.APurposes.AsNoTracking()
+                                    on app.PurposeId equals purposes.Id into purposesLeft
+                                from purposes in purposesLeft.DefaultIfEmpty()
+
+                                join paymentMethods in dbContext.APaymentMethods.AsNoTracking()
+                                    on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
+                                from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
+
+                                select new ApplicationPreviewDTO
+                                {
+                                    Id = app.Id,
+                                    CreatedOn = app.CreatedOn,
+                                    Egn = app.Egn,
+                                    Email = app.Email,
+                                    PaymentMethodName = paymentMethods.Name,
+                                    PurposeName = purposes.Name,
+                                    Purpose = app.Purpose,
+                                    RegistrationNumber = app.RegistrationNumber,
+                                    Status = status.Name,
+                                    StatusCode = status.Code,
+                                    // IsPaid  ?? todo
+                                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
+        }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;
         }
 
-        public void SetWApplicationStatus(WApplication wapplication,  WApplicationStatus newStatus, string description, bool addToContext = true)
+        public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
             wapplication.StatusCodeNavigation = newStatus;
             WStatusH wStatusH = new WStatusH();
+            wStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
             wStatusH.Descr = description;
             wStatusH.StatusCode = newStatus.Code;
             wStatusH.StatusCodeNavigation = newStatus;
@@ -148,6 +184,7 @@ namespace MJ_CAIS.Services
             {
                 wapplication.WStatusHes = new List<WStatusH>();
             }
+
             wStatusH.ReportOrder = wapplication.WStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
             wStatusH.Id = BaseEntity.GenerateNewId();
             wStatusH.ApplicationId = wapplication.Id;
@@ -160,6 +197,5 @@ namespace MJ_CAIS.Services
                 dbContext.WApplications.Update(wapplication);
             }
         }
-
     }
 }

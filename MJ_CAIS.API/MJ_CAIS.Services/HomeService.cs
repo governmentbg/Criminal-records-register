@@ -13,25 +13,31 @@ namespace MJ_CAIS.Services
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IIsinDataRepository _isinDataRepository;
         private readonly IEcrisMessageRepository _ecrisMessageRepository;
+        private readonly IEcrisTcnRepository _ecrisTcnRepository;
         private readonly IBulletinEventRepository _bulletinEventRepository;
         private readonly IApplicationRepository _applicationRepository;
         private readonly IInternalRequestRepository _internalRequestRepository;
+        private readonly IFbbcRepository _fbbcRepository;
         private readonly IUserContext _userContext;
 
         public HomeService(IBulletinRepository bulletinRepository,
             IIsinDataRepository isinDataRepository,
             IEcrisMessageRepository ecrisMessageRepository,
+            IEcrisTcnRepository ecrisTcnRepository,
             IBulletinEventRepository bulletinEventRepository,
             IApplicationRepository applicationRepository,
             IInternalRequestRepository internalRequestRepository,
+            IFbbcRepository fbbcRepository,
             IUserContext userContext)
         {
             _bulletinRepository = bulletinRepository;
             _isinDataRepository = isinDataRepository;
             _ecrisMessageRepository = ecrisMessageRepository;
+            _ecrisTcnRepository = ecrisTcnRepository;
             _bulletinEventRepository = bulletinEventRepository;
             _applicationRepository = applicationRepository;
-            _internalRequestRepository = internalRequestRepository; 
+            _internalRequestRepository = internalRequestRepository;
+            _fbbcRepository = fbbcRepository;
             _userContext = userContext;
         }
 
@@ -85,8 +91,10 @@ namespace MJ_CAIS.Services
             var result = new EcrisCountDTO();
             var ercisStatusCountQuery = _ecrisMessageRepository.GetStatusCount();
             var ercisStatuses = await ercisStatusCountQuery.ToListAsync();
+
             result.ForIdentification = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ForIdentification)?.Count ?? 0;
             result.WaitingForCSAuthority = ercisStatuses.FirstOrDefault(x => x.Status == EcrisMessageStatuses.ReqWaitingForCSAuthority)?.Count ?? 0;
+            result.Tcn = await _ecrisTcnRepository.GetCountAsync();
 
             return result;
         }
@@ -125,8 +133,22 @@ namespace MJ_CAIS.Services
             result.BulletinSelection = applicationStatuses
                 .FirstOrDefault(x => x.Status == ApplicationConstants.ApplicationStatuses.BulletinsSelection)?.Count ?? 0;
 
-
             result.InternalRequests = await _internalRequestRepository.GetCountOfNewRequestsAsync();
+
+            return result;
+        }
+
+        public async Task<FbbcCountDTO> GetFbbcCountByCurrentAuthorityAsync()
+        {
+            var result = new FbbcCountDTO();
+            var fbbcStatusesCountQuery = _fbbcRepository.GetStatusCount();
+            var fbbcStatuses = await fbbcStatusesCountQuery.ToListAsync();
+
+            result.New = fbbcStatuses
+                .FirstOrDefault(x => x.Status == FbbcConstants.FBBCStatus.Active)?.Count ?? 0;
+
+            result.ForDestruction = fbbcStatuses
+                .FirstOrDefault(x => x.Status == FbbcConstants.FBBCStatus.ForDelete)?.Count ?? 0;
 
             return result;
         }

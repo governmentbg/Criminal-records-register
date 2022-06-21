@@ -65,5 +65,13 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._service.GetForJudgeCountByCurrentAuthorityAsync();
             return Ok(result);
         }
+
+        [HttpGet("fbbc-count")]
+        [Authorize(Roles = $"{RoleConstants.CentralAuth}")]
+        public async Task<IActionResult> FbbcCounts()
+        {
+            var result = await this._service.GetFbbcCountByCurrentAuthorityAsync();
+            return Ok(result);
+        }
     }
 }

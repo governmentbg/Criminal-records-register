@@ -187,14 +187,14 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/application-history")]
-        public async Task<IActionResult> GetAppplicationHistory(string aId)
+        public async Task<IActionResult> GetApplicationHistory(string aId)
         {
             var result = await this._applicationService.SelectApplicationPersStatusHAsync(aId);
             return Ok(result);
         }
 
         [HttpGet("{aId}/application-certificate")]
-        public async Task<IActionResult> GetAppplicationCertificate(string aId)
+        public async Task<IActionResult> GetApplicationCertificate(string aId)
         {
             var result = await this._applicationService.SelectApplicationCertificateByApplicationIdAsync(aId);
             return Ok(result);

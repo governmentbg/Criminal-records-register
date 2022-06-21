@@ -61,6 +61,42 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заяви.
+        /// </summary>
+        public static string btnApply {
+            get {
+                return ResourceManager.GetString("btnApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Назад.
+        /// </summary>
+        public static string btnBack {
+            get {
+                return ResourceManager.GetString("btnBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Отказ.
+        /// </summary>
+        public static string btnCancel {
+            get {
+                return ResourceManager.GetString("btnCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Преглед.
+        /// </summary>
+        public static string btnPreview {
+            get {
+                return ResourceManager.GetString("btnPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Здравейте,.
         /// </summary>
         public static string lblGreetingUser {

@@ -18,6 +18,9 @@ namespace MJ_CAIS.WebPortal.Public.Utils.Mappings
 
             CreateMap<PublicApplicationDTO, WApplication>()
                 .ReverseMap();
+
+            CreateMap<ApplicationPreviewDTO, ApplicationPreviewModel>();
+            
         }
     }
 }

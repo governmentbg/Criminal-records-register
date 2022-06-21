@@ -403,13 +403,11 @@ namespace MJ_CAIS.Services
             }
 
             // save old status
-            if (entity.EntityState == EntityStateEnum.Modified)
+
+            var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id, entity.Locked);
+            if (isAddedHistory)
             {
-                var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id, entity.Locked);
-                if (isAddedHistory)
-                {
-                    UpdateModifiedProperties(entity, nameof(entity.StatusId));
-                }
+                UpdateModifiedProperties(entity, nameof(entity.StatusId));
             }
 
             // it is locked each time
@@ -512,7 +510,7 @@ namespace MJ_CAIS.Services
         /// <param name="bulletinId">ID</param>
         private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId, bool? isLocked)
         {
-            if (string.IsNullOrEmpty(oldStatus) || oldStatus == newStatus) return false;
+            if (oldStatus == newStatus) return false;
 
             var statusHistory = new BBulletinStatusH
             {

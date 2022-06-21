@@ -67,19 +67,19 @@ namespace MJ_CAIS.DataAccess
             IDbContextTransaction dbTransaction = null;
             try
             {
-                //dbTransaction = this.Database.BeginTransaction();
+                dbTransaction = this.Database.BeginTransaction();
 
-                //var trackedEntities = this.ChangeTracker.Entries()
-                //    .Where(t => t.State == EntityState.Added || t.State == EntityState.Modified)
-                //    .ToList();
+                var trackedEntities = this.ChangeTracker.Entries()
+                    .Where(t => t.State == EntityState.Added || t.State == EntityState.Modified)
+                    .ToList();
 
                 this.SimpleAudit();
                 var result = base.SaveChanges();
 
-                //this.UpdateVersions(trackedEntities);
-                //base.SaveChanges();
+                this.UpdateVersions(trackedEntities);
+                base.SaveChanges();
 
-                //dbTransaction.Commit();
+                dbTransaction.Commit();
                 return result;
             }
             catch (Exception ex)

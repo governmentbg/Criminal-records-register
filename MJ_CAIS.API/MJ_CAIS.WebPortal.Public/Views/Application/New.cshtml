@@ -2,23 +2,26 @@
 @using MJ_CAIS.WebPortal.Public.Controllers
 @using MJ_CAIS.WebPortal.Public.Models.Application
 @using MJ_CAIS.WebSetup.Utils.CustomHtmlHelpers
+@using MJ_CAIS.Common.Resources
+@using MJ_CAIS.Common
 @model ApplicationEditModel
 
 @{
-    ViewData["Title"] = "Ново заявление";
+    var title = ApplicationResources.titleAppPreview;
+    ViewData["Title"] = title;
 }
 
 <form asp-action="New" method="post" autocomplete="off">
     <div class="page-content scrollable-page cais-header">
         <div class="d-flex" style="justify-content: space-between">
             <div class="d-flex align-items-center">
-                <h4>Заявление за издаване на електронно свидетелство за съдимост</h4>
+                <h4>@title</h4>
             </div>
             <div class="d-flex">
                 <div>
-                    <button class="btn btn-success" type="submit">Заяви</button>
-                    <a class="btn btn-outline-secondary" asp-controller="Application" asp-action="Index">
-                        Отказ
+                    <button class="btn btn-success" type="submit">@CommonResources.btnApply</button>
+                    <a class="btn btn-secondary" asp-controller="Application" asp-action="Index">
+                        @CommonResources.btnCancel
                     </a>
                 </div>
             </div>
@@ -58,13 +61,14 @@
                 <div class="row">
                     @*TODO:*@
                     <div class="form-group mt-2">
-                        <label>Получаване</label>
+                        <label> @ApplicationResources.lblReceiving</label>
                         <br />
                         <input type="checkbox" disabled="disabled" class="form-check-input" checked />
-                        От този портал
+                        @ApplicationResources.lblReceivingFromPortal
+
                         <br />
                         <input type="checkbox" class="form-check-input" />
-                        Чрез ССЕВ - Система за сигурно електронно връчване
+                        @ApplicationResources.lblReceivingEDelivery
                     </div>
 
                     <div class="form-group mt-2 col-md-6">
@@ -73,14 +77,13 @@
                         <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
                     </div>
                 </div>
-                
+
                 <div class="form-group mt-2">
-                    За да се обработи заявката, е необходимо в 14-дневен срок да заплатите държавна такса за издаване на 
-                    свидетелство за съдимост в размер на 3.00 лв.
+                    @ApplicationResources.msgPaymentInfo
                 </div>
 
                 <div>
-                    При избор на "Освободено от плащане" трябва да прикачите документ удостоверяващ това право.
+                    @ApplicationResources.msgPaymentFreeInfo
                 </div>
             </div>
 

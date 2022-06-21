@@ -12,6 +12,7 @@ import { ApplicationCountModel } from "../_models/application-count.model";
 import { BulletinCountModel } from "../_models/bulletin-count.model";
 import { BulletinEventCountModel } from "../_models/bulletin-event-count.model";
 import { EcrisCountModel } from "../_models/ecris-count.model";
+import { FbbcCountModel } from "../_models/fbbc-count.model";
 import { ForJudgeCountModel } from "../_models/for-judge-count.model";
 import { IsinCountModel } from "../_models/isin-count.model";
 import { ObjectCountModel } from "../_models/object-count.model";
@@ -40,6 +41,7 @@ export class HomeResolver implements Resolve<any> {
       ecris: of(null),
       isin: of(null),
       forJudge: of(null),
+      fbbc: of(null),
     };
 
     this.permissionsService.permissions$.subscribe((perm) => {
@@ -63,6 +65,7 @@ export class HomeResolver implements Resolve<any> {
 
       if (roles.indexOf(RoleNameEnum.CentralAuth) > -1) {
         result.ecris = this.service.getEcrisCount();
+        result.fbbc = this.service.getFbbcCount();
       }
 
       if (roles.indexOf(RoleNameEnum.Judge) > -1) {
@@ -81,4 +84,5 @@ export class HomeResolverData extends BaseResolverData<ObjectCountModel> {
   public ecris: Observable<EcrisCountModel>;
   public isin: Observable<IsinCountModel>;
   public forJudge: Observable<ForJudgeCountModel>;
+  public fbbc: Observable<FbbcCountModel>;
 }
