@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
@@ -154,7 +155,7 @@ namespace MJ_CAIS.Common.XmlData
             return result;
         }
 
-        public static string XmlTransform(string transformationContent, string documentToTransform) // xslt, xml
+        public static string XmlTransform(string transformationContent, string? documentToTransform) // xslt, xml
         {
             StringBuilder resultSb;
             XslCompiledTransform xslt = new XslCompiledTransform();
@@ -180,7 +181,28 @@ namespace MJ_CAIS.Common.XmlData
                 xslt.Transform(xmlDocumentToTransform, null, writer, null);
             }
 
-            return resultSb.ToString();
+            string html = GetHtmlBody(resultSb.ToString());
+            string htmlContainerTemplate = "<html><head></head><body><div>{0}</div></body></html>";
+            html = String.Format(htmlContainerTemplate, html);
+            return html;
+
+        }
+
+        private static string GetHtmlBody(string html)
+        {
+            string htmlBody = html;
+
+            RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Singleline;
+            Regex regx = new Regex("<body>(?<theBody>.*)</body>", options);
+
+            Match match = regx.Match(html);
+
+            if (match.Success)
+            {
+                htmlBody = match.Groups["theBody"].Value;
+            }
+
+            return htmlBody;
         }
     }
 }

@@ -11,6 +11,14 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
+
+        public virtual async Task<EWebRequest> SelectAsync(string id)
+        {
+            var result = await _dbContext.Set<EWebRequest>().Include(x => x.WebService).AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+            return result;
+        }
+
         public async Task<IQueryable<EWebRequest>> SelectAllByApplicationId(string aId)
         {
             return

@@ -118,6 +118,7 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
+
         [HttpGet("printApplication/{aId}")]
         public async Task<IActionResult> PrintApplicationById(string aId)
         {
@@ -125,7 +126,7 @@ namespace MJ_CAIS.Web.Controllers
             if (result == null) return NotFound();
 
             var content = result;
-            var fileName = "sertificate.pdf";
+            var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
 
             Response.Headers.Add("File-Name", fileName);

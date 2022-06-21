@@ -1,5 +1,6 @@
 <igx-grid
   #decisionsGrid
+  [pinning]="pinningConfig"
   [height]="null"
   [data]="historyData"
   [primaryKey]="'id'"
@@ -24,4 +25,31 @@
     [sortable]="true"
     [dataType]="'string'"
   ></igx-column>
+
+  <igx-column
+    field="hasError"
+    header="Грешка"
+    [sortable]="true"
+    [dataType]="'boolean'"
+  ></igx-column>
+
+  <igx-column
+    field="error"
+    header="Вид грешка"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    width="150px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a [title]="'Редактиране'" (click)="downloadHtml(cell.rowData.id)">
+        <i class="fas fa-download"></i>
+      </a>
+    </ng-template>
+  </igx-column>
 </igx-grid>
