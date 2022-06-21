@@ -39,6 +39,8 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+
+        [Authorize(Roles = $"{RoleConstants.Normal}")]
         [HttpGet("create")]
         public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
         {
@@ -49,6 +51,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("certificates")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> GetAllByCertificateStatus(ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._applicationService.SelectAllCertWithPaginationAsync(aQueryOptions, statusId);
@@ -56,12 +59,14 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> Get(string aId)
         {
             return await base.Get(aId);
         }
 
         [HttpGet("cancelApplication/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal}")]
         public virtual async Task<IActionResult> cancelApplicationByIdentifier(string aId)
         {
             await this._applicationService.ChangeApplicationStatusToCanceled(aId);
@@ -71,6 +76,7 @@ namespace MJ_CAIS.Web.Controllers
 
 
         [HttpGet("changeStatusToCheckPayment/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal}")]
         public virtual async Task<IActionResult> changeStatusToCheckPayment(string aId)
         {
             await this._applicationService.ChangeApplicationStatusToCheckPayment(aId);
@@ -78,6 +84,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("searchByIdentifier/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal}")]
         public virtual async Task<IActionResult> SearchByIdentifier(string aId)
         {
             var result = await this._searchByIdentifierService.SearchByIdentifier(aId);
@@ -85,6 +92,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("searchByIdentifierLNCH/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal}")]
         public virtual async Task<IActionResult> searchByIdentifierLNCH(string aId)
         {
             var result = await this._searchByIdentifierService.SearchByIdentifierLNCH(aId);
@@ -92,12 +100,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
+        [Authorize(Roles = $"{RoleConstants.Normal}")]
         public virtual async Task<IActionResult> Post([FromBody] ApplicationInDTO aInDto)
         {
-            // ����:
-            // ������ � ��������� �� ������������, � �� �������
-            // ��� ��������� �� ������� ������ �� � ���� ����
-            // �� ��������� �� �� ������� ���� ����� ����� �� ���� InsertAsync
             aInDto.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // todo
             aInDto.StatusCode = ApplicationConstants.ApplicationStatuses.NewId;
             aInDto.ApplicationTypeId = "6";
@@ -105,6 +110,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("final-edit/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> FinalEdit(string aId, [FromBody] ApplicationInDTO aInDto)
         {
             await this._applicationService.UpdateAsync(aInDto, true);
@@ -112,6 +118,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> Put(string aId, [FromBody] ApplicationInDTO aInDto)
         {
             await this._applicationService.UpdateAsync(aInDto, false);
@@ -120,6 +127,7 @@ namespace MJ_CAIS.Web.Controllers
 
 
         [HttpGet("printApplication/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> PrintApplicationById(string aId)
         {
             var result = await this._printDocumentService.PrintApplication(aId);
@@ -136,6 +144,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/documents")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetDocuments(string aId)
         {
             var result = await this._applicationService.GetDocumentsByApplicationIdAsync(aId);
@@ -143,6 +152,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("{aId}/documents")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
         {
             await this._applicationService.InsertApplicationDocumentAsync(aId, aInDto);
@@ -150,6 +160,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpDelete("{aId}/documents/{documentId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
             await this._applicationService.DeleteDocumentAsync(documentId);
@@ -157,6 +168,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/documents-download/{documentId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetContents(string documentId)
         {
             var result = await this._applicationService.GetDocumentContentAsync(documentId);
@@ -173,6 +185,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/person-alias")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetPersonAlias(string aId)
         {
             var result = await this._applicationService.SelectApplicationPersAliasByApplicationIdAsync(aId);
@@ -180,6 +193,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/eWeb-requests")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetEWebRequestsByApplicationId(string aId)
         {
             var result = await this._applicationService.SelectAllEWebRequestsByApplicationIdAsync(aId);
@@ -187,6 +201,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/application-history")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetApplicationHistory(string aId)
         {
             var result = await this._applicationService.SelectApplicationPersStatusHAsync(aId);
@@ -194,6 +209,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/application-certificate")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetApplicationCertificate(string aId)
         {
             var result = await this._applicationService.SelectApplicationCertificateByApplicationIdAsync(aId);

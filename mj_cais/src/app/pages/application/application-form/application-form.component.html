@@ -69,7 +69,7 @@
           Отхвърляне
         </button>
         <button
-          *ngIf="!isForPreview"
+          *ngIf="!isForPreview &&  !isCreate"
           nbButton
           matRipple
           [status]="'success'"

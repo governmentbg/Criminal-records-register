@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NbDialogRef } from "@nebular/theme";
+import { CustomToastrService } from "../../../../@core/services/common/custom-toastr.service";
+import { ApplicationService } from "../../application-form/_data/application.service";
 
 @Component({
   selector: "cais-search-by-egn-error-dialog",
@@ -10,15 +12,25 @@ import { NbDialogRef } from "@nebular/theme";
 export class SearchByEgnErrorDialogComponent implements OnInit {
   public title: string;
   public applicationId: string = null;
+  protected successMessage = "Успешно анулирано!";
 
   constructor(
     protected ref: NbDialogRef<SearchByEgnErrorDialogComponent>,
-    private router: Router
+    private router: Router,
+    private applicationService: ApplicationService,
+    private toastr: CustomToastrService
   ) {}
 
   ngOnInit(): void {}
 
-  changeStatusToCanceled() {}
+  changeStatusToCanceled() {
+    this.applicationService
+      .cancelApplication(this.applicationId)
+      .subscribe((result) => {
+        this.ref.close();
+        this.toastr.showToast("success", this.successMessage);
+      });
+  }
 
   navigateToApplicationCreate() {
     this.router.navigate(["pages", "applications", "edit", this.applicationId]);

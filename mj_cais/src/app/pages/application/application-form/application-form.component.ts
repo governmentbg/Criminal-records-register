@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
+import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { Observable } from "rxjs";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
@@ -30,6 +31,7 @@ export class ApplicationFormComponent
   public applicationStatus: string;
   public ApplicationTypeStatusConstants = ApplicationTypeStatusConstants;
   private isFinalEdit: boolean;
+  public isCreate: boolean;
 
   constructor(
     service: ApplicationService,
@@ -68,6 +70,8 @@ export class ApplicationFormComponent
     ) {
       this.fullForm.paymentMethodId.enable();
     }
+
+    this.isCreate = this.currentAction != EActions.EDIT;
   }
 
   buildFormImpl(): FormGroup {
