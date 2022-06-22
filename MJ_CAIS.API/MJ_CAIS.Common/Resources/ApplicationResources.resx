@@ -141,6 +141,9 @@
   <data name="lblIsPaid" xml:space="preserve">
     <value>Плащане</value>
   </data>
+  <data name="lblName" xml:space="preserve">
+    <value>Имена</value>
+  </data>
   <data name="lblPaymentMethodId" xml:space="preserve">
     <value>Начин на плащане</value>
   </data>

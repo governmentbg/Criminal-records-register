@@ -300,7 +300,9 @@ body div.container {
 }
 
 /*#region Infragistics*/
-
+.ui-iggrid tbody td {
+    white-space: nowrap;
+}
 .ui-iggrid .ui-widget-header,
 .ui-iggrid th.ui-state-default,
 .ui-iggrid-header .ui-widget-header {

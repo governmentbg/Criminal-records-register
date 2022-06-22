@@ -16,6 +16,8 @@ namespace MJ_CAIS.Services.Contracts
 
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true);
 
-        Task<ApplicationPreviewDTO> GetForPreviewAsync(string id);
+        Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id);
+
+        Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id);
     }
 }

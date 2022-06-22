@@ -63,12 +63,13 @@
             feature
                 .Paging()
                 .Type(OpType.Remote)
-                .PageSize(20)
+                .PageSize(10)
                 .PageSizeDropDownLocation("inpager");
             feature
                 .Filtering()
                 .Mode(FilterMode.Simple)
                 .Type(OpType.Remote);
+            feature.Tooltips().Visibility(TooltipsVisibility.Overflow).Style(TooltipsStyle.Popover);
         })
         .DataSourceUrl(Url.Action(nameof(UserExternalController.GetUsers), "UserExternal"))
         .Render())
