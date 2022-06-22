@@ -117,106 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnApply" xml:space="preserve">
-    <value>Заяви</value>
+  <data name="btnCreateNewUser" xml:space="preserve">
+    <value>Нов потребител</value>
   </data>
-  <data name="btnBack" xml:space="preserve">
-    <value>Назад</value>
+  <data name="lblActive" xml:space="preserve">
+    <value>Активен</value>
   </data>
-  <data name="btnCancel" xml:space="preserve">
-    <value>Отказ</value>
+  <data name="lblAdministration" xml:space="preserve">
+    <value>Администрация</value>
   </data>
-  <data name="btnEdit" xml:space="preserve">
-    <value>Редакция</value>
+  <data name="lblEgn" xml:space="preserve">
+    <value>ЕГН</value>
   </data>
-  <data name="btnPreview" xml:space="preserve">
-    <value>Преглед</value>
+  <data name="lblEmail" xml:space="preserve">
+    <value>Електронна поща</value>
   </data>
-  <data name="btnSave" xml:space="preserve">
-    <value>Запис</value>
+  <data name="lblIsActive" xml:space="preserve">
+    <value>Активен</value>
   </data>
-  <data name="lblGreetingUser" xml:space="preserve">
-    <value>Здравейте,</value>
+  <data name="lblIsAdmin" xml:space="preserve">
+    <value>Администратор</value>
   </data>
-  <data name="lblLogout" xml:space="preserve">
-    <value>Изход</value>
+  <data name="lblName" xml:space="preserve">
+    <value>Имена</value>
   </data>
-  <data name="lblNo" xml:space="preserve">
-    <value>Не</value>
+  <data name="lblPosition" xml:space="preserve">
+    <value>Позиция</value>
   </data>
-  <data name="lblYes" xml:space="preserve">
-    <value>Да</value>
+  <data name="titleAddUser" xml:space="preserve">
+    <value>Добавяне на потребител</value>
   </data>
-  <data name="MsgContactYourAdministrator" xml:space="preserve">
-    <value>Моля, свържете се с администратор.</value>
+  <data name="titleEditUser" xml:space="preserve">
+    <value>Редакция на потребител</value>
   </data>
-  <data name="MsgDataBaseError" xml:space="preserve">
-    <value>Възникна грешка при извършване на операцията в базата от данни.</value>
+  <data name="titlePreviewUser" xml:space="preserve">
+    <value>Преглед на потребител</value>
   </data>
-  <data name="MsgDataNotFound" xml:space="preserve">
-    <value>Няма намерени данни</value>
-  </data>
-  <data name="MsgDeleteSuccessfull" xml:space="preserve">
-    <value>Записът беше успешно изтрит.</value>
-  </data>
-  <data name="MsgEmailInvalid" xml:space="preserve">
-    <value>Невалидна електронна поща</value>
-  </data>
-  <data name="MsgError404" xml:space="preserve">
-    <value>Страницата, която се опитвате да достъпите, не е намерена. (HTTP Status Code: 404)</value>
-  </data>
-  <data name="MsgErrorOccurred" xml:space="preserve">
-    <value>Възникна системна грешка. </value>
-  </data>
-  <data name="MsgInvalidloginAttempt" xml:space="preserve">
-    <value>Невалидно потребителско име или парола</value>
-  </data>
-  <data name="MsgMinLength" xml:space="preserve">
-    <value>Полето "{0}" трябва да е максимум {1} символа.</value>
-  </data>
-  <data name="MsgNotSuportedTransaction" xml:space="preserve">
-    <value>Тази транзакция не се поддържа.</value>
-  </data>
-  <data name="MsgOperationException" xml:space="preserve">
-    <value>Възникна грешка при извършване на операцията.</value>
-  </data>
-  <data name="MsgRequired" xml:space="preserve">
-    <value>Полето "{0}" е задължително</value>
-  </data>
-  <data name="MsgSaveError" xml:space="preserve">
-    <value>Възникна грешка при изпълняване на операцията!</value>
-  </data>
-  <data name="MsgSaveSuccessfull" xml:space="preserve">
-    <value>Данните бяха записани успешно.</value>
-  </data>
-  <data name="MsgSessionExpired" xml:space="preserve">
-    <value>Сесията Ви е изтекла.</value>
-  </data>
-  <data name="MsgUserLockout" xml:space="preserve">
-    <value>Потребителят е заключен</value>
-  </data>
-  <data name="titleContractInfoExtPart1" xml:space="preserve">
-    <value>Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект:</value>
-  </data>
-  <data name="titleContractInfoExtPart2" xml:space="preserve">
-    <value>„Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“,</value>
-  </data>
-  <data name="titleContractInfoExtPart3" xml:space="preserve">
-    <value>финансиран по Оперативна програма „Добро управление“, чрез ЕСФ.</value>
-  </data>
-  <data name="titleEAppInfo" xml:space="preserve">
-    <value>Информация за услуга "Издаване на електронно свидетелство за съдимост"</value>
-  </data>
-  <data name="titleExternalPortal" xml:space="preserve">
-    <value>Портал за служебен достъп</value>
-  </data>
-  <data name="titleGeneralTerms" xml:space="preserve">
-    <value>Общи условия</value>
-  </data>
-  <data name="titleMinistryOfJustice" xml:space="preserve">
-    <value>Министерство на правосъдието</value>
-  </data>
-  <data name="titleRepublicOfBulgaria" xml:space="preserve">
-    <value>Република България</value>
+  <data name="titleUsers" xml:space="preserve">
+    <value>Потребители</value>
   </data>
 </root>

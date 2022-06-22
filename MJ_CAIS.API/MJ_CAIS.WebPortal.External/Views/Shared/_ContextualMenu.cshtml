@@ -1,5 +1,6 @@
 ﻿@using MJ_CAIS.Common
 @using MJ_CAIS.WebPortal.External.Controllers
+@using MJ_CAIS.Common.Resources
 
 @{
     var isAuthenticated = Convert.ToBoolean(ViewData["IsAuthenticated"]);
@@ -17,7 +18,10 @@
     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
         <ul class="navbar-nav flex-grow-1">
             <li class="nav-item">
-                <a class="nav-link" asp-controller="Application" asp-action="Index">Заявления</a>
+                <a class="nav-link" asp-controller="Application" asp-action="Index">@ApplicationResources.titleApplications</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="UserExternal" asp-action="Index">@UsersResources.titleUsers</a>
             </li>
         </ul>
     </div>

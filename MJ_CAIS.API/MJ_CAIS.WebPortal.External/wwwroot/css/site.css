@@ -1,5 +1,5 @@
 html {
-    font-size: 14px;
+    font-size: 14px !important;
     /* background-color: rgb(242,247,255);*/
 }
 
@@ -282,3 +282,106 @@ body div.container {
 .importan-text {
     color: red;
 }
+
+.grid-button {
+    cursor: pointer;
+    color: #014f86 !important;
+    font-size: 1.2em;
+}
+
+    .grid-button:hover {
+        color: #0054a4 !important;
+        text-decoration: none;
+    }
+
+.button-margin {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/*#region Infragistics*/
+
+.ui-iggrid .ui-widget-header,
+.ui-iggrid th.ui-state-default,
+.ui-iggrid-header .ui-widget-header {
+    background-color: #eceeef !important;
+}
+
+.ui-iggrid .ui-iggrid-footer .ui-iggrid-paging-item.ui-state-default {
+    border: none !important;
+}
+
+.ui-iggrid-footer .ui-iggrid-paging .ui-iggrid-paging-item:hover .ui-icon-arrowstop-1-w:before {
+    color: black !important;
+}
+
+.ui-iggrid-footer .ui-iggrid-paging .ui-iggrid-paging-item:hover .ui-icon-triangle-1-w:before {
+    color: black !important;
+}
+
+.ui-iggrid-footer .ui-iggrid-paging .ui-iggrid-paging-item:hover .ui-icon-triangle-1-e:before {
+    color: black !important;
+}
+
+.ui-iggrid-footer .ui-iggrid-paging .ui-iggrid-paging-item:hover .ui-icon-arrowstop-1-e:before {
+    color: black !important;
+}
+
+.ui-iggrid-firstpage:hover,
+.ui-iggrid-prevpage:hover,
+.ui-iggrid-nextpage:hover,
+.ui-iggrid-lastpage:hover {
+    background-color: #eee !important;
+    border-radius: .125rem !important;
+    -webkit-transition: all .3s linear !important;
+    transition: all .3s linear !important;
+    color: #212529 !important;
+    border-radius: .125rem;
+}
+
+.ui-iggrid .ui-iggrid-paging li:hover {
+    background-color: #eee !important;
+    border-radius: .125rem !important;
+    -webkit-transition: all .3s linear !important;
+    transition: all .3s linear !important;
+    color: #212529 !important;
+    border-radius: .125rem;
+}
+
+.ui-iggrid .ui-iggrid-paging li {
+    border-bottom: none !important;
+}
+
+.ui-iggrid .ui-iggrid-pagesizedropdown.ui-state-default {
+    border-radius: .125rem !important;
+    -webkit-transition: all .3s linear !important;
+    transition: all .3s linear !important;
+    border: none !important;
+}
+
+
+.ui-iggrid-paging .ui-iggrid-firstpage, .ui-iggrid-lastpage, .ui-iggrid-nextpage, .ui-iggrid-prevpage {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important
+}
+
+.ui-iggrid-pagedropdowncontainer .ui-igedit-container {
+    height: 1.4em !important;
+    border-radius: 0px !important;
+    border-bottom: 1px solid #ccc !important;
+}
+
+.ui-iggrid-paging, .ui-iggrid-results .ui-iggrid-pagedropdowncontainer, .ui-igedit-container {
+    font-size: medium !important;
+    height: 1.4em !important;
+}
+
+.ui-iggrid-paging, .ui-iggrid-footer .ui-iggrid-results {
+    font-size: smaller !important;
+}
+
+.ui-iggrid-results {
+    display: flex !important;
+    align-items: center !important;
+}
+/*#endregion */

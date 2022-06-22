@@ -13,7 +13,9 @@ using MJ_CAIS.WebPortal.External.Models.Application;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
-    [Authorize]
+    // [Authorize]
+    [AllowAnonymous]
+
     public class ApplicationController : BaseController
     {
         private readonly IMapper _mapper;
