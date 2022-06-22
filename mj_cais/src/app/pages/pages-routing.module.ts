@@ -117,6 +117,13 @@ const routes: Routes = [
           ).then((m) => m.AdministrationExternalModule),
       },
       {
+        path: "e-applicaiton",
+        loadChildren: () =>
+          import(
+            "./e-application/eapplication.module"
+          ).then((m) => m.EApplicationModule),
+      },
+      {
         path: "",
         redirectTo: "home",
         pathMatch: "full",

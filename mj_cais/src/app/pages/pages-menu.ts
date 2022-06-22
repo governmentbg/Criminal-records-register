@@ -193,6 +193,21 @@ export class PagesMenu {
             link: "/pages/bulletin-administrations",    
           }
         ],
+      },
+      {
+        title: "E-Свидетелства",
+        icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
+        children: [
+          {
+            title: "Потвърждение за плащане",
+            link: "/pages/e-applicaiton/check-payment",
+          },
+          // {
+          //   title: "Oсвободени от плащане",
+          //   link: "/pages/e-applicaiton/tax-free",
+          // },
+        ],
       },   
     ];
 

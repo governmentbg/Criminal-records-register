@@ -18,6 +18,25 @@ namespace MJ_CAIS.Services
         {
             _userExternalRepository = userExternalRepository;
         }
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
+        public async Task<string?> GetUserAdministrationNameAsync(string userId)
+            => await _userExternalRepository.GetUserAdministrationNameAsync(userId);
+
+        public async Task<string?> GetUserAdministrationIdAsync(string userId)
+           => await _userExternalRepository.GetUserAdministrationIdAsync(userId);
+
+        public async Task<string> SaveUserExternalAsync(UserExternalDTO aInDto, bool isAdded)
+        {
+            var entity = mapper.MapToEntity<UserExternalDTO, GUsersExt>(aInDto, isAdded: isAdded);
+            if (isAdded)
+            {
+                this.TransformDataOnInsert(entity);
+            }
+
+            await this.SaveEntityAsync(entity);
+            return entity.Id;
+        }
 
         public async Task<GUsersExt> AuthenticateExternalUserAsync(UserExternalDTO userDTO)
         {
@@ -34,9 +53,17 @@ namespace MJ_CAIS.Services
             return entity;
         }
 
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
+        public async Task<IQueryable<UserExternalGridDTO>> SelectExternalUsersByUserIdAsync(string userId)
         {
-            return false;
+            var administrationId = await GetUserAdministrationIdAsync(userId);
+            var query = _userExternalRepository.GetUsersByAdministration(administrationId);
+            return query;
+        }
+
+        public async Task<UserExternalDTO> GetUserExternalDTOAsync(string userId)
+        {
+            var entity = await _userExternalRepository.SelectAsync(userId);
+            return mapper.Map<UserExternalDTO>(entity);
         }
     }
 }
