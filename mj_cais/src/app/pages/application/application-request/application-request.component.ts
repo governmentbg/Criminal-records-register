@@ -49,20 +49,18 @@ export class ApplicationRequestComponent implements OnInit {
               debugger;
 
               this.dialogService
-              .open(SearchByEgnErrorDialogComponent, {
-                context: {
-                  title: errTittle,
-                  applicationId: errBody,
-                },
-                closeOnBackdropClick: false,
-              })
-              .onClose.subscribe((result) => {
-                if (result) {
-                  //TODO: Get Application
-                 
-                 
-                }
-              });
+                .open(SearchByEgnErrorDialogComponent, {
+                  context: {
+                    title: errTittle,
+                    applicationId: errBody,
+                  },
+                  closeOnBackdropClick: false,
+                })
+                .onClose.subscribe((result) => {
+                  if (result) {
+                    //TODO: Get Application
+                  }
+                });
             }
           );
         }
@@ -91,7 +89,27 @@ export class ApplicationRequestComponent implements OnInit {
                 ]);
               },
               (error) => {
-                let title = "a";
+                var parser = new DOMParser();
+                var htmlDoc = parser.parseFromString(error.error, "text/html");
+                let errMsgElement = htmlDoc.getElementById("err-message");
+                let errMsg = (errMsgElement.firstChild as any).data;
+                let errTittle = (errMsg as string).split(":")[0];
+                let errBody = (errMsg as string).split(":")[1];
+                debugger;
+
+                this.dialogService
+                  .open(SearchByEgnErrorDialogComponent, {
+                    context: {
+                      title: errTittle,
+                      applicationId: errBody,
+                    },
+                    closeOnBackdropClick: false,
+                  })
+                  .onClose.subscribe((result) => {
+                    if (result) {
+                      //TODO: Get Application
+                    }
+                  });
               }
             );
         }
