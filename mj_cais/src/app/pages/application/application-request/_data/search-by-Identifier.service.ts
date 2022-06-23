@@ -1,16 +1,23 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { ConfigurationService } from "@tl/tl-common";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
 export class SearchByIdentifierService {
-  constructor(private http: HttpClient) {}
+  baseUrl: string;
+  url: string;
+  endpoint = "applications";
+  constructor(private http: HttpClient, private configurationService: ConfigurationService) {
+    this.baseUrl = this.configurationService.getServiceUrl();
+   this.url = this.baseUrl + '/api/' + this.endpoint
+  }
 
   public searchByIdentifier(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:7275/api/applications/searchByIdentifier/${id}`);
+    return this.http.get<any[]>(`${this.url}/applications/searchByIdentifier/${id}`);
   }
 
   public searchByIdentifierLNCH(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:7275/api/applications/searchByIdentifierLNCH/${id}`);
+    return this.http.get<any[]>(`${this.url}/applications/searchByIdentifierLNCH/${id}`);
   }
 }
