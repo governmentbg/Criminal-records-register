@@ -221,6 +221,7 @@ namespace MJ_CAIS.ExternalWebServices
                 msg.EmailAddress = certificate.Application.Email;
                 msg.CertificateId = certificate.Id;
                 msg.Certificate = certificate;
+                msg.Status = EdeliveryConstants.EdeliveryStatuses.Pending;
                 dbContext.EEdeliveryMsgs.Add(msg);
             }
 
