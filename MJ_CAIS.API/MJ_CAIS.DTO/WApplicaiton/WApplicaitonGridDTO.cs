@@ -7,5 +7,6 @@ namespace MJ_CAIS.DTO.WApplicaiton
         public string Purpose { get; set; }
         public string PurposeDesc { get; set; }
         public string PaymentMethodName { get; set; }
+        public string StatusName { get; set; }
     }
 }

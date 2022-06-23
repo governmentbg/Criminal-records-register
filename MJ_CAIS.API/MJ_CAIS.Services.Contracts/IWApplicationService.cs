@@ -5,8 +5,12 @@ using Microsoft.AspNet.OData.Query;
 
 namespace MJ_CAIS.Services.Contracts
 {
-    public interface IWApplicaitonService : IBaseAsyncService<WApplicaitonDTO, WApplicaitonDTO, WApplicaitonGridDTO, WApplication, string>
+    public interface IWApplicationService : IBaseAsyncService<WApplicaitonDTO, WApplicaitonDTO, WApplicaitonGridDTO, WApplication, string>
     {
         Task<IgPageResult<WApplicaitonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<WApplicaitonGridDTO> aQueryOptions, string? statusId);
+       
+        Task ConfirmPaymentAsync(string aId);
+
+        Task ProcessTaxFreeAsync(string aId, bool approved);
     }
 }

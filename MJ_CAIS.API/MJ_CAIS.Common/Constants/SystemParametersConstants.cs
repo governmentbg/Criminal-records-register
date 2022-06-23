@@ -28,6 +28,8 @@ namespace MJ_CAIS.Common.Constants
             public const string REGIX_NUMBER_OF_ATTEMPTS = "REGIX_NUMBER_OF_ATTEMPTS";
             //Брой дни в които regix кеша да се пази
             public const string REGIX_DAYS_CACHE = "REGIX_DAYS_CACHE";
+            // 'Максимален брой опити до успешно изпращане през ЕДеливери',
+            public const string EDELIVERY_NUMBER_OF_ATTEMPTS = "EDELIVERY_NUMBER_OF_ATTEMPTS";
         }
     }
 }

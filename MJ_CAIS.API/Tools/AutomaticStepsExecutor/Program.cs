@@ -57,7 +57,7 @@ namespace AutomaticStepsExecutor
 
                 using (host)
                 {
-                    CertificateGenerationService s = (CertificateGenerationService)host.Services.GetService<ICertificateGenerationService>();
+                   // CertificateGenerationService s = (CertificateGenerationService)host.Services.GetService<ICertificateGenerationService>();
                     //var fileArray = await s.PrintApplication("aaaa-bbbb-cccc");
                     //var _pdfSigner = host.Services.GetService<IPdfSigner>();
                     //fileArray = _pdfSigner.SignPdf(fileArray, "cais.mjs.bg", new Dictionary<string, string>()

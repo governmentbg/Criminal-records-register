@@ -13,9 +13,9 @@ namespace MJ_CAIS.Web.Controllers
     [Authorize(Roles = RoleConstants.CentralAuth)]
     public class WApplicationsController : BaseApiCrudController<WApplicaitonDTO, WApplicaitonDTO, WApplicaitonGridDTO, WApplication, string>
     {
-        private readonly IWApplicaitonService _wApplicaitonService;
+        private readonly IWApplicationService _wApplicaitonService;
         private readonly IApplicationWebService _applicationWebService;
-        public WApplicationsController(IWApplicaitonService wApplicaitonService,
+        public WApplicationsController(IWApplicationService wApplicaitonService,
             IApplicationWebService applicationWebService) : base(wApplicaitonService)
         {
             _wApplicaitonService = wApplicaitonService;
@@ -32,8 +32,14 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("{aId}/confirm-payment")]
         public async Task<IActionResult> ConfirmPayment(string aId)
         {
-            // todo: 
-            //await this._applicationWebService.ConfirmPaymentAsync(aId);
+            await this._wApplicaitonService.ConfirmPaymentAsync(aId);
+            return Ok();
+        }
+
+        [HttpPut("{aId}/process-tax-free{approve}")]
+        public async Task<IActionResult> ProcessTaxFree(string aId, bool approve)
+        {
+            await this._wApplicaitonService.ProcessTaxFreeAsync(aId, approve);
             return Ok();
         }
     }

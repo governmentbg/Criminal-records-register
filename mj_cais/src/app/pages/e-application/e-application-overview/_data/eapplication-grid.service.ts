@@ -30,4 +30,11 @@ export class EApplicationGridService extends CaisCrudService<
       {}
     );
   } 
+  public processTaxFree(aId: string, approve: boolean): Observable<any> {
+    return this.http.put(
+      this.baseUrl + `/api/e-applications/${aId}/process-tax-free/${approve}`,
+      {}
+    );
+  }
+  
 }

@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using MJ_CAIS.DataAccess;
+using MJ_CAIS.ExternalWebServices;
 
 namespace EcrisToCAISExporter
 {
@@ -31,6 +32,7 @@ namespace EcrisToCAISExporter
                 IHost host = Host.CreateDefaultBuilder()
                     .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                     .ConfigureServices(services => services.AddSingleton<EcrisToCAISService>())
+                      .ConfigureServices(services =>services.AddScoped<PersonValidatorClient>())
                     .ConfigureLogging(logging =>
                       {
                           logging.ClearProviders();
