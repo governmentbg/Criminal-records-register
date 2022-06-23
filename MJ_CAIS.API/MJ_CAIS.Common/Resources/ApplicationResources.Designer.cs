@@ -70,6 +70,24 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Прехвърлено от електронно заявление.
+        /// </summary>
+        public static string descApplicationFromWeb {
+            get {
+                return ResourceManager.GetString("descApplicationFromWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Одобрено електронно заявление.
+        /// </summary>
+        public static string descAprovedApp {
+            get {
+                return ResourceManager.GetString("descAprovedApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи.
         /// </summary>
         public static string descChangeStatus {

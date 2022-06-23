@@ -7,6 +7,7 @@ export class EApplicationGridModel extends BaseGridModel {
   public purpose: string;
   public purposeDesc: string;
   public paymentMethodName: string;
+  public statusName: string;
 
   constructor(init?: Partial<EApplicationGridModel>) {
     super(init);
@@ -16,5 +17,6 @@ export class EApplicationGridModel extends BaseGridModel {
     this.purpose = init?.purpose ?? null;
     this.purposeDesc = init?.purposeDesc ?? null;
     this.paymentMethodName = init?.paymentMethodName ?? null;
+    this.statusName = init?.statusName ?? null;
   }
 }

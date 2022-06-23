@@ -19,7 +19,5 @@ namespace MJ_CAIS.Services.Contracts
         Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id);
 
         Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id);
-
-        Task ConfirmPaymentAsync(string aId);
     }
 }

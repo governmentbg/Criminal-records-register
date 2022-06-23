@@ -120,6 +120,12 @@
   <data name="btnNewApp" xml:space="preserve">
     <value>Ново заявление</value>
   </data>
+  <data name="descApplicationFromWeb" xml:space="preserve">
+    <value>Прехвърлено от електронно заявление</value>
+  </data>
+  <data name="descAprovedApp" xml:space="preserve">
+    <value>Одобрено електронно заявление</value>
+  </data>
   <data name="descChangeStatus" xml:space="preserve">
     <value>Очаква от съдия избор на бюлетини, съобразно целта и избор на подписващи</value>
   </data>

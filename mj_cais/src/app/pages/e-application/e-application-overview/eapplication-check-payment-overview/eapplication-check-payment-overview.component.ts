@@ -18,6 +18,9 @@ export class EApplicationCheckPaymentOverviewComponent extends RemoteGridWithSta
   EApplicationGridModel,
   EApplicationGridService
 > {
+
+  public hideStatus: boolean = true;
+
   constructor(
     private dialogService: NbDialogService,
     service: EApplicationGridService,
@@ -30,6 +33,17 @@ export class EApplicationCheckPaymentOverviewComponent extends RemoteGridWithSta
 
   ngOnInit(): void {
     super.ngOnInit();
+  }
+
+  
+  onShowAll(isChacked: boolean) {
+    if (isChacked) {
+      this.service.updateUrlStatus();
+    } else {
+      this.service.updateUrlStatus(EApplicationTypeStatusEnum.CheckPayment);
+    }
+    this.hideStatus = !isChacked;
+    this.ngOnInit();
   }
 
   public confirmPayment(id: any): void {
