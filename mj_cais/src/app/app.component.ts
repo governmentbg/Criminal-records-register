@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { NgxPermissionsService } from "ngx-permissions";
 import { map, of, switchMap, tap } from "rxjs";
 import { UserAuthorityService } from "./@core/services/common/user-authority.service";
+import { UserInfoService } from "./@core/services/common/user-info.service";
 
 @Component({
   selector: "ngx-app",
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
     private permissionsService: NgxPermissionsService,
     private authService: NbAuthService,
     private userAuthorityService: UserAuthorityService,
+    private userInfoService: UserInfoService,
     translate: TranslateService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang("bg");
@@ -61,8 +63,13 @@ export class AppComponent implements OnInit {
         } else {
           this.permissionsService.loadPermissions([]);
         }
+        debugger;
         if (data?.CsAuthorityId){
           this.userAuthorityService.csAuthorityId = data?.CsAuthorityId;
+          this.userInfoService.csAuthorityId = data?.CsAuthorityId;
+        }
+        if (data?.sub){
+          this.userInfoService.userId = data?.sub;
         }
       })
     ).subscribe();    

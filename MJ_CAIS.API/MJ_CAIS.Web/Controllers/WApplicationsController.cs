@@ -36,5 +36,12 @@ namespace MJ_CAIS.Web.Controllers
             //await this._applicationWebService.ConfirmPaymentAsync(aId);
             return Ok();
         }
+
+        [HttpPut("{aId}/process-tax-free{approve}")]
+        public async Task<IActionResult> ProcessTaxFree(string aId, bool approve)
+        {
+            // todo: 
+            return Ok();
+        }
     }
 }

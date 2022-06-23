@@ -134,7 +134,7 @@ namespace MJ_CAIS.Web.Controllers
             if (result == null) return NotFound();
 
             var content = result;
-            var fileName = "certificate.pdf";
+            var fileName = "application.pdf";
             var mimeType = "application/octet-stream";
 
             Response.Headers.Add("File-Name", fileName);

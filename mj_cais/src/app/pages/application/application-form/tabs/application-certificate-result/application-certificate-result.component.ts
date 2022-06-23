@@ -10,6 +10,7 @@ import { CertificateStatuTypeEnum } from "./_models/certificate-status-type.enum
 import { BulletinCheckGridModel } from "./_models/bulletin-check-grid.model";
 import { IgxGridComponent } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { UserInfoService } from "../../../../../@core/services/common/user-info.service";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -40,7 +41,8 @@ export class ApplicationCertificateResultComponent
   constructor(
     service: ApplicationCertificateService,
     public injector: Injector,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    private userInfoService: UserInfoService,
   ) {
     super(service, injector);
   }
@@ -67,6 +69,11 @@ export class ApplicationCertificateResultComponent
           .subscribe((response) => {
             this.bulletinsCheckData = response;
           });
+      }
+      debugger;
+      if(this.model.firstSignerId == null){
+        this.model.firstSignerId = this.userInfoService.userId;
+        this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
       }
     }
 

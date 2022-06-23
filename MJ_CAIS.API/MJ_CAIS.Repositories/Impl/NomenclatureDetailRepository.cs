@@ -7,8 +7,11 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class NomenclatureDetailRepository : BaseAsyncRepository<GNomenclature, CaisDbContext>, INomenclatureDetailRepository
     {
-        public NomenclatureDetailRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IUserContext _userContext;
+
+        public NomenclatureDetailRepository(CaisDbContext dbContext, IUserContext userContext) : base(dbContext)
         {
+            _userContext = userContext;
         }
 
         public IQueryable<GBgMunicipality> GetMunicipalitiesByDistrict(string districtId)
@@ -51,8 +54,8 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<GDecidingAuthority>> GetDecidingAuthoritiesForBulletinsAsync()
         {
             var query = _dbContext.GDecidingAuthorities.AsNoTracking()
-                .Where(x=>x.ActiveForBulletins.HasValue && x.ActiveForBulletins.Value)
-                .OrderBy(x=>x.OrderNumber);
+                .Where(x => x.ActiveForBulletins.HasValue && x.ActiveForBulletins.Value)
+                .OrderBy(x => x.OrderNumber);
 
             return await Task.FromResult(query);
         }
@@ -60,14 +63,14 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<GUser>> GetGUsersAsync()
         {
             var query = _dbContext.GUsers.AsNoTracking();
-
+            query = _userContext.FilterByAuthorityForAllRoles(query);
             return await Task.FromResult(query);
         }
 
         public IQueryable<GCountry> GetCountries()
         {
             return _dbContext.GCountries.AsNoTracking()
-                .OrderBy(x=>x.Iso31662Code);
+                .OrderBy(x => x.Iso31662Code);
         }
 
         public IQueryable<APurpose> GetAllAPurposes()
