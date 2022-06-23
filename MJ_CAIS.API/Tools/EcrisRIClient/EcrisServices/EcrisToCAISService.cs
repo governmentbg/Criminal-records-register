@@ -11,6 +11,9 @@ using MJ_CAIS.Common.Constants;
 using EcrisRIClient;
 using MJ_CAIS.DTO.EcrisService;
 using MJ_CAIS.EcrisObjectsServices;
+using MJ_CAIS.ExternalWebServices;
+using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
+using Microsoft.EntityFrameworkCore;
 //using Microsoft.Extensions.Logging;
 
 namespace EcrisIntegrationServices
@@ -21,11 +24,13 @@ namespace EcrisIntegrationServices
         const string PARAM_NOTIFICATION_NAME = "ECRIS_NOTIFICATION_LAST_SYNCH_DATE";
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisToCAISService> _logger;
+        private readonly PersonValidatorClient _personValidatorClient;
 
-        public EcrisToCAISService(CaisDbContext dbContext, ILogger<EcrisToCAISService> logger)
+        public EcrisToCAISService(CaisDbContext dbContext, ILogger<EcrisToCAISService> logger, PersonValidatorClient personValidatorClient)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _personValidatorClient = personValidatorClient;
         }
 
         public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage,  string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders,  bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
@@ -109,7 +114,7 @@ namespace EcrisIntegrationServices
                         if (r != null)
                         {
                             await AddMessageToDBContext(r, client, sessionID, skipDataExtraction, joinSeparator, docTypeCode);
-
+                            
                         }
 
                     }
@@ -317,6 +322,36 @@ namespace EcrisIntegrationServices
                         d.DocContent = content;
                         content.DDocuments.Add(d);
 
+
+                        PersonInfoRequest reqidentifiacition = new PersonInfoRequest();
+                        reqidentifiacition.fname = m.EEcrisMsgNames.FirstOrDefault()?.Firstname;
+                        reqidentifiacition.sname = m.EEcrisMsgNames.FirstOrDefault()?.Surname;
+                        reqidentifiacition.lname = m.EEcrisMsgNames.FirstOrDefault()?.Familyname;
+                        reqidentifiacition.threshold = PersonIdentificationConstants.Tresholds.PartialMatch;
+                        reqidentifiacition.gender = m.Sex.ToString();
+                        if (m.BirthDate.HasValue)
+                        {
+                            reqidentifiacition.month = m.BirthDate.Value.Month.ToString();
+                            reqidentifiacition.year = m.BirthDate.Value.Year.ToString();
+                            reqidentifiacition.day = m.BirthDate.Value.Day.ToString();
+                        }
+
+                        var graoPersons = await _personValidatorClient.GetPersonInfo(reqidentifiacition);
+
+                        if (graoPersons.personData.Length > 0)
+                        {
+                            var egns = graoPersons.personData.Select(p => p.person.personalNumber).ToList();
+                            m.EEcrisIdentifications = await _dbContext.GraoPeople.Where(p=>egns.Contains(p.Egn))
+                                .Select(x => new EEcrisIdentification{ 
+                                 Id=BaseEntity.GenerateNewId(),
+                                  EcrisMsgId = m.Id,
+                                  EcrisMsg = m,
+                                   GraoPersonId = x.Id                                   
+                                })
+                                .ToListAsync();
+                            _dbContext.EEcrisIdentifications.AddRange(m.EEcrisIdentifications);
+                        }
+
                         _dbContext.EEcrisMessages.Add(m);
                      
                         _dbContext.DDocuments.Add(d);
@@ -329,7 +364,7 @@ namespace EcrisIntegrationServices
                         {
                             _dbContext.EEcrisMsgNames.AddRange(m.EEcrisMsgNames);
                         }
-
+                      
 
 
                     }
@@ -338,6 +373,8 @@ namespace EcrisIntegrationServices
                         inbox.EcrisMsgId = existingMSg.Id;
                         inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
                     }
+                    
+
                 }
                 catch (Exception ex)
                 {

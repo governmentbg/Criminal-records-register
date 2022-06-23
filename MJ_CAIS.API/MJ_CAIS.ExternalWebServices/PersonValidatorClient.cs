@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
 using System.Text.Json;
 
@@ -63,6 +64,25 @@ namespace MJ_CAIS.ExternalWebServices
             headers.Add("Accept-Encoding", "gzip,deflate");
             headers.Add("Connection", "Keep-Alive");
             headers.Add("Host", new Uri(host).Host);
+        }
+
+        public async Task<List<PersonData>> GetPersonInfo(string firstname, string surname, string familyname, string sex, DateTime birthDate, string matchTreshold = "0.6")
+        {
+
+            PersonInfoRequest reqidentifiacition = new PersonInfoRequest();
+            reqidentifiacition.fname = firstname;
+            reqidentifiacition.sname = surname;
+            reqidentifiacition.lname = familyname;
+            reqidentifiacition.threshold = matchTreshold;
+            reqidentifiacition.gender = sex;
+            reqidentifiacition.month = birthDate.Month.ToString();
+            reqidentifiacition.year = birthDate.Year.ToString();
+            reqidentifiacition.day = birthDate.Day.ToString();
+
+            var result = await GetPersonInfo(reqidentifiacition);
+
+            return result.personData.ToList();
+
         }
     }
 }
