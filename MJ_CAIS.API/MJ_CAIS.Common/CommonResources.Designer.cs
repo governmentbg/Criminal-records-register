@@ -88,11 +88,29 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Редакция.
+        /// </summary>
+        public static string btnEdit {
+            get {
+                return ResourceManager.GetString("btnEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Преглед.
         /// </summary>
         public static string btnPreview {
             get {
                 return ResourceManager.GetString("btnPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Запис.
+        /// </summary>
+        public static string btnSave {
+            get {
+                return ResourceManager.GetString("btnSave", resourceCulture);
             }
         }
         
@@ -111,6 +129,24 @@ namespace MJ_CAIS.Common {
         public static string lblLogout {
             get {
                 return ResourceManager.GetString("lblLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не.
+        /// </summary>
+        public static string lblNo {
+            get {
+                return ResourceManager.GetString("lblNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Да.
+        /// </summary>
+        public static string lblYes {
+            get {
+                return ResourceManager.GetString("lblYes", resourceCulture);
             }
         }
         
@@ -255,6 +291,78 @@ namespace MJ_CAIS.Common {
         public static string MsgUserLockout {
             get {
                 return ResourceManager.GetString("MsgUserLockout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект:.
+        /// </summary>
+        public static string titleContractInfoExtPart1 {
+            get {
+                return ResourceManager.GetString("titleContractInfoExtPart1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to „Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“,.
+        /// </summary>
+        public static string titleContractInfoExtPart2 {
+            get {
+                return ResourceManager.GetString("titleContractInfoExtPart2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to финансиран по Оперативна програма „Добро управление“, чрез ЕСФ..
+        /// </summary>
+        public static string titleContractInfoExtPart3 {
+            get {
+                return ResourceManager.GetString("titleContractInfoExtPart3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Информация за услуга &quot;Издаване на електронно свидетелство за съдимост&quot;.
+        /// </summary>
+        public static string titleEAppInfo {
+            get {
+                return ResourceManager.GetString("titleEAppInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Портал за служебен достъп.
+        /// </summary>
+        public static string titleExternalPortal {
+            get {
+                return ResourceManager.GetString("titleExternalPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Общи условия.
+        /// </summary>
+        public static string titleGeneralTerms {
+            get {
+                return ResourceManager.GetString("titleGeneralTerms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Министерство на правосъдието.
+        /// </summary>
+        public static string titleMinistryOfJustice {
+            get {
+                return ResourceManager.GetString("titleMinistryOfJustice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Република България.
+        /// </summary>
+        public static string titleRepublicOfBulgaria {
+            get {
+                return ResourceManager.GetString("titleRepublicOfBulgaria", resourceCulture);
             }
         }
     }

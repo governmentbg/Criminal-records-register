@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
-
+@using MJ_CAIS.Common
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +27,7 @@
         <div class="container-fluid">
             @* TODO: fix with flex *@
             <h4 style="float: right;padding-top: 20px;padding-right: 20px;">
-                Портал за служебен достъп
+                @CommonResources.titleExternalPortal
             </h4>
             <div class="cais-headerbar">
                 <div class="cais-logo-wrapper">
@@ -37,10 +37,11 @@
                 </div>
                 <div class="cais-header-text">
                     <div class="row main-header">
-                        Република България
+                        @CommonResources.titleRepublicOfBulgaria
+
                     </div>
                     <div class="row" style="font-size: 14px;">
-                        Министерство на правосъдието
+                        @CommonResources.titleMinistryOfJustice
                     </div>
                 </div>
             </div>
@@ -61,7 +62,7 @@
     </header>
 
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-5">
             @RenderBody()
         </main>
     </div>
@@ -73,18 +74,19 @@
                 <div class="col-sm-2 cais-footer-link">
                     <div class="row">
                         <a class="navbar-brand" asp-controller="Home" asp-action="Info">
-                            Информация за услуга "Издаване на електронно свидетелство за съдимост"
+                            @CommonResources.titleEAppInfo
+
                         </a>
                         <a class="navbar-brand" asp-controller="Home" asp-action="GeneralCondition">
-                            Общи условия
+                            @CommonResources.titleGeneralTerms
                         </a>
                     </div>
                 </div>
                 <div class="col-sm-2 cais-footer-text">
                     <p>
-                        Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект: <br />
-                        „Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“, <br />
-                        финансиран по Оперативна програма „Добро управление“, чрез ЕСФ. <br />
+                        <div>@CommonResources.titleContractInfoExtPart1</div>
+                        <div>@CommonResources.titleContractInfoExtPart2</div>
+                        <div>@CommonResources.titleContractInfoExtPart3</div>
                     </p>
                 </div>
 

@@ -1,5 +1,4 @@
-﻿using MJ_CAIS.DTO.Application;
-using MJ_CAIS.DTO.Application.Public;
+﻿using MJ_CAIS.DTO.Application.Public;
 
 namespace MJ_CAIS.WebPortal.Public.Models.Application
 {

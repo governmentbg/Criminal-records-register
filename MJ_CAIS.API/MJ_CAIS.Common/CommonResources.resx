@@ -126,14 +126,26 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Отказ</value>
   </data>
+  <data name="btnEdit" xml:space="preserve">
+    <value>Редакция</value>
+  </data>
   <data name="btnPreview" xml:space="preserve">
     <value>Преглед</value>
+  </data>
+  <data name="btnSave" xml:space="preserve">
+    <value>Запис</value>
   </data>
   <data name="lblGreetingUser" xml:space="preserve">
     <value>Здравейте,</value>
   </data>
   <data name="lblLogout" xml:space="preserve">
     <value>Изход</value>
+  </data>
+  <data name="lblNo" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="lblYes" xml:space="preserve">
+    <value>Да</value>
   </data>
   <data name="MsgContactYourAdministrator" xml:space="preserve">
     <value>Моля, свържете се с администратор.</value>
@@ -182,5 +194,29 @@
   </data>
   <data name="MsgUserLockout" xml:space="preserve">
     <value>Потребителят е заключен</value>
+  </data>
+  <data name="titleContractInfoExtPart1" xml:space="preserve">
+    <value>Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект:</value>
+  </data>
+  <data name="titleContractInfoExtPart2" xml:space="preserve">
+    <value>„Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“,</value>
+  </data>
+  <data name="titleContractInfoExtPart3" xml:space="preserve">
+    <value>финансиран по Оперативна програма „Добро управление“, чрез ЕСФ.</value>
+  </data>
+  <data name="titleEAppInfo" xml:space="preserve">
+    <value>Информация за услуга "Издаване на електронно свидетелство за съдимост"</value>
+  </data>
+  <data name="titleExternalPortal" xml:space="preserve">
+    <value>Портал за служебен достъп</value>
+  </data>
+  <data name="titleGeneralTerms" xml:space="preserve">
+    <value>Общи условия</value>
+  </data>
+  <data name="titleMinistryOfJustice" xml:space="preserve">
+    <value>Министерство на правосъдието</value>
+  </data>
+  <data name="titleRepublicOfBulgaria" xml:space="preserve">
+    <value>Република България</value>
   </data>
 </root>

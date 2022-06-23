@@ -46,6 +46,7 @@ namespace MJ_CAIS.Services
             aStatusH.ReportOrder = certificate.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
             aStatusH.Id = BaseEntity.GenerateNewId();
             aStatusH.CertificateId = certificate.Id;
+            aStatusH.ApplicationId = certificate.ApplicationId;
 
             certificate.AStatusHes.Add(aStatusH);
             dbContext.AStatusHes.Add(aStatusH);

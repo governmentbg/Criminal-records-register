@@ -24,7 +24,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly RequestUtils _requestUtils;
         private readonly ICertificateService _certificateService;
 
-
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
                                      INomenclatureDetailService nomenclatureDetailService,
@@ -76,7 +75,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         [HttpGet]
         public async Task<ActionResult> Preview(string id)
         {
-            var app = await _applicationWebService.GetForPreviewAsync(id);
+            var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
             viewModel.HasGeneratedCertificate = app.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady ||
                  app.StatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint;

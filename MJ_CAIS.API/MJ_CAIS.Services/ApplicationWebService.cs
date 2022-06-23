@@ -30,6 +30,8 @@ namespace MJ_CAIS.Services
             _userContext = userContext;
         }
 
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
         public string GetWebApplicationTypeId()
         {
             // TODO: use code, and filter by code!
@@ -60,7 +62,7 @@ namespace MJ_CAIS.Services
             entity.UserExtId = dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity);
+            await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
@@ -117,6 +119,14 @@ namespace MJ_CAIS.Services
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
 
+                join purposes in dbContext.APurposes.AsNoTracking()
+                on app.PurposeId equals purposes.Id into purposesLeft
+                from purposes in purposesLeft.DefaultIfEmpty()
+
+                join application in dbContext.AApplications.AsNoTracking()
+              on app.WApplicationId equals application.Id into applicationLeft
+                from application in applicationLeft.DefaultIfEmpty()
+
                 where app.UserExtId == userId
                 select new ExternalApplicationGridDTO
                 {
@@ -124,16 +134,19 @@ namespace MJ_CAIS.Services
                     RegistrationNumber = app.RegistrationNumber,
                     ApplicantName = app.ApplicantName,
                     Purpose = app.Purpose,
+                    PurposeName = purposes.Name,
                     PurposeId = app.PurposeId,
                     StatusCode = app.StatusCode,
                     StatusName = status.Name,
                     CreatedOn = app.CreatedOn,
+                    Egn = app.Egn,
+                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname
                 };
 
             return result;
         }
 
-        public async Task<ApplicationPreviewDTO> GetForPreviewAsync(string id)
+        public async Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id)
         {
             var result = await (from app in dbContext.WApplications.AsNoTracking()
 
@@ -148,7 +161,7 @@ namespace MJ_CAIS.Services
                                     on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
                                 from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
 
-                                select new ApplicationPreviewDTO
+                                select new DTO.Application.Public.ApplicationPreviewDTO
                                 {
                                     Id = app.Id,
                                     CreatedOn = app.CreatedOn,
@@ -166,9 +179,35 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
+        public async Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id)
         {
-            return false;
+            var result = await (from app in dbContext.WApplications.AsNoTracking()
+
+                                join status in dbContext.WApplicationStatuses.AsNoTracking()
+                                    on app.StatusCode equals status.Code
+
+                                join purposes in dbContext.APurposes.AsNoTracking()
+                                    on app.PurposeId equals purposes.Id into purposesLeft
+                                from purposes in purposesLeft.DefaultIfEmpty()
+
+                                join application in dbContext.AApplications.AsNoTracking()
+                                    on app.WApplicationId equals application.Id into applicationLeft
+                                from application in applicationLeft.DefaultIfEmpty()
+                                select new DTO.Application.External.ApplicationPreviewDTO
+                                {
+                                    Id = app.Id,
+                                    CreatedOn = app.CreatedOn,
+                                    Egn = app.Egn,
+                                    Email = app.Email,
+                                    PurposeName = purposes.Name,
+                                    Purpose = app.Purpose,
+                                    RegistrationNumber = app.RegistrationNumber,
+                                    Status = status.Name,
+                                    StatusCode = status.Code,
+                                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname
+                                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
         }
 
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
@@ -196,6 +235,22 @@ namespace MJ_CAIS.Services
                 dbContext.WStatusHes.Add(wStatusH);
                 dbContext.WApplications.Update(wapplication);
             }
+        }
+
+        public async Task ConfirmPaymentAsync(string aId)
+        {
+            var entity = await _applicationWebRepository.SelectAsync(aId);            
+            var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.WebApprovedApplication);
+            if (statusNew == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.WebApprovedApplication));
+
+            entity.StatusCode = statusNew.Code;
+            entity.EntityState = Common.Enums.EntityStateEnum.Modified;
+            entity.ModifiedProperties = new List<string> { nameof(entity.StatusCode), nameof(entity.Version) };
+
+            SetWApplicationStatus(entity, statusNew, ApplicationResources.titleConfirmedPayment, false);
+
+            await dbContext.SaveEntityAsync(entity, true);
         }
     }
 }

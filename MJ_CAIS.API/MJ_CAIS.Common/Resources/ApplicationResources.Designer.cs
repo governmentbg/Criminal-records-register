@@ -133,6 +133,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Имена.
+        /// </summary>
+        public static string lblName {
+            get {
+                return ResourceManager.GetString("lblName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Начин на плащане.
         /// </summary>
         public static string lblPaymentMethodId {
@@ -237,6 +246,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string titleAppPreview {
             get {
                 return ResourceManager.GetString("titleAppPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Потвърдено плащане.
+        /// </summary>
+        public static string titleConfirmedPayment {
+            get {
+                return ResourceManager.GetString("titleConfirmedPayment", resourceCulture);
             }
         }
         
