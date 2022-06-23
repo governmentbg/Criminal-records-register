@@ -203,10 +203,10 @@ export class PagesMenu {
             title: "Потвърждение за плащане",
             link: "/pages/e-applicaiton/check-payment",
           },
-          // {
-          //   title: "Oсвободени от плащане",
-          //   link: "/pages/e-applicaiton/tax-free",
-          // },
+          {
+            title: "Oсвободени от плащане",
+            link: "/pages/e-applicaiton/check-tax-free",
+          },
         ],
       },   
     ];
