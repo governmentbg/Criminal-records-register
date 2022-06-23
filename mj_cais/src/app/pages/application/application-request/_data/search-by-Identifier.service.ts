@@ -14,10 +14,10 @@ export class SearchByIdentifierService {
   }
 
   public searchByIdentifier(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url}/applications/searchByIdentifier/${id}`);
+    return this.http.get<any[]>(`${this.url}/searchByIdentifier/${id}`);
   }
 
   public searchByIdentifierLNCH(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url}/applications/searchByIdentifierLNCH/${id}`);
+    return this.http.get<any[]>(`${this.url}/searchByIdentifierLNCH/${id}`);
   }
 }
