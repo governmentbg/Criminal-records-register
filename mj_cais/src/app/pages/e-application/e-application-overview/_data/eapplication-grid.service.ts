@@ -1,4 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
+import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { EApplicationGridModel } from "../_models/e-application-grid.model";
 
@@ -22,4 +23,11 @@ export class EApplicationGridService extends CaisCrudService<
       this.updateUrl(`${currentEndpoint}`);
     }
   }
+
+  public confirmPayment(aId: string): Observable<any> {
+    return this.http.put(
+      this.baseUrl + `/api/e-applications/${aId}/confirm-payment`,
+      {}
+    );
+  } 
 }

@@ -20,7 +20,7 @@ import { CustomToastrService } from "../services/common/custom-toastr.service";
 
 @Directive()
 export class RemoteGridWithStatePersistance<
-  T extends { id: any, createdOn: Date },
+  T extends { id: any; createdOn: Date },
   CS extends CrudService<T, any>
 > extends RemoteComponentWithForm<T, CS> {
   @ViewChild(IgxGridStateDirective, { static: true })
@@ -165,8 +165,11 @@ export class RemoteGridWithStatePersistance<
     toastr.showBodyToast("danger", title, errorText);
   };
 
-  protected deleteRowHandler = (pk) => {
-    this.toastr.showToast("success", this.deletedSuccessfullyMessage);
+  protected deleteRowHandler = (pk, message?: string) => {
+    this.toastr.showToast(
+      "success",
+      message || this.deletedSuccessfullyMessage
+    );
     this.grid.deleteRow(pk);
     this.grid.data = this.grid.data.filter((d) => d.id != pk);
   };

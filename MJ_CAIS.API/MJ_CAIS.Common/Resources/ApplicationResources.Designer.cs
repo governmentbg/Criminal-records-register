@@ -250,6 +250,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Потвърдено плащане.
+        /// </summary>
+        public static string titleConfirmedPayment {
+            get {
+                return ResourceManager.GetString("titleConfirmedPayment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Свали свидетелство.
         /// </summary>
         public static string titleDownloadCertificate {

@@ -30,6 +30,8 @@ namespace MJ_CAIS.Services
             _userContext = userContext;
         }
 
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
         public string GetWebApplicationTypeId()
         {
             // TODO: use code, and filter by code!
@@ -208,11 +210,6 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
-        }
-
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
@@ -238,6 +235,22 @@ namespace MJ_CAIS.Services
                 dbContext.WStatusHes.Add(wStatusH);
                 dbContext.WApplications.Update(wapplication);
             }
+        }
+
+        public async Task ConfirmPaymentAsync(string aId)
+        {
+            var entity = await _applicationWebRepository.SelectAsync(aId);            
+            var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.WebApprovedApplication);
+            if (statusNew == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.WebApprovedApplication));
+
+            entity.StatusCode = statusNew.Code;
+            entity.EntityState = Common.Enums.EntityStateEnum.Modified;
+            entity.ModifiedProperties = new List<string> { nameof(entity.StatusCode), nameof(entity.Version) };
+
+            SetWApplicationStatus(entity, statusNew, ApplicationResources.titleConfirmedPayment, false);
+
+            await dbContext.SaveEntityAsync(entity, true);
         }
     }
 }

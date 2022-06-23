@@ -1,6 +1,8 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
+import { ConfirmDialogComponent } from "../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { ConfirmTemplateDialogComponent } from "../../../../@core/components/dialogs/confirm-template-dialog/confirm-template-dialog.component";
+import { CommonConstants } from "../../../../@core/constants/common.constants";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { EApplicationGridService } from "../_data/eapplication-grid.service";
@@ -32,8 +34,6 @@ export class EApplicationCheckPaymentOverviewComponent extends RemoteGridWithSta
 
   public confirmPayment(id: any): void {
     let rowId = id;
-    debugger;
-    //TODO:
     this.dialogService
       .open(ConfirmTemplateDialogComponent, {
         context: {
@@ -42,9 +42,13 @@ export class EApplicationCheckPaymentOverviewComponent extends RemoteGridWithSta
         closeOnBackdropClick: false,
       })
       .onClose.subscribe((result) => {
-        if (result == true) {
-          debugger;
-          rowId;
+        if (result) {
+          this.service.confirmPayment(rowId).subscribe(
+            (res) => {
+              this.deleteRowHandler(rowId,"Успешно потвърдено плащане");
+            },
+            (error) => this.errorHandler(error)
+          );
         }
       });
   }

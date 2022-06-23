@@ -14,10 +14,12 @@ namespace MJ_CAIS.Web.Controllers
     public class WApplicationsController : BaseApiCrudController<WApplicaitonDTO, WApplicaitonDTO, WApplicaitonGridDTO, WApplication, string>
     {
         private readonly IWApplicaitonService _wApplicaitonService;
-
-        public WApplicationsController(IWApplicaitonService wApplicaitonService) : base(wApplicaitonService)
+        private readonly IApplicationWebService _applicationWebService;
+        public WApplicationsController(IWApplicaitonService wApplicaitonService,
+            IApplicationWebService applicationWebService) : base(wApplicaitonService)
         {
             _wApplicaitonService = wApplicaitonService;
+            _applicationWebService = applicationWebService;
         }
 
         [HttpGet("")]
@@ -25,6 +27,14 @@ namespace MJ_CAIS.Web.Controllers
         {
             var result = await this._wApplicaitonService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
+        }
+
+        [HttpPut("{aId}/confirm-payment")]
+        public async Task<IActionResult> ConfirmPayment(string aId)
+        {
+            // todo: 
+            //await this._applicationWebService.ConfirmPaymentAsync(aId);
+            return Ok();
         }
     }
 }
