@@ -64,7 +64,7 @@ namespace MJ_CAIS.Common.Constants
         }
         public static class PaymentMethodsCodes
         {
-            public const string Free = "Free";
+            public const string Free = "FreeFromTax";
         }
 
         public static class ReceivingMethods
