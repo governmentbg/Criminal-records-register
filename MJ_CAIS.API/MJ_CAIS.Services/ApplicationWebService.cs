@@ -64,6 +64,16 @@ namespace MJ_CAIS.Services
             return entity.Id;
         }
 
+        public Task<decimal?> GetPriceByApplicationType(string applicationTypeID)
+        {
+            return _applicationWebRepository
+                .GetDbContext()
+                .AApplicationTypes
+                .Where(at => at.Id == applicationTypeID)
+                .Select(at => at.Price)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
@@ -97,7 +107,7 @@ namespace MJ_CAIS.Services
         public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
         {
             var result =
-                from app in dbContext.WApplications.AsNoTracking()
+                (from app in dbContext.WApplications.AsNoTracking()
 
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
@@ -118,7 +128,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = app.CreatedOn,
                     Email = app.Email,
                     Version = app.Version,
-                };
+                }).OrderByDescending(x => x.CreatedOn);
 
             return result;
         }
@@ -126,7 +136,7 @@ namespace MJ_CAIS.Services
         public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
         {
             var result =
-                from app in dbContext.WApplications.AsNoTracking()
+                (from app in dbContext.WApplications.AsNoTracking()
 
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
@@ -153,7 +163,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = app.CreatedOn,
                     Egn = app.Egn,
                     Name = application.Firstname + " " + application.Surname + " " + application.Familyname
-                };
+                }).OrderByDescending(x=>x.CreatedOn);
 
             return result;
         }
