@@ -27,7 +27,6 @@ namespace MJ_CAIS.Repositories.Impl
             return _dbContext.WApplications
                 .Include(x => x.StatusCodeNavigation)
                 .Include(x => x.ApplicationType)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

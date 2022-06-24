@@ -9,6 +9,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DTO.Application.External;
+using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.External.Models.Application;
 
@@ -21,16 +22,19 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         private readonly IApplicationWebService _applicationWebService;
         private readonly INomenclatureDetailService _nomenclatureDetailService;
         private readonly ICertificateService _certificateService;
+        private readonly IRegixService _regixService;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
                                      INomenclatureDetailService nomenclatureDetailService,
-                                     ICertificateService certificateService)
+                                     ICertificateService certificateService,
+                                     IRegixService regixService)
         {
             _mapper = mapper;
             _applicationWebService = applicationWebService;
             _nomenclatureDetailService = nomenclatureDetailService;
             _certificateService = certificateService;
+            _regixService = regixService;
         }
 
         [HttpGet]
@@ -59,7 +63,8 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             }
 
             var itemToUpdate = _mapper.Map<ExternalApplicationDTO>(viewModel);
-            await _applicationWebService.InsertExternalAsync(itemToUpdate);
+            var id = await _applicationWebService.InsertExternalAsync(itemToUpdate);
+            var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
 
             return RedirectToAction(nameof(Index));
         }

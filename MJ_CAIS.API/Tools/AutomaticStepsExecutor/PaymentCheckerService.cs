@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MJ_CAIS.Common.Enums;
 
 namespace AutomaticStepsExecutor
 {
@@ -20,7 +21,8 @@ namespace AutomaticStepsExecutor
         private readonly IApplicationService _applicationService;
         private readonly IApplicationWebService _applicationWebService;
         private readonly IPersonService _personService;
-        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personService)
+        private readonly IWApplicationService _wApplicationService;
+        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personService, IWApplicationService wApplicationService)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -28,6 +30,7 @@ namespace AutomaticStepsExecutor
             _applicationService = applicationService;
             _applicationWebService = applicationWebService;
             _personService = personService;
+            _wApplicationService = wApplicationService;
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -105,8 +108,22 @@ namespace AutomaticStepsExecutor
                         bool isPaid = CheckPayment(wapplication);
                         if (isPaid)
                         {
-                           await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
+                            //await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
                             //todo: must add some FK for payment?!
+                            var person = await _wApplicationService.ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
+                            //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
+                            await _dbContext.SaveChangesAsync();
+                            if (person != null && person.EntityState != EntityStateEnum.Detached)
+                            {
+                                _dbContext.Entry(person).State = EntityState.Detached;
+                                foreach (var pIds in person.PPersonIds)
+                                {
+                                    if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
+                                    {
+                                        _dbContext.Entry(pIds).State = EntityState.Detached;
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -115,12 +132,13 @@ namespace AutomaticStepsExecutor
                                 _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
                                 //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
                                 _dbContext.WApplications.Update(wapplication);
+                                await _dbContext.SaveChangesAsync();
 
                             }
                           
                         }
                      
-                        await _dbContext.SaveChangesAsync();
+                      
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)

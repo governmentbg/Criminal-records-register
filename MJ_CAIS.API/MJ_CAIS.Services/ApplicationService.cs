@@ -354,6 +354,7 @@ namespace MJ_CAIS.Services
             application.StatusCode = newStatus.Code;
             application.StatusCodeNavigation = newStatus;
             var aStatusH = new AStatusH();
+            aStatusH.EntityState = EntityStateEnum.Added;
             aStatusH.Descr = description;
             aStatusH.StatusCode = newStatus.Code;
             aStatusH.StatusCodeNavigation = newStatus;
@@ -401,6 +402,7 @@ namespace MJ_CAIS.Services
 
         private async Task UpdatePersonDataAsync(ApplicationInDTO aInDto, AApplication entity)
         {
+            // тодо: да се прегледат дали се сетват правилно идентификраторите
             var person = await _personService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {

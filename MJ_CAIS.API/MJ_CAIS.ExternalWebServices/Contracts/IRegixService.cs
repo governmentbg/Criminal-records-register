@@ -12,7 +12,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string? bulletinId = null,
             string? applicationId = null,
             string? wApplicationId = null,
-            string? ecrisMsgId = null);
+            string? ecrisMsgId = null,
+            bool isAsync = false);
 
         (ForeignIdentityInfoResponseType, EWebRequest) SyncCallPersonDataSearchByLNCH(string egn,
             string? bulletinId = null,

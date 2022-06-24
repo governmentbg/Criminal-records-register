@@ -41,17 +41,22 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string? bulletinId = null,
             string? applicationId = null,
             string? wApplicationId = null,
-            string? ecrisMsgId = null)
+            string? ecrisMsgId = null,
+            bool isAsync = false)
         {
-            var isAsync = false;
             var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
 
             var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
             _dbContext.SaveEntity(webRequestEntity);
-            var response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
+
+            PersonDataResponseType response = null;
+            if (!isAsync)
+            {
+                response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
+            }
             return (response, webRequestEntity);
         }
-
+     
         public (ForeignIdentityInfoResponseType, EWebRequest) SyncCallPersonDataSearchByLNCH(string egn,
             string? bulletinId = null,
             string? applicationId = null,

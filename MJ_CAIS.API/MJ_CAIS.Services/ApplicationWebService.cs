@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
@@ -34,10 +35,17 @@ namespace MJ_CAIS.Services
 
         public string GetWebApplicationTypeId()
         {
-            // TODO: use code, and filter by code!
-            const string name = "Заявление за електронно свидетелство за съдимост";
+            
             var result = dbContext.AApplicationTypes.AsNoTracking()
-                .FirstOrDefault(x => x.Name == name);
+                .FirstOrDefault(x => x.Code == ApplicationConstants.ApplicationTypes.WebCertificate);
+
+            return result.Id;
+        }
+        public string GetExternalWebApplicationTypeId()
+        {
+           
+            var result = dbContext.AApplicationTypes.AsNoTracking()
+                .FirstOrDefault(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
 
             return result.Id;
         }
@@ -46,31 +54,45 @@ namespace MJ_CAIS.Services
         {
             var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
             this.TransformDataOnInsert(entity);
+            entity.ApplicationTypeId = GetWebApplicationTypeId();
 
             entity.UserCitizenId = dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity, true);
+           dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+           // await this.SaveEntityAsync(entity, true);
             return entity.Id;
+        }
+
+        public Task<decimal?> GetPriceByApplicationType(string applicationTypeID)
+        {
+            return _applicationWebRepository
+                .GetDbContext()
+                .AApplicationTypes
+                .Where(at => at.Id == applicationTypeID)
+                .Select(at => at.Price)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
             this.TransformDataOnInsert(entity);
+            entity.ApplicationTypeId = GetExternalWebApplicationTypeId();
 
             entity.UserExtId = dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity, true);
+            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+            //await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
         protected override void TransformDataOnInsert(WApplication entity)
         {
             base.TransformDataOnInsert(entity);
-
-            entity.ApplicationTypeId = GetWebApplicationTypeId();
+          
+           // entity.ApplicationTypeId = GetWebApplicationTypeId(); //GetExternalWebApplicationTypeId();
             var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
             if (statusNew == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.NewWebApplication));

@@ -14,12 +14,10 @@ namespace MJ_CAIS.Web.Controllers
     public class WApplicationsController : BaseApiCrudController<WApplicaitonDTO, WApplicaitonDTO, WApplicaitonGridDTO, WApplication, string>
     {
         private readonly IWApplicationService _wApplicaitonService;
-        private readonly IApplicationWebService _applicationWebService;
-        public WApplicationsController(IWApplicationService wApplicaitonService,
-            IApplicationWebService applicationWebService) : base(wApplicaitonService)
+        public WApplicationsController(IWApplicationService wApplicaitonService) 
+            : base(wApplicaitonService)
         {
             _wApplicaitonService = wApplicaitonService;
-            _applicationWebService = applicationWebService;
         }
 
         [HttpGet("")]
@@ -36,7 +34,7 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
-        [HttpPut("{aId}/process-tax-free{approve}")]
+        [HttpPut("{aId}/process-tax-free/{approve}")]
         public async Task<IActionResult> ProcessTaxFree(string aId, bool approve)
         {
             await this._wApplicaitonService.ProcessTaxFreeAsync(aId, approve);

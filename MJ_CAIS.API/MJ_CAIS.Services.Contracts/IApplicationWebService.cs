@@ -7,6 +7,7 @@ namespace MJ_CAIS.Services.Contracts
     public interface IApplicationWebService : IBaseAsyncService<PublicApplicationDTO, PublicApplicationDTO, PublicApplicationGridDTO, WApplication, string>
     {
         string GetWebApplicationTypeId();
+        string GetExternalWebApplicationTypeId();
 
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
         Task<string> InsertPublicAsync(PublicApplicationDTO aInDto);
@@ -19,5 +20,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id);
 
         Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id);
+
+        Task<decimal?> GetPriceByApplicationType(string applicationTypeID);
     }
 }
