@@ -24,7 +24,7 @@ namespace AutomaticStepsExecutor
         {
             _dbContext = dbContext;
             _logger = logger;
-            _certificateGenerationService = _certificateGenerationService;
+            _certificateGenerationService = certificateGenerationService;
             _certificateService = certificateService;
         }
 
