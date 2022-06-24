@@ -43,7 +43,7 @@ namespace MJ_CAIS.Repositories.Impl
             var content = await (from wApp in _dbContext.WApplications.AsNoTracking()
 
                                  join app in _dbContext.AApplications.AsNoTracking()
-                                 on wApp.WApplicationId equals app.Id
+                                 on wApp.Id equals app.WApplicationId
                                  into appLeft
                                  from app in appLeft.DefaultIfEmpty()
 

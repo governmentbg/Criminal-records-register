@@ -40,7 +40,7 @@
             <div class="form-group mt-2 mt-2 ms-3">
                 <label asp-for="Egn" class="control-label fw-bold"></label>: @Model.Egn
             </div>
-             <div class="form-group mt-2 mt-2 ms-3">
+            <div class="form-group mt-2 mt-2 ms-3">
                 <label asp-for="Name" class="control-label fw-bold"></label>: @Model.Name
             </div>
             <div class="form-group mt-2 ms-3">
@@ -54,15 +54,16 @@
             </div>
             <div class="form-group mt-2">
                 <label asp-for="Status" class="control-label fw-bold"></label>: @Model.Status
-                @if (Model.HasGeneratedCertificate)
-                {
-                    var downloadFileUrl = Url.Action(nameof(ApplicationController.DownloadCertificate)) + $"/{Model.Id}";
+                <div class="row col-md-6">
+                    @if (Model.HasGeneratedCertificate)
+                    {
+                        var downloadFileUrl = Url.Action(nameof(ApplicationController.DownloadCertificate)) + $"/{Model.Id}";
 
-                    <a href="@downloadFileUrl" title="@ApplicationResources.titleDownloadCertificate" class="btn btn-primary mt-3">
-                        <i class="fa fa-download"></i>@ApplicationResources.titleDownloadCertificate
-                    </a>
-                }
-
+                        <a href="@downloadFileUrl" title="@ApplicationResources.titleDownloadCertificate" class="btn btn-primary ms-3 mt-3">
+                            <i class="fa fa-download"></i>@ApplicationResources.titleDownloadCertificate
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </div>
