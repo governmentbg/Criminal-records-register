@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MJ_CAIS.Common.Enums;
 
 namespace AutomaticStepsExecutor
 {
@@ -21,12 +22,14 @@ namespace AutomaticStepsExecutor
         private readonly IApplicationService _applicationService;
         private readonly IApplicationWebService _applicationWebService;
         private readonly IPersonService _personSevice;
+        private readonly IWApplicationService _wApplicationService;
         public const string Pending = "Pending";
         public const string Accepted = "Accepted";
         public const string Rejected = "Rejected";
 
 
-        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personSevice)
+        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService,
+            IPersonService personSevice, IWApplicationService wApplicationService)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -34,6 +37,7 @@ namespace AutomaticStepsExecutor
             _applicationService = applicationService;
             _applicationWebService = applicationWebService;
             _personSevice = personSevice;
+            _wApplicationService = wApplicationService;
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -48,7 +52,7 @@ namespace AutomaticStepsExecutor
                             .Include(a => a.EWebRequests)
                             .Include(a => a.WStatusHes)
                       //todo: дали е този статус?! 
-                      .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebRegistersChecks)
+                      .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.NewWebApplication)
                         .OrderBy(a => a.CreatedOn)
                         .Take(pageSize)
                       .ToList<IBaseIdEntity>());
@@ -144,8 +148,25 @@ namespace AutomaticStepsExecutor
                         //ако е служебно заявление,влиза в цаис за обработка
                         if (wapplication.ApplicationTypeId == internalApplicationType.Id)
                         {
-                            await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
+                           var person =  await _wApplicationService.ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
+                            //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
                             await _dbContext.SaveChangesAsync();
+                            if (person != null && person.EntityState != EntityStateEnum.Detached)
+                            {
+                                _dbContext.Entry(person).State = EntityState.Detached;
+                                foreach (var pIds in person.PPersonIds)
+                                {
+                                    if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
+                                    {
+                                        _dbContext.Entry(pIds).State = EntityState.Detached;
+                                    }
+                                }
+                            }
+                            //foreach (var entry in _dbContext.ChangeTracker.Entries<AStatusH>())
+                            //{
+                            //    entry.Entity.EntityState = EntityStateEnum.Detached;
+                            //}
+
                             numberOfSuccessEntities++;
                             continue;
                         }
@@ -162,23 +183,27 @@ namespace AutomaticStepsExecutor
                         //дефолтно - очаква плащане
                         //todo: дали да не се прави и проверката за плащане тук и ако има плащане да преминава към следваща стъпка
                         _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckPayment, " За проверка за плащане");
-                        APayment payment = new APayment();
-                        payment.Id = BaseEntity.GenerateNewId();
-                        payment.WApplicationId = wapplication.Id;
+                        var numberOfPayments = await _dbContext.EPayments.Where(p => p.APayments.Any(ap => ap.WApplicationId == wapplication.Id)).CountAsync();
+                        if (numberOfPayments == 0)
+                        {
+                            APayment payment = new APayment();
+                            payment.Id = BaseEntity.GenerateNewId();
+                            payment.WApplicationId = wapplication.Id;
 
-                        EPayment ePayment = new EPayment();
-                        ePayment.Id = BaseEntity.GenerateNewId();
+                            EPayment ePayment = new EPayment();
+                            ePayment.Id = BaseEntity.GenerateNewId();
 
-                        ePayment.Amount = wapplication.ApplicationType.Price;
-                        ePayment.PaymentStatus = PaymentConstants.PaymentStatuses.Pending;
-                        ePayment.MerchantId = config.GetValue<string>("AutomaticStepsExecutor:MerchantId"); ;
-                        ePayment.InvoiceNumber = wapplication.RegistrationNumber;
-                        payment.EPaymentId = ePayment.Id;
-                        payment.EPayment = ePayment;
-                        wapplication.APayments.Add(payment);
+                            ePayment.Amount = wapplication.ApplicationType.Price;
+                            ePayment.PaymentStatus = PaymentConstants.PaymentStatuses.Pending;
+                            ePayment.MerchantId = config.GetValue<string>("AutomaticStepsExecutor:MerchantId");
+                            ePayment.InvoiceNumber = wapplication.RegistrationNumber;
+                            payment.EPaymentId = ePayment.Id;
+                            payment.EPayment = ePayment;
+                            wapplication.APayments.Add(payment);
 
-                        _dbContext.EPayments.Add(ePayment);
-                        _dbContext.APayments.Add(payment);
+                            _dbContext.EPayments.Add(ePayment);
+                            _dbContext.APayments.Add(payment);
+                        }
                         _dbContext.WApplications.Update(wapplication);
                         await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
@@ -199,7 +224,7 @@ namespace AutomaticStepsExecutor
 
         private string SuccessfullCheckInRegisters(WApplication wapplication, int maxNumberOfAttempts)
         {
-
+            if (wapplication.EWebRequests.Count == 0) return Rejected;
             if (wapplication.EWebRequests.Any(rq => (rq.Status == Pending || rq.Status == Rejected) && rq.Attempts < maxNumberOfAttempts))
                 return Pending;
             if (wapplication.EWebRequests.Any(rq => rq.Status == Rejected && rq.Attempts == maxNumberOfAttempts))

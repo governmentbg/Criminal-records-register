@@ -120,7 +120,7 @@ namespace MJ_CAIS.Services
             await dbContext.SaveChangesAsync();      
         }
 
-        public async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus)
+        public async Task<PPerson> ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus)
         {
             //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
             _webApplicationService.SetWApplicationStatus(wapplication, wapplicationStatus, ApplicationResources.descAprovedApp);
@@ -245,9 +245,29 @@ namespace MJ_CAIS.Services
             //                         PersonId = x.Id
             //                     }).ToListAsync();
 
+            //TODO: при неколкократно извикване на метода за един и същ човек
+            //се променя статуса на Added за всички траквани обекти.
+            //причината е различния начин на ползване на дб контекста
+            //в personService на ред 349 dbContext.ApplyChanges(personToUpdate, new List<IBaseIdEntity>(), true); 
+            //предизвиква проблема
+            //не зная защо само това ентити, а не и aapplication...?!
+            foreach (var entity in dbContext.ChangeTracker.Entries<AStatusH>())
+            {
+                if (entity.Entity.ApplicationId != appl.Id)
+                {
+                    if (entity.Entity != null && entity.Entity.EntityState != EntityStateEnum.Detached)
+                    {
+                        dbContext.Entry(entity.Entity).State = EntityState.Detached;
+                    }
+                }
+            }
+            
             dbContext.AApplications.Add(appl);
+            //dbContext.AStatusHes.AddRange(appl.AStatusHes);
             // dbContext.PAppIds.AddRange(appl.PAppIds);
             dbContext.WApplications.Update(wapplication);
+
+            return person;
         }
     }
 }

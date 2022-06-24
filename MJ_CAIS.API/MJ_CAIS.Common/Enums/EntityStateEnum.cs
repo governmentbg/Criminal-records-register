@@ -5,6 +5,7 @@
         Added,
         Modified,
         Deleted,
-        Unchanged
+        Unchanged,
+        Detached
     }
 }
