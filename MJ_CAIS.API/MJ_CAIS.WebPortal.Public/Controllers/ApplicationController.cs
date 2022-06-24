@@ -9,6 +9,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DTO.Application.Public;
+using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 using MJ_CAIS.WebSetup.Utils;
@@ -23,18 +24,21 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly INomenclatureDetailService _nomenclatureDetailService;
         private readonly RequestUtils _requestUtils;
         private readonly ICertificateService _certificateService;
+        private readonly IRegixService _regixService;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
                                      INomenclatureDetailService nomenclatureDetailService,
                                      RequestUtils requestUtils,
-                                     ICertificateService certificateService)
+                                     ICertificateService certificateService,
+                                     IRegixService regixService)
         {
             _mapper = mapper;
             _applicationWebService = applicationWebService;
             _nomenclatureDetailService = nomenclatureDetailService;
             _requestUtils = requestUtils;
             _certificateService = certificateService;
+            _regixService = regixService;
         }
 
         [HttpGet]
@@ -67,8 +71,9 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.ClientIp = _requestUtils.GetClientIpAddress(HttpContext);
 
             var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
-            await _applicationWebService.InsertPublicAsync(itemToUpdate);
+            var id =  await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
+            var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
             return RedirectToAction(nameof(Index));
         }
 
@@ -78,7 +83,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
             viewModel.HasGeneratedCertificate = app.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady ||
-                 app.StatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint;
+            app.StatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint;
 
             return View(viewModel);
         }

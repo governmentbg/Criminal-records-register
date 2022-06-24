@@ -50,7 +50,8 @@ namespace MJ_CAIS.Services
             entity.UserCitizenId = dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity, true);
+           dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+           // await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
@@ -62,7 +63,8 @@ namespace MJ_CAIS.Services
             entity.UserExtId = dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
-            await this.SaveEntityAsync(entity, true);
+            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+            //await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 

@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Resources;
@@ -83,36 +84,40 @@ namespace MJ_CAIS.Services
 
         public async Task ProcessTaxFreeAsync(string aId, bool approved)
         {
+            // tracked entities
             var wApp = await _wApplicationRepository.SelectAsync(aId);
 
             if (approved)
             {
                 var statusWebApprovedApplication = await dbContext.WApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.WebApprovedApplication);
                 var statusApprovedApplication = await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.ApprovedApplication);
-                await ProcessWebApplicationToApplicationAsync(wApp, statusWebApprovedApplication, statusApprovedApplication);
+                await ProcessWebApplicationToApplicationAsync(wApp, statusWebApprovedApplication, statusApprovedApplication);              
+                await dbContext.SaveChangesAsync();
                 return;
             }
 
             wApp.StatusCode = ApplicationStatuses.WebCheckPayment;
-            wApp.EntityState = EntityStateEnum.Modified;
-            wApp.ModifiedProperties = new List<string> { nameof(wApp.StatusCode), nameof(wApp.Version) };
+            dbContext.WApplications.Update(wApp);
 
-            var ePaymentId = BaseEntity.GenerateNewId();
-            wApp.APayments = new List<APayment>{ new APayment()
+            var ePayment = new EPayment()
+            {
+                Id = BaseEntity.GenerateNewId(),
+                Amount = wApp.ApplicationType.Price,
+                PaymentStatus = PaymentConstants.PaymentStatuses.Pending,
+                InvoiceNumber = wApp.RegistrationNumber
+            };
+
+            var aPayment = new APayment()
             {
                 Id = BaseEntity.GenerateNewId(),
                 WApplicationId = aId,
-                EPaymentId = ePaymentId,
-                EPayment = new EPayment()
-                {
-                    Id = ePaymentId,
-                    Amount = wApp.ApplicationType.Price,
-                    PaymentStatus = PaymentConstants.PaymentStatuses.Pending,
-                    InvoiceNumber = wApp.RegistrationNumber
-                }
-            } };
+                EPaymentId = ePayment.Id,
+                EPayment = ePayment
+            };
 
-            await dbContext.SaveEntityAsync(wApp, true);
+            dbContext.APayments.Add(aPayment);
+            dbContext.EPayments.Add(ePayment);
+            await dbContext.SaveChangesAsync();      
         }
 
         public async Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus)
@@ -129,6 +134,7 @@ namespace MJ_CAIS.Services
             {
                 regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebExternal(wapplication.CsAuthorityId);
             }
+
             AApplication appl = new AApplication()
             {
                 Id = BaseEntity.GenerateNewId(),
@@ -182,8 +188,7 @@ namespace MJ_CAIS.Services
                 WApplicationId = wapplication.Id,
                 RegistrationNumber = regNumber,
                 ApplicationType = wapplication.ApplicationType,
-                ApplicationTypeId = wapplication.ApplicationType.Id
-
+                ApplicationTypeId = wapplication.ApplicationTypeId,
             };
 
             _applicationService.SetApplicationStatus(appl, applicationStatus, ApplicationResources.descApplicationFromWeb);
@@ -213,8 +218,8 @@ namespace MJ_CAIS.Services
             // var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
             //                                             && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
 
-            appl.EgnId = person.PPersonIds.First(x => x.PidType.Code == PersonConstants.PidType.Egn).Id;
-            appl.EgnNavigation = person.PPersonIds.First(x => x.PidType.Code == PersonConstants.PidType.Egn);
+            appl.EgnId = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Id;
+            appl.EgnNavigation = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn);
 
             //foreach (var v in wapplication.AAppCitizenships)
             //{
@@ -239,7 +244,6 @@ namespace MJ_CAIS.Services
             //                         Id = BaseEntity.GenerateNewId(),
             //                         PersonId = x.Id
             //                     }).ToListAsync();
-
 
             dbContext.AApplications.Add(appl);
             // dbContext.PAppIds.AddRange(appl.PAppIds);
