@@ -12,5 +12,7 @@ namespace MJ_CAIS.Services.Contracts
         Task ConfirmPaymentAsync(string aId);
 
         Task ProcessTaxFreeAsync(string aId, bool approved);
+
+        Task ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus);
     }
 }
