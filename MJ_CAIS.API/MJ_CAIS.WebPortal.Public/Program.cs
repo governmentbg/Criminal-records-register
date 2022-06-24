@@ -4,10 +4,13 @@ using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using MJ_CAIS.WebPortal.Public.Services;
 using MJ_CAIS.WebPortal.Public.Utils.Mappings;
 using MJ_CAIS.WebSetup;
 using MJ_CAIS.WebSetup.Utils;
 using System.Security.Principal;
+using TL.EGovPayments;
+using TL.EGovPayments.Interfaces;
 
 namespace MJ_CAIS.WebPortal.Public
 {
@@ -18,6 +21,9 @@ namespace MJ_CAIS.WebPortal.Public
             var builder = WebSetupConfig.CustomConfigureBuilder(args);
             builder.Services.AddAutoMapper(typeof(ApplicationProfile).Assembly);
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IEGovPaymentService, EGovPaymentService>();
+            builder.Services.AddScoped<IEGovIntegrationService, EGovPaymentsService>();
 
             var configuration = builder.Configuration;
 

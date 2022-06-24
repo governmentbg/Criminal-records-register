@@ -64,6 +64,16 @@ namespace MJ_CAIS.Services
             return entity.Id;
         }
 
+        public Task<decimal?> GetPriceByApplicationType(string applicationTypeID)
+        {
+            return _applicationWebRepository
+                .GetDbContext()
+                .AApplicationTypes
+                .Where(at => at.Id == applicationTypeID)
+                .Select(at => at.Price)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
