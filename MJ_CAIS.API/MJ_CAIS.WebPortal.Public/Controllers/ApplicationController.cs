@@ -13,6 +13,12 @@ using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.Public.Models.Application;
 using MJ_CAIS.WebSetup.Utils;
+using Newtonsoft.Json;
+using TL.EGovPayments;
+using TL.EGovPayments.ControllerModels;
+using TL.EGovPayments.Interfaces;
+using TL.EGovPayments.JsonEnums;
+using TL.EGovPayments.JsonModels;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
 {
@@ -25,13 +31,18 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly RequestUtils _requestUtils;
         private readonly ICertificateService _certificateService;
         private readonly IRegixService _regixService;
+        private readonly IEGovPaymentService _egovPaymentService;
+        private readonly IEGovIntegrationService _egovIntegrationService;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
                                      INomenclatureDetailService nomenclatureDetailService,
                                      RequestUtils requestUtils,
                                      ICertificateService certificateService,
-                                     IRegixService regixService)
+                                     IRegixService regixService,
+                                     IServiceProvider serviceProvider,
+                                     IEGovPaymentService egovPaymentService,
+                                     IEGovIntegrationService egovIntegrationService)
         {
             _mapper = mapper;
             _applicationWebService = applicationWebService;
@@ -39,6 +50,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             _requestUtils = requestUtils;
             _certificateService = certificateService;
             _regixService = regixService;
+            _egovPaymentService = egovPaymentService;
+            _egovIntegrationService = egovIntegrationService;
         }
 
         [HttpGet]
@@ -74,7 +87,36 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var id =  await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
             var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
-            return RedirectToAction(nameof(Index));
+
+            var paymentMethod = _nomenclatureDetailService.GetWebPaymentMethods().Where(pm => pm.Id == viewModel.PaymentMethodId).FirstOrDefault();
+            if (paymentMethod != null && paymentMethod.Code == "PayEgovBg")
+            {
+                var price = await _applicationWebService.GetPriceByApplicationType("4");
+                var application = await _applicationWebService.SelectAsync(id);
+                var paymentRequestModel = new EGovPaymentRequestModel()
+                {
+                    ApplicantIdentifier = CurrentEgnIdentifier,
+                    ApplicantName = CurrentUserName,
+                    ApplicantType = ApplicantTypes.EGN,
+                    MobilePayment = false,
+                    PaymentAmount = (float)price,
+                    //TODO: PaymentAmount from configuration
+                    PaymentReason = "Такса свидетелство съдимост",
+                    PaymentRefDate = DateTime.Now,
+                    PaymentRefNumber = application.RegistrationNumber,
+                    PaymentType = VPOSPaymentTypes.EPAY
+                };
+                TempData["paymentRequestModel"] = JsonConvert.SerializeObject(paymentRequestModel);
+                return RedirectToActionPreserveMethod("CreateVPOSPayment2", "EGovPayments");
+            }
+            //TODO: 
+            //else if (paymentMethod !=  null && paymentMethod.Code == "FreeFromTax")
+            //{
+            //}
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpGet]
