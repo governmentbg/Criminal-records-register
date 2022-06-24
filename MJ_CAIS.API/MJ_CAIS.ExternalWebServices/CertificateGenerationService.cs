@@ -230,6 +230,7 @@ namespace MJ_CAIS.ExternalWebServices
             mail.EmailAddress = certificate.Application.Email;
             mail.Body = await GetBodyForCertificateMailAsync(certificate, mailBodyPattern, webportalUrl);
             mail.Subject = GetSubjectForCertificateMail(certificate, mailSubjectPattern);
+            mail.EmailStatus = EmailStatusConstants.Pending;
             mail.CertificateId = certificate.Id;
             dbContext.EEmailEvents.Add(mail);
         }
