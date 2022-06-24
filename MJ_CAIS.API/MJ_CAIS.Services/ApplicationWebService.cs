@@ -97,7 +97,7 @@ namespace MJ_CAIS.Services
         public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
         {
             var result =
-                from app in dbContext.WApplications.AsNoTracking()
+                (from app in dbContext.WApplications.AsNoTracking()
 
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
@@ -118,7 +118,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = app.CreatedOn,
                     Email = app.Email,
                     Version = app.Version,
-                };
+                }).OrderByDescending(x => x.CreatedOn);
 
             return result;
         }
@@ -126,7 +126,7 @@ namespace MJ_CAIS.Services
         public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
         {
             var result =
-                from app in dbContext.WApplications.AsNoTracking()
+                (from app in dbContext.WApplications.AsNoTracking()
 
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
@@ -153,7 +153,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = app.CreatedOn,
                     Egn = app.Egn,
                     Name = application.Firstname + " " + application.Surname + " " + application.Familyname
-                };
+                }).OrderByDescending(x=>x.CreatedOn);
 
             return result;
         }
