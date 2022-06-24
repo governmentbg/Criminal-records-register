@@ -234,7 +234,7 @@ namespace MJ_CAIS.Services
 
                 }
             }
-            _applicationService.SetApplicationStatus(application, applicationStatus, "Създаване на справка");
+            //_applicationService.SetApplicationStatus(application, applicationStatus, "Създаване на справка");
 
             application.AReports.Add(rep);
             dbContext.AReports.Add(rep);
