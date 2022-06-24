@@ -35,10 +35,22 @@
           >
             Генерирай свидетелство
           </button>
+
+          <button
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="upload()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px; float: right"
+          >
+            Качи
+          </button>
           <button
             *ngIf="
               this.model.statusCode ==
-                CertificateStatuTypeEnum.CertificatePaperPrint
+              CertificateStatuTypeEnum.CertificatePaperPrint
             "
             nbButton
             matRipple
@@ -49,7 +61,7 @@
             style="min-width: 100px; float: right"
           >
             Разпечатай свидетелство
-          </button> 
+          </button>
         </div>
       </div>
       <div class="row">
@@ -198,7 +210,10 @@
           <a
             style="color: black; margin-right: 30px"
             [title]="'Преглед'"
-            [routerLink]="['/pages/bulletins/preview/', cell.rowData.bulletinId]"
+            [routerLink]="[
+              '/pages/bulletins/preview/',
+              cell.rowData.bulletinId
+            ]"
           >
             <nb-icon pack="fa" icon="eye"></nb-icon>
           </a>
@@ -295,7 +310,10 @@
           <a
             style="color: black; margin-right: 30px"
             [title]="'Преглед'"
-            [routerLink]="['/pages/bulletins/preview/', cell.rowData.bulletinId]"
+            [routerLink]="[
+              '/pages/bulletins/preview/',
+              cell.rowData.bulletinId
+            ]"
           >
             <nb-icon pack="fa" icon="eye"></nb-icon>
           </a>

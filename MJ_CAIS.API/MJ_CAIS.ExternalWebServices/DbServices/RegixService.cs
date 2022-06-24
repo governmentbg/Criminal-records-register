@@ -45,7 +45,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         {
             var isAsync = false;
             var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-            
+
             var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
             _dbContext.SaveEntity(webRequestEntity);
             var response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
@@ -89,7 +89,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 var cache = AddOrUpdateCache(request, webServiceName, citizenEgn);
                 PopulateObjects(request, cache);
             }
-            
+
             _dbContext.SaveChanges();
             return responseObject;
         }
@@ -125,19 +125,20 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         {
             if (!string.IsNullOrEmpty(request.ApplicationId))
             {
-              var application = await _dbContext.AApplications.FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
+                var application = await _dbContext.AApplications.FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
                 if (application != null)
                 {
                     application.Firstname = cache.Firstname;
-                    application.FirstnameLat = cache.FirstnameLat; 
+                    application.FirstnameLat = cache.FirstnameLat;
                     application.Surname = cache.Surname;
                     application.SurnameLat = cache.SurnameLat;
                     application.Familyname = cache.Familyname;
                     application.FamilynameLat = cache.FamilynameLat;
-                    application.Egn= cache.Egn;
+                    application.Egn = cache.Egn;
                     application.Lnch = cache.Lnch;
                     application.BirthDate = cache.BirthDate;
-                    application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " "+ cache.BirthCityName + " " +cache.BirthPlace;
+                    //application.Sex = cache.s; TODO: ADD sex column to ERegixCache
+                    application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " + cache.BirthCityName + " " + cache.BirthPlace;
                     if (!string.IsNullOrEmpty(cache.BirthCountryCode))
                     {
                         var country = await _dbContext.GCountries.FirstOrDefaultAsync(x => x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
@@ -147,6 +148,15 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             application.BirthCountryId = country.Id;
                         }
                     }
+                    //foreach (var v in wapplication.AAppCitizenships)
+                    //{
+                    //    var newObj = new AAppCitizenship()
+                    //    {
+                    //        Id = BaseEntity.GenerateNewId(),
+                    //        ApplicationId = appl.Id,
+                    //        CountryId = v.CountryId
+                    //    };
+                    //    appl.AAppCitizenships.Add(newObj);
                     _dbContext.AApplications.Update(application);
                     //( cache.BirthCountryCode == null ? null :  cache.BirthCountryCode.ToUpper())
                 }
@@ -296,14 +306,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.FirstnameLat = (string)responseObject.PersonNames.FirstNameLatin;
                 regixCache.SurnameLat = (string)responseObject.PersonNames.SurnameLatin;
                 regixCache.FamilynameLat = (string)responseObject.PersonNames.LastNameLatin;
-                
+
                 regixCache.Firstname = (string)responseObject.PersonNames.FirstName;
                 regixCache.Surname = (string)responseObject.PersonNames.Surname;
                 regixCache.Familyname = (string)responseObject.PersonNames.FamilyName;
 
                 regixCache.BirthCountryName = responseObject.BirthPlace.CountryName;
                 regixCache.BirthCountryCode = responseObject.BirthPlace.CountryCode;
-                
+
                 regixCache.BirthMunName = responseObject.BirthPlace.MunicipalityName;
             }
 
@@ -349,13 +359,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.BirthCountryName = responseObject.Nationality.NationalityName;
                 regixCache.BirthCountryCode = responseObject.Nationality.NationalityCode;
                 regixCache.BirthPlace = responseObject.PlaceBirth;
+
             }
-           
+
             // TODO: based on operation, parse different objects and fill data
 
             return regixCache;
         }
-        
+
         private (string Id, string WebServiceName) GetOperationByType(string typeCode)
         {
             // Singleton pattern
