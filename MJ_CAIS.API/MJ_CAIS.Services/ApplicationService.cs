@@ -465,7 +465,7 @@ namespace MJ_CAIS.Services
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
                 application.CsAuthorityId, application.ApplicationType.Code);
             //todo: add resources
-            SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            //SetApplicationStatus(application, aStatus, "Създаване на сертификат");
             //  application.StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication;
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
@@ -526,7 +526,7 @@ namespace MJ_CAIS.Services
                     };
                 }).ToList();
             //todo: add resources
-            SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            //SetApplicationStatus(application, aStatus, "Създаване на сертификат");
 
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
