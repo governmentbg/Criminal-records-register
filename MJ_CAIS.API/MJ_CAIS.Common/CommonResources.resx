@@ -213,6 +213,9 @@
   <data name="titleGeneralTerms" xml:space="preserve">
     <value>Общи условия</value>
   </data>
+  <data name="titleLogIn" xml:space="preserve">
+    <value>Вход</value>
+  </data>
   <data name="titleMinistryOfJustice" xml:space="preserve">
     <value>Министерство на правосъдието</value>
   </data>
