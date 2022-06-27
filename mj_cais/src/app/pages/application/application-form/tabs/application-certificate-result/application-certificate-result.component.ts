@@ -91,9 +91,21 @@ export class ApplicationCertificateResultComponent
 
   updateStatus() {
     this.service.updateStatus(this.fullForm.id.value).subscribe((x) => {
+      this.toastr.showBodyToast(
+        "success",
+        "Успешно връчване(смяна на статус)",
+        ""
+      );
       this.reloadCurrentRoute();
       debugger;
-    });
+    }),(error) => {
+      var errorText = error.status + " " + error.statusText;
+      this.toastr.showBodyToast(
+        "danger",
+        "Грешка при смяна на статуса:",
+        errorText
+      );
+    };
   }
 
   upload() {
@@ -111,7 +123,20 @@ export class ApplicationCertificateResultComponent
             .uploadSignedCertificate(this.fullForm.id.value, object)
             .subscribe((x) => {
               debugger;
-            });
+              this.toastr.showBodyToast(
+                "success",
+                "Успешно качване на файл",
+                ""
+              );
+            }),
+            (error) => {
+              var errorText = error.status + " " + error.statusText;
+              this.toastr.showBodyToast(
+                "danger",
+                "Грешка при качване на файла:",
+                errorText
+              );
+            };
         }
       });
   }

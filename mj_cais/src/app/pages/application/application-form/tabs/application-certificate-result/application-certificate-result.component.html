@@ -38,7 +38,7 @@
             Генерирай свидетелство
           </button>
 
-          <button
+          <!-- <button
             *ngIf="
               this.model.statusCode ==
               CertificateStatuTypeEnum.CertificateUserSign
@@ -52,7 +52,7 @@
             style="min-width: 100px; float: right"
           >
             Качи
-          </button>
+          </button> -->
           <button
             *ngIf="
               this.model.statusCode ==
@@ -112,6 +112,12 @@
 
           <br />
           <a
+            *ngIf="
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.CertificatePaperPrint ||
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.CertificateUserSign
+            "
             [title]="'Свали'"
             class="mr-4"
             style="color: #3366ff; text-decoration: underline"
@@ -132,26 +138,6 @@
           </a>
         </div>
       </div>
-      <!-- <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на валидно от'"
-            [inputFormControl]="fullForm.validFrom"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div> -->
-      <!-- <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на валидно до'"
-            [inputFormControl]="fullForm.validTo"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div> -->
     </form>
   </ng-container>
 
