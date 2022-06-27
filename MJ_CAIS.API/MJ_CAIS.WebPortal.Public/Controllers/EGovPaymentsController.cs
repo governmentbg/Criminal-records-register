@@ -226,6 +226,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             return base.RegisterOfflinePayment(paymentRefNumber);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
         public override IActionResult PaymentStatusCallback([FromForm] MessageWrapper<PaymentStatus> message)
         {
             //logger.LogInfo($"Payment Status Changed ClientId: {message.ClientId} Data: {message.Data}");
