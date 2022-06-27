@@ -232,6 +232,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Успешно създадено заявление.
+        /// </summary>
+        public static string messageCreateSuccessfull {
+            get {
+                return ResourceManager.GetString("messageCreateSuccessfull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to При избор на &quot;Освободено от плащане&quot; трябва да прикачите документ удостоверяващ това право..
         /// </summary>
         public static string msgPaymentFreeInfo {

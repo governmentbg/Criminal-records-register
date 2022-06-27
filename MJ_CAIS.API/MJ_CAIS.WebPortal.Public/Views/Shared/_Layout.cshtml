@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
-
+@using MJ_CAIS.Common
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MJ_CAIS.WebPortal.Public</title>
+    <title>@ViewData["Title"] - @CommonResources.titleMjCais </title>
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>
@@ -25,9 +25,8 @@
 <body>
     <header>
         <div class="container-fluid">
-            @* TODO: fix with flex *@
             <h4 style="float: right;padding-top: 20px;padding-right: 20px;">
-                Публичен портал
+                @CommonResources.titlePublicPortal
             </h4>
             <div class="cais-headerbar">
                 <div class="cais-logo-wrapper">
@@ -37,16 +36,16 @@
                 </div>
                 <div class="cais-header-text">
                     <div class="row main-header">
-                        Република България
+                        @CommonResources.titleRepublicOfBulgaria
                     </div>
                     <div class="row" style="font-size: 14px;">
-                        Министерство на правосъдието
+                        @CommonResources.titleMinistryOfJustice
                     </div>
                 </div>
             </div>
             <div class="cais-navbar">
                 <nav class="navbar navbar-expand-lg">
-                    <h1><a class="navbar-brand" asp-controller="Home" asp-action="Index">ЦАИС "Съдебен статус"</a></h1>
+                    <h1><a class="navbar-brand" asp-controller="Home" asp-action="Index">@CommonResources.titleMjCais</a></h1>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon cais-nav-icon">
@@ -73,18 +72,18 @@
                 <div class="col-sm-2 cais-footer-link">
                     <div class="row">
                         <a class="navbar-brand" asp-controller="Home" asp-action="Info">
-                            Информация за услуга "Издаване на електронно свидетелство за съдимост"
+                            @CommonResources.titleEAppInfo
                         </a>
-                        <a class="navbar-brand" asp-controller="Home" asp-action="GeneralCondition">
-                            Общи условия
+                        <a class="navbar-brand" asp-controller="Home" asp-action="GeneralTerms">
+                            @CommonResources.titleGeneralTerms
                         </a>
                     </div>
                 </div>
                 <div class="col-sm-2 cais-footer-text">
                     <p>
-                        Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект: <br />
-                        „Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“, <br />
-                        финансиран по Оперативна програма „Добро управление“, чрез ЕСФ. <br />
+                        <div>@CommonResources.titleContractInfoExtPart1</div>
+                        <div>@CommonResources.titleContractInfoExtPart2</div>
+                        <div>@CommonResources.titleContractInfoExtPart3</div>
                     </p>
                 </div>
 

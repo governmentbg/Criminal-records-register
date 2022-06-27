@@ -63,7 +63,6 @@ export class AppComponent implements OnInit {
         } else {
           this.permissionsService.loadPermissions([]);
         }
-        debugger;
         if (data?.CsAuthorityId){
           this.userAuthorityService.csAuthorityId = data?.CsAuthorityId;
           this.userInfoService.csAuthorityId = data?.CsAuthorityId;

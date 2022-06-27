@@ -44,4 +44,19 @@ export class CustomFileUploader extends FileUploader {
     let result = new CustomFileUploader(defaultOptions);
     return result;
   }
+
+  static createUploaderPDF(): CustomFileUploader {
+    let defaultOptions: FileUploaderOptions = {
+      isHTML5: true,
+      autoUpload: false,
+      maxFileSize: 10 * 1024 * 1024,
+      removeAfterUpload: true,
+      allowedMimeType: [
+       "application/pdf",
+      ], // TODO: remove??
+      //authToken: 'Bearer ' + token //TODO: Maybe this isnt needed at all?
+    };
+    let result = new CustomFileUploader(defaultOptions);
+    return result;
+  }
 }

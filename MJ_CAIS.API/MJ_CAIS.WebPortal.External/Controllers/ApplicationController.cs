@@ -66,6 +66,7 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             var id = await _applicationWebService.InsertExternalAsync(itemToUpdate);
             var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
 
+            TempData["createSuccessfull"] = true;         
             return RedirectToAction(nameof(Index));
         }
 

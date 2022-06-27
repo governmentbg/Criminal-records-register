@@ -1,6 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
+import { ApplicationCertificateDocumentModel } from "../_models/application-certificate-document.model";
 import { ApplicationCertificateResultModel } from "../_models/application-certificate-result.model";
 import { BulletinCheckGridModel } from "../_models/bulletin-check-grid.model";
 
@@ -44,6 +45,22 @@ export class ApplicationCertificateService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
+  public uploadSignedCertificate(
+    certId: string,
+    model: ApplicationCertificateDocumentModel
+  ): Observable<any> {
+    return this.http.post<ApplicationCertificateDocumentModel>(
+      `${this.url}/${certId}/uploadSignedCertificate`,
+      model
+    );
+  }
+
+
+  public updateStatus(certId: string) {
+    return this.http.get<any>(
+      `${this.url}/updateCertificateStatus/${certId}`
+    );
+  }
 
   public getCertificateByAppId(appId: string) {
     return this.http.get<ApplicationCertificateResultModel>(

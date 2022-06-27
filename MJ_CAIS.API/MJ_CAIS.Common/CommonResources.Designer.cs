@@ -367,6 +367,24 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ЦАИС &quot;Съдебен статус&quot;.
+        /// </summary>
+        public static string titleMjCais {
+            get {
+                return ResourceManager.GetString("titleMjCais", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Публичен портал.
+        /// </summary>
+        public static string titlePublicPortal {
+            get {
+                return ResourceManager.GetString("titlePublicPortal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Република България.
         /// </summary>
         public static string titleRepublicOfBulgaria {

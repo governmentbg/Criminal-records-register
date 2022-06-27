@@ -11,6 +11,10 @@ import { BulletinCheckGridModel } from "./_models/bulletin-check-grid.model";
 import { IgxGridComponent } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { UserInfoService } from "../../../../../@core/services/common/user-info.service";
+import { NbDialogService } from "@nebular/theme";
+import { CommonConstants } from "../../../../../@core/constants/common.constants";
+import { ApplicationCertificateDocumentResultComponent } from "../application-certificate-document-result/application-certificate-document-result.component";
+import { ApplicationCertificateDocumentModel } from "./_models/application-certificate-document.model";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -43,12 +47,12 @@ export class ApplicationCertificateResultComponent
     public injector: Injector,
     public dateFormatService: DateFormatService,
     private userInfoService: UserInfoService,
+    private dialogService: NbDialogService
   ) {
     super(service, injector);
   }
 
   ngOnInit(): void {
-    debugger;
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
     if (this.model) {
@@ -65,13 +69,15 @@ export class ApplicationCertificateResultComponent
         this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
       ) {
         this.service
-          .getBulletinsCheck(this.fullForm.id.value,this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection)
+          .getBulletinsCheck(
+            this.fullForm.id.value,
+            this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
+          )
           .subscribe((response) => {
             this.bulletinsCheckData = response;
           });
       }
-      debugger;
-      if(this.model.firstSignerId == null){
+      if (this.model.firstSignerId == null) {
         this.model.firstSignerId = this.userInfoService.userId;
         this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
       }
@@ -81,6 +87,58 @@ export class ApplicationCertificateResultComponent
       this.fullForm.group.disable();
     }
     this.formFinishedLoading.emit();
+  }
+
+  updateStatus() {
+    this.service.updateStatus(this.fullForm.id.value).subscribe((x) => {
+      this.toastr.showBodyToast(
+        "success",
+        "Успешно връчване(смяна на статус)",
+        ""
+      );
+      this.reloadCurrentRoute();
+      debugger;
+    }),(error) => {
+      var errorText = error.status + " " + error.statusText;
+      this.toastr.showBodyToast(
+        "danger",
+        "Грешка при смяна на статуса:",
+        errorText
+      );
+    };
+  }
+
+  upload() {
+    this.dialogService
+      .open(
+        ApplicationCertificateDocumentResultComponent,
+        CommonConstants.defaultDialogConfig
+      )
+      .onClose.subscribe((x) => {
+        debugger;
+        if (x) {
+          var object = new ApplicationCertificateDocumentModel();
+          object.documentContent = x.documentContent;
+          this.service
+            .uploadSignedCertificate(this.fullForm.id.value, object)
+            .subscribe((x) => {
+              debugger;
+              this.toastr.showBodyToast(
+                "success",
+                "Успешно качване на файл",
+                ""
+              );
+            }),
+            (error) => {
+              var errorText = error.status + " " + error.statusText;
+              this.toastr.showBodyToast(
+                "danger",
+                "Грешка при качване на файла:",
+                errorText
+              );
+            };
+        }
+      });
   }
 
   buildFormImpl(): FormGroup {
@@ -149,7 +207,7 @@ export class ApplicationCertificateResultComponent
       .sendBulletinsForSelection(this.model.id)
       .subscribe((response: any) => {
         this.model.statusCode = CertificateStatuTypeEnum.BulletinsSelection;
-        this.router.navigate(["pages/applications/for-check"]); 
+        this.router.navigate(["pages/applications/for-check"]);
       }),
       (error) => {
         var errorText = error.status + " " + error.statusText;
@@ -162,8 +220,9 @@ export class ApplicationCertificateResultComponent
     this.service
       .sendBulletinsForRehabilitation(this.model.id, selectedItesm)
       .subscribe((response: any) => {
-        this.model.statusCode = CertificateStatuTypeEnum.BulletinsRehabilitation
-        this.router.navigate(["pages/applications/for-check"]); 
+        this.model.statusCode =
+          CertificateStatuTypeEnum.BulletinsRehabilitation;
+        this.router.navigate(["pages/applications/for-check"]);
       }),
       (error) => {
         var errorText = error.status + " " + error.statusText;

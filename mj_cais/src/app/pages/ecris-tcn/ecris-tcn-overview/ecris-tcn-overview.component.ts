@@ -44,7 +44,6 @@ export class EcrisTcnOverviewComponent extends RemoteGridWithStatePersistance<
   }
 
   changeToApproved = (id: string) => {
-    debugger;
     this.dialogService
       .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
       .onClose.subscribe((result) => {

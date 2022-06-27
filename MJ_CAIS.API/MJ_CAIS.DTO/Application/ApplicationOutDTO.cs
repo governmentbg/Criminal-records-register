@@ -8,6 +8,7 @@ namespace MJ_CAIS.DTO.Application
         public string? RegistrationNumber { get; set; }
         public string? Purpose { get; set; }
 
+        public string? CurrentApplicationStatus { get; set; }
         public string? PersonId { get; set; }
         public string? ApplicantName { get; set; }
         public string? Address { get; set; }

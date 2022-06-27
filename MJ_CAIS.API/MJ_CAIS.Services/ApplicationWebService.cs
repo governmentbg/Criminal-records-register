@@ -162,7 +162,8 @@ namespace MJ_CAIS.Services
                     StatusName = status.Name,
                     CreatedOn = app.CreatedOn,
                     Egn = app.Egn,
-                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname
+                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
+                    Email = application.Email,
                 }).OrderByDescending(x=>x.CreatedOn);
 
             return result;

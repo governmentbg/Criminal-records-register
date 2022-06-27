@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.WebSetup.Utils;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
@@ -14,6 +15,18 @@ namespace MJ_CAIS.WebPortal.External.Controllers
 
         [RedirectAuthenticatedRequests("Index", "Application")]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Info()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult GeneralTerms()
         {
             return View();
         }
