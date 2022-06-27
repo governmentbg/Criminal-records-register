@@ -3,7 +3,9 @@
     *ngIf="
       this.model.statusCode ==
         CertificateStatuTypeEnum.CertificateContentReady ||
-      this.model.statusCode == CertificateStatuTypeEnum.CertificatePaperPrint
+      this.model.statusCode == CertificateStatuTypeEnum.CertificatePaperPrint ||
+      this.model.statusCode == CertificateStatuTypeEnum.CertificateUserSign ||
+      this.model.statusCode == CertificateStatuTypeEnum.CertificateForDelivery
     "
   >
     <form autocomplete="off">
@@ -37,6 +39,10 @@
           </button>
 
           <button
+            *ngIf="
+              this.model.statusCode ==
+              CertificateStatuTypeEnum.CertificateUserSign
+            "
             nbButton
             matRipple
             [status]="'success'"
@@ -50,7 +56,24 @@
           <button
             *ngIf="
               this.model.statusCode ==
-              CertificateStatuTypeEnum.CertificatePaperPrint
+              CertificateStatuTypeEnum.CertificateUserSign
+            "
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="updateStatus()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px; float: right"
+          >
+            Готово за връчване
+          </button>
+          <!-- <button
+            *ngIf="
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.CertificatePaperPrint ||
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.CertificateUserSign
             "
             nbButton
             matRipple
@@ -60,8 +83,8 @@
             class="ml-2"
             style="min-width: 100px; float: right"
           >
-            Разпечатай свидетелство
-          </button>
+            Свали свидетелство
+          </button> -->
         </div>
       </div>
       <div class="row">
@@ -74,6 +97,39 @@
             [items]="users"
           >
           </cais-autocomplete>
+          <cais-input
+            [type]="'text'"
+            [label]="'Номер на свидетелство'"
+            [inputFormControl]="fullForm.registrationNumber"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+          <cais-input
+            [type]="'text'"
+            [label]="'Статус'"
+            [inputFormControl]="fullForm.statusName"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+
+          <br />
+          <a
+            [title]="'Свали'"
+            class="mr-4"
+            style="color: #3366ff; text-decoration: underline"
+            (click)="printCertificate()"
+          >
+            {{ fullForm.docName.value }}.pdf
+          </a>
+
+          <a
+            *ngIf="
+              this.model.statusCode ==
+              CertificateStatuTypeEnum.CertificateUserSign
+            "
+            [title]="'Качи'"
+            (click)="upload()"
+          >
+            <i class="fas fa-upload"></i>
+          </a>
         </div>
       </div>
       <!-- <div class="row">

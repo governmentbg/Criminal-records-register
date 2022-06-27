@@ -3,6 +3,8 @@ import { BaseModel } from "../../../../../../@core/models/common/base.model";
 export class ApplicationCertificateResultModel extends BaseModel {
   public applicationId: string = null;
   public statusCode: string = null;
+  public statusName: string = null;
+  public docName: string = null;
   public registrationNumber: string = null;
   public firstSignerId: string = null;
   public secondSignerId: string = null;
@@ -15,6 +17,8 @@ export class ApplicationCertificateResultModel extends BaseModel {
     super(init);
     this.applicationId = init?.applicationId ?? null;
     this.statusCode = init?.statusCode ?? null;
+    this.statusName = init?.statusName ?? null;
+    this.docName = init?.docName ?? null;
     this.registrationNumber = init?.registrationNumber ?? null;
     this.firstSignerId = init?.firstSignerId ?? null;
     this.secondSignerId = init?.secondSignerId ?? null;

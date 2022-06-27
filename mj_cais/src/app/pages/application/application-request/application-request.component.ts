@@ -46,7 +46,6 @@ export class ApplicationRequestComponent implements OnInit {
               let errMsg = (errMsgElement.firstChild as any).data;
               let errTittle = (errMsg as string).split(":")[0];
               let errBody = (errMsg as string).split(":")[1];
-              debugger;
 
               this.dialogService
                 .open(SearchByEgnErrorDialogComponent, {
@@ -95,7 +94,6 @@ export class ApplicationRequestComponent implements OnInit {
                 let errMsg = (errMsgElement.firstChild as any).data;
                 let errTittle = (errMsg as string).split(":")[0];
                 let errBody = (errMsg as string).split(":")[1];
-                debugger;
 
                 this.dialogService
                   .open(SearchByEgnErrorDialogComponent, {

@@ -43,7 +43,6 @@ export class ApplicationReportFormComponent
   }
 
   ngOnInit(): void {
-    debugger;
     this.fullForm = new ApplicationReportForm();
     this.fullForm.group.patchValue(this.dbData.element);
     if (!this.isEdit()) {
@@ -72,7 +71,7 @@ export class ApplicationReportFormComponent
   }
 
   submitFunction = () => {
-    debugger;
+   
     // this.fullForm.applicationTypeId.setValue('6'); //Взима се от контекста
     // this.fullForm.csAuthorityId.setValue('562');  //Взима се от контекста
     this.isFinalEdit = false;
@@ -98,9 +97,9 @@ export class ApplicationReportFormComponent
   }
 
   downloadSertificate(id) {
-    debugger;
+  
     this.service.downloadSertificate(id).subscribe((response: any) => {
-      debugger;
+    
       this.fullForm.group.disable();
       let blob = new Blob([response.body]);
       window.URL.createObjectURL(blob);
@@ -138,7 +137,6 @@ export class ApplicationReportFormComponent
 
     submitAction.subscribe({
       next: (data) => {
-        debugger;
         this.toastr.showToast("success", this.successMessage);
 
         setTimeout(() => {

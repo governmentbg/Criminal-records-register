@@ -14,6 +14,7 @@ import { UserInfoService } from "../../../../../@core/services/common/user-info.
 import { NbDialogService } from "@nebular/theme";
 import { CommonConstants } from "../../../../../@core/constants/common.constants";
 import { ApplicationCertificateDocumentResultComponent } from "../application-certificate-document-result/application-certificate-document-result.component";
+import { ApplicationCertificateDocumentModel } from "./_models/application-certificate-document.model";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -52,7 +53,6 @@ export class ApplicationCertificateResultComponent
   }
 
   ngOnInit(): void {
-    debugger;
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(this.model);
     if (this.model) {
@@ -77,7 +77,6 @@ export class ApplicationCertificateResultComponent
             this.bulletinsCheckData = response;
           });
       }
-      debugger;
       if (this.model.firstSignerId == null) {
         this.model.firstSignerId = this.userInfoService.userId;
         this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
@@ -90,13 +89,31 @@ export class ApplicationCertificateResultComponent
     this.formFinishedLoading.emit();
   }
 
+  updateStatus() {
+    this.service.updateStatus(this.fullForm.id.value).subscribe((x) => {
+      this.reloadCurrentRoute();
+      debugger;
+    });
+  }
+
   upload() {
     this.dialogService
       .open(
         ApplicationCertificateDocumentResultComponent,
         CommonConstants.defaultDialogConfig
       )
-      .onClose.subscribe((x) => {});
+      .onClose.subscribe((x) => {
+        debugger;
+        if (x) {
+          var object = new ApplicationCertificateDocumentModel();
+          object.documentContent = x.documentContent;
+          this.service
+            .uploadSignedCertificate(this.fullForm.id.value, object)
+            .subscribe((x) => {
+              debugger;
+            });
+        }
+      });
   }
 
   buildFormImpl(): FormGroup {

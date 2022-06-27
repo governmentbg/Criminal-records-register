@@ -6,6 +6,7 @@ using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -16,14 +17,21 @@ namespace MJ_CAIS.Services
     {
         private readonly ICertificateRepository _certificateRepository;
         private readonly IUserContext _userContext;
+        private readonly IDDocContentRepository _dDocContentRepository;
         private readonly IMapper _mapper;
 
-        public CertificateService(IMapper mapper, ICertificateRepository certificateRepository, IUserContext userContext)
+
+        public CertificateService(IMapper mapper,
+            ICertificateRepository certificateRepository,
+            IUserContext userContext,
+            IDDocContentRepository dDocContentRepository
+            )
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
             _mapper = mapper;
             _userContext = userContext;
+            _dDocContentRepository = dDocContentRepository;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
@@ -53,6 +61,25 @@ namespace MJ_CAIS.Services
             dbContext.ACertificates.Update(certificate);
 
         }
+
+        public async Task UploadSignedDocumet(string certID, CertificateDocumentDTO aInDto)
+        {
+            var result = await this._certificateRepository.GetWithDocContentAsync(certID);
+            result.Doc.DocContent.Content = aInDto.DocumentContent;
+            await this._dDocContentRepository.UpdateAsync(result.Doc.DocContent);
+        }
+
+        public async Task UpdateCertificateStatus(string certID)
+        {
+            var result = await this._certificateRepository.SelectAsync(certID);
+
+            var aapplicationStatus = await dbContext.AApplicationStatuses.FirstOrDefaultAsync(x =>
+               x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
+            SetCertificateStatus(result, aapplicationStatus, "Преминаване към готово за връчване");
+            await dbContext.SaveChangesAsync();
+
+        }
+
 
         public async Task<DDocContent> GetCertificateDocumentContent(string accessCode)
         {

@@ -10,5 +10,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<AAppBulletin>> GetBulletinsCheckByIdAsync(string certId, bool onlyApproved);
 
         Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId);
+        Task<ACertificate> GetWithDocContentAsync(string certId);
     }
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from "@angular/core";
+import { NbDialogRef } from "@nebular/theme";
 import { Observable, ReplaySubject } from "rxjs";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
 import { ApplicationDocumentForm } from "../../_models/application-document.form";
+import { ApplicationCertificateDocumentForm } from "../application-certificate-result/_models/application-certificate-document.form";
 
 @Component({
   selector: "cais-application-certificate-document-result",
@@ -10,12 +12,12 @@ import { ApplicationDocumentForm } from "../../_models/application-document.form
   styleUrls: ["./application-certificate-document-result.component.scss"],
 })
 export class ApplicationCertificateDocumentResultComponent implements OnInit {
-  public appDocumentForm = new ApplicationDocumentForm();
+  public appDocumentForm = new ApplicationCertificateDocumentForm();
   public uploader: CustomFileUploader;
   public hasDropZoneOver: boolean = false;
   protected validationMessage = "Грешка при валидациите!";
 
-  constructor(public toastr: CustomToastrService) {
+  constructor(protected ref: NbDialogRef<ApplicationCertificateDocumentResultComponent>,public toastr: CustomToastrService) {
     this.initializeUploader();
   }
 
@@ -30,25 +32,16 @@ export class ApplicationCertificateDocumentResultComponent implements OnInit {
     }
 
     let model = this.appDocumentForm.group.value;
-    // this.appService.saveDocument(this.appForm.id.value, model).subscribe(
-    //   (res) => {
-    //     this.toastr.showToast("success", "Успешно добавен документ");
-
-    //   },
-
-    //   (error) => {
-    //     this.showErrorMessage(error, "Възникна грешка при запис на данните: ");
-    //   }
-    // );
+    this.ref.close(model);
   }
 
   onCloseAppDocumentDilog() {
     this.appDocumentForm = new ApplicationDocumentForm();
-    //this.dialog.close();
+    this.ref.close();
   }
 
   private initializeUploader() {
-    this.uploader = CustomFileUploader.createUploader();
+    this.uploader = CustomFileUploader.createUploaderPDF();
 
     this.uploader.onWhenAddingFileFailed = (fileItem, response, status) => {
       this.toastr.showBodyToast(
@@ -65,8 +58,8 @@ export class ApplicationCertificateDocumentResultComponent implements OnInit {
 
         this.convertFile(blob).subscribe((base64) => {
           this.appDocumentForm.documentContent.setValue(base64);
-          this.appDocumentForm.mimeType.setValue(file.type);
-          this.appDocumentForm.name.setValue(file.name);
+          // this.appDocumentForm.mimeType.setValue(file.type);
+          // this.appDocumentForm.name.setValue(file.name);
         });
       }
     };

@@ -11,20 +11,20 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "WApplication",
-                SingleName = "WApplicaiton",
-                MultipleName = "WApplications",
+                EntityName = "AApplicationStatus",
+                SingleName = "AApplicationStatus",
+                MultipleName = "AApplicationStatuses",
                 AngularModuleName = "e-application",
             };
 
             var projectPath = ClassGenerator.GetCurrentProjectPath();
-            ClassGenerator.GenerateDTO(projectPath, parameters);
-            ClassGenerator.GenerateGridDTO(projectPath, parameters);
-             ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
+            //ClassGenerator.GenerateDTO(projectPath, parameters);
+            //ClassGenerator.GenerateGridDTO(projectPath, parameters);
+            ClassGenerator.GenerateRepositoryInterface(projectPath, parameters);
             ClassGenerator.GenerateRepository(projectPath, parameters);
-            ClassGenerator.GenerateInterface(projectPath, parameters);
-           ClassGenerator.GenerateService(projectPath, parameters);
-            ClassGenerator.GenerateController(projectPath, parameters);
+            // ClassGenerator.GenerateInterface(projectPath, parameters);
+            // ClassGenerator.GenerateService(projectPath, parameters);
+            //  ClassGenerator.GenerateController(projectPath, parameters);
 
             //ClassGenerator.GenerateAngularFormControlModel(projectPath, parameters);
             //ClassGenerator.GenerateAngularFormModel(projectPath, parameters);

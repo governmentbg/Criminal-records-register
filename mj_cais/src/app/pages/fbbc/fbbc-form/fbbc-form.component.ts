@@ -98,7 +98,6 @@ export class FbbcFormComponent
 
   public onSelectCountry = (item: CountryGridModel) => {
     if (item) {
-      debugger
       this.fullForm.countryLookup.setValue(item.id, item.name);
     }
   };

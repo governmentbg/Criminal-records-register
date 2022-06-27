@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MJ_CAIS.Common.Constants
+﻿namespace MJ_CAIS.Common.Constants
 {
     public class ApplicationConstants
     {
         public static class ApplicationStatuses
         {
-     
-            public const string NewId= "NewId";
+
+            public const string NewId = "NewId";
             public const string FillApplication = "FillApplication";
             public const string Canceled = "Canceled";
             public const string CheckTaxFree = "CheckTaxFree";
@@ -53,10 +47,10 @@ namespace MJ_CAIS.Common.Constants
         public static class ApplicationTypes
         {
             //todo: дали това са им имената
-// 4	Заявление за електронно свидетелство за съдимост
-//5	Заявление за електронно служебно свидетелство за съдимост
-//6	Заявление за Свидетелство за съдимост
-//7	Заявление за Справка за съдимост
+            // 4	Заявление за електронно свидетелство за съдимост
+            //5	Заявление за електронно служебно свидетелство за съдимост
+            //6	Заявление за Свидетелство за съдимост
+            //7	Заявление за Справка за съдимост
             public const string WebCertificate = "4";
             public const string WebExternalCertificate = "5";
             public const string DeskCertificate = "6";
