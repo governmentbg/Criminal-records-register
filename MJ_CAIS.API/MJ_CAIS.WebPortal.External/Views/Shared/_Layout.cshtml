@@ -5,9 +5,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MJ_CAIS.WebPortal.External</title>
+    <title>@ViewData["Title"] - @CommonResources.titleMjCais</title>
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+
     <script src="~/lib/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
@@ -16,16 +17,17 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MJ_CAIS.WebPortal.External.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />
-
+@*    <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" asp-append-version="true" />
+*@
     <script src="~/lib/modernizr/modernizr.min.js" asp-append-version="true"></script>
-    <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
+@*    <script src="~/lib/toastr.js/toastr.min.js" asp-append-version="true"></script>
+*@    <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
+    <script src="~/js/custom/commonUtils.js" asp-append-version="true"></script>
 
-    <partial name="_InfragisticsLoader" />
 </head>
 <body>
     <header>
         <div class="container-fluid">
-            @* TODO: fix with flex *@
             <h4 style="float: right;padding-top: 20px;padding-right: 20px;">
                 @CommonResources.titleExternalPortal
             </h4>
@@ -47,7 +49,7 @@
             </div>
             <div class="cais-navbar">
                 <nav class="navbar navbar-expand-lg">
-                    <h1><a class="navbar-brand" asp-controller="Home" asp-action="Index">ЦАИС "Съдебен статус"</a></h1>
+                    <h1><a class="navbar-brand" asp-controller="Home" asp-action="Index">@CommonResources.titleMjCais</a></h1>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon cais-nav-icon">
@@ -75,9 +77,8 @@
                     <div class="row">
                         <a class="navbar-brand" asp-controller="Home" asp-action="Info">
                             @CommonResources.titleEAppInfo
-
                         </a>
-                        <a class="navbar-brand" asp-controller="Home" asp-action="GeneralCondition">
+                        <a class="navbar-brand" asp-controller="Home" asp-action="GeneralTerms">
                             @CommonResources.titleGeneralTerms
                         </a>
                     </div>
@@ -104,7 +105,6 @@
     </footer>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-    <script src="~/js/custom/commonUtils.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

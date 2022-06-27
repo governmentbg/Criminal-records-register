@@ -20,17 +20,15 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             _userExternalService = userExternalService;
         }
 
-        // TODO: Cookie login, should be removed later
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [RedirectAuthenticatedRequests("Index", "Application")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            return RedirectToAction("Index", "Home", new { returnUrl });
+            return View();
         }
 
-        // TODO: Cookie login, should be removed later
         [HttpPost]
         [AllowAnonymous]
         [RedirectAuthenticatedRequests("Index", "Application")]
@@ -38,7 +36,6 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         public async Task<IActionResult> Login()
         {
             var returnUrl = "";
-
             var userDTO = new UserExternalDTO
             {
                 Egn = "9201010101",
@@ -65,14 +62,6 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             }
 
             return View();
-        }
-
-        // TODO: Cookie login, should be removed later
-        [HttpPost]
-        public async Task<ActionResult> CookieLogOff()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

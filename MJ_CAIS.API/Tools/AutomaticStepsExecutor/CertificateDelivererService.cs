@@ -24,7 +24,7 @@ namespace AutomaticStepsExecutor
         {
             _dbContext = dbContext;
             _logger = logger;
-            _certificateGenerationService = _certificateGenerationService;
+            _certificateGenerationService = certificateGenerationService;
             _certificateService = certificateService;
         }
 
@@ -39,7 +39,7 @@ namespace AutomaticStepsExecutor
                                     .Include(a=>a.Application)
                                     .Include(a=>a.Application.SrvcResRcptMeth)
                               //todo: дали има шанс да е в това състояние:ApplicationConstants.ApplicationStatuses.CertificateServerSign
-                              .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateUserSigned
+                              .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
                               //todo: да гледаме ли срок на плащането, ако не е платено в срок?!                             
                               )
                               .OrderBy(a=>a.CreatedOn)

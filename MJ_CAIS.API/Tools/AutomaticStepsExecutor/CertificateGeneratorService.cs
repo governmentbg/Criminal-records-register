@@ -135,11 +135,12 @@ namespace AutomaticStepsExecutor
                                            .Include(a => a.SuidNavigation)
                                            .Include(a => a.ApplicationType)
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
+                                 && aa.ServiceMigrationId ==null
                                  //това е краен статус, затова търсим само такива, за които няма генерирани репорти или сертификати
                                             && ((aa.ApplicationType.Code == ApplicationConstants.ApplicationTypes.ConvictionRequest && !aa.AReports.Any())
                                                || (aa.ApplicationType.Code != ApplicationConstants.ApplicationTypes.ConvictionRequest && !aa.ACertificates.Any())))
 
-                                 .OrderBy(a => a.CreatedOn)
+                                 .OrderByDescending(a => a.CreatedOn)
                                  .Take(pageSize)
 
                                  .ToList()

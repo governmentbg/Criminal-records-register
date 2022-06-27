@@ -57,8 +57,8 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var content = await (from wApp in _dbContext.WApplications.AsNoTracking()
                                  join app in _dbContext.AApplications.AsNoTracking()
-                                     on wApp.WApplicationId equals app.Id
-                                     into appLeft
+                                 on wApp.Id equals app.WApplicationId
+                                 into appLeft
                                  from app in appLeft.DefaultIfEmpty()
                                  join cert in _dbContext.ACertificates.AsNoTracking()
                                      on app.Id equals cert.ApplicationId into certLeft

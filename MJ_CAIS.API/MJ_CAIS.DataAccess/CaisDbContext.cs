@@ -117,9 +117,13 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WApplicationStatus> WApplicationStatuses { get; set; } = null!;
         public virtual DbSet<WStatusH> WStatusHes { get; set; } = null!;
         public virtual DbSet<WWebRequest> WWebRequests { get; set; } = null!;
+        public virtual DbSet<ZBulletin> ZBulletins { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
         public virtual DbSet<ZPerson> ZPersons { get; set; } = null!;
+        public virtual DbSet<ZPersonNationality> ZPersonNationalities { get; set; } = null!;
+        public virtual DbSet<ZService> ZServices { get; set; } = null!;
+        public virtual DbSet<ZZService> ZZServices { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -500,6 +504,16 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("PAYMENT_METHOD_ID");
 
+                entity.Property(e => e.PersonIdCsc)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERSON_ID_CSC");
+
+                entity.Property(e => e.PersonIdCscId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERSON_ID_CSC_ID");
+
                 entity.Property(e => e.Purpose).HasColumnName("PURPOSE");
 
                 entity.Property(e => e.PurposeId)
@@ -510,6 +524,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.RegistrationNumber)
                     .HasMaxLength(100)
                     .HasColumnName("REGISTRATION_NUMBER");
+
+                entity.Property(e => e.ServiceMigrationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SERVICE_MIGRATION_ID");
 
                 entity.Property(e => e.Sex)
                     .HasColumnType("NUMBER(38)")
@@ -3425,6 +3444,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.MimeType)
                     .HasMaxLength(200)
                     .HasColumnName("MIME_TYPE");
+
+                entity.Property(e => e.ServiceMigrationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SERVICE_MIGRATION_ID");
 
                 entity.Property(e => e.Sha1Hash)
                     .HasMaxLength(18)
@@ -7568,6 +7592,150 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_W_WEB_REQUESTS_W_APPLICATIO");
             });
 
+            modelBuilder.Entity<ZBulletin>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Z_BULLETINS");
+
+                entity.Property(e => e.ActDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("ACT_DATE");
+
+                entity.Property(e => e.ActExecuteDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("ACT_EXECUTE_DATE");
+
+                entity.Property(e => e.ActIndex)
+                    .HasMaxLength(32)
+                    .HasColumnName("ACT_INDEX");
+
+                entity.Property(e => e.ActType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ACT_TYPE");
+
+                entity.Property(e => e.AdditionalInfo)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("ADDITIONAL_INFO");
+
+                entity.Property(e => e.BulletinId)
+                    .HasMaxLength(20)
+                    .HasColumnName("BULLETIN_ID");
+
+                entity.Property(e => e.BulletinIndex)
+                    .HasMaxLength(32)
+                    .HasColumnName("BULLETIN_INDEX");
+
+                entity.Property(e => e.BulletinStatus)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("BULLETIN_STATUS");
+
+                entity.Property(e => e.BulletinStatusDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("BULLETIN_STATUS_DATE");
+
+                entity.Property(e => e.BulletinType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("BULLETIN_TYPE");
+
+                entity.Property(e => e.CaseDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CASE_DATE");
+
+                entity.Property(e => e.CaseIndex)
+                    .HasMaxLength(32)
+                    .HasColumnName("CASE_INDEX");
+
+                entity.Property(e => e.CaseType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("CASE_TYPE");
+
+                entity.Property(e => e.CourtInsert)
+                    .HasMaxLength(8)
+                    .HasColumnName("COURT_INSERT");
+
+                entity.Property(e => e.CourtOfAct)
+                    .HasMaxLength(8)
+                    .HasColumnName("COURT_OF_ACT");
+
+                entity.Property(e => e.CourtPrepared)
+                    .HasMaxLength(8)
+                    .HasColumnName("COURT_PREPARED");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.DateInsert)
+                    .HasColumnType("DATE")
+                    .HasColumnName("DATE_INSERT");
+
+                entity.Property(e => e.ExtractInfo)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("EXTRACT_INFO");
+
+                entity.Property(e => e.IncludedInConviction)
+                    .HasMaxLength(1)
+                    .HasColumnName("INCLUDED_IN_CONVICTION")
+                    .HasDefaultValueSql("('Y')");
+
+                entity.Property(e => e.JudgeEditDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("JUDGE_EDIT_DATE")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.JudgeEdited)
+                    .HasMaxLength(1)
+                    .HasColumnName("JUDGE_EDITED")
+                    .HasDefaultValueSql("('N')");
+
+                entity.Property(e => e.JudgeNotes)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("JUDGE_NOTES")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.JudgeText)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("JUDGE_TEXT")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.PersonId)
+                    .HasMaxLength(20)
+                    .HasColumnName("PERSON_ID");
+
+                entity.Property(e => e.R1)
+                    .HasMaxLength(255)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.R2)
+                    .HasMaxLength(255)
+                    .HasDefaultValueSql("('')\n");
+
+                entity.Property(e => e.RegistrationDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("REGISTRATION_DATE");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(20)
+                    .HasColumnName("USER_ID");
+            });
+
             modelBuilder.Entity<ZImportFbbc>(entity =>
             {
                 entity.ToTable("Z_IMPORT_FBBC");
@@ -8266,6 +8434,377 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.TransformationStatus)
                     .HasMaxLength(255)
                     .HasColumnName("TRANSFORMATION_STATUS");
+            });
+
+            modelBuilder.Entity<ZPersonNationality>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Z_PERSON_NATIONALITY");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.Nationality)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("NATIONALITY");
+
+                entity.Property(e => e.PersNatlPk)
+                    .HasMaxLength(20)
+                    .HasColumnName("PERS_NATL_PK");
+
+                entity.Property(e => e.PersonId)
+                    .HasMaxLength(20)
+                    .HasColumnName("PERSON_ID");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+            });
+
+            modelBuilder.Entity<ZService>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Z_SERVICES");
+
+                entity.Property(e => e.AddressAnswer)
+                    .HasMaxLength(200)
+                    .HasColumnName("ADDRESS_ANSWER");
+
+                entity.Property(e => e.ApplicationNumber)
+                    .HasPrecision(15)
+                    .HasColumnName("APPLICATION_NUMBER");
+
+                entity.Property(e => e.ApplicationNumberDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("APPLICATION_NUMBER_DATE");
+
+                entity.Property(e => e.CertificateNumber)
+                    .HasPrecision(15)
+                    .HasColumnName("CERTIFICATE_NUMBER");
+
+                entity.Property(e => e.CityCodeAnswer)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("CITY_CODE_ANSWER");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(10)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.Judge)
+                    .HasMaxLength(20)
+                    .HasColumnName("JUDGE");
+
+                entity.Property(e => e.JudgeDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("JUDGE_DATE");
+
+                entity.Property(e => e.Lnch)
+                    .HasMaxLength(10)
+                    .HasColumnName("LNCH");
+
+                entity.Property(e => e.MessageId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MESSAGE_ID");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.PersonId)
+                    .HasMaxLength(20)
+                    .HasColumnName("PERSON_ID");
+
+                entity.Property(e => e.PersonRequest)
+                    .HasMaxLength(200)
+                    .HasColumnName("PERSON_REQUEST");
+
+                entity.Property(e => e.Purpose)
+                    .HasMaxLength(255)
+                    .HasColumnName("PURPOSE");
+
+                entity.Property(e => e.R1)
+                    .HasMaxLength(255)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.R2)
+                    .HasMaxLength(255)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Reabilitation).HasColumnName("REABILITATION");
+
+                entity.Property(e => e.RequestType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("REQUEST_TYPE");
+
+                entity.Property(e => e.ServiceDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SERVICE_DATE");
+
+                entity.Property(e => e.ServiceId)
+                    .HasMaxLength(20)
+                    .HasColumnName("SERVICE_ID");
+
+                entity.Property(e => e.ServiceResult)
+                    .HasPrecision(2)
+                    .HasColumnName("SERVICE_RESULT");
+
+                entity.Property(e => e.ServiceStatus)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("SERVICE_STATUS");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+
+                entity.Property(e => e.StatusDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("STATUS_DATE");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(20)
+                    .HasColumnName("USER_ID");
+
+                entity.Property(e => e.XmlAnswer)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("XML_ANSWER");
+
+                entity.Property(e => e.XmlReg)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("XML_REG");
+            });
+
+            modelBuilder.Entity<ZZService>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Z_Z_SERVICES");
+
+                entity.Property(e => e.AddressAnswer)
+                    .HasMaxLength(200)
+                    .HasColumnName("ADDRESS_ANSWER");
+
+                entity.Property(e => e.ApplicationNumber)
+                    .HasPrecision(15)
+                    .HasColumnName("APPLICATION_NUMBER");
+
+                entity.Property(e => e.ApplicationNumberDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("APPLICATION_NUMBER_DATE");
+
+                entity.Property(e => e.BirthCityId)
+                    .HasMaxLength(200)
+                    .HasColumnName("BIRTH_CITY_ID");
+
+                entity.Property(e => e.BirthCountryId)
+                    .HasMaxLength(200)
+                    .HasColumnName("BIRTH_COUNTRY_ID");
+
+                entity.Property(e => e.BirthDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("BIRTH_DATE");
+
+                entity.Property(e => e.BirthPlaceOther)
+                    .HasMaxLength(200)
+                    .HasColumnName("BIRTH_PLACE_OTHER");
+
+                entity.Property(e => e.CertificateNumber)
+                    .HasPrecision(15)
+                    .HasColumnName("CERTIFICATE_NUMBER");
+
+                entity.Property(e => e.CityCodeAnswer)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("CITY_CODE_ANSWER");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(10)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.Error)
+                    .IsUnicode(false)
+                    .HasColumnName("ERROR");
+
+                entity.Property(e => e.Familyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILYNAME");
+
+                entity.Property(e => e.FatherFullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_FULLNAME");
+
+                entity.Property(e => e.Firstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FIRSTNAME");
+
+                entity.Property(e => e.Fullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FULLNAME");
+
+                entity.Property(e => e.HasError)
+                    .HasMaxLength(200)
+                    .HasColumnName("HAS_ERROR");
+
+                entity.Property(e => e.InnerEgn)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("INNER_EGN");
+
+                entity.Property(e => e.InnerLnch)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("INNER_LNCH");
+
+                entity.Property(e => e.Judge)
+                    .HasMaxLength(20)
+                    .HasColumnName("JUDGE");
+
+                entity.Property(e => e.JudgeDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("JUDGE_DATE");
+
+                entity.Property(e => e.Lnch)
+                    .HasMaxLength(10)
+                    .HasColumnName("LNCH");
+
+                entity.Property(e => e.MessageId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MESSAGE_ID");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.MotherFullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_FULLNAME");
+
+                entity.Property(e => e.Nationality1Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("NATIONALITY1_CODE");
+
+                entity.Property(e => e.Nationality2Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("NATIONALITY2_CODE");
+
+                entity.Property(e => e.Nationality3Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("NATIONALITY3_CODE");
+
+                entity.Property(e => e.Nationality4Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("NATIONALITY4_CODE");
+
+                entity.Property(e => e.Nationality5Code)
+                    .HasMaxLength(200)
+                    .HasColumnName("NATIONALITY5_CODE");
+
+                entity.Property(e => e.PersonId)
+                    .HasMaxLength(20)
+                    .HasColumnName("PERSON_ID");
+
+                entity.Property(e => e.PersonIdIdent)
+                    .HasMaxLength(20)
+                    .HasColumnName("PERSON_ID_IDENT");
+
+                entity.Property(e => e.PersonRequest)
+                    .HasMaxLength(200)
+                    .HasColumnName("PERSON_REQUEST");
+
+                entity.Property(e => e.Purpose)
+                    .HasMaxLength(255)
+                    .HasColumnName("PURPOSE");
+
+                entity.Property(e => e.R1).HasMaxLength(255);
+
+                entity.Property(e => e.R2).HasMaxLength(255);
+
+                entity.Property(e => e.Reabilitation).HasColumnName("REABILITATION");
+
+                entity.Property(e => e.RequestType)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("REQUEST_TYPE");
+
+                entity.Property(e => e.ServiceDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SERVICE_DATE");
+
+                entity.Property(e => e.ServiceId)
+                    .HasMaxLength(20)
+                    .HasColumnName("SERVICE_ID");
+
+                entity.Property(e => e.ServiceResult)
+                    .HasPrecision(2)
+                    .HasColumnName("SERVICE_RESULT");
+
+                entity.Property(e => e.ServiceStatus)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("SERVICE_STATUS");
+
+                entity.Property(e => e.Sex)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("SEX");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+
+                entity.Property(e => e.StatusDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("STATUS_DATE");
+
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(200)
+                    .HasColumnName("SURNAME");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(20)
+                    .HasColumnName("USER_ID");
+
+                entity.Property(e => e.XmlAnswer)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("XML_ANSWER");
+
+                entity.Property(e => e.XmlReg)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("XML_REG");
             });
 
             modelBuilder.HasSequence("DOC_REG_COMMON_SEQ");

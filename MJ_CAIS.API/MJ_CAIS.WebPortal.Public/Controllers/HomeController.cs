@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.Common.Exceptions;
-using MJ_CAIS.WebPortal.Public.Models;
 using MJ_CAIS.WebSetup.Utils;
-using System.Diagnostics;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
 {
@@ -30,7 +26,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult GeneralCondition()
+        public IActionResult GeneralTerms()
         {
             return View();
         }
