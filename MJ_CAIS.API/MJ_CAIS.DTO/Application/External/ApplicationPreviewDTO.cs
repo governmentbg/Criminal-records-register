@@ -21,5 +21,7 @@
         public string? StatusCode { get; set; }
 
         public string? Name { get; set; }
+
+        public string CertificateStatusCode { get; set; }
     }
 }

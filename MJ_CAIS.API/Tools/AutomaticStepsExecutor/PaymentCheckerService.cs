@@ -42,7 +42,8 @@ namespace AutomaticStepsExecutor
         {
             var result = await Task.FromResult(_dbContext.WApplications
                                             .Include(a => a.APayments)
-                                            .Include(a => a.APayments.Select(x=>x.EPayment))                                            
+                                            .ThenInclude(p => p.EPayment)
+                                            .Include(a => a.ApplicationType)
                                .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebCheckPayment)
                                  .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)

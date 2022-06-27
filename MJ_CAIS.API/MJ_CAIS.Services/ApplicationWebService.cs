@@ -107,7 +107,7 @@ namespace MJ_CAIS.Services
         public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
         {
             var result =
-                from app in dbContext.WApplications.AsNoTracking()
+                (from app in dbContext.WApplications.AsNoTracking()
 
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
@@ -128,7 +128,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = app.CreatedOn,
                     Email = app.Email,
                     Version = app.Version,
-                };
+                }).OrderByDescending(x => x.CreatedOn);
 
             return result;
         }
@@ -136,7 +136,7 @@ namespace MJ_CAIS.Services
         public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
         {
             var result =
-                from app in dbContext.WApplications.AsNoTracking()
+                (from app in dbContext.WApplications.AsNoTracking()
 
                 join status in dbContext.WApplicationStatuses.AsNoTracking()
                     on app.StatusCode equals status.Code
@@ -146,7 +146,7 @@ namespace MJ_CAIS.Services
                 from purposes in purposesLeft.DefaultIfEmpty()
 
                 join application in dbContext.AApplications.AsNoTracking()
-              on app.WApplicationId equals application.Id into applicationLeft
+                on app.Id equals application.WApplicationId into applicationLeft
                 from application in applicationLeft.DefaultIfEmpty()
 
                 where app.UserExtId == userId
@@ -163,7 +163,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = app.CreatedOn,
                     Egn = app.Egn,
                     Name = application.Firstname + " " + application.Surname + " " + application.Familyname
-                };
+                }).OrderByDescending(x=>x.CreatedOn);
 
             return result;
         }
@@ -183,6 +183,10 @@ namespace MJ_CAIS.Services
                                     on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
                                 from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
 
+                                join cert in dbContext.ACertificates.AsNoTracking()
+                                on app.Id equals cert.ApplicationId into certLeft
+                                from cert in certLeft.DefaultIfEmpty()
+
                                 select new DTO.Application.Public.ApplicationPreviewDTO
                                 {
                                     Id = app.Id,
@@ -196,6 +200,7 @@ namespace MJ_CAIS.Services
                                     Status = status.Name,
                                     StatusCode = status.Code,
                                     // IsPaid  ?? todo
+                                    CertificateStatusCode = cert.StatusCode
                                 }).FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
@@ -213,8 +218,13 @@ namespace MJ_CAIS.Services
                                 from purposes in purposesLeft.DefaultIfEmpty()
 
                                 join application in dbContext.AApplications.AsNoTracking()
-                                    on app.WApplicationId equals application.Id into applicationLeft
+                                    on app.Id equals application.WApplicationId into applicationLeft
                                 from application in applicationLeft.DefaultIfEmpty()
+
+                                join cert in dbContext.ACertificates.AsNoTracking()
+                                    on application.Id equals cert.ApplicationId into certLeft
+                                from cert in certLeft.DefaultIfEmpty()
+
                                 select new DTO.Application.External.ApplicationPreviewDTO
                                 {
                                     Id = app.Id,
@@ -226,7 +236,9 @@ namespace MJ_CAIS.Services
                                     RegistrationNumber = app.RegistrationNumber,
                                     Status = status.Name,
                                     StatusCode = status.Code,
-                                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname
+                                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
+                                    CertificateStatusCode = cert.StatusCode
+
                                 }).FirstOrDefaultAsync(x => x.Id == id);
 
             return result;

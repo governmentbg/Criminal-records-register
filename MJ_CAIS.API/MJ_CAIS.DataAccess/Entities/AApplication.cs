@@ -77,6 +77,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? LnchId { get; set; }
         public string? LnId { get; set; }
         public string? SuidId { get; set; }
+        public string? ServiceMigrationId { get; set; }
+        public string? PersonIdCsc { get; set; }
+        public string? PersonIdCscId { get; set; }
 
         public virtual AApplicationType ApplicationType { get; set; } = null!;
         public virtual GCity? BirthCity { get; set; }
