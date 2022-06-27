@@ -12,6 +12,8 @@ namespace MJ_CAIS.Common.Constants
         {
             public const string Payed = "Payed";
             public const string Pending = "Pending";
+            public const string Canceled = "Canceled";
+            
         }
     }
 }
