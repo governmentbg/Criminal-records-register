@@ -219,6 +219,12 @@
   <data name="titleMinistryOfJustice" xml:space="preserve">
     <value>Министерство на правосъдието</value>
   </data>
+  <data name="titleMjCais" xml:space="preserve">
+    <value>ЦАИС "Съдебен статус"</value>
+  </data>
+  <data name="titlePublicPortal" xml:space="preserve">
+    <value>Публичен портал</value>
+  </data>
   <data name="titleRepublicOfBulgaria" xml:space="preserve">
     <value>Република България</value>
   </data>

@@ -10,6 +10,7 @@
     ViewData["Title"] = ApplicationResources.titleApplications;
     var pkName = nameof(PublicApplicationGridDTO.Id);
     var buttonPreviewTemplate = ButtonTemplates.PreviewButton(Url.Action(nameof(ApplicationController.Preview), "Application") + $"/${{{pkName}}}");
+    var messageCreateSuccessfullApp = ApplicationResources.messageCreateSuccessfull;
 }
 
 <partial name="_InfragisticsLoader" />
@@ -72,3 +73,9 @@
             .Render())
     </div>
 </div>
+@* <script>
+       @if(TempData["createSuccessfull"] != null)
+        {
+            @: cais.commonUtils.showSuccessMessageInToast('@messageCreateSuccessfullApp');
+        }
+</script> *@
