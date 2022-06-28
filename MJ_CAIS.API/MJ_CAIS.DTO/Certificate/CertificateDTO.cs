@@ -5,6 +5,8 @@ namespace MJ_CAIS.DTO.Certificate
         public string? CurrentUserAuthId { get; set; }
         public string? ApplicationId { get; set; }
         public string? StatusCode { get; set; }
+        public string? StatusName { get; set; }
+        public string? DocName { get; set; }
         public string? RegistrationNumber { get; set; }
         public string? FirstSignerId { get; set; }
         public string? SecondSignerId { get; set; }

@@ -5,6 +5,7 @@ import { BaseModel } from "../../../../@core/models/common/base.model";
 export class ApplicationModel extends BaseModel {
   public registrationNumber: string = null;
   public purpose: string = null;
+  public currentApplicationStatus: string = null;
 
   public personId: string = null;
   public applicantName: string = null;
@@ -47,6 +48,7 @@ export class ApplicationModel extends BaseModel {
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;
       this.purpose = init.purpose ?? null;
+      this.currentApplicationStatus = init.currentApplicationStatus ?? null;
       this.personId = init.personId ?? null;
       this.person = init.person ?? null;
       this.applicantName = init.applicantName ?? null;

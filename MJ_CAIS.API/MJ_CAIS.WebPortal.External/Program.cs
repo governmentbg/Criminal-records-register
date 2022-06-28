@@ -17,52 +17,40 @@ namespace MJ_CAIS.WebPortal.External
 
             var configuration = builder.Configuration;
 
-            // TODO: cookie login, should be removed soon
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            builder.Services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
                 .AddCookie(options =>
                 {
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                    options.SlidingExpiration = true;
-                    options.AccessDeniedPath = "/Forbidden/";
-                    options.LoginPath = "/Account/Login";
-                    options.Cookie.Name = "CaisExternalPortal";
+                    options.Cookie.Name = "mvccode";
+                })
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = configuration.GetValue<string>("Authentication:TokenIssuer");
+                    options.ClientId = configuration.GetValue<string>("Authentication:ClientId");
+                    options.ClientSecret = configuration.GetValue<string>("Authentication:ClientSecret");
+                    options.AuthenticationMethod = OpenIdConnectRedirectBehavior.FormPost;
+
+                    // code flow + PKCE (PKCE is turned on by default)
+                    options.ResponseType = "code";
+                    options.UsePkce = true;
+
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+
+                    // keeps id_token smaller
+                    options.GetClaimsFromUserInfoEndpoint = false;
+                    options.SaveTokens = true;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = JwtClaimTypes.Name,
+                        RoleClaimType = JwtClaimTypes.Role,
+                    };
                 });
-
-            // TODO: 
-            //builder.Services.AddAuthentication(options =>
-            //    {
-            //        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            //    })
-            //    .AddCookie(options =>
-            //    {
-            //        options.Cookie.Name = "mvccode";
-            //    })
-            //    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            //    {
-            //        options.Authority = configuration.GetValue<string>("Authentication:TokenIssuer");
-            //        options.ClientId = configuration.GetValue<string>("Authentication:ClientId");
-            //        options.ClientSecret = configuration.GetValue<string>("Authentication:ClientSecret");
-            //        options.AuthenticationMethod = OpenIdConnectRedirectBehavior.FormPost;
-
-            //        // code flow + PKCE (PKCE is turned on by default)
-            //        options.ResponseType = "code";
-            //        options.UsePkce = true;
-
-            //        options.Scope.Clear();
-            //        options.Scope.Add("openid");
-            //        options.Scope.Add("profile");
-
-            //        // keeps id_token smaller
-            //        options.GetClaimsFromUserInfoEndpoint = false;
-            //        options.SaveTokens = true;
-
-            //        options.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            NameClaimType = JwtClaimTypes.Name,
-            //            RoleClaimType = JwtClaimTypes.Role,
-            //        };
-            //    });
 
             var app = builder.Build();
 

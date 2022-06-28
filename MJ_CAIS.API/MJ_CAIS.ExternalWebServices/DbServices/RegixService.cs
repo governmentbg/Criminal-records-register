@@ -142,6 +142,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     application.Egn = cache.Egn;
                     application.Lnch = cache.Lnch;
                     application.BirthDate = cache.BirthDate;
+                    //application.Sex = cache.s; TODO: ADD sex column to ERegixCache
                     application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " + cache.BirthCityName + " " + cache.BirthPlace;
                     if (!string.IsNullOrEmpty(cache.BirthCountryCode))
                     {
@@ -152,6 +153,15 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             application.BirthCountryId = country.Id;
                         }
                     }
+                    //foreach (var v in wapplication.AAppCitizenships)
+                    //{
+                    //    var newObj = new AAppCitizenship()
+                    //    {
+                    //        Id = BaseEntity.GenerateNewId(),
+                    //        ApplicationId = appl.Id,
+                    //        CountryId = v.CountryId
+                    //    };
+                    //    appl.AAppCitizenships.Add(newObj);
                     _dbContext.AApplications.Update(application);
                     //( cache.BirthCountryCode == null ? null :  cache.BirthCountryCode.ToUpper())
                 }
@@ -354,6 +364,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.BirthCountryName = responseObject.Nationality.NationalityName;
                 regixCache.BirthCountryCode = responseObject.Nationality.NationalityCode;
                 regixCache.BirthPlace = responseObject.PlaceBirth;
+
             }
 
             // TODO: based on operation, parse different objects and fill data

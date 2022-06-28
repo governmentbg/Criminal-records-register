@@ -162,7 +162,8 @@ namespace MJ_CAIS.Services
                     StatusName = status.Name,
                     CreatedOn = app.CreatedOn,
                     Egn = app.Egn,
-                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname
+                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
+                    Email = application.Email,
                 }).OrderByDescending(x=>x.CreatedOn);
 
             return result;
@@ -183,8 +184,12 @@ namespace MJ_CAIS.Services
                                     on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
                                 from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
 
+                                join application in dbContext.AApplications.AsNoTracking()
+                                         on app.Id equals application.WApplicationId into applicationLeft
+                                from application in applicationLeft.DefaultIfEmpty()
+
                                 join cert in dbContext.ACertificates.AsNoTracking()
-                                on app.Id equals cert.ApplicationId into certLeft
+                                    on application.Id equals cert.ApplicationId into certLeft
                                 from cert in certLeft.DefaultIfEmpty()
 
                                 select new DTO.Application.Public.ApplicationPreviewDTO

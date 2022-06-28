@@ -1,0 +1,31 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+    <div>
+        <noscript>
+            <p>
+                <strong>Важно:</strong> Моля, натиснете бутон „Изпрати”, за да изпратите формата
+            </p>
+        </noscript>
+        <form method="post" action="@ViewBag.postUrl">
+            <input type="hidden" name="clientId" value="@ViewBag.ClientId" />
+            <input type="hidden" name="data" value="@ViewBag.Data" />
+            <input type="hidden" name="hmac" value="@ViewBag.HMAC" />
+            <noscript>
+                <div>
+                    <input type="submit" value="Изпрати" />
+                </div>
+            </noscript>
+        </form>
+        <div class="redirecting-text">
+            <span>Пренасочване към payegov.bg...</span>
+        </div>
+    </div>
+
+<script>
+    function executeForm() {
+        document.forms[0].submit();
+    }
+
+    $(function () {
+        executeForm();
+    });
+</script>

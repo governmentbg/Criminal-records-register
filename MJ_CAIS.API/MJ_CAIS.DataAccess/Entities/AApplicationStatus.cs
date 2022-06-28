@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class AApplicationStatus
+    public partial class AApplicationStatus //: BaseEntity, IBaseIdEntity
     {
         public AApplicationStatus()
         {
@@ -20,5 +17,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<ACertificate> ACertificates { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }
+        // public string? Id { get; set; }
     }
 }

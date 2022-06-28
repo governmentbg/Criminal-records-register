@@ -32,7 +32,6 @@ export class BulletinEventsArticleOverviewComponent extends RemoteGridWithStateP
   }
 
   onShowAllBulletinEventsChange(isChacked: boolean) {
-    debugger;
     if (isChacked) {
       this.service.updateEventStatusUrl(null, this.bulletinId);
     } else {

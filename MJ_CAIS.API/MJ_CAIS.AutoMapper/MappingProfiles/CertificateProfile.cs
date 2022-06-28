@@ -10,7 +10,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public CertificateProfile()
         {
             CreateMap<ACertificate, CertificateDTO>()
-                .ReverseMap();
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name))
+                .ForMember(d => d.DocName, opt => opt.MapFrom(src => src.Doc.Name));
+
+            CreateMap<CertificateDTO, ACertificate>()
+                .ForMember(d => d.StatusCodeNavigation, opt => opt.Ignore())
+                .ForMember(d => d.Doc, opt => opt.Ignore());
 
             CreateMap<AAppBulletin, BulletinCheckDTO>()
               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))

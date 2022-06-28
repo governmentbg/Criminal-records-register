@@ -9,6 +9,7 @@ export class ApplicationForm extends BaseForm {
 
   public registrationNumber: FormControl;
   public purpose: FormControl;
+  public currentApplicationStatus: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -66,6 +67,7 @@ export class ApplicationForm extends BaseForm {
     super();
     this.registrationNumber = new FormControl(null);
     this.purpose = new FormControl(null);
+    this.currentApplicationStatus = new FormControl(null);
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
     this.familyname = new FormControl(null);
@@ -121,11 +123,13 @@ export class ApplicationForm extends BaseForm {
     
     //Validators
     this.registrationNumber.disable();
+    this.currentApplicationStatus.disable();
     
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
       registrationNumber: this.registrationNumber,
+      currentApplicationStatus: this.currentApplicationStatus,
       purpose: this.purpose,
       firstname: this.firstname,
       surname: this.surname,

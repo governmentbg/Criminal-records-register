@@ -12,7 +12,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<AApplication, ApplicationGridDTO>()
                 .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
 
-            CreateMap<AApplication, ApplicationDTO>();
+            // CreateMap<AApplication, ApplicationDTO>();
 
             CreateMap<ApplicationInDTO, AApplication>()
                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
@@ -44,6 +44,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<AApplication, ApplicationOutDTO>()
              .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.RegistrationNumber))
+             .ForMember(d => d.CurrentApplicationStatus, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name))
              .ForPath(d => d.Person.Suid, opt => opt.MapFrom(src => src.Suid))
              .ForPath(d => d.Person.Firstname, opt => opt.MapFrom(src => src.Firstname))
              .ForPath(d => d.Person.Surname, opt => opt.MapFrom(src => src.Surname))
@@ -88,7 +89,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<DDocument, ApplicationDocumentDTO>()
                 .ForMember(d => d.DocumentContentId, opt => opt.MapFrom(src => src.DocContent.Id))
-             .ForMember(d => d.DocumentContent, opt => opt.Ignore());          
+             .ForMember(d => d.DocumentContent, opt => opt.Ignore());
         }
     }
 }

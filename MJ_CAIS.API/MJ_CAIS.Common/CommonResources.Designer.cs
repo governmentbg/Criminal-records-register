@@ -349,11 +349,38 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Вход.
+        /// </summary>
+        public static string titleLogIn {
+            get {
+                return ResourceManager.GetString("titleLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Министерство на правосъдието.
         /// </summary>
         public static string titleMinistryOfJustice {
             get {
                 return ResourceManager.GetString("titleMinistryOfJustice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ЦАИС &quot;Съдебен статус&quot;.
+        /// </summary>
+        public static string titleMjCais {
+            get {
+                return ResourceManager.GetString("titleMjCais", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Публичен портал.
+        /// </summary>
+        public static string titlePublicPortal {
+            get {
+                return ResourceManager.GetString("titlePublicPortal", resourceCulture);
             }
         }
         

@@ -24,7 +24,6 @@ export class ApplicationReportResolver implements Resolve<any> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
-    debugger;
     let applicationId = route.params["ID"];
     let isEdit = route.data["edit"];
     let personId = route.queryParams["personId"];

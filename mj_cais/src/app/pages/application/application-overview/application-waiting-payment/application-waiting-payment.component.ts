@@ -32,7 +32,6 @@ export class ApplicationWaitingPaymentComponent extends RemoteGridWithStatePersi
 
   public confirmPayment(id: any): void {
     let rowId = id;
-    debugger;
       //TODO: 
       this.dialogService
       .open(ConfirmTemplateDialogComponent, { context: {
@@ -41,7 +40,6 @@ export class ApplicationWaitingPaymentComponent extends RemoteGridWithStatePersi
       },closeOnBackdropClick: false })
       .onClose.subscribe((result) => {
         if(result == true){
-          debugger;
           rowId;
         }
         

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -66,6 +67,20 @@ namespace MJ_CAIS.Web.Controllers
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
             return File(content, mimeType, fileName);
+        }
+
+        [HttpPost("{certId}/uploadSignedCertificate")]
+        public async Task<IActionResult> UploadSignedCertificate(string certId, [FromBody] CertificateDocumentDTO aInDto)
+        {
+            await this._certificateService.UploadSignedDocumet(certId, aInDto);
+            return Ok();
+        }
+
+        [HttpGet("updateCertificateStatus/{certId}")]
+        public async Task<IActionResult> UpdateCertificateStatus(string certId)
+        {
+            await this._certificateService.UpdateCertificateStatus(certId);
+            return Ok();
         }
 
         [HttpGet("by-application/{appId}")]
