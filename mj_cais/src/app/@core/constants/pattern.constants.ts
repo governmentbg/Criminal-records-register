@@ -1,0 +1,1 @@
+export const CYRILLIC_SYMBOLS_PATTERN = "[а-яА-Я\\s]+";
