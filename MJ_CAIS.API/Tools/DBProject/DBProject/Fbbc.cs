@@ -102,9 +102,9 @@ namespace DBProject
                     row["FROM_AUTH_ID"] = msg.FromAuthId; //todo да се извлече Id от номенклатурата, за сега се извлича абревиатурата на държавата
                     row["TO_AUTH_ID"] = msg.ToAuthId; //todo да се извлече Id от номенклатурата, за сега се извлича абревиатурата на държавата
                     row["ECRIS_MSG_CONVICTION_ID"] = msg.EcrisMsgConvictionId;
-                    row["FIRSTNAME"] = msg.Firstname;
-                    row["SURNAME"] = msg.Surname;
-                    row["FAMILYNAME"] = msg.Familyname;
+                  //  row["FIRSTNAME"] = msg.Firstname;
+                  //  row["SURNAME"] = msg.Surname;
+                  //  row["FAMILYNAME"] = msg.Familyname;
                     row["SEX"] = msg.Sex;
                     row["BIRTH_DATE"] = msg.BirthDate;
 
@@ -113,8 +113,8 @@ namespace DBProject
                     row["BIRTH_CITY"] = msg.BirthCity;
 
 
-                    row["NATIONALITY1_CODE"] = msg.Nationality1Code; //todo да се извлече по код от номенклатурата, за сега работи защото при миграцията id==код
-                    row["NATIONALITY2_CODE"] = msg.Nationality2Code; //todo да се извлече по код от номенклатурата, за сега работи защото при миграцията id==код
+                 //   row["NATIONALITY1_CODE"] = msg.Nationality1Code; //todo да се извлече по код от номенклатурата, за сега работи защото при миграцията id==код
+                 //   row["NATIONALITY2_CODE"] = msg.Nationality2Code; //todo да се извлече по код от номенклатурата, за сега работи защото при миграцията id==код
 
                 }
             }
