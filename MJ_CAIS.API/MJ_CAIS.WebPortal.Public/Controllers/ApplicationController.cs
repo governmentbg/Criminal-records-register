@@ -124,8 +124,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
-            viewModel.HasGeneratedCertificate = viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
-                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
+            viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
+                app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
             return View(viewModel);
         }
