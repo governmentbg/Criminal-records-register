@@ -33,4 +33,13 @@
     <ProjectReference Include="..\MJ_CAIS.Services\MJ_CAIS.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EmailTemplates\BodyDeliveryMail_BG.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EmailTemplates\SubjectDeliveryMail_BG.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
