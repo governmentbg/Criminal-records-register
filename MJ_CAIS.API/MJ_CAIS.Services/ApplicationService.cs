@@ -55,7 +55,7 @@ namespace MJ_CAIS.Services
             if (!string.IsNullOrEmpty(statusId))
             {
                 var statues = statusId.Split(',');
-                entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode));
+                entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
             }
 
             var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);
@@ -469,8 +469,8 @@ namespace MJ_CAIS.Services
             {
                 SetApplicationStatus(application, aStatus, "Създаване на сертификат");
             }
-           
-                application.ACertificates.Add(cert);
+
+            application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AApplications.Update(application);
         }

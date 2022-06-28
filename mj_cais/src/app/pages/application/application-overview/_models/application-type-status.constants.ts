@@ -6,6 +6,6 @@ export enum ApplicationTypeStatusConstants {
   BulletinsCheck = "BulletinsCheck", // За обработка
   BulletinsSelection = "BulletinsSelection", // Очаква от съдия избор на бюлетини , съобразно  целта
   ForSigning = "CertificateContentReady,CertificatePaperPrint", // За подпис
-  ForSigningByJudge = "CertificateContentReady,CertificatePaperPrint", // За подпис от съдя
+  ForSigningByJudge = "CertificateContentReady,CertificateUserSign", // За подпис от съдя
   ApprovedApplication = "ApprovedApplication",
 }
