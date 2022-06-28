@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NbDialogRef } from "@nebular/theme";
+import { FileItem } from "ng2-file-upload";
 import { Observable, ReplaySubject } from "rxjs";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
@@ -63,6 +64,11 @@ export class ApplicationCertificateDocumentResultComponent implements OnInit {
         });
       }
     };
+  }
+
+  onRmoveDocument(item: FileItem) {
+    this.appDocumentForm.documentContent.setValue(null);
+    item.remove();
   }
 
   private convertFile(file: Blob): Observable<string> {
