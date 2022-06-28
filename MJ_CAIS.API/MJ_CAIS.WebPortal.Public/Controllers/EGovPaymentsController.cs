@@ -1,12 +1,83 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
+using System.Dynamic;
 using TL.EGovPayments;
 using TL.EGovPayments.ControllerModels;
 using TL.EGovPayments.Interfaces;
 using TL.EGovPayments.JsonEnums;
 using TL.EGovPayments.JsonModels;
+
+
+
+namespace Microsoft.AspNetCore.Mvc.ViewFeatures
+{
+    internal class DynamicViewData : DynamicObject
+    {
+        private readonly Func<ViewDataDictionary> _viewDataFunc;
+
+        public DynamicViewData(Func<ViewDataDictionary> viewDataFunc)
+        {
+            if (viewDataFunc == null)
+            {
+                throw new ArgumentNullException(nameof(viewDataFunc));
+            }
+
+            _viewDataFunc = viewDataFunc;
+        }
+
+        private ViewDataDictionary ViewData
+        {
+            get
+            {
+                var viewData = _viewDataFunc();
+                if (viewData == null)
+                {
+                    throw new InvalidOperationException("ViewData is null");
+                }
+
+                return viewData;
+            }
+        }
+
+        // Implementing this function extends the ViewBag contract, supporting or improving some scenarios. For example
+        // having this method improves the debugging experience as it provides the debugger with the list of all
+        // properties currently defined on the object.
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            return ViewData.Keys;
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            if (binder == null)
+            {
+                throw new ArgumentNullException(nameof(binder));
+            }
+
+            result = ViewData[binder.Name];
+
+            // ViewDataDictionary[key] will never throw a KeyNotFoundException.
+            // Similarly, return true so caller does not throw.
+            return true;
+        }
+
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            if (binder == null)
+            {
+                throw new ArgumentNullException(nameof(binder));
+            }
+
+            ViewData[binder.Name] = value;
+
+            // Can always add / update a ViewDataDictionary value.
+            return true;
+        }
+    }
+}
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
 {
@@ -49,6 +120,50 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             }
         }
 
+        private DynamicViewData _viewBag;
+        private ViewDataDictionary _viewData;
+
+
+        [ViewDataDictionary]
+        public ViewDataDictionary ViewData
+        {
+            get
+            {
+                if (_viewData == null)
+                {
+                    // This should run only for the controller unit test scenarios
+                    _viewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), ControllerContext.ModelState);
+                }
+
+                return _viewData;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentException("Argument {0} cannot be null", nameof(ViewData));
+                }
+
+                _viewData = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the dynamic view bag.
+        /// </summary>
+        public dynamic ViewBag
+        {
+            get
+            {
+                if (_viewBag == null)
+                {
+                    _viewBag = new DynamicViewData(() => ViewData);
+                }
+
+                return _viewBag;
+            }
+        }
+
         //[HttpGet]
         ////[CustomAuthorize]
         //public override IActionResult CreateVPOSPayment(string paymentId, VPOSPaymentTypes paymentType, bool mobilePayment = false)
@@ -60,14 +175,34 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         //[CustomAuthorize]
         public async Task<IActionResult> CreateVPOSPayment2()
         {
-            EGovPaymentRequestModel paymentRequest = JsonConvert.DeserializeObject<EGovPaymentRequestModel>(TempData["paymentRequestModel"].ToString());
-            var res = await base.CreateVPOSPayment(paymentRequest);
-            //return res;
-            var objectResult = res as ObjectResult;
-            var value = objectResult.Value;
-            //TempData["paymentRequestModel2"] = JsonConvert.SerializeObject(value);
-            return RedirectToAction("Index", "Application");
-            //return RedirectToActionPreserveMethod("New2", "Application");
+            try
+            {
+                EGovPaymentRequestModel paymentRequest = JsonConvert.DeserializeObject<EGovPaymentRequestModel>(TempData["paymentRequestModel"].ToString());
+                //var res = await base.CreateVPOSPayment(paymentRequest);
+                var res = await base.CreateVPOSPayment(paymentRequest);
+                return RedirectToAction("Index", "Application");
+
+                //var objectResult = res as ObjectResult;
+                //dynamic value = objectResult.Value;
+
+                //ViewBag.postUrl = value.PostUrl;
+                //ViewBag.ClientId = value.Message.ClientId;
+                //ViewBag.Data = value.Message.Data;
+                //ViewBag.HMAC = value.Message.HMAC;
+
+                //return new ViewResult()
+                //{
+                //    ViewName = "/Views/Application/PayEgov.cshtml",
+                //    ViewData = ViewData,
+                //    TempData = TempData
+                //};
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
+            //return View("Index", "Application");
         }
 
         [HttpGet]
@@ -91,6 +226,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             return base.RegisterOfflinePayment(paymentRefNumber);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
         public override IActionResult PaymentStatusCallback([FromForm] MessageWrapper<PaymentStatus> message)
         {
             //logger.LogInfo($"Payment Status Changed ClientId: {message.ClientId} Data: {message.Data}");

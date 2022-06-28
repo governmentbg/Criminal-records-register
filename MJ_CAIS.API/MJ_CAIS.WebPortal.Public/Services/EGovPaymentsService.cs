@@ -1,53 +1,72 @@
-﻿using MJ_CAIS.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using Newtonsoft.Json;
 using TL.EGovPayments.ControllerModels;
 using TL.EGovPayments.Interfaces;
+using TL.EGovPayments.JsonEnums;
 using TL.EGovPayments.JsonModels;
 
 namespace MJ_CAIS.WebPortal.Public.Services
 {
     public class EGovPaymentsService : IEGovIntegrationService
     {
+        private CaisDbContext _dbContext;
         public EGovPaymentsService(CaisDbContext dbContext)
-        { }
+        {
+            _dbContext = dbContext;
+        }
 
         public bool ChangePaymentStatusCallback(PaymentStatus paymentStatus)
         {
-            
-            //TODO: Insert
-            return true;
+            try
+            {
+                var payment = _dbContext.EPayments.Where(ep => ep.InvoiceNumber == paymentStatus.Id).FirstOrDefault();
 
-            //try
-            //{
-            //    int applicationId = GetApplicationIdByPaymentRef(paymentStatus.Id);
-            //    var statuses = GetApplicationStatus(applicationId);
+                if (payment != null)
+                {
+                    var paymentNotification = new EPaymentNotification();
+                    paymentNotification.Id = BaseEntity.GenerateNewId();
+                    paymentNotification.DecodedText = JsonConvert.SerializeObject(paymentStatus);
+                    paymentNotification.PaymentId = payment.Id;
+                    paymentNotification.LogDate = paymentStatus.ChangeTime.ToString("dd.MM.yyyy hh:mm:ss");
+                    _dbContext.EPaymentNotifications.Add(paymentNotification);
 
-            //    if ((paymentStatus.Status == PaymentRequestStatuses.PAID
-            //        || paymentStatus.Status == PaymentRequestStatuses.AUTHORIZED
-            //        || paymentStatus.Status == PaymentRequestStatuses.ORDERED)
-            //       && statuses.Item1 != PaymentStatusesEnum.PaidOK)
-            //    {
-            //        MarkPaymentAsPaid(applicationId, paymentStatus.Id, paymentStatus.Status.ToString(), paymentStatus.ChangeTime);
-            //    }
-            //    else if ((paymentStatus.Status == PaymentRequestStatuses.EXPIRED
-            //                || paymentStatus.Status == PaymentRequestStatuses.CANCELED
-            //                || paymentStatus.Status == PaymentRequestStatuses.SUSPENDED)
-            //             && statuses.Item2 != ApplicationStatusesEnum.PAYMENT_ANNUL)
-            //    {
-            //        MarkPaymentAsAnnuled(applicationId, paymentStatus.Status.ToString());
-            //    }
-            //    else // for PENDING payment status
-            //    {
-            //        string newStatusReason = string.Format(AppResources.statusInPayEGovBG, paymentStatus.Status.ToString());
-            //        this.UpdateApplicationStatusReason(applicationId, newStatusReason);
-            //    }
+                    var statuses = payment.PaymentStatus;
+                    if (paymentStatus.Status == PaymentRequestStatuses.PAID
+                        || paymentStatus.Status == PaymentRequestStatuses.AUTHORIZED
+                        || paymentStatus.Status == PaymentRequestStatuses.ORDERED
+                       )
+                    {
+                        payment.PaymentStatus = PaymentConstants.PaymentStatuses.Payed;
+                    }
+                    else if (paymentStatus.Status == PaymentRequestStatuses.EXPIRED
+                                || paymentStatus.Status == PaymentRequestStatuses.CANCELED
+                                || paymentStatus.Status == PaymentRequestStatuses.SUSPENDED
+                             )
+                    {
+                        payment.PaymentStatus = PaymentConstants.PaymentStatuses.Canceled;
+                    }
+                    else // for PENDING payment status
+                    {
+                        //string newStatusReason = string.Format(AppResources.statusInPayEGovBG, paymentStatus.Status.ToString());
+                        //this.UpdateApplicationStatusReason(applicationId, newStatusReason);
+                    }
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    return false;
+                }
 
-            //    return true;
-            //}
-            //catch (Exception ex)
-            //{
-            //    logger.LogException(ex);
-            //    return false;
-            //}
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public string GeneratePaymentNumber(PaymentRequest paymentRequest)
@@ -111,19 +130,34 @@ namespace MJ_CAIS.WebPortal.Public.Services
 
         public void SavePaymentId(string paymentRefNumber, string paymentId)
         {
+            var wApplication = 
+                _dbContext
+                .WApplications
+                .Include("ApplicationType")
+                .Where(wa => wa.RegistrationNumber == paymentRefNumber)
+                .FirstOrDefault();
 
-            //TODO
+            if (wApplication != null)
+            {
 
+                APayment payment = new APayment();
+                payment.Id = BaseEntity.GenerateNewId();
+                payment.WApplicationId = wApplication.WApplicationId;
 
-            //int applicationId = int.Parse(paymentRefNumber);
-            //ApplicationPayment applicationPayment = (from appl in Db.Applications
-            //                                         join applPayment in Db.ApplicationPayments on appl.Id equals applPayment.ApplicationId
-            //                                         where appl.Id == applicationId
-            //                                         select applPayment).Single();
+                EPayment ePayment = new EPayment();
+                ePayment.Id = BaseEntity.GenerateNewId();
 
-            //applicationPayment.PaymentRefNum = paymentId;
+                ePayment.Amount = wApplication.ApplicationType.Price;
+                ePayment.PaymentStatus = PaymentConstants.PaymentStatuses.Pending;
+                ePayment.InvoiceNumber = paymentId;
+                payment.EPaymentId = ePayment.Id;
+                payment.EPayment = ePayment;
+                wApplication.APayments.Add(payment);
 
-            //Db.SaveChanges();
+                _dbContext.EPayments.Add(ePayment);
+                _dbContext.APayments.Add(payment);
+                _dbContext.SaveChanges();
+            }
         }
 
         private void UpdateApplicationStatusReason(int applicationId, string statusReason)

@@ -134,6 +134,7 @@ namespace AutomaticStepsExecutor
                                            .Include(a => a.LnNavigation)
                                            .Include(a => a.SuidNavigation)
                                            .Include(a => a.ApplicationType)
+                                           .Include(а=>а.AStatusHes)
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
                                  && aa.ServiceMigrationId ==null
                                  //това е краен статус, затова търсим само такива, за които няма генерирани репорти или сертификати
