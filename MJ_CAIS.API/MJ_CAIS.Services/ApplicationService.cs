@@ -200,6 +200,7 @@ namespace MJ_CAIS.Services
                 .Include(a => a.LnNavigation)
                 .Include(a => a.SuidNavigation)
                 .Include(a => a.ApplicationType)
+                .Include(a=>a.AStatusHes)
                 .FirstOrDefaultAsync(aa => aa.Id == id);
             if (application == null)
             {
