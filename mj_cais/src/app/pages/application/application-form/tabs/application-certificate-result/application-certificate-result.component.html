@@ -396,6 +396,21 @@
           >
             Генерирай свидетелство
           </button>
+          <button
+          *ngIf="
+            this.model.statusCode ==
+            CertificateStatuTypeEnum.CertificateUserSign
+          "
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="updateStatus()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
+        >
+          Готово за връчване
+        </button>
         </div>
       </div>
       <div class="row">
@@ -408,28 +423,47 @@
             [items]="users"
           >
           </cais-autocomplete>
+          <cais-input
+          [type]="'text'"
+          [label]="'Номер на свидетелство'"
+          [inputFormControl]="fullForm.registrationNumber"
+          [parentGroup]="fullForm.group"
+        ></cais-input>
+        <cais-input
+          [type]="'text'"
+          [label]="'Статус'"
+          [inputFormControl]="fullForm.statusName"
+          [parentGroup]="fullForm.group"
+        ></cais-input>
+
+        <br />
+        <a
+          *ngIf="
+            this.model.statusCode ==
+              CertificateStatuTypeEnum.CertificatePaperPrint ||
+            this.model.statusCode ==
+              CertificateStatuTypeEnum.CertificateUserSign
+          "
+          [title]="'Свали'"
+          class="mr-4"
+          style="color: #3366ff; text-decoration: underline"
+          (click)="printCertificate()"
+        >
+          {{ fullForm.docName.value }}.pdf
+        </a>
+
+        <a
+          *ngIf="
+            this.model.statusCode ==
+            CertificateStatuTypeEnum.CertificateUserSign
+          "
+          [title]="'Качи'"
+          (click)="upload()"
+        >
+          <i class="fas fa-upload"></i>
+        </a>
         </div>
       </div>
-      <!-- <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на валидно от'"
-            [inputFormControl]="fullForm.validFrom"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div> -->
-      <!-- <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на валидно до'"
-            [inputFormControl]="fullForm.validTo"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div> -->
     </form>
   </ng-container>
 </ng-container>
