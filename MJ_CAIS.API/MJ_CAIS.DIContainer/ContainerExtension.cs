@@ -42,8 +42,10 @@ namespace MJ_CAIS.DIContainer
 
             services.AddJasperReporting();
             services.AddSingleton<IPdfSigner, PdfSigner>();
+            services.AddScoped<IPdfSignatureValidator, PdfSignatureValidator>();
             services.AddSingleton<IEDeliveryService,EDeliveryService>();
             services.AddTransient<ICertificateGenerationService, CertificateGenerationService>();
+            services.AddTransient<ICertificateValidatorService, CertificateValidatorService>();
             services.AddTransient<IPrintDocumentService, PrintDocumentService>();
             services.AddTransient<IReportGenerationService, ReportGenerationService>();
             services.AddTransient<ISearchByIdentifierService, SearchByIdentifierService>();

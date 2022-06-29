@@ -116,6 +116,7 @@ namespace AutomaticStepsExecutor
                                     .ThenInclude(appl => appl.PurposeNavigation)                            
                                     .Include(c=>c.Application.SrvcResRcptMeth)
                                     .Include(c=>c.AStatusHes)
+                                    .Include(c => c.Application.ApplicationType)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                               .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)
