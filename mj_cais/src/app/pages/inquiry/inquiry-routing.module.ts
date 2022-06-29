@@ -11,18 +11,18 @@ const routes: Routes = [
     path: "search-bulletins",
     component: ReportBulletinSearchFormComponent,
     resolve: { dbData: ReportBulletinResolver },
-    // canActivate: [NgxPermissionsGuard],
-    // data: {
-    //   permissions: {
-    //     only: [
-    //       RoleNameEnum.Judge,
-    //       RoleNameEnum.Normal,
-    //       RoleNameEnum.Admin,
-    //       RoleNameEnum.GlobalAdmin,
-    //       RoleNameEnum.CentralAuth,
-    //     ],
-    //   },
-    // },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [
+          RoleNameEnum.Judge,
+          RoleNameEnum.Normal,
+          RoleNameEnum.Admin,
+          RoleNameEnum.GlobalAdmin,
+          RoleNameEnum.CentralAuth,
+        ],
+      },
+    },
   },
   {
     path: "",

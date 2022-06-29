@@ -19,9 +19,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("search-bulletins")]
-        public IActionResult SearchBulletins(ODataQueryOptions<SearchBulletinGridDTO> aQueryOptions, bool isPageInit = false)
+        public IActionResult SearchBulletins(ODataQueryOptions<InquiryBulletinGridDTO> aQueryOptions, [FromQuery] InquirySearchBulletinDTO searchParams)
         {
-            var result = this._service.SearchBulletinsWithPagination(aQueryOptions, isPageInit);
+            var result = this._service.SearchBulletinsWithPagination(aQueryOptions, searchParams);
             return Ok(result);
         }
     }

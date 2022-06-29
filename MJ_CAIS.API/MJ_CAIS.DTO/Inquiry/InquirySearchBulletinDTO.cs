@@ -1,9 +1,7 @@
 ﻿namespace MJ_CAIS.DTO.Inquiry
 {
-    public class SearchBulletinGridDTO
+    public class InquirySearchBulletinDTO
     {
-        #region Search properties
-
         public string? RegistrationNumber { get; set; }
         public string? BulletinType { get; set; }
         public DateTime? BulletinReceivedDate { get; set; }
@@ -19,12 +17,5 @@
         public string? OffenceCatId { get; set; }
         public string? SanctCategoryId { get; set; }
         public decimal? FineAmount { get; set; }
-
-        #endregion
-
-        public string? FirstName { get; set; }
-        public string? SurName { get; set; }
-        public string? FamilyName { get; set; }
-        public DateTime? BirthDate { get; set; }
     }
 }

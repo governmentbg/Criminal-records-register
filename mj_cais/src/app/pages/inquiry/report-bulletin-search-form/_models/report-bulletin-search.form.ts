@@ -1,7 +1,5 @@
 import { FormControl, FormGroup } from "@angular/forms";
-import { BaseForm } from "../../../../@core/models/common/base.form";
-
-export class ReportBulletinSearchForm extends BaseForm {
+export class ReportBulletinSearchForm  {
   public group: FormGroup;
 
   public registrationNumber: FormControl;
@@ -21,7 +19,6 @@ export class ReportBulletinSearchForm extends BaseForm {
   public fineAmount: FormControl;
 
   constructor() {
-    super();
     this.registrationNumber = new FormControl(null);
     this.bulletinType = new FormControl(null);
     this.bulletinReceivedDate = new FormControl(null);
@@ -39,8 +36,6 @@ export class ReportBulletinSearchForm extends BaseForm {
     this.fineAmount = new FormControl(null);
 
     this.group = new FormGroup({
-      id: this.id,
-      version: this.version,
       registrationNumber: this.registrationNumber,
       bulletinType: this.bulletinType,
       bulletinReceivedDate: this.bulletinReceivedDate,

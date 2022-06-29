@@ -2,6 +2,7 @@
 using MJ_CAIS.DTO.Inquiry;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services
 {
@@ -14,7 +15,7 @@ namespace MJ_CAIS.Services
             _inquiryRepository = inquiryRepository;
         }
 
-        public IQueryable<SearchBulletinGridDTO> SearchBulletinsWithPagination(ODataQueryOptions<SearchBulletinGridDTO> aQueryOptions, bool isPageInit = false)
+        public IgPageResult<InquiryBulletinGridDTO> SearchBulletinsWithPagination(ODataQueryOptions<InquiryBulletinGridDTO> aQueryOptions, InquirySearchBulletinDTO searchParams)
         {
             throw new NotImplementedException();
         }

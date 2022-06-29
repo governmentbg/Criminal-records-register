@@ -7,6 +7,7 @@
       <div class="d-flex">
         <div>
           <button
+          (click)="onSearch()"
             nbButton
             matRipple
             type="button"
@@ -150,10 +151,10 @@
             [items]="dbData.offCategories"
           ></cais-autocomplete>
         </div>
-      <!-- </div> -->
-      <!-- <div class="font-weight-bold">Накзание</div>
+        <!-- </div> -->
+        <!-- <div class="font-weight-bold">Накзание</div>
       <hr /> -->
-      <!-- <div class="row"> -->
+        <!-- <div class="row"> -->
         <div class="form-group col-md-3">
           <cais-autocomplete
             [label]="'Вид наказание'"
@@ -173,5 +174,7 @@
         </div>
       </div>
     </form>
+    <cais-report-bulletin-search-overview #bulletinReportOverview>
+    </cais-report-bulletin-search-overview>
   </nb-card-body>
 </nb-card>
