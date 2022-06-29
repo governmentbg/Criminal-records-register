@@ -22,7 +22,9 @@ namespace MJ_CAIS.Repositories.Impl
             var result = this._dbContext
                 .Set<AApplication>()
                 .Include(x => x.CsAuthorityBirth)
+                .Include(x => x.ACertificates)
                 .AsNoTracking();
+
             result = _userContext.FilterByAuthorityForAllRoles(result);
 
             return result;

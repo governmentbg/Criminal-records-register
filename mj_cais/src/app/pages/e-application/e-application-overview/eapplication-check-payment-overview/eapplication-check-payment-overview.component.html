@@ -82,7 +82,7 @@
   </igx-column>
 
   <igx-column
-    field="purposeName"
+    field="purpose"
     header="Цел"
     [sortable]="true"
     [dataType]="'string'"
@@ -91,9 +91,8 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
   <igx-column
-    field="purpose"
+    field="purposeName"
     header="Цел свободен текст"
     [sortable]="true"
     [dataType]="'string'"

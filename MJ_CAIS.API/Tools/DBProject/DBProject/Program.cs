@@ -11,7 +11,12 @@ namespace DBProject
 
             var fbbcConnString = config.GetConnectionString("FBBCConnectionString");
             var dbConnString = config.GetConnectionString("DefaultConnectionString");
-            Fbbc.GetData(fbbcConnString, dbConnString);
+
+            var cscMainConnString = config.GetConnectionString("CSCMAIN_ConnectionString");
+
+            //CSCMain.GetData(cscMainConnString, dbConnString);
+            //Fbbc.GetData(fbbcConnString, dbConnString);
+            Esgraon.GetData(cscMainConnString, dbConnString);
         }
     }
 }
