@@ -31,5 +31,19 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? BirthCountryNameLat { get; set; }
         public string? BirthPlace { get; set; }
         public string? Alias { get; set; }
+        public string? ForeignFirstname { get; set; }
+        public string? ForeignSurname { get; set; }
+        public string? ForeignFamilyname { get; set; }
+        public string? GenderCode { get; set; }
+        public string? NationalityCode1 { get; set; }
+        public string? NationalityName1 { get; set; }
+        public string? NationalityCode2 { get; set; }
+        public string? NationalityName2 { get; set; }
+        public string? MotherFirstname { get; set; }
+        public string? MotherSurname { get; set; }
+        public string? MotherFamilyname { get; set; }
+        public string? FatherFirstname { get; set; }
+        public string? FatherSurname { get; set; }
+        public string? FatherFamilyname { get; set; }
     }
 }
