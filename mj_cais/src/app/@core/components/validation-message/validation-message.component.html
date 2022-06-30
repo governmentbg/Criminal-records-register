@@ -2,6 +2,9 @@
   <span class="caption status-danger" *ngIf="showMinLength">
     Очакват се най-малко {{ minLength }} символа
   </span>
+  <span class="caption status-danger" *ngIf="showCyrillicPattern">
+    Полето може да съдържа само символи на кирилица
+  </span>
   <span class="caption status-danger" *ngIf="showMaxLength">
     Очакват се най-много {{ maxLength }} символа
   </span>

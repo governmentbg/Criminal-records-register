@@ -1,4 +1,4 @@
-import { BaseGridModel } from "../../../../../../../@core/models/common/base-grid.model";
+import { BaseGridModel } from "../../../../models/common/base-grid.model";
 
 export class OffenceCategoryGridModel extends BaseGridModel{
   public name: string = null;

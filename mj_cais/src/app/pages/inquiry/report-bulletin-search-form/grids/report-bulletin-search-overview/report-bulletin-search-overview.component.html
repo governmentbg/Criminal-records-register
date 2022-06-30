@@ -4,22 +4,19 @@
   [data]="items$ | async"
   [height]="null"
   [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
   [paging]="true"
   [clipboardOptions]="{ copyHeaders: false }"
   [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
   [paginationTemplate]="pager"
-  [allowFiltering]="true"
+  [allowFiltering]="false"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Oсвободени от плащане</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title> Бюлетини</igx-grid-toolbar-title>
   </igx-grid-toolbar>
+
   <igx-column
     field="id"
     header="Идентификатор"
@@ -31,9 +28,31 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
+
+  <igx-column
+    field="bulletinType"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="statusName"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
   <igx-column
     field="createdOn"
-    header="Дата на заявяване"
+    header="Дата на създаване"
     [sortable]="true"
     [dataType]="'date'"
   >
@@ -46,19 +65,7 @@
 
   <igx-column
     field="registrationNumber"
-    header="Регистрационен номер"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  
-  <igx-column
-    field="egn"
-    header="ЕГН"
+    header="Номер на бюлетин"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -68,29 +75,8 @@
   </igx-column>
 
   <igx-column
-  field="purpose"
-  header="Цел"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
-
-  <igx-column
-    field="purposeName"
-    header="Цел свободен текст"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="paymentMethodName"
-    header="Начин на плащане"
+    field="alphabeticalIndex"
+    header="Входящ номер в азб. указател"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -100,6 +86,39 @@
   </igx-column>
 
   <igx-column
+    field="firstName"
+    header="Име"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="surName"
+    header="Презиме"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="familyName"
+    header="Фамилия"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <!-- <igx-column
     width="150px"
     header=""
     [sortable]="false"
@@ -107,14 +126,14 @@
     [pinned]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a [title]="'Потвърди'" (click)="approve(cell.rowData.id)">
-        <nb-icon pack="fa" icon="check"></nb-icon>
-      </a> 
-      <a [title]="'Отхръли'" (click)="reject(cell.rowData.id)">
-        <nb-icon pack="fa" icon="times"></nb-icon>
-      </a> 
-    </ng-template>
-  </igx-column>
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>   
+    </ng-template> 
+  </igx-column> -->
 
   <ng-template #pager let-grid>
     <div class="tl-paginator">
@@ -123,6 +142,7 @@
         [perPage]="remoteService.pagerParams.perPage"
         [totalCount]="remoteService.pagerParams.totalCount"
         (pagerChange)="pagerChange($event)"
+        [excelReference]="excelExportAll"
       ></cais-grid-pager>
     </div>
   </ng-template>

@@ -12,8 +12,8 @@ import { AddressFormComponent } from "../../../../../@core/components/forms/addr
 import { forkJoin, of } from "rxjs";
 import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
 import { NbDialogService } from "@nebular/theme";
-import { OffenceCategoryDialogComponent } from "./dialog/offence-category-dialog/offence-category-dialog.component";
-import { OffenceCategoryGridModel } from "./dialog/_models/offence-category-grid.model";
+import { OffenceCategoryDialogComponent } from "../../../../../@core/components/dialogs/offence-category-dialog/offence-category-dialog.component";
+import { OffenceCategoryGridModel } from "../../../../../@core/components/dialogs/offence-category-dialog/_models/offence-category-grid.model";
 
 @Component({
   selector: "cais-bulletin-offences-form",

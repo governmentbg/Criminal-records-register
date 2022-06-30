@@ -18,7 +18,7 @@
         public static class Type
         {
             public const string ConvictionBulletin = "ConvictionBulletin";
-            public const string Bulletin78A = "ConvictionBulletin";
+            public const string Bulletin78A = "Bulletin78A";
             public const string Unspecified = "Unspecified";
         }
 

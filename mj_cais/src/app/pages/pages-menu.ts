@@ -4,7 +4,6 @@ import { RoleNameEnum } from "../@core/constants/role-name.enum";
 
 @Injectable()
 export class PagesMenu {
-
   constructor(iconsLibrary: NbIconLibraries) {
     iconsLibrary.registerFontPack("fa", {
       packClass: "fa",
@@ -36,12 +35,16 @@ export class PagesMenu {
         title: "Лица",
         icon: "people-outline",
         link: "/pages/people",
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) && this.hasNoRole(roles, RoleNameEnum.Judge),
+        hidden:
+          this.hasNoRole(roles, RoleNameEnum.Normal) &&
+          this.hasNoRole(roles, RoleNameEnum.Judge),
       },
       {
         title: "Бюлетини",
         icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) && this.hasNoRole(roles, RoleNameEnum.Judge),
+        hidden:
+          this.hasNoRole(roles, RoleNameEnum.Normal) &&
+          this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
             title: "Актуални бюлетини",
@@ -76,7 +79,7 @@ export class PagesMenu {
       {
         title: "Свидетелства",
         icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal) ,
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
         children: [
           {
             title: "Нови заявления",
@@ -85,7 +88,7 @@ export class PagesMenu {
           {
             title: "Потвърждение за плащане",
             link: "/pages/applications/waiting-payment",
-          },       
+          },
           {
             title: "За обработка",
             link: "/pages/applications/for-check",
@@ -167,7 +170,9 @@ export class PagesMenu {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
         expanded: true,
-        hidden: this.hasNoRole(roles, RoleNameEnum.Admin) && this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
+        hidden:
+          this.hasNoRole(roles, RoleNameEnum.Admin) &&
+          this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
         children: [
           {
             title: "Потребители",
@@ -176,22 +181,22 @@ export class PagesMenu {
           {
             title: "Външни потребители",
             link: "/pages/users-external",
-            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin)
+            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
           },
           {
             title: "Външни администрации",
             link: "/pages/administrations-ext",
-            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin)
+            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
           },
           {
             title: "Публични потребители",
             link: "/pages/users-public",
-            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin)
+            hidden: this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
           },
           {
             title: "Управление на бюлетини",
-            link: "/pages/bulletin-administrations",    
-          }
+            link: "/pages/bulletin-administrations",
+          },
         ],
       },
       {
@@ -208,7 +213,17 @@ export class PagesMenu {
             link: "/pages/e-applicaiton/check-tax-free",
           },
         ],
-      },   
+      },
+      {
+        title: "Справки",
+        icon: { icon: "chart-pie", pack: "fas" },
+        children: [
+          {
+            title: "Xарактеристики на бюлетини",
+            link: "/pages/inquiry/search-bulletins",
+          },
+        ],
+      },
     ];
 
     return dashboardMenu;
