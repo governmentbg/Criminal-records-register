@@ -28,6 +28,15 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<InquiryBulletinGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
-        }   
+        }
+
+        public async Task<IgPageResult<InquiryBulletinByPersonGridDTO>> SearchBulletinsByPersonWithPaginationAsync(ODataQueryOptions<InquiryBulletinByPersonGridDTO> aQueryOptions, InquirySearchBulletinByPersonDTO searchParams)
+        {
+            var baseQuery = _inquiryRepository.FilterBulletinsByPerson(searchParams);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<InquiryBulletinByPersonGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
+        }
     }
 }

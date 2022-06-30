@@ -7,5 +7,7 @@ namespace MJ_CAIS.Repositories.Contracts
     public interface IInquiryRepository : IBaseAsyncRepository<VBulletin, string, CaisDbContext>
     {
         IQueryable<InquiryBulletinGridDTO> FilterBulletins(InquirySearchBulletinDTO searchParams);
+
+        IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams);
     }
 }

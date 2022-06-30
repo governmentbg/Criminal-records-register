@@ -28,7 +28,8 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("search-bulletins-by-person")]
         public async Task<IActionResult> SearchBulletinsByPerson(ODataQueryOptions<InquiryBulletinByPersonGridDTO> aQueryOptions, [FromQuery] InquirySearchBulletinByPersonDTO searchParams)
         {
-            return Ok();
+            var result = await this._service.SearchBulletinsByPersonWithPaginationAsync(aQueryOptions, searchParams);
+            return Ok(result);
         }
     }
 }

@@ -64,7 +64,6 @@ export class ReportPersonSearchFormComponent
       this.spinner.hide();
     }, 500);
 
-    debugger;
     let formObj = this.fullForm.group.getRawValue();
 
     let birthPlaceObj= {}

@@ -15,7 +15,7 @@
         public string? BirthPlaceDesc { get; set; }
         public decimal? Sex { get; set; }
         public string? IdDocNumber { get; set; }
-        public string? IdDocIssuingDate { get; set; }
-        public string? IdDocValidDate { get; set; }
+        public DateTime? IdDocIssuingDate { get; set; }
+        public DateTime? IdDocValidDate { get; set; }
     }
 }

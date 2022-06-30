@@ -19,11 +19,81 @@ namespace MJ_CAIS.Repositories
         {
             var queryResult = ApplyFilters(searchParams);
 
-            var result = from bulletin in _dbContext.VBulletins
+            var result = from bulletin in queryResult
                          join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
                          into bulletinStatusLeft
                          from bulletinStatus in bulletinStatusLeft.DefaultIfEmpty()
                          select new InquiryBulletinGridDTO
+                         {
+                             Id = bulletin.Id,
+                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                            (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                            BulletinResources.Unspecified),
+                             Egn = bulletin.Egn,
+                             FamilyName = bulletin.Familyname,
+                             FirstName = bulletin.Firstname,
+                             Ln = bulletin.Ln,
+                             Lnch = bulletin.Lnch,
+                             RegistrationNumber = bulletin.RegistrationNumber,
+                             StatusId = bulletin.StatusId,
+                             StatusName = bulletinStatus.Name,
+                             SurName = bulletin.Surname,
+                             Version = bulletin.Version,
+                             CreatedOn = bulletin.CreatedOn,
+                         };
+
+            return result;
+        }
+
+        public IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams)
+        {
+            var bulletinsQuery = from bulletin in _dbContext.VBulletins select bulletin;
+
+            if (!string.IsNullOrEmpty(searchParams.Firstname))
+                bulletinsQuery = bulletinsQuery.Where(x => x.Firstname == searchParams.Firstname);
+
+            if (!string.IsNullOrEmpty(searchParams.Surname))
+                bulletinsQuery = bulletinsQuery.Where(x => x.Surname == searchParams.Surname);
+
+            if (!string.IsNullOrEmpty(searchParams.Familyname))
+                bulletinsQuery = bulletinsQuery.Where(x => x.Familyname == searchParams.Familyname);
+
+            if (!string.IsNullOrEmpty(searchParams.Egn))
+                bulletinsQuery = bulletinsQuery.Where(x => x.Egn == searchParams.Egn);
+
+            if (!string.IsNullOrEmpty(searchParams.Lnch))
+                bulletinsQuery = bulletinsQuery.Where(x => x.Lnch == searchParams.Lnch);
+
+            if (searchParams.BirthDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.BirthDate == searchParams.BirthDate);
+
+            if (!string.IsNullOrEmpty(searchParams.BirthPlaceCountryId))
+                bulletinsQuery = bulletinsQuery.Where(x => x.BirthCountryId == searchParams.BirthPlaceCountryId);
+
+            if (!string.IsNullOrEmpty(searchParams.BirthPlaceCityId))
+                bulletinsQuery = bulletinsQuery.Where(x => x.BirthCityId == searchParams.BirthPlaceCityId);
+
+            if (!string.IsNullOrEmpty(searchParams.BirthPlaceDesc))
+                bulletinsQuery = bulletinsQuery.Where(x => x.BirthPlaceOther == searchParams.BirthPlaceDesc);
+
+            if (searchParams.Sex.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.Sex == searchParams.Sex);
+
+            if (!string.IsNullOrEmpty(searchParams.IdDocNumber))
+                bulletinsQuery = bulletinsQuery.Where(x => x.IdDocNumber == searchParams.IdDocNumber);
+
+            if (searchParams.IdDocIssuingDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.IdDocIssuingDate == searchParams.IdDocIssuingDate);
+
+            if (searchParams.IdDocValidDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.IdDocValidDate == searchParams.IdDocValidDate);
+
+
+            var result = from bulletin in bulletinsQuery
+                         join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
+                         into bulletinStatusLeft
+                         from bulletinStatus in bulletinStatusLeft.DefaultIfEmpty()
+                         select new InquiryBulletinByPersonGridDTO
                          {
                              Id = bulletin.Id,
                              BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
@@ -50,64 +120,40 @@ namespace MJ_CAIS.Repositories
             var bulletinsQuery = from bulletin in _dbContext.VBulletins select bulletin;
 
             if (!string.IsNullOrEmpty(searchParams.RegistrationNumber))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.RegistrationNumber == searchParams.RegistrationNumber);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.BulletinType))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.BulletinType == searchParams.BulletinType);
-            }
 
             if (searchParams.BulletinReceivedDate.HasValue)
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.BulletinReceivedDate == searchParams.BulletinReceivedDate);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.CaseTypeId))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.CaseTypeId == searchParams.CaseTypeId);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.CaseNumber))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.CaseNumber == searchParams.CaseNumber);
-            }
 
             if (searchParams.CaseYear.HasValue)
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.CaseYear == searchParams.CaseYear);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.DecidingAuthId))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.DecidingAuthId == searchParams.DecidingAuthId);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.DecisionNumber))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.DecisionNumber == searchParams.DecisionNumber);
-            }
 
             if (searchParams.DecisionDate.HasValue)
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.DecisionDate == searchParams.DecisionDate);
-            }
 
             if (searchParams.DecisionFinalDate.HasValue)
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.DecisionFinalDate == searchParams.DecisionFinalDate);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.DecisionTypeId))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.DecisionTypeId == searchParams.DecisionTypeId);
-            }
 
             if (!string.IsNullOrEmpty(searchParams.StatusId))
-            {
                 bulletinsQuery = bulletinsQuery.Where(x => x.StatusId == searchParams.StatusId);
-            }
 
             var queryResult = bulletinsQuery;
 
