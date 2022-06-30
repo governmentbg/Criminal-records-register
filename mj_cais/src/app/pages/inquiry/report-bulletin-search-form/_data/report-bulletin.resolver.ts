@@ -34,7 +34,6 @@ export class ReportBulletinResolver implements Resolve<any> {
       decidingAuthorities:
         this.nomenclatureService.getDecidingAuthoritiesForBulletins(),
       statuses: this.nomenclatureService.getBulletinStatuses(),
-      offCategories: this.nomenclatureService.getEcrisOffCategories(),
       sanctionCategories: this.nomenclatureService.getSanctionCategories(),
     };
 
@@ -48,6 +47,5 @@ export class ReportBulletinResolverData extends BaseResolverData<ReportBulletinS
   public decisionTypes: Observable<BaseNomenclatureModel[]>;
   public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
   public statuses: Observable<BaseNomenclatureModel[]>;
-  public offCategories: Observable<BaseNomenclatureModel[]>;
   public sanctionCategories: Observable<BaseNomenclatureModel[]>;
 }

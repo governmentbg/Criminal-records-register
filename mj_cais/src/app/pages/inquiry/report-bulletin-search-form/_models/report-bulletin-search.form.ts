@@ -1,4 +1,6 @@
 import { FormControl, FormGroup } from "@angular/forms";
+import { LookupForm } from "../../../../@core/components/forms/inputs/lookup/models/lookup.form";
+
 export class ReportBulletinSearchForm  {
   public group: FormGroup;
 
@@ -14,7 +16,7 @@ export class ReportBulletinSearchForm  {
   public decisionFinalDate: FormControl;
   public decisionTypeId: FormControl;
   public statusId: FormControl;
-  public offenceCatId: FormControl;
+  public offenceCategory: LookupForm;
   public sanctCategoryId: FormControl;
   public fineAmount: FormControl;
 
@@ -31,7 +33,7 @@ export class ReportBulletinSearchForm  {
     this.decisionFinalDate = new FormControl(null);
     this.decisionTypeId = new FormControl(null);
     this.statusId = new FormControl(null);
-    this.offenceCatId = new FormControl(null);
+    this.offenceCategory = new LookupForm();
     this.sanctCategoryId = new FormControl(null);
     this.fineAmount = new FormControl(null);
 
@@ -48,7 +50,7 @@ export class ReportBulletinSearchForm  {
       decisionFinalDate: this.decisionFinalDate,
       decisionTypeId: this.decisionTypeId,
       statusId: this.statusId,
-      offenceCatId: this.offenceCatId,
+      offenceCategory: this.offenceCategory.group,
       sanctCategoryId: this.sanctCategoryId,
       fineAmount: this.fineAmount,
     });

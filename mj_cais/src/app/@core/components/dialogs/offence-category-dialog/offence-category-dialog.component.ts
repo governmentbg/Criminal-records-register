@@ -4,10 +4,10 @@ import {
   IgxGridComponent,
 } from "@infragistics/igniteui-angular";
 import { NbDialogRef } from "@nebular/theme";
-import { RemoteGridWithStatePersistance } from "../../../../../../../@core/directives/remote-grid-with-state-persistance.directive";
-import { FormUtils } from "../../../../../../../@core/utils/form.utils";
-import { OffenceCategoryGridService } from "../_data/offence-category-grid.service";
-import { OffenceCategoryGridModel } from "../_models/offence-category-grid.model";
+import { RemoteGridWithStatePersistance } from "../../../directives/remote-grid-with-state-persistance.directive";
+import { FormUtils } from "../../../utils/form.utils";
+import { OffenceCategoryGridService } from "./_data/offence-category-grid.service";
+import { OffenceCategoryGridModel } from "./_models/offence-category-grid.model";
 
 @Component({
   selector: "cais-offence-category-dialog",

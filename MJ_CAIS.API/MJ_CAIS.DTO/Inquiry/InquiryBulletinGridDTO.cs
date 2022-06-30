@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Inquiry
 {
-    public class InquiryBulletinGridDTO : BaseDTO
+    public class InquiryBulletinGridDTO : BaseGridDTO
     {
         public string? RegistrationNumber { get; set; }
         public string? BulletinType { get; set; }

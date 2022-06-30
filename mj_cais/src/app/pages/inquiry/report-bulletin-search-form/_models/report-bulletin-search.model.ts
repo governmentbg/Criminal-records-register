@@ -1,3 +1,4 @@
+import { LookupModel } from "../../../../@core/components/forms/inputs/lookup/models/lookup.model";
 import { BaseModel } from "../../../../@core/models/common/base.model";
 
 export class ReportBulletinSearchModel extends BaseModel {
@@ -12,8 +13,8 @@ export class ReportBulletinSearchModel extends BaseModel {
   public decisionDate: Date = null;
   public decisionFinalDate: Date = null;
   public decisionTypeId: string = null;
-  public statusId: string = null;
-  public offenceCatId: string = null;
+  public statusId: LookupModel = null;
+  public offenceCategory: string = null;
   public sanctCategoryId: string = null;
   public fineAmount: number = null;
 
@@ -31,7 +32,7 @@ export class ReportBulletinSearchModel extends BaseModel {
     this.decisionFinalDate = init?.decisionFinalDate ?? null;
     this.decisionTypeId = init?.decisionTypeId ?? null;
     this.statusId = init?.statusId ?? null;
-    this.offenceCatId = init?.offenceCatId ?? null;
+    this.offenceCategory = init?.offenceCategory ?? null;
     this.sanctCategoryId = init?.sanctCategoryId ?? null;
     this.fineAmount = init?.fineAmount ?? null;
   }

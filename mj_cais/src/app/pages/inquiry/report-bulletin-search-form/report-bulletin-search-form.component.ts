@@ -1,6 +1,10 @@
 import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
+import { OffenceCategoryDialogComponent } from "../../../@core/components/dialogs/offence-category-dialog/offence-category-dialog.component";
+import { OffenceCategoryGridModel } from "../../../@core/components/dialogs/offence-category-dialog/_models/offence-category-grid.model";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { ReportBulletinSearchOverviewComponent } from "./grids/report-bulletin-search-overview/report-bulletin-search-overview.component";
 import { ReportBulletinResolverData } from "./_data/report-bulletin.resolver";
@@ -25,7 +29,8 @@ export class ReportBulletinSearchFormComponent
   constructor(
     service: ReportBulletinService,
     public injector: Injector,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private dialogService: NbDialogService
   ) {
     super(service, injector);
   }
@@ -62,17 +67,39 @@ export class ReportBulletinSearchFormComponent
       this.spinner.hide();
     }, 500);
 
-    let count = 0;
+    let categoryIsAdded = false;
     let filterQuery = "";
-
     let formObj = this.fullForm.group.getRawValue();
     for (let key in formObj) {
       if (key && formObj[key]) {
-        filterQuery += `&${key}='${formObj[key]}'`;
+        if (typeof formObj[key] == "object" && formObj[key]._isUTC != null) {
+          let date = new Date(formObj[key]);
+          let result = date.toISOString();
+          filterQuery += `&${key}=${result}`;
+        } else if ((key == "offenceCategory" && formObj[key].id != '' && !categoryIsAdded)) {
+          categoryIsAdded = true;
+          filterQuery += `&offenceCatId=${formObj[key].id}`;
+        } else {
+          filterQuery += `&${key}=${formObj[key]}`;
+        }
       }
     }
 
-    debugger;
     this.bulletinReportOverview.onSearch(filterQuery);
+  };
+
+  public openOffenceCategoryDialog = () => {
+    this.dialogService
+      .open(OffenceCategoryDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe(this.onSelectOffenceCategory);
+  };
+
+  public onSelectOffenceCategory = (item: OffenceCategoryGridModel) => {
+    if (item) {
+      this.fullForm.offenceCategory.setValue(
+        item.id,
+        item.name + ", " + item.code
+      );
+    }
   };
 }
