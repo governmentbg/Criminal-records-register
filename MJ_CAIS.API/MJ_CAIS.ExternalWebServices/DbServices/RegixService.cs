@@ -45,18 +45,25 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             bool isAsync = false)
         {
             var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
+            var operationRelationsSearch = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
+
 
             var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
+            var webRequestEntityPersonRelations = FactoryRegix.CreatePersonRelationsWebRequest(egn, isAsync, operationRelationsSearch.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
+
             _dbContext.SaveEntity(webRequestEntity);
+            _dbContext.SaveEntity(webRequestEntityPersonRelations);
 
             PersonDataResponseType response = null;
             if (!isAsync)
             {
-                response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName);
+                response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName, webRequestEntityPersonRelations, operationRelationsSearch.WebServiceName);
             }
             return (response, webRequestEntity);
         }
-     
+
+
+
         public (ForeignIdentityInfoResponseType, EWebRequest) SyncCallPersonDataSearchByLNCH(string egn,
             string? bulletinId = null,
             string? applicationId = null,
@@ -77,7 +84,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// </summary>
         /// <param name="request"></param>
         /// <param name="serviceURI"></param>
-        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName)
+        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName, EWebRequest requestRelations, string webServiceNameRelations)
         {
             var empty = new PersonDataResponseType();
             var emptyXml = XmlUtils.SerializeToXml(empty);
@@ -86,18 +93,22 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             var citizenEgn = requestDeserialized.EGN;
 
             CallRegix(request, webServiceName, citizenEgn);
+            CallRegix(requestRelations, webServiceNameRelations, citizenEgn);
 
             PersonDataResponseType responseObject = null;
             if (request.HasError != true)
             {
                 responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
                 var cache = AddOrUpdateCache(request, webServiceName, citizenEgn);
-                PopulateObjects(request, cache);
+                var cacheRelations = AddOrUpdateCache(requestRelations, webServiceNameRelations, citizenEgn);
+                PopulateObjects(request, cache, cacheRelations);
             }
 
             _dbContext.SaveChanges();
             return responseObject;
         }
+
+
 
         /// <summary>
         /// Изпълнява заявка от таблицата с web requests
@@ -126,7 +137,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return responseObject;
         }
 
-        private async void PopulateObjects(EWebRequest request, ERegixCache cache)
+        private async void PopulateObjects(EWebRequest request, ERegixCache cache, ERegixCache? cacheRelations = null)
         {
             if (!string.IsNullOrEmpty(request.ApplicationId))
             {
@@ -141,8 +152,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     application.FamilynameLat = cache.FamilynameLat;
                     application.Egn = cache.Egn;
                     application.Lnch = cache.Lnch;
+                    application.Sex = decimal.Parse(cache.GenderCode);
                     application.BirthDate = cache.BirthDate;
-                    //application.Sex = cache.s; TODO: ADD sex column to ERegixCache
                     application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " + cache.BirthCityName + " " + cache.BirthPlace;
                     if (!string.IsNullOrEmpty(cache.BirthCountryCode))
                     {
@@ -151,19 +162,31 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         {
                             application.BirthCountry = country;
                             application.BirthCountryId = country.Id;
+
+                            var newObj = new AAppCitizenship()
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                ApplicationId = application.Id,
+                                CountryId = country.Id
+                            };
+                            _dbContext.AAppCitizenships.Add(newObj);
+
                         }
                     }
-                    //foreach (var v in wapplication.AAppCitizenships)
-                    //{
-                    //    var newObj = new AAppCitizenship()
-                    //    {
-                    //        Id = BaseEntity.GenerateNewId(),
-                    //        ApplicationId = appl.Id,
-                    //        CountryId = v.CountryId
-                    //    };
-                    //    appl.AAppCitizenships.Add(newObj);
+
+                    if (cacheRelations != null)
+                    {
+                        application.MotherFirstname = cacheRelations.MotherFirstname;
+                        application.MotherSurname = cacheRelations.MotherSurname;
+                        application.MotherFamilyname = cacheRelations.MotherFamilyname;
+
+                        application.FatherFirstname = cacheRelations.FatherFirstname;
+                        application.FatherSurname = cacheRelations.FatherSurname;
+                        application.FatherFamilyname = cacheRelations.FatherFamilyname;
+                    }
+
                     _dbContext.AApplications.Update(application);
-                    //( cache.BirthCountryCode == null ? null :  cache.BirthCountryCode.ToUpper())
+
                 }
             }
             if (!string.IsNullOrEmpty(request.WApplicationId))
@@ -327,9 +350,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             return regixCache;
         }
+
         private ERegixCache AddOrUpdateCache(EWebRequest request, string webServiceName, string egn)
         {
-            var regixCache = _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == webServiceName);
+            var regixCache =
+                _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == webServiceName);
             if (regixCache == null)
             {
                 regixCache = new ERegixCache()
@@ -345,11 +370,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             regixCache.ResponseXml = request.ResponseXml;
             regixCache.WebServiceName = webServiceName;
             regixCache.ExecutionDate = DateTime.Now;
-            var responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
+
 
 
             if (webServiceName.EndsWith("PersonDataSearch"))
             {
+                var responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
                 regixCache.BirthDate = responseObject.BirthDate;
                 regixCache.Egn = responseObject.EGN;
 
@@ -364,11 +390,29 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.BirthCountryName = responseObject.Nationality.NationalityName;
                 regixCache.BirthCountryCode = responseObject.Nationality.NationalityCode;
                 regixCache.BirthPlace = responseObject.PlaceBirth;
-
+                regixCache.GenderCode = responseObject.Gender.GenderCode.ToString();
             }
 
-            // TODO: based on operation, parse different objects and fill data
+            if (webServiceName.EndsWith("RelationsSearch"))
+            {
+                var responseObject = XmlUtils.DeserializeXml<RelationsResponseType>(request.ResponseXml);
+                foreach (var personRelation in responseObject.PersonRelations)
+                {
+                    if (personRelation.RelationCode == RelationType.Майка)
+                    {
+                        regixCache.MotherFirstname = personRelation.FirstName;
+                        regixCache.MotherSurname = personRelation.SurName;
+                        regixCache.MotherFamilyname = personRelation.FamilyName;
+                    }
 
+                    if (personRelation.RelationCode == RelationType.Баща)
+                    {
+                        regixCache.FatherFirstname = personRelation.FirstName;
+                        regixCache.FatherSurname = personRelation.SurName;
+                        regixCache.FatherFamilyname = personRelation.FamilyName;
+                    }
+                }
+            }
             return regixCache;
         }
 

@@ -45,8 +45,28 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return webRequestEntity;
         }
 
-        private static EWebRequest CreateWebRequest(bool isAsync, 
-            string? bulletinId = null, 
+        public static EWebRequest CreatePersonRelationsWebRequest(string egn,
+            bool isAsync,
+            string webServiceId,
+            string? bulletinId = null,
+            string? applicationId = null,
+            string? wApplicationId = null,
+            string? ecrisMsgId = null)
+        {
+            var request = new RelationsRequestType() { EGN = egn };
+            var requestXml = XmlUtils.SerializeToXml(request);
+
+            var webRequestEntity = CreateWebRequest(isAsync, bulletinId, applicationId, wApplicationId, ecrisMsgId);
+            webRequestEntity.RequestXml = requestXml;
+            webRequestEntity.WebServiceId = webServiceId;
+
+            return webRequestEntity;
+        }
+
+
+
+        private static EWebRequest CreateWebRequest(bool isAsync,
+            string? bulletinId = null,
             string? applicationId = null,
             string? wApplicationId = null,
             string? ecrisMsgId = null)
