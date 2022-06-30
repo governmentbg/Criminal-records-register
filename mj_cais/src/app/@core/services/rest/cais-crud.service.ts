@@ -63,4 +63,21 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
       })
     );
   }
+
+  constructQueryParamsByFilters(formObj, filterQuery) : string {
+    for (let key in formObj) {
+      if (key && formObj[key]) {
+        let value = formObj[key];
+
+        if (typeof formObj[key] == "object" && formObj[key]._isUTC != null) {
+          let date = new Date(formObj[key]);
+          value = date.toISOString();
+        }
+
+        filterQuery += `&${key}=${value}`;
+      }
+    }
+
+    return filterQuery;
+  }
 }

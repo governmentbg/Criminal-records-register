@@ -1,8 +1,9 @@
-import { Component, Injector, Input, OnInit } from "@angular/core";
+import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { ReportPersonSearchOverviewComponent } from "./grids/report-person-search-overview/report-person-search-overview.component";
 import { ReportPersonResolverData } from "./_data/report-person.resolver";
 import { ReportPersonService } from "./_data/report-person.service";
 import { ReportPersonSearchForm } from "./_models/report-person-search.form";
@@ -33,9 +34,12 @@ export class ReportPersonSearchFormComponent
 
   @Input() title: string = "Справка по характеристики на лице";
 
+  @ViewChild("bulletinByPersonReportOverview")
+  bulletinByPersonReportOverview: ReportPersonSearchOverviewComponent;
+
   ngOnInit(): void {
     this.fullForm = new ReportPersonSearchForm();
-    // this.fullForm.group.patchValue(this.dbData.element);
+    this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
   }
 
@@ -60,21 +64,21 @@ export class ReportPersonSearchFormComponent
       this.spinner.hide();
     }, 500);
 
-    let categoryIsAdded = false;
-    let filterQuery = "";
+    debugger;
     let formObj = this.fullForm.group.getRawValue();
-    for (let key in formObj) {
-      if (key && formObj[key]) {
-        if (typeof formObj[key] == "object" && formObj[key]._isUTC != null) {
-          let date = new Date(formObj[key]);
-          let result = date.toISOString();
-          filterQuery += `&${key}=${result}`;
-        } else {
-          filterQuery += `&${key}=${formObj[key]}`;
-        }
-      }
-    }
 
-    //this.personReportOverview.onSearch(filterQuery);
+    let birthPlaceObj= {}
+    birthPlaceObj['birthPlaceCountryId'] = this.fullForm.birthPlace.country.id.value;
+    birthPlaceObj['birthPlaceMunicipalityId'] = this.fullForm.birthPlace.municipalityId.value;
+    birthPlaceObj['birthPlaceDistrictId'] = this.fullForm.birthPlace.districtId.value;
+    birthPlaceObj['birthPlaceCityId'] = this.fullForm.birthPlace.cityId.value;
+    birthPlaceObj['birthPlaceDesc'] = this.fullForm.birthPlace.foreignCountryAddress.value;
+
+    let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
+    filterQuery = this.service.constructQueryParamsByFilters(birthPlaceObj, filterQuery);
+
+    this.bulletinByPersonReportOverview.onSearch(filterQuery);
   };
+
+  
 }
