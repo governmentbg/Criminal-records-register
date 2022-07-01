@@ -25,6 +25,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("export-bulletins")]
+        public async Task<IActionResult> ExportBulletins([FromQuery] InquirySearchBulletinDTO searchParams)
+        {
+            var result = await this._service.ExportBulletinsAsync(searchParams);
+            return Ok(result);
+        }
+
         [HttpGet("search-bulletins-by-person")]
         public async Task<IActionResult> SearchBulletinsByPerson(ODataQueryOptions<InquiryBulletinByPersonGridDTO> aQueryOptions, [FromQuery] InquirySearchBulletinByPersonDTO searchParams)
         {

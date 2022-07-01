@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO;
@@ -28,6 +30,15 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<InquiryBulletinGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
+        }
+
+        public async Task<List<ExportInquiryBulletinGridDTO>> ExportBulletinsAsync(InquirySearchBulletinDTO searchParams)
+        {
+            var baseQuery = _inquiryRepository.FilterBulletinsForExport(searchParams)
+                .ProjectTo<ExportInquiryBulletinGridDTO>(mapperConfiguration);
+
+            var result = await baseQuery.ToListAsync(); // todo: max
+            return result;
         }
 
         public async Task<IgPageResult<InquiryBulletinByPersonGridDTO>> SearchBulletinsByPersonWithPaginationAsync(ODataQueryOptions<InquiryBulletinByPersonGridDTO> aQueryOptions, InquirySearchBulletinByPersonDTO searchParams)

@@ -1,7 +1,6 @@
 import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
-import { NgxSpinnerService } from "ngx-spinner";
 import { OffenceCategoryDialogComponent } from "../../../@core/components/dialogs/offence-category-dialog/offence-category-dialog.component";
 import { OffenceCategoryGridModel } from "../../../@core/components/dialogs/offence-category-dialog/_models/offence-category-grid.model";
 import { CommonConstants } from "../../../@core/constants/common.constants";
@@ -29,8 +28,7 @@ export class ReportBulletinSearchFormComponent
   constructor(
     service: ReportBulletinService,
     public injector: Injector,
-    private spinner: NgxSpinnerService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
   ) {
     super(service, injector);
   }
@@ -55,25 +53,7 @@ export class ReportBulletinSearchFormComponent
   }
 
   public onSearch = () => {
-    if (!this.fullForm.group.valid) {
-      this.fullForm.group.markAllAsTouched();
-      this.toastr.showToast("danger", "Грешка при валидациите!");
-      return;
-    }
-
-    this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
-      this.spinner.hide();
-    }, 500);
-
-    let formObj = this.fullForm.group.getRawValue();
-    let offenceCategory= {}
-    offenceCategory['offenceCategory'] = this.fullForm.offenceCategory.id.value;
-    let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
-    filterQuery = this.service.constructQueryParamsByFilters(offenceCategory, filterQuery);
-    
-    this.bulletinReportOverview.onSearch(filterQuery);
+    this.bulletinReportOverview.onSearch();
   };
 
   public openOffenceCategoryDialog = () => {

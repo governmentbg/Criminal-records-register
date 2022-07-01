@@ -8,6 +8,8 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         IQueryable<InquiryBulletinGridDTO> FilterBulletins(InquirySearchBulletinDTO searchParams);
 
+        IQueryable<VBulletinsFull> FilterBulletinsForExport(InquirySearchBulletinDTO searchParams);
+
         IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams);
     }
 }
