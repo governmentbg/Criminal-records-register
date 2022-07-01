@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Inquiry
 {
-    public class InquirySearchBulletinByPersonDTO
+    public class InquirySearchBulletinByPersonDTO : PeriodSearchDTO
     {
         public string? Firstname { get; set; }
         public string? Surname { get; set; }

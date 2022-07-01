@@ -1,7 +1,7 @@
 import { FormControl, FormGroup } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
 
-export class ReportPersonSearchForm  {
+export class ReportPersonSearchForm {
   public group: FormGroup;
 
   public firstname: FormControl;
@@ -15,6 +15,8 @@ export class ReportPersonSearchForm  {
   public idDocNumber: FormControl;
   public idDocIssuingDate: FormControl;
   public idDocValidDate: FormControl;
+  public fromDate: FormControl;
+  public toDate: FormControl;
 
   constructor() {
     this.firstname = new FormControl(null);
@@ -28,18 +30,22 @@ export class ReportPersonSearchForm  {
     this.idDocNumber = new FormControl(null);
     this.idDocIssuingDate = new FormControl(null);
     this.idDocValidDate = new FormControl(null);
+    this.fromDate = new FormControl(null);
+    this.toDate = new FormControl(null);
 
     this.group = new FormGroup({
-        firstname: this.firstname,
-        surname: this.surname,
-        familyname: this.familyname,
-        egn: this.egn,
-        lnch: this.lnch,
-        birthDate: this.birthDate,
-        sex: this.sex,
-        idDocNumber: this.idDocNumber,
-        idDocIssuingDate: this.idDocIssuingDate,
-        idDocValidDate: this.idDocValidDate,   
+      firstname: this.firstname,
+      surname: this.surname,
+      familyname: this.familyname,
+      egn: this.egn,
+      lnch: this.lnch,
+      birthDate: this.birthDate,
+      sex: this.sex,
+      idDocNumber: this.idDocNumber,
+      idDocIssuingDate: this.idDocIssuingDate,
+      idDocValidDate: this.idDocValidDate,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
     });
   }
 }

@@ -88,6 +88,11 @@ namespace MJ_CAIS.Repositories
             if (searchParams.IdDocValidDate.HasValue)
                 bulletinsQuery = bulletinsQuery.Where(x => x.IdDocValidDate == searchParams.IdDocValidDate);
 
+            if (searchParams.FromDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn >= searchParams.FromDate);
+
+            if (searchParams.ToDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate);
 
             var result = from bulletin in bulletinsQuery
                          join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
@@ -154,6 +159,12 @@ namespace MJ_CAIS.Repositories
 
             if (!string.IsNullOrEmpty(searchParams.StatusId))
                 bulletinsQuery = bulletinsQuery.Where(x => x.StatusId == searchParams.StatusId);
+
+            if (searchParams.FromDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn >= searchParams.FromDate);
+
+            if (searchParams.ToDate.HasValue)
+                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate);
 
             var queryResult = bulletinsQuery;
 

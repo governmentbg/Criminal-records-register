@@ -19,6 +19,8 @@ export class ReportBulletinSearchForm  {
   public offenceCategory: LookupForm;
   public sanctCategoryId: FormControl;
   public fineAmount: FormControl;
+  public fromDate: FormControl;
+  public toDate: FormControl;
 
   constructor() {
     this.registrationNumber = new FormControl(null);
@@ -36,6 +38,8 @@ export class ReportBulletinSearchForm  {
     this.offenceCategory = new LookupForm();
     this.sanctCategoryId = new FormControl(null);
     this.fineAmount = new FormControl(null);
+    this.fromDate = new FormControl(null);
+    this.toDate = new FormControl(null);
 
     this.group = new FormGroup({
       registrationNumber: this.registrationNumber,
@@ -53,6 +57,8 @@ export class ReportBulletinSearchForm  {
       offenceCategory: this.offenceCategory.group,
       sanctCategoryId: this.sanctCategoryId,
       fineAmount: this.fineAmount,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
     });
   }
 }

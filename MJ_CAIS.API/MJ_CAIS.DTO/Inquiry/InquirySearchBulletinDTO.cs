@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DTO.Inquiry
 {
-    public class InquirySearchBulletinDTO
+    public class InquirySearchBulletinDTO : PeriodSearchDTO
     {
         public string? RegistrationNumber { get; set; }
         public string? BulletinType { get; set; }
