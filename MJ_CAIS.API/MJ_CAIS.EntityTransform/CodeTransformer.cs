@@ -79,22 +79,22 @@ namespace MJ_CAIS.EntityTransform
                         extends.Add(Constants.BaseEntityName);
                     }
 
-                    if (hasId)
+                    var hasCustomFilterInterface = filterInterfaces.ContainsKey(entityName);
+                    if (hasId && !hasCustomFilterInterface)
                     {
                         extends.Add(nameof(IBaseIdEntity));
+                    }
+
+                    if (hasCustomFilterInterface)
+                    {
+                        extends.Add(filterInterfaces[entityName]);
                     }
 
                     if (nomenclatures.Contains(entityName))
                     {
                         extends.Add(Constants.NomenclatureInterfaceName);
                     }
-
-                    if (filterInterfaces.ContainsKey(entityName))
-                    {
-                        extends.Add(filterInterfaces[entityName]);
-                        extends.Remove(nameof(IBaseIdEntity));
-                    }
-
+              
                     if (extends.Any())
                     {
                         var extendsText = string.Join(", ", extends);
