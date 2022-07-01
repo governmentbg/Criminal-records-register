@@ -13,6 +13,8 @@ export class ReportPersonSearchModel extends BaseModel {
   public idDocNumber: string = null;
   public idDocIssuingDate: Date = null;
   public idDocValidDate: Date = null;
+  public nationalityTypeCode: string = null;
+  public nationalityCountryId: string = null;
 
   constructor(init?: Partial<ReportPersonSearchModel>) {
     super(init);
@@ -27,5 +29,7 @@ export class ReportPersonSearchModel extends BaseModel {
     this.idDocNumber = init?.idDocNumber ?? null;
     this.idDocIssuingDate = init?.idDocIssuingDate ?? null;
     this.idDocValidDate = init?.idDocValidDate ?? null;
+    this.nationalityTypeCode = init?.nationalityTypeCode ?? null;
+    this.nationalityCountryId = init?.nationalityCountryId ?? null;
   }
 }

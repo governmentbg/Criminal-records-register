@@ -2,6 +2,10 @@ import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
+import { CountryDialogComponent } from "../../../@core/components/forms/address-form/dialog/country-dialog/country-dialog.component";
+import { CountryGridModel } from "../../../@core/components/forms/address-form/dialog/_models/country-grid.model";
+import { CommonConstants } from "../../../@core/constants/common.constants";
+import { NationalityTypeConstants } from "../../../@core/constants/nationality-type.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { ReportPersonSearchOverviewComponent } from "./grids/report-person-search-overview/report-person-search-overview.component";
 import { ReportPersonResolverData } from "./_data/report-person.resolver";
@@ -37,6 +41,8 @@ export class ReportPersonSearchFormComponent
   @ViewChild("bulletinByPersonReportOverview")
   bulletinByPersonReportOverview: ReportPersonSearchOverviewComponent;
 
+  public showCountryLookup: boolean = false;
+
   ngOnInit(): void {
     this.fullForm = new ReportPersonSearchForm();
     this.fullForm.group.patchValue(this.dbData.element);
@@ -66,18 +72,42 @@ export class ReportPersonSearchFormComponent
 
     let formObj = this.fullForm.group.getRawValue();
 
-    let birthPlaceObj= {}
-    birthPlaceObj['birthPlaceCountryId'] = this.fullForm.birthPlace.country.id.value;
-    birthPlaceObj['birthPlaceMunicipalityId'] = this.fullForm.birthPlace.municipalityId.value;
-    birthPlaceObj['birthPlaceDistrictId'] = this.fullForm.birthPlace.districtId.value;
-    birthPlaceObj['birthPlaceCityId'] = this.fullForm.birthPlace.cityId.value;
-    birthPlaceObj['birthPlaceDesc'] = this.fullForm.birthPlace.foreignCountryAddress.value;
+    let birthPlaceObj = {};
+    birthPlaceObj["birthPlaceCountryId"] =
+      this.fullForm.birthPlace.country.id.value;
+    birthPlaceObj["birthPlaceMunicipalityId"] =
+      this.fullForm.birthPlace.municipalityId.value;
+    birthPlaceObj["birthPlaceDistrictId"] =
+      this.fullForm.birthPlace.districtId.value;
+    birthPlaceObj["birthPlaceCityId"] = this.fullForm.birthPlace.cityId.value;
+    birthPlaceObj["birthPlaceDesc"] =
+      this.fullForm.birthPlace.foreignCountryAddress.value;
 
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
-    filterQuery = this.service.constructQueryParamsByFilters(birthPlaceObj, filterQuery);
+    filterQuery = this.service.constructQueryParamsByFilters(
+      birthPlaceObj,
+      filterQuery
+    );
 
     this.bulletinByPersonReportOverview.onSearch(filterQuery);
   };
 
-  
+  public openCountryDialog = () => {
+    this.dialogService
+      .open(CountryDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe(this.onSelectCountry);
+  };
+
+  public onSelectCountry = (item: CountryGridModel) => {
+    debugger;
+    if (item) {
+      this.fullForm.nationalityCountry.setValue(item.id, item.name);
+      this.fullForm.nationalityCountryId.setValue(item.id);
+    }
+  };
+
+  public onNationalityTypeChanged(nationalityTypeCode) {
+    this.showCountryLookup =
+    nationalityTypeCode == NationalityTypeConstants.currentCountry.code;
+  }
 }

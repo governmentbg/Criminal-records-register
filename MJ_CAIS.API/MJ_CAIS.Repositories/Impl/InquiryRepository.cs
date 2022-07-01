@@ -5,6 +5,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Inquiry;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Repositories.Impl;
+using static MJ_CAIS.Common.Constants.GlobalConstants;
 
 namespace MJ_CAIS.Repositories
 {
@@ -46,6 +47,36 @@ namespace MJ_CAIS.Repositories
         }
 
         public IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams)
+        {
+            var bulletinsQuery = ApplyFiltersByPerson(searchParams);
+
+            var result = from bulletin in bulletinsQuery
+                         join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
+                         into bulletinStatusLeft
+                         from bulletinStatus in bulletinStatusLeft.DefaultIfEmpty()
+                         select new InquiryBulletinByPersonGridDTO
+                         {
+                             Id = bulletin.Id,
+                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                            (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                            BulletinResources.Unspecified),
+                             Egn = bulletin.Egn,
+                             FamilyName = bulletin.Familyname,
+                             FirstName = bulletin.Firstname,
+                             Ln = bulletin.Ln,
+                             Lnch = bulletin.Lnch,
+                             RegistrationNumber = bulletin.RegistrationNumber,
+                             StatusId = bulletin.StatusId,
+                             StatusName = bulletinStatus.Name,
+                             SurName = bulletin.Surname,
+                             Version = bulletin.Version,
+                             CreatedOn = bulletin.CreatedOn,
+                         };
+
+            return result;
+        }
+
+        private IQueryable<VBulletin> ApplyFiltersByPerson(InquirySearchBulletinByPersonDTO searchParams)
         {
             var bulletinsQuery = from bulletin in _dbContext.VBulletins select bulletin;
 
@@ -94,30 +125,22 @@ namespace MJ_CAIS.Repositories
             if (searchParams.ToDate.HasValue)
                 bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate);
 
-            var result = from bulletin in bulletinsQuery
-                         join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
-                         into bulletinStatusLeft
-                         from bulletinStatus in bulletinStatusLeft.DefaultIfEmpty()
-                         select new InquiryBulletinByPersonGridDTO
-                         {
-                             Id = bulletin.Id,
-                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
-                                            (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
-                                            BulletinResources.Unspecified),
-                             Egn = bulletin.Egn,
-                             FamilyName = bulletin.Familyname,
-                             FirstName = bulletin.Firstname,
-                             Ln = bulletin.Ln,
-                             Lnch = bulletin.Lnch,
-                             RegistrationNumber = bulletin.RegistrationNumber,
-                             StatusId = bulletin.StatusId,
-                             StatusName = bulletinStatus.Name,
-                             SurName = bulletin.Surname,
-                             Version = bulletin.Version,
-                             CreatedOn = bulletin.CreatedOn,
-                         };
+            if (!string.IsNullOrEmpty(searchParams.NationalityTypeCode) || !string.IsNullOrEmpty(searchParams.NationalityCountryId))
+            {
+                bulletinsQuery = from bulletin in bulletinsQuery
+                                 join nationality in _dbContext.BPersNationalities on bulletin.Id equals nationality.BulletinId
+                                         into nationalityLeft
+                                 from nationality in nationalityLeft.DefaultIfEmpty()
 
-            return result;
+                                 where (searchParams.NationalityTypeCode == NationalityType.Country && nationality.CountryId == searchParams.NationalityCountryId) ||
+                                 (searchParams.NationalityTypeCode == NationalityType.Eu && bulletin.EuCitizen == true) ||
+                                 (searchParams.NationalityTypeCode == NationalityType.Tcn && bulletin.TcnCitizen == true) ||
+                                 (searchParams.NationalityTypeCode == NationalityType.BgAndEU && bulletin.EuCitizen == true && nationality.CountryId == BGCountryId) ||
+                                 (searchParams.NationalityTypeCode == NationalityType.BgAndTcn && bulletin.TcnCitizen == true && nationality.CountryId == BGCountryId)
+                                 select bulletin;
+            }
+
+            return bulletinsQuery;
         }
 
         private IQueryable<VBulletin> ApplyFilters(InquirySearchBulletinDTO searchParams)

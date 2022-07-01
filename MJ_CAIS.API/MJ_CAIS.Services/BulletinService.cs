@@ -631,7 +631,7 @@ namespace MJ_CAIS.Services
 
             if (skipEcris) return;
 
-            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id).Where(x => x != "CO-00-100-BGR"); //todo:
+            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id).Where(x => x != BG);
             var isEuCitizen = await dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));
 
             if (isEuCitizen)

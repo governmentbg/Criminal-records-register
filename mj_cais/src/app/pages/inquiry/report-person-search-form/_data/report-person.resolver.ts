@@ -30,6 +30,7 @@ export class ReportPersonResolver implements Resolve<any> {
     let result: ReportPersonResolverData = {
       element: element,
       genderTypes: this.nomenclatureService.getGenderTypes(),
+      nationalityTypes: this.nomenclatureService.getNationalityTypes()
     };
 
     return forkJoin(result);
@@ -38,4 +39,5 @@ export class ReportPersonResolver implements Resolve<any> {
 
 export class ReportPersonResolverData extends BaseResolverData<ReportPersonSearchModel> {
   public genderTypes: Observable<BaseNomenclatureModel[]>;
+  public nationalityTypes: Observable<BaseNomenclatureModel[]>;
 }

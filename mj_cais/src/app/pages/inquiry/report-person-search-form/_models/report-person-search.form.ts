@@ -1,5 +1,6 @@
 import { FormControl, FormGroup } from "@angular/forms";
 import { AddressForm } from "../../../../@core/components/forms/address-form/_model/address.form";
+import { LookupForm } from "../../../../@core/components/forms/inputs/lookup/models/lookup.form";
 
 export class ReportPersonSearchForm {
   public group: FormGroup;
@@ -17,6 +18,9 @@ export class ReportPersonSearchForm {
   public idDocValidDate: FormControl;
   public fromDate: FormControl;
   public toDate: FormControl;
+  public nationalityTypeCode: FormControl;
+  public nationalityCountryId : FormControl;
+  public nationalityCountry: LookupForm;
 
   constructor() {
     this.firstname = new FormControl(null);
@@ -32,6 +36,9 @@ export class ReportPersonSearchForm {
     this.idDocValidDate = new FormControl(null);
     this.fromDate = new FormControl(null);
     this.toDate = new FormControl(null);
+    this.nationalityTypeCode = new FormControl(null);
+    this.nationalityCountryId = new FormControl(null);
+    this.nationalityCountry = new LookupForm(null);
 
     this.group = new FormGroup({
       firstname: this.firstname,
@@ -46,6 +53,9 @@ export class ReportPersonSearchForm {
       idDocValidDate: this.idDocValidDate,
       fromDate: this.fromDate,
       toDate: this.toDate,
+      nationalityTypeCode: this.nationalityTypeCode,
+      nationalityCountryId: this.nationalityCountryId,
+      nationalityCountry: this.nationalityCountry.group
     });
   }
 }

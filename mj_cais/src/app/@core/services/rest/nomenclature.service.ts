@@ -1,6 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { map, Observable, of } from "rxjs";
 import { GenderConstants } from "../../constants/gender.constants";
+import { NationalityTypeConstants } from "../../constants/nationality-type.constants";
 import { PersonAliasConstants } from "../../constants/person-alias-type.constants";
 import { BaseNomenclatureModel } from "../../models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "./cais-crud.service";
@@ -96,6 +97,11 @@ export class NomenclatureService extends CaisCrudService<
   public getGenderTypes(): Observable<BaseNomenclatureModel[]> {
     return of(GenderConstants.allData);
   }
+
+  public getNationalityTypes(): Observable<BaseNomenclatureModel[]> {
+    return of(NationalityTypeConstants.allData);
+  }
+
 
   public getNationalities(): Observable<BaseNomenclatureModel[]> {
     return of([]);

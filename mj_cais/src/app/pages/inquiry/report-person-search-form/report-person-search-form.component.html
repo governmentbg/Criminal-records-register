@@ -85,20 +85,6 @@
           ></cais-input>
         </div>
       </div>
-
-      <div class="font-weight-bold">Месторождение</div>
-      <hr />
-
-      <div class="row ml-2">
-        <div class="form-group col-md-12">
-          <cais-address-form
-            #offPlace
-            [parentForm]="fullForm.birthPlace"
-            [showDescWhenIsNativeAddress]="true"
-          ></cais-address-form>
-        </div>
-      </div>
-
       <div class="font-weight-bold">Документ за самоличност</div>
       <hr />
       <div class="row">
@@ -127,6 +113,43 @@
           ></cais-input>
         </div>
       </div>
+      <div class="font-weight-bold">Гражданство</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Тип'"
+            [inputFormControl]="fullForm.nationalityTypeCode"
+            [parentGroup]="fullForm.group"
+            [items]="dbData.nationalityTypes"
+            [inputName]="'nationalityTypeCode'"
+            (selectionChanged)="onNationalityTypeChanged($event)"
+          >
+          </cais-autocomplete>
+        </div>
+          <div class="form-group col-md-3">
+            <cais-lookup
+              [label]="'Държава'"
+              [inputControl]="fullForm.nationalityCountry"
+              [parentGroup]="fullForm.nationalityCountry.group"
+              [openFunction]="openCountryDialog"
+              [hidden]="!showCountryLookup"
+            ></cais-lookup>
+          </div>
+      </div>
+      <div class="font-weight-bold">Месторождение</div>
+      <hr />
+
+      <div class="row">
+        <div class="form-group col-md-12">
+          <cais-address-form
+            #birthPlace
+            [parentForm]="fullForm.birthPlace"
+            [hideDesc]="true"
+          ></cais-address-form>
+        </div>
+      </div>
+
       <div class="font-weight-bold">Период</div>
       <hr />
       <div class="row">

@@ -17,5 +17,7 @@
         public string? IdDocNumber { get; set; }
         public DateTime? IdDocIssuingDate { get; set; }
         public DateTime? IdDocValidDate { get; set; }
+        public string? NationalityTypeCode { get; set; }
+        public string? NationalityCountryId { get; set; }
     }
 }
