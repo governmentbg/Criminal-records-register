@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
+using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
@@ -15,12 +16,14 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly ICertificateService _certificateService;
         private readonly ICertificateGenerationService _certificateGenerationService;
+        private readonly ICertificateValidatorService _certificateValidatorService;
 
-        public CertificatesController(ICertificateService certificateService, ICertificateGenerationService certificateGenerationService)
+        public CertificatesController(ICertificateService certificateService, ICertificateGenerationService certificateGenerationService, ICertificateValidatorService certificateValidatorService)
             : base(certificateService)
         {
             _certificateService = certificateService;
             _certificateGenerationService = certificateGenerationService;
+            _certificateValidatorService = certificateValidatorService;
         }
 
         [HttpPut("{aId}/save-signer-data")]
@@ -56,7 +59,8 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/certificate-content-only")]
         public async Task<IActionResult> GetContentOnly(string aId)
         {
-            var result = await this._certificateGenerationService.GetCertificateContentAsync(aId);
+            //var result = await this._certificateGenerationService.GetCertificateContentAsync(aId);
+            var result = await this._certificateValidatorService.GetPdfForDownload(aId);// get signed pdf
             if (result == null) return NotFound();
 
             var content = result;
@@ -72,6 +76,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPost("{certId}/uploadSignedCertificate")]
         public async Task<IActionResult> UploadSignedCertificate(string certId, [FromBody] CertificateDocumentDTO aInDto)
         {
+            if (await _certificateValidatorService.ValidatePdf(aInDto.DocumentContent, certId)) return NotFound();
             await this._certificateService.UploadSignedDocumet(certId, aInDto);
             return Ok();
         }
