@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class VBulletin : BaseEntity, IBaseIdEntity
+    public partial class VBulletinsFull : BaseEntity, IBaseIdEntity
     {
         public string Id { get; set; } = null!;
         public string? CsAuthorityId { get; set; }
@@ -76,7 +76,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public bool? PrevSuspSent { get; set; }
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
-        public string? ConvRemarks { get; set; }
         public string? Suid { get; set; }
         public string? EgnId { get; set; }
         public string? LnchId { get; set; }
@@ -89,6 +88,20 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PersonIdCscId { get; set; }
         public string? MigrationBulletinId { get; set; }
         public string? BirthMunicipalityId { get; set; }
+        public string? BirthCityName { get; set; }
+        public string? BirthMunName { get; set; }
         public string? BirthDistrictId { get; set; }
+        public string? BirthDistrictName { get; set; }
+        public string? BirthCountryName { get; set; }
+        public string? CsAuthorityName { get; set; }
+        public string? CaseAuthName { get; set; }
+        public string? DecidingAuthName { get; set; }
+        public string? DecisionTypeName { get; set; }
+        public string? CaseTypeName { get; set; }
+        public string? BulletinAuthorityName { get; set; }
+        public string? StatusName { get; set; }
+        public string? CreatedByUsername { get; set; }
+        public string? UpdatedByUsername { get; set; }
+        public string? IdDocCategoryName { get; set; }
     }
 }
