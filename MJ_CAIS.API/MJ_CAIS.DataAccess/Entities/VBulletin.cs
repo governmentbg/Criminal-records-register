@@ -76,7 +76,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public bool? PrevSuspSent { get; set; }
         public string? PrevSuspSentDescr { get; set; }
         public string? CaseAuthId { get; set; }
-        public string? ConvRemarks { get; set; }
         public string? Suid { get; set; }
         public string? EgnId { get; set; }
         public string? LnchId { get; set; }

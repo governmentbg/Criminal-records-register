@@ -7275,10 +7275,6 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("CONV_IS_TRANSMITTABLE");
 
-                entity.Property(e => e.ConvRemarks)
-                    .HasColumnType("CLOB")
-                    .HasColumnName("CONV_REMARKS");
-
                 entity.Property(e => e.ConvRetPeriodEndDate)
                     .HasColumnType("DATE")
                     .HasColumnName("CONV_RET_PERIOD_END_DATE");

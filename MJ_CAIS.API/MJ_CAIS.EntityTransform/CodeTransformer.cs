@@ -92,6 +92,7 @@ namespace MJ_CAIS.EntityTransform
                     if (filterInterfaces.ContainsKey(entityName))
                     {
                         extends.Add(filterInterfaces[entityName]);
+                        extends.Remove(nameof(IBaseIdEntity));
                     }
 
                     if (extends.Any())
