@@ -76,6 +76,10 @@ export class InquirySharedService {
     result["Дата на раждане"] = new Date(item.birthDate).toLocaleDateString(
       CommonConstants.bgLocale
     );
+    result["Гражданство 1"] = item.countryName1;
+    result["Гражданство 2"] = item.countryName2;
+    result["Гражданство 3"] = item.countryName3;
+    result["Гражданство 4"] = item.countryName4;
     result["ЕГН"] = item.egn;
     result["ЛНЧ"] = item.lnch;
     result["ЛН"] = item.ln;
