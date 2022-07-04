@@ -169,7 +169,6 @@ export class PagesMenu {
       {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
-        expanded: true,
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Admin) &&
           this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
@@ -221,6 +220,10 @@ export class PagesMenu {
           {
             title: "Xарактеристики на бюлетини",
             link: "/pages/inquiry/search-bulletins",
+          },
+          {
+            title: "Xарактеристики на лице",
+            link: "/pages/inquiry/search-people",
           },
         ],
       },

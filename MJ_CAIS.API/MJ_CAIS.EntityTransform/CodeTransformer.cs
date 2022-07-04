@@ -6,14 +6,14 @@ namespace MJ_CAIS.EntityTransform
 {
     public class CodeTransformer
     {
-        public static void TransformEntities(string rootPath, List<string> nomenclatures)
+        public static void TransformEntities(string rootPath, List<string> nomenclatures, Dictionary<string, string> filterInterfaces)
         {
             var parameters = new Parameters();
             var entitiesPath = parameters.GetEntitiesPath(rootPath);
             var files = Directory.GetFiles(entitiesPath, "*.cs");
             foreach (var file in files)
             {
-                var result = ChangeEntityFileContent(file, nomenclatures);
+                var result = ChangeEntityFileContent(file, nomenclatures, filterInterfaces);
                 if (result.hasChange)
                 {
                     File.WriteAllText(file, result.text);
@@ -51,7 +51,7 @@ namespace MJ_CAIS.EntityTransform
             }
         }
 
-        private static (string text, bool hasChange) ChangeEntityFileContent(string path, List<string> nomenclatures)
+        private static (string text, bool hasChange) ChangeEntityFileContent(string path, List<string> nomenclatures, Dictionary<string, string> filterInterfaces)
         {
             var lines = File.ReadAllLines(path).ToList();
             var entityName = Path.GetFileNameWithoutExtension(path);
@@ -79,16 +79,22 @@ namespace MJ_CAIS.EntityTransform
                         extends.Add(Constants.BaseEntityName);
                     }
 
-                    if (hasId)
+                    var hasCustomFilterInterface = filterInterfaces.ContainsKey(entityName);
+                    if (hasId && !hasCustomFilterInterface)
                     {
                         extends.Add(nameof(IBaseIdEntity));
+                    }
+
+                    if (hasCustomFilterInterface)
+                    {
+                        extends.Add(filterInterfaces[entityName]);
                     }
 
                     if (nomenclatures.Contains(entityName))
                     {
                         extends.Add(Constants.NomenclatureInterfaceName);
                     }
-
+              
                     if (extends.Any())
                     {
                         var extendsText = string.Join(", ", extends);

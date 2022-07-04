@@ -1,7 +1,6 @@
 import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
-import { NgxSpinnerService } from "ngx-spinner";
 import { OffenceCategoryDialogComponent } from "../../../@core/components/dialogs/offence-category-dialog/offence-category-dialog.component";
 import { OffenceCategoryGridModel } from "../../../@core/components/dialogs/offence-category-dialog/_models/offence-category-grid.model";
 import { CommonConstants } from "../../../@core/constants/common.constants";
@@ -29,8 +28,7 @@ export class ReportBulletinSearchFormComponent
   constructor(
     service: ReportBulletinService,
     public injector: Injector,
-    private spinner: NgxSpinnerService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
   ) {
     super(service, injector);
   }
@@ -55,37 +53,7 @@ export class ReportBulletinSearchFormComponent
   }
 
   public onSearch = () => {
-    if (!this.fullForm.group.valid) {
-      this.fullForm.group.markAllAsTouched();
-      this.toastr.showToast("danger", "Грешка при валидациите!");
-      return;
-    }
-
-    this.spinner.show();
-    setTimeout(() => {
-      /** spinner ends after 5 seconds */
-      this.spinner.hide();
-    }, 500);
-
-    let categoryIsAdded = false;
-    let filterQuery = "";
-    let formObj = this.fullForm.group.getRawValue();
-    for (let key in formObj) {
-      if (key && formObj[key]) {
-        if (typeof formObj[key] == "object" && formObj[key]._isUTC != null) {
-          let date = new Date(formObj[key]);
-          let result = date.toISOString();
-          filterQuery += `&${key}=${result}`;
-        } else if ((key == "offenceCategory" && formObj[key].id != '' && !categoryIsAdded)) {
-          categoryIsAdded = true;
-          filterQuery += `&offenceCatId=${formObj[key].id}`;
-        } else {
-          filterQuery += `&${key}=${formObj[key]}`;
-        }
-      }
-    }
-
-    this.bulletinReportOverview.onSearch(filterQuery);
+    this.bulletinReportOverview.onSearch();
   };
 
   public openOffenceCategoryDialog = () => {

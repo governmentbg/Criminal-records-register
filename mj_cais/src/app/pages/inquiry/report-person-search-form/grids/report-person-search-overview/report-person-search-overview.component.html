@@ -30,6 +30,17 @@
   </igx-column>
 
   <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
     field="bulletinType"
     header="Тип"
     [sortable]="true"
@@ -86,7 +97,7 @@
   </igx-column>
 
   <igx-column
-    field="firstname"
+    field="firstName"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -97,7 +108,7 @@
   </igx-column>
 
   <igx-column
-    field="surname"
+    field="surName"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
@@ -108,7 +119,7 @@
   </igx-column>
 
   <igx-column
-    field="familyname"
+    field="familyName"
     header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"

@@ -1,4 +1,5 @@
 ﻿using MJ_CAIS.CodeGenerator.Utils;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 
 namespace MJ_CAIS.EntityTransform
@@ -8,7 +9,7 @@ namespace MJ_CAIS.EntityTransform
         public static void Main(string[] args)
         {
             var rootPath = ClassGenerator.GetCurrentProjectPath();
-            CodeTransformer.TransformEntities(rootPath, Nomenclatures);
+            CodeTransformer.TransformEntities(rootPath, Nomenclatures, FilterInterfaces);
             CodeTransformer.TransformDbContext(rootPath);
         }
 
@@ -37,6 +38,12 @@ namespace MJ_CAIS.EntityTransform
             nameof(GCity),
             nameof(EEcrisAuthority),
             nameof(BFormOfGuilt),
+        };
+
+        public static Dictionary<string, string> FilterInterfaces = new Dictionary<string, string>
+        {
+            { nameof(VBulletin) , nameof(IInquiryBulletinFilterable) },
+            { nameof(VBulletinsFull) , nameof(IInquiryBulletinFilterable) }
         };
     }
 }

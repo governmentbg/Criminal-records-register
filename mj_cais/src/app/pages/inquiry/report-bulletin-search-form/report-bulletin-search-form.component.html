@@ -172,8 +172,31 @@
           ></cais-input>
         </div>
       </div>
+      <div class="font-weight-bold">Период</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'От'"
+            [inputFormControl]="fullForm.fromDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'До'"
+            [inputFormControl]="fullForm.toDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
     </form>
-    <cais-report-bulletin-search-overview #bulletinReportOverview>
+    <cais-report-bulletin-search-overview
+      #bulletinReportOverview
+      [searchForm]="fullForm"
+    >
     </cais-report-bulletin-search-overview>
   </nb-card-body>
 </nb-card>

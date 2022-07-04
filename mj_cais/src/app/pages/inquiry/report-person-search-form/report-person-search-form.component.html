@@ -1,0 +1,177 @@
+<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+  <nb-card-header class="card-header-shadow">
+    <div class="d-flex" style="justify-content: space-between">
+      <div class="d-flex align-items-center">
+        <div style="font-weight: bold; font-size: 22px">{{ title }}</div>
+      </div>
+      <div class="d-flex">
+        <div>
+          <button
+            (click)="onSearch()"
+            nbButton
+            matRipple
+            type="button"
+            class="ml-2"
+            style="min-width: 100px"
+          >
+            Търсене
+          </button>
+        </div>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="font-weight-bold">Основна информация</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Име'"
+            [inputFormControl]="fullForm.firstname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Презиме'"
+            [inputFormControl]="fullForm.surname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Фамилия'"
+            [inputFormControl]="fullForm.familyname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Пол'"
+            [inputFormControl]="fullForm.sex"
+            [parentGroup]="fullForm.group"
+            [inputName]="'sex'"
+            [items]="dbData.genderTypes"
+          ></cais-autocomplete>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'ЕГН'"
+            [inputFormControl]="fullForm.egn"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'ЛНЧ'"
+            [inputFormControl]="fullForm.lnch"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата на раждане'"
+            [inputFormControl]="fullForm.birthDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="font-weight-bold">Документ за самоличност</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Номер'"
+            [inputFormControl]="fullForm.idDocNumber"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Валиден от'"
+            [inputFormControl]="fullForm.idDocIssuingDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Валиден до'"
+            [inputFormControl]="fullForm.idDocValidDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="font-weight-bold">Гражданство</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Тип'"
+            [inputFormControl]="fullForm.nationalityTypeCode"
+            [parentGroup]="fullForm.group"
+            [items]="dbData.nationalityTypes"
+            [inputName]="'nationalityTypeCode'"
+            (selectionChanged)="onNationalityTypeChanged($event)"
+          >
+          </cais-autocomplete>
+        </div>
+          <div class="form-group col-md-3">
+            <cais-lookup
+              [label]="'Държава'"
+              [inputControl]="fullForm.nationalityCountry"
+              [parentGroup]="fullForm.nationalityCountry.group"
+              [openFunction]="openCountryDialog"
+              [hidden]="!showCountryLookup"
+            ></cais-lookup>
+          </div>
+      </div>
+      <div class="font-weight-bold">Месторождение</div>
+      <hr />
+
+      <div class="row">
+        <div class="form-group col-md-12">
+          <cais-address-form
+            #birthPlace
+            [parentForm]="fullForm.birthPlace"
+            [hideDesc]="true"
+          ></cais-address-form>
+        </div>
+      </div>
+
+      <div class="font-weight-bold">Период</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'От'"
+            [inputFormControl]="fullForm.fromDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'До'"
+            [inputFormControl]="fullForm.toDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+    <cais-report-person-search-overview #bulletinByPersonReportOverview>
+    </cais-report-person-search-overview>
+  </nb-card-body>
+</nb-card>

@@ -1,6 +1,6 @@
-﻿namespace MJ_CAIS.DTO.Inquiry
+﻿namespace MJ_CAIS.DataAccess
 {
-    public class InquirySearchBulletinDTO : PeriodSearchDTO
+    public interface IInquiryBulletinFilterable : IBaseIdEntity
     {
         public string? RegistrationNumber { get; set; }
         public string? BulletinType { get; set; }
@@ -14,8 +14,6 @@
         public DateTime? DecisionFinalDate { get; set; }
         public string? DecisionTypeId { get; set; }
         public string? StatusId { get; set; }
-        public string? OffenceCatId { get; set; }
-        public string? SanctCategoryId { get; set; }
-        public decimal? FineAmount { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }
