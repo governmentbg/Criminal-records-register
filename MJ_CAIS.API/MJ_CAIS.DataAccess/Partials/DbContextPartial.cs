@@ -37,7 +37,14 @@ namespace MJ_CAIS.DataAccess
                         var claimId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
                         if (claimId == null || string.IsNullOrEmpty(claimId.Value))
                         {
-                            _currentUserId = null;
+                            if (!string.IsNullOrEmpty(_userContext?.UserId))
+                            {
+                                _currentUserId = _userContext.UserId;
+                            }
+                            else
+                            {
+                                _currentUserId = null;
+                            }
                         }
                         else
                         {
