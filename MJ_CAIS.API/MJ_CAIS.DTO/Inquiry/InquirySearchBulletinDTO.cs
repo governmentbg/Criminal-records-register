@@ -17,5 +17,6 @@
         public string? OffenceCatId { get; set; }
         public string? SanctCategoryId { get; set; }
         public decimal? FineAmount { get; set; }
+        public string? AuthorityId { get; set; }
     }
 }

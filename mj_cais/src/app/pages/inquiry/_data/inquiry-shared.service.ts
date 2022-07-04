@@ -46,7 +46,7 @@ export class InquirySharedService {
     );
 
     result["Номер на бюлетин"] = item.registrationNumber;
-    result["Бюро съдимост, в което се съхранява"] = item.caseAuthName;
+    result["Бюро съдимост, в което се съхранява"] = item.csAuthorityName;
     result["Статус"] = item.statusName;
     result["Входящ номер към азбучния указател"] = item.alphabeticalIndex;
     result["ID на осъждане в ECRIS"] = item.ecrisConvictionId;

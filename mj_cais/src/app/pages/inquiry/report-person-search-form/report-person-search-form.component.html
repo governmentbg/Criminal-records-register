@@ -22,6 +22,17 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Бюро съдимост'"
+            [inputFormControl]="fullForm.authorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'authorityId'"
+            [items]="dbData.authorities"
+          ></cais-autocomplete>
+        </div>
+      </div>
       <div class="font-weight-bold">Основна информация</div>
       <hr />
       <div class="row">

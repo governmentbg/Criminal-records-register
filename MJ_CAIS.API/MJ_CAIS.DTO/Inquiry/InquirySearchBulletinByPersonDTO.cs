@@ -19,5 +19,6 @@
         public DateTime? IdDocValidDate { get; set; }
         public string? NationalityTypeCode { get; set; }
         public string? NationalityCountryId { get; set; }
+        public string? AuthorityId { get; set; }
     }
 }

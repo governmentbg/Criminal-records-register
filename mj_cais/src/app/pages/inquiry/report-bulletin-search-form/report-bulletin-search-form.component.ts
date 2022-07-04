@@ -5,11 +5,12 @@ import { OffenceCategoryDialogComponent } from "../../../@core/components/dialog
 import { OffenceCategoryGridModel } from "../../../@core/components/dialogs/offence-category-dialog/_models/offence-category-grid.model";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { UserAuthorityService } from "../../../@core/services/common/user-authority.service";
+import { ExportBulletinModel } from "../_models/export-bulletin.model";
 import { ReportBulletinSearchOverviewComponent } from "./grids/report-bulletin-search-overview/report-bulletin-search-overview.component";
 import { ReportBulletinResolverData } from "./_data/report-bulletin.resolver";
 import { ReportBulletinService } from "./_data/report-bulletin.service";
 import { ReportBulletinSearchForm } from "./_models/report-bulletin-search.form";
-import { ReportBulletinSearchModel } from "./_models/report-bulletin-search.model";
 
 @Component({
   selector: "cais-report-bulletin-search-form",
@@ -18,7 +19,7 @@ import { ReportBulletinSearchModel } from "./_models/report-bulletin-search.mode
 })
 export class ReportBulletinSearchFormComponent
   extends CrudForm<
-    ReportBulletinSearchModel,
+    ExportBulletinModel,
     ReportBulletinSearchForm,
     ReportBulletinResolverData,
     ReportBulletinService
@@ -29,6 +30,7 @@ export class ReportBulletinSearchFormComponent
     service: ReportBulletinService,
     public injector: Injector,
     private dialogService: NbDialogService,
+    private userAuthService: UserAuthorityService
   ) {
     super(service, injector);
   }
@@ -41,6 +43,7 @@ export class ReportBulletinSearchFormComponent
   ngOnInit(): void {
     this.fullForm = new ReportBulletinSearchForm();
     this.fullForm.group.patchValue(this.dbData.element);
+    this.fullForm.authorityId.patchValue(this.userAuthService.csAuthorityId);
     this.formFinishedLoading.emit();
   }
 
@@ -48,8 +51,8 @@ export class ReportBulletinSearchFormComponent
     return this.fullForm.group;
   }
 
-  createInputObject(object: ReportBulletinSearchModel) {
-    return new ReportBulletinSearchModel(object);
+  createInputObject(object: ExportBulletinModel) {
+    return new ExportBulletinModel(object);
   }
 
   public onSearch = () => {

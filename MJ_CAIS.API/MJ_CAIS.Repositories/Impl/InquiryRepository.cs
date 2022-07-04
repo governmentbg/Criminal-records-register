@@ -73,14 +73,14 @@ namespace MJ_CAIS.Repositories
                                             (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                             BulletinResources.Unspecified),
                              Egn = bulletin.Egn,
-                             FamilyName = bulletin.Familyname,
-                             FirstName = bulletin.Firstname,
+                             Familyname = bulletin.Familyname,
+                             Firstname = bulletin.Firstname,
                              Ln = bulletin.Ln,
                              Lnch = bulletin.Lnch,
                              RegistrationNumber = bulletin.RegistrationNumber,
                              StatusId = bulletin.StatusId,
                              StatusName = bulletinStatus.Name,
-                             SurName = bulletin.Surname,
+                             Surname = bulletin.Surname,
                              Version = bulletin.Version,
                              CreatedOn = bulletin.CreatedOn,
                          };
@@ -99,6 +99,8 @@ namespace MJ_CAIS.Repositories
         private IQueryable<T> ApplyFiltersByPerson<T>(IQueryable<T> bulletinsQuery, InquirySearchBulletinByPersonDTO searchParams)
             where T : class, IInquiryBulletinFilterable
         {
+            if (!string.IsNullOrEmpty(searchParams.AuthorityId))
+                bulletinsQuery = bulletinsQuery.Where(x => x.CsAuthorityId == searchParams.AuthorityId);
 
             if (!string.IsNullOrEmpty(searchParams.Firstname))
                 bulletinsQuery = bulletinsQuery.Where(x => x.Firstname == searchParams.Firstname);
@@ -166,6 +168,9 @@ namespace MJ_CAIS.Repositories
         private IQueryable<T> ApplyFilters<T>(IQueryable<T> bulletinsQuery, InquirySearchBulletinDTO searchParams)
             where T : class, IInquiryBulletinFilterable
         {
+            if (!string.IsNullOrEmpty(searchParams.AuthorityId))
+                bulletinsQuery = bulletinsQuery.Where(x => x.CsAuthorityId == searchParams.AuthorityId);
+
             if (!string.IsNullOrEmpty(searchParams.RegistrationNumber))
                 bulletinsQuery = bulletinsQuery.Where(x => x.RegistrationNumber == searchParams.RegistrationNumber);
 

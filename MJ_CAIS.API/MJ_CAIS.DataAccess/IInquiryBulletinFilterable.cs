@@ -30,5 +30,6 @@
         public DateTime? IdDocValidDate { get; set; }
         public bool? EuCitizen { get; set; }
         public bool? TcnCitizen { get; set; }
+        public string? CsAuthorityId { get; set; }
     }
 }
