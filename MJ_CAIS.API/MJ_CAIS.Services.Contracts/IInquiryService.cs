@@ -13,5 +13,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<List<ExportInquiryBulletinGridDTO>> ExportBulletinsAsync(InquirySearchBulletinDTO searchParams);
 
         Task<IgPageResult<InquiryBulletinByPersonGridDTO>> SearchBulletinsByPersonWithPaginationAsync(ODataQueryOptions<InquiryBulletinByPersonGridDTO> aQueryOptions, InquirySearchBulletinByPersonDTO searchParams);
+
+        Task<List<ExportInquiryBulletinGridDTO>> ExportBulletinsByPersonDataAsync(InquirySearchBulletinByPersonDTO searchParams);
     }
 }

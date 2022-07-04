@@ -58,7 +58,9 @@ namespace MJ_CAIS.Repositories
 
         public IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams)
         {
-            var bulletinsQuery = ApplyFiltersByPerson(searchParams);
+            var query = from bulletin in _dbContext.VBulletins select bulletin;
+
+            var bulletinsQuery = ApplyFiltersByPerson(query, searchParams);
 
             var result = from bulletin in bulletinsQuery
                          join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
@@ -86,9 +88,17 @@ namespace MJ_CAIS.Repositories
             return result;
         }
 
-        private IQueryable<VBulletin> ApplyFiltersByPerson(InquirySearchBulletinByPersonDTO searchParams)
+        public IQueryable<VBulletinsFull> FilterBulletinsByPersonDataForExport(InquirySearchBulletinByPersonDTO searchParams)
         {
-            var bulletinsQuery = from bulletin in _dbContext.VBulletins select bulletin;
+            var bulletinsQuery = from bulletin in _dbContext.VBulletinsFulls select bulletin;
+            var queryResult = ApplyFiltersByPerson(bulletinsQuery, searchParams);
+
+            return queryResult;
+        }
+
+        private IQueryable<T> ApplyFiltersByPerson<T>(IQueryable<T> bulletinsQuery, InquirySearchBulletinByPersonDTO searchParams)
+            where T : class, IInquiryBulletinFilterable
+        {
 
             if (!string.IsNullOrEmpty(searchParams.Firstname))
                 bulletinsQuery = bulletinsQuery.Where(x => x.Firstname == searchParams.Firstname);

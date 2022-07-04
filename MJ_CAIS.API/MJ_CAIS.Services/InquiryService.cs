@@ -49,5 +49,14 @@ namespace MJ_CAIS.Services
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
         }
+
+        public async Task<List<ExportInquiryBulletinGridDTO>> ExportBulletinsByPersonDataAsync(InquirySearchBulletinByPersonDTO searchParams)
+        {
+            var baseQuery = _inquiryRepository.FilterBulletinsByPersonDataForExport(searchParams)
+                .ProjectTo<ExportInquiryBulletinGridDTO>(mapperConfiguration);
+
+            var result = await baseQuery.ToListAsync(); // todo: max
+            return result;
+        }
     }
 }

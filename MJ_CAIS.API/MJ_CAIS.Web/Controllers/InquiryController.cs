@@ -38,5 +38,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._service.SearchBulletinsByPersonWithPaginationAsync(aQueryOptions, searchParams);
             return Ok(result);
         }
+
+        [HttpGet("export-bulletins-by-person")]
+        public async Task<IActionResult> ExportBulletins([FromQuery] InquirySearchBulletinByPersonDTO searchParams)
+        {
+            var result = await this._service.ExportBulletinsByPersonDataAsync(searchParams);
+            return Ok(result);
+        }
     }
 }

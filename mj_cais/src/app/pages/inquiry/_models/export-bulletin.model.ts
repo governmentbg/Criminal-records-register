@@ -1,4 +1,4 @@
-import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.model";
+import { BaseGridModel } from "../../../@core/models/common/base-grid.model";
 
 export class ExportBulletinModel extends BaseGridModel {
   public registrationNumber: string = null;

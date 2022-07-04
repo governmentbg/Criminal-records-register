@@ -127,15 +127,15 @@
           >
           </cais-autocomplete>
         </div>
-          <div class="form-group col-md-3">
-            <cais-lookup
-              [label]="'Държава'"
-              [inputControl]="fullForm.nationalityCountry"
-              [parentGroup]="fullForm.nationalityCountry.group"
-              [openFunction]="openCountryDialog"
-              [hidden]="!showCountryLookup"
-            ></cais-lookup>
-          </div>
+        <div class="form-group col-md-3">
+          <cais-lookup
+            [label]="'Държава'"
+            [inputControl]="fullForm.nationalityCountry"
+            [parentGroup]="fullForm.nationalityCountry.group"
+            [openFunction]="openCountryDialog"
+            [hidden]="!showCountryLookup"
+          ></cais-lookup>
+        </div>
       </div>
       <div class="font-weight-bold">Месторождение</div>
       <hr />
@@ -171,7 +171,10 @@
         </div>
       </div>
     </form>
-    <cais-report-person-search-overview #bulletinByPersonReportOverview>
+    <cais-report-person-search-overview
+      #bulletinByPersonReportOverview
+      [searchForm]="fullForm"
+    >
     </cais-report-person-search-overview>
   </nb-card-body>
 </nb-card>

@@ -15,5 +15,20 @@
         public string? DecisionTypeId { get; set; }
         public string? StatusId { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public string Firstname { get; set; }
+        public string Surname { get; set; }
+        public string Familyname { get; set; }
+        public string Egn { get; set; }
+        public string Lnch { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string BirthCountryId { get; set; }
+        public string BirthCityId { get; set; }
+        public string BirthPlaceOther { get; set; }
+        public decimal Sex { get; set; }
+        public string IdDocNumber { get; set; }
+        public DateTime? IdDocIssuingDate { get; set; }
+        public DateTime? IdDocValidDate { get; set; }
+        public bool? EuCitizen { get; set; }
+        public bool? TcnCitizen { get; set; }
     }
 }
