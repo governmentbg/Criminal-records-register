@@ -5,18 +5,27 @@ import { ReportBulletinSearchFormComponent } from './report-bulletin-search-form
 import { ReportBulletinSearchOverviewComponent } from './report-bulletin-search-form/grids/report-bulletin-search-overview/report-bulletin-search-overview.component';
 import { ReportPersonSearchFormComponent } from './report-person-search-form/report-person-search-form.component';
 import { ReportPersonSearchOverviewComponent } from './report-person-search-form/grids/report-person-search-overview/report-person-search-overview.component';
-
+import { StatisticsComponent } from './statistics/statistics.component';
+// import { 
+// 	IgxDoughnutChartModule,
+//   IgxPieChartModule,
+// 	IgxRingSeriesModule,
+//  } from "igniteui-angular-charts";
 
 @NgModule({
   declarations: [
     ReportBulletinSearchFormComponent,
     ReportBulletinSearchOverviewComponent,
     ReportPersonSearchFormComponent,
-    ReportPersonSearchOverviewComponent
+    ReportPersonSearchOverviewComponent,
+    StatisticsComponent
   ],
   imports: [
     CoreComponentModule,
-    InquiryRoutingModule
-  ]
+    InquiryRoutingModule,
+    // IgxDoughnutChartModule,
+    // IgxPieChartModule,
+		// IgxRingSeriesModule, 
+  ],
 })
 export class InquiryModule { }

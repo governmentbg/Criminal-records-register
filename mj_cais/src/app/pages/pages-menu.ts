@@ -225,6 +225,10 @@ export class PagesMenu {
             title: "Xарактеристики на лице",
             link: "/pages/inquiry/search-people",
           },
+          {
+            title: "Статистика",
+            link: "/pages/inquiry/statistics",
+          },
         ],
       },
     ];

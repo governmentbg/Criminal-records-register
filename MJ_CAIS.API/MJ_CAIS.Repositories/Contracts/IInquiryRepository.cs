@@ -13,5 +13,13 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams);
 
         IQueryable<VBulletinsFull> FilterBulletinsByPersonDataForExport(InquirySearchBulletinByPersonDTO searchParams);
+
+        IQueryable<StatisticCountDTO> GetStatisticForBulletins(StatisticSearchDTO searchParam);
+
+        Task<StatisticCountDTO> GetStatisticForApplicationsAsync(StatisticSearchDTO searchParam);
+
+        Task<StatisticCountDTO> GetStatisticForReportsAsync(StatisticSearchDTO searchParam);
+
+        Task<StatisticCountDTO> GetStatisticForInternalRequestsAsync(StatisticSearchDTO searchParam);
     }
 }

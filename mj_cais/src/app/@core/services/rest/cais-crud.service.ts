@@ -64,7 +64,7 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
     );
   }
 
-  constructQueryParamsByFilters(formObj, filterQuery): string {
+  constructQueryParamsByFilters(formObj, filterQuery = ''): string {
     for (let key in formObj) {
       if (key && formObj[key]) {
         let value = formObj[key];

@@ -70,6 +70,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Въведени бюлетини по чл. 78а от НК.
+        /// </summary>
+        public static string Bulletin78AForStatistics {
+            get {
+                return ResourceManager.GetString("Bulletin78AForStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to за съдимост.
         /// </summary>
         public static string ConvictionBulletin {
@@ -79,11 +88,47 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Въведени бюлетини за съдимост.
+        /// </summary>
+        public static string ConvictionBulletinForStatistics {
+            get {
+                return ResourceManager.GetString("ConvictionBulletinForStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Въведени бюлетини.
+        /// </summary>
+        public static string titleBulletinsForStatistics {
+            get {
+                return ResourceManager.GetString("titleBulletinsForStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявки за реабилитация.
+        /// </summary>
+        public static string titleInternalRequestsForStatistics {
+            get {
+                return ResourceManager.GetString("titleInternalRequestsForStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to неопределен.
         /// </summary>
         public static string Unspecified {
             get {
                 return ResourceManager.GetString("Unspecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Въведени бюлетини от тип неопределен.
+        /// </summary>
+        public static string UnspecifiedForStatistics {
+            get {
+                return ResourceManager.GetString("UnspecifiedForStatistics", resourceCulture);
             }
         }
     }

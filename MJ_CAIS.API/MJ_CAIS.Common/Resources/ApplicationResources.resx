@@ -186,6 +186,9 @@
   <data name="titleApplications" xml:space="preserve">
     <value>Заявления</value>
   </data>
+  <data name="titleApplicationsForStatistics" xml:space="preserve">
+    <value>Издадени свидетелства</value>
+  </data>
   <data name="titleAppPreview" xml:space="preserve">
     <value>Заявление за издаване на електронно свидетелство за съдимост</value>
   </data>
@@ -197,5 +200,8 @@
   </data>
   <data name="titleNewApp" xml:space="preserve">
     <value>Ново заявление</value>
+  </data>
+  <data name="titleReportsForStatistics" xml:space="preserve">
+    <value>Издадени справки</value>
   </data>
 </root>

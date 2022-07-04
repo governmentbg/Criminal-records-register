@@ -7,6 +7,8 @@ import { ReportBulletinSearchFormComponent } from "./report-bulletin-search-form
 import { ReportBulletinResolver } from "./report-bulletin-search-form/_data/report-bulletin.resolver";
 import { ReportPersonSearchFormComponent } from "./report-person-search-form/report-person-search-form.component";
 import { ReportPersonResolver } from "./report-person-search-form/_data/report-person.resolver";
+import { StatisticsComponent } from "./statistics/statistics.component";
+import { StatisticsResolver } from "./statistics/_data/statistics.resolver";
 
 const routes: Routes = [
   {
@@ -30,6 +32,23 @@ const routes: Routes = [
     path: "search-people",
     component: ReportPersonSearchFormComponent,
     resolve: { dbData: ReportPersonResolver },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [
+          RoleNameEnum.Judge,
+          RoleNameEnum.Normal,
+          RoleNameEnum.Admin,
+          RoleNameEnum.GlobalAdmin,
+          RoleNameEnum.CentralAuth,
+        ],
+      },
+    },
+  },
+  {
+    path: "statistics",
+    component: StatisticsComponent,
+    resolve: { dbData: StatisticsResolver },
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
