@@ -43,7 +43,7 @@ export class ApplicationForm extends BaseForm {
   public addrEmail: FormControl;
   public description: FormControl;
   public email: FormControl;
-  public applicationTypeId: FormControl;
+  public applicationCode: FormControl;
   public csAuthorityId: FormControl;
   public isLocal: FormControl;
   public purposeId: FormControl;
@@ -102,7 +102,7 @@ export class ApplicationForm extends BaseForm {
     this.addrEmail = new FormControl(null);
     this.description = new FormControl(null);
     this.email = new FormControl(null);
-    this.applicationTypeId = new FormControl(null);
+    this.applicationCode = new FormControl(null);
     this.csAuthorityId = new FormControl(null);
     this.isLocal = new FormControl(null);
     this.purposeId = new FormControl(null);
@@ -165,7 +165,7 @@ export class ApplicationForm extends BaseForm {
       addrEmail: this.addrEmail,
       description: this.description,
       email: this.email,
-      applicationTypeId: this.applicationTypeId,
+      applicationCode: this.applicationCode,
       csAuthorityId: this.csAuthorityId,
       isLocal: this.isLocal,
       purposeId: this.purposeId,

@@ -6,5 +6,5 @@ export enum CertificateStatuTypeEnum {
   BulletinsSelection = "BulletinsSelection",
   BulletinsRehabilitation = "BulletinsRehabilitation",
   CertificateUserSign = "CertificateUserSign",
-  CertificateForDelivery = "CertificateForDelivery"
+  CertificateForDelivery = "CertificateForDelivery",
 }

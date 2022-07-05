@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.DataAccess;
 using TL.Signer;
 
@@ -42,7 +43,18 @@ namespace MJ_CAIS.ExternalWebServices
         {
             var contentFromDb = await GetCertificateContent(certificateID);
             var validationString = ExternalServicesHelper.GetValidationString(contentFromDb);
-            return await ValidatePdf(pdfBytes, validationString, certificateID);
+
+            bool result;
+            try
+            {
+                result = await ValidatePdf(pdfBytes, validationString, certificateID);
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLogicException("Файлът не е подписан!");
+            }
+
+            return result;
         }
 
         public async Task<byte[]> SignPdfForDownload(byte[] pdfBytes, string certificateID)

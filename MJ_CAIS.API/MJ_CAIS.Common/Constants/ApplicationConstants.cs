@@ -55,6 +55,8 @@
             public const string WebExternalCertificate = "5";
             public const string DeskCertificate = "6";
             public const string ConvictionRequest = "7";
+            public const string ApplicationRequestOld = "8";
+            public const string ConvictionRequestOld = "9";
         }
         public static class PaymentMethodsCodes
         {

@@ -24,6 +24,10 @@ export class ApplicationCertificateDocumentResultComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  public fileOverAnother(e: any): void {
+    this.hasDropZoneOver = e;
+  }
+
   onSubmitAppDocument() {
     if (!this.appDocumentForm.group.valid) {
       this.toastr.showToast("danger", this.validationMessage);

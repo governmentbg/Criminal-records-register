@@ -12,6 +12,7 @@ export class ApplicationCertificateResultForm extends BaseForm {
   public applicationId: FormControl;
   public statusCode: FormControl;
   public docName: FormControl;
+  public docType: FormControl;
   public statusName: FormControl;
   public registrationNumber: FormControl;
   public currentUserAuthId: FormControl;
@@ -27,6 +28,7 @@ export class ApplicationCertificateResultForm extends BaseForm {
     this.statusCode = new FormControl(null);
     this.statusName = new FormControl(null);
     this.docName = new FormControl(null);
+    this.docType = new FormControl(null);
     this.registrationNumber = new FormControl(null);
     this.currentUserAuthId = new FormControl(null);
     this.selectedBulletinsIds = new FormControl(null);
@@ -41,6 +43,7 @@ export class ApplicationCertificateResultForm extends BaseForm {
       version: this.version,
       firstSignerId: this.firstSignerId,
       docName: this.docName,
+      docType: this.docType,
       secondSignerId: this.secondSignerId,
       validFrom: this.validFrom,
       validTo: this.validTo,

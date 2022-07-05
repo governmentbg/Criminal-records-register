@@ -25,7 +25,7 @@ namespace MJ_CAIS.DTO.Application
         public string? AddrEmail { get; set; }
         public string? Description { get; set; }
         public string? Email { get; set; }
-        public string? ApplicationTypeId { get; set; }
+        public string? ApplicationCode { get; set; }
         public string? CsAuthorityId { get; set; }
         public bool? IsLocal { get; set; }
         public string? PurposeId { get; set; }
