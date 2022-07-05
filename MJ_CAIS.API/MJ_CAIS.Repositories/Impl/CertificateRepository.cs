@@ -17,6 +17,7 @@ namespace MJ_CAIS.Repositories.Impl
             var certificate = await _dbContext.ACertificates
                 .Include(x => x.StatusCodeNavigation)
                 .Include(x => x.Doc)
+                .ThenInclude(x => x.DocContent)
                 .AsNoTracking()
                 .Where(x => x.ApplicationId == appId)
                 .OrderByDescending(x => x.CreatedOn)

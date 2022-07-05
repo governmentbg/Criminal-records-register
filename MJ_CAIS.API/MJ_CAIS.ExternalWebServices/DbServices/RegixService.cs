@@ -152,7 +152,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     application.FamilynameLat = cache.FamilynameLat;
                     application.Egn = cache.Egn;
                     application.Lnch = cache.Lnch;
-                    application.Sex = decimal.Parse(cache.GenderCode);
+                    decimal result;
+                    if (decimal.TryParse(cache.GenderCode, out result))
+                    {
+                        application.Sex = result;
+                    }
                     application.BirthDate = cache.BirthDate;
                     application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " + cache.BirthCityName + " " + cache.BirthPlace;
                     if (!string.IsNullOrEmpty(cache.BirthCountryCode))

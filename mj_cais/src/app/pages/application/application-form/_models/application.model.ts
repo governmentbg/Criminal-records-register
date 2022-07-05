@@ -23,7 +23,7 @@ export class ApplicationModel extends BaseModel {
   public addrEmail: string = null;
   public description: string = null;
   public email: string = null;
-  public applicationTypeId: string = null;
+  public applicationCode: string = null;
   public csAuthorityId: string = null;
   public isLocal: boolean = null;
   public version: number = null;
@@ -65,7 +65,7 @@ export class ApplicationModel extends BaseModel {
       this.addrEmail = init.addrEmail ?? null;
       this.description = init.description ?? null;
       this.email = init.email ?? null;
-      this.applicationTypeId = init.applicationTypeId ?? null;
+      this.applicationCode = init.applicationCode ?? null;
       this.csAuthorityId = init.csAuthorityId ?? null;
       this.isLocal = init.isLocal ?? null;
       this.version = init.version ?? null;

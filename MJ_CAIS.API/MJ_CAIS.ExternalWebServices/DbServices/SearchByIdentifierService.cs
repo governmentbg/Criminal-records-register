@@ -55,7 +55,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string currentUserAuth = _userContext.CsAuthorityId ?? null ?? "660";
             string registrationNumber = await this._registerTypeService.GetRegisterNumberForApplicationOnDesk(currentUserAuth);
             ApplicationInDTO applicaiton = new ApplicationInDTO()
-            { RegistrationNumber = registrationNumber, Person = new PersonDTO() { Egn = id } };
+            { RegistrationNumber = registrationNumber, StatusCode = ApplicationConstants.ApplicationStatuses.NewId, Person = new PersonDTO() { Lnch = id } };
             string applicationId = await _applicationService.InsertAsync(applicaiton);
 
             _dbContext.ChangeTracker.Clear();

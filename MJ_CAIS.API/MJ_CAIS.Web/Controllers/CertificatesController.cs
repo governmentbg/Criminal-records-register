@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
+using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
@@ -15,12 +17,14 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly ICertificateService _certificateService;
         private readonly ICertificateGenerationService _certificateGenerationService;
+        private readonly ICertificateValidatorService _certificateValidatorService;
 
-        public CertificatesController(ICertificateService certificateService, ICertificateGenerationService certificateGenerationService)
+        public CertificatesController(ICertificateService certificateService, ICertificateGenerationService certificateGenerationService, ICertificateValidatorService certificateValidatorService)
             : base(certificateService)
         {
             _certificateService = certificateService;
             _certificateGenerationService = certificateGenerationService;
+            _certificateValidatorService = certificateValidatorService;
         }
 
         [HttpPut("{aId}/save-signer-data")]
@@ -53,12 +57,24 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
-        [HttpGet("{aId}/certificate-content-only")]
-        public async Task<IActionResult> GetContentOnly(string aId)
+        [HttpGet("{aId}/certificate-content-only/{applicationType}")]
+        public async Task<IActionResult> GetContentOnly(string aId, string applicationType)
         {
-            var result = await this._certificateGenerationService.GetCertificateContentAsync(aId);
-            if (result == null) return NotFound();
 
+            if (applicationType == ApplicationConstants.ApplicationTypes.ApplicationRequestOld ||
+                applicationType == ApplicationConstants.ApplicationTypes.ConvictionRequestOld)
+            {
+                var resultXML = await this._certificateGenerationService.GetCertificateContentAsync(aId);
+                var fileNameXML = "certificate.html";
+                var mimeTypeXML = "application/octet-stream";
+
+                Response.Headers.Add("File-Name", fileNameXML);
+                Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+                return File(resultXML, mimeTypeXML, fileNameXML);
+            }
+            ;
+            var result = await this._certificateValidatorService.GetPdfForDownload(aId);// get signed pdf
             var content = result;
             var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
@@ -72,6 +88,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPost("{certId}/uploadSignedCertificate")]
         public async Task<IActionResult> UploadSignedCertificate(string certId, [FromBody] CertificateDocumentDTO aInDto)
         {
+            await _certificateValidatorService.ValidatePdf(aInDto.DocumentContent, certId);
             await this._certificateService.UploadSignedDocumet(certId, aInDto);
             return Ok();
         }

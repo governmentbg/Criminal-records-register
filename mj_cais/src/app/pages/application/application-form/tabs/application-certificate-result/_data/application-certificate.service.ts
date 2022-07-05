@@ -40,8 +40,8 @@ export class ApplicationCertificateService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
-  public downloadSertificateContent(id: string) {
-    let url = `${this.url}/${id}/certificate-content-only`;
+  public downloadSertificateContent(id: string, applicationCode: string) {
+    let url = `${this.url}/${id}/certificate-content-only/${applicationCode}`;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
@@ -62,7 +62,7 @@ export class ApplicationCertificateService extends CaisCrudService<
     );
   }
 
-  public getCertificateByAppId(appId: string) {
+  public getCertificateByAppId(appId: string) : Observable<ApplicationCertificateResultModel> {
     return this.http.get<ApplicationCertificateResultModel>(
       `${this.url}/by-application/${appId}`
     );
