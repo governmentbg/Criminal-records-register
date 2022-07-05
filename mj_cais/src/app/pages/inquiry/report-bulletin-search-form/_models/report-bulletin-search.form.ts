@@ -21,6 +21,7 @@ export class ReportBulletinSearchForm  {
   public fineAmount: FormControl;
   public fromDate: FormControl;
   public toDate: FormControl;
+  public authorityId: FormControl;
 
   constructor() {
     this.registrationNumber = new FormControl(null);
@@ -40,7 +41,8 @@ export class ReportBulletinSearchForm  {
     this.fineAmount = new FormControl(null);
     this.fromDate = new FormControl(null);
     this.toDate = new FormControl(null);
-
+    this.authorityId = new FormControl(null);
+    
     this.group = new FormGroup({
       registrationNumber: this.registrationNumber,
       bulletinType: this.bulletinType,
@@ -59,6 +61,7 @@ export class ReportBulletinSearchForm  {
       fineAmount: this.fineAmount,
       fromDate: this.fromDate,
       toDate: this.toDate,
+      authorityId: this.authorityId
     });
   }
 }

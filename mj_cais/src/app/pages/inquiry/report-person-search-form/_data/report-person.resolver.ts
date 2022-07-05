@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import {
-  Router,
   Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
@@ -9,7 +8,6 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { ReportPersonSearchModel } from "../_models/report-person-search.model";
 import { ReportPersonService } from "./report-person.service";
 
 @Injectable({
@@ -30,14 +28,16 @@ export class ReportPersonResolver implements Resolve<any> {
     let result: ReportPersonResolverData = {
       element: element,
       genderTypes: this.nomenclatureService.getGenderTypes(),
-      nationalityTypes: this.nomenclatureService.getNationalityTypes()
+      nationalityTypes: this.nomenclatureService.getNationalityTypes(),
+      authorities: this.nomenclatureService.getCsAuthorities(),
     };
 
     return forkJoin(result);
   }
 }
 
-export class ReportPersonResolverData extends BaseResolverData<ReportPersonSearchModel> {
+export class ReportPersonResolverData extends BaseResolverData<any> {
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalityTypes: Observable<BaseNomenclatureModel[]>;
+  public authorities: Observable<BaseNomenclatureModel[]>;
 }

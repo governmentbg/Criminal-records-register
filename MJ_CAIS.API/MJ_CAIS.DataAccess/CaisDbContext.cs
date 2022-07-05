@@ -7661,6 +7661,22 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CONV_RET_PERIOD_END_DATE");
 
+                entity.Property(e => e.CountryName1)
+                    .HasMaxLength(200)
+                    .HasColumnName("COUNTRY_NAME_1");
+
+                entity.Property(e => e.CountryName2)
+                    .HasMaxLength(200)
+                    .HasColumnName("COUNTRY_NAME_2");
+
+                entity.Property(e => e.CountryName3)
+                    .HasMaxLength(200)
+                    .HasColumnName("COUNTRY_NAME_3");
+
+                entity.Property(e => e.CountryName4)
+                    .HasMaxLength(200)
+                    .HasColumnName("COUNTRY_NAME_4");
+
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)
                     .HasColumnName("CREATED_BY");

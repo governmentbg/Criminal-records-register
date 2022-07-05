@@ -1,4 +1,6 @@
-﻿namespace MJ_CAIS.DTO.Inquiry
+﻿using MJ_CAIS.DTO.Shared;
+
+namespace MJ_CAIS.DTO.Inquiry
 {
     public class InquirySearchBulletinByPersonDTO : PeriodSearchDTO
     {
@@ -19,5 +21,6 @@
         public DateTime? IdDocValidDate { get; set; }
         public string? NationalityTypeCode { get; set; }
         public string? NationalityCountryId { get; set; }
+        public string? AuthorityId { get; set; }
     }
 }

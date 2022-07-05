@@ -103,5 +103,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedByUsername { get; set; }
         public string? UpdatedByUsername { get; set; }
         public string? IdDocCategoryName { get; set; }
+        public string? CountryName1 { get; set; }
+        public string? CountryName2 { get; set; }
+        public string? CountryName3 { get; set; }
+        public string? CountryName4 { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.model";
+import { BaseGridModel } from "../../../@core/models/common/base-grid.model";
 
 export class ExportBulletinModel extends BaseGridModel {
   public registrationNumber: string = null;
@@ -72,6 +72,10 @@ export class ExportBulletinModel extends BaseGridModel {
   public createdByUsername: string = null;
   public updatedByUsername: string = null;
   public idDocCategoryName: string = null;
+  public countryName1: string = null;
+  public countryName2: string = null;
+  public countryName3: string = null;
+  public countryName4: string = null;
 
   constructor(init?: Partial<ExportBulletinModel>) {
     super(init);
@@ -146,6 +150,10 @@ export class ExportBulletinModel extends BaseGridModel {
       this.createdByUsername = init.createdByUsername ?? null;
       this.updatedByUsername = init.updatedByUsername ?? null;
       this.idDocCategoryName = init.idDocCategoryName ?? null;
+      this.countryName1 = init.countryName1 ?? null;
+      this.countryName2 = init.countryName2 ?? null;
+      this.countryName3 = init.countryName3 ?? null;
+      this.countryName4 = init.countryName4 ?? null;
     }
   }
 }

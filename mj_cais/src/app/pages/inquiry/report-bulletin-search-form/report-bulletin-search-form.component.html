@@ -26,6 +26,15 @@
       <hr />
       <div class="row">
         <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Бюро съдимост'"
+            [inputFormControl]="fullForm.authorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'authorityId'"
+            [items]="dbData.authorities"
+          ></cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
           <cais-input
             [type]="'text'"
             [label]="'Номер'"
@@ -51,6 +60,8 @@
             [items]="dbData.statuses"
           ></cais-autocomplete>
         </div>
+      </div>
+      <div class="row">
         <div class="form-group col-md-3">
           <cais-input
             [type]="'date'"

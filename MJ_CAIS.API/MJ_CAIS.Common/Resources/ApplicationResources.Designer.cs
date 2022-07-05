@@ -268,6 +268,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Издадени свидетелства.
+        /// </summary>
+        public static string titleApplicationsForStatistics {
+            get {
+                return ResourceManager.GetString("titleApplicationsForStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Заявление за издаване на електронно свидетелство за съдимост.
         /// </summary>
         public static string titleAppPreview {
@@ -300,6 +309,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string titleNewApp {
             get {
                 return ResourceManager.GetString("titleNewApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Издадени справки.
+        /// </summary>
+        public static string titleReportsForStatistics {
+            get {
+                return ResourceManager.GetString("titleReportsForStatistics", resourceCulture);
             }
         }
     }

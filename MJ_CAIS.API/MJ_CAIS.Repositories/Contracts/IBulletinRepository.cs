@@ -1,6 +1,7 @@
 ﻿using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Home;
+using MJ_CAIS.DTO.Statistics;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
@@ -39,5 +40,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task SaveBulletinsAsync(List<BBulletin> bulletins);
 
         Task<Dictionary<string, string>> GetAuthIdByEkatteAsync(List<string> ekatteCodes);
+
+        Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams);
     }
 }

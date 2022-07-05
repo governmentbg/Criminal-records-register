@@ -3,7 +3,10 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Home;
+using MJ_CAIS.DTO.Statistics;
 using MJ_CAIS.Repositories.Contracts;
+using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -265,6 +268,65 @@ namespace MJ_CAIS.Repositories.Impl
                     .Where(x => x.CreatedOn >= dateFrom && x.CreatedOn <= dateTo);
 
             return await Task.FromResult(result);
+        }
+
+        public async Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams)
+        {
+            DataSet ds = new DataSet();
+            List<StatisticsCountDTO> result = new List<StatisticsCountDTO>();
+
+            try
+            {
+                using (OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString()))
+                {
+                    // Create command
+                    OracleCommand cmd = new OracleCommand("STATISTICS.bulletins_statistics", oracleConnection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set parameters
+
+                    cmd.Parameters.Add(new OracleParameter("p_date_from", OracleDbType.Date, searchParams.FromDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_date_to", OracleDbType.Date, searchParams.ToDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_cs_authority", OracleDbType.Varchar2, searchParams.Authority, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
+
+                    OracleDataAdapter resultDataSet = new OracleDataAdapter(cmd);
+                    try
+                    {
+                        await oracleConnection.OpenAsync();
+                        resultDataSet.Fill(ds);
+
+                        foreach (DataRow row in ds.Tables[0].Rows)
+                        {
+                            result.Add(new StatisticsCountDTO
+                            {
+                                Count = int.Parse(row["cnt"].ToString()),
+                                ObjectType = row["text"].ToString(),
+                                OrderNumber = int.Parse(row["order_number"].ToString()),
+                            });
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        // todo: log
+                        throw;
+                    }
+                    finally
+                    {
+                        oracleConnection.Close();
+                        oracleConnection.Dispose();
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                // todo: log error
+                // add message
+                throw;
+            }
+
+            return result.OrderBy(x => x.OrderNumber).ToList();
         }
     }
 }

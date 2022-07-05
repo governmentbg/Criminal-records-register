@@ -4,9 +4,9 @@
     {
         public string? RegistrationNumber { get; set; }
         public string? BulletinType { get; set; }
-        public string? FirstName { get; set; }
-        public string? SurName { get; set; }
-        public string? FamilyName { get; set; }
+        public string? Firstname { get; set; }
+        public string? Surname { get; set; }
+        public string? Familyname { get; set; }
         public string? StatusId { get; set; }
         public string? StatusName { get; set; }
         public string? Ln { get; set; }

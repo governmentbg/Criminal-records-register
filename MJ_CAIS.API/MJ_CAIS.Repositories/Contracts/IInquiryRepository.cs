@@ -11,5 +11,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<VBulletinsFull> FilterBulletinsForExport(InquirySearchBulletinDTO searchParams);
 
         IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams);
+
+        IQueryable<VBulletinsFull> FilterBulletinsByPersonDataForExport(InquirySearchBulletinByPersonDTO searchParams);
     }
 }

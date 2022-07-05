@@ -1,4 +1,6 @@
-﻿namespace MJ_CAIS.DTO.Inquiry
+﻿using MJ_CAIS.DTO.Shared;
+
+namespace MJ_CAIS.DTO.Inquiry
 {
     public class InquirySearchBulletinDTO : PeriodSearchDTO
     {
@@ -17,5 +19,6 @@
         public string? OffenceCatId { get; set; }
         public string? SanctCategoryId { get; set; }
         public decimal? FineAmount { get; set; }
+        public string? AuthorityId { get; set; }
     }
 }

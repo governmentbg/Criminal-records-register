@@ -1,4 +1,4 @@
-﻿namespace MJ_CAIS.DTO.Inquiry
+﻿namespace MJ_CAIS.DTO.Shared
 {
     public class PeriodSearchDTO 
     {

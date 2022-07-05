@@ -58,7 +58,9 @@ namespace MJ_CAIS.Repositories
 
         public IQueryable<InquiryBulletinByPersonGridDTO> FilterBulletinsByPerson(InquirySearchBulletinByPersonDTO searchParams)
         {
-            var bulletinsQuery = ApplyFiltersByPerson(searchParams);
+            var query = from bulletin in _dbContext.VBulletins select bulletin;
+
+            var bulletinsQuery = ApplyFiltersByPerson(query, searchParams);
 
             var result = from bulletin in bulletinsQuery
                          join bulletinStatus in _dbContext.BBulletinStatuses on bulletin.StatusId equals bulletinStatus.Code
@@ -71,14 +73,14 @@ namespace MJ_CAIS.Repositories
                                             (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                             BulletinResources.Unspecified),
                              Egn = bulletin.Egn,
-                             FamilyName = bulletin.Familyname,
-                             FirstName = bulletin.Firstname,
+                             Familyname = bulletin.Familyname,
+                             Firstname = bulletin.Firstname,
                              Ln = bulletin.Ln,
                              Lnch = bulletin.Lnch,
                              RegistrationNumber = bulletin.RegistrationNumber,
                              StatusId = bulletin.StatusId,
                              StatusName = bulletinStatus.Name,
-                             SurName = bulletin.Surname,
+                             Surname = bulletin.Surname,
                              Version = bulletin.Version,
                              CreatedOn = bulletin.CreatedOn,
                          };
@@ -86,9 +88,19 @@ namespace MJ_CAIS.Repositories
             return result;
         }
 
-        private IQueryable<VBulletin> ApplyFiltersByPerson(InquirySearchBulletinByPersonDTO searchParams)
+        public IQueryable<VBulletinsFull> FilterBulletinsByPersonDataForExport(InquirySearchBulletinByPersonDTO searchParams)
         {
-            var bulletinsQuery = from bulletin in _dbContext.VBulletins select bulletin;
+            var bulletinsQuery = from bulletin in _dbContext.VBulletinsFulls select bulletin;
+            var queryResult = ApplyFiltersByPerson(bulletinsQuery, searchParams);
+
+            return queryResult;
+        }
+
+        private IQueryable<T> ApplyFiltersByPerson<T>(IQueryable<T> bulletinsQuery, InquirySearchBulletinByPersonDTO searchParams)
+            where T : class, IInquiryBulletinFilterable
+        {
+            if (!string.IsNullOrEmpty(searchParams.AuthorityId))
+                bulletinsQuery = bulletinsQuery.Where(x => x.CsAuthorityId == searchParams.AuthorityId);
 
             if (!string.IsNullOrEmpty(searchParams.Firstname))
                 bulletinsQuery = bulletinsQuery.Where(x => x.Firstname == searchParams.Firstname);
@@ -156,6 +168,9 @@ namespace MJ_CAIS.Repositories
         private IQueryable<T> ApplyFilters<T>(IQueryable<T> bulletinsQuery, InquirySearchBulletinDTO searchParams)
             where T : class, IInquiryBulletinFilterable
         {
+            if (!string.IsNullOrEmpty(searchParams.AuthorityId))
+                bulletinsQuery = bulletinsQuery.Where(x => x.CsAuthorityId == searchParams.AuthorityId);
+
             if (!string.IsNullOrEmpty(searchParams.RegistrationNumber))
                 bulletinsQuery = bulletinsQuery.Where(x => x.RegistrationNumber == searchParams.RegistrationNumber);
 

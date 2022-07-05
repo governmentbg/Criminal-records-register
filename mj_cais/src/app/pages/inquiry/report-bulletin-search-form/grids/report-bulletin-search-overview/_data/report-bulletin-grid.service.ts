@@ -1,7 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { map } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
-import { ExportBulletinModel } from "../_models/export-bulletin.model";
+import { ExportBulletinModel } from "../../../../_models/export-bulletin.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,6 @@ export class ReportBulletinGridService extends CaisCrudService<
   }
 
   public excelExportBulletins(queryParams) {
-    debugger;
     let urlResult = `${this.baseUrl}/api/inquiry/export-bulletins?`;
     if (queryParams) {
       urlResult += queryParams;

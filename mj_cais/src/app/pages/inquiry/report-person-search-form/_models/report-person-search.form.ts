@@ -19,8 +19,9 @@ export class ReportPersonSearchForm {
   public fromDate: FormControl;
   public toDate: FormControl;
   public nationalityTypeCode: FormControl;
-  public nationalityCountryId : FormControl;
+  public nationalityCountryId: FormControl;
   public nationalityCountry: LookupForm;
+  public authorityId: FormControl;
 
   constructor() {
     this.firstname = new FormControl(null);
@@ -39,6 +40,7 @@ export class ReportPersonSearchForm {
     this.nationalityTypeCode = new FormControl(null);
     this.nationalityCountryId = new FormControl(null);
     this.nationalityCountry = new LookupForm(null);
+    this.authorityId = new FormControl(null);
 
     this.group = new FormGroup({
       firstname: this.firstname,
@@ -55,7 +57,8 @@ export class ReportPersonSearchForm {
       toDate: this.toDate,
       nationalityTypeCode: this.nationalityTypeCode,
       nationalityCountryId: this.nationalityCountryId,
-      nationalityCountry: this.nationalityCountry.group
+      nationalityCountry: this.nationalityCountry.group,
+      authorityId: this.authorityId,
     });
   }
 }

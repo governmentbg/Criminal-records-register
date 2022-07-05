@@ -8,7 +8,6 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { ReportBulletinSearchModel } from "../_models/report-bulletin-search.model";
 import { ReportBulletinService } from "./report-bulletin.service";
 
 @Injectable({
@@ -35,17 +34,19 @@ export class ReportBulletinResolver implements Resolve<any> {
         this.nomenclatureService.getDecidingAuthoritiesForBulletins(),
       statuses: this.nomenclatureService.getBulletinStatuses(),
       sanctionCategories: this.nomenclatureService.getSanctionCategories(),
+      authorities: this.nomenclatureService.getCsAuthorities(),
     };
 
     return forkJoin(result);
   }
 }
 
-export class ReportBulletinResolverData extends BaseResolverData<ReportBulletinSearchModel> {
+export class ReportBulletinResolverData extends BaseResolverData<any> {
   public bulletinTypes: Observable<BaseNomenclatureModel[]>;
   public caseTypes: Observable<BaseNomenclatureModel[]>;
   public decisionTypes: Observable<BaseNomenclatureModel[]>;
   public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
   public statuses: Observable<BaseNomenclatureModel[]>;
   public sanctionCategories: Observable<BaseNomenclatureModel[]>;
+  public authorities: Observable<BaseNomenclatureModel[]>;
 }

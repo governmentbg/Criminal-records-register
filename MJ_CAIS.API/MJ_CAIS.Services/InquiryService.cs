@@ -15,6 +15,7 @@ namespace MJ_CAIS.Services
     public class InquiryService : BaseAsyncService<BaseDTO, BaseDTO, BaseGridDTO, VBulletin, string, CaisDbContext>, IInquiryService
     {
         private readonly IInquiryRepository _inquiryRepository;
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         public InquiryService(IInquiryRepository inquiryRepository, IMapper mapper)
@@ -48,6 +49,15 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<InquiryBulletinByPersonGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
+        }
+
+        public async Task<List<ExportInquiryBulletinGridDTO>> ExportBulletinsByPersonDataAsync(InquirySearchBulletinByPersonDTO searchParams)
+        {
+            var baseQuery = _inquiryRepository.FilterBulletinsByPersonDataForExport(searchParams)
+                .ProjectTo<ExportInquiryBulletinGridDTO>(mapperConfiguration);
+
+            var result = await baseQuery.ToListAsync(); // todo: max
+            return result;
         }
     }
 }

@@ -129,6 +129,13 @@ const routes: Routes = [
           import("./inquiry/inquiry.module").then((m) => m.InquiryModule),
       },
       {
+        path: "statistics",
+        loadChildren: () =>
+          import("./statistics/statistics.module").then(
+            (m) => m.StatisticsModule
+          ),
+      },
+      {
         path: "",
         redirectTo: "home",
         pathMatch: "full",
