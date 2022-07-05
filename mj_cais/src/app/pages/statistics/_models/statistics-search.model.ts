@@ -1,4 +1,4 @@
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseModel } from "../../../@core/models/common/base.model";
 
 export class StatisticsSearchModel extends BaseModel {
   public fromDate: Date = null;

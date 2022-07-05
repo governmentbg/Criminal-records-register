@@ -1,0 +1,98 @@
+<nb-card class="card-single-page-height" [formGroup]="form.group">
+    <nb-card-header class="card-header-shadow">
+      <div class="d-flex" style="justify-content: space-between">
+        <div class="d-flex align-items-center">
+          <div style="font-weight: bold; font-size: 22px">{{ title }}</div>
+        </div>
+        <div class="d-flex">
+          <div>
+            <button
+              (click)="onSearch()"
+              nbButton
+              matRipple
+              type="button"
+              class="ml-2"
+              style="min-width: 100px"
+            >
+              Търсене
+            </button>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body class="overflow-scroll">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="form-group col-md-3">
+            <cais-autocomplete
+              [label]="'Бюро съдимост'"
+              [inputFormControl]="form.authority"
+              [parentGroup]="form.group"
+              [inputName]="'authority'"
+              [items]="authorities"
+            ></cais-autocomplete>
+          </div>
+          <div class="form-group col-md-3">
+            <cais-input
+              [type]="'date'"
+              [label]="'От'"
+              [inputFormControl]="form.fromDate"
+              [parentGroup]="form.group"
+            ></cais-input>
+          </div>
+          <div class="form-group col-md-3">
+            <cais-input
+              [type]="'date'"
+              [label]="'До'"
+              [inputFormControl]="form.toDate"
+              [parentGroup]="form.group"
+            ></cais-input>
+          </div>
+        </div>
+      </form>
+  
+      <div class="container">
+        <ng-container *ngIf="showChart">
+          <div class="row" style="min-height: 300px; align-items: center">
+            <div class="legend col-md-3">
+              <igx-item-legend orientation="Vertical" name="Legend" #legend>
+              </igx-item-legend>
+            </div>
+            <div class="container fill col-md-9">
+              <igx-pie-chart
+                [dataSource]="data"
+                labelMemberPath="objectType"
+                valueMemberPath="count"
+                (sliceClick)="itemSelection($event)"
+                [legend]="legend"
+                legendLabelMemberPath="objectType"
+                labelsPosition="BestFit"
+                radiusFactor="0.7"
+              >
+              </igx-pie-chart>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="showGrid">
+        <div class="grid">
+          <igx-grid #dataGrid [data]="data">
+            <igx-column
+              field="objectType"
+              header="Тип"
+              [cellClasses]="condClasses"
+              dataType="string"
+            ></igx-column>
+            <igx-column
+              field="count"
+              header="Брой"
+              [cellClasses]="condClasses"
+              dataType="number"
+            >
+            </igx-column>
+          </igx-grid>
+        </div>
+      </ng-container>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  

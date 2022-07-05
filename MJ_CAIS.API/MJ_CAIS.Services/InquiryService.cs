@@ -2,13 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Common.Constants;
-using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO;
 using MJ_CAIS.DTO.Inquiry;
-using MJ_CAIS.DTO.InternalRequest;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -18,6 +15,7 @@ namespace MJ_CAIS.Services
     public class InquiryService : BaseAsyncService<BaseDTO, BaseDTO, BaseGridDTO, VBulletin, string, CaisDbContext>, IInquiryService
     {
         private readonly IInquiryRepository _inquiryRepository;
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         public InquiryService(IInquiryRepository inquiryRepository, IMapper mapper)
@@ -60,20 +58,6 @@ namespace MJ_CAIS.Services
 
             var result = await baseQuery.ToListAsync(); // todo: max
             return result;
-        }
-
-        public async Task<IEnumerable<StatisticCountDTO>> GetStatisticCountsAsync(StatisticSearchDTO searchParam)
-        {
-            var statistic = await _inquiryRepository.GetStatisticForBulletinsAsync(searchParam);
-            var application = await _inquiryRepository.GetStatisticForApplicationsAsync(searchParam);
-            var reports = await _inquiryRepository.GetStatisticForReportsAsync(searchParam);
-            var ir = await _inquiryRepository.GetStatisticForInternalRequestsAsync(searchParam);
-
-            statistic.Add(application);   
-            statistic.Add(reports);
-            statistic.Add(ir);
-
-            return statistic.OrderByDescending(x=>x.Count);
         }
     }
 }

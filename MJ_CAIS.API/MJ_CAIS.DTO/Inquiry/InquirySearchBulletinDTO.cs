@@ -1,4 +1,6 @@
-﻿namespace MJ_CAIS.DTO.Inquiry
+﻿using MJ_CAIS.DTO.Shared;
+
+namespace MJ_CAIS.DTO.Inquiry
 {
     public class InquirySearchBulletinDTO : PeriodSearchDTO
     {

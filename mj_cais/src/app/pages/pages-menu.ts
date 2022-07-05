@@ -215,7 +215,7 @@ export class PagesMenu {
       },
       {
         title: "Справки",
-        icon: { icon: "chart-pie", pack: "fas" },
+        icon: { icon: "tasks", pack: "fas" },
         children: [
           {
             title: "Xарактеристики на бюлетини",
@@ -225,9 +225,15 @@ export class PagesMenu {
             title: "Xарактеристики на лице",
             link: "/pages/inquiry/search-people",
           },
+        ],
+      },
+      {
+        title: "Статистика",
+        icon: { icon: "chart-bar", pack: "fas" },
+        children: [
           {
-            title: "Статистика",
-            link: "/pages/inquiry/statistics",
+            title: "Бюлетини",
+            link: "/pages/statistics/bulletins",
           },
         ],
       },
