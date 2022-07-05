@@ -97,12 +97,26 @@ namespace MJ_CAIS.Repositories
             return queryResult;
         }
 
-        public IQueryable<StatisticCountDTO> GetStatisticForBulletins(StatisticSearchDTO searchParam)
+        public async Task<List<StatisticCountDTO>> GetStatisticForBulletinsAsync(StatisticSearchDTO searchParam)
         {
-            var requestsCount = from bulletins in this._dbContext.BBulletins.AsNoTracking()
-                                where (!searchParam.FromDate.HasValue || bulletins.CreatedOn >= searchParam.FromDate) &&
-                                (!searchParam.ToDate.HasValue || bulletins.CreatedOn <= searchParam.ToDate) &&
-                                (string.IsNullOrEmpty(bulletins.CsAuthorityId) || bulletins.CsAuthorityId == searchParam.Authority)
+            var bulletinQuery = from bulletins in this._dbContext.BBulletins.AsNoTracking() select bulletins;
+
+            if (!string.IsNullOrEmpty(searchParam.Authority))
+            {
+                bulletinQuery = bulletinQuery.Where(x => x.CsAuthorityId == searchParam.Authority);
+            }
+
+            if (searchParam.FromDate.HasValue)
+            {
+                bulletinQuery = bulletinQuery.Where(x => x.CreatedOn >= searchParam.FromDate);
+            }
+
+            if (searchParam.ToDate.HasValue)
+            {
+                bulletinQuery = bulletinQuery.Where(x => x.CreatedOn <= searchParam.ToDate);
+            }
+
+            var requestsCount = from bulletins in bulletinQuery
                                 group bulletins by new { bulletins.BulletinType } into gr
                                 select new StatisticCountDTO
                                 {
@@ -112,16 +126,51 @@ namespace MJ_CAIS.Repositories
                                     Count = gr.Count()
                                 };
 
-            return requestsCount;
+            var result = await requestsCount.ToListAsync();
+            if (!result.Any(x => x.ObjectType == BulletinResources.Bulletin78AForStatistics))
+            {
+                result.Add(new StatisticCountDTO { ObjectType = BulletinResources.Bulletin78AForStatistics, Count = 0 });
+            }
+
+            if (!result.Any(x => x.ObjectType == BulletinResources.ConvictionBulletinForStatistics))
+            {
+                result.Add(new StatisticCountDTO { ObjectType = BulletinResources.ConvictionBulletinForStatistics, Count = 0 });
+            }
+
+            if (!result.Any(x => x.ObjectType == BulletinResources.UnspecifiedForStatistics))
+            {
+                result.Add(new StatisticCountDTO { ObjectType = BulletinResources.UnspecifiedForStatistics, Count = 0 });
+            }
+
+            result.Add(new StatisticCountDTO()
+            {
+                Count = result.Select(x => x.Count).Sum(),
+                ObjectType = BulletinResources.titleBulletinsForStatistics
+            });
+
+            return result;
         }
 
         public async Task<StatisticCountDTO> GetStatisticForApplicationsAsync(StatisticSearchDTO searchParam)
         {
-            var count = await (from applications in this._dbContext.AApplications.AsNoTracking()
-                               where (!searchParam.FromDate.HasValue || applications.CreatedOn >= searchParam.FromDate) &&
-                               (!searchParam.ToDate.HasValue || applications.CreatedOn <= searchParam.ToDate) &&
-                               (string.IsNullOrEmpty(applications.CsAuthorityId) || applications.CsAuthorityId == searchParam.Authority)
-                               select applications).CountAsync();
+            var appQuery = from applications in this._dbContext.AApplications.AsNoTracking() select applications;
+
+            if (!string.IsNullOrEmpty(searchParam.Authority))
+            {
+                appQuery = appQuery.Where(x => x.CsAuthorityId == searchParam.Authority);
+            }
+
+            if (searchParam.FromDate.HasValue)
+            {
+                appQuery = appQuery.Where(x => x.CreatedOn >= searchParam.FromDate);
+            }
+
+            if (searchParam.ToDate.HasValue)
+            {
+                appQuery = appQuery.Where(x => x.CreatedOn <= searchParam.ToDate);
+            }
+
+            var count = await (from applications in appQuery select applications).CountAsync();
 
             var result = new StatisticCountDTO
             {
@@ -134,11 +183,24 @@ namespace MJ_CAIS.Repositories
 
         public async Task<StatisticCountDTO> GetStatisticForReportsAsync(StatisticSearchDTO searchParam)
         {
-            var count = await (from reports in this._dbContext.AReports.AsNoTracking()
-                               where (!searchParam.FromDate.HasValue || reports.CreatedOn >= searchParam.FromDate) &&
-                                     (!searchParam.ToDate.HasValue || reports.CreatedOn <= searchParam.ToDate) //&&
-                                                                                                               //(string.IsNullOrEmpty(reports.CsAuthorityId) || reports.CsAuthorityId == searchParam.Authority)
-                               select reports).CountAsync();
+            var reportQuery = from reports in this._dbContext.AReports.AsNoTracking() select reports;
+
+            //if (string.IsNullOrEmpty(searchParam.Authority))
+            //{
+            //    reportQuery = reportQuery.Where(x => x.CsAuthorityId == searchParam.Authority);
+            //}
+
+            if (searchParam.FromDate.HasValue)
+            {
+                reportQuery = reportQuery.Where(x => x.CreatedOn >= searchParam.FromDate);
+            }
+
+            if (searchParam.ToDate.HasValue)
+            {
+                reportQuery = reportQuery.Where(x => x.CreatedOn <= searchParam.ToDate);
+            }
+
+            var count = await (from reports in reportQuery select reports).CountAsync();
 
             var result = new StatisticCountDTO
             {
@@ -151,11 +213,24 @@ namespace MJ_CAIS.Repositories
 
         public async Task<StatisticCountDTO> GetStatisticForInternalRequestsAsync(StatisticSearchDTO searchParam)
         {
-            var count = await (from ir in this._dbContext.BInternalRequests.AsNoTracking()
-                               where (!searchParam.FromDate.HasValue || ir.CreatedOn >= searchParam.FromDate) &&
-                                     (!searchParam.ToDate.HasValue || ir.CreatedOn <= searchParam.ToDate) //&&
-                                                                                                          //(string.IsNullOrEmpty(ir.CsAuthorityId) || reports.CsAuthorityId == searchParam.Authority)
-                               select ir).CountAsync();
+            var irQuery = from ir in this._dbContext.AReports.AsNoTracking() select ir;
+
+            //if (string.IsNullOrEmpty(searchParam.Authority))
+            //{
+            //    irQuery = irQuery.Where(x => x.CsAuthorityId == searchParam.Authority);
+            //}
+
+            if (searchParam.FromDate.HasValue)
+            {
+                irQuery = irQuery.Where(x => x.CreatedOn >= searchParam.FromDate);
+            }
+
+            if (searchParam.ToDate.HasValue)
+            {
+                irQuery = irQuery.Where(x => x.CreatedOn <= searchParam.ToDate);
+            }
+
+            var count = await (from ir in irQuery select ir).CountAsync();
 
             var result = new StatisticCountDTO
             {

@@ -6,11 +6,11 @@ import { ReportBulletinSearchOverviewComponent } from './report-bulletin-search-
 import { ReportPersonSearchFormComponent } from './report-person-search-form/report-person-search-form.component';
 import { ReportPersonSearchOverviewComponent } from './report-person-search-form/grids/report-person-search-overview/report-person-search-overview.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-// import { 
-// 	IgxDoughnutChartModule,
-//   IgxPieChartModule,
-// 	IgxRingSeriesModule,
-//  } from "igniteui-angular-charts";
+import { 
+	IgxDoughnutChartModule,
+  IgxItemLegendModule,
+  IgxPieChartModule,
+ } from "igniteui-angular-charts";
 
 @NgModule({
   declarations: [
@@ -23,9 +23,9 @@ import { StatisticsComponent } from './statistics/statistics.component';
   imports: [
     CoreComponentModule,
     InquiryRoutingModule,
-    // IgxDoughnutChartModule,
-    // IgxPieChartModule,
-		// IgxRingSeriesModule, 
+    IgxItemLegendModule,
+    IgxDoughnutChartModule,
+    IgxPieChartModule
   ],
 })
 export class InquiryModule { }

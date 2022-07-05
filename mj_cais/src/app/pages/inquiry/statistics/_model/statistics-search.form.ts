@@ -5,17 +5,19 @@ export class StatisticsSearchForm {
 
   public fromDate: FormControl;
   public toDate: FormControl;
-  public authorityId: FormControl;
+  public authority: FormControl;
 
   constructor() {
-    this.fromDate = new FormControl(null);
-    this.toDate = new FormControl(null);
-    this.authorityId = new FormControl(null);
+    this.fromDate =  new FormControl( new Date());
+    let dateMonthAfter = new Date();
+    dateMonthAfter.setMonth(dateMonthAfter.getMonth() + 1);
+    this.toDate = new FormControl(dateMonthAfter);
+    this.authority = new FormControl(null);
 
     this.group = new FormGroup({
       fromDate: this.fromDate,
       toDate: this.toDate,
-      authorityId: this.authorityId,
+      authority: this.authority,
     });
   }
 }

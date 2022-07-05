@@ -16,6 +16,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<List<ExportInquiryBulletinGridDTO>> ExportBulletinsByPersonDataAsync(InquirySearchBulletinByPersonDTO searchParams);
 
-        Task<List<StatisticCountDTO>> GetStatisticCountsAsync(StatisticSearchDTO searchParam);
+        Task<IEnumerable<StatisticCountDTO>> GetStatisticCountsAsync(StatisticSearchDTO searchParam);
     }
 }

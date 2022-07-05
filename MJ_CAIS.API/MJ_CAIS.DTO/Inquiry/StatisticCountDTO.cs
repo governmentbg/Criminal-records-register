@@ -3,6 +3,6 @@
     public class StatisticCountDTO
     {
         public string? ObjectType { get; set; }
-        public long Count { get; set; }
+        public int Count { get; set; }
     }
 }

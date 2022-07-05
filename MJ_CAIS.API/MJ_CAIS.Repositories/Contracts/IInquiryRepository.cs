@@ -14,7 +14,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<VBulletinsFull> FilterBulletinsByPersonDataForExport(InquirySearchBulletinByPersonDTO searchParams);
 
-        IQueryable<StatisticCountDTO> GetStatisticForBulletins(StatisticSearchDTO searchParam);
+        Task<List<StatisticCountDTO>> GetStatisticForBulletinsAsync(StatisticSearchDTO searchParam);
 
         Task<StatisticCountDTO> GetStatisticForApplicationsAsync(StatisticSearchDTO searchParam);
 

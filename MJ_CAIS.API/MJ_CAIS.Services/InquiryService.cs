@@ -62,23 +62,18 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        public async Task<List<StatisticCountDTO>> GetStatisticCountsAsync(StatisticSearchDTO searchParam)
+        public async Task<IEnumerable<StatisticCountDTO>> GetStatisticCountsAsync(StatisticSearchDTO searchParam)
         {
-            var statistic = await _inquiryRepository.GetStatisticForBulletins(searchParam).ToListAsync();
+            var statistic = await _inquiryRepository.GetStatisticForBulletinsAsync(searchParam);
             var application = await _inquiryRepository.GetStatisticForApplicationsAsync(searchParam);
             var reports = await _inquiryRepository.GetStatisticForReportsAsync(searchParam);
             var ir = await _inquiryRepository.GetStatisticForInternalRequestsAsync(searchParam);
 
-            statistic.Add(application);
-            statistic.Add(new StatisticCountDTO()
-            {
-                Count = statistic.Select(x=>x.Count).Sum(),
-                ObjectType = BulletinResources.titleBulletinsForStatistics
-            });
+            statistic.Add(application);   
             statistic.Add(reports);
             statistic.Add(ir);
 
-            return statistic;
+            return statistic.OrderByDescending(x=>x.Count);
         }
     }
 }
