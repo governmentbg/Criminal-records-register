@@ -13,6 +13,9 @@ namespace MJ_CAIS.Repositories.Impl
     public class BulletinRepository : BaseAsyncRepository<BBulletin, CaisDbContext>, IBulletinRepository
     {
         private readonly IUserContext _userContext;
+        private const string STATISTICS_PACKAGE_NAME = "STATISTICS";
+        private const string STATISTICS_PROCEDURE_BULLETIN_NAME = "bulletins_statistics";
+        private const string STATISTICS_PROCEDURE_APPLICATION_NAME = "applications_statistics";
 
         public BulletinRepository(CaisDbContext dbContext, IUserContext userContext)
             : base(dbContext)
@@ -272,15 +275,25 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams)
         {
-            DataSet ds = new DataSet();
-            List<StatisticsCountDTO> result = new List<StatisticsCountDTO>();
+            return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_BULLETIN_NAME);          
+        }
+
+        public async Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams)
+        {
+            return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_APPLICATION_NAME);
+        }
+
+        private async Task<List<StatisticsCountDTO>> GetStatisticsAsync(StatisticsSearchDTO searchParams, string procedureName )
+        {
+            var ds = new DataSet();
+            var result = new List<StatisticsCountDTO>();
 
             try
             {
                 using (OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString()))
                 {
                     // Create command
-                    OracleCommand cmd = new OracleCommand("STATISTICS.bulletins_statistics", oracleConnection);
+                    OracleCommand cmd = new OracleCommand($"{STATISTICS_PACKAGE_NAME}.{procedureName}", oracleConnection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     // Set parameters

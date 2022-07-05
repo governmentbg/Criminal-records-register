@@ -24,5 +24,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._service.GetStatisticsForBulletinsAsync(searchParams);
             return Ok(result);
         }
+
+        [HttpGet("applications")]
+        public async Task<IActionResult> GetStatisticsForApplications([FromQuery] StatisticsSearchDTO searchParams)
+        {
+            var result = await this._service.GetStatisticsForApplicationsAsync(searchParams);
+            return Ok(result);
+        }
     }
 }

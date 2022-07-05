@@ -42,5 +42,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<Dictionary<string, string>> GetAuthIdByEkatteAsync(List<string> ekatteCodes);
 
         Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams);
+
+        Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams);
     }
 }

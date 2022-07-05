@@ -14,8 +14,9 @@ namespace MJ_CAIS.Services
         }
 
         public async Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams)
-        {
-            return await _bulletinRepository.GetStatisticsForBulletinsAsync(searchParams);
-        }
+           => await _bulletinRepository.GetStatisticsForBulletinsAsync(searchParams);
+
+        public async Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams)
+            => await _bulletinRepository.GetStatisticsForApplicationsAsync(searchParams);
     }
 }

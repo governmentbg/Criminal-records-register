@@ -235,6 +235,10 @@ export class PagesMenu {
             title: "Бюлетини",
             link: "/pages/statistics/bulletins",
           },
+          {
+            title: "Свидетелства",
+            link: "/pages/statistics/applications",
+          },
         ],
       },
     ];
