@@ -48,6 +48,13 @@ namespace MJ_CAIS.Services
         }
 
 
+        public virtual async Task<ApplicationOutDTO> SelectAsync(string aId)
+        {
+            AApplication repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            ApplicationOutDTO result = mapper.Map<ApplicationOutDTO>(repoObj);
+            return result;
+        }
+
         public virtual async Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(
             ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
         {
@@ -200,7 +207,7 @@ namespace MJ_CAIS.Services
                 .Include(a => a.LnNavigation)
                 .Include(a => a.SuidNavigation)
                 .Include(a => a.ApplicationType)
-                .Include(a=>a.AStatusHes)
+                .Include(a => a.AStatusHes)
                 .FirstOrDefaultAsync(aa => aa.Id == id);
             if (application == null)
             {
