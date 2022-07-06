@@ -35,8 +35,10 @@ export class ReportPersonSearchForm {
     this.idDocNumber = new FormControl(null);
     this.idDocIssuingDate = new FormControl(null);
     this.idDocValidDate = new FormControl(null);
-    this.fromDate = new FormControl(null);
-    this.toDate = new FormControl(null);
+    let dateMonthBefore = new Date();
+    dateMonthBefore.setMonth(dateMonthBefore.getMonth() - 1);
+    this.fromDate = new FormControl(dateMonthBefore);
+    this.toDate = new FormControl(new Date());
     this.nationalityTypeCode = new FormControl(null);
     this.nationalityCountryId = new FormControl(null);
     this.nationalityCountry = new LookupForm(null);

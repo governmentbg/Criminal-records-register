@@ -48,6 +48,14 @@ export class StatisticsFormComponent implements OnInit {
       filterQuery
     );
 
+    //when has default value date is not of type moment
+    if (this.form.fromDate.value && filterQuery.indexOf("fromDate") < 0) {
+      filterQuery += `&fromDate=${this.form.fromDate.value.toISOString()}`;
+    }
+    if (this.form.toDate.value && filterQuery.indexOf("toDate") < 0) {
+      filterQuery += `&toDate=${this.form.toDate.value.toISOString()}`;
+    }
+
     this.service.getStatistics(filterQuery).subscribe(
       (data) => {
         this.data = data;
@@ -61,7 +69,7 @@ export class StatisticsFormComponent implements OnInit {
         this.service.isLoading = false;
         this.loaderService.hideSpinner(this.service);
         var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast("danger", 'Възникна грешка', errorText);
+        this.toastr.showBodyToast("danger", "Възникна грешка", errorText);
       }
     );
   };

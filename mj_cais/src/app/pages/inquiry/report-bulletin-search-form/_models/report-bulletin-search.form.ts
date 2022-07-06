@@ -39,8 +39,10 @@ export class ReportBulletinSearchForm  {
     this.offenceCategory = new LookupForm();
     this.sanctCategoryId = new FormControl(null);
     this.fineAmount = new FormControl(null);
-    this.fromDate = new FormControl(null);
-    this.toDate = new FormControl(null);
+    let dateMonthBefore = new Date();
+    dateMonthBefore.setMonth(dateMonthBefore.getMonth() - 1);
+    this.fromDate = new FormControl(dateMonthBefore);
+    this.toDate = new FormControl(new Date());
     this.authorityId = new FormControl(null);
     
     this.group = new FormGroup({

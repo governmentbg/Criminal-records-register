@@ -8,10 +8,10 @@ export class StatisticsSearchForm {
   public authority: FormControl;
 
   constructor() {
-    this.fromDate =  new FormControl( new Date());
-    let dateMonthAfter = new Date();
-    dateMonthAfter.setMonth(dateMonthAfter.getMonth() + 1);
-    this.toDate = new FormControl(dateMonthAfter);
+    let dateMonthBefore = new Date();
+    dateMonthBefore.setMonth(dateMonthBefore.getMonth() - 1);
+    this.fromDate = new FormControl(dateMonthBefore);
+    this.toDate = new FormControl(new Date());
     this.authority = new FormControl(null);
 
     this.group = new FormGroup({
