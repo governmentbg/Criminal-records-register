@@ -88,7 +88,7 @@ export class BulletinFormComponent
 
     if (!this.isEdit()) {
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
-        "CO-00-100-BGR",
+        CommonConstants.bgCountryId,
       ]);
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
@@ -138,6 +138,7 @@ export class BulletinFormComponent
 
       this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
     }
+
     this.validateAndSave(this.fullForm);
   };
 

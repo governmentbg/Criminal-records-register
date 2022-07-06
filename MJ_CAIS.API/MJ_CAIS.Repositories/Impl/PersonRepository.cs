@@ -30,6 +30,7 @@ namespace MJ_CAIS.Repositories.Impl
             return await this._dbContext.PPeople.AsNoTracking()
                 .Include(x => x.PPersonIds)
                 .Include(x => x.BirthCountry)
+                .ThenInclude(x => x.PPersonCitizenships)
                 .Include(x => x.BirthCity)
                    .ThenInclude(x => x.Municipality)
                    .ThenInclude(x => x.District)
@@ -46,7 +47,7 @@ namespace MJ_CAIS.Repositories.Impl
                         .Include(x => x.LnNavigation)
                         .Include(x => x.IdDocNumberNavigation)
                         .Include(x => x.SuidNavigation)
-                        .Where(x=>x.EgnNavigation.PersonId == personId ||
+                        .Where(x => x.EgnNavigation.PersonId == personId ||
                           x.LnchNavigation.PersonId == personId ||
                           x.LnNavigation.PersonId == personId ||
                           x.IdDocNumberNavigation.PersonId == personId ||

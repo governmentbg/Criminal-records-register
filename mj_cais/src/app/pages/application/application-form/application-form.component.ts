@@ -5,6 +5,7 @@ import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { Observable } from "rxjs";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { ApplicationTypeStatusConstants } from "../application-overview/_models/application-type-status.constants";
@@ -49,7 +50,7 @@ export class ApplicationFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
     if (!this.isEdit()) {
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
-        "CO-00-100-BGR",
+        CommonConstants.bgCountryId,
       ]);
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
