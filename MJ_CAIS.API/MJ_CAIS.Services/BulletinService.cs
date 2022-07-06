@@ -108,17 +108,17 @@ namespace MJ_CAIS.Services
             // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
-
             bulletin.CsAuthorityId = _userContext.CsAuthorityId;
+
             var regNumber = await _registerTypeService.GetRegisterNumberForBulletin(bulletin.CsAuthorityId, bulletin.BulletinType);
             bulletin.RegistrationNumber = regNumber;
 
             await UpdateBulletinAsync(aInDto, bulletin);
             await _bulletinRepository.SaveChangesAsync();
 
-            if (bulletin.StatusId == Status.NoSanction)
+            if (bulletin.StatusId is Status.NoSanction)
             {
-                await _bulletinEventService.GenerateEventWhenUpdateBullAsync(bulletin);
+                await _bulletinEventService.GenerateEventWhenUpdateBullAsync(bulletin, aInDto.Person.Id);
                 await _bulletinRepository.SaveChangesAsync();
             }
 
@@ -170,7 +170,7 @@ namespace MJ_CAIS.Services
             switch (bulletinToUpdate.StatusId)
             {
                 case Status.NoSanction:
-                    await _bulletinEventService.GenerateEventWhenUpdateBullAsync(bulletinToUpdate);
+                    await _bulletinEventService.GenerateEventWhenUpdateBullAsync(bulletinToUpdate, aInDto.Person.Id);
                     break;
                 case Status.Active or Status.ForRehabilitation:
                     await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletinToUpdate);
@@ -230,7 +230,6 @@ namespace MJ_CAIS.Services
                 nameof(bulletin.Version)
             };
 
-
             if (!mustUpdatePersonAndSendData)
             {
                 await _bulletinRepository.SaveChangesAsync();
@@ -244,6 +243,7 @@ namespace MJ_CAIS.Services
 
             if (isActiveBulletin)
             {
+                // todo: call in one method and take only ones bulletins of a person
                 // only apply changes to the context
                 await _bulletinEventService.GenerateEventWhenChangeStatusOfBullAsync(bulletin, personId);
                 await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
@@ -382,32 +382,16 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         private async Task UpdateBulletinAsync(BulletinBaseDTO aInDto, BBulletin entity, string oldStatus = null)
         {
-            UpdateDataForDestruction(entity);
-
             await UpdateTransactionsAsync(aInDto, entity);
 
-            UpdateStatusByDecisions(entity);
+            CheckForBulletinStatus(entity, oldStatus);
 
-            // if no sanction is selected
-            // change bulletin status
-            if (entity.NoSanction == true)
-            {
-                entity.StatusId = Status.NoSanction;
-            }
-
-            if (entity.StatusId is Status.NoSanction or Status.ForDestruction)
+            // if status is Rehabilitated, person is created 
+            if (entity.StatusId is Status.NoSanction or Status.ForDestruction or Status.ReplacedAct425)
             {
                 // if new person is created 
                 // set new person id
                 aInDto.Person.Id = await CreatePersonFromBulletinAsync(entity);
-            }
-
-            // save old status
-
-            var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id, entity.Locked);
-            if (isAddedHistory)
-            {
-                UpdateModifiedProperties(entity, nameof(entity.StatusId));
             }
 
             // it is locked each time
@@ -420,6 +404,57 @@ namespace MJ_CAIS.Services
 
             var passedNavigationProperties = new List<IBaseIdEntity>();
             dbContext.ApplyChanges(entity, passedNavigationProperties, true);
+        }
+
+        private void CheckForBulletinStatus(BBulletin entity, string oldStatus)
+        {
+            // Change the status of the bulletin depending on the added decision information
+            // (ReplacedAct425, Rehabilitated)
+            if (entity.BDecisions.Any(x => x.DecisionChTypeId == DecisionType.Rehabilitation))
+            {
+                entity.StatusId = Status.Rehabilitated;
+            }
+
+            if (entity.BDecisions.Any(x => x.DecisionChTypeId == DecisionType.JudicialAnnulment))
+            {
+                entity.StatusId = Status.ReplacedAct425;
+            }
+
+            /// Destruction
+            /// For criminal records - 100 years from the date of birth of the convicted person
+            /// For bulletins for administrative sanctions under Art. 78a - 
+            ///     15 years from the date of entry into force of the judicial act
+            switch (entity.BulletinType)
+            {
+                case BulletinConstants.Type.ConvictionBulletin when entity.BirthDate.HasValue:
+                    entity.DeleteDate = entity.BirthDate.Value.AddYears(100);
+                    UpdateModifiedProperties(entity, nameof(entity.DeleteDate));
+                    break;
+                case BulletinConstants.Type.Bulletin78A when entity.DecisionFinalDate.HasValue:
+                    entity.DeleteDate = entity.DecisionFinalDate.Value.AddYears(15);
+                    UpdateModifiedProperties(entity, nameof(entity.DeleteDate));
+                    break;
+            }
+
+            if (entity.DeleteDate.HasValue && entity.DeleteDate <= DateTime.Now)
+            {
+                entity.StatusId = Status.ForDestruction;
+                UpdateModifiedProperties(entity, nameof(entity.StatusId));
+            }
+
+            // if no sanction is selected
+            // change bulletin status
+            if (entity.NoSanction == true)
+            {
+                entity.StatusId = Status.NoSanction;
+            }
+
+            // save old status
+            var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id, entity.Locked);
+            if (isAddedHistory)
+            {
+                UpdateModifiedProperties(entity, nameof(entity.StatusId));
+            }
         }
 
         /// <summary>
@@ -435,26 +470,49 @@ namespace MJ_CAIS.Services
             // create person object, apply changes
             var person = await _personService.CreatePersonAsync(personDto);
 
-            // create rehabilitation between person identifier and bulletin
             // create PBulletinId for all pids (locally added and saved in db)
 
             foreach (var personIdObj in person.PPersonIds)
             {
-                bulletin.PBulletinIds.Add(new PBulletinId
+                if (personIdObj.PidTypeId == PidType.Egn)
                 {
-                    BulletinId = bulletin.Id,
-                    Id = BaseEntity.GenerateNewId(),
-                    EntityState = EntityStateEnum.Added,
-                    PersonId = personIdObj.Id // table P_PERSON_IDS not P_PERSON,
-                });
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.EgnId));
+                    bulletin.EgnId = personIdObj.Id;
+                }
+                else if (personIdObj.PidTypeId == PidType.Lnch)
+                {
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.LnchId));
+                    bulletin.LnchId = personIdObj.Id;
 
-                if (personIdObj.PidTypeId == PidType.Suid)
+                }
+                else if (personIdObj.PidTypeId == PidType.Ln)
                 {
-                    bulletin.Suid = personIdObj.Pid;
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.LnId));
+                    bulletin.LnId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.DocumentId)
+                {
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.IdDocNumberId));
+                    bulletin.IdDocNumberId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.DocumentId)
+                {
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.IdDocNumber));
+                    bulletin.EgnNavigation = personIdObj;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.Suid)
+                {
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.SuidId));
+                    bulletin.SuidId = personIdObj.Id;
                 }
 
-                dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
+                dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
             }
+
+            dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
 
             return person.Id;
         }
@@ -480,25 +538,6 @@ namespace MJ_CAIS.Services
                         nameof(bulletin.BulletinReceivedDate),
                         nameof(bulletin.Version),
                     };
-            }
-        }
-
-        /// <summary>
-        /// Change the status of the bulletin depending on the added decision information
-        /// (ReplacedAct425, Rehabilitated)
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        private void UpdateStatusByDecisions(BBulletin entityToSave)
-        {
-            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == DecisionType.Rehabilitation))
-            {
-                entityToSave.StatusId = Status.Rehabilitated;
-            }
-
-            if (entityToSave.BDecisions.Any(x => x.DecisionChTypeId == DecisionType.JudicialAnnulment))
-            {
-                entityToSave.StatusId = Status.ReplacedAct425;
             }
         }
 
@@ -575,36 +614,10 @@ namespace MJ_CAIS.Services
                           }).ToArray(),
                       }).ToListAsync();
 
-
             return deletedSanctionAndItsProbations;
         }
 
-        /// <summary>
-        /// Destruction
-        /// For criminal records - 100 years from the date of birth of the convicted person
-        /// For bulletins for administrative sanctions under Art. 78a - 
-        ///     15 years from the date of entry into force of the judicial act
-        /// </summary>
-        /// <param name="bulletin"></param>
-        private void UpdateDataForDestruction(BBulletin bulletin)
-        {
-            switch (bulletin.BulletinType)
-            {
-                case BulletinConstants.Type.ConvictionBulletin when bulletin.BirthDate.HasValue:
-                    bulletin.DeleteDate = bulletin.BirthDate.Value.AddYears(100);
-                    UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
-                    break;
-                case BulletinConstants.Type.Bulletin78A when bulletin.DecisionFinalDate.HasValue:
-                    bulletin.DeleteDate = bulletin.DecisionFinalDate.Value.AddYears(15);
-                    UpdateModifiedProperties(bulletin, nameof(bulletin.DeleteDate));
-                    break;
-            }
 
-            if (!bulletin.DeleteDate.HasValue || !(bulletin.DeleteDate <= DateTime.Now)) return;
-
-            bulletin.StatusId = Status.ForDestruction;
-            UpdateModifiedProperties(bulletin, nameof(bulletin.StatusId));
-        }
 
         private void UpdateModifiedProperties(BaseEntity entityToSave, string nameOfProp)
         {
@@ -626,6 +639,8 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
         {
+            bulletin.BgCitizen = bulletin.BPersNationalities.Any(x => x.CountryId == BG);
+
             // if person is bulgarian citizen
             var skipEcris = bulletin.BPersNationalities is { Count: 1 } && bulletin.BPersNationalities.First().CountryId == BG;
 

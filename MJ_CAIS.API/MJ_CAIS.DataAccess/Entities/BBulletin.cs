@@ -22,7 +22,6 @@ namespace MJ_CAIS.DataAccess.Entities
             EEcrisTcns = new HashSet<EEcrisTcn>();
             EIsinData = new HashSet<EIsinDatum>();
             EWebRequests = new HashSet<EWebRequest>();
-            PBulletinIds = new HashSet<PBulletinId>();
         }
 
         public string Id { get; set; } = null!;
@@ -108,6 +107,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PersonIdCsc { get; set; }
         public string? PersonIdCscId { get; set; }
         public string? MigrationBulletinId { get; set; }
+        public bool? BgCitizen { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -140,6 +140,5 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<EEcrisTcn> EEcrisTcns { get; set; }
         public virtual ICollection<EIsinDatum> EIsinData { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
-        public virtual ICollection<PBulletinId> PBulletinIds { get; set; }
     }
 }

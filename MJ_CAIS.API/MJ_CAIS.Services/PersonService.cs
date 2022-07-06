@@ -192,7 +192,7 @@ namespace MJ_CAIS.Services
 
         public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = await _personRepository.GetBulletinByPersonIdAsync(personId);
+            var entityQuery = _personRepository.GetBulletinsByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
@@ -262,11 +262,8 @@ namespace MJ_CAIS.Services
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber, PidType.AfisNumber, IssuerType.MVR));
             }
 
-            if (pidsFromForm.Count == 0)
-            {
-                var suid = GenerateSuid(aInDto);
-                pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CRR));
-            }
+            var suid = GenerateSuid(aInDto);
+            pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CRR));
 
             var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, personId);
 
@@ -333,10 +330,7 @@ namespace MJ_CAIS.Services
                     nameof(personToUpdate.UpdatedOn),
                     nameof(personToUpdate.Version)
                 };
-            }
-
-            // update person with new data
-            personToUpdate.UpdatedOn = DateTime.UtcNow; // todo: remove       
+            }   
 
             // create person history object with old data
             var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);

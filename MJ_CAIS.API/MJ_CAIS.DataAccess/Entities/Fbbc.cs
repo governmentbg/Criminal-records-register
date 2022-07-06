@@ -13,7 +13,7 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public string Id { get; set; } = null!;
         public string? CountryId { get; set; }
-        public string? DocTypeId { get; set; }
+        public string DocTypeId { get; set; } = null!;
         public string? SanctionTypeId { get; set; }
         public DateTime? ReceiveDate { get; set; }
         public DateTime? IssueDate { get; set; }
@@ -46,7 +46,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? EcrisUpdConvTypeId { get; set; }
         public string? EcrisUpdConvId { get; set; }
         public string? CreatedBy { get; set; }
-        public DateTime? CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public bool? IsAdministrative { get; set; }
@@ -63,7 +63,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
         public virtual GCountry? Country { get; set; }
-        public virtual FbbcDocType? DocType { get; set; }
+        public virtual FbbcDocType DocType { get; set; } = null!;
         public virtual PPersonId? Person { get; set; }
         public virtual FbbcSanctType? SanctionType { get; set; }
         public virtual FbbcStatus? StatusCodeNavigation { get; set; }

@@ -9,9 +9,9 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId, string? bulletinId);
 
-        Task<IQueryable<BulletinSancttionsEventDTO>> GetBulletinByPersonIdAsync(string personId);
+        IQueryable<BulletinSancttionsEventDTO> GetBulletinsByPersonId(string personId);
 
-        Task<string> GetPersonIdByBulletinIdAsync(string bulletinId);
+        //Task<string> GetPersonIdByBulletinIdAsync(string bulletinId);
 
         IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
     }

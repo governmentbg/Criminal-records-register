@@ -49,6 +49,8 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> GetBulletinPersonInfo(string bulletinId)
         {
             var result = await this._internalRequestService.GetBulletinPersonInfoAsync(bulletinId);
+            if (result == null) return NotFound();
+
             return Ok(result);
         }
     }

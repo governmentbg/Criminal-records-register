@@ -36,48 +36,39 @@ namespace MJ_CAIS.Repositories.Impl
                 .FirstAsync(x => x.Id == id);
         }
 
-        public async Task<IQueryable<PersonBulletinGridDTO>> GetBulletinByPersonIdAsync(string personId)
+        public IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId)
         {
-            var query = (from bulletin in _dbContext.BBulletins.AsNoTracking()
-                         join bulletinAuth in _dbContext.GCsAuthorities.AsNoTracking() on bulletin.CsAuthorityId equals bulletinAuth.Id
-                                 into bulletinAuthLeft
-                         from bulletinAuth in bulletinAuthLeft.DefaultIfEmpty()
-
-                         join bulletinStatuses in _dbContext.BBulletinStatuses.AsNoTracking() on bulletin.StatusId equals bulletinStatuses.Code
-                                     into bulletinStatusesLeft
-                         from bulletinStatuses in bulletinStatusesLeft.DefaultIfEmpty()
-
-                         join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
-                                   into bulletinPersonLeft
-                         from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
-
-                         join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
-                                     into personIdsLeft
-                         from personIds in personIdsLeft.DefaultIfEmpty()
-
-                         join personIdType in _dbContext.PPersonIdTypes.AsNoTracking() on personIds.PidTypeId equals personIdType.Code
-                                   into personIdTypeLeft
-                         from personIdType in personIdTypeLeft.DefaultIfEmpty()
-
-                         where personIds.PersonId == personId
-                         select new PersonBulletinGridDTO
-                         {
-                             Id = bulletin.Id,
-                             AlphabeticalIndex = bulletin.AlphabeticalIndex,
-                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+            var query = _dbContext.BBulletins.AsNoTracking()
+                        .Include(x => x.CsAuthority)
+                        .Include(x => x.Status)
+                        .Include(x => x.EgnNavigation)
+                        .Include(x => x.LnchNavigation)
+                        .Include(x => x.LnNavigation)
+                        .Include(x => x.IdDocNumberNavigation)
+                        .Include(x => x.SuidNavigation)
+                        .Where(x=>x.EgnNavigation.PersonId == personId ||
+                          x.LnchNavigation.PersonId == personId ||
+                          x.LnNavigation.PersonId == personId ||
+                          x.IdDocNumberNavigation.PersonId == personId ||
+                          x.SuidNavigation.PersonId == personId)
+                        .Select(bulletin => new PersonBulletinGridDTO
+                        {
+                            Id = bulletin.Id,
+                            AlphabeticalIndex = bulletin.AlphabeticalIndex,
+                            BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
                                                         bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                                              BulletinResources.Unspecified,
-                             BulletinAuthorityName = bulletinAuth.Name,
-                             CreatedOn = bulletinAuth.CreatedOn,
-                             FamilyName = bulletin.Familyname,
-                             FirstName = bulletin.Firstname,
-                             RegistrationNumber = bulletin.RegistrationNumber,
-                             StatusName = bulletinStatuses.Name,
-                             SurName = bulletin.Surname,
-                             BirthDate = bulletin.BirthDate
-                         }).Distinct();
+                            BulletinAuthorityName = bulletin.CsAuthority.Name,
+                            CreatedOn = bulletin.CreatedOn,
+                            FamilyName = bulletin.Familyname,
+                            FirstName = bulletin.Firstname,
+                            RegistrationNumber = bulletin.RegistrationNumber,
+                            StatusName = bulletin.Status.Name,
+                            SurName = bulletin.Surname,
+                            BirthDate = bulletin.BirthDate
+                        }).Distinct();
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)

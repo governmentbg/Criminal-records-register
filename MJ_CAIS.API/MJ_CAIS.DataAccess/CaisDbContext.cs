@@ -105,7 +105,6 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GUsersCitizen> GUsersCitizens { get; set; } = null!;
         public virtual DbSet<GUsersExt> GUsersExts { get; set; } = null!;
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
-        public virtual DbSet<PBulletinId> PBulletinIds { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
         public virtual DbSet<PPersonCitizenship> PPersonCitizenships { get; set; } = null!;
         public virtual DbSet<PPersonH> PPersonHs { get; set; } = null!;
@@ -1600,6 +1599,8 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.BirthCityId, "XIF9B_BULLETINS");
 
+                entity.HasIndex(e => new { e.CsAuthorityId, e.CreatedOn, e.StatusId }, "XIX_BULLETINS");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -1616,6 +1617,10 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.ApprovedByNames).HasColumnName("APPROVED_BY_NAMES");
 
                 entity.Property(e => e.ApprovedByPosition).HasColumnName("APPROVED_BY_POSITION");
+
+                entity.Property(e => e.BgCitizen)
+                    .HasPrecision(1)
+                    .HasColumnName("BG_CITIZEN");
 
                 entity.Property(e => e.BirthCityId)
                     .HasMaxLength(50)
@@ -3592,14 +3597,12 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VERSION");
 
                 entity.Property(e => e.Visible)
-                    .HasColumnType("NUMBER(38)")
+                    .HasPrecision(1)
                     .HasColumnName("VISIBLE");
 
                 entity.Property(e => e.Xslt)
-                    .HasMaxLength(18)
-                    .IsUnicode(false)
-                    .HasColumnName("XSLT")
-                    .IsFixedLength();
+                    .HasColumnType("CLOB")
+                    .HasColumnName("XSLT");
             });
 
             modelBuilder.Entity<DDocument>(entity =>
@@ -5302,6 +5305,8 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.StatusCode, "XIF8FBBC");
 
+                entity.HasIndex(e => e.CreatedOn, "XIX_FBBC");
+
                 entity.HasIndex(e => e.EcrisConvId, "XUKFBBC")
                     .IsUnique();
 
@@ -5521,6 +5526,7 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.DocType)
                     .WithMany(p => p.Fbbcs)
                     .HasForeignKey(d => d.DocTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FBBC_FBBC_DOC_TYPES");
 
                 entity.HasOne(d => d.Person)
@@ -5761,6 +5767,9 @@ namespace MJ_CAIS.DataAccess
                 entity.HasIndex(e => e.MunicipalityId, "XIF2G_CITIES");
 
                 entity.HasIndex(e => e.CsAuthorityId, "XIF3G_CITIES");
+
+                entity.HasIndex(e => e.EkatteCode, "XUK_CITIES_EKATTE")
+                    .IsUnique();
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -6540,6 +6549,9 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("GRAO_PERSON");
 
+                entity.HasIndex(e => e.Egn, "XUKGRAO_PERSON")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -6600,59 +6612,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
-            });
-
-            modelBuilder.Entity<PBulletinId>(entity =>
-            {
-                entity.ToTable("P_BULLETIN_IDS");
-
-                entity.HasIndex(e => e.PersonId, "XIF1P_BULLETIN_IDS");
-
-                entity.HasIndex(e => e.BulletinId, "XIF2P_BULLETIN_IDS");
-
-                entity.HasIndex(e => new { e.PersonId, e.BulletinId }, "XUKP_BULLETIN_IDS")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.BulletinId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("BULLETIN_ID");
-
-                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.PersonId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("PERSON_ID");
-
-                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-
-                entity.HasOne(d => d.Bulletin)
-                    .WithMany(p => p.PBulletinIds)
-                    .HasForeignKey(d => d.BulletinId)
-                    .HasConstraintName("FK_P_BULLETIN_IDS_B_BULLETINS");
-
-                entity.HasOne(d => d.Person)
-                    .WithMany(p => p.PBulletinIds)
-                    .HasForeignKey(d => d.PersonId)
-                    .HasConstraintName("FK_P_BULLETIN_IDS_P_PERSON_IDS");
             });
 
             modelBuilder.Entity<PPerson>(entity =>

@@ -6,7 +6,7 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IRehabilitationRepository : IBaseAsyncRepository<BBulletin, string, CaisDbContext>
     {
-        Task<IQueryable<BulletinForRehabilitationDTO>> GetBulletinByPersonIdAsync(string personId);
+        IQueryable<BulletinForRehabilitationDTO> GetBulletinsByPersonId(string personId);
 
         void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate, string? status);
 
