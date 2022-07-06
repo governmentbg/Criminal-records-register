@@ -3,11 +3,11 @@ import { StatisticsRoutingModule } from "./statistics-routing.module";
 import { BulletinStatisticsFormComponent } from "./bulletin-statistics-form/bulletin-statistics-form.component";
 import { ApplicationStatisticsFormComponent } from "./application-statistics-form/application-statistics-form.component";
 import { StatisticsFormComponent } from "./statistics-form/statistics-form.component";
-import {
-  IgxDoughnutChartModule,
-  IgxItemLegendModule,
-  IgxPieChartModule,
-} from "igniteui-angular-charts";
+// import {
+//   IgxDoughnutChartModule,
+//   IgxItemLegendModule,
+//   IgxPieChartModule,
+// } from "igniteui-angular-charts";
 import { CoreComponentModule } from "../../@core/components/core-component.module";
 
 @NgModule({
@@ -19,9 +19,9 @@ import { CoreComponentModule } from "../../@core/components/core-component.modul
   imports: [
     CoreComponentModule,
     StatisticsRoutingModule,
-    IgxItemLegendModule,
-    IgxDoughnutChartModule,
-    IgxPieChartModule,
+    // IgxItemLegendModule,
+    // IgxDoughnutChartModule,
+    // IgxPieChartModule,
   ],
 })
 export class StatisticsModule {}
