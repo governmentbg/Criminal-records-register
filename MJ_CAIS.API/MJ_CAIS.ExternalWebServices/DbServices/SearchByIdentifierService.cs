@@ -37,16 +37,24 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string applicationId = await _applicationService.InsertAsync(application);
 
             _dbContext.ChangeTracker.Clear();
-            (PersonDataResponseType, EWebRequest) result = this._regixService.SyncCallPersonDataSearch(id, applicationId: applicationId);
-            if (result.Item1.EGN == null) //TODO: shoud be ==
+            try
             {
-                throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
+                (PersonDataResponseType, EWebRequest) result = this._regixService.SyncCallPersonDataSearch(id, applicationId: applicationId);
+                if (result.Item1.EGN == null)
+                {
+                    throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
+                }
+
+                if (result.Item2.HasError == true)
+                {
+                    throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new BusinessLogicException($"Възникна грешка при извършване на операцията:{applicationId}");
             }
 
-            if (result.Item2.HasError == true)
-            {
-                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}");
-            }
             return applicationId;
         }
 
