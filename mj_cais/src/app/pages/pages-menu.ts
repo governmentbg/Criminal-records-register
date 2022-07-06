@@ -135,10 +135,10 @@ export class PagesMenu {
             title: "Подлежащи на заличаване",
             link: "/pages/fbbcs/for-destruction",
           },
-          {
-            title: "Заличени",
-            link: "/pages/fbbcs/destructed",
-          },
+          // {
+          //   title: "Заличени",
+          //   link: "/pages/fbbcs/destructed",
+          // },
         ],
       },
       {
