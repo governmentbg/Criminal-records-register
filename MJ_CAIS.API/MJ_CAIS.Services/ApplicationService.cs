@@ -140,6 +140,7 @@ namespace MJ_CAIS.Services
             ValidateData(aInDto);
 
             var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, false);
+            entity.ApplicationTypeId = applicationDb.ApplicationTypeId;
 
             await UpdateApplicationAsync(aInDto, entity);
 

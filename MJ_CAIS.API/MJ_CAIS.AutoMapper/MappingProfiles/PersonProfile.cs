@@ -27,9 +27,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.BirthPlace.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
                 .ForPath(d => d.BirthPlace.DistrictDisplayName, opt => opt.MapFrom(src => src.BirthCity.Municipality.District.Name))
                 .ForPath(d => d.BirthPlace.MunicipalityId, opt => opt.MapFrom(src => src.BirthCity != null ? src.BirthCity.MunicipalityId : null))
-                .ForPath(d => d.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => true))
-                .ForPath(d => d.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => src.PPersonCitizenships.Select(x => x.Id)))
-                .ForPath(d => d.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.PPersonCitizenships.Select(x => x.CountryId)));
+                .ForPath(d => d.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.PPersonCitizenships.Select(x => x.CountryId)))
+                .ForPath(d => d.NationalitiesNames, opt => opt.MapFrom(src => src.PPersonCitizenships.Select(x => x.Country.Name)));
 
             CreateMap<PPerson, PPersonH>();
             CreateMap<PPersonId, PPersonIdsH>();
