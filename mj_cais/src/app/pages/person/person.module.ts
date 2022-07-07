@@ -8,7 +8,6 @@ import { PersonDetailsFormComponent } from "./person-details-form/person-details
 import { PersonRemindFormComponent } from "./person-remind-form/person-remind-form.component";
 import { PersonSearchOverviewComponent } from "./person-search-form/grids/person-search-overview/person-search-overview.component";
 import { PersonSearchFormComponent } from "./person-search-form/person-search-form.component";
-import { NbRouteTabsetModule } from "@nebular/theme";
 
 @NgModule({
   declarations: [
@@ -22,7 +21,6 @@ import { NbRouteTabsetModule } from "@nebular/theme";
   ],
   imports: [
     CoreComponentModule, 
-    PersonRoutingModule,
-    NbRouteTabsetModule],
+    PersonRoutingModule],
 })
 export class PersonModule {}

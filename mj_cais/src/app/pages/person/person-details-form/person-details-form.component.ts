@@ -38,29 +38,15 @@ export class PersonDetailsFormComponent
   public PersonContextEnum = PersonContextEnum;
   public tabs: any[];
 
+  public bulletinsTabTitle = 'Бюлетини';
+  public applicationsTabTitle = 'Свидетелства';
+  public fbbcsTabTitle = 'Сведения за осъждане в чужбина';
+  public showApplicationsTab: boolean = false;
+  public showFbbcsTab: boolean = false;
+
   ngOnInit(): void {
     this.model = this.dbData.element as any;
     this.personId = this.model.id;
-    this.bulletinsGridService.setPersonId(this.personId);
-    this.applicationGridService.setPersonId(this.personId);
-    this.fbbcGridService.setPersonId(this.personId);
-
-    this.tabs = [
-      {
-        title: "Бюлетини",
-        route: `./tab-bulletins`,
-      },
-      {
-        title: "Свидетелства",
-        route: `./tab-applications`,
-      },
-      {
-        title: "Сведения за осъждане в чужбина",
-        route: `./tab-fbbc`,
-      },
-    ];
-
-    this.router.navigateByUrl(`pages/people/preview/${this.personId}/tab-bulletins`)  ;           
   }
 
   buildFormImpl(): FormGroup {
@@ -69,5 +55,15 @@ export class PersonDetailsFormComponent
 
   createInputObject(object: PersonModel) {
     return null;
+  }
+
+  onChangeTab(event){
+    let tabTitle = event.tabTitle;
+    if(!this.showApplicationsTab){
+      this.showApplicationsTab = tabTitle == this.applicationsTabTitle;
+    }
+    if(!this.showFbbcsTab){
+      this.showFbbcsTab = tabTitle == this.fbbcsTabTitle;
+    }
   }
 }

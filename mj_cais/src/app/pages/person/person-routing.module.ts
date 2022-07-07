@@ -35,21 +35,7 @@ const routes: Routes = [
       permissions: {
         only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
-    },
-    children:[
-      {
-        path: "tab-bulletins",
-        component: PersonBulletinOverviewComponent,
-      },
-      {
-        path: "tab-applications",
-        component: PersonApplicationOverviewComponent,
-      },
-      {
-        path: "tab-fbbc",
-        component: PersonFbbcOverviewComponent,
-      },
-    ]
+    }
   },
   {
     path: "remind/:ID",

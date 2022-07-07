@@ -163,10 +163,20 @@
         </div>
       </div>
     </div>
-
-    <nb-route-tabset 
-        [tabs]="tabs"
-    ></nb-route-tabset>
-
+    <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
+      <nb-tab #bulletinTab [tabTitle]="bulletinsTabTitle">
+        <cais-person-bulletin-overview></cais-person-bulletin-overview>
+      </nb-tab>
+      <nb-tab #applicationTab [tabTitle]="applicationsTabTitle">
+        <ng-container *ngIf="showApplicationsTab">
+          <cais-person-application-overview></cais-person-application-overview>
+        </ng-container>
+      </nb-tab>
+      <nb-tab [tabTitle]="fbbcsTabTitle">
+        <ng-container *ngIf="showFbbcsTab">
+          <cais-person-fbbc-overview></cais-person-fbbc-overview>
+        </ng-container>
+      </nb-tab>
+    </nb-tabset>
   </nb-card-body>
 </nb-card>
