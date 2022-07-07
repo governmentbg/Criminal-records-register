@@ -20,9 +20,6 @@ export class PersonBulletinOverviewComponent extends RemoteGridWithStatePersista
     public dateFormatService: DateFormatService
   ) {
     super("person-bulletins-search", service, injector);
-    let personIdParams = this.activatedRoute.snapshot.params["ID"];
-    this.personId = personIdParams;
-    this.service.setPersonId(personIdParams);
   }
 
   ngOnInit() {

@@ -164,18 +164,9 @@
       </div>
     </div>
 
-    <nb-tabset #nbtabset>
-      <nb-tab tabTitle="Бюлетини">
-        <cais-person-bulletin-overview></cais-person-bulletin-overview>
-      </nb-tab>
-      <nb-tab tabTitle="Свидетелства">
-        <cais-person-application-overview></cais-person-application-overview>
-      </nb-tab>
-      <nb-tab tabTitle="Сведения за осъждане в чужбина">
-        <cais-person-fbbc-overview></cais-person-fbbc-overview>
-      </nb-tab>
-      <!-- <nb-tab tabTitle="Напомнителни записи"> </nb-tab> -->
-      <nb-tab tabTitle="Справки"> </nb-tab>
-    </nb-tabset>
+    <nb-route-tabset 
+        [tabs]="tabs"
+    ></nb-route-tabset>
+
   </nb-card-body>
 </nb-card>
