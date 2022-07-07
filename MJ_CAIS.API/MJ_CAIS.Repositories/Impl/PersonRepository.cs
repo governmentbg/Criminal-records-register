@@ -41,7 +41,7 @@ namespace MJ_CAIS.Repositories.Impl
         public IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId)
         {
             var query = _dbContext.BBulletins.AsNoTracking()
-                        .Include(x => x.CsAuthority)
+                        .Include(x => x.BulletinAuthority)
                         .Include(x => x.Status)
                         .Include(x => x.EgnNavigation)
                         .Include(x => x.LnchNavigation)
@@ -56,18 +56,20 @@ namespace MJ_CAIS.Repositories.Impl
                         .Select(bulletin => new PersonBulletinGridDTO
                         {
                             Id = bulletin.Id,
-                            AlphabeticalIndex = bulletin.AlphabeticalIndex,
                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
                                                         bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                                              BulletinResources.Unspecified,
-                            BulletinAuthorityName = bulletin.CsAuthority.Name,
-                            CreatedOn = bulletin.CreatedOn,
-                            FamilyName = bulletin.Familyname,
-                            FirstName = bulletin.Firstname,
+
                             RegistrationNumber = bulletin.RegistrationNumber,
                             StatusName = bulletin.Status.Name,
-                            SurName = bulletin.Surname,
-                            BirthDate = bulletin.BirthDate
+                            BulletinAuthorityName = bulletin.BulletinAuthority.Name,
+                            CaseNumberAndYear = bulletin.CaseNumber + "/" + bulletin.CaseYear,
+                            Egn = bulletin.Egn,
+                            Lnch = bulletin.Lnch,
+                            FullName = !string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Fullname :
+                             bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname,
+                            BirthDate = bulletin.BirthDate,
+                            CreatedOn = bulletin.CreatedOn,
                         }).Distinct();
 
             return query;
