@@ -27,6 +27,7 @@
         public string? IdDocTypeDescr { get; set; }
         public DateTime? IdDocIssuingDate { get; set; }
         public DateTime? IdDocValidDate { get; set; }
+        public string? IdDocIssuingAuthority { get; set; }
         public string? MotherFirstname { get; set; }
         public string? MotherFamilyname { get; set; }
         public string? MotherFullname { get; set; }
