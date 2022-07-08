@@ -19,6 +19,8 @@ import { PersonSearchFormComponent } from "./person-search-form/person-search-fo
     PersonSearchFormComponent,
     PersonSearchOverviewComponent,
   ],
-  imports: [CoreComponentModule, PersonRoutingModule],
+  imports: [
+    CoreComponentModule, 
+    PersonRoutingModule],
 })
 export class PersonModule {}

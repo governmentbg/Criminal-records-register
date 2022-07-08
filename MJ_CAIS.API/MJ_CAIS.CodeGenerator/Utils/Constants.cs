@@ -26,6 +26,7 @@
         public static readonly string EntityNamespace = "MJ_CAIS.DataAccess.Entities";
         public static readonly string BaseEntityName = "BaseEntity";
         public static readonly string NomenclatureInterfaceName = "IBaseNomenclature";
+        public static readonly string InquiryBulletinFilterableInterfaceName = "IInquiryBulletinFilterable";
 
         public static readonly string EntityPath = @$"{EntitiesPath}\Entities";
         public static readonly string ControllersPath = @$"{WebPath}\Controllers";

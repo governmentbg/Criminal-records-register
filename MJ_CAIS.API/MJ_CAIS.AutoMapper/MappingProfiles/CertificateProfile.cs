@@ -11,6 +11,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<ACertificate, CertificateDTO>()
                 .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name))
+                .ForMember(d => d.DocType, opt => opt.MapFrom(src => src.Doc.DocContent.MimeType))
                 .ForMember(d => d.DocName, opt => opt.MapFrom(src => src.Doc.Name));
 
             CreateMap<CertificateDTO, ACertificate>()

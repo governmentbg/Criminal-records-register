@@ -120,10 +120,25 @@
   <data name="Bulletin78A" xml:space="preserve">
     <value>по чл.78а от НК</value>
   </data>
+  <data name="Bulletin78AForStatistics" xml:space="preserve">
+    <value>Въведени бюлетини по чл. 78а от НК</value>
+  </data>
   <data name="ConvictionBulletin" xml:space="preserve">
     <value>за съдимост</value>
   </data>
+  <data name="ConvictionBulletinForStatistics" xml:space="preserve">
+    <value>Въведени бюлетини за съдимост</value>
+  </data>
+  <data name="titleBulletinsForStatistics" xml:space="preserve">
+    <value>Въведени бюлетини</value>
+  </data>
+  <data name="titleInternalRequestsForStatistics" xml:space="preserve">
+    <value>Заявки за реабилитация</value>
+  </data>
   <data name="Unspecified" xml:space="preserve">
     <value>неопределен</value>
+  </data>
+  <data name="UnspecifiedForStatistics" xml:space="preserve">
+    <value>Въведени бюлетини от тип неопределен</value>
   </data>
 </root>

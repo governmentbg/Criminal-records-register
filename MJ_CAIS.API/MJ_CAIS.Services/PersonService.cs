@@ -5,6 +5,7 @@ using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -136,6 +137,7 @@ namespace MJ_CAIS.Services
                 var existingPerson = await dbContext.PPeople
                                 .AsNoTracking()
                                 .Include(x => x.PPersonIds)
+                                .Include(x => x.PPersonCitizenships)
                                 .FirstOrDefaultAsync(x => x.Id == personToBeUpdatedId);
                 // all pids
                 var allPids = existingPerson.PPersonIds.ToList();
@@ -192,19 +194,19 @@ namespace MJ_CAIS.Services
 
         public async Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = await _personRepository.GetBulletinByPersonIdAsync(personId);
+            var entityQuery = _personRepository.GetBulletinsByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
         public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = await _personRepository.GetApplicationsByPersonIdAsync(personId);
+            var entityQuery = _personRepository.GetApplicationsByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
         public async Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = await _personRepository.GetFbbcByPersonIdAsync(personId);
+            var entityQuery = _personRepository.GetFbbcByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
@@ -219,12 +221,12 @@ namespace MJ_CAIS.Services
         private PersonDTO MapPerson(PPerson personDb)
         {
             var person = mapper.Map<PPerson, PersonDTO>(personDb);
-
-            // todo: first identifier ??
-            person.Egn = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Egn)?.Pid;
-            person.Lnch = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Lnch)?.Pid;
-            person.Ln = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Ln)?.Pid;
-            person.AfisNumber = personDb.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.AfisNumber)?.Pid;
+            var personIds = personDb.PPersonIds.OrderByDescending(x => x.CreatedOn);
+            // last updating of a person
+            person.Egn = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Egn)?.Pid;
+            person.Lnch = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Lnch)?.Pid;
+            person.Ln = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Ln)?.Pid;
+            person.AfisNumber = personIds.FirstOrDefault(x => x.PidTypeId == PidType.AfisNumber)?.Pid;
             return person;
         }
 
@@ -262,11 +264,8 @@ namespace MJ_CAIS.Services
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber, PidType.AfisNumber, IssuerType.MVR));
             }
 
-            if (pidsFromForm.Count == 0)
-            {
-                var suid = GenerateSuid(aInDto);
-                pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CRR));
-            }
+            var suid = GenerateSuid(aInDto);
+            pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CRR));
 
             var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, personId);
 
@@ -292,6 +291,27 @@ namespace MJ_CAIS.Services
             var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
             personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
+            // add person nationalities and nationalities history
+            person.PPersonCitizenships = new List<PPersonCitizenship>();
+            personH.PPersonHCitizenships = new List<PPersonHCitizenship>();
+            foreach (var nationality in aInDto.Nationalities.SelectedForeignKeys)
+            {
+                person.PPersonCitizenships.Add(new PPersonCitizenship
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    EntityState = EntityStateEnum.Added,
+                    CountryId = nationality,
+                    // PersonId = person.Id
+                });
+
+                personH.PPersonHCitizenships.Add(new PPersonHCitizenship
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    EntityState = EntityStateEnum.Added,
+                    CountryId = nationality,
+                });
+            }
+
             dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);
             dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
             return person;
@@ -310,6 +330,22 @@ namespace MJ_CAIS.Services
             var personToUpdate = mapper.MapToEntity<PersonDTO, PPerson>(aInDto, false);
             personToUpdate.Id = existingPerson.Id;
             personToUpdate.Version = existingPerson.Version;
+
+            var existingNationalities = existingPerson.PPersonCitizenships.Select(x => x.CountryId);
+            var newNationalitiesToBeAdded = aInDto.Nationalities.SelectedForeignKeys.Except(existingNationalities);
+
+            // add person nationalities
+            personToUpdate.PPersonCitizenships = existingPerson.PPersonCitizenships ?? new List<PPersonCitizenship>();
+            foreach (var nationality in newNationalitiesToBeAdded)
+            {
+                personToUpdate.PPersonCitizenships.Add(new PPersonCitizenship
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    EntityState = EntityStateEnum.Added,
+                    CountryId = nationality,
+                });
+            }
+
             // àll identifiers, both new and old are added
             // so that when the object returns to a registry
             // it can add connection to the those pids
@@ -335,9 +371,6 @@ namespace MJ_CAIS.Services
                 };
             }
 
-            // update person with new data
-            personToUpdate.UpdatedOn = DateTime.UtcNow; // todo: remove       
-
             // create person history object with old data
             var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);
             personHistoryToBeAdded.Id = BaseEntity.GenerateNewId();
@@ -345,6 +378,10 @@ namespace MJ_CAIS.Services
             // existing and new pids
             var allPids = mapper.MapToEntityList<PPersonId, PPersonIdsH>(personToUpdate.PPersonIds.ToList(), true, true);
             personHistoryToBeAdded.PPersonIdsHes = allPids;
+
+            // existing and new nationalities
+            var allNationalities = mapper.MapToEntityList<PPersonCitizenship, PPersonHCitizenship>(personToUpdate.PPersonCitizenships.ToList(), true, true);
+            personHistoryToBeAdded.PPersonHCitizenships = allNationalities;
 
             dbContext.ApplyChanges(personToUpdate, new List<IBaseIdEntity>(), true);
             dbContext.ApplyChanges(personHistoryToBeAdded, new List<IBaseIdEntity>(), true);

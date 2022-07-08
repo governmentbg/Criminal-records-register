@@ -14,66 +14,95 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
-        public async Task<IQueryable<BulletinForRehabilitationDTO>> GetBulletinByPersonIdAsync(string personId)
+        public IQueryable<BulletinForRehabilitationDTO> GetBulletinsByPersonId(string personId)
         {
-            var query = (from bulletin in _dbContext.BBulletins.AsNoTracking()
-
-                         join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
-                                   into bulletinPersonLeft
-                         from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
-
-                         join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
-                                     into personIdsLeft
-                         from personIds in personIdsLeft.DefaultIfEmpty()
-
-                         where personIds.PersonId == personId && (bulletin.StatusId == BulletinConstants.Status.Active ||
+            var query = _dbContext.BBulletins
+                   .Include(x => x.EgnNavigation)
+                   .Include(x => x.LnchNavigation)
+                   .Include(x => x.LnNavigation)
+                   .Include(x => x.IdDocNumberNavigation)
+                   .Include(x => x.SuidNavigation)
+                   .Where(bulletin => bulletin.StatusId == BulletinConstants.Status.Active ||
                          bulletin.StatusId == BulletinConstants.Status.ForRehabilitation)
-                         select
-                        new BulletinForRehabilitationDTO
-                        {
-                            Id = bulletin.Id,
-                            DecisionDate = bulletin.DecisionDate,
-                            DecisionFinalDate = bulletin.DecisionFinalDate,
-                            Status = bulletin.StatusId,
-                            RehabilitationDate = bulletin.RehabilitationDate,
-                            Version = bulletin.Version,
-                            CaseType = bulletin.CaseTypeId,
-                            BirthDate = bulletin.BirthDate,
-                            Sanctions = bulletin.BSanctions.Select(x => new SanctionForRehabilitationDTO
-                            {
-                                SuspentionDuration = new Duration
-                                {
-                                    Years = x.SuspentionDurationYears,
-                                    Months = x.SuspentionDurationMonths,
-                                    Days = x.SuspentionDurationDays,
-                                },
-                                Type = x.SanctCategoryId,
-                                PropbationDurations = x.BProbations.Select(p => new Duration
-                                {
-                                    Years = p.DecisionDurationYears,
-                                    Months = p.DecisionDurationMonths,
-                                    Days = p.DecisionDurationDays,
-                                    Hours = p.DecisionDurationHours,
-                                })
-                            }),
-                            Decisions = bulletin.BDecisions.Select(x => new DecisionForRehabilitationDTO
-                            {
-                                Type = x.DecisionChTypeId,
-                                ChangeDate = x.ChangeDate,
-                            }),
-                            OffencesEndDates = bulletin.BOffences.Select(o => o.OffEndDate)
-                        }).GroupBy(x => x.Id).Select(x => x.FirstOrDefault());
+                   .Where(x => x.EgnNavigation.PersonId == personId ||
+                             x.LnchNavigation.PersonId == personId ||
+                             x.LnNavigation.PersonId == personId ||
+                             x.IdDocNumberNavigation.PersonId == personId ||
+                             x.SuidNavigation.PersonId == personId)
+                   .Select(bulletin => new BulletinForRehabilitationDTO
+                   {
+                       Id = bulletin.Id,
+                       DecisionDate = bulletin.DecisionDate,
+                       DecisionFinalDate = bulletin.DecisionFinalDate,
+                       Status = bulletin.StatusId,
+                       RehabilitationDate = bulletin.RehabilitationDate,
+                       Version = bulletin.Version,
+                       CaseType = bulletin.CaseTypeId,
+                       BirthDate = bulletin.BirthDate,
+                       Sanctions = bulletin.BSanctions.Select(x => new SanctionForRehabilitationDTO
+                       {
+                           SuspentionDuration = new Duration
+                           {
+                               Years = x.SuspentionDurationYears,
+                               Months = x.SuspentionDurationMonths,
+                               Days = x.SuspentionDurationDays,
+                           },
+                           Type = x.SanctCategoryId,
+                           PropbationDurations = x.BProbations.Select(p => new Duration
+                           {
+                               Years = p.DecisionDurationYears,
+                               Months = p.DecisionDurationMonths,
+                               Days = p.DecisionDurationDays,
+                               Hours = p.DecisionDurationHours,
+                           })
+                       }),
+                       Decisions = bulletin.BDecisions.Select(x => new DecisionForRehabilitationDTO
+                       {
+                           Type = x.DecisionChTypeId,
+                           ChangeDate = x.ChangeDate,
+                       }),
+                       OffencesEndDates = bulletin.BOffences.Select(o => o.OffEndDate)
+                   }).GroupBy(x => x.Id).Select(x => x.FirstOrDefault());
 
-            return await Task.FromResult(query);
+            return query;
         }
 
-        public async Task<string> GetPersonIdByBulletinIdAsync(string bulleintId)
+        public async Task<string> GetPersonIdByBulletinIdAsync(string bulletinId)
         {
-            var result = await _dbContext.PBulletinIds.AsNoTracking()
-                        .Include(x => x.Person)
-                        .FirstOrDefaultAsync(x => x.BulletinId == bulleintId);
+            var bulletin = await _dbContext.BBulletins.AsNoTracking()
+                        .Include(x => x.EgnNavigation)
+                        .Include(x => x.LnchNavigation)
+                        .Include(x => x.LnNavigation)
+                        .Include(x => x.IdDocNumberNavigation)
+                        .Include(x => x.SuidNavigation)
+                        .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
-            return result?.Person?.PersonId;
+            if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
+            {
+                return bulletin.EgnNavigation.PersonId;
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
+            {
+                return bulletin.LnchNavigation.PersonId;
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
+            {
+                return bulletin.LnNavigation.PersonId;
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
+            {
+                return bulletin.IdDocNumberNavigation.PersonId;
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
+            {
+                return bulletin.SuidNavigation.PersonId;
+            }
+
+            return null;
         }
 
         /// <summary>

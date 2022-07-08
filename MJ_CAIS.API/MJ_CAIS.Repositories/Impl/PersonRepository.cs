@@ -8,6 +8,7 @@ using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
+using static MJ_CAIS.Common.Constants.ApplicationConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -30,96 +31,116 @@ namespace MJ_CAIS.Repositories.Impl
             return await this._dbContext.PPeople.AsNoTracking()
                 .Include(x => x.PPersonIds)
                 .Include(x => x.BirthCountry)
+                .Include(x => x.PPersonCitizenships)
+                    .ThenInclude(x => x.Country)
                 .Include(x => x.BirthCity)
                    .ThenInclude(x => x.Municipality)
                    .ThenInclude(x => x.District)
                 .FirstAsync(x => x.Id == id);
         }
 
-        public async Task<IQueryable<PersonBulletinGridDTO>> GetBulletinByPersonIdAsync(string personId)
+        public IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId)
         {
-            var query = (from bulletin in _dbContext.BBulletins.AsNoTracking()
-                         join bulletinAuth in _dbContext.GCsAuthorities.AsNoTracking() on bulletin.CsAuthorityId equals bulletinAuth.Id
-                                 into bulletinAuthLeft
-                         from bulletinAuth in bulletinAuthLeft.DefaultIfEmpty()
-
-                         join bulletinStatuses in _dbContext.BBulletinStatuses.AsNoTracking() on bulletin.StatusId equals bulletinStatuses.Code
-                                     into bulletinStatusesLeft
-                         from bulletinStatuses in bulletinStatusesLeft.DefaultIfEmpty()
-
-                         join bulletinPersonId in _dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
-                                   into bulletinPersonLeft
-                         from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
-
-                         join personIds in _dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
-                                     into personIdsLeft
-                         from personIds in personIdsLeft.DefaultIfEmpty()
-
-                         join personIdType in _dbContext.PPersonIdTypes.AsNoTracking() on personIds.PidTypeId equals personIdType.Code
-                                   into personIdTypeLeft
-                         from personIdType in personIdTypeLeft.DefaultIfEmpty()
-
-                         where personIds.PersonId == personId
-                         select new PersonBulletinGridDTO
-                         {
-                             Id = bulletin.Id,
-                             AlphabeticalIndex = bulletin.AlphabeticalIndex,
-                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+            var query = _dbContext.BBulletins.AsNoTracking()
+                        .Include(x => x.BulletinAuthority)
+                        .Include(x => x.Status)
+                        .Include(x => x.EgnNavigation)
+                        .Include(x => x.LnchNavigation)
+                        .Include(x => x.LnNavigation)
+                        .Include(x => x.IdDocNumberNavigation)
+                        .Include(x => x.SuidNavigation)
+                        .Where(x => x.EgnNavigation.PersonId == personId ||
+                          x.LnchNavigation.PersonId == personId ||
+                          x.LnNavigation.PersonId == personId ||
+                          x.IdDocNumberNavigation.PersonId == personId ||
+                          x.SuidNavigation.PersonId == personId)
+                        .Select(bulletin => new PersonBulletinGridDTO
+                        {
+                            Id = bulletin.Id,
+                            BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
                                                         bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                                              BulletinResources.Unspecified,
-                             BulletinAuthorityName = bulletinAuth.Name,
-                             CreatedOn = bulletinAuth.CreatedOn,
-                             FamilyName = bulletin.Familyname,
-                             FirstName = bulletin.Firstname,
-                             RegistrationNumber = bulletin.RegistrationNumber,
-                             StatusName = bulletinStatuses.Name,
-                             SurName = bulletin.Surname,
-                             BirthDate = bulletin.BirthDate
-                         }).Distinct();
 
-            return await Task.FromResult(query);
+                            RegistrationNumber = bulletin.RegistrationNumber,
+                            StatusName = bulletin.Status.Name,
+                            BulletinAuthorityName = bulletin.BulletinAuthority.Name,
+                            CaseNumberAndYear = bulletin.CaseNumber + "/" + bulletin.CaseYear,
+                            Egn = bulletin.Egn,
+                            Lnch = bulletin.Lnch,
+                            FullName = !string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Fullname :
+                             bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname,
+                            BirthDate = bulletin.BirthDate,
+                            CreatedOn = bulletin.CreatedOn,
+                        }).Distinct();
+
+            return query;
         }
 
-        public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
+        public IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId)
         {
-            var query = _dbContext.AApplications.Where(a => a.EgnNavigation.PersonId == personId
-                                                            || a.LnNavigation.PersonId == personId
-                                                            || a.LnchNavigation.PersonId == personId
-                                                            || a.SuidNavigation.PersonId == personId
-                                                            ).Select(application => new PersonApplicationGridDTO
+            var query = _dbContext.ACertificates.AsNoTracking()
+                .Include(x => x.StatusCodeNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.EgnNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.LnNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.LnchNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.SuidNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.ApplicationType)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.CsAuthority)
+                .Where(x => x.Application.ApplicationTypeId == ApplicationTypes.DeskCertificate ||
+                            x.Application.ApplicationTypeId == ApplicationTypes.ConvictionRequest ||
+                            x.Application.ApplicationTypeId == ApplicationTypes.ApplicationRequestOld ||
+                            x.Application.ApplicationTypeId == ApplicationTypes.ConvictionRequestOld)
+                .Where(c => c.Application.EgnNavigation.PersonId == personId
+                                                            || c.Application.LnNavigation.PersonId == personId
+                                                            || c.Application.LnchNavigation.PersonId == personId
+                                                            || c.Application.SuidNavigation.PersonId == personId
+                                                            ).Select(c => new PersonApplicationGridDTO
                                                             {
-                                                                Id = application.Id,
-                                                                RegistrationNumber = application.RegistrationNumber,
-                                                                Firstname = application.Firstname,
-                                                                Surname = application.Surname,
-                                                                Familyname = application.Familyname,
-                                                                CreatedOn = application.CreatedOn
-                                                            })
-                                                            .Distinct();
+                                                                Id = c.Id,
+                                                                Type = c.Application.ApplicationType.Name,
+                                                                CertificateStatus = c.StatusCodeNavigation.Name,
+                                                                CertifivateRegistrationNumber = c.RegistrationNumber,
+                                                                CertifivateValidDate = c.ValidTo,
+                                                                CsAuthority = c.Application.CsAuthority.Name,
+                                                                ApplicantName = c.Application.ApplicantName,
+                                                                Egn = c.Application.Egn,
+                                                                Lnch = c.Application.Lnch,
+                                                                FullName = !string.IsNullOrEmpty(c.Application.Fullname) ? c.Application.Fullname :
+                                                                            c.Application.Firstname + " " + c.Application.Surname + " " + c.Application.Familyname,
+                                                                BithDate = c.Application.BirthDate,
+                                                                CreatedOn = c.CreatedOn
+                                                            });
 
-            return await Task.FromResult(query);
+            return query;
         }
 
-        public async Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId)
+        public IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId)
         {
             var query = _dbContext.Fbbcs.AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.Country)
                 .Include(x => x.Person)
                 .Include(x => x.SuidNavigation)
                 .Where(x => x.Person.PersonId == personId || x.SuidNavigation.PersonId == personId)
                 .Select(fbbc => new PersonFbbcGridDTO
                 {
                     Id = fbbc.Id,
-                    Surname = fbbc.Surname,
-                    Firstname = fbbc.Firstname,
-                    Familyname = fbbc.Familyname,
-                    BirthDate = fbbc.BirthDate,
-                    DestroyedDate = fbbc.DestroyedDate,
-                    Egn = fbbc.Egn,
+                    DocType = fbbc.DocType.Name,
                     ReceiveDate = fbbc.ReceiveDate,
+                    Country = fbbc.Country.Name,
+                    Egn = fbbc.Egn,
+                    FullName = fbbc.Firstname + " " + fbbc.Surname + " " + fbbc.Familyname,
+                    BirthDate = fbbc.BirthDate,
                     CreatedOn = fbbc.CreatedOn
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)

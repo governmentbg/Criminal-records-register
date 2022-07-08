@@ -3,13 +3,19 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Home;
+using MJ_CAIS.DTO.Statistics;
 using MJ_CAIS.Repositories.Contracts;
+using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
 namespace MJ_CAIS.Repositories.Impl
 {
     public class BulletinRepository : BaseAsyncRepository<BBulletin, CaisDbContext>, IBulletinRepository
     {
         private readonly IUserContext _userContext;
+        private const string STATISTICS_PACKAGE_NAME = "STATISTICS";
+        private const string STATISTICS_PROCEDURE_BULLETIN_NAME = "bulletins_statistics";
+        private const string STATISTICS_PROCEDURE_APPLICATION_NAME = "applications_statistics";
 
         public BulletinRepository(CaisDbContext dbContext, IUserContext userContext)
             : base(dbContext)
@@ -128,8 +134,11 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
                     .Include(x => x.BBullPersAliases)
-                    .Include(x => x.PBulletinIds)
-                        .ThenInclude(x => x.Person)
+                    .Include(x => x.EgnNavigation)
+                    .Include(x => x.LnchNavigation)
+                    .Include(x => x.LnNavigation)
+                    .Include(x => x.IdDocNumberNavigation)
+                    .Include(x => x.SuidNavigation)
                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             return bulletin;
@@ -172,27 +181,22 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType)
         {
-            var personId = await _dbContext.PPersonIds.AsNoTracking()
+            var person = await _dbContext.PPersonIds.AsNoTracking()
                 .Include(x => x.PidType)
+                .Include(x => x.Person)
+                     .ThenInclude(x => x.BirthCity)
+                .Include(x => x.Person)
+                     .ThenInclude(x => x.BirthCountry)
                 .Where(p => p.Pid == pid && p.PidType.Code == pidType)
+                .Select(x => x.Person)
                 .FirstOrDefaultAsync();
 
-            if (personId == null) return null;
-
-            var result = await _dbContext.PPeople.AsNoTracking()
-                   .Include(x => x.PPersonIds).ThenInclude(x => x.PBulletinIds)
-                   .Include(x => x.PPersonIds).ThenInclude(x => x.PidType)
-                   .Include(x => x.BirthCity)
-                   .Include(x => x.BirthCountry)
-                   .FirstOrDefaultAsync(x => x.Id == personId.PersonId);
-
-            return result;
+            return person;
         }
 
         public async Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId)
         {
             var result = _dbContext.BBulletins.AsNoTracking()
-                    .Include(x => x.PBulletinIds)
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCountry)
                     .Include(x => x.DecidingAuth)
@@ -215,7 +219,11 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.CsAuthority)
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
-                    .Where(x => x.PBulletinIds.Any(x => x.PersonId == pidId));
+                    .Where(x => x.EgnId == pidId ||
+                          x.LnchId == pidId ||
+                          x.LnId == pidId ||
+                          x.IdDocNumberId == pidId ||
+                          x.SuidId == pidId);
 
             return await Task.FromResult(result);
         }
@@ -239,7 +247,6 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<BBulletin>> GetBulletinsForPeriodAsync(DateTime dateFrom, DateTime dateTo)
         {
             var result = _dbContext.BBulletins.AsNoTracking()
-                    .Include(x => x.PBulletinIds)
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCountry)
                     .Include(x => x.DecidingAuth)
@@ -265,6 +272,75 @@ namespace MJ_CAIS.Repositories.Impl
                     .Where(x => x.CreatedOn >= dateFrom && x.CreatedOn <= dateTo);
 
             return await Task.FromResult(result);
+        }
+
+        public async Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams)
+        {
+            return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_BULLETIN_NAME);
+        }
+
+        public async Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams)
+        {
+            return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_APPLICATION_NAME);
+        }
+
+        private async Task<List<StatisticsCountDTO>> GetStatisticsAsync(StatisticsSearchDTO searchParams, string procedureName)
+        {
+            var ds = new DataSet();
+            var result = new List<StatisticsCountDTO>();
+
+            try
+            {
+                using (OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString()))
+                {
+                    // Create command
+                    OracleCommand cmd = new OracleCommand($"{STATISTICS_PACKAGE_NAME}.{procedureName}", oracleConnection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set parameters
+
+                    cmd.Parameters.Add(new OracleParameter("p_date_from", OracleDbType.Date, searchParams.FromDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_date_to", OracleDbType.Date, searchParams.ToDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_cs_authority", OracleDbType.Varchar2, searchParams.Authority, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
+
+                    OracleDataAdapter resultDataSet = new OracleDataAdapter(cmd);
+                    try
+                    {
+                        await oracleConnection.OpenAsync();
+                        resultDataSet.Fill(ds);
+
+                        foreach (DataRow row in ds.Tables[0].Rows)
+                        {
+                            result.Add(new StatisticsCountDTO
+                            {
+                                Count = int.Parse(row["cnt"].ToString()),
+                                ObjectType = row["text"].ToString(),
+                                OrderNumber = int.Parse(row["order_number"].ToString()),
+                            });
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        // todo: log
+                        throw;
+                    }
+                    finally
+                    {
+                        oracleConnection.Close();
+                        oracleConnection.Dispose();
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                // todo: log error
+                // add message
+                throw;
+            }
+
+            return result.OrderBy(x => x.OrderNumber).ToList();
         }
     }
 }

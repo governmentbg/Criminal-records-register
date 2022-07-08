@@ -80,7 +80,29 @@ namespace MJ_CAIS.Services
             var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(isin.BulletinId);
             if (bulletin == null) return null;
 
-            isin.BulletinPersonInfo = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
+            var result = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
+            if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.EgnNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.LnchNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.LnNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.IdDocNumberNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.SuidNavigation.PersonId;
+            }
+
+            isin.BulletinPersonInfo = result;
             return isin;
         }
 

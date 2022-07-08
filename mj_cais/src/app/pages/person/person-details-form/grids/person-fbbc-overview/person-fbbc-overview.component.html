@@ -44,6 +44,16 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
+  <igx-column
+    field="docType"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
 
   <igx-column
     field="receiveDate"
@@ -58,13 +68,32 @@
       </span>
     </ng-template>
   </igx-column>
+  <igx-column
+    field="country"
+    header="Дъжава(източник)"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
 
   <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
+  <igx-column
+    field="fullName"
+    header="Имена"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
   <igx-column
     field="birthDate"
     header="Дата на раждане"
@@ -76,50 +105,6 @@
       <span [title]="this.dateFormatService.displayDate(cell.value)">
         {{ this.dateFormatService.displayDate(cell.value) }}
       </span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="firstname"
-    header="Име"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="surname"
-    header="Презиме"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="familyname"
-    header="Фамилия"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="docType"
-    header="Източник"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
 
@@ -136,7 +121,7 @@
         [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>    
+      </a>
     </ng-template>
   </igx-column>
   <ng-template #pager let-grid>

@@ -21,6 +21,6 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string? wApplicationId = null,
             string? ecrisMsgId = null);
 
-        PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName);
+        PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName, EWebRequest requestRelations, string webServiceNameRelations);
     }
 }

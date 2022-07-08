@@ -45,6 +45,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<AApplication, ApplicationOutDTO>()
              .ForMember(d => d.RegistrationNumber, opt => opt.MapFrom(src => src.RegistrationNumber))
              .ForMember(d => d.CurrentApplicationStatus, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name))
+             .ForMember(d => d.ApplicationCode, opt => opt.MapFrom(src => src.ApplicationType.Code))
              .ForPath(d => d.Person.Suid, opt => opt.MapFrom(src => src.Suid))
              .ForPath(d => d.Person.Firstname, opt => opt.MapFrom(src => src.Firstname))
              .ForPath(d => d.Person.Surname, opt => opt.MapFrom(src => src.Surname))

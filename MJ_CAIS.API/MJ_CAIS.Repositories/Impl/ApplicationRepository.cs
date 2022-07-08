@@ -45,8 +45,14 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var result = await this._dbContext.Set<AApplication>()
                 .Include(x => x.ACertificates)
+                .Include(x => x.ApplicationType)
                 .Include(x => x.StatusCodeNavigation)
-                .Include(x => x.AAppCitizenships).AsNoTracking()
+                .Include(x => x.AAppCitizenships)
+                .Include(x => x.BirthCountry)
+                .Include(x => x.BirthCity)
+                .Include(x => x.BirthCity.Municipality)
+                //.Include(x => x.BirthCity.Country)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }

@@ -61,23 +61,20 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin)
+        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin,  string personId)
         {
-            var personId = await _bulletinEventRepository.GetPersonIdByBulletinIdAsync(currentAttachedBulletin.Id);
-            if (string.IsNullOrEmpty(personId)) return;
-
-            var bulletinsQuery = await _bulletinEventRepository.GetBulletinByPersonIdAsync(personId);
-            var bulletins = await bulletinsQuery.ToListAsync();
-
-            // if person has one bulletin 
-            // the event is not applicable
-            if (bulletins.Count == 1) return;
-
             var existingEvents = dbContext.BBulEvents
                                 .AsNoTracking()
                                 .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == BulletinEventConstants.Type.Article2212);
 
             if (existingEvents) return;
+
+            var bulletinsQuery = _bulletinEventRepository.GetBulletinsByPersonId(personId);
+            var bulletins = await bulletinsQuery.ToListAsync();
+
+            // if person has one bulletin 
+            // the event is not applicable
+            if (bulletins.Count == 1) return;
 
             currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
             CheckForArticle2212(bulletins, currentAttachedBulletin);
@@ -92,13 +89,6 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId)
         {
-            var bulletinsQuery = await _bulletinEventRepository.GetBulletinByPersonIdAsync(personId);
-            var bulletins = await bulletinsQuery.ToListAsync();
-
-            // if person has one bulletin 
-            // the event is not applicable
-            if (bulletins.Count == 1) return;
-
             var existingEvents = dbContext.BBulEvents
                                 .AsNoTracking()
                                 .Where(x => x.BulletinId == currentAttachedBulletin.Id)
@@ -112,12 +102,23 @@ namespace MJ_CAIS.Services
             currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
 
             var article2211 = existingEvents.FirstOrDefault(x => x.Type == BulletinEventConstants.Type.Article2211);
+            var article3000 = existingEvents.FirstOrDefault(x => x.Type == BulletinEventConstants.Type.Article3000);
+
+            var checkForEvent = article2211 == null || !article2211.Any || article3000 == null || !article3000.Any;
+            if(!checkForEvent) return;
+
+            var bulletinsQuery = _bulletinEventRepository.GetBulletinsByPersonId(personId);
+            var bulletins = await bulletinsQuery.ToListAsync();
+
+            // if person has one bulletin 
+            // the event is not applicable
+            if (bulletins.Count == 1) return;
+
             if (article2211 == null || !article2211.Any)
             {
                 CheckForArticle2211(bulletins, currentAttachedBulletin);
             }
 
-            var article3000 = existingEvents.FirstOrDefault(x => x.Type == BulletinEventConstants.Type.Article3000);
             if (article3000 == null || !article3000.Any)
             {
                 CheckForArticle3000(bulletins, currentAttachedBulletin);

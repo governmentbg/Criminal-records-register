@@ -32,6 +32,7 @@ export class ApplicationCertificateResultComponent
 {
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
+  @Input() applicationCode: string;
 
   @ViewChild("bulletinsCheckGrid", {
     read: IgxGridComponent,
@@ -54,7 +55,8 @@ export class ApplicationCertificateResultComponent
 
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
-    this.fullForm.group.patchValue(this.model);
+    this.fullForm.group.patchValue(new ApplicationCertificateResultModel(this.model));
+    debugger;
     if (this.model) {
       if (
         this.model.statusCode ==
@@ -98,14 +100,15 @@ export class ApplicationCertificateResultComponent
       );
       this.reloadCurrentRoute();
       debugger;
-    }),(error) => {
-      var errorText = error.status + " " + error.statusText;
-      this.toastr.showBodyToast(
-        "danger",
-        "Грешка при смяна на статуса:",
-        errorText
-      );
-    };
+    }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Грешка при смяна на статуса:",
+          errorText
+        );
+      };
   }
 
   upload() {
@@ -115,30 +118,38 @@ export class ApplicationCertificateResultComponent
         CommonConstants.defaultDialogConfig
       )
       .onClose.subscribe((x) => {
-        debugger;
         if (x) {
+          debugger;
           var object = new ApplicationCertificateDocumentModel();
           object.documentContent = x.documentContent;
           this.service
             .uploadSignedCertificate(this.fullForm.id.value, object)
-            .subscribe((x) => {
+            .subscribe((y) => {
               debugger;
+              let res = y;
               this.toastr.showBodyToast(
                 "success",
                 "Успешно качване на файл",
                 ""
               );
-            }),
-            (error) => {
+            },   (error) => {
               var errorText = error.status + " " + error.statusText;
               this.toastr.showBodyToast(
                 "danger",
                 "Грешка при качване на файла:",
                 errorText
               );
-            };
+            });
         }
-      });
+      }),
+      (error) => {
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Грешка при качване на файла:",
+          errorText
+        );
+      };
   }
 
   buildFormImpl(): FormGroup {
@@ -174,7 +185,7 @@ export class ApplicationCertificateResultComponent
 
   printCertificate() {
     this.service
-      .downloadSertificateContent(this.model.id)
+      .downloadSertificateContent(this.model.id,this.applicationCode)
       .subscribe((response: any) => {
         this.fullForm.group.disable();
         let blob = new Blob([response.body]);

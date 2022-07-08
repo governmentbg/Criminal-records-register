@@ -12,7 +12,7 @@ import { BulletinForRehabilitationOverviewComponent } from './bulletin-overview/
 import { BulletinNewEissOverviewComponent } from './bulletin-overview/bulletin-neweiss-overview/bulletin-neweiss-overview.component';
 import { BulletinNewOfficeOverviewComponent } from './bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component';
 import { CoreComponentModule } from '../../@core/components/core-component.module';
-import { OffenceCategoryDialogComponent } from './bulletin-form/tabs/bulletin-offences-form/dialog/offence-category-dialog/offence-category-dialog.component';
+import { OffenceCategoryDialogComponent } from '../../@core/components/dialogs/offence-category-dialog/offence-category-dialog.component';
 import { BulletinEventsOverviewComponent } from '../bulletin-events/bulletin-events-overview/bulletin-events-overview.component';
 import { BulletinEventsArticleOverviewComponent } from '../bulletin-events/bulletin-events-overview/tabs/bulletin-events-article-overview/bulletin-events-article-overview.component';
 import { BulletinEventsDocumentOverviewComponent } from '../bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';

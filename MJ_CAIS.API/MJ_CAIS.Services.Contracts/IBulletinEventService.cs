@@ -13,6 +13,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId);
 
-        Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin);
+        Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin, string personId);
     }
 }

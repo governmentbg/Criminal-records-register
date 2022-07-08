@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { CaisCrudService } from "../../../../../../../@core/services/rest/cais-crud.service";
+import { CaisCrudService } from "../../../../services/rest/cais-crud.service";
 import { OffenceCategoryGridModel } from "../_models/offence-category-grid.model";
 
 @Injectable({

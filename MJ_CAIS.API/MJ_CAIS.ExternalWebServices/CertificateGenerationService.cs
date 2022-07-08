@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Certificate;
@@ -9,6 +10,7 @@ using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services;
 using MJ_CAIS.Services.Contracts;
+using System.Text;
 using TL.Signer;
 
 namespace MJ_CAIS.ExternalWebServices
@@ -43,6 +45,7 @@ namespace MJ_CAIS.ExternalWebServices
                                     .ThenInclude(appl => appl.PurposeNavigation)
                                     .Include(c => c.Application.SrvcResRcptMeth)
                                     .Include(c => c.AStatusHes)
+                                    .Include(c => c.Application.ApplicationType)
                                     .FirstOrDefaultAsync(x => x.Id == certificateID);
             if (certificate == null)
             {
@@ -77,19 +80,21 @@ namespace MJ_CAIS.ExternalWebServices
         public async Task<byte[]> GetCertificateContentAsync(string certificateID)
         {
             var content = await dbContext.ACertificates
+                                    .Include(c => c.Doc.DocType)
                                     .Include(c => c.Doc)
                                     .ThenInclude(d => d.DocContent)
                                     .Where(x => x.Id == certificateID)
-                                    .Select(x => x.Doc.DocContent.Content)
                                     .FirstOrDefaultAsync();
-            return content;
+
+            string xml = Encoding.UTF8.GetString(content.Doc.DocContent.Content);
+            var html = XmlUtils.XmlTransform(content.Doc.DocType.Xslt, xml);
+            var result = Encoding.UTF8.GetBytes(html);
+
+            return await Task.FromResult(result);
         }
 
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
-        //string statusCodeCertificateServerSign = ApplicationConstants.ApplicationStatuses.CertificateServerSign
-        //, string statusCodeCertificateForDelivery = ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-        //, string statusCodeCertificatePaperPrint = ApplicationConstants.ApplicationStatuses.CertificatePaperPrint)
         {
 
             byte[] contentCertificate;
@@ -97,12 +102,37 @@ namespace MJ_CAIS.ExternalWebServices
             bool containsBulletins = false;
             if (certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() == 0)
             {
-                contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_without_conviction, signingCertificateName);
+                switch (certificate.Application.ApplicationType.Code)
+                {
+                    case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
+                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_external_certificate_without_conviction, signingCertificateName);
+                        break;
+                    case ApplicationConstants.ApplicationTypes.WebCertificate:
+                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_certificate_without_conviction, signingCertificateName);
+                        break;
+                    default:
+                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_without_conviction, signingCertificateName);
+                        break;
+                }
+
                 containsBulletins = false;
             }
             else
             {
-                contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction, signingCertificateName);
+
+                switch (certificate.Application.ApplicationType.Code)
+                {
+                    case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
+                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_external_certificate_with_conviction, signingCertificateName);
+                        break;
+                    case ApplicationConstants.ApplicationTypes.WebCertificate:
+                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_certificate_with_conviction, signingCertificateName);
+                        break;
+                    default:
+                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction, signingCertificateName);
+                        break;
+                }
+
                 containsBulletins = true;
             }
             bool isExistingDoc = false;
@@ -162,7 +192,7 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
 
             certificate.DocId = doc.Id;
-            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate 
+            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate
                 && certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebCertificate)
             {
                 //ako не е електронно -> за печат
@@ -259,8 +289,7 @@ namespace MJ_CAIS.ExternalWebServices
         {
             byte[] fileArray = await _printerService.PrintCertificate(certificateID, checkUrl, reportName);
             //todo: кои полета да се добавят за валидиране?!
-            //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, 
-            //    new Dictionary<string, string>() { { "certificate_id", certificateID} });
+            fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, null);
 
             return fileArray;
 

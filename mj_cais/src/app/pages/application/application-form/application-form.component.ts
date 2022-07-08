@@ -5,6 +5,7 @@ import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { Observable } from "rxjs";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { ApplicationTypeStatusConstants } from "../application-overview/_models/application-type-status.constants";
@@ -47,13 +48,23 @@ export class ApplicationFormComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationForm();
     this.fullForm.group.patchValue(this.dbData.element);
-    if (!this.isEdit()) {
+
+    let selectedForeignKeys =
+      this.fullForm.person.nationalities.selectedForeignKeys.value;
+
+    let mustAddDefaultCountry =
+      !this.isEdit() &&
+      (selectedForeignKeys == null || selectedForeignKeys.length == 0);
+
+    if (mustAddDefaultCountry) {
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
-        "CO-00-100-BGR",
+        CommonConstants.bgCountryId,
       ]);
       this.fullForm.person.nationalities.isChanged.patchValue(true);
+    } else if (!this.isEdit()) {
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
-
+    
     this.applicationStatus = this.fullForm.statusCode.value;
     if (
       this.fullForm.statusCode.value ==
@@ -62,7 +73,6 @@ export class ApplicationFormComponent
       this.fullForm.group.disable();
     }
 
-    
     this.formFinishedLoading.emit();
     if (
       this.fullForm.statusCode.value ==
@@ -89,27 +99,24 @@ export class ApplicationFormComponent
     this.validateAndSave(this.fullForm);
   };
 
-
   public printApplication() {
-    this.service
-      .printApplication(this.objectId)
-      .subscribe((response) => {
-        let blob = new Blob([response.body]);
-        window.URL.createObjectURL(blob);
+    this.service.printApplication(this.objectId).subscribe((response) => {
+      let blob = new Blob([response.body]);
+      window.URL.createObjectURL(blob);
 
-        let header = response.headers.get("Content-Disposition");
-        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+      let header = response.headers.get("Content-Disposition");
+      let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 
-        let fileName = "download";
+      let fileName = "download";
 
-        var matches = filenameRegex.exec(header);
-        if (matches != null && matches[1]) {
-          fileName = matches[1].replace(/['"]/g, "");
-        }
+      var matches = filenameRegex.exec(header);
+      if (matches != null && matches[1]) {
+        fileName = matches[1].replace(/['"]/g, "");
+      }
 
-        fileSaver.saveAs(blob, fileName);
-        this.toastr.showToast("success", "Успешно разпечатан документ");
-      });
+      fileSaver.saveAs(blob, fileName);
+      this.toastr.showToast("success", "Успешно разпечатан документ");
+    });
   }
 
   public finalEdit() {
@@ -124,9 +131,7 @@ export class ApplicationFormComponent
   }
 
   public cancelApplication() {
-    this.service
-      .cancelApplication(this.objectId)
-      .subscribe((result) => {});
+    this.service.cancelApplication(this.objectId).subscribe((result) => {});
   }
 
   protected saveAndNavigate() {

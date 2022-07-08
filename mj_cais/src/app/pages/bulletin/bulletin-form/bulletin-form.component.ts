@@ -86,10 +86,19 @@ export class BulletinFormComponent
     this.fullForm = new BulletinForm(bulletinStatusId, this.isEdit(), locked);
     this.fullForm.group.patchValue(this.dbData.element);
 
-    if (!this.isEdit()) {
+    let selectedForeignKeys =
+      this.fullForm.person.nationalities.selectedForeignKeys.value;
+
+    let mustAddDefaultCountry =
+      !this.isEdit() &&
+      (selectedForeignKeys == null || selectedForeignKeys.length == 0);
+
+    if (mustAddDefaultCountry) {
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
-        "CO-00-100-BGR",
+        CommonConstants.bgCountryId,
       ]);
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
+    } else if (!this.isEdit()) {
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
 
@@ -138,6 +147,7 @@ export class BulletinFormComponent
 
       this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
     }
+
     this.validateAndSave(this.fullForm);
   };
 

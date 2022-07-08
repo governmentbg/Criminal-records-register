@@ -119,9 +119,21 @@ const routes: Routes = [
       {
         path: "e-applicaiton",
         loadChildren: () =>
-          import(
-            "./e-application/eapplication.module"
-          ).then((m) => m.EApplicationModule),
+          import("./e-application/eapplication.module").then(
+            (m) => m.EApplicationModule
+          ),
+      },
+      {
+        path: "inquiry",
+        loadChildren: () =>
+          import("./inquiry/inquiry.module").then((m) => m.InquiryModule),
+      },
+      {
+        path: "statistics",
+        loadChildren: () =>
+          import("./statistics/statistics.module").then(
+            (m) => m.StatisticsModule
+          ),
       },
       {
         path: "",

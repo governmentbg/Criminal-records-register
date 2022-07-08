@@ -1,0 +1,70 @@
+// nb-card{
+//     height: 2000px !important;
+// }
+
+ :host{
+    ::ng-deep {
+       .select {
+          background-color: lightgreen;
+       }
+  
+      .deselect {
+           background-color: white;
+      }
+    }
+  }
+  
+/* ============ container styles  ============ */
+
+.container
+{
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-self: stretch;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    min-width: 200px;
+    //height: 100%;
+    width: 100%;
+    padding: 0rem;
+    margin: 0rem;
+   // position: absolute;
+    max-width: none;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Titillium Web', Verdana, Tahoma, sans-serif;
+    box-sizing: border-box;
+}
+
+.fill > * {
+    height: 100%;
+    width: 100%;
+}
+
+/* ============ legend styles ============ */
+.legend {
+    --legend-item-overflow: hidden;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+#legendTitle,
+.legend-title {
+    width: 100%;
+    margin: 0rem;
+    padding: 0rem;
+    vertical-align: middle;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-family: 'Titillium Web', Verdana, Tahoma, sans-serif;
+    color: black;
+}
+
+.ig-chart-legend-item-badge > canvas {
+    vertical-align: middle;
+    margin-bottom: 0.2rem;
+}

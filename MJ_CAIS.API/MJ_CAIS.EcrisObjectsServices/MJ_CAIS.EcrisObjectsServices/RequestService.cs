@@ -181,7 +181,13 @@ namespace MJ_CAIS.EcrisObjectsServices
                                 .Include(b => b.IdDocCategory)
                                 //todo: id или код?! дали е този код
                                 .Where(b => b.StatusId == BulletinConstants.Status.Active
-                               && b.PBulletinIds.Where(pb => personIDs.Contains(pb.PersonId)).Any())
+                               && /*b.PBulletinIds.Where(pb => personIDs.Contains(pb.PersonId)).Any()*/
+                               (personIDs.Contains(b.EgnId) ||
+                               personIDs.Contains(b.LnchId) ||
+                               personIDs.Contains(b.LnId) ||
+                               personIDs.Contains(b.IdDocNumberId) ||
+                               personIDs.Contains(b.SuidId)
+                               ))
                                .ToListAsync();
 
         }
