@@ -26,7 +26,7 @@ namespace MJ_CAIS.IdentityServer.CAISAppCredentials
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("MJ_CAIS");
+            //modelBuilder.HasDefaultSchema("MJ_CAIS");
 
             modelBuilder.Entity<GRoles>(entity =>
             {
