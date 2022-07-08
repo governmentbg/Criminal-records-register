@@ -69,7 +69,6 @@ export class ReportPersonSearchFormComponent
   };
 
   public onSelectCountry = (item: CountryGridModel) => {
-    debugger;
     if (item) {
       this.fullForm.nationalityCountry.setValue(item.id, item.name);
       this.fullForm.nationalityCountryId.setValue(item.id);
@@ -79,5 +78,10 @@ export class ReportPersonSearchFormComponent
   public onNationalityTypeChanged(nationalityTypeCode) {
     this.showCountryLookup =
       nationalityTypeCode == NationalityTypeConstants.currentCountry.code;
+  }
+
+  public onNationalityTypeCleared(event) {
+    debugger;
+    this.fullForm.nationalityCountryId.setValue(null);
   }
 }

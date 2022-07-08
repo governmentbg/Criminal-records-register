@@ -34,7 +34,7 @@
             [items]="dbData.authorities"
           ></cais-autocomplete>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'Номер'"
@@ -42,7 +42,7 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-autocomplete
             [label]="'Вид'"
             [inputFormControl]="fullForm.bulletinType"
@@ -60,12 +60,10 @@
             [items]="dbData.statuses"
           ></cais-autocomplete>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'date'"
-            [label]="'Датата на постъпване на хартиения бюлетин'"
+            [label]="'Датата на постъпване на хартия'"
             [inputFormControl]="fullForm.bulletinReceivedDate"
             [parentGroup]="fullForm.group"
           ></cais-input>
@@ -84,7 +82,7 @@
           ></cais-autocomplete>
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'Номер'"
@@ -93,7 +91,7 @@
           ></cais-input>
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-autocomplete
             [label]="'Вид'"
             [inputFormControl]="fullForm.decisionTypeId"
@@ -103,16 +101,16 @@
           ></cais-autocomplete>
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'date'"
-            [label]="'Дата'"
+            [label]="'Дата на издаване'"
             [inputFormControl]="fullForm.decisionDate"
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'date'"
             [label]="'Дата на влизане в сила на акта'"

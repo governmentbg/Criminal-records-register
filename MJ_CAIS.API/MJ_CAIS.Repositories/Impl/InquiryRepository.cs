@@ -147,7 +147,7 @@ namespace MJ_CAIS.Repositories
             if (searchParams.ToDate.HasValue)
                 bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate);
 
-            if (!string.IsNullOrEmpty(searchParams.NationalityTypeCode) || !string.IsNullOrEmpty(searchParams.NationalityCountryId))
+            if (!string.IsNullOrEmpty(searchParams.NationalityTypeCode) && !string.IsNullOrEmpty(searchParams.NationalityCountryId))
             {
                 bulletinsQuery = from bulletin in bulletinsQuery
                                  join nationality in _dbContext.BPersNationalities on bulletin.Id equals nationality.BulletinId
