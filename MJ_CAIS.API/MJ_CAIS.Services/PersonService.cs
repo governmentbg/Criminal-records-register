@@ -206,7 +206,7 @@ namespace MJ_CAIS.Services
 
         public async Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = await _personRepository.GetFbbcByPersonIdAsync(personId);
+            var entityQuery = _personRepository.GetFbbcByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 

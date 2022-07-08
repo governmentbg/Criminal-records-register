@@ -16,6 +16,6 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId);
 
-        Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId);
+        IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId);
     }
 }

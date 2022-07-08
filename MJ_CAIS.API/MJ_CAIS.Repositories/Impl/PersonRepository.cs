@@ -120,26 +120,27 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public async Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId)
+        public IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId)
         {
             var query = _dbContext.Fbbcs.AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.Country)
                 .Include(x => x.Person)
                 .Include(x => x.SuidNavigation)
                 .Where(x => x.Person.PersonId == personId || x.SuidNavigation.PersonId == personId)
                 .Select(fbbc => new PersonFbbcGridDTO
                 {
                     Id = fbbc.Id,
-                    Surname = fbbc.Surname,
-                    Firstname = fbbc.Firstname,
-                    Familyname = fbbc.Familyname,
-                    BirthDate = fbbc.BirthDate,
-                    DestroyedDate = fbbc.DestroyedDate,
-                    Egn = fbbc.Egn,
+                    DocType = fbbc.DocType.Name,
                     ReceiveDate = fbbc.ReceiveDate,
+                    Country = fbbc.Country.Name,
+                    Egn = fbbc.Egn,
+                    FullName = fbbc.Firstname + " " + fbbc.Surname + " " + fbbc.Familyname,
+                    BirthDate = fbbc.BirthDate,
                     CreatedOn = fbbc.CreatedOn
                 });
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)
