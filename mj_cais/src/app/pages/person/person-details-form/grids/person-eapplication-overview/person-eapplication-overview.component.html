@@ -17,22 +17,6 @@
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
-  <igx-grid-toolbar>
-    <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <a
-          nbButton
-          matRipple
-          [status]="'success'"
-          [routerLink]="['/pages/applications/create']"
-          [queryParams]="{ personId: personId }"
-        >
-          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добавяне
-        </a>
-      </div>
-    </igx-grid-toolbar-actions>
-  </igx-grid-toolbar>
-
   <igx-column
     field="id"
     header="Идентификатор"
@@ -45,13 +29,7 @@
     </ng-template>
   </igx-column>
 
-  <igx-column
-    field="type"
-    header="Тип"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="true"
-  >
+  <igx-column field="type" header="Тип" [sortable]="true" [dataType]="'string'">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
@@ -61,7 +39,6 @@
     header="Статус"
     [sortable]="true"
     [dataType]="'string'"
-    [hidden]="true"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -93,18 +70,7 @@
   </igx-column>
 
   <igx-column
-    field="csAuthority"
-    header="Бюро съдимост по заявяване"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="applicantName"
+    field="extAdministration"
     header="Заявено от"
     [sortable]="true"
     [dataType]="'string'"

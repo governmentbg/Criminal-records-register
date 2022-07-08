@@ -102,7 +102,7 @@ namespace MJ_CAIS.Repositories.Impl
                                                             || c.Application.SuidNavigation.PersonId == personId
                                                             ).Select(c => new PersonApplicationGridDTO
                                                             {
-                                                                Id = c.Id,
+                                                                Id = c.ApplicationId,
                                                                 Type = c.Application.ApplicationType.Name,
                                                                 CertificateStatus = c.StatusCodeNavigation.Name,
                                                                 CertifivateRegistrationNumber = c.RegistrationNumber,
@@ -116,6 +116,72 @@ namespace MJ_CAIS.Repositories.Impl
                                                                 BithDate = c.Application.BirthDate,
                                                                 CreatedOn = c.CreatedOn
                                                             });
+
+            return query;
+        }
+
+        public IQueryable<PersonEApplicationGridDTO> GetEApplicationsByPersonId(string personId)
+        {
+            var query = from cert in _dbContext.ACertificates.AsNoTracking()
+
+                        join app in _dbContext.AApplications.AsNoTracking()
+                           on cert.ApplicationId equals app.Id into appLeft
+                        from app in appLeft.DefaultIfEmpty()
+
+                        join appType in _dbContext.AApplicationTypes.AsNoTracking()
+                           on app.ApplicationTypeId equals appType.Id into appTypeLeft
+                        from appType in appTypeLeft.DefaultIfEmpty()
+
+                        join wApp in _dbContext.WApplications.AsNoTracking()
+                          on app.WApplicationId equals wApp.Id into wAppLeft
+                        from wApp in wAppLeft.DefaultIfEmpty()
+
+                        join extUser in _dbContext.GUsersExts.AsNoTracking()
+                        on wApp.UserExtId equals extUser.Id into extUserLeft
+                        from extUser in extUserLeft.DefaultIfEmpty()
+
+                        join extAdministration in _dbContext.GExtAdministrations.AsNoTracking()
+                        on extUser.AdministrationId equals extAdministration.Id into extAdministrationLeft
+                        from extAdministration in extAdministrationLeft.DefaultIfEmpty()
+
+                        join status in _dbContext.AApplicationStatuses.AsNoTracking()
+                         on cert.StatusCode equals status.Code into statusLeft
+                        from status in statusLeft.DefaultIfEmpty()
+
+                        join egn in _dbContext.PPersonIds.AsNoTracking()
+                        on app.EgnId equals egn.Id into egnLeft
+                        from egn in egnLeft.DefaultIfEmpty()
+
+                        join lnch in _dbContext.PPersonIds.AsNoTracking()
+                        on app.LnchId equals lnch.Id into lnchLeft
+                        from lnch in lnchLeft.DefaultIfEmpty()
+
+                        join ln in _dbContext.PPersonIds.AsNoTracking()
+                        on app.LnId equals ln.Id into lnLeft
+                        from ln in lnLeft.DefaultIfEmpty()
+
+                        join suid in _dbContext.PPersonIds.AsNoTracking()
+                        on app.SuidId equals suid.Id into suidLeft
+                        from suid in suidLeft.DefaultIfEmpty()
+
+                        where (app.ApplicationTypeId == ApplicationTypes.WebCertificate ||
+                            app.ApplicationTypeId == ApplicationTypes.WebExternalCertificate) &&
+                            (egn.PersonId == personId || lnch.PersonId == personId || ln.PersonId == personId || suid.PersonId == personId)
+                        select new PersonEApplicationGridDTO
+                        {
+                            Id = app.Id,
+                            Type = appType.Name,
+                            CertificateStatus = status.Name,
+                            CertifivateRegistrationNumber = cert.RegistrationNumber,
+                            CertifivateValidDate = cert.ValidTo,
+                            ExtAdministration = extAdministration.Name,
+                            Egn = app.Egn,
+                            Lnch = app.Lnch,
+                            FullName = !string.IsNullOrEmpty(app.Fullname) ? app.Fullname :
+                                                                            app.Firstname + " " + app.Surname + " " + app.Familyname,
+                            BithDate = app.BirthDate,
+                            CreatedOn = cert.CreatedOn,
+                        };
 
             return query;
         }

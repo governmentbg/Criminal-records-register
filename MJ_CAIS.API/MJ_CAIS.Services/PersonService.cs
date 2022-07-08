@@ -204,6 +204,12 @@ namespace MJ_CAIS.Services
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
+        public async Task<IgPageResult<PersonEApplicationGridDTO>> SelectPersonEApplicationAllWithPaginationAsync(ODataQueryOptions<PersonEApplicationGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = _personRepository.GetEApplicationsByPersonId(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
         public async Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
             var entityQuery = _personRepository.GetFbbcByPersonId(personId);

@@ -172,6 +172,11 @@
           <cais-person-application-overview></cais-person-application-overview>
         </ng-container>
       </nb-tab>
+      <nb-tab [tabTitle]="eApplicationsTabTitle">
+        <ng-container *ngIf="showEApplicationsTab">
+          <cais-person-eapplication-overview></cais-person-eapplication-overview>
+        </ng-container>
+      </nb-tab>
       <nb-tab [tabTitle]="fbbcsTabTitle">
         <ng-container *ngIf="showFbbcsTab">
           <cais-person-fbbc-overview></cais-person-fbbc-overview>

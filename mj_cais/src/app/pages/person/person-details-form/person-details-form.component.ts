@@ -28,7 +28,7 @@ export class PersonDetailsFormComponent
     public injector: Injector,
     public bulletinsGridService: PersonBulletinGridService,
     public applicationGridService: PersonApplicationGridService,
-    public fbbcGridService: PersonFbbcGridService,  
+    public fbbcGridService: PersonFbbcGridService
   ) {
     super(service, injector);
   }
@@ -38,11 +38,13 @@ export class PersonDetailsFormComponent
   public PersonContextEnum = PersonContextEnum;
   public tabs: any[];
 
-  public bulletinsTabTitle = 'Бюлетини';
-  public applicationsTabTitle = 'Свидетелства';
-  public fbbcsTabTitle = 'Сведения за осъждане в чужбина';
+  public bulletinsTabTitle = "Бюлетини";
+  public applicationsTabTitle = "Документи на гише";
+  public eApplicationsTabTitle = "Е-Свидетелства";
+  public fbbcsTabTitle = "Сведения за осъждане в чужбина";
   public showApplicationsTab: boolean = false;
   public showFbbcsTab: boolean = false;
+  public showEApplicationsTab: boolean = false;
 
   ngOnInit(): void {
     this.model = this.dbData.element as any;
@@ -57,13 +59,17 @@ export class PersonDetailsFormComponent
     return null;
   }
 
-  onChangeTab(event){
+  onChangeTab(event) {
     let tabTitle = event.tabTitle;
-    if(!this.showApplicationsTab){
+    if (!this.showApplicationsTab) {
       this.showApplicationsTab = tabTitle == this.applicationsTabTitle;
     }
-    if(!this.showFbbcsTab){
+
+    if (!this.showFbbcsTab) {
       this.showFbbcsTab = tabTitle == this.fbbcsTabTitle;
+    }
+    if (!this.showEApplicationsTab) {
+      this.showEApplicationsTab = tabTitle == this.eApplicationsTabTitle;
     }
   }
 }
