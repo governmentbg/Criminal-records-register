@@ -154,6 +154,7 @@ export class ExportBulletinModel extends BaseGridModel {
       this.countryName2 = init.countryName2 ?? null;
       this.countryName3 = init.countryName3 ?? null;
       this.countryName4 = init.countryName4 ?? null;
+      this.decisionDate = init.decisionDate ?? null;
     }
   }
 }
