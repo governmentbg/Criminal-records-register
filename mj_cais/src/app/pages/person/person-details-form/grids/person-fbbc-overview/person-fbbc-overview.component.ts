@@ -3,7 +3,7 @@ import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
 import { PersonFbbcGridService } from "./_data/person-fbbc-grid.service";
-import { PersonFbbcGridModel } from "./_models/person-bulletin-grid";
+import { PersonFbbcGridModel } from "./_models/person-bulletin-grid-model";
 
 @Component({
   selector: "cais-person-fbbc-overview",

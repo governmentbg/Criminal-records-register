@@ -182,6 +182,11 @@
           <cais-person-fbbc-overview></cais-person-fbbc-overview>
         </ng-container>
       </nb-tab>
+      <nb-tab [tabTitle]="pidsTabTitle">
+        <ng-container *ngIf="showPidsTab">
+          <cais-person-pid-overview></cais-person-pid-overview>
+        </ng-container>
+      </nb-tab>
     </nb-tabset>
   </nb-card-body>
 </nb-card>

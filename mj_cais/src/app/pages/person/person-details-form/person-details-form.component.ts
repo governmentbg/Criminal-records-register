@@ -42,9 +42,11 @@ export class PersonDetailsFormComponent
   public applicationsTabTitle = "Документи на гише";
   public eApplicationsTabTitle = "Е-Свидетелства";
   public fbbcsTabTitle = "Сведения за осъждане в чужбина";
+  public pidsTabTitle = "Идентификатори на лице";
   public showApplicationsTab: boolean = false;
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;
+  public showPidsTab: boolean = false;
 
   ngOnInit(): void {
     this.model = this.dbData.element as any;
@@ -68,8 +70,13 @@ export class PersonDetailsFormComponent
     if (!this.showFbbcsTab) {
       this.showFbbcsTab = tabTitle == this.fbbcsTabTitle;
     }
+
     if (!this.showEApplicationsTab) {
       this.showEApplicationsTab = tabTitle == this.eApplicationsTabTitle;
+    }
+
+    if (!this.showPidsTab) {
+      this.showPidsTab = tabTitle == this.pidsTabTitle;
     }
   }
 }

@@ -22,7 +22,7 @@ export class PersonApplicationOverviewComponent extends RemoteGridWithStatePersi
     public dateFormatService: DateFormatService,
     public loaderService: LoaderService,
   ) {
-    super("application-bulletins-search", service, injector);
+    super("person-application-search", service, injector);
   }
 
   ngOnInit() {

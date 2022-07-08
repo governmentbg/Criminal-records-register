@@ -1,18 +1,18 @@
 import { Injectable, Injector } from "@angular/core";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
-import { PersonFbbcGridModel } from "../_models/person-bulletin-grid-model";
+import { PersonPidGridModel } from "../_models/person-pid-grid.model";
 
-const currentEndpoint = "people/fbbcs";
+const currentEndpoint = "people/pids";
 
 @Injectable({
   providedIn: "root",
 })
-export class PersonFbbcGridService extends CaisCrudService<
-  PersonFbbcGridModel,
+export class PersonPidGridService extends CaisCrudService<
+  PersonPidGridModel,
   string
 > {
   constructor(injector: Injector) {
-    super(PersonFbbcGridModel, injector, currentEndpoint);
+    super(PersonPidGridModel, injector, currentEndpoint);
   }
 
   public setPersonId(personId: string) {

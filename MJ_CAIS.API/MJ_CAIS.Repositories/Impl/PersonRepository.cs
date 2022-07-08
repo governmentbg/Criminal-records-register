@@ -209,6 +209,23 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<PersonPidGridDTO> GetPidsByPersonId(string personId)
+        {
+            var query = _dbContext.PPersonIds.AsNoTracking()
+                .Include(x => x.PidType)
+                .Where(x => x.PersonId == personId)
+                .Select(x => new PersonPidGridDTO
+                {
+                    Id = x.Id,
+                    Type = x.PidType.Name,
+                    Pid = x.Pid,
+                    Issuer = x.Issuer,
+                    CreatedOn = x.CreatedOn
+                });
+
+            return query;
+        }
+
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)
         {
             DataSet ds = new DataSet();

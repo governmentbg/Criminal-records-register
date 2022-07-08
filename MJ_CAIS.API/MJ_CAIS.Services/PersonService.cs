@@ -216,6 +216,11 @@ namespace MJ_CAIS.Services
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
+        public async Task<IgPageResult<PersonPidGridDTO>> SelectPersonPidAllWithPaginationAsync(ODataQueryOptions<PersonPidGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = _personRepository.GetPidsByPersonId(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
         private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)
         {
             var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);

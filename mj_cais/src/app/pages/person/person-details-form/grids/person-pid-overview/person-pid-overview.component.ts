@@ -1,28 +1,28 @@
-import { Component, Injector } from "@angular/core";
+import { Component, Injector} from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
-import { PersonEApplicationGridService } from "./_data/person-eapplication-grid.service";
-import { PersonEApplicationGridModel } from "./_models/person-eapplication-grid.model";
+import { PersonPidGridService } from "./_data/person-pid-grid.service";
+import { PersonPidGridModel } from "./_models/person-pid-grid.model";
 
 @Component({
-  selector: "cais-person-eapplication-overview",
-  templateUrl: "./person-eapplication-overview.component.html",
-  styleUrls: ["./person-eapplication-overview.component.scss"],
+  selector: "cais-person-pid-overview",
+  templateUrl: "./person-pid-overview.component.html",
+  styleUrls: ["./person-pid-overview.component.scss"],
 })
-export class PersonEApplicationOverviewComponent extends RemoteGridWithStatePersistance<
-  PersonEApplicationGridModel,
-  PersonEApplicationGridService
+export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
+  PersonPidGridModel,
+  PersonPidGridService
 > {
   public personId: string;
 
   constructor(
-    public service: PersonEApplicationGridService,
+    public service: PersonPidGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
     public loaderService: LoaderService
   ) {
-    super("person-e-application-search", service, injector);
+    super("person-pids-search", service, injector);
   }
 
   ngOnInit() {

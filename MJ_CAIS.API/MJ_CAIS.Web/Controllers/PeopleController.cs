@@ -64,6 +64,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("pids")]
+        public async Task<IActionResult> GetAllPids(ODataQueryOptions<PersonPidGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonPidAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
         [HttpPost("{aId}/connect/{personToBeConnected}")]
         public async Task<IActionResult> ConnectPeople(string aId, string personToBeConnected)
         {

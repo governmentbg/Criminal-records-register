@@ -9,6 +9,7 @@ import { PersonRemindFormComponent } from "./person-remind-form/person-remind-fo
 import { PersonSearchOverviewComponent } from "./person-search-form/grids/person-search-overview/person-search-overview.component";
 import { PersonSearchFormComponent } from "./person-search-form/person-search-form.component";
 import { PersonEApplicationOverviewComponent } from './person-details-form/grids/person-eapplication-overview/person-eapplication-overview.component';
+import { PersonPidOverviewComponent } from './person-details-form/grids/person-pid-overview/person-pid-overview.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { PersonEApplicationOverviewComponent } from './person-details-form/grids
     PersonSearchFormComponent,
     PersonSearchOverviewComponent,
     PersonEApplicationOverviewComponent,
+    PersonPidOverviewComponent,
   ],
   imports: [
     CoreComponentModule, 
