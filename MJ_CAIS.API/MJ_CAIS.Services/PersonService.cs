@@ -200,7 +200,7 @@ namespace MJ_CAIS.Services
 
         public async Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId)
         {
-            var entityQuery = await _personRepository.GetApplicationsByPersonIdAsync(personId);
+            var entityQuery = _personRepository.GetApplicationsByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 

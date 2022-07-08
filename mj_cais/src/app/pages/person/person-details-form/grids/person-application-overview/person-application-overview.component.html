@@ -37,7 +37,7 @@
     field="id"
     header="Идентификатор"
     [sortable]="true"
-    [dataType]="'number'"
+    [dataType]="'string'"
     [hidden]="true"
   >
     <ng-template igxCell let-cell="cell">
@@ -46,7 +46,30 @@
   </igx-column>
 
   <igx-column
-    field="registrationNumber"
+    field="type"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="certificateStatus"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="certifivateRegistrationNumber"
     header="Номер на свидетелство"
     [sortable]="true"
     [dataType]="'string'"
@@ -57,8 +80,21 @@
   </igx-column>
 
   <igx-column
-    field="firstname"
-    header="Име"
+    field="certifivateValidDate"
+    header="Дата на валидност"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="csAuthority"
+    header="Бюро съдимост по заявяване"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -68,8 +104,8 @@
   </igx-column>
 
   <igx-column
-    field="surname"
-    header="Презиме"
+    field="applicantName"
+    header="Заявител"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -78,14 +114,36 @@
     </ng-template>
   </igx-column>
 
+  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="lnch" header="ЛНЧ" [sortable]="true" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
   <igx-column
-    field="familyname"
-    header="Фамилия"
+    field="fullName"
+    header="Имена"
     [sortable]="true"
     [dataType]="'string'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="bithDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
 

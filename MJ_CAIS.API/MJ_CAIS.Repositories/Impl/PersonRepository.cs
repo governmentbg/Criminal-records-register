@@ -8,6 +8,7 @@ using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
+using static MJ_CAIS.Common.Constants.ApplicationConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -75,24 +76,48 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public async Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId)
+        public IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId)
         {
-            var query = _dbContext.AApplications.Where(a => a.EgnNavigation.PersonId == personId
-                                                            || a.LnNavigation.PersonId == personId
-                                                            || a.LnchNavigation.PersonId == personId
-                                                            || a.SuidNavigation.PersonId == personId
-                                                            ).Select(application => new PersonApplicationGridDTO
+            var query = _dbContext.ACertificates.AsNoTracking()
+                .Include(x => x.StatusCodeNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.EgnNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.LnNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.LnchNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.SuidNavigation)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.ApplicationType)
+                .Include(x => x.Application)
+                    .ThenInclude(x => x.CsAuthority)
+                .Where(x => x.Application.ApplicationTypeId == ApplicationTypes.DeskCertificate ||
+                            x.Application.ApplicationTypeId == ApplicationTypes.ConvictionRequest ||
+                            x.Application.ApplicationTypeId == ApplicationTypes.ApplicationRequestOld ||
+                            x.Application.ApplicationTypeId == ApplicationTypes.ConvictionRequestOld)
+                .Where(c => c.Application.EgnNavigation.PersonId == personId
+                                                            || c.Application.LnNavigation.PersonId == personId
+                                                            || c.Application.LnchNavigation.PersonId == personId
+                                                            || c.Application.SuidNavigation.PersonId == personId
+                                                            ).Select(c => new PersonApplicationGridDTO
                                                             {
-                                                                Id = application.Id,
-                                                                RegistrationNumber = application.RegistrationNumber,
-                                                                Firstname = application.Firstname,
-                                                                Surname = application.Surname,
-                                                                Familyname = application.Familyname,
-                                                                CreatedOn = application.CreatedOn
-                                                            })
-                                                            .Distinct();
+                                                                Id = c.Id,
+                                                                Type = c.Application.ApplicationType.Name,
+                                                                CertificateStatus = c.StatusCodeNavigation.Name,
+                                                                CertifivateRegistrationNumber = c.RegistrationNumber,
+                                                                CertifivateValidDate = c.ValidTo,
+                                                                CsAuthority = c.Application.CsAuthority.Name,
+                                                                ApplicantName = c.Application.ApplicantName,
+                                                                Egn = c.Application.Egn,
+                                                                Lnch = c.Application.Lnch,
+                                                                FullName = !string.IsNullOrEmpty(c.Application.Fullname) ? c.Application.Fullname :
+                                                                            c.Application.Firstname + " " + c.Application.Surname + " " + c.Application.Familyname,
+                                                                BithDate = c.Application.BirthDate,
+                                                                CreatedOn = c.CreatedOn
+                                                            });
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public async Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId)
