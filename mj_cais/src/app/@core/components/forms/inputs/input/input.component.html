@@ -121,8 +121,11 @@
     [showLnch]="inputFormControl?.errors?.lnch && inputHasBeenInteracted()"
     [showEmail]="inputFormControl?.errors?.email && inputHasBeenInteracted()"
     [showCyrillicPattern]="
-      inputFormControl?.errors?.pattern && inputHasBeenInteracted() 
-    " 
+      inputFormControl?.errors?.cyrillicValidation && inputHasBeenInteracted()
+    "
+    [showEmailPattern]="
+      inputFormControl?.errors?.emailValidation && inputHasBeenInteracted()
+    "
   ></cais-validation-message>
   <mat-error *ngIf="inputFormControl?.errors?.serverErrors">
     <div

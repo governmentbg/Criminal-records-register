@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { CYRILLIC_SYMBOLS_PATTERN } from "../../../../constants/pattern.constants";
+import { createCyrillicValidator } from "../../../../validators/cyrillic-validation-function";
 import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
@@ -94,23 +94,23 @@ export class PersonForm {
         this.firstname.setValidators([
           Validators.required,
           Validators.maxLength(200),
-          Validators.pattern(CYRILLIC_SYMBOLS_PATTERN),
+          createCyrillicValidator(),
         ]);
 
         this.surname.setValidators([
           Validators.required,
           Validators.maxLength(200),
-          Validators.pattern(CYRILLIC_SYMBOLS_PATTERN,),
+          createCyrillicValidator(),
         ]);
 
         this.familyname.setValidators([
           Validators.required,
           Validators.maxLength(200),
-          Validators.pattern(CYRILLIC_SYMBOLS_PATTERN),
+          createCyrillicValidator(),
         ]);
         this.fullname.setValidators([
           Validators.maxLength(200),
-          Validators.pattern(CYRILLIC_SYMBOLS_PATTERN),
+          createCyrillicValidator(),
         ]);
         this.fullnameLat.setValidators(Validators.maxLength(200));
         this.motherFullname.setValidators(Validators.maxLength(200));

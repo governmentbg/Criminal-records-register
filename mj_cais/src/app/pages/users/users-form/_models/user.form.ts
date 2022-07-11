@@ -1,9 +1,7 @@
-import { Input } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Guid } from "guid-typescript";
 import { MultipleChooseForm } from "../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
 import { BaseForm } from "../../../../@core/models/common/base.form";
-import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
+import { createEmailValidator } from "../../../../@core/validators/email-validator-function";
 
 export class UserForm extends BaseForm {
   public group: FormGroup;
@@ -24,7 +22,7 @@ export class UserForm extends BaseForm {
     this.surname = new FormControl(null, [Validators.required]);
     this.familyname = new FormControl(null, [Validators.required]);
     this.active = new FormControl(null);
-    this.email = new FormControl(null);
+    this.email = new FormControl(null, [createEmailValidator()]);
     this.egn = new FormControl(null, [Validators.required]);
     this.position = new FormControl(null);
     this.csAuthorityId = new FormControl(null);
