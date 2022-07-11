@@ -75,7 +75,7 @@ export class LookupComponent implements OnInit {
     );
   }
 
-  clearSelection(): void {
+ public clearSelection(): void {
     this.inputControl.id.setValue(null);
     this.inputControl.displayName.setValue(null);
     this.onClearSelection.emit();

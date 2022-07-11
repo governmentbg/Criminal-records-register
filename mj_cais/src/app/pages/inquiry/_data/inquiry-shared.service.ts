@@ -163,20 +163,6 @@ export class InquirySharedService {
     result["Деецът не е наказан съгласно НК"] =
       item.noSanction == true ? "Да" : "Не";
 
-    let deleteDate = item.deleteDate
-      ? new Date(item.deleteDate).toLocaleDateString(CommonConstants.bgLocale)
-      : "";
-
-    result["Дата на унищожаване"] = deleteDate;
-
-    let rehabilitationDate = item.rehabilitationDate
-      ? new Date(item.rehabilitationDate).toLocaleDateString(
-          CommonConstants.bgLocale
-        )
-      : "";
-
-    result["Дата на реабилитация"] = rehabilitationDate;
-
     let updatedOn = item.updatedOn
       ? new Date(item.updatedOn).toLocaleDateString(CommonConstants.bgLocale)
       : "";

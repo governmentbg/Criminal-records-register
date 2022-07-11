@@ -2,9 +2,7 @@ import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.m
 
 export class ReportBulletinByPersonGridModel extends BaseGridModel {
   public registrationNumber: string = null;
-  public firstname: string = null;
-  public surname: string = null;
-  public familyname: string = null;
+  public fullname: string = null;
   public statusId: string = null;
   public statusName: string = null;
   public ln: string = null;
@@ -16,9 +14,7 @@ export class ReportBulletinByPersonGridModel extends BaseGridModel {
     super(init);
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;
-      this.firstname = init.firstname ?? null;
-      this.surname = init.surname ?? null;
-      this.familyname = init.familyname ?? null;
+      this.fullname = init.fullname ?? null;
       this.statusId = init.statusId ?? null;
       this.statusName = init.statusName ?? null;
       this.createdOn = init.createdOn ?? null;

@@ -8,6 +8,7 @@ export class NationalityTypeConstants {
       NationalityTypeConstants.tcn,
       NationalityTypeConstants.bgAndEu,
       NationalityTypeConstants.bgAndTcn,
+      NationalityTypeConstants.euAndTcn,
     ];
   }
 
@@ -31,7 +32,7 @@ export class NationalityTypeConstants {
     let result = new BaseNomenclatureModel();
     result.code = "TCN";
     result.id = result.code;
-    result.name = "TCN";
+    result.name = "Гражданин на трета страна";
     return result;
   }
 
@@ -39,7 +40,7 @@ export class NationalityTypeConstants {
     let result = new BaseNomenclatureModel();
     result.code = "BG_EU";
     result.id = result.code;
-    result.name = "БГ и ЕС";
+    result.name = "Гражданин на България и ЕС";
     return result;
   }
 
@@ -47,7 +48,15 @@ export class NationalityTypeConstants {
     let result = new BaseNomenclatureModel();
     result.code = "BG_TCN";
     result.id = result.code;
-    result.name = "БГ и TCN";
+    result.name = "Гражданин на трета страна и България";
+    return result;
+  }
+
+  static get euAndTcn() {
+    let result = new BaseNomenclatureModel();
+    result.code = "EU_TCN";
+    result.id = result.code;
+    result.name = "Гражданин на трета страна и ЕС";
     return result;
   }
 }

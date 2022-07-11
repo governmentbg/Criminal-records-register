@@ -41,8 +41,6 @@
         public DateTime? ConvRetPeriodEndDate { get; set; }
         public string? CreatedByPosition { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public DateTime? RehabilitationDate { get; set; }
         public string? EcrisConvictionId { get; set; }
         public bool? Locked { get; set; }
         public bool? NoSanction { get; set; }

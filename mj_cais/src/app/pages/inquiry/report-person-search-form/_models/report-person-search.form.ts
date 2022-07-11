@@ -22,6 +22,7 @@ export class ReportPersonSearchForm {
   public nationalityCountryId: FormControl;
   public nationalityCountry: LookupForm;
   public authorityId: FormControl;
+  public foreigner: FormControl;
 
   constructor() {
     this.firstname = new FormControl(null);
@@ -43,6 +44,7 @@ export class ReportPersonSearchForm {
     this.nationalityCountryId = new FormControl(null);
     this.nationalityCountry = new LookupForm(null);
     this.authorityId = new FormControl(null);
+    this.foreigner = new FormControl(null);
 
     this.group = new FormGroup({
       firstname: this.firstname,
@@ -61,6 +63,7 @@ export class ReportPersonSearchForm {
       nationalityCountryId: this.nationalityCountryId,
       nationalityCountry: this.nationalityCountry.group,
       authorityId: this.authorityId,
+      foreigner: this.foreigner,
     });
   }
 }

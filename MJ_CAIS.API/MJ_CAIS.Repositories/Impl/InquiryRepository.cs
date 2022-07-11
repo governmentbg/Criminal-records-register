@@ -33,14 +33,12 @@ namespace MJ_CAIS.Repositories
                                             (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                             BulletinResources.Unspecified),
                              Egn = bulletin.Egn,
-                             Familyname = bulletin.Familyname,
-                             Firstname = bulletin.Firstname,
+                             Fullname = string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname : bulletin.Fullname,
                              Ln = bulletin.Ln,
                              Lnch = bulletin.Lnch,
                              RegistrationNumber = bulletin.RegistrationNumber,
                              StatusId = bulletin.StatusId,
                              StatusName = bulletinStatus.Name,
-                             Surname = bulletin.Surname,
                              Version = bulletin.Version,
                              CreatedOn = bulletin.CreatedOn,
                          };
@@ -73,14 +71,12 @@ namespace MJ_CAIS.Repositories
                                             (bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                             BulletinResources.Unspecified),
                              Egn = bulletin.Egn,
-                             Familyname = bulletin.Familyname,
-                             Firstname = bulletin.Firstname,
+                             Fullname = string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname : bulletin.Fullname,
                              Ln = bulletin.Ln,
                              Lnch = bulletin.Lnch,
                              RegistrationNumber = bulletin.RegistrationNumber,
                              StatusId = bulletin.StatusId,
                              StatusName = bulletinStatus.Name,
-                             Surname = bulletin.Surname,
                              Version = bulletin.Version,
                              CreatedOn = bulletin.CreatedOn,
                          };
@@ -147,7 +143,15 @@ namespace MJ_CAIS.Repositories
             if (searchParams.ToDate.HasValue)
                 bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate);
 
-            if (!string.IsNullOrEmpty(searchParams.NationalityTypeCode) && !string.IsNullOrEmpty(searchParams.NationalityCountryId))
+            if (searchParams.Foreigner == true)
+            {
+                bulletinsQuery = bulletinsQuery.Where(x => x.BirthCountryId != BGCountryId);
+            }
+
+            if (searchParams.NationalityTypeCode == NationalityType.Country && string.IsNullOrEmpty(searchParams.NationalityCountryId))
+                return bulletinsQuery;
+
+            if (!string.IsNullOrEmpty(searchParams.NationalityTypeCode))
             {
                 bulletinsQuery = from bulletin in bulletinsQuery
                                  join nationality in _dbContext.BPersNationalities on bulletin.Id equals nationality.BulletinId
@@ -158,7 +162,8 @@ namespace MJ_CAIS.Repositories
                                  (searchParams.NationalityTypeCode == NationalityType.Eu && bulletin.EuCitizen == true) ||
                                  (searchParams.NationalityTypeCode == NationalityType.Tcn && bulletin.TcnCitizen == true) ||
                                  (searchParams.NationalityTypeCode == NationalityType.BgAndEU && bulletin.EuCitizen == true && nationality.CountryId == BGCountryId) ||
-                                 (searchParams.NationalityTypeCode == NationalityType.BgAndTcn && bulletin.TcnCitizen == true && nationality.CountryId == BGCountryId)
+                                 (searchParams.NationalityTypeCode == NationalityType.BgAndTcn && bulletin.TcnCitizen == true && nationality.CountryId == BGCountryId) ||
+                                 (searchParams.NationalityTypeCode == NationalityType.EuAndTcn && bulletin.EuCitizen == true && bulletin.TcnCitizen == true)
                                  select bulletin;
             }
 

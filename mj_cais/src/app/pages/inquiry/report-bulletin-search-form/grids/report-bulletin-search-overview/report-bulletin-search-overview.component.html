@@ -87,7 +87,7 @@
   </igx-column>
 
   <igx-column
-    field="firstname"
+    field="fullname"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -96,45 +96,6 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
-  <igx-column
-    field="surname"
-    header="Презиме"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="familyname"
-    header="Фамилия"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <!-- <igx-column
-    width="150px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>   
-    </ng-template> 
-  </igx-column> -->
 
   <ng-template #pager let-grid>
     <div class="tl-paginator">

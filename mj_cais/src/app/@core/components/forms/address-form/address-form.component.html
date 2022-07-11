@@ -6,66 +6,71 @@
         [inputControl]="parentForm.country"
         [parentGroup]="parentForm.country.group"
         [openFunction]="openCountryDialog"
+        (onClearSelection)="onClearCountry()"
       ></cais-lookup>
     </div>
-    <div
-      class="form-group col-md-3"
-      [hidden]="!parentForm.isSetForNativeAddress"
-    >
-      <cais-autocomplete
-        #districtAutocomplete
-        [label]="'Област'"
-        [inputFormControl]="parentForm.districtId"
-        [parentGroup]="parentForm.group"
-        [inputName]="'districtId'"
-        [(items)]="districts"
-        (selectionChanged)="onDistrictChanged($event)"
-      ></cais-autocomplete>
-    </div>
+    <ng-container *ngIf="!isClearedContry">
+      <div
+        class="form-group col-md-3"
+        [hidden]="!parentForm.isSetForNativeAddress"
+      >
+        <cais-autocomplete
+          #districtAutocomplete
+          [label]="'Област'"
+          [inputFormControl]="parentForm.districtId"
+          [parentGroup]="parentForm.group"
+          [inputName]="'districtId'"
+          [(items)]="districts"
+          (selectionChanged)="onDistrictChanged($event)"
+        ></cais-autocomplete>
+      </div>
 
-    <div
-      class="form-group col-md-3"
-      [hidden]="!parentForm.isSetForNativeAddress"
-    >
-      <cais-autocomplete
-        #municipalityAutocomplete
-        [label]="'Община'"
-        [inputFormControl]="parentForm.municipalityId"
-        [parentGroup]="parentForm.group"
-        [inputName]="'municipalityId'"
-        [(items)]="municipalities"
-        (selectionChanged)="onMunicipalityChanged($event)"
-      ></cais-autocomplete>
-    </div>
+      <div
+        class="form-group col-md-3"
+        [hidden]="!parentForm.isSetForNativeAddress"
+      >
+        <cais-autocomplete
+          #municipalityAutocomplete
+          [label]="'Община'"
+          [inputFormControl]="parentForm.municipalityId"
+          [parentGroup]="parentForm.group"
+          [inputName]="'municipalityId'"
+          [(items)]="municipalities"
+          (selectionChanged)="onMunicipalityChanged($event)"
+        ></cais-autocomplete>
+      </div>
 
-    <div
-      class="form-group col-md-3"
-      [hidden]="!parentForm.isSetForNativeAddress"
-    >
-      <cais-autocomplete
-        #cityAutocomplete
-        [label]="'Град'"
-        [inputFormControl]="parentForm.cityId"
-        [parentGroup]="parentForm.group"
-        [inputName]="'cityId'"
-        [(items)]="cities"
-      ></cais-autocomplete>
-    </div>
-    <div
-      class="form-group col-md-6"
-      [hidden]="
-        parentForm.isSetForNativeAddress && !showDescWhenIsNativeAddress && hideDesc
-      "
-    >
-      <cais-input
-        [type]="'text'"
-        [label]="'Описание в случай на друго'"
-        [inputFormControl]="parentForm.foreignCountryAddress"
-        [parentGroup]="parentForm.group"
-        [inputName]="'foreignCountryAddress'"
-        [rows]="'1'"
-        [inputType]="'TextArea'"
-      ></cais-input>
-    </div>
+      <div
+        class="form-group col-md-3"
+        [hidden]="!parentForm.isSetForNativeAddress"
+      >
+        <cais-autocomplete
+          #cityAutocomplete
+          [label]="'Град'"
+          [inputFormControl]="parentForm.cityId"
+          [parentGroup]="parentForm.group"
+          [inputName]="'cityId'"
+          [(items)]="cities"
+        ></cais-autocomplete>
+      </div>
+      <div
+        class="form-group col-md-6"
+        [hidden]="
+          parentForm.isSetForNativeAddress &&
+          !showDescWhenIsNativeAddress &&
+          hideDesc
+        "
+      >
+        <cais-input
+          [type]="'text'"
+          [label]="'Описание в случай на друго'"
+          [inputFormControl]="parentForm.foreignCountryAddress"
+          [parentGroup]="parentForm.group"
+          [inputName]="'foreignCountryAddress'"
+          [rows]="'1'"
+          [inputType]="'TextArea'"
+        ></cais-input>
+      </div>
+    </ng-container>
   </div>
 </div>

@@ -22,5 +22,6 @@ namespace MJ_CAIS.DTO.Inquiry
         public string? NationalityTypeCode { get; set; }
         public string? NationalityCountryId { get; set; }
         public string? AuthorityId { get; set; }
+        public bool? Foreigner { get; set; }
     }
 }

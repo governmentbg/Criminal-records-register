@@ -55,6 +55,8 @@ export class AddressFormComponent implements OnInit {
   private bgCountryId = CommonConstants.bgCountryId;
   private bgCountryName = CommonConstants.bgCountryName;
 
+  public isClearedContry = false;
+
   ngOnInit(): void {
     let districtId = this.parentForm.districtId.value ?? 0;
     let municipalityId = this.parentForm.municipalityId.value ?? 0;
@@ -158,6 +160,7 @@ export class AddressFormComponent implements OnInit {
 
   public onSelectCountry = (item: CountryGridModel) => {
     if (item) {
+      this.isClearedContry = false;
       this.parentForm.country.setValue(item.id, item.name);
 
       if (item.id == this.bgCountryId) {
@@ -170,4 +173,10 @@ export class AddressFormComponent implements OnInit {
       }
     }
   };
+
+  public onClearCountry(){
+    debugger;
+    this.isClearedContry = true;
+    this.parentForm.foreignCountryAddress.patchValue(null);
+  }
 }

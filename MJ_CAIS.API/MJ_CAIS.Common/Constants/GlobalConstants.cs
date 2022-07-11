@@ -18,6 +18,7 @@
             public const string Tcn = "TCN";
             public const string BgAndEU = "BG_EU";
             public const string BgAndTcn = "BG_TCN";
+            public const string EuAndTcn = "EU_TCN";
         }
     }
 }
