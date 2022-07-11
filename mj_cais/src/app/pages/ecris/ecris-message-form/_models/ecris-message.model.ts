@@ -16,9 +16,8 @@ export class EcrisMessageModel extends BaseModel {
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
-  public sex: number = null;
-  public nationality1Code: string = null;
-  public nationality2Code: string = null;
+  public sex: string = null;
+  public nationalities: string = null;
   public msgTypeId: string = null;
 
   constructor(init?: Partial<EcrisMessageModel>) {
@@ -40,8 +39,7 @@ export class EcrisMessageModel extends BaseModel {
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;
       this.sex = init.sex ?? null;
-      this.nationality1Code = init.nationality1Code ?? null;
-      this.nationality2Code = init.nationality2Code ?? null;
+      this.nationalities = init.nationalities ?? null;
       this.msgTypeId = init.msgTypeId ?? null;
     }
   }

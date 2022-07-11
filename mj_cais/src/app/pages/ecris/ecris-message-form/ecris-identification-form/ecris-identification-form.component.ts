@@ -1,6 +1,8 @@
 import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
+import { IsinDataStatusConstants } from "../../../isin/isin-data-form/_models/isin-data-status.constants";
 import { EcrisMessageService } from "../_data/ecris-message.service";
 import { EcrisMessageForm } from "../_models/ecris-message.form";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
@@ -26,6 +28,8 @@ export class EcrisIdentificationFormComponent
     this.setDisplayTitle("запитване за идентификация");
   }
 
+  public model: EcrisMessageModel;
+
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
   }
@@ -39,6 +43,22 @@ export class EcrisIdentificationFormComponent
     this.fullForm.group.disable();
     this.fullForm.group.patchValue(this.dbData.element);
     this.formFinishedLoading.emit();
+
+    let id = this.activatedRoute.snapshot.params["ID"];
+    this.service.get(id).subscribe((response) => {
+      this.model = response;
+
+      this.model.sex =
+        GenderConstants.allData.find((g) => g.id == response.sex)?.name ?? null;
+    });
+debugger
+    this.service.getNationalities(id).subscribe((response) => {
+      let countries = response;
+      countries.map((val) => {
+        return val.name;
+      });
+      this.model.nationalities = countries.join(",");
+    });
   }
 
   updateFunction = () => {

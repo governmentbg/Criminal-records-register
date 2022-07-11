@@ -7,5 +7,7 @@ namespace MJ_CAIS.Repositories.Contracts
     public interface IEcrisMessageRepository : IBaseAsyncRepository<EEcrisMessage, string, CaisDbContext>
     {
         IQueryable<ObjectStatusCountDTO> GetStatusCount();
+        Task<IQueryable<EEcrisMsgNationality>> SelectAllNationalitiesAsync();
+        Task<IQueryable<EEcrisMsgName>> SelectAllNamesAsync();
     }
 }

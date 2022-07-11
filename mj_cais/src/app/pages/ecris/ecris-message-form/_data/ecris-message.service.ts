@@ -4,6 +4,7 @@ import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.servi
 import { BulletinGridModel } from "../../../bulletin/bulletin-overview/_models/bulletin-grid.model";
 import { FbbcGridModel } from "../../../fbbc/fbbc-overview/_models/fbbc-grid.model";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
+import { EcrisMsgNationalityModel } from "../_models/ecris-msg-nationality.model";
 
 @Injectable({ providedIn: "root" })
 export class EcrisMessageService extends CaisCrudService<
@@ -20,5 +21,13 @@ export class EcrisMessageService extends CaisCrudService<
 
   public getEcrisFbbcs(id: string): Observable<FbbcGridModel[]> {
     return this.http.get<FbbcGridModel[]>(`${this.url}/${id}/fbbcs`);
+  }
+
+  public get(id: string): Observable<EcrisMessageModel> {
+    return this.http.get<EcrisMessageModel>(`${this.url}/${id}`);
+  }
+
+  public getNationalities(id: string): Observable<EcrisMsgNationalityModel[]> {
+    return this.http.get<EcrisMsgNationalityModel[]>(`${this.url}/${id}/nationalities`);
   }
 }

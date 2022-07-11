@@ -1,4 +1,4 @@
-<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+<!-- <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
   <nb-card-header class="card-header-shadow">
     <cais-card-header
       [label]="displayTitle"
@@ -118,4 +118,120 @@
       </div>
     </form>
   </nb-card-body>
-</nb-card>
+</nb-card> -->
+
+<ng-container>
+  <nb-card class="card-single-page-height">
+    <nb-card-header class="card-header-shadow">
+      <div class="d-flex" style="justify-content: space-between">
+        <div class="d-flex align-items-center">
+          <div style="font-weight: bold; font-size: 22px">
+            {{ displayTitle }}
+          </div>
+        </div>
+        <div class="d-flex">
+          <div>
+            <button
+              nbButton
+              matRipple
+              (click)="globalCancelFunction()"
+              type="button"
+              class="ml-2"
+              style="min-width: 100px"
+            >
+              Назад
+            </button>
+          </div>
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body class="overflow-scroll">
+      <div class="inner-card-body">
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">ECRIS Идентификатор: </span>
+              <span>
+                {{ model.ecrisIdentifier }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Идентификатор: </span>
+              <span>
+                {{ model.identifier }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Дата на запитване: </span>
+              <span>
+                {{ model.msgTimestamp | date }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Имена: </span>
+              <span>
+                {{ model.firstname }} {{ model.surname }} {{ model.familyname }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Пол: </span>
+              <span>
+                {{ model.sex }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Месторождение - държава: </span>
+              <span>
+                {{ model.birthCountry }}
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Месторождение - град: </span>
+              <span>
+                {{ model.birthCity }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Гражданство: </span>
+              <span>
+                {{ model.nationalities }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-5">
+            <div class="row col-md-12 cais-display-form-group">
+              <span class="label">Дата на раждане: </span>
+              <span>
+                {{ model.birthDate | date }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-container>
