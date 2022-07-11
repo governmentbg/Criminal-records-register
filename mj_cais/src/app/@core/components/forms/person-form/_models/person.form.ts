@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { createCyrillicValidator } from "../../../../validators/cyrillic-validation-function";
+import { createEgnValidator } from "../../../../validators/egn-validation-function";
 import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
@@ -115,6 +116,9 @@ export class PersonForm {
         this.fullnameLat.setValidators(Validators.maxLength(200));
         this.motherFullname.setValidators(Validators.maxLength(200));
         this.fatherFullname.setValidators(Validators.maxLength(200));
+        // this.egn.setValidators([
+        //   createEgnValidator(),
+        // ]);
       }
 
       if (

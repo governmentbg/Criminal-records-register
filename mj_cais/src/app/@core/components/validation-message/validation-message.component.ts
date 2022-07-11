@@ -28,7 +28,6 @@ export class ValidationMessageComponent {
   @Input() showEgn: boolean;
   @Input() showLnch: boolean;
   @Input() showAcceptedValues: boolean;
-  @Input() showEmail: boolean;
   @Input() showGridMessage: boolean;
   @Input() showCyrillicPattern: boolean;
   @Input() showEmailPattern: boolean;

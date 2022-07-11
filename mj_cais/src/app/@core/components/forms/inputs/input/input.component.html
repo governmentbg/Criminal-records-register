@@ -117,9 +117,8 @@
     [showMinLength]="
       inputFormControl?.errors?.minlength && inputHasBeenInteracted()
     "
-    [showEgn]="inputFormControl?.errors?.egn && inputHasBeenInteracted()"
-    [showLnch]="inputFormControl?.errors?.lnch && inputHasBeenInteracted()"
-    [showEmail]="inputFormControl?.errors?.email && inputHasBeenInteracted()"
+    [showEgn]="inputFormControl?.errors?.egnValidation && inputHasBeenInteracted()"
+    [showLnch]="inputFormControl?.errors?.lnchValidation && inputHasBeenInteracted()"
     [showCyrillicPattern]="
       inputFormControl?.errors?.cyrillicValidation && inputHasBeenInteracted()
     "
