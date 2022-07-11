@@ -59,6 +59,8 @@ export class ReportPersonSearchFormComponent
   }
 
   public onSearch = () => {
+    let selectedCountry = this.fullForm.nationalityCountry.id.value;
+    this.fullForm.nationalityCountryId.patchValue(selectedCountry);
     this.bulletinByPersonReportOverview.onSearch();
   };
 
@@ -78,10 +80,5 @@ export class ReportPersonSearchFormComponent
   public onNationalityTypeChanged(nationalityTypeCode) {
     this.showCountryLookup =
       nationalityTypeCode == NationalityTypeConstants.currentCountry.code;
-  }
-
-  public onNationalityTypeCleared(event) {
-    debugger;
-    this.fullForm.nationalityCountryId.setValue(null);
   }
 }
