@@ -22,7 +22,7 @@ export class ApplicationForSigningComponent extends RemoteGridWithStatePersistan
     public dateFormatService: DateFormatService
   ) {
     super("application-for-signing", service, injector);
-    this.service.updateUrlStatusForCert(ApplicationTypeStatusConstants.ForSigning);
+    this.service.updateUrlStatus(ApplicationTypeStatusConstants.ForSigning);
   }
 
   ngOnInit(): void {
