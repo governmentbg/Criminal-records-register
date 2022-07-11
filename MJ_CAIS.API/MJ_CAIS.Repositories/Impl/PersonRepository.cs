@@ -298,10 +298,11 @@ namespace MJ_CAIS.Repositories.Impl
             // todo: make one call
             foreach (var currentPid in personIds)
             {
+                var pidToUpper = currentPid.Pid.ToUpper();
                 var pidDb = await _dbContext.PPersonIds
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(x =>
-                                        x.Pid.ToLower() == currentPid.Pid.ToLower() &&
+                                        x.Pid.ToUpper() == pidToUpper &&
                                         x.PidTypeId == currentPid.Type &&
                                         x.Issuer == currentPid.Issuer &&
                                         x.CountryId == BG);
@@ -311,7 +312,7 @@ namespace MJ_CAIS.Repositories.Impl
                     result.Add(new PPersonId
                     {
                         Id = BaseEntity.GenerateNewId(),
-                        Pid = currentPid.Pid,
+                        Pid = pidToUpper,
                         PidTypeId = currentPid.Type,
                         CountryId = BG,
                         Issuer = currentPid.Issuer,
@@ -323,7 +324,6 @@ namespace MJ_CAIS.Repositories.Impl
                 {
                     result.Add(pidDb);
                 }
-
             }
 
             return result;

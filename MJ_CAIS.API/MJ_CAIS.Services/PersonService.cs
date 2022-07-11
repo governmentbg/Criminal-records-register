@@ -257,26 +257,26 @@ namespace MJ_CAIS.Services
 
             if (!string.IsNullOrEmpty(aInDto?.Egn))
             {
-                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Egn, PidType.Egn, IssuerType.GRAO));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Egn.ToUpper(), PidType.Egn, IssuerType.GRAO));
             }
 
             if (!string.IsNullOrEmpty(aInDto?.Lnch))
             {
-                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Lnch, PidType.Lnch, IssuerType.MVR));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Lnch.ToUpper(), PidType.Lnch, IssuerType.MVR));
             }
 
             if (!string.IsNullOrEmpty(aInDto?.Ln))
             {
-                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Ln, PidType.Ln, IssuerType.EU));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Ln.ToUpper(), PidType.Ln, IssuerType.EU));
             }
 
             if (!string.IsNullOrEmpty(aInDto?.AfisNumber))
             {
-                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber, PidType.AfisNumber, IssuerType.MVR));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber.ToUpper(), PidType.AfisNumber, IssuerType.MVR));
             }
 
             var suid = GenerateSuid(aInDto);
-            pidsFromForm.Add(new PersonIdTypeDTO(suid, PidType.Suid, IssuerType.CRR));
+            pidsFromForm.Add(new PersonIdTypeDTO(suid.ToUpper(), PidType.Suid, IssuerType.CRR));
 
             var pids = await _personRepository.GetPersonIdsAsync(pidsFromForm, personId);
 
