@@ -15,7 +15,7 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly IEcrisMessageService _ecrisMessageService;
 
-        public EcrisMessagesController(IEcrisMessageService ecrisMessageService) 
+        public EcrisMessagesController(IEcrisMessageService ecrisMessageService)
             : base(ecrisMessageService)
         {
             _ecrisMessageService = ecrisMessageService;
@@ -60,6 +60,14 @@ namespace MJ_CAIS.Web.Controllers
         public new async Task<IActionResult> Put(string aId, [FromBody] EcrisMessageDTO aInDto)
         {
             return await base.Put(aId, aInDto);
+        }
+
+
+        [HttpGet("{aId}/nationalities")]
+        public async Task<IActionResult> GetNationalities(string aId)
+        {
+            var result = await this._ecrisMessageService.GetNationalitiesAsync(aId);
+            return Ok(result);
         }
     }
 }

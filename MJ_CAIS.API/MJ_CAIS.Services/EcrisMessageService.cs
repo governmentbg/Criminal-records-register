@@ -22,7 +22,7 @@ namespace MJ_CAIS.Services
         private readonly IFbbcRepository _fbcRepository;
         private readonly INomenclatureDetailRepository _nomenclatureDetailRepository;
 
-        public EcrisMessageService(IMapper mapper, 
+        public EcrisMessageService(IMapper mapper,
             IEcrisMessageRepository ecrisMessageRepository,
             IBulletinRepository bulletinRepository,
             IFbbcRepository fbbcRepository,
@@ -85,7 +85,7 @@ namespace MJ_CAIS.Services
         {
             var result =
                 from ecrisMsg in this.dbContext.EEcrisMessages.AsNoTracking()
-                    
+
                 join ecrisMsgStatus in this.dbContext.EEcrisMsgStatuses.AsNoTracking()
                     on ecrisMsg.EcrisMsgStatus equals ecrisMsgStatus.Code
 
@@ -101,13 +101,13 @@ namespace MJ_CAIS.Services
                     on ecrisMsg.BirthCountry equals birthCountry.Id into birthCountry_left
                 from birthCountry in birthCountry_left.DefaultIfEmpty()
 
-               // join nationality1 in this.dbContext.GCountries.AsNoTracking()
-                //    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
-                //from nationality1 in nationality1_left.DefaultIfEmpty()
+                    // join nationality1 in this.dbContext.GCountries.AsNoTracking()
+                    //    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
+                    //from nationality1 in nationality1_left.DefaultIfEmpty()
 
-               // join nationality2 in this.dbContext.GCountries.AsNoTracking()
-                //    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
-                //from nationality2 in nationality2_left.DefaultIfEmpty()
+                    // join nationality2 in this.dbContext.GCountries.AsNoTracking()
+                    //    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
+                    //from nationality2 in nationality2_left.DefaultIfEmpty()
 
                 select new EcrisMessageGridDTO
                 {
@@ -126,7 +126,7 @@ namespace MJ_CAIS.Services
                     CreatedOn = ecrisMsg.CreatedOn
                     //Firstname = ecrisMsg.Firstname,
                     //Surname = ecrisMsg.Surname,
-                   // Familyname = ecrisMsg.Familyname,
+                    // Familyname = ecrisMsg.Familyname,
                     //Nationality1Code = ecrisMsg.Nationality1Code,
                     //Nationality1Name = nationality1.Name,
                     //Nationality2Code = ecrisMsg.Nationality2Code,
@@ -134,6 +134,20 @@ namespace MJ_CAIS.Services
                 };
 
             return result;
+        }
+
+        public async Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId)
+        {
+            var nationalities = await _ecrisMessageRepository.SelectAllNationalitiesAsync();
+            var filteredNationalities = nationalities.Where(x => x.EEcrisMsgId == aId);
+            return filteredNationalities.ProjectTo<EcrisMsgNationalityDTO>(mapperConfiguration);
+        }
+
+        public async Task<IQueryable<EcrisMsgNameDTO>> GetNamesAsync(string aId)
+        {
+            var names = await _ecrisMessageRepository.SelectAllNamesAsync();
+            var filteredNames = names.Where(x => x.EEcrisMsgId == aId);
+            return filteredNames.ProjectTo<EcrisMsgNameDTO>(mapperConfiguration);
         }
     }
 }

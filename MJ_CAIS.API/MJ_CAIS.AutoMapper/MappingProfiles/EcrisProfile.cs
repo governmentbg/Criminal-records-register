@@ -12,6 +12,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<EcrisMessageDTO, EEcrisMessage>();
 
             CreateMap<EEcrisMessage, EcrisMessageGridDTO>();
+
+            CreateMap<EEcrisMsgNationality, EcrisMsgNationalityDTO>()
+                .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Country.Name));
         }
     }
 }

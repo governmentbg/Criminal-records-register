@@ -27,5 +27,22 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+
+        public async Task<IQueryable<EEcrisMsgNationality>> SelectAllNationalitiesAsync()
+        {
+            var query = _dbContext.EEcrisMsgNationalities
+                 .AsNoTracking()
+                 .Include(x => x.Country);
+
+            return await Task.FromResult(query);
+        }
+
+        public async Task<IQueryable<EEcrisMsgName>> SelectAllNamesAsync()
+        {
+            var query = _dbContext.EEcrisMsgNames
+                 .AsNoTracking();
+
+            return await Task.FromResult(query);
+        }
     }
 }
