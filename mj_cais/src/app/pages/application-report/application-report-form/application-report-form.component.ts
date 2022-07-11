@@ -11,6 +11,7 @@ import { ApplicationReportService } from "./_data/application-report.service";
 import { ApplicationReportForm } from "./_models/application-report.form";
 import { ApplicationReportModel } from "./_models/application-report.model";
 import * as fileSaver from "file-saver";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 
 @Component({
   selector: "cais-application-report-form",
@@ -47,7 +48,7 @@ export class ApplicationReportFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
     if (!this.isEdit()) {
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
-        "CO-00-100-BGR",
+        CommonConstants.bgCountryId,
       ]);
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }

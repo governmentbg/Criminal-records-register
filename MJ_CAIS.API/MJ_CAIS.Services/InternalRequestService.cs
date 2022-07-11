@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -162,7 +163,31 @@ namespace MJ_CAIS.Services
         public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
         {
             var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
-            return mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
+            if (bulletin == null) return null;
+
+            var result = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
+            if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.EgnNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.LnchNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.LnNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.IdDocNumberNavigation.PersonId;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
+            {
+                result.PersonId = bulletin.SuidNavigation.PersonId;
+            }
+
+            return result;
         }
     }
 }

@@ -22,21 +22,10 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Бюро съдимост'"
-            [inputFormControl]="fullForm.authorityId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'authorityId'"
-            [items]="dbData.authorities"
-          ></cais-autocomplete>
-        </div>
-      </div>
       <div class="font-weight-bold">Основна информация</div>
       <hr />
       <div class="row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'Име'"
@@ -44,7 +33,7 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'Презиме'"
@@ -52,7 +41,7 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'Фамилия'"
@@ -60,18 +49,7 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Пол'"
-            [inputFormControl]="fullForm.sex"
-            [parentGroup]="fullForm.group"
-            [inputName]="'sex'"
-            [items]="dbData.genderTypes"
-          ></cais-autocomplete>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'ЕГН'"
@@ -79,7 +57,7 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'text'"
             [label]="'ЛНЧ'"
@@ -87,13 +65,44 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
+          <cais-autocomplete
+            [label]="'Пол'"
+            [inputFormControl]="fullForm.sex"
+            [parentGroup]="fullForm.group"
+            [inputName]="'sex'"
+            [items]="dbData.genderTypes"
+          ></cais-autocomplete>
+        </div>       
+      </div>
+      <div class="row">     
+        <div class="form-group col-md-2">
           <cais-input
             [type]="'date'"
             [label]="'Дата на раждане'"
             [inputFormControl]="fullForm.birthDate"
             [parentGroup]="fullForm.group"
           ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Гражданство'"
+            [inputFormControl]="fullForm.nationalityTypeCode"
+            [parentGroup]="fullForm.group"
+            [items]="dbData.nationalityTypes"
+            [inputName]="'nationalityTypeCode'"
+            (selectionChanged)="onNationalityTypeChanged($event)"
+          >
+          </cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-lookup
+            [label]="'Държава'"
+            [inputControl]="fullForm.nationalityCountry"
+            [parentGroup]="fullForm.nationalityCountry.group"
+            [openFunction]="openCountryDialog"
+            [hidden]="!showCountryLookup"
+          ></cais-lookup>
         </div>
       </div>
       <div class="font-weight-bold">Документ за самоличност</div>
@@ -124,30 +133,6 @@
           ></cais-input>
         </div>
       </div>
-      <div class="font-weight-bold">Гражданство</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Тип'"
-            [inputFormControl]="fullForm.nationalityTypeCode"
-            [parentGroup]="fullForm.group"
-            [items]="dbData.nationalityTypes"
-            [inputName]="'nationalityTypeCode'"
-            (selectionChanged)="onNationalityTypeChanged($event)"
-          >
-          </cais-autocomplete>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-lookup
-            [label]="'Държава'"
-            [inputControl]="fullForm.nationalityCountry"
-            [parentGroup]="fullForm.nationalityCountry.group"
-            [openFunction]="openCountryDialog"
-            [hidden]="!showCountryLookup"
-          ></cais-lookup>
-        </div>
-      </div>
       <div class="font-weight-bold">Месторождение</div>
       <hr />
 
@@ -159,15 +144,27 @@
             [hideDesc]="true"
           ></cais-address-form>
         </div>
+          <div class="form-group col-md-2">
+            <nb-checkbox [formControl]="fullForm.foreigner"
+            >Лица родени извън България</nb-checkbox
+          >
+          </div>
       </div>
-
-      <div class="font-weight-bold">Период</div>
       <hr />
       <div class="row">
         <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Бюро съдимост'"
+            [inputFormControl]="fullForm.authorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'authorityId'"
+            [items]="dbData.authorities"
+          ></cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
           <cais-input
             [type]="'date'"
-            [label]="'От'"
+            [label]="'От дата'"
             [inputFormControl]="fullForm.fromDate"
             [parentGroup]="fullForm.group"
           ></cais-input>
@@ -175,7 +172,7 @@
         <div class="form-group col-md-3">
           <cais-input
             [type]="'date'"
-            [label]="'До'"
+            [label]="'До дата'"
             [inputFormControl]="fullForm.toDate"
             [parentGroup]="fullForm.group"
           ></cais-input>

@@ -50,10 +50,24 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("e-applications")]
+        public async Task<IActionResult> GetAllEApplications(ODataQueryOptions<PersonEApplicationGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonEApplicationAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
         [HttpGet("fbbcs")]
         public async Task<IActionResult> GetAllFbbcs(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
             var result = await this._personService.SelectPersonFbbcAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
+        [HttpGet("pids")]
+        public async Task<IActionResult> GetAllPids(ODataQueryOptions<PersonPidGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonPidAllWithPaginationAsync(aQueryOptions, personId);
             return Ok(result);
         }
 
@@ -63,6 +77,5 @@ namespace MJ_CAIS.Web.Controllers
             await this._personService.ConnectPeopleAsync(aId, personToBeConnected);
             return Ok();
         }
-
     }
 }

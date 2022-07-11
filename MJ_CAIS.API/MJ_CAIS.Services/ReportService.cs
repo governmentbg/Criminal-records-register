@@ -214,8 +214,16 @@ namespace MJ_CAIS.Services
 
             if (pids.Count > 0)
             {
-                var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
-                                 && b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId))).Select(b => new { b.Id, b.DecisionDate }).Distinct().ToListAsync();
+                var bulletins = await dbContext.BBulletins
+                    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
+                                                                    (pids.Contains(b.EgnId) ||
+                                                                     pids.Contains(b.LnchId) ||
+                                                                     pids.Contains(b.LnId) ||
+                                                                     pids.Contains(b.IdDocNumberId) ||
+                                                                     pids.Contains(b.SuidId)))
+                    //&& b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId)))
+                    .Select(b => new { b.Id, b.DecisionDate }).Distinct().ToListAsync();
+
                 if (bulletins.Count > 0)
                 {
                     rep.ARepBulletins = bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>

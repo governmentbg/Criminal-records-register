@@ -59,6 +59,8 @@ export class ReportPersonSearchFormComponent
   }
 
   public onSearch = () => {
+    let selectedCountry = this.fullForm.nationalityCountry.id.value;
+    this.fullForm.nationalityCountryId.patchValue(selectedCountry);
     this.bulletinByPersonReportOverview.onSearch();
   };
 
@@ -69,7 +71,6 @@ export class ReportPersonSearchFormComponent
   };
 
   public onSelectCountry = (item: CountryGridModel) => {
-    debugger;
     if (item) {
       this.fullForm.nationalityCountry.setValue(item.id, item.name);
       this.fullForm.nationalityCountryId.setValue(item.id);

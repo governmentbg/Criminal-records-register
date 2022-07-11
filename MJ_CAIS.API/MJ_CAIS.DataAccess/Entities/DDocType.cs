@@ -13,8 +13,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public string? Name { get; set; }
-        public string? Xslt { get; set; }
-        public decimal? Visible { get; set; }
+        public bool? Visible { get; set; }
         public DateTime? ValidTo { get; set; }
         public DateTime? ValidFrom { get; set; }
         public string? SystemCode { get; set; }
@@ -22,6 +21,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public string? Xslt { get; set; }
 
         public virtual ICollection<DDocument> DDocuments { get; set; }
     }

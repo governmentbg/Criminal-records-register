@@ -32,7 +32,7 @@ const routes: Routes = [
       permissions: {
         only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
       },
-    },
+    }
   },
   {
     path: "remind/:ID",
@@ -55,6 +55,9 @@ const routes: Routes = [
     component: NotFoundComponent,
   },
 ];
+
+
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

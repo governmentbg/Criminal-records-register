@@ -31,7 +31,7 @@ namespace MJ_CAIS.Services
         /// </summary>
         public async Task ApplyRehabilitationOnChangeStatusAsync(BBulletin currentAttachedBull, string personId)
         {
-            var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
+            var bulletinsQuery = _rehabilitationRepository.GetBulletinsByPersonId(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
             var isFirstPointApplied = ApplyFirstPoint(bulletins, currentAttachedBull);
@@ -58,7 +58,7 @@ namespace MJ_CAIS.Services
             var personId = await _rehabilitationRepository.GetPersonIdByBulletinIdAsync(currentAttachedBull.Id);
             if (string.IsNullOrEmpty(personId)) return;
 
-            var bulletinsQuery = await _rehabilitationRepository.GetBulletinByPersonIdAsync(personId);
+            var bulletinsQuery = _rehabilitationRepository.GetBulletinsByPersonId(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
 
             var appliedChangesSecondPoint = ApplySecondPoint(bulletins, currentAttachedBull);

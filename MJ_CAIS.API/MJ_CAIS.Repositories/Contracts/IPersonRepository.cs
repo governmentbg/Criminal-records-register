@@ -12,10 +12,14 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<PPerson> SelectWithBirthInfoAsync(string id);
 
-        Task<IQueryable<PersonBulletinGridDTO>> GetBulletinByPersonIdAsync(string personId);
+        IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId);
 
-        Task<IQueryable<PersonApplicationGridDTO>> GetApplicationsByPersonIdAsync(string personId);
+        IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId);
 
-        Task<IQueryable<PersonFbbcGridDTO>> GetFbbcByPersonIdAsync(string personId);
+        IQueryable<PersonEApplicationGridDTO> GetEApplicationsByPersonId(string personId);
+
+        IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId);
+
+        IQueryable<PersonPidGridDTO> GetPidsByPersonId(string personId);
     }
 }

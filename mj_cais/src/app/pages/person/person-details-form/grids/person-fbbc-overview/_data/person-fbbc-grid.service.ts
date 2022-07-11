@@ -1,6 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
-import { PersonFbbcGridModel } from "../_models/person-bulletin-grid";
+import { PersonFbbcGridModel } from "../_models/person-bulletin-grid-model";
 
 const currentEndpoint = "people/fbbcs";
 

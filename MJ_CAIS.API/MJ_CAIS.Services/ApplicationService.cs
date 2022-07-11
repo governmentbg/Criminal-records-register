@@ -140,6 +140,7 @@ namespace MJ_CAIS.Services
             ValidateData(aInDto);
 
             var entity = mapper.MapToEntity<ApplicationInDTO, AApplication>(aInDto, false);
+            entity.ApplicationTypeId = applicationDb.ApplicationTypeId;
 
             await UpdateApplicationAsync(aInDto, entity);
 
@@ -257,9 +258,15 @@ namespace MJ_CAIS.Services
             //await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
             if (pids.Count > 0)
             {
-                var bulletins = await dbContext.BBulletins.Where(b => b.Status.Code != BulletinConstants.Status.Deleted
-                                                                      && b.PBulletinIds.Any(bulID =>
-                                                                          pids.Contains(bulID.Person.PersonId)))
+                var bulletins = await dbContext.BBulletins
+                    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
+                                                                    //&& b.PBulletinIds.Any(bulID =>
+                                                                    //    pids.Contains(bulID.Person.PersonId
+                                                                    (pids.Contains(b.EgnId) ||
+                                                                     pids.Contains(b.LnchId) ||
+                                                                     pids.Contains(b.LnId) ||
+                                                                     pids.Contains(b.IdDocNumberId) ||
+                                                                     pids.Contains(b.SuidId)))
                     .ToListAsync();
                 if (bulletins.Count > 0)
                 {

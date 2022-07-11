@@ -107,7 +107,6 @@ namespace MJ_CAIS.Services
                 curertnIsinData.EntityState = EntityStateEnum.Added;
                 curertnIsinData.Status = IsinDataConstants.Status.New;
 
-                var egnType = IdentifierType.EGN.ToString();
 
                 if (!string.IsNullOrEmpty(fine.PersonData?.Identifier) && fine.PersonData.IdentifierType == IdentifierType.EGN)
                 {
@@ -115,32 +114,25 @@ namespace MJ_CAIS.Services
                     var decisionTypeId = fine.ConvictionData.ActTypeCodeSpecified ? fine.ConvictionData.ActTypeCode.ToString() : null;
                     var decisionDate = fine.ConvictionData.ActDateSpecified ? fine.ConvictionData.ActDate : (DateTime?)null;
                     var decisionNumber = fine.ConvictionData.ActNumber;
-                    var decidingAuthId = GetAuthId(fine.ConvictionData.ActDecidingAuthorityCode, auths); 
+                    var decidingAuthId = GetAuthId(fine.ConvictionData.ActDecidingAuthorityCode, auths);
                     var caseNumber = fine.ConvictionData.CaseNumber;
                     var caseYearParsed = decimal.TryParse(fine.ConvictionData.CaseYear, out decimal caseYear);
                     var caseTypeId = fine.ConvictionData.CaseTypeCodeSpecified ? fine.ConvictionData.CaseTypeCode.ToString() : null;
                     var caseAuthId = GetAuthId(fine.ConvictionData.CaseDecidingAuthorityCode, auths);
 
-                    var bulletinId = await (from bulletin in dbContext.BBulletins.AsNoTracking()
-
-                                 join bulletinPersonId in dbContext.PBulletinIds.AsNoTracking() on bulletin.Id equals bulletinPersonId.BulletinId
-                                           into bulletinPersonLeft
-                                 from bulletinPersonId in bulletinPersonLeft.DefaultIfEmpty()
-
-                                 join personIds in dbContext.PPersonIds.AsNoTracking() on bulletinPersonId.PersonId equals personIds.Id
-                                             into personIdsLeft
-                                 from personIds in personIdsLeft.DefaultIfEmpty()
-                                 where personIds.Pid == egn && personIds.PidTypeId == egnType &&
-                                           (bulletin.DecisionTypeId == decisionTypeId || string.IsNullOrEmpty(decisionTypeId)) &&
-                                           (bulletin.DecisionDate == decisionDate || !decisionDate.HasValue) &&
-                                            bulletin.DecisionNumber == decisionNumber  &&
+                    var bulletinId = await dbContext.BBulletins.AsNoTracking()
+                        .Include(x => x.EgnNavigation).AsNoTracking()
+                        .Where(bulletin => bulletin.EgnNavigation.Pid == egn &&
+                                            (bulletin.DecisionTypeId == decisionTypeId || string.IsNullOrEmpty(decisionTypeId)) &&
+                                            (bulletin.DecisionDate == decisionDate || !decisionDate.HasValue) &&
+                                            bulletin.DecisionNumber == decisionNumber &&
                                             bulletin.DecidingAuthId == decidingAuthId &&
                                             bulletin.CaseNumber == caseNumber &&
                                             (bulletin.CaseYear == caseYear || !caseYearParsed) &&
                                             (bulletin.CaseTypeId == caseTypeId || string.IsNullOrEmpty(caseTypeId)) &&
-                                             bulletin.CaseAuthId == caseAuthId
-                                 select bulletin.Id)
-                                .FirstOrDefaultAsync();
+                                            bulletin.CaseAuthId == caseAuthId)
+                        .Select(x => x.Id)
+                        .FirstOrDefaultAsync();
 
                     if (!string.IsNullOrEmpty(bulletinId))
                     {
@@ -151,7 +143,7 @@ namespace MJ_CAIS.Services
 
                 isinData.Add(curertnIsinData);
             }
-      
+
             await dbContext.SaveEntityListAsync(isinData);
         }
 
@@ -163,7 +155,7 @@ namespace MJ_CAIS.Services
 
         private string? GetAuthId(DecidingAuthorityType? auth, List<GDecidingAuthority> authorities)
         {
-            return GetAuthId(auth?.DecidingAuthorityCodeEIK, authorities);      
+            return GetAuthId(auth?.DecidingAuthorityCodeEIK, authorities);
         }
 
         private string? GetAuthId(string code, List<GDecidingAuthority> authorities)

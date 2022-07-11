@@ -8,6 +8,8 @@ import { PersonDetailsFormComponent } from "./person-details-form/person-details
 import { PersonRemindFormComponent } from "./person-remind-form/person-remind-form.component";
 import { PersonSearchOverviewComponent } from "./person-search-form/grids/person-search-overview/person-search-overview.component";
 import { PersonSearchFormComponent } from "./person-search-form/person-search-form.component";
+import { PersonEApplicationOverviewComponent } from './person-details-form/grids/person-eapplication-overview/person-eapplication-overview.component';
+import { PersonPidOverviewComponent } from './person-details-form/grids/person-pid-overview/person-pid-overview.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,11 @@ import { PersonSearchFormComponent } from "./person-search-form/person-search-fo
     PersonRemindFormComponent,
     PersonSearchFormComponent,
     PersonSearchOverviewComponent,
+    PersonEApplicationOverviewComponent,
+    PersonPidOverviewComponent,
   ],
-  imports: [CoreComponentModule, PersonRoutingModule],
+  imports: [
+    CoreComponentModule, 
+    PersonRoutingModule],
 })
 export class PersonModule {}

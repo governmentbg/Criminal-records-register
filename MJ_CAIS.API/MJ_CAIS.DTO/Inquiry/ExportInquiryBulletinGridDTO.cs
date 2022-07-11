@@ -27,6 +27,7 @@
         public string? IdDocTypeDescr { get; set; }
         public DateTime? IdDocIssuingDate { get; set; }
         public DateTime? IdDocValidDate { get; set; }
+        public string? IdDocIssuingAuthority { get; set; }
         public string? MotherFirstname { get; set; }
         public string? MotherFamilyname { get; set; }
         public string? MotherFullname { get; set; }
@@ -40,8 +41,6 @@
         public DateTime? ConvRetPeriodEndDate { get; set; }
         public string? CreatedByPosition { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public DateTime? RehabilitationDate { get; set; }
         public string? EcrisConvictionId { get; set; }
         public bool? Locked { get; set; }
         public bool? NoSanction { get; set; }

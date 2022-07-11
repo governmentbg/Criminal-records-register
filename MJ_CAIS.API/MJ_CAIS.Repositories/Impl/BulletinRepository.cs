@@ -134,8 +134,11 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
                     .Include(x => x.BBullPersAliases)
-                    .Include(x => x.PBulletinIds)
-                        .ThenInclude(x => x.Person)
+                    .Include(x => x.EgnNavigation)
+                    .Include(x => x.LnchNavigation)
+                    .Include(x => x.LnNavigation)
+                    .Include(x => x.IdDocNumberNavigation)
+                    .Include(x => x.SuidNavigation)
                .FirstOrDefaultAsync(x => x.Id == bulletinId);
 
             return bulletin;
@@ -178,27 +181,22 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType)
         {
-            var personId = await _dbContext.PPersonIds.AsNoTracking()
+            var person = await _dbContext.PPersonIds.AsNoTracking()
                 .Include(x => x.PidType)
+                .Include(x => x.Person)
+                     .ThenInclude(x => x.BirthCity)
+                .Include(x => x.Person)
+                     .ThenInclude(x => x.BirthCountry)
                 .Where(p => p.Pid == pid && p.PidType.Code == pidType)
+                .Select(x => x.Person)
                 .FirstOrDefaultAsync();
 
-            if (personId == null) return null;
-
-            var result = await _dbContext.PPeople.AsNoTracking()
-                   .Include(x => x.PPersonIds).ThenInclude(x => x.PBulletinIds)
-                   .Include(x => x.PPersonIds).ThenInclude(x => x.PidType)
-                   .Include(x => x.BirthCity)
-                   .Include(x => x.BirthCountry)
-                   .FirstOrDefaultAsync(x => x.Id == personId.PersonId);
-
-            return result;
+            return person;
         }
 
         public async Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId)
         {
             var result = _dbContext.BBulletins.AsNoTracking()
-                    .Include(x => x.PBulletinIds)
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCountry)
                     .Include(x => x.DecidingAuth)
@@ -221,7 +219,11 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.CsAuthority)
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
-                    .Where(x => x.PBulletinIds.Any(x => x.PersonId == pidId));
+                    .Where(x => x.EgnId == pidId ||
+                          x.LnchId == pidId ||
+                          x.LnId == pidId ||
+                          x.IdDocNumberId == pidId ||
+                          x.SuidId == pidId);
 
             return await Task.FromResult(result);
         }
@@ -245,7 +247,6 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<BBulletin>> GetBulletinsForPeriodAsync(DateTime dateFrom, DateTime dateTo)
         {
             var result = _dbContext.BBulletins.AsNoTracking()
-                    .Include(x => x.PBulletinIds)
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCountry)
                     .Include(x => x.DecidingAuth)
@@ -275,7 +276,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams)
         {
-            return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_BULLETIN_NAME);          
+            return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_BULLETIN_NAME);
         }
 
         public async Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams)
@@ -283,7 +284,7 @@ namespace MJ_CAIS.Repositories.Impl
             return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_APPLICATION_NAME);
         }
 
-        private async Task<List<StatisticsCountDTO>> GetStatisticsAsync(StatisticsSearchDTO searchParams, string procedureName )
+        private async Task<List<StatisticsCountDTO>> GetStatisticsAsync(StatisticsSearchDTO searchParams, string procedureName)
         {
             var ds = new DataSet();
             var result = new List<StatisticsCountDTO>();

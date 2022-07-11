@@ -1,6 +1,7 @@
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Logging;
+using MJ_CAIS.Web.Utils;
 using MJ_CAIS.WebSetup;
 using MJ_CAIS.WebSetup.Setup;
 
@@ -14,10 +15,15 @@ namespace MJ_CAIS.Web
             var builder = WebSetupConfig.CustomConfigureBuilder(args);
             if (!builder.Environment.IsEnvironment("tl"))
             {
-                builder.Services.AddControllers(opt =>
-                {
-                    opt.UseCentralRoutePrefix(new RouteAttribute("api"));
-                });
+                builder.Services
+                    .AddControllers(opt =>
+                    {
+                        opt.UseCentralRoutePrefix(new RouteAttribute("api"));
+                    })
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
+                    });
             }
 
             // TODO: at some point in time move back to WebSetupConfig
@@ -38,7 +44,7 @@ namespace MJ_CAIS.Web
             var app = builder.Build();
 
             WebSetupConfig.CustomConfigureApp(app);
-            
+
             app.Run();
         }
     }

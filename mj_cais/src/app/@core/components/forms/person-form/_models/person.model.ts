@@ -35,6 +35,7 @@ export class PersonModel extends BaseModel {
   public fatherFamilyname: string = null;
   public fatherFullname: string = null;
   public nationalities: MultipleChooseModel = new MultipleChooseModel();
+  public nationalitiesNames: string[];
 
   constructor(init?: Partial<PersonModel>) {
     super(init);
@@ -70,5 +71,6 @@ export class PersonModel extends BaseModel {
     this.fatherFamilyname = init?.fatherFamilyname ?? null;
     this.fatherFullname = init?.fatherFullname ?? null;
     this.nationalities = init?.nationalities ?? null;
+    this.nationalitiesNames = init?.nationalitiesNames ?? null;
   }
 }

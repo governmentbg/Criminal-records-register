@@ -28,7 +28,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:DefaultSchema", "MJ_CAIS");
+            //modelBuilder.HasAnnotation("Relational:DefaultSchema", "MJ_CAIS");
 
             modelBuilder.Entity<GUsersExt>(entity =>
             {
