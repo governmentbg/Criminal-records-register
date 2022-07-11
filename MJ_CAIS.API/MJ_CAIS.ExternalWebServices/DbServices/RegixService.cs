@@ -362,6 +362,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (webServiceName.EndsWith("GetForeignIdentityV2"))
             {
                 regixCache.Egn = responseObject.EGN;
+                regixCache.Lnch = responseObject.LNCh;
 
                 regixCache.FirstnameLat = (string)responseObject.PersonNames.FirstNameLatin;
                 regixCache.SurnameLat = (string)responseObject.PersonNames.SurnameLatin;
@@ -370,6 +371,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.Firstname = (string)responseObject.PersonNames.FirstName;
                 regixCache.Surname = (string)responseObject.PersonNames.Surname;
                 regixCache.Familyname = (string)responseObject.PersonNames.FamilyName;
+
+                DateTime result;
+                if (DateTime.TryParse(responseObject.BirthDate, out result))
+                {
+                    regixCache.BirthDate = result;
+                }
 
                 regixCache.BirthCountryName = responseObject.BirthPlace.CountryName;
                 regixCache.BirthCountryCode = responseObject.BirthPlace.CountryCode;

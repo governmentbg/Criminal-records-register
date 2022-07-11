@@ -96,7 +96,7 @@ namespace MJ_CAIS.Web.Controllers
         public virtual async Task<IActionResult> searchByIdentifierLNCH(string aId)
         {
             var result = await this._searchByIdentifierService.SearchByIdentifierLNCH(aId);
-            return Ok(result);
+            return Ok(new { id = result });
         }
 
         [HttpPost("")]
