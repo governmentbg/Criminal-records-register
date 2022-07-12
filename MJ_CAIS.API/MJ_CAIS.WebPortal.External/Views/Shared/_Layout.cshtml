@@ -17,11 +17,12 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MJ_CAIS.WebPortal.External.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />
-@*    <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" asp-append-version="true" />
-*@
+    @*    <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" asp-append-version="true" />
+    *@
     <script src="~/lib/modernizr/modernizr.min.js" asp-append-version="true"></script>
-@*    <script src="~/lib/toastr.js/toastr.min.js" asp-append-version="true"></script>
-*@    <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
+    @*    <script src="~/lib/toastr.js/toastr.min.js" asp-append-version="true"></script>
+    *@
+    <script src="~/js/infragistics.loader.js" asp-append-version="true"></script>
     <script src="~/js/custom/commonUtils.js" asp-append-version="true"></script>
 
 </head>
@@ -63,8 +64,8 @@
         </div>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-5">
+    <div class="container-fluid">
+        <main role="main" class="pt-4 pb-5 ps-5 pe-5">
             @RenderBody()
         </main>
     </div>

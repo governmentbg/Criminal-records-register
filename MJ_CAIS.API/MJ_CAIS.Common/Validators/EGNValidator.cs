@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.Common.Validators
 {
-    public static class EGNValidator
+    public static class EgnValidator
     {
         private static readonly byte[] Egn = new byte[10];
         private static readonly byte[] Weights = new byte[9] { 2, 4, 8, 5, 10, 9, 7, 3, 6 };

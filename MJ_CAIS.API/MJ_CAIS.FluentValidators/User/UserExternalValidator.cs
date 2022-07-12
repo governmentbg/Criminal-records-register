@@ -23,7 +23,7 @@ namespace MJ_CAIS.FluentValidators.User
                         context.AddFailure(FluentValidationResources.NotEmpty);
                     }
                 
-                    if (!EGNValidator.IsValid(egn))
+                    if (!EgnValidator.IsValid(egn))
                     {
                         context.AddFailure(FluentValidationResources.InvalidEgn);
                     }
