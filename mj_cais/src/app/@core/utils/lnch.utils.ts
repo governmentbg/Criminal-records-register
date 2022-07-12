@@ -8,9 +8,9 @@ export class LnchUtils {
   private _value: string;
 
   constructor(value) {
-    if (typeof value !== "string") {
-      throw new Error(`${value} is not of type string!`);
-    }
+    // if (typeof value !== "string") {
+    //   throw new Error(`${value} is not of type string!`);
+    // }
 
     this._value = value;
   }
