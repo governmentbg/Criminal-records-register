@@ -3,6 +3,7 @@ import { BaseNomenclatureModel } from "../../../models/nomenclature/base-nomencl
 import { PersonAliasModel } from "../../../models/common/person-alias.model";
 import { PersonForm } from "./_models/person.form";
 import { PersonContextEnum } from "./_models/person-context-enum";
+import { EgnUtils } from "../../../utils/egn.utils";
 
 @Component({
   selector: "cais-person-form[contextType]",
@@ -24,6 +25,7 @@ export class PersonFormComponent implements OnInit {
   public isPersonContext: boolean;
   public isApplicationContext: boolean;
   public showEgnDisplay: boolean;
+  public showInvalidEgnMessage: boolean = false;
 
   ngOnInit(): void {
     // when form is init context type must be set
@@ -53,5 +55,10 @@ export class PersonFormComponent implements OnInit {
       this.personForm.egn.disable();
       this.personForm.lnch.disable();
     }
+
+    this.personForm.group.get("egn").valueChanges.subscribe((selectedValue) => {
+      let isValidEgn = EgnUtils.isValid(selectedValue);
+      this.showInvalidEgnMessage = !isValidEgn;
+    });
   }
 }

@@ -10,13 +10,13 @@ export class EgnUtils {
   private _birthday: any;
 
   constructor(value) {
-    if (typeof value !== "string") {
-      throw new Error(`${value} is not of type string!`);
-    }
+    // if (typeof value !== "string") {
+    //   throw new Error(`${value} is not of type string!`);
+    // }
 
-    if (value.length !== 10) {
-      throw new Error(`${value} is not of size 10!`);
-    }
+    // if (value.length !== 10) {
+    //   throw new Error(`${value} is not of size 10!`);
+    // }
 
     this._value = value;
     this._gender = "";
