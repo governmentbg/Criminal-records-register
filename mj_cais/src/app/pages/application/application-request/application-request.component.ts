@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { NbDialogService } from "@nebular/theme";
+import { CustomToastrService } from "../../../@core/services/common/custom-toastr.service";
+import { EgnUtils } from "../../../@core/utils/egn.utils";
+import { LnchUtils } from "../../../@core/utils/lnch.utils";
 import { SearchByEgnDialogComponent } from "./search-by-egn-dialog/search-by-egn-dialog.component";
 import { SearchByEgnErrorDialogComponent } from "./search-by-egn-error-dialog/search-by-egn-error-dialog.component";
 import { SearchByIdentifierService } from "./_data/search-by-Identifier.service";
@@ -14,7 +17,8 @@ export class ApplicationRequestComponent implements OnInit {
   constructor(
     private dialogService: NbDialogService,
     private searchByIdentifierService: SearchByIdentifierService,
-    private router: Router
+    private router: Router,
+    private toastr: CustomToastrService
   ) {}
 
   ngOnInit(): void {}
@@ -28,7 +32,13 @@ export class ApplicationRequestComponent implements OnInit {
         closeOnBackdropClick: true,
       })
       .onClose.subscribe((result) => {
+        debugger;
         if (result) {
+          var isValidEgn = EgnUtils.isValid(result);
+          if(!isValidEgn){
+            this.toastr.showToast("danger", "Невалидно ЕГН!");
+            return;
+          }
           //TODO: Get Application
           this.searchByIdentifierService.searchByIdentifier(result).subscribe(
             (result: any) => {
@@ -76,6 +86,11 @@ export class ApplicationRequestComponent implements OnInit {
       })
       .onClose.subscribe((result) => {
         if (result) {
+          var isValidLnch = LnchUtils.isValid(result);
+          if(!isValidLnch){
+            this.toastr.showToast("danger", "Невалидно ЛНЧ!");
+            return;
+          }
           this.searchByIdentifierService
             .searchByIdentifierLNCH(result)
             .subscribe(
