@@ -5,6 +5,7 @@ import { EcrisIdentificationFormComponent } from "./ecris-message-form/ecris-ide
 import { EcrisReqWaitingFormComponent } from "./ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
 import { EcrisIdentificationOverviewComponent } from "./ecris-message-overivew/ecris-identification-overview/ecris-identification-overview.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
+import { EcrisMsgNamesOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/ecris-msg-names/ecris-msg-names-overview/ecris-msg-names-overview.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris
     EcrisReqWaitingFormComponent,
     EcrisReqWaitingOverviewComponent,
     EcrisIdentificationFormComponent,
+    EcrisMsgNamesOverviewComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],
 })

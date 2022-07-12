@@ -33,6 +33,7 @@ export class EcrisIdentificationResolver implements Resolve<any> {
       ecrisAuthorities: this.nomenclatureService.getEcrisAuthorities(),
       genderTypes: this.nomenclatureService.getGenderTypes(),
       countries: this.nomenclatureService.getCountries(),
+      ecrisMsgNames: this.service.getEcrisMsgNames(id), 
     };
     return forkJoin(result);
   }

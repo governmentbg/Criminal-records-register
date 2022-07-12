@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from "@angular/core";
+import { Component, OnInit, Injector, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
@@ -22,6 +22,10 @@ export class EcrisIdentificationFormComponent
   >
   implements OnInit
 {
+  // @ViewChild("ecrisMsgNames", {
+  //   read: EcrisMsgNamesOverviewComponent,
+  // })
+  
   constructor(service: EcrisMessageService, public injector: Injector) {
     super(service, injector);
     this.backUrl = "pages/ecris/identification";
@@ -51,7 +55,7 @@ export class EcrisIdentificationFormComponent
       this.model.sex =
         GenderConstants.allData.find((g) => g.id == response.sex)?.name ?? null;
     });
-debugger
+
     this.service.getNationalities(id).subscribe((response) => {
       let countries = response;
       countries.map((val) => {
