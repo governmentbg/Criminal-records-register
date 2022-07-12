@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MJ_CAIS.Common.Resources;
 
 namespace MJ_CAIS.FluentValidators
 {
@@ -8,12 +9,12 @@ namespace MJ_CAIS.FluentValidators
         {
             return ruleBuilder
                 .NotEmpty()
-                .WithMessage(ValidationMessageConstants.NotEmpty);
+                .WithMessage(FluentValidationResources.NotEmpty);
         }
 
         public static IRuleBuilderOptions<T, string?> HasMaxLength<T>(this IRuleBuilder<T, string?> ruleBuilder, int maxLength)
         {
-            var message = string.Format(ValidationMessageConstants.HasMaxLength, maxLength);
+            var message = string.Format(FluentValidationResources.HasMaxLength, maxLength);
             return ruleBuilder
                 .Length(0, 100)
                 .WithMessage(message);
@@ -21,7 +22,7 @@ namespace MJ_CAIS.FluentValidators
 
         public static IRuleBuilderOptions<T, string?> HasMinLength<T>(this IRuleBuilder<T, string?> ruleBuilder, int minLength)
         {
-            var message = string.Format(ValidationMessageConstants.HasMinLength, minLength);
+            var message = string.Format(FluentValidationResources.HasMinLength, minLength);
             return ruleBuilder
                 .Length(minLength, int.MaxValue)
                 .WithMessage(message);
@@ -29,7 +30,7 @@ namespace MJ_CAIS.FluentValidators
 
         public static IRuleBuilderOptions<T, string?> HasLength<T>(this IRuleBuilder<T, string?> ruleBuilder, int minLength, int maxLength)
         {
-            var message = string.Format(ValidationMessageConstants.HasLength, maxLength, minLength);
+            var message = string.Format(FluentValidationResources.HasLength, maxLength, minLength);
             return ruleBuilder
                 .Length(minLength, maxLength)
                 .WithMessage(message);

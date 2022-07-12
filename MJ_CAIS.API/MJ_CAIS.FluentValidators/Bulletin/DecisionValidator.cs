@@ -3,7 +3,7 @@ using MJ_CAIS.DTO.Bulletin;
 
 namespace MJ_CAIS.FluentValidators.Bulletin
 {
-    internal class DecisionValidator : AbstractValidator<DecisionDTO>
+    public class DecisionValidator : AbstractValidator<DecisionDTO>
     {
         public DecisionValidator()
         {
