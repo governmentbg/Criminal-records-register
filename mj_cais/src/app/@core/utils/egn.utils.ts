@@ -9,15 +9,7 @@ export class EgnUtils {
   private _gender: string;
   private _birthday: any;
 
-  constructor(value) {
-    // if (typeof value !== "string") {
-    //   throw new Error(`${value} is not of type string!`);
-    // }
-
-    // if (value.length !== 10) {
-    //   throw new Error(`${value} is not of size 10!`);
-    // }
-
+  constructor(value: string) {
     this._value = value;
     this._gender = "";
     this._birthday = {};
@@ -57,9 +49,13 @@ export class EgnUtils {
   }
 
   private isValid(): boolean {
-    let sum = 0;
+    if (this._value.length !== 10) return false;
 
+    let sum = 0;
     for (let i = 0; i < this._value.length - 1; i++) {
+      let num = Number(this._value.charAt(i));
+      if (isNaN(num)) return false;
+
       sum += ~~this._value.charAt(i) * this.CONTROLS[i];
     }
 

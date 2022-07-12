@@ -7,11 +7,7 @@ export class LnchUtils {
   private CONTROLS = [21, 19, 17, 13, 11, 9, 7, 3, 1];
   private _value: string;
 
-  constructor(value) {
-    // if (typeof value !== "string") {
-    //   throw new Error(`${value} is not of type string!`);
-    // }
-
+  constructor(value: string) {
     this._value = value;
   }
 
@@ -27,6 +23,8 @@ export class LnchUtils {
     let sum = 0;
 
     for (let i = 0; i < this._value.length - 1; i++) {
+      let num = Number(this._value.charAt(i));
+      if (isNaN(num)) return false;
       sum += ~~this._value.charAt(i) * this.CONTROLS[i];
     }
 
