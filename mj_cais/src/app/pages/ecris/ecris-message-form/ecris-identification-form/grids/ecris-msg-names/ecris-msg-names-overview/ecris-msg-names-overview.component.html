@@ -1,0 +1,20 @@
+<igx-grid #namesGrid [height]="null" [data]="names" [primaryKey]="'id'">
+  <igx-column
+    field="firstname"
+    header="Име"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    field="surname"
+    header="Презиме"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    field="familyname"
+    header="Фамилия"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+</igx-grid>
