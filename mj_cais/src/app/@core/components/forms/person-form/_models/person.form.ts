@@ -91,7 +91,22 @@ export class PersonForm {
       this.birthPlace.group.disable();
     } else {
       this.birthPlace = new AddressForm(false, false);
-      if (context != PersonContextEnum.Fbbc) {
+      if (context == PersonContextEnum.Fbbc) {
+        this.firstname.setValidators([
+          Validators.maxLength(200),
+          createCyrillicValidator(),
+        ]);
+
+        this.surname.setValidators([
+          Validators.maxLength(200),
+          createCyrillicValidator(),
+        ]);
+
+        this.familyname.setValidators([
+          Validators.maxLength(200),
+          createCyrillicValidator(),
+        ]);
+      } else {
         this.firstname.setValidators([
           Validators.required,
           Validators.maxLength(200),
