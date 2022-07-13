@@ -5,6 +5,9 @@
   <span class="caption status-danger" *ngIf="showCyrillicPattern">
     Полето може да съдържа само символи на кирилица
   </span>
+  <span class="caption status-danger" *ngIf="showEmailPattern">
+     Невалидна електронна поща
+  </span>
   <span class="caption status-danger" *ngIf="showMaxLength">
     Очакват се най-много {{ maxLength }} символа
   </span>
@@ -27,8 +30,6 @@
   <span class="caption status-danger" *ngIf="showAcceptedValues"
     >Невалидна стойност</span
   >
-  <span class="caption status-danger" *ngIf="showEmail">Невалидна поща</span>
-
   <span class="caption status-danger" *ngIf="showGridMessage"
     >Въведете поне един запис</span
   >

@@ -259,9 +259,9 @@ footer.footer {
                 width: 50%;
             }
 
-body div.container {
+/*body div.container-fluid {
     margin-top: 20px;
-}
+}*/
 
 .cais-footer-link {
     text-align: center;

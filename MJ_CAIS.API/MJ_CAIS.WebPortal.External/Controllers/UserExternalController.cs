@@ -2,6 +2,8 @@
 using Infragistics.Web.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.Common.Resources;
+using MJ_CAIS.Common.Validators;
 using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.External.Models.UserExternal;
@@ -73,6 +75,12 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(UserExternalEditModel viewModel)
         {
+            var isValid = EgnValidator.IsValid(viewModel.Egn);
+            if (!isValid)
+            {
+                ModelState.AddModelError(nameof(viewModel.Egn), FluentValidationResources.InvalidEgn);
+            }
+
             if (!ModelState.IsValid)
             {
                 await FillDataForEditModel(viewModel);

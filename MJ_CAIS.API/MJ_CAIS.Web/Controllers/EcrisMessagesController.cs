@@ -69,5 +69,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._ecrisMessageService.GetNationalitiesAsync(aId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/names")]
+        public async Task<IActionResult> GetNames(string aId)
+        {
+            var result = await this._ecrisMessageService.GetNamesAsync(aId);
+            return Ok(result);
+        }
     }
 }

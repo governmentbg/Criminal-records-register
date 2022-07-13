@@ -1,6 +1,8 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Guid } from "guid-typescript";
 import { BaseForm } from "../../../../@core/models/common/base.form";
+import { createEgnValidator } from "../../../../@core/validators/egn-validation-function";
+import { createEmailValidator } from "../../../../@core/validators/email-validator-function";
 
 export class UsersExternalForm extends BaseForm {
   public group: FormGroup;
@@ -18,8 +20,8 @@ export class UsersExternalForm extends BaseForm {
     this.name = new FormControl(null, [Validators.required]);
     this.active = new FormControl(null);
     this.isAdmin = new FormControl(null);
-    this.email = new FormControl(null);
-    this.egn = new FormControl(null, [Validators.required]);
+    this.email = new FormControl(null, [createEmailValidator()]);
+    this.egn = new FormControl(null, [Validators.required, createEgnValidator()]);
     this.position = new FormControl(null);
     this.administrationId = new FormControl(null, [Validators.required]);
 

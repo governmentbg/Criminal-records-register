@@ -7,10 +7,10 @@
     ></cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
-    <form autocomplete="off">      
+    <form autocomplete="off">
       <ng-template [ngxPermissionsOnly]="['GlobalAdmin']">
-        <div class="row">        
-          <div  class="form-group col-md-12">
+        <div class="row">
+          <div class="form-group col-md-12">
             <cais-autocomplete
               [label]="'Бюро съдимост'"
               [inputFormControl]="fullForm.csAuthorityId"
@@ -47,7 +47,7 @@
           ></cais-input>
         </div>
       </div>
-      <div class="row">          
+      <div class="row">
         <div class="form-group col-md-4">
           <cais-input
             [type]="'text'"
@@ -63,7 +63,15 @@
             [inputFormControl]="fullForm.position"
             [parentGroup]="fullForm.group"
           ></cais-input>
-          </div>
+        </div>
+       <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Електронна поща'"
+            [inputFormControl]="fullForm.email"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div> 
       </div>
       <div class="row">
         <div class="form-group col-md-12">
@@ -76,11 +84,9 @@
           </cais-multiple-choose>
         </div>
       </div>
-      <div class="row">        
+      <div class="row">
         <div class="form-group col-md-2">
-          <nb-checkbox [formControl]="fullForm.active"
-          >Активен</nb-checkbox
-        >
+          <nb-checkbox [formControl]="fullForm.active">Активен</nb-checkbox>
         </div>
       </div>
     </form>

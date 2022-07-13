@@ -3,6 +3,8 @@ import { BaseNomenclatureModel } from "../../../models/nomenclature/base-nomencl
 import { PersonAliasModel } from "../../../models/common/person-alias.model";
 import { PersonForm } from "./_models/person.form";
 import { PersonContextEnum } from "./_models/person-context-enum";
+import { EgnUtils } from "../../../utils/egn.utils";
+import { LnchUtils } from "../../../utils/lnch.utils";
 
 @Component({
   selector: "cais-person-form[contextType]",
@@ -24,6 +26,9 @@ export class PersonFormComponent implements OnInit {
   public isPersonContext: boolean;
   public isApplicationContext: boolean;
   public showEgnDisplay: boolean;
+  public showInvalidEgnMessage: boolean = false;
+  public showInvalidLnchMessage: boolean = false;
+  public showInvalidEgnOrLnchMessage: boolean = false;
 
   ngOnInit(): void {
     // when form is init context type must be set
@@ -52,6 +57,50 @@ export class PersonFormComponent implements OnInit {
     if (this.isApplicationContext && this.personForm.ln.value !== null) {
       this.personForm.egn.disable();
       this.personForm.lnch.disable();
+    }
+
+    this.setPidWarningMessages();
+  }
+
+  private setPidWarningMessages() {
+    if (this.isApplicationContext || this.isBulletinContext) {
+      this.personForm.group
+        .get("egn")
+        .valueChanges.subscribe((selectedValue) => {
+          if (selectedValue) {
+            let isValidEgn = EgnUtils.isValid(selectedValue);
+            this.showInvalidEgnMessage = !isValidEgn;
+          } else {
+            this.showInvalidEgnMessage = false;
+          }
+        });
+
+      this.personForm.group
+        .get("lnch")
+        .valueChanges.subscribe((selectedValue) => {
+          if (selectedValue) {
+            let isValidLnch = LnchUtils.isValid(selectedValue);
+            this.showInvalidLnchMessage = !isValidLnch;
+          } else {
+            this.showInvalidLnchMessage = false;
+          }
+        });
+    } else if (this.isFbbcContext) {
+      this.personForm.group
+        .get("egn")
+        .valueChanges.subscribe((selectedValue) => {
+          if (selectedValue) {
+            let isValidEgn = EgnUtils.isValid(selectedValue);
+            let isValidLnch = LnchUtils.isValid(selectedValue);
+            if(isValidEgn || isValidLnch){
+              this.showInvalidEgnOrLnchMessage = false;
+            }else{
+              this.showInvalidEgnOrLnchMessage = true;
+            }
+          } else {
+            this.showInvalidEgnOrLnchMessage = false;
+          }
+        });
     }
   }
 }

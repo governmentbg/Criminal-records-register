@@ -12,6 +12,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CommonResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\FluentValidationResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FluentValidationResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\UsersResources.Designer.cs">
       <DependentUpon>UsersResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -43,6 +48,10 @@
     <EmbeddedResource Update="CommonResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FluentValidationResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FluentValidationResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UsersResources.resx">
       <LastGenOutput>UsersResources.Designer.cs</LastGenOutput>

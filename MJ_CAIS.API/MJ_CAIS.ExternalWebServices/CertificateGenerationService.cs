@@ -99,42 +99,21 @@ namespace MJ_CAIS.ExternalWebServices
 
             byte[] contentCertificate;
             string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
-            bool containsBulletins = false;
-            if (certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() == 0)
+            bool containsBulletins = certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() != 0;
+           
+            switch (certificate.Application.ApplicationType.Code)
             {
-                switch (certificate.Application.ApplicationType.Code)
-                {
-                    case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
-                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_external_certificate_without_conviction, signingCertificateName);
-                        break;
-                    case ApplicationConstants.ApplicationTypes.WebCertificate:
-                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_certificate_without_conviction, signingCertificateName);
-                        break;
-                    default:
-                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_without_conviction, signingCertificateName);
-                        break;
-                }
-
-                containsBulletins = false;
+                case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
+                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_external_certificate, signingCertificateName);
+                    break;
+                case ApplicationConstants.ApplicationTypes.WebCertificate:
+                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_certificate, signingCertificateName);
+                    break;
+                default:
+                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate, signingCertificateName);
+                    break;
             }
-            else
-            {
-
-                switch (certificate.Application.ApplicationType.Code)
-                {
-                    case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
-                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_external_certificate_with_conviction, signingCertificateName);
-                        break;
-                    case ApplicationConstants.ApplicationTypes.WebCertificate:
-                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_certificate_with_conviction, signingCertificateName);
-                        break;
-                    default:
-                        contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate_with_conviction, signingCertificateName);
-                        break;
-                }
-
-                containsBulletins = true;
-            }
+           
             bool isExistingDoc = false;
             bool isExistingContent = false;
             DDocument doc;

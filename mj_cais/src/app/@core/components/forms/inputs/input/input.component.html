@@ -117,12 +117,14 @@
     [showMinLength]="
       inputFormControl?.errors?.minlength && inputHasBeenInteracted()
     "
-    [showEgn]="inputFormControl?.errors?.egn && inputHasBeenInteracted()"
-    [showLnch]="inputFormControl?.errors?.lnch && inputHasBeenInteracted()"
-    [showEmail]="inputFormControl?.errors?.email && inputHasBeenInteracted()"
+    [showEgn]="inputFormControl?.errors?.egnValidation && inputHasBeenInteracted()"
+    [showLnch]="inputFormControl?.errors?.lnchValidation && inputHasBeenInteracted()"
     [showCyrillicPattern]="
-      inputFormControl?.errors?.pattern && inputHasBeenInteracted() 
-    " 
+      inputFormControl?.errors?.cyrillicValidation && inputHasBeenInteracted()
+    "
+    [showEmailPattern]="
+      inputFormControl?.errors?.emailValidation && inputHasBeenInteracted()
+    "
   ></cais-validation-message>
   <mat-error *ngIf="inputFormControl?.errors?.serverErrors">
     <div

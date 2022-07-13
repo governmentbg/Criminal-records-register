@@ -15,6 +15,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<EEcrisMsgNationality, EcrisMsgNationalityDTO>()
                 .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Country.Name));
+
+            CreateMap<EEcrisMsgName, EcrisMsgNameDTO>()
+                .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Firstname))
+                .ForMember(d => d.Surname, opt => opt.MapFrom(src => src.Surname))
+                .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Familyname));
         }
     }
 }

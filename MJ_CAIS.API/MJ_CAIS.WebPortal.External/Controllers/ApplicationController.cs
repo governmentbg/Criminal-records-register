@@ -3,11 +3,13 @@ using AutoMapper.QueryableExtensions;
 using Infragistics.Web.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
+using MJ_CAIS.Common.Validators;
 using MJ_CAIS.DTO.Application.External;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
@@ -56,12 +58,18 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         [HttpPost]
         public async Task<ActionResult> New(ApplicationEditModel viewModel)
         {
+            var isValid = EgnValidator.IsValid(viewModel.Egn);
+            if (!isValid)
+            {
+                ModelState.AddModelError(nameof(viewModel.Egn), FluentValidationResources.InvalidEgn);
+            }
+
             if (!ModelState.IsValid)
             {
                 await FillDataForEditModel(viewModel);
                 return View(viewModel);
             }
-
+                     
             var itemToUpdate = _mapper.Map<ExternalApplicationDTO>(viewModel);
             var id = await _applicationWebService.InsertExternalAsync(itemToUpdate);
             var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);

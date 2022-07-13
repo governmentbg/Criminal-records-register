@@ -7,7 +7,6 @@ namespace MJ_CAIS.FluentValidators.Bulletin
     {
         public DocumentValidator()
         {
-            //RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.DocTypeId).HasMaxLength(50);
             RuleFor(x => x.Name).HasMaxLength(200);
         }

@@ -133,6 +133,11 @@
           [inputFormControl]="personForm.egn"
           [parentGroup]="personForm.group"
         ></cais-input>
+        <ng-container *ngIf="showInvalidEgnOrLnchMessage">
+          <span class="text-warning">
+            Въведената стойност за ЕГН/ЛНЧ е невалидна</span
+          >
+        </ng-container>
       </div>
     </ng-container>
     <ng-container *ngIf="showEgnDisplay">
@@ -156,6 +161,11 @@
         [inputFormControl]="personForm.egn"
         [parentGroup]="personForm.group"
       ></cais-input>
+      <ng-container *ngIf="showInvalidEgnMessage">
+        <span class="text-warning">
+          Въведената стойност за ЕГН е невалидна</span
+        >
+      </ng-container>
     </div>
 
     <div class="form-group col-md-3">
@@ -165,6 +175,11 @@
         [inputFormControl]="personForm.lnch"
         [parentGroup]="personForm.group"
       ></cais-input>
+      <ng-container *ngIf="showInvalidLnchMessage">
+        <span class="text-warning">
+          Въведената стойност за ЛНЧ е невалидна
+        </span>
+      </ng-container>
     </div>
     <div class="form-group col-md-3">
       <cais-input
