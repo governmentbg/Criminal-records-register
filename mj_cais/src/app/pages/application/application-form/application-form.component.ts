@@ -9,6 +9,7 @@ import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { ApplicationTypeStatusConstants } from "../application-overview/_models/application-type-status.constants";
+import { CancelDialogComponent } from "./cancel-dialog/cancel-dialog.component";
 import { ApplicationResolverData } from "./_data/application.resolver";
 import { ApplicationService } from "./_data/application.service";
 import { ApplicationForm } from "./_models/application.form";
@@ -64,7 +65,7 @@ export class ApplicationFormComponent
     } else if (!this.isEdit()) {
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
-    
+
     this.applicationStatus = this.fullForm.statusCode.value;
     if (
       this.fullForm.statusCode.value ==
@@ -131,7 +132,19 @@ export class ApplicationFormComponent
   }
 
   public cancelApplication() {
-    this.service.cancelApplication(this.objectId).subscribe((result) => {});
+    this.dialogService
+      .open(CancelDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((x) => {
+        if (x) {
+          this.service
+            .cancelApplication(this.objectId, x)
+            .subscribe((result) => {
+              let message = "Успешно анулирано";
+              this.toastr.showToast("success", message);
+              this.locationService.back();
+            });
+        }
+      });
   }
 
   protected saveAndNavigate() {

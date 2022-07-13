@@ -50,6 +50,7 @@ import { AuthGuard } from "./@core/services/common/guard.service";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { NgxPermissionsModule } from "ngx-permissions";
 import { CoreModule } from "./@core/core.module";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -76,6 +77,8 @@ registerLocaleData(localeBg);
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,

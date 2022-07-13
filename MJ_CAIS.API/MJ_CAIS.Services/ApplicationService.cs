@@ -50,8 +50,8 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<ApplicationOutDTO> SelectAsync(string aId)
         {
-            AApplication repoObj = await this.baseAsyncRepository.SelectAsync(aId);
-            ApplicationOutDTO result = mapper.Map<ApplicationOutDTO>(repoObj);
+            var repoObj = await baseAsyncRepository.SelectAsync(aId);
+            var result = mapper.Map<ApplicationOutDTO>(repoObj);
             return result;
         }
 
@@ -62,7 +62,8 @@ namespace MJ_CAIS.Services
             if (!string.IsNullOrEmpty(statusId))
             {
                 var statues = statusId.Split(',');
-                entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
+                entityQuery = entityQuery.Where(x =>
+                    statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
             }
 
             var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);
@@ -111,11 +112,14 @@ namespace MJ_CAIS.Services
             return entity.Id;
         }
 
-        public async Task ChangeApplicationStatusToCanceled(string aId)
+        public async Task ChangeApplicationStatusToCanceled(string aId, ApplicationCancelDTO aInDto)
         {
-            var repoObj = await baseAsyncRepository.SelectAsync(aId);
-            repoObj.StatusCode = ApplicationConstants.ApplicationStatuses.Canceled;
-            await baseAsyncRepository.UpdateAsync(repoObj);
+            var repoObj = await dbContext.AApplications
+                .FirstOrDefaultAsync(x => x.Id == aId);
+            var statusCanceledApplication =
+                await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a =>
+                    a.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+            SetApplicationStatus(repoObj, statusCanceledApplication, aInDto.Description);
             await dbContext.SaveChangesAsync();
         }
 
@@ -260,13 +264,13 @@ namespace MJ_CAIS.Services
             {
                 var bulletins = await dbContext.BBulletins
                     .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                                                                    //&& b.PBulletinIds.Any(bulID =>
-                                                                    //    pids.Contains(bulID.Person.PersonId
-                                                                    (pids.Contains(b.EgnId) ||
-                                                                     pids.Contains(b.LnchId) ||
-                                                                     pids.Contains(b.LnId) ||
-                                                                     pids.Contains(b.IdDocNumberId) ||
-                                                                     pids.Contains(b.SuidId)))
+                                //&& b.PBulletinIds.Any(bulID =>
+                                //    pids.Contains(bulID.Person.PersonId
+                                (pids.Contains(b.EgnId) ||
+                                 pids.Contains(b.LnchId) ||
+                                 pids.Contains(b.LnId) ||
+                                 pids.Contains(b.IdDocNumberId) ||
+                                 pids.Contains(b.SuidId)))
                     .ToListAsync();
                 if (bulletins.Count > 0)
                 {
@@ -548,6 +552,7 @@ namespace MJ_CAIS.Services
             {
                 SetApplicationStatus(application, aStatus, "Създаване на сертификат");
             }
+
             application.ACertificates.Add(cert);
             dbContext.ACertificates.Add(cert);
             dbContext.AAppBulletins.AddRange(cert.AAppBulletins);

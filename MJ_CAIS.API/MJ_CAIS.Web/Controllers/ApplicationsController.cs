@@ -65,11 +65,11 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
-        [HttpGet("cancelApplication/{aId}")]
+        [HttpPost("cancelApplication/{aId}")]
         [Authorize(Roles = $"{RoleConstants.Normal}")]
-        public virtual async Task<IActionResult> cancelApplicationByIdentifier(string aId)
+        public virtual async Task<IActionResult> cancelApplicationByIdentifier(string aId, [FromBody] ApplicationCancelDTO aInDto)
         {
-            await this._applicationService.ChangeApplicationStatusToCanceled(aId);
+            await this._applicationService.ChangeApplicationStatusToCanceled(aId, aInDto);
             return Ok();
         }
 

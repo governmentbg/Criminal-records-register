@@ -56,7 +56,6 @@ export class ApplicationCertificateResultComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
     this.fullForm.group.patchValue(new ApplicationCertificateResultModel(this.model));
-    debugger;
     if (this.model) {
       if (
         this.model.statusCode ==
@@ -99,7 +98,6 @@ export class ApplicationCertificateResultComponent
         ""
       );
       this.reloadCurrentRoute();
-      debugger;
     }),
       (error) => {
         var errorText = error.status + " " + error.statusText;
@@ -119,13 +117,11 @@ export class ApplicationCertificateResultComponent
       )
       .onClose.subscribe((x) => {
         if (x) {
-          debugger;
           var object = new ApplicationCertificateDocumentModel();
           object.documentContent = x.documentContent;
           this.service
             .uploadSignedCertificate(this.fullForm.id.value, object)
             .subscribe((y) => {
-              debugger;
               let res = y;
               this.toastr.showBodyToast(
                 "success",

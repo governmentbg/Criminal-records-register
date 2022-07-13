@@ -51,7 +51,6 @@ export class EcrisIdentificationFormComponent
       this.model.sex =
         GenderConstants.allData.find((g) => g.id == response.sex)?.name ?? null;
     });
-debugger
     this.service.getNationalities(id).subscribe((response) => {
       let countries = response;
       countries.map((val) => {

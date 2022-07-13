@@ -33,7 +33,6 @@ export class StatisticsFormComponent implements OnInit {
   ngOnInit(): void {}
 
   public onSearch = () => {
-    debugger;
     if (!this.form.group.valid) {
       this.form.group.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");

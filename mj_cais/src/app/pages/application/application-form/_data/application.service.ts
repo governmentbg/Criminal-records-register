@@ -57,10 +57,12 @@ export class ApplicationService extends CaisCrudService<
   }
 
   public cancelApplication(
-    id: string
+    id: string,
+    t: any
   ): Observable<any[]> {
-    return this.http.get<any>(
-      `${this.url}/cancelApplication/${id}`
+    return this.http.post<any>(
+      `${this.url}/cancelApplication/${id}`,
+      t
     );
   }
 
