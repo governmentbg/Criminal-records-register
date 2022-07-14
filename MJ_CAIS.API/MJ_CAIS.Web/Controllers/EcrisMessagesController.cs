@@ -76,5 +76,20 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._ecrisMessageService.GetNamesAsync(aId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/grao-people")]
+        public async Task<IActionResult> GetGraoPeople(string aId)
+        {
+            var result = await this._ecrisMessageService.GetGraoPeopleAsync(aId);
+            return Ok(result);
+        }
+
+        [HttpPut("{aId}/change-status/{statusId}")]
+        [Authorize(Roles = RoleConstants.CentralAuth)]
+        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        {
+            await this._ecrisMessageService.ChangeStatusAsync(aId, statusId);
+            return Ok();
+        }
     }
 }

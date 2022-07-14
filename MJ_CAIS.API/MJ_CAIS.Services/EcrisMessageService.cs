@@ -149,5 +149,42 @@ namespace MJ_CAIS.Services
             var filteredNames = names.Where(x => x.EEcrisMsgId == aId);
             return filteredNames.ProjectTo<EcrisMsgNameDTO>(mapperConfiguration);
         }
+
+        public async Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId)
+        {
+            var result =
+                from ecrisIdentif in this.dbContext.EEcrisIdentifications.AsNoTracking()
+
+                join ecrisMsg in this.dbContext.EEcrisMessages.AsNoTracking()
+                    on ecrisIdentif.EcrisMsgId equals ecrisMsg.Id
+                join graoPers in this.dbContext.GraoPeople.AsNoTracking()
+                    on ecrisIdentif.GraoPersonId equals graoPers.Id
+
+                select new GraoPersonGridDTO
+                {
+                    Egn = graoPers.Egn,
+                    Firstname = graoPers.Firstname,
+                    Surname = graoPers.Surname,
+                    Familyname = graoPers.Familyname,
+                    BirthDate = graoPers.BirthDate,
+                    Sex = graoPers.Sex
+                };
+            return result;
+        }
+
+        public async Task ChangeStatusAsync(string aInDto, string statusId)
+        {
+            var ecrisMessage = await dbContext.EEcrisMessages
+               .FirstOrDefaultAsync(x => x.Id == aInDto);
+
+            if (ecrisMessage == null)
+            {
+                throw new ArgumentException($"Ecris message with id: {aInDto} is missing");
+            }
+
+            ecrisMessage.EcrisMsgStatus = statusId;
+
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

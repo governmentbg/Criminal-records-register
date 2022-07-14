@@ -6,6 +6,7 @@ import { FbbcGridModel } from "../../../fbbc/fbbc-overview/_models/fbbc-grid.mod
 import { EcrisMessageModel } from "../_models/ecris-message.model";
 import { EcrisMsgNameModel } from "../_models/ecris-msg-name.model";
 import { EcrisMsgNationalityModel } from "../_models/ecris-msg-nationality.model";
+import { GraoPersonModel } from "../ecris-identification-form/grids/grao-person-overview/_models/grao-person.model";
 
 @Injectable({ providedIn: "root" })
 export class EcrisMessageService extends CaisCrudService<
@@ -35,8 +36,15 @@ export class EcrisMessageService extends CaisCrudService<
   }
 
   public getEcrisMsgNames(id: string): Observable<EcrisMsgNameModel[]> {
-    return this.http.get<EcrisMsgNameModel[]>(
-      `${this.url}/${id}/names`
-    );
+    return this.http.get<EcrisMsgNameModel[]>(`${this.url}/${id}/names`);
+  }
+
+  public getGraoPeople(id: string): Observable<GraoPersonModel[]> {
+    return this.http.get<GraoPersonModel[]>(`${this.url}/${id}/grao-people`);
+  }
+
+  public changeStatus(aId: string, statusId: string): Observable<any> {
+    let url = `${this.url}/${aId}/change-status/${statusId}`;
+    return this.http.put(url, {});
   }
 }

@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { IsinDataStatusConstants } from "../../../isin/isin-data-form/_models/isin-data-status.constants";
+import { EcrisMessageStatusConstants } from "../../ecris-message-overivew/_models/ecris-message-status.constants";
 import { EcrisMessageService } from "../_data/ecris-message.service";
 import { EcrisMessageForm } from "../_models/ecris-message.form";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
@@ -25,7 +26,7 @@ export class EcrisIdentificationFormComponent
   // @ViewChild("ecrisMsgNames", {
   //   read: EcrisMsgNamesOverviewComponent,
   // })
-  
+
   constructor(service: EcrisMessageService, public injector: Injector) {
     super(service, injector);
     this.backUrl = "pages/ecris/identification";
@@ -71,5 +72,14 @@ export class EcrisIdentificationFormComponent
 
   submitFunction = () => {
     this.validateAndSave(this.fullForm);
+  };
+
+  identifyFunction = () => {
+    let id = this.activatedRoute.snapshot.params["ID"];
+    this.service
+      .changeStatus(id, EcrisMessageStatusConstants.Identified)
+      .subscribe((res) => {
+        this.reloadCurrentRoute();
+      });
   };
 }
