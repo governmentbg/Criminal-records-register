@@ -96,6 +96,7 @@ export class BulletinDocumentFormComponent {
       )?.name;
       this.bulletinDocumentForm.docTypeName.patchValue(docTypeName);
     }
+
     this.documentsGrid.addRow(this.bulletinDocumentForm.group.value);
 
     this.onCloseBulletinDocumentDilog();

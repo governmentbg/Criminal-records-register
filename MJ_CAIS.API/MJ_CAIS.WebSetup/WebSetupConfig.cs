@@ -1,16 +1,13 @@
 ﻿using FluentValidation.AspNetCore;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 using MJ_CAIS.FluentValidators.Bulletin;
 using MJ_CAIS.WebSetup.Setup;
+using MJ_CAIS.WebSetup.Utils.CustomModelBinders;
 
 namespace MJ_CAIS.WebSetup
 {
@@ -29,7 +26,12 @@ namespace MJ_CAIS.WebSetup
             builder.Services.ConfigureDependencies(configuration);
             builder.Services.ConfigureOData();
             builder.Services.ConfigureUserContext();
-            builder.Services.AddMvc(opt => opt.EnableEndpointRouting = false);
+            builder.Services.AddMvc(opt =>
+            {
+                opt.ModelBinderProviders.Insert(0, new CustomDateTimeModelBinderProvider());
+                opt.EnableEndpointRouting = false;
+            }
+            );
 
             builder.Services.AddFluentValidation(conf =>
             {

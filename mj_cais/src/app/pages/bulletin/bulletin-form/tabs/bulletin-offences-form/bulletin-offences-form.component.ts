@@ -51,6 +51,7 @@ export class BulletinOffencesFormComponent implements OnInit {
 
   public onOpenEditBulletinOffence(event: IgxGridRowComponent) {
     this.updateOffPlaceObj(event);
+    this.dateFormatService.parseDatesFromGridRow(event, ["offStartDate", "offEndDate"]);
     this.bulletinOffenceForm.group.patchValue(event.rowData);
     this.dialog.open();
   }

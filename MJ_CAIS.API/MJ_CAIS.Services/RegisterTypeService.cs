@@ -29,7 +29,7 @@ namespace MJ_CAIS.Services
 
         private async Task<string> GetRegisterNumber(string authorityID, string registerCode)
         {
-            var paramDate = new OracleParameter("P_DATE", OracleDbType.Date, DateTime.UtcNow.Date, System.Data.ParameterDirection.Input);
+            var paramDate = new OracleParameter("P_DATE", OracleDbType.Date, DateTime.Now.Date, System.Data.ParameterDirection.Input);
             var paramAuthority = new OracleParameter("P_CS_AUTH_ID", OracleDbType.Varchar2, authorityID, System.Data.ParameterDirection.Input);
             var paramRegisterCode = new OracleParameter("P_REGISTER_CODE", OracleDbType.Varchar2, registerCode, System.Data.ParameterDirection.Input);
 

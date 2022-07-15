@@ -92,6 +92,7 @@ export class ReportPersonSearchOverviewComponent extends RemoteGridWithStatePers
     birthPlaceObj["birthPlaceCityId"] = this.searchForm.birthPlace.cityId.value;
     birthPlaceObj["birthPlaceDesc"] =
       this.searchForm.birthPlace.foreignCountryAddress.value;
+    formObj.nationalityCountry = null;
 
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
     filterQuery = this.service.constructQueryParamsByFilters(
@@ -99,13 +100,6 @@ export class ReportPersonSearchOverviewComponent extends RemoteGridWithStatePers
       filterQuery
     );
 
-    //when has default value date is not of type moment
-    if (this.searchForm.fromDate.value && filterQuery.indexOf("fromDate") < 0) {
-      filterQuery += `&fromDate=${this.searchForm.fromDate.value.toISOString()}`;
-    }
-    if (this.searchForm.toDate.value && filterQuery.indexOf("toDate") < 0) {
-      filterQuery += `&toDate=${this.searchForm.toDate.value.toISOString()}`;
-    }
     return filterQuery;
   }
 }

@@ -521,8 +521,8 @@ namespace MJ_CAIS.Services
             }
 
             cert.AccessCode1 = Guid.NewGuid().ToString();
-            cert.ValidFrom = DateTime.UtcNow;
-            cert.ValidTo = DateTime.UtcNow.AddMonths(certificateValidityMonths);
+            cert.ValidFrom = DateTime.Now;
+            cert.ValidTo = DateTime.Now.AddMonths(certificateValidityMonths);
             // cert.AccessCode2 = Guid.NewGuid().ToString();
             return cert;
         }

@@ -47,7 +47,7 @@ namespace MJ_CAIS.Services
             var result = new CriminalRecordsReportType()
             {
                 ReportCriteria = value.CriminalRecordsRequest,
-                ReportDate = DateTime.UtcNow,
+                ReportDate = DateTime.Now,
                 ReportResult = new ReportResultType
                 {
                     PersonData = person,
@@ -123,7 +123,7 @@ namespace MJ_CAIS.Services
             var result = _mapper.Map<List<PPerson>, PersonIdentifierSearchResponseType>(res);
 
             result.ReportCriteria = value.PersonIdentifierSearchRequest;
-            result.ReportDate = DateTime.UtcNow;
+            result.ReportDate = DateTime.Now;
             return result;
         }
 
@@ -192,7 +192,7 @@ namespace MJ_CAIS.Services
             var result = new CriminalRecordsForPeriodResponseType()
             {
                 ReportCriteria = value,
-                ReportDate = DateTime.UtcNow,
+                ReportDate = DateTime.Now,
                 ReportResult = new BulletinsList
                 {
                     Bulletin = bullArray

@@ -78,7 +78,7 @@ namespace MJ_CAIS.ExternalWebServices
             }
             finally
             {
-                message.SentDate = DateTime.UtcNow;
+                message.SentDate = DateTime.Now;
                 dbContext.EEdeliveryMsgs.Update(message);
                 dbContext.SaveChanges();
             }

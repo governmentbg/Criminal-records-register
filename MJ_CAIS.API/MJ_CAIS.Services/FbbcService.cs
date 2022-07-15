@@ -177,7 +177,7 @@ namespace MJ_CAIS.Services
 
             if (statusId == EntityStateEnum.Deleted.ToString())
             {
-                fbbc.DestroyedDate = DateTime.UtcNow;
+                fbbc.DestroyedDate = DateTime.Now;
             }
 
             await dbContext.SaveChangesAsync();

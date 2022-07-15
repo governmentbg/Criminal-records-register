@@ -57,51 +57,54 @@
         [readonly]="isReadOnly"
       />
     </ng-container>
-
     <ng-container *ngIf="type === 'date'">
-      <nb-form-field>
-        <input
-          nbInput
-          fullWidth
-          [matDatepicker]="formpicker"
-          [formControl]="inputFormControl"
-          (blur)="onBlur($event)"
-          (keyup)="onKeyUp($event)"
-          (ngModelChange)="onChange($event)"
-          [readonly]="isReadOnly"
-        />
-
-        <mat-datepicker-toggle
-          nbSuffix
-          nbButton
-          ghost
-          [for]="formpicker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker
-          #formpicker
-          [disabled]="isReadOnly || inputFormControl.disabled"
-        ></mat-datepicker>
-      </nb-form-field>
-    </ng-container>
-    <!-- <ng-container *ngIf="type == 'datetime'">
-      <div style="display: flex; align-items: center">
-        <input
-          matInput
-          nbInput
-          fullWidth
-          [ngxMatDatetimePicker]="formpicker"
-          [formControl]="inputFormControl"
-          [disabled]="isReadOnly || inputFormControl.disabled"
-        />
-        <mat-datepicker-toggle
-          style="position: absolute; right: 18px"
-          matSuffix
-          [for]="formpicker"
-        ></mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #formpicker [showSeconds]="true">
-        </ngx-mat-datetime-picker>
+      <div class="form-date-picker">
+        <div class="date-picker-wrapper">
+          <igx-date-picker
+            #datePicker
+            [formControl]="inputFormControl"
+            locale="bg"
+            class="cais-date-time-picker"
+            mode="dropdown"
+            [labelVisibility]="false"
+            format="dd.MM.yyyy г."
+            [disabled]="isReadOnly"
+          >
+          </igx-date-picker>
+        </div>
       </div>
-    </ng-container> -->
+    </ng-container>
+    <ng-container *ngIf="type == 'datetime'">
+      <div class="form-group row">
+        <div class="form-date-picker col-md-6" style="padding-right: 0px">
+          <igx-date-picker
+            #datePicker
+            name="date-picker"
+            [formControl]="inputFormControl"
+            locale="bg"
+            class="cais-date-time-picker"
+            mode="dropdown"
+            [labelVisibility]="false"
+            format="dd.MM.yyyy г."
+            [disabled]="isReadOnly"
+          >
+          </igx-date-picker>
+        </div>
+        <div class="form-time-picker col-md-4" style="padding-left: 0px">
+          <igx-time-picker
+            name="time-picker"
+            locale="bg"
+            class="cais-date-time-picker"
+            [formControl]="inputFormControl"
+            [disabled]="datePicker.value || isReadOnly ? false : true"
+            mode="dropdown"
+            format="HH:mm"
+          >
+            <label igxLabel></label>
+          </igx-time-picker>
+        </div>
+      </div>
+    </ng-container>
   </ng-container>
 
   <cais-validation-message
@@ -117,8 +120,12 @@
     [showMinLength]="
       inputFormControl?.errors?.minlength && inputHasBeenInteracted()
     "
-    [showEgn]="inputFormControl?.errors?.egnValidation && inputHasBeenInteracted()"
-    [showLnch]="inputFormControl?.errors?.lnchValidation && inputHasBeenInteracted()"
+    [showEgn]="
+      inputFormControl?.errors?.egnValidation && inputHasBeenInteracted()
+    "
+    [showLnch]="
+      inputFormControl?.errors?.lnchValidation && inputHasBeenInteracted()
+    "
     [showCyrillicPattern]="
       inputFormControl?.errors?.cyrillicValidation && inputHasBeenInteracted()
     "

@@ -30,6 +30,8 @@ export class BulletinDecisionFormComponent {
   constructor(public dateFormatService: DateFormatService) {}
 
   public onOpenEditBulletinDecision(event: IgxGridRowComponent) {
+    this.dateFormatService.parseDatesFromGridRow(event, ["decisionDate", "decisionFinalDate","changeDate"]);
+
     this.bulletinDecisionForm.group.patchValue(event.rowData);
     this.dialog.open();
   }

@@ -209,8 +209,8 @@ namespace MJ_CAIS.Services
             rep.Id = BaseEntity.GenerateNewId();
             rep.ApplicationId = application.Id;
             rep.RegistrationNumber = await _registerTypeService.GetRegisterNumberForReport(application.CsAuthorityId);
-            rep.ValidFrom = DateTime.UtcNow;
-            rep.ValidTo = DateTime.UtcNow.AddMonths(validityMonths);
+            rep.ValidFrom = DateTime.Now;
+            rep.ValidTo = DateTime.Now.AddMonths(validityMonths);
 
             if (pids.Count > 0)
             {

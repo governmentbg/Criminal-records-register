@@ -68,19 +68,20 @@
       [dataType]="'string'"
     >
     </igx-column>
+
     <igx-column
       field="offStartDate"
       [sortable]="true"
       header="Начална дата на извършване на деянието"
-      dataType="date"
+      dataType="'date'"
       [formatter]="this.dateFormatService.formatDate"
     >
       <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDate(cell.value)">
-          {{ this.dateFormatService.displayDate(cell.value) }}
+        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+          {{ this.dateFormatService.displayDateTime(cell.value) }}
         </span>
       </ng-template>
-    </igx-column>
+    </igx-column> 
     <igx-column
       field="offEndDate"
       [sortable]="true"
@@ -89,8 +90,8 @@
       [formatter]="this.dateFormatService.formatDate"
     >
       <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDate(cell.value)">
-          {{ this.dateFormatService.displayDate(cell.value) }}
+        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+          {{ this.dateFormatService.displayDateTime(cell.value) }}
         </span>
       </ng-template>
     </igx-column>
@@ -153,17 +154,6 @@
         </div>
       </nb-card-header>
       <nb-card-body>
-        <!--  <div class="row mt-2">
-          <div class="gorm-group col-md-8">
-            <label class="label">Крайна дата на извършване на деянието</label>
-             <cais-date-precision
-              [formModel]="bulletinOffenceForm.testDate"
-              [parentGroup]="bulletinOffenceForm.group"
-            >
-            </cais-date-precision> 
-          </div>
-        </div>-->
-
         <div class="row mt-2">
           <div class="form-group col-md-8">
             <cais-lookup
@@ -224,18 +214,18 @@
           </div>
         </div>
         <div class="row mt-2">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-6">
             <cais-input
-              [type]="'date'"
+              [type]="'datetime'"
               [label]="'Начална дата на извършване на деянието'"
               [inputFormControl]="bulletinOffenceForm.offStartDate"
               [parentGroup]="bulletinOffenceForm.group"
               [inputName]="'offStartDate'"
             ></cais-input>
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-6">
             <cais-input
-              [type]="'date'"
+              [type]="'datetime'"
               [label]="'Крайна дата на извършване на деянието'"
               [inputFormControl]="bulletinOffenceForm.offEndDate"
               [parentGroup]="bulletinOffenceForm.group"

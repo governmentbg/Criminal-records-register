@@ -16,6 +16,9 @@ export class CommonConstants {
     return "България";
   }
 
+  static get localDateFormat(){
+    return 'dd.MM.yyyy г'
+  }
 
   public static defaultDialogConfig = {
     closeOnBackdropClick: false,
