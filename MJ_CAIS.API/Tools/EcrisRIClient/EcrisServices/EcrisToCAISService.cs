@@ -256,7 +256,7 @@ namespace EcrisIntegrationServices
             //var outputData = (ReadMessageWSOutputDataType)messageContent.WSData;
             inbox.XmlMessage = messageContent.SerializedXMLFromService;//XmlUtils.SerializeToXml(outputData);
 
-            inbox.ImportedOn = DateTime.UtcNow;
+            inbox.ImportedOn = DateTime.Now;
 
 
             //ако съществува такъв запис, не добавяме
@@ -466,7 +466,7 @@ namespace EcrisIntegrationServices
             }
 
 
-            var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.UtcNow && ea.ValidTo >= DateTime.UtcNow
+            var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
             || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
             if (msg.MessageSendingMemberStateSpecified)
