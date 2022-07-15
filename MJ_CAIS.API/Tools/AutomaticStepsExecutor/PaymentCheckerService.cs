@@ -94,7 +94,7 @@ namespace AutomaticStepsExecutor
                 {
                     throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS} is not set.");
                 }
-                var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb.Value).Date;
+                var startDateWeb = DateTime.Now.AddDays(-systemParamValidityPeriodWeb.Value).Date;
 
             
 

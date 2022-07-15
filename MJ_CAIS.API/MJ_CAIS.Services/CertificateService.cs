@@ -178,7 +178,7 @@ namespace MJ_CAIS.Services
                     ReqStatusCode = InternalRequestStatusTypeConstants.New,
                     Description = CertificateResources.msgStatusForRehabilitationDesc,
                     EntityState = Common.Enums.EntityStateEnum.Added,
-                    RequestDate = DateTime.UtcNow
+                    RequestDate = DateTime.Now
                 });
             }
 
