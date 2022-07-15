@@ -1,66 +1,63 @@
 <igx-grid
   #grid
   igxGridState
-  [data]="model | async"
+  [data]="people"
   [height]="null"
   [filterStrategy]="noopFilterStrategy"
   [sortStrategy]="noopSortStrategy"
-  [paging]="true"
   [clipboardOptions]="{ copyHeaders: false }"
   [displayDensity]="'cosy'"
   (onSortingDone)="sortingDone($event)"
   (onFilteringDone)="filteringDone($event)"
   (onSelection)="cellSelection($event)"
-  [paginationTemplate]="pager"
   [allowFiltering]="true"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
+  [rowSelection]="selectionMode"
+  [selectedRows]="selectedRows"
+  [pinning]="pinningConfig"
+  (onRowSelectionChange)="handleRowSelection($event)"
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title></igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
-      <div class="d-flex">
-        <div>
-          <!-- <button
-            nbButton
-            matRipple
-            (click)="globalCancelFunction()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
-            Назад
-          </button> -->
-        </div>
-      </div>
-    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
-  <igx-column
-    field="egn"
-    header="ЕГН"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
+  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template></igx-column
+  >
   <igx-column
     field="firstname"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
-  ></igx-column>
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template></igx-column
+  >
   <igx-column
     field="surname"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
-  ></igx-column>
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template></igx-column
+  >
   <igx-column
     field="familyname"
     header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"
-  ></igx-column>
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template></igx-column
+  >
   <igx-column
     field="birthDate"
     header="Дата на раждане"
@@ -73,14 +70,4 @@
       </span>
     </ng-template></igx-column
   >
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
-    </div>
-  </ng-template>
 </igx-grid>

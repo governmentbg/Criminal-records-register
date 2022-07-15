@@ -1,126 +1,4 @@
-<!-- <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
-  <nb-card-header class="card-header-shadow">
-    <cais-card-header
-      [label]="displayTitle"
-      [onSaveFunction]="submitFunction"
-      [onCancelFunction]="globalCancelFunction"
-    ></cais-card-header>
-  </nb-card-header>
-  <nb-card-body class="overflow-scroll">
-    <form autocomplete="off">
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'ECRIS Идентификатор'"
-            [inputFormControl]="fullForm.ecrisIdentifier"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Идентификатор'"
-            [inputFormControl]="fullForm.identifier"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на запитване'"
-            [inputFormControl]="fullForm.msgTimestamp"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="fullForm.firstname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Презиме'"
-            [inputFormControl]="fullForm.surname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Фамилия'"
-            [inputFormControl]="fullForm.familyname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Пол'"
-            [inputFormControl]="fullForm.sex"
-            [parentGroup]="fullForm.group"
-            [inputName]="'sex'"
-            [items]="dbData.genderTypes"
-          ></cais-autocomplete>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Основно гражданство'"
-            [inputFormControl]="fullForm.nationality1Code"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Друго гражданство'"
-            [inputFormControl]="fullForm.nationality2Code"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-autocomplete
-            [label]="'Месторождение - държава'"
-            [inputFormControl]="fullForm.birthCountry"
-            [parentGroup]="fullForm.group"
-            [inputName]="'birthCountry'"
-            [items]="dbData.countries"
-          >
-          </cais-autocomplete>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Месторождение - град'"
-            [inputFormControl]="fullForm.nationality2Code"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на раждане'"
-            [inputFormControl]="fullForm.birthDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-    </form>
-  </nb-card-body>
-</nb-card> -->
-
-<ng-container>
+<ng-container *ngIf="model">
   <nb-card class="card-single-page-height">
     <nb-card-header class="card-header-shadow">
       <div class="d-flex" style="justify-content: space-between">
@@ -131,6 +9,17 @@
         </div>
         <div class="d-flex">
           <div>
+            <button
+              nbButton
+              matRipple
+              [status]="'success'"
+              (click)="identifyFunction()"
+              type="button"
+              class="ml-2"
+              style="min-width: 100px"
+            >
+              Идентифицирай
+            </button>
             <button
               nbButton
               matRipple
@@ -245,7 +134,9 @@
         <div class="mt-4 mb-4">
           <cais-grao-person-overview
             #graoPeople
-            
+            (selectRow)="handleSelectedRow($event)"
+            [people]="dbData.graoPeople"
+            [dbData]="dbData"
           >
           </cais-grao-person-overview>
         </div>

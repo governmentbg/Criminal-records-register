@@ -1,7 +1,7 @@
 import { BaseModel } from "../../../../../../../@core/models/common/base.model";
 
 export class GraoPersonModel {
-  id: number = null;
+  public id: number = null;
   public egn: string = null;
   public firstName: string = null;
   public surname: string = null;

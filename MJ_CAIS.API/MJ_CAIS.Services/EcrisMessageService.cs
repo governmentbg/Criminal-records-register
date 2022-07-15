@@ -162,6 +162,7 @@ namespace MJ_CAIS.Services
 
                 select new GraoPersonGridDTO
                 {
+                    Id = graoPers.Id,
                     Egn = graoPers.Egn,
                     Firstname = graoPers.Firstname,
                     Surname = graoPers.Surname,
@@ -172,17 +173,21 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        public async Task ChangeStatusAsync(string aInDto, string statusId)
+        public async Task IdentifyAsync(string aInDto, string graoPersonId)
         {
             var ecrisMessage = await dbContext.EEcrisMessages
                .FirstOrDefaultAsync(x => x.Id == aInDto);
+            var ecrisIdentif = await dbContext.EEcrisIdentifications
+                .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
+                .FirstOrDefaultAsync();
 
             if (ecrisMessage == null)
             {
                 throw new ArgumentException($"Ecris message with id: {aInDto} is missing");
             }
 
-            ecrisMessage.EcrisMsgStatus = statusId;
+            ecrisMessage.EcrisMsgStatus = "Identified";
+            ecrisIdentif.Approved = 1;
 
             await dbContext.SaveChangesAsync();
         }

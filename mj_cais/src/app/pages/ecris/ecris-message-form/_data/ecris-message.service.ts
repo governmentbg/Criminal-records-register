@@ -43,8 +43,8 @@ export class EcrisMessageService extends CaisCrudService<
     return this.http.get<GraoPersonModel[]>(`${this.url}/${id}/grao-people`);
   }
 
-  public changeStatus(aId: string, statusId: string): Observable<any> {
-    let url = `${this.url}/${aId}/change-status/${statusId}`;
+  public identify(aId: string, graoPersonId: string): Observable<any> {
+    let url = `${this.url}/${aId}/identify/${graoPersonId}`;
     return this.http.put(url, {});
   }
 }
