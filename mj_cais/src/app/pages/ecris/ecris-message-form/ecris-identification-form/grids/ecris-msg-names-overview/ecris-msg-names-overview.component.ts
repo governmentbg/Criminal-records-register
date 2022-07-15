@@ -1,5 +1,5 @@
-import { EcrisMessageForm } from './../../../../_models/ecris-message.form';
-import { EcrisMessageService } from './../../../../_data/ecris-message.service';
+import { EcrisMessageForm } from '../../../_models/ecris-message.form';
+import { EcrisMessageService } from '../../../_data/ecris-message.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IgxGridComponent } from '@infragistics/igniteui-angular';
 

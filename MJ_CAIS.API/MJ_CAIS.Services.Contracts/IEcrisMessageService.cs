@@ -16,5 +16,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<FbbcGridDTO>> GetEcrisFbbcsByIdAsync(string ecrisMessageId);
         Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId);
         Task<IQueryable<EcrisMsgNameDTO>> GetNamesAsync(string aId);
+        Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId);
+        Task ChangeStatusAsync(string aInDto, string statusId);
     }
 }

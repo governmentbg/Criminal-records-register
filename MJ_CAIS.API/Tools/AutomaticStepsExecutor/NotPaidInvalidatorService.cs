@@ -91,7 +91,7 @@ namespace AutomaticStepsExecutor
             }
             var systemParamValidityPeriodOnDesk = (int)systemParametrs.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ValueNumber;
             //var systemParamValidityPeriodWeb = (int)systemParametrs.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS).ValueNumber;
-            var startDateOnDesk = DateTime.UtcNow.AddDays(-systemParamValidityPeriodOnDesk).Date;
+            var startDateOnDesk = DateTime.Now.AddDays(-systemParamValidityPeriodOnDesk).Date;
             //var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb).Date;
             var result = await Task.FromResult(_dbContext.AApplications
                                 .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment

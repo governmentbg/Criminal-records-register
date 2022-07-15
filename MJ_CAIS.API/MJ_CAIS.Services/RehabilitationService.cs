@@ -381,7 +381,7 @@ namespace MJ_CAIS.Services
 
         private void SetRehabilitationData(BBulletin bulletin, DateTime? rehabilitationDate)
         {
-            var status = rehabilitationDate <= DateTime.Now ? Status.ForRehabilitation : null;
+            var status = rehabilitationDate <= DateTime.Now ? Status.ForRehabilitation : null;// todo: ?
 
             // this entity is attached to context
             bulletin.RehabilitationDate = rehabilitationDate;
