@@ -1,5 +1,6 @@
 ﻿using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Statistics;
 
@@ -44,5 +45,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams);
 
         Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams);
+
+        IQueryable<BulletinByPersonIdDTO> GetBulletinsByPersonId(string personId);
     }
 }

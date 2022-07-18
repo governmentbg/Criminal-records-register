@@ -2,6 +2,7 @@ using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.DTO.Home;
 
 namespace MJ_CAIS.Services.Contracts
 {
@@ -24,5 +25,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IgPageResult<PersonPidGridDTO>> SelectPersonPidAllWithPaginationAsync(ODataQueryOptions<PersonPidGridDTO> aQueryOptions, string personId);
 
         Task ConnectPeopleAsync(string aId, string personToBeConnected);
+
+        IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
     }
 }

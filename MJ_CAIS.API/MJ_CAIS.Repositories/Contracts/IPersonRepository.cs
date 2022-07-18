@@ -1,5 +1,6 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.Repositories.Contracts
@@ -21,5 +22,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId);
 
         IQueryable<PersonPidGridDTO> GetPidsByPersonId(string personId);
+
+        IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
     }
 }

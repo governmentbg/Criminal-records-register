@@ -36,6 +36,9 @@ export class PersonModel extends BaseModel {
   public fatherFullname: string = null;
   public nationalities: MultipleChooseModel = new MultipleChooseModel();
   public nationalitiesNames: string[];
+  public bulletin78ACount: number;
+  public convictionBulletinCount: number;
+  public bulletinUnspecifiedCount: number;
 
   constructor(init?: Partial<PersonModel>) {
     super(init);
@@ -72,5 +75,8 @@ export class PersonModel extends BaseModel {
     this.fatherFullname = init?.fatherFullname ?? null;
     this.nationalities = init?.nationalities ?? null;
     this.nationalitiesNames = init?.nationalitiesNames ?? null;
+    this.bulletin78ACount = init?.bulletin78ACount ?? null;
+    this.convictionBulletinCount = init?.convictionBulletinCount ?? null;
+    this.bulletinUnspecifiedCount = init?.bulletinUnspecifiedCount ?? null;
   }
 }

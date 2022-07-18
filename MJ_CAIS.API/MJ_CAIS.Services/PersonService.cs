@@ -5,7 +5,7 @@ using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Common;
+using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -104,6 +104,9 @@ namespace MJ_CAIS.Services
 
             return await Task.FromResult(pageResult);
         }
+
+        public IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId)
+            => _personRepository.GetBulletinsCountByPersonId(personId);
 
         /// <summary>
         /// Generate P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
@@ -221,6 +224,7 @@ namespace MJ_CAIS.Services
             var entityQuery = _personRepository.GetPidsByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
+
         private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)
         {
             var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);

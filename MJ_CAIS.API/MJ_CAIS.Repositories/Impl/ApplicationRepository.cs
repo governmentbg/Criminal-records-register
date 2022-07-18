@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.Repositories.Contracts;
@@ -125,6 +126,92 @@ namespace MJ_CAIS.Repositories.Impl
                 });
 
             return query;
+        }
+
+        public IQueryable<ApplicationsByPersonIdDTO> GetAppAplicationsByPersonId(string personId)
+        {
+            var applicationsByEgn = from application in _dbContext.AApplications.AsNoTracking()
+                                    join egn in _dbContext.PPersonIds.AsNoTracking() on application.EgnId equals egn.Id
+                                    where egn.PersonId == personId
+                                    select new ApplicationsByPersonIdDTO
+                                    {
+                                        ApplicationId = application.Id,
+                                        ApplicationTypeId = application.ApplicationTypeId,
+                                        CsAuthorityId = application.CsAuthorityId,
+                                        ApplicantName = application.ApplicantName,
+                                        Firstname = application.Firstname,
+                                        Surname = application.Surname,
+                                        Familyname = application.Familyname,
+                                        Fullname = application.Fullname,
+                                        BirthDate = application.BirthDate,
+                                        Egn = application.Egn,
+                                        Lnch = application.Lnch,
+                                        WApplicationId = application.WApplicationId
+                                    };
+
+            var applicationsByLnch = from application in _dbContext.AApplications.AsNoTracking()
+                                     join lnch in _dbContext.PPersonIds.AsNoTracking() on application.LnchId equals lnch.Id
+                                     where lnch.PersonId == personId
+                                     select new ApplicationsByPersonIdDTO
+                                     {
+                                         ApplicationId = application.Id,
+                                         ApplicationTypeId = application.ApplicationTypeId,
+                                         CsAuthorityId = application.CsAuthorityId,
+                                         ApplicantName = application.ApplicantName,
+                                         Firstname = application.Firstname,
+                                         Surname = application.Surname,
+                                         Familyname = application.Familyname,
+                                         Fullname = application.Fullname,
+                                         BirthDate = application.BirthDate,
+                                         Egn = application.Egn,
+                                         Lnch = application.Lnch,
+                                         WApplicationId = application.WApplicationId
+                                     };
+
+            var applicationsByLn = from application in _dbContext.AApplications.AsNoTracking()
+                                   join ln in _dbContext.PPersonIds.AsNoTracking() on application.LnId equals ln.Id
+                                   where ln.PersonId == personId
+                                   select new ApplicationsByPersonIdDTO
+                                   {
+                                       ApplicationId = application.Id,
+                                       ApplicationTypeId = application.ApplicationTypeId,
+                                       CsAuthorityId = application.CsAuthorityId,
+                                       ApplicantName = application.ApplicantName,
+                                       Firstname = application.Firstname,
+                                       Surname = application.Surname,
+                                       Familyname = application.Familyname,
+                                       Fullname = application.Fullname,
+                                       BirthDate = application.BirthDate,
+                                       Egn = application.Egn,
+                                       Lnch = application.Lnch,
+                                       WApplicationId = application.WApplicationId
+                                   };
+
+            var applicationsBySuid = from application in _dbContext.AApplications.AsNoTracking()
+                                     join suid in _dbContext.PPersonIds.AsNoTracking() on application.SuidId equals suid.Id
+                                     where suid.PersonId == personId
+                                     select new ApplicationsByPersonIdDTO
+                                     {
+                                         ApplicationId = application.Id,
+                                         ApplicationTypeId = application.ApplicationTypeId,
+                                         CsAuthorityId = application.CsAuthorityId,
+                                         ApplicantName = application.ApplicantName,
+                                         Firstname = application.Firstname,
+                                         Surname = application.Surname,
+                                         Familyname = application.Familyname,
+                                         Fullname = application.Fullname,
+                                         BirthDate = application.BirthDate,
+                                         Egn = application.Egn,
+                                         Lnch = application.Lnch,
+                                         WApplicationId = application.WApplicationId
+                                     };
+
+            var allApplications = applicationsByEgn
+                .Union(applicationsByLnch)
+                .Union(applicationsByLn)
+                .Union(applicationsBySuid);
+
+            return allApplications;
         }
     }
 }
