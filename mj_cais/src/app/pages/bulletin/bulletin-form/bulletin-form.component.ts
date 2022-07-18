@@ -32,36 +32,66 @@ export class BulletinFormComponent
   implements OnInit
 {
   //#region Престъпления
+
   @ViewChild("bulletineOffences", {
     read: BulletinOffencesFormComponent,
   })
   public bulletineOffencesForm: BulletinOffencesFormComponent;
   public isOffancesEditable: boolean;
+
   //#endregion
 
   //#region Наказания
+
   @ViewChild("bulletineSanctions", {
     read: BulletinSanctionsFormComponent,
   })
   public bulletineSanctionsForm: BulletinSanctionsFormComponent;
   public isSanctionsEditable: boolean;
+
   //#endregion
 
   //#region Допълнителни сведения
+
   @ViewChild("bulletineDecisions", {
     read: BulletinDecisionFormComponent,
   })
   public bulletineDescitionForm: BulletinDecisionFormComponent;
   public isDecisionEditable: boolean = false;
+
   //#endregion
 
   //#region Докумнти
+
   @ViewChild("bulletineDocuments", {
     read: BulletinDocumentFormComponent,
   })
   public bulletineDocumentsForm: BulletinDocumentFormComponent;
   public isDocumentsEditable: boolean;
+
   //#endregion
+
+   //#region Tabset
+
+   public offencesTabTitle = "Престъпления";
+   public sanctionsTabTitle = "Наказания";
+   public decisionTabTitle = "Доп. сведения";
+   public eventsTabTitle = "Уведомления";
+   public documentsTabTitle = "Документи";
+   public isinTabTitle = "Изтърпени наказания";
+   public historyTabTitle = "Одит";
+   public docEventTabTitle = "Уведомяване за променен съдебен статус на осъдено лице";
+
+   public showOffencesTab: boolean = false;
+   public showSanctionsTab: boolean = false;
+   public showDecisionTab: boolean = false;
+   public showEventsTab: boolean = false;
+   public showDocumentsTab: boolean = false;
+   public showIsinTab: boolean = false;
+   public showHistoryTab: boolean = false;
+   public showDocEventTab: boolean = false;
+
+   //#endregion
 
   public isNoSanctionCheck: boolean = false;
   public isBulletinPersonAliasEditable = false;
@@ -124,6 +154,8 @@ export class BulletinFormComponent
         );
 
       this.fullForm.offancesTransactions.setValue(offancesTransactions);
+    }else{
+      this.fullForm.offancesTransactions.setValue([]);
     }
 
     // if noSanction is false
@@ -146,6 +178,8 @@ export class BulletinFormComponent
         );
 
       this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
+    }else{
+      this.fullForm.decisionsTransactions.setValue([]);
     }
 
     this.validateAndSave(this.fullForm);
@@ -237,5 +271,45 @@ export class BulletinFormComponent
     this.showForUpdate =
       this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
       this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+  }
+
+  onChangeTab(event) {
+    let tabTitle = event.tabTitle;
+
+    if (!this.showOffencesTab) {
+      this.showOffencesTab = tabTitle == this.offencesTabTitle;
+    }
+
+    if (!this.showSanctionsTab) {
+      this.showSanctionsTab = tabTitle == this.sanctionsTabTitle;
+    }
+
+    if (!this.showDecisionTab) {
+      this.showDecisionTab = tabTitle == this.decisionTabTitle;
+    }
+
+    if (!this.showEventsTab) {
+      this.showEventsTab = tabTitle == this.eventsTabTitle;
+    }
+
+    if (!this.showDocumentsTab) {
+      this.showDocumentsTab = tabTitle == this.documentsTabTitle;
+    }
+
+    if (!this.showIsinTab) {
+      this.showIsinTab = tabTitle == this.isinTabTitle;
+    }
+
+    if (!this.showHistoryTab) {
+      this.showHistoryTab = tabTitle == this.historyTabTitle;
+    }
+  }
+
+  onChangeEventsTab(event){
+       let tabTitle = event.tabTitle;
+
+    if (!this.showDocEventTab) {
+      this.showDocEventTab = tabTitle == this.docEventTabTitle;
+    }
   }
 }

@@ -112,14 +112,32 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
-        public async Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync()
+        public IQueryable<BulletinStatusHistoryDTO> SelectAllStatusHistoryData()
         {
-            var query = _dbContext.BBulletinStatusHes.AsNoTracking()
-                 .Include(x => x.NewStatusCodeNavigation)
-                 .Include(x => x.OldStatusCodeNavigation)
-                 .OrderByDescending(x => x.CreatedOn);
+            var query = from bulletinHis in _dbContext.BBulletinStatusHes.AsNoTracking()
+                         join newStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.NewStatusCode equals newStatus.Code
+                             into newStatusLeft
+                         from newStatus in newStatusLeft.DefaultIfEmpty()
+                         join oldStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.OldStatusCode equals oldStatus.Code
+                            into oldStatusLeft
+                         from oldStatus in oldStatusLeft.DefaultIfEmpty()
+                         join user in _dbContext.GUsers.AsNoTracking() on bulletinHis.CreatedBy equals user.Id
+                           into userLeft
+                         from user in userLeft.DefaultIfEmpty()
+                         select new BulletinStatusHistoryDTO
+                         {
+                             Id = bulletinHis.Id,
+                             CreatedBy = user.Firstname + " " + user.Surname + " " + user.Familyname,
+                             CreatedOn = bulletinHis.CreatedOn,
+                             Descr = bulletinHis.Descr,
+                             Locked = bulletinHis.Locked,
+                             NewStatus = newStatus.Name,
+                             OldStatus = oldStatus.Name,
+                             Version = bulletinHis.Version,
+                             BulletinId = bulletinHis.BulletinId
+                         };
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public async Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId)

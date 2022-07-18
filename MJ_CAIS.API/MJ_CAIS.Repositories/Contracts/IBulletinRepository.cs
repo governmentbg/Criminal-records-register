@@ -24,7 +24,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
 
-        Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync();
+        IQueryable<BulletinStatusHistoryDTO> SelectAllStatusHistoryData();
 
         Task SaveChangesAsync();
 

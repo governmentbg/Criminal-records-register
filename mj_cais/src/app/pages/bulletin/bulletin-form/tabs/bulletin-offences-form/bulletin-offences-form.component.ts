@@ -14,6 +14,11 @@ import { NomenclatureService } from "../../../../../@core/services/rest/nomencla
 import { NbDialogService } from "@nebular/theme";
 import { OffenceCategoryDialogComponent } from "../../../../../@core/components/dialogs/offence-category-dialog/offence-category-dialog.component";
 import { OffenceCategoryGridModel } from "../../../../../@core/components/dialogs/offence-category-dialog/_models/offence-category-grid.model";
+import { BulletinService } from "../../_data/bulletin.service";
+import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
+import { BulletinOffenceModel } from "./_models/bulletin-offence.model";
+import { NgxSpinnerService } from "ngx-spinner";
+import { EActions } from "@tl/tl-common";
 
 @Component({
   selector: "cais-bulletin-offences-form",
@@ -23,6 +28,7 @@ import { OffenceCategoryGridModel } from "../../../../../@core/components/dialog
 export class BulletinOffencesFormComponent implements OnInit {
   @Input() bulletinOffenceTransactions: string;
   @Input() dbData: any;
+
   @Input() isForPreview: boolean;
   public InputTypeConstants = InputTypeConstants;
 
@@ -41,17 +47,40 @@ export class BulletinOffencesFormComponent implements OnInit {
   })
   public offPlaceComponent: AddressFormComponent;
 
+  public offences: BulletinOffenceModel[];
+
   constructor(
     public dateFormatService: DateFormatService,
     private nomenclatureService: NomenclatureService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private bulletinService: BulletinService,
+    private loaderService: NgxSpinnerService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (
+      this.activatedRoute.snapshot.routeConfig.path.toUpperCase() ===
+      EActions.CREATE
+    ) {
+      this.offences = [];
+      return;
+    }
+
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    this.loaderService.show();
+    this.bulletinService.getOffences(bulletinId).subscribe((res) => {
+      this.offences = res;
+      this.loaderService.hide();
+    });
+  }
 
   public onOpenEditBulletinOffence(event: IgxGridRowComponent) {
     this.updateOffPlaceObj(event);
-    this.dateFormatService.parseDatesFromGridRow(event, ["offStartDate", "offEndDate"]);
+    this.dateFormatService.parseDatesFromGridRow(event, [
+      "offStartDate",
+      "offEndDate",
+    ]);
     this.bulletinOffenceForm.group.patchValue(event.rowData);
     this.dialog.open();
   }

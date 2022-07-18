@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { LoaderService } from "../../../../../@core/services/common/loader.service";
 import { IsinDataGridService } from "../../../../isin/isin-data-overview/_data/isin-data-grid.service";
 import { IsinDataGridModel } from "../../../../isin/isin-data-overview/_model/isin-data-grid.model";
 
@@ -16,7 +17,8 @@ export class BulletinIsinFormComponent extends RemoteGridWithStatePersistance<
   constructor(
     service: IsinDataGridService,
     injector: Injector,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    public loaderService: LoaderService
   ) {
     super("isin-data-search", service, injector);
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
@@ -24,6 +26,7 @@ export class BulletinIsinFormComponent extends RemoteGridWithStatePersistance<
   }
 
   ngOnInit() {
+    this.loaderService.showSpinner(this.service);
     super.ngOnInit();
   }
 }

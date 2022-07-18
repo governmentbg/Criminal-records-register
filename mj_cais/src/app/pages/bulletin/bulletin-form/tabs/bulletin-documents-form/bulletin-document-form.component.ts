@@ -1,11 +1,14 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import {
   IgxDialogComponent,
   IgxGridComponent,
 } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
+import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { FileItem } from "ng2-file-upload";
+import { NgxSpinnerService } from "ngx-spinner";
 import { Observable, ReplaySubject } from "rxjs";
 import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CommonConstants } from "../../../../../@core/constants/common.constants";
@@ -15,6 +18,7 @@ import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploa
 import { BulletinService } from "../../_data/bulletin.service";
 import { BulletinForm } from "../../_models/bulletin.form";
 import { BulletinDocumentForm } from "./_models/bulletin-document.form";
+import { BulletinDocumentModel } from "./_models/bulletin-document.model";
 
 @Component({
   selector: "cais-bulletin-document-form",
@@ -23,7 +27,6 @@ import { BulletinDocumentForm } from "./_models/bulletin-document.form";
 })
 export class BulletinDocumentFormComponent {
   @Input() bulletinForm: BulletinForm;
-  @Input() documents: any;
   @Input() dbData: any;
   @Input() isForPreview: boolean;
   @Input() showAddDeleteButton: boolean;
@@ -39,6 +42,7 @@ export class BulletinDocumentFormComponent {
   public bulletinDocumentForm = new BulletinDocumentForm();
   public uploader: CustomFileUploader;
   public hasDropZoneOver: boolean = false;
+  public documents: BulletinDocumentModel[];
 
   protected validationMessage = "Грешка при валидациите!";
 
@@ -46,9 +50,27 @@ export class BulletinDocumentFormComponent {
     public toastr: CustomToastrService,
     public bulletinService: BulletinService,
     private dialogService: NbDialogService,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    private loaderService: NgxSpinnerService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initializeUploader();
+  }
+
+  ngOnInit(): void {
+    if (
+      this.activatedRoute.snapshot.routeConfig.path.toUpperCase() ===
+      EActions.CREATE
+    ) {
+      this.documents = [];
+      return;
+    }
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    this.loaderService.show();
+    this.bulletinService.getDocuments(bulletinId).subscribe((res) => {
+      this.documents = res;
+      this.loaderService.hide();
+    });
   }
 
   public fileOverAnother(e: any): void {

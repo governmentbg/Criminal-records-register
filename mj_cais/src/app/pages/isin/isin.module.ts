@@ -7,7 +7,6 @@ import { IsinDataSelectBulletinFormComponent } from "./isin-data-form/isin-data-
 import { IsinIdentifiedOverviewComponent } from "./isin-data-overview/isin-identified-overview/isin-identified-overview.component";
 import { IsinNewOverviewComponent } from "./isin-data-overview/isin-new-overview/isin-new-overview.component";
 import { CoreComponentModule } from "../../@core/components/core-component.module";
-import { BulletinIsinFormComponent } from "../bulletin/bulletin-form/tabs/bulletin-isin-form/bulletin-isin-form.component";
 
 @NgModule({
   declarations: [
@@ -17,7 +16,6 @@ import { BulletinIsinFormComponent } from "../bulletin/bulletin-form/tabs/bullet
     IsinDataSelectBulletinFormComponent,
     IsinDataPreviewFormComponent,
     IsinDataFormComponent,
-    BulletinIsinFormComponent,
   ],
   imports: [CoreComponentModule, IsinRoutingModule],
 })
