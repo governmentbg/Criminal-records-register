@@ -7,7 +7,7 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IPersonRepository : IBaseAsyncRepository<PPerson, string, CaisDbContext>
     {
-        Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber);
+        Task<List<PersonGridDTO>> SelectInPageAsync(PersonSearchParamsDTO searchObj, int pageSize, int pageNumber);
 
         Task<List<PPersonId>> GetPersonIdsAsync(List<PersonIdTypeDTO> personIds, string personId);
 

@@ -185,7 +185,7 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)
+        public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonSearchParamsDTO searchObj, int pageSize, int pageNumber)
         {
             DataSet ds = new DataSet();
             List<PersonGridDTO> result = new List<PersonGridDTO>();
@@ -201,11 +201,13 @@ namespace MJ_CAIS.Repositories.Impl
                     // Set parameters
 
                     cmd.Parameters.Add(new OracleParameter("p_egn", OracleDbType.Varchar2, searchObj.Pid, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, searchObj.FirstName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, searchObj.SurName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.FamilyName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, searchObj.FullName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, searchObj.BirthDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, searchObj.Firstname, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, searchObj.Surname, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.Familyname, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, searchObj.Fullname, ParameterDirection.Input));
+
+                    var birthDate = searchObj.BirthDate.HasValue? searchObj.BirthDate.Value.Date : (DateTime?)null;
+                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, birthDate, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, searchObj.BirthDatePrec, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_size", OracleDbType.Int32, pageSize, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_number", OracleDbType.Int32, pageNumber, ParameterDirection.Input));

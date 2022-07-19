@@ -14,7 +14,6 @@ export class PersonSearchForm extends BaseForm {
   public pidType: FormControl;
   public birthDate: DatePrecisionModelForm;
   public sex: FormControl;
-  public birthPlace: AddressForm;
 
   constructor() {
     super();
@@ -26,7 +25,6 @@ export class PersonSearchForm extends BaseForm {
     this.pidType = new FormControl(null);
     this.birthDate = new DatePrecisionModelForm(null);
     this.sex = new FormControl(null);
-    this.birthPlace = new AddressForm(false);
 
     this.group = new FormGroup({
       id: this.id,
@@ -39,7 +37,6 @@ export class PersonSearchForm extends BaseForm {
       pidType: this.pidType,
       birthDate: this.birthDate.group,
       sex: this.sex,
-      birthPlace: this.birthPlace.group,
     });
   }
 }

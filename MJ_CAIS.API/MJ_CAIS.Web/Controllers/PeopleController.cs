@@ -22,9 +22,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit = false)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<PersonGridDTO> aQueryOptions, [FromQuery] PersonSearchParamsDTO searchParams)
         {
-            var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, isPageInit);
+            var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, searchParams);
             return Ok(result);
         }
 

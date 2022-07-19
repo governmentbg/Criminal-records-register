@@ -30,7 +30,6 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
 
   ngOnInit() {
     this.service.updateUrl(`people?isPageInit=true`);
-    super.ngOnInit();
   }
 
   public onSearch = () => {
@@ -41,47 +40,19 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
     }
 
     this.loader.showSpinner(this.service);
- 
-    //$filter=contains(bulletinType,%20%27as%27)%20and%20contains(createdOn,%20%272%27)
-    let count = 0;
-    let filterQuery = "";
-
     let formObj = this.searchForm.group.getRawValue();
-
     if (this.searchForm.birthDate.precision.value) {
       let date = this.searchForm.birthDate.getFullYear();
       if (date) {
-        formObj["birthDateDisplay"] = date.toISOString();
         formObj["birthDatePrec"] = this.searchForm.birthDate.precision.value;
+        formObj["birthDate"] = date.toISOString();
       }
     }
-
-    // get birth place value
-    if (this.searchForm.birthPlace.group.value) {
-      formObj["cityId"] = this.searchForm.birthPlace.cityId.value;
-      formObj["countryId"] = this.searchForm.birthPlace.country.id.value;
-      formObj["districtId"] = this.searchForm.birthPlace.districtId.value;
-      formObj["municipalityId"] =
-        this.searchForm.birthPlace.municipalityId.value;
-      formObj["foreignCountryAddress"] =
-        this.searchForm.birthPlace.foreignCountryAddress.value;
-    }
-
-    formObj.birthPlace = null;
-    formObj.birthDate = null;
-    for (let key in formObj) {
-      if (formObj[key] && key && key != "birthDate") {
-        count++;
-        if (count == 1) {
-          filterQuery += `$filter=contains(${key},'${formObj[key]}')`;
-        } else {
-          filterQuery += ` and contains(${key},'${formObj[key]}')`;
-        }
-      }
-    }
-
+    let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
     this.service.updateUrl(`people?${filterQuery}`);
+
     super.ngOnInit();
+    this.loader.hideSpinner(this.service);
   };
 
   public connectPeople(existingPersonId, personToBeConnected) {
