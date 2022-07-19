@@ -14,7 +14,7 @@ export class GraoPersonGridService extends CaisCrudService<
     super(GraoPersonModel, injector, "ecris-messages");
   }
 
-  public getGraoPeople(id: string): Observable<GraoPersonModel[]> {
+  public getGraoPeople(id: string): Observable<any> {
     return this.http.get<GraoPersonModel[]>(`${this.url}/${id}/grao-people`);
   }
 }

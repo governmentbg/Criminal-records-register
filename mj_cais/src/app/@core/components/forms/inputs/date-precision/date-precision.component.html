@@ -1,7 +1,7 @@
 <div [formGroup]="formModel.group">
   <div class="row">
     <div class="form-group col-md-6">
-      <label for="date" class="label"> {{label || 'Дата'}} </label>
+      <label for="date" class="label"> {{ label || "Дата" }} </label>
       <ng-select
         #autoControl
         formControlName="precision"
@@ -15,27 +15,13 @@
     </div>
     <div class="form-group col-md-6">
       <ng-container *ngIf="showFullDate">
-        <label class="label">Дата</label>
-        <nb-form-field>
-          <input
-            nbInput
-            fullWidth
-            [matDatepicker]="formpicker"
-            [formControl]="formModel.date"
-            [readonly]="isReadOnly"
-          />
-
-          <mat-datepicker-toggle
-            nbSuffix
-            nbButton
-            ghost
-            [for]="formpicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker
-            #formpicker
-            [disabled]="isReadOnly || formModel.date.disabled"
-          ></mat-datepicker>
-        </nb-form-field>
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата'"
+            [inputFormControl]="formModel.date"
+            [parentGroup]="formModel.group"
+            [inputName]="'date'"
+          ></cais-input>
       </ng-container>
       <ng-container *ngIf="showYearAndMonth">
         <div class="row">

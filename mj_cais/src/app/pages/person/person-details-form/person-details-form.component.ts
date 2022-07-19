@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonModel } from "../../../@core/components/forms/person-form/_models/person.model";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { BulletinTypeConstants } from "../../bulletin/bulletin-form/_models/bulletin-type-constants";
 import { PersonApplicationGridService } from "./grids/person-application-overview/_data/person-application-grid.service";
 import { PersonBulletinGridService } from "./grids/person-bulletin-overview/_data/person-bulletin-grid.service";
 import { PersonFbbcGridService } from "./grids/person-fbbc-overview/_data/person-fbbc-grid.service";
@@ -36,6 +37,7 @@ export class PersonDetailsFormComponent
   public personId: string;
   public model: PersonModel;
   public PersonContextEnum = PersonContextEnum;
+  public BulletinTypeConstants = BulletinTypeConstants;
   public tabs: any[];
 
   public bulletinsTabTitle = "Бюлетини";

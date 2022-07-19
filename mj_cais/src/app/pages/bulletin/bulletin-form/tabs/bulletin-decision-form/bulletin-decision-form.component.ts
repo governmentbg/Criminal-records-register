@@ -1,11 +1,16 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import {
   IgxDialogComponent,
   IgxGridComponent,
   IgxGridRowComponent,
 } from "@infragistics/igniteui-angular";
+import { EActions } from "@tl/tl-common";
+import { NgxSpinnerService } from "ngx-spinner";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { BulletinService } from "../../_data/bulletin.service";
 import { BulletinDecisionForm } from "./_models/bulletin-decision.form";
+import { BulletinDecisionModel } from "./_models/bulletin-decision.model";
 
 @Component({
   selector: "cais-bulletin-decision-form",
@@ -26,10 +31,39 @@ export class BulletinDecisionFormComponent {
   public dialog: IgxDialogComponent;
 
   public bulletinDecisionForm = new BulletinDecisionForm();
+  public decisions: BulletinDecisionModel[];
+  
+  constructor(
+    public dateFormatService: DateFormatService,
+    private bulletinService: BulletinService,
+    private loaderService: NgxSpinnerService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
-  constructor(public dateFormatService: DateFormatService) {}
+  ngOnInit(): void {
+    if (
+      this.activatedRoute.snapshot.routeConfig.path.toUpperCase() ===
+      EActions.CREATE
+    ) {
+      this.decisions = [];
+      return;
+    }
+    
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    this.loaderService.show();
+    this.bulletinService.getDecisions(bulletinId).subscribe((res) => {
+      this.decisions = res;
+      this.loaderService.hide();
+    });
+  }
 
   public onOpenEditBulletinDecision(event: IgxGridRowComponent) {
+    this.dateFormatService.parseDatesFromGridRow(event, [
+      "decisionDate",
+      "decisionFinalDate",
+      "changeDate",
+    ]);
+
     this.bulletinDecisionForm.group.patchValue(event.rowData);
     this.dialog.open();
   }

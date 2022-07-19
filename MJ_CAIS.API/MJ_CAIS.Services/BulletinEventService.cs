@@ -61,7 +61,7 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin,  string personId)
+        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin, string personId)
         {
             var existingEvents = dbContext.BBulEvents
                                 .AsNoTracking()
@@ -105,7 +105,7 @@ namespace MJ_CAIS.Services
             var article3000 = existingEvents.FirstOrDefault(x => x.Type == BulletinEventConstants.Type.Article3000);
 
             var checkForEvent = article2211 == null || !article2211.Any || article3000 == null || !article3000.Any;
-            if(!checkForEvent) return;
+            if (!checkForEvent) return;
 
             var bulletinsQuery = _bulletinEventRepository.GetBulletinsByPersonId(personId);
             var bulletins = await bulletinsQuery.ToListAsync();
@@ -131,20 +131,20 @@ namespace MJ_CAIS.Services
         /// </summary>
         /// <param name="bulletins">All bulletins of the person</param>
         /// <param name="currentBulletin">Updated bulletin attached to the context</param>
-        private static void CheckForArticle2211(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        private async void CheckForArticle2211(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
         {
             // PrevSuspSent must be false
             if (currentBulletin.PrevSuspSent == true) return;
 
-            var currentBullOffencesEndDates = bulletins.FirstOrDefault(x => x.Id == currentBulletin.Id)?.OffencesEndDates;
+            var currentBullOffencesEndDates = await _bulletinEventRepository.GetOffencesEndDatesByBulletinId(currentBulletin.Id).ToListAsync();
             if (currentBullOffencesEndDates == null || !currentBullOffencesEndDates.Any()) return;
 
             var anotherBulletins = bulletins.Where(x => x.Id != currentBulletin.Id);
 
+            var allSanctionByBulletins = _bulletinEventRepository.GetSanctionsSuspentionByBulletinId(bulletins.Select(x => x.Id).ToList());
             // has sanction of type
-            var bulletinWithSanctionOfTypeLos = anotherBulletins
-                .Where(x => x.Sanctions
-                .Any(x => x.Type == SanctionType.Imprisonment))
+            var bulletinWithSanctionOfTypeLos = allSanctionByBulletins
+                .Where(x => x.Type == SanctionType.Imprisonment)
                 .ToList();
 
             if (bulletinWithSanctionOfTypeLos.Count == 0) return;
@@ -154,24 +154,21 @@ namespace MJ_CAIS.Services
             foreach (var bullWithSanc in bulletinWithSanctionOfTypeLos)
             {
                 // we cannot calculate the period
-                if (!bullWithSanc.DecisionDate.HasValue) continue;
+                var periodStart = bulletins.FirstOrDefault(x => x.Id == bullWithSanc.BulletinId)?.DecisionDate;
+                if (!periodStart.HasValue) continue;
 
-                var periodStart = bullWithSanc.DecisionDate.Value;
+                var periodStartVal = periodStart.Value;
+                var periodEndDate = periodStartVal;
+                periodEndDate = periodEndDate.AddHours(bullWithSanc.SuspentionDurationHours ?? 0);
+                periodEndDate = periodEndDate.AddDays(bullWithSanc.SuspentionDurationDays ?? 0);
+                periodEndDate = periodEndDate.AddMonths(bullWithSanc.SuspentionDurationMonths ?? 0);
+                periodEndDate = periodEndDate.AddYears(bullWithSanc.SuspentionDurationYears ?? 0);
 
-                foreach (var sanction in bullWithSanc.Sanctions)
+                var isInPeriod = currentBullOffencesEndDates.Any(x => x >= periodStart && x <= periodEndDate);
+
+                if (isInPeriod)
                 {
-                    var periodEndDate = periodStart;
-                    periodEndDate = periodEndDate.AddHours(sanction.SuspentionDurationHours ?? 0);
-                    periodEndDate = periodEndDate.AddDays(sanction.SuspentionDurationDays ?? 0);
-                    periodEndDate = periodEndDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
-                    periodEndDate = periodEndDate.AddYears(sanction.SuspentionDurationYears ?? 0);
-
-                    var isInPeriod = currentBullOffencesEndDates.Any(x => x >= periodStart && x <= periodEndDate);
-
-                    if (isInPeriod)
-                    {
-                        mustAddEvent = true;
-                    }
+                    mustAddEvent = true;
                 }
             }
 

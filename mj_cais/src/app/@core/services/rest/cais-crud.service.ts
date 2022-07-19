@@ -64,16 +64,15 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
     );
   }
 
+  // used only for flat object !!!
   constructQueryParamsByFilters(formObj, filterQuery = ''): string {
     for (let key in formObj) {
       if (key && formObj[key]) {
         let value = formObj[key];
 
-        if (typeof formObj[key] == "object" && formObj[key]._isUTC != null) {
-          let date = new Date(formObj[key]);
+        if (typeof formObj[key] == "object") {
+          let date = new Date(formObj[key] );
           value = date.toISOString();
-        } else if (typeof formObj[key] == "object") {
-          continue;
         }
 
         filterQuery += `&${key}=${value}`;

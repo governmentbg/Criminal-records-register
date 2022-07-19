@@ -207,7 +207,7 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
             var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(oldBulletinStatus, statusId, bulletinId, bulletin.Locked);
+            AddBulletinStatusH(oldBulletinStatus, statusId, bulletinId);
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
                 statusId == Status.Active;
@@ -290,11 +290,11 @@ namespace MJ_CAIS.Services
             return filteredDocuments.ProjectTo<DocumentDTO>(mapperConfiguration);
         }
 
-        public async Task<IQueryable<BulletinStatusHistoryDTO>> GetStatusHistoryByBulletinIdAsync(string aId)
+        public IQueryable<BulletinStatusHistoryDTO> GetStatusHistoryByBulletinId(string aId)
         {
-            var statues = await _bulletinRepository.SelectAllStatusHistoryDataAsync();
+            var statues = _bulletinRepository.SelectAllStatusHistoryData();
             var filteredStatuses = statues.Where(x => x.BulletinId == aId);
-            return filteredStatuses.ProjectTo<BulletinStatusHistoryDTO>(mapperConfiguration);
+            return filteredStatuses;
         }
 
         public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
@@ -450,7 +450,7 @@ namespace MJ_CAIS.Services
             }
 
             // save old status
-            var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id, entity.Locked);
+            var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id);
             if (isAddedHistory)
             {
                 UpdateModifiedProperties(entity, nameof(entity.StatusId));
@@ -547,7 +547,7 @@ namespace MJ_CAIS.Services
         /// <param name="oldStatus">Previous status</param>
         /// <param name="newStatus">New status</param>
         /// <param name="bulletinId">ID</param>
-        private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId, bool? isLocked)
+        private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
         {
             if (oldStatus == newStatus) return false;
 
@@ -558,7 +558,7 @@ namespace MJ_CAIS.Services
                 OldStatusCode = oldStatus,
                 NewStatusCode = newStatus,
                 EntityState = EntityStateEnum.Added,
-                Locked = isLocked
+                Locked = newStatus != BulletinConstants.Status.NewOffice
             };
 
             dbContext.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
@@ -611,13 +611,13 @@ namespace MJ_CAIS.Services
                           {
                               Id = x.Id,
                               EntityState = EntityStateEnum.Deleted,
+                              Version = x.Version
                           }).ToArray(),
+                          Version = x.Version
                       }).ToListAsync();
 
             return deletedSanctionAndItsProbations;
         }
-
-
 
         private void UpdateModifiedProperties(BaseEntity entityToSave, string nameOfProp)
         {

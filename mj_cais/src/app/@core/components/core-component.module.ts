@@ -17,8 +17,6 @@ import { CaisGridPagerComponent } from "./grid/cais-grid-pager/cais-grid-pager.c
 import { GridWithTransactionsComponent } from "./grid/grid-with-transactions.component";
 import { ValidationMessageComponent } from "./validation-message/validation-message.component";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatInputModule } from "@angular/material/input";
 import { NbCardModule } from "@nebular/theme";
 import { SharedModule } from "../../shared.module";
@@ -54,8 +52,8 @@ const COMPONENTS = [
     SharedModule,
     NgSelectModule,
     MatInputModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
+    // MatDatepickerModule,
+    // MatMomentDateModule,
     NbCardModule,
   ],
 })

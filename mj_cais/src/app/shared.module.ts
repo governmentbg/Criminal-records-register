@@ -4,8 +4,10 @@ import {
   IgxActionStripModule,
   IgxCalendarModule,
   IgxComboModule,
+  IgxDatePickerModule,
   IgxDialogModule,
   IgxGridModule,
+  IgxTimePickerModule,
   IgxTreeGridModule,
 } from "@infragistics/igniteui-angular";
 import {
@@ -61,6 +63,8 @@ import { NgxPermissionsModule } from "ngx-permissions";
     MatMenuModule,
     NbToggleModule,
     NgxPermissionsModule.forChild(),
+    IgxDatePickerModule,
+    IgxTimePickerModule
   ],
   exports: [
     TlCommonModule,
@@ -90,6 +94,8 @@ import { NgxPermissionsModule } from "ngx-permissions";
     MatMenuModule,
     NbToggleModule,
     NgxPermissionsModule,
+    IgxDatePickerModule,
+    IgxTimePickerModule
   ],
 })
 export class SharedModule {}

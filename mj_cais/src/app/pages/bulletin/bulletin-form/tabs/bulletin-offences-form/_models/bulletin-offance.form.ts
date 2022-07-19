@@ -17,7 +17,6 @@ export class BulletinOffenceForm extends BaseForm {
   public offStartDate: FormControl;
   public offEndDate: FormControl;
   public offPlace: AddressForm;
-  // public testDate: DatePrecisionModelForm;
 
   constructor() {
     super();
@@ -29,9 +28,8 @@ export class BulletinOffenceForm extends BaseForm {
     this.ecrisOffCatName = new FormControl(null);
     this.legalProvisions = new FormControl(null);
     this.offStartDate = new FormControl(null);
-    this.offEndDate = new FormControl(null, [Validators.required]); // тодо: крайна дата, ако е период
+    this.offEndDate = new FormControl(null, [Validators.required]);
     this.offPlace = new AddressForm();
-    //this.testDate = new DatePrecisionModelForm(false,false);
 
     this.group = new FormGroup({
       id: this.id,
@@ -46,7 +44,6 @@ export class BulletinOffenceForm extends BaseForm {
       legalProvisions: this.legalProvisions,
       offEndDate: this.offEndDate,
       offPlace: this.offPlace.group,
-      //testDate: this.testDate.group
     });
   }
 }

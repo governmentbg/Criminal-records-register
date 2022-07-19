@@ -25,7 +25,7 @@ export class PersonSearchFormComponent
     super(service, injector);
   }
 
-  @Input() title: string = 'Тъсене на лице';
+  @Input() title: string = 'Търсене на лице';
   @Input() existingPersonId: string;
   @Input() isRemindPersonForm: boolean = false;
 

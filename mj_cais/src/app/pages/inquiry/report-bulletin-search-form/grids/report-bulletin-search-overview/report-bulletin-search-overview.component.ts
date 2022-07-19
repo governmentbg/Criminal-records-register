@@ -70,13 +70,19 @@ export class ReportBulletinSearchOverviewComponent extends RemoteGridWithStatePe
           });
         })
       )
-      .subscribe((data) => {
-        // Here are the changes
-        let title = this.title ?? "Справка по характеристики на бюлетини";
-        let options = new IgxExcelExporterOptions(title);
-        options.columnWidth = 30;
-        this.exportService.exportData(data, options);
-      });
+      .subscribe(
+        (data) => {
+          // Here are the changes
+          let title = this.title ?? "Справка по характеристики на бюлетини";
+          let options = new IgxExcelExporterOptions(title);
+          options.columnWidth = 30;
+          this.exportService.exportData(data, options);
+        },
+        (error) => {
+          var errorText = error.status + " " + error.statusText;
+          this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+        }
+      );
   }
 
   // Overriding default behaviour
@@ -86,22 +92,18 @@ export class ReportBulletinSearchOverviewComponent extends RemoteGridWithStatePe
 
   private getFilterQuery(): string {
     let formObj = this.searchForm.group.getRawValue();
+
     let offenceCategory = {};
     offenceCategory["offenceCategory"] =
       this.searchForm.offenceCategory.id.value;
+    formObj.offenceCategory = null;
+
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
     filterQuery = this.service.constructQueryParamsByFilters(
       offenceCategory,
       filterQuery
     );
-
-    //when has default value date is not of type moment
-    if (this.searchForm.fromDate.value && filterQuery.indexOf("fromDate") < 0) {
-      filterQuery += `&fromDate=${this.searchForm.fromDate.value.toISOString()}`;
-    }
-    if (this.searchForm.toDate.value && filterQuery.indexOf("toDate") < 0) {
-      filterQuery += `&toDate=${this.searchForm.toDate.value.toISOString()}`;
-    }
+ 
     return filterQuery;
   }
 }

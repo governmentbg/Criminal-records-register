@@ -139,7 +139,7 @@
         </span>
       </div>
     </div>
-    <div class="cais-display-form-group">
+    <div class="cais-display-form-group mt-3">
       <div class="label">Родители</div>
     </div>
     <hr />
@@ -163,6 +163,37 @@
         </div>
       </div>
     </div>
+    <div class="cais-display-form-group">
+      <div class="label">Брой бюлетини</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">{{BulletinTypeConstants.bulletin78A.name}}: </span>
+          <span>
+            {{ model.bulletin78ACount}}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">{{BulletinTypeConstants.convictionBulletin.name}}: </span>
+          <span>
+            {{ model.convictionBulletinCount }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">{{BulletinTypeConstants.unspecified.name}}: </span>
+          <span>
+            {{ model.bulletinUnspecifiedCount}}
+          </span>
+        </div>
+      </div>
+    </div>
+  
     <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
       <nb-tab #bulletinTab [tabTitle]="bulletinsTabTitle">
         <cais-person-bulletin-overview></cais-person-bulletin-overview>

@@ -39,15 +39,17 @@ export class DatePrecisionModelForm {
   public getFullYear(): Date {
     if (this.precision.value == DatePrecisionConstants.fullDate.id) {
       return this.date.value;
-    } else if (this.precision.value == DatePrecisionConstants.yearAndMonth.id) {
-      let newDate = new Date(this.year.value, this.month.value, 1);
-      return newDate;
     }
-    if (this.precision.value == DatePrecisionConstants.fullDate.id) {
-      let newDate = new Date(this.year.value, 1, 1);
+
+    if (this.precision.value == DatePrecisionConstants.yearAndMonth.id) {
+      let newDate = new Date(this.year.value, this.month.value - 1, 1);
       return newDate;
     }
 
+    if (this.precision.value == DatePrecisionConstants.year.id) {
+      let newDate = new Date(this.year.value, 0, 1);
+      return newDate;
+    }
     return null;
   }
 }

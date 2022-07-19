@@ -12,8 +12,5 @@
 
         public DateTime? DecisionDate { get; set; }
 
-        public IEnumerable<SanctionEventDTO> Sanctions { get; set; }
-        
-        public IEnumerable<DateTime?> OffencesEndDates { get; set; }
     }
 }
