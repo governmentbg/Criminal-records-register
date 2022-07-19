@@ -147,7 +147,7 @@ namespace MJ_CAIS.Services
             personToUpdate.EntityState = EntityStateEnum.Modified;
 
             // call logic for only one person
-            UpdatePersonDataWhenHasOnePerson(personToUpdate);
+            UpdatePersonDataWhenHasOnePerson(personToUpdate, false);
             await dbContext.SaveChangesAsync();
         }
 
@@ -322,7 +322,9 @@ namespace MJ_CAIS.Services
             // it can add connection to the those pids
             personToUpdate.PPersonIds = existingPerson.PPersonIds;
 
-            return UpdatePersonDataWhenHasOnePerson(personToUpdate);
+            // check person data
+            var isPersonEqueals = personToUpdate.Equals(existingPerson);
+            return UpdatePersonDataWhenHasOnePerson(personToUpdate, isPersonEqueals);
         }
 
         /// <summary>
@@ -331,7 +333,7 @@ namespace MJ_CAIS.Services
         /// <param name="personToUpdate">Person with updated data</param>
         /// <returns>Updated person includes the identifiers</returns>
         /// </summary>
-        private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate)
+        private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate, bool isPersonEqueals)
         {
             if (personToUpdate.ModifiedProperties == null)
             {
@@ -341,6 +343,10 @@ namespace MJ_CAIS.Services
                     nameof(personToUpdate.Version)
                 };
             }
+
+            var allPidsExists = personToUpdate.PPersonIds.All(x => x.EntityState == EntityStateEnum.Unchanged);
+            var allNationalitiesExists = personToUpdate.PPersonCitizenships.All(x => x.EntityState == EntityStateEnum.Unchanged);
+            if(allPidsExists && allNationalitiesExists && isPersonEqueals) return personToUpdate;
 
             // create person history object with old data
             var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);

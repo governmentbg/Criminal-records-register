@@ -500,7 +500,7 @@ namespace MJ_CAIS.Services
                 else if (personIdObj.PidTypeId == PidType.DocumentId)
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.IdDocNumber));
-                    bulletin.EgnNavigation = personIdObj;
+                    bulletin.IdDocNumberId = personIdObj.Id;
 
                 }
                 else if (personIdObj.PidTypeId == PidType.Suid)

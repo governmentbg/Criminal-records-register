@@ -263,7 +263,7 @@ namespace MJ_CAIS.Repositories.Impl
                 var pidDb = await _dbContext.PPersonIds
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(x =>
-                                        x.Pid.ToUpper() == pidToUpper &&
+                                        x.Pid == pidToUpper &&
                                         x.PidTypeId == currentPid.Type &&
                                         x.Issuer == currentPid.Issuer &&
                                         x.CountryId == BG);

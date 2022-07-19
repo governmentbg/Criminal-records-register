@@ -14,9 +14,8 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             RuleFor(x => x.DecisionDate).RequredField();
             RuleFor(x => x.DecisionFinalDate).RequredField();
 
-            RuleFor(x => x.DecidingAuthId)
-                .RequredField()
-                .HasMaxLength(50);
+            RuleFor(x => x.CaseAuthId)
+                .RequredField();
 
             RuleFor(x => x.CaseNumber)
                 .RequredField()

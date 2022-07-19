@@ -115,27 +115,27 @@ namespace MJ_CAIS.Repositories.Impl
         public IQueryable<BulletinStatusHistoryDTO> SelectAllStatusHistoryData()
         {
             var query = from bulletinHis in _dbContext.BBulletinStatusHes.AsNoTracking()
-                         join newStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.NewStatusCode equals newStatus.Code
-                             into newStatusLeft
-                         from newStatus in newStatusLeft.DefaultIfEmpty()
-                         join oldStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.OldStatusCode equals oldStatus.Code
-                            into oldStatusLeft
-                         from oldStatus in oldStatusLeft.DefaultIfEmpty()
-                         join user in _dbContext.GUsers.AsNoTracking() on bulletinHis.CreatedBy equals user.Id
-                           into userLeft
-                         from user in userLeft.DefaultIfEmpty()
-                         select new BulletinStatusHistoryDTO
-                         {
-                             Id = bulletinHis.Id,
-                             CreatedBy = user.Firstname + " " + user.Surname + " " + user.Familyname,
-                             CreatedOn = bulletinHis.CreatedOn,
-                             Descr = bulletinHis.Descr,
-                             Locked = bulletinHis.Locked,
-                             NewStatus = newStatus.Name,
-                             OldStatus = oldStatus.Name,
-                             Version = bulletinHis.Version,
-                             BulletinId = bulletinHis.BulletinId
-                         };
+                        join newStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.NewStatusCode equals newStatus.Code
+                            into newStatusLeft
+                        from newStatus in newStatusLeft.DefaultIfEmpty()
+                        join oldStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.OldStatusCode equals oldStatus.Code
+                           into oldStatusLeft
+                        from oldStatus in oldStatusLeft.DefaultIfEmpty()
+                        join user in _dbContext.GUsers.AsNoTracking() on bulletinHis.CreatedBy equals user.Id
+                          into userLeft
+                        from user in userLeft.DefaultIfEmpty()
+                        select new BulletinStatusHistoryDTO
+                        {
+                            Id = bulletinHis.Id,
+                            CreatedBy = user.Firstname + " " + user.Surname + " " + user.Familyname,
+                            CreatedOn = bulletinHis.CreatedOn,
+                            Descr = bulletinHis.Descr,
+                            Locked = bulletinHis.Locked,
+                            NewStatus = newStatus.Name,
+                            OldStatus = oldStatus.Name,
+                            Version = bulletinHis.Version,
+                            BulletinId = bulletinHis.BulletinId
+                        };
 
             return query;
         }
@@ -318,8 +318,10 @@ namespace MJ_CAIS.Repositories.Impl
 
                     // Set parameters
 
-                    cmd.Parameters.Add(new OracleParameter("p_date_from", OracleDbType.Date, searchParams.FromDate, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_date_to", OracleDbType.Date, searchParams.ToDate, ParameterDirection.Input));
+                    var fromDate = searchParams.FromDate.HasValue ? searchParams.FromDate.Value.Date : (DateTime?)null;
+                    var toDate = searchParams.ToDate.HasValue ? searchParams.ToDate.Value.Date : (DateTime?)null;
+                    cmd.Parameters.Add(new OracleParameter("p_date_from", OracleDbType.Date, fromDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_date_to", OracleDbType.Date, toDate, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_cs_authority", OracleDbType.Varchar2, searchParams.Authority, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
 

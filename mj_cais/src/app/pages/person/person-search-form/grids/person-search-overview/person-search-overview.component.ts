@@ -46,7 +46,11 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
       if (date) {
         formObj["birthDatePrec"] = this.searchForm.birthDate.precision.value;
         formObj["birthDate"] = date.toISOString();
+      }else{
+        formObj["birthDate"] = null;
       }
+    }else{
+      formObj["birthDate"] = null;
     }
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
     this.service.updateUrl(`people?${filterQuery}`);
