@@ -69,47 +69,6 @@ namespace MJ_CAIS.Repositories.Impl
                 });
 
             return query;
-        }
-
-        public IQueryable<FbbcByPersonIdDTO> GetAllFbbcsByPersonId(string personId)
-        {
-            var fbbcByEgn = from fbbc in _dbContext.Fbbcs.AsNoTracking()
-                            join egn in _dbContext.PPersonIds.AsNoTracking() on fbbc.PersonId equals egn.Id
-                            where egn.PersonId == personId
-                            select new FbbcByPersonIdDTO
-                            {
-                                Id = fbbc.Id,
-                                DocTypeId = fbbc.DocTypeId,
-                                ReceiveDate = fbbc.ReceiveDate,
-                                CountryId = fbbc.CountryId,
-                                Egn = fbbc.Egn,
-                                Firstname = fbbc.Firstname,
-                                Surname = fbbc.Surname,
-                                Familyname = fbbc.Familyname,
-                                BirthDate = fbbc.BirthDate,
-                                CreatedOn = fbbc.CreatedOn
-                            };
-
-            var fbbcBySuid = from fbbc in _dbContext.Fbbcs.AsNoTracking()
-                             join suid in _dbContext.PPersonIds.AsNoTracking() on fbbc.SuidId equals suid.Id
-                             where suid.PersonId == personId
-                             select new FbbcByPersonIdDTO
-                             {
-                                 Id = fbbc.Id,
-                                 DocTypeId = fbbc.DocTypeId,
-                                 ReceiveDate = fbbc.ReceiveDate,
-                                 CountryId = fbbc.CountryId,
-                                 Egn = fbbc.Egn,
-                                 Firstname = fbbc.Firstname,
-                                 Surname = fbbc.Surname,
-                                 Familyname = fbbc.Familyname,
-                                 BirthDate = fbbc.BirthDate,
-                                 CreatedOn = fbbc.CreatedOn
-                             };
-
-            var allFbbcs = fbbcByEgn.Union(fbbcBySuid);
-
-            return allFbbcs;
-        }
+        }     
     }
 }

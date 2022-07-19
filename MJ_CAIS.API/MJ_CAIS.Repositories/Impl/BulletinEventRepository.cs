@@ -11,11 +11,15 @@ namespace MJ_CAIS.Repositories.Impl
     public class BulletinEventRepository : BaseAsyncRepository<BBulEvent, CaisDbContext>, IBulletinEventRepository
     {
         private readonly IUserContext _userContext;
+        private readonly IPersonHelperRepository _personHelperRepository;
 
-        public BulletinEventRepository(CaisDbContext dbContext, IUserContext userContext)
+        public BulletinEventRepository(CaisDbContext dbContext,
+            IUserContext userContext,
+            IPersonHelperRepository personHelperRepository)
             : base(dbContext)
         {
             _userContext = userContext;
+            _personHelperRepository = personHelperRepository;
         }
 
         public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId, string? bulletinId)
@@ -55,81 +59,23 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<BulletinSancttionsEventDTO> GetBulletinsByPersonId(string personId)
         {
-            var query = _dbContext.BBulletins
-                   .Include(x => x.EgnNavigation)
-                   .Include(x => x.LnchNavigation)
-                   .Include(x => x.LnNavigation)
-                   .Include(x => x.IdDocNumberNavigation)
-                   .Include(x => x.SuidNavigation)
-                   .Where(bulletin => bulletin.StatusId == BulletinConstants.Status.Active ||
+            var query = _personHelperRepository.GetAllBulletinsForEventsByPersonId(personId)
+               .Where(bulletin => bulletin.StatusId == BulletinConstants.Status.Active ||
                                       bulletin.StatusId == BulletinConstants.Status.ForRehabilitation ||
                                       bulletin.StatusId == BulletinConstants.Status.NoSanction)
-                   .Where(x => x.EgnNavigation.PersonId == personId ||
-                             x.LnchNavigation.PersonId == personId ||
-                             x.LnNavigation.PersonId == personId ||
-                             x.IdDocNumberNavigation.PersonId == personId ||
-                             x.SuidNavigation.PersonId == personId)
-                   .Select(bulletin => new BulletinSancttionsEventDTO
-                   {
-                       Id = bulletin.Id,
-                       DecisionDate = bulletin.DecisionDate,
-                       PrevSuspSent = bulletin.PrevSuspSent,
-                       StatusId = bulletin.StatusId,
-                       Version = bulletin.Version,
-                       BulletinType = bulletin.BulletinType,
-                       CaseType = bulletin.CaseTypeId,
-                       Sanctions = bulletin.BSanctions.Select(x => new SanctionEventDTO
-                       {
-                           Id = x.Id,
-                           SuspentionDurationDays = x.SuspentionDurationDays,
-                           SuspentionDurationHours = x.SuspentionDurationHours,
-                           SuspentionDurationMonths = x.SuspentionDurationMonths,
-                           SuspentionDurationYears = x.SuspentionDurationYears,
-                           Type = x.SanctCategoryId
-                       }),
-                       OffencesEndDates = bulletin.BOffences.Select(x => x.OffEndDate)
-                   }).GroupBy(x => x.Id).Select(x => x.FirstOrDefault());
+                 .Select(bulletin => new BulletinSancttionsEventDTO
+                 {
+                     Id = bulletin.Id,
+                     DecisionDate = bulletin.DecisionDate,
+                     PrevSuspSent = bulletin.PrevSuspSent,
+                     StatusId = bulletin.StatusId,
+                     Version = bulletin.Version,
+                     BulletinType = bulletin.BulletinType,
+                     CaseType = bulletin.CaseTypeId,
+                 });
 
             return query;
         }
-
-        //public async Task<string> GetPersonIdByBulletinIdAsync(string bulletinId)
-        //{
-        //    var bulletin = await _dbContext.BBulletins.AsNoTracking()
-        //                .Include(x => x.EgnNavigation)
-        //                .Include(x => x.LnchNavigation)
-        //                .Include(x => x.LnNavigation)
-        //                .Include(x => x.IdDocNumberNavigation)
-        //                .Include(x => x.SuidNavigation)
-        //                .FirstOrDefaultAsync(x => x.Id == bulletinId);
-
-        //    if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
-        //    {
-        //       return bulletin.EgnNavigation.PersonId;
-        //    }
-           
-        //    if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
-        //    {
-        //        return bulletin.LnchNavigation.PersonId;
-        //    }
-           
-        //    if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
-        //    {
-        //        return bulletin.LnNavigation.PersonId;
-        //    }
-            
-        //    if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
-        //    {
-        //        return bulletin.IdDocNumberNavigation.PersonId;
-        //    }
-            
-        //    if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
-        //    {
-        //       return bulletin.SuidNavigation.PersonId;
-        //    }
-
-        //    return null;
-        //}
 
         public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
@@ -145,6 +91,33 @@ namespace MJ_CAIS.Repositories.Impl
                 {
                     Status = x.Key,
                     Count = x.Count()
+                });
+
+            return query;
+        }
+
+        public IQueryable<DateTime?> GetOffencesEndDatesByBulletinId(string bulletinId)
+        {
+            var query = _dbContext.BOffences.AsNoTracking()
+                .Where(x => x.BulletinId == bulletinId)
+                .Select(x => x.OffEndDate);
+
+            return query;
+        }
+
+        public IQueryable<SanctionEventDTO> GetSanctionsSuspentionByBulletinId(List<string> bulletinIds)
+        {
+            var query = _dbContext.BSanctions.AsNoTracking()
+                .Where(x => bulletinIds.Contains(x.BulletinId))
+                .Select(x => new SanctionEventDTO
+                {
+                    Id = x.Id,
+                    SuspentionDurationDays = x.SuspentionDurationDays,
+                    SuspentionDurationHours = x.SuspentionDurationHours,
+                    SuspentionDurationMonths = x.SuspentionDurationMonths,
+                    SuspentionDurationYears = x.SuspentionDurationYears,
+                    Type = x.SanctCategoryId,
+                    BulletinId = x.BulletinId
                 });
 
             return query;

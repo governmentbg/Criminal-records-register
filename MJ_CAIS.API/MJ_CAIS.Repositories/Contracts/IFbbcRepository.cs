@@ -9,6 +9,5 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<IQueryable<FbbcGridDTO>> SelectByStatusCodeAsync(string statusCode);
         IQueryable<ObjectStatusCountDTO> GetStatusCount();
-        IQueryable<FbbcByPersonIdDTO> GetAllFbbcsByPersonId(string personId);
     }
 }

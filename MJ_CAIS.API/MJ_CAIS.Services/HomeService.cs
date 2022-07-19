@@ -144,9 +144,6 @@ namespace MJ_CAIS.Services
             var fbbcStatusesCountQuery = _fbbcRepository.GetStatusCount();
             var fbbcStatuses = await fbbcStatusesCountQuery.ToListAsync();
 
-            //result.New = fbbcStatuses
-            //    .FirstOrDefault(x => x.Status == FbbcConstants.FBBCStatus.Active)?.Count ?? 0;
-
             result.ForDestruction = fbbcStatuses
                 .FirstOrDefault(x => x.Status == FbbcConstants.FBBCStatus.ForDelete)?.Count ?? 0;
 

@@ -11,8 +11,10 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<BulletinSancttionsEventDTO> GetBulletinsByPersonId(string personId);
 
-        //Task<string> GetPersonIdByBulletinIdAsync(string bulletinId);
-
         IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
+
+        IQueryable<DateTime?> GetOffencesEndDatesByBulletinId(string bulletinId);
+
+        IQueryable<SanctionEventDTO> GetSanctionsSuspentionByBulletinId(List<string> bulletinId);
     }
 }

@@ -45,7 +45,5 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams);
 
         Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams);
-
-        IQueryable<BulletinByPersonIdDTO> GetBulletinsByPersonId(string personId);
     }
 }

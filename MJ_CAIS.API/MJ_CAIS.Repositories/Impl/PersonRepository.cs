@@ -16,19 +16,13 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class PersonRepository : BaseAsyncRepository<PPerson, CaisDbContext>, IPersonRepository
     {
-        private readonly IApplicationRepository _applicationRepository;
-        private readonly IBulletinRepository _bulletinRepository;
-        private readonly IFbbcRepository _fbbcRepository;
+        private readonly IPersonHelperRepository _personHelperRepository;
 
         public PersonRepository(CaisDbContext dbContext,
-            IApplicationRepository applicationRepository,
-            IBulletinRepository bulletinRepository,
-            IFbbcRepository fbbcRepository)
+            IPersonHelperRepository personHelperRepository)
             : base(dbContext)
         {
-            _applicationRepository = applicationRepository;
-            _bulletinRepository = bulletinRepository;
-            _fbbcRepository = fbbcRepository;
+            _personHelperRepository = personHelperRepository;
         }
 
         public override async Task<PPerson> SelectAsync(string id)
@@ -53,7 +47,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId)
         {
-            var bulletins = _bulletinRepository.GetBulletinsByPersonId(personId);
+            var bulletins = _personHelperRepository.GetAllBulletinsByPersonId(personId);
 
             var query = from bulletin in bulletins
                         join auth in _dbContext.GDecidingAuthorities.AsNoTracking() on bulletin.BulletinAuthorityId equals auth.Id
@@ -84,7 +78,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId)
         {
-            var allApplications = _applicationRepository.GetAppAplicationsByPersonId(personId);
+            var allApplications = _personHelperRepository.GetAllAplicationsByPersonId(personId);
 
             var query = from certificate in _dbContext.ACertificates
                         join application in allApplications on certificate.ApplicationId equals application.ApplicationId
@@ -117,7 +111,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<PersonEApplicationGridDTO> GetEApplicationsByPersonId(string personId)
         {
-            var allApplications = _applicationRepository.GetAppAplicationsByPersonId(personId);
+            var allApplications = _personHelperRepository.GetAllAplicationsByPersonId(personId);
 
             var query = from certificate in _dbContext.ACertificates
                         join application in allApplications on certificate.ApplicationId equals application.ApplicationId
@@ -149,7 +143,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId)
         {
-            var allFbbcs = _fbbcRepository.GetAllFbbcsByPersonId(personId);
+            var allFbbcs = _personHelperRepository.GetAllFbbcsByPersonId(personId);
 
             var query = from fbbc in allFbbcs
                         join docType in _dbContext.FbbcDocTypes.AsNoTracking() on fbbc.DocTypeId equals docType.Id
@@ -302,7 +296,7 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId)
         {
-            var allBulletins = _bulletinRepository.GetBulletinsByPersonId(personId);
+            var allBulletins = _personHelperRepository.GetAllBulletinsByPersonId(personId);
             var restult = allBulletins.GroupBy(x => x.BulletinType)
                 .Select(x => new ObjectStatusCountDTO
                 {
