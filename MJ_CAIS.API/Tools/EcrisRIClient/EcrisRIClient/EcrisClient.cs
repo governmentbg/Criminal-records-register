@@ -167,7 +167,8 @@ namespace EcrisRIClient
                 PageNumber = pageNumber,
                 PageNumberSpecified = true,
                 MessagesSortedBy = MessageSortByType.ReceivedSendDateAsc,
-                MessagesSortedBySpecified = true
+                MessagesSortedBySpecified = true,
+                 
             };
 
             var response = await client.performSearchAsync(request);

@@ -148,6 +148,8 @@ namespace EcrisRIClient.Mappers
                  .ReverseMap();
             CreateMap<EcrisRIClient.EcrisService.SanctionSuspensionType, MJ_CAIS.DTO.EcrisService.SanctionSuspensionType>()
                  .ReverseMap();
+            CreateMap<EcrisRIClient.EcrisService.SanctionTypeOfSuspensionExternalReferenceType, MJ_CAIS.DTO.EcrisService.SanctionTypeOfSuspensionExternalReferenceType>()
+            .ReverseMap();
             CreateMap<EcrisRIClient.EcrisService.SanctionInterruptionType, MJ_CAIS.DTO.EcrisService.SanctionInterruptionType>()
                  .ReverseMap();
             CreateMap<EcrisRIClient.EcrisService.DecisionToSanctionsRelationshipType, MJ_CAIS.DTO.EcrisService.DecisionToSanctionsRelationshipType>()

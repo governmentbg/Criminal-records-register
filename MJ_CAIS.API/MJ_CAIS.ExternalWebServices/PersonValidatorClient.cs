@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace MJ_CAIS.ExternalWebServices
@@ -38,10 +40,36 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<PersonInfoResponse> GetPersonInfo(PersonInfoRequest request)
         {
-            var httpClient = GetHttpClient(_configuration);
-            var postData = new FormUrlEncodedContent(request.GetKeyValuePairs());
+            if (string.IsNullOrEmpty(request.fname))
+            {
+                throw new Exception("Първо име не е въведено.");
+            }
 
-            var data = await httpClient.PostAsync(ApiEndpoint, postData);
+            if(string.IsNullOrEmpty(request.year) || string.IsNullOrEmpty(request.month) || string.IsNullOrEmpty(request.day))
+            {
+                throw new Exception("Рожденната дата не е коректна.");
+            }
+
+            var httpClient = GetHttpClient(_configuration);
+            HttpResponseMessage data;
+            var dict = request.GetKeyValuePairs();
+            if (!String.IsNullOrEmpty(request.fname) && !String.IsNullOrEmpty(request.sname) && !String.IsNullOrEmpty(request.lname))
+            {
+              
+                dict.Remove("fullname");
+                var postData = new FormUrlEncodedContent(dict);
+                data = await httpClient.PostAsync(ApiEndpoint, postData);
+            }
+            else
+            {
+              
+                dict.Remove("fname");
+                dict.Remove("sname");
+                dict.Remove("lname");
+                var postData = new FormUrlEncodedContent(dict);
+                data = await httpClient.PostAsync(ApiEndpoint, postData);
+            }
+
             if (!data.IsSuccessStatusCode)
             {
                 var errorContent = await data.Content.ReadAsStringAsync();
@@ -56,6 +84,7 @@ namespace MJ_CAIS.ExternalWebServices
             return result;
         }
 
+
         internal static void ConfigureHttpClient(HttpClient httpClient, string host)
         {
             var headers = httpClient.DefaultRequestHeaders;
@@ -66,7 +95,7 @@ namespace MJ_CAIS.ExternalWebServices
             headers.Add("Host", new Uri(host).Host);
         }
 
-        public async Task<List<PersonData>> GetPersonInfo(string firstname, string surname, string familyname, string sex, DateTime birthDate, string matchTreshold = "0.6")
+        public async Task<List<PersonData>> GetPersonInfo(string firstname, string? surname, string? familyname, PersonInfoGenderType sex, DateTime birthDate, string matchTreshold = "0.6")
         {
 
             PersonInfoRequest reqidentifiacition = new PersonInfoRequest();
