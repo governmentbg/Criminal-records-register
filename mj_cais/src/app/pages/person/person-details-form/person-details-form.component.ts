@@ -24,16 +24,6 @@ export class PersonDetailsFormComponent
   >
   implements OnInit
 {
-  constructor(
-    service: PersonDetailsService,
-    public injector: Injector,
-    public bulletinsGridService: PersonBulletinGridService,
-    public applicationGridService: PersonApplicationGridService,
-    public fbbcGridService: PersonFbbcGridService
-  ) {
-    super(service, injector);
-  }
-
   public personId: string;
   public model: PersonModel;
   public PersonContextEnum = PersonContextEnum;
@@ -49,6 +39,16 @@ export class PersonDetailsFormComponent
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;
   public showPidsTab: boolean = false;
+
+  constructor(
+    service: PersonDetailsService,
+    public injector: Injector,
+    public bulletinsGridService: PersonBulletinGridService,
+    public applicationGridService: PersonApplicationGridService,
+    public fbbcGridService: PersonFbbcGridService,
+  ) {
+    super(service, injector);
+  }
 
   ngOnInit(): void {
     this.model = this.dbData.element as any;

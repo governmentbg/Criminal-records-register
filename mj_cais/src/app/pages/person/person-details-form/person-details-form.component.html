@@ -170,15 +170,19 @@
     <div class="row mb-3">
       <div class="col-md-2">
         <div class="row col-md-12 cais-display-form-group">
-          <span class="label">{{BulletinTypeConstants.bulletin78A.name}}: </span>
+          <span class="label"
+            >{{ BulletinTypeConstants.bulletin78A.name }}:
+          </span>
           <span>
-            {{ model.bulletin78ACount}}
+            {{ model.bulletin78ACount }}
           </span>
         </div>
       </div>
       <div class="col-md-2">
         <div class="row col-md-12 cais-display-form-group">
-          <span class="label">{{BulletinTypeConstants.convictionBulletin.name}}: </span>
+          <span class="label"
+            >{{ BulletinTypeConstants.convictionBulletin.name }}:
+          </span>
           <span>
             {{ model.convictionBulletinCount }}
           </span>
@@ -186,14 +190,16 @@
       </div>
       <div class="col-md-2">
         <div class="row col-md-12 cais-display-form-group">
-          <span class="label">{{BulletinTypeConstants.unspecified.name}}: </span>
+          <span class="label"
+            >{{ BulletinTypeConstants.unspecified.name }}:
+          </span>
           <span>
-            {{ model.bulletinUnspecifiedCount}}
+            {{ model.bulletinUnspecifiedCount }}
           </span>
         </div>
       </div>
     </div>
-  
+
     <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
       <nb-tab #bulletinTab [tabTitle]="bulletinsTabTitle">
         <cais-person-bulletin-overview></cais-person-bulletin-overview>
@@ -215,7 +221,9 @@
       </nb-tab>
       <nb-tab [tabTitle]="pidsTabTitle">
         <ng-container *ngIf="showPidsTab">
-          <cais-person-pid-overview></cais-person-pid-overview>
+          <cais-person-pid-overview
+            [personModel]="this.dbData.element"
+          ></cais-person-pid-overview>
         </ng-container>
       </nb-tab>
     </nb-tabset>
