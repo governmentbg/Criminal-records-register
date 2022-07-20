@@ -24,5 +24,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<PersonPidGridDTO> GetPidsByPersonId(string personId);
 
         IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
+
+        Task<PPersonId> GetPersonIdByIdAsync(string pidId);
     }
 }

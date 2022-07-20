@@ -27,5 +27,6 @@ namespace MJ_CAIS.Services.Contracts
         Task ConnectPeopleAsync(string aId, string personToBeConnected);
 
         IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
+        Task<PPersonId> RemovePidAsync(RemovePidDTO aInDto);
     }
 }

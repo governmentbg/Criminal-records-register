@@ -1,4 +1,4 @@
-import { Component, Injector,  Input, ViewChild } from "@angular/core";
+import { Component, Injector, Input, ViewChild } from "@angular/core";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { PersonModel } from "../../../../../@core/components/forms/person-form/_models/person.model";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
@@ -19,7 +19,6 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
   PersonPidGridModel,
   PersonPidGridService
 > {
-
   public personId: string;
   public countries: BaseNomenclatureModel[];
   public genderTypes: BaseNomenclatureModel[];
@@ -29,7 +28,7 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
 
   @ViewChild("removePidDialog", { read: IgxDialogComponent })
   public dialog: IgxDialogComponent;
-  
+
   constructor(
     public service: PersonPidGridService,
     public injector: Injector,
@@ -39,7 +38,6 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
   ) {
     super("person-pids-search", service, injector);
   }
-
 
   ngOnInit() {
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
@@ -58,8 +56,8 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
   }
 
   onOpenDialogForRemovePid(personId, pidId) {
-    if(this.personModel.birthDate ){
-      this.personModel.birthDate = new Date(this.personModel.birthDate)
+    if (this.personModel.birthDate) {
+      this.personModel.birthDate = new Date(this.personModel.birthDate);
     }
     this.personForm.group.patchValue(this.personModel);
     this.personForm.existinPersonId.patchValue(personId);
@@ -67,7 +65,30 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
     this.dialog.open();
   }
 
-  onRemovePid() {}
+  onRemovePid() {
+    if (!this.personForm.group.valid) {
+      this.personForm.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+      return;
+    }
+
+    this.loaderService.showSpinner(this.service);
+    let formObject = this.personForm.group.value;
+
+    this.service.removePid(formObject).subscribe(
+      (resp) => {
+        this.loaderService.hideSpinner(this.service);
+        this.toastr.showToast("success", "Успешно премахване на идентификатор");
+        this.router.navigate([this.router.url]);
+      },
+      (error) => {
+        this.loaderService.hideSpinner(this.service);
+
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+      }
+    );
+  }
 
   onCloseDilog() {
     this.dialog.close();

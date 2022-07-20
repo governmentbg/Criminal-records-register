@@ -181,6 +181,39 @@ namespace MJ_CAIS.Services
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
+        /// <summary>
+        /// Remove pid from existing person to new person object
+        /// </summary>
+        public async Task<PPersonId> RemovePidAsync(RemovePidDTO aInDto)
+        {
+            // pid to be updated
+            var pidToBeRemoved = await _personRepository.GetPersonIdByIdAsync(aInDto.PidId);
+            if (pidToBeRemoved == null) return null;
+
+            // new person 
+            var newPersonData = mapper.MapToEntity<RemovePidDTO, PPerson>(aInDto, true);
+            newPersonData.Id = BaseEntity.GenerateNewId();
+            newPersonData.PPersonIds = new List<PPersonId> { pidToBeRemoved };
+            pidToBeRemoved.PersonId = newPersonData.Id;
+            pidToBeRemoved.EntityState = EntityStateEnum.Modified;
+            pidToBeRemoved.ModifiedProperties = new List<string> { nameof(pidToBeRemoved.PersonId), nameof(pidToBeRemoved.Version) };
+
+            // add person history object with pids
+            var personH = mapper.MapToEntity<PPerson, PPersonH>(newPersonData, true);
+
+            var pidH = mapper.MapToEntity<PPersonId, PPersonIdsH>(pidToBeRemoved, true);
+            pidH.Id = BaseEntity.GenerateNewId();
+            personH.PPersonIdsHes = new List<PPersonIdsH> { pidH };
+
+            GeneratePersonCitizenship(newPersonData, personH, aInDto.Nationalities.SelectedForeignKeys);
+
+            dbContext.ApplyChanges(newPersonData, new List<IBaseIdEntity>(), true);
+            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
+
+            await dbContext.SaveChangesAsync();
+            return pidToBeRemoved;
+        }
+
         private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)
         {
             var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
@@ -262,10 +295,22 @@ namespace MJ_CAIS.Services
             var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
             personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
+            GeneratePersonCitizenship(person, personH, aInDto.Nationalities.SelectedForeignKeys);
+
+            dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);
+            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
+            return person;
+        }
+
+        /// <summary>
+        /// Add citizenship data to person and person history obkect
+        /// </summary>
+        private void GeneratePersonCitizenship(PPerson person, PPersonH personH, IEnumerable<string> nationalities)
+        {
             // add person nationalities and nationalities history
             person.PPersonCitizenships = new List<PPersonCitizenship>();
             personH.PPersonHCitizenships = new List<PPersonHCitizenship>();
-            foreach (var nationality in aInDto.Nationalities.SelectedForeignKeys)
+            foreach (var nationality in nationalities)
             {
                 person.PPersonCitizenships.Add(new PPersonCitizenship
                 {
@@ -282,10 +327,6 @@ namespace MJ_CAIS.Services
                     CountryId = nationality,
                 });
             }
-
-            dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);
-            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
-            return person;
         }
 
         /// <summary>
@@ -346,7 +387,7 @@ namespace MJ_CAIS.Services
 
             var allPidsExists = personToUpdate.PPersonIds.All(x => x.EntityState == EntityStateEnum.Unchanged);
             var allNationalitiesExists = personToUpdate.PPersonCitizenships.All(x => x.EntityState == EntityStateEnum.Unchanged);
-            if(allPidsExists && allNationalitiesExists && isPersonEqueals) return personToUpdate;
+            if (allPidsExists && allNationalitiesExists && isPersonEqueals) return personToUpdate;
 
             // create person history object with old data
             var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);

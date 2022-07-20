@@ -83,5 +83,14 @@ namespace MJ_CAIS.Web.Controllers
             await this._personService.ConnectPeopleAsync(aId, personToBeConnected);
             return Ok();
         }
+
+        [HttpPost("remove-pid")]
+        public async Task<IActionResult> RemovePid([FromBody] RemovePidDTO aInDto)
+        {
+            var result =  await this._personService.RemovePidAsync(aInDto);
+            if(result == null) return NotFound();
+
+            return Ok(result.PersonId);
+        }
     }
 }
