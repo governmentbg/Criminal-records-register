@@ -84,6 +84,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{aId}/document")]
+        public async Task<IActionResult> GetEcrisDocument(string aId)
+        {
+            var result = await this._ecrisMessageService.GetEcrisDocumentByIdAsync(aId);
+            return Ok(result);
+        }
+
         [HttpPut("{aId}/change-status/{statusId}")]
         [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> ChangeStatus(string aId, string statusId)

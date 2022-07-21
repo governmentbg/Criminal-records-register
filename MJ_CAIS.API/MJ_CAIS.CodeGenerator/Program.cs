@@ -11,9 +11,9 @@ namespace MJ_CAIS.CodeGenerator
         {
             var parameters = new Parameters()
             {
-                EntityName = "AApplicationStatus",
-                SingleName = "AApplicationStatus",
-                MultipleName = "AApplicationStatuses",
+                EntityName = "DDocument",
+                SingleName = "DDocument",
+                MultipleName = "DDocuments",
                 AngularModuleName = "e-application",
             };
 

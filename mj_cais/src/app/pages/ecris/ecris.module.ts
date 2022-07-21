@@ -7,6 +7,7 @@ import { EcrisIdentificationOverviewComponent } from "./ecris-message-overivew/e
 import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
 import { EcrisMsgNamesOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/ecris-msg-names-overview/ecris-msg-names-overview.component';
 import { GraoPersonOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/grao-person-overview/grao-person-overview.component';
+import { EcrisReqPreviewComponent } from './ecris-message-form/ecris-req-preview/ecris-req-preview.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { GraoPersonOverviewComponent } from './ecris-message-form/ecris-identifi
     EcrisIdentificationFormComponent,
     EcrisMsgNamesOverviewComponent,
     GraoPersonOverviewComponent,
+    EcrisReqPreviewComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],
 })

@@ -14,6 +14,7 @@ import { CountryGridModel } from "../../../@core/components/forms/address-form/d
 import { CountryDialogComponent } from "../../../@core/components/forms/address-form/dialog/country-dialog/country-dialog.component";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
+import { EcrisMessageService } from "../../ecris/ecris-message-form/_data/ecris-message.service";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -35,11 +36,12 @@ export class FbbcFormComponent
   public bgCountryId = CommonConstants.bgCountryId;
   public docType = DocTypeConstants.ECRIS;
   public PersonContextEnum = PersonContextEnum;
-  
+
   constructor(
     service: FbbcService,
     public injector: Injector,
     private dialogService: NbDialogService,
+    private ecrisMessageService: EcrisMessageService,
     public dateFormatService: DateFormatService
   ) {
     super(service, injector);
@@ -60,14 +62,14 @@ export class FbbcFormComponent
     let generatedId = this.fullForm.id.value;
 
     this.fullForm.group.patchValue(this.dbData.element);
-    if(!this.fullForm.id.value){
+    if (!this.fullForm.id.value) {
       this.fullForm.id.patchValue(generatedId);
     }
 
     this.formFinishedLoading.emit();
     this.isForEdit = this.activatedRoute.snapshot.data["edit"];
     this.isForCreate = this.activatedRoute.snapshot.outlet === "primary";
-    if(this.isForEdit) {
+    if (this.isForEdit) {
       this.fullForm.docTypeId.disable();
     }
   }
@@ -101,4 +103,11 @@ export class FbbcFormComponent
       this.fullForm.countryLookup.setValue(item.id, item.name);
     }
   };
+
+  getDocument(id: string) {
+    debugger;
+    this.ecrisMessageService.getEcrisDocument(id).subscribe((x) => {
+      debugger;
+    });
+  }
 }

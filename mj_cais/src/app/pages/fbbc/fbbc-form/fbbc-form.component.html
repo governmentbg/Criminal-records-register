@@ -290,10 +290,7 @@
             <ng-template igxCell let-cell="cell">
               <a
                 [title]="'Преглед'"
-                [routerLink]="[
-                  '/pages/ecris-identification/preview',
-                  cell.rowData.id
-                ]"
+                (click)="getDocument(cell.rowData.id)"
               >
                 <nb-icon pack="fa" icon="eye"></nb-icon>
               </a>

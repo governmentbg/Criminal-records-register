@@ -21,6 +21,10 @@ export class EcrisMessageService extends CaisCrudService<
     return this.http.get<BulletinGridModel[]>(`${this.url}/${id}/bulletins`);
   }
 
+  public getEcrisDocument(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/${id}/document`);
+  }
+
   public getEcrisFbbcs(id: string): Observable<FbbcGridModel[]> {
     return this.http.get<FbbcGridModel[]>(`${this.url}/${id}/fbbcs`);
   }
