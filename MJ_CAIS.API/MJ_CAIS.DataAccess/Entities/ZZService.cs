@@ -56,5 +56,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Nationality5Code { get; set; }
         public string? HasError { get; set; }
         public string? Error { get; set; }
+        public string? SourceCourt { get; set; }
     }
 }

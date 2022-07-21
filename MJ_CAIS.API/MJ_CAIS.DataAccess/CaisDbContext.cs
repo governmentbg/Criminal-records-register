@@ -73,6 +73,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisMsgName> EEcrisMsgNames { get; set; } = null!;
         public virtual DbSet<EEcrisMsgNationality> EEcrisMsgNationalities { get; set; } = null!;
         public virtual DbSet<EEcrisMsgStatus> EEcrisMsgStatuses { get; set; } = null!;
+        public virtual DbSet<EEcrisNomenclature> EEcrisNomenclatures { get; set; } = null!;
         public virtual DbSet<EEcrisOutbox> EEcrisOutboxes { get; set; } = null!;
         public virtual DbSet<EEcrisReference> EEcrisReferences { get; set; } = null!;
         public virtual DbSet<EEcrisTcn> EEcrisTcns { get; set; } = null!;
@@ -123,14 +124,16 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ZBulletin> ZBulletins { get; set; } = null!;
         public virtual DbSet<ZImportFbbc> ZImportFbbcs { get; set; } = null!;
         public virtual DbSet<ZImportFbbcTest> ZImportFbbcTests { get; set; } = null!;
+        public virtual DbSet<ZLog> ZLogs { get; set; } = null!;
         public virtual DbSet<ZPerson> ZPersons { get; set; } = null!;
         public virtual DbSet<ZPersonNationality> ZPersonNationalities { get; set; } = null!;
         public virtual DbSet<ZService> ZServices { get; set; } = null!;
+        public virtual DbSet<ZSourcesDone> ZSourcesDones { get; set; } = null!;
         public virtual DbSet<ZZService> ZZServices { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           // modelBuilder.HasDefaultSchema("MJ_CAIS");
+            modelBuilder.HasDefaultSchema("MJ_CAIS");
 
             modelBuilder.Entity<AAppBulletin>(entity =>
             {
@@ -339,6 +342,14 @@ namespace MJ_CAIS.DataAccess
                 entity.HasIndex(e => e.StatusCode, "XIF8A_APPLICATIONS");
 
                 entity.HasIndex(e => e.BirthCountryId, "XIF9A_APPLICATIONS");
+
+                entity.HasIndex(e => e.EgnId, "XIF_EGN_APPLICATIONS");
+
+                entity.HasIndex(e => e.LnchId, "XIF_LNCH_APPLICATIONS");
+
+                entity.HasIndex(e => e.LnId, "XIF_LN_APPLICATIONS");
+
+                entity.HasIndex(e => e.SuidId, "XIF_SUID_APPLICATIONS");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -1599,7 +1610,19 @@ namespace MJ_CAIS.DataAccess
 
                 entity.HasIndex(e => e.BirthCityId, "XIF9B_BULLETINS");
 
+                entity.HasIndex(e => e.IdDocNumberId, "XIF_DOC_BULLETINS");
+
+                entity.HasIndex(e => e.EgnId, "XIF_EGN_BULLETINS");
+
+                entity.HasIndex(e => e.LnchId, "XIF_LNCH_BULLETINS");
+
+                entity.HasIndex(e => e.LnId, "XIF_LN_BULLETINS");
+
+                entity.HasIndex(e => e.SuidId, "XIF_SUID_BULLETINS");
+
                 entity.HasIndex(e => new { e.CsAuthorityId, e.CreatedOn, e.StatusId }, "XIX_BULLETINS");
+
+                entity.HasIndex(e => e.CreatedOn, "XI_CREATED_BULLETINS");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -4324,6 +4347,70 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
+            });
+
+            modelBuilder.Entity<EEcrisNomenclature>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("E_ECRIS_NOMENCLATURES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(500)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.EcrisTechId)
+                    .HasMaxLength(200)
+                    .HasColumnName("ECRIS_TECH_ID");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.NameBg)
+                    .HasMaxLength(500)
+                    .HasColumnName("NAME_BG");
+
+                entity.Property(e => e.NameEn)
+                    .HasMaxLength(500)
+                    .HasColumnName("NAME_EN");
+
+                entity.Property(e => e.NomCode)
+                    .HasMaxLength(200)
+                    .HasColumnName("NOM_CODE");
+
+                entity.Property(e => e.Num)
+                    .HasMaxLength(200)
+                    .HasColumnName("NUM");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<EEcrisOutbox>(entity =>
@@ -9283,6 +9370,31 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("XML_DATA");
             });
 
+            modelBuilder.Entity<ZLog>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Z_LOG");
+
+                entity.Property(e => e.Info)
+                    .IsUnicode(false)
+                    .HasColumnName("INFO");
+
+                entity.Property(e => e.Line)
+                    .HasPrecision(9)
+                    .HasColumnName("LINE");
+
+                entity.Property(e => e.LogDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("LOG_DATE")
+                    .HasDefaultValueSql("sysdate");
+
+                entity.Property(e => e.ProcedureName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("PROCEDURE_NAME");
+            });
+
             modelBuilder.Entity<ZPerson>(entity =>
             {
                 entity.HasNoKey();
@@ -9570,6 +9682,30 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("XML_REG");
             });
 
+            modelBuilder.Entity<ZSourcesDone>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Z_SOURCES_DONE");
+
+                entity.Property(e => e.ApplicationsDone)
+                    .HasPrecision(2)
+                    .HasColumnName("APPLICATIONS_DONE");
+
+                entity.Property(e => e.BulletinsDone)
+                    .HasPrecision(2)
+                    .HasColumnName("BULLETINS_DONE");
+
+                entity.Property(e => e.ServicesDone)
+                    .HasPrecision(2)
+                    .HasColumnName("SERVICES_DONE");
+
+                entity.Property(e => e.SourceCourt)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("SOURCE_COURT");
+            });
+
             modelBuilder.Entity<ZZService>(entity =>
             {
                 entity.HasNoKey();
@@ -9755,6 +9891,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.SiteId)
                     .HasMaxLength(8)
                     .HasColumnName("SITE_ID");
+
+                entity.Property(e => e.SourceCourt)
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasColumnName("SOURCE_COURT");
 
                 entity.Property(e => e.StatusDate)
                     .HasColumnType("DATE")

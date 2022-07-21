@@ -70,6 +70,11 @@ namespace MJ_CAIS.Services
             return result;
         }
 
+        public Task ChangeStatusAsync(string aInDto, string statusId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<DDocument> GetEcrisDocumentByIdAsync(string ecrisMessageId)
         {
             var ecrisMsg = "0cfd5df5-a14c-436e-afa3-3bdce104bbd9"; // for test
@@ -90,6 +95,7 @@ namespace MJ_CAIS.Services
                 var country = await _dbContext.GCountries.AsNoTracking().FirstOrDefaultAsync(x =>
                     x.Id ==
                     requestMessage.MessagePerson.PersonBirthPlace.PlaceCountryReference.Value);
+
 
                 requestMessage.MessagePerson.PersonBirthPlace.PlaceCountryReference.Value = country.Name;
                 var result = mapper.Map<EcrisRequestDTO>((RequestMessageType)msg);
