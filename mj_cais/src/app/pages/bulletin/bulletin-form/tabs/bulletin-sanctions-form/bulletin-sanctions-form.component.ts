@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import {
   IgxDialogComponent,
   IgxGridCellComponent,
@@ -6,10 +7,14 @@ import {
   IgxGridRowComponent,
   TransactionType,
 } from "@infragistics/igniteui-angular";
+import { EActions } from "@tl/tl-common";
+import { NgxSpinnerService } from "ngx-spinner";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { BulletinService } from "../../_data/bulletin.service";
 import { SanctionCategoryType } from "../../_models/sanction-category-type-constants";
 import { BulletinSanctionForm } from "./_models/bulletin-sanction.form";
+import { BulletinSanctionModel } from "./_models/bulletin-sanction.model";
 
 @Component({
   selector: "cais-bulletin-sanctions-form[isNoSanction]",
@@ -22,7 +27,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   @Input() isForPreview: boolean;
   @Input() decisionDateInput: any;
   @Input() isNoSanction: boolean = false;
-  
+
   @ViewChild("sanctionsGrid", {
     read: IgxGridComponent,
   })
@@ -48,12 +53,33 @@ export class BulletinSanctionsFormComponent implements OnInit {
   public sanctionProbMeasuresOptions: BaseNomenclatureModel[];
   public sanctionCategoriesOptions: BaseNomenclatureModel[];
 
-  constructor(public dateFormatService: DateFormatService) {}
+  public sanctions: BulletinSanctionModel[];
+  constructor(
+    public dateFormatService: DateFormatService,
+    private bulletinService: BulletinService,
+    private loaderService: NgxSpinnerService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.sanctionProbCategoriesOptions = this.dbData.sanctionProbCategories;
     this.sanctionProbMeasuresOptions = this.dbData.sanctionProbMeasures;
     this.sanctionCategoriesOptions = this.dbData.sanctionCategories;
+
+    if (
+      this.activatedRoute.snapshot.routeConfig.path.toUpperCase() ===
+      EActions.CREATE
+    ) {
+      this.sanctions = [];
+      return;
+    }
+    
+    let bulletinId = this.activatedRoute.snapshot.params["ID"];
+    this.loaderService.show();
+    this.bulletinService.getSanctions(bulletinId).subscribe((res) => {
+      this.sanctions = res;
+      this.loaderService.hide();
+    });
   }
 
   ngAfterViewInit(): void {

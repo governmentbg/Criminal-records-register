@@ -11,11 +11,10 @@ import { BulletinDecisionFormComponent } from "./tabs/bulletin-decision-form/bul
 import { BulletinDocumentFormComponent } from "./tabs/bulletin-documents-form/bulletin-document-form.component";
 import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.enum";
 import { EActions } from "@tl/tl-common";
-import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { CommonConstants } from "../../../@core/constants/common.constants";
-import { NbDialogService } from "@nebular/theme";
-import { TranslateService } from "@ngx-translate/core";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
+import { NgxSpinnerService } from "ngx-spinner";
+import { BulletinHelperService } from "../_data/bulletin-helper.service";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -32,35 +31,66 @@ export class BulletinFormComponent
   implements OnInit
 {
   //#region Престъпления
+
   @ViewChild("bulletineOffences", {
     read: BulletinOffencesFormComponent,
   })
   public bulletineOffencesForm: BulletinOffencesFormComponent;
   public isOffancesEditable: boolean;
+
   //#endregion
 
   //#region Наказания
+
   @ViewChild("bulletineSanctions", {
     read: BulletinSanctionsFormComponent,
   })
   public bulletineSanctionsForm: BulletinSanctionsFormComponent;
   public isSanctionsEditable: boolean;
+
   //#endregion
 
   //#region Допълнителни сведения
+
   @ViewChild("bulletineDecisions", {
     read: BulletinDecisionFormComponent,
   })
   public bulletineDescitionForm: BulletinDecisionFormComponent;
   public isDecisionEditable: boolean = false;
+
   //#endregion
 
   //#region Докумнти
+
   @ViewChild("bulletineDocuments", {
     read: BulletinDocumentFormComponent,
   })
   public bulletineDocumentsForm: BulletinDocumentFormComponent;
   public isDocumentsEditable: boolean;
+
+  //#endregion
+
+  //#region Tabset
+
+  public offencesTabTitle = "Престъпления";
+  public sanctionsTabTitle = "Наказания";
+  public decisionTabTitle = "Доп. сведения";
+  public eventsTabTitle = "Уведомления";
+  public documentsTabTitle = "Документи";
+  public isinTabTitle = "Изтърпени наказания";
+  public historyTabTitle = "Одит";
+  public docEventTabTitle =
+    "Уведомяване за променен съдебен статус на осъдено лице";
+
+  public showOffencesTab: boolean = false;
+  public showSanctionsTab: boolean = false;
+  public showDecisionTab: boolean = false;
+  public showEventsTab: boolean = false;
+  public showDocumentsTab: boolean = false;
+  public showIsinTab: boolean = false;
+  public showHistoryTab: boolean = false;
+  public showDocEventTab: boolean = false;
+
   //#endregion
 
   public isNoSanctionCheck: boolean = false;
@@ -72,8 +102,8 @@ export class BulletinFormComponent
   constructor(
     service: BulletinService,
     public injector: Injector,
-    private dialogService: NbDialogService,
-    private translate: TranslateService
+    private loaderService: NgxSpinnerService,
+    private helperService: BulletinHelperService
   ) {
     super(service, injector);
     this.setDisplayTitle("бюлетин");
@@ -124,10 +154,10 @@ export class BulletinFormComponent
         );
 
       this.fullForm.offancesTransactions.setValue(offancesTransactions);
+    } else {
+      this.fullForm.offancesTransactions.setValue([]);
     }
 
-    // if noSanction is false
-    // todo: remove sanction saved in db ???
     if (this.bulletineSanctionsForm?.sanctionGrid) {
       let sanctionsTransactions =
         this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
@@ -146,6 +176,8 @@ export class BulletinFormComponent
         );
 
       this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
+    } else {
+      this.fullForm.decisionsTransactions.setValue([]);
     }
 
     this.validateAndSave(this.fullForm);
@@ -153,60 +185,42 @@ export class BulletinFormComponent
 
   //override submit function
   //todo
-  // onSubmitSuccess(data: any) {
-  //   // if (data?.id) {
-  //   //   const url = `pages/bulletins/preview/${data.id}`;
-  //   //   this.router.navigateByUrl(url);
-  //   // } else {
-  //   //   super.reloadCurrentRoute();
-  //   // }
-  // }
+  onSubmitSuccess(data: any) {
+    debugger;
+    this.loaderService.hide();
+
+    if (data?.id) {
+      const url = `pages/bulletins/preview/${data.id}`;
+      this.router.navigateByUrl(url);
+    } else {
+      super.reloadCurrentRoute();
+    }
+  }
+
+  //override
+  protected validateAndSave(form: any) {
+    debugger;
+    console.log(form.group);
+    if (!form.group.valid) {
+      form.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+
+      this.scrollToValidationError();
+    } else {
+      this.loaderService.show();
+      this.formObject = form.group.value;
+
+      this.saveAndNavigate();
+    }
+  }
 
   public onNoSanctionChange(event: any) {
     this.isNoSanctionCheck = event.target.checked;
   }
 
-  //#region Актуализация на бюлетин
-
   public openUpdateConfirmationDialog() {
-    let dialogRef = this.dialogService.open(
-      ConfirmDialogComponent,
-      CommonConstants.defaultDialogConfig
-    );
-
-    dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
-      "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
-    );
-    dialogRef.componentRef.instance.showHeder = false;
-
-    dialogRef.onClose.subscribe((result) => {
-      if (result) {
-        this.service
-          .changeStatus(this.fullForm.id.value, BulletinStatusTypeEnum.Active)
-          .subscribe(
-            (res) => {
-              this.toastr.showToast(
-                "success",
-                this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
-              );
-              this.router.navigate(["pages/bulletins/active"]);
-            },
-            (error) => {
-              let title = this.dangerMessage;
-              let errorText = error.status + " " + error.statusText;
-              if (error.error && error.error.customMessage) {
-                title = error.error.customMessage;
-                errorText = "";
-              }
-
-              this.toastr.showBodyToast("danger", title, errorText);
-            }
-          );
-      }
-    });
+    this.helperService.openUpdateConfirmationDialog(this.fullForm.id.value);
   }
-
-  //#endregion
 
   private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
     let isGridsEditable =
@@ -237,5 +251,27 @@ export class BulletinFormComponent
     this.showForUpdate =
       this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
       this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+  }
+
+  onChangeTab(event) {
+    let tabTitle = event.tabTitle;
+
+    this.showOffencesTab =
+      !this.showOffencesTab && tabTitle == this.offencesTabTitle;
+    this.showSanctionsTab =
+      !this.showSanctionsTab && tabTitle == this.sanctionsTabTitle;
+    this.showDecisionTab =
+      !this.showDecisionTab && tabTitle == this.decisionTabTitle;
+    this.showEventsTab = !this.showEventsTab && tabTitle == this.eventsTabTitle;
+    this.showDocumentsTab =
+      !this.showDocumentsTab && tabTitle == this.documentsTabTitle;
+    this.showIsinTab = !this.showIsinTab && tabTitle == this.isinTabTitle;
+    this.showHistoryTab =
+      !this.showHistoryTab && tabTitle == this.historyTabTitle;
+  }
+
+  onChangeEventsTab(event) {
+    this.showDocEventTab =
+      !this.showDocEventTab && event.tabTitle == this.docEventTabTitle;
   }
 }

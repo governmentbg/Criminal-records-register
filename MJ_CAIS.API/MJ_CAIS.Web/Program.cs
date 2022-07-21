@@ -23,6 +23,7 @@ namespace MJ_CAIS.Web
                     .AddJsonOptions(options =>
                     {
                         options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
+                        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
                     });
             }
 

@@ -166,7 +166,6 @@ export class BulletinForm extends BaseForm {
     this.decisionDate.setValidators(Validators.required);
     this.decisionFinalDate.setValidators(Validators.required);
     this.decidingAuthId.setValidators([
-      Validators.required,
       Validators.maxLength(50),
     ]);
     this.decisionEcli.setValidators(Validators.maxLength(100));
@@ -177,6 +176,7 @@ export class BulletinForm extends BaseForm {
       Validators.maxLength(100),
     ]);
     this.caseYear.setValidators(Validators.required);
+    this.caseAuthId.setValidators(Validators.required);
     this.statusId.setValidators(Validators.maxLength(50));
   }
 

@@ -8,5 +8,6 @@
         public string? CreatedBy { get; set; }
         public string? Descr { get; set; }
         public bool? Locked { get; set; }
+        public string BulletinId { get; set; }
     }
 }

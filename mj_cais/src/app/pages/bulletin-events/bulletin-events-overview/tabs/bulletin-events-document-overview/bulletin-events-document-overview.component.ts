@@ -1,6 +1,7 @@
 import { Component, Injector, Input } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { LoaderService } from "../../../../../@core/services/common/loader.service";
 import { BulletinEventsGridModel } from "../../_models/bulletin-events-grid.model";
 import { BulletinEventsStatusTypeEnum } from "../../_models/bulletin-events-status-type.enum";
 import { BulletinEventsDocumentGridService } from "./_data/bulletin-events-document-grid.service";
@@ -17,7 +18,8 @@ export class BulletinEventsDocumentOverviewComponent extends RemoteGridWithState
   constructor(
     service: BulletinEventsDocumentGridService,
     injector: Injector,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    public loaderService: LoaderService
   ) {
     super("bulletins-events-document-search", service, injector);
   }
@@ -29,6 +31,7 @@ export class BulletinEventsDocumentOverviewComponent extends RemoteGridWithState
 
   ngOnInit() {
     this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New, this.bulletinId);
+    this.loaderService.showSpinner(this.service);
     super.ngOnInit();
   }
 

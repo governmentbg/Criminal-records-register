@@ -30,8 +30,13 @@ namespace MJ_CAIS.EcrisObjectsServices
             d.Id = BaseEntity.GenerateNewId();
             var docType = dbContext.DDocTypes.FirstOrDefault(dt => dt.Code != null && dt.Code.ToLower() == t.ToString().ToLower());
             d.DocTypeId = docType?.Id;
-            d.Name = name;
-
+            if (name == null) {
+                d.Name = "ecris_message"; 
+            }
+            else
+            {
+                d.Name = name;
+            }
             //todo: add resources
             if (t == MJ_CAIS.DTO.EcrisService.EcrisMessageType.REQ)
             {
@@ -636,7 +641,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                                        Int32.Parse(XmlUtils.GetNumbersFromString(person.PersonBirthDate.DateMonthDay.DateMonth)),
                                        Int32.Parse(XmlUtils.GetNumbersFromString(person.PersonBirthDate.DateMonthDay.DateDay)));
             m.BirthCountry = person.PersonBirthPlace.PlaceCountryReference.Value;
-            m.Sex = person.PersonSex;
+            m.Sex = person.PersonSex == 0 ? 1:2;
 
             var forenames = person?.PersonName?.Forename?.ToList();
             if (forenames != null)
@@ -697,7 +702,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             }
 
 
-            var countriesAuthorities = dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.UtcNow && ea.ValidTo >= DateTime.UtcNow
+            var countriesAuthorities = dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
             || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
             if (msg.MessageSendingMemberStateSpecified)

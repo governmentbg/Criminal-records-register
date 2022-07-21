@@ -6,6 +6,7 @@ using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using MJ_CAIS.Common.Constants;
+using Microsoft.EntityFrameworkCore;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -21,9 +22,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit = false)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<PersonGridDTO> aQueryOptions, [FromQuery] PersonSearchParamsDTO searchParams)
         {
-            var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, isPageInit);
+            var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, searchParams);
             return Ok(result);
         }
 
@@ -31,6 +32,11 @@ namespace MJ_CAIS.Web.Controllers
         public new async Task<IActionResult> Get(string aId)
         {
             var result = await this._personService.SelectWithBirthInfoAsync(aId);
+            var count = await this._personService.GetBulletinsCountByPersonId(aId).ToListAsync();
+            result.Bulletin78ACount = count.FirstOrDefault(x=> x.Status == BulletinConstants.Type.Bulletin78A)?.Count ?? 0;
+            result.ConvictionBulletinCount = count.FirstOrDefault(x=> x.Status == BulletinConstants.Type.ConvictionBulletin)?.Count ?? 0;
+            result.BulletinUnspecifiedCount = count.FirstOrDefault(x=> x.Status == BulletinConstants.Type.Unspecified)?.Count ?? 0;
+
             if (result == null) return NotFound();
 
             return Ok(result);
@@ -76,6 +82,15 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._personService.ConnectPeopleAsync(aId, personToBeConnected);
             return Ok();
+        }
+
+        [HttpPost("remove-pid")]
+        public async Task<IActionResult> RemovePid([FromBody] RemovePidDTO aInDto)
+        {
+            var result =  await this._personService.RemovePidAsync(aInDto);
+            if(result == null) return NotFound();
+
+            return Ok(result.PersonId);
         }
     }
 }

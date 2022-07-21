@@ -2,6 +2,7 @@ import { Component, OnInit, Injector, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
+import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { IsinDataStatusConstants } from "../../../isin/isin-data-form/_models/isin-data-status.constants";
 import { EcrisMessageStatusConstants } from "../../ecris-message-overivew/_models/ecris-message-status.constants";
 import { EcrisMessageService } from "../_data/ecris-message.service";
@@ -27,13 +28,18 @@ export class EcrisIdentificationFormComponent
   //   read: EcrisMsgNamesOverviewComponent,
   // })
 
-  constructor(service: EcrisMessageService, public injector: Injector) {
+  constructor(
+    service: EcrisMessageService,
+    public injector: Injector,
+    private nomenclatureService: NomenclatureService
+  ) {
     super(service, injector);
     this.backUrl = "pages/ecris/identification";
     this.setDisplayTitle("запитване за идентификация");
   }
 
   public model: EcrisMessageModel;
+  private graoPersonId: string;
 
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
@@ -55,14 +61,23 @@ export class EcrisIdentificationFormComponent
 
       this.model.sex =
         GenderConstants.allData.find((g) => g.id == response.sex)?.name ?? null;
-    });
 
-    this.service.getNationalities(id).subscribe((response) => {
-      let countries = response;
-      countries.map((val) => {
-        return val.name;
+      this.nomenclatureService.getCountries().subscribe((resp) => {
+        this.model.birthCountry = resp.find(
+          (c) => c.id == response.birthCountry
+        )?.name;
       });
-      this.model.nationalities = countries.join(",");
+
+      this.service.getNationalities(id).subscribe((response) => {
+        let countries = response;
+
+        let result = countries.map((val) => {
+          return val.name;
+        });
+        if (this.model) {
+          this.model.nationalities = result.join(", ");
+        }
+      });
     });
   }
 
@@ -77,9 +92,13 @@ export class EcrisIdentificationFormComponent
   identifyFunction = () => {
     let id = this.activatedRoute.snapshot.params["ID"];
     this.service
-      .changeStatus(id, EcrisMessageStatusConstants.Identified)
+      .identify(id, this.graoPersonId)
       .subscribe((res) => {
         this.reloadCurrentRoute();
       });
   };
+
+  handleSelectedRow(event) {
+    this.graoPersonId = event;
+  }
 }

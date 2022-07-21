@@ -9,14 +9,14 @@
     </div>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
-    <nb-tabset #nbtabset>
-      <nb-tab
-        tabTitle="Уведомяване за настъпили обстоятелства по чл. 30, чл.22"
-      >
+    <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
+      <nb-tab [tabTitle]="articleTabTitle">
         <cais-bulletin-events-article-overview></cais-bulletin-events-article-overview>
       </nb-tab>
-      <nb-tab tabTitle="Уведомяване за променен съдебен статус на осъдено лице">
-        <cais-bulletin-events-document-overview></cais-bulletin-events-document-overview>
+      <nb-tab [tabTitle]="documentTabTitle">
+        <ng-container *ngIf="showDocumentTab">
+          <cais-bulletin-events-document-overview></cais-bulletin-events-document-overview>
+        </ng-container>
       </nb-tab>
     </nb-tabset>
   </nb-card-body>

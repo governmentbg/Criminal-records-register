@@ -10,7 +10,6 @@ export class PersonSearchModel extends BaseModel {
   public pid: string = null;
   public birthDate: DatePrecisionModel = null;
   public sex: string = null;
-  public birthPlace: AddressModel = new AddressModel();
 
   constructor(init?: Partial<PersonSearchModel>) {
     super(init);
@@ -21,6 +20,5 @@ export class PersonSearchModel extends BaseModel {
     this.pid = init?.pid ?? null;
     this.birthDate = init?.birthDate ?? null;
     this.sex = init?.sex ?? null;
-    this.birthPlace = init?.birthPlace ?? null;
   }
 }

@@ -92,10 +92,11 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPut("{aId}/change-status/{statusId}")]
+        [HttpPut("{aId}/identify/{graoPersonId}")]
         [Authorize(Roles = RoleConstants.CentralAuth)]
-        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        public async Task<IActionResult> Identify(string aId, string graoPersonId)
         {
-            await this._ecrisMessageService.ChangeStatusAsync(aId, statusId);
+            await this._ecrisMessageService.IdentifyAsync(aId, graoPersonId);
             return Ok();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Statistics;
 
@@ -23,7 +24,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
 
-        Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync();
+        IQueryable<BulletinStatusHistoryDTO> SelectAllStatusHistoryData();
 
         Task SaveChangesAsync();
 

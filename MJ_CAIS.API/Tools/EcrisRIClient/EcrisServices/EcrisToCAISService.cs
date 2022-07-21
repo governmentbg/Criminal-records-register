@@ -107,7 +107,7 @@ namespace EcrisIntegrationServices
                     _logger.LogTrace($"{messageType.ToString()}: Query executed. {result.MessageShortViewList.Length} rows returned (out of {totalNumberOfMessages}), page {pageNumber}.");
                     pageNumber++;
                     //заявката чете само дата, затова филтрираме само записите, за които последната промяна е след дата, която търсим
-                    var filteredMessages = result.MessageShortViewList.Where(m => m.MessageVersionTimestamp > lastUpdatedTime).ToList();
+                    var filteredMessages = result.MessageShortViewList.Where(m => m.MessageSenderTimestampSpecified == true && m.MessageSenderTimestamp > lastUpdatedTime).ToList();
                     foreach (var r in filteredMessages)
                     {
 
@@ -121,7 +121,7 @@ namespace EcrisIntegrationServices
 
                     if (filteredMessages.Count > 0)
                     {
-                        var newDate = filteredMessages.Select(r => !r.MessageVersionTimestampSpecified ? DateTime.MinValue : r.MessageVersionTimestamp)?.Max(d => d);
+                        var newDate = filteredMessages.Where(r => r.MessageSenderTimestampSpecified).Select(r =>  r.MessageSenderTimestamp)?.Max(d => d);
                         lastUpdatedTime = newDate.HasValue && newDate.Value != DateTime.MinValue ? newDate.Value : lastUpdatedTime;
 
 
@@ -226,7 +226,7 @@ namespace EcrisIntegrationServices
 
             query.QueryParameters.MessageDateQueryParameter = new MJ_CAIS.DTO.EcrisService.MessageDateQueryParameterType()
             {
-                DateType = MJ_CAIS.DTO.EcrisService.MessageDateTypeEnumeration.LastUpdated,
+                DateType = MJ_CAIS.DTO.EcrisService.MessageDateTypeEnumeration.SentReceived,
                 DateValue = new MJ_CAIS.DTO.EcrisService.DateStrictRangeQueryParameter()
                 {
                     DateRangeParameter = period,
@@ -237,6 +237,13 @@ namespace EcrisIntegrationServices
 
             };
 
+            query.QueryParameters.MemberStateQueryParameter = new QueryTypeQueryParametersMemberStateQueryParameter();
+            query.QueryParameters.MemberStateQueryParameter.DestinationSpecified = true;
+            query.QueryParameters.MemberStateQueryParameter.Destination = QueryTypeQueryParametersMemberStateQueryParameterDestination.SENT;
+            query.QueryParameters.MemberStateQueryParameter.MemberStateCodes = new MemberStateCodeType[1];
+            query.QueryParameters.MemberStateQueryParameter.MemberStateCodes[0] = MemberStateCodeType.BG;
+
+           
             return query;
 
         }
@@ -256,7 +263,7 @@ namespace EcrisIntegrationServices
             //var outputData = (ReadMessageWSOutputDataType)messageContent.WSData;
             inbox.XmlMessage = messageContent.SerializedXMLFromService;//XmlUtils.SerializeToXml(outputData);
 
-            inbox.ImportedOn = DateTime.UtcNow;
+            inbox.ImportedOn = DateTime.Now;
 
 
             //ако съществува такъв запис, не добавяме
@@ -322,36 +329,33 @@ namespace EcrisIntegrationServices
                         d.DocContent = content;
                         content.DDocuments.Add(d);
 
-
-                        PersonInfoRequest reqidentifiacition = new PersonInfoRequest();
-                        reqidentifiacition.fname = m.EEcrisMsgNames.FirstOrDefault()?.Firstname;
-                        reqidentifiacition.sname = m.EEcrisMsgNames.FirstOrDefault()?.Surname;
-                        reqidentifiacition.lname = m.EEcrisMsgNames.FirstOrDefault()?.Familyname;
-                        reqidentifiacition.threshold = PersonIdentificationConstants.Tresholds.PartialMatch;
-                        reqidentifiacition.gender = m.Sex.ToString();
-                        if (m.BirthDate.HasValue)
+                        if (m.Sex != 0 && m.Sex != null
+                            && !string.IsNullOrEmpty(m.EEcrisMsgNames.FirstOrDefault()?.Firstname)
+                            && m.BirthDate.HasValue)
                         {
-                            reqidentifiacition.month = m.BirthDate.Value.Month.ToString();
-                            reqidentifiacition.year = m.BirthDate.Value.Year.ToString();
-                            reqidentifiacition.day = m.BirthDate.Value.Day.ToString();
+                            //при тези условия има смисъл да включваме идентификацията, иначе остава за ръчна обработка
+
+                         
+                            var gender = m.Sex == 1 ? PersonInfoGenderType.male : PersonInfoGenderType.female;
+                            var graoPersons = await _personValidatorClient.GetPersonInfo(m.EEcrisMsgNames.FirstOrDefault().Firstname,
+                                m.EEcrisMsgNames.FirstOrDefault()?.Surname,  m.EEcrisMsgNames.FirstOrDefault()?.Familyname, gender, m.BirthDate.Value, PersonIdentificationConstants.Tresholds.PartialMatch);
+                    
+
+                            if (graoPersons.Count > 0)
+                            {
+                                var egns = graoPersons.Select(p => p.person.personalNumber).ToList();
+                                m.EEcrisIdentifications = await _dbContext.GraoPeople.Where(p => egns.Contains(p.Egn))
+                                    .Select(x => new EEcrisIdentification
+                                    {
+                                        Id = BaseEntity.GenerateNewId(),
+                                        EcrisMsgId = m.Id,
+                                        EcrisMsg = m,
+                                        GraoPersonId = x.Id
+                                    })
+                                    .ToListAsync();
+                                _dbContext.EEcrisIdentifications.AddRange(m.EEcrisIdentifications);
+                            }
                         }
-
-                        var graoPersons = await _personValidatorClient.GetPersonInfo(reqidentifiacition);
-
-                        if (graoPersons.personData.Length > 0)
-                        {
-                            var egns = graoPersons.personData.Select(p => p.person.personalNumber).ToList();
-                            m.EEcrisIdentifications = await _dbContext.GraoPeople.Where(p=>egns.Contains(p.Egn))
-                                .Select(x => new EEcrisIdentification{ 
-                                 Id=BaseEntity.GenerateNewId(),
-                                  EcrisMsgId = m.Id,
-                                  EcrisMsg = m,
-                                   GraoPersonId = x.Id                                   
-                                })
-                                .ToListAsync();
-                            _dbContext.EEcrisIdentifications.AddRange(m.EEcrisIdentifications);
-                        }
-
                         _dbContext.EEcrisMessages.Add(m);
                      
                         _dbContext.DDocuments.Add(d);
@@ -405,7 +409,7 @@ namespace EcrisIntegrationServices
                                        Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateMonth)),
                                        Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateDay)));
             m.BirthCountry = msg.MessageShortViewPerson.PersonBirthPlace.PlaceCountryReference.Value;
-            m.Sex = msg.MessageShortViewPerson.PersonSex;
+            m.Sex = msg.MessageShortViewPerson.PersonSex == 0 ? 1:2;
 
             var forenames = msg.MessageShortViewPerson.PersonName?.Forename?.ToList();
             if (forenames != null)
@@ -466,7 +470,7 @@ namespace EcrisIntegrationServices
             }
 
 
-            var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.UtcNow && ea.ValidTo >= DateTime.UtcNow
+            var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
             || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
             if (msg.MessageSendingMemberStateSpecified)

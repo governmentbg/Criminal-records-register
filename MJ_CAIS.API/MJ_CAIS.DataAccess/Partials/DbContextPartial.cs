@@ -140,7 +140,7 @@ namespace MJ_CAIS.DataAccess
                 if (entity.Entity.GetType().GetProperty("CreatedBy") != null)
                 {
                     entity.Property("CreatedBy").CurrentValue = CurrentUserId;
-                    entity.Property("CreatedOn").CurrentValue = DateTime.UtcNow;
+                    entity.Property("CreatedOn").CurrentValue = DateTime.Now;
                 }
             }
 
@@ -151,7 +151,7 @@ namespace MJ_CAIS.DataAccess
                 if (entity.Entity.GetType().GetProperty("UpdatedBy") != null)
                 {
                     entity.Property("UpdatedBy").CurrentValue = CurrentUserId;
-                    entity.Property("UpdatedOn").CurrentValue = DateTime.UtcNow;
+                    entity.Property("UpdatedOn").CurrentValue = DateTime.Now;
                 }
             }
         }

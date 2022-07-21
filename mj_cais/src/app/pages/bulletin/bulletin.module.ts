@@ -16,6 +16,7 @@ import { OffenceCategoryDialogComponent } from '../../@core/components/dialogs/o
 import { BulletinEventsOverviewComponent } from '../bulletin-events/bulletin-events-overview/bulletin-events-overview.component';
 import { BulletinEventsArticleOverviewComponent } from '../bulletin-events/bulletin-events-overview/tabs/bulletin-events-article-overview/bulletin-events-article-overview.component';
 import { BulletinEventsDocumentOverviewComponent } from '../bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
+import { BulletinIsinFormComponent } from './bulletin-form/tabs/bulletin-isin-form/bulletin-isin-form.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { BulletinEventsDocumentOverviewComponent } from '../bulletin-events/bull
     BulletinEventsOverviewComponent,
     BulletinEventsDocumentOverviewComponent,
     BulletinEventsArticleOverviewComponent,
+    BulletinIsinFormComponent
   ],
   imports: [
     CoreComponentModule,

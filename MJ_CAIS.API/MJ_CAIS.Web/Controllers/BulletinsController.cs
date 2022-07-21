@@ -110,7 +110,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/status-history")]
         public async Task<IActionResult> GetStatusHistory(string aId)
         {
-            var result = await this._bulletinService.GetStatusHistoryByBulletinIdAsync(aId);
+            var result = this._bulletinService.GetStatusHistoryByBulletinId(aId);
             return Ok(result);
         }
 

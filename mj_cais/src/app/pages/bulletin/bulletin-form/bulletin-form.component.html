@@ -24,7 +24,7 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <nb-tabset #nbtabset>
+      <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
         <nb-tab tabTitle="Основна информация">
           <div class="font-weight-bold">Данни за бюлетин</div>
           <hr />
@@ -342,75 +342,88 @@
           </div>
         </nb-tab>
 
-        <nb-tab tabTitle="Престъпления">
-          <cais-bulletin-offences-form
-            #bulletineOffences
-            [bulletinOffenceTransactions]="fullForm.offancesTransactions"
-            [dbData]="dbData"
-            [isForPreview]="!isOffancesEditable"
-          ></cais-bulletin-offences-form>
+        <nb-tab [tabTitle]="offencesTabTitle">
+          <ng-container *ngIf="showOffencesTab">
+            <cais-bulletin-offences-form
+              #bulletineOffences
+              [bulletinOffenceTransactions]="fullForm.offancesTransactions"
+              [dbData]="dbData"
+              [isForPreview]="!isOffancesEditable"
+            ></cais-bulletin-offences-form>
+          </ng-container>
         </nb-tab>
 
-        <nb-tab tabTitle="Наказания">
-          <cais-bulletin-sanctions-form
-            #bulletineSanctions
-            [bulletinSanctionsTransactions]="fullForm.sanctionsTransactions"
-            [dbData]="dbData"
-            [isForPreview]="!isSanctionsEditable"
-            [decisionDateInput]="fullForm.decisionDate"
-            [isNoSanction]="isNoSanctionCheck"
-          >
-          </cais-bulletin-sanctions-form>
-        </nb-tab>
-
-        <nb-tab tabTitle="Доп. сведения">
-          <cais-bulletin-decision-form
-            #bulletineDecisions
-            [bulletinDecisionsTransactions]="fullForm.decisionsTransactions"
-            [dbData]="dbData"
-            [isForPreview]="!isDecisionEditable"
-          >
-          </cais-bulletin-decision-form>
-        </nb-tab>
-        <nb-tab tabTitle="Уведомления" *ngIf="isEdit() || isForPreview">
-          <nb-tabset #nbtabset>
-            <nb-tab
-              tabTitle="Уведомяване за настъпили обстоятелства по чл. 30, чл.22"
+        <nb-tab [tabTitle]="sanctionsTabTitle">
+          <ng-container *ngIf="showSanctionsTab">
+            <cais-bulletin-sanctions-form
+              #bulletineSanctions
+              [bulletinSanctionsTransactions]="fullForm.sanctionsTransactions"
+              [dbData]="dbData"
+              [isForPreview]="!isSanctionsEditable"
+              [decisionDateInput]="fullForm.decisionDate"
+              [isNoSanction]="isNoSanctionCheck"
             >
-              <cais-bulletin-events-article-overview
-                [bulletinId]="fullForm.id.value"
-              ></cais-bulletin-events-article-overview>
-            </nb-tab>
-            <nb-tab
-              tabTitle="Уведомяване за променен съдебен статус на осъдено лице"
+            </cais-bulletin-sanctions-form>
+          </ng-container>
+        </nb-tab>
+
+        <nb-tab [tabTitle]="decisionTabTitle">
+          <ng-container *ngIf="showDecisionTab">
+            <cais-bulletin-decision-form
+              #bulletineDecisions
+              [bulletinDecisionsTransactions]="fullForm.decisionsTransactions"
+              [dbData]="dbData"
+              [isForPreview]="!isDecisionEditable"
             >
-              <cais-bulletin-events-document-overview
-                [bulletinId]="fullForm.id.value"
-              ></cais-bulletin-events-document-overview>
-            </nb-tab>
-          </nb-tabset>
+            </cais-bulletin-decision-form>
+          </ng-container>
+        </nb-tab>
+        <nb-tab [tabTitle]="eventsTabTitle" *ngIf="isEdit() || isForPreview">
+          <ng-container *ngIf="showEventsTab">
+            <nb-tabset #nbtabsetevent (changeTab)="onChangeEventsTab($event)">
+              <nb-tab
+                tabTitle="Уведомяване за настъпили обстоятелства по чл. 30, чл.22"
+              >
+                <cais-bulletin-events-article-overview
+                  [bulletinId]="fullForm.id.value"
+                ></cais-bulletin-events-article-overview>
+              </nb-tab>
+              <nb-tab [tabTitle]="docEventTabTitle">
+                <ng-container *ngIf="showDocEventTab">
+                  <cais-bulletin-events-document-overview
+                    [bulletinId]="fullForm.id.value"
+                  ></cais-bulletin-events-document-overview>
+                </ng-container>
+              </nb-tab>
+            </nb-tabset>
+          </ng-container>
         </nb-tab>
 
-        <nb-tab tabTitle="Документи" *ngIf="isEdit() || isForPreview">
-          <cais-bulletin-document-form
-            #bulletineDocuments
-            [bulletinForm]="fullForm"
-            [showAddDeleteButton]="isDocumentsEditable"
-            [documents]="dbData.documents"
-            [dbData]="dbData"
-          >
-          </cais-bulletin-document-form>
+        <nb-tab [tabTitle]="documentsTabTitle" *ngIf="isEdit() || isForPreview">
+          <ng-container *ngIf="showDocumentsTab">
+            <cais-bulletin-document-form
+              #bulletineDocuments
+              [bulletinForm]="fullForm"
+              [showAddDeleteButton]="isDocumentsEditable"
+              [dbData]="dbData"
+            >
+            </cais-bulletin-document-form>
+          </ng-container>
         </nb-tab>
 
-        <nb-tab tabTitle="Изтърпени наказания" *ngIf="isEdit() || isForPreview">
-          <cais-bulletin-isin-form></cais-bulletin-isin-form>
+        <nb-tab [tabTitle]="isinTabTitle" *ngIf="isEdit() || isForPreview">
+          <ng-container *ngIf="showIsinTab">
+            <cais-bulletin-isin-form></cais-bulletin-isin-form>
+          </ng-container>
         </nb-tab>
 
-        <nb-tab tabTitle="Одит" *ngIf="isEdit() || isForPreview">
-          <cais-bulletin-status-history-overview
-            [historyData]="dbData.bulletinStatusHistoryData"
-          >
-          </cais-bulletin-status-history-overview>
+        <nb-tab [tabTitle]="historyTabTitle" *ngIf="isEdit() || isForPreview">
+          <ng-container *ngIf="showHistoryTab">
+            <cais-bulletin-status-history-overview
+              [historyData]="dbData.bulletinStatusHistoryData"
+            >
+            </cais-bulletin-status-history-overview>
+          </ng-container>
         </nb-tab>
       </nb-tabset>
     </form>

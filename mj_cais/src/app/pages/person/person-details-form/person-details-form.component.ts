@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonModel } from "../../../@core/components/forms/person-form/_models/person.model";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { BulletinTypeConstants } from "../../bulletin/bulletin-form/_models/bulletin-type-constants";
 import { PersonApplicationGridService } from "./grids/person-application-overview/_data/person-application-grid.service";
 import { PersonBulletinGridService } from "./grids/person-bulletin-overview/_data/person-bulletin-grid.service";
 import { PersonFbbcGridService } from "./grids/person-fbbc-overview/_data/person-fbbc-grid.service";
@@ -23,19 +24,10 @@ export class PersonDetailsFormComponent
   >
   implements OnInit
 {
-  constructor(
-    service: PersonDetailsService,
-    public injector: Injector,
-    public bulletinsGridService: PersonBulletinGridService,
-    public applicationGridService: PersonApplicationGridService,
-    public fbbcGridService: PersonFbbcGridService
-  ) {
-    super(service, injector);
-  }
-
   public personId: string;
   public model: PersonModel;
   public PersonContextEnum = PersonContextEnum;
+  public BulletinTypeConstants = BulletinTypeConstants;
   public tabs: any[];
 
   public bulletinsTabTitle = "Бюлетини";
@@ -47,6 +39,16 @@ export class PersonDetailsFormComponent
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;
   public showPidsTab: boolean = false;
+
+  constructor(
+    service: PersonDetailsService,
+    public injector: Injector,
+    public bulletinsGridService: PersonBulletinGridService,
+    public applicationGridService: PersonApplicationGridService,
+    public fbbcGridService: PersonFbbcGridService,
+  ) {
+    super(service, injector);
+  }
 
   ngOnInit(): void {
     this.model = this.dbData.element as any;

@@ -9,11 +9,6 @@ import { BaseResolverData } from "../../../../@core/models/common/base-resolver.
 import { PersonAliasModel } from "../../../../@core/models/common/person-alias.model";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { BulletinDecisionModel } from "../tabs/bulletin-decision-form/_models/bulletin-decision.model";
-import { BulletinDocumentModel } from "../tabs/bulletin-documents-form/_models/bulletin-document.model";
-import { BulletinOffenceModel } from "../tabs/bulletin-offences-form/_models/bulletin-offence.model";
-import { BulletinSanctionModel } from "../tabs/bulletin-sanctions-form/_models/bulletin-sanction.model";
-import { BulletinStatusHistoryModel } from "../tabs/bulletin-status-history-overview/_models/bulletin-status-history.model";
 import { BulletinModel } from "../_models/bulletin.model";
 import { BulletinService } from "./bulletin.service";
 
@@ -52,10 +47,8 @@ export class BulletinResolver implements Resolve<any> {
       decisionTypes: this.nomenclatureService.getDecisionTypes(),
       decidingAuthorities: this.nomenclatureService.getDecidingAuthoritiesForBulletins(),
       caseTypes: this.nomenclatureService.getCaseTypes(),
-      offences: this.service.getOffences(bulletineId),
       ecrisOffCategories: this.nomenclatureService.getEcrisOffCategories(),
       countries: this.nomenclatureService.getCountries(),
-      sanctions: this.service.getSanctions(bulletineId),
       sanctionCategories: this.nomenclatureService.getSanctionCategories(),
       sanctionProbCategories:
         this.nomenclatureService.getSanctionPobCategories(),
@@ -63,15 +56,11 @@ export class BulletinResolver implements Resolve<any> {
         this.nomenclatureService.getEcrisSanctionCategories(),
       sanctionProbMeasures: this.nomenclatureService.getSanctionProbMeasures(),
       decisionChTypes: this.nomenclatureService.getDecisionChTypes(),
-      decisions: this.service.getDecisions(bulletineId),
-      documents: this.service.getDocuments(bulletineId),
       documentTypes: this.nomenclatureService.getDocumentTypes(),
       bulletinStatuses: this.nomenclatureService.getBulletinStatuses(),
       personAlias: this.service.getPersonAlias(bulletineId),
       personAliasTypes: this.nomenclatureService.getPersonAliasTypes(),
       bulletinTypes: this.service.getBulletinTypes(),
-      bulletinStatusHistoryData:
-        this.service.getBulletinStatusHistoryData(bulletineId),
       formOfGuilts: this.nomenclatureService.getFormOfGuilts(),
     };
     return forkJoin(result);
@@ -79,12 +68,7 @@ export class BulletinResolver implements Resolve<any> {
 }
 
 export class BulletinResolverData extends BaseResolverData<BulletinModel> {
-  public sanctions: Observable<BulletinSanctionModel[]>;
-  public offences: Observable<BulletinOffenceModel[]>;
-  public decisions: Observable<BulletinDecisionModel[]>;
-  public documents: Observable<BulletinDocumentModel[]>;
   public personAlias: Observable<PersonAliasModel[]>;
-  public bulletinStatusHistoryData: Observable<BulletinStatusHistoryModel[]>;
 
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public nationalities: Observable<BaseNomenclatureModel[]>;

@@ -69,6 +69,6 @@ namespace MJ_CAIS.Repositories.Impl
                 });
 
             return query;
-        }
+        }     
     }
 }

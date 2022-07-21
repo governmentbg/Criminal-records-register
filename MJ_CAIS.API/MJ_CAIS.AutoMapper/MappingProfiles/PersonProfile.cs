@@ -35,6 +35,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<PPerson, PPerson>();
             CreateMap<PPersonCitizenship, PPersonHCitizenship>();
 
+            CreateMap<RemovePidDTO, PPerson>();
+
             CreateMap<BBulletin, PersonDTO>()
                 .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                 .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))

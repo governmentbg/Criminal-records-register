@@ -7,5 +7,6 @@
         public byte? SuspentionDurationMonths { get; set; }
         public byte? SuspentionDurationDays { get; set; }
         public byte? SuspentionDurationHours { get; set; }
+        public string? BulletinId { get; set; }
     }
 }

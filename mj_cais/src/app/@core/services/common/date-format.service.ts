@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { IgxGridRowComponent } from "@infragistics/igniteui-angular";
 import { CommonConstants } from "../../constants/common.constants";
 
 @Injectable({
@@ -51,5 +52,19 @@ export class DateFormatService {
     let date = new Date(val);
     let result = date.toLocaleString(CommonConstants.bgLocale);
     return result;
+  }
+
+  public parseDatesFromGridRow(
+    event: IgxGridRowComponent,
+    datePropNames: string[]
+  ) {
+    let rowData = event.rowData;
+
+    for (let prop of datePropNames) {
+      if (rowData[prop] && typeof rowData[prop] !== "object") {
+        let localDate =  new Date(rowData[prop]);
+        event.rowData[prop] = localDate;
+      }
+    }
   }
 }

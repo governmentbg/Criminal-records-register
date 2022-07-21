@@ -5,16 +5,14 @@ using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Common;
+using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Data;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
@@ -48,62 +46,23 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public async Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, bool isPageInit)
+        public async Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, PersonSearchParamsDTO searchParams)
         {
             var pageSize = base.CalculateTop(aQueryOptions);
             var currentPage = base.CalculateCurrentPage(aQueryOptions);
-
             var pageResult = new IgPageResult<PersonGridDTO>();
             pageResult.CurrentPage = currentPage;
             pageResult.PerPage = pageSize;
 
-            if (isPageInit)
-            {
-                pageResult.Data = new List<PersonGridDTO>();
-                return pageResult;
-            }
-
-            var queryValidator = new CustomQueryValidator<PersonGridDTO>();
-
-            if (aQueryOptions?.Filter != null)
-            {
-                queryValidator.Validate(aQueryOptions.Filter, new ODataValidationSettings());
-            }
-
-            var searchObj = new PersonGridDTO();
-            if (!string.IsNullOrEmpty(aQueryOptions?.Filter?.RawValue))
-            {
-                var searchParams = aQueryOptions.Filter.RawValue;
-                var containsReg = new Regex("contains\\((\\w+?)\\s*,\\s*\'(.+?)'\\)\\s*");
-                var matches = containsReg.Matches(searchParams);
-
-                foreach (Match match in matches)
-                {
-                    // group 1 fullmatch, group 1 prop name, group 2 prop value
-                    if (match.Groups?.Count == null || match.Groups?.Count < 3) continue;
-                    var propName = match.Groups[1].Value?.ToUpper();
-                    var propValue = match.Groups[2].Value?.ToUpper();
-
-                    var propInfo = searchObj.GetType().GetProperty(propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                    if (propInfo != null)
-                    {
-                        if (propName.ToUpper() == nameof(searchObj.BirthDateDisplay).ToUpper())
-                        {
-                            var isParsed = DateTime.TryParse(propValue, out DateTime paresedDate);
-                            if (isParsed) searchObj.BirthDate = paresedDate;
-                            continue;
-                        }
-                        propInfo.SetValue(searchObj, propValue);
-                    }
-                }
-            }
-
-            var resultInPage = await _personRepository.SelectInPageAsync(searchObj, pageSize, currentPage);
+            var resultInPage = await _personRepository.SelectInPageAsync(searchParams, pageSize, currentPage);
             pageResult.Data = resultInPage;
             pageResult.Total = resultInPage.FirstOrDefault()?.TotalCount ?? 0;
 
             return await Task.FromResult(pageResult);
         }
+
+        public IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId)
+            => _personRepository.GetBulletinsCountByPersonId(personId);
 
         /// <summary>
         /// Generate P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
@@ -188,7 +147,7 @@ namespace MJ_CAIS.Services
             personToUpdate.EntityState = EntityStateEnum.Modified;
 
             // call logic for only one person
-            UpdatePersonDataWhenHasOnePerson(personToUpdate);
+            UpdatePersonDataWhenHasOnePerson(personToUpdate, false);
             await dbContext.SaveChangesAsync();
         }
 
@@ -221,6 +180,40 @@ namespace MJ_CAIS.Services
             var entityQuery = _personRepository.GetPidsByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
+
+        /// <summary>
+        /// Remove pid from existing person to new person object
+        /// </summary>
+        public async Task<PPersonId> RemovePidAsync(RemovePidDTO aInDto)
+        {
+            // pid to be updated
+            var pidToBeRemoved = await _personRepository.GetPersonIdByIdAsync(aInDto.PidId);
+            if (pidToBeRemoved == null) return null;
+
+            // new person 
+            var newPersonData = mapper.MapToEntity<RemovePidDTO, PPerson>(aInDto, true);
+            newPersonData.Id = BaseEntity.GenerateNewId();
+            newPersonData.PPersonIds = new List<PPersonId> { pidToBeRemoved };
+            pidToBeRemoved.PersonId = newPersonData.Id;
+            pidToBeRemoved.EntityState = EntityStateEnum.Modified;
+            pidToBeRemoved.ModifiedProperties = new List<string> { nameof(pidToBeRemoved.PersonId), nameof(pidToBeRemoved.Version) };
+
+            // add person history object with pids
+            var personH = mapper.MapToEntity<PPerson, PPersonH>(newPersonData, true);
+
+            var pidH = mapper.MapToEntity<PPersonId, PPersonIdsH>(pidToBeRemoved, true);
+            pidH.Id = BaseEntity.GenerateNewId();
+            personH.PPersonIdsHes = new List<PPersonIdsH> { pidH };
+
+            GeneratePersonCitizenship(newPersonData, personH, aInDto.Nationalities.SelectedForeignKeys);
+
+            dbContext.ApplyChanges(newPersonData, new List<IBaseIdEntity>(), true);
+            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
+
+            await dbContext.SaveChangesAsync();
+            return pidToBeRemoved;
+        }
+
         private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)
         {
             var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
@@ -302,10 +295,22 @@ namespace MJ_CAIS.Services
             var personH = mapper.MapToEntity<PPerson, PPersonH>(person, true);
             personH.PPersonIdsHes = mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
+            GeneratePersonCitizenship(person, personH, aInDto.Nationalities.SelectedForeignKeys);
+
+            dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);
+            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
+            return person;
+        }
+
+        /// <summary>
+        /// Add citizenship data to person and person history obkect
+        /// </summary>
+        private void GeneratePersonCitizenship(PPerson person, PPersonH personH, IEnumerable<string> nationalities)
+        {
             // add person nationalities and nationalities history
             person.PPersonCitizenships = new List<PPersonCitizenship>();
             personH.PPersonHCitizenships = new List<PPersonHCitizenship>();
-            foreach (var nationality in aInDto.Nationalities.SelectedForeignKeys)
+            foreach (var nationality in nationalities)
             {
                 person.PPersonCitizenships.Add(new PPersonCitizenship
                 {
@@ -322,10 +327,6 @@ namespace MJ_CAIS.Services
                     CountryId = nationality,
                 });
             }
-
-            dbContext.ApplyChanges(person, new List<IBaseIdEntity>(), true);
-            dbContext.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
-            return person;
         }
 
         /// <summary>
@@ -362,7 +363,9 @@ namespace MJ_CAIS.Services
             // it can add connection to the those pids
             personToUpdate.PPersonIds = existingPerson.PPersonIds;
 
-            return UpdatePersonDataWhenHasOnePerson(personToUpdate);
+            // check person data
+            var isPersonEqueals = personToUpdate.Equals(existingPerson);
+            return UpdatePersonDataWhenHasOnePerson(personToUpdate, isPersonEqueals);
         }
 
         /// <summary>
@@ -371,7 +374,7 @@ namespace MJ_CAIS.Services
         /// <param name="personToUpdate">Person with updated data</param>
         /// <returns>Updated person includes the identifiers</returns>
         /// </summary>
-        private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate)
+        private PPerson UpdatePersonDataWhenHasOnePerson(PPerson personToUpdate, bool isPersonEqueals)
         {
             if (personToUpdate.ModifiedProperties == null)
             {
@@ -381,6 +384,10 @@ namespace MJ_CAIS.Services
                     nameof(personToUpdate.Version)
                 };
             }
+
+            var allPidsExists = personToUpdate.PPersonIds.All(x => x.EntityState == EntityStateEnum.Unchanged);
+            var allNationalitiesExists = personToUpdate.PPersonCitizenships.All(x => x.EntityState == EntityStateEnum.Unchanged);
+            if (allPidsExists && allNationalitiesExists && isPersonEqueals) return personToUpdate;
 
             // create person history object with old data
             var personHistoryToBeAdded = mapper.MapToEntity<PPerson, PPersonH>(personToUpdate, true);

@@ -21,10 +21,9 @@ namespace MJ_CAIS.FluentValidators.Bulletin
                 .RequredField()
                 .WhenBulletinIsUnlockedNewOffice();
 
-            RuleFor(x => x.DecidingAuthId)
+            RuleFor(x => x.CaseAuthId)
                 .RequredField()
-                .WhenBulletinIsUnlockedNewOffice()
-                .HasMaxLength(50);
+                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.CaseNumber)
                 .RequredField()
@@ -37,10 +36,6 @@ namespace MJ_CAIS.FluentValidators.Bulletin
 
             RuleFor(x => x.AlphabeticalIndex)
                 .HasMaxLength(100);
-
-            RuleFor(x => x.BulletinCreateDate)
-                .RequredField()
-                .WhenBulletinIsUnlockedNewOffice();
 
             RuleFor(x => x.BulletinAuthorityId).HasMaxLength(50);
             RuleFor(x => x.BulletinType).HasMaxLength(50);

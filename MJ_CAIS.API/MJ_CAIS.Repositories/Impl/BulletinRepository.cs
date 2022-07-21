@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Statistics;
 using MJ_CAIS.Repositories.Contracts;
@@ -111,14 +112,32 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
-        public async Task<IQueryable<BBulletinStatusH>> SelectAllStatusHistoryDataAsync()
+        public IQueryable<BulletinStatusHistoryDTO> SelectAllStatusHistoryData()
         {
-            var query = _dbContext.BBulletinStatusHes.AsNoTracking()
-                 .Include(x => x.NewStatusCodeNavigation)
-                 .Include(x => x.OldStatusCodeNavigation)
-                 .OrderByDescending(x => x.CreatedOn);
+            var query = from bulletinHis in _dbContext.BBulletinStatusHes.AsNoTracking()
+                        join newStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.NewStatusCode equals newStatus.Code
+                            into newStatusLeft
+                        from newStatus in newStatusLeft.DefaultIfEmpty()
+                        join oldStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.OldStatusCode equals oldStatus.Code
+                           into oldStatusLeft
+                        from oldStatus in oldStatusLeft.DefaultIfEmpty()
+                        join user in _dbContext.GUsers.AsNoTracking() on bulletinHis.CreatedBy equals user.Id
+                          into userLeft
+                        from user in userLeft.DefaultIfEmpty()
+                        select new BulletinStatusHistoryDTO
+                        {
+                            Id = bulletinHis.Id,
+                            CreatedBy = user.Firstname + " " + user.Surname + " " + user.Familyname,
+                            CreatedOn = bulletinHis.CreatedOn,
+                            Descr = bulletinHis.Descr,
+                            Locked = bulletinHis.Locked,
+                            NewStatus = newStatus.Name,
+                            OldStatus = oldStatus.Name,
+                            Version = bulletinHis.Version,
+                            BulletinId = bulletinHis.BulletinId
+                        };
 
-            return await Task.FromResult(query);
+            return query;
         }
 
         public async Task<BBulletin> SelectBulletinPersonInfoAsync(string bulletinId)
@@ -299,8 +318,10 @@ namespace MJ_CAIS.Repositories.Impl
 
                     // Set parameters
 
-                    cmd.Parameters.Add(new OracleParameter("p_date_from", OracleDbType.Date, searchParams.FromDate, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_date_to", OracleDbType.Date, searchParams.ToDate, ParameterDirection.Input));
+                    var fromDate = searchParams.FromDate.HasValue ? searchParams.FromDate.Value.Date : (DateTime?)null;
+                    var toDate = searchParams.ToDate.HasValue ? searchParams.ToDate.Value.Date : (DateTime?)null;
+                    cmd.Parameters.Add(new OracleParameter("p_date_from", OracleDbType.Date, fromDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_date_to", OracleDbType.Date, toDate, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_cs_authority", OracleDbType.Varchar2, searchParams.Authority, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
 

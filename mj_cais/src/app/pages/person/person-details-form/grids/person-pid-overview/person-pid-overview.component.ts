@@ -1,9 +1,14 @@
-import { Component, Injector} from "@angular/core";
+import { Component, Injector, Input, ViewChild } from "@angular/core";
+import { IgxDialogComponent } from "@infragistics/igniteui-angular";
+import { PersonModel } from "../../../../../@core/components/forms/person-form/_models/person.model";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
+import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
 import { PersonPidGridService } from "./_data/person-pid-grid.service";
 import { PersonPidGridModel } from "./_models/person-pid-grid.model";
+import { RemovePidDialogFrom } from "./_models/remove-pid-dialog.form";
 
 @Component({
   selector: "cais-person-pid-overview",
@@ -15,12 +20,21 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
   PersonPidGridService
 > {
   public personId: string;
+  public countries: BaseNomenclatureModel[];
+  public genderTypes: BaseNomenclatureModel[];
+  public personForm: RemovePidDialogFrom = new RemovePidDialogFrom();
+
+  @Input() personModel: PersonModel;
+
+  @ViewChild("removePidDialog", { read: IgxDialogComponent })
+  public dialog: IgxDialogComponent;
 
   constructor(
     public service: PersonPidGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
-    public loaderService: LoaderService
+    public loaderService: LoaderService,
+    public nomenclatureService: NomenclatureService
   ) {
     super("person-pids-search", service, injector);
   }
@@ -31,5 +45,52 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
     this.service.setPersonId(personIdParams);
     this.loaderService.showSpinner(this.service);
     super.ngOnInit();
+
+    this.nomenclatureService.getCountries().subscribe((resp) => {
+      this.countries = resp;
+    });
+
+    this.nomenclatureService.getGenderTypes().subscribe((resp) => {
+      this.genderTypes = resp;
+    });
+  }
+
+  onOpenDialogForRemovePid(personId, pidId) {
+    if (this.personModel.birthDate) {
+      this.personModel.birthDate = new Date(this.personModel.birthDate);
+    }
+    this.personForm.group.patchValue(this.personModel);
+    this.personForm.existinPersonId.patchValue(personId);
+    this.personForm.pidId.patchValue(pidId);
+    this.dialog.open();
+  }
+
+  onRemovePid() {
+    if (!this.personForm.group.valid) {
+      this.personForm.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+      return;
+    }
+
+    this.loaderService.showSpinner(this.service);
+    let formObject = this.personForm.group.value;
+
+    this.service.removePid(formObject).subscribe(
+      (resp) => {
+        this.loaderService.hideSpinner(this.service);
+        this.toastr.showToast("success", "Успешно премахване на идентификатор");
+        this.router.navigate([this.router.url]);
+      },
+      (error) => {
+        this.loaderService.hideSpinner(this.service);
+
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+      }
+    );
+  }
+
+  onCloseDilog() {
+    this.dialog.close();
   }
 }

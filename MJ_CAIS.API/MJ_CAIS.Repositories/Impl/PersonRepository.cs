@@ -4,6 +4,7 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
@@ -15,8 +16,13 @@ namespace MJ_CAIS.Repositories.Impl
 {
     public class PersonRepository : BaseAsyncRepository<PPerson, CaisDbContext>, IPersonRepository
     {
-        public PersonRepository(CaisDbContext dbContext) : base(dbContext)
+        private readonly IPersonHelperRepository _personHelperRepository;
+
+        public PersonRepository(CaisDbContext dbContext,
+            IPersonHelperRepository personHelperRepository)
+            : base(dbContext)
         {
+            _personHelperRepository = personHelperRepository;
         }
 
         public override async Task<PPerson> SelectAsync(string id)
@@ -41,146 +47,95 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId)
         {
-            var query = _dbContext.BBulletins.AsNoTracking()
-                        .Include(x => x.BulletinAuthority)
-                        .Include(x => x.Status)
-                        .Include(x => x.EgnNavigation)
-                        .Include(x => x.LnchNavigation)
-                        .Include(x => x.LnNavigation)
-                        .Include(x => x.IdDocNumberNavigation)
-                        .Include(x => x.SuidNavigation)
-                        .Where(x => x.EgnNavigation.PersonId == personId ||
-                          x.LnchNavigation.PersonId == personId ||
-                          x.LnNavigation.PersonId == personId ||
-                          x.IdDocNumberNavigation.PersonId == personId ||
-                          x.SuidNavigation.PersonId == personId)
-                        .Select(bulletin => new PersonBulletinGridDTO
+            var bulletins = _personHelperRepository.GetAllBulletinsByPersonId(personId);
+
+            var query = from bulletin in bulletins
+                        join auth in _dbContext.GDecidingAuthorities.AsNoTracking() on bulletin.BulletinAuthorityId equals auth.Id
+                            into authLeft
+                        from auth in authLeft.DefaultIfEmpty()
+
+                        join status in _dbContext.BBulletinStatuses.AsNoTracking() on bulletin.StatusId equals status.Code
+                        select new PersonBulletinGridDTO
                         {
                             Id = bulletin.Id,
                             BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
                                                         bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                                                              BulletinResources.Unspecified,
-
                             RegistrationNumber = bulletin.RegistrationNumber,
-                            StatusName = bulletin.Status.Name,
-                            BulletinAuthorityName = bulletin.BulletinAuthority.Name,
+                            StatusName = status.Name,
+                            BulletinAuthorityName = auth.Name,
                             CaseNumberAndYear = bulletin.CaseNumber + "/" + bulletin.CaseYear,
                             Egn = bulletin.Egn,
                             Lnch = bulletin.Lnch,
-                            FullName = !string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Fullname :
-                             bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname,
+                            FullName = !string.IsNullOrEmpty(bulletin.FullName) ? bulletin.FullName :
+                             bulletin.FirstName + " " + bulletin.SurName + " " + bulletin.FamilyName,
                             BirthDate = bulletin.BirthDate,
                             CreatedOn = bulletin.CreatedOn,
-                        }).Distinct();
+                        };
 
             return query;
         }
 
         public IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId)
         {
-            var query = _dbContext.ACertificates.AsNoTracking()
-                .Include(x => x.StatusCodeNavigation)
-                .Include(x => x.Application)
-                    .ThenInclude(x => x.EgnNavigation)
-                .Include(x => x.Application)
-                    .ThenInclude(x => x.LnNavigation)
-                .Include(x => x.Application)
-                    .ThenInclude(x => x.LnchNavigation)
-                .Include(x => x.Application)
-                    .ThenInclude(x => x.SuidNavigation)
-                .Include(x => x.Application)
-                    .ThenInclude(x => x.ApplicationType)
-                .Include(x => x.Application)
-                    .ThenInclude(x => x.CsAuthority)
-                .Where(x => x.Application.ApplicationTypeId == ApplicationTypes.DeskCertificate ||
-                            x.Application.ApplicationTypeId == ApplicationTypes.ConvictionRequest ||
-                            x.Application.ApplicationTypeId == ApplicationTypes.ApplicationRequestOld ||
-                            x.Application.ApplicationTypeId == ApplicationTypes.ConvictionRequestOld)
-                .Where(c => c.Application.EgnNavigation.PersonId == personId
-                                                            || c.Application.LnNavigation.PersonId == personId
-                                                            || c.Application.LnchNavigation.PersonId == personId
-                                                            || c.Application.SuidNavigation.PersonId == personId
-                                                            ).Select(c => new PersonApplicationGridDTO
-                                                            {
-                                                                Id = c.ApplicationId,
-                                                                Type = c.Application.ApplicationType.Name,
-                                                                CertificateStatus = c.StatusCodeNavigation.Name,
-                                                                CertifivateRegistrationNumber = c.RegistrationNumber,
-                                                                CertifivateValidDate = c.ValidTo,
-                                                                CsAuthority = c.Application.CsAuthority.Name,
-                                                                ApplicantName = c.Application.ApplicantName,
-                                                                Egn = c.Application.Egn,
-                                                                Lnch = c.Application.Lnch,
-                                                                FullName = !string.IsNullOrEmpty(c.Application.Fullname) ? c.Application.Fullname :
-                                                                            c.Application.Firstname + " " + c.Application.Surname + " " + c.Application.Familyname,
-                                                                BithDate = c.Application.BirthDate,
-                                                                CreatedOn = c.CreatedOn
-                                                            });
+            var allApplications = _personHelperRepository.GetAllAplicationsByPersonId(personId);
+
+            var query = from certificate in _dbContext.ACertificates
+                        join application in allApplications on certificate.ApplicationId equals application.ApplicationId
+                        join status in _dbContext.AApplicationStatuses.AsNoTracking() on certificate.StatusCode equals status.Code
+                        join applicationType in _dbContext.AApplicationTypes.AsNoTracking() on application.ApplicationTypeId equals applicationType.Id
+                        join auth in _dbContext.GCsAuthorities.AsNoTracking() on application.CsAuthorityId equals auth.Id
+                        where application.ApplicationTypeId == ApplicationTypes.DeskCertificate ||
+                                        application.ApplicationTypeId == ApplicationTypes.ConvictionRequest ||
+                                        application.ApplicationTypeId == ApplicationTypes.ApplicationRequestOld ||
+                                        application.ApplicationTypeId == ApplicationTypes.ConvictionRequestOld
+                        select new PersonApplicationGridDTO
+                        {
+                            Id = application.ApplicationId,
+                            Type = applicationType.Name,
+                            CertificateStatus = status.Name,
+                            CertifivateRegistrationNumber = certificate.RegistrationNumber,
+                            CertifivateValidDate = certificate.ValidTo,
+                            CsAuthority = auth.Name,
+                            ApplicantName = application.ApplicantName,
+                            Egn = application.Egn,
+                            Lnch = application.Lnch,
+                            FullName = !string.IsNullOrEmpty(application.Fullname) ? application.Fullname :
+                                                            application.Firstname + " " + application.Surname + " " + application.Familyname,
+                            BithDate = application.BirthDate,
+                            CreatedOn = certificate.CreatedOn
+                        };
 
             return query;
         }
 
         public IQueryable<PersonEApplicationGridDTO> GetEApplicationsByPersonId(string personId)
         {
-            var query = from cert in _dbContext.ACertificates.AsNoTracking()
+            var allApplications = _personHelperRepository.GetAllAplicationsByPersonId(personId);
 
-                        join app in _dbContext.AApplications.AsNoTracking()
-                           on cert.ApplicationId equals app.Id into appLeft
-                        from app in appLeft.DefaultIfEmpty()
-
-                        join appType in _dbContext.AApplicationTypes.AsNoTracking()
-                           on app.ApplicationTypeId equals appType.Id into appTypeLeft
-                        from appType in appTypeLeft.DefaultIfEmpty()
-
-                        join wApp in _dbContext.WApplications.AsNoTracking()
-                          on app.WApplicationId equals wApp.Id into wAppLeft
-                        from wApp in wAppLeft.DefaultIfEmpty()
-
-                        join extUser in _dbContext.GUsersExts.AsNoTracking()
-                        on wApp.UserExtId equals extUser.Id into extUserLeft
-                        from extUser in extUserLeft.DefaultIfEmpty()
-
-                        join extAdministration in _dbContext.GExtAdministrations.AsNoTracking()
-                        on extUser.AdministrationId equals extAdministration.Id into extAdministrationLeft
-                        from extAdministration in extAdministrationLeft.DefaultIfEmpty()
-
-                        join status in _dbContext.AApplicationStatuses.AsNoTracking()
-                         on cert.StatusCode equals status.Code into statusLeft
-                        from status in statusLeft.DefaultIfEmpty()
-
-                        join egn in _dbContext.PPersonIds.AsNoTracking()
-                        on app.EgnId equals egn.Id into egnLeft
-                        from egn in egnLeft.DefaultIfEmpty()
-
-                        join lnch in _dbContext.PPersonIds.AsNoTracking()
-                        on app.LnchId equals lnch.Id into lnchLeft
-                        from lnch in lnchLeft.DefaultIfEmpty()
-
-                        join ln in _dbContext.PPersonIds.AsNoTracking()
-                        on app.LnId equals ln.Id into lnLeft
-                        from ln in lnLeft.DefaultIfEmpty()
-
-                        join suid in _dbContext.PPersonIds.AsNoTracking()
-                        on app.SuidId equals suid.Id into suidLeft
-                        from suid in suidLeft.DefaultIfEmpty()
-
-                        where (app.ApplicationTypeId == ApplicationTypes.WebCertificate ||
-                            app.ApplicationTypeId == ApplicationTypes.WebExternalCertificate) &&
-                            (egn.PersonId == personId || lnch.PersonId == personId || ln.PersonId == personId || suid.PersonId == personId)
+            var query = from certificate in _dbContext.ACertificates
+                        join application in allApplications on certificate.ApplicationId equals application.ApplicationId
+                        join applicationType in _dbContext.AApplicationTypes.AsNoTracking() on application.ApplicationTypeId equals applicationType.Id
+                        join wApp in _dbContext.WApplications.AsNoTracking() on application.WApplicationId equals wApp.Id
+                        join extUser in _dbContext.GUsersExts.AsNoTracking() on wApp.UserExtId equals extUser.Id
+                        join extAdministration in _dbContext.GExtAdministrations.AsNoTracking() on extUser.AdministrationId equals extAdministration.Id
+                        join status in _dbContext.AApplicationStatuses.AsNoTracking() on certificate.StatusCode equals status.Code
+                        where application.ApplicationTypeId == ApplicationTypes.WebCertificate ||
+                              application.ApplicationTypeId == ApplicationTypes.WebExternalCertificate
                         select new PersonEApplicationGridDTO
                         {
-                            Id = app.Id,
-                            Type = appType.Name,
+                            Id = application.ApplicationId,
+                            Type = applicationType.Name,
                             CertificateStatus = status.Name,
-                            CertifivateRegistrationNumber = cert.RegistrationNumber,
-                            CertifivateValidDate = cert.ValidTo,
+                            CertifivateRegistrationNumber = certificate.RegistrationNumber,
+                            CertifivateValidDate = certificate.ValidTo,
                             ExtAdministration = extAdministration.Name,
-                            Egn = app.Egn,
-                            Lnch = app.Lnch,
-                            FullName = !string.IsNullOrEmpty(app.Fullname) ? app.Fullname :
-                                                                            app.Firstname + " " + app.Surname + " " + app.Familyname,
-                            BithDate = app.BirthDate,
-                            CreatedOn = cert.CreatedOn,
+                            Egn = application.Egn,
+                            Lnch = application.Lnch,
+                            FullName = !string.IsNullOrEmpty(application.Fullname) ? application.Fullname :
+                                                                            application.Firstname + " " + application.Surname + " " + application.Familyname,
+                            BithDate = application.BirthDate,
+                            CreatedOn = certificate.CreatedOn,
                         };
 
             return query;
@@ -188,23 +143,27 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId)
         {
-            var query = _dbContext.Fbbcs.AsNoTracking()
-                .Include(x => x.DocType)
-                .Include(x => x.Country)
-                .Include(x => x.Person)
-                .Include(x => x.SuidNavigation)
-                .Where(x => x.Person.PersonId == personId || x.SuidNavigation.PersonId == personId)
-                .Select(fbbc => new PersonFbbcGridDTO
-                {
-                    Id = fbbc.Id,
-                    DocType = fbbc.DocType.Name,
-                    ReceiveDate = fbbc.ReceiveDate,
-                    Country = fbbc.Country.Name,
-                    Egn = fbbc.Egn,
-                    FullName = fbbc.Firstname + " " + fbbc.Surname + " " + fbbc.Familyname,
-                    BirthDate = fbbc.BirthDate,
-                    CreatedOn = fbbc.CreatedOn
-                });
+            var allFbbcs = _personHelperRepository.GetAllFbbcsByPersonId(personId);
+
+            var query = from fbbc in allFbbcs
+                        join docType in _dbContext.FbbcDocTypes.AsNoTracking() on fbbc.DocTypeId equals docType.Id
+                            into docTypeLeft
+                        from docType in docTypeLeft.DefaultIfEmpty()
+
+                        join country in _dbContext.GCountries.AsNoTracking() on fbbc.CountryId equals country.Id
+                            into countryLeft
+                        from country in countryLeft.DefaultIfEmpty()
+                        select new PersonFbbcGridDTO
+                        {
+                            Id = fbbc.Id,
+                            DocType = docType.Name,
+                            ReceiveDate = fbbc.ReceiveDate,
+                            Country = country.Name,
+                            Egn = fbbc.Egn,
+                            FullName = fbbc.Firstname + " " + fbbc.Surname + " " + fbbc.Familyname,
+                            BirthDate = fbbc.BirthDate,
+                            CreatedOn = fbbc.CreatedOn
+                        };
 
             return query;
         }
@@ -226,7 +185,7 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonGridDTO searchObj, int pageSize, int pageNumber)
+        public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonSearchParamsDTO searchObj, int pageSize, int pageNumber)
         {
             DataSet ds = new DataSet();
             List<PersonGridDTO> result = new List<PersonGridDTO>();
@@ -242,11 +201,13 @@ namespace MJ_CAIS.Repositories.Impl
                     // Set parameters
 
                     cmd.Parameters.Add(new OracleParameter("p_egn", OracleDbType.Varchar2, searchObj.Pid, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, searchObj.FirstName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, searchObj.SurName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.FamilyName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, searchObj.FullName, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, searchObj.BirthDate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, searchObj.Firstname, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, searchObj.Surname, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.Familyname, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, searchObj.Fullname, ParameterDirection.Input));
+
+                    var birthDate = searchObj.BirthDate.HasValue ? searchObj.BirthDate.Value.Date : (DateTime?)null;
+                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, birthDate, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, searchObj.BirthDatePrec, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_size", OracleDbType.Int32, pageSize, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_number", OracleDbType.Int32, pageNumber, ParameterDirection.Input));
@@ -302,7 +263,7 @@ namespace MJ_CAIS.Repositories.Impl
                 var pidDb = await _dbContext.PPersonIds
                                     .AsNoTracking()
                                     .FirstOrDefaultAsync(x =>
-                                        x.Pid.ToUpper() == pidToUpper &&
+                                        x.Pid == pidToUpper &&
                                         x.PidTypeId == currentPid.Type &&
                                         x.Issuer == currentPid.Issuer &&
                                         x.CountryId == BG);
@@ -333,6 +294,27 @@ namespace MJ_CAIS.Repositories.Impl
         public override Task<PPerson> InsertAsync(PPerson entity)
         {
             return base.InsertAsync(entity);
+        }
+
+        public IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId)
+        {
+            var allBulletins = _personHelperRepository.GetAllBulletinsByPersonId(personId);
+            var restult = allBulletins.GroupBy(x => x.BulletinType)
+                .Select(x => new ObjectStatusCountDTO
+                {
+                    Status = x.Key,
+                    Count = x.Count(),
+                });
+
+            return restult;
+        }
+
+        public async Task<PPersonId> GetPersonIdByIdAsync(string pidId)
+        {
+            var personId = await _dbContext.PPersonIds.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == pidId);
+
+            return personId;
         }
 
         private static List<PersonGridDTO> GetPersons(DataTable dataTable)

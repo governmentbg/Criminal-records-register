@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.Repositories.Contracts;
@@ -126,5 +127,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+
+      
     }
 }
