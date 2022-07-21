@@ -21,17 +21,20 @@ namespace MJ_CAIS.Services
 
         private readonly IApplicationService _applicationService;
         private readonly IRegisterTypeService _registerTypeService;
-        private readonly IPersonService _personService;
+        private readonly IManagePersonService _managePersonService;
 
 
-        public ReportService(IMapper mapper, IReportRepository reportRepository, IApplicationService applicationService, IRegisterTypeService registerTypeService,
-            IPersonService personService)
+        public ReportService(IMapper mapper, 
+            IReportRepository reportRepository, 
+            IApplicationService applicationService, 
+            IRegisterTypeService registerTypeService,
+            IManagePersonService managePersonService)
             : base(mapper, reportRepository)
         {
             _reportRepository = reportRepository;
             _applicationService = applicationService;
             _registerTypeService = registerTypeService;
-            _personService = personService;
+            _managePersonService = managePersonService;
         }
 
         public async Task<string> InsertAsync(ApplicationInDTO aInDto)
@@ -57,7 +60,7 @@ namespace MJ_CAIS.Services
 
         private async Task UpdatePersonDataAsync(ApplicationInDTO aInDto, AApplication entity)
         {
-            var person = await _personService.CreatePersonAsync(aInDto.Person);
+            var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {
                 if (personIdObj.PidTypeId == PidType.Egn)

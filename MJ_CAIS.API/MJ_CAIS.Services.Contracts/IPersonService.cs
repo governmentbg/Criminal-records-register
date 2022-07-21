@@ -10,10 +10,6 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, PersonSearchParamsDTO searchParams);
 
-        Task<PPerson> CreatePersonAsync(PersonDTO aInDto, bool autoMergePeople = false);
-
-        Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
-
         Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId);
 
         Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId);
@@ -24,9 +20,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<IgPageResult<PersonPidGridDTO>> SelectPersonPidAllWithPaginationAsync(ODataQueryOptions<PersonPidGridDTO> aQueryOptions, string personId);
 
-        Task ConnectPeopleAsync(string aId, string personToBeConnected);
-
         IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
-        Task<PPersonId> RemovePidAsync(RemovePidDTO aInDto);
     }
 }

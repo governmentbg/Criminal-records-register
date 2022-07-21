@@ -26,5 +26,13 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
 
         Task<PPersonId> GetPersonIdByIdAsync(string pidId);
+
+        Task<PPerson> GetExistingPersonWithPidsDataAsync(string id);
+
+        IQueryable<PPerson> GetExistingPeopleWithPidsData(IEnumerable<string> ids);
+
+        IQueryable<PPerson> GetPeopleToBeConectedWithPidData(string firstPersonId, string secondPersonId);
+
+        Task<string> GetIsoNumberByCountryIdAsync(string countryId);
     }
 }

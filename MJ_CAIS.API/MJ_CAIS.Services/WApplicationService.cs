@@ -23,21 +23,21 @@ namespace MJ_CAIS.Services
         private readonly IApplicationWebService _webApplicationService;
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IApplicationService _applicationService;
-        private readonly IPersonService _personService;
+        private readonly IManagePersonService _managePersonService;
 
         public WApplicationService(IMapper mapper,
             IWApplicationRepository wApplicationRepository,
             IApplicationWebService webApplicationService,
             IRegisterTypeService registerTypeService,
             IApplicationService applicationService,
-            IPersonService personService)
+            IManagePersonService managePersonService)
             : base(mapper, wApplicationRepository)
         {
             _wApplicationRepository = wApplicationRepository;
             _webApplicationService = webApplicationService;
             _registerTypeService = registerTypeService;
             _applicationService = applicationService;
-            _personService = personService;
+            _managePersonService = managePersonService;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
@@ -213,7 +213,7 @@ namespace MJ_CAIS.Services
             personDto.MotherFullname = wapplication.MotherFullname;
             personDto.Sex = wapplication.Sex;
 
-            var person = await _personService.CreatePersonAsync(personDto);
+            var person = await _managePersonService.CreatePersonAsync(personDto);
 
             // var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
             //                                             && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);

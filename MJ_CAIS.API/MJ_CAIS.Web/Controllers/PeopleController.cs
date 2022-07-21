@@ -15,10 +15,13 @@ namespace MJ_CAIS.Web.Controllers
     public class PeopleController : BaseApiCrudController<PersonDTO, PersonDTO, PersonGridDTO, PPerson, string>
     {
         private readonly IPersonService _personService;
+        private readonly IManagePersonService _managePersonService;
 
-        public PeopleController(IPersonService personService) : base(personService)
+        public PeopleController(IPersonService personService,
+            IManagePersonService managePersonService) : base(personService)
         {
             _personService = personService;
+            _managePersonService = managePersonService;
         }
 
         [HttpGet("")]
@@ -31,11 +34,11 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}")]
         public new async Task<IActionResult> Get(string aId)
         {
-            var result = await this._personService.SelectWithBirthInfoAsync(aId);
+            var result = await this._managePersonService.SelectWithBirthInfoAsync(aId);
             var count = await this._personService.GetBulletinsCountByPersonId(aId).ToListAsync();
-            result.Bulletin78ACount = count.FirstOrDefault(x=> x.Status == BulletinConstants.Type.Bulletin78A)?.Count ?? 0;
-            result.ConvictionBulletinCount = count.FirstOrDefault(x=> x.Status == BulletinConstants.Type.ConvictionBulletin)?.Count ?? 0;
-            result.BulletinUnspecifiedCount = count.FirstOrDefault(x=> x.Status == BulletinConstants.Type.Unspecified)?.Count ?? 0;
+            result.Bulletin78ACount = count.FirstOrDefault(x => x.Status == BulletinConstants.Type.Bulletin78A)?.Count ?? 0;
+            result.ConvictionBulletinCount = count.FirstOrDefault(x => x.Status == BulletinConstants.Type.ConvictionBulletin)?.Count ?? 0;
+            result.BulletinUnspecifiedCount = count.FirstOrDefault(x => x.Status == BulletinConstants.Type.Unspecified)?.Count ?? 0;
 
             if (result == null) return NotFound();
 
@@ -80,15 +83,15 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPost("{aId}/connect/{personToBeConnected}")]
         public async Task<IActionResult> ConnectPeople(string aId, string personToBeConnected)
         {
-            await this._personService.ConnectPeopleAsync(aId, personToBeConnected);
+            await this._managePersonService.ConnectPeopleAsync(aId, personToBeConnected);
             return Ok();
         }
 
         [HttpPost("remove-pid")]
         public async Task<IActionResult> RemovePid([FromBody] RemovePidDTO aInDto)
         {
-            var result =  await this._personService.RemovePidAsync(aInDto);
-            if(result == null) return NotFound();
+            var result = await this._managePersonService.RemovePidAsync(aInDto);
+            if (result == null) return NotFound();
 
             return Ok(result.PersonId);
         }

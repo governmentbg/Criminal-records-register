@@ -1,18 +1,17 @@
 using AutoMapper;
-using MJ_CAIS.DataAccess;
-using MJ_CAIS.Repositories.Contracts;
-using MJ_CAIS.DTO.Fbbc;
-using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.Services.Contracts;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
-using MJ_CAIS.Common.Enums;
-using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
-using MJ_CAIS.DTO.EcrisMessage;
+using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Enums;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.EcrisMessage;
+using MJ_CAIS.DTO.Fbbc;
 using MJ_CAIS.DTO.Person;
+using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.Services.Contracts.Utils;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
@@ -21,14 +20,16 @@ namespace MJ_CAIS.Services
     {
         private readonly IFbbcRepository _fbbcRepository;
         private readonly IEcrisMessageRepository _ecrisMessageRepository;
-        private readonly IPersonService _personService;
+        private readonly IManagePersonService _managePersonService;
 
-        public FbbcService(IMapper mapper, IFbbcRepository fbbcRepository, IEcrisMessageRepository ecrisMessageRepository, IPersonService personService)
+        public FbbcService(IMapper mapper, IFbbcRepository fbbcRepository,
+            IEcrisMessageRepository ecrisMessageRepository,
+            IManagePersonService managePersonService)
             : base(mapper, fbbcRepository)
         {
             _fbbcRepository = fbbcRepository;
             _ecrisMessageRepository = ecrisMessageRepository;
-            _personService = personService;
+            _managePersonService = managePersonService;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -70,7 +71,7 @@ namespace MJ_CAIS.Services
         public async Task<FbbcDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new FbbcDTO();
-            var person = await _personService.SelectWithBirthInfoAsync(personId);
+            var person = await _managePersonService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
         }
@@ -188,7 +189,7 @@ namespace MJ_CAIS.Services
 
             var personDto = aInDto.Person;
             // create person object, apply changes
-            var person = await _personService.CreatePersonAsync(personDto);
+            var person = await _managePersonService.CreatePersonAsync(personDto);
 
             foreach (var personIdObj in person.PPersonIds)
             {

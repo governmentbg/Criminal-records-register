@@ -317,6 +317,45 @@ namespace MJ_CAIS.Repositories.Impl
             return personId;
         }
 
+        public async Task<PPerson> GetExistingPersonWithPidsDataAsync(string id)
+        {
+            var existingPerson = await _dbContext.PPeople
+                                .AsNoTracking()
+                                .Include(x => x.PPersonIds)
+                                .Include(x => x.PPersonCitizenships)
+                                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return existingPerson;
+        }
+
+        public IQueryable<PPerson> GetExistingPeopleWithPidsData(IEnumerable<string> ids)
+        {
+            var existingPersons = _dbContext.PPeople
+                 .AsNoTracking()
+                 .Include(x => x.PPersonIds)
+                 .Where(x => ids.Contains(x.Id));
+
+            return existingPersons;
+        }
+
+        public IQueryable<PPerson> GetPeopleToBeConectedWithPidData(string firstPersonId, string secondPersonId)
+        {
+            var people = _dbContext.PPeople
+                              .AsNoTracking()
+                              .Include(x => x.PPersonIds)
+                              .Where(x => x.Id == firstPersonId || x.Id == secondPersonId);
+
+            return people;
+        }
+
+        public async Task<string> GetIsoNumberByCountryIdAsync(string countryId)
+        {
+            var result = (await _dbContext.GCountries
+                     .AsNoTracking()
+                     .FirstOrDefaultAsync(x => x.Id == countryId))?.Iso31662Number;
+
+            return result;
+        }
         private static List<PersonGridDTO> GetPersons(DataTable dataTable)
         {
             var result = new List<PersonGridDTO>();
