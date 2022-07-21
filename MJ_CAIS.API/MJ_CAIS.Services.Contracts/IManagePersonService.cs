@@ -14,5 +14,11 @@ namespace MJ_CAIS.Services.Contracts
         Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
 
         Task<List<PersonIdTypeDTO>> GetPidsFromFormAsync(PersonDTO aInDto);
+
+        void GeneratePersonCitizenship(PPerson person, PPersonH personH, IEnumerable<string> nationalities);
+
+        PPerson CreateNewPerson(PersonDTO aInDto, List<PPersonId> pids, string personId);
+
+        PPersonH CreateNewPersonHistory(PPerson person);
     }
 }

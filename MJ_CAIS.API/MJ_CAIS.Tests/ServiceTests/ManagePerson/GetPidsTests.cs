@@ -35,12 +35,60 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
             var result = await _peopleService.GetPidsFromFormAsync(personDto);
 
             // assert
-            Assert.IsNotNull(result);
-            Assert.IsNotEmpty(result);
             Assert.AreEqual(result.Count(), 1);
             Assert.AreEqual(result.First().Type, PersonConstants.PidType.Suid);
-            Assert.NotNull(result.First().Pid);
-            Assert.IsNotEmpty(result.First().Pid);
+        }
+
+        [Test]
+        public async Task ReturnNotEmptySuid_WhenAllPidsAreEmpty()
+        {
+            // arrange 
+            var personDto = new PersonDTO();
+
+            // act
+            var result = await _peopleService.GetPidsFromFormAsync(personDto);
+
+            // assert
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Suid && !string.IsNullOrEmpty(p.Pid)), Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task ReturnSuidAndEgn_WhenOnlyEgnIsFilledIn()
+        {
+            // arrange 
+            var personDto = new PersonDTO { Egn = "123456789" };
+
+            // act
+            var result = await _peopleService.GetPidsFromFormAsync(personDto);
+
+            // assert     
+            Assert.AreEqual(result.Count(), 2);
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Suid), Is.EqualTo(1));
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Egn), Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task ReturnAllPids_WhenAllAreFilledIn()
+        {
+            // arrange 
+            var personDto = new PersonDTO()
+            {
+                Egn = "123456789",
+                Lnch = "15242563140",
+                Ln = "1014141515",
+                AfisNumber = "789658473"
+            };
+
+            // act
+            var result = await _peopleService.GetPidsFromFormAsync(personDto);
+
+            // assert     
+            Assert.AreEqual(result.Count(), 5);
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Egn), Is.EqualTo(1));
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Lnch), Is.EqualTo(1));
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Ln), Is.EqualTo(1));
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.AfisNumber), Is.EqualTo(1));
+            Assert.That(result.Count(p => p.Type == PersonConstants.PidType.Suid), Is.EqualTo(1));
         }
     }
 }

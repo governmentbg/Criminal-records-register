@@ -9,6 +9,7 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using System.Security.Cryptography;
 using System.Text;
+using MJ_CAIS.Common.Exceptions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
@@ -16,8 +17,7 @@ namespace MJ_CAIS.Services
     public class ManagePersonService : IManagePersonService
     {
         private readonly IPersonRepository _personRepository;
-        protected IMapper _mapper;
-        protected IConfigurationProvider mapperConfiguration => _mapper.ConfigurationProvider;
+        private readonly IMapper _mapper;
 
         public ManagePersonService(IPersonRepository personRepository, IMapper mapper)
         {
@@ -42,7 +42,12 @@ namespace MJ_CAIS.Services
             // must create new person object if pids do not exist in db
             if (pidsDoNotExistExist)
             {
-                return CreateNewPerson(aInDto, pids, personId);
+                var newPerson =  CreateNewPerson(aInDto, pids, personId);
+                var newPersonH = CreateNewPersonHistory(newPerson);
+
+                GeneratePersonCitizenship(newPerson, newPersonH, aInDto.Nationalities.SelectedForeignKeys);
+                _personRepository.ApplyChanges(newPerson, new List<IBaseIdEntity>(), true);
+                _personRepository.ApplyChanges(newPersonH, new List<IBaseIdEntity>(), true);
             }
 
             // identifiers of a person who exists in the database and the specific pids are attached to it
@@ -69,7 +74,8 @@ namespace MJ_CAIS.Services
             // user will be notified for existing pids connected to another person
             if (!autoMergePeople)
             {
-                return CreateNewPerson(aInDto, pids, personId);
+                // todo: employee must chose what to do in this case
+                throw new BusinessLogicException("More then one person exists with those identifier");
             }
 
             // !!! Automatic merging of more than one person will not be used at this stage
@@ -191,14 +197,18 @@ namespace MJ_CAIS.Services
 
         /// <summary>
         /// The method is executed when no identifiers are found in the database
-        /// Create P_PERSON, P_PERSON_IDS, P_PERSON_H and P_PERSON_IDS_H objects with applied changes.
+        /// Create P_PERSON, P_PERSON_IDS.
         /// </summary>
         /// <param name="aInDto">Person data</param>
         /// <param name="pids">Identifiers</param>
         /// <param name="personId">Person identifier</param>
         /// <returns>The newly created person includes the identifiers</returns>
-        private PPerson CreateNewPerson(PersonDTO aInDto, List<PPersonId> pids, string personId)
+        public PPerson CreateNewPerson(PersonDTO aInDto, List<PPersonId> pids, string personId)
         {
+            if (aInDto is null) throw new ArgumentNullException(nameof(aInDto));
+            if (pids is null || pids.Count == 0) throw new ArgumentNullException(nameof(pids));
+            if (string.IsNullOrEmpty(personId)) throw new ArgumentNullException(nameof(personId));
+
             // add person with pids
             var person = _mapper.MapToEntity<PersonDTO, PPerson>(aInDto, true);
             person.Id = personId;
@@ -208,21 +218,36 @@ namespace MJ_CAIS.Services
             var personH = _mapper.MapToEntity<PPerson, PPersonH>(person, true);
             personH.PPersonIdsHes = _mapper.MapToEntityList<PPersonId, PPersonIdsH>(pids, true);
 
-            GeneratePersonCitizenship(person, personH, aInDto.Nationalities.SelectedForeignKeys);
-
-            _personRepository.ApplyChanges(person, new List<IBaseIdEntity>(), true);
-            _personRepository.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
             return person;
         }
 
         /// <summary>
-        /// Add citizenship data to person and person history obkect
+        /// Create person and person identifiers history from newly created person  
         /// </summary>
-        private void GeneratePersonCitizenship(PPerson person, PPersonH personH, IEnumerable<string> nationalities)
+        public PPersonH CreateNewPersonHistory(PPerson person)
         {
+            if (person is null) throw new ArgumentNullException(nameof(person));
+
+            // add person history object with pids
+            var personH = _mapper.MapToEntity<PPerson, PPersonH>(person, true);
+            personH.PPersonIdsHes = _mapper.MapToEntityList<PPersonId, PPersonIdsH>(person.PPersonIds.ToList(), true);
+
+            return personH;
+        }
+
+        /// <summary>
+        /// Add citizenship data to person and person history object
+        /// </summary>
+        public void GeneratePersonCitizenship(PPerson person, PPersonH personH, IEnumerable<string> nationalities)
+        {
+            if (person is null) throw new ArgumentNullException(nameof(person));
+            if (personH is null) throw new ArgumentNullException(nameof(personH));
+
             // add person nationalities and nationalities history
             person.PPersonCitizenships = new List<PPersonCitizenship>();
             personH.PPersonHCitizenships = new List<PPersonHCitizenship>();
+            if (nationalities is null) return;
+
             foreach (var nationality in nationalities)
             {
                 person.PPersonCitizenships.Add(new PPersonCitizenship
