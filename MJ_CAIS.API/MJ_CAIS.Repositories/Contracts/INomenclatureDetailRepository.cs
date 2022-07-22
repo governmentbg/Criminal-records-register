@@ -25,6 +25,10 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<APaymentMethod> GetAllAPaymentMethods();
 
+        IQueryable<APaymentMethod> GetWebAPaymentMethods();
+
+        IQueryable<APaymentMethod> GetDeskAPaymentMethods();
+
         IQueryable<ASrvcResRcptMeth> GetSrvcResRcptMethods();
 
         IQueryable<PPersonIdType> GetPidTypes();

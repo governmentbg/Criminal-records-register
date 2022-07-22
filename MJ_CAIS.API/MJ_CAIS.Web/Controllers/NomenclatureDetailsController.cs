@@ -38,9 +38,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("a-payment-methods")]
-        public IActionResult GetAllAPaymentMethods()
+        public IActionResult GetDeskAPaymentMethods()
         {
-            var result = _nomenclatureDetailService.GetAllAPaymentMethods();
+            var result = _nomenclatureDetailService.GetDeskAPaymentMethods();
             return Ok(result);
         }
 
