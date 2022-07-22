@@ -13,4 +13,23 @@
       </form>
     </ng-container>
   </nb-card-body>
+  <nb-card-footer>
+    <div class="row">
+      <div class="col-6">
+        <button nbButton matRipple fullWidth (click)="onCancel()">Отказ</button>
+      </div>
+      <div class="col-6">
+        <button
+          nbButton
+          matRipple
+          fullWidth
+          status="primary"
+          (click)="onSubmit()"
+          [disabled]="searchValue === null ||searchValue === undefined || searchValue === ''"
+        >
+          Търси
+        </button>
+      </div>
+    </div>
+  </nb-card-footer>
 </nb-card>

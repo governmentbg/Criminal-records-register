@@ -18,5 +18,9 @@ export class SearchByEgnDialogComponent implements OnInit {
  
   onSubmit() {
     this.ref.close(this.searchValue);
- }
+  }
+
+  onCancel() {
+    this.ref.close();
+  }
 }
