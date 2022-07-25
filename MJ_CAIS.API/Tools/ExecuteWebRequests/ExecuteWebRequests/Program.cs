@@ -31,6 +31,14 @@ namespace ExecuteWebRequests
                     {
                         regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
                     }
+                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
+                    {
+                        regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName);
+                    }
+                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
+                    {
+                        regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName);
+                    }
                 }
             }
         }
