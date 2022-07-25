@@ -38,6 +38,7 @@ namespace MJ_CAIS.EntityTransform
             nameof(GCity),
             nameof(EEcrisAuthority),
             nameof(BFormOfGuilt),
+            
         };
 
         public static Dictionary<string, string> FilterInterfaces = new Dictionary<string, string>

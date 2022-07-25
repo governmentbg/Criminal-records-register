@@ -90,7 +90,8 @@ namespace MJ_CAIS.Services
 
         public virtual async Task SaveEntityAsync(IBaseIdEntity entity, bool applyToAllLevels = true)
         {
-            await dbContext.SaveEntityAsync(entity, applyToAllLevels);
+            await baseAsyncRepository.SaveEntityAsync(entity, applyToAllLevels);
+           // await dbContext.SaveEntityAsync(entity, applyToAllLevels);
         }
 
         public virtual async Task<List<TGridDTO>> SelectAllAsync(ODataQueryOptions<TGridDTO> aQueryOptions)

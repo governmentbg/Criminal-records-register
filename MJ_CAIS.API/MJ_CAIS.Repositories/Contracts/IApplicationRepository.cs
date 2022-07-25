@@ -14,5 +14,8 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId);
         Task<IQueryable<ACertificate>> SelectAllCertificateAsync();
         IQueryable<ObjectStatusCountDTO> GetForJudgeCountByCurrentAuthority();
+
+        Task<AApplication> SelectEntityAsync(string id);
+        Task<AApplication?> GetApplicationForCertificateGeneration(string id);
     }
 }
