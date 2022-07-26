@@ -27,17 +27,20 @@ namespace ExecuteWebRequests
 
                 foreach (var webRequest in webRequests)
                 {
-                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
+                    if(webRequest.WebService != null)
                     {
-                        regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
-                    }
-                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
-                    {
-                        regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName);
-                    }
-                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
-                    {
-                        regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName);
+                        if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
+                        {
+                            regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
+                        }
+                        if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
+                        {
+                            regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName);
+                        }
+                        if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
+                        {
+                            regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName);
+                        }
                     }
                 }
             }

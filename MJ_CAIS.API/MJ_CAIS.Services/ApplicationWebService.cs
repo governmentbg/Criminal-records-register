@@ -87,7 +87,7 @@ namespace MJ_CAIS.Services
             //await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
-
+        
         protected override void TransformDataOnInsert(WApplication entity)
         {
             base.TransformDataOnInsert(entity);

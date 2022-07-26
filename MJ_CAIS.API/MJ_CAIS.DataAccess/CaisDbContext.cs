@@ -117,6 +117,8 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<VBulletinsFull> VBulletinsFulls { get; set; } = null!;
         public virtual DbSet<VOffence> VOffences { get; set; } = null!;
         public virtual DbSet<VSanction> VSanctions { get; set; } = null!;
+        public virtual DbSet<WAppCitizenship> WAppCitizenships { get; set; } = null!;
+        public virtual DbSet<WAppPersAlias> WAppPersAliases { get; set; } = null!;
         public virtual DbSet<WApplication> WApplications { get; set; } = null!;
         public virtual DbSet<WApplicationStatus> WApplicationStatuses { get; set; } = null!;
         public virtual DbSet<WStatusH> WStatusHes { get; set; } = null!;
@@ -133,7 +135,6 @@ namespace MJ_CAIS.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.HasDefaultSchema("MJ_CAIS");
 
             modelBuilder.Entity<AAppBulletin>(entity =>
             {
@@ -5005,6 +5006,9 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("E_REGIX_CACHE");
 
+                entity.HasIndex(e => new { e.ReqIdentifier, e.WebServiceName }, "XUKE_REGIX_CACHE")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -5088,6 +5092,50 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("GENDER_CODE");
 
+                entity.Property(e => e.IdDocIssueDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("ID_DOC_ISSUE_DATE");
+
+                entity.Property(e => e.IdDocIssuePlace)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_ISSUE_PLACE");
+
+                entity.Property(e => e.IdDocIssuerName)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_ISSUER_NAME");
+
+                entity.Property(e => e.IdDocNumber)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_NUMBER");
+
+                entity.Property(e => e.IdDocPrRemarks)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_PR_REMARKS");
+
+                entity.Property(e => e.IdDocReason)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_REASON");
+
+                entity.Property(e => e.IdDocStatus)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_STATUS");
+
+                entity.Property(e => e.IdDocStatusDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("ID_DOC_STATUS_DATE");
+
+                entity.Property(e => e.IdDocType)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_TYPE");
+
+                entity.Property(e => e.IdDocTypeOfPermit)
+                    .HasMaxLength(200)
+                    .HasColumnName("ID_DOC_TYPE_OF_PERMIT");
+
+                entity.Property(e => e.IdDocValidDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("ID_DOC_VALID_DATE");
+
                 entity.Property(e => e.Lnch)
                     .HasMaxLength(100)
                     .HasColumnName("LNCH");
@@ -5120,6 +5168,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NATIONALITY_NAME2");
 
+                entity.Property(e => e.ReqIdentifier)
+                    .HasMaxLength(100)
+                    .HasColumnName("REQ_IDENTIFIER");
+
                 entity.Property(e => e.RequestXml)
                     .HasColumnType("CLOB")
                     .HasColumnName("REQUEST_XML");
@@ -5135,6 +5187,46 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.SurnameLat)
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME_LAT");
+
+                entity.Property(e => e.TrDocIssueDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("TR_DOC_ISSUE_DATE");
+
+                entity.Property(e => e.TrDocIssuePlace)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_ISSUE_PLACE");
+
+                entity.Property(e => e.TrDocIssuerName)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_ISSUER_NAME");
+
+                entity.Property(e => e.TrDocNumber)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_NUMBER");
+
+                entity.Property(e => e.TrDocReason)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_REASON");
+
+                entity.Property(e => e.TrDocSeries)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_SERIES");
+
+                entity.Property(e => e.TrDocStatus)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_STATUS");
+
+                entity.Property(e => e.TrDocStatusDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("TR_DOC_STATUS_DATE");
+
+                entity.Property(e => e.TrDocType)
+                    .HasMaxLength(200)
+                    .HasColumnName("TR_DOC_TYPE");
+
+                entity.Property(e => e.TrDocValidDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("TR_DOC_VALID_DATE");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
@@ -8183,6 +8275,122 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+            });
+
+            modelBuilder.Entity<WAppCitizenship>(entity =>
+            {
+                entity.ToTable("W_APP_CITIZENSHIP");
+
+                entity.HasIndex(e => e.WApplicationId, "XIF1W_APP_CITIZENSHIP");
+
+                entity.HasIndex(e => e.CountryId, "XIF2W_APP_CITIZENSHIP");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CountryId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("COUNTRY_ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.Property(e => e.WApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("W_APPLICATION_ID");
+
+                entity.HasOne(d => d.Country)
+                    .WithMany(p => p.WAppCitizenships)
+                    .HasForeignKey(d => d.CountryId)
+                    .HasConstraintName("FK_W_APP_CITIZENSHIP_G_COUNTRI");
+
+                entity.HasOne(d => d.WApplication)
+                    .WithMany(p => p.WAppCitizenships)
+                    .HasForeignKey(d => d.WApplicationId)
+                    .HasConstraintName("FK_W_APP_CITIZENSHIP_W_APPLICA");
+            });
+
+            modelBuilder.Entity<WAppPersAlias>(entity =>
+            {
+                entity.ToTable("W_APP_PERS_ALIAS");
+
+                entity.HasIndex(e => e.WApplicationId, "XIF1W_APP_PERS_ALIAS");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Familyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILYNAME");
+
+                entity.Property(e => e.Firstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FIRSTNAME");
+
+                entity.Property(e => e.Fullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FULLNAME");
+
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(200)
+                    .HasColumnName("SURNAME");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(200)
+                    .HasColumnName("TYPE");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.Property(e => e.WApplicationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("W_APPLICATION_ID");
+
+                entity.HasOne(d => d.WApplication)
+                    .WithMany(p => p.WAppPersAliases)
+                    .HasForeignKey(d => d.WApplicationId)
+                    .HasConstraintName("FK_W_APP_PERS_ALIAS_W_APPLICAT");
             });
 
             modelBuilder.Entity<WApplication>(entity =>

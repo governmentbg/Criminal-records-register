@@ -40,7 +40,13 @@ namespace MJ_CAIS.EntityTransform
                     lines.RemoveRange(i, linesCount);
                     i -= linesCount;
 
-                    break; // Breaking because there are no other changes for now
+                    //break; // Breaking because there are no other changes for now
+                }
+                if(line.Contains("modelBuilder.HasDefaultSchema(\"MJ_CAIS\");"))
+                {
+                    hasChange = true;
+                    lines.RemoveAt(i);
+                    i -= 1;
                 }
             }
 

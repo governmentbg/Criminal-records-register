@@ -45,5 +45,27 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FatherFirstname { get; set; }
         public string? FatherSurname { get; set; }
         public string? FatherFamilyname { get; set; }
+        public string ReqIdentifier { get; set; } = null!;
+        public string? IdDocType { get; set; }
+        public string? IdDocNumber { get; set; }
+        public DateTime? IdDocIssueDate { get; set; }
+        public string? IdDocIssuePlace { get; set; }
+        public string? IdDocIssuerName { get; set; }
+        public DateTime? IdDocValidDate { get; set; }
+        public string? IdDocPrRemarks { get; set; }
+        public string? IdDocTypeOfPermit { get; set; }
+        public string? IdDocReason { get; set; }
+        public string? IdDocStatus { get; set; }
+        public DateTime? IdDocStatusDate { get; set; }
+        public string? TrDocType { get; set; }
+        public string? TrDocNumber { get; set; }
+        public DateTime? TrDocIssueDate { get; set; }
+        public string? TrDocIssuePlace { get; set; }
+        public string? TrDocIssuerName { get; set; }
+        public DateTime? TrDocValidDate { get; set; }
+        public string? TrDocSeries { get; set; }
+        public string? TrDocReason { get; set; }
+        public string? TrDocStatus { get; set; }
+        public DateTime? TrDocStatusDate { get; set; }
     }
 }
