@@ -7,20 +7,19 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
     public interface IRegixService
     {
         List<EWebRequest> GetRequestsForAsyncExecution();
-
-        (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
-            string? bulletinId = null,
+        public (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
             string? applicationId = null,
-            string? wApplicationId = null,
-            string? ecrisMsgId = null,
-            bool isAsync = false);
+            string? wApplicationId = null);
 
-        (ForeignIdentityInfoResponseType, EWebRequest) SyncCallPersonDataSearchByLNCH(string egn,
-            string? bulletinId = null,
+        void CreateRegixRequests(string egn, string wApplicationId);
+
+        (ForeignIdentityInfoResponseType, EWebRequest) SyncCallForeignIdentitySearchV2(string egn,
             string? applicationId = null,
-            string? wApplicationId = null,
-            string? ecrisMsgId = null);
+            string? wApplicationId = null);
 
-        PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName, EWebRequest requestRelations, string webServiceNameRelations);
+        PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName, string? egn = null);
+        RelationsResponseType ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null);
+        ForeignIdentityInfoResponseType ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null);
+
     }
 }

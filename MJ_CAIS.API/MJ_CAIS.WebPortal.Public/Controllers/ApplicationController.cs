@@ -86,9 +86,10 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
             var id =  await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
-            var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
+            //var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
+            _regixService.CreateRegixRequests(viewModel.Egn, wApplicationId: id);
 
-            var paymentMethod = _nomenclatureDetailService.GetWebPaymentMethods().Where(pm => pm.Id == viewModel.PaymentMethodId).FirstOrDefault();
+            var paymentMethod = _nomenclatureDetailService.GetWebAPaymentMethods().Where(pm => pm.Id == viewModel.PaymentMethodId).FirstOrDefault();
             if (paymentMethod != null && paymentMethod.Code == "PayEgovBg")
             {
                 var price = await _applicationWebService.GetPriceByApplicationType("4");
@@ -162,7 +163,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.PurposeTypes = await purposes.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
 
-            var paymentMethods = _nomenclatureDetailService.GetWebPaymentMethods();
+            var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
             viewModel.PaymentMethodTypes = await paymentMethods.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
         }

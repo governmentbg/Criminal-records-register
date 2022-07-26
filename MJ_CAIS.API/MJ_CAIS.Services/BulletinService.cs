@@ -24,7 +24,7 @@ namespace MJ_CAIS.Services
     public class BulletinService : BaseAsyncService<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string, CaisDbContext>, IBulletinService
     {
         private readonly IBulletinRepository _bulletinRepository;
-        private readonly IPersonService _personService;
+        private readonly IManagePersonService _managePersonService;
         private readonly INotificationService _notificationService;
         private readonly IBulletinEventService _bulletinEventService;
         private readonly IRehabilitationService _rehabilitationService;
@@ -33,21 +33,21 @@ namespace MJ_CAIS.Services
 
         public BulletinService(IMapper mapper,
             IBulletinRepository bulletinRepository,
-            IPersonService personService,
             INotificationService notificationService,
             IBulletinEventService bulletinEventService,
             IRehabilitationService rehabilitationService,
             IUserContext userContext,
-            IRegisterTypeService registerTypeService)
+            IRegisterTypeService registerTypeService,
+            IManagePersonService managePersonService)
             : base(mapper, bulletinRepository)
         {
             _bulletinRepository = bulletinRepository;
-            _personService = personService;
             _notificationService = notificationService;
             _bulletinEventService = bulletinEventService;
             _rehabilitationService = rehabilitationService;
             _userContext = userContext;
             _registerTypeService = registerTypeService;
+            _managePersonService = managePersonService;
         }
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
@@ -92,7 +92,7 @@ namespace MJ_CAIS.Services
             var authId = _userContext.CsAuthorityId;
             var auth = await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
             result.CsAuthorityName = auth?.Name;
-            var person = await _personService.SelectWithBirthInfoAsync(personId);
+            var person = await _managePersonService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
         }
@@ -468,7 +468,7 @@ namespace MJ_CAIS.Services
             // get person data from bulletin
             var personDto = mapper.Map<BBulletin, PersonDTO>(bulletin);
             // create person object, apply changes
-            var person = await _personService.CreatePersonAsync(personDto);
+            var person = await _managePersonService.CreatePersonAsync(personDto);
 
             // create PBulletinId for all pids (locally added and saved in db)
 

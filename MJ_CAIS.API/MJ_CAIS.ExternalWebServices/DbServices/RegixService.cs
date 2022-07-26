@@ -38,50 +38,53 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return result;
         }
 
-        public (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
-            string? bulletinId = null,
-            string? applicationId = null,
-            string? wApplicationId = null,
-            string? ecrisMsgId = null,
-            bool isAsync = false)
+
+        public void CreateRegixRequests(string egn,
+            string wApplicationId)
         {
-            var operation = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-            var operationRelationsSearch = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
+            var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
+            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, operationPDS.Id, null, wApplicationId: wApplicationId);
 
+            var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
+            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, null, wApplicationId: wApplicationId);
 
-            var webRequestEntity = FactoryRegix.CreatePersonWebRequest(egn, isAsync, operation.Id, bulletinId,
-                applicationId, wApplicationId, ecrisMsgId);
-            var webRequestEntityPersonRelations = FactoryRegix.CreatePersonRelationsWebRequest(egn, isAsync,
-                operationRelationsSearch.Id, bulletinId, applicationId, wApplicationId, ecrisMsgId);
-
-            _dbContext.SaveEntity(webRequestEntity);
-            _dbContext.SaveEntity(webRequestEntityPersonRelations);
-
-            PersonDataResponseType response = null;
-            if (!isAsync)
-            {
-                response = ExecutePersonDataSearch(webRequestEntity, operation.WebServiceName,
-                    webRequestEntityPersonRelations, operationRelationsSearch.WebServiceName);
-            }
-
-            return (response, webRequestEntity);
+            _dbContext.SaveChanges();
         }
 
-
-        public (ForeignIdentityInfoResponseType, EWebRequest) SyncCallPersonDataSearchByLNCH(string egn,
-            string? bulletinId = null,
+        public (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
             string? applicationId = null,
-            string? wApplicationId = null,
-            string? ecrisMsgId = null)
+            string? wApplicationId = null)
         {
-            var isAsync = false;
-            var operation = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
 
-            var webRequestEntity = FactoryRegix.CreateForeignPersonWebRequest(egn, isAsync, operation.Id, bulletinId,
-                applicationId, wApplicationId, ecrisMsgId);
-            _dbContext.SaveEntity(webRequestEntity);
-            var response = ExecutePersonDataSearchByLNCH(webRequestEntity, operation.WebServiceName);
-            return (response, webRequestEntity);
+            var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
+            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, operationPDS.Id, applicationId, wApplicationId: wApplicationId);
+
+            var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
+            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, applicationId, wApplicationId: wApplicationId);
+
+            _dbContext.SaveChanges();
+
+            
+            var responsePDS = ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn);
+            var responseRS = ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn);
+
+            return (responsePDS, eWRequestPDS);
+        }
+
+        public (ForeignIdentityInfoResponseType, EWebRequest) SyncCallForeignIdentitySearchV2(string egn,
+            string? applicationId = null,
+            string? wApplicationId = null)
+        {
+            var operationFI = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
+            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: egn, isAsync: true, operationFI.Id, applicationId, wApplicationId: wApplicationId);
+
+            _dbContext.SaveChanges();
+
+
+            var responseFI = ExecuteForeignIdentitySearchV2(eWRequestFI, operationFI.WebServiceName, egn);
+
+            
+            return (responseFI, eWRequestFI);
         }
 
         /// <summary>
@@ -89,25 +92,57 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// </summary>
         /// <param name="request"></param>
         /// <param name="serviceURI"></param>
-        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName,
-            EWebRequest requestRelations, string webServiceNameRelations)
+        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName,  string? egn = null)
         {
-            var empty = new PersonDataResponseType();
-            var emptyXml = XmlUtils.SerializeToXml(empty);
+            string? citizenEgn = egn;
+            if (String.IsNullOrEmpty(egn))
+            {
+                var empty = new PersonDataResponseType();
+                var emptyXml = XmlUtils.SerializeToXml(empty);
 
-            var requestDeserialized = XmlUtils.DeserializeXml<PersonDataRequestType>(request.RequestXml);
-            var citizenEgn = requestDeserialized.EGN;
-
-            CallRegix(request, webServiceName, citizenEgn);
-            CallRegix(requestRelations, webServiceNameRelations, citizenEgn);
-
+                var requestDeserialized = XmlUtils.DeserializeXml<PersonDataRequestType>(request.RequestXml);
+                citizenEgn = requestDeserialized.EGN;
+            }
+            
+            CallRegix(request, webServiceName, citizenEgn, null);
+           
             PersonDataResponseType responseObject = null;
             if (request.HasError != true)
             {
                 responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
                 var cache = AddOrUpdateCache(request, webServiceName, citizenEgn);
-                var cacheRelations = AddOrUpdateCache(requestRelations, webServiceNameRelations, citizenEgn);
-                PopulateObjects(request, cache, cacheRelations);
+                PopulateObjects(request, cache); 
+            }
+
+            _dbContext.SaveChanges();
+            return responseObject;
+        }
+
+        /// <summary>
+        ///     Изпълнява заявка от таблицата с web requests
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="serviceURI"></param>
+        public RelationsResponseType ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null)
+        {
+            string? citizenEgn = egn;
+            if (String.IsNullOrEmpty(egn))
+            {
+                var empty = new RelationsRequestType();
+                var emptyXml = XmlUtils.SerializeToXml(empty);
+
+                var requestDeserialized = XmlUtils.DeserializeXml<RelationsRequestType>(request.RequestXml);
+                citizenEgn = requestDeserialized.EGN;
+            }
+
+            CallRegix(request, webServiceNameRelations, citizenEgn, null);
+
+            RelationsResponseType responseObject = null;
+            if (request.HasError != true)
+            {
+                responseObject = XmlUtils.DeserializeXml<RelationsResponseType>(request.ResponseXml);
+                var cache = AddOrUpdateCache(request, webServiceNameRelations, citizenEgn);
+                PopulateObjects(request, cache);
             }
 
             _dbContext.SaveChanges();
@@ -120,15 +155,19 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// </summary>
         /// <param name="request"></param>
         /// <param name="serviceURI"></param>
-        public ForeignIdentityInfoResponseType ExecutePersonDataSearchByLNCH(EWebRequest request, string webServiceName)
+        public ForeignIdentityInfoResponseType ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null)
         {
-            var empty = new ForeignIdentityInfoResponseType();
-            var emptyXml = XmlUtils.SerializeToXml(empty);
+            string? citizenLNCH = egn;
+            if (String.IsNullOrEmpty(egn))
+            {
+                var empty = new ForeignIdentityInfoResponseType();
+                var emptyXml = XmlUtils.SerializeToXml(empty);
 
-            var requestDeserialized = XmlUtils.DeserializeXml<ForeignIdentityInfoRequestType>(request.RequestXml);
-            var citizenLNCH = requestDeserialized.Identifier;
-
-            CallRegixLNCH(request, webServiceName, citizenLNCH);
+                var requestDeserialized = XmlUtils.DeserializeXml<ForeignIdentityInfoRequestType>(request.RequestXml);
+                citizenLNCH = requestDeserialized.Identifier;
+            }
+            
+            CallRegix(request, webServiceName, null, citizenLNCH);
 
             ForeignIdentityInfoResponseType responseObject = null;
             if (request.HasError != true)
@@ -246,9 +285,53 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
         }
 
-        private void CallRegixLNCH(EWebRequest request, string webServiceName, string citizenLNCH)
+        //private void CallRegixLNCH(EWebRequest request, string webServiceName, string citizenLNCH)
+        //{
+        //    var cachedResponse = CheckForCachedResponseLNCH(citizenLNCH, webServiceName);
+        //    if (cachedResponse != null)
+        //    {
+        //        request.ResponseXml = cachedResponse.ResponseXml;
+        //        request.IsFromCache = true;
+        //    }
+        //    else
+        //    {
+        //        request.Attempts += 1;
+        //        request.IsFromCache = false;
+
+        //        try
+        //        {
+        //            var callContext = CreateCallContext(request);
+        //            var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
+        //                callContext, citizenLNCH);
+        //            request.ResponseXml = resultData.Data.Response.Any.OuterXml;
+        //            request.ResponseXml = AddXmlSchema(request.ResponseXml);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            request.HasError = true;
+        //            request.Error = ex.Message;
+        //            request.StackTrace = ex.StackTrace;
+        //        }
+        //    }
+
+        //    request.ExecutionDate = DateTime.Now;
+        //    request.Status = request.HasError == true
+        //        ? WebRequestStatusConstants.Rejected
+        //        : WebRequestStatusConstants.Accepted;
+        //}
+
+        private void CallRegix(EWebRequest request, string webServiceName, string? citizenEgn, string? citizenLNCH)
         {
-            var cachedResponse = CheckForCachedResponseLNCH(citizenLNCH, webServiceName);
+            ERegixCache cachedResponse = null;
+            if (!string.IsNullOrEmpty(citizenEgn))
+            {
+                cachedResponse = CheckForCachedResponse(citizenEgn, webServiceName);
+            }
+            if (!string.IsNullOrEmpty(citizenLNCH))
+            {
+                cachedResponse = CheckForCachedResponseLNCH(citizenLNCH, webServiceName);
+            }
+                 
             if (cachedResponse != null)
             {
                 request.ResponseXml = cachedResponse.ResponseXml;
@@ -263,7 +346,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 {
                     var callContext = CreateCallContext(request);
                     var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
-                        callContext, citizenLNCH);
+                        callContext, !string.IsNullOrEmpty(citizenEgn) ? citizenEgn: citizenLNCH);
                     request.ResponseXml = resultData.Data.Response.Any.OuterXml;
                     request.ResponseXml = AddXmlSchema(request.ResponseXml);
                 }
@@ -280,42 +363,6 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 ? WebRequestStatusConstants.Rejected
                 : WebRequestStatusConstants.Accepted;
         }
-
-        private void CallRegix(EWebRequest request, string webServiceName, string citizenEgn)
-        {
-            var cachedResponse = CheckForCachedResponse(citizenEgn, webServiceName);
-            if (cachedResponse != null)
-            {
-                request.ResponseXml = cachedResponse.ResponseXml;
-                request.IsFromCache = true;
-            }
-            else
-            {
-                request.Attempts += 1;
-                request.IsFromCache = false;
-
-                try
-                {
-                    var callContext = CreateCallContext(request);
-                    var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
-                        callContext, citizenEgn);
-                    request.ResponseXml = resultData.Data.Response.Any.OuterXml;
-                    request.ResponseXml = AddXmlSchema(request.ResponseXml);
-                }
-                catch (Exception ex)
-                {
-                    request.HasError = true;
-                    request.Error = ex.Message;
-                    request.StackTrace = ex.StackTrace;
-                }
-            }
-
-            request.ExecutionDate = DateTime.Now;
-            request.Status = request.HasError == true
-                ? WebRequestStatusConstants.Rejected
-                : WebRequestStatusConstants.Accepted;
-        }
-
 
         private ERegixCache CheckForCachedResponseLNCH(string citizenLNCH, string webServiceName)
         {

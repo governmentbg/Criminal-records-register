@@ -54,5 +54,22 @@ namespace MJ_CAIS.Repositories.Impl
             await _dbContext.SaveChangesAsync();
             return repoObj;
         }
+
+        public async Task SaveChangesAsync()
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+
+        public void ApplyChanges<T>(ICollection<T> listEntries, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false)
+           where T : class, IBaseIdEntity
+        {
+            _dbContext.ApplyChanges(listEntries, passedNavigationProperties, applyToAllLevels);
+        }
+
+        public void ApplyChanges<T>(T entity, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true)
+           where T : class, IBaseIdEntity
+        {
+            _dbContext.ApplyChanges(entity, passedNavigationProperties, applyToAllLevels,isRoot);
+        }
     }
 }

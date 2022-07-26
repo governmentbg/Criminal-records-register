@@ -77,10 +77,18 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.APurposes.AsNoTracking();
         }
-
         public IQueryable<APaymentMethod> GetAllAPaymentMethods()
         {
+            return _dbContext.APaymentMethods.AsNoTracking();
+        }
+
+        public IQueryable<APaymentMethod> GetDeskAPaymentMethods()
+        {
             return _dbContext.APaymentMethods.Where(x => x.IsForDesk == true).AsNoTracking();
+        }
+        public IQueryable<APaymentMethod> GetWebAPaymentMethods()
+        {
+            return _dbContext.APaymentMethods.Where(x => x.IsForWeb == true).AsNoTracking();
         }
 
         public IQueryable<ASrvcResRcptMeth> GetSrvcResRcptMethods()

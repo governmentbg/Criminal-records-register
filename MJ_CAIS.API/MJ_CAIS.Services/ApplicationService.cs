@@ -26,7 +26,7 @@ namespace MJ_CAIS.Services
         private readonly IApplicationRepository _applicationRepository;
         private readonly ICertificateService _certificateService;
         private readonly IEWebRequestsRepository _eWebRequestsRepository;
-        private readonly IPersonService _personService;
+        private readonly IManagePersonService _managePersonService;
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IUserContext _userContext;
 
@@ -35,16 +35,16 @@ namespace MJ_CAIS.Services
             IRegisterTypeService registerTypeService,
             ICertificateService certificateService,
             IUserContext userContext,
-            IPersonService personService,
-            IEWebRequestsRepository eWebRequestsRepository)
+            IEWebRequestsRepository eWebRequestsRepository,
+            IManagePersonService managePersonService)
             : base(mapper, applicationRepository)
         {
             _applicationRepository = applicationRepository;
             _registerTypeService = registerTypeService;
             _certificateService = certificateService;
             _userContext = userContext;
-            _personService = personService;
             _eWebRequestsRepository = eWebRequestsRepository;
+            _managePersonService = managePersonService;
         }
 
 
@@ -96,7 +96,7 @@ namespace MJ_CAIS.Services
             result.Id = BaseEntity.GenerateNewId();
             var authId = _userContext.CsAuthorityId;
             result.CsAuthorityId = authId;
-            var person = await _personService.SelectWithBirthInfoAsync(personId);
+            var person = await _managePersonService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
             return result;
         }
@@ -422,7 +422,7 @@ namespace MJ_CAIS.Services
         private async Task UpdatePersonDataAsync(ApplicationInDTO aInDto, AApplication entity)
         {
             // тодо: да се прегледат дали се сетват правилно идентификраторите
-            var person = await _personService.CreatePersonAsync(aInDto.Person);
+            var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {
                 if (personIdObj.PidTypeId == PidType.Egn)
