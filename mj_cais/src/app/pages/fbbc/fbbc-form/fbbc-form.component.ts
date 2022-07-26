@@ -15,6 +15,7 @@ import { CountryDialogComponent } from "../../../@core/components/forms/address-
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { EcrisMessageService } from "../../ecris/ecris-message-form/_data/ecris-message.service";
+import { EcrisReqPreviewComponent } from "../../ecris/ecris-message-form/ecris-req-preview/ecris-req-preview.component";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -106,8 +107,12 @@ export class FbbcFormComponent
 
   getDocument(id: string) {
     debugger;
-    this.ecrisMessageService.getEcrisDocument(id).subscribe((x) => {
-      debugger;
-    });
+    // this.ecrisMessageService.getEcrisDocument(id).subscribe((x) => {
+    //   debugger;
+    // });
+
+    this.dialogService
+    .open(EcrisReqPreviewComponent, CommonConstants.defaultDialogConfig)
+    .onClose.subscribe(x => {});
   }
 }

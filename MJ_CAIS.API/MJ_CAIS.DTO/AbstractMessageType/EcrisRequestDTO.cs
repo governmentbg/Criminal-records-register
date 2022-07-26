@@ -6,6 +6,8 @@ namespace MJ_CAIS.DTO.AbstractMessageType
     {
         public string Id { get; set; }
         public string EcrisId { get; set; }
+        public string SendingMemberState { get; set; }
+        public string ReceivingMemberState { get; set; }
 
         #region Запитващ орган
         public string RequestAuthorityName { get; set; }
