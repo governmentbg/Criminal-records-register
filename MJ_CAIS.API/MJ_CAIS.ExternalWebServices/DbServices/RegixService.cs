@@ -43,10 +43,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string wApplicationId)
         {
             var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, operationPDS.Id, null, wApplicationId: wApplicationId);
+            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, webServiceId: operationPDS.Id, wApplicationId: wApplicationId);
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
-            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, null, wApplicationId: wApplicationId);
+            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, webServiceId: operationRS.Id, wApplicationId: wApplicationId);
 
              _dbContext.SaveChanges();
         }
@@ -61,7 +61,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
             EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, applicationId, wApplicationId: wApplicationId);
-
+            _dbContext.EWebRequests.Add(eWRequestPDS);
+            _dbContext.EWebRequests.Add(eWRequestRS);
             _dbContext.SaveChanges();
 
             
@@ -71,17 +72,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return (responsePDS, eWRequestPDS);
         }
 
-        public async Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string egn,
+        public async Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string lnch,
             string? applicationId = null,
             string? wApplicationId = null)
         {
             var operationFI = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
-            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: egn, isAsync: true, operationFI.Id, applicationId, wApplicationId: wApplicationId);
-
+            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: true, webServiceId: operationFI.Id, applicationId: applicationId, wApplicationId: wApplicationId);
+            _dbContext.EWebRequests.Add(eWRequestFI);
             _dbContext.SaveChanges();
 
 
-            var responseFI = await ExecuteForeignIdentitySearchV2(eWRequestFI, operationFI.WebServiceName, egn);
+            var responseFI = await ExecuteForeignIdentitySearchV2(eWRequestFI, operationFI.WebServiceName, lnch);
 
             
             return (responseFI, eWRequestFI);
@@ -323,7 +324,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     
                     //todo add identity document or travel document
 
-                   // _dbContext.AApplications.Update(application);
+                    _dbContext.AApplications.Update(application);
                 }
             }
         }
@@ -451,7 +452,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
                     //todo add identity document or travel document
 
-                    //_dbContext.WApplications.Update(application);
+                    _dbContext.WApplications.Update(application);
                 }
             }
         }
@@ -612,14 +613,15 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 _dbContext.ERegixCaches.FirstOrDefault(r => r.ReqIdentifier == reqIdentifier && r.WebServiceName == webServiceName);
             if (regixCache == null)
             {
-                regixCache = new ERegixCache
+                var newRegixCache = new ERegixCache
                 {
                     Id = BaseEntity.GenerateNewId(),
                     WebServiceName = webServiceName,
                     ReqIdentifier = reqIdentifier
                 };
 
-                _dbContext.ERegixCaches.Add(regixCache);
+                //_dbContext.ERegixCaches.Add(newRegixCache);
+                return newRegixCache;
             }
             return regixCache;
         }
@@ -675,7 +677,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.GenderCode = responseObject.Gender.GenderCode.ToString();
             }
             regixCache.Alias = responseObject.Alias;
-
+            if(regixCache.Version == null)
+            {
+                _dbContext.ERegixCaches.Add(regixCache);
+            }
+            else
+            {
+                _dbContext.ERegixCaches.Update(regixCache);
+            }
             return regixCache;
         }
 
@@ -706,6 +715,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     regixCache.FatherSurname = personRelation.SurName;
                     regixCache.FatherFamilyname = personRelation.FamilyName;
                 }
+            }
+            if (regixCache.Version == null)
+            {
+                _dbContext.ERegixCaches.Add(regixCache);
+            }
+            else
+            {
+                _dbContext.ERegixCaches.Update(regixCache);
             }
             return regixCache;
         }
@@ -787,10 +804,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
                 regixCache.IdDocType = responseObject.IdentityDocument.DocumentType;
                 regixCache.IdDocNumber = responseObject.IdentityDocument.IdentityDocumentNumber;
-                regixCache.IdDocIssueDate = responseObject.IdentityDocument.IssueDate;
+                if (responseObject.IdentityDocument.IssueDateSpecified)
+                {
+                    regixCache.IdDocIssueDate = responseObject.IdentityDocument.IssueDate;
+                }
                 regixCache.IdDocIssuePlace = responseObject.IdentityDocument.IssuePlace;
                 regixCache.IdDocIssuerName = responseObject.IdentityDocument.IssuerName;
-                regixCache.IdDocValidDate = responseObject.IdentityDocument.ValidDate;
+                if(responseObject.IdentityDocument.ValidDateSpecified)
+                {
+                    regixCache.IdDocValidDate = responseObject.IdentityDocument.ValidDate;
+                }
+                
                 if(responseObject.IdentityDocument.RPRemarks != null)
                 {
                     string? rpremarks = null;
@@ -804,21 +828,35 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.IdDocReason = responseObject.IdentityDocument.StatusReasonCyrillic != null ? responseObject.IdentityDocument.StatusReasonCyrillic.ToString() : null;
                 regixCache.IdDocStatus = responseObject.IdentityDocument.StatusCyrillic;
                 regixCache.IdDocStatusDate = responseObject.IdentityDocument.StatusDate;
+                
             }
             if (responseObject.TravelDocument != null)
             {
                 regixCache.TrDocType = responseObject.TravelDocument.DocumentType;
                 regixCache.TrDocNumber = responseObject.TravelDocument.TravelDocumentNumber;
-                regixCache.TrDocIssueDate = responseObject.TravelDocument.IssueDate;
+                if (responseObject.TravelDocument.IssueDateSpecified)
+                {
+                    regixCache.TrDocIssueDate = responseObject.TravelDocument.IssueDate;
+                }
                 regixCache.TrDocIssuePlace = responseObject.TravelDocument.IssuePlace;
                 regixCache.TrDocIssuerName = responseObject.TravelDocument.IssuerName;
-                regixCache.TrDocValidDate = responseObject.TravelDocument.ValidDate;
+                if (responseObject.TravelDocument.ValidDateSpecified)
+                {
+                    regixCache.TrDocValidDate = responseObject.TravelDocument.ValidDate;
+                }
                 regixCache.TrDocSeries = responseObject.TravelDocument.TravelDocumentSeries;
                 regixCache.TrDocReason = responseObject.TravelDocument.StatusReasonCyrillic;
                 regixCache.TrDocStatus = responseObject.TravelDocument.StatusCyrillic;
                 regixCache.TrDocStatusDate = responseObject.TravelDocument.StatusDate;
             }
-
+            if (regixCache.Version == null)
+            {
+                _dbContext.ERegixCaches.Add(regixCache);
+            }
+            else
+            {
+                _dbContext.ERegixCaches.Update(regixCache);
+            }
             return regixCache;
         }
 

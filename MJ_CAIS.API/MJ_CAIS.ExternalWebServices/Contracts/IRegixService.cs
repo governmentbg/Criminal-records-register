@@ -13,7 +13,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
         void CreateRegixRequests(string egn, string wApplicationId);
 
-        Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string egn,
+        Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string lnch,
             string? applicationId = null,
             string? wApplicationId = null);
 
