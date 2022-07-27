@@ -47,8 +47,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
             EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, webServiceId: operationRS.Id, wApplicationId: wApplicationId);
-
-             _dbContext.SaveChanges();
+           
+            _dbContext.EWebRequests.Add(eWRequestPDS);
+            _dbContext.EWebRequests.Add(eWRequestRS);
+            _dbContext.SaveChanges();
         }
 
         public async Task<(PersonDataResponseType, EWebRequest)> SyncCallPersonDataSearch(string egn,
@@ -61,9 +63,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
             EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, applicationId, wApplicationId: wApplicationId);
-            _dbContext.EWebRequests.Add(eWRequestPDS);
-            _dbContext.EWebRequests.Add(eWRequestRS);
-            _dbContext.SaveChanges();
+            //_dbContext.EWebRequests.Add(eWRequestPDS);
+            //_dbContext.EWebRequests.Add(eWRequestRS);
+            //_dbContext.SaveChanges();
 
             
             var responsePDS = await ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn);
@@ -78,8 +80,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         {
             var operationFI = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
             EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: true, webServiceId: operationFI.Id, applicationId: applicationId, wApplicationId: wApplicationId);
-            _dbContext.EWebRequests.Add(eWRequestFI);
-            _dbContext.SaveChanges();
+            //_dbContext.EWebRequests.Add(eWRequestFI);
+            //_dbContext.SaveChanges();
 
 
             var responseFI = await ExecuteForeignIdentitySearchV2(eWRequestFI, operationFI.WebServiceName, lnch);
@@ -321,9 +323,16 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         application.BirthCityId =  await GetCityIdFromGraoByEGN(application.Egn);
                     }
-                    
-                    //todo add identity document or travel document
 
+                    //todo add identity document or travel document
+                    if (request.Version != null)
+                    {
+                        _dbContext.EWebRequests.Update(request);
+                    }
+                    else
+                    {
+                        _dbContext.EWebRequests.Add(request);
+                    }
                     _dbContext.AApplications.Update(application);
                 }
             }
@@ -451,7 +460,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     }
 
                     //todo add identity document or travel document
-
+                    if(request.Version != null)
+                    {
+                        _dbContext.EWebRequests.Update(request);
+                    }
+                    else
+                    {
+                        _dbContext.EWebRequests.Add(request);
+                    }
                     _dbContext.WApplications.Update(application);
                 }
             }

@@ -18,6 +18,8 @@ using MJ_CAIS.DIContainer;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using TechnoLogica.RegiX.MVRERChAdapterV2;
 using MJ_CAIS.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
 {
@@ -70,7 +72,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestEGN()
         {
 
-            var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3").Result;
+            var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "dfc773d0-dc26-4ced-9249-57d3d7dec4e6").Result;
             if (result.Item1.EGN == null) //TODO: shoud be ==
             {
                 Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
@@ -82,6 +84,40 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
             }
             Assert.True(true);
 
+        }
+        [Test]
+        public void TestCreateWebRequests()
+        {
+            _regixService.CreateRegixRequests("8310188539", "5ee90ac2-da63-48df-ae37-dc0a99d91730");
+            Assert.True(true);
+        }
+
+        [Test]
+        public void TestExecuteWebRequests()
+        {
+            foreach (var webRequest in _dbContext.EWebRequests.Include(x => x.WebService)
+                            .Where(x => x.IsAsync == true || x.IsAsync == null)
+                            .Where(x => x.Status == WebRequestStatusConstants.Pending ||
+                                        x.Status == WebRequestStatusConstants.Rejected)
+                            //.Where(x => x.Attempts < attempts
+                            .ToList())
+            {
+                if (webRequest.WebService != null)
+                {
+                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
+                    {
+                        _regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
+                    }
+                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
+                    {
+                        _regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName);
+                    }
+                    if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
+                    {
+                        _regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName);
+                    }
+                }
+            }
         }
     }
 }
