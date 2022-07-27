@@ -801,7 +801,15 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.IdDocIssuePlace = responseObject.IdentityDocument.IssuePlace;
                 regixCache.IdDocIssuerName = responseObject.IdentityDocument.IssuerName;
                 regixCache.IdDocValidDate = responseObject.IdentityDocument.ValidDate;
-                regixCache.IdDocPrRemarks = responseObject.IdentityDocument.RPRemarks.Aggregate((b,c) => (string)b.Concat(c).Concat(";"));
+                if(responseObject.IdentityDocument.RPRemarks != null)
+                {
+                    string? rpremarks = null;
+                    foreach (var rpremark in responseObject.IdentityDocument.RPRemarks)
+                    {
+                        rpremarks += rpremark.Concat(";");
+                    }
+                    regixCache.IdDocPrRemarks = rpremarks;
+                }
                 regixCache.IdDocTypeOfPermit = responseObject.IdentityDocument.RPTypeOfPermit;
                 regixCache.IdDocReason = responseObject.IdentityDocument.StatusReasonCyrillic.ToString();
                 regixCache.IdDocStatus = responseObject.IdentityDocument.StatusCyrillic;
