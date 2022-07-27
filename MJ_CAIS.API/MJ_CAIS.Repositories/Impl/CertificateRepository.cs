@@ -75,5 +75,49 @@ namespace MJ_CAIS.Repositories.Impl
 
             return content;
         }
+
+        public async Task<DDocContent> GetCertificateDocumentByAccessCode(string accessCode)
+        {
+            return await _dbContext.ACertificates.Where(x => x.AccessCode1 == accessCode && x.Doc != null).Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
+        }
+
+        public  async Task<ACertificate> GetCertificateData(string aId)
+        {
+            return await _dbContext.ACertificates.AsNoTracking()
+                .Include(x => x.AAppBulletins)
+                .Where(x => x.Id == aId)
+                .FirstOrDefaultAsync();
+        }
+        public  async Task<ACertificate> GetCertificateWithDocumentContent(string certificateID)
+        {
+            return await _dbContext.ACertificates
+                                  .Include(c => c.Doc)
+                                  .ThenInclude(d => d.DocContent)
+                                  .Include(c => c.Application)
+                                  .Where(x => x.Id == certificateID)
+                                  .FirstOrDefaultAsync();
+        }
+
+        public  async Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID)
+        {
+            return await _dbContext.ACertificates
+                                    .Include(c => c.AAppBulletins)
+                                    .Include(c => c.Application)
+                                    .ThenInclude(appl => appl.PurposeNavigation)
+                                    .Include(c => c.Application.SrvcResRcptMeth)
+                                    .Include(c => c.AStatusHes)
+                                    .Include(c => c.Application.ApplicationType)
+                                    .FirstOrDefaultAsync(x => x.Id == certificateID);
+        }
+
+        public async Task<ACertificate> GetCertificateDataWithContentAndType(string certificateID)
+        {
+            return await _dbContext.ACertificates
+                                    .Include(c => c.Doc.DocType)
+                                    .Include(c => c.Doc)
+                                    .ThenInclude(d => d.DocContent)
+                                    .Where(x => x.Id == certificateID)
+                                    .FirstOrDefaultAsync();
+        }
     }
 }

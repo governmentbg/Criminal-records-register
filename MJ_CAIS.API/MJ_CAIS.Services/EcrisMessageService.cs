@@ -48,7 +48,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<EcrisMessageGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
         {
-            var baseQuery = this.CustomGetAll().Where(x => x.EcrisMsgStatus == statusId);
+            var baseQuery = _ecrisMessageRepository.CustomGetAll().Where(x => x.EcrisMsgStatus == statusId);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<EcrisMessageGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
@@ -139,60 +139,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        private IQueryable<EcrisMessageGridDTO> CustomGetAll()
-        {
-            var result =
-                from ecrisMsg in this.dbContext.EEcrisMessages.AsNoTracking()
-
-                join ecrisMsgStatus in this.dbContext.EEcrisMsgStatuses.AsNoTracking()
-                    on ecrisMsg.EcrisMsgStatus equals ecrisMsgStatus.Code
-
-                join doc in this.dbContext.DDocuments.AsNoTracking()
-                    on ecrisMsg.Id equals doc.EcrisMsgId into doc_left
-                from doc in doc_left.DefaultIfEmpty()
-
-                join docType in this.dbContext.DDocTypes.AsNoTracking()
-                    on doc.DocTypeId equals docType.Id into docType_left
-                from docType in docType_left.DefaultIfEmpty()
-
-                join birthCountry in this.dbContext.GCountries.AsNoTracking()
-                    on ecrisMsg.BirthCountry equals birthCountry.Id into birthCountry_left
-                from birthCountry in birthCountry_left.DefaultIfEmpty()
-
-                    // join nationality1 in this.dbContext.GCountries.AsNoTracking()
-                    //    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
-                    //from nationality1 in nationality1_left.DefaultIfEmpty()
-
-                    // join nationality2 in this.dbContext.GCountries.AsNoTracking()
-                    //    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
-                    //from nationality2 in nationality2_left.DefaultIfEmpty()
-
-                select new EcrisMessageGridDTO
-                {
-                    Id = ecrisMsg.Id,
-                    DocTypeId = doc.DocTypeId,
-                    DocTypeName = docType.Name,
-                    Identifier = ecrisMsg.Identifier,
-                    EcrisIdentifier = ecrisMsg.EcrisIdentifier,
-                    MsgTimestamp = ecrisMsg.MsgTimestamp,
-                    EcrisMsgStatus = ecrisMsg.EcrisMsgStatus,
-                    EcrisMsgStatusName = ecrisMsgStatus.Name,
-                    BirthDate = ecrisMsg.BirthDate,
-                    BirthCountry = ecrisMsg.BirthCountry,
-                    BirthCountryName = birthCountry.Name,
-                    BirthCity = ecrisMsg.BirthCity,
-                    CreatedOn = ecrisMsg.CreatedOn
-                    //Firstname = ecrisMsg.Firstname,
-                    //Surname = ecrisMsg.Surname,
-                    // Familyname = ecrisMsg.Familyname,
-                    //Nationality1Code = ecrisMsg.Nationality1Code,
-                    //Nationality1Name = nationality1.Name,
-                    //Nationality2Code = ecrisMsg.Nationality2Code,
-                    //Nationality2Name = nationality2.Name,
-                };
-
-            return result;
-        }
+        
 
         public async Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId)
         {
@@ -208,36 +155,17 @@ namespace MJ_CAIS.Services
             return filteredNames.ProjectTo<EcrisMsgNameDTO>(mapperConfiguration);
         }
 
-        public async Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId)
-        {
-            var result =
-                from ecrisIdentif in this.dbContext.EEcrisIdentifications.AsNoTracking()
-
-                join ecrisMsg in this.dbContext.EEcrisMessages.AsNoTracking()
-                    on ecrisIdentif.EcrisMsgId equals ecrisMsg.Id
-                join graoPers in this.dbContext.GraoPeople.AsNoTracking()
-                    on ecrisIdentif.GraoPersonId equals graoPers.Id
-
-                select new GraoPersonGridDTO
-                {
-                    Id = graoPers.Id,
-                    Egn = graoPers.Egn,
-                    Firstname = graoPers.Firstname,
-                    Surname = graoPers.Surname,
-                    Familyname = graoPers.Familyname,
-                    BirthDate = graoPers.BirthDate,
-                    Sex = graoPers.Sex
-                };
-            return result;
-        }
+       
 
         public async Task IdentifyAsync(string aInDto, string graoPersonId)
         {
-            var ecrisMessage = await dbContext.EEcrisMessages
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
-            var ecrisIdentif = await dbContext.EEcrisIdentifications
-                .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
-                .FirstOrDefaultAsync();
+            var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
+                //await dbContext.EEcrisMessages
+                //.FirstOrDefaultAsync(x => x.Id == aInDto);
+            var ecrisIdentif = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisIdentification>(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId);
+            //await dbContext.EEcrisIdentifications
+            //    .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
+            //    .FirstOrDefaultAsync();
 
             if (ecrisMessage == null)
             {
@@ -247,7 +175,12 @@ namespace MJ_CAIS.Services
             ecrisMessage.EcrisMsgStatus = "Identified";
             ecrisIdentif.Approved = 1;
 
-            await dbContext.SaveChangesAsync();
+            await _ecrisMessageRepository.SaveChangesAsync();
+        }
+
+        public async Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId)
+        {
+            return await _ecrisMessageRepository.GetGraoPeopleAsync(aId);
         }
     }
 }

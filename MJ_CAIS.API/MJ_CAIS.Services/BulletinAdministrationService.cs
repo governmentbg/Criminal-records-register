@@ -49,9 +49,9 @@ namespace MJ_CAIS.Services
                 Locked = false,
             };
 
-            dbContext.ApplyChanges(statusHis, new List<IBaseIdEntity>());
-            dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
-            await dbContext.SaveChangesAsync();
+            _bulletinAdministrationRepository.ApplyChanges(statusHis, new List<IBaseIdEntity>());
+            _bulletinAdministrationRepository.ApplyChanges(bulletin, new List<IBaseIdEntity>());
+            await _bulletinAdministrationRepository.SaveChangesAsync();
         }
     }
 }

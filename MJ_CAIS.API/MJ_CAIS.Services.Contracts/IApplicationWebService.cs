@@ -6,8 +6,8 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IApplicationWebService : IBaseAsyncService<PublicApplicationDTO, PublicApplicationDTO, PublicApplicationGridDTO, WApplication, string>
     {
-        string GetWebApplicationTypeId();
-        string GetExternalWebApplicationTypeId();
+        Task<string> GetWebApplicationTypeId();
+        Task<string> GetExternalWebApplicationTypeId();
 
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
         Task<string> InsertPublicAsync(PublicApplicationDTO aInDto);

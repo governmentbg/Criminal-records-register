@@ -107,7 +107,7 @@ namespace MJ_CAIS.Services
             //todo: дали да не отиде в репо?!
             entity.CsAuthorityId = _userContext.CsAuthorityId;
             entity.ApplicationTypeId = "6"; //TODO: For test purposes (remove later)
-            TransformDataOnInsert(entity);
+            TransformDataOnInsertAsync(entity);
             await UpdateTransactionsAsync(aInDto, entity);
             await _applicationRepository.SaveEntityAsync<AApplication>(entity, true);
             //await dbContext.SaveEntityAsync(entity, true);
@@ -190,9 +190,9 @@ namespace MJ_CAIS.Services
             }
 
             var systemParameters = //await Task.FromResult(dbContext.GSystemParameters.Where(x =>
-                 (await _applicationRepository.FindAsync<GSystemParameter>(x =>
+                 await _applicationRepository.FindAsync<GSystemParameter>(x =>
                 x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
-                || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME));
+                || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME);
             if (systemParameters.Count() != 2)
             {
                 throw new Exception(
@@ -280,12 +280,12 @@ namespace MJ_CAIS.Services
             if (pids.Count > 0)
             {
                 //todo: дали да не  е union?
-                var bulletins = (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
+                var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
                                (pids.Contains(b.EgnId) ||
                                pids.Contains(b.LnchId) ||
                                pids.Contains(b.LnId) ||
                                pids.Contains(b.IdDocNumberId) ||
-                               pids.Contains(b.SuidId)))).ToList();
+                               pids.Contains(b.SuidId)))).ToListAsync();
                 //var bulletins = await dbContext.BBulletins
                 //    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
                 //                //&& b.PBulletinIds.Any(bulID =>
@@ -314,6 +314,10 @@ namespace MJ_CAIS.Services
         {
             application.StatusCode = newStatus.Code;
             application.EntityState = EntityStateEnum.Modified;
+            if (application.ModifiedProperties == null)
+            {
+                application.ModifiedProperties = new List<string>();
+            }
             application.ModifiedProperties.Add(nameof(application.StatusCode));
             
            //application.StatusCodeNavigation = newStatus;
@@ -350,15 +354,18 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
         {
-            //todo: дали е за тук?!
-            var result = await _applicationRepository.SelectApplicationPersAliasByApplicationIdAsync(aId);
+            
+            var result =await _applicationRepository.FindAsync<AAppPersAlias>(x => x.ApplicationId == aId);
+                //await _applicationRepository.SelectApplicationPersAliasByApplicationIdAsync(aId);
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider); //AAppPersAlias
         }
 
         public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
         {
             //todo: дали е за тук?!
-            var result = await _applicationRepository.SelectApplicationCertificateByApplicationIdAsync(aId);
+        
+            var result = await  _applicationRepository.FindAsync<ACertificate>(x => x.ApplicationId == aId);
+            //await _applicationRepository.SelectApplicationCertificateByApplicationIdAsync(aId);
             return result.ProjectTo<ACertificate>(mapper.ConfigurationProvider);
         }
 
@@ -373,7 +380,10 @@ namespace MJ_CAIS.Services
             // тодо: да се прегледат дали се сетват правилно идентификраторите
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
-            {
+            {   if(entity.ModifiedProperties == null)
+                {
+                    entity.ModifiedProperties = new List<string>();
+                }
                 if (personIdObj.PidTypeId == PidType.Egn)
                 {
                     entity.ModifiedProperties.Add(nameof(entity.Egn));
@@ -446,6 +456,10 @@ namespace MJ_CAIS.Services
           
             //dbContext.ACertificates.Add(cert);
             application.EntityState = EntityStateEnum.Modified;
+            if(application.ModifiedProperties == null)
+            {
+                application.ModifiedProperties = new List<string>();
+            }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
             //dbContext.AApplications.Update(application);
         }
@@ -513,6 +527,10 @@ namespace MJ_CAIS.Services
 
             application.ACertificates.Add(cert);
             application.EntityState = EntityStateEnum.Modified;
+            if (application.ModifiedProperties == null)
+            {
+                application.ModifiedProperties = new List<string>();
+            }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
             //dbContext.ACertificates.Add(cert);
             // dbContext.AAppBulletins.AddRange(cert.AAppBulletins);

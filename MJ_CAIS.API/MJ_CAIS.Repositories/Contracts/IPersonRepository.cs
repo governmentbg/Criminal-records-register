@@ -34,5 +34,11 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<PPerson> GetPeopleToBeConectedWithPidData(string firstPersonId, string secondPersonId);
 
         Task<string> GetIsoNumberByCountryIdAsync(string countryId);
+
+        Task<List<PPerson>> GetPersonByID(IQueryable<string> personIds);
+
+        IQueryable<string> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear);
+
+
     }
 }

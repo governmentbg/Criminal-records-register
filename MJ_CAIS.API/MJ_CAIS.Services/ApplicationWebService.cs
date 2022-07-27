@@ -33,19 +33,23 @@ namespace MJ_CAIS.Services
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
-        public string GetWebApplicationTypeId()
+        public async Task<string> GetWebApplicationTypeId()
         {
-            
-            var result = dbContext.AApplicationTypes.AsNoTracking()
-                .FirstOrDefault(x => x.Code == ApplicationConstants.ApplicationTypes.WebCertificate);
+
+            var result = await _applicationWebRepository.SingleOrDefaultAsync<AApplicationType>(x => x.Code == ApplicationConstants.ApplicationTypes.WebCertificate);
+
+
+                //dbContext.AApplicationTypes.AsNoTracking()
+                //.FirstOrDefault(x => x.Code == ApplicationConstants.ApplicationTypes.WebCertificate);
 
             return result.Id;
         }
-        public string GetExternalWebApplicationTypeId()
+        public async Task<string> GetExternalWebApplicationTypeId()
         {
-           
-            var result = dbContext.AApplicationTypes.AsNoTracking()
-                .FirstOrDefault(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
+            var result = await _applicationWebRepository.SingleOrDefaultAsync<AApplicationType>(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
+
+            //var result = dbContext.AApplicationTypes.AsNoTracking()
+            //    .FirstOrDefault(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
 
             return result.Id;
         }
@@ -53,206 +57,75 @@ namespace MJ_CAIS.Services
         public async Task<string> InsertPublicAsync(PublicApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
-            this.TransformDataOnInsert(entity);
-            entity.ApplicationTypeId = GetWebApplicationTypeId();
+            this.TransformDataOnInsertAsync(entity);
+            entity.ApplicationTypeId = await GetWebApplicationTypeId();
 
-            entity.UserCitizenId = dbContext.CurrentUserId;
+            entity.UserCitizenId = _applicationWebRepository.GetCurrentUserId(); //dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
-           dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+            _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
            // await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
-        public Task<decimal?> GetPriceByApplicationType(string applicationTypeID)
+        public async Task<decimal?> GetPriceByApplicationType(string applicationTypeID)
         {
-            return _applicationWebRepository
-                .GetDbContext()
-                .AApplicationTypes
-                .Where(at => at.Id == applicationTypeID)
-                .Select(at => at.Price)
-                .FirstOrDefaultAsync();
+            //return _applicationWebRepository
+            //    .GetDbContext()
+            //    .AApplicationTypes
+            //    .Where(at => at.Id == applicationTypeID)
+            //    .Select(at => at.Price)
+            //    .FirstOrDefaultAsync();
+            return (await _applicationWebRepository.SingleOrDefaultAsync<AApplicationType>
+                (at => at.Id == applicationTypeID))?.Price;
         }
 
         public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
-            this.TransformDataOnInsert(entity);
-            entity.ApplicationTypeId = GetExternalWebApplicationTypeId();
+            this.TransformDataOnInsertAsync(entity);
+            entity.ApplicationTypeId = await GetExternalWebApplicationTypeId();
 
-            entity.UserExtId = dbContext.CurrentUserId;
+            entity.UserExtId = _applicationWebRepository.GetCurrentUserId();//dbContext.CurrentUserId;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
-            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
+            _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
             //await this.SaveEntityAsync(entity, true);
             return entity.Id;
         }
 
-        protected override void TransformDataOnInsert(WApplication entity)
+        protected  async Task TransformDataOnInsertAsync(WApplication entity)
         {
-            base.TransformDataOnInsert(entity);
+            base.TransformDataOnInsertAsync(entity);
           
            // entity.ApplicationTypeId = GetWebApplicationTypeId(); //GetExternalWebApplicationTypeId();
-            var statusNew = dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
+            var statusNew =
+                await _applicationWebRepository.SingleOrDefaultAsync<WApplicationStatus>(x => x.Code == ApplicationWebStatuses.NewWebApplication);
+
+
+            //dbContext.WApplicationStatuses.FirstOrDefault(x => x.Code == ApplicationWebStatuses.NewWebApplication);
             if (statusNew == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.NewWebApplication));
 
             SetWApplicationStatus(entity, statusNew, ApplicationResources.titleNewApp, false);
-            entity.UserId = dbContext.CurrentUserId; // TODO: must be nullable
+            entity.UserId = _applicationWebRepository.GetCurrentUserId(); //dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
             entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
             entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // TODO: constant
         }
 
-        public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
-        {
-            var result =
-                (from app in dbContext.WApplications.AsNoTracking()
-
-                join status in dbContext.WApplicationStatuses.AsNoTracking()
-                    on app.StatusCode equals status.Code
-
-                join purposes in dbContext.APurposes.AsNoTracking()
-                on app.PurposeId equals purposes.Id into purposesLeft
-                from purposes in purposesLeft.DefaultIfEmpty()
-
-                where app.UserCitizenId == userId
-                select new PublicApplicationGridDTO
-                {
-                    Id = app.Id,
-                    RegistrationNumber = app.RegistrationNumber,
-                    Purpose = app.Purpose,
-                    PurposeTypeName = purposes.Name,
-                    StatusCode = app.StatusCode,
-                    StatusName = status.Name,
-                    CreatedOn = app.CreatedOn,
-                    Email = app.Email,
-                    Version = app.Version,
-                }).OrderByDescending(x => x.CreatedOn);
-
-            return result;
-        }
-
-        public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
-        {
-            var result =
-                (from app in dbContext.WApplications.AsNoTracking()
-
-                join status in dbContext.WApplicationStatuses.AsNoTracking()
-                    on app.StatusCode equals status.Code
-
-                join purposes in dbContext.APurposes.AsNoTracking()
-                on app.PurposeId equals purposes.Id into purposesLeft
-                from purposes in purposesLeft.DefaultIfEmpty()
-
-                join application in dbContext.AApplications.AsNoTracking()
-                on app.Id equals application.WApplicationId into applicationLeft
-                from application in applicationLeft.DefaultIfEmpty()
-
-                where app.UserExtId == userId
-                select new ExternalApplicationGridDTO
-                {
-                    Id = app.Id,
-                    RegistrationNumber = app.RegistrationNumber,
-                    ApplicantName = app.ApplicantName,
-                    Purpose = app.Purpose,
-                    PurposeName = purposes.Name,
-                    PurposeId = app.PurposeId,
-                    StatusCode = app.StatusCode,
-                    StatusName = status.Name,
-                    CreatedOn = app.CreatedOn,
-                    Egn = app.Egn,
-                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
-                    Email = application.Email,
-                }).OrderByDescending(x=>x.CreatedOn);
-
-            return result;
-        }
-
-        public async Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id)
-        {
-            var result = await (from app in dbContext.WApplications.AsNoTracking()
-
-                                join status in dbContext.WApplicationStatuses.AsNoTracking()
-                                    on app.StatusCode equals status.Code
-
-                                join purposes in dbContext.APurposes.AsNoTracking()
-                                    on app.PurposeId equals purposes.Id into purposesLeft
-                                from purposes in purposesLeft.DefaultIfEmpty()
-
-                                join paymentMethods in dbContext.APaymentMethods.AsNoTracking()
-                                    on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
-                                from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
-
-                                join application in dbContext.AApplications.AsNoTracking()
-                                         on app.Id equals application.WApplicationId into applicationLeft
-                                from application in applicationLeft.DefaultIfEmpty()
-
-                                join cert in dbContext.ACertificates.AsNoTracking()
-                                    on application.Id equals cert.ApplicationId into certLeft
-                                from cert in certLeft.DefaultIfEmpty()
-
-                                select new DTO.Application.Public.ApplicationPreviewDTO
-                                {
-                                    Id = app.Id,
-                                    CreatedOn = app.CreatedOn,
-                                    Egn = app.Egn,
-                                    Email = app.Email,
-                                    PaymentMethodName = paymentMethods.Name,
-                                    PurposeName = purposes.Name,
-                                    Purpose = app.Purpose,
-                                    RegistrationNumber = app.RegistrationNumber,
-                                    Status = status.Name,
-                                    StatusCode = status.Code,
-                                    // IsPaid  ?? todo
-                                    CertificateStatusCode = cert.StatusCode
-                                }).FirstOrDefaultAsync(x => x.Id == id);
-
-            return result;
-        }
-
-        public async Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id)
-        {
-            var result = await (from app in dbContext.WApplications.AsNoTracking()
-
-                                join status in dbContext.WApplicationStatuses.AsNoTracking()
-                                    on app.StatusCode equals status.Code
-
-                                join purposes in dbContext.APurposes.AsNoTracking()
-                                    on app.PurposeId equals purposes.Id into purposesLeft
-                                from purposes in purposesLeft.DefaultIfEmpty()
-
-                                join application in dbContext.AApplications.AsNoTracking()
-                                    on app.Id equals application.WApplicationId into applicationLeft
-                                from application in applicationLeft.DefaultIfEmpty()
-
-                                join cert in dbContext.ACertificates.AsNoTracking()
-                                    on application.Id equals cert.ApplicationId into certLeft
-                                from cert in certLeft.DefaultIfEmpty()
-
-                                select new DTO.Application.External.ApplicationPreviewDTO
-                                {
-                                    Id = app.Id,
-                                    CreatedOn = app.CreatedOn,
-                                    Egn = app.Egn,
-                                    Email = app.Email,
-                                    PurposeName = purposes.Name,
-                                    Purpose = app.Purpose,
-                                    RegistrationNumber = app.RegistrationNumber,
-                                    Status = status.Name,
-                                    StatusCode = status.Code,
-                                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
-                                    CertificateStatusCode = cert.StatusCode
-
-                                }).FirstOrDefaultAsync(x => x.Id == id);
-
-            return result;
-        }
+        
 
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
-            wapplication.StatusCodeNavigation = newStatus;
+            wapplication.EntityState = Common.Enums.EntityStateEnum.Added;
+            if( wapplication.ModifiedProperties== null)
+            {
+                wapplication.ModifiedProperties = new List<string>();
+            }
+            wapplication.ModifiedProperties.Add(nameof(wapplication.StatusCode));
+            //wapplication.StatusCodeNavigation = newStatus;
             WStatusH wStatusH = new WStatusH();
             wStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
             wStatusH.Descr = description;
@@ -269,11 +142,35 @@ namespace MJ_CAIS.Services
             wStatusH.Application = wapplication;
 
             wapplication.WStatusHes.Add(wStatusH);
-            if (addToContext)
-            {
-                dbContext.WStatusHes.Add(wStatusH);
-                dbContext.WApplications.Update(wapplication);
-            }
-        }     
+            _applicationWebRepository.ApplyChanges (wStatusH, new List<IBaseIdEntity>());
+            _applicationWebRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>());
+            //if (addToContext)
+            //{
+            //    dbContext.WStatusHes.Add(wStatusH);
+            //    dbContext.WApplications.Update(wapplication);
+            //}
+        }
+
+        public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
+        {
+            return _applicationWebRepository.SelectExternalApplications(userId);
+        }
+
+        public async Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id)
+        {
+            return await _applicationWebRepository.GetPublicForPreviewAsync(id);
+        }
+
+        public async Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id)
+        {
+            return await _applicationWebRepository.GetExternalForPreviewAsync(id);
+        }
+
+        public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
+        {
+            return _applicationWebRepository.SelectPublicApplications(userId);
+        }
+
+      
     }
 }

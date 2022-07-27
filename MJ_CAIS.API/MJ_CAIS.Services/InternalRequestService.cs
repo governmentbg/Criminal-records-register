@@ -104,29 +104,24 @@ namespace MJ_CAIS.Services
             if (string.IsNullOrEmpty(entity.AAppBulletinId))
             {
                 bulletin.Id = entity.BulletinId;
-                await dbContext.SaveEntityAsync(bulletin, true);
+                await _internalRequestRepository.SaveEntityAsync(bulletin, true);
                 return;
             }
 
             // from application form
-            var currentBull = await dbContext.AAppBulletins.AsNoTracking()
-                .Include(x => x.Certificate)
-               .FirstOrDefaultAsync(x => x.Id == entity.AAppBulletinId);
+            AAppBulletin? currentBull = await _internalRequestRepository.GetBulletinsInCertificate(entity);
 
             bulletin.Id = currentBull.BulletinId;
 
             var certId = currentBull.CertificateId;
 
-            var bullIdsForCert = await dbContext.AAppBulletins.AsNoTracking()
-                .Where(x => x.CertificateId == certId)
+            var bullIdsForCert = await  (await _internalRequestRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certId))//await dbContext.AAppBulletins.AsNoTracking()
+                //.Where(x => x.CertificateId == certId)
                 .Select(x => x.Id).ToListAsync();
 
             if (bullIdsForCert.Any())
             {
-                var hasRequests = await dbContext.BInternalRequests.AsNoTracking()
-                    .AnyAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.New &&
-                    x.Id != entity.Id &&
-                    bullIdsForCert.Contains(x.AAppBulletinId));
+                bool hasRequests = await _internalRequestRepository.HasRequests(entity, bullIdsForCert);
 
                 // change status of certificate
                 if (!hasRequests)
@@ -135,7 +130,7 @@ namespace MJ_CAIS.Services
                     cert.EntityState = EntityStateEnum.Modified;
                     cert.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsSelection;
                     cert.ModifiedProperties = new List<string> { nameof(cert.StatusCode), nameof(cert.Version) };
-                    dbContext.ApplyChanges(cert, new List<IBaseIdEntity>());
+                    _internalRequestRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
 
                     var result = new AStatusH
                     {
@@ -147,12 +142,14 @@ namespace MJ_CAIS.Services
                         EntityState = EntityStateEnum.Added
                     };
 
-                    dbContext.ApplyChanges(result, new List<IBaseIdEntity>());
+                    _internalRequestRepository.ApplyChanges(result, new List<IBaseIdEntity>());
                 }
             }
 
-            await dbContext.SaveEntityAsync(bulletin, true);
+            await _internalRequestRepository.SaveEntityAsync(bulletin, true);
         }
+
+   
 
         /// <summary>
         /// Основна информация за бюлетин и лицето към него, 

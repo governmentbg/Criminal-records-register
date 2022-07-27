@@ -6,6 +6,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.Documents;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
@@ -155,9 +156,12 @@ namespace MJ_CAIS.Web.Controllers
 
         [HttpPost("{aId}/documents")]
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
-        public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
+       // public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
+         public async Task<IActionResult> PostDocument(string aId, [FromBody] DocumentDTO aInDto)
         {
-            await this._documentService.InsertApplicationDocumentAsync(aId, aInDto);
+            //await this._documentService.InsertApplicationDocumentAsync(aId, aInDto);
+            
+            await this._documentService.InsertDocumentAsync(aId,null,null, aInDto);
             return Ok();
         }
 

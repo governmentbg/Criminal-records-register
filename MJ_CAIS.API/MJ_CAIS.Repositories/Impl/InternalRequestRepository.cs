@@ -43,5 +43,20 @@ namespace MJ_CAIS.Repositories.Impl
 
             return result;
         }
+
+        public async Task<bool> HasRequests(BInternalRequest entity, List<string> bullIdsForCert)
+        {
+            return await _dbContext.BInternalRequests.AsNoTracking()
+                .AnyAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.New &&
+                x.Id != entity.Id &&
+                bullIdsForCert.Contains(x.AAppBulletinId));
+        }
+
+        public async Task<AAppBulletin> GetBulletinsInCertificate(BInternalRequest entity)
+        {
+            return await _dbContext.AAppBulletins.AsNoTracking()
+                .Include(x => x.Certificate)
+               .FirstOrDefaultAsync(x => x.Id == entity.AAppBulletinId);
+        }
     }
 }

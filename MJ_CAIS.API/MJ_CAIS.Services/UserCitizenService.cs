@@ -19,14 +19,15 @@ namespace MJ_CAIS.Services
 
         public async Task<GUsersCitizen> AuthenticatePublicUserAsync(UserCitizenDTO userDTO)
         {
-            var entity = await dbContext.GUsersCitizens.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Egn == userDTO.Egn);
+            var entity = await _userCitizenRepository.SingleOrDefaultAsync<GUsersCitizen>(x => x.Egn == userDTO.Egn);// await dbContext.GUsersCitizens.AsNoTracking()
+                //.FirstOrDefaultAsync(x => x.Egn == userDTO.Egn);
 
             if (entity == null)
             {
                 entity = mapper.MapToEntity<UserCitizenDTO, GUsersCitizen>(userDTO, true);
                 entity.Id = BaseEntity.GenerateNewId();
-                await dbContext.SaveEntityAsync(entity);
+                entity.EntityState = Common.Enums.EntityStateEnum.Added;
+                await _userCitizenRepository.SaveEntityAsync(entity,false);
             }
 
             return entity;
@@ -34,8 +35,9 @@ namespace MJ_CAIS.Services
 
         public async Task<GUsersCitizen> GetUserCitizenByEgnAsync(string egn)
         {
-            var entity = await dbContext.GUsersCitizens.AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Egn == egn);
+            var entity = await _userCitizenRepository.SingleOrDefaultAsync<GUsersCitizen>(x => x.Egn == egn);
+            //await dbContext.GUsersCitizens.AsNoTracking()
+            //.FirstOrDefaultAsync(u => u.Egn == egn);
             return entity;
         }
 

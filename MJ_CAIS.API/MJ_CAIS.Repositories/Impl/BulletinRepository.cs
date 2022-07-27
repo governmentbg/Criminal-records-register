@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
@@ -198,6 +199,8 @@ namespace MJ_CAIS.Repositories.Impl
             await _dbContext.SaveChangesAsync();
         }
 
+      
+
         public async Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType)
         {
             var person = await _dbContext.PPersonIds.AsNoTracking()
@@ -362,6 +365,57 @@ namespace MJ_CAIS.Repositories.Impl
             }
 
             return result.OrderBy(x => x.OrderNumber).ToList();
+        }
+        public async Task<BBulletin> GetBulletinData(string bulletinId)
+        {
+            return await _dbContext.BBulletins
+                .Include(x => x.BPersNationalities)
+                    .ThenInclude(x => x.Country)
+                .FirstOrDefaultAsync(x => x.Id == bulletinId);
+        }
+
+        public async Task<string> GetDataForSendFinesDataAsync(string egn, string? decisionTypeId, DateTime? decisionDate, string decisionNumber, string? decidingAuthId, string caseNumber, bool caseYearParsed, decimal caseYear, string? caseTypeId, string? caseAuthId)
+        {
+            return await _dbContext.BBulletins.AsNoTracking()
+                .Include(x => x.EgnNavigation).AsNoTracking()
+                .Where(bulletin => bulletin.EgnNavigation.Pid == egn &&
+                                    (bulletin.DecisionTypeId == decisionTypeId || string.IsNullOrEmpty(decisionTypeId)) &&
+                                    (bulletin.DecisionDate == decisionDate || !decisionDate.HasValue) &&
+                                    bulletin.DecisionNumber == decisionNumber &&
+                                    bulletin.DecidingAuthId == decidingAuthId &&
+                                    bulletin.CaseNumber == caseNumber &&
+                                    (bulletin.CaseYear == caseYear || !caseYearParsed) &&
+                                    (bulletin.CaseTypeId == caseTypeId || string.IsNullOrEmpty(caseTypeId)) &&
+                                    bulletin.CaseAuthId == caseAuthId)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<BSanction>> GetDeletedSanctionsAsync(List<string> deletedSanctionIds)
+        {
+            if (deletedSanctionIds.Count == 0) return new List<BSanction>();
+
+            var deletedSanctionAndItsProbations = await _dbContext.BSanctions.AsNoTracking()
+                      .Where(x => deletedSanctionIds.Contains(x.Id))
+                      .Include(x => x.BProbations)
+                      .Select(x => new BSanction
+                      {
+                          Id = x.Id,
+                          EntityState = EntityStateEnum.Deleted,
+                          BProbations = x.BProbations.Select(x => new BProbation
+                          {
+                              Id = x.Id,
+                              EntityState = EntityStateEnum.Deleted,
+                              Version = x.Version
+                          }).ToArray(),
+                          Version = x.Version
+                      }).ToListAsync();
+
+            return deletedSanctionAndItsProbations;
+        }
+        public  async Task<bool> IsEuCitizen(IEnumerable<string> personNationalities)
+        {
+            return await _dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));
         }
     }
 }

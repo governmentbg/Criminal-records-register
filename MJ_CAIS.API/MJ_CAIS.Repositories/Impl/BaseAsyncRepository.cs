@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.Repositories.Contracts;
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -16,9 +17,14 @@ namespace MJ_CAIS.Repositories.Impl
             this._dbContext = dbContext;
         }
 
-        public TContext GetDbContext()
+        private TContext GetDbContext()
         {
             return this._dbContext;
+        }
+
+        public string? GetCurrentUserId()
+        {
+            return _dbContext.CurrentUserId;
         }
 
         public virtual IQueryable<TEntity> SelectAll()
@@ -77,16 +83,22 @@ namespace MJ_CAIS.Repositories.Impl
         {
             await _dbContext.SaveEntityAsync(entity, includeRelations);
         }
-        public async Task<IEnumerable<T>> FindAsync<T>
+        public async Task<IQueryable<T>> FindAsync<T>
           (Expression<Func<T, bool>> expression) where T : class
         {
-            return await _dbContext.Set<T>().Where(expression).ToListAsync();
+            return await Task.FromResult( _dbContext.Set<T>().AsNoTracking().Where(expression));
         }
 
         public async Task<T> SingleOrDefaultAsync<T>
         (Expression<Func<T, bool>> expression) where T : class
         {
-            return await _dbContext.Set<T>().SingleOrDefaultAsync(expression);
+            return await _dbContext.Set<T>().AsNoTracking().SingleOrDefaultAsync(expression);
+        }
+
+        public async Task SaveEntityListAsync<T>(ICollection<T> entities, bool applyToAllLevels = false)
+            where T : class, IBaseIdEntity
+        {
+            await _dbContext.SaveEntityListAsync(entities, applyToAllLevels);
         }
     }
 }

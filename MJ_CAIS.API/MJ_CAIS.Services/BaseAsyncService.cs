@@ -32,7 +32,7 @@ namespace MJ_CAIS.Services
         private const string QUERY_OPTIONS_SKIP = "$skip";
         private const string QUERY_OPTIONS_TOP = "$top";
 
-        protected TContext dbContext;
+        //protected TContext dbContext;
         protected IBaseAsyncRepository<TEntity, TPk, TContext> baseAsyncRepository;
         protected IMapper mapper;
         protected IConfigurationProvider mapperConfiguration => mapper.ConfigurationProvider;
@@ -48,7 +48,7 @@ namespace MJ_CAIS.Services
         {
             this.mapper = mapper;
             this.baseAsyncRepository = baseAsyncRepository;
-            this.dbContext = baseAsyncRepository.GetDbContext();
+            //this.dbContext = baseAsyncRepository.GetDbContext();
             this.validationSettings = new ODataValidationSettings();
             this.dtoFieldsToEntityFields = new Dictionary<string, string>();
             this.PopulateDtoToEntityFieldsMapping();
@@ -180,7 +180,7 @@ namespace MJ_CAIS.Services
         {
             this.ValidateData(aInDto);
             TEntity entity = mapper.MapToEntity<TInDTO, TEntity>(aInDto, isAdded: true);
-            this.TransformDataOnInsert(entity);
+            this.TransformDataOnInsertAsync(entity);
             await this.SaveEntityAsync(entity);
             return entity.Id;
         }
@@ -227,7 +227,7 @@ namespace MJ_CAIS.Services
             }
 
             repoObj.EntityState = EntityStateEnum.Deleted;
-            await dbContext.SaveEntityAsync(repoObj);
+            await baseAsyncRepository.SaveEntityAsync(repoObj,false);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace MJ_CAIS.Services
         /// Този метод се извиква преди да се запазят данните в базата при insert
         /// </summary>
         /// <param name="entity"></param>
-        protected virtual void TransformDataOnInsert(TEntity entity)
+        protected virtual void TransformDataOnInsertAsync(TEntity entity)
         {
             entity.Id = Guid.NewGuid().ToString();
         }

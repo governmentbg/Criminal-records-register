@@ -49,9 +49,10 @@ namespace MJ_CAIS.Services
         public override async Task<string> InsertAsync(FbbcDTO aInDto)
         {
             var entity = mapper.MapToEntity<FbbcDTO, Fbbc>(aInDto, true);
-            await this.SaveEntityAsync(entity);
-
-            dbContext.Entry(entity).State = EntityState.Detached;
+            await _fbbcRepository.SaveEntityAsync(entity,false);
+            //todo: защо се прави това тук?!
+            //dbContext.Entry(entity).State = EntityState.Detached;
+            entity.EntityState = EntityStateEnum.Detached;
             entity.Version = 1;
             entity.EntityState = EntityStateEnum.Modified;
             entity.ModifiedProperties = new List<string> { nameof(entity.Version) };
@@ -63,7 +64,7 @@ namespace MJ_CAIS.Services
         public override async Task UpdateAsync(string aId, FbbcDTO aInDto)
         {
             var entity = mapper.MapToEntity<FbbcDTO, Fbbc>(aInDto, false);
-            await dbContext.SaveEntityAsync(entity);
+            await _fbbcRepository.SaveEntityAsync(entity,false);
 
             await UpdatePersonAsync(aInDto, entity);
         }
@@ -78,96 +79,36 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<EcrisMessageGridDTO>> GetEcrisMessagesByFbbcIdAsync(string aId)
         {
-            var result = dbContext.EEcrisMessages.AsNoTracking()
-                .Where(x => x.FbbcId == aId)
+            var result =(await _fbbcRepository.FindAsync<EEcrisMessage>(x => x.FbbcId == aId))
+                //dbContext.EEcrisMessages.AsNoTracking()
+                //.Where(x => x.FbbcId == aId)
                 .ProjectTo<EcrisMessageGridDTO>(mapper.ConfigurationProvider);
 
             return await Task.FromResult(result);
         }
 
-        public async Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId)
-        {
-            var result = dbContext.DDocuments
-                .AsNoTracking()
-                .Include(x => x.DocType)
-                .Include(x => x.DocContent)
-                .Where(x => x.FbbcId == aId)
-                .ProjectTo<FbbcDocumentDTO>(mapper.ConfigurationProvider);
+        //public async Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId)
+        //{
+        //    var result = dbContext.DDocuments
+        //        .AsNoTracking()
+        //        .Include(x => x.DocType)
+        //        .Include(x => x.DocContent)
+        //        .Where(x => x.FbbcId == aId)
+        //        .ProjectTo<FbbcDocumentDTO>(mapper.ConfigurationProvider);
 
-            return await Task.FromResult(result);
-        }
+        //    return await Task.FromResult(result);
+        //}
 
-        public async Task InsertFbbcDocumentAsync(string fbbcId, FbbcDocumentDTO aInDto)
-        {
-            if (aInDto == null)
-            {
-                throw new ArgumentNullException(nameof(aInDto));
-            }
+     
 
-            if (aInDto.DocumentContent?.Length == 0)
-            {
-                throw new ArgumentNullException("Documetn is empty");
-            }
-
-            var docContentId = string.IsNullOrEmpty(aInDto.DocumentContentId) ?
-                Guid.NewGuid().ToString() : aInDto.DocumentContentId;
-
-            var document = mapper.Map<FbbcDocumentDTO, DDocument>(aInDto);
-            document.FbbcId = fbbcId;
-            document.DocContentId = docContentId;
-
-            var documentContent = new DDocContent()
-            {
-                Id = docContentId,
-                Content = aInDto.DocumentContent,
-                MimeType = aInDto.MimeType
-            };
-
-            dbContext.Add(document);
-            dbContext.Add(documentContent);
-            await dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteDocumentAsync(string documentId)
-        {
-            var document = await dbContext.Set<DDocument>().AsNoTracking()
-                .Include(x => x.DocContent)
-                .FirstOrDefaultAsync(x => x.Id == documentId);
-
-            if (document == null)
-            {
-                throw new ArgumentException($"Document with id: {documentId} is missing");
-            }
-
-            document.EntityState = EntityStateEnum.Deleted;
-            if (document.DocContent != null)
-            {
-                document.DocContent.EntityState = EntityStateEnum.Deleted;
-            }
-
-            await dbContext.SaveEntityAsync(document, true);
-        }
-
-        public async Task<FbbcDocumentDTO> GetDocumentContentAsync(string documentId)
-        {
-            var document = await dbContext.Set<DDocument>().AsNoTracking()
-                .Include(x => x.DocContent)
-                .FirstOrDefaultAsync(x => x.Id == documentId);
-
-            if (document == null || document.DocContent == null) return null;
-
-            return new FbbcDocumentDTO
-            {
-                Name = document.Name,
-                DocumentContent = document.DocContent.Content,
-                MimeType = document.DocContent.MimeType
-            };
-        }
+     
+     
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
-        {
-            var fbbc = await dbContext.Fbbcs
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
+        {//todo: може би да се вика селект метода?!
+            var fbbc = await _fbbcRepository.SingleOrDefaultAsync<Fbbc>(x => x.Id == aInDto);
+            //await dbContext.Fbbcs
+               //.FirstOrDefaultAsync(x => x.Id == aInDto);
 
             if (fbbc == null)
             {
@@ -175,13 +116,21 @@ namespace MJ_CAIS.Services
             }
 
             fbbc.StatusCode = statusId;
+            fbbc.EntityState = EntityStateEnum.Modified;
+            if (fbbc.ModifiedProperties == null)
+            {
+                fbbc.ModifiedProperties = new List<string>();
+            }
+            fbbc.ModifiedProperties.Add(nameof(fbbc.StatusCode));
 
             if (statusId == EntityStateEnum.Deleted.ToString())
             {
                 fbbc.DestroyedDate = DateTime.Now;
+                fbbc.ModifiedProperties.Add(nameof(fbbc.DestroyedDate));
             }
 
-            await dbContext.SaveChangesAsync();
+            await _fbbcRepository.SaveEntityAsync(fbbc, false);
+            //await _fbbcRepository.SaveChangesAsync();
         }
 
         private async Task UpdatePersonAsync(FbbcDTO aInDto, Fbbc entity)
@@ -195,7 +144,14 @@ namespace MJ_CAIS.Services
             {
                 //personIdObj.Id = BaseEntity.GenerateNewId();
                 //personIdObj.EntityState = EntityStateEnum.Added;
-
+                if (entity.ModifiedProperties == null)
+                {
+                    entity.ModifiedProperties = new List<string>();
+                }
+                if (entity.ModifiedProperties == null)
+                {
+                    entity.ModifiedProperties = new List<string>();
+                }
                 if (personIdObj.PidTypeId == PidType.Egn)
                 {
                     entity.ModifiedProperties.Add(nameof(entity.PersonId));
@@ -211,11 +167,11 @@ namespace MJ_CAIS.Services
                     entity.SuidNavigation = personIdObj;
                 }
 
-                dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+                _fbbcRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
             }
 
-            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
-            await dbContext.SaveChangesAsync();
+            _fbbcRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
+            await _fbbcRepository.SaveChangesAsync();
         }
     }
 }

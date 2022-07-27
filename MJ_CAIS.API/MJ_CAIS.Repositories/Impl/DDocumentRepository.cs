@@ -17,5 +17,31 @@ namespace MJ_CAIS.Repositories.Impl
                 .FirstOrDefaultAsync(x => x.EcrisMsgId == id);
             return result;
         }
+
+        public IQueryable<DDocument> GetDocumentDataByApplicationID(string aId)
+        {
+            return _dbContext.DDocuments
+                .AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.DocContent)
+                .Where(x => x.ApplicationId == aId)
+                ;
+        }
+        public IQueryable<DDocument> GetDocumentDataByFbbcID(string aId)
+        {
+            return _dbContext.DDocuments
+                .AsNoTracking()
+                .Include(x => x.DocType)
+                .Include(x => x.DocContent)
+                .Where(x => x.FbbcId == aId)
+                ;
+        }
+
+        public  async Task<DDocument> GetDocumentWithContentByID(string documentId)
+        {
+            return await _dbContext.Set<DDocument>().AsNoTracking()
+                .Include(x => x.DocContent)
+                .FirstOrDefaultAsync(x => x.Id == documentId);
+        }
     }
 }

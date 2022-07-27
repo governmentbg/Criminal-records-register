@@ -122,5 +122,26 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+
+        public bool GetExistingEvents(BBulletin currentAttachedBulletin)
+        {
+            return _dbContext.BBulEvents
+                                .AsNoTracking()
+                                .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == BulletinEventConstants.Type.Article2212);
+
+        }
+
+        public IQueryable<BuletinEventTypeDTO> GetExistingEventsByType(BBulletin currentAttachedBulletin)
+        {
+            return _dbContext.BBulEvents
+                                .AsNoTracking()
+                                .Where(x => x.BulletinId == currentAttachedBulletin.Id)
+                                .GroupBy(x => x.EventType)
+                                .Select(x => new BuletinEventTypeDTO
+                                {
+                                    Type = x.Key,
+                                    Any = x.Any()
+                                });
+        }
     }
 }

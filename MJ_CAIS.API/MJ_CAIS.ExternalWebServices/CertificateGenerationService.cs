@@ -39,30 +39,33 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<byte[]> CreateCertificate(string certificateID)
         {
-            var certificate = await dbContext.ACertificates
-                                    .Include(c => c.AAppBulletins)
-                                    .Include(c => c.Application)
-                                    .ThenInclude(appl => appl.PurposeNavigation)
-                                    .Include(c => c.Application.SrvcResRcptMeth)
-                                    .Include(c => c.AStatusHes)
-                                    .Include(c => c.Application.ApplicationType)
-                                    .FirstOrDefaultAsync(x => x.Id == certificateID);
+            ACertificate certificate = await _certificateRepository.GetCertificateWithIncludedDataForApplicationAndBulletins(certificateID);
             if (certificate == null)
             {
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {certificateID} does not exist.");
             }
-            var signingCertificateName = (await dbContext.GSystemParameters
-                                    .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+            var signingCertificateName = (await _certificateRepository.SingleOrDefaultAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+
+
+
+            // (await dbContext.GSystemParameters
+            //                        .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
             if (string.IsNullOrEmpty(signingCertificateName))
             {//todo: EH & resources
                 throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
             }
-            var statuses = await dbContext.AApplicationStatuses.Where(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
-           || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-           || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
-           || x.Code == ApplicationConstants.ApplicationStatuses.Delivered).ToListAsync();
-            if (statuses.Count != 4)
+            var statuses = await (await _certificateRepository.FindAsync<AApplicationStatus>(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
+             || x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+             || x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
+             || x.Code == ApplicationConstants.ApplicationStatuses.Delivered)).ToListAsync();
+
+
+            //     await dbContext.AApplicationStatuses.Where(x => x.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
+            //|| x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+            //|| x.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
+            //|| x.Code == ApplicationConstants.ApplicationStatuses.Delivered).ToListAsync();
+            if (statuses.Count() != 4)
             {
                 throw new Exception($"Няма въведени статуси: {ApplicationConstants.ApplicationStatuses.CertificateServerSign}, { ApplicationConstants.ApplicationStatuses.CertificateForDelivery}, {ApplicationConstants.ApplicationStatuses.CertificatePaperPrint}");
             }
@@ -73,25 +76,31 @@ namespace MJ_CAIS.ExternalWebServices
             //todo:get patterns for mail if needed:
             var content = await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateServerSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, await GetWebPortalAddress());
 
-            await dbContext.SaveChangesAsync();
+            await _certificateRepository.SaveChangesAsync();
             return content;
         }
 
+
+
         public async Task<byte[]> GetCertificateContentAsync(string certificateID)
         {
-            var content = await dbContext.ACertificates
-                                    .Include(c => c.Doc.DocType)
-                                    .Include(c => c.Doc)
-                                    .ThenInclude(d => d.DocContent)
-                                    .Where(x => x.Id == certificateID)
-                                    .FirstOrDefaultAsync();
-
+            ACertificate content = await _certificateRepository.GetCertificateDataWithContentAndType(certificateID);
+            if (content?.Doc?.DocContent?.Content == null)
+            {
+                throw new Exception("Content is empty");
+            }
+            if (content?.Doc?.DocType?.Xslt == null)
+            {
+                throw new Exception("Xslt is empty");
+            }
             string xml = Encoding.UTF8.GetString(content.Doc.DocContent.Content);
             var html = XmlUtils.XmlTransform(content.Doc.DocType.Xslt, xml);
             var result = Encoding.UTF8.GetBytes(html);
 
             return await Task.FromResult(result);
         }
+
+
 
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
@@ -100,7 +109,7 @@ namespace MJ_CAIS.ExternalWebServices
             byte[] contentCertificate;
             string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             bool containsBulletins = certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() != 0;
-           
+
             switch (certificate.Application.ApplicationType.Code)
             {
                 case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
@@ -113,13 +122,14 @@ namespace MJ_CAIS.ExternalWebServices
                     contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate, signingCertificateName);
                     break;
             }
-           
+
             bool isExistingDoc = false;
             bool isExistingContent = false;
             DDocument doc;
             if (!string.IsNullOrEmpty(certificate.DocId))
             {
-                var currentDocument = await dbContext.DDocuments.FirstOrDefaultAsync(d => d.Id == certificate.DocId);
+                var currentDocument = await _certificateRepository.SingleOrDefaultAsync<DDocument>(d => d.Id == certificate.DocId);
+                //await dbContext.DDocuments.FirstOrDefaultAsync(d => d.Id == certificate.DocId);
                 if (currentDocument != null)
                 {
                     doc = currentDocument;
@@ -149,7 +159,8 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                var currentContent = await dbContext.DDocContents.FirstOrDefaultAsync(d => d.Id == doc.DocContentId);
+                var currentContent = await _certificateRepository.SingleOrDefaultAsync<DDocContent>(d => d.Id == doc.DocContentId);
+                //await dbContext.DDocContents.FirstOrDefaultAsync(d => d.Id == doc.DocContentId);
                 if (currentContent != null)
                 {
                     content = currentContent;
@@ -202,21 +213,54 @@ namespace MJ_CAIS.ExternalWebServices
 
             if (isExistingContent)
             {
-                dbContext.DDocContents.Update(content);
+                content.EntityState = EntityStateEnum.Modified;
+                if (content.ModifiedProperties == null)
+                {
+                    content.ModifiedProperties = new List<string>();
+                }
+                content.ModifiedProperties.Add(nameof(content.MimeType));
+                content.ModifiedProperties.Add(nameof(content.Content));
+                content.ModifiedProperties.Add(nameof(content.Bytes));
+
+                //dbContext.DDocContents.Update(content);
             }
             else
             {
-                dbContext.DDocContents.Add(content);
+                content.EntityState = EntityStateEnum.Added;
+                //dbContext.DDocContents.Add(content);
             }
             if (isExistingDoc)
             {
-                dbContext.DDocuments.Update(doc);
+                doc.EntityState = EntityStateEnum.Modified;
+                if (doc.ModifiedProperties == null)
+                {
+                    doc.ModifiedProperties = new List<string>();
+                }
+                doc.ModifiedProperties.Add(nameof(doc.DocContentId));
+                // dbContext.DDocuments.Update(doc);
             }
             else
             {
-                dbContext.DDocuments.Add(doc);
+                doc.EntityState = EntityStateEnum.Added;
+                //dbContext.DDocuments.Add(doc);
             }
-            dbContext.ACertificates.Update(certificate);
+            //dbContext.ACertificates.Update(certificate);
+            certificate.EntityState = EntityStateEnum.Modified;
+           
+
+            if (certificate.ModifiedProperties == null)
+            {
+                certificate.ModifiedProperties = new List<string>();
+            }
+
+            certificate.ModifiedProperties.Add(nameof(certificate.DocId));
+            if (!certificate.ModifiedProperties.Contains(nameof(certificate.StatusCode)))
+            {
+                certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
+            }
+            _certificateRepository.ApplyChanges(content, new List<IBaseIdEntity>());
+            _certificateRepository.ApplyChanges(doc, new List<IBaseIdEntity>());
+            _certificateRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
 
             return contentCertificate;
 
@@ -232,7 +276,9 @@ namespace MJ_CAIS.ExternalWebServices
                 msg.CertificateId = certificate.Id;
                 msg.Certificate = certificate;
                 msg.Status = EdeliveryConstants.EdeliveryStatuses.Pending;
-                dbContext.EEdeliveryMsgs.Add(msg);
+                msg.EntityState = EntityStateEnum.Added;
+                _certificateRepository.ApplyChanges(msg, new List<IBaseIdEntity>());
+                // dbContext.EEdeliveryMsgs.Add(msg);
             }
 
             EEmailEvent mail = new EEmailEvent();
@@ -242,7 +288,9 @@ namespace MJ_CAIS.ExternalWebServices
             mail.Subject = GetSubjectForCertificateMail(certificate, mailSubjectPattern);
             mail.EmailStatus = EmailStatusConstants.Pending;
             mail.CertificateId = certificate.Id;
-            dbContext.EEmailEvents.Add(mail);
+            mail.EntityState = EntityStateEnum.Added;
+            _certificateRepository.ApplyChanges(mail, new List<IBaseIdEntity>());
+            //dbContext.EEmailEvents.Add(mail);
         }
 
         private async Task<string?> GetBodyForCertificateMailAsync(ACertificate certificate, string mailBodyPattern, string webportalUrl)
@@ -316,7 +364,8 @@ namespace MJ_CAIS.ExternalWebServices
         }
         public async Task<string?> GetWebPortalAddress()
         {
-            return (await dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.WEB_PORTAL_URL))?.ValueString;
+            return (await _certificateRepository.SingleOrDefaultAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.WEB_PORTAL_URL))?.ValueString;
+            //(await dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.WEB_PORTAL_URL))?.ValueString;
         }
 
         private string ReplaceTextInTemplate(string htmlCode, Dictionary<string, string> placeholdersAndValues)

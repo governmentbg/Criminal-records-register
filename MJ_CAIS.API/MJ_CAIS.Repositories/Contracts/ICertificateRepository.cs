@@ -11,5 +11,14 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId);
         Task<ACertificate> GetWithDocContentAsync(string certId);
+
+        Task<DDocContent> GetCertificateDocumentByAccessCode(string accessCode);
+
+        Task<ACertificate> GetCertificateData(string aId);
+        Task<ACertificate> GetCertificateWithDocumentContent(string certificateID);
+        Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID);
+        Task<ACertificate> GetCertificateDataWithContentAndType(string certificateID);
+
+
     }
 }

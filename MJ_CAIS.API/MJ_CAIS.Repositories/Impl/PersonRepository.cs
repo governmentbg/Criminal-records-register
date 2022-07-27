@@ -386,5 +386,35 @@ namespace MJ_CAIS.Repositories.Impl
 
             return person;
         }
+
+        public async Task<List<PPerson>> GetPersonByID(IQueryable<string> personIds)
+        {
+            return await
+                (from p in _dbContext.PPeople.Include(p => p.BirthCity).Include(p => p.BirthCountry).Include(p => p.PPersonIds).ThenInclude(pid => pid.PidType)
+                 where personIds.Contains(p.Id)
+                 select p).ToListAsync();
+        }
+
+        public IQueryable<string> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear)
+        {
+            return (
+                from ph in _dbContext.PPersonHs.Include(p => p.BirthCountry).Include(p => p.BirthCity)
+                join phids in _dbContext.PPersonIdsHes on ph.Id equals phids.PersonHId
+                join pids in _dbContext.PPersonIds on new { phids.Pid, phids.PidTypeId } equals new { pids.Pid, pids.PidTypeId }
+                where (string.IsNullOrEmpty(firstname) || ph.Firstname.ToUpper().Contains(firstname)) &&
+                      (string.IsNullOrEmpty(surname) || ph.Surname.ToUpper().Contains(surname)) &&
+                      (string.IsNullOrEmpty(familyname) || ph.Familyname.ToUpper().Contains(familyname)) &&
+                      (string.IsNullOrEmpty(fullname) || ph.Fullname.ToUpper().Contains(fullname)) &&
+                      (string.IsNullOrEmpty(birthCountry) || ph.BirthCountry.Name.ToUpper().Contains(birthCountry)) &&
+                      (string.IsNullOrEmpty(birthplace) || ph.BirthCity.Name.ToUpper().Contains(birthplace)) &&
+                      (
+                         (!string.IsNullOrEmpty(birthDatePrec) && birthDatePrec.Equals("YM") && ph.BirthDate >= birthdateFrom && ph.BirthDate <= birthdateTo) ||
+                         (!string.IsNullOrEmpty(birthDatePrec) && birthDatePrec.Equals("Y") && ph.BirthDate.Value.Year == birthdateYear) ||
+                         ph.BirthDate.Equals(birthdate)
+                     )
+
+                select pids.PersonId
+                ).Distinct().Take(100);
+        }
     }
 }

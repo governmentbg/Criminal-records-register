@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MJ_CAIS.DTO.Application
+namespace MJ_CAIS.DTO.Documents
 {
-    public class ApplicationDocumentDTO
+    public class DocumentDTO
     {
-        //deprecated
         public string Id { get; set; }
         public string? Name { get; set; }
         public string? Descr { get; set; }

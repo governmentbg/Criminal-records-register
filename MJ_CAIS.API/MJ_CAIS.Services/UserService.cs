@@ -33,7 +33,7 @@ namespace MJ_CAIS.Services
             {
                 entity.CsAuthorityId = _userContext.CsAuthorityId;
             }
-            this.TransformDataOnInsert(entity);
+            this.TransformDataOnInsertAsync(entity);
             entity.GUserRoles = CaisMapper.MapMultipleChooseToEntityList<GUserRole, string, string>(aInDto.Roles, nameof(GUserRole.Id), nameof(GUserRole.RoleId));
             await this.SaveEntityAsync(entity);
             return entity.Id;

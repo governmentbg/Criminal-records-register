@@ -16,5 +16,8 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<DateTime?> GetOffencesEndDatesByBulletinId(string bulletinId);
 
         IQueryable<SanctionEventDTO> GetSanctionsSuspentionByBulletinId(List<string> bulletinId);
+
+        bool GetExistingEvents(BBulletin currentAttachedBulletin);
+        IQueryable<BuletinEventTypeDTO> GetExistingEventsByType(BBulletin currentAttachedBulletin);
     }
 }

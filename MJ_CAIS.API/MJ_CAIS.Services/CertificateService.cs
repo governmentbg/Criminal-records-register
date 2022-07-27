@@ -42,7 +42,7 @@ namespace MJ_CAIS.Services
         public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description)
         {
             certificate.StatusCode = newStatus.Code;
-            certificate.StatusCodeNavigation = newStatus;
+            //certificate.StatusCodeNavigation = newStatus;
             AStatusH aStatusH = new AStatusH();
             aStatusH.Descr = description;
             aStatusH.StatusCode = newStatus.Code;
@@ -55,10 +55,18 @@ namespace MJ_CAIS.Services
             aStatusH.Id = BaseEntity.GenerateNewId();
             aStatusH.CertificateId = certificate.Id;
             aStatusH.ApplicationId = certificate.ApplicationId;
+            aStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
 
             certificate.AStatusHes.Add(aStatusH);
-            dbContext.AStatusHes.Add(aStatusH);
-            dbContext.ACertificates.Update(certificate);
+            certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
+            if (certificate.ModifiedProperties==null)
+            {
+                certificate.ModifiedProperties = new List<string>();
+            }
+            certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
+            certificate.ModifiedProperties.Add(nameof(certificate.AStatusHes));
+            //dbContext.AStatusHes.Add(aStatusH);
+            //dbContext.ACertificates.Update(certificate);
 
         }
 
@@ -73,48 +81,50 @@ namespace MJ_CAIS.Services
         {
             var result = await this._certificateRepository.SelectAsync(certID);
 
-            var aapplicationStatus = await dbContext.AApplicationStatuses.FirstOrDefaultAsync(x =>
-               x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
+            var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync< AApplicationStatus>(x =>
+              x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
+            //await dbContext.AApplicationStatuses.FirstOrDefaultAsync(x =>
+            //  x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
             SetCertificateStatus(result, aapplicationStatus, "Преминаване към готово за връчване");
-            await dbContext.SaveChangesAsync();
+            await _certificateRepository.SaveChangesAsync();
 
         }
 
 
         public async Task<DDocContent> GetCertificateDocumentContent(string accessCode)
         {
-            var content = await dbContext.ACertificates.Where(x => x.AccessCode1 == accessCode && x.Doc != null).Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
-            //if (content == null)
-            //{
-            //    throw new Exception("Certificate does not exist.");
-            //}
+            DDocContent? content = await _certificateRepository.GetCertificateDocumentByAccessCode(accessCode);
             return content;
         }
+
+     
 
         public async Task SaveSignerDataAsync(CertificateDTO aInDto)
         {
             var entity = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
 
-            var dbContext = _certificateRepository.GetDbContext();
-            await dbContext.SaveEntityAsync(entity);
+            //var dbContext = _certificateRepository.GetDbContext();
+            await _certificateRepository.SaveEntityAsync(entity, false);
         }
 
         public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
         {
             var certificate = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
 
-            var dbContext = _certificateRepository.GetDbContext();
+            // var dbContext = _certificateRepository.GetDbContext();
 
-            var allCertificateBulletins = dbContext.AAppBulletins
-                .Where(x => x.CertificateId == certificate.Id);
+            IQueryable<AAppBulletin> allCertificateBulletins =await  _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certificate.Id);
+                
 
             foreach (var item in allCertificateBulletins)
             {
                 item.Approved = aInDto.SelectedBulletinsIds.Contains(item.Id);
             }
 
-            await dbContext.SaveChangesAsync();
+            await _certificateRepository.SaveChangesAsync();
         }
+
+       
 
         public async Task<CertificateDTO> GetByApplicationIdAsync(string appId)
         {
@@ -136,34 +146,33 @@ namespace MJ_CAIS.Services
 
         public async Task SetCertificateForSelectionAsync(string aId)
         {
-            var dbContext = _certificateRepository.GetDbContext();
+            //var dbContext = _certificateRepository.GetDbContext();
 
-            var certificate = await dbContext.ACertificates
-                .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.Id == aId);
+            //var certificate = await dbContext.ACertificates
+            //    .AsNoTracking()
+            //    .FirstOrDefaultAsync(a => a.Id == aId);
+            //дали да не се ползва Select метода от репозиторито
+            var certificate = await _certificateRepository.SingleOrDefaultAsync<ACertificate>(a=>a.Id == aId);
 
             if (certificate == null)
                 throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
 
-            UpdateCertificateStatus(dbContext, certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
+            UpdateCertificateStatus( certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
             CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
-            await dbContext.SaveChangesAsync();
+            await _certificateRepository.SaveChangesAsync();
         }
 
         public async Task SetBulletinsForRehabilitationAsync(string aId, string[] ids)
         {
-            var dbContext = _certificateRepository.GetDbContext();
+            //var dbContext = _certificateRepository.GetDbContext();
 
-            var certificate = await dbContext.ACertificates.AsNoTracking()
-                .Include(x => x.AAppBulletins)
-                .Where(x => x.Id == aId)
-                .FirstOrDefaultAsync();
+            ACertificate? certificate = await _certificateRepository.GetCertificateData(aId);
 
             if (certificate == null)
                 throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
 
-            UpdateCertificateStatus(dbContext, certificate, ApplicationConstants.ApplicationStatuses.BulletinsRehabilitation);
+            UpdateCertificateStatus(certificate, ApplicationConstants.ApplicationStatuses.BulletinsRehabilitation);
 
             CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
@@ -182,16 +191,18 @@ namespace MJ_CAIS.Services
                 });
             }
 
-            dbContext.ApplyChanges(request);
-            await dbContext.SaveChangesAsync();
+            _certificateRepository.ApplyChanges(request, new List<IBaseIdEntity>());
+            await _certificateRepository.SaveChangesAsync();
         }
 
-        private static void UpdateCertificateStatus(CaisDbContext dbContext, ACertificate? certificate, string statusCode)
+   
+
+        private  void UpdateCertificateStatus(ACertificate? certificate, string statusCode)
         {
             certificate.StatusCode = statusCode;
             certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
             certificate.ModifiedProperties = new List<string> { nameof(certificate.StatusCode), nameof(certificate.Version) };
-            dbContext.ApplyChanges(certificate, new List<IBaseIdEntity>());
+            _certificateRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
         }
 
         private void CreateAStatusH(string appId, string certId, string status, string desc)
@@ -206,7 +217,7 @@ namespace MJ_CAIS.Services
                 EntityState = Common.Enums.EntityStateEnum.Added
             };
 
-            dbContext.ApplyChanges(result, new List<IBaseIdEntity>());
+            _certificateRepository.ApplyChanges(result, new List<IBaseIdEntity>());
         }
     }
 }

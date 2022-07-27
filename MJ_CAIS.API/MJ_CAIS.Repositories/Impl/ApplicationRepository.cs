@@ -66,11 +66,11 @@ namespace MJ_CAIS.Repositories.Impl
         }
 
 
-        public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
-        {
-            return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
-                .Where(x => x.ApplicationId == aId));
-        }
+        //public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
+        //{
+        //    return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
+        //        .Where(x => x.ApplicationId == aId));
+        //}
 
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
         {
@@ -94,11 +94,11 @@ namespace MJ_CAIS.Repositories.Impl
 
         }
 
-        public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
-        {
-            return await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
-                .Where(x => x.ApplicationId == aId));
-        }
+        //public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
+        //{
+        //    return await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
+        //        .Where(x => x.ApplicationId == aId));
+        //}
 
         public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {

@@ -18,7 +18,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<TEntity> DeleteAsync(TPk id);
 
-        TContext GetDbContext();
+        //TContext GetDbContext();
+        string? GetCurrentUserId();
 
         Task SaveChangesAsync();
 
@@ -30,12 +31,15 @@ namespace MJ_CAIS.Repositories.Contracts
         public void ApplyChanges<T>(ICollection<T> listEntries, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false)
             where T : class, IBaseIdEntity;
 
-        Task<IEnumerable<T>> FindAsync<T>
+        Task<IQueryable<T>> FindAsync<T>
       (Expression<Func<T, bool>> expression) where T : class;
 
 
         Task<T> SingleOrDefaultAsync<T>
         (Expression<Func<T, bool>> expression) where T : class;
+
+        Task SaveEntityListAsync<T>(ICollection<T> entities, bool applyToAllLevels = false)
+            where T : class, IBaseIdEntity;
 
     }
 }

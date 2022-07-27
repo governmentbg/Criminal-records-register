@@ -79,7 +79,7 @@ namespace MJ_CAIS.Services
                 ePayment.ModifiedProperties = new List<string> { nameof(ePayment.PaymentStatus), nameof(ePayment.Version) };
             }
 
-            await dbContext.SaveEntityListAsync(ePayments);
+            await _wApplicationRepository.SaveEntityListAsync(ePayments);
         }
 
         public async Task ProcessTaxFreeAsync(string aId, bool approved)
@@ -89,19 +89,29 @@ namespace MJ_CAIS.Services
 
             if (approved)
             {
-                var statusWebApprovedApplication = await dbContext.WApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.WebApprovedApplication);
-                var statusApprovedApplication = await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.ApprovedApplication);
+                var statusWebApprovedApplication = await _wApplicationRepository.SingleOrDefaultAsync<WApplicationStatus>(a => a.Code == ApplicationStatuses.WebApprovedApplication);
+                //    await dbContext.WApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.WebApprovedApplication);
+                var statusApprovedApplication = await _wApplicationRepository.SingleOrDefaultAsync<AApplicationStatus>(a => a.Code == ApplicationStatuses.ApprovedApplication);
+                //await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.ApprovedApplication);
                 await ProcessWebApplicationToApplicationAsync(wApp, statusWebApprovedApplication, statusApprovedApplication);              
-                await dbContext.SaveChangesAsync();
+                await _wApplicationRepository.SaveChangesAsync();
                 return;
             }
 
             wApp.StatusCode = ApplicationStatuses.WebCheckPayment;
-            dbContext.WApplications.Update(wApp);
+            wApp.EntityState = EntityStateEnum.Modified;
+            if (wApp.ModifiedProperties == null)
+            {
+                wApp.ModifiedProperties = new List<string>();
+            }
+            wApp.ModifiedProperties.Add(nameof(wApp.StatusCode));
+      
+            //dbContext.WApplications.Update(wApp);
 
             var ePayment = new EPayment()
             {
                 Id = BaseEntity.GenerateNewId(),
+                EntityState = EntityStateEnum.Added,
                 Amount = wApp.ApplicationType.Price,
                 PaymentStatus = PaymentConstants.PaymentStatuses.Pending,
                 InvoiceNumber = wApp.RegistrationNumber
@@ -111,13 +121,17 @@ namespace MJ_CAIS.Services
             {
                 Id = BaseEntity.GenerateNewId(),
                 WApplicationId = aId,
+                EntityState = EntityStateEnum.Added,
                 EPaymentId = ePayment.Id,
                 EPayment = ePayment
             };
 
-            dbContext.APayments.Add(aPayment);
-            dbContext.EPayments.Add(ePayment);
-            await dbContext.SaveChangesAsync();      
+            //dbContext.APayments.Add(aPayment);
+            //dbContext.EPayments.Add(ePayment);
+            _wApplicationRepository.ApplyChanges(wApp, new List<IBaseIdEntity>());
+            _wApplicationRepository.ApplyChanges(aPayment, new List<IBaseIdEntity>());
+            _wApplicationRepository.ApplyChanges(ePayment, new List<IBaseIdEntity>());
+            await _wApplicationRepository.SaveChangesAsync();      
         }
 
         public async Task<PPerson> ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus)
@@ -189,6 +203,7 @@ namespace MJ_CAIS.Services
                 RegistrationNumber = regNumber,
                 ApplicationType = wapplication.ApplicationType,
                 ApplicationTypeId = wapplication.ApplicationTypeId,
+                EntityState = EntityStateEnum.Added
             };
 
             _applicationService.SetApplicationStatus(appl, applicationStatus, ApplicationResources.descApplicationFromWeb);
@@ -251,21 +266,23 @@ namespace MJ_CAIS.Services
             //в personService на ред 349 dbContext.ApplyChanges(personToUpdate, new List<IBaseIdEntity>(), true); 
             //предизвиква проблема
             //не зная защо само това ентити, а не и aapplication...?!
-            foreach (var entity in dbContext.ChangeTracker.Entries<AStatusH>())
-            {
-                if (entity.Entity.ApplicationId != appl.Id)
-                {
-                    if (entity.Entity != null && entity.Entity.EntityState != EntityStateEnum.Detached)
-                    {
-                        dbContext.Entry(entity.Entity).State = EntityState.Detached;
-                    }
-                }
-            }
-            
-            dbContext.AApplications.Add(appl);
+            //foreach (var entity in dbContext.ChangeTracker.Entries<AStatusH>())
+            //{
+            //    if (entity.Entity.ApplicationId != appl.Id)
+            //    {
+            //        if (entity.Entity != null && entity.Entity.EntityState != EntityStateEnum.Detached)
+            //        {
+            //            dbContext.Entry(entity.Entity).State = EntityState.Detached;
+            //        }
+            //    }
+            //}
+
+            _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);
+           // dbContext.AApplications.Add(appl);
             //dbContext.AStatusHes.AddRange(appl.AStatusHes);
             // dbContext.PAppIds.AddRange(appl.PAppIds);
-            dbContext.WApplications.Update(wapplication);
+            //dbContext.WApplications.Update(wapplication);
+            _wApplicationRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>(), true);
 
             return person;
         }

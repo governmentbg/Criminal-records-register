@@ -94,7 +94,7 @@ namespace MJ_CAIS.Services
 
         public async Task SendFinesDataAsync(SendFineDataRequestType value)
         {
-            var dbContext = _bulletinRepository.GetDbContext();
+            //var dbContext = _bulletinRepository.GetDbContext();
             var isinData = new List<EIsinDatum>();
 
             var authQuery = await _nomenclatureDetailRepository.GetDecidingAuthoritiesForBulletinsAsync();
@@ -120,19 +120,7 @@ namespace MJ_CAIS.Services
                     var caseTypeId = fine.ConvictionData.CaseTypeCodeSpecified ? fine.ConvictionData.CaseTypeCode.ToString() : null;
                     var caseAuthId = GetAuthId(fine.ConvictionData.CaseDecidingAuthorityCode, auths);
 
-                    var bulletinId = await dbContext.BBulletins.AsNoTracking()
-                        .Include(x => x.EgnNavigation).AsNoTracking()
-                        .Where(bulletin => bulletin.EgnNavigation.Pid == egn &&
-                                            (bulletin.DecisionTypeId == decisionTypeId || string.IsNullOrEmpty(decisionTypeId)) &&
-                                            (bulletin.DecisionDate == decisionDate || !decisionDate.HasValue) &&
-                                            bulletin.DecisionNumber == decisionNumber &&
-                                            bulletin.DecidingAuthId == decidingAuthId &&
-                                            bulletin.CaseNumber == caseNumber &&
-                                            (bulletin.CaseYear == caseYear || !caseYearParsed) &&
-                                            (bulletin.CaseTypeId == caseTypeId || string.IsNullOrEmpty(caseTypeId)) &&
-                                            bulletin.CaseAuthId == caseAuthId)
-                        .Select(x => x.Id)
-                        .FirstOrDefaultAsync();
+                    string bulletinId = await _bulletinRepository.GetDataForSendFinesDataAsync(egn, decisionTypeId, decisionDate, decisionNumber, decidingAuthId, caseNumber, caseYearParsed, caseYear, caseTypeId, caseAuthId);
 
                     if (!string.IsNullOrEmpty(bulletinId))
                     {
@@ -144,8 +132,10 @@ namespace MJ_CAIS.Services
                 isinData.Add(curertnIsinData);
             }
 
-            await dbContext.SaveEntityListAsync(isinData);
+            await _bulletinRepository.SaveEntityListAsync(isinData);
         }
+
+  
 
         private string? GetCountryId(CountryType? country, List<GCountry> countries)
         {

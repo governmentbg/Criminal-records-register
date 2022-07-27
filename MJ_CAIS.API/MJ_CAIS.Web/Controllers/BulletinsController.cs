@@ -15,11 +15,12 @@ namespace MJ_CAIS.Web.Controllers
     public class BulletinsController : BaseApiCrudController<BulletinBaseDTO, BulletinBaseDTO, BulletinGridDTO, BBulletin, string>
     {
         private readonly IBulletinService _bulletinService;
-
-        public BulletinsController(IBulletinService bulletinService)
+        private readonly IDocumentService _documentService;
+        public BulletinsController(IBulletinService bulletinService, IDocumentService documentService)
             : base(bulletinService)
         {
             _bulletinService = bulletinService;
+            _documentService = documentService;
         }
 
         [HttpGet("")]
@@ -124,14 +125,14 @@ namespace MJ_CAIS.Web.Controllers
         [HttpDelete("{aId}/documents/{documentId}")]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
-            await this._bulletinService.DeleteDocumentAsync(documentId);
+            await this._documentService.DeleteDocumentAsync(documentId);
             return Ok();
         }
 
         [HttpGet("{aId}/documents-download/{documentId}")]
         public async Task<IActionResult> GetContents(string documentId)
         {
-            var result = await this._bulletinService.GetDocumentContentAsync(documentId);
+            var result = await this._documentService.GetDocumentContentAsync(documentId);
             if (result == null) return NotFound();
 
             var content = result.DocumentContent;
