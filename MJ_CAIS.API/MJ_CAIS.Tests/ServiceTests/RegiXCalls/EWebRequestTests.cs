@@ -47,6 +47,8 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
             _dbContext = host.Services.GetService<CaisDbContext>();
 
             _regixService = host.Services.GetService<IRegixService>();
+            _dbContext.ERegixCaches.RemoveRange(_dbContext.ERegixCaches);
+            _dbContext.SaveChanges();
         }
 
 

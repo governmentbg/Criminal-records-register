@@ -67,7 +67,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             //_dbContext.EWebRequests.Add(eWRequestRS);
             //_dbContext.SaveChanges();
 
-            
+
             var responsePDS = await ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn);
             var responseRS = await ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn);
 
@@ -117,9 +117,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 {
                     responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
                     var cache = AddOrUpdateCachePersonDataSearch(request, webServiceName, citizenEgn, responseObject);
-                    await PopulateObjects(request, cache);
+                     await PopulateObjects(request, cache);
                 }
 
+
+                // request
+                //cache
+                //aapplication
+                //wapplication
                 _dbContext.SaveChanges();
                 return responseObject;
             }
@@ -211,14 +216,15 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     await _dbContext.AApplications.FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
                 if (application != null)
                 {
-                    application.Firstname = !string.IsNullOrEmpty(cache.Firstname) ?  cache.Firstname.ToUpper() : null;
-                    application.FirstnameLat = !string.IsNullOrEmpty(cache.FirstnameLat) ? cache.FirstnameLat.ToUpper() : null;
-                    application.Surname = !string.IsNullOrEmpty(cache.Surname) ? cache.Surname.ToUpper() : null;
-                    application.SurnameLat = !string.IsNullOrEmpty(cache.SurnameLat) ? cache.SurnameLat.ToUpper() : null;
-                    application.Familyname = !string.IsNullOrEmpty(cache.Familyname) ? cache.Familyname.ToUpper() : null;
-                    application.FamilynameLat = !string.IsNullOrEmpty(cache.FamilynameLat) ? cache.FamilynameLat.ToUpper() : null;
-                    application.Egn = !string.IsNullOrEmpty(cache.Egn) ? cache.Egn.ToUpper() : null;
-                    application.Lnch = !string.IsNullOrEmpty(cache.Lnch) ? cache.Lnch.ToUpper() : null;
+                    application.Firstname = !string.IsNullOrEmpty(cache.Firstname) ?  cache.Firstname.ToUpper() : application.Firstname;
+                    //application.ModifiedProperties.Add(nameof(application.Firstname));
+                    application.FirstnameLat = !string.IsNullOrEmpty(cache.FirstnameLat) ? cache.FirstnameLat.ToUpper() : application.FirstnameLat;
+                    application.Surname = !string.IsNullOrEmpty(cache.Surname) ? cache.Surname.ToUpper() : application.Surname;
+                    application.SurnameLat = !string.IsNullOrEmpty(cache.SurnameLat) ? cache.SurnameLat.ToUpper() : application.SurnameLat;
+                    application.Familyname = !string.IsNullOrEmpty(cache.Familyname) ? cache.Familyname.ToUpper() : application.Familyname;
+                    application.FamilynameLat = !string.IsNullOrEmpty(cache.FamilynameLat) ? cache.FamilynameLat.ToUpper() : application.FamilynameLat;
+                    application.Egn = !string.IsNullOrEmpty(cache.Egn) ? cache.Egn.ToUpper() : application.Egn;
+                    application.Lnch = !string.IsNullOrEmpty(cache.Lnch) ? cache.Lnch.ToUpper() : application.Lnch;
                     if(!string.IsNullOrEmpty(cache.ForeignFirstname) 
                         || !string.IsNullOrEmpty(cache.ForeignSurname) 
                         || !string.IsNullOrEmpty(cache.ForeignFamilyname)
@@ -253,7 +259,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         application.Sex = result;
                     }
 
-                    application.BirthDate = cache.BirthDate;
+                    application.BirthDate = cache.BirthDate != null? cache.BirthDate : application.BirthDate;
                     if(cache.BirthDistrictName != null && cache.BirthMunName != null && cache.BirthCityName != null)
                     {
                         application.BirthCityId = await TryGetCityIdByNames(cache.BirthDistrictName.Trim(), cache.BirthMunName.Trim(), cache.BirthCityName.Trim());
@@ -333,6 +339,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         _dbContext.EWebRequests.Add(request);
                     }
+                   // application.EntityState = Common.Enums.EntityStateEnum.Modified;
                     _dbContext.AApplications.Update(application);
                 }
             }
