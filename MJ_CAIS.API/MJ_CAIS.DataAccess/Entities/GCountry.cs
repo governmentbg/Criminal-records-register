@@ -21,6 +21,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PPersonHCitizenships = new HashSet<PPersonHCitizenship>();
             PPersonHs = new HashSet<PPersonH>();
             PPersonIds = new HashSet<PPersonId>();
+            WAppCitizenships = new HashSet<WAppCitizenship>();
             WApplications = new HashSet<WApplication>();
         }
 
@@ -54,6 +55,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<PPersonHCitizenship> PPersonHCitizenships { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }
         public virtual ICollection<PPersonId> PPersonIds { get; set; }
+        public virtual ICollection<WAppCitizenship> WAppCitizenships { get; set; }
         public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }

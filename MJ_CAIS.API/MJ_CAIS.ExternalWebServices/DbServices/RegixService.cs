@@ -43,15 +43,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string wApplicationId)
         {
             var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, operationPDS.Id, null, wApplicationId: wApplicationId);
+            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, webServiceId: operationPDS.Id, wApplicationId: wApplicationId);
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
-            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, null, wApplicationId: wApplicationId);
-
+            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, webServiceId: operationRS.Id, wApplicationId: wApplicationId);
+           
+            _dbContext.EWebRequests.Add(eWRequestPDS);
+            _dbContext.EWebRequests.Add(eWRequestRS);
             _dbContext.SaveChanges();
         }
 
-        public (PersonDataResponseType, EWebRequest) SyncCallPersonDataSearch(string egn,
+        public async Task<(PersonDataResponseType, EWebRequest)> SyncCallPersonDataSearch(string egn,
             string? applicationId = null,
             string? wApplicationId = null)
         {
@@ -61,38 +63,41 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
             EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, applicationId, wApplicationId: wApplicationId);
+            //_dbContext.EWebRequests.Add(eWRequestPDS);
+            //_dbContext.EWebRequests.Add(eWRequestRS);
+            //_dbContext.SaveChanges();
 
-            _dbContext.SaveChanges();
 
-            
-            var responsePDS = ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn);
-            var responseRS = ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn);
+            var responsePDS = await ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn);
+            var responseRS = await ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn);
 
             return (responsePDS, eWRequestPDS);
         }
 
-        public (ForeignIdentityInfoResponseType, EWebRequest) SyncCallForeignIdentitySearchV2(string egn,
+        public async Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string lnch,
             string? applicationId = null,
             string? wApplicationId = null)
         {
             var operationFI = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
-            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: egn, isAsync: true, operationFI.Id, applicationId, wApplicationId: wApplicationId);
+            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: true, webServiceId: operationFI.Id, applicationId: applicationId, wApplicationId: wApplicationId);
+            //_dbContext.EWebRequests.Add(eWRequestFI);
+            //_dbContext.SaveChanges();
 
-            _dbContext.SaveChanges();
 
-
-            var responseFI = ExecuteForeignIdentitySearchV2(eWRequestFI, operationFI.WebServiceName, egn);
+            var responseFI = await ExecuteForeignIdentitySearchV2(eWRequestFI, operationFI.WebServiceName, lnch);
 
             
             return (responseFI, eWRequestFI);
         }
 
         /// <summary>
-        ///     Изпълнява заявка от таблицата с web requests
+        /// Изпълнява заявка ExecutePersonDataSearch от таблицата с web requests
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="serviceURI"></param>
-        public PersonDataResponseType ExecutePersonDataSearch(EWebRequest request, string webServiceName,  string? egn = null)
+        /// <param name="webServiceName"></param>
+        /// <param name="egn"></param>
+        /// <returns></returns>
+        public async Task<PersonDataResponseType> ExecutePersonDataSearch(EWebRequest request, string webServiceName,  string? egn = null)
         {
             string? citizenEgn = egn;
             if (String.IsNullOrEmpty(egn))
@@ -103,27 +108,35 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 var requestDeserialized = XmlUtils.DeserializeXml<PersonDataRequestType>(request.RequestXml);
                 citizenEgn = requestDeserialized.EGN;
             }
-            
-            CallRegix(request, webServiceName, citizenEgn, null);
-           
-            PersonDataResponseType responseObject = null;
-            if (request.HasError != true)
+            if (citizenEgn != null)
             {
-                responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
-                var cache = AddOrUpdateCache(request, webServiceName, citizenEgn);
-                PopulateObjects(request, cache); 
-            }
+                CallRegix(request, webServiceName, citizenEgn);
 
-            _dbContext.SaveChanges();
-            return responseObject;
+                PersonDataResponseType responseObject = null;
+                if (request.HasError != true && request.ResponseXml != null)
+                {
+                    responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
+                    var cache = AddOrUpdateCachePersonDataSearch(request, webServiceName, citizenEgn, responseObject);
+                     await PopulateObjects(request, cache);
+                }
+
+
+                // request
+                //cache
+                //aapplication
+                //wapplication
+                _dbContext.SaveChanges();
+                return responseObject;
+            }
+            return null;
         }
 
         /// <summary>
-        ///     Изпълнява заявка от таблицата с web requests
+        ///     Изпълнява заявка RelationsSearch от таблицата с web requests
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="serviceURI"></param>
-        public RelationsResponseType ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null)
+        /// <param name="webServiceNameRelations"></param>
+        public async Task<RelationsResponseType> ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null)
         {
             string? citizenEgn = egn;
             if (String.IsNullOrEmpty(egn))
@@ -131,31 +144,37 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 var empty = new RelationsRequestType();
                 var emptyXml = XmlUtils.SerializeToXml(empty);
 
-                var requestDeserialized = XmlUtils.DeserializeXml<RelationsRequestType>(request.RequestXml);
-                citizenEgn = requestDeserialized.EGN;
+                if(request.RequestXml != null)
+                {
+                    var requestDeserialized = XmlUtils.DeserializeXml<RelationsRequestType>(request.RequestXml);
+                    citizenEgn = requestDeserialized.EGN;
+                }
             }
-
-            CallRegix(request, webServiceNameRelations, citizenEgn, null);
-
-            RelationsResponseType responseObject = null;
-            if (request.HasError != true)
+            if (citizenEgn != null)
             {
-                responseObject = XmlUtils.DeserializeXml<RelationsResponseType>(request.ResponseXml);
-                var cache = AddOrUpdateCache(request, webServiceNameRelations, citizenEgn);
-                PopulateObjects(request, cache);
-            }
+                CallRegix(request, webServiceNameRelations, citizenEgn);
 
-            _dbContext.SaveChanges();
-            return responseObject;
+                RelationsResponseType responseObject = null;
+                if (request.HasError != true && request.ResponseXml != null)
+                {
+                    responseObject = XmlUtils.DeserializeXml<RelationsResponseType>(request.ResponseXml);
+                    var cache = AddOrUpdateCacheRelationsSearch(request, webServiceNameRelations, citizenEgn, responseObject);
+                    await PopulateObjects(request, cache);
+                }
+
+                _dbContext.SaveChanges();
+                return responseObject;
+            }
+            return null;
         }
 
 
         /// <summary>
-        ///     Изпълнява заявка от таблицата с web requests
+        ///     Изпълнява заявка ForeignIdentitySearchV2 от таблицата с web requests
         /// </summary>
         /// <param name="request"></param>
         /// <param name="serviceURI"></param>
-        public ForeignIdentityInfoResponseType ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null)
+        public async Task<ForeignIdentityInfoResponseType> ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null)
         {
             string? citizenLNCH = egn;
             if (String.IsNullOrEmpty(egn))
@@ -163,25 +182,33 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 var empty = new ForeignIdentityInfoResponseType();
                 var emptyXml = XmlUtils.SerializeToXml(empty);
 
-                var requestDeserialized = XmlUtils.DeserializeXml<ForeignIdentityInfoRequestType>(request.RequestXml);
-                citizenLNCH = requestDeserialized.Identifier;
+                if(request.RequestXml != null)
+                {
+                    var requestDeserialized = XmlUtils.DeserializeXml<ForeignIdentityInfoRequestType>(request.RequestXml);
+                    citizenLNCH = requestDeserialized.Identifier;
+                }
             }
-            
-            CallRegix(request, webServiceName, null, citizenLNCH);
-
-            ForeignIdentityInfoResponseType responseObject = null;
-            if (request.HasError != true)
+            if(citizenLNCH != null)
             {
-                responseObject = XmlUtils.DeserializeXml<ForeignIdentityInfoResponseType>(request.ResponseXml);
-                var cache = AddOrUpdateCacheLNCH(request, webServiceName, citizenLNCH);
-                PopulateObjects(request, cache);
-            }
+                CallRegix(request, webServiceName, citizenLNCH);
 
-            _dbContext.SaveChanges();
-            return responseObject;
+                ForeignIdentityInfoResponseType responseObject = null;
+                if (request.HasError != true)
+                {
+                    if (request.ResponseXml != null)
+                    {
+                        responseObject = XmlUtils.DeserializeXml<ForeignIdentityInfoResponseType>(request.ResponseXml);
+                        var cache = AddOrUpdateCacheForeignIdentity(request, webServiceName, citizenLNCH, responseObject);
+                        await PopulateObjects(request, cache);
+                    }
+                }
+                _dbContext.SaveChanges();
+                return responseObject;
+            }
+            return null;
         }
 
-        private async void PopulateObjects(EWebRequest request, ERegixCache cache, ERegixCache? cacheRelations = null)
+        private async Task PopulateAApplication(EWebRequest request, ERegixCache cache)
         {
             if (!string.IsNullOrEmpty(request.ApplicationId))
             {
@@ -189,14 +216,179 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     await _dbContext.AApplications.FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
                 if (application != null)
                 {
-                    application.Firstname = cache.Firstname;
-                    application.FirstnameLat = cache.FirstnameLat;
-                    application.Surname = cache.Surname;
-                    application.SurnameLat = cache.SurnameLat;
-                    application.Familyname = cache.Familyname;
-                    application.FamilynameLat = cache.FamilynameLat;
-                    application.Egn = cache.Egn;
-                    application.Lnch = cache.Lnch;
+                    application.Firstname = !string.IsNullOrEmpty(cache.Firstname) ?  cache.Firstname.ToUpper() : application.Firstname;
+                    //application.ModifiedProperties.Add(nameof(application.Firstname));
+                    application.FirstnameLat = !string.IsNullOrEmpty(cache.FirstnameLat) ? cache.FirstnameLat.ToUpper() : application.FirstnameLat;
+                    application.Surname = !string.IsNullOrEmpty(cache.Surname) ? cache.Surname.ToUpper() : application.Surname;
+                    application.SurnameLat = !string.IsNullOrEmpty(cache.SurnameLat) ? cache.SurnameLat.ToUpper() : application.SurnameLat;
+                    application.Familyname = !string.IsNullOrEmpty(cache.Familyname) ? cache.Familyname.ToUpper() : application.Familyname;
+                    application.FamilynameLat = !string.IsNullOrEmpty(cache.FamilynameLat) ? cache.FamilynameLat.ToUpper() : application.FamilynameLat;
+                    application.Egn = !string.IsNullOrEmpty(cache.Egn) ? cache.Egn.ToUpper() : application.Egn;
+                    application.Lnch = !string.IsNullOrEmpty(cache.Lnch) ? cache.Lnch.ToUpper() : application.Lnch;
+                    if(!string.IsNullOrEmpty(cache.ForeignFirstname) 
+                        || !string.IsNullOrEmpty(cache.ForeignSurname) 
+                        || !string.IsNullOrEmpty(cache.ForeignFamilyname)
+                        || !string.IsNullOrEmpty(cache.Alias)
+                        )
+                    {
+                        var newObj = new AAppPersAlias
+                        {
+                            Id = BaseEntity.GenerateNewId(),
+                            ApplicationId = application.Id,
+                            Firstname = !string.IsNullOrEmpty(cache.ForeignFirstname) ? cache.ForeignFirstname.ToUpper() : null,
+                            Surname = !string.IsNullOrEmpty(cache.ForeignSurname) ? cache.ForeignSurname.ToUpper() : null,
+                            Familyname = !string.IsNullOrEmpty(cache.ForeignFamilyname) ? cache.ForeignFamilyname.ToUpper() : null,
+                            Type = "previous" //todo да стане foreign
+                        };
+                        _dbContext.AAppPersAliases.Add(newObj);
+                    }
+                    if ( !string.IsNullOrEmpty(cache.Alias) )
+                    {
+                        var newObj = new AAppPersAlias
+                        {
+                            Id = BaseEntity.GenerateNewId(),
+                            ApplicationId = application.Id,
+                            Fullname =  cache.Alias.ToUpper(),
+                            Type = "nickname" //todo да стане constant
+                        };
+                        _dbContext.AAppPersAliases.Add(newObj);
+                    }
+                    decimal result;
+                    if (decimal.TryParse(cache.GenderCode, out result))
+                    {
+                        application.Sex = result;
+                    }
+
+                    application.BirthDate = cache.BirthDate != null? cache.BirthDate : application.BirthDate;
+                    if(cache.BirthDistrictName != null && cache.BirthMunName != null && cache.BirthCityName != null)
+                    {
+                        application.BirthCityId = await TryGetCityIdByNames(cache.BirthDistrictName.Trim(), cache.BirthMunName.Trim(), cache.BirthCityName.Trim());
+                    }
+                    
+                    if(application.BirthCityId == null)
+                    {
+                        application.BirthPlaceOther = (cache.BirthDistrictName != null  ? (cache.BirthDistrictName + " ") : "") 
+                            + (cache.BirthMunName != null ? (cache.BirthMunName + " ") : "")
+                            + (cache.BirthCityName != null ? (cache.BirthCityName + " ") : "")
+                            + cache.BirthPlace;
+                    }
+                    else
+                    {
+                        application.BirthPlaceOther = cache.BirthPlace;
+                    }
+                   
+                    if (!string.IsNullOrEmpty(cache.BirthCountryCode))
+                    {
+                        string? countryId = await GetCounrtyByCode(cache.BirthCountryCode.ToUpper());
+                        if (countryId != null)
+                        {
+                            application.BirthCountryId = countryId;
+                        }
+                        else
+                        {
+                            if( application.BirthCityId != null )
+                            {
+                                application.BirthCountryId = GlobalConstants.BGCountryId;
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cache.NationalityCode1))
+                    {
+                        string? countryId = await GetCounrtyByCode(cache.NationalityCode1.ToUpper());
+                        if (countryId != null)
+                        {
+                            application.BirthCountryId = countryId;
+
+                            var newObj = new AAppCitizenship
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                ApplicationId = application.Id,
+                                CountryId = countryId
+                            };
+                            _dbContext.AAppCitizenships.Add(newObj);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cache.NationalityCode2))
+                    {
+                        string? countryId = await GetCounrtyByCode(cache.NationalityCode2.ToUpper());
+                        if (countryId != null)
+                        {
+                            application.BirthCountryId = countryId;
+
+                            var newObj = new AAppCitizenship
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                ApplicationId = application.Id,
+                                CountryId = countryId
+                            };
+                            _dbContext.AAppCitizenships.Add(newObj);
+                        }
+                    }
+                    //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
+                    if(application.Egn != null && application.BirthCityId == null)
+                    {
+                        application.BirthCityId =  await GetCityIdFromGraoByEGN(application.Egn);
+                    }
+
+                    //todo add identity document or travel document
+                    if (request.Version != null)
+                    {
+                        _dbContext.EWebRequests.Update(request);
+                    }
+                    else
+                    {
+                        _dbContext.EWebRequests.Add(request);
+                    }
+                   // application.EntityState = Common.Enums.EntityStateEnum.Modified;
+                    _dbContext.AApplications.Update(application);
+                }
+            }
+        }
+
+        private async Task PopulateWApplication(EWebRequest request, ERegixCache cache)
+        {
+            if (!string.IsNullOrEmpty(request.WApplicationId))
+            {
+                var application =
+                    await _dbContext.WApplications.FirstOrDefaultAsync(a => a.Id == request.WApplicationId);
+                if (application != null)
+                {
+                    application.Firstname = !string.IsNullOrEmpty(cache.Firstname) ? cache.Firstname.ToUpper() : null;
+                    application.FirstnameLat = !string.IsNullOrEmpty(cache.FirstnameLat) ? cache.FirstnameLat.ToUpper() : null;
+                    application.Surname = !string.IsNullOrEmpty(cache.Surname) ? cache.Surname.ToUpper() : null;
+                    application.SurnameLat = !string.IsNullOrEmpty(cache.SurnameLat) ? cache.SurnameLat.ToUpper() : null;
+                    application.Familyname = !string.IsNullOrEmpty(cache.Familyname) ? cache.Familyname.ToUpper() : null;
+                    application.FamilynameLat = !string.IsNullOrEmpty(cache.FamilynameLat) ? cache.FamilynameLat.ToUpper() : null;
+                    application.Egn = !string.IsNullOrEmpty(cache.Egn) ? cache.Egn.ToUpper() : null;
+                    application.Lnch = !string.IsNullOrEmpty(cache.Lnch) ? cache.Lnch.ToUpper() : null;
+                    if (!string.IsNullOrEmpty(cache.ForeignFirstname)
+                        || !string.IsNullOrEmpty(cache.ForeignSurname)
+                        || !string.IsNullOrEmpty(cache.ForeignFamilyname)
+                        || !string.IsNullOrEmpty(cache.Alias)
+                        )
+                    {
+                        var newObj = new WAppPersAlias
+                        {
+                            Id = BaseEntity.GenerateNewId(),
+                            WApplicationId = application.Id,
+                            Firstname = !string.IsNullOrEmpty(cache.ForeignFirstname) ? cache.ForeignFirstname.ToUpper() : null,
+                            Surname = !string.IsNullOrEmpty(cache.ForeignSurname) ? cache.ForeignSurname.ToUpper() : null,
+                            Familyname = !string.IsNullOrEmpty(cache.ForeignFamilyname) ? cache.ForeignFamilyname.ToUpper() : null,
+                            Type = "previous" //todo да стане foreign
+                        };
+                        _dbContext.WAppPersAliases.Add(newObj);
+                    }
+                    if (!string.IsNullOrEmpty(cache.Alias))
+                    {
+                        var newObj = new WAppPersAlias
+                        {
+                            Id = BaseEntity.GenerateNewId(),
+                            WApplicationId = application.Id,
+                            Fullname = cache.Alias.ToUpper(),
+                            Type = "nickname" //todo да стане constant
+                        };
+                        _dbContext.WAppPersAliases.Add(newObj);
+                    }
                     decimal result;
                     if (decimal.TryParse(cache.GenderCode, out result))
                     {
@@ -204,134 +396,195 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     }
 
                     application.BirthDate = cache.BirthDate;
-                    application.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " +
-                                                  cache.BirthCityName + " " + cache.BirthPlace;
+                    if (cache.BirthDistrictName != null && cache.BirthMunName != null && cache.BirthCityName != null)
+                    {
+                        application.BirthCityId = await TryGetCityIdByNames(cache.BirthDistrictName.Trim(), cache.BirthMunName.Trim(), cache.BirthCityName.Trim());
+                    }
+
+                    if (application.BirthCityId == null)
+                    {
+                        application.BirthPlaceOther = (cache.BirthDistrictName != null ? (cache.BirthDistrictName + " ") : "")
+                            + (cache.BirthMunName != null ? (cache.BirthMunName + " ") : "")
+                            + (cache.BirthCityName != null ? (cache.BirthCityName + " ") : "")
+                            + cache.BirthPlace;
+                    }
+                    else
+                    {
+                        application.BirthPlaceOther = cache.BirthPlace;
+                    }
+
                     if (!string.IsNullOrEmpty(cache.BirthCountryCode))
                     {
-                        var country = await _dbContext.GCountries.AsNoTracking()
-                            .FirstOrDefaultAsync(x => x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
-                        if (country != null)
+                        string? countryId = await GetCounrtyByCode(cache.BirthCountryCode.ToUpper());
+                        if (countryId != null)
                         {
-                            application.BirthCountryId = country.Id;
+                            application.BirthCountryId = countryId;
+                        }
+                        else
+                        {
+                            if (application.BirthCityId != null)
+                            {
+                                application.BirthCountryId = GlobalConstants.BGCountryId;
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cache.NationalityCode1))
+                    {
+                        string? countryId = await GetCounrtyByCode(cache.NationalityCode1.ToUpper());
+                        if (countryId != null)
+                        {
+                            application.BirthCountryId = countryId;
 
-                            var newObj = new AAppCitizenship
+                            var newObj = new WAppCitizenship
                             {
                                 Id = BaseEntity.GenerateNewId(),
-                                ApplicationId = application.Id,
-                                CountryId = country.Id
+                                WApplicationId = application.Id,
+                                CountryId = countryId
                             };
-                            _dbContext.AAppCitizenships.Add(newObj);
+                            _dbContext.WAppCitizenships.Add(newObj);
                         }
                     }
-
-                    var graoPerson = await _dbContext.GraoPeople.AsNoTracking()
-                        .FirstOrDefaultAsync(a => a.Egn == application.Egn);
-                    if (graoPerson != null)
+                    if (!string.IsNullOrEmpty(cache.NationalityCode2))
                     {
-                        var gCity = await _dbContext.GCities
-                            .FirstOrDefaultAsync(a => a.EkatteCode == graoPerson.BirthplaceCode);
-                        if (gCity != null)
+                        string? countryId = await GetCounrtyByCode(cache.NationalityCode2.ToUpper());
+                        if (countryId != null)
                         {
-                            application.BirthCityId = gCity.Id;
+                            application.BirthCountryId = countryId;
+
+                            var newObj = new WAppCitizenship
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                WApplicationId = application.Id,
+                                CountryId = countryId
+                            };
+                            _dbContext.WAppCitizenships.Add(newObj);
                         }
                     }
-
-                    if (cacheRelations != null)
+                    //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
+                    if (application.Egn != null && application.BirthCityId == null)
                     {
-                        application.MotherFirstname = cacheRelations.MotherFirstname;
-                        application.MotherSurname = cacheRelations.MotherSurname;
-                        application.MotherFamilyname = cacheRelations.MotherFamilyname;
-
-                        application.FatherFirstname = cacheRelations.FatherFirstname;
-                        application.FatherSurname = cacheRelations.FatherSurname;
-                        application.FatherFamilyname = cacheRelations.FatherFamilyname;
+                        application.BirthCityId = await GetCityIdFromGraoByEGN(application.Egn);
                     }
 
-                    _dbContext.AApplications.Update(application);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(request.WApplicationId))
-            {
-                var wapplication =
-                    await _dbContext.WApplications.FirstOrDefaultAsync(a => a.Id == request.WApplicationId);
-                if (wapplication != null)
-                {
-                    wapplication.Firstname = cache.Firstname;
-                    wapplication.FirstnameLat = cache.FirstnameLat;
-                    ;
-                    wapplication.Surname = cache.Surname;
-                    wapplication.SurnameLat = cache.SurnameLat;
-                    wapplication.Familyname = cache.Familyname;
-                    wapplication.FamilynameLat = cache.FamilynameLat;
-                    wapplication.Egn = cache.Egn;
-                    wapplication.Lnch = cache.Lnch;
-                    wapplication.BirthDate = cache.BirthDate;
-                    wapplication.BirthPlaceOther = cache.BirthDistrictName + " " + cache.BirthMunName + " " +
-                                                   cache.BirthCityName + " " + cache.BirthPlace;
-                    if (!string.IsNullOrEmpty(cache.BirthCountryCode))
+                    //todo add identity document or travel document
+                    if(request.Version != null)
                     {
-                        var country = await _dbContext.GCountries.FirstOrDefaultAsync(x =>
-                            x.Iso3166Alpha2 == cache.BirthCountryCode.ToUpper());
-                        if (country != null)
-                        {
-                            wapplication.BirthCountry = country;
-                            wapplication.BirthCountryId = country.Id;
-                        }
+                        _dbContext.EWebRequests.Update(request);
                     }
-
-                    _dbContext.WApplications.Update(wapplication);
+                    else
+                    {
+                        _dbContext.EWebRequests.Add(request);
+                    }
+                    _dbContext.WApplications.Update(application);
                 }
             }
         }
 
-        //private void CallRegixLNCH(EWebRequest request, string webServiceName, string citizenLNCH)
-        //{
-        //    var cachedResponse = CheckForCachedResponseLNCH(citizenLNCH, webServiceName);
-        //    if (cachedResponse != null)
-        //    {
-        //        request.ResponseXml = cachedResponse.ResponseXml;
-        //        request.IsFromCache = true;
-        //    }
-        //    else
-        //    {
-        //        request.Attempts += 1;
-        //        request.IsFromCache = false;
+        private async Task<string?> GetCityIdFromGraoByEGN(string egn)
+        {
+            var graoPerson = await _dbContext.GraoPeople.AsNoTracking()
+                        .FirstOrDefaultAsync(a => a.Egn == egn);
+            if (graoPerson != null && graoPerson.BirthplaceCode != null)
+            {
+                var gCity = await _dbContext.GCities
+                    .FirstOrDefaultAsync(a => a.EkatteCode == graoPerson.BirthplaceCode);
+                if (gCity != null)
+                {
+                    return gCity.Id;
+                }
+            }
+            return null;
+        }
+        private async Task<string?> TryGetCityIdByNames(string districtName, string munName, string cityname)
+        {
+           string ? districtId = await GetDistrictIdByName(districtName);
+            if(districtId != null)
+            {
+               string? munId = await GetMunicipalityIdByName(munName, districtId);
+                if(munId != null)
+                {
+                    string? cityId = await GetCityIdByName(cityname, munId);
+                    return cityId;
+                }
+            }
+            return null;
+        }
+        private async Task<string?> GetDistrictIdByName(string name)
+        {
+            var district = await _dbContext.GBgDistricts.AsNoTracking().OrderByDescending(c => c.ValidFrom)
+                                       .FirstOrDefaultAsync(x => x.Name.ToUpper() == name.ToUpper());
+            if (district != null )
+            {
+                return district.Id;
+            }
+            return null;
+        }
 
-        //        try
-        //        {
-        //            var callContext = CreateCallContext(request);
-        //            var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
-        //                callContext, citizenLNCH);
-        //            request.ResponseXml = resultData.Data.Response.Any.OuterXml;
-        //            request.ResponseXml = AddXmlSchema(request.ResponseXml);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            request.HasError = true;
-        //            request.Error = ex.Message;
-        //            request.StackTrace = ex.StackTrace;
-        //        }
-        //    }
+        private async Task<string?> GetMunicipalityIdByName(string name, string? districtId)
+        {
+            var municipality = await _dbContext.GBgMunicipalities.AsNoTracking().OrderByDescending(c => c.ValidFrom)
+                                       .FirstOrDefaultAsync(x => x.Name.ToUpper() == name.ToUpper() && x.DistrictId == districtId);
+            if (municipality != null )
+            {
+                return municipality.Id;
+            }
+            return null;
+        }
 
-        //    request.ExecutionDate = DateTime.Now;
-        //    request.Status = request.HasError == true
-        //        ? WebRequestStatusConstants.Rejected
-        //        : WebRequestStatusConstants.Accepted;
-        //}
+        private async Task<string?> GetCityIdByName(string name, string? municipalityId)
+        {
+            var municipality = await _dbContext.GCities.AsNoTracking().OrderByDescending(c => c.ValidFrom)
+                                       .FirstOrDefaultAsync(x =>
+                                                x.Name.ToUpper().EndsWith(". " + name.ToUpper())  && x.MunicipalityId == municipalityId);
+            if (municipality != null )
+            {
+                return municipality.Id;
+            }
+            return null;
+        }
 
-        private void CallRegix(EWebRequest request, string webServiceName, string? citizenEgn, string? citizenLNCH)
+        private async Task<string?> GetCounrtyByCode(string code)
+        {
+            int codeLen = code.Length;
+            if(codeLen == 2)
+            {
+                var country = await _dbContext.GCountries.AsNoTracking().OrderByDescending(c=> c.ValidFrom)
+                                       .FirstOrDefaultAsync(x => x.Iso3166Alpha2 == code);
+                if(country != null && country != null)
+                {
+                    return country.Id;
+                }   
+            }
+            if(codeLen == 3)
+            {
+                var country = await _dbContext.GCountries.AsNoTracking().OrderByDescending(c => c.ValidFrom)
+                                        .FirstOrDefaultAsync(x => x.Iso31662Code == code);
+                if (country != null)
+                {
+                    return country.Id;
+                }
+            }
+            return null;
+        }
+
+        private async Task PopulateObjects(EWebRequest request, ERegixCache cache)
+        {
+            if (request.WApplicationId != null)
+            {
+                await PopulateWApplication(request, cache);
+            }
+            if (request.ApplicationId != null)
+            {
+                await PopulateAApplication(request, cache);
+            }
+        }
+
+        
+        private void CallRegix(EWebRequest request, string webServiceName, string citizenIdentifier)
         {
             ERegixCache cachedResponse = null;
-            if (!string.IsNullOrEmpty(citizenEgn))
-            {
-                cachedResponse = CheckForCachedResponse(citizenEgn, webServiceName);
-            }
-            if (!string.IsNullOrEmpty(citizenLNCH))
-            {
-                cachedResponse = CheckForCachedResponseLNCH(citizenLNCH, webServiceName);
-            }
-                 
+            cachedResponse = CheckForCachedResponse(citizenIdentifier, webServiceName);
+
             if (cachedResponse != null)
             {
                 request.ResponseXml = cachedResponse.ResponseXml;
@@ -344,11 +597,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
                 try
                 {
-                    var callContext = CreateCallContext(request);
-                    var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
-                        callContext, !string.IsNullOrEmpty(citizenEgn) ? citizenEgn: citizenLNCH);
-                    request.ResponseXml = resultData.Data.Response.Any.OuterXml;
-                    request.ResponseXml = AddXmlSchema(request.ResponseXml);
+                    if(request.RequestXml != null)
+                    {
+                        var callContext = CreateCallContext(request);
+                        var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
+                            callContext, citizenIdentifier);
+                        request.ResponseXml = resultData.Data.Response.Any.OuterXml;
+                        request.ResponseXml = AddXmlSchema(request.ResponseXml);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -364,144 +620,270 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 : WebRequestStatusConstants.Accepted;
         }
 
-        private ERegixCache CheckForCachedResponseLNCH(string citizenLNCH, string webServiceName)
+        private ERegixCache CheckForCachedResponse(string identifier, string webServiceName)
         {
             var daysCache = GetRegixDaysCache();
             var yesterday = DateTime.Now.AddDays(-daysCache);
 
             var cachedResponse = _dbContext.ERegixCaches
-                .FirstOrDefault(r =>
-                    r.Lnch == citizenLNCH && r.ExecutionDate > yesterday && r.WebServiceName == webServiceName);
+                .FirstOrDefault(r => r.ReqIdentifier == identifier && r.ExecutionDate > yesterday && r.WebServiceName == webServiceName);
             return cachedResponse;
         }
 
-        private ERegixCache CheckForCachedResponse(string egn, string webServiceName)
-        {
-            var daysCache = GetRegixDaysCache();
-            var yesterday = DateTime.Now.AddDays(-daysCache);
-
-            var cachedResponse = _dbContext.ERegixCaches
-                .FirstOrDefault(r => r.Egn == egn && r.ExecutionDate > yesterday && r.WebServiceName == webServiceName);
-            return cachedResponse;
-        }
-
-        private ERegixCache AddOrUpdateCacheLNCH(EWebRequest request, string webServiceName, string lnch)
+        private ERegixCache GetRegixCacheObject(string webServiceName, string reqIdentifier)
         {
             var regixCache =
-                _dbContext.ERegixCaches.FirstOrDefault(r => r.Lnch == lnch && r.WebServiceName == webServiceName);
+                _dbContext.ERegixCaches.FirstOrDefault(r => r.ReqIdentifier == reqIdentifier && r.WebServiceName == webServiceName);
             if (regixCache == null)
             {
-                regixCache = new ERegixCache
+                var newRegixCache = new ERegixCache
                 {
                     Id = BaseEntity.GenerateNewId(),
-                    Lnch = lnch
+                    WebServiceName = webServiceName,
+                    ReqIdentifier = reqIdentifier
                 };
 
-                _dbContext.ERegixCaches.Add(regixCache);
+                //_dbContext.ERegixCaches.Add(newRegixCache);
+                return newRegixCache;
             }
-
-            regixCache.RequestXml = request.RequestXml;
-            regixCache.ResponseXml = request.ResponseXml;
-            regixCache.WebServiceName = webServiceName;
-            regixCache.ExecutionDate = DateTime.Now;
-            var responseObject = XmlUtils.DeserializeXml<ForeignIdentityInfoResponseType>(request.ResponseXml);
-
-            if (webServiceName.EndsWith("GetForeignIdentityV2"))
-            {
-                regixCache.Egn = responseObject.EGN;
-                regixCache.Lnch = responseObject.LNCh;
-
-                regixCache.FirstnameLat = (string)responseObject.PersonNames.FirstNameLatin;
-                regixCache.SurnameLat = (string)responseObject.PersonNames.SurnameLatin;
-                regixCache.FamilynameLat = (string)responseObject.PersonNames.LastNameLatin;
-
-                regixCache.Firstname = (string)responseObject.PersonNames.FirstName;
-                regixCache.Surname = (string)responseObject.PersonNames.Surname;
-                regixCache.Familyname = (string)responseObject.PersonNames.FamilyName;
-
-                DateTime result;
-                if (DateTime.TryParse(responseObject.BirthDate, out result))
-                {
-                    regixCache.BirthDate = result;
-                }
-
-                regixCache.BirthCountryName = responseObject.BirthPlace.CountryName;
-                regixCache.BirthCountryCode = responseObject.BirthPlace.CountryCode;
-
-                regixCache.BirthMunName = responseObject.BirthPlace.MunicipalityName;
-            }
-
-
-            // TODO: based on operation, parse different objects and fill data
-
             return regixCache;
         }
-
-        private ERegixCache AddOrUpdateCache(EWebRequest request, string webServiceName, string egn)
+        private ERegixCache AddOrUpdateCachePersonDataSearch(EWebRequest request, string webServiceName, string reqIdentifier, PersonDataResponseType responseObject)
         {
-            var regixCache =
-                _dbContext.ERegixCaches.FirstOrDefault(r => r.Egn == egn && r.WebServiceName == webServiceName);
-            if (regixCache == null)
+            var regixCache = GetRegixCacheObject(webServiceName, reqIdentifier);
+            if (request.IsFromCache == true)
             {
-                regixCache = new ERegixCache
-                {
-                    Id = BaseEntity.GenerateNewId(),
-                    Egn = egn
-                };
-
-                _dbContext.ERegixCaches.Add(regixCache);
+                return regixCache;
             }
 
             regixCache.RequestXml = request.RequestXml;
             regixCache.ResponseXml = request.ResponseXml;
-            regixCache.WebServiceName = webServiceName;
             regixCache.ExecutionDate = DateTime.Now;
-
-
-            if (webServiceName.EndsWith("PersonDataSearch"))
+            
+            if(responseObject.BirthDateSpecified)
             {
-                var responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
                 regixCache.BirthDate = responseObject.BirthDate;
-                regixCache.Egn = responseObject.EGN;
+            }
+            
+            regixCache.Egn = responseObject.EGN;
+
+            if(responseObject.PersonNames != null)
+            {
+                regixCache.Firstname = (string)responseObject.PersonNames.FirstName;
+                regixCache.Surname = (string)responseObject.PersonNames.SurName;
+                regixCache.Familyname = (string)responseObject.PersonNames.FamilyName;
+            }
+            if (responseObject.LatinNames != null)
+            {
 
                 regixCache.FirstnameLat = (string)responseObject.LatinNames.FirstName;
                 regixCache.SurnameLat = (string)responseObject.LatinNames.SurName;
                 regixCache.FamilynameLat = (string)responseObject.LatinNames.FamilyName;
+            }
+            if (responseObject.ForeignNames != null)
+            {
+                regixCache.ForeignFirstname = (string)responseObject.ForeignNames.FirstName;
+                regixCache.ForeignSurname = (string)responseObject.ForeignNames.SurName;
+                regixCache.ForeignFamilyname = (string)responseObject.ForeignNames.FamilyName;
+            }
+            if (responseObject.Nationality != null)
+            {
+                regixCache.NationalityCode1 = responseObject.Nationality.NationalityName;
+                regixCache.NationalityName1 = responseObject.Nationality.NationalityCode;
 
-                regixCache.Firstname = (string)responseObject.PersonNames.FirstName;
-                regixCache.Surname = (string)responseObject.PersonNames.SurName;
-                regixCache.Familyname = (string)responseObject.PersonNames.FamilyName;
-
-                regixCache.BirthCountryName = responseObject.Nationality.NationalityName;
-                regixCache.BirthCountryCode = responseObject.Nationality.NationalityCode;
-                regixCache.BirthPlace = responseObject.PlaceBirth;
+                regixCache.NationalityCode2 = responseObject.Nationality.NationalityCode2;
+                regixCache.NationalityName2 = responseObject.Nationality.NationalityName2;
+            }
+            regixCache.BirthPlace = responseObject.PlaceBirth;
+            if(responseObject.Gender != null && responseObject.Gender.GenderCodeSpecified)
+            {
                 regixCache.GenderCode = responseObject.Gender.GenderCode.ToString();
             }
-
-            if (webServiceName.EndsWith("RelationsSearch"))
+            regixCache.Alias = responseObject.Alias;
+            if(regixCache.Version == null)
             {
-                var responseObject = XmlUtils.DeserializeXml<RelationsResponseType>(request.ResponseXml);
-                foreach (var personRelation in responseObject.PersonRelations)
-                {
-                    if (personRelation.RelationCode == RelationType.Майка)
-                    {
-                        regixCache.MotherFirstname = personRelation.FirstName;
-                        regixCache.MotherSurname = personRelation.SurName;
-                        regixCache.MotherFamilyname = personRelation.FamilyName;
-                    }
-
-                    if (personRelation.RelationCode == RelationType.Баща)
-                    {
-                        regixCache.FatherFirstname = personRelation.FirstName;
-                        regixCache.FatherSurname = personRelation.SurName;
-                        regixCache.FatherFamilyname = personRelation.FamilyName;
-                    }
-                }
+                _dbContext.ERegixCaches.Add(regixCache);
             }
-
+            else
+            {
+                _dbContext.ERegixCaches.Update(regixCache);
+            }
             return regixCache;
         }
 
+        private ERegixCache AddOrUpdateCacheRelationsSearch(EWebRequest request, string webServiceName, string reqIdentifier, RelationsResponseType responseObject)
+        {
+            var regixCache = GetRegixCacheObject(webServiceName, reqIdentifier);
+            if (request.IsFromCache == true)
+            {
+                return regixCache;
+            }
+
+            regixCache.RequestXml = request.RequestXml;
+            regixCache.ResponseXml = request.ResponseXml;
+            regixCache.ExecutionDate = DateTime.Now;
+
+            foreach (var personRelation in responseObject.PersonRelations)
+            {
+                if (personRelation.RelationCode == RelationType.Майка)
+                {
+                    regixCache.MotherFirstname = personRelation.FirstName;
+                    regixCache.MotherSurname = personRelation.SurName;
+                    regixCache.MotherFamilyname = personRelation.FamilyName;
+                }
+
+                if (personRelation.RelationCode == RelationType.Баща)
+                {
+                    regixCache.FatherFirstname = personRelation.FirstName;
+                    regixCache.FatherSurname = personRelation.SurName;
+                    regixCache.FatherFamilyname = personRelation.FamilyName;
+                }
+            }
+            if (regixCache.Version == null)
+            {
+                _dbContext.ERegixCaches.Add(regixCache);
+            }
+            else
+            {
+                _dbContext.ERegixCaches.Update(regixCache);
+            }
+            return regixCache;
+        }
+
+        private ERegixCache AddOrUpdateCacheForeignIdentity(EWebRequest request, string webServiceName, string reqIdentifier, ForeignIdentityInfoResponseType responseObject)
+        {
+            var regixCache = GetRegixCacheObject(webServiceName, reqIdentifier);
+            if (request.IsFromCache == true)
+            {
+                return regixCache;
+            }
+
+            regixCache.RequestXml = request.RequestXml;
+            regixCache.ResponseXml = request.ResponseXml;
+            regixCache.ExecutionDate = DateTime.Now;
+
+            regixCache.Egn = responseObject.EGN;
+            regixCache.Lnch = responseObject.LNCh;
+
+            if(responseObject.PersonNames != null)
+            {
+                regixCache.Firstname = (string)responseObject.PersonNames.FirstName;
+                regixCache.Surname = (string)responseObject.PersonNames.Surname;
+                regixCache.Familyname = (string)responseObject.PersonNames.FamilyName;
+
+                regixCache.FirstnameLat = (string)responseObject.PersonNames.FirstNameLatin;
+                regixCache.SurnameLat = (string)responseObject.PersonNames.SurnameLatin;
+                regixCache.FamilynameLat = (string)responseObject.PersonNames.LastNameLatin;
+            }
+            
+
+            DateTime result;
+            if (DateTime.TryParse(responseObject.BirthDate, out result))
+            {
+                regixCache.BirthDate = result;
+            }
+
+            if(responseObject.BirthPlace != null)
+            {
+                regixCache.BirthCountryName = responseObject.BirthPlace.CountryName;
+                regixCache.BirthCountryCode = responseObject.BirthPlace.CountryCode;
+                regixCache.BirthMunName = responseObject.BirthPlace.MunicipalityName;
+                regixCache.BirthDistrictName = responseObject.BirthPlace.DistrictName;
+                regixCache.BirthCityName = responseObject.BirthPlace.TerritorialUnitName;
+            }
+            
+            
+            switch(responseObject.GenderName) 
+            {
+                case "Мъж":
+                    regixCache.GenderCode = "1";
+                    break;
+                case "Жена":
+                    regixCache.GenderCode = "2";
+                    break;
+                default:
+                    regixCache.GenderCode = "0";
+                    break;
+            }
+            if (responseObject.NationalityList != null)
+            {
+                int i = 1;
+                foreach (var nationality in responseObject.NationalityList)
+                {
+                    if(i == 1)
+                    {
+                        regixCache.NationalityCode1 = nationality.NationalityCode;
+                        regixCache.NationalityName1 = nationality.NationalityName;
+                    }
+                    if(i==2)
+                    {
+                        regixCache.NationalityCode2 = nationality.NationalityCode;
+                        regixCache.NationalityName2 = nationality.NationalityName;
+                    }
+                    i++;
+                }
+            }
+            if(responseObject.IdentityDocument != null)
+            {
+                regixCache.IdDocType = responseObject.IdentityDocument.DocumentType;
+                regixCache.IdDocNumber = responseObject.IdentityDocument.IdentityDocumentNumber;
+                if (responseObject.IdentityDocument.IssueDateSpecified)
+                {
+                    regixCache.IdDocIssueDate = responseObject.IdentityDocument.IssueDate;
+                }
+                regixCache.IdDocIssuePlace = responseObject.IdentityDocument.IssuePlace;
+                regixCache.IdDocIssuerName = responseObject.IdentityDocument.IssuerName;
+                if(responseObject.IdentityDocument.ValidDateSpecified)
+                {
+                    regixCache.IdDocValidDate = responseObject.IdentityDocument.ValidDate;
+                }
+                
+                if(responseObject.IdentityDocument.RPRemarks != null)
+                {
+                    string? rpremarks = null;
+                    foreach (var rpremark in responseObject.IdentityDocument.RPRemarks)
+                    {
+                        rpremarks += rpremark.Concat(";");
+                    }
+                    regixCache.IdDocPrRemarks = rpremarks;
+                }
+                regixCache.IdDocTypeOfPermit = responseObject.IdentityDocument.RPTypeOfPermit;
+                regixCache.IdDocReason = responseObject.IdentityDocument.StatusReasonCyrillic != null ? responseObject.IdentityDocument.StatusReasonCyrillic.ToString() : null;
+                regixCache.IdDocStatus = responseObject.IdentityDocument.StatusCyrillic;
+                regixCache.IdDocStatusDate = responseObject.IdentityDocument.StatusDate;
+                
+            }
+            if (responseObject.TravelDocument != null)
+            {
+                regixCache.TrDocType = responseObject.TravelDocument.DocumentType;
+                regixCache.TrDocNumber = responseObject.TravelDocument.TravelDocumentNumber;
+                if (responseObject.TravelDocument.IssueDateSpecified)
+                {
+                    regixCache.TrDocIssueDate = responseObject.TravelDocument.IssueDate;
+                }
+                regixCache.TrDocIssuePlace = responseObject.TravelDocument.IssuePlace;
+                regixCache.TrDocIssuerName = responseObject.TravelDocument.IssuerName;
+                if (responseObject.TravelDocument.ValidDateSpecified)
+                {
+                    regixCache.TrDocValidDate = responseObject.TravelDocument.ValidDate;
+                }
+                regixCache.TrDocSeries = responseObject.TravelDocument.TravelDocumentSeries;
+                regixCache.TrDocReason = responseObject.TravelDocument.StatusReasonCyrillic;
+                regixCache.TrDocStatus = responseObject.TravelDocument.StatusCyrillic;
+                regixCache.TrDocStatusDate = responseObject.TravelDocument.StatusDate;
+            }
+            if (regixCache.Version == null)
+            {
+                _dbContext.ERegixCaches.Add(regixCache);
+            }
+            else
+            {
+                _dbContext.ERegixCaches.Update(regixCache);
+            }
+            return regixCache;
+        }
+
+       
         private (string Id, string WebServiceName) GetOperationByType(string typeCode)
         {
             // Singleton pattern
