@@ -97,7 +97,7 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
                 context.IssuedClaims.Add(new Claim("EgnIdentifier", user.Egn));
                 context.IssuedClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
                 context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));                
-                context.IssuedClaims.Add(new Claim("Email", user.Email));
+                context.IssuedClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             }
         }
 
