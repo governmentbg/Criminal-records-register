@@ -115,6 +115,9 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<PPersonIdsH> PPersonIdsHes { get; set; } = null!;
         public virtual DbSet<VBulletin> VBulletins { get; set; } = null!;
         public virtual DbSet<VBulletinsFull> VBulletinsFulls { get; set; } = null!;
+        public virtual DbSet<VCntApplication> VCntApplications { get; set; } = null!;
+        public virtual DbSet<VCntBulletin> VCntBulletins { get; set; } = null!;
+        public virtual DbSet<VCntCentralAuth> VCntCentralAuths { get; set; } = null!;
         public virtual DbSet<VOffence> VOffences { get; set; } = null!;
         public virtual DbSet<VSanction> VSanctions { get; set; } = null!;
         public virtual DbSet<WAppCitizenship> WAppCitizenships { get; set; } = null!;
@@ -205,6 +208,9 @@ namespace MJ_CAIS.DataAccess
             modelBuilder.Entity<AAppCitizenship>(entity =>
             {
                 entity.ToTable("A_APP_CITIZENSHIP");
+
+                entity.HasIndex(e => new { e.ApplicationId, e.CountryId }, "UK_A_APP_CITIZENSHIP_COUTRY")
+                    .IsUnique();
 
                 entity.HasIndex(e => e.ApplicationId, "XIF1A_APP_CITIZENSHIP");
 
@@ -8106,6 +8112,69 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VERSION");
             });
 
+            modelBuilder.Entity<VCntApplication>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("V_CNT_APPLICATIONS");
+
+                entity.Property(e => e.Cnt)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("CNT");
+
+                entity.Property(e => e.CsAuthorityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CS_AUTHORITY_ID");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("TYPE");
+            });
+
+            modelBuilder.Entity<VCntBulletin>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("V_CNT_BULLETINS");
+
+                entity.Property(e => e.Cnt)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("CNT");
+
+                entity.Property(e => e.CsAuthorityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CS_AUTHORITY_ID");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("TYPE");
+            });
+
+            modelBuilder.Entity<VCntCentralAuth>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("V_CNT_CENTRAL_AUTH");
+
+                entity.Property(e => e.Cnt)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("CNT");
+
+                entity.Property(e => e.CsAuthorityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CS_AUTHORITY_ID");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("TYPE");
+            });
+
             modelBuilder.Entity<VOffence>(entity =>
             {
                 entity.HasNoKey();
@@ -8280,6 +8349,9 @@ namespace MJ_CAIS.DataAccess
             modelBuilder.Entity<WAppCitizenship>(entity =>
             {
                 entity.ToTable("W_APP_CITIZENSHIP");
+
+                entity.HasIndex(e => new { e.WApplicationId, e.CountryId }, "UK_W_APP_CITIZENSHIP_COUTRY")
+                    .IsUnique();
 
                 entity.HasIndex(e => e.WApplicationId, "XIF1W_APP_CITIZENSHIP");
 

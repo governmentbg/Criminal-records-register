@@ -93,10 +93,10 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         [Test]
         public void TestEGN()
         {
-            foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
-            {
-                // var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "dfc773d0-dc26-4ced-9249-57d3d7dec4e6").Result;
-                var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id).Result;
+            //foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
+            //{
+                 var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "dfc773d0-dc26-4ced-9249-57d3d7dec4e6").Result;
+                //var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id).Result;
 
                 if (result.Item1.EGN == null) //TODO: shoud be ==
                 {
@@ -117,7 +117,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
                 {
                    // Assert.True(true);
                 }
-            }
+            //}
             Assert.True(true);
         }
         [Test]

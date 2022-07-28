@@ -751,6 +751,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         var callContext = CreateCallContext(request);
                         var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
                             callContext, citizenIdentifier);
+                        request.ApiServiceCallId = resultData.ServiceCallID.ToString();
+                        request.ModifiedProperties.Add(nameof(request.ApiServiceCallId));
+
+                        request.CallContext = XmlUtils.SerializeToXml(callContext);
+                        request.ModifiedProperties.Add(nameof(request.CallContext));
+                        // request.CallContext = callContext
                         request.ResponseXml = resultData.Data.Response.Any.OuterXml;
                         request.ResponseXml = AddXmlSchema(request.ResponseXml);
                         request.ModifiedProperties.Add(nameof(request.ResponseXml));

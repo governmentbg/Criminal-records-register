@@ -22,7 +22,7 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> BulletinCounts()
         {
             var result = await this._service.GetBulletinCountByCurrentAuthorityAsync();
-            return Ok(result);
+            return Ok(result.Item1);
         }
 
 
@@ -30,16 +30,16 @@ namespace MJ_CAIS.Web.Controllers
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> BulletinEventCounts()
         {
-            var result = await this._service.GetBulletinEventCountByCurrentAuthorityAsync();
-            return Ok(result);
+            var result = await this._service.GetBulletinCountByCurrentAuthorityAsync();
+            return Ok(result.Item2);
         }
 
         [HttpGet("isin-count")]
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.CentralAuth},{RoleConstants.Judge}")]
         public async Task<IActionResult> IsinCounts()
         {
-            var result = await this._service.GetIsinCountByCurrentAuthorityAsync();
-            return Ok(result);
+            var result = await this._service.GetBulletinCountByCurrentAuthorityAsync();
+            return Ok(result.Item3);
         }
 
         [HttpGet("ecris-count")]
@@ -47,7 +47,7 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> EcrisCounts()
         {
             var result = await this._service.GetEcrisCountAsync();
-            return Ok(result);
+            return Ok(result.Item1);
         }
 
         [HttpGet("application-count")]
@@ -55,23 +55,23 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> ApplicationCounts()
         {
             var result = await this._service.GetApplicationCountByCurrentAuthorityAsync();
-            return Ok(result);
+            return Ok(result.Item1);
         }
 
         [HttpGet("for-judge-count")]
         [Authorize(Roles = $"{RoleConstants.Judge}")]
         public async Task<IActionResult> ForJudgeCounts()
         {
-            var result = await this._service.GetForJudgeCountByCurrentAuthorityAsync();
-            return Ok(result);
+            var result = await this._service.GetApplicationCountByCurrentAuthorityAsync();
+            return Ok(result.Item2);
         }
 
         [HttpGet("fbbc-count")]
         [Authorize(Roles = $"{RoleConstants.CentralAuth}")]
         public async Task<IActionResult> FbbcCounts()
         {
-            var result = await this._service.GetFbbcCountByCurrentAuthorityAsync();
-            return Ok(result);
+            var result = await this._service.GetEcrisCountAsync();
+            return Ok(result.Item2);
         }
     }
 }
