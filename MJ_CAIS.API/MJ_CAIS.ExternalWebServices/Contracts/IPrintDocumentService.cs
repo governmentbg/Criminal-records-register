@@ -13,7 +13,10 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
     public interface IPrintDocumentService 
     {
         Task<byte[]> PrintApplication(string applicationID);
-        Task<byte[]> PrintCertificate(string certificateID, string checkUrl, JasperReportsNames reportName);
-        Task<byte[]> PrintReport(string reportId, JasperReportsNames reportName);
+        Task<byte[]> PrintCertificate(string certificateID, string checkUrl);
+        Task<byte[]> PrintElectronicCertificate(string certificateID, string checkUrl);
+        Task<byte[]> PrintExternalElectronicCertificate(string certificateID, string checkUrl);
+        Task<byte[]> PrintReport(string reportId);
+        Task<byte[]> PrintBulletin(string bulletinID);
     }
 }

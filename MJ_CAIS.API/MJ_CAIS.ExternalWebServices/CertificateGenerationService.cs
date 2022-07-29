@@ -22,6 +22,10 @@ namespace MJ_CAIS.ExternalWebServices
         private readonly IPrintDocumentService _printerService;
         private readonly ICertificateService _certificateService;
 
+        const string CERTIFICATE = "CERT";
+        const string ELECTRONIC_CERTIFICATE = "ECERT";
+        const string EXTERNAL_ELECTRONIC_CERTIFICATE = "EECERT";
+
         public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository,
             IPdfSigner pdfSignerService, IPrintDocumentService printerService, ICertificateService certificateService)
             : base(mapper, certificateRepository)
@@ -113,13 +117,13 @@ namespace MJ_CAIS.ExternalWebServices
             switch (certificate.Application.ApplicationType.Code)
             {
                 case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
-                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_external_certificate, signingCertificateName);
+                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, EXTERNAL_ELECTRONIC_CERTIFICATE, signingCertificateName);
                     break;
                 case ApplicationConstants.ApplicationTypes.WebCertificate:
-                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Electronic_certificate, signingCertificateName);
+                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, ELECTRONIC_CERTIFICATE, signingCertificateName);
                     break;
                 default:
-                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, JasperReportsNames.Certificate, signingCertificateName);
+                    contentCertificate = await CreatePdf(certificate.Id, checkUrl, CERTIFICATE, signingCertificateName);
                     break;
             }
 
@@ -312,9 +316,22 @@ namespace MJ_CAIS.ExternalWebServices
             return ReplaceTextInTemplate(mailSubjectPattern, placeholdersAndValues);
         }
 
-        private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, JasperReportsNames reportName, string signingCertificateName)
+        private async Task<byte[]> CreatePdf(string certificateID, string checkUrl, string certType, string signingCertificateName)
         {
-            byte[] fileArray = await _printerService.PrintCertificate(certificateID, checkUrl, reportName);
+            byte[] fileArray = null;
+            switch (certType)
+            {
+                case CERTIFICATE:
+                    fileArray = await _printerService.PrintCertificate(certificateID, checkUrl);
+                    break;
+                case ELECTRONIC_CERTIFICATE:
+                    fileArray = await _printerService.PrintElectronicCertificate(certificateID, checkUrl);
+                    break;
+                case EXTERNAL_ELECTRONIC_CERTIFICATE:
+                    fileArray = await _printerService.PrintExternalElectronicCertificate(certificateID, checkUrl);
+                    break;
+            }
+            
             //todo: кои полета да се добавят за валидиране?!
             fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, null);
 

@@ -74,7 +74,7 @@ namespace MJ_CAIS.ExternalWebServices
         {
 
             byte[] contentReport;
-            contentReport = await CreatePdf(report.Id,  JasperReportsNames.Conviction_Report, signingCertificateName);
+            contentReport = await CreatePdf(report.Id,   signingCertificateName);
             bool isExistingDoc = false;
             bool isExistingContent = false;
             DDocument doc;
@@ -208,9 +208,9 @@ namespace MJ_CAIS.ExternalWebServices
 
         }
 
-        private async Task<byte[]> CreatePdf(string reportid, JasperReportsNames conviction_Report, string signingCertificateName)
+        private async Task<byte[]> CreatePdf(string reportid, string signingCertificateName)
         {
-            byte[] fileArray = await _printerService.PrintReport(reportid, conviction_Report);
+            byte[] fileArray = await _printerService.PrintReport(reportid);
             //todo: кои полета да се добавят за валидиране?!
             //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName,
             //    new Dictionary<string, string>() { { "report_id", reportid } });
