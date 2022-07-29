@@ -176,20 +176,22 @@ namespace MJ_CAIS.Services
 
             CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
-            var request = new List<BInternalRequest>();
-            foreach (var appBullId in ids)
-            {
-                request.Add(new BInternalRequest
-                {
-                    Id = BaseEntity.GenerateNewId(),
-                    BulletinId = certificate.AAppBulletins.FirstOrDefault(x => x.Id == appBullId)?.BulletinId,
-                    AAppBulletinId = appBullId,
-                    ReqStatusCode = InternalRequestStatusTypeConstants.New,
-                    Description = CertificateResources.msgStatusForRehabilitationDesc,
-                    EntityState = Common.Enums.EntityStateEnum.Added,
-                    RequestDate = DateTime.Now
-                });
-            }
+            //todo: change
+            var request = new List<IBaseIdEntity>();
+            //var request = new List<BInternalRequest>();
+            //foreach (var appBullId in ids)
+            //{
+            //    request.Add(new BInternalRequest
+            //    {
+            //        Id = BaseEntity.GenerateNewId(),
+            //        BulletinId = certificate.AAppBulletins.FirstOrDefault(x => x.Id == appBullId)?.BulletinId,
+            //        AAppBulletinId = appBullId,
+            //        ReqStatusCode = InternalRequestStatusTypeConstants.New,
+            //        Description = CertificateResources.msgStatusForRehabilitationDesc,
+            //        EntityState = Common.Enums.EntityStateEnum.Added,
+            //        RequestDate = DateTime.Now
+            //    });
+            //}
 
             _certificateRepository.ApplyChanges(request, new List<IBaseIdEntity>());
             await _certificateRepository.SaveChangesAsync();

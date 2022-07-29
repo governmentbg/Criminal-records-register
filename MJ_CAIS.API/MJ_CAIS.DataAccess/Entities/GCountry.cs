@@ -8,7 +8,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public GCountry()
         {
             AAppCitizenships = new HashSet<AAppCitizenship>();
+            AApplicants = new HashSet<AApplicant>();
             AApplications = new HashSet<AApplication>();
+            ARepCitizenships = new HashSet<ARepCitizenship>();
+            AReportApplicationAddrCountries = new HashSet<AReportApplication>();
+            AReportApplicationBirthCountries = new HashSet<AReportApplication>();
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
@@ -42,7 +46,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
+        public virtual ICollection<AApplicant> AApplicants { get; set; }
         public virtual ICollection<AApplication> AApplications { get; set; }
+        public virtual ICollection<ARepCitizenship> ARepCitizenships { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationAddrCountries { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationBirthCountries { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }

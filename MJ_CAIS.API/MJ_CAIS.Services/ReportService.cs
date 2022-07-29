@@ -153,8 +153,8 @@ namespace MJ_CAIS.Services
             var applicationStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
 
             AApplication? application = await _reportRepository.GetApplicationData(applicationID);
-
-            var reportDb = application.AReports.FirstOrDefault();
+            //todo: change
+            var reportDb = new AReport();//application.AReports.FirstOrDefault();
             if (reportDb != null) return reportDb;
 
             var report = await GenerateReportFromApplication(application, applicationStatus, (int)certificateValidityMonths);
@@ -206,7 +206,8 @@ namespace MJ_CAIS.Services
             AReport rep = new AReport();
             rep.Id = BaseEntity.GenerateNewId();
             rep.EntityState = EntityStateEnum.Added;
-            rep.ApplicationId = application.Id;
+            //todo: change
+            //rep.ApplicationId = application.Id;
             rep.RegistrationNumber = await _registerTypeService.GetRegisterNumberForReport(application.CsAuthorityId);
             rep.ValidFrom = DateTime.Now;
             rep.ValidTo = DateTime.Now.AddMonths(validityMonths);
@@ -235,8 +236,8 @@ namespace MJ_CAIS.Services
                 }
             }
             //_applicationService.SetApplicationStatus(application, applicationStatus, "Създаване на справка");
-
-            application.AReports.Add(rep);
+            //todo: change
+            //application.AReports.Add(rep);
             // dbContext.AReports.Add(rep);
             //dbContext.ARepBulletins.AddRange(rep.ARepBulletins);
             _reportRepository.ApplyChanges(rep, rep.ARepBulletins.ToList<IBaseIdEntity>() , true);

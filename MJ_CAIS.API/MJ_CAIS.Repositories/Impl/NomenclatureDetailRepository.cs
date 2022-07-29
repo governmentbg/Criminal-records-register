@@ -41,9 +41,9 @@ namespace MJ_CAIS.Repositories.Impl
             return _dbContext.FbbcSanctTypes.AsNoTracking();
         }
 
-        public IQueryable<BReqStatus> GetInternalRequestStatuses()
+        public IQueryable<NReqStatus> GetInternalRequestStatuses()
         {
-            return _dbContext.BReqStatuses.AsNoTracking();
+            return _dbContext.NReqStatuses.AsNoTracking();
         }
 
         public IQueryable<BSanctionCategory> GetSanctionCategories()

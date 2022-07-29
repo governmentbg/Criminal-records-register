@@ -33,6 +33,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GUser? FirstSigner { get; set; }
         public virtual GUser? SecondSigner { get; set; }
         public virtual AApplicationStatus? StatusCodeNavigation { get; set; }
+        public virtual WCertificate WCertificate { get; set; } = null!;
         public virtual ICollection<AAppBulletin> AAppBulletins { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }
         public virtual ICollection<EEdeliveryMsg> EEdeliveryMsgs { get; set; }

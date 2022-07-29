@@ -5,6 +5,11 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class BOffence : BaseEntity, IBaseIdEntity
     {
+        public BOffence()
+        {
+            NInternalReqBulletins = new HashSet<NInternalReqBulletin>();
+        }
+
         public string Id { get; set; } = null!;
         public string? OffenceCatId { get; set; }
         public string? Remarks { get; set; }
@@ -29,5 +34,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCity? OffPlaceCity { get; set; }
         public virtual GCountry? OffPlaceCountry { get; set; }
         public virtual BOffenceCategory? OffenceCat { get; set; }
+        public virtual ICollection<NInternalReqBulletin> NInternalReqBulletins { get; set; }
     }
 }

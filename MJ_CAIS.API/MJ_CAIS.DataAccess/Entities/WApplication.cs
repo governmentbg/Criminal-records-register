@@ -11,6 +11,7 @@ namespace MJ_CAIS.DataAccess.Entities
             EWebRequests = new HashSet<EWebRequest>();
             WAppCitizenships = new HashSet<WAppCitizenship>();
             WAppPersAliases = new HashSet<WAppPersAlias>();
+            WCertificates = new HashSet<WCertificate>();
             WStatusHes = new HashSet<WStatusH>();
             WWebRequests = new HashSet<WWebRequest>();
         }
@@ -88,6 +89,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
         public virtual ICollection<WAppCitizenship> WAppCitizenships { get; set; }
         public virtual ICollection<WAppPersAlias> WAppPersAliases { get; set; }
+        public virtual ICollection<WCertificate> WCertificates { get; set; }
         public virtual ICollection<WStatusH> WStatusHes { get; set; }
         public virtual ICollection<WWebRequest> WWebRequests { get; set; }
     }

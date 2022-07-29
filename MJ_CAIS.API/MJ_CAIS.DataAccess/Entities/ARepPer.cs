@@ -14,6 +14,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
 
-        public virtual AReportSearchPer? Report { get; set; }
+        public virtual WReportSearchPer? Report { get; set; }
     }
 }

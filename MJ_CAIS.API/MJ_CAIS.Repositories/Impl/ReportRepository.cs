@@ -14,14 +14,14 @@ namespace MJ_CAIS.Repositories.Impl
            
         }
         public async Task<AApplication> GetApplicationData(string applicationID)
-        {
+        {//todo: change
             return await _dbContext.AApplications
             .Include(a => a.EgnNavigation)
             .Include(a => a.LnchNavigation)
             .Include(a => a.LnNavigation)
             .Include(a => a.SuidNavigation)
             .Include(a => a.ApplicationType)
-            .Include(x => x.AReports)
+            //.Include(x => x.AReports)
             .FirstOrDefaultAsync(aa => aa.Id == applicationID);
         }
 

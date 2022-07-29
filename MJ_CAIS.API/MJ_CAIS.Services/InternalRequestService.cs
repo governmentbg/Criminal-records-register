@@ -17,7 +17,7 @@ using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services
 {
-    public class InternalRequestService : BaseAsyncService<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, BInternalRequest, string, CaisDbContext>, IInternalRequestService
+    public class InternalRequestService : BaseAsyncService<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, NInternalRequest, string, CaisDbContext>, IInternalRequestService
     {
         private readonly IInternalRequestRepository _internalRequestRepository;
         private readonly IBulletinRepository _bulletinRepository;
@@ -43,8 +43,8 @@ namespace MJ_CAIS.Services
             var entityQuery = this.GetSelectAllQueriable();
 
             if (!string.IsNullOrEmpty(bulletinId))
-            {
-                entityQuery = entityQuery.Where(x => x.BulletinId == bulletinId);
+            {//todo: change
+                //entityQuery = entityQuery.Where(x => x.BulletinId == bulletinId);
             }
 
             if (!string.IsNullOrEmpty(statusId))
@@ -74,7 +74,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public override async Task UpdateAsync(string aId, InternalRequestDTO aInDto)
         {
-            var entity = mapper.MapToEntity<InternalRequestDTO, BInternalRequest>(aInDto, false);
+            var entity = mapper.MapToEntity<InternalRequestDTO, NInternalRequest>(aInDto, false);
 
             var bulletinStatus = entity.ReqStatusCode == InternalRequestStatusTypeConstants.Approved ?
                 BulletinConstants.Status.Rehabilitated : BulletinConstants.Status.Active;
@@ -90,26 +90,28 @@ namespace MJ_CAIS.Services
             var statusHistory = new BBulletinStatusH
             {
                 Id = Guid.NewGuid().ToString(),
-                BulletinId = entity.BulletinId,
+                //todo: change
+                //BulletinId = entity.BulletinId,
                 OldStatusCode = aInDto.BulletinStatusId,
                 NewStatusCode = bulletinStatus,
                 EntityState = EntityStateEnum.Added,
                 Locked = true,
             };
-
-            bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
+            //todo: change
+            //bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
             bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { statusHistory };
+            //todo: change
 
-
-            if (string.IsNullOrEmpty(entity.AAppBulletinId))
-            {
-                bulletin.Id = entity.BulletinId;
-                await _internalRequestRepository.SaveEntityAsync(bulletin, true);
-                return;
-            }
+            //if (string.IsNullOrEmpty(entity.AAppBulletinId))
+            //{
+            //    bulletin.Id = entity.BulletinId;
+            //    await _internalRequestRepository.SaveEntityAsync(bulletin, true);
+            //    return;
+            //}
 
             // from application form
-            AAppBulletin? currentBull = await _internalRequestRepository.GetBulletinsInCertificate(entity);
+            //todo: change
+            AAppBulletin? currentBull = null; // await _internalRequestRepository.GetBulletinsInCertificate(entity);
 
             bulletin.Id = currentBull.BulletinId;
 
@@ -121,7 +123,8 @@ namespace MJ_CAIS.Services
 
             if (bullIdsForCert.Any())
             {
-                bool hasRequests = await _internalRequestRepository.HasRequests(entity, bullIdsForCert);
+                //todo:change
+                bool hasRequests = false; //await _internalRequestRepository.HasRequests(entity, bullIdsForCert);
 
                 // change status of certificate
                 if (!hasRequests)
