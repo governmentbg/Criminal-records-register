@@ -28,7 +28,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         public List<EWebRequest> GetRequestsForAsyncExecution()
         {
             var attempts = GetRegixAttempts();
-            var result = _dbContext.EWebRequests.Include(x => x.WebService)
+            var result = _dbContext.EWebRequests.Include(x => x.WebService).Include(x => x.WApplication)
                 .Where(x => x.IsAsync == true || x.IsAsync == null)
                 .Where(x => x.Status == WebRequestStatusConstants.Pending ||
                             x.Status == WebRequestStatusConstants.Rejected)
@@ -54,29 +54,28 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         }
 
         public async Task<(PersonDataResponseType, EWebRequest)> SyncCallPersonDataSearch(string egn,
-            string? applicationId = null,
-            string? wApplicationId = null)
+            string applicationId, string registrationNumber)
         {
 
             var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: true, operationPDS.Id, applicationId, wApplicationId: wApplicationId);
-
-            var responsePDS = await ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn);
+            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: false, operationPDS.Id, applicationId, wApplicationId: null);
+            eWRequestPDS.EntityState = Common.Enums.EntityStateEnum.Added;
+            var responsePDS = await ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn, registrationNumber);
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
-            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, operationRS.Id, applicationId, wApplicationId: wApplicationId);
-
-            var responseRS = await ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn);
+            EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: false, operationRS.Id, applicationId, wApplicationId: null);
+            eWRequestRS.EntityState = Common.Enums.EntityStateEnum.Added;
+            var responseRS = await ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn, registrationNumber);
 
             return (responsePDS, eWRequestPDS);
         }
 
         public async Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string lnch,
-            string? applicationId = null,
-            string? wApplicationId = null)
+            string applicationId, string registrationNumber)
         {
             var operationFI = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
-            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: true, webServiceId: operationFI.Id, applicationId: applicationId, wApplicationId: wApplicationId);
+            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: true, webServiceId: operationFI.Id, applicationId: applicationId);
+            eWRequestFI.EntityState = Common.Enums.EntityStateEnum.Added;
             //_dbContext.EWebRequests.Add(eWRequestFI);
             //_dbContext.SaveChanges();
 
@@ -94,7 +93,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// <param name="webServiceName"></param>
         /// <param name="egn"></param>
         /// <returns></returns>
-        public async Task<PersonDataResponseType> ExecutePersonDataSearch(EWebRequest request, string webServiceName,  string? egn = null)
+        public async Task<PersonDataResponseType> ExecutePersonDataSearch(EWebRequest request, string webServiceName,  string? egn = null, string? registrationNumber = null)
         {
             string? citizenEgn = egn;
             if (String.IsNullOrEmpty(egn))
@@ -107,16 +106,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
             if (citizenEgn != null)
             {
-                CallRegixAndUpdateRequest(request, webServiceName, citizenEgn);
-                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
-
+                CallRegixAndUpdateRequest(request, webServiceName, citizenEgn, registrationNumber);
+                
                 PersonDataResponseType responseObject = null;
                 if (request.HasError != true && request.ResponseXml != null)
                 {
                     responseObject = XmlUtils.DeserializeXml<PersonDataResponseType>(request.ResponseXml);
                     var cache = AddOrUpdateCachePersonDataSearch(request, webServiceName, citizenEgn, responseObject);
-                    _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
-                    _dbContext.ApplyChanges(cache, new List<IBaseIdEntity>());
+                    
                     if (request.WApplicationId != null)
                     {
                         WApplication application = await PopulateWApplication(request, cache);
@@ -128,7 +125,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                 }
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 return responseObject;
             }
             return null;
@@ -139,7 +136,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// </summary>
         /// <param name="request"></param>
         /// <param name="webServiceNameRelations"></param>
-        public async Task<RelationsResponseType> ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null)
+        public async Task<RelationsResponseType> ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null, string? registrationNumber = null)
         {
             string? citizenEgn = egn;
             if (String.IsNullOrEmpty(egn))
@@ -155,16 +152,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
             if (citizenEgn != null)
             {
-                CallRegixAndUpdateRequest(request, webServiceNameRelations, citizenEgn);
-                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
-
+                CallRegixAndUpdateRequest(request, webServiceNameRelations, citizenEgn, registrationNumber);
+               
                 RelationsResponseType responseObject = null;
                 if (request.HasError != true && request.ResponseXml != null)
                 {
                     responseObject = XmlUtils.DeserializeXml<RelationsResponseType>(request.ResponseXml);
                     var cache = AddOrUpdateCacheRelationsSearch(request, webServiceNameRelations, citizenEgn, responseObject);
-                    _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
-                    _dbContext.ApplyChanges(cache, new List<IBaseIdEntity>());
+                    
                     if (request.WApplicationId != null)
                     {
                         WApplication application = await PopulateWApplication(request, cache);
@@ -177,7 +172,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     }
                     
                 }
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 return responseObject;
             }
             return null;
@@ -189,7 +184,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// </summary>
         /// <param name="request"></param>
         /// <param name="serviceURI"></param>
-        public async Task<ForeignIdentityInfoResponseType> ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null)
+        public async Task<ForeignIdentityInfoResponseType> ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null, string? registrationNumber = null)
         {
             string? citizenLNCH = egn;
             if (String.IsNullOrEmpty(egn))
@@ -205,8 +200,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
             if(citizenLNCH != null)
             {
-                CallRegixAndUpdateRequest(request, webServiceName, citizenLNCH);
-                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
+                CallRegixAndUpdateRequest(request, webServiceName, citizenLNCH, registrationNumber);
+                
 
                 ForeignIdentityInfoResponseType responseObject = null;
                 if (request.HasError != true)
@@ -215,8 +210,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         responseObject = XmlUtils.DeserializeXml<ForeignIdentityInfoResponseType>(request.ResponseXml);
                         var cache = AddOrUpdateCacheForeignIdentity(request, webServiceName, citizenLNCH, responseObject);
-                        _dbContext.ApplyChanges(cache, new List<IBaseIdEntity>());
-                        _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
+                       
                         if (request.WApplicationId != null)
                         {
                             WApplication application = await PopulateWApplication(request, cache);
@@ -229,7 +223,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         }
                     }
                 }
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
                 return responseObject;
             }
             return null;
@@ -722,7 +716,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         
 
         
-        private void CallRegixAndUpdateRequest(EWebRequest request, string webServiceName, string citizenIdentifier)
+        private void CallRegixAndUpdateRequest(EWebRequest request, string webServiceName, string citizenIdentifier, string registrationNumber)
         {
             ERegixCache cachedResponse = null;
             cachedResponse = CheckForCachedResponse(citizenIdentifier, webServiceName);
@@ -730,6 +724,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
                 request.ModifiedProperties = new List<string>();
             }
+            if(request.EntityState != Common.Enums.EntityStateEnum.Added)
+            {
+                request.EntityState = Common.Enums.EntityStateEnum.Modified;
+            }
+            
             if (cachedResponse != null)
             {
                 request.ResponseXml = cachedResponse.ResponseXml;
@@ -748,7 +747,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 {
                     if(request.RequestXml != null)
                     {
-                        var callContext = CreateCallContext(request);
+                        var callContext = CreateCallContext(request, registrationNumber);
                         var resultData = _client.CallRegixExecuteSynchronous(request.RequestXml, webServiceName,
                             callContext, citizenIdentifier);
                         request.ApiServiceCallId = resultData.ServiceCallID.ToString();
@@ -780,6 +779,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 : WebRequestStatusConstants.Accepted;
             request.ModifiedProperties.Add(nameof(request.ExecutionDate));
             request.ModifiedProperties.Add(nameof(request.Status));
+            _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
         }
 
         private ERegixCache CheckForCachedResponse(string identifier, string webServiceName)
@@ -807,7 +807,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 newRegixCache.EntityState = Common.Enums.EntityStateEnum.Added;
                 return newRegixCache;
             }
-            regixCache.EntityState = Common.Enums.EntityStateEnum.Modified;
+            
             return regixCache;
         }
         private ERegixCache AddOrUpdateCachePersonDataSearch(EWebRequest request, string webServiceName, string reqIdentifier, PersonDataResponseType responseObject)
@@ -818,7 +818,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
                 return regixCache;
             }
-            if(regixCache.ModifiedProperties == null)
+
+            if(regixCache.EntityState != Common.Enums.EntityStateEnum.Added)
+            {
+                regixCache.EntityState = Common.Enums.EntityStateEnum.Modified;
+            }
+            if (regixCache.ModifiedProperties == null)
             {
                 regixCache.ModifiedProperties = new List<string>();
             }
@@ -900,15 +905,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.Alias = responseObject.Alias;
                 regixCache.ModifiedProperties.Add(nameof(regixCache.Alias));
             }
-            
-            //if (regixCache.Version == null)
-            //{
-            //    _dbContext.ERegixCaches.Add(regixCache);
-            //}
-            //else
-            //{
-            //    _dbContext.ERegixCaches.Update(regixCache);
-            //}
+
+            _dbContext.ApplyChanges(regixCache, new List<IBaseIdEntity>());
             return regixCache;
         }
 
@@ -919,7 +917,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
                 return regixCache;
             }
-
+            if (regixCache.EntityState != Common.Enums.EntityStateEnum.Added)
+            {
+                regixCache.EntityState = Common.Enums.EntityStateEnum.Modified;
+            }
             if (regixCache.ModifiedProperties == null)
             {
                 regixCache.ModifiedProperties = new List<string>();
@@ -961,14 +962,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     regixCache.ModifiedProperties.Add(nameof(regixCache.FatherFamilyname));
                 }
             }
-            //if (regixCache.Version == null)
-            //{
-            //    _dbContext.ERegixCaches.Add(regixCache);
-            //}
-            //else
-            //{
-            //    _dbContext.ERegixCaches.Update(regixCache);
-            //}
+            _dbContext.ApplyChanges(regixCache, new List<IBaseIdEntity>());
             return regixCache;
         }
 
@@ -979,7 +973,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
                 return regixCache;
             }
-
+            if (regixCache.EntityState != Common.Enums.EntityStateEnum.Added)
+            {
+                regixCache.EntityState = Common.Enums.EntityStateEnum.Modified;
+            }
             if (regixCache.ModifiedProperties == null)
             {
                 regixCache.ModifiedProperties = new List<string>();
@@ -1160,6 +1157,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             //{
             //    _dbContext.ERegixCaches.Update(regixCache);
             //}
+            _dbContext.ApplyChanges(regixCache, new List<IBaseIdEntity>());
             return regixCache;
         }
 
@@ -1201,31 +1199,52 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             return result;
         }
 
-        private CallContext CreateCallContext(EWebRequest request)
+        private CallContext CreateCallContext(EWebRequest request, string registrationNumber)
         {
             // Default value
-            var serviceURI = "ЦАИС_" + DateTime.Now.Date.ToString("dd-MM-yyyy");
-
-            if (request.ApplicationId != null)
-            {
-                serviceURI = "Във връзка със заявление: " + request.ApplicationId;
-            }
-            else if (request.WApplicationId != null)
-            {
-                serviceURI = "Във връзка с електронно заявление: " + request.WApplicationId;
-            }
-            else if (request.BulletinId != null)
-            {
-                serviceURI = "Във връзка с бюлетин: " + request.BulletinId;
-            }
-            else if (request.EcrisMsgId != null)
-            {
-                serviceURI = "Във връзка със съобщение от ЕКРИС: " + request.EcrisMsgId;
-            }
-
+            var serviceURI = registrationNumber;//"ЦАИС_" + DateTime.Now.Date.ToString("dd-MM-yyyy");
             var callContext = _client.CreateSampleCallContext(serviceURI);
             // TODO: fill other data for user that created the web request
-
+            
+            if (request.ApplicationId != null && request.CreatedBy != null)
+            {
+                var user = _dbContext.GUsers.Include(x=> x.CsAuthority).FirstOrDefault(x => x.Id == request.CreatedBy);
+                if(user != null)
+                {
+                    callContext.EmployeeIdentifier = user.Email;
+                    callContext.EmployeeAditionalIdentifier = user.Id;
+                    callContext.EmployeeNames = user.Firstname + " " + user.Surname + " " + user.Familyname;
+                    callContext.EmployeePosition = user.Position + " в "+ user.CsAuthority?.Name;
+                    if(user.CsAuthority != null)
+                    {
+                        callContext.AdministrationName = user.CsAuthority?.Name;
+                    }
+                    
+                }
+                callContext.Remark = "Във връзка с издаване на свидетелство/справка за съдимост";
+            }
+            if (request.WApplicationId != null && request.WApplication != null && request.WApplication.UserExtId != null)
+            {
+                var user = _dbContext.GUsersExts.Include(x => x.Administration).FirstOrDefault(x => x.Id == request.WApplication.UserExtId);
+                if (user != null)
+                {
+                    callContext.EmployeeIdentifier = user.Email;
+                    callContext.EmployeeAditionalIdentifier = user.Id;
+                    callContext.EmployeeNames = user.Name;
+                    callContext.EmployeePosition = user.Position;
+                    if (user.Administration != null)
+                    {
+                        callContext.AdministrationName = user.Administration?.Name;
+                    }
+                }
+                callContext.Remark = "Във връзка с издаване на Електронно служебно свидетелство за съдимост";
+            }
+            if (request.WApplicationId != null && request.WApplication != null && request.WApplication.UserCitizenId != null)
+            {
+                callContext.ResponsiblePersonIdentifier = "systemUser";
+                callContext.AdministrationName = "Публичен портал за електронни свидетелства за съдимост за граждани";
+                callContext.Remark = "Във връзка с издаване на Електронно свидетелство за съдимост, заявено от гражданин в лично качество";
+            }
             return callContext;
         }
 

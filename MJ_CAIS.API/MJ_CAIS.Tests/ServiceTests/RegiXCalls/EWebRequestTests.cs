@@ -20,6 +20,7 @@ using TechnoLogica.RegiX.MVRERChAdapterV2;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System;
 
 namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
 {
@@ -44,11 +45,23 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
                 .ConfigureServices(services => services.AddTransient<IRegixService, RegixService>())
                 .Build();
 
-            _dbContext = host.Services.GetService<CaisDbContext>();
+            //_dbContext = host.Services.GetService<CaisDbContext>();
 
+            
+            //using (CaisDbContext db = host.Services.GetService<CaisDbContext>())
+            //{
+            //    db.ERegixCaches.RemoveRange(db.ERegixCaches);
+            //    db.SaveChanges();
+            //    foreach (var req in db.EWebRequests.Where(w => w.WApplicationId != null).ToList())
+            //    {
+            //        req.Status = "Pending";
+            //        //  req.Attempts = 0;
+            //        db.EWebRequests.Update(req);
+            //    }
+            //    db.SaveChanges();
+            //}
+            _dbContext = host.Services.GetService<CaisDbContext>();
             _regixService = host.Services.GetService<IRegixService>();
-            _dbContext.ERegixCaches.RemoveRange(_dbContext.ERegixCaches);
-            _dbContext.SaveChanges();
         }
 
 
@@ -56,7 +69,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestLNCHWithData()
         {
 
-            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("1001001001", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3").Result;
+            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("1001001001", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123").Result;
             if (result.Item1.LNCh == null) //TODO: shoud be ==
             {
                 Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
@@ -79,7 +92,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestLNCHNoData()
         {
 
-            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("10000", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3").Result;
+            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("10000", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123").Result;
             if (result.Item2.HasError == true)
             {
                 //throw new BusinessLogicException($"RegiX e недостъпен");
@@ -93,31 +106,38 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         [Test]
         public void TestEGN()
         {
-            //foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
-            //{
-                 var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "dfc773d0-dc26-4ced-9249-57d3d7dec4e6").Result;
-                //var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id).Result;
+            foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
+            {
+                // var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "dfc773d0-dc26-4ced-9249-57d3d7dec4e6", registrationNumber: "220728660123000000123").Result;
+                try
+                {
+                    var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id, registrationNumber: "220728660123000000123").Result;
 
-                if (result.Item1.EGN == null) //TODO: shoud be ==
-                {
-                    Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
-                }
+                    if (result.Item1.EGN == null) //TODO: shoud be ==
+                    {
+                        Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
+                    }
 
-                if (result.Item2.HasError == true)
-                {
-                    Assert.Fail();//throw new BusinessLogicException($"RegiX e недостъпен");
+                    if (result.Item2.HasError == true)
+                    {
+                        Assert.Fail();//throw new BusinessLogicException($"RegiX e недостъпен");
+                    }
+                    if (result.Item1.PersonNames.FirstName.ToString().ToUpper() != result.Item2.Application.Firstname
+                            && result.Item2.Application.MotherFirstname == null
+                            && result.Item2.Application.AAppCitizenships.FirstOrDefault().CountryId != GlobalConstants.BGCountryId)
+                    {
+                        Assert.Fail();
+                    }
+                    else
+                    {
+                        // Assert.True(true);
+                    }
                 }
-                if (result.Item1.PersonNames.FirstName.ToString().ToUpper() != result.Item2.Application.Firstname
-                        && result.Item2.Application.MotherFirstname == null
-                        && result.Item2.Application.AAppCitizenships.FirstOrDefault().CountryId != GlobalConstants.BGCountryId)
+                catch(Exception ex)
                 {
-                    Assert.Fail();
+                    Assert.Fail(ex.Message);
                 }
-                else
-                {
-                   // Assert.True(true);
-                }
-            //}
+            }
             Assert.True(true);
         }
         [Test]
@@ -130,11 +150,13 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         [Test]
         public void TestExecuteWebRequests()
         {
-            foreach (var webRequest in _dbContext.EWebRequests.Include(x => x.WebService)
+            foreach (var webRequest in _dbContext.EWebRequests.Include(x => x.WebService).Include(x => x.WApplication)
                             .Where(x => x.IsAsync == true || x.IsAsync == null)
-                            .Where(x => x.Status == WebRequestStatusConstants.Pending ||
-                                        x.Status == WebRequestStatusConstants.Rejected)
+                            //.Where(x => x.Status == WebRequestStatusConstants.Pending ||
+                            //            x.Status == WebRequestStatusConstants.Rejected)
                             //.Where(x => x.Attempts < attempts
+                            .Where(x => x.CallContext == null)
+                            .Where(x => x.IsFromCache == false)
                             .ToList())
             {
                 if (webRequest.WebService != null)
