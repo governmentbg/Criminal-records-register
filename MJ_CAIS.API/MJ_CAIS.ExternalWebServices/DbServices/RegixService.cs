@@ -28,7 +28,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         public List<EWebRequest> GetRequestsForAsyncExecution()
         {
             var attempts = GetRegixAttempts();
-            var result = _dbContext.EWebRequests.Include(x => x.WebService).Include(x => x.WApplication)
+            var result = _dbContext.EWebRequests.AsNoTracking().Include(x => x.WebService).Include(x => x.WApplication)
                 .Where(x => x.IsAsync == true || x.IsAsync == null)
                 .Where(x => x.Status == WebRequestStatusConstants.Pending ||
                             x.Status == WebRequestStatusConstants.Rejected)
@@ -269,7 +269,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     application.Egn = SetValue(cache.Egn?.ToUpper(), application, nameof(application.Egn), application.Egn);
                     application.Lnch = SetValue(cache.Lnch?.ToUpper(), application, nameof(application.Lnch), application.Lnch);
                     
-                    if ( application.AAppPersAliases == null)
+                    if ( application.AAppPersAliases?.Count == 0)
                     {
                         if ((!string.IsNullOrEmpty(cache.ForeignFirstname)
                         || !string.IsNullOrEmpty(cache.ForeignSurname)
@@ -286,6 +286,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                                 Familyname = !string.IsNullOrEmpty(cache.ForeignFamilyname) ? cache.ForeignFamilyname.ToUpper() : null,
                                 Type = "previous" //todo да стане foreign
                             };
+                            newAlias.EntityState = Common.Enums.EntityStateEnum.Added;
                             application.AAppPersAliases.Add(newAlias);
                             // _dbContext.AAppPersAliases.Add(newAlias);
                         }
@@ -298,6 +299,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                                 Fullname = cache.Alias.ToUpper(),
                                 Type = "nickname" //todo да стане constant
                             };
+                            newAlias.EntityState = Common.Enums.EntityStateEnum.Added;
                             application.AAppPersAliases.Add(newAlias);
                             //_dbContext.AAppPersAliases.Add(newAlias);
                         }
@@ -331,7 +333,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             + (cache.BirthMunName != null ? (cache.BirthMunName + " ") : "")
                             + (cache.BirthCityName != null ? (cache.BirthCityName + " ") : "")
                             + cache.BirthPlace;
-                        if (birthPlaceOther != null)
+                        if (!string.IsNullOrEmpty(birthPlaceOther))
                         {
                             application.BirthPlaceOther = birthPlaceOther;
                             application.ModifiedProperties.Add(nameof(application.BirthPlaceOther));
@@ -363,21 +365,21 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             }
                         }
                     }
-                    if (application.AAppCitizenships == null)
+                    if (application.AAppCitizenships?.Count == 0)
                     {
                         if (!string.IsNullOrEmpty(cache.NationalityCode1))
                         {
                             string? countryId = await GetCounrtyByCode(cache.NationalityCode1.ToUpper());
                             if (countryId != null)
                             {
-                                application.BirthCountryId = countryId;
-
+                             
                                 var newCountry = new AAppCitizenship
                                 {
                                     Id = BaseEntity.GenerateNewId(),
                                     ApplicationId = application.Id,
                                     CountryId = countryId
                                 };
+                                newCountry.EntityState = Common.Enums.EntityStateEnum.Added;
                                 application.AAppCitizenships.Add(newCountry);
                                 // _dbContext.AAppCitizenships.Add(newCountry);
                             }
@@ -387,14 +389,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             string? countryId = await GetCounrtyByCode(cache.NationalityCode2.ToUpper());
                             if (countryId != null)
                             {
-                                application.BirthCountryId = countryId;
-
+                              
                                 var newCountry = new AAppCitizenship
                                 {
                                     Id = BaseEntity.GenerateNewId(),
                                     ApplicationId = application.Id,
                                     CountryId = countryId
                                 };
+                                newCountry.EntityState = Common.Enums.EntityStateEnum.Added;
                                 application.AAppCitizenships.Add(newCountry);
                                 //_dbContext.AAppCitizenships.Add(newObj);
                             }
@@ -425,6 +427,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         }
                     }
 
+                    if (application.BirthCityId != null && application.BirthCountryId == null)
+                    {
+                        application.BirthCountryId = GlobalConstants.BGCountryId;
+                        application.ModifiedProperties.Add(nameof(application.BirthCountryId));
+                    }
 
                     //todo add identity document or travel document
 
@@ -465,20 +472,21 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         || !string.IsNullOrEmpty(cache.ForeignFamilyname)
                         || !string.IsNullOrEmpty(cache.Alias)
                         )
-                    {
-                        var newAlias = new WAppPersAlias
                         {
-                            Id = BaseEntity.GenerateNewId(),
-                            WApplicationId = application.Id,
-                            Firstname = !string.IsNullOrEmpty(cache.ForeignFirstname) ? cache.ForeignFirstname.ToUpper() : null,
-                            Surname = !string.IsNullOrEmpty(cache.ForeignSurname) ? cache.ForeignSurname.ToUpper() : null,
-                            Familyname = !string.IsNullOrEmpty(cache.ForeignFamilyname) ? cache.ForeignFamilyname.ToUpper() : null,
-                            Type = "previous" //todo да стане foreign
-                        };
-                        //newAlias.ModifiedProperties = new List<string>();
-                        application.WAppPersAliases.Add(newAlias);
-                        // _dbContext.AAppPersAliases.Add(newAlias);
-                    }
+                            var newAlias = new WAppPersAlias
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                WApplicationId = application.Id,
+                                Firstname = !string.IsNullOrEmpty(cache.ForeignFirstname) ? cache.ForeignFirstname.ToUpper() : null,
+                                Surname = !string.IsNullOrEmpty(cache.ForeignSurname) ? cache.ForeignSurname.ToUpper() : null,
+                                Familyname = !string.IsNullOrEmpty(cache.ForeignFamilyname) ? cache.ForeignFamilyname.ToUpper() : null,
+                                Type = "previous" //todo да стане foreign
+                            };
+                            //newAlias.ModifiedProperties = new List<string>();
+                            newAlias.EntityState = Common.Enums.EntityStateEnum.Added;
+                            application.WAppPersAliases.Add(newAlias);
+                            // _dbContext.AAppPersAliases.Add(newAlias);
+                        }
                     
                         if (!string.IsNullOrEmpty(cache.Alias))
                         {
@@ -489,6 +497,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                                 Fullname = cache.Alias.ToUpper(),
                                 Type = "nickname" //todo да стане constant
                             };
+                            newAlias.EntityState = Common.Enums.EntityStateEnum.Added;
                             application.WAppPersAliases.Add(newAlias);
                             //_dbContext.AAppPersAliases.Add(newAlias);
                         }
@@ -560,14 +569,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             string? countryId = await GetCounrtyByCode(cache.NationalityCode1.ToUpper());
                             if (countryId != null)
                             {
-                                application.BirthCountryId = countryId;
-
+                                
                                 var newCountry = new WAppCitizenship
                                 {
                                     Id = BaseEntity.GenerateNewId(),
                                     WApplicationId = application.Id,
                                     CountryId = countryId
                                 };
+                                newCountry.EntityState = Common.Enums.EntityStateEnum.Added;
                                 application.WAppCitizenships.Add(newCountry);
                                 // _dbContext.AAppCitizenships.Add(newCountry);
                             }
@@ -577,14 +586,13 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             string? countryId = await GetCounrtyByCode(cache.NationalityCode2.ToUpper());
                             if (countryId != null)
                             {
-                                application.BirthCountryId = countryId;
-
                                 var newCountry = new WAppCitizenship
                                 {
                                     Id = BaseEntity.GenerateNewId(),
                                     WApplicationId = application.Id,
                                     CountryId = countryId
                                 };
+                                newCountry.EntityState = Common.Enums.EntityStateEnum.Added;
                                 application.WAppCitizenships.Add(newCountry);
                                 //_dbContext.AAppCitizenships.Add(newObj);
                             }
@@ -630,7 +638,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
                 if ( graoPerson.BirthplaceCode != null)
                 {
-                    var gCity = await _dbContext.GCities
+                    var gCity = await _dbContext.GCities.AsNoTracking()
                                         .FirstOrDefaultAsync(a => a.EkatteCode == graoPerson.BirthplaceCode);
                     if (gCity != null)
                     {
@@ -787,7 +795,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             var daysCache = GetRegixDaysCache();
             var yesterday = DateTime.Now.AddDays(-daysCache);
 
-            var cachedResponse = _dbContext.ERegixCaches
+            var cachedResponse = _dbContext.ERegixCaches.AsNoTracking()
                 .FirstOrDefault(r => r.ReqIdentifier == identifier && r.ExecutionDate > yesterday && r.WebServiceName == webServiceName);
             return cachedResponse;
         }
@@ -795,7 +803,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         private ERegixCache GetRegixCacheObject(string webServiceName, string reqIdentifier)
         {
             var regixCache =
-                _dbContext.ERegixCaches.FirstOrDefault(r => r.ReqIdentifier == reqIdentifier && r.WebServiceName == webServiceName);
+                _dbContext.ERegixCaches.AsNoTracking().FirstOrDefault(r => r.ReqIdentifier == reqIdentifier && r.WebServiceName == webServiceName);
             if (regixCache == null)
             {
                 var newRegixCache = new ERegixCache
@@ -1149,14 +1157,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.ModifiedProperties.Add(nameof(regixCache.TrDocStatus));
                 regixCache.ModifiedProperties.Add(nameof(regixCache.TrDocStatusDate));
             }
-            //if (regixCache.Version == null)
-            //{
-            //    _dbContext.ERegixCaches.Add(regixCache);
-            //}
-            //else
-            //{
-            //    _dbContext.ERegixCaches.Update(regixCache);
-            //}
+           
             _dbContext.ApplyChanges(regixCache, new List<IBaseIdEntity>());
             return regixCache;
         }

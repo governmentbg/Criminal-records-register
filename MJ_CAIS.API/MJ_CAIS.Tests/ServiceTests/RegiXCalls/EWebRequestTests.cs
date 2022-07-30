@@ -106,14 +106,14 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         [Test]
         public void TestEGN()
         {
-            foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
-            {
-                // var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "dfc773d0-dc26-4ced-9249-57d3d7dec4e6", registrationNumber: "220728660123000000123").Result;
+            //foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
+            //{
                 try
                 {
-                    var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id, registrationNumber: "220728660123000000123").Result;
+                //var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id, registrationNumber: "220728660123000000123").Result;
+                var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "d27a7b76-b426-451f-aa10-35b622199388", registrationNumber: "220728660123000000123").Result;
 
-                    if (result.Item1.EGN == null) //TODO: shoud be ==
+                if (result.Item1.EGN == null) //TODO: shoud be ==
                     {
                         Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
                     }
@@ -137,7 +137,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
                 {
                     Assert.Fail(ex.Message);
                 }
-            }
+           // }
             Assert.True(true);
         }
         [Test]
@@ -152,11 +152,11 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         {
             foreach (var webRequest in _dbContext.EWebRequests.Include(x => x.WebService).Include(x => x.WApplication)
                             .Where(x => x.IsAsync == true || x.IsAsync == null)
-                            //.Where(x => x.Status == WebRequestStatusConstants.Pending ||
-                            //            x.Status == WebRequestStatusConstants.Rejected)
+                            .Where(x => x.Status == WebRequestStatusConstants.Pending ||
+                                        x.Status == WebRequestStatusConstants.Rejected)
                             //.Where(x => x.Attempts < attempts
-                            .Where(x => x.CallContext == null)
-                            .Where(x => x.IsFromCache == false)
+                            //.Where(x => x.CallContext == null)
+                            //.Where(x => x.IsFromCache == false)
                             .ToList())
             {
                 if (webRequest.WebService != null)
