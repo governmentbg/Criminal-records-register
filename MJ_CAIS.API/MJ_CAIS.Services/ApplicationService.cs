@@ -161,9 +161,13 @@ namespace MJ_CAIS.Services
 
             if (isFinal)
             {
-                var regNumber =
+                if(!string.IsNullOrEmpty(entity.RegistrationNumber))
+                {
+                    var regNumber =
                     await _registerTypeService.GetRegisterNumberForApplicationOnDesk(applicationDb.CsAuthorityId);
-                entity.RegistrationNumber = regNumber;
+                    entity.RegistrationNumber = regNumber;
+                }
+                
                 await UpdatePersonDataAsync(aInDto, entity);
 
                 await GenerateCertificateFromApplication(applicationDb.Id);

@@ -39,7 +39,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             _dbContext.ChangeTracker.Clear();
             try
             {
-                (PersonDataResponseType, EWebRequest) result = await this._regixService.SyncCallPersonDataSearch(id, applicationId: application.Id, registrationNumber: registrationNumber);
+                (PersonDataResponseType, EWebRequest) result = await this._regixService.SyncCallPersonDataSearch(id, applicationId: applicationId, registrationNumber: registrationNumber);
                 if (result.Item1.EGN == null)
                 {
                     throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
