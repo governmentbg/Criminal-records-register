@@ -67,5 +67,6 @@
  
 ## 8. Одит на бюлетини - след статус актуален, всяка промяна в бюлетин му пази версия на данните.(rel-model, xml, pdf), bulletin_statuses_h
  * **!!! предстоящи големи промени по модела на бюлетини bulletin, offence, sanction, probations, decisions**
- * има xsd, mapping, xslt за текущата версия на бюлетин
+ * <em><strong>Добавен е единствено запис на xml-а</strong></em>
+ * има xsd, mapping, xslt за текущата версия на бюлетин 
  * има pdf 
