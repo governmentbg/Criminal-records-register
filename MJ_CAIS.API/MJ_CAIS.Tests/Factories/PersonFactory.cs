@@ -3,13 +3,14 @@ using MJ_CAIS.DTO.Person;
 using System;
 using System.Collections.Generic;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess.Entities;
 
 namespace MJ_CAIS.Tests.Factories
 {
     internal static class PersonFactory
     {
-        public static PersonDTO GetFilledInPersonDto()
+        public static PersonDTO GetFilledInPersonDto(bool onlyEgn =false)
         {
             return new PersonDTO()
             {
@@ -33,9 +34,9 @@ namespace MJ_CAIS.Tests.Factories
                 MotherFullname = "Ирина Александрова Василева",
                 Sex = 2,
                 Egn = "1010101010",
-                Ln = "1111111111",
-                Lnch = "1212121212",
-                AfisNumber = "1313131313",
+                Ln = onlyEgn ? null: "1111111111",
+                Lnch = onlyEgn ? null: "1212121212",
+                AfisNumber = onlyEgn ? null: "1313131313",
                 Suid = "7894155as",
                 Version = 1,
                 BirthPlace = new AddressDTO()
@@ -66,8 +67,8 @@ namespace MJ_CAIS.Tests.Factories
                 Nationalities = new MultipleChooseDTO()
                 {
                     IsChanged = true,
-                    SelectedForeignKeys = new List<string> { "1" },
-                    SelectedPrimaryKeys = new List<string> { "2" },
+                    SelectedForeignKeys = new List<string> { "BG" },
+                    SelectedPrimaryKeys = new List<string> { "BGN" },
                 },
                 NationalitiesNames = new List<string> { "България" },
             };
@@ -120,6 +121,18 @@ namespace MJ_CAIS.Tests.Factories
                     }
                 },
 
+            };
+        }
+
+        public static PPersonId GetFilledPersonId(string pidType = PersonConstants.PidType.Suid, EntityStateEnum entityState = EntityStateEnum.Added, string personId = "fd44544sds54d7sds5d")
+        {
+            return new PPersonId()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Pid = Guid.NewGuid().ToString(),
+                PidTypeId = pidType,
+                EntityState = entityState,
+                PersonId = personId
             };
         }
     }
