@@ -7,13 +7,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Update="ExternalServicesHost\ESCSC.xslt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	  <Compile Remove="NewFolder\**" />
+	  <EmbeddedResource Remove="NewFolder\**" />
+	  <None Remove="NewFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="NewFolder\" />
+		<None Update="ExternalServicesHost\ESCSC.xslt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

@@ -25,18 +25,13 @@
         <nb-card-body>
           <nb-list>
             <nb-list-item>
-              <a [routerLink]="['/pages/bulletins/new-office']">
-                Нови бюлетини ({{ bulletins.newOffice }})
-              </a>
-            </nb-list-item>
-            <nb-list-item>
               <a [routerLink]="['/pages/bulletins/new-eiss']">
                 Нови бюлетини от ЕИСС ({{ bulletins.newEISS }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/isin/identified']">
-                Данни за изтърпени наказания ({{ isin.identified }})
+                Данни за изтърпени наказания ({{ bulletins.isinIdentified }})
               </a>
             </nb-list-item>
             <nb-list-item>
@@ -52,34 +47,63 @@
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 1 ({{
-                  bulletinEvents.article2211
+                  bulletins.article2211
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 2 ({{
-                  bulletinEvents.article2212
+                  bulletins.article2212
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по чл.30 ({{
-                  bulletinEvents.article3000
+                  bulletins.article3000
                 }})
               </a>
             </nb-list-item>
             <nb-list-item>
               <a [routerLink]="['/pages/bulletins/events']">
                 Уведомяване за променен съдебен статус на осъдено лице ({{
-                  bulletinEvents.newDocument
+                  bulletins.newDocument
                 }})
               </a>
             </nb-list-item>
           </nb-list>
         </nb-card-body>
       </nb-card>
+      <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
+          <nb-card accent="info" class="col-md-12">
+            <nb-card-header>За решение от съдия/юрист</nb-card-header>
+            <nb-card-body>
+              <nb-list>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/internal-requests']">
+                    Нови заявки за реабилитация ({{ applications.internalRequests }})
+                  </a>
+                </nb-list-item>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/applications/tax-free']">
+                    Oсвободени от плащане ({{ applications.taxFree }})
+                  </a>
+                </nb-list-item>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/applications/for-signing-by-judge']">
+                    За подпис от съдия/юрист ({{ applications.forSigningByJudge }})
+                  </a>
+                </nb-list-item>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/applications/bulletin-selection']">
+                    За избор на бюлетини ({{ applications.bulletinSelection }})
+                  </a>
+                </nb-list-item>
+              </nb-list>
+            </nb-card-body>
+          </nb-card>
+      </ng-template>
     </div>
     <div class="col-md-6">
       <nb-card accent="info" class="col-md-12">
@@ -114,109 +138,69 @@
               <a [routerLink]="['/pages/applications/waiting-payment']">
                 Потвърждение за плащане ({{ applications.checkPayment }})
               </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/applications/tax-free']">
-                Oсвободени от плащане ({{ applications.checkTaxFree }})
-              </a>
-            </nb-list-item>
+            </nb-list-item>            
             <nb-list-item>
               <a [routerLink]="['/pages/applications/for-check']">
                 За обработка ({{ applications.bulletinsCheck }})
               </a>
-            </nb-list-item>
+            </nb-list-item>                
           </nb-list>
         </nb-card-body>
       </nb-card>
-    </div>
-  </ng-template>
+      <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
+          <nb-card accent="info" class="col-md-12">
+            <nb-card-header>Осъдени в чужбина</nb-card-header>
+            <nb-card-body>
+              <nb-list>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/fbbcs/for-destruction']">
+                    Подлежащи на заличаване ({{ centralAuth.forDestruction }})
+                  </a>
+                </nb-list-item>
+              </nb-list>
+            </nb-card-body>
+          </nb-card>
+          <nb-card accent="info" class="col-md-12">
+            <nb-card-header>Е-свидетелства</nb-card-header>
+            <nb-card-body>
+              <nb-list-item>
+                <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
+                   Oсвободени от плащане  ({{ centralAuth.webCheckTaxFree }})
+                </a>
+              </nb-list-item>
+            </nb-card-body>
+          </nb-card>
+          <!-- <nb-card accent="info" class="col-md-12">
+            <nb-card-header>Изтърпени наказания</nb-card-header>
+            <nb-card-body>
+              <nb-list>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/isin/new']">
+                    Новопостъпили данни за изтърпени наказания ({{ bulletins.isinNew }})
+                  </a>
+                </nb-list-item>
+              </nb-list>
+            </nb-card-body>
+          </nb-card> -->
 
-  <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
-      <div class="col-md-6">
-        <nb-card accent="info" class="col-md-12">
-          <nb-card-header>Осъдени в чужбина</nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <!-- <nb-list-item>
-                <a [routerLink]="['/pages/fbbcs']">
-                  Актуални сведения ({{ fbbc.new }})
-                </a>
-              </nb-list-item> -->
-              <nb-list-item>
-                <a [routerLink]="['/pages/fbbcs/for-destruction']">
-                  Подлежащи на заличаване ({{ fbbc.forDestruction }})
-                </a>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
-        </nb-card>
-        <nb-card accent="info" class="col-md-12">
-          <nb-card-header>Изтърпени наказания</nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <a [routerLink]="['/pages/isin/new']">
-                  Новопостъпили данни за изтърпени наказания ({{ isin.new }})
-                </a>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
-        </nb-card>
-      </div>
-      <div class="col-md-6">
-        <nb-card accent="info" class="col-md-12">
-          <nb-card-header>ECRIS</nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <a [routerLink]="['/pages/ecris/identification']">
-                  За идентификация ({{ ecris.forIdentification }})
-                </a>
-              </nb-list-item>
-              <nb-list-item>
-                <a [routerLink]="['/pages/ecris/req-waiting']">
-                  Запитвания ({{ ecris.waitingForCSAuthority }})
-                </a>
-              </nb-list-item>
-              <nb-list-item>
-                <a [routerLink]="['/pages/ecris/req-waiting']">
-                  ECRIS-TCN ({{ ecris.tcn }})
-                </a>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
-        </nb-card>
-      </div>
-  </ng-template>
-  <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
-    <div class="col-md-6">
-      <nb-card accent="info" class="col-md-12">
-        <nb-card-header>За решение от съдия/юрист</nb-card-header>
-        <nb-card-body>
-          <nb-list>
-            <nb-list-item>
-              <a [routerLink]="['/pages/internal-requests']">
-                Нови заявки за реабилитация ({{ forJudge.internalRequests }})
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/applications/tax-free']">
-                Oсвободени от плащане ({{ forJudge.taxFree }})
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/applications/for-signing-by-judge']">
-                За подпис от съдия/юрист ({{ forJudge.forSigningByJudge }})
-              </a>
-            </nb-list-item>
-            <nb-list-item>
-              <a [routerLink]="['/pages/applications/bulletin-selection']">
-                За избор на бюлетини ({{ forJudge.bulletinSelection }})
-              </a>
-            </nb-list-item>
-          </nb-list>
-        </nb-card-body>
-      </nb-card>
+          <nb-card accent="info" class="col-md-12">
+            <nb-card-header>ECRIS</nb-card-header>
+            <nb-card-body>
+              <nb-list>
+                <nb-list-item>
+                  <a [routerLink]="['/pages/ecris/identification']">
+                    За идентификация ({{ centralAuth.forIdentification }})
+                  </a>
+                </nb-list-item>           
+                <nb-list-item>
+                  <a [routerLink]="['/pages/ecris-tcn']">
+                    ECRIS-TCN ({{ centralAuth.tcn }})
+                  </a>
+                </nb-list-item>
+              </nb-list>
+            </nb-card-body>
+          </nb-card>
+    </ng-template>
     </div>
   </ng-template>
 </div>
