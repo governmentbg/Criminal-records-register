@@ -48,8 +48,8 @@ namespace MJ_CAIS.Tests.ServiceTests.Application
                 .ConfigureServices(services => services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
                 .ConfigureServices(services => services.AddSingleton<IUserContext>(new UserContext()
                 {
-                    UserId = config.GetValue<string>("ContextUser:UserId"),
-                    UserName = config.GetValue<string>("ContextUser:UserName")
+                    UserId = "bee63110-ae2b-4a7b-878b-a9abd131ee41",
+                    UserName = "Надя Желева"
                 }))
 
                 .Build();
@@ -102,7 +102,9 @@ namespace MJ_CAIS.Tests.ServiceTests.Application
             try
             {
                 string appId = _searchByIdentifierService.SearchByIdentifierLNCH("1001001001").Result;
+                _dbContext.ChangeTracker.Clear();
                 ApplicationOutDTO applOut = _applicationService.SelectAsync(appId).Result;
+                _dbContext.ChangeTracker.Clear();
                 ApplicationInDTO aInDto = new ApplicationInDTO()
                 {
                     Person = applOut.Person,

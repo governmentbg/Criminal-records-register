@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
@@ -151,6 +153,9 @@ namespace MJ_CAIS.Services
             {
                 throw new ArgumentException($"Application with id {aInDto.Id} is missing");
             }
+            if (applicationDb.CsAuthorityId != _userContext.CsAuthorityId)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.editIsUnauthorized);
+
 
             ValidateData(aInDto);
 
