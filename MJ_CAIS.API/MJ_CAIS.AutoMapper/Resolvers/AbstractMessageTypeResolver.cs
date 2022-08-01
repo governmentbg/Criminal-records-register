@@ -1,31 +1,16 @@
-﻿using MJ_CAIS.DTO.ExternalServicesHost;
-using static MJ_CAIS.Common.Constants.GlobalConstants;
+﻿using MJ_CAIS.DTO.EcrisService;
 
 namespace MJ_CAIS.AutoMapperContainer.Resolvers
 {
-    public static class AbstractMessageTypeProfile
+    public static class AbstractMessageTypeResolver
     {
-        public static DateType GetDateType(DateTime? date, string datePrecision)
+        public static string GetDateType(DateType date)
         {
-            if (date == null) return null;
-            if (string.IsNullOrEmpty(datePrecision))
-            {
-                datePrecision = DatePrecisionType.YMD;
-            }
+            var year = date.DateYear;
+            var day = date.DateMonthDay.DateDay.Substring(2);
+            var month = date.DateMonthDay.DateMonth.Substring(1);
 
-            var dateValue = date.Value;
-
-
-
-            var result = new DateType();
-            result.Date = dateValue;
-            if (!string.IsNullOrEmpty(datePrecision))
-            {
-                result.DatePrecision = Enum.Parse<DatePrecisionEnum>(datePrecision.ToUpper());
-            }
-            result.DatePrecisionSpecified = string.IsNullOrEmpty(datePrecision);
-
-            return result;
+            return $"{day}/{month}/{year}";
         }
     }
 }

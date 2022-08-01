@@ -22,6 +22,7 @@ namespace MJ_CAIS.DTO.AbstractMessageType
         public string LastNameSecond { get; set; }
         public string FullName { get; set; }
         public string Nationality { get; set; }
+        public string Birthday { get; set; }
         public string CountryPerson { get; set; }
         public string MunicipalityPerson { get; set; }
         public string CityPerson { get; set; }
