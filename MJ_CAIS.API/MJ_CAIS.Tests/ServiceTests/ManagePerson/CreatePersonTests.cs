@@ -14,6 +14,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 {
@@ -86,11 +87,21 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
             src.AfisNumber = null;
             src.Ln = null;
 
+            var pids = new List<PPersonId> { new()
+            {
+                Pid = src.Egn,
+                PidTypeId = PidType.Egn,
+                Issuer = IssuerType.MVR,
+                EntityState = EntityStateEnum.Added
+            } };
+
+            _repository.Setup(x => x.GetPersonIdsAsync(It.IsAny<List<PersonIdTypeDTO>>(), It.IsAny<string>())).ReturnsAsync(pids);
+
             var dest = await _peopleService.CreatePersonAsync(src);
 
             Assert.IsNotEmpty(dest.PPersonIds);
             Assert.AreEqual(dest.PPersonIds.Count, 1);
-            Assert.AreEqual(dest.PPersonIds.First().Pid, PersonFactory.GetFilledPersonId().Pid);
+            Assert.AreEqual(dest.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Pid, src.Egn);
         }
 
         [Test]
@@ -105,15 +116,15 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
             var pids = new List<PPersonId> { new()
             {
                 Pid = "1010101010",
-                PidTypeId = PersonConstants.PidType.Egn,
-                Issuer = PersonConstants.IssuerType.MVR,
+                PidTypeId = PidType.Egn,
+                Issuer = IssuerType.MVR,
                 EntityState = EntityStateEnum.Added
             },
                 new()
                 {
                     Pid = "13231321",
-                    PidTypeId = PersonConstants.PidType.Lnch,
-                    Issuer = PersonConstants.IssuerType.EU,
+                    PidTypeId = PidType.Lnch,
+                    Issuer = IssuerType.EU,
                     EntityState = EntityStateEnum.Added
                 }
             };
@@ -153,7 +164,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
             var pids = new List<PPersonId>
             {
-                PersonFactory.GetFilledPersonId(PersonConstants.PidType.Suid,entityState:EntityStateEnum.Unchanged)
+                PersonFactory.GetFilledPersonId(PidType.Suid,entityState:EntityStateEnum.Unchanged)
             };
 
             _repository.Setup(x => x.GetPersonIdsAsync(It.IsAny<List<PersonIdTypeDTO>>(), It.IsAny<string>()))
@@ -198,7 +209,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
             var pids = new List<PPersonId>
             {
-                PersonFactory.GetFilledPersonId(PersonConstants.PidType.Suid,entityState:EntityStateEnum.Unchanged)
+                PersonFactory.GetFilledPersonId(PidType.Suid,entityState:EntityStateEnum.Unchanged)
             };
 
             _repository.Setup(x => x.GetPersonIdsAsync(It.IsAny<List<PersonIdTypeDTO>>(), It.IsAny<string>()))
@@ -220,7 +231,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
             var pids = new List<PPersonId>
             {
-                PersonFactory.GetFilledPersonId(PersonConstants.PidType.Lnch,entityState:EntityStateEnum.Unchanged),
+                PersonFactory.GetFilledPersonId(PidType.Lnch,entityState:EntityStateEnum.Unchanged),
                 PersonFactory.GetFilledPersonId()
             };
 
@@ -241,22 +252,22 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         {
             var src = PersonFactory.GetFilledInPersonDto();
 
-            var  newPids = new List<PPersonId>
+            var pids = new List<PPersonId>
             {
-                PersonFactory.GetFilledPersonId(PersonConstants.PidType.Egn)
+                PersonFactory.GetFilledPersonId(PidType.Egn),
+                PersonFactory.GetFilledPersonId(PidType.Lnch, entityState: EntityStateEnum.Unchanged)
             };
 
             _repository.Setup(x => x.GetPersonIdsAsync(It.IsAny<List<PersonIdTypeDTO>>(), It.IsAny<string>()))
-                .ReturnsAsync(newPids);
+                .ReturnsAsync(pids);
 
-            var existingPid = PersonFactory.GetFilledPersonId(PersonConstants.PidType.Lnch, entityState: EntityStateEnum.Unchanged);
             _repository.Setup(x => x.GetExistingPersonWithPidsDataAsync(It.IsAny<string>()))
-                .ReturnsAsync(new PPerson { PPersonIds = new List<PPersonId> { existingPid } });
+                .ReturnsAsync(new PPerson { PPersonIds = new List<PPersonId> { pids.First(x=>x.PidTypeId == PidType.Lnch) } });
 
             var dest = await _peopleService.CreatePersonAsync(src);
 
-            Assert.That(dest.PPersonIds.Any(x => x.PidTypeId == PersonConstants.PidType.Egn && x.Pid == newPids.First().Pid && x.EntityState == EntityStateEnum.Added), Is.EqualTo(true));
-            Assert.That(dest.PPersonIds.Any(x => x.PidTypeId == PersonConstants.PidType.Lnch && x.Pid == existingPid.Pid && x.EntityState == EntityStateEnum.Unchanged), Is.EqualTo(true));
+            Assert.That(dest.PPersonIds.Any(x => x.PidTypeId == PidType.Egn && x.Pid == pids.First(x => x.PidTypeId == PidType.Egn).Pid && x.EntityState == EntityStateEnum.Added), Is.EqualTo(true));
+            Assert.That(dest.PPersonIds.Any(x => x.PidTypeId == PidType.Lnch && x.Pid == pids.First(x => x.PidTypeId == PidType.Lnch).Pid && x.EntityState == EntityStateEnum.Unchanged), Is.EqualTo(true));
         }
 
         #endregion
