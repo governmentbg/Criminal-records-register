@@ -8,7 +8,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public GCountry()
         {
             AAppCitizenships = new HashSet<AAppCitizenship>();
+            AApplicants = new HashSet<AApplicant>();
             AApplications = new HashSet<AApplication>();
+            ARepCitizenships = new HashSet<ARepCitizenship>();
+            AReportApplicationAddrCountries = new HashSet<AReportApplication>();
+            AReportApplicationBirthCountries = new HashSet<AReportApplication>();
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
@@ -21,6 +25,7 @@ namespace MJ_CAIS.DataAccess.Entities
             PPersonHCitizenships = new HashSet<PPersonHCitizenship>();
             PPersonHs = new HashSet<PPersonH>();
             PPersonIds = new HashSet<PPersonId>();
+            WAppCitizenships = new HashSet<WAppCitizenship>();
             WApplications = new HashSet<WApplication>();
         }
 
@@ -41,7 +46,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public virtual ICollection<AAppCitizenship> AAppCitizenships { get; set; }
+        public virtual ICollection<AApplicant> AApplicants { get; set; }
         public virtual ICollection<AApplication> AApplications { get; set; }
+        public virtual ICollection<ARepCitizenship> ARepCitizenships { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationAddrCountries { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationBirthCountries { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
@@ -54,6 +63,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<PPersonHCitizenship> PPersonHCitizenships { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }
         public virtual ICollection<PPersonId> PPersonIds { get; set; }
+        public virtual ICollection<WAppCitizenship> WAppCitizenships { get; set; }
         public virtual ICollection<WApplication> WApplications { get; set; }
     }
 }

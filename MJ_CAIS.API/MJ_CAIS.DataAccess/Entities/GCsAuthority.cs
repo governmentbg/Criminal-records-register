@@ -9,10 +9,13 @@ namespace MJ_CAIS.DataAccess.Entities
         {
             AApplicationCsAuthorities = new HashSet<AApplication>();
             AApplicationCsAuthorityBirths = new HashSet<AApplication>();
+            AReportApplications = new HashSet<AReportApplication>();
             BBulletins = new HashSet<BBulletin>();
             DCsDocRegisters = new HashSet<DCsDocRegister>();
             GCities = new HashSet<GCity>();
             GUsers = new HashSet<GUser>();
+            NInternalRequestFromAuthorities = new HashSet<NInternalRequest>();
+            NInternalRequestToAuthorities = new HashSet<NInternalRequest>();
             WApplicationCsAuthorities = new HashSet<WApplication>();
             WApplicationCsAuthorityBirths = new HashSet<WApplication>();
         }
@@ -33,10 +36,13 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GDecidingAuthority? DecidingAuth { get; set; }
         public virtual ICollection<AApplication> AApplicationCsAuthorities { get; set; }
         public virtual ICollection<AApplication> AApplicationCsAuthorityBirths { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplications { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<DCsDocRegister> DCsDocRegisters { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<GUser> GUsers { get; set; }
+        public virtual ICollection<NInternalRequest> NInternalRequestFromAuthorities { get; set; }
+        public virtual ICollection<NInternalRequest> NInternalRequestToAuthorities { get; set; }
         public virtual ICollection<WApplication> WApplicationCsAuthorities { get; set; }
         public virtual ICollection<WApplication> WApplicationCsAuthorityBirths { get; set; }
     }

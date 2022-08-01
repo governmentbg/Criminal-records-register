@@ -42,15 +42,19 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<byte[]> CreateReport(string reportID)
         {
-            var report = await dbContext.AReports
-            .FirstOrDefaultAsync(x => x.Id == reportID);
+            var report = await _reportRepository.SingleOrDefaultAsync<AReport>(x => x.Id == reportID); 
+                //await dbContext.AReports
+            //.FirstOrDefaultAsync(x => x.Id == reportID);
             if (report == null)
             {
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {reportID} does not exist.");
             }
-            var signingCertificateName = (await dbContext.GSystemParameters
-            .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+            var signingCertificateName = (await _reportRepository.SingleOrDefaultAsync<GSystemParameter>(x => 
+            x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+
+            //(await dbContext.GSystemParameters
+            //.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
             if (string.IsNullOrEmpty(signingCertificateName))
             {//todo: EH & resources
                 throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
@@ -60,7 +64,7 @@ namespace MJ_CAIS.ExternalWebServices
 
 
 
-            dbContext.SaveChanges();
+            await _reportRepository.SaveChangesAsync();
 
             return result;
         }
@@ -70,13 +74,15 @@ namespace MJ_CAIS.ExternalWebServices
         {
 
             byte[] contentReport;
-            contentReport = await CreatePdf(report.Id,  JasperReportsNames.Conviction_Report, signingCertificateName);
+            contentReport = await CreatePdf(report.Id,   signingCertificateName);
             bool isExistingDoc = false;
             bool isExistingContent = false;
             DDocument doc;
             if (!string.IsNullOrEmpty(report.DocId))
             {
-                var currentDocument = await dbContext.DDocuments.FirstOrDefaultAsync(d => d.Id == report.DocId);
+                var currentDocument = await _reportRepository.SingleOrDefaultAsync<DDocument>(d => d.Id == report.DocId);
+
+                //await dbContext.DDocuments.FirstOrDefaultAsync(d => d.Id == report.DocId);
                 if (currentDocument != null)
                 {
                     doc = currentDocument;
@@ -106,7 +112,8 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                var currentContent = await dbContext.DDocContents.FirstOrDefaultAsync(d => d.Id == doc.DocContentId);
+                var currentContent = await _reportRepository.SingleOrDefaultAsync<DDocContent>(d => d.Id == doc.DocContentId);
+                //await dbContext.DDocContents.FirstOrDefaultAsync(d => d.Id == doc.DocContentId);
                 if (currentContent != null)
                 {
                     content = currentContent;
@@ -130,31 +137,80 @@ namespace MJ_CAIS.ExternalWebServices
             report.DocId = doc.Id;
          
 
+            //if (isExistingContent)
+            //{
+            //    dbContext.DDocContents.Update(content);
+            //}
+            //else
+            //{
+            //    dbContext.DDocContents.Add(content);
+            //}
+            //if (isExistingDoc)
+            //{
+            //    dbContext.DDocuments.Update(doc);
+            //}
+            //else
+            //{
+            //    dbContext.DDocuments.Add(doc);
+            //}
+            //dbContext.AReports.Update(report);
+
+
+
             if (isExistingContent)
             {
-                dbContext.DDocContents.Update(content);
+                content.EntityState = EntityStateEnum.Modified;
+                if (content.ModifiedProperties == null)
+                {
+                    content.ModifiedProperties = new List<string>();
+                }
+                content.ModifiedProperties.Add(nameof(content.MimeType));
+                content.ModifiedProperties.Add(nameof(content.Content));
+                content.ModifiedProperties.Add(nameof(content.Bytes));
+
+                //dbContext.DDocContents.Update(content);
             }
             else
             {
-                dbContext.DDocContents.Add(content);
+                content.EntityState = EntityStateEnum.Added;
+                //dbContext.DDocContents.Add(content);
             }
             if (isExistingDoc)
             {
-                dbContext.DDocuments.Update(doc);
+                doc.EntityState = EntityStateEnum.Modified;
+                if (doc.ModifiedProperties == null)
+                {
+                    doc.ModifiedProperties = new List<string>();
+                }
+                doc.ModifiedProperties.Add(nameof(doc.DocContentId));
+                // dbContext.DDocuments.Update(doc);
             }
             else
             {
-                dbContext.DDocuments.Add(doc);
+                doc.EntityState = EntityStateEnum.Added;
+                //dbContext.DDocuments.Add(doc);
             }
-            dbContext.AReports.Update(report);
+            //dbContext.ACertificates.Update(certificate);
+            report.EntityState = EntityStateEnum.Modified;
+
+
+            if (report.ModifiedProperties == null)
+            {
+                report.ModifiedProperties = new List<string>();
+            }
+            report.ModifiedProperties.Add(nameof(report.DocId));
+          
+            _reportRepository.ApplyChanges(content, new List<IBaseIdEntity>());
+            _reportRepository.ApplyChanges(doc, new List<IBaseIdEntity>());
+            _reportRepository.ApplyChanges(report, new List<IBaseIdEntity>());
 
             return contentReport;
 
         }
 
-        private async Task<byte[]> CreatePdf(string reportid, JasperReportsNames conviction_Report, string signingCertificateName)
+        private async Task<byte[]> CreatePdf(string reportid, string signingCertificateName)
         {
-            byte[] fileArray = await _printerService.PrintReport(reportid, conviction_Report);
+            byte[] fileArray = await _printerService.PrintReport(reportid);
             //todo: кои полета да се добавят за валидиране?!
             //fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName,
             //    new Dictionary<string, string>() { { "report_id", reportid } });

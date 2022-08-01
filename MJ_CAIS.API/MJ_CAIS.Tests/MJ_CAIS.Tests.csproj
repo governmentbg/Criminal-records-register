@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -17,9 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj" />
+    <ProjectReference Include="..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Repositories\MJ_CAIS.Repositories.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj" />
     <ProjectReference Include="..\MJ_CAIS.Services\MJ_CAIS.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

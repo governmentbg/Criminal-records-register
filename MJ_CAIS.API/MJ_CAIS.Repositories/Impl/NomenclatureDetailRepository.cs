@@ -41,9 +41,9 @@ namespace MJ_CAIS.Repositories.Impl
             return _dbContext.FbbcSanctTypes.AsNoTracking();
         }
 
-        public IQueryable<BReqStatus> GetInternalRequestStatuses()
+        public IQueryable<NReqStatus> GetInternalRequestStatuses()
         {
-            return _dbContext.BReqStatuses.AsNoTracking();
+            return _dbContext.NReqStatuses.AsNoTracking();
         }
 
         public IQueryable<BSanctionCategory> GetSanctionCategories()
@@ -99,6 +99,13 @@ namespace MJ_CAIS.Repositories.Impl
         public IQueryable<PPersonIdType> GetPidTypes()
         {
             return _dbContext.PPersonIdTypes.AsNoTracking();
+        }
+
+        public IQueryable<IBaseNomenclature> GetDbSet(string propertyName)
+        {
+            var property = _dbContext.GetType().GetProperty(propertyName);
+            var dbSet = property.GetValue(_dbContext) as IQueryable<IBaseNomenclature>;
+            return dbSet;
         }
     }
 }

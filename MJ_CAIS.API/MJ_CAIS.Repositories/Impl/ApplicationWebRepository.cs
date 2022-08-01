@@ -1,6 +1,9 @@
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Application.External;
+using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.DTO.Application.Public;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -8,6 +11,153 @@ namespace MJ_CAIS.Repositories.Impl
     {
         public ApplicationWebRepository(CaisDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId)
+        {
+            var result =
+                (from app in _dbContext.WApplications.AsNoTracking()
+
+                 join status in _dbContext.WApplicationStatuses.AsNoTracking()
+                     on app.StatusCode equals status.Code
+
+                 join purposes in _dbContext.APurposes.AsNoTracking()
+                 on app.PurposeId equals purposes.Id into purposesLeft
+                 from purposes in purposesLeft.DefaultIfEmpty()
+
+                 join application in _dbContext.AApplications.AsNoTracking()
+                 on app.Id equals application.WApplicationId into applicationLeft
+                 from application in applicationLeft.DefaultIfEmpty()
+
+                 where app.UserExtId == userId
+                 select new ExternalApplicationGridDTO
+                 {
+                     Id = app.Id,
+                     RegistrationNumber = app.RegistrationNumber,
+                     ApplicantName = app.ApplicantName,
+                     Purpose = app.Purpose,
+                     PurposeName = purposes.Name,
+                     PurposeId = app.PurposeId,
+                     StatusCode = app.StatusCode,
+                     StatusName = status.Name,
+                     CreatedOn = app.CreatedOn,
+                     Egn = app.Egn,
+                     Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
+                     Email = application.Email,
+                 }).OrderByDescending(x => x.CreatedOn);
+
+            return result;
+        }
+
+        public async Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id)
+        {
+            var result = await (from app in _dbContext.WApplications.AsNoTracking()
+
+                                join status in _dbContext.WApplicationStatuses.AsNoTracking()
+                                    on app.StatusCode equals status.Code
+
+                                join purposes in _dbContext.APurposes.AsNoTracking()
+                                    on app.PurposeId equals purposes.Id into purposesLeft
+                                from purposes in purposesLeft.DefaultIfEmpty()
+
+                                join paymentMethods in _dbContext.APaymentMethods.AsNoTracking()
+                                    on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
+                                from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
+
+                                join application in _dbContext.AApplications.AsNoTracking()
+                                         on app.Id equals application.WApplicationId into applicationLeft
+                                from application in applicationLeft.DefaultIfEmpty()
+
+                                join cert in _dbContext.ACertificates.AsNoTracking()
+                                    on application.Id equals cert.ApplicationId into certLeft
+                                from cert in certLeft.DefaultIfEmpty()
+
+                                select new DTO.Application.Public.ApplicationPreviewDTO
+                                {
+                                    Id = app.Id,
+                                    CreatedOn = app.CreatedOn,
+                                    Egn = app.Egn,
+                                    Email = app.Email,
+                                    PaymentMethodName = paymentMethods.Name,
+                                    PurposeName = purposes.Name,
+                                    Purpose = app.Purpose,
+                                    RegistrationNumber = app.RegistrationNumber,
+                                    Status = status.Name,
+                                    StatusCode = status.Code,
+                                    // IsPaid  ?? todo
+                                    CertificateStatusCode = cert.StatusCode
+                                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
+        }
+
+        public async Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id)
+        {
+            var result = await (from app in _dbContext.WApplications.AsNoTracking()
+
+                                join status in _dbContext.WApplicationStatuses.AsNoTracking()
+                                    on app.StatusCode equals status.Code
+
+                                join purposes in _dbContext.APurposes.AsNoTracking()
+                                    on app.PurposeId equals purposes.Id into purposesLeft
+                                from purposes in purposesLeft.DefaultIfEmpty()
+
+                                join application in _dbContext.AApplications.AsNoTracking()
+                                    on app.Id equals application.WApplicationId into applicationLeft
+                                from application in applicationLeft.DefaultIfEmpty()
+
+                                join cert in _dbContext.ACertificates.AsNoTracking()
+                                    on application.Id equals cert.ApplicationId into certLeft
+                                from cert in certLeft.DefaultIfEmpty()
+
+                                select new DTO.Application.External.ApplicationPreviewDTO
+                                {
+                                    Id = app.Id,
+                                    CreatedOn = app.CreatedOn,
+                                    Egn = app.Egn,
+                                    Email = app.Email,
+                                    PurposeName = purposes.Name,
+                                    Purpose = app.Purpose,
+                                    RegistrationNumber = app.RegistrationNumber,
+                                    Status = status.Name,
+                                    StatusCode = status.Code,
+                                    Name = application.Firstname + " " + application.Surname + " " + application.Familyname,
+                                    CertificateStatusCode = cert.StatusCode
+
+                                }).FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
+        }
+
+
+
+        public IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId)
+        {
+            var result =
+                (from app in _dbContext.WApplications.AsNoTracking()
+
+                 join status in _dbContext.WApplicationStatuses.AsNoTracking()
+                         on app.StatusCode equals status.Code
+
+                 join purposes in _dbContext.APurposes.AsNoTracking()
+                     on app.PurposeId equals purposes.Id into purposesLeft
+                 from purposes in purposesLeft.DefaultIfEmpty()
+
+                 where app.UserCitizenId == userId
+                 select new PublicApplicationGridDTO
+                 {
+                     Id = app.Id,
+                     RegistrationNumber = app.RegistrationNumber,
+                     Purpose = app.Purpose,
+                     PurposeTypeName = purposes.Name,
+                     StatusCode = app.StatusCode,
+                     StatusName = status.Name,
+                     CreatedOn = app.CreatedOn,
+                     Email = app.Email,
+                     Version = app.Version,
+                 }).OrderByDescending(x => x.CreatedOn);
+
+            return result;
         }
     }
 }

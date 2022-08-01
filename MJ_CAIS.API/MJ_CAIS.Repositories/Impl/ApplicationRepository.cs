@@ -58,12 +58,19 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
-
-        public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
+        public async Task<AApplication> SelectEntityAsync(string id)
         {
-            return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
-                .Where(x => x.ApplicationId == aId));
+            var result = await this._dbContext.Set<AApplication>()
+                   .FirstOrDefaultAsync(x => x.Id == id);
+            return result;
         }
+
+
+        //public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
+        //{
+        //    return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
+        //        .Where(x => x.ApplicationId == aId));
+        //}
 
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
         {
@@ -87,11 +94,11 @@ namespace MJ_CAIS.Repositories.Impl
 
         }
 
-        public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
-        {
-            return await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
-                .Where(x => x.ApplicationId == aId));
-        }
+        //public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
+        //{
+        //    return await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
+        //        .Where(x => x.ApplicationId == aId));
+        //}
 
         public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
         {
@@ -128,6 +135,18 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-      
+        public async Task<AApplication?> GetApplicationForCertificateGeneration(string id)
+        {
+           return await _dbContext.AApplications
+                .Include(a => a.EgnNavigation)
+                .Include(a => a.LnchNavigation)
+                .Include(a => a.LnNavigation)
+                .Include(a => a.SuidNavigation)
+                .Include(a => a.ApplicationType)
+                .Include(a => a.AStatusHes)
+                .FirstOrDefaultAsync(aa => aa.Id == id);
+        }
+
+
     }
 }

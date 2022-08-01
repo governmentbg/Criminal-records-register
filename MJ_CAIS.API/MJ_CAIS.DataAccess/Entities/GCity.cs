@@ -7,7 +7,10 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GCity()
         {
+            AApplicants = new HashSet<AApplicant>();
             AApplications = new HashSet<AApplication>();
+            AReportApplicationAddrCities = new HashSet<AReportApplication>();
+            AReportApplicationBirthCities = new HashSet<AReportApplication>();
             BBulletins = new HashSet<BBulletin>();
             BOffences = new HashSet<BOffence>();
             Fbbcs = new HashSet<Fbbc>();
@@ -36,7 +39,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCountry? Country { get; set; }
         public virtual GCsAuthority? CsAuthority { get; set; }
         public virtual GBgMunicipality? Municipality { get; set; }
+        public virtual ICollection<AApplicant> AApplicants { get; set; }
         public virtual ICollection<AApplication> AApplications { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationAddrCities { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationBirthCities { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<Fbbc> Fbbcs { get; set; }

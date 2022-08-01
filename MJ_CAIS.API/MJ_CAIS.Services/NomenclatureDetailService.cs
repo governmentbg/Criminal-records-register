@@ -184,9 +184,9 @@ namespace MJ_CAIS.Services
             }
 
             var propertyName = StringHelper.ConvertNameToPascalCase(tableName);
-            var property = dbContext.GetType().GetProperty(propertyName);
-            var dbSet = property.GetValue(dbContext) as IQueryable<IBaseNomenclature>;
-            return dbSet;
+            return _nomenclatureDetailRepository.GetDbSet(propertyName);
         }
+
+     
     }
 }

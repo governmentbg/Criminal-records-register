@@ -8,6 +8,7 @@ namespace MJ_CAIS.DTO.Application
 {
     public class ApplicationDocumentDTO
     {
+        //deprecated
         public string Id { get; set; }
         public string? Name { get; set; }
         public string? Descr { get; set; }

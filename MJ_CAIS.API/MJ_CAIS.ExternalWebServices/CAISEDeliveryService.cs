@@ -39,15 +39,15 @@ namespace MJ_CAIS.ExternalWebServices
         {
 
             var returnValue = -1;
-            var certificate = await dbContext.ACertificates
-                                  .Include(c => c.Doc)
-                                  .ThenInclude(d => d.DocContent)
-                                  .Include(c=>c.Application)
-                                  .Where(x => x.Id == message.CertificateId)
-                                  .FirstOrDefaultAsync();
-
-            var fileContent = certificate.Doc.DocContent.Content;
-
+            ACertificate certificate = await _certificateRepository.GetCertificateWithDocumentContent(message.CertificateId);
+            if (certificate == null) {
+                throw new Exception("Certificate does not exist.");
+            }
+            var fileContent = certificate.Doc?.DocContent?.Content;
+            if (fileContent == null)
+            {
+                throw new Exception("File does not exist.");
+            }
             try
             {
                 var channel = _eDeliveryService.CreateChannel();
@@ -74,17 +74,28 @@ namespace MJ_CAIS.ExternalWebServices
                 message.StackTrace = ex.StackTrace;
                 message.Attempts = (byte?)(message.Attempts + 1);
                 message.HasError = true;
-              
+
             }
             finally
             {
                 message.SentDate = DateTime.Now;
-                dbContext.EEdeliveryMsgs.Update(message);
-                dbContext.SaveChanges();
+                message.EntityState = Common.Enums.EntityStateEnum.Modified;
+                message.ModifiedProperties.Add(nameof(message.SentDate));
+                message.ModifiedProperties.Add(nameof(message.Status));
+                message.ModifiedProperties.Add(nameof(message.Error));
+                message.ModifiedProperties.Add(nameof(message.StackTrace));
+                message.ModifiedProperties.Add(nameof(message.HasError));
+                message.ModifiedProperties.Add(nameof(message.Attempts));
+                message.ModifiedProperties.Add(nameof(message.ReferenceNumber));
+                await _certificateRepository.SaveEntityAsync(message, false);
+               // dbContext.EEdeliveryMsgs.Update(message);
+               // dbContext.SaveChanges();
             }
 
-            return returnValue; 
+            return returnValue;
 
         }
+
+   
     }
 }

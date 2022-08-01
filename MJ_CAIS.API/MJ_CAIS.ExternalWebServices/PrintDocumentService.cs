@@ -23,21 +23,46 @@ namespace MJ_CAIS.ExternalWebServices
             return fileArray;
         }
 
-        public async Task<byte[]> PrintCertificate(string certificateID, string checkUrl, JasperReportsNames reportName)
+        public async Task<byte[]> PrintBulletin(string bulletinID)
         {
-            var inputs = new Dictionary<string, string> { { "certificate_id", certificateID }, { "check_url", checkUrl } };
-            var pathToReport = GetUrlOfCertificateReport(reportName);
+            var inputs = new Dictionary<string, string> { { "bulletin_id", bulletinID } };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Bulletin);
             var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
             return fileArray;
         }
 
-        public async Task<byte[]> PrintReport(string reportId,  JasperReportsNames reportName)
+        public async Task<byte[]> PrintCertificate(string certificateID, string checkUrl)
         {
-            var inputs = new Dictionary<string, string> { { "report_id", reportId }};
-            var pathToReport = GetUrlOfCertificateReport(reportName);
+            var inputs = new Dictionary<string, string> { { "certificate_id", certificateID }, { "check_url", checkUrl } };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Certificate);
             var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
             return fileArray;
         }
+
+        public async Task<byte[]> PrintElectronicCertificate(string certificateID, string checkUrl)
+        {
+            var inputs = new Dictionary<string, string> { { "certificate_id", certificateID }, { "check_url", checkUrl } };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Electronic_certificate);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+        public async Task<byte[]> PrintExternalElectronicCertificate(string certificateID, string checkUrl)
+        {
+            var inputs = new Dictionary<string, string> { { "certificate_id", certificateID }, { "check_url", checkUrl } };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Electronic_external_certificate);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+
+        public async Task<byte[]> PrintReport(string reportId)
+        {
+            var inputs = new Dictionary<string, string> { { "report_id", reportId }};
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Conviction_Report);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+
+       
 
         private string GetUrlOfCertificateReport(JasperReportsNames reportName)
         {

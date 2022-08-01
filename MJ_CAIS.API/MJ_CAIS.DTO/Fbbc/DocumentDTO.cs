@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MJ_CAIS.DTO.Fbbc
 {
     public class FbbcDocumentDTO
-    {
+    {//depricaeted
         public string Id { get; set; }
         public string? Name { get; set; }
         public string? Descr { get; set; }

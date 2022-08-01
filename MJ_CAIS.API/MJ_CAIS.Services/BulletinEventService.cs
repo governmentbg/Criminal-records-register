@@ -37,8 +37,9 @@ namespace MJ_CAIS.Services
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
-            var bulletinEvent = await dbContext.BBulEvents
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
+            var bulletinEvent = await _bulletinEventRepository.SelectAsync(aInDto);
+               // await dbContext.BBulEvents
+               //.FirstOrDefaultAsync(x => x.Id == aInDto);
 
             if (bulletinEvent == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto));
@@ -50,8 +51,8 @@ namespace MJ_CAIS.Services
                 nameof(bulletinEvent.StatusCode),
                 nameof(bulletinEvent.Version),
             };
-
-            await dbContext.SaveChangesAsync();
+            //todo: дали не е saveEntity?!
+            await _bulletinEventRepository.SaveChangesAsync();
         }
 
         /// <summary>
@@ -63,10 +64,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin, string personId)
         {
-            var existingEvents = dbContext.BBulEvents
-                                .AsNoTracking()
-                                .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == BulletinEventConstants.Type.Article2212);
-
+            bool existingEvents = _bulletinEventRepository.GetExistingEvents(currentAttachedBulletin);
             if (existingEvents) return;
 
             var bulletinsQuery = _bulletinEventRepository.GetBulletinsByPersonId(personId);
@@ -80,6 +78,8 @@ namespace MJ_CAIS.Services
             CheckForArticle2212(bulletins, currentAttachedBulletin);
         }
 
+ 
+
         /// <summary>
         /// Check for events
         /// http://tfstl:8080/tfs/DefaultCollection/MJ-CAIS/_workitems/edit/45537
@@ -89,15 +89,17 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId)
         {
-            var existingEvents = dbContext.BBulEvents
-                                .AsNoTracking()
-                                .Where(x => x.BulletinId == currentAttachedBulletin.Id)
-                                .GroupBy(x => x.EventType)
-                                .Select(x => new
-                                {
-                                    Type = x.Key,
-                                    Any = x.Any()
-                                });
+            //var existingEvents = dbContext.BBulEvents
+            //                    .AsNoTracking()
+            //                    .Where(x => x.BulletinId == currentAttachedBulletin.Id)
+            //                    .GroupBy(x => x.EventType)
+            //                    .Select(x => new
+            //                    {
+            //                        Type = x.Key,
+            //                        Any = x.Any()
+            //                    });
+
+            var existingEvents = _bulletinEventRepository.GetExistingEventsByType(currentAttachedBulletin);
 
             currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
 
@@ -203,6 +205,7 @@ namespace MJ_CAIS.Services
 
         private static void AddEventToBulletin(BBulletin currentBulletin, string eventType)
         {
+            //todo: дали да не е в репо - сменя EntityState?!
             currentBulletin.BBulEvents.Add(new BBulEvent
             {
                 BulletinId = currentBulletin.Id,

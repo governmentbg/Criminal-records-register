@@ -11,6 +11,10 @@ namespace MJ_CAIS.DataAccess.Entities
             AApplicationLnNavigations = new HashSet<AApplication>();
             AApplicationLnchNavigations = new HashSet<AApplication>();
             AApplicationSuidNavigations = new HashSet<AApplication>();
+            AReportApplicationEgnNavigations = new HashSet<AReportApplication>();
+            AReportApplicationLnNavigations = new HashSet<AReportApplication>();
+            AReportApplicationLnchNavigations = new HashSet<AReportApplication>();
+            AReportApplicationSuidNavigations = new HashSet<AReportApplication>();
             BBulletinEgnNavigations = new HashSet<BBulletin>();
             BBulletinIdDocNumberNavigations = new HashSet<BBulletin>();
             BBulletinLnNavigations = new HashSet<BBulletin>();
@@ -19,6 +23,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BBulletinSuidNavigations = new HashSet<BBulletin>();
             FbbcPeople = new HashSet<Fbbc>();
             FbbcSuidNavigations = new HashSet<Fbbc>();
+            NInternalRequests = new HashSet<NInternalRequest>();
         }
 
         public string Id { get; set; } = null!;
@@ -39,6 +44,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<AApplication> AApplicationLnNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationLnchNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationSuidNavigations { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationEgnNavigations { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationLnNavigations { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationLnchNavigations { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplicationSuidNavigations { get; set; }
         public virtual ICollection<BBulletin> BBulletinEgnNavigations { get; set; }
         public virtual ICollection<BBulletin> BBulletinIdDocNumberNavigations { get; set; }
         public virtual ICollection<BBulletin> BBulletinLnNavigations { get; set; }
@@ -47,5 +56,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BBulletin> BBulletinSuidNavigations { get; set; }
         public virtual ICollection<Fbbc> FbbcPeople { get; set; }
         public virtual ICollection<Fbbc> FbbcSuidNavigations { get; set; }
+        public virtual ICollection<NInternalRequest> NInternalRequests { get; set; }
     }
 }

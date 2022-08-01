@@ -88,9 +88,10 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
-            var dbContext = _bulletinRepository.GetDbContext();
+            //var dbContext = _bulletinRepository.GetDbContext();
             var authId = _userContext.CsAuthorityId;
-            var auth = await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
+            var auth = await _bulletinRepository.SingleOrDefaultAsync<GCsAuthority>(x => x.Id == authId);
+                //await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
             result.CsAuthorityName = auth?.Name;
             var person = await _managePersonService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
@@ -136,8 +137,9 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task UpdateAsync(BulletinEditDTO aInDto)
         {
-            var bulletinDb = await dbContext.BBulletins.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == aInDto.Id);
+            var bulletinDb = await _bulletinRepository.SingleOrDefaultAsync<BBulletin>(x => x.Id == aInDto.Id);
+                //await dbContext.BBulletins.AsNoTracking()
+                //.FirstOrDefaultAsync(x => x.Id == aInDto.Id);
 
             if (bulletinDb == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto.Id));
@@ -198,10 +200,7 @@ namespace MJ_CAIS.Services
         /// <exception cref="ArgumentException"></exception>
         public async Task ChangeStatusAsync(string bulletinId, string statusId)
         {
-            var bulletin = await dbContext.BBulletins
-                .Include(x => x.BPersNationalities)
-                    .ThenInclude(x => x.Country)
-                .FirstOrDefaultAsync(x => x.Id == bulletinId);
+            BBulletin? bulletin = await _bulletinRepository.GetBulletinData(bulletinId);
 
             if (bulletin == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
@@ -221,7 +220,7 @@ namespace MJ_CAIS.Services
                 bulletin.Locked = true;
             }
 
-            bulletin.StatusId = statusId;
+            bulletin.StatusId = statusId;//todo: Дали да не е в репо, променя стейт
             bulletin.EntityState = EntityStateEnum.Modified;
             bulletin.ModifiedProperties = new List<string>
             {
@@ -261,6 +260,8 @@ namespace MJ_CAIS.Services
                 throw;
             }
         }
+
+ 
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
@@ -331,39 +332,20 @@ namespace MJ_CAIS.Services
                     EntityState = EntityStateEnum.Added
                 };
 
-                dbContext.Add(bullEvent);
+                //dbContext.Add(bullEvent);
             }
-
-            dbContext.Add(document);
-            dbContext.Add(documentContent);
+            document.EntityState = EntityStateEnum.Added;
+            documentContent.EntityState = EntityStateEnum.Added;
+            // dbContext.Add(document);
+            // dbContext.Add(documentContent);
+            //todo: how to add entities?
 
             await _bulletinRepository.SaveChangesAsync();
         }
 
-        public async Task DeleteDocumentAsync(string documentId)
-        {
-            var document = await _bulletinRepository.SelectDocumentAsync(documentId);
-            if (document == null)
-                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.documentDoesNotExist, documentId));
+     
 
-            document.EntityState = EntityStateEnum.Deleted;
-            if (document.DocContent != null)
-            {
-                document.DocContent.EntityState = EntityStateEnum.Deleted;
-            }
-
-            await dbContext.SaveEntityAsync(document, true);
-        }
-
-        public async Task<DocumentDTO> GetDocumentContentAsync(string documentId)
-        {
-            var document = await _bulletinRepository.SelectDocumentAsync(documentId);
-            if (document == null) return null;
-
-            var documentDTO = mapper.Map<DocumentDTO>(document);
-            documentDTO.DocumentContent = document.DocContent.Content;
-            return documentDTO;
-        }
+   
 
         public async Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId)
         {
@@ -403,7 +385,7 @@ namespace MJ_CAIS.Services
             }
 
             var passedNavigationProperties = new List<IBaseIdEntity>();
-            dbContext.ApplyChanges(entity, passedNavigationProperties, true);
+            _bulletinRepository.ApplyChanges(entity, passedNavigationProperties, true);
         }
 
         private void CheckForBulletinStatus(BBulletin entity, string oldStatus)
@@ -509,10 +491,10 @@ namespace MJ_CAIS.Services
                     bulletin.SuidId = personIdObj.Id;
                 }
 
-                dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+                _bulletinRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
             }
 
-            dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
+            _bulletinRepository.ApplyChanges(bulletin, new List<IBaseIdEntity>());
 
             return person.Id;
         }
@@ -561,7 +543,7 @@ namespace MJ_CAIS.Services
                 Locked = newStatus != BulletinConstants.Status.NewOffice
             };
 
-            dbContext.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
+            _bulletinRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
             return true;
         }
 
@@ -573,7 +555,7 @@ namespace MJ_CAIS.Services
                     .Where(x => x.Type == TransactionTypesEnum.DELETE)
                     .Select(x => x.Id).ToList();
 
-            var sanctions = await GetDeletedSanctionsAsync(deletedSanctionIds);
+            var sanctions = await _bulletinRepository.GetDeletedSanctionsAsync(deletedSanctionIds);
 
             // added or updated entities
             foreach (var currentTransaction in aInDto.SanctionsTransactions.Where(x => x.Type != TransactionTypesEnum.DELETE))
@@ -596,28 +578,7 @@ namespace MJ_CAIS.Services
             entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Person.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
         }
 
-        private async Task<List<BSanction>> GetDeletedSanctionsAsync(List<string> deletedSanctionIds)
-        {
-            if (deletedSanctionIds.Count == 0) return new List<BSanction>();
-
-            var deletedSanctionAndItsProbations = await dbContext.BSanctions.AsNoTracking()
-                      .Where(x => deletedSanctionIds.Contains(x.Id))
-                      .Include(x => x.BProbations)
-                      .Select(x => new BSanction
-                      {
-                          Id = x.Id,
-                          EntityState = EntityStateEnum.Deleted,
-                          BProbations = x.BProbations.Select(x => new BProbation
-                          {
-                              Id = x.Id,
-                              EntityState = EntityStateEnum.Deleted,
-                              Version = x.Version
-                          }).ToArray(),
-                          Version = x.Version
-                      }).ToListAsync();
-
-            return deletedSanctionAndItsProbations;
-        }
+       
 
         private void UpdateModifiedProperties(BaseEntity entityToSave, string nameOfProp)
         {
@@ -647,7 +608,7 @@ namespace MJ_CAIS.Services
             if (skipEcris) return;
 
             var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id).Where(x => x != BG);
-            var isEuCitizen = await dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));
+            bool isEuCitizen = await _bulletinRepository.IsEuCitizen(personNationalities);
 
             if (isEuCitizen)
             {
@@ -655,12 +616,17 @@ namespace MJ_CAIS.Services
             }
 
             // todo: Except 
-            var createEcrisTcn = personNationalities.Except(dbContext.EEcrisAuthorities.AsNoTracking().Select(x => x.CountryId)).Any();
+            var createEcrisTcn = personNationalities.Except(
+               (await _bulletinRepository.FindAsync<EEcrisAuthority>(x => 1 == 1))
+                //dbContext.EEcrisAuthorities.AsNoTracking()
+                .Select(x => x.CountryId)).Any();
             if (createEcrisTcn)
             {
                 bulletin.TcnCitizen = true;
             }
         }
+
+     
 
         private async Task SendMessageToEcrisAsync(bool? isEuCitizen, bool? isTcnCitizen, string bulletinId, string bOldStatus, string bNewStatus)
         {

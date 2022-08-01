@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Documents;
 using MJ_CAIS.DTO.Fbbc;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
@@ -15,10 +16,12 @@ namespace MJ_CAIS.Web.Controllers
     public class FbbcsController : BaseApiCrudController<FbbcDTO, FbbcDTO, FbbcGridDTO, Fbbc, string>
     {
         private readonly IFbbcService _fbbcService;
+        private readonly IDocumentService _documentService;
 
-        public FbbcsController(IFbbcService fbbcService) : base(fbbcService)
+        public FbbcsController(IFbbcService fbbcService, IDocumentService documentService) : base(fbbcService)
         {
             _fbbcService = fbbcService;
+            _documentService = documentService;
         }
 
         [HttpGet("")]
@@ -77,15 +80,16 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/documents")]
         public async Task<IActionResult> GetDocuments(string aId)
         {
-            var result = await this._fbbcService.GetDocumentsByFbbcIdAsync(aId);
+            var result = await this._documentService.GetDocumentsByFbbcIdAsync(aId);
             return Ok(result);
         }
 
         [HttpPost("{aId}/documents")]
         [Authorize(Roles = RoleConstants.CentralAuth)]
-        public async Task<IActionResult> PostDocument(string aId, [FromBody] FbbcDocumentDTO aInDto)
+       // public async Task<IActionResult> PostDocument(string aId, [FromBody] FbbcDocumentDTO aInDto)
+        public async Task<IActionResult> PostDocument(string aId, [FromBody] DocumentDTO aInDto)
         {
-            await this._fbbcService.InsertFbbcDocumentAsync(aId, aInDto);
+            await this._documentService.InsertDocumentAsync(null,null,aId, aInDto);
             return Ok();
         }
 
@@ -93,14 +97,14 @@ namespace MJ_CAIS.Web.Controllers
         [Authorize(Roles = RoleConstants.CentralAuth)]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
-            await this._fbbcService.DeleteDocumentAsync(documentId);
+            await this._documentService.DeleteDocumentAsync(documentId);
             return Ok();
         }
 
         [HttpGet("{aId}/documents-download/{documentId}")]
         public async Task<IActionResult> GetContents(string documentId)
         {
-            var result = await this._fbbcService.GetDocumentContentAsync(documentId);
+            var result = await this._documentService.GetDocumentContentAsync(documentId);
             if (result == null) return NotFound();
 
             var content = result.DocumentContent;

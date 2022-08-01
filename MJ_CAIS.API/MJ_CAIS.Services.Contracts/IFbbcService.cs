@@ -10,10 +10,9 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<FbbcGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<FbbcGridDTO> aQueryOptions, string statusId);
         Task<IQueryable<EcrisMessageGridDTO>> GetEcrisMessagesByFbbcIdAsync(string aId);
-        Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId);
-        Task InsertFbbcDocumentAsync(string fbbcId, FbbcDocumentDTO aInDto);
-        Task DeleteDocumentAsync(string documentId);
-        Task<FbbcDocumentDTO> GetDocumentContentAsync(string documentId);
+        //Task<IQueryable<FbbcDocumentDTO>> GetDocumentsByFbbcIdAsync(string aId);
+          // Task DeleteDocumentAsync(string documentId);
+       // Task<FbbcDocumentDTO> GetDocumentContentAsync(string documentId);
         Task ChangeStatusAsync(string aInDto, string statusId);
         Task<FbbcDTO> SelectWithPersonDataAsync(string personId);
     }

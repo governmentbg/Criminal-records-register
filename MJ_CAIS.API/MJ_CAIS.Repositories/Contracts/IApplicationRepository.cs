@@ -9,10 +9,13 @@ namespace MJ_CAIS.Repositories.Contracts
     public interface IApplicationRepository : IBaseAsyncRepository<AApplication, string, CaisDbContext>
     {
         IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority();
-        Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId);
+        //Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId);
         Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId);
-        Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId);
+       // Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId);
         Task<IQueryable<ACertificate>> SelectAllCertificateAsync();
         IQueryable<ObjectStatusCountDTO> GetForJudgeCountByCurrentAuthority();
+
+        Task<AApplication> SelectEntityAsync(string id);
+        Task<AApplication?> GetApplicationForCertificateGeneration(string id);
     }
 }

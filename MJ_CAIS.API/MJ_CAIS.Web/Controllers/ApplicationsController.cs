@@ -6,6 +6,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.Documents;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
@@ -18,17 +19,19 @@ namespace MJ_CAIS.Web.Controllers
     public class ApplicationsController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
+        private readonly IDocumentService _documentService;
         private readonly IUserContext _userContext;
         private readonly ISearchByIdentifierService _searchByIdentifierService;
         private readonly IPrintDocumentService _printDocumentService;
 
-        public ApplicationsController(IApplicationService applicationService, IUserContext userContext, ISearchByIdentifierService searchByIdentifierService, IPrintDocumentService printDocumentService)
+        public ApplicationsController(IApplicationService applicationService, IUserContext userContext, ISearchByIdentifierService searchByIdentifierService, IPrintDocumentService printDocumentService, IDocumentService documentService)
             : base(applicationService)
         {
             _applicationService = applicationService;
             _userContext = userContext;
             _searchByIdentifierService = searchByIdentifierService;
             _printDocumentService = printDocumentService;
+            _documentService = documentService;
         }
 
         [HttpGet("")]
@@ -147,15 +150,18 @@ namespace MJ_CAIS.Web.Controllers
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetDocuments(string aId)
         {
-            var result = await this._applicationService.GetDocumentsByApplicationIdAsync(aId);
+            var result = await this._documentService.GetDocumentsByApplicationIdAsync(aId);
             return Ok(result);
         }
 
         [HttpPost("{aId}/documents")]
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
-        public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
+       // public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
+         public async Task<IActionResult> PostDocument(string aId, [FromBody] DocumentDTO aInDto)
         {
-            await this._applicationService.InsertApplicationDocumentAsync(aId, aInDto);
+            //await this._documentService.InsertApplicationDocumentAsync(aId, aInDto);
+            
+            await this._documentService.InsertDocumentAsync(aId,null,null, aInDto);
             return Ok();
         }
 
@@ -163,7 +169,7 @@ namespace MJ_CAIS.Web.Controllers
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
-            await this._applicationService.DeleteDocumentAsync(documentId);
+            await this._documentService.DeleteDocumentAsync(documentId);
             return Ok();
         }
 
@@ -171,7 +177,7 @@ namespace MJ_CAIS.Web.Controllers
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetContents(string documentId)
         {
-            var result = await this._applicationService.GetDocumentContentAsync(documentId);
+            var result = await this._documentService.GetDocumentContentAsync(documentId);
             if (result == null) return NotFound();
 
             var content = result.DocumentContent;

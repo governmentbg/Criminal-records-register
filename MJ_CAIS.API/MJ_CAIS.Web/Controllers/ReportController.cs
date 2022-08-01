@@ -6,6 +6,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
+using MJ_CAIS.DTO.Documents;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
@@ -17,17 +18,20 @@ namespace MJ_CAIS.Web.Controllers
     public class ReportController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>
     {
         private readonly IApplicationService _applicationService;
+        private readonly IDocumentService _documentService;
         private readonly IUserContext _userContext;
         private readonly IReportService _reportService;
         private readonly IReportGenerationService _reportGenerationService;
 
-        public ReportController(IApplicationService applicationService, IUserContext userContext, IReportService reportService, IReportGenerationService reportGenerationService)
+
+        public ReportController(IApplicationService applicationService, IUserContext userContext, IReportService reportService, IReportGenerationService reportGenerationService, IDocumentService documentService)
             : base(applicationService)
         {
             _applicationService = applicationService;
             _userContext = userContext;
             _reportService = reportService;
             _reportGenerationService = reportGenerationService;
+            _documentService = documentService;
         }
 
         [HttpGet("")]
@@ -90,28 +94,29 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/documents")]
         public async Task<IActionResult> GetDocuments(string aId)
         {
-            var result = await this._applicationService.GetDocumentsByApplicationIdAsync(aId);
+            var result = await this._documentService.GetDocumentsByApplicationIdAsync(aId);
             return Ok(result);
         }
 
         [HttpPost("{aId}/documents")]
-        public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
+        //public async Task<IActionResult> PostDocument(string aId, [FromBody] ApplicationDocumentDTO aInDto)
+             public async Task<IActionResult> PostDocument(string aId, [FromBody] DocumentDTO aInDto)
         {
-            await this._applicationService.InsertApplicationDocumentAsync(aId, aInDto);
+            await this._documentService.InsertDocumentAsync(aId,null,null, aInDto);
             return Ok();
         }
 
         [HttpDelete("{aId}/documents/{documentId}")]
         public async Task<IActionResult> DeleteDocument(string documentId)
         {
-            await this._applicationService.DeleteDocumentAsync(documentId);
+            await this._documentService.DeleteDocumentAsync(documentId);
             return Ok();
         }
 
         [HttpGet("{aId}/documents-download/{documentId}")]
         public async Task<IActionResult> GetContents(string documentId)
         {
-            var result = await this._applicationService.GetDocumentContentAsync(documentId);
+            var result = await this._documentService.GetDocumentContentAsync(documentId);
             if (result == null) return NotFound();
 
             var content = result.DocumentContent;

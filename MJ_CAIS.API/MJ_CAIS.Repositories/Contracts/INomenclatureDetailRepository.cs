@@ -15,7 +15,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<FbbcSanctType> GetAllFbbcSanctTypes();
 
-        IQueryable<BReqStatus> GetInternalRequestStatuses();
+        IQueryable<NReqStatus> GetInternalRequestStatuses();
 
         IQueryable<GCountry> GetCountries();
 
@@ -36,5 +36,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<GDecidingAuthority>> GetDecidingAuthoritiesForBulletinsAsync();
 
         Task<IQueryable<GUser>> GetGUsersAsync();
+        IQueryable<IBaseNomenclature> GetDbSet(string propertyName);
     }
 }

@@ -397,7 +397,7 @@ namespace MJ_CAIS.Services
                 Locked = bulletin.Locked
             };
 
-            dbContext.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
+            _rehabilitationRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
             bulletin.StatusId = status;
         }
 

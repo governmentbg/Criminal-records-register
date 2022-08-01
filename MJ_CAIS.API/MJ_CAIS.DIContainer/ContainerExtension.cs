@@ -40,6 +40,7 @@ namespace MJ_CAIS.DIContainer
             var interfaceTypesECRIS = typeof(INotificationService).Assembly.GetInterfaceTypes("Service");
             AddTransientTypes(services, servicesTypesECRIS, interfaceTypesECRIS);
 
+      
             services.AddJasperReporting();
             services.AddSingleton<IPdfSigner, PdfSigner>();
             services.AddScoped<IPdfSignatureValidator, PdfSignatureValidator>();

@@ -5,5 +5,6 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IRegisterTypeRepository : IBaseAsyncRepository<DRegisterType, string, CaisDbContext>
     {
+        Task<string> GetRegisterNumber(string authorityID, string registerCode);
     }
 }

@@ -13,7 +13,6 @@ namespace MJ_CAIS.DataAccess.Entities
             BBullPersAliases = new HashSet<BBullPersAlias>();
             BBulletinStatusHes = new HashSet<BBulletinStatusH>();
             BDecisions = new HashSet<BDecision>();
-            BInternalRequests = new HashSet<BInternalRequest>();
             BOffences = new HashSet<BOffence>();
             BPersNationalities = new HashSet<BPersNationality>();
             BSanctions = new HashSet<BSanction>();
@@ -22,6 +21,7 @@ namespace MJ_CAIS.DataAccess.Entities
             EEcrisTcns = new HashSet<EEcrisTcn>();
             EIsinData = new HashSet<EIsinDatum>();
             EWebRequests = new HashSet<EWebRequest>();
+            NInternalReqBulletins = new HashSet<NInternalReqBulletin>();
         }
 
         public string Id { get; set; } = null!;
@@ -108,6 +108,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? PersonIdCscId { get; set; }
         public string? MigrationBulletinId { get; set; }
         public bool? BgCitizen { get; set; }
+        public DateTime? ReviewDate { get; set; }
+        public bool? IsAutoRehabilitation { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }
@@ -131,7 +133,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BBullPersAlias> BBullPersAliases { get; set; }
         public virtual ICollection<BBulletinStatusH> BBulletinStatusHes { get; set; }
         public virtual ICollection<BDecision> BDecisions { get; set; }
-        public virtual ICollection<BInternalRequest> BInternalRequests { get; set; }
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<BPersNationality> BPersNationalities { get; set; }
         public virtual ICollection<BSanction> BSanctions { get; set; }
@@ -140,5 +141,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<EEcrisTcn> EEcrisTcns { get; set; }
         public virtual ICollection<EIsinDatum> EIsinData { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
+        public virtual ICollection<NInternalReqBulletin> NInternalReqBulletins { get; set; }
     }
 }

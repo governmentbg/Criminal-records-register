@@ -44,8 +44,9 @@ namespace MJ_CAIS.Services
 
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
-            var ecrisTcn = await dbContext.EEcrisTcns
-               .FirstOrDefaultAsync(x => x.Id == aInDto);
+            var ecrisTcn = await _ecrisTcnRepository.SelectAsync(aInDto);
+                // await dbContext.EEcrisTcns
+                //.FirstOrDefaultAsync(x => x.Id == aInDto);
 
             if (ecrisTcn == null)
             {
@@ -53,7 +54,7 @@ namespace MJ_CAIS.Services
             }
 
             ecrisTcn.Status = statusId;
-            await dbContext.SaveChangesAsync();
+            await _ecrisTcnRepository.SaveChangesAsync();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace MJ_CAIS.Services
             var entity = mapper.MapToEntity<UserExternalDTO, GUsersExt>(aInDto, isAdded: isAdded);
             if (isAdded)
             {
-                this.TransformDataOnInsert(entity);
+                this.TransformDataOnInsertAsync(entity);
             }
 
             await this.SaveEntityAsync(entity);
@@ -40,14 +40,16 @@ namespace MJ_CAIS.Services
 
         public async Task<GUsersExt> AuthenticateExternalUserAsync(UserExternalDTO userDTO)
         {
-            var entity = await dbContext.GUsersExts.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Egn == userDTO.Egn);
+            var entity = await _userExternalRepository.SingleOrDefaultAsync<GUsersExt>(x => x.Egn == userDTO.Egn);
+            //await dbContext.GUsersExts.AsNoTracking()
+            //.FirstOrDefaultAsync(x => x.Egn == userDTO.Egn);
 
             if (entity == null)
             {
                 entity = mapper.MapToEntity<UserExternalDTO, GUsersExt>(userDTO, true);
                 entity.Id = BaseEntity.GenerateNewId();
-                await dbContext.SaveEntityAsync(entity);
+                entity.EntityState = Common.Enums.EntityStateEnum.Added;
+                await _userExternalRepository.SaveEntityAsync(entity,false);
             }
 
             return entity;

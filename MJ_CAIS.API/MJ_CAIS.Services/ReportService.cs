@@ -45,10 +45,11 @@ namespace MJ_CAIS.Services
             entity.RegistrationNumber = regNumber;
 
             await UpdateTransactionsAsync(aInDto, entity);
-            await dbContext.SaveEntityAsync(entity, true);
+            await _reportRepository.SaveEntityAsync(entity, true);
 
 
-            dbContext.Entry(entity).State = EntityState.Detached;
+            //dbContext.Entry(entity).State = EntityState.Detached;
+            //todo: защо се прави това тук, не се ли оправя версията в бейс обект
             entity.Version = 1;
             entity.EntityState = EntityStateEnum.Modified;
             entity.ModifiedProperties = new List<string> { nameof(entity.Version) };
@@ -63,6 +64,10 @@ namespace MJ_CAIS.Services
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {
+                if (entity.ModifiedProperties == null)
+                {
+                    entity.ModifiedProperties = new List<string>();
+                }
                 if (personIdObj.PidTypeId == PidType.Egn)
                 {
                     entity.ModifiedProperties.Add(nameof(entity.Egn));
@@ -95,11 +100,11 @@ namespace MJ_CAIS.Services
                     entity.SuidNavigation = personIdObj;
                 }
 
-                dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+                _reportRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
             }
 
-            dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
-            await dbContext.SaveChangesAsync();
+            _reportRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
+            await _reportRepository.SaveChangesAsync();
         }
 
 
@@ -118,7 +123,9 @@ namespace MJ_CAIS.Services
         {
 
 
-            var statuses = await Task.FromResult(dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToList());
+            var statuses = await (await _reportRepository.FindAsync<AApplicationStatus>(a =>
+            a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication)).ToListAsync();
+            //await Task.FromResult(dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToList());
             if (statuses.Count != 1)
             {
                 throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
@@ -126,8 +133,10 @@ namespace MJ_CAIS.Services
 
 
             }
-            var systemParameters = await Task.FromResult(dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
-            ).ToList());
+            var systemParameters = await (await _reportRepository.FindAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS)).ToListAsync();
+
+            // await Task.FromResult(dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+            //).ToList());
             if (systemParameters.Count != 1)
             {
                 throw new Exception($"Application statuses do not exist. Statuses: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
@@ -143,23 +152,13 @@ namespace MJ_CAIS.Services
 
             var applicationStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
 
-
-
-
-            var application = await dbContext.AApplications
-            .Include(a => a.EgnNavigation)
-            .Include(a => a.LnchNavigation)
-            .Include(a => a.LnNavigation)
-            .Include(a => a.SuidNavigation)
-            .Include(a => a.ApplicationType)
-            .Include(x => x.AReports)
-            .FirstOrDefaultAsync(aa => aa.Id == applicationID);
-
-            var reportDb = application.AReports.FirstOrDefault();
+            AApplication? application = await _reportRepository.GetApplicationData(applicationID);
+            //todo: change
+            var reportDb = new AReport();//application.AReports.FirstOrDefault();
             if (reportDb != null) return reportDb;
 
             var report = await GenerateReportFromApplication(application, applicationStatus, (int)certificateValidityMonths);
-            await dbContext.SaveChangesAsync();
+            await _reportRepository.SaveChangesAsync();
 
 
 
@@ -167,15 +166,11 @@ namespace MJ_CAIS.Services
 
         }
 
+   
 
         public async Task<DDocContent> GetReportContent(string reportID)
         {
-            var content = await dbContext.AReports.Where(x => x.Id == reportID && x.Doc != null).Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
-            //if (content == null)
-            //{
-            // throw new Exception("Certificate does not exist.");
-            //}
-            return content;
+           return await _reportRepository.GetReportContent(reportID);
         }
 
 
@@ -210,24 +205,18 @@ namespace MJ_CAIS.Services
 
             AReport rep = new AReport();
             rep.Id = BaseEntity.GenerateNewId();
-            rep.ApplicationId = application.Id;
+            rep.EntityState = EntityStateEnum.Added;
+            //todo: change
+            //rep.ApplicationId = application.Id;
             rep.RegistrationNumber = await _registerTypeService.GetRegisterNumberForReport(application.CsAuthorityId);
             rep.ValidFrom = DateTime.Now;
             rep.ValidTo = DateTime.Now.AddMonths(validityMonths);
 
             if (pids.Count > 0)
             {
-                var bulletins = await dbContext.BBulletins
-                    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                                                                    (pids.Contains(b.EgnId) ||
-                                                                     pids.Contains(b.LnchId) ||
-                                                                     pids.Contains(b.LnId) ||
-                                                                     pids.Contains(b.IdDocNumberId) ||
-                                                                     pids.Contains(b.SuidId)))
-                    //&& b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId)))
-                    .Select(b => new { b.Id, b.DecisionDate }).Distinct().ToListAsync();
+                var bulletins = await _reportRepository.GetBulletinesPerPerson(pids);
 
-                if (bulletins.Count > 0)
+                if (bulletins.Count() > 0)
                 {
                     rep.ARepBulletins = bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
                     {
@@ -238,7 +227,8 @@ namespace MJ_CAIS.Services
                             BulletinId = b.Id,
                             //Bulletin = b,
                             ReportId = rep.Id,
-                            Report = rep
+                            Report = rep,
+                            EntityState = EntityStateEnum.Added
 
                         };
                     }).ToList();
@@ -246,14 +236,17 @@ namespace MJ_CAIS.Services
                 }
             }
             //_applicationService.SetApplicationStatus(application, applicationStatus, "Създаване на справка");
+            //todo: change
+            //application.AReports.Add(rep);
+            // dbContext.AReports.Add(rep);
+            //dbContext.ARepBulletins.AddRange(rep.ARepBulletins);
+            _reportRepository.ApplyChanges(rep, rep.ARepBulletins.ToList<IBaseIdEntity>() , true);
 
-            application.AReports.Add(rep);
-            dbContext.AReports.Add(rep);
-            dbContext.ARepBulletins.AddRange(rep.ARepBulletins);
-            dbContext.AApplications.Update(application);
+            //dbContext.AApplications.Update(application);
 
             return rep;
         }
 
+ 
     }
 }

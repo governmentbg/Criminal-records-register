@@ -87,16 +87,28 @@ namespace MJ_CAIS.DataAccess
                 base.SaveChanges();
 
                 dbTransaction.Commit();
+                //туй го добавям, щото става голямо объркване със State И EntityState.
+                //След SaveChanges State=Unchanged, докато EntityState остава такъв, каквъто е бил преди SaveChanges().
+                //В някои случаи това е ГОЛЯМ проблем
+                //Трябва да се види, дали няма нужда и при Exception да се прави нещо с тези EntityState-ове
+                foreach (var dbEntityEntry in this.ChangeTracker.Entries())
+                {
+                    if ((dbEntityEntry.Entity is BaseEntity) && ((BaseEntity)dbEntityEntry.Entity).EntityState != Common.Enums.EntityStateEnum.Unchanged)
+                    {
+                        ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
+                    }
+                }
+
                 return result;
             }
             catch (Exception ex)
             {
-                //dbTransaction.Rollback();
+                dbTransaction?.Rollback();
                 throw;
             }
             finally
             {
-                //dbTransaction.Dispose();
+                dbTransaction.Dispose();
             }
         }
 
@@ -116,7 +128,18 @@ namespace MJ_CAIS.DataAccess
 
                 this.UpdateVersions(trackedEntities);
                 await base.SaveChangesAsync(cancellationToken);
-
+               
+                //туй го добавям, щото става голямо объркване със State И EntityState.
+                //След SaveChanges State=Unchanged, докато EntityState остава такъв, каквъто е бил преди SaveChanges().
+                //В някои случаи това е ГОЛЯМ проблем
+                //Трябва да се види, дали няма нужда и при Exception да се прави нещо с тези EntityState-ове
+                foreach (var dbEntityEntry in this.ChangeTracker.Entries())
+                {
+                    if ((dbEntityEntry.Entity is BaseEntity) && ((BaseEntity)dbEntityEntry.Entity).EntityState !=  Common.Enums.EntityStateEnum.Unchanged)
+                    {
+                        ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
+                    }
+                }
                 await dbTransaction.CommitAsync(cancellationToken);
                 return result;
             }

@@ -11,18 +11,18 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public InternalRequestsProfile()
         {
-            CreateMap<BInternalRequest, InternalRequestGridDTO>()
-               .ForMember(d => d.BulletinNumber, opt => opt.MapFrom(src => src.Bulletin.RegistrationNumber))
-               .ForMember(d => d.ReqStatus, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
-               .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Bulletin.Firstname))
-               .ForMember(d => d.SurName, opt => opt.MapFrom(src => src.Bulletin.Surname))
-               .ForMember(d => d.FamilyName, opt => opt.MapFrom(src => src.Bulletin.Familyname))
-               .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Bulletin.Id));
+            //CreateMap<BInternalRequest, InternalRequestGridDTO>()
+            //   .ForMember(d => d.BulletinNumber, opt => opt.MapFrom(src => src.Bulletin.RegistrationNumber))
+            //   .ForMember(d => d.ReqStatus, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
+            //   .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Bulletin.Firstname))
+            //   .ForMember(d => d.SurName, opt => opt.MapFrom(src => src.Bulletin.Surname))
+            //   .ForMember(d => d.FamilyName, opt => opt.MapFrom(src => src.Bulletin.Familyname))
+            //   .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Bulletin.Id));
 
-            CreateMap<BInternalRequest, InternalRequestDTO>()
-             .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
-             .ForMember(d => d.BulletinVersion, opt => opt.MapFrom(src => src.Bulletin.Version))
-             .ForMember(d => d.BulletinStatusId, opt => opt.MapFrom(src => src.Bulletin.StatusId));
+            //CreateMap<BInternalRequest, InternalRequestDTO>()
+            // .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
+            // .ForMember(d => d.BulletinVersion, opt => opt.MapFrom(src => src.Bulletin.Version))
+            // .ForMember(d => d.BulletinStatusId, opt => opt.MapFrom(src => src.Bulletin.StatusId));
 
             CreateMap<BBulletin, BulletinPersonInfoModelDTO>()
                 .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Id))
@@ -42,7 +42,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                            src.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
                            BulletinResources.Unspecified));
                     
-            CreateMap<InternalRequestDTO, BInternalRequest>();
+            //CreateMap<InternalRequestDTO, BInternalRequest>();
         }
     }
 }

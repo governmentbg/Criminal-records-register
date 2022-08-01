@@ -81,7 +81,7 @@ namespace MJ_CAIS.Services
 
         public async Task<PersonIdentifierSearchResponseType> PersonIdentifierSearchAsync(PersonIdentifierSearchExtendedRequestType value)
         {
-            var dbContext = _personRepository.GetDbContext();
+            //var dbContext = _personRepository.GetDbContext();
 
             var firstname = value.PersonIdentifierSearchRequest.Firstame?.ToUpper();
             var surname = value.PersonIdentifierSearchRequest.Surname?.ToUpper();
@@ -95,30 +95,9 @@ namespace MJ_CAIS.Services
             var birthdateTo = birthdateFrom.AddMonths(1).AddDays(-1);
             var birthdateYear = birthdate.Year;
 
-            var personIds =
-                (
-                from ph in dbContext.PPersonHs.Include( p => p.BirthCountry).Include(p => p.BirthCity)
-                join phids in dbContext.PPersonIdsHes on ph.Id equals phids.PersonHId
-                join pids in dbContext.PPersonIds on new { phids.Pid, phids.PidTypeId } equals new { pids.Pid, pids.PidTypeId }
-               where (string.IsNullOrEmpty(firstname) || ph.Firstname.ToUpper().Contains(firstname)) &&
-                     (string.IsNullOrEmpty(surname) || ph.Surname.ToUpper().Contains(surname)) &&
-                     (string.IsNullOrEmpty(familyname) || ph.Familyname.ToUpper().Contains(familyname)) &&
-                     (string.IsNullOrEmpty(fullname) || ph.Fullname.ToUpper().Contains(fullname)) &&
-                     (string.IsNullOrEmpty(birthCountry) || ph.BirthCountry.Name.ToUpper().Contains(birthCountry)) &&
-                     (string.IsNullOrEmpty(birthplace) || ph.BirthCity.Name.ToUpper().Contains(birthplace)) &&
-                     (
-                        (!string.IsNullOrEmpty(birthDatePrec) && birthDatePrec.Equals("YM") && ph.BirthDate >= birthdateFrom && ph.BirthDate <= birthdateTo) ||
-                        (!string.IsNullOrEmpty(birthDatePrec) && birthDatePrec.Equals("Y") && ph.BirthDate.Value.Year == birthdateYear) ||
-                        ph.BirthDate.Equals(birthdate)
-                    )
+            IQueryable<string> personIds = _personRepository.GetPersonIDsByPersonData( firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname, birthdateFrom, birthdateTo, birthdateYear);
 
-                select pids.PersonId
-                ).Distinct().Take(100);
-
-            var res = await 
-                (from p in dbContext.PPeople.Include(p => p.BirthCity).Include(p => p.BirthCountry).Include(p => p.PPersonIds).ThenInclude(pid => pid.PidType)
-                where personIds.Contains(p.Id)
-                select p).ToListAsync();
+            List<PPerson> res = await _personRepository.GetPersonByID( personIds);
 
             var result = _mapper.Map<List<PPerson>, PersonIdentifierSearchResponseType>(res);
 
@@ -126,6 +105,8 @@ namespace MJ_CAIS.Services
             result.ReportDate = DateTime.Now;
             return result;
         }
+
+     
 
         public static string ApplyTransformation(string xmlString, string xslt)
         {

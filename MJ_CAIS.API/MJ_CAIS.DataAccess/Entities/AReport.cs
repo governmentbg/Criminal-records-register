@@ -12,19 +12,6 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public string Id { get; set; } = null!;
         public string? RegistrationNumber { get; set; }
-        public string? CServiceUri { get; set; }
-        public string? CServiceType { get; set; }
-        public string? CEmplId { get; set; }
-        public string? CEmpNames { get; set; }
-        public string? CEmpAddId { get; set; }
-        public string? CEmpPos { get; set; }
-        public string? CRespPersId { get; set; }
-        public string? CLawReason { get; set; }
-        public string? CRemark { get; set; }
-        public string? CAdministrationOid { get; set; }
-        public string? CAdministrationName { get; set; }
-        public string? Pid { get; set; }
-        public string? PidType { get; set; }
         public string? FirstSignerId { get; set; }
         public string? SecondSignerId { get; set; }
         public DateTime? ValidFrom { get; set; }
@@ -33,11 +20,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? ApiServiceCallId { get; set; }
         public string? DocId { get; set; }
-        public string? ApplicationId { get; set; }
+        public string? StatusCode { get; set; }
+        public string ARepApplId { get; set; } = null!;
 
-        public virtual AApplication? Application { get; set; }
+        public virtual AReportApplication ARepAppl { get; set; } = null!;
         public virtual DDocument? Doc { get; set; }
         public virtual GUser? FirstSigner { get; set; }
         public virtual GUser? SecondSigner { get; set; }

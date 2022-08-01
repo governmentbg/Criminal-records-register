@@ -7,6 +7,8 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GBgMunicipality()
         {
+            AApplicants = new HashSet<AApplicant>();
+            AReportApplications = new HashSet<AReportApplication>();
             GCities = new HashSet<GCity>();
         }
 
@@ -24,6 +26,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public virtual GBgDistrict? District { get; set; }
+        public virtual ICollection<AApplicant> AApplicants { get; set; }
+        public virtual ICollection<AReportApplication> AReportApplications { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
     }
 }

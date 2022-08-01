@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BReqStatus
+    public partial class NReqStatus
     {
-        public BReqStatus()
+        public NReqStatus()
         {
-            BInternalRequests = new HashSet<BInternalRequest>();
+            NInternalRequests = new HashSet<NInternalRequest>();
         }
 
         public string Code { get; set; } = null!;
         public string? Name { get; set; }
 
-        public virtual ICollection<BInternalRequest> BInternalRequests { get; set; }
+        public virtual ICollection<NInternalRequest> NInternalRequests { get; set; }
     }
 }
