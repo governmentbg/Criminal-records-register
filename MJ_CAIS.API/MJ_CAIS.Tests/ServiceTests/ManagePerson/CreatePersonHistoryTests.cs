@@ -1,5 +1,7 @@
 ﻿using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services;
 using MJ_CAIS.Services.Contracts;
@@ -8,11 +10,12 @@ using MJ_CAIS.Tests.Helpers;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 {
-    internal class CreateNewPersonHistoryTests
+    public class CreatePersonHistoryTests
     {
         private IManagePersonService _peopleService;
         private Mock<IPersonRepository> _repository;
@@ -23,17 +26,19 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
             var mapper = InitObjectHelper.GetMapper<PersonProfile>();
             _repository = new Mock<IPersonRepository>();
             _peopleService = new ManagePersonService(_repository.Object, mapper);
+            _repository.Setup(x => x.GetPersonIdsAsync(It.IsAny<List<PersonIdTypeDTO>>(), It.IsAny<string>()))
+                .ReturnsAsync(new List<PPersonId> { PersonFactory.GetFilledPersonId() });
         }
 
         [Test]
         public void ThrowArgumentNullEx_WhenPersonIsNull()
-            => Assert.Throws<ArgumentNullException>(() => _peopleService.CreateNewPersonHistory(null));
+          => Assert.Throws<ArgumentNullException>(() => _peopleService.CreatePersonHistory(null));
 
         [Test]
         public void PersonHIsEqual_WhenPersonDataIsFilledIn()
         {
             var src = PersonFactory.GetFilledInPerson();
-            var dest = _peopleService.CreateNewPersonHistory(src);
+            var dest = _peopleService.CreatePersonHistory(src);
 
             Assert.AreEqual(src.Firstname, dest.Firstname);
             Assert.AreEqual(src.Surname, dest.Surname);
@@ -66,7 +71,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         public void PersonHPidsAreEqual_WhenPersonPidsAreFilledIn()
         {
             var person = PersonFactory.GetFilledInPerson();
-            var personH = _peopleService.CreateNewPersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person);
 
             Assert.AreEqual(person.PPersonIds.Count, personH.PPersonIdsHes.Count);
             Assert.AreEqual(person.PPersonIds.First().Pid, personH.PPersonIdsHes.First().Pid);
@@ -78,7 +83,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         public void PersonHWithEntityStateAdded_WhenAllDataIsFilledIn()
         {
             var person = PersonFactory.GetFilledInPerson();
-            var personH = _peopleService.CreateNewPersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person);
 
             Assert.AreEqual(personH.EntityState, EntityStateEnum.Added);
         }
@@ -87,7 +92,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         public void PersonPidsHWithEntityStateAdded_WhenAllDataIsFilledIn()
         {
             var person = PersonFactory.GetFilledInPerson();
-            var personH = _peopleService.CreateNewPersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person);
 
             Assert.That(personH.PPersonIdsHes.Count(p => p.EntityState == EntityStateEnum.Added), Is.EqualTo(personH.PPersonIdsHes.Count));
         }

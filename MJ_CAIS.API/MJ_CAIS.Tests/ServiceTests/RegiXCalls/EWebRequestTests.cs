@@ -26,9 +26,6 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
 {
     internal class EWebRequestTests
     {
-        private IManagePersonService _peopleService;
-        private Mock<IPersonRepository> _repository;
-        private Mock<IApplicationRepository> _appRepository;
         private IRegixService _regixService;
         private CaisDbContext _dbContext;
 
@@ -111,7 +108,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
                 try
                 {
                 //var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id, registrationNumber: "220728660123000000123").Result;
-                var result = _regixService.SyncCallPersonDataSearch("8310188539", applicationId: "d27a7b76-b426-451f-aa10-35b622199388", registrationNumber: "220728660123000000123").Result;
+                var result = _regixService.SyncCallPersonDataSearch("1212124563", applicationId: "329812b4-4530-466a-8d46-2dc571cb70d3", registrationNumber: "220731660101000001024").Result;
 
                 if (result.Item1.EGN == null) //TODO: shoud be ==
                     {

@@ -31,15 +31,15 @@ namespace ExecuteWebRequests
                     {
                         if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
                         {
-                            regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName);
+                            regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName, webRequest.WApplication.RegistrationNumber);
                         }
                         if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
                         {
-                            regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName);
+                            regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName, webRequest.WApplication.RegistrationNumber);
                         }
                         if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
                         {
-                            regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName);
+                            regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, webRequest.WApplication.RegistrationNumber);
                         }
                     }
                 }

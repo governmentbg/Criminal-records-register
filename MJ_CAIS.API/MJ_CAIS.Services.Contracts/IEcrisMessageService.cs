@@ -1,5 +1,6 @@
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.AbstractMessageType;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.EcrisMessage;
 using MJ_CAIS.DTO.Fbbc;
@@ -18,7 +19,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<EcrisMsgNameDTO>> GetNamesAsync(string aId);
         Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId);
         Task ChangeStatusAsync(string aInDto, string statusId);
-        Task<DDocument> GetEcrisDocumentByIdAsync(string ecrisMessageId);
+        Task<EcrisRequestDTO> GetEcrisDocumentByIdAsync(string ecrisMessageId);
         Task IdentifyAsync(string aInDto, string statusId);
     }
 }
