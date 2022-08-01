@@ -29,7 +29,7 @@ namespace MJ_CAIS.Services
         }
         public async Task<List<ExtAdministrationGridDTO>> SelectAllAsync()
         {
-            var query = this.GetSelectAllQueriable();
+            var query = this.GetSelectAllQueryable();
             var baseQuery = query.ProjectTo<ExtAdministrationGridDTO>(mapperConfiguration);
             var repoList = baseQuery.ToList();
             return repoList;

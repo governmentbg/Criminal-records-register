@@ -40,7 +40,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? statusId, string? bulletinId)
         {
-            var entityQuery = this.GetSelectAllQueriable();
+            var entityQuery = this.GetSelectAllQueryable();
 
             if (!string.IsNullOrEmpty(bulletinId))
             {//todo: change

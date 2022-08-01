@@ -58,7 +58,7 @@ namespace MJ_CAIS.Services
         public virtual async Task<IgPageResult<ApplicationGridDTO>> SelectAllWithPaginationAsync(
             ODataQueryOptions<ApplicationGridDTO> aQueryOptions, string? statusId)
         {
-            var entityQuery = GetSelectAllQueriable();
+            var entityQuery = GetSelectAllQueryable();
             if (!string.IsNullOrEmpty(statusId))
             {
                 var statues = statusId.Split(',');
