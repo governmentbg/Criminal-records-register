@@ -54,16 +54,21 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
 
         public async Task<UserInfo> FindByUsername(string scheme, string username)
         {
-            var res = 
-            (from u in CaisDbContext.GUsers
-            where u.Egn == username
-            select new UserInfo()
+            UserInfo res = null;
+            if (!string.IsNullOrEmpty(username))
             {
-                Name = $"{u.Firstname} {u.Surname} {u.Familyname}",
-                SubjectId = u.Id,
-                Active = u.Active,
-                Username = u.Egn
-            }).FirstOrDefault();
+                var egn = username.Replace("PNOBG-", "");
+                res =
+                    (from u in CaisDbContext.GUsers
+                     where u.Egn == egn
+                     select new UserInfo()
+                     {
+                         Name = $"{u.Firstname} {u.Surname} {u.Familyname}",
+                         SubjectId = u.Id,
+                         Active = u.Active,
+                         Username = u.Egn
+                     }).FirstOrDefault();
+            }
             return res;
         }
 

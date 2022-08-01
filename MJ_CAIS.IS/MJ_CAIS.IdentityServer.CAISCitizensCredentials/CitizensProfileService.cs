@@ -50,31 +50,51 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
 
         public async Task<UserInfo> FindByUsername(string scheme, string username)
         {
-            var res =
-
-            (from u in CaisDbContext.GUsersCitizen
-             where u.Egn == username
-             select new UserInfo()
-             {
-                 Name = u.Name ?? u.Egn,
-                 SubjectId = u.Id,
-                 Username = u.Egn,
-                 Active = true
-             }).FirstOrDefault();
+            UserInfo res = null;
+            if (!string.IsNullOrEmpty(username))
+            {
+                var egn = username.Replace("PNOBG-", "");
+                res =
+                (from u in CaisDbContext.GUsersCitizen
+                 where u.Egn == egn
+                 select new UserInfo()
+                 {
+                     Name = u.Name ?? u.Egn,
+                     SubjectId = u.Id,
+                     Username = u.Egn,
+                     Active = true
+                 }).FirstOrDefault();
+            }
             return res;
         }
 
         public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            CaisDbContext.GUsersCitizen.Add(new Entities.GUsersCitizen()
+            if (!string.IsNullOrEmpty(userName) && userName.StartsWith("PNOBG-"))
             {
-                Id = Guid.NewGuid().ToString(),
-                Egn = userName,
-                Name = name,
-                Email = email
-            });
-            await CaisDbContext.SaveChangesAsync();
-            return new UserRegistrationResult() { Succeeded = true };
+                var egn = userName.Replace("PNOBG-", "");
+                CaisDbContext.GUsersCitizen.Add(new Entities.GUsersCitizen()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Egn = egn,
+                    Name = name,
+                    Email = email
+                });
+                await CaisDbContext.SaveChangesAsync();
+                return new UserRegistrationResult() { Succeeded = true };
+            }
+            else
+            {
+                return new UserRegistrationResult() { 
+                    Succeeded = false, 
+                    Errors = new UserRegistrationError[] {
+                        new UserRegistrationError() {
+                            Code = "EGN_ONLY",
+                            Description = "Only users with EGN allowed"
+                        }
+                    }
+                };
+            }
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
