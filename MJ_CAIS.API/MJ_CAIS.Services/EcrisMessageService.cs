@@ -151,7 +151,7 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        
+
 
         public async Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId)
         {
@@ -167,13 +167,13 @@ namespace MJ_CAIS.Services
             return filteredNames.ProjectTo<EcrisMsgNameDTO>(mapperConfiguration);
         }
 
-       
+
 
         public async Task IdentifyAsync(string aInDto, string graoPersonId)
         {
             var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
-                //await dbContext.EEcrisMessages
-                //.FirstOrDefaultAsync(x => x.Id == aInDto);
+            //await dbContext.EEcrisMessages
+            //.FirstOrDefaultAsync(x => x.Id == aInDto);
             var ecrisIdentif = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisIdentification>(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId);
             //await dbContext.EEcrisIdentifications
             //    .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
@@ -195,10 +195,6 @@ namespace MJ_CAIS.Services
             return await _ecrisMessageRepository.GetGraoPeopleAsync(aId);
         }
 
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
-        }
         private async Task<EEcrisAuthority> getSendingMemberStateName(RequestMessageType requestMessage)
         {
             EEcrisAuthority? memberState = null;
@@ -282,54 +278,6 @@ namespace MJ_CAIS.Services
                 }
             }
         }
-        private IQueryable<EcrisMessageGridDTO> CustomGetAll()
-        {
-            var result =
-                from ecrisMsg in dbContext.EEcrisMessages.AsNoTracking()
-                join ecrisMsgStatus in dbContext.EEcrisMsgStatuses.AsNoTracking()
-                    on ecrisMsg.EcrisMsgStatus equals ecrisMsgStatus.Code
-                join doc in dbContext.DDocuments.AsNoTracking()
-                    on ecrisMsg.Id equals doc.EcrisMsgId into doc_left
-                from doc in doc_left.DefaultIfEmpty()
-                join docType in dbContext.DDocTypes.AsNoTracking()
-                    on doc.DocTypeId equals docType.Id into docType_left
-                from docType in docType_left.DefaultIfEmpty()
-                join birthCountry in dbContext.GCountries.AsNoTracking()
-                    on ecrisMsg.BirthCountry equals birthCountry.Id into birthCountry_left
-                from birthCountry in birthCountry_left.DefaultIfEmpty()
 
-                    // join nationality1 in this.dbContext.GCountries.AsNoTracking()
-                    //    on ecrisMsg.Nationality1Code equals nationality1.Id into nationality1_left
-                    //from nationality1 in nationality1_left.DefaultIfEmpty()
-
-                    // join nationality2 in this.dbContext.GCountries.AsNoTracking()
-                    //    on ecrisMsg.Nationality2Code equals nationality2.Id into nationality2_left
-                    //from nationality2 in nationality2_left.DefaultIfEmpty()
-                select new EcrisMessageGridDTO
-                {
-                    Id = ecrisMsg.Id,
-                    DocTypeId = doc.DocTypeId,
-                    DocTypeName = docType.Name,
-                    Identifier = ecrisMsg.Identifier,
-                    EcrisIdentifier = ecrisMsg.EcrisIdentifier,
-                    MsgTimestamp = ecrisMsg.MsgTimestamp,
-                    EcrisMsgStatus = ecrisMsg.EcrisMsgStatus,
-                    EcrisMsgStatusName = ecrisMsgStatus.Name,
-                    BirthDate = ecrisMsg.BirthDate,
-                    BirthCountry = ecrisMsg.BirthCountry,
-                    BirthCountryName = birthCountry.Name,
-                    BirthCity = ecrisMsg.BirthCity,
-                    CreatedOn = ecrisMsg.CreatedOn
-                    //Firstname = ecrisMsg.Firstname,
-                    //Surname = ecrisMsg.Surname,
-                    // Familyname = ecrisMsg.Familyname,
-                    //Nationality1Code = ecrisMsg.Nationality1Code,
-                    //Nationality1Name = nationality1.Name,
-                    //Nationality2Code = ecrisMsg.Nationality2Code,
-                    //Nationality2Name = nationality2.Name,
-                };
-
-            return result;
-        }
     }
 }
