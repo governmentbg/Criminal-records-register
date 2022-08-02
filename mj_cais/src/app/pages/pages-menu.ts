@@ -214,6 +214,21 @@ export class PagesMenu {
         ],
       },
       {
+        title: "Журнал на Е-справки",
+        icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
+        children: [
+          {
+            title: "Справка за съдимост",
+            link: "/pages/e-applicaiton-report/reports/overview",
+          },
+          {
+            title: "Справка за идентификатори",
+            link: "/pages/e-applicaiton-report/search-pers/overview",
+          },
+        ],
+      },
+      {
         title: "Справки",
         icon: { icon: "tasks", pack: "fas" },
         children: [
