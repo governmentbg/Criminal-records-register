@@ -7,9 +7,11 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
+using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.EcrisObjectsServices.Contracts;
@@ -52,7 +54,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
-            var entityQuery = this.GetSelectAllQueriable();
+            var entityQuery = this.GetSelectAllQueryable();
             if (!string.IsNullOrEmpty(statusId))
             {
                 entityQuery = entityQuery.Where(x => x.StatusId == statusId);
@@ -67,7 +69,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
-            var entityQuery = this.GetSelectAllQueriable();
+            var entityQuery = this.GetSelectAllQueryable();
             if (!string.IsNullOrEmpty(statusId))
             {
                 entityQuery = entityQuery.Where(x => x.StatusId == statusId);
@@ -88,10 +90,8 @@ namespace MJ_CAIS.Services
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
         {
             var result = new BulletinBaseDTO();
-            //var dbContext = _bulletinRepository.GetDbContext();
             var authId = _userContext.CsAuthorityId;
             var auth = await _bulletinRepository.SingleOrDefaultAsync<GCsAuthority>(x => x.Id == authId);
-                //await dbContext.GCsAuthorities.AsNoTracking().FirstOrDefaultAsync(x => x.Id == authId);
             result.CsAuthorityName = auth?.Name;
             var person = await _managePersonService.SelectWithBirthInfoAsync(personId);
             result.Person = person ?? new PersonDTO();
@@ -138,8 +138,6 @@ namespace MJ_CAIS.Services
         public async Task UpdateAsync(BulletinEditDTO aInDto)
         {
             var bulletinDb = await _bulletinRepository.SingleOrDefaultAsync<BBulletin>(x => x.Id == aInDto.Id);
-                //await dbContext.BBulletins.AsNoTracking()
-                //.FirstOrDefaultAsync(x => x.Id == aInDto.Id);
 
             if (bulletinDb == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto.Id));
@@ -200,13 +198,13 @@ namespace MJ_CAIS.Services
         /// <exception cref="ArgumentException"></exception>
         public async Task ChangeStatusAsync(string bulletinId, string statusId)
         {
-            BBulletin? bulletin = await _bulletinRepository.GetBulletinData(bulletinId);
+            var bulletin = await _bulletinRepository.GetBulletinData(bulletinId);
 
             if (bulletin == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
             var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(oldBulletinStatus, statusId, bulletinId);
+            AddBulletinStatusH(bulletin,oldBulletinStatus, statusId, bulletinId);
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
                 statusId == Status.Active;
@@ -220,7 +218,7 @@ namespace MJ_CAIS.Services
                 bulletin.Locked = true;
             }
 
-            bulletin.StatusId = statusId;//todo: Дали да не е в репо, променя стейт
+            bulletin.StatusId = statusId;
             bulletin.EntityState = EntityStateEnum.Modified;
             bulletin.ModifiedProperties = new List<string>
             {
@@ -260,8 +258,6 @@ namespace MJ_CAIS.Services
                 throw;
             }
         }
-
- 
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {
@@ -307,7 +303,7 @@ namespace MJ_CAIS.Services
                 Guid.NewGuid().ToString() :
                 aInDto.DocumentContentId;
 
-            var document = mapper.Map<DocumentDTO, DDocument>(aInDto);
+            var document = mapper.MapToEntity<DocumentDTO, DDocument>(aInDto,true);
             document.BulletinId = bulletinId;
             document.DocContentId = docContentId;
 
@@ -315,7 +311,8 @@ namespace MJ_CAIS.Services
             {
                 Id = docContentId,
                 Content = aInDto.DocumentContent,
-                MimeType = aInDto.MimeType
+                MimeType = aInDto.MimeType,
+                EntityState = EntityStateEnum.Added
             };
 
             // add an event when a user from another authority attaches a document
@@ -332,20 +329,14 @@ namespace MJ_CAIS.Services
                     EntityState = EntityStateEnum.Added
                 };
 
-                //dbContext.Add(bullEvent);
+                _bulletinRepository.ApplyChanges(bullEvent, new List<IBaseIdEntity>());
             }
-            document.EntityState = EntityStateEnum.Added;
-            documentContent.EntityState = EntityStateEnum.Added;
-            // dbContext.Add(document);
-            // dbContext.Add(documentContent);
-            //todo: how to add entities?
+
+            _bulletinRepository.ApplyChanges(document, new List<IBaseIdEntity>());
+            _bulletinRepository.ApplyChanges(documentContent, new List<IBaseIdEntity>());
 
             await _bulletinRepository.SaveChangesAsync();
         }
-
-     
-
-   
 
         public async Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId)
         {
@@ -432,7 +423,7 @@ namespace MJ_CAIS.Services
             }
 
             // save old status
-            var isAddedHistory = AddBulletinStatusH(oldStatus, entity.StatusId, entity.Id);
+            var isAddedHistory = AddBulletinStatusH(entity,oldStatus, entity.StatusId, entity.Id);
             if (isAddedHistory)
             {
                 UpdateModifiedProperties(entity, nameof(entity.StatusId));
@@ -499,7 +490,7 @@ namespace MJ_CAIS.Services
             return person.Id;
         }
 
-        private static void SetModifiedPropertiesByStatus(BBulletin? bulletinDb, BBulletin bulletin)
+        private static void SetModifiedPropertiesByStatus(BBulletin bulletinDb, BBulletin bulletin)
         {
             if (bulletinDb.StatusId != Status.NewEISS &&
                 bulletinDb.StatusId != Status.NewOffice)
@@ -529,7 +520,7 @@ namespace MJ_CAIS.Services
         /// <param name="oldStatus">Previous status</param>
         /// <param name="newStatus">New status</param>
         /// <param name="bulletinId">ID</param>
-        private bool AddBulletinStatusH(string oldStatus, string newStatus, string bulletinId)
+        private bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus, string bulletinId)
         {
             if (oldStatus == newStatus) return false;
 
@@ -540,8 +531,18 @@ namespace MJ_CAIS.Services
                 OldStatusCode = oldStatus,
                 NewStatusCode = newStatus,
                 EntityState = EntityStateEnum.Added,
-                Locked = newStatus != BulletinConstants.Status.NewOffice
+                Locked = newStatus != Status.NewOffice
             };
+
+            // todo: if bulletin is unlock by admin
+            // save data in tables
+            if (newStatus != Status.NewOffice)
+            {
+                var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
+                var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
+                statusHistory.Content = xml;
+                statusHistory.Version = 1; 
+            }
 
             _bulletinRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
             return true;
@@ -578,15 +579,9 @@ namespace MJ_CAIS.Services
             entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Person.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
         }
 
-       
-
         private void UpdateModifiedProperties(BaseEntity entityToSave, string nameOfProp)
         {
-            if (entityToSave.ModifiedProperties == null)
-            {
-                entityToSave.ModifiedProperties = new List<string>();
-            }
-
+            entityToSave.ModifiedProperties ??= new List<string>();
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
 
@@ -615,7 +610,6 @@ namespace MJ_CAIS.Services
                 bulletin.EuCitizen = true;
             }
 
-            // todo: Except 
             var createEcrisTcn = personNationalities.Except(
                (await _bulletinRepository.FindAsync<EEcrisAuthority>(x => 1 == 1))
                 //dbContext.EEcrisAuthorities.AsNoTracking()
@@ -626,8 +620,7 @@ namespace MJ_CAIS.Services
             }
         }
 
-     
-
+        
         private async Task SendMessageToEcrisAsync(bool? isEuCitizen, bool? isTcnCitizen, string bulletinId, string bOldStatus, string bNewStatus)
         {
             if (isEuCitizen == true)

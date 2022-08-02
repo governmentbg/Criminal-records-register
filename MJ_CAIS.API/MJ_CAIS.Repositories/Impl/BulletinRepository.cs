@@ -194,13 +194,6 @@ namespace MJ_CAIS.Repositories.Impl
             _dbContext.Add(ecrisTcn);
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
-      
-
         public async Task<PPerson> GetPersonIdByPidAsync(string pid, string pidType)
         {
             var person = await _dbContext.PPersonIds.AsNoTracking()
@@ -366,6 +359,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             return result.OrderBy(x => x.OrderNumber).ToList();
         }
+
         public async Task<BBulletin> GetBulletinData(string bulletinId)
         {
             return await _dbContext.BBulletins
@@ -413,6 +407,7 @@ namespace MJ_CAIS.Repositories.Impl
 
             return deletedSanctionAndItsProbations;
         }
+
         public  async Task<bool> IsEuCitizen(IEnumerable<string> personNationalities)
         {
             return await _dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));

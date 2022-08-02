@@ -124,6 +124,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: "e-applicaiton-report",
+        loadChildren: () =>
+          import("./e-application-report/e-application-report.module").then(
+            (m) => m.EApplicationReportModule
+          ),
+      },
+      {
         path: "inquiry",
         loadChildren: () =>
           import("./inquiry/inquiry.module").then((m) => m.InquiryModule),

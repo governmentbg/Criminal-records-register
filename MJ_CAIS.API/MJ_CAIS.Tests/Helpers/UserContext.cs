@@ -13,7 +13,7 @@ namespace MJ_CAIS.Tests.Helpers
 
         public string UserName { get; set; }
 
-        public string? CsAuthorityId => null;
+        public string? CsAuthorityId => "660";
 
         public string[] Role => new string[] { "GlobalAdmin" };
 

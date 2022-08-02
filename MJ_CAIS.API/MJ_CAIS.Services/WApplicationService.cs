@@ -52,13 +52,13 @@ namespace MJ_CAIS.Services
             }
             else if (statusId is ApplicationWebStatuses.WebCheckTaxFree)
             {
-                var entityQuery = GetSelectAllQueriable();
+                var entityQuery = GetSelectAllQueryable();
                 entityQuery = entityQuery.Where(x => x.StatusCode == statusId);
                 baseQuery = entityQuery.ProjectTo<WApplicaitonGridDTO>(mapperConfiguration);
             }
             else
             {
-                var entityQuery = GetSelectAllQueriable();
+                var entityQuery = GetSelectAllQueryable();
                 baseQuery = entityQuery.ProjectTo<WApplicaitonGridDTO>(mapperConfiguration);
             }
 

@@ -78,8 +78,6 @@ namespace MJ_CAIS.Services
             CheckForArticle2212(bulletins, currentAttachedBulletin);
         }
 
- 
-
         /// <summary>
         /// Check for events
         /// http://tfstl:8080/tfs/DefaultCollection/MJ-CAIS/_workitems/edit/45537

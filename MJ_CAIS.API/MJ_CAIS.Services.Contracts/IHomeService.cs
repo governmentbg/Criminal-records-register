@@ -4,12 +4,10 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IHomeService
     {
-        Task<(BulletinCountDTO, BulletinEventCountDTO, IsinCountDTO)> GetBulletinCountByCurrentAuthorityAsync();
+        Task<BulletinCountDTO> GetBulletinCountByCurrentAuthorityAsync();
 
-        Task<(EcrisCountDTO, FbbcCountDTO)> GetEcrisCountAsync();
+        Task<CentralAuthorityCountDTO> GetCentralAuthorityCountsAsync();
 
-        Task<(ApplicationCountDTO, ForJudgeCountDTO)> GetApplicationCountByCurrentAuthorityAsync();
-
-       
+        Task<ApplicationCountDTO> GetApplicationCountByCurrentAuthorityAsync();
     }
 }

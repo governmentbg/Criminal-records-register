@@ -10,12 +10,7 @@ import { RoleNameEnum } from "../../../@core/constants/role-name.enum";
 import { BaseResolverData } from "../../../@core/models/common/base-resolver.data";
 import { ApplicationCountModel } from "../_models/application-count.model";
 import { BulletinCountModel } from "../_models/bulletin-count.model";
-import { BulletinEventCountModel } from "../_models/bulletin-event-count.model";
-import { EcrisCountModel } from "../_models/ecris-count.model";
-import { FbbcCountModel } from "../_models/fbbc-count.model";
-import { ForJudgeCountModel } from "../_models/for-judge-count.model";
-import { IsinCountModel } from "../_models/isin-count.model";
-import { ObjectCountModel } from "../_models/object-count.model";
+import { CentralAuthCountModel } from "../_models/central-auth-count.model";
 import { HomeService } from "./home.service";
 
 @Injectable({
@@ -38,7 +33,7 @@ export class HomeResolver implements Resolve<any> {
       applications: of(null),
       bulletins: of(null),
       bulletinEvents: of(null),
-      ecris: of(null),
+      centralAuth: of(null),
       isin: of(null),
       forJudge: of(null),
       fbbc: of(null),
@@ -51,25 +46,11 @@ export class HomeResolver implements Resolve<any> {
         roles.indexOf(RoleNameEnum.Judge) > -1
       ) {
         result.bulletins = this.service.getBulletinsCount();
-        result.bulletinEvents = this.service.getBulletinEventsCount();
         result.applications = this.service.getApplicationsCount();
       }
 
-      if (
-        roles.indexOf(RoleNameEnum.Normal) > -1 ||
-        roles.indexOf(RoleNameEnum.CentralAuth) > -1 ||
-        roles.indexOf(RoleNameEnum.Judge) > -1
-      ) {
-        result.isin = this.service.getIsinCount();
-      }
-
       if (roles.indexOf(RoleNameEnum.CentralAuth) > -1) {
-        result.ecris = this.service.getEcrisCount();
-        result.fbbc = this.service.getFbbcCount();
-      }
-
-      if (roles.indexOf(RoleNameEnum.Judge) > -1) {
-        result.forJudge = this.service.getForJudgeCount();
+        result.centralAuth = this.service.getCentralAuthCount();
       }
     });
 
@@ -77,12 +58,8 @@ export class HomeResolver implements Resolve<any> {
   }
 }
 
-export class HomeResolverData extends BaseResolverData<ObjectCountModel> {
+export class HomeResolverData extends BaseResolverData<any> {
   public applications: Observable<ApplicationCountModel>;
   public bulletins: Observable<BulletinCountModel>;
-  public bulletinEvents: Observable<BulletinEventCountModel>;
-  public ecris: Observable<EcrisCountModel>;
-  public isin: Observable<IsinCountModel>;
-  public forJudge: Observable<ForJudgeCountModel>;
-  public fbbc: Observable<FbbcCountModel>;
+  public centralAuth: Observable<CentralAuthCountModel>;
 }

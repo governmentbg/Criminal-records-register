@@ -96,7 +96,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<List<TGridDTO>> SelectAllAsync(ODataQueryOptions<TGridDTO> aQueryOptions)
         {
-            var query = this.GetSelectAllQueriable();
+            var query = this.GetSelectAllQueryable();
             var baseQuery = query.ProjectTo<TGridDTO>(mapperConfiguration);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var repoList = resultQuery.ToList();
@@ -105,7 +105,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<TGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<TGridDTO> aQueryOptions)
         {
-            var entityQuery = this.GetSelectAllQueriable();
+            var entityQuery = this.GetSelectAllQueryable();
             var baseQuery = entityQuery.ProjectTo<TGridDTO>(mapperConfiguration);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<TGridDTO>();
@@ -154,7 +154,7 @@ namespace MJ_CAIS.Services
             return ((IQueryable<T>)queryable).Count();
         }
 
-        protected virtual IQueryable<TEntity> GetSelectAllQueriable()
+        protected virtual IQueryable<TEntity> GetSelectAllQueryable()
         {
             return this.baseAsyncRepository.SelectAll();
         }

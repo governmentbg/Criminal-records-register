@@ -50,16 +50,21 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
         public async Task<UserInfo> FindByUsername(string scheme, string username)
         {
-            var res =
-            (from u in CaisDbContext.GUsersExt
-             where u.Egn == username
-             select new UserInfo()
-             {
-                 Name = u.Name,
-                 SubjectId = u.Id,
-                 Active = u.Active,
-                 Username = u.Egn
-             }).FirstOrDefault();
+            UserInfo res = null;
+            if (!string.IsNullOrEmpty(username))
+            {
+                var egn = username.Replace("PNOBG-", "");
+                res =
+                (from u in CaisDbContext.GUsersExt
+                    where u.Egn == egn
+                    select new UserInfo()
+                    {
+                        Name = u.Name,
+                        SubjectId = u.Id,
+                        Active = u.Active,
+                        Username = u.Egn
+                    }).FirstOrDefault();
+            }
             return res;
         }
 

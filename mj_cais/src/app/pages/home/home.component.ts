@@ -6,12 +6,7 @@ import { HomeResolverData } from "./_data/home.resolver";
 import { HomeService } from "./_data/home.service";
 import { ApplicationCountModel } from "./_models/application-count.model";
 import { BulletinCountModel } from "./_models/bulletin-count.model";
-import { BulletinEventCountModel } from "./_models/bulletin-event-count.model";
-import { EcrisCountModel } from "./_models/ecris-count.model";
-import { FbbcCountModel } from "./_models/fbbc-count.model";
-import { ForJudgeCountModel } from "./_models/for-judge-count.model";
-import { IsinCountModel } from "./_models/isin-count.model";
-import { ObjectCountModel } from "./_models/object-count.model";
+import { CentralAuthCountModel } from "./_models/central-auth-count.model";
 
 @Component({
   selector: "cais-home",
@@ -19,16 +14,12 @@ import { ObjectCountModel } from "./_models/object-count.model";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent
-  extends CrudForm<ObjectCountModel, null, HomeResolverData, HomeService>
+  extends CrudForm<any, null, HomeResolverData, HomeService>
   implements OnInit
 {
   public applications: ApplicationCountModel;
   public bulletins: BulletinCountModel;
-  public bulletinEvents: BulletinEventCountModel;
-  public ecris: EcrisCountModel;
-  public isin: IsinCountModel;
-  public forJudge: ForJudgeCountModel;
-  public fbbc: FbbcCountModel;
+  public centralAuth: CentralAuthCountModel;
 
   public RoleNameEnum = RoleNameEnum;
   constructor(service: HomeService, public injector: Injector) {
@@ -38,18 +29,14 @@ export class HomeComponent
   ngOnInit(): void {
     this.applications = this.dbData.applications as any;
     this.bulletins = this.dbData.bulletins as any;
-    this.bulletinEvents = this.dbData.bulletinEvents as any;
-    this.ecris = this.dbData.ecris as any;
-    this.isin = this.dbData.isin as any;
-    this.forJudge = this.dbData.forJudge as any;
-    this.fbbc = this.dbData.fbbc as any;
+    this.centralAuth = this.dbData.centralAuth as any;
   }
 
   buildFormImpl(): FormGroup {
     return null;
   }
 
-  createInputObject(object: ObjectCountModel) {
+  createInputObject(object: any) {
     return null;
   }
 }

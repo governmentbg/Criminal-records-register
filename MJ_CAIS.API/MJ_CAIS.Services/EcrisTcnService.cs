@@ -29,7 +29,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<EcrisTcnGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<EcrisTcnGridDTO> aQueryOptions, string? statusId)
         {
-            var entityQuery = this.GetSelectAllQueriable();
+            var entityQuery = this.GetSelectAllQueryable();
             if (!string.IsNullOrEmpty(statusId))
             {
                 entityQuery = entityQuery.Where(x => x.Status == statusId);
