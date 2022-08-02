@@ -101,6 +101,9 @@ namespace EcrisIntegrationServices
                 //lastUpdatedTime = lastUpdatedTime.AddSeconds(1);
                 do
                 {
+                    //var id = "RI-RRS-000000001382773";
+                    //var messageContent = await client.ReadMessage(sessionID, id);
+                    //var p = XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage);
 
                     var result = await client.ExecutePreparedQuery(sessionID, query, pageNumber, itemsPerPage);
                     totalNumberOfMessages = result.NumberOfResults;
@@ -254,7 +257,10 @@ namespace EcrisIntegrationServices
                 throw new Exception(String.Format($"Unknown type - MessageEcrisID  = {0}", msg.MessageEcrisIdentifier));
             }
             var identifier = msg.MessageIdentifier;
-            var messageContent = await client.ReadMessage(sessionId, identifier);
+            var id = "PL-BG-NOT-000000000012055";
+            var messageContent = await client.ReadMessage(sessionId, id);
+            
+            //var messageContent = await client.ReadMessage(sessionId, identifier);
             EEcrisInbox inbox = new EEcrisInbox();
             inbox.Id = BaseEntity.GenerateNewId();
             //todo: get from enum

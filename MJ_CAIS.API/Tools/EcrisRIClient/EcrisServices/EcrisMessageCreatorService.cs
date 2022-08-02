@@ -21,11 +21,11 @@ namespace EcrisIntegrationServices
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisMessageCreatorService> _logger;
         const string ECRIS_REQUEST_CODE = "EcrisRequest";
-        private readonly IPersonService _personService;
+        private readonly IManagePersonService _personService;
 
 
         RequestService _requestService;
-        public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService, IPersonService personService)
+        public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService, IManagePersonService personService)
         {
             _dbContext = dbContext;
             _logger = logger;
