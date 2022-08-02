@@ -253,7 +253,7 @@ namespace MJ_CAIS.Services
             return application.ACertificates.First().Id;
         }
 
-        public async Task GenerateCertificateFromApplication(AApplication application,
+        public async Task<ACertificate> GenerateCertificateFromApplication(AApplication application,
             AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus,
             AApplicationStatus certificateWithoutBulletinStatus,
             int certificateValidityMonths =
@@ -307,13 +307,13 @@ namespace MJ_CAIS.Services
                 //    .ToListAsync();
                 if (bulletins.Count() > 0)
                 {
-                    await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
+                    return await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
                         certificateValidityMonths, applicationStatus);
-                    return;
+                   
                 }
             }
 
-            await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus,
+            return await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus,
                 certificateValidityMonths, applicationStatus);
         }
 
@@ -450,7 +450,7 @@ namespace MJ_CAIS.Services
                 aInDto.Person.Nationalities, nameof(AAppCitizenship.Id), nameof(AAppCitizenship.CountryId));
         }
 
-        private async Task ProcessApplicationWithoutBulletinsAsync(AApplication application,
+        private async Task<ACertificate> ProcessApplicationWithoutBulletinsAsync(AApplication application,
             AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
@@ -470,6 +470,9 @@ namespace MJ_CAIS.Services
                 application.ModifiedProperties = new List<string>();
             }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
+            baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            return cert;
             //dbContext.AApplications.Update(application);
         }
 
@@ -507,7 +510,7 @@ namespace MJ_CAIS.Services
             return cert;
         }
 
-        private async Task ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
+        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
             AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
@@ -541,6 +544,9 @@ namespace MJ_CAIS.Services
                 application.ModifiedProperties = new List<string>();
             }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
+            baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
+            return cert;
             //dbContext.ACertificates.Add(cert);
             // dbContext.AAppBulletins.AddRange(cert.AAppBulletins);
             //dbContext.AApplications.Update(application);

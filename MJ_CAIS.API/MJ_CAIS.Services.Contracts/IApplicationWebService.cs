@@ -22,5 +22,5 @@ namespace MJ_CAIS.Services.Contracts
         Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id);
 
         Task<decimal?> GetPriceByApplicationType(string applicationTypeID);
-    }
+          }
 }

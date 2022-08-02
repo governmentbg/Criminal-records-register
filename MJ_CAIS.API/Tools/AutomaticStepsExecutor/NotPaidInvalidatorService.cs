@@ -56,7 +56,7 @@ namespace AutomaticStepsExecutor
             if (entities.Count > 0)
             {
                 numberOfProcesedEntities = entities.Count;
-                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.Canceled).ToListAsync();
+                var statuses = await _dbContext.AApplicationStatuses.AsNoTracking().Where(a => a.Code == ApplicationConstants.ApplicationStatuses.Canceled).ToListAsync();
                 if (statuses.Count != 1)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.Canceled }");
@@ -70,7 +70,7 @@ namespace AutomaticStepsExecutor
 
                   });
 
-                _dbContext.AApplications.UpdateRange(entities.Select(x => (AApplication)x));
+                //_dbContext.AApplications.UpdateRange(entities.Select(x => (AApplication)x));
                 var resultCount = await _dbContext.SaveChangesAsync();
                 numberOfSuccessEntities = resultCount;
                 //безсмислено, защото или ще минат всички, или никой
@@ -83,7 +83,7 @@ namespace AutomaticStepsExecutor
 
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
-            var systemParametrs = await _dbContext.GSystemParameters.Where(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ToListAsync();
+            var systemParametrs = await _dbContext.GSystemParameters.AsNoTracking().Where(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ToListAsync();
 
             if (systemParametrs.Count != 1 || systemParametrs.Any(x => x.ValueNumber == null))
             {
@@ -93,7 +93,7 @@ namespace AutomaticStepsExecutor
             //var systemParamValidityPeriodWeb = (int)systemParametrs.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS).ValueNumber;
             var startDateOnDesk = DateTime.Now.AddDays(-systemParamValidityPeriodOnDesk).Date;
             //var startDateWeb = DateTime.UtcNow.AddDays(-systemParamValidityPeriodWeb).Date;
-            var result = await Task.FromResult(_dbContext.AApplications
+            var result = await Task.FromResult(_dbContext.AApplications.AsNoTracking()
                                 .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment
                                                            && aa.CreatedOn < startDateOnDesk)//((aa.CreatedOn < startDateOnDesk && aa.WApplicationId == null)
                                                                                              //|| (aa.CreatedOn < startDateWeb && aa.WApplicationId != null))

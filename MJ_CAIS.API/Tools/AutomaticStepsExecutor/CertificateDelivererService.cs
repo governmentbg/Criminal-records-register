@@ -35,12 +35,13 @@ namespace AutomaticStepsExecutor
 
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
-            var result = await Task.FromResult(_dbContext.ACertificates
-                                    .Include(a=>a.Application)
-                                    .Include(a=>a.Application.SrvcResRcptMeth)
-                              //todo: дали има шанс да е в това състояние:ApplicationConstants.ApplicationStatuses.CertificateServerSign
-                              .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
-                              //todo: да гледаме ли срок на плащането, ако не е платено в срок?!                             
+            List<string> processedTypes = new List<string>() { ApplicationConstants.ApplicationTypes.WebCertificate, ApplicationConstants.ApplicationTypes.WebExternalCertificate };
+
+            var result = await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
+                                    .Include(a=>a.Application).AsNoTracking()
+                                    .Include(a=>a.Application.SrvcResRcptMeth).AsNoTracking()
+                             .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
+                              && processedTypes.Contains(aa.Application.ApplicationType.Code)                             
                               )
                               .OrderBy(a=>a.CreatedOn)
                               .Take(pageSize)
@@ -76,7 +77,7 @@ namespace AutomaticStepsExecutor
                 var statusCertificateDelivered = statuses.First();
                 var webPortalUrl = await _certificateGenerationService.GetWebPortalAddress();
                 //todo: get mail data
-                var sysParamsForMail = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
+                var sysParamsForMail = await _dbContext.GSystemParameters.AsNoTracking().Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
                 || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ToListAsync();
                 if (sysParamsForMail.Count != 2 || sysParamsForMail.Any(x => string.IsNullOrEmpty(x.ValueString)))
                 {

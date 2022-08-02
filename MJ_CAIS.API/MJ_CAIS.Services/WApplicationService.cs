@@ -286,5 +286,48 @@ namespace MJ_CAIS.Services
 
             return person;
         }
+        public async Task ProcessWApplicationCheckPayment(AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebApprovedApplication, WApplicationStatus statusWebCancel, DateTime startDateWeb, WApplication wapplication)
+        {
+            //todo: check payment
+            //todo: да гледаме ли срок на плащането, ако не е платено в срок, но все пак е платено какво става?!  
+
+            bool isPaid = CheckPayment(wapplication);
+            if (isPaid)
+            {
+                //await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
+                //todo: must add some FK for payment?!
+                var person = await ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
+                //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
+                // await _dbContext.SaveChangesAsync();
+                //if (person != null && person.EntityState != EntityStateEnum.Detached)
+                //{
+                //    _dbContext.Entry(person).State = EntityState.Detached;
+                //    foreach (var pIds in person.PPersonIds)
+                //    {
+                //        if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
+                //        {
+                //            _dbContext.Entry(pIds).State = EntityState.Detached;
+                //        }
+                //    }
+                //}
+            }
+            else
+            {
+                if (wapplication.CreatedOn.Value.Date < startDateWeb)
+                {
+                    _webApplicationService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
+                    //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
+                    // _dbContext.WApplications.Update(wapplication);
+                    //await _dbContext.SaveChangesAsync();
+
+                }
+
+            }
+        }
+
+        private bool CheckPayment(WApplication wapplication)
+        {
+            return wapplication.APayments.All(x => x.EPayment.PaymentStatus == PaymentConstants.PaymentStatuses.Payed);
+        }
     }
 }

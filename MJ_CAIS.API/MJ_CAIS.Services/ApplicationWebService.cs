@@ -119,7 +119,7 @@ namespace MJ_CAIS.Services
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
-            wapplication.EntityState = Common.Enums.EntityStateEnum.Added;
+            wapplication.EntityState = Common.Enums.EntityStateEnum.Modified;
             if( wapplication.ModifiedProperties== null)
             {
                 wapplication.ModifiedProperties = new List<string>();
@@ -171,6 +171,7 @@ namespace MJ_CAIS.Services
             return _applicationWebRepository.SelectPublicApplications(userId);
         }
 
-      
+       
+
     }
 }

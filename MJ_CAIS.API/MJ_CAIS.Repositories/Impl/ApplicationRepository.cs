@@ -137,13 +137,13 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<AApplication?> GetApplicationForCertificateGeneration(string id)
         {
-           return await _dbContext.AApplications
-                .Include(a => a.EgnNavigation)
-                .Include(a => a.LnchNavigation)
-                .Include(a => a.LnNavigation)
-                .Include(a => a.SuidNavigation)
-                .Include(a => a.ApplicationType)
-                .Include(a => a.AStatusHes)
+           return await _dbContext.AApplications.AsNoTracking()
+                .Include(a => a.EgnNavigation).AsNoTracking()
+                .Include(a => a.LnchNavigation).AsNoTracking()
+                .Include(a => a.LnNavigation).AsNoTracking()
+                .Include(a => a.SuidNavigation).AsNoTracking()
+                .Include(a => a.ApplicationType).AsNoTracking()
+                .Include(a => a.AStatusHes).AsNoTracking()
                 .FirstOrDefaultAsync(aa => aa.Id == id);
         }
 

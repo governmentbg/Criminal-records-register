@@ -18,26 +18,29 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<WApplicationProcessorService> _logger;
-        private readonly IRegisterTypeService _registerTypeService;
-        private readonly IApplicationService _applicationService;
+        //private readonly IRegisterTypeService _registerTypeService;
+        //private readonly IApplicationService _applicationService;
         private readonly IApplicationWebService _applicationWebService;
-        private readonly IPersonService _personSevice;
+        //private readonly IPersonService _personSevice;
         private readonly IWApplicationService _wApplicationService;
+      
         public const string Pending = "Pending";
         public const string Accepted = "Accepted";
         public const string Rejected = "Rejected";
 
 
-        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService,
-            IPersonService personSevice, IWApplicationService wApplicationService)
+        public WApplicationProcessorService(CaisDbContext dbContext, ILogger<WApplicationProcessorService> logger,
+         IApplicationWebService applicationWebService,
+             IWApplicationService wApplicationService)
         {
             _dbContext = dbContext;
             _logger = logger;
-            _registerTypeService = registerTypeService;
-            _applicationService = applicationService;
+            //_registerTypeService = registerTypeService;
+            //_applicationService = applicationService;
             _applicationWebService = applicationWebService;
-            _personSevice = personSevice;
+            //_personSevice = personSevice;
             _wApplicationService = wApplicationService;
+           
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -47,10 +50,10 @@ namespace AutomaticStepsExecutor
 
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
-            var result = await Task.FromResult(_dbContext.WApplications
-                            .Include(a => a.ApplicationType)
-                            .Include(a => a.EWebRequests)
-                            .Include(a => a.WStatusHes)
+            var result = await Task.FromResult(_dbContext.WApplications.AsNoTracking()
+                            .Include(a => a.ApplicationType).AsNoTracking()
+                            .Include(a => a.EWebRequests).AsNoTracking()
+                            .Include(a => a.WStatusHes).AsNoTracking()
                       //todo: дали е този статус?! 
                       .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.NewWebApplication)
                         .OrderBy(a => a.CreatedOn)
@@ -121,6 +124,12 @@ namespace AutomaticStepsExecutor
                 {
                     throw new Exception($"System parameter \"{SystemParametersConstants.SystemParametersNames.REGIX_NUMBER_OF_ATTEMPTS}\" is not set.");
                 }
+                var systemParamValidityPeriodWeb = (int?)_dbContext.GSystemParameters.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS)?.ValueNumber;
+                if (systemParamValidityPeriodWeb == null)
+                {
+                    throw new Exception($"System parameter {SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_WEB_DAYS} is not set.");
+                }
+                var startDateWeb = DateTime.Now.AddDays(-systemParamValidityPeriodWeb.Value).Date;
                 foreach (IBaseIdEntity entity in entities)
                 {
                     numberOfProcesedEntities++;
@@ -137,10 +146,7 @@ namespace AutomaticStepsExecutor
 
                         if (checkRegixSuccess == Rejected)
                         {
-                            _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Неуспешни проверки е регистрите.");
-                            // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
-                            _dbContext.WApplications.Update(wapplication);
-                            await _dbContext.SaveChangesAsync();
+                            await CancelWApplication(statusWebCancel, wapplication);
                             numberOfSuccessEntities++;
                             continue;
                         }
@@ -148,24 +154,7 @@ namespace AutomaticStepsExecutor
                         //ако е служебно заявление,влиза в цаис за обработка
                         if (wapplication.ApplicationTypeId == internalApplicationType.Id)
                         {
-                           var person =  await _wApplicationService.ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
-                            //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
-                            await _dbContext.SaveChangesAsync();
-                            if (person != null && person.EntityState != EntityStateEnum.Detached)
-                            {
-                                _dbContext.Entry(person).State = EntityState.Detached;
-                                foreach (var pIds in person.PPersonIds)
-                                {
-                                    if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
-                                    {
-                                        _dbContext.Entry(pIds).State = EntityState.Detached;
-                                    }
-                                }
-                            }
-                            //foreach (var entry in _dbContext.ChangeTracker.Entries<AStatusH>())
-                            //{
-                            //    entry.Entity.EntityState = EntityStateEnum.Detached;
-                            //}
+                            await ProcessInternalWApplication(statusApprovedApplication, statusWebApprovedApplication, wapplication);
 
                             numberOfSuccessEntities++;
                             continue;
@@ -173,39 +162,12 @@ namespace AutomaticStepsExecutor
                         //ако е освободен от плащане - отива при съдия
                         if (wapplication.PaymentMethodId == paymentMethodFree.Id)
                         {
-                            _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckTaxFree, " За проверка за освобождаване от плащане");
-                            // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCheckTaxFree;
-                            _dbContext.WApplications.Update(wapplication);
-                            await _dbContext.SaveChangesAsync();
+                            await ProcessTaxFree(statusWebCheckTaxFree, wapplication);
                             numberOfSuccessEntities++;
                             continue;
                         }
                         //дефолтно - очаква плащане
-                        //todo: дали да не се прави и проверката за плащане тук и ако има плащане да преминава към следваща стъпка
-                        _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckPayment, " За проверка за плащане");
-                        var numberOfPayments = await _dbContext.EPayments.Where(p => p.APayments.Any(ap => ap.WApplicationId == wapplication.Id)).CountAsync();
-                        if (numberOfPayments == 0)
-                        {
-                            APayment payment = new APayment();
-                            payment.Id = BaseEntity.GenerateNewId();
-                            payment.WApplicationId = wapplication.Id;
-
-                            EPayment ePayment = new EPayment();
-                            ePayment.Id = BaseEntity.GenerateNewId();
-
-                            ePayment.Amount = wapplication.ApplicationType.Price;
-                            ePayment.PaymentStatus = PaymentConstants.PaymentStatuses.Pending;
-                            ePayment.MerchantId = config.GetValue<string>("AutomaticStepsExecutor:MerchantId");
-                            ePayment.InvoiceNumber = wapplication.RegistrationNumber;
-                            payment.EPaymentId = ePayment.Id;
-                            payment.EPayment = ePayment;
-                            wapplication.APayments.Add(payment);
-
-                            _dbContext.EPayments.Add(ePayment);
-                            _dbContext.APayments.Add(payment);
-                        }
-                        _dbContext.WApplications.Update(wapplication);
-                        await _dbContext.SaveChangesAsync();
+                        await ProcessPayments(config, statusWebCheckPayment, wapplication, statusApprovedApplication, statusWebCancel,startDateWeb, statusWebApprovedApplication);
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -220,6 +182,81 @@ namespace AutomaticStepsExecutor
 
             return result;
 
+        }
+
+        private async Task ProcessPayments(IConfiguration config, WApplicationStatus statusWebCheckPayment, WApplication wapplication, AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebCancel, DateTime startDateWeb, WApplicationStatus statusWebApprovedApplication)
+        {
+            _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckPayment, " За проверка за плащане");
+            var numberOfPayments = await _dbContext.EPayments.Where(p => p.APayments.Any(ap => ap.WApplicationId == wapplication.Id)).CountAsync();
+            if (numberOfPayments == 0)
+            {
+                APayment payment = new APayment();
+                payment.EntityState = EntityStateEnum.Added;
+                payment.Id = BaseEntity.GenerateNewId();
+                payment.WApplicationId = wapplication.Id;
+
+                EPayment ePayment = new EPayment();
+                ePayment.EntityState = EntityStateEnum.Added;
+                ePayment.Id = BaseEntity.GenerateNewId();
+
+                ePayment.Amount = wapplication.ApplicationType.Price;
+                ePayment.PaymentStatus = PaymentConstants.PaymentStatuses.Pending;
+                ePayment.MerchantId = config.GetValue<string>("AutomaticStepsExecutor:MerchantId");
+                ePayment.InvoiceNumber = wapplication.RegistrationNumber;
+                payment.EPaymentId = ePayment.Id;
+                payment.EPayment = ePayment;
+
+                _dbContext.ApplyChanges(payment, new List<IBaseIdEntity>());
+               // wapplication.APayments.Add(payment);
+                _dbContext.ApplyChanges(ePayment, new List<IBaseIdEntity>());
+                //_dbContext.EPayments.Add(ePayment);
+                //_dbContext.APayments.Add(payment);
+            }
+            else
+            {
+               await _wApplicationService.ProcessWApplicationCheckPayment(statusApprovedApplication,statusWebApprovedApplication,statusWebCancel,startDateWeb, wapplication);
+            }
+            //_dbContext.WApplications.Update(wapplication);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task ProcessTaxFree(WApplicationStatus statusWebCheckTaxFree, WApplication wapplication)
+        {
+            _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckTaxFree, " За проверка за освобождаване от плащане");
+            // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCheckTaxFree;
+            //_dbContext.WApplications.Update(wapplication);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task ProcessInternalWApplication(AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebApprovedApplication, WApplication wapplication)
+        {
+            var person = await _wApplicationService.ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
+            //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
+            await _dbContext.SaveChangesAsync();
+            if (person != null && person.EntityState != EntityStateEnum.Detached)
+            {
+                _dbContext.Entry(person).State = EntityState.Detached;
+                foreach (var pIds in person.PPersonIds)
+                {
+                    if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
+                    {
+                        _dbContext.Entry(pIds).State = EntityState.Detached;
+                    }
+                }
+            }
+            //foreach (var entry in _dbContext.ChangeTracker.Entries<AStatusH>())
+            //{
+            //    entry.Entity.EntityState = EntityStateEnum.Detached;
+            //}
+        }
+
+        private async Task CancelWApplication(WApplicationStatus statusWebCancel, WApplication wapplication)
+        {
+            _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Неуспешни проверки е регистрите.");
+            // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
+            //_dbContext.WApplications.Update(wapplication);
+            await _dbContext.SaveChangesAsync();
+            _dbContext.ChangeTracker.Clear();
         }
 
         private string SuccessfullCheckInRegisters(WApplication wapplication, int maxNumberOfAttempts)

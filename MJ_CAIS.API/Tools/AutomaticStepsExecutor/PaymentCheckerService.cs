@@ -17,20 +17,28 @@ namespace AutomaticStepsExecutor
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<PaymentCheckerService> _logger;
-        private readonly IRegisterTypeService _registerTypeService;
-        private readonly IApplicationService _applicationService;
-        private readonly IApplicationWebService _applicationWebService;
-        private readonly IPersonService _personService;
+        //private readonly IRegisterTypeService _registerTypeService;
+        //private readonly IApplicationService _applicationService;
+        //private readonly IApplicationWebService _applicationWebService;
+        //private readonly IPersonService _personService;
         private readonly IWApplicationService _wApplicationService;
-        public PaymentCheckerService(CaisDbContext dbContext, ILogger<PaymentCheckerService> logger, IRegisterTypeService registerTypeService, IApplicationService applicationService, IApplicationWebService applicationWebService, IPersonService personService, IWApplicationService wApplicationService)
+      
+        public PaymentCheckerService(CaisDbContext dbContext, 
+            ILogger<PaymentCheckerService> logger,
+            //IRegisterTypeService registerTypeService,
+            //IApplicationService applicationService, 
+            //IApplicationWebService applicationWebService,
+            //IPersonService personService,
+            IWApplicationService wApplicationService)
         {
             _dbContext = dbContext;
             _logger = logger;
-            _registerTypeService = registerTypeService;
-            _applicationService = applicationService;
-            _applicationWebService = applicationWebService;
-            _personService = personService;
+            //_registerTypeService = registerTypeService;
+            //_applicationService = applicationService;
+            //_applicationWebService = applicationWebService;
+            //_personService = personService;
             _wApplicationService = wApplicationService;
+            
         }
 
         public async Task PreSelectAsync(Microsoft.Extensions.Configuration.IConfiguration config)
@@ -40,10 +48,10 @@ namespace AutomaticStepsExecutor
 
         public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
         {
-            var result = await Task.FromResult(_dbContext.WApplications
+            var result = await Task.FromResult(_dbContext.WApplications.AsNoTracking()
                                             .Include(a => a.APayments)
-                                            .ThenInclude(p => p.EPayment)
-                                            .Include(a => a.ApplicationType)
+                                            .ThenInclude(p => p.EPayment).AsNoTracking()
+                                            .Include(a => a.ApplicationType).AsNoTracking()
                                .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebCheckPayment)
                                  .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)
@@ -71,7 +79,7 @@ namespace AutomaticStepsExecutor
             if (entities.Count > 0)
             {
                 numberOfProcesedEntities = entities.Count;
-                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToListAsync();
+                var statuses = await _dbContext.AApplicationStatuses.AsNoTracking().Where(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToListAsync();
                 if (statuses.Count != 1)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication }");
@@ -79,7 +87,7 @@ namespace AutomaticStepsExecutor
                 }
                 var statusApprovedApplication = statuses.First();
 
-                var webStatuses= await _dbContext.WApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.WebApprovedApplication
+                var webStatuses= await _dbContext.WApplicationStatuses.AsNoTracking().Where(a => a.Code == ApplicationConstants.ApplicationStatuses.WebApprovedApplication
                                             || a.Code == ApplicationConstants.ApplicationStatuses.WebCanceled).ToListAsync();
                 if (webStatuses.Count != 2)
                 {
@@ -104,42 +112,8 @@ namespace AutomaticStepsExecutor
                     try
                     {
                         var wapplication = (WApplication)entity;
-                        //todo: check payment
-                        //todo: да гледаме ли срок на плащането, ако не е платено в срок, но все пак е платено какво става?!  
-                        bool isPaid = CheckPayment(wapplication);
-                        if (isPaid)
-                        {
-                            //await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
-                            //todo: must add some FK for payment?!
-                            var person = await _wApplicationService.ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
-                            //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
-                            await _dbContext.SaveChangesAsync();
-                            if (person != null && person.EntityState != EntityStateEnum.Detached)
-                            {
-                                _dbContext.Entry(person).State = EntityState.Detached;
-                                foreach (var pIds in person.PPersonIds)
-                                {
-                                    if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
-                                    {
-                                        _dbContext.Entry(pIds).State = EntityState.Detached;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if(wapplication.CreatedOn.Value.Date< startDateWeb)
-                            {
-                                _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
-                                //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
-                                _dbContext.WApplications.Update(wapplication);
-                                await _dbContext.SaveChangesAsync();
-
-                            }
-                          
-                        }
-                     
-                      
+                        await _wApplicationService.ProcessWApplicationCheckPayment(statusApprovedApplication, statusWebApprovedApplication, statusWebCancel, startDateWeb, wapplication);
+                        await _dbContext.SaveChangesAsync();
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -156,10 +130,9 @@ namespace AutomaticStepsExecutor
 
         }
 
-        private bool CheckPayment(WApplication wapplication)
-        {
-            return wapplication.APayments.All(x => x.EPayment.PaymentStatus == PaymentConstants.PaymentStatuses.Payed);
-        }
+        
+
+       
 
         public async Task PostProcessAsync(Microsoft.Extensions.Configuration.IConfiguration config)
         {
