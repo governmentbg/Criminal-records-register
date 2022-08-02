@@ -48,6 +48,7 @@ export class EcrisReqPreviewComponent implements OnInit {
       cityPerson: [{ value: "", disabled: true }],
       personId: [{ value: "", disabled: true }],
       sex: [{ value: "", disabled: true }],
+      birthday: [{ value: "", disabled: true }],
       firstNameFormer: [{ value: "", disabled: true }],
       middleNameFormer: [{ value: "", disabled: true }],
       lastNameFormer: [{ value: "", disabled: true }],

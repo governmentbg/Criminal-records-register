@@ -52,7 +52,7 @@ namespace MJ_CAIS.Services
             ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
         {
             var baseQuery = _ecrisMessageRepository.CustomGetAll().Where(x => x.EcrisMsgStatus == statusId);
-            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var resultQuery = await ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<EcrisMessageGridDTO>();
             PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
@@ -81,7 +81,8 @@ namespace MJ_CAIS.Services
         public async Task<EcrisRequestDTO> GetEcrisDocumentByIdAsync(string ecrisMessageId)
         {
             var ecrisMsg = "0cfd5df5-a14c-436e-afa3-3bdce104bbd9"; // for test
-            var ecrisMessage = await _dDocumentRepository.SelectByEcrisIdAsync(ecrisMessageId);
+            var ecrisMsgNot = "3aa8eb7e-0909-48a9-bdc3-ccdd29059928"; // for test
+            var ecrisMessage = await _dDocumentRepository.SelectByEcrisIdAsync(ecrisMsgNot);
             if (ecrisMessage == null)
             {
                 throw new BusinessLogicException($"�� � ������� �������� � ID: {ecrisMessage}");
@@ -90,7 +91,7 @@ namespace MJ_CAIS.Services
             var doc = new XmlDocument();
             var xml = Encoding.UTF8.GetString(ecrisMessage.DocContent.Content);
             var msg = XmlUtils.DeserializeXml<AbstractMessageType>(xml);
-            EcrisRequestDTO result = new EcrisRequestDTO();
+            var result = new EcrisRequestDTO();
 
             if (ecrisMessage.DocTypeId == "EcrisRequest")
             {
@@ -111,7 +112,6 @@ namespace MJ_CAIS.Services
             if (ecrisMessage.DocTypeId == "EcrisNot")
             {
                 result = mapper.Map<EcrisRequestDTO>((NotificationMessageType)msg);
-
             }
 
             if (ecrisMessage.DocTypeId == "EcrisRes")
@@ -125,7 +125,6 @@ namespace MJ_CAIS.Services
 
             return result;
         }
-
 
 
         public async Task<IQueryable<FbbcGridDTO>> GetEcrisFbbcsByIdAsync(string ecrisMessageId)
@@ -146,12 +145,6 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
-        }
-
-
 
         public async Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId)
         {
@@ -168,13 +161,14 @@ namespace MJ_CAIS.Services
         }
 
 
-
         public async Task IdentifyAsync(string aInDto, string graoPersonId)
         {
             var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
             //await dbContext.EEcrisMessages
             //.FirstOrDefaultAsync(x => x.Id == aInDto);
-            var ecrisIdentif = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisIdentification>(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId);
+            var ecrisIdentif =
+                await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisIdentification>(x =>
+                    x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId);
             //await dbContext.EEcrisIdentifications
             //    .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
             //    .FirstOrDefaultAsync();
@@ -195,6 +189,11 @@ namespace MJ_CAIS.Services
             return await _ecrisMessageRepository.GetGraoPeopleAsync(aId);
         }
 
+        protected override bool IsChildRecord(string aId, List<string> aParentsList)
+        {
+            return false;
+        }
+
         private async Task<EEcrisAuthority> getSendingMemberStateName(RequestMessageType requestMessage)
         {
             EEcrisAuthority? memberState = null;
@@ -205,7 +204,7 @@ namespace MJ_CAIS.Services
                         _dbContext.EEcrisAuthorities
                             .AsNoTracking()
                             .FirstOrDefaultAsync(x =>
-                                x.MemberStateCode == (requestMessage.MessageSendingMemberState.ToString()));
+                                x.MemberStateCode == requestMessage.MessageSendingMemberState.ToString());
             }
 
             return memberState;
@@ -221,7 +220,7 @@ namespace MJ_CAIS.Services
                         _dbContext.EEcrisAuthorities
                             .AsNoTracking()
                             .FirstOrDefaultAsync(x =>
-                                x.MemberStateCode == (requestMessage.MessageReceivingMemberState[0].ToString()));
+                                x.MemberStateCode == requestMessage.MessageReceivingMemberState[0].ToString());
             }
 
             return memberState;
@@ -278,6 +277,5 @@ namespace MJ_CAIS.Services
                 }
             }
         }
-
     }
 }
