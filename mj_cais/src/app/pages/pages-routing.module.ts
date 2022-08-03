@@ -26,17 +26,10 @@ const routes: Routes = [
           ),
       },
       {
-        path: "application-reports",
+        path: "report-applications",
         loadChildren: () =>
-          import("./application-report/application-report.module").then(
-            (m) => m.ApplicationReportModule
-          ),
-      },
-      {
-        path: "application-report",
-        loadChildren: () =>
-          import("./application-report/application-report.module").then(
-            (m) => m.ApplicationReportModule
+          import("./report-application/report-application.module").then(
+            (m) => m.ReportApplicationModule
           ),
       },
       {
