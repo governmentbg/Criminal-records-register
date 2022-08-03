@@ -8,8 +8,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public WApplicationReportSearchPerProfile()
         {
-            CreateMap<WReport, WApplicationReportSearchPerGridDTO>();
-            CreateMap<WReport, WApplicationReportSearchPerDTO>();
+            CreateMap<WReportSearchPer, WApplicationReportSearchPerGridDTO>();
         }
     }
 }
