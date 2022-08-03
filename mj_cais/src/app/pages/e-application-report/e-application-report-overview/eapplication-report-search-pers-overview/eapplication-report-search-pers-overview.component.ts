@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit } from "@angular/core";
+import { DatePrecisionConstants } from "../../../../@core/components/forms/inputs/date-precision/_models/date-precision.constants";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { EApplicationReportSearchPersGridService } from "../_data/eapplication-report-search-pers-grid.service";
@@ -18,10 +19,20 @@ export class EapplicationReportSearchPersOverviewComponent extends RemoteGridWit
     injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("e-application-report-check-pers-search", service, injector);
+    super("e-application-report-search-pers-search", service, injector);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
+  }
+
+  formatPrecision(value: any) {
+    if (value == DatePrecisionConstants.fullDate.id) {
+      return DatePrecisionConstants.fullDate.name;
+    } else if (value == DatePrecisionConstants.yearAndMonth.id) {
+      return DatePrecisionConstants.yearAndMonth.name;
+    } else if (value == DatePrecisionConstants.year.id) {
+      return DatePrecisionConstants.year.name;
+    }
   }
 }
