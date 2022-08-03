@@ -19,15 +19,15 @@
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title
-      >Журнал - справка за идентификатори</igx-grid-toolbar-title
+      >Журнал - Справка за идентификатори</igx-grid-toolbar-title
     >
   </igx-grid-toolbar>
   <igx-column
-    field="id"
-    header="Идентификатор"
+    field="cServiceType"
+    header="Тип на услуга"
     [sortable]="true"
-    [dataType]="'number'"
-    [hidden]="true"
+    [dataType]="'string'"
+    [width]="'17%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -35,39 +35,32 @@
   </igx-column>
   <igx-column
     field="cServiceUri"
-    header="C_SERVICE_URI"
+    header="Услуга"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'17%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
   <igx-column
-    field="cServiceType"
-    header="C_SERVICE_TYPE"
+    field="cAdministrationName"
+    header="Име на администрация"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
   <igx-column
-    field="cEmplId"
-    header="C_EMPL_ID"
+    field="cAdministrationOid"
+    header="OID на администрация"
     [sortable]="true"
     [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="cEmpNames"
-    header="C_EMP_NAMES"
-    [sortable]="true"
-    [dataType]="'string'"
+    [width]="'20%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -75,9 +68,32 @@
   </igx-column>
   <igx-column
     field="cEmpAddId"
-    header="C_EMP_ADD_ID"
+    header="ID на администрация"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="cEmpNames"
+    header="Имена на служител"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'23%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="cEmplId"
+    header="ID на служител"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'18%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -85,9 +101,10 @@
   </igx-column>
   <igx-column
     field="cEmpPos"
-    header="C_EMP_POS"
+    header="Позиция на служител"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -98,56 +115,7 @@
     header="C_RESP_PERS_ID"
     [sortable]="true"
     [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="cLawReason"
-    header="C_LAW_REASON"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="cRemark"
-    header="C_REMARK"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="cAdministrationOid"
-    header="C_ADMINISTRATION_OID"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="cAdministrationName"
-    header="C_ADMINISTRATION_NAME"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="fullname"
-    header="FULLNAME"
-    [sortable]="true"
-    [dataType]="'string'"
+    [width]="'16%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -155,9 +123,10 @@
   </igx-column>
   <igx-column
     field="birthdate"
-    header="BIRTHDATE"
+    header="Дата на раждане"
     [sortable]="true"
     [dataType]="'date'"
+    [width]="'15%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">
@@ -167,7 +136,7 @@
   </igx-column>
   <igx-column
     field="birthdatePrec"
-    header="BIRTHDATE_PREC"
+    header="Точност"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -177,9 +146,10 @@
   </igx-column>
   <igx-column
     field="birthplace"
-    header="BIRTHPLACE"
+    header="Място на раждане"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'18%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -187,9 +157,10 @@
   </igx-column>
   <igx-column
     field="firstname"
-    header="FIRSTNAME"
+    header="Първо име"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -197,9 +168,10 @@
   </igx-column>
   <igx-column
     field="surname"
-    header="SURNAME"
+    header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -207,9 +179,43 @@
   </igx-column>
   <igx-column
     field="familyname"
-    header="FAMILYNAME"
+    header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="fullname"
+    header="Име"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'28%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="cLawReason"
+    header="Основание"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'21%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="cRemark"
+    header="Забележки"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'21%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -217,9 +223,10 @@
   </igx-column>
   <igx-column
     field="apiServiceCallId"
-    header="API_SERVICE_CALL_ID"
+    header="API service call ID"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'18%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
