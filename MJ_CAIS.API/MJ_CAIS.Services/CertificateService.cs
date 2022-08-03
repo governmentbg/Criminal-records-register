@@ -58,7 +58,10 @@ namespace MJ_CAIS.Services
             aStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
 
             certificate.AStatusHes.Add(aStatusH);
-            certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
+            if (certificate.EntityState != Common.Enums.EntityStateEnum.Added)
+            {
+                certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
+            }
             if (certificate.ModifiedProperties==null)
             {
                 certificate.ModifiedProperties = new List<string>();

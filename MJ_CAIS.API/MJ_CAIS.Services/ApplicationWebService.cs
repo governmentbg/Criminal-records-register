@@ -57,7 +57,7 @@ namespace MJ_CAIS.Services
         public async Task<string> InsertPublicAsync(PublicApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
-            this.TransformDataOnInsertAsync(entity);
+            await  this.TransformDataOnInsertAsync(entity);
             entity.ApplicationTypeId = await GetWebApplicationTypeId();
 
             entity.UserCitizenId = _applicationWebRepository.GetCurrentUserId(); //dbContext.CurrentUserId;
@@ -83,7 +83,7 @@ namespace MJ_CAIS.Services
         public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
-            this.TransformDataOnInsertAsync(entity);
+            await this.TransformDataOnInsertAsync(entity);
             entity.ApplicationTypeId = await GetExternalWebApplicationTypeId();
 
             entity.UserExtId = _applicationWebRepository.GetCurrentUserId();//dbContext.CurrentUserId;
@@ -97,7 +97,7 @@ namespace MJ_CAIS.Services
         protected  async Task TransformDataOnInsertAsync(WApplication entity)
         {
             base.TransformDataOnInsertAsync(entity);
-          
+            entity.EntityState = Common.Enums.EntityStateEnum.Added;
            // entity.ApplicationTypeId = GetWebApplicationTypeId(); //GetExternalWebApplicationTypeId();
             var statusNew =
                 await _applicationWebRepository.SingleOrDefaultAsync<WApplicationStatus>(x => x.Code == ApplicationWebStatuses.NewWebApplication);
@@ -119,7 +119,12 @@ namespace MJ_CAIS.Services
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true)
         {
             wapplication.StatusCode = newStatus.Code;
-            wapplication.EntityState = Common.Enums.EntityStateEnum.Modified;
+            if(wapplication.EntityState!= Common.Enums.EntityStateEnum.Added)
+            {
+                wapplication.EntityState = Common.Enums.EntityStateEnum.Modified;
+
+            }
+         
             if( wapplication.ModifiedProperties== null)
             {
                 wapplication.ModifiedProperties = new List<string>();
