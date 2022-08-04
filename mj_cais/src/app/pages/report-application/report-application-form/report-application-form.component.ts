@@ -1,7 +1,9 @@
-import { Component, Injector, OnInit } from "@angular/core";
+import { Component, Injector, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
 import { Observable } from "rxjs";
+import { CancelDialogComponent } from "../../../@core/components/dialogs/cancel-dialog/cancel-dialog.component";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
@@ -29,6 +31,9 @@ export class ReportApplicationFormComponent
   public reportApplicationStatus: string;
   public ReportApplicationStatusConstants = ReportApplicationStatusConstants;
   public PersonContextEnum = PersonContextEnum;
+
+  @ViewChild("cancelAppReportDialog", { read: IgxDialogComponent })
+  public cancelAppReportDialog: IgxDialogComponent;
 
   constructor(
     service: ReportApplicationService,
@@ -59,6 +64,11 @@ export class ReportApplicationFormComponent
     } else if (!this.isEdit()) {
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
+
+    this.isForPreview =  this.reportApplicationStatus == ReportApplicationStatusConstants.Approved || 
+    this.reportApplicationStatus == ReportApplicationStatusConstants.Canceled || 
+    this.reportApplicationStatus == ReportApplicationStatusConstants.Delivered ;
+
     this.formFinishedLoading.emit();
   }
 
@@ -104,5 +114,25 @@ export class ReportApplicationFormComponent
         this.onServiceError(errorResponse);
       },
     });
+  }
+
+  public onOpenDialogForCancelApplication() {
+    this.dialogService
+      .open(CancelDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((x) => {
+        if (x) {
+          this.service.cancel(this.objectId, x).subscribe({
+            next: (data) => {
+              this.cancelAppReportDialog.close();
+              let message = "Успешно анулирано";
+              this.toastr.showToast("success", message);
+              this.router.navigate(["pages/report-applications"]);
+            },
+            error: (errorResponse) => {
+              this.onServiceError(errorResponse);
+            },
+          });
+        }
+      });
   }
 }

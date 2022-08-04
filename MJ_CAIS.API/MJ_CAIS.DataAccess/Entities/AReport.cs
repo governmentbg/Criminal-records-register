@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public AReport()
         {
             ARepBulletins = new HashSet<ARepBulletin>();
+            AReportStatusHes = new HashSet<AReportStatusH>();
         }
 
         public string Id { get; set; } = null!;
@@ -29,5 +30,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GUser? FirstSigner { get; set; }
         public virtual GUser? SecondSigner { get; set; }
         public virtual ICollection<ARepBulletin> ARepBulletins { get; set; }
+        public virtual ICollection<AReportStatusH> AReportStatusHes { get; set; }
     }
 }

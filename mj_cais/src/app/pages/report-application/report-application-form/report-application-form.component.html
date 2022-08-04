@@ -5,7 +5,8 @@
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="
-        reportApplicationStatus == ReportApplicationStatusConstants.Approved
+        reportApplicationStatus == ReportApplicationStatusConstants.Approved || 
+        reportApplicationStatus == ReportApplicationStatusConstants.Canceled
       "
     >
       <div>
@@ -21,6 +22,7 @@
           type="button"
           class="ml-2"
           style="min-width: 100px"
+          (click)="onOpenDialogForCancelApplication()"
         >
           Анулирай
         </button>

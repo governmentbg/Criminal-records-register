@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
@@ -56,6 +57,7 @@ namespace MJ_CAIS.Services
 
             entity.ARepCitizenships = CaisMapper.MapMultipleChooseToEntityList<ARepCitizenship, string, string>(
              aInDto.Person.Nationalities, nameof(ARepCitizenship.Id), nameof(ARepCitizenship.CountryId));
+            entity.AReportStatusHes = new List<AReportStatusH> { CreateH(entity.StatusCode) };
 
             await _reportApplicationRepository.SaveEntityAsync(entity, true);
             return entity.Id;
@@ -76,6 +78,8 @@ namespace MJ_CAIS.Services
 
             if (isFinal)
             {     // todo
+                reportApp.AReportStatusHes = new List<AReportStatusH> { CreateH(reportApp.StatusCode) };
+
                 //await UpdatePersonDataAsync(aInDto, entity);
                 //await GenerateReportFromReportApplication(applicationDb.Id);
                 return entity.Id;
@@ -83,6 +87,36 @@ namespace MJ_CAIS.Services
 
             await _reportApplicationRepository.SaveEntityAsync(entity, true);
             return entity.Id;
+        }
+
+        public async Task<string> CancelAsync(string aId, string cancelDesc)
+        {
+            var reportApp = await baseAsyncRepository.SingleOrDefaultAsync<AReportApplication>(a => a.Id == aId);
+            if (reportApp == null) return null;
+
+            if (string.IsNullOrEmpty(cancelDesc))
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.fieldIsRequired, ReportApplicationResources.lblCancelDesc));
+
+            reportApp.EntityState = EntityStateEnum.Modified;
+            reportApp.ModifiedProperties = new List<string>{nameof(reportApp.StatusCode), nameof(reportApp.Version)};
+            reportApp.StatusCode = ReportApplicationConstants.Status.Canceled;
+            // todo: add history
+            // todo: check for generated report
+
+            reportApp.AReportStatusHes = new List<AReportStatusH> {CreateH(reportApp.StatusCode, cancelDesc)};
+            await _reportApplicationRepository.SaveEntityAsync(reportApp,true);
+            return reportApp.Id;
+        }
+
+        private static AReportStatusH CreateH(string statusCode, string desc = null)
+        {
+            return new AReportStatusH
+            {
+                Id = BaseEntity.GenerateNewId(),
+                Descr = desc,
+                EntityState = EntityStateEnum.Added,
+                StatusCode = statusCode,
+            };
         }
     }
 }

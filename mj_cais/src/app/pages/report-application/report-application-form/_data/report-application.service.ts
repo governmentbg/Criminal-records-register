@@ -1,4 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
+import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { ReportApplicationModel } from "../_models/report-application.model";
 
@@ -11,5 +12,20 @@ export class ReportApplicationService extends CaisCrudService<
 > {
   constructor(injector: Injector) {
     super(ReportApplicationModel, injector, "a-report-applications");
+  }
+
+  public cancel(id: string, cancelDesc: any): Observable<any[]> {
+    return this.http.post<any>(`${this.url}/cancel/${id}`, cancelDesc);
+  }
+
+  public updateFinal(
+    id: string,
+    model: ReportApplicationModel
+  ): Observable<ReportApplicationModel> {
+    return this.http.put<ReportApplicationModel>(
+      this.url + `/final-edit/${id}`,
+      model,
+      {}
+    );
   }
 }

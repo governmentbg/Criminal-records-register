@@ -6,10 +6,8 @@ export class ReportApplicationGridModel extends BaseGridModel {
   public firstname: string;
   public surname: string;
   public familyname: string;
-  public statusCode: string;
   public statusName: string;
   public birthDate: Date;
-  public csAuthorityBirth: string;
   public createdOn: Date;
   
   constructor(init?: Partial<ReportApplicationGridModel>) {
@@ -21,9 +19,7 @@ export class ReportApplicationGridModel extends BaseGridModel {
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;
       this.birthDate = init.birthDate ?? null;
-      this.statusCode = init.statusCode ?? null;
       this.statusName = init.statusName ?? null;
-      this.csAuthorityBirth = init.csAuthorityBirth ?? null;
       this.createdOn = init.createdOn ?? null;
     }
   }

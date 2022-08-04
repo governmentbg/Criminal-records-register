@@ -6,6 +6,7 @@ using MJ_CAIS.Web.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
 using MJ_CAIS.Common.Constants;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.DTO.Common;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -54,5 +55,13 @@ namespace MJ_CAIS.Web.Controllers
             if (string.IsNullOrEmpty(result)) return NotFound();
             return Ok();
         }
+
+        [HttpPost("cancel/{aId}")]
+        public virtual async Task<IActionResult> Cancel(string aId, [FromBody] CancelDTO aInDto)
+        {
+            await this._reportApplicationService.CancelAsync(aId, aInDto.Description);
+            return Ok();
+        }
+        
     }
 }

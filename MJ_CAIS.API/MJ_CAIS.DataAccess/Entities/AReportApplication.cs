@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public AReportApplication()
         {
             ARepCitizenships = new HashSet<ARepCitizenship>();
+            AReportStatusHes = new HashSet<AReportStatusH>();
             AReports = new HashSet<AReport>();
         }
 
@@ -82,6 +83,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual APurpose? PurposeNavigation { get; set; }
         public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<ARepCitizenship> ARepCitizenships { get; set; }
+        public virtual ICollection<AReportStatusH> AReportStatusHes { get; set; }
         public virtual ICollection<AReport> AReports { get; set; }
     }
 }

@@ -106,6 +106,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Полето {0} е задължително.
+        /// </summary>
+        public static string fieldIsRequired {
+            get {
+                return ResourceManager.GetString("fieldIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Изтърпяно наказание с идентификатор {0} не съществува..
         /// </summary>
         public static string isinDataDoesNotExist {

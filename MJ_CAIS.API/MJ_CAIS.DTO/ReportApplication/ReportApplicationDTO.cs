@@ -1,4 +1,3 @@
-using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.DTO.ReportApplication
@@ -8,8 +7,8 @@ namespace MJ_CAIS.DTO.ReportApplication
         public string? RegistrationNumber { get; set; }
         public string? RegistrationNumberDisplay { get; set; }
         public string? Purpose { get; set; }
-        public PersonDTO? Person { get; set; }      
-        public string? ApplicantName { get; set; }    
+        public PersonDTO? Person { get; set; }
+        public string? ApplicantName { get; set; }
         public string? AddrName { get; set; }
         public string? AddrStr { get; set; }
         public string? AddrDistrict { get; set; }
@@ -21,7 +20,7 @@ namespace MJ_CAIS.DTO.ReportApplication
         public string? StatusCode { get; set; }
         public string? StatusName { get; set; }
         public string? CsAuthorityId { get; set; }
-        public string? ApplicantDescr { get; set; } 
+        public string? ApplicantDescr { get; set; }
         public string? ApplicantId { get; set; }
         public string? PurposeId { get; set; }
     }

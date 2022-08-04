@@ -73,6 +73,10 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CsAuthorityBirthId { get; set; }
         public string? StatusCode { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public decimal? WebCheckPaymentReady { get; set; }
+        public decimal? WebCheckTaxFreeReady { get; set; }
+        public string? RegNumberReqId { get; set; }
+        public string? ResponseAddress { get; set; }
 
         public virtual AApplicationType? ApplicationType { get; set; }
         public virtual GCity? BirthCity { get; set; }

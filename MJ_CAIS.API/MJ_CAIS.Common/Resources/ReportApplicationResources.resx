@@ -126,6 +126,9 @@
   <data name="delivered" xml:space="preserve">
     <value>Доставено</value>
   </data>
+  <data name="lblCancelDesc" xml:space="preserve">
+    <value>Основание</value>
+  </data>
   <data name="statusNew" xml:space="preserve">
     <value>Ново искане</value>
   </data>

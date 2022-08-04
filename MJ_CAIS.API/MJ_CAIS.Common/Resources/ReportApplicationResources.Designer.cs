@@ -88,6 +88,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Основание.
+        /// </summary>
+        public static string lblCancelDesc {
+            get {
+                return ResourceManager.GetString("lblCancelDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ново искане.
         /// </summary>
         public static string statusNew {
