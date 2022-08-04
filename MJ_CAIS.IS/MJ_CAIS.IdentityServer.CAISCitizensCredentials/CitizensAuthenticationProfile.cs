@@ -20,7 +20,6 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
             services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
             services.AddTransient<IProfileClientService, CitizensProfileService>();
-            services.AddTransient<IProfileClientService, LocalCitizensProfileService>();
 
         }
     }

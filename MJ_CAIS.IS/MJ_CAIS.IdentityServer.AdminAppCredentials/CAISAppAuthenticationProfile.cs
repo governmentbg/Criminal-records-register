@@ -22,7 +22,6 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
             services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
             services.AddTransient<IProfileClientService, CAISAppProfileService>();
-            services.AddTransient<IProfileClientService, LocalAdminProfileService>();
 
         }
     }
