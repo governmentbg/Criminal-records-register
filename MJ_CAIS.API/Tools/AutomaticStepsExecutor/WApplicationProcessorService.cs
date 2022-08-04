@@ -147,9 +147,7 @@ namespace AutomaticStepsExecutor
                         if (checkRegixSuccess == Rejected)
                         {
                             await CancelWApplication(statusWebCancel, wapplication);
-                            numberOfSuccessEntities++;
-
-                            
+                            numberOfSuccessEntities++;                         
                             
                            
                             continue;
@@ -172,6 +170,8 @@ namespace AutomaticStepsExecutor
                         }
                         //дефолтно - очаква плащане
                         await ProcessPayments(config, statusWebCheckPayment, wapplication, statusApprovedApplication, statusWebCancel,startDateWeb, statusWebApprovedApplication);
+                       
+                        _dbContext.ChangeTracker.Clear();
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
@@ -191,6 +191,7 @@ namespace AutomaticStepsExecutor
         private async Task ProcessPayments(IConfiguration config, WApplicationStatus statusWebCheckPayment, WApplication wapplication, AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebCancel, DateTime startDateWeb, WApplicationStatus statusWebApprovedApplication)
         {
             _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckPayment, " За проверка за плащане");
+            _dbContext.ApplyChanges(wapplication, new List<IBaseIdEntity>());
             var numberOfPayments = await _dbContext.EPayments.Where(p => p.APayments.Any(ap => ap.WApplicationId == wapplication.Id)).CountAsync();
             if (numberOfPayments == 0)
             {
@@ -212,7 +213,7 @@ namespace AutomaticStepsExecutor
 
                 _dbContext.ApplyChanges(payment, new List<IBaseIdEntity>());
                // wapplication.APayments.Add(payment);
-                _dbContext.ApplyChanges(ePayment, new List<IBaseIdEntity>());
+                //_dbContext.ApplyChanges(ePayment, new List<IBaseIdEntity>());
                 //_dbContext.EPayments.Add(ePayment);
                 //_dbContext.APayments.Add(payment);
             }
@@ -220,20 +221,19 @@ namespace AutomaticStepsExecutor
             {
                await _wApplicationService.ProcessWApplicationCheckPayment(statusApprovedApplication,statusWebApprovedApplication,statusWebCancel,startDateWeb, wapplication);
             }
-            //_dbContext.WApplications.Update(wapplication);
+  
             await _dbContext.SaveChangesAsync();
             _dbContext.ChangeTracker.Clear();
-            _dbContext.DetachAllEntities();
+            
         }
 
         private async Task ProcessTaxFree(WApplicationStatus statusWebCheckTaxFree, WApplication wapplication)
         {
             _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckTaxFree, " За проверка за освобождаване от плащане");
-            // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCheckTaxFree;
-            //_dbContext.WApplications.Update(wapplication);
+            _dbContext.ApplyChanges(wapplication, new List<IBaseIdEntity>());
             await _dbContext.SaveChangesAsync();
             _dbContext.ChangeTracker.Clear();
-            _dbContext.DetachAllEntities();
+    
         }
 
         private async Task ProcessInternalWApplication(AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebApprovedApplication, WApplication wapplication)
@@ -242,7 +242,7 @@ namespace AutomaticStepsExecutor
             //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
             await _dbContext.SaveChangesAsync();
             _dbContext.ChangeTracker.Clear();
-            _dbContext.DetachAllEntities();
+         
             //if (person != null && person.EntityState != EntityStateEnum.Detached)
             //{
             //    _dbContext.Entry(person).State = EntityState.Detached;
@@ -263,11 +263,10 @@ namespace AutomaticStepsExecutor
         private async Task CancelWApplication(WApplicationStatus statusWebCancel, WApplication wapplication)
         {
             _applicationWebService.SetWApplicationStatus(wapplication, statusWebCancel, "Неуспешни проверки е регистрите.");
-            // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
-            //_dbContext.WApplications.Update(wapplication);
+            _dbContext.ApplyChanges(wapplication, new List<IBaseIdEntity>());
             await _dbContext.SaveChangesAsync();
             _dbContext.ChangeTracker.Clear();
-            _dbContext.DetachAllEntities();
+         
         
         }
 

@@ -108,10 +108,12 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.statusDoesNotExist, ApplicationWebStatuses.NewWebApplication));
 
             SetWApplicationStatus(entity, statusNew, ApplicationResources.titleNewApp, false);
+         
             entity.UserId = _applicationWebRepository.GetCurrentUserId(); //dbContext.CurrentUserId; // TODO: must be nullable
             entity.WApplicationId = "-"; // TODO: remove, no such column
             entity.StatusCode = ApplicationWebStatuses.NewWebApplication;
             entity.CsAuthorityId = _userContext.CsAuthorityId ?? "660"; // TODO: constant
+            _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
         }
 
         
@@ -135,7 +137,7 @@ namespace MJ_CAIS.Services
             wStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
             wStatusH.Descr = description;
             wStatusH.StatusCode = newStatus.Code;
-            wStatusH.StatusCodeNavigation = newStatus;
+            //wStatusH.StatusCodeNavigation = newStatus;
             if (wapplication.WStatusHes == null)
             {
                 wapplication.WStatusHes = new List<WStatusH>();
@@ -148,7 +150,7 @@ namespace MJ_CAIS.Services
 
             wapplication.WStatusHes.Add(wStatusH);
             _applicationWebRepository.ApplyChanges (wStatusH, new List<IBaseIdEntity>());
-            _applicationWebRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>());
+           // _applicationWebRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>());
             //if (addToContext)
             //{
             //    dbContext.WStatusHes.Add(wStatusH);

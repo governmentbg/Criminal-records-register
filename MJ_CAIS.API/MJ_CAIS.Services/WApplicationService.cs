@@ -138,6 +138,7 @@ namespace MJ_CAIS.Services
         {
             //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
             _webApplicationService.SetWApplicationStatus(wapplication, wapplicationStatus, ApplicationResources.descAprovedApp);
+     
             string regNumber = "";
 
             if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
@@ -199,9 +200,9 @@ namespace MJ_CAIS.Services
                 UserCitizenId = wapplication.UserCitizenId,
                 UserExtId = wapplication.UserExtId,
                 UserId = wapplication.UserId,
-                WApplicationId = wapplication.Id,
+                WApplicationId = wapplication.Id,                
                 RegistrationNumber = regNumber,
-                ApplicationType = wapplication.ApplicationType,
+                //ApplicationType = wapplication.ApplicationType,
                 ApplicationTypeId = wapplication.ApplicationTypeId,
                 EntityState = EntityStateEnum.Added
             };
@@ -234,7 +235,7 @@ namespace MJ_CAIS.Services
             //                                             && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
 
             appl.EgnId = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Id;
-            appl.EgnNavigation = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn);
+            //appl.EgnNavigation = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn);
 
             //foreach (var v in wapplication.AAppCitizenships)
             //{
@@ -278,10 +279,11 @@ namespace MJ_CAIS.Services
             //}
 
             _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);
-           // dbContext.AApplications.Add(appl);
+            // dbContext.AApplications.Add(appl);
             //dbContext.AStatusHes.AddRange(appl.AStatusHes);
             // dbContext.PAppIds.AddRange(appl.PAppIds);
             //dbContext.WApplications.Update(wapplication);
+           
             _wApplicationRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>(), true);
 
             return person;
@@ -316,9 +318,7 @@ namespace MJ_CAIS.Services
                 if (wapplication.CreatedOn.Value.Date < startDateWeb)
                 {
                     _webApplicationService.SetWApplicationStatus(wapplication, statusWebCancel, "Служебно анулиране - услугата не е платена в срок.");
-                    //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCanceled;
-                    // _dbContext.WApplications.Update(wapplication);
-                    //await _dbContext.SaveChangesAsync();
+                    _wApplicationRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>());
 
                 }
 
