@@ -60,7 +60,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     {
                         Name = u.Name,
                         SubjectId = u.Id,
-                        Active = u.Active,
+                        Active = true, // Allways returns active. Specific roles for inactive users is returned in the profile data
                         Username = u.Egn
                     }).FirstOrDefault();
             }
@@ -125,6 +125,14 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 if (user.IsAdmin.HasValue && user.IsAdmin.Value)
                 {
                     context.IssuedClaims.Add(new Claim("isAdmin", "true"));
+                }
+                if (user.Active.HasValue && user.Active.Value)
+                {
+                    context.IssuedClaims.Add(new Claim("Active", "true"));
+                }
+                else
+                {
+                    context.IssuedClaims.Add(new Claim("NotActive", "true"));
                 }
             }
             throw new NotImplementedException();
