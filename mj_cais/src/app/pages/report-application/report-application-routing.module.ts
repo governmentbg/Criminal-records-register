@@ -40,18 +40,18 @@ const routes: Routes = [
       },
     },
   },
-  // {
-  //   path: "edit/:ID",
-  //   component: ApplicationFormComponent,
-  //   resolve: { dbData: ApplicationResolver },
-  //   data: { edit: true },
-  // },
-  // {
-  //   path: "preview/:ID",
-  //   component: ApplicationFormComponent,
-  //   resolve: { dbData: ApplicationResolver },
-  //   data: { edit: true, preview: true },
-  // },
+  {
+    path: "edit/:ID",
+    component: ReportApplicationFormComponent,
+    resolve: { dbData: ReportApplicationResolver },
+    data: { edit: true },
+  },
+  {
+    path: "preview/:ID",
+    component: ReportApplicationFormComponent,
+    resolve: { dbData: ReportApplicationResolver },
+    data: { edit: true, preview: true },
+  },
 
   {
     path: "",

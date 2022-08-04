@@ -5,7 +5,7 @@ export class ReportApplicationModel extends BaseModel {
   public id: string = null;
   public registrationNumber: string = null;
   public purpose: string = null;
-  public personData: PersonModel = null;
+  public person: PersonModel = null;
   public applicantName: string = null;
   public addrName: string = null;
   public addrStr: string = null;
@@ -28,7 +28,7 @@ export class ReportApplicationModel extends BaseModel {
     this.registrationNumber = init?.registrationNumber ?? null;
     this.registrationNumberDisplay = init?.registrationNumberDisplay ?? null;
     this.purpose = init?.purpose ?? null;
-    this.personData = init?.personData ?? null;
+    this.person = init?.person ?? null;
     this.applicantName = init?.applicantName ?? null;
     this.addrName = init?.addrName ?? null;
     this.addrStr = init?.addrStr ?? null;
@@ -41,6 +41,7 @@ export class ReportApplicationModel extends BaseModel {
     this.csAuthorityName = init?.csAuthorityName ?? null;
     this.applicantDescr = init?.applicantDescr ?? null;
     this.purposeId = init?.purposeId ?? null;
+    this.statusCode = init?.statusCode ?? null;
     this.statusName = init?.statusName ?? null;
   }
 }

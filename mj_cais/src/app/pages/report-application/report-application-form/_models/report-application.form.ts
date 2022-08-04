@@ -10,7 +10,7 @@ export class ReportApplicationForm extends BaseForm {
   public registrationNumber: FormControl;
   public registrationNumberDisplay: FormControl;
   public purpose: FormControl;
-  public personData: PersonForm;
+  public person: PersonForm;
   public applicantName: FormControl;
   public addrName: FormControl;
   public addrStr: FormControl;
@@ -32,7 +32,7 @@ export class ReportApplicationForm extends BaseForm {
     this.registrationNumber = new FormControl(null);
     this.registrationNumberDisplay = new FormControl(null);
     this.purpose = new FormControl(null);
-    this.personData = new PersonForm(PersonContextEnum.Application, false);
+    this.person = new PersonForm(PersonContextEnum.Application, false);
     this.applicantName = new FormControl(null);
     this.addrName = new FormControl(null);
     this.addrStr = new FormControl(null);
@@ -58,7 +58,7 @@ export class ReportApplicationForm extends BaseForm {
       registrationNumber: this.registrationNumber,
       registrationNumberDisplay: this.registrationNumberDisplay,
       purpose: this.purpose,
-      personData: this.personData.group,
+      person: this.person.group,
       applicantName: this.applicantName,
       addrName: this.addrName,
       addrStr: this.addrStr,

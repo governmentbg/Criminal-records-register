@@ -10,6 +10,6 @@ export class ReportApplicationService extends CaisCrudService<
   string
 > {
   constructor(injector: Injector) {
-    super(ReportApplicationModel, injector, "applications");
+    super(ReportApplicationModel, injector, "a-report-applications");
   }
 }

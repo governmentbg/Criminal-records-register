@@ -44,6 +44,7 @@ export class ReportApplicationResolver implements Resolve<any> {
       purposeIds: this.nomenclatureService.getPurposes(),
       users: this.nomenclatureService.getUsers(), // todo? remote
       countries: this.nomenclatureService.getCountries(),
+      genderTypes: this.nomenclatureService.getGenderTypes(),
     };
     return forkJoin(result);
   }
@@ -53,4 +54,5 @@ export class ReportApplicationResolverData extends BaseResolverData<ReportApplic
   public purposeIds: Observable<BaseNomenclatureModel[]>;
   public users: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
+  public genderTypes: Observable<BaseNomenclatureModel[]>;
 }

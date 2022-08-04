@@ -8,5 +8,7 @@ namespace MJ_CAIS.Services.Contracts
     public interface IReportApplicationService : IBaseAsyncService<ReportApplicationDTO, ReportApplicationDTO, ReportApplicationGridDTO, AReportApplication, string>
     {
         Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode);
+
+        Task<string> UpdateAsync(ReportApplicationDTO aInDto, bool isFinal);
     }
 }

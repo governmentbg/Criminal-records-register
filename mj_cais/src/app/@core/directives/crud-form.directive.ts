@@ -264,6 +264,11 @@ export abstract class CrudForm<
   }
 
   protected onServiceError(errorResponse): void {
+    if(errorResponse.code == "401"){
+      this.router.navigateByUrl("pages");
+      return;
+    }
+    
     let title = this.dangerMessage;
     let errorText = errorResponse.status + " " + errorResponse.statusText;
 

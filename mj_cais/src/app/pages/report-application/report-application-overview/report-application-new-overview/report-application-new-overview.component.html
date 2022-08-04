@@ -31,6 +31,7 @@
           >Всички искания</nb-toggle
         >
         <a
+          class="ml-2"
           nbButton
           matRipple
           [status]="'success'"
@@ -39,9 +40,7 @@
           <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Ново искане
         </a>
       </div>
-      <div class="ml-auto">
-        
-      </div>
+      <div class="ml-auto"></div>
     </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
@@ -118,11 +117,11 @@
     [sortable]="true"
     [dataType]="'date'"
   >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDate(cell.value)">
-      {{ this.dateFormatService.displayDate(cell.value) }}
-    </span>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
   </igx-column>
 
   <igx-column
@@ -143,21 +142,21 @@
     [filterable]="false"
     [pinned]="true"
   >
-    <!-- <ng-template igxCell let-cell="cell">
+    <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [routerLink]="['/pages/applications/preview', cell.rowData.id]"
+        [routerLink]="['/pages/report-applications/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
         *ngIf="hideStatus"
         [title]="'Редактиране'"
-        [routerLink]="['/pages/applications/edit', cell.rowData.id]"
+        [routerLink]="['/pages/report-applications/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>
-    </ng-template> -->
+    </ng-template>
   </igx-column>
 
   <ng-template #pager let-grid>
