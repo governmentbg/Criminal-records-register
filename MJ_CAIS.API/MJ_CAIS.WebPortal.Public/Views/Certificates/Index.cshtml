@@ -8,6 +8,10 @@
 @using X.PagedList.Web.Common
 @model X.PagedList.IPagedList<MJ_CAIS.DataAccess.Entities.WCertificate>
 
+@{
+    var title = CertificateResources.titleCertificates;
+    ViewData["Title"] = title;
+}
 
 
 <div class="container">
