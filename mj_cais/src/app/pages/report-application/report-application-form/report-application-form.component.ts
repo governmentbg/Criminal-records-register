@@ -44,33 +44,29 @@ export class ReportApplicationFormComponent
     debugger;
     this.fullForm = new ReportApplicationForm();
     this.fullForm.group.patchValue(this.dbData.element);
-
+    this.reportApplicationStatus = this.fullForm.statusCode.value;
     let selectedForeignKeys =
-      this.fullForm.personData.nationalities.selectedForeignKeys.value;
+      this.fullForm.person.nationalities.selectedForeignKeys.value;
     let mustAddDefaultCountry =
       !this.isEdit() &&
       (selectedForeignKeys == null || selectedForeignKeys.length == 0);
 
     if (mustAddDefaultCountry) {
-      this.fullForm.personData.nationalities.selectedForeignKeys.patchValue([
+      this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
         CommonConstants.bgCountryId,
       ]);
-      this.fullForm.personData.nationalities.isChanged.patchValue(true);
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
     } else if (!this.isEdit()) {
-      this.fullForm.personData.nationalities.isChanged.patchValue(true);
+      this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
     this.formFinishedLoading.emit();
   }
 
   buildFormImpl(): FormGroup {
-    debugger;
-
     return this.fullForm.group;
   }
 
   createInputObject(object: ReportApplicationModel) {
-    debugger;
-
     return object;
   }
 

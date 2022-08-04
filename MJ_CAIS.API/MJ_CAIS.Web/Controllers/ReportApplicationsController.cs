@@ -25,6 +25,34 @@ namespace MJ_CAIS.Web.Controllers
         {
             var result = await this._reportApplicationService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
-        }       
+        }
+
+        [HttpPost("")]
+        public new async Task<IActionResult> Post([FromBody] ReportApplicationDTO aInDto)
+        {
+            return await base.Post(aInDto);
+        }
+
+        [HttpGet("{aId}")]
+        public new async Task<IActionResult> Get(string aId)
+        {
+            return await base.Get(aId);
+        }
+
+        [HttpPut("{aId}")]
+        public new async Task<IActionResult> Put(string aId, [FromBody] ReportApplicationDTO aInDto)
+        {
+            var result = await this._reportApplicationService.UpdateAsync(aInDto, false);
+            if (string.IsNullOrEmpty(result)) return NotFound();
+            return Ok();
+        }
+
+        [HttpPut("final-edit/{aId}")]
+        public async Task<IActionResult> FinalEdit(string aId, [FromBody] ReportApplicationDTO aInDto)
+        {
+            var result = await this._reportApplicationService.UpdateAsync(aInDto, true);
+            if (string.IsNullOrEmpty(result)) return NotFound();
+            return Ok();
+        }
     }
 }

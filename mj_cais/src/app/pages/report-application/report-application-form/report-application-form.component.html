@@ -46,19 +46,18 @@
     <form autocomplete="off">
       <nb-tabset #nbtabset>
         <nb-tab tabTitle="Искане">
-          <div class="font-weight-bold">Служебна информация</div>
-          <hr />
-          <div class="row">
-            <div class="form-group col-md-4">
-              <cais-input
-                [type]="'text'"
-                [label]="'Статус'"
-                [inputFormControl]="fullForm.statusName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
-            </div>
-
-            <ng-container *ngIf="isEdit()">
+          <ng-container *ngIf="isEdit()">
+            <div class="font-weight-bold">Служебна информация</div>
+            <hr />
+            <div class="row">
+              <div class="form-group col-md-4">
+                <cais-input
+                  [type]="'text'"
+                  [label]="'Статус'"
+                  [inputFormControl]="fullForm.statusName"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
               <div class="form-group col-md-6">
                 <cais-input
                   [type]="'text'"
@@ -67,18 +66,18 @@
                   [parentGroup]="fullForm.group"
                 ></cais-input>
               </div>
-            </ng-container>
-            <ng-container *ngIf="isEdit() || fullForm.csAuthorityName.value">
-              <div class="form-group col-md-6">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Бюро съдимост'"
-                  [inputFormControl]="fullForm.csAuthorityName"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
-              </div>
-            </ng-container>
-          </div>
+              <ng-container *ngIf="fullForm.csAuthorityName.value">
+                <div class="form-group col-md-6">
+                  <cais-input
+                    [type]="'text'"
+                    [label]="'Бюро съдимост'"
+                    [inputFormControl]="fullForm.csAuthorityName"
+                    [parentGroup]="fullForm.group"
+                  ></cais-input>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
           <div class="font-weight-bold">Заявител</div>
           <hr />
           <div class="row">
@@ -125,7 +124,7 @@
             Информация, събрана по служебен път
           </div>
           <cais-person-form
-            [personForm]="fullForm.personData"
+            [personForm]="fullForm.person"
             [genderTypes]="dbData.genderTypes"
             [countries]="dbData.countries"
             [contextType]="PersonContextEnum.ReportApplication"
@@ -148,14 +147,15 @@
               ></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'ул. №'"
-                [inputFormControl]="fullForm.addrStr"
+              <cais-autocomplete
+                [label]="'Държава'"
+                [inputFormControl]="fullForm.addrState"
                 [parentGroup]="fullForm.group"
-              ></cais-input>
+                [items]="dbData.countries"
+                [inputName]="'addrState'"
+              >
+              </cais-autocomplete>
             </div>
-
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
@@ -178,8 +178,8 @@
             <div class="form-group col-md-3">
               <cais-input
                 [type]="'text'"
-                [label]="'Държава'"
-                [inputFormControl]="fullForm.addrState"
+                [label]="'ул. №'"
+                [inputFormControl]="fullForm.addrStr"
                 [parentGroup]="fullForm.group"
               ></cais-input>
             </div>
@@ -202,7 +202,14 @@
           </div>
         </nb-tab>
 
-        <nb-tab tabTitle="Справка" *ngIf="isEdit()"> </nb-tab>
+        <nb-tab
+          tabTitle="Справка"
+          *ngIf="
+            isEdit() &&
+            reportApplicationStatus == ReportApplicationStatusConstants.Approved
+          "
+        >
+        </nb-tab>
       </nb-tabset>
     </form>
   </nb-card-body>
