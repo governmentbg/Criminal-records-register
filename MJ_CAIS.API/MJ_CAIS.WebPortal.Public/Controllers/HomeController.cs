@@ -30,10 +30,5 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             return View();
         }
-        [AllowAnonymous]
-        public IActionResult ErrorAuthentication()
-        {
-            return View();
-        }
     }
 }
