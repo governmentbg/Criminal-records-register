@@ -21,11 +21,10 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> GetAll(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._reportApplicationService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
             return Ok(result);
-        }
+        }       
     }
 }

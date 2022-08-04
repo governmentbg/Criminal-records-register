@@ -2,7 +2,6 @@ namespace MJ_CAIS.DTO.ReportApplication
 {
     public class ReportApplicationDTO : BaseDTO
     {
-        public string Id { get; set; } = null!;
         public string RegistrationNumber { get; set; } = null!;
         public string? Purpose { get; set; }
         public string? Firstname { get; set; }

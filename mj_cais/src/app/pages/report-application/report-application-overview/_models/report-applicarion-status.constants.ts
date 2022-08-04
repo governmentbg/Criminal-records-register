@@ -1,4 +1,4 @@
-export enum ApplicationReportStatusConstants {
+export enum ReportApplicationStatusConstants {
     New = "New", // Ново искане
     Approved = "Approved", // Одобрено
     Canceled = "Canceled", // Анулирано

@@ -3,4 +3,5 @@ export enum PersonContextEnum {
   Bulletin = "Bulletin",
   Application = "Application",
   Fbbc = "Fbbc",
+  ReportApplication = "ReportApplication",
 }

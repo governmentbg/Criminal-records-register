@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { ReportApplicationGridService } from "../_data/report-application-grid.service";
-import { ApplicationReportStatusConstants } from "../_models/applicarion-report-status.constants";
+import { ReportApplicationStatusConstants } from "../_models/report-applicarion-status.constants";
 import { ReportApplicationGridModel } from "../_models/report-application-grid.model";
 
 @Component({
@@ -22,7 +22,7 @@ export class ReportApplicationNewOverviewComponent extends RemoteGridWithStatePe
     public dateFormatService: DateFormatService
   ) {
     super("report-application-new", service, injector);
-    this.service.updateUrlStatus(ApplicationReportStatusConstants.New);
+    this.service.updateUrlStatus(ReportApplicationStatusConstants.New);
   }
 
   ngOnInit(): void {
@@ -34,7 +34,7 @@ export class ReportApplicationNewOverviewComponent extends RemoteGridWithStatePe
       //removed filter entirely
       this.service.updateUrlStatus();
     } else {
-      this.service.updateUrlStatus(ApplicationReportStatusConstants.New);
+      this.service.updateUrlStatus(ReportApplicationStatusConstants.New);
     }
     this.hideStatus = !isChacked;
     this.ngOnInit();
