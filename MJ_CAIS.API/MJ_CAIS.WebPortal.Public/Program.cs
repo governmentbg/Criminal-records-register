@@ -71,6 +71,8 @@ namespace MJ_CAIS.WebPortal.Public
                         NameClaimType = JwtClaimTypes.Name,
                         RoleClaimType = JwtClaimTypes.Role,
                     };
+
+                    options.AccessDeniedPath = "/Home/ErrorAuthentication";
                 });
 
             var app = builder.Build();

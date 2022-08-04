@@ -117,16 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="msgCertificateDoesNotExist" xml:space="preserve">
-    <value>Свидетелство с идентификатор {0} не съществува</value>
+  <data name="btnSend" xml:space="preserve">
+    <value>Изпрати</value>
   </data>
-  <data name="msgStatusForRehabilitation" xml:space="preserve">
-    <value>Очаква обработка на заявка/и за реабилитация към съди</value>
+  <data name="lblDescription" xml:space="preserve">
+    <value>Описание</value>
   </data>
-  <data name="msgStatusForRehabilitationDesc" xml:space="preserve">
-    <value>Генерирана заявка за реабилитация при обработка на свидетелство</value>
+  <data name="lblEmail" xml:space="preserve">
+    <value>Eлектронна поща</value>
   </data>
-  <data name="titleCertificates" xml:space="preserve">
-    <value>Свидетелства</value>
+  <data name="lblFeedbackFor" xml:space="preserve">
+    <value>Съобщение за</value>
+  </data>
+  <data name="lblFeedbackForProposal" xml:space="preserve">
+    <value>Предложение</value>
+  </data>
+  <data name="lblFeedbackForQuestion" xml:space="preserve">
+    <value>Въпрос</value>
+  </data>
+  <data name="lblFeedbackForTechnicalIssue" xml:space="preserve">
+    <value>Технически проблем</value>
+  </data>
+  <data name="lblName" xml:space="preserve">
+    <value>Име</value>
+  </data>
+  <data name="titleFeedback" xml:space="preserve">
+    <value>Обратна връзка</value>
   </data>
 </root>

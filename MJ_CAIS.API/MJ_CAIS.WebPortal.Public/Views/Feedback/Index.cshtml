@@ -1,0 +1,51 @@
+﻿@using Infragistics.Web.Mvc
+@using MJ_CAIS.WebPortal.Public.Controllers
+@using MJ_CAIS.WebPortal.Public.Models.Feedback
+@using MJ_CAIS.WebSetup.Utils.CustomHtmlHelpers
+@using MJ_CAIS.Common.Resources
+@using MJ_CAIS.Common
+@model FeedbackViewModel
+
+@{
+    var title = FeedbackResources.titleFeedback;
+    ViewData["Title"] = title;
+}
+
+<div class="container">
+    <div class="row">        
+        <div class="col-md-12">
+            <div class="card h-100  ">
+                <div class="card-header h5 bg-primary text-white">@FeedbackResources.titleFeedback</div>
+                <div class="card-body">                
+                <form asp-action="Send" method="post" autocomplete="off">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="FeedbackForId" class="form-label fw-bold required"></label>
+                            @Html.DropDownListFor(model => model.FeedbackForId, Model.FeedbackFor,  new { @class = "form-select", @required=""})
+                            <span asp-validation-for="FeedbackForId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control" required/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label fw-bold required"></label>
+                            <textarea asp-for="Description" type="text" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-primary btn-lg" type="submit">@FeedbackResources.btnSend</button>
+                        </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

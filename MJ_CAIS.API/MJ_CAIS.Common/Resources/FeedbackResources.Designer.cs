@@ -22,14 +22,14 @@ namespace MJ_CAIS.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CertificateResources {
+    public class FeedbackResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CertificateResources() {
+        internal FeedbackResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MJ_CAIS.Common.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MJ_CAIS.Common.Resources.CertificateResources", typeof(CertificateResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MJ_CAIS.Common.Resources.FeedbackResources", typeof(FeedbackResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,83 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Свидетелство с идентификатор {0} не съществува.
+        ///   Looks up a localized string similar to Изпрати.
         /// </summary>
-        public static string msgCertificateDoesNotExist {
+        public static string btnSend {
             get {
-                return ResourceManager.GetString("msgCertificateDoesNotExist", resourceCulture);
+                return ResourceManager.GetString("btnSend", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Очаква обработка на заявка/и за реабилитация към съди.
+        ///   Looks up a localized string similar to Описание.
         /// </summary>
-        public static string msgStatusForRehabilitation {
+        public static string lblDescription {
             get {
-                return ResourceManager.GetString("msgStatusForRehabilitation", resourceCulture);
+                return ResourceManager.GetString("lblDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Генерирана заявка за реабилитация при обработка на свидетелство.
+        ///   Looks up a localized string similar to Eлектронна поща.
         /// </summary>
-        public static string msgStatusForRehabilitationDesc {
+        public static string lblEmail {
             get {
-                return ResourceManager.GetString("msgStatusForRehabilitationDesc", resourceCulture);
+                return ResourceManager.GetString("lblEmail", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Свидетелства.
+        ///   Looks up a localized string similar to Съобщение за.
         /// </summary>
-        public static string titleCertificates {
+        public static string lblFeedbackFor {
             get {
-                return ResourceManager.GetString("titleCertificates", resourceCulture);
+                return ResourceManager.GetString("lblFeedbackFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Предложение.
+        /// </summary>
+        public static string lblFeedbackForProposal {
+            get {
+                return ResourceManager.GetString("lblFeedbackForProposal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Въпрос.
+        /// </summary>
+        public static string lblFeedbackForQuestion {
+            get {
+                return ResourceManager.GetString("lblFeedbackForQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Технически проблем.
+        /// </summary>
+        public static string lblFeedbackForTechnicalIssue {
+            get {
+                return ResourceManager.GetString("lblFeedbackForTechnicalIssue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Име.
+        /// </summary>
+        public static string lblName {
+            get {
+                return ResourceManager.GetString("lblName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Обратна връзка.
+        /// </summary>
+        public static string titleFeedback {
+            get {
+                return ResourceManager.GetString("titleFeedback", resourceCulture);
             }
         }
     }

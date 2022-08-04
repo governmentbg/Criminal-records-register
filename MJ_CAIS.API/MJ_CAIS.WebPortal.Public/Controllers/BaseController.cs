@@ -36,5 +36,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         public string? CurrentUserID => CurrentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         public string? CurrentEgnIdentifier => CurrentUser.FindFirst("EgnIdentifier")?.Value;
+
+        public string? CurrentMail => CurrentUser.FindFirst(ClaimTypes.Email)?.Value;
     }
 }

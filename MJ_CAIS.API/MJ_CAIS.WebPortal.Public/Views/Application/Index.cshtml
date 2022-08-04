@@ -1,10 +1,12 @@
-﻿@model ApplicationViewModel
+﻿@model X.PagedList.IPagedList<PublicApplicationGridDTO>
 @using Infragistics.Web.Mvc
 @using MJ_CAIS.WebPortal.Public.Models.Application
 @using MJ_CAIS.Common.Resources
 @using MJ_CAIS.WebPortal.Public.Controllers
 @using MJ_CAIS.WebPortal.Public.Utils;
 @using MJ_CAIS.DTO.Application.Public
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 
 @{
     ViewData["Title"] = ApplicationResources.titleApplications;
@@ -12,62 +14,98 @@
     var buttonPreviewTemplate = ButtonTemplates.PreviewButton(Url.Action(nameof(ApplicationController.Preview), "Application") + $"/${{{pkName}}}");
 }
 
-<partial name="_InfragisticsLoader" />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mb-3 d-flex justify-content-end align-items-start">
+                <a class="btn btn-primary" asp-controller="Application" asp-action="New">
+                    Ново заявление
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@ApplicationResources.titleApplications</div>
+                <div class="card-body">
 
-<div class="d-flex" style="justify-content: space-between">
-    <div class="d-flex align-items-center">
-        <h3 class="pull-left">@ViewData["Title"]</h3>
-    </div>
-    <div class="d-flex">
-        <div>
-            <a class="btn btn-primary" asp-controller="Application" asp-action="New">
-                @ApplicationResources.btnNewApp
-            </a>
+                    @if (Model.TotalItemCount != 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <tr>
+                                    <th class="d-none d-sm-table-cell">
+                                        @ApplicationResources.lblRegistrationNumber
+                                    </th>
+                                    <th>
+                                        @ApplicationResources.lblCreatedOn
+                                    </th>
+                                    <th>
+                                        @ApplicationResources.lblStatus
+                                    </th>
+                                    <th class="d-none d-sm-table-cell">
+                                        @ApplicationResources.lblPurposeId
+                                    </th>
+                                    <th class="d-none d-sm-table-cell">
+                                        @ApplicationResources.lblPurpose
+                                    </th>
+                                    <th class="d-none d-sm-table-cell">
+                                        @ApplicationResources.lblEmail
+                                    </th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr onclick="location.href = '@Url.Action("Preview", "Application", new { id=item.Id })'">
+                                        <td class="d-none d-sm-table-cell">
+                                            <a href="@Url.Action("Preview", "Application", new { id=item.Id })">
+                                                @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a  class="d-block d-sm-none" href="@Url.Action("Preview", "Application", new { id=item.Id })">
+                                                @Html.DisplayFor(modelItem => item.CreatedOn)
+                                            </a>
+                                            <div class="d-none d-sm-block">
+                                                @Html.DisplayFor(modelItem => item.CreatedOn)
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StatusName)
+                                        </td>
+                                        <td class="d-none d-sm-table-cell">
+                                            @Html.DisplayFor(modelItem => item.PurposeTypeName)
+                                        </td>
+                                        <td class="d-none d-sm-table-cell">
+                                            @Html.DisplayFor(modelItem => item.Purpose)
+                                        </td>
+                                        <td class="d-none d-sm-table-cell">
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                    new PagedListRenderOptions()
+                    {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                    })
+                    }
+                    else
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                            </symbol>
+                        </svg>
+
+                        <div class="alert alert-primary d-flex align-items-center mb-0" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
+                            <div>
+                                Не са намерени заявления
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
-<hr />
-
-<div class="page-content scrollable-page">
-    <div class="box-content">
-        @(Html.Infragistics()
-        .Grid(Model.Applications)
-        .ID("applications")
-        .Language(ViewData["Culture"].ToString())
-        .Width("100%")
-        .PrimaryKey("Id")
-        .AutoGenerateColumns(false)
-        .AutoGenerateLayouts(false)
-        .Columns(column =>
-        {
-        column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
-        column.For(x => x.RegistrationNumber).HeaderText(ApplicationResources.lblRegistrationNumber).Width("20%");
-        column.For(x => x.CreatedOn).HeaderText(ApplicationResources.lblCreatedOn).Width("15%");
-        column.For(x => x.StatusName).HeaderText(ApplicationResources.lblStatus).Width("20%");
-        column.For(x => x.PurposeTypeName).HeaderText(ApplicationResources.lblPurposeId).Width("25%");
-        column.For(x => x.Purpose).HeaderText(ApplicationResources.lblPurpose).Width("25%");
-        column.For(x => x.Email).HeaderText(ApplicationResources.lblEmail).Width("25%");
-        column.Unbound("buttons").HeaderText("").Template(buttonPreviewTemplate).Width("8%");
-        })
-        .Features(feature =>
-        {
-        feature
-        .Sorting()
-        .Type(OpType.Remote);
-        feature
-        .Paging()
-        .Type(OpType.Remote)
-        .PageSize(20)
-        .PageSizeDropDownLocation("inpager");
-        //.PagingHandler(OpType.Remote, pageSizeDropDownLocation: PageSizeDropDownLocation.inpager);
-        feature
-        .Filtering()
-        .Mode(FilterMode.Simple)
-        .Type(OpType.Remote);
-        //.SetFilterToLower();
-        })
-        .DataSourceUrl(Url.Action(nameof(ApplicationController.GetUserApplications), "Application"))
-        .Render())
     </div>
 </div>
