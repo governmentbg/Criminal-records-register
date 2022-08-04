@@ -28,7 +28,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         public List<EWebRequest> GetRequestsForAsyncExecution()
         {
             var attempts = GetRegixAttempts();
-            var result = _dbContext.EWebRequests.AsNoTracking().Include(x => x.WebService).Include(x => x.WApplication)
+            var result = _dbContext.EWebRequests.AsNoTracking()
+                .Include(x => x.WebService).AsNoTracking()
+                .Include(x => x.WApplication).AsNoTracking()
                 .Where(x => x.IsAsync == true || x.IsAsync == null)
                 .Where(x => x.Status == WebRequestStatusConstants.Pending ||
                             x.Status == WebRequestStatusConstants.Rejected)
@@ -50,6 +52,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             _dbContext.ApplyChanges(eWRequestPDS, new List<IBaseIdEntity>());
             _dbContext.ApplyChanges(eWRequestRS, new List<IBaseIdEntity>());
+            //todo: дали не е добре да е async
             _dbContext.SaveChanges();
         }
 
@@ -117,14 +120,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     if (request.WApplicationId != null)
                     {
                         WApplication application = await PopulateWApplication(request, cache);
-                        _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
+                        request.WApplication = application;
+                       // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                     if (request.ApplicationId != null)
                     {
                         AApplication application = await PopulateAApplication(request, cache);
-                        _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
+                        request.Application = application;
+                        // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                 }
+                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
                 await _dbContext.SaveChangesAsync();
                 return responseObject;
             }
@@ -163,15 +169,18 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     if (request.WApplicationId != null)
                     {
                         WApplication application = await PopulateWApplication(request, cache);
-                        _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
+                        request.WApplication = application;
+                       // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                     if (request.ApplicationId != null)
                     {
                         AApplication application = await PopulateAApplication(request, cache);
-                        _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
+                        request.Application = application;
+                       // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                     
                 }
+                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
                 await _dbContext.SaveChangesAsync();
                 return responseObject;
             }
@@ -214,15 +223,18 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         if (request.WApplicationId != null)
                         {
                             WApplication application = await PopulateWApplication(request, cache);
-                            _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
+                            request.WApplication=application;
+                           // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                         }
                         if (request.ApplicationId != null)
                         {
                             AApplication application = await PopulateAApplication(request, cache);
-                            _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
+                            request.Application = application;
+                            //_dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                         }
                     }
                 }
+                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
                 await _dbContext.SaveChangesAsync();
                 return responseObject;
             }
@@ -244,7 +256,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (!string.IsNullOrEmpty(request.ApplicationId))
             {
                 var application =
-                    await _dbContext.AApplications.Include(x => x.AAppCitizenships).Include(x => x.AAppPersAliases).FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
+                    await _dbContext.AApplications.AsNoTracking()
+                    .Include(x => x.AAppCitizenships).AsNoTracking()
+                    .Include(x => x.AAppPersAliases).AsNoTracking()
+                    .FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
                 if (application.ModifiedProperties == null)
                 {
                     application.ModifiedProperties = new List<string>();
@@ -449,7 +464,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (!string.IsNullOrEmpty(request.WApplicationId))
             {
                 var application =
-                    await _dbContext.WApplications.Include(x => x.WAppCitizenships).Include(x => x.WAppPersAliases).FirstOrDefaultAsync(a => a.Id == request.WApplicationId);
+                    await _dbContext.WApplications.AsNoTracking()
+                    .Include(x => x.WAppCitizenships).AsNoTracking()
+                    .Include(x => x.WAppPersAliases).AsNoTracking().FirstOrDefaultAsync(a => a.Id == request.WApplicationId);
                 if (application.ModifiedProperties == null)
                 {
                     application.ModifiedProperties = new List<string>();
@@ -610,12 +627,16 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
                         }
-                        if (!string.IsNullOrEmpty(application.MotherFirstname))
+                        //todo: Надя, виж това
+                        //стар код:
+                        //if (!string.IsNullOrEmpty(application.MotherFirstname))
+                        if (!string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        if (!string.IsNullOrEmpty(application.FatherFirstname))
+                        //if (!string.IsNullOrEmpty(application.FatherFirstname))
+                        if (!string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));
@@ -767,6 +788,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         request.ResponseXml = resultData.Data.Response.Any.OuterXml;
                         request.ResponseXml = AddXmlSchema(request.ResponseXml);
                         request.ModifiedProperties.Add(nameof(request.ResponseXml));
+                        //todo: Надя,дали това трябва да е така?! или през статуса да се управлява?!
+                        request.HasError = false;
+                        request.ModifiedProperties.Add(nameof(request.HasError));
                     }
                 }
                 catch (Exception ex)
@@ -787,7 +811,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 : WebRequestStatusConstants.Accepted;
             request.ModifiedProperties.Add(nameof(request.ExecutionDate));
             request.ModifiedProperties.Add(nameof(request.Status));
-            _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
+            //_dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
         }
 
         private ERegixCache CheckForCachedResponse(string identifier, string webServiceName)
@@ -943,7 +967,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             regixCache.ModifiedProperties.Add(nameof(regixCache.ResponseXml));
             regixCache.ModifiedProperties.Add(nameof(regixCache.ExecutionDate));
 
+            //todo: Надя, може би заради лошото извикване тук се получаваше рег номер на справката да се записва в поле егн
+            //да се прегледа
             regixCache.Egn = regixCache.ReqIdentifier;
+          
             regixCache.ModifiedProperties.Add(nameof(regixCache.Egn));
 
             foreach (var personRelation in responseObject.PersonRelations)
@@ -1209,7 +1236,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             
             if (request.ApplicationId != null && request.CreatedBy != null)
             {
-                var user = _dbContext.GUsers.Include(x=> x.CsAuthority).FirstOrDefault(x => x.Id == request.CreatedBy);
+                var user = _dbContext.GUsers.AsNoTracking().
+                    Include(x=> x.CsAuthority).AsNoTracking()
+                    .FirstOrDefault(x => x.Id == request.CreatedBy);
                 if(user != null)
                 {
                     callContext.EmployeeIdentifier = user.Email;
@@ -1226,7 +1255,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
             if (request.WApplicationId != null && request.WApplication != null && request.WApplication.UserExtId != null)
             {
-                var user = _dbContext.GUsersExts.Include(x => x.Administration).FirstOrDefault(x => x.Id == request.WApplication.UserExtId);
+                var user = _dbContext.GUsersExts.AsNoTracking()
+                    .Include(x => x.Administration).AsNoTracking()
+                    .FirstOrDefault(x => x.Id == request.WApplication.UserExtId);
                 if (user != null)
                 {
                     callContext.EmployeeIdentifier = user.Email;

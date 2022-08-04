@@ -186,34 +186,7 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
 
             certificate.DocId = doc.Id;
-            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate
-                && certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebCertificate)
-            {
-                //ako не е електронно -> за печат
-                _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
-                // certificate.StatusCode = statusCodeCertificatePaperPrint;
-
-            }
-            else
-            {
-                if (containsBulletins || certificate.Application.PurposeNavigation.ForSecondSignature == true)
-                {
-                    //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
-                    _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
-                    //certificate.StatusCode = statusCodeCertificateServerSign;
-                }
-                else
-                {
-                    //todo: за доставка
-                    _certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне на заявител");
-                    //certificate.StatusCode = statusCodeCertificateForDelivery;
-
-                    await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
-
-                    _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
-
-                }
-            }
+            certificate.Doc = doc;
 
             if (isExistingContent)
             {
@@ -258,6 +231,35 @@ namespace MJ_CAIS.ExternalWebServices
             }
 
             certificate.ModifiedProperties.Add(nameof(certificate.DocId));
+           
+            if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate
+                && certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                //ako не е електронно -> за печат
+                _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
+                // certificate.StatusCode = statusCodeCertificatePaperPrint;
+
+            }
+            else
+            {
+                if (containsBulletins || certificate.Application.PurposeNavigation.ForSecondSignature == true)
+                {
+                    //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
+                    _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
+                    //certificate.StatusCode = statusCodeCertificateServerSign;
+                }
+                else
+                {
+                    //todo: за доставка
+                    //_certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне на заявител");
+                    //certificate.StatusCode = statusCodeCertificateForDelivery;
+
+                    await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
+
+                    _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
+
+                }
+            }
             if (!certificate.ModifiedProperties.Contains(nameof(certificate.StatusCode)))
             {
                 certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
@@ -296,7 +298,7 @@ namespace MJ_CAIS.ExternalWebServices
             _certificateRepository.ApplyChanges(mail, new List<IBaseIdEntity>());
             //dbContext.EEmailEvents.Add(mail);
         }
-
+        
         private async Task<string?> GetBodyForCertificateMailAsync(ACertificate certificate, string mailBodyPattern, string webportalUrl)
         {
             Dictionary<string, string> placeholdersAndValues = new Dictionary<string, string>();

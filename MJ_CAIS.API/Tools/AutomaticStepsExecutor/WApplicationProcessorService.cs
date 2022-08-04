@@ -82,21 +82,21 @@ namespace AutomaticStepsExecutor
             if (entities.Count > 0)
             {
 
-                var internalApplicationType = await _dbContext.AApplicationTypes.FirstOrDefaultAsync(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
+                var internalApplicationType = await _dbContext.AApplicationTypes.AsNoTracking().FirstOrDefaultAsync(x => x.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate);
                 if (internalApplicationType == null)
                 {
                     throw new Exception($"Code \"{ApplicationConstants.ApplicationTypes.WebExternalCertificate}\" for internal applications is not set.");
 
                 }
 
-                var paymentMethodFree = await _dbContext.APaymentMethods.FirstOrDefaultAsync(x => x.Code == ApplicationConstants.PaymentMethodsCodes.Free);
+                var paymentMethodFree = await _dbContext.APaymentMethods.AsNoTracking().FirstOrDefaultAsync(x => x.Code == ApplicationConstants.PaymentMethodsCodes.Free);
                 if (paymentMethodFree == null)
                 {
                     throw new Exception($"Code \"{ApplicationConstants.PaymentMethodsCodes.Free}\" for payment method is not set.");
 
                 }
 
-                var statuses = await _dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToListAsync();
+                var statuses = await _dbContext.AApplicationStatuses.AsNoTracking().Where(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToListAsync();
                 if (statuses.Count != 1)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication }");
@@ -104,7 +104,7 @@ namespace AutomaticStepsExecutor
                 }
                 var statusApprovedApplication = statuses.First();
 
-                var webStatuses = await _dbContext.WApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.WebApprovedApplication
+                var webStatuses = await _dbContext.WApplicationStatuses.AsNoTracking().Where(a => a.Code == ApplicationConstants.ApplicationStatuses.WebApprovedApplication
                                              || a.Code == ApplicationConstants.ApplicationStatuses.WebCanceled
                                              || a.Code == ApplicationConstants.ApplicationStatuses.WebCheckTaxFree
                                              || a.Code == ApplicationConstants.ApplicationStatuses.WebCheckPayment).ToListAsync();
@@ -119,7 +119,7 @@ namespace AutomaticStepsExecutor
                 var statusWebCheckTaxFree = webStatuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.WebCheckTaxFree);
                 var statusWebCheckPayment = webStatuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.WebCheckPayment);
 
-                var maxNumberOfAttempts = (await _dbContext.GSystemParameters.FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.REGIX_NUMBER_OF_ATTEMPTS))?.ValueNumber;
+                var maxNumberOfAttempts = (await _dbContext.GSystemParameters.AsNoTracking().FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.REGIX_NUMBER_OF_ATTEMPTS))?.ValueNumber;
                 if (maxNumberOfAttempts == null)
                 {
                     throw new Exception($"System parameter \"{SystemParametersConstants.SystemParametersNames.REGIX_NUMBER_OF_ATTEMPTS}\" is not set.");
@@ -148,6 +148,10 @@ namespace AutomaticStepsExecutor
                         {
                             await CancelWApplication(statusWebCancel, wapplication);
                             numberOfSuccessEntities++;
+
+                            
+                            
+                           
                             continue;
                         }
 
@@ -218,6 +222,8 @@ namespace AutomaticStepsExecutor
             }
             //_dbContext.WApplications.Update(wapplication);
             await _dbContext.SaveChangesAsync();
+            _dbContext.ChangeTracker.Clear();
+            _dbContext.DetachAllEntities();
         }
 
         private async Task ProcessTaxFree(WApplicationStatus statusWebCheckTaxFree, WApplication wapplication)
@@ -226,6 +232,8 @@ namespace AutomaticStepsExecutor
             // wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebCheckTaxFree;
             //_dbContext.WApplications.Update(wapplication);
             await _dbContext.SaveChangesAsync();
+            _dbContext.ChangeTracker.Clear();
+            _dbContext.DetachAllEntities();
         }
 
         private async Task ProcessInternalWApplication(AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebApprovedApplication, WApplication wapplication)
@@ -233,17 +241,19 @@ namespace AutomaticStepsExecutor
             var person = await _wApplicationService.ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
             //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
             await _dbContext.SaveChangesAsync();
-            if (person != null && person.EntityState != EntityStateEnum.Detached)
-            {
-                _dbContext.Entry(person).State = EntityState.Detached;
-                foreach (var pIds in person.PPersonIds)
-                {
-                    if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
-                    {
-                        _dbContext.Entry(pIds).State = EntityState.Detached;
-                    }
-                }
-            }
+            _dbContext.ChangeTracker.Clear();
+            _dbContext.DetachAllEntities();
+            //if (person != null && person.EntityState != EntityStateEnum.Detached)
+            //{
+            //    _dbContext.Entry(person).State = EntityState.Detached;
+            //    foreach (var pIds in person.PPersonIds)
+            //    {
+            //        if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
+            //        {
+            //            _dbContext.Entry(pIds).State = EntityState.Detached;
+            //        }
+            //    }
+            //}
             //foreach (var entry in _dbContext.ChangeTracker.Entries<AStatusH>())
             //{
             //    entry.Entity.EntityState = EntityStateEnum.Detached;
@@ -257,6 +267,8 @@ namespace AutomaticStepsExecutor
             //_dbContext.WApplications.Update(wapplication);
             await _dbContext.SaveChangesAsync();
             _dbContext.ChangeTracker.Clear();
+            _dbContext.DetachAllEntities();
+        
         }
 
         private string SuccessfullCheckInRegisters(WApplication wapplication, int maxNumberOfAttempts)

@@ -70,10 +70,15 @@ namespace MJ_CAIS.DataAccess
             dbContext.ChangeEntityState(entity);
         }
 
-        public static void ApplyChanges<T>(this DbContext dbContext, T entity, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true) 
+        public static void ApplyChanges<T>(this DbContext dbContext, T entity, List<IBaseIdEntity> passedNavigationProperties = null, bool applyToAllLevels = false, bool isRoot = true) 
             where T : class, IBaseIdEntity
         {
             if (entity == null) return;
+            if(passedNavigationProperties == null)
+            {
+                passedNavigationProperties = new List<IBaseIdEntity>();
+
+            }
 
             // Applying db state changes to root element
             dbContext.ChangeEntityState(entity);
