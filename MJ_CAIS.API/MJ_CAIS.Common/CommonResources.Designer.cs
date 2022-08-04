@@ -115,6 +115,15 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to изберете....
+        /// </summary>
+        public static string lblChoose {
+            get {
+                return ResourceManager.GetString("lblChoose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Здравейте,.
         /// </summary>
         public static string lblGreetingUser {
@@ -291,6 +300,15 @@ namespace MJ_CAIS.Common {
         public static string MsgUserLockout {
             get {
                 return ResourceManager.GetString("MsgUserLockout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект: „Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“, финансиран по Оперативна програма „Добро управление“, чрез ЕСФ..
+        /// </summary>
+        public static string titleContractInfoExt {
+            get {
+                return ResourceManager.GetString("titleContractInfoExt", resourceCulture);
             }
         }
         

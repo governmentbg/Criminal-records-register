@@ -86,5 +86,14 @@ namespace MJ_CAIS.Common.Resources {
                 return ResourceManager.GetString("msgStatusForRehabilitationDesc", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Свидетелства.
+        /// </summary>
+        public static string titleCertificates {
+            get {
+                return ResourceManager.GetString("titleCertificates", resourceCulture);
+            }
+        }
     }
 }

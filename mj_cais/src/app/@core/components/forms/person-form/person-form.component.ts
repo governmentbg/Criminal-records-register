@@ -25,6 +25,7 @@ export class PersonFormComponent implements OnInit {
   public isBulletinContext: boolean;
   public isPersonContext: boolean;
   public isApplicationContext: boolean;
+  public isReportApplicationContext: boolean;
   public showEgnDisplay: boolean;
   public showInvalidEgnMessage: boolean = false;
   public showInvalidLnchMessage: boolean = false;
@@ -37,6 +38,8 @@ export class PersonFormComponent implements OnInit {
     this.isPersonContext = this.contextType == PersonContextEnum.Person;
     this.isApplicationContext =
       this.contextType == PersonContextEnum.Application;
+    this.isReportApplicationContext =
+      this.contextType == PersonContextEnum.ReportApplication;
 
     if (this.isFbbcContext && this.personForm.egn.value) {
       this.personForm.egnDisplay.patchValue(this.personForm.egn.value);
@@ -44,17 +47,26 @@ export class PersonFormComponent implements OnInit {
       this.showEgnDisplay = true;
     }
 
-    if (this.isApplicationContext && this.personForm.egn.value !== null) {
+    if (
+      (this.isApplicationContext || this.isReportApplicationContext) &&
+      this.personForm.egn.value !== null
+    ) {
       this.personForm.lnch.disable();
       this.personForm.ln.disable();
     }
 
-    if (this.isApplicationContext && this.personForm.lnch.value !== null) {
+    if (
+      (this.isApplicationContext || this.isReportApplicationContext) &&
+      this.personForm.lnch.value !== null
+    ) {
       this.personForm.egn.disable();
       this.personForm.ln.disable();
     }
 
-    if (this.isApplicationContext && this.personForm.ln.value !== null) {
+    if (
+      (this.isApplicationContext || this.isReportApplicationContext) &&
+      this.personForm.ln.value !== null
+    ) {
       this.personForm.egn.disable();
       this.personForm.lnch.disable();
     }
@@ -63,7 +75,7 @@ export class PersonFormComponent implements OnInit {
   }
 
   private setPidWarningMessages() {
-    if (this.isApplicationContext || this.isBulletinContext) {
+    if (this.isApplicationContext || this.isBulletinContext || this.isReportApplicationContext) {
       this.personForm.group
         .get("egn")
         .valueChanges.subscribe((selectedValue) => {
@@ -92,9 +104,9 @@ export class PersonFormComponent implements OnInit {
           if (selectedValue) {
             let isValidEgn = EgnUtils.isValid(selectedValue);
             let isValidLnch = LnchUtils.isValid(selectedValue);
-            if(isValidEgn || isValidLnch){
+            if (isValidEgn || isValidLnch) {
               this.showInvalidEgnOrLnchMessage = false;
-            }else{
+            } else {
               this.showInvalidEgnOrLnchMessage = true;
             }
           } else {

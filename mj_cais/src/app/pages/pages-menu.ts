@@ -100,6 +100,17 @@ export class PagesMenu {
         ],
       },
       {
+        title: "Справка за съдимост",
+        icon: { icon: "id-card", pack: "fas" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
+        children: [
+          {
+            title: "Нови искания",
+            link: "/pages/report-applications",
+          }       
+        ],
+      },
+      {
         title: "За решение от съдия/юрист",
         icon: "message-circle-outline",
         hidden: this.hasNoRole(roles, RoleNameEnum.Judge),

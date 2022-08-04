@@ -1,14 +1,3 @@
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Вътрешен системен идентификатор'"
-      [inputFormControl]="personForm.suid"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-  </div>
-</div>
 <div class="font-weight-bold">Имена</div>
 <hr />
 
@@ -150,6 +139,15 @@
         ></cais-input>
       </div>
     </ng-container>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Вътрешен системен идентификатор'"
+        [inputFormControl]="personForm.suid"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
+    </div>
   </ng-container>
 </div>
 <ng-container *ngIf="!isFbbcContext">
@@ -188,6 +186,15 @@
         [inputFormControl]="personForm.ln"
         [parentGroup]="personForm.group"
       ></cais-input>
+    </div>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'Вътрешен системен идентификатор'"
+        [inputFormControl]="personForm.suid"
+        [parentGroup]="personForm.group"
+      >
+      </cais-input>
     </div></div
 ></ng-container>
 <div class="font-weight-bold">Място на раждане</div>
@@ -198,7 +205,11 @@
 ></cais-address-form>
 
 <div class="row">
-  <ng-container *ngIf="isBulletinContext || isApplicationContext">
+  <ng-container
+    *ngIf="
+      isBulletinContext || isApplicationContext || isReportApplicationContext
+    "
+  >
     <div class="form-group col-md-6">
       <cais-multiple-choose
         [label]="'Гражданство'"

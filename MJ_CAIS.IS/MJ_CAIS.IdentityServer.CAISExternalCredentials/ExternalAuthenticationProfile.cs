@@ -20,7 +20,6 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             services.AddDbContext<CaisDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
 
             services.AddTransient<IProfileClientService, ExternalProfileService>();
-            services.AddTransient<IProfileClientService, LocalExternalProfileService>();
 
         }
     }

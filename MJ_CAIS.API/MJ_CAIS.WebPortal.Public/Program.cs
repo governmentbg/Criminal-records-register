@@ -1,14 +1,10 @@
 using IdentityModel;
-using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using MJ_CAIS.WebPortal.Public.Services;
 using MJ_CAIS.WebPortal.Public.Utils.Mappings;
 using MJ_CAIS.WebSetup;
-using MJ_CAIS.WebSetup.Utils;
-using System.Security.Principal;
 using TL.EGovPayments;
 using TL.EGovPayments.Interfaces;
 
@@ -27,22 +23,11 @@ namespace MJ_CAIS.WebPortal.Public
 
             var configuration = builder.Configuration;
 
-            // TODO: left for simple testing, should be removed soon
-            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options =>
-            //    {
-            //        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-            //        options.SlidingExpiration = true;
-            //        options.AccessDeniedPath = "/Forbidden/";
-            //        options.LoginPath = "/Account/Login";
-            //        options.Cookie.Name = "CaisPublicPortal";
-            //    });
-
             builder.Services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                })
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
                 .AddCookie(options =>
                 {
                     options.Cookie.Name = "mvccode";
@@ -71,6 +56,8 @@ namespace MJ_CAIS.WebPortal.Public
                         NameClaimType = JwtClaimTypes.Name,
                         RoleClaimType = JwtClaimTypes.Role,
                     };
+
+                    options.AccessDeniedPath = "/Account/ErrorAuthentication";
                 });
 
             var app = builder.Build();

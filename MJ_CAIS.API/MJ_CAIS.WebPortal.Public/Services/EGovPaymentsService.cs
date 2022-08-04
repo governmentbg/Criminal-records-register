@@ -121,7 +121,7 @@ namespace MJ_CAIS.WebPortal.Public.Services
 
         public void PaymentResponseCallback(VPOSPaymentResponse vPOSPaymentResponse)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
             //int applicationId = GetApplicationIdByPaymentRef(vPOSPaymentResponse.RequestId);
             //logger.LogWarning($"{nameof(PaymentResponseCallback)} ApplicationId: {applicationId} PaymentStatus: {vPOSPaymentResponse.Status}");
 

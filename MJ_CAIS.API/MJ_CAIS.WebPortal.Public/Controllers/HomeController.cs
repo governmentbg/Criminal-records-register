@@ -13,7 +13,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             _logger = logger;
         }
 
-        [RedirectAuthenticatedRequests("Index", "Application")]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

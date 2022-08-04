@@ -6,47 +6,41 @@
     ViewData["Title"] = "Начална страница";
 }
 
-<div class="text-center mb-3">
-    <h1 class="mt-2 text-center">Публичен портал</h1>
-    <h4 class="mt-2 text-center">ЦАИС "Съдебен статус"</h4>
-</div>
-
-<div class="row text-center">
-    <div class="col-md-6">
-        <div class="card">
+<div class="row pt-5">
+    <div class="col-md-6 mb-3 mb-md-0">
+        <div class="card h-100  ">
+            <div class="card-header h5 bg-primary text-white">Заявления и справки</div>
             <div class="card-body">
-                <h5 class="card-title">Проверка на електронно свидетелство</h5>
+                <p>
+                    За да подадете заявление за издаване на електронно свидетелство съдимост или да достъпите Вашите заявления и свидетелства, Ви е необходим валиден начин за автентикация в <a href="https://eauth.egov.bg/eauth/ssologin" target="_blank">еАвт</a>.
+                </p>
+                <div class="d-flex justify-content-center mb-3 gap-2">
+                    <a class="btn btn-primary btn-lg" asp-controller="Application" asp-action="Index">
+                        Заявления
+                    </a>
+                    <a class="btn btn-primary btn-lg" asp-controller="Application" asp-action="New">
+                        Ново заявление
+                    </a>
+                </div>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <form asp-controller="Conviction" asp-action="ViewByCode" method="get" target="_blank" autocomplete="off">
-                        <div class="row mb-3 mt-3" style="align-items: center;">
-                            <label for="Id" class="col-md-3">Код за достъп:</label>
-                            <input asp-for="Id" class="form-control" style="max-width: 300px; display: inline-block;" />
-                            <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary">Проверка</button>
-                            </div>
-                        </div>
-                    </form>
-                </li>
-            </ul>
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Заявления и справки</h5>
+    <div class="col-md-6 ">
+        <div class="card h-100">
+            <div class="card-header h5 bg-primary text-white">Проверка на електронно свидетелство</div>
+            <div class="card-body d-flex h-100 align-items-center justify-content-center">
+                <div>
+                    <form asp-controller="Conviction" asp-action="ViewByCode" method="get" target="_blank" autocomplete="off">
+                        <label for="Id" class="form-label fw-bold">Код за достъп</label>
+                        <div class="input-group">
+                            <input asp-for="Id" required class="form-control form-control-lg">
+                            <button class="btn btn-primary" type="submit">Проверка</button>
+                        </div>
+                        <span asp-validation-for="Id" class="text-danger"></span>
+                    </form>
+                </div>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <div class="mb-3 mt-3">
-                        <a class="btn btn-primary col-md-3" asp-controller="Account" asp-action="Login">
-                            Вход с КЕП
-                        </a>
-                    </div>
-                </li>
-            </ul>
         </div>
     </div>
 </div>
