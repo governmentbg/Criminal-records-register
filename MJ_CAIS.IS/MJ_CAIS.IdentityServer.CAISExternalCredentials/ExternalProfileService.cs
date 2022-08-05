@@ -117,7 +117,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 .FirstOrDefault();
             if (user != null)
             {
-                context.IssuedClaims.Add(new Claim("Name", user.Name));
+                context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
                     context.IssuedClaims.Add(new Claim("AdministrationId", user.AdministrationId));
