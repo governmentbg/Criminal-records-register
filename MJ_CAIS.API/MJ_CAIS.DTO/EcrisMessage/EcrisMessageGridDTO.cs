@@ -20,5 +20,6 @@ namespace MJ_CAIS.DTO.EcrisMessage
         public string? Nationality1Name { get; set; }
         public string? Nationality2Code { get; set; }
         public string? Nationality2Name { get; set; }
+        public string? MsgType { get; set; }
     }
 }

@@ -84,11 +84,30 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{aId}/document")]
-        public async Task<IActionResult> GetEcrisDocument(string aId)
+        [HttpGet("{aId}/document/{type}")]
+        public async Task<IActionResult> GetEcrisDocument(string aId, string type)
         {
-            var result = await this._ecrisMessageService.GetEcrisDocumentByIdAsync(aId);
-            return Ok(result);
+            if (type == "EcrisNot")
+            {
+                var ecrisNot = await this._ecrisMessageService.GetEcrisNotificationByIdAsync(aId);
+                return Ok(ecrisNot);
+            }
+            else if (type == "EcrisReqResp")
+            {
+                var ecrisNot = await this._ecrisMessageService.GetEcrisResponseByIdAsync(aId);//RSponse
+                return Ok(ecrisNot);
+            }
+            else if (type == "EcrisRequest")
+            {
+                var ecrisRequest = await this._ecrisMessageService.GetEcrisRequestByIdAsync(aId);
+                return Ok(ecrisRequest);
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+
         }
 
         [HttpPut("{aId}/change-status/{statusId}")]

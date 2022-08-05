@@ -1,0 +1,40 @@
+<nb-card
+  class="card-single-page-height"
+  *ngIf="formGroup"
+  [formGroup]="formGroup"
+>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="font-weight-bold">Решение</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Име на съдебния орган'"
+            [inputFormControl]="this.formGroup.controls.decidingAuthorityName"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Смяна на типа'"
+            [inputFormControl]="
+              this.formGroup.controls.decisionChangeType
+            "
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Дата'"
+            [inputFormControl]="this.formGroup.controls.decisionDate"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

@@ -37,7 +37,7 @@ namespace MJ_CAIS.Repositories.Impl
                 ;
         }
 
-        public  async Task<DDocument> GetDocumentWithContentByID(string documentId)
+        public async Task<DDocument> GetDocumentWithContentByID(string documentId)
         {
             return await _dbContext.Set<DDocument>().AsNoTracking()
                 .Include(x => x.DocContent)
