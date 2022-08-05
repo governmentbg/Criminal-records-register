@@ -21,6 +21,8 @@ export class ReportApplicationModel extends BaseModel {
   public applicantDescr: string = null;
   public purposeId: string = null;
   public registrationNumberDisplay: string = null;
+  public firstSignerId: string;
+  public secondSignerId: string;
 
   constructor(init?: Partial<ReportApplicationModel>) {
     super(init);
@@ -43,5 +45,7 @@ export class ReportApplicationModel extends BaseModel {
     this.purposeId = init?.purposeId ?? null;
     this.statusCode = init?.statusCode ?? null;
     this.statusName = init?.statusName ?? null;
+    this.firstSignerId = init?.firstSignerId ?? null;
+    this.secondSignerId = init?.secondSignerId ?? null;
   }
 }

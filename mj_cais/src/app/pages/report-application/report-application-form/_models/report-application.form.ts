@@ -1,4 +1,3 @@
-
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
@@ -26,6 +25,8 @@ export class ReportApplicationForm extends BaseForm {
   public purposeId: FormControl;
   public statusName: FormControl;
   public csAuthorityName: FormControl;
+  public firstSignerId: FormControl;
+  public secondSignerId: FormControl;
 
   constructor() {
     super();
@@ -48,10 +49,13 @@ export class ReportApplicationForm extends BaseForm {
     this.purposeId = new FormControl(null);
     this.statusName = new FormControl(null);
     this.csAuthorityName = new FormControl(null);
+    this.firstSignerId = new FormControl(null);
+    this.secondSignerId = new FormControl(null);
 
     this.csAuthorityName.disable();
     this.registrationNumberDisplay.disable();
     this.statusName.disable();
+
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
@@ -73,9 +77,9 @@ export class ReportApplicationForm extends BaseForm {
       applicantDescr: this.applicantDescr,
       purposeId: this.purposeId,
       statusName: this.statusName,
-      csAuthorityName: this.csAuthorityName
+      csAuthorityName: this.csAuthorityName,
+      firstSignerId: this.firstSignerId,
+      secondSignerId: this.secondSignerId,
     });
   }
 }
-
-

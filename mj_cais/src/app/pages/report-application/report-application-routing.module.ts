@@ -6,12 +6,34 @@ import { NotFoundComponent } from "../miscellaneous/not-found/not-found.componen
 import { RegixRequestFormComponent } from "./regix-request-form/regix-request-form.component";
 import { ReportApplicationFormComponent } from "./report-application-form/report-application-form.component";
 import { ReportApplicationResolver } from "./report-application-form/_data/report-application.resolver";
+import { ReportApplicationApprovedOverviewComponent } from "./report-application-overview/report-application-approved-overview/report-application-approved-overview.component";
+import { ReportApplicationDeliveredOverviewComponent } from "./report-application-overview/report-application-delivered-overview/report-application-delivered-overview.component";
 import { ReportApplicationNewOverviewComponent } from "./report-application-overview/report-application-new-overview/report-application-new-overview.component";
 
 const routes: Routes = [
   {
     path: "",
     component: ReportApplicationNewOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
+  },
+  {
+    path: "approved",
+    component: ReportApplicationApprovedOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
+  },
+  {
+    path: "delivered",
+    component: ReportApplicationDeliveredOverviewComponent,
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
@@ -44,13 +66,24 @@ const routes: Routes = [
     path: "edit/:ID",
     component: ReportApplicationFormComponent,
     resolve: { dbData: ReportApplicationResolver },
-    data: { edit: true },
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
   {
     path: "preview/:ID",
     component: ReportApplicationFormComponent,
     resolve: { dbData: ReportApplicationResolver },
-    data: { edit: true, preview: true },
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
   },
 
   {

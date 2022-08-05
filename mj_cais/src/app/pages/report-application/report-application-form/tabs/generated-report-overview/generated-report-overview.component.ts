@@ -3,15 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DateFormatService } from '../../../../../@core/services/common/date-format.service';
 import { ReportApplicationService } from '../../_data/report-application.service';
-import { ReportAppStatusHistoryModel } from './_models/report-app-status-history.model';
+import { GeneratedReportModel } from './_models/generated-report-grid.model';
 
 @Component({
-  selector: 'cais-report-app-history-overview',
-  templateUrl: './report-app-history-overview.component.html',
-  styleUrls: ['./report-app-history-overview.component.scss']
+  selector: 'cais-generated-report-overview',
+  templateUrl: './generated-report-overview.component.html',
+  styleUrls: ['./generated-report-overview.component.scss']
 })
-export class ReportAppHistoryOverviewComponent implements OnInit {
-  public historyData: ReportAppStatusHistoryModel[];
+export class GeneratedReportOverviewComponent implements OnInit {
+  public reports: GeneratedReportModel[];
 
   constructor(
     public dateFormatService: DateFormatService,
@@ -23,14 +23,14 @@ export class ReportAppHistoryOverviewComponent implements OnInit {
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.params["ID"];
     this.loaderService.show();
-    if(this.historyData){
+    if(this.reports){
       this.loaderService.hide();
       return;
     }
     this.service
-      .getStatusHistoryData(id)
+      .getReportsData(id)
       .subscribe((res) => {
-        this.historyData = res;
+        this.reports = res;
         this.loaderService.hide();
       });
   }

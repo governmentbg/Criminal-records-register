@@ -38,6 +38,7 @@
           type="button"
           class="ml-2"
           style="min-width: 100px"
+          (click)="onFinalEditDialogOpen()"
         >
           Окончателна редакция
         </button>
@@ -205,13 +206,17 @@
         </nb-tab>
 
         <nb-tab
-          tabTitle="Справка"
+          [tabTitle]="reportsTabTitle"
           *ngIf="
             isEdit() &&
             reportApplicationStatus == ReportApplicationStatusConstants.Approved
           "
         >
+          <ng-container *ngIf="showReportsTab">
+            <cais-generated-report-overview> </cais-generated-report-overview>
+          </ng-container>
         </nb-tab>
+
         <nb-tab [tabTitle]="historyTabTitle" *ngIf="isEdit() || isForPreview">
           <ng-container *ngIf="showHistoryTab">
             <cais-report-app-history-overview>
@@ -222,3 +227,62 @@
     </form>
   </nb-card-body>
 </nb-card>
+
+<igx-dialog #finalEditDialog>
+  <form autocomplete="off">
+    <div class="dialogNewRecord" style="min-width: 1000px">
+      <nb-card>
+        <nb-card-header>Окончателна редакция</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Подписващ 1'"
+                [inputFormControl]="signersformGroup.controls.firstSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'firstSignerId'"
+                [items]="dbData.users"
+              >
+              </cais-autocomplete>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Подписващ 2'"
+                [inputFormControl]="signersformGroup.controls.secondSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'secondSignerId'"
+                [items]="dbData.users"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row">
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                status="danger"
+                (click)="finalEdit()"
+              >
+                Запис
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                (click)="finalEditDialog.close()"
+              >
+                Отказ
+              </button>
+            </div>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+  </form>
+</igx-dialog>
