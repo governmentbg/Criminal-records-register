@@ -8,6 +8,7 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris
 import { EcrisMsgNamesOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/ecris-msg-names-overview/ecris-msg-names-overview.component';
 import { GraoPersonOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/grao-person-overview/grao-person-overview.component';
 import { EcrisReqPreviewComponent } from './ecris-message-form/ecris-req-preview/ecris-req-preview.component';
+import { ResultFromSearchOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/result-from-search-overview/result-from-search-overview.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { EcrisReqPreviewComponent } from './ecris-message-form/ecris-req-preview
     EcrisMsgNamesOverviewComponent,
     GraoPersonOverviewComponent,
     EcrisReqPreviewComponent,
+    ResultFromSearchOverviewComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],
 })

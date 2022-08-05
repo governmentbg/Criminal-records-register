@@ -1,5 +1,5 @@
 <igx-grid
-  #grid
+  #peopleGrid
   igxGridState
   [data]="people"
   [height]="null"
@@ -88,7 +88,7 @@
                 nbButton
                 matRipple
                 [status]="'success'"
-                (click)="search()"
+                (click)="onSearch()"
                 type="button"
                 class="ml-2"
               >
@@ -174,6 +174,11 @@
             ></cais-input>
           </div>
         </div>
+
+        <cais-result-from-search-overview
+          #resultGrid
+          [searchPersonForm]="searchPersonForm"
+        ></cais-result-from-search-overview>
       </nb-card-body>
     </nb-card>
   </div>

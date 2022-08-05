@@ -19,6 +19,7 @@ import { GraoPersonGridService } from "./_data/grao-person-grid.service";
 import { SearchPersonForm } from "./_models/search-person.form";
 import { BaseNomenclatureModel } from "../../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../../../@core/services/rest/nomenclature.service";
+import { ResultFromSearchOverviewComponent } from "../result-from-search-overview/result-from-search-overview.component";
 
 @Component({
   selector: "cais-grao-person-overview",
@@ -47,6 +48,11 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
   @ViewChild("peopleGrid", {
     read: IgxGridComponent,
   })
+  public peopleGrid: IgxGridComponent;
+
+  @ViewChild("resultGrid")
+  resultFromSearchPersonGridForm: ResultFromSearchOverviewComponent;
+
   public model: GraoPersonModel[];
   public selectionMode: GridSelectionMode = "single";
   public currentPage = 0;
@@ -72,14 +78,18 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
     this.selectRow.emit(event.newSelection[0]);
   }
 
-  search() {}
-
   onCloseDialog() {
+    this.searchPersonForm = new SearchPersonForm();
     this.dialog.close();
   }
 
   //предава данните на основния грид с данните от ГРАО
   addInGrid() {
+    this.peopleGrid.addRow(this.searchPersonForm.group.value);//избрания ред от табличката
     this.onCloseDialog();
   }
+
+  onSearch = () => {
+    this.resultFromSearchPersonGridForm.onSearch();
+  };
 }
