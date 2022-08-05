@@ -64,6 +64,14 @@ namespace MJ_CAIS.Repositories.Impl
                                     on app.PaymentMethodId equals paymentMethods.Id into paymentMethodsLeft
                                 from paymentMethods in paymentMethodsLeft.DefaultIfEmpty()
 
+                                join aPayments in _dbContext.APayments.AsNoTracking()
+                                     on app.Id equals aPayments.WApplicationId into aPaymentsLeft
+                                from aPayments in aPaymentsLeft.DefaultIfEmpty()
+
+                                join ePayments in _dbContext.EPayments.AsNoTracking()
+                                     on aPayments.EPaymentId equals ePayments.Id into ePaymentsLeft
+                                from ePayments in ePaymentsLeft.DefaultIfEmpty()
+
                                 join application in _dbContext.AApplications.AsNoTracking()
                                          on app.Id equals application.WApplicationId into applicationLeft
                                 from application in applicationLeft.DefaultIfEmpty()
@@ -84,7 +92,7 @@ namespace MJ_CAIS.Repositories.Impl
                                     RegistrationNumber = app.RegistrationNumber,
                                     Status = status.Name,
                                     StatusCode = status.Code,
-                                    // IsPaid  ?? todo
+                                    IsPaid = ePayments.PaymentStatus == "Payed",
                                     CertificateStatusCode = cert.StatusCode
                                 }).FirstOrDefaultAsync(x => x.Id == id);
 
