@@ -18,5 +18,6 @@ namespace MJ_CAIS.DataAccess.Entities
 
         public virtual AReport? AReport { get; set; }
         public virtual AReportApplication? AReportAppl { get; set; }
+        public virtual AReportStatus StatusCodeNavigation { get; set; } = null!;
     }
 }

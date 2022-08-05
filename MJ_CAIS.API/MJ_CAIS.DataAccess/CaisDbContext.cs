@@ -33,6 +33,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ARepPer> ARepPers { get; set; } = null!;
         public virtual DbSet<AReport> AReports { get; set; } = null!;
         public virtual DbSet<AReportApplication> AReportApplications { get; set; } = null!;
+        public virtual DbSet<AReportStatus> AReportStatuses { get; set; } = null!;
         public virtual DbSet<AReportStatusH> AReportStatusHes { get; set; } = null!;
         public virtual DbSet<ASrvcResRcptMeth> ASrvcResRcptMeths { get; set; } = null!;
         public virtual DbSet<AStatusH> AStatusHes { get; set; } = null!;
@@ -1316,6 +1317,8 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("A_REPORTS");
 
+                entity.HasIndex(e => e.StatusCode, "XIF10A_REPORT_ReportStatus");
+
                 entity.HasIndex(e => e.FirstSignerId, "XIF1A_REPORTS");
 
                 entity.HasIndex(e => e.SecondSignerId, "XIF2A_REPORTS");
@@ -1402,6 +1405,11 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.AReportSecondSigners)
                     .HasForeignKey(d => d.SecondSignerId)
                     .HasConstraintName("FK_A_REPORTS_G_USERS2");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.AReports)
+                    .HasForeignKey(d => d.StatusCode)
+                    .HasConstraintName("FK_A_REPORTS_STAT");
             });
 
             modelBuilder.Entity<AReportApplication>(entity =>
@@ -1412,6 +1420,8 @@ namespace MJ_CAIS.DataAccess
                     .IsUnique();
 
                 entity.HasIndex(e => e.LnId, "XIF10A_REPORT_APPLICATIONS");
+
+                entity.HasIndex(e => e.StatusCode, "XIF10A_REP_APPLSStatus");
 
                 entity.HasIndex(e => e.SuidId, "XIF11A_REPORT_APPLICATIONS");
 
@@ -1715,10 +1725,40 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.PurposeId)
                     .HasConstraintName("FK_A_REPORT_APPLICATIONS_A_PUR");
 
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.AReportApplications)
+                    .HasForeignKey(d => d.StatusCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_A_REPORT_APPLICATION_STAT");
+
                 entity.HasOne(d => d.SuidNavigation)
                     .WithMany(p => p.AReportApplicationSuidNavigations)
                     .HasForeignKey(d => d.SuidId)
                     .HasConstraintName("FK_A_REPORT_APPL_P_PER_SUID");
+            });
+
+            modelBuilder.Entity<AReportStatus>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKA_REPORT_STATUSES");
+
+                entity.ToTable("A_REPORT_STATUSES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.StatusType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_TYPE");
             });
 
             modelBuilder.Entity<AReportStatusH>(entity =>
@@ -1785,6 +1825,12 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.AReportStatusHes)
                     .HasForeignKey(d => d.AReportId)
                     .HasConstraintName("FK_A_REP_STATUS_H_A_REP");
+
+                entity.HasOne(d => d.StatusCodeNavigation)
+                    .WithMany(p => p.AReportStatusHes)
+                    .HasForeignKey(d => d.StatusCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_A_REPORT_STAT_H");
             });
 
             modelBuilder.Entity<ASrvcResRcptMeth>(entity =>

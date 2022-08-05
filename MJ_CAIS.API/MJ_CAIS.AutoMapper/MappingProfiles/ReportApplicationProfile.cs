@@ -11,17 +11,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public ReportApplicationProfile()
         {
             CreateMap<AReportApplication, ReportApplicationGridDTO>()
-                .ForMember(d => d.StatusName, opt => opt.MapFrom(src =>
-                    src.StatusCode == Status.New
-                        ? ReportApplicationResources.statusNew
-                        : (src.StatusCode == Status.Approved
-                            ? ReportApplicationResources.approved
-                            : (src.StatusCode == Status.Canceled
-                                ? ReportApplicationResources.canceled
-                                : (src.StatusCode == Status.Delivered
-                                    ? ReportApplicationResources.delivered
-                                    : string.Empty)))));
-
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name));
 
             CreateMap<ReportApplicationDTO, AReportApplication>()
                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
@@ -82,11 +72,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.Person.BirthPlace.DistrictId, opt => opt.MapFrom(src => src.BirthCity != null && src.BirthCity.Municipality != null ? src.BirthCity.Municipality.DistrictId : null))
                 .ForPath(d => d.Person.Nationalities.SelectedPrimaryKeys, opt => opt.MapFrom(src => src.ARepCitizenships.Select(x => x.Id)))
                 .ForPath(d => d.Person.Nationalities.SelectedForeignKeys, opt => opt.MapFrom(src => src.ARepCitizenships.Select(x => x.CountryId)))
-                .ForMember(d => d.StatusName, opt => opt.MapFrom(src =>
-                         src.StatusCode == Status.New ? ReportApplicationResources.statusNew :
-                         (src.StatusCode == Status.Approved ? ReportApplicationResources.approved :
-                         (src.StatusCode == Status.Canceled ? ReportApplicationResources.canceled :
-                         (src.StatusCode == Status.Delivered ? ReportApplicationResources.delivered : string.Empty)))));
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name));
         }
     }
 }

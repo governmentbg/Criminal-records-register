@@ -1,7 +1,12 @@
 import { Component, Injector, OnInit, ViewChild } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
+import { NgxSpinnerService } from "ngx-spinner";
 import { Observable } from "rxjs";
 import { CancelDialogComponent } from "../../../@core/components/dialogs/cancel-dialog/cancel-dialog.component";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
@@ -28,6 +33,11 @@ export class ReportApplicationFormComponent
   >
   implements OnInit
 {
+  @ViewChild("finalEditDialog", { read: IgxDialogComponent })
+  public finalEditDialog: IgxDialogComponent;
+
+  public signersformGroup: FormGroup;
+
   public reportApplicationStatus: string;
   public ReportApplicationStatusConstants = ReportApplicationStatusConstants;
   public PersonContextEnum = PersonContextEnum;
@@ -35,12 +45,14 @@ export class ReportApplicationFormComponent
   public historyTabTitle = "Одит";
   public showHistoryTab: boolean = false;
   private isFinalEdit: boolean;
-  
+
   constructor(
     service: ReportApplicationService,
     public injector: Injector,
     private dialogService: NbDialogService,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    private formBuilder: FormBuilder,
+    private loaderService: NgxSpinnerService,
   ) {
     super(service, injector);
     this.setDisplayTitle("искане за справка за съдимост");
@@ -73,6 +85,11 @@ export class ReportApplicationFormComponent
       this.reportApplicationStatus ==
         ReportApplicationStatusConstants.Delivered;
 
+    this.signersformGroup = this.formBuilder.group({
+      firstSignerId: [{ value: "", disabled: false }, Validators.required],
+      secondSignerId: [{ value: "", disabled: false }, Validators.required],
+    });
+
     this.formFinishedLoading.emit();
   }
 
@@ -85,13 +102,28 @@ export class ReportApplicationFormComponent
   }
 
   public submitFunction = () => {
+    this.loaderService.show();
     this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
 
   public finalEdit() {
-    this.isFinalEdit = true;
-    this.validateAndSave(this.fullForm);
+    this.loaderService.show();
+    if (this.signersformGroup.valid) {
+      this.isFinalEdit = true;
+      this.fullForm.firstSignerId.patchValue(
+        this.signersformGroup.value.firstSignerId
+      );
+      this.fullForm.secondSignerId.patchValue(
+        this.signersformGroup.value.secondSignerId
+      );
+
+      this.validateAndSave(this.fullForm);
+    }
+  }
+
+  public onFinalEditDialogOpen() {
+    this.finalEditDialog.open();
   }
 
   protected saveAndNavigate() {
@@ -108,12 +140,13 @@ export class ReportApplicationFormComponent
     submitAction.subscribe({
       next: (data) => {
         this.toastr.showToast("success", this.successMessage);
-
+        this.loaderService.hide();
         setTimeout(() => {
           this.onSubmitSuccess(data);
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
+        this.loaderService.hide();
         this.onServiceError(errorResponse);
       },
     });
