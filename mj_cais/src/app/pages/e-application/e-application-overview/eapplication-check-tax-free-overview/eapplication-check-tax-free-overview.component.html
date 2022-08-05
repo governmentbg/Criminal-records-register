@@ -36,6 +36,7 @@
     header="Дата на заявяване"
     [sortable]="true"
     [dataType]="'date'"
+    [width]="'13%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">
@@ -49,16 +50,73 @@
     header="Регистрационен номер"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'16%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
 
-  
   <igx-column
     field="egn"
     header="ЕГН"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'13%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="firstname"
+    header="Първо име"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'14%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="surname"
+    header="Презиме"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'14%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="familyname"
+    header="Фамилия"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'14%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="fullname"
+    header="Име"
+    [sortable]="true"
+    [dataType]="'string'"
+    [width]="'21%'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="purpose"
+    header="Цел"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -66,23 +124,13 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
-  <igx-column
-  field="purpose"
-  header="Цел"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
 
   <igx-column
     field="purposeName"
     header="Цел свободен текст"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'16%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -93,6 +141,7 @@
     header="Начин на плащане"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'13%'"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -109,10 +158,10 @@
     <ng-template igxCell let-cell="cell">
       <a [title]="'Потвърди'" (click)="approve(cell.rowData.id)">
         <nb-icon pack="fa" icon="check"></nb-icon>
-      </a> 
+      </a>
       <a [title]="'Отхръли'" (click)="reject(cell.rowData.id)">
         <nb-icon pack="fa" icon="times"></nb-icon>
-      </a> 
+      </a>
     </ng-template>
   </igx-column>
 
