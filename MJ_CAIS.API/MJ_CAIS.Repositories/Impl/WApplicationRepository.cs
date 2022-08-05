@@ -52,6 +52,10 @@ namespace MJ_CAIS.Repositories.Impl
                     PurposeDesc = x.PurposeNavigation.Description,
                     RegistrationNumber = x.RegistrationNumber,
                     Version = x.Version,
+                    Firstname = x.Firstname,
+                    Surname = x.Surname,
+                    Familyname = x.Familyname,
+                    Fullname = x.Fullname,
                 });
 
             return query;
