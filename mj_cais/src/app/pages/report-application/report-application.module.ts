@@ -5,6 +5,8 @@ import { CoreComponentModule } from "../../@core/components/core-component.modul
 import { RegixRequestFormComponent } from "./regix-request-form/regix-request-form.component";
 import { ReportApplicationFormComponent } from './report-application-form/report-application-form.component';
 import { ReportAppHistoryOverviewComponent } from './report-application-form/tabs/report-app-history-overview/report-app-history-overview.component';
+import { ReportApplicationApprovedOverviewComponent } from './report-application-overview/report-application-approved-overview/report-application-approved-overview.component';
+import { ReportApplicationDeliveredOverviewComponent } from './report-application-overview/report-application-delivered-overview/report-application-delivered-overview.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,8 @@ import { ReportAppHistoryOverviewComponent } from './report-application-form/tab
     RegixRequestFormComponent,
     ReportApplicationFormComponent,
     ReportAppHistoryOverviewComponent,
+    ReportApplicationApprovedOverviewComponent,
+    ReportApplicationDeliveredOverviewComponent,
   ],
   imports: [CoreComponentModule, ReportApplicationRoutingModule],
 })

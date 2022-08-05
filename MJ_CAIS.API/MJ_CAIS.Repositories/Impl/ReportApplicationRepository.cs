@@ -32,7 +32,7 @@ namespace MJ_CAIS.Repositories.Impl
                             into userLeft
                         from user in userLeft.DefaultIfEmpty()
                         join status in _dbContext.AReportStatuses.AsNoTracking() on reportAppHis.StatusCode equals status.Code
-                       into statusLeft
+                        into statusLeft
                         from status in statusLeft.DefaultIfEmpty()
                         select new ReportAppStatusHistoryDTO
                         {

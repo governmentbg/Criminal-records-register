@@ -18,27 +18,7 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Нови искания</igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <nb-toggle
-          (checkedChange)="onShowAllReportApplicationsChange($event)"
-          status="info"
-          labelPosition="left"
-          >Всички искания</nb-toggle
-        >
-        <a
-          class="ml-2"
-          nbButton
-          matRipple
-          [status]="'success'"
-          [routerLink]="['/pages/report-applications/regix-request']"
-        >
-          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Ново искане
-        </a>
-      </div>
-      <div class="ml-auto"></div>
-    </igx-grid-toolbar-actions>
+    <igx-grid-toolbar-title>Обработени искания</igx-grid-toolbar-title>
   </igx-grid-toolbar>
 
   <igx-column
@@ -63,16 +43,6 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column
-  field="statusName"
-  header="Статус"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
   <igx-column
     field="purpose"
     header="Цел"
@@ -143,13 +113,6 @@
         [routerLink]="['/pages/report-applications/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        *ngIf="hideStatus"
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/report-applications/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>
     </ng-template>
   </igx-column>

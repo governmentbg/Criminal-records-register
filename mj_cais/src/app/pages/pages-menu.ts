@@ -107,7 +107,15 @@ export class PagesMenu {
           {
             title: "Нови искания",
             link: "/pages/report-applications",
-          }       
+          },
+          {
+            title: "В процес на обработка",
+            link: "/pages/report-applications/approved",
+          },
+          {
+            title: "Обработени",
+            link: "/pages/report-applications/delivered",
+          },
         ],
       },
       {
