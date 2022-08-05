@@ -79,25 +79,56 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string egnId, string lnchId, string lnId, string suidId)
+        public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId)
         {
-            var egnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.EgnId == egnId);
-            var lnchBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.LnchId == lnchId);
-            var lnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.LnId == lnId);
-            var suidBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.SuidId == suidId);
+            var bulletinsByEgn = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                 join egn in _dbContext.PPersonIds.AsNoTracking() on bulletin.EgnId equals egn.Id
+                                 where egn.PersonId == personId
+                                 select new ReportAppBulletinIdDTO
+                                 {
+                                     Id = bulletin.Id,
+                                     CreatedOn = bulletin.CreatedOn,
+                                     DecisionDate = bulletin.DecisionDate
+                                 };
 
-            var result = egnBull
-                            .Union(lnchBull)
-                            .Union(lnchBull)
-                            .Union(suidBull)
-                            .Select(x => new ReportAppBulletinIdDTO
-                            {
-                                Id = x.Id,
-                                CreatedOn = x.CreatedOn,
-                                DecisionDate = x.DecisionDate
-                            });
 
-            return result;
+            var bulletinsByLnch = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                  join lnch in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnchId equals lnch.Id
+                                  where lnch.PersonId == personId
+                                  select new ReportAppBulletinIdDTO
+                                  {
+                                      Id = bulletin.Id,
+                                      CreatedOn = bulletin.CreatedOn,
+                                      DecisionDate = bulletin.DecisionDate
+                                  };
+
+
+            var bulletinsByLn = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                join ln in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnId equals ln.Id
+                                where ln.PersonId == personId
+                                select new ReportAppBulletinIdDTO
+                                {
+                                    Id = bulletin.Id,
+                                    CreatedOn = bulletin.CreatedOn,
+                                    DecisionDate = bulletin.DecisionDate
+                                };
+
+
+            var bulletinsBySuid = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                  join suid in _dbContext.PPersonIds.AsNoTracking() on bulletin.SuidId equals suid.Id
+                                  where suid.PersonId == personId
+                                  select new ReportAppBulletinIdDTO
+                                  {
+                                      Id = bulletin.Id,
+                                      CreatedOn = bulletin.CreatedOn,
+                                      DecisionDate = bulletin.DecisionDate
+                                  };
+
+            var bulletins = bulletinsByEgn
+                                .Union(bulletinsByLnch)
+                                .Union(bulletinsByLn)
+                                .Union(bulletinsBySuid);
+            return bulletins;
         }
 
     }
