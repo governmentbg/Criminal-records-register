@@ -54,5 +54,26 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string egnId, string lnchId, string lnId, string suidId)
+        {
+            var egnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.EgnId == egnId);
+            var lnchBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.LnchId == lnchId);
+            var lnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.LnId == lnId);
+            var suidBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.SuidId == suidId);
+
+            var result = egnBull
+                            .Union(lnchBull)
+                            .Union(lnchBull)
+                            .Union(suidBull)
+                            .Select(x => new ReportAppBulletinIdDTO
+                            {
+                                Id = x.Id,
+                                CreatedOn = x.CreatedOn,
+                                DecisionDate = x.DecisionDate
+                            });
+
+            return result;
+        }
+
     }
 }

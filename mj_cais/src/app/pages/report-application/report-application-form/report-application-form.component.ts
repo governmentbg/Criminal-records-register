@@ -34,7 +34,8 @@ export class ReportApplicationFormComponent
 
   public historyTabTitle = "Одит";
   public showHistoryTab: boolean = false;
-
+  private isFinalEdit: boolean;
+  
   constructor(
     service: ReportApplicationService,
     public injector: Injector,
@@ -46,7 +47,6 @@ export class ReportApplicationFormComponent
   }
 
   ngOnInit(): void {
-    debugger;
     this.fullForm = new ReportApplicationForm();
     this.fullForm.group.patchValue(this.dbData.element);
     this.reportApplicationStatus = this.fullForm.statusCode.value;
@@ -85,22 +85,21 @@ export class ReportApplicationFormComponent
   }
 
   public submitFunction = () => {
-    //this.isFinalEdit = false;
+    this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
 
   public finalEdit() {
-    //this.isFinalEdit = true;
+    this.isFinalEdit = true;
     this.validateAndSave(this.fullForm);
   }
 
   protected saveAndNavigate() {
     let model = this.formObject;
     let submitAction: Observable<ReportApplicationModel>;
-    // if (this.isFinalEdit) {
-    //   submitAction = this.service.updateFinal(this.formObject.id, model);
-    // } else
-    if (this.isEdit()) {
+    if (this.isFinalEdit) {
+      submitAction = this.service.updateFinal(this.formObject.id, model);
+    } else if (this.isEdit()) {
       submitAction = this.service.update(this.formObject.id, model);
     } else {
       submitAction = this.service.save(model);

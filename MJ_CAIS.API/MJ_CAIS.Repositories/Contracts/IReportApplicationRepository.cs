@@ -7,5 +7,7 @@ namespace MJ_CAIS.Repositories.Contracts
     public interface IReportApplicationRepository : IBaseAsyncRepository<AReportApplication, string, CaisDbContext>
     {
         IQueryable<ReportAppStatusHistoryDTO> SelectAllStatusHistoryData();
+
+        IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string egnId, string lnchId, string lnId, string suidId);
     }
 }

@@ -32,7 +32,9 @@ namespace MJ_CAIS.ExternalWebServices
 
             _pdfSignerService = pdfSignerService;
             _printerService = printerService;
-     
+            _reportRepository = reportRepository;
+
+
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

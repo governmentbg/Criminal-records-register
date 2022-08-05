@@ -1176,6 +1176,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
+                entity.Property(e => e.OrderNumber)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ORDER_NUMBER");
+
                 entity.Property(e => e.ReportId)
                     .HasMaxLength(50)
                     .IsUnicode(false)

@@ -23,5 +23,7 @@ namespace MJ_CAIS.DTO.ReportApplication
         public string? ApplicantDescr { get; set; }
         public string? ApplicantId { get; set; }
         public string? PurposeId { get; set; }
+        public string? FirstSignerId { get; set; }
+        public string? SecondSignerId { get; set; }
     }
 }
