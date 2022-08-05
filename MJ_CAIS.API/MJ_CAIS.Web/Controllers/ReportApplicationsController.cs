@@ -62,6 +62,12 @@ namespace MJ_CAIS.Web.Controllers
             await this._reportApplicationService.CancelAsync(aId, aInDto.Description);
             return Ok();
         }
-        
+
+        [HttpGet("{aId}/status-history")]
+        public IActionResult GetStatusHistory(string aId)
+        {
+            var result = this._reportApplicationService.GetStatusHistoryByReportAppId(aId);
+            return Ok(result);
+        }
     }
 }

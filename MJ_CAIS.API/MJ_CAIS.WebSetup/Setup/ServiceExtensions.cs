@@ -87,7 +87,7 @@ namespace MJ_CAIS.WebSetup.Setup
         {
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserContext>(
-                s => new UserContext(s.GetService<IHttpContextAccessor>().HttpContext.User)
+                s => new UserContext(s.GetService<IHttpContextAccessor>()?.HttpContext?.User)
             );
         }
     }

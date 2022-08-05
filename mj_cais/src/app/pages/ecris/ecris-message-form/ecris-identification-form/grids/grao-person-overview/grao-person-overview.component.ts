@@ -10,15 +10,15 @@ import {
 } from "@angular/core";
 import {
   GridSelectionMode,
+  IgxDialogComponent,
   IgxGridComponent,
 } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../../@core/services/common/date-format.service";
-import { EcrisMessageService } from "../../../_data/ecris-message.service";
-import { EcrisMessageForm } from "../../../_models/ecris-message.form";
 import { RemoteGridWithStatePersistance } from "../../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { GraoPersonGridService } from "./_data/grao-person-grid.service";
-import { BehaviorSubject } from "rxjs";
-import { FormUtils } from "../../../../../../@core/utils/form.utils";
+import { SearchPersonForm } from "./_models/search-person.form";
+import { BaseNomenclatureModel } from "../../../../../../@core/models/nomenclature/base-nomenclature.model";
+import { NomenclatureService } from "../../../../../../@core/services/rest/nomenclature.service";
 
 @Component({
   selector: "cais-grao-person-overview",
@@ -32,13 +32,17 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
   constructor(
     public service: GraoPersonGridService,
     public injector: Injector,
-    public dateFormatService: DateFormatService
+    public dateFormatService: DateFormatService,
+    public nomenclatureService: NomenclatureService
   ) {
     super("grao-people-search", service, injector);
   }
 
   @Input() people: any;
   @Input() dbData: any;
+
+  @ViewChild("dialogAdd", { read: IgxDialogComponent })
+  public dialog: IgxDialogComponent;
 
   @ViewChild("peopleGrid", {
     read: IgxGridComponent,
@@ -53,27 +57,29 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
 
   @Output() selectRow = new EventEmitter<string>();
 
+  public searchPersonForm = new SearchPersonForm();
+
+  public genderTypes: BaseNomenclatureModel[];
+
   ngOnInit(): void {
     super.ngOnInit();
-    let id = this.activatedRoute.snapshot.params["ID"];
-    // this.service.getGraoPeople(id).subscribe((response) => {
-    //   this.model = response;
-    // });
+    this.nomenclatureService.getGenderTypes().subscribe((data) => {
+      this.genderTypes = data;
+    });
   }
 
   handleRowSelection(event) {
     this.selectRow.emit(event.newSelection[0]);
   }
 
-  // handleRowSelection(event) {
-  //   debugger;
-  //   let selectedId = event.newSelection[0];
-  //   if (selectedId) {
-  //     let grid = this.grid as IgxGridComponent;
-  //     this.selectedItem = FormUtils.getGridItemById(grid, selectedId);
-  //   } else {
-  //     this.selectedItem = undefined;
-  //   }
+  search() {}
 
-  // }
+  onCloseDialog() {
+    this.dialog.close();
+  }
+
+  //предава данните на основния грид с данните от ГРАО
+  addInGrid() {
+    this.onCloseDialog();
+  }
 }

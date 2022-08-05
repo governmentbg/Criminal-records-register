@@ -108,6 +108,13 @@ namespace MJ_CAIS.Services
             return reportApp.Id;
         }
 
+        public IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId)
+        {
+            var statues = _reportApplicationRepository.SelectAllStatusHistoryData();
+            var filteredStatuses = statues.Where(x => x.AReportApplId == aId);
+            return filteredStatuses;
+        }
+
         private static AReportStatusH CreateH(string statusCode, string desc = null)
         {
             return new AReportStatusH

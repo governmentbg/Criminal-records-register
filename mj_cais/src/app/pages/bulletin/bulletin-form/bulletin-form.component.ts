@@ -256,18 +256,33 @@ export class BulletinFormComponent
   onChangeTab(event) {
     let tabTitle = event.tabTitle;
 
-    this.showOffencesTab =
-      !this.showOffencesTab && tabTitle == this.offencesTabTitle;
-    this.showSanctionsTab =
-      !this.showSanctionsTab && tabTitle == this.sanctionsTabTitle;
-    this.showDecisionTab =
-      !this.showDecisionTab && tabTitle == this.decisionTabTitle;
-    this.showEventsTab = !this.showEventsTab && tabTitle == this.eventsTabTitle;
-    this.showDocumentsTab =
-      !this.showDocumentsTab && tabTitle == this.documentsTabTitle;
-    this.showIsinTab = !this.showIsinTab && tabTitle == this.isinTabTitle;
-    this.showHistoryTab =
-      !this.showHistoryTab && tabTitle == this.historyTabTitle;
+    if (!this.showOffencesTab) {
+      this.showOffencesTab = tabTitle == this.offencesTabTitle;
+    }
+    
+    if (!this.showSanctionsTab) {
+      this.showSanctionsTab = tabTitle == this.sanctionsTabTitle;
+    }
+
+    if (!this.showDecisionTab) {
+      this.showDecisionTab = tabTitle == this.decisionTabTitle;
+    }
+
+    if (!this.showEventsTab) {
+      this.showEventsTab = tabTitle == this.eventsTabTitle;
+    }
+
+    if (!this.showDocumentsTab) {
+      this.showDocumentsTab = tabTitle == this.documentsTabTitle;
+    }
+
+    if (!this.showIsinTab) {
+      this.showIsinTab = tabTitle == this.isinTabTitle;
+    }
+
+    if (!this.showHistoryTab) {
+      this.showHistoryTab = tabTitle == this.historyTabTitle;
+    }
   }
 
   onChangeEventsTab(event) {

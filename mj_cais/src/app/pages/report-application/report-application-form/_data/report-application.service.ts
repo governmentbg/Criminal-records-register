@@ -1,6 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
+import { ReportAppStatusHistoryModel } from "../tabs/report-app-history-overview/_models/report-app-status-history.model";
 import { ReportApplicationModel } from "../_models/report-application.model";
 
 @Injectable({
@@ -26,6 +27,14 @@ export class ReportApplicationService extends CaisCrudService<
       this.url + `/final-edit/${id}`,
       model,
       {}
+    );
+  }
+
+  public getStatusHistoryData(
+    id: string
+  ): Observable<ReportAppStatusHistoryModel[]> {
+    return this.http.get<ReportAppStatusHistoryModel[]>(
+      `${this.url}/${id}/status-history`
     );
   }
 }

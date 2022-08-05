@@ -4,12 +4,14 @@ import { ReportApplicationNewOverviewComponent } from "./report-application-over
 import { CoreComponentModule } from "../../@core/components/core-component.module";
 import { RegixRequestFormComponent } from "./regix-request-form/regix-request-form.component";
 import { ReportApplicationFormComponent } from './report-application-form/report-application-form.component';
+import { ReportAppHistoryOverviewComponent } from './report-application-form/tabs/report-app-history-overview/report-app-history-overview.component';
 
 @NgModule({
   declarations: [
     ReportApplicationNewOverviewComponent,
     RegixRequestFormComponent,
     ReportApplicationFormComponent,
+    ReportAppHistoryOverviewComponent,
   ],
   imports: [CoreComponentModule, ReportApplicationRoutingModule],
 })

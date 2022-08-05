@@ -12,5 +12,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<string> UpdateAsync(ReportApplicationDTO aInDto, bool isFinal);
 
         Task<string> CancelAsync(string aId, string cancelDesc);
+
+        IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId);
     }
 }

@@ -1,0 +1,54 @@
+<div class="font-weight-bold">История на промяна на статусите</div>
+<hr />
+<igx-grid
+  #statusHistoryGrid
+  [height]="null"
+  [data]="historyData"
+  [primaryKey]="'id'"
+>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="false"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+  </igx-column>
+  <igx-column
+    field="status"
+    header="Статус"
+    dataType="string"
+    [sortable]="true"
+  >
+  </igx-column>
+
+  <igx-column
+    field="createdOn"
+    [sortable]="true"
+    header="Дата на създаване"
+    dataType="date"
+    [formatter]="this.dateFormatService.formatDate"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="createdBy"
+    header="Създаден от"
+    dataType="string"
+    [sortable]="true"
+  >
+  </igx-column>
+
+  <igx-column
+    field="descr"
+    header="Описание"
+    dataType="string"
+    [sortable]="true"
+  >
+  </igx-column>
+</igx-grid>
