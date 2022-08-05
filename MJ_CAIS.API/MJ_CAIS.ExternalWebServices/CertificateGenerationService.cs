@@ -246,7 +246,7 @@ namespace MJ_CAIS.ExternalWebServices
                 {
                     //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
                     _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
-                    //certificate.StatusCode = statusCodeCertificateServerSign;
+  
                 }
                 else
                 {

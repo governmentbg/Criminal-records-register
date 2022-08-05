@@ -136,7 +136,7 @@ namespace MJ_CAIS.Services
 
         public async Task<PPerson> ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus)
         {
-            //wapplication.StatusCode = ApplicationConstants.ApplicationStatuses.WebApprovedApplication;
+  
             _webApplicationService.SetWApplicationStatus(wapplication, wapplicationStatus, ApplicationResources.descAprovedApp);
      
             string regNumber = "";
@@ -204,11 +204,33 @@ namespace MJ_CAIS.Services
                 RegistrationNumber = regNumber,
                 //ApplicationType = wapplication.ApplicationType,
                 ApplicationTypeId = wapplication.ApplicationTypeId,
-                EntityState = EntityStateEnum.Added
+                EntityState = EntityStateEnum.Added,
+            
+                
             };
 
+            appl.AAppPersAliases = wapplication.WAppPersAliases.Select(w => new AAppPersAlias
+            {
+                EntityState = EntityStateEnum.Added,
+                ApplicationId = appl.Id,
+                Familyname = w.Familyname,
+                Firstname = w.Firstname,
+                Fullname = w.Fullname,
+                Id = BaseEntity.GenerateNewId(),
+                 Surname=w.Surname
+                 
+            }).ToList();
+            appl.AAppCitizenships = wapplication.WAppCitizenships.Select(w => new AAppCitizenship
+            {
+                EntityState = EntityStateEnum.Added,
+                ApplicationId = appl.Id,               
+                Id = BaseEntity.GenerateNewId(),
+               CountryId = w.CountryId,
+               
+            }).ToList();
             _applicationService.SetApplicationStatus(appl, applicationStatus, ApplicationResources.descApplicationFromWeb);
 
+           
             PersonDTO personDto = new PersonDTO();
 
             personDto.Egn = wapplication.Egn;
@@ -231,59 +253,12 @@ namespace MJ_CAIS.Services
 
             var person = await _managePersonService.CreatePersonAsync(personDto);
 
-            // var idpid = await dbContext.PPersonIds.FirstOrDefaultAsync(x => x.Issuer == PersonConstants.IssuerType.GRAO && x.PidTypeId == PersonConstants.PidType.Egn 
-            //                                             && x.CountryId == PersonConstants.BG && x.Pid == appl.Egn);
-
             appl.EgnId = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Id;
-            //appl.EgnNavigation = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn);
+                 
 
-            //foreach (var v in wapplication.AAppCitizenships)
-            //{
-            //    var newObj = new AAppCitizenship()
-            //    {
-            //        Id = BaseEntity.GenerateNewId(),
-            //        ApplicationId = appl.Id,
-            //        CountryId = v.CountryId
-            //    };
-            //    appl.AAppCitizenships.Add(newObj);
-
-            //}
-            //todo: какво е това
-            // appl.AAppPersAliases
-
-            //appl.PAppIds = await dbContext.PPersonIds.Where(x => (x.PidTypeId == PersonConstants.PidType.Egn && x.Issuer == PersonConstants.IssuerType.GRAO && x.Pid == appl.Egn)
-            //                                || (x.PidTypeId == PersonConstants.PidType.Lnch && x.Issuer == PersonConstants.IssuerType.MVR && x.Pid == appl.Lnch)
-            //                                || (x.PidTypeId == PersonConstants.PidType.Ln && x.Issuer == PersonConstants.IssuerType.CAIS && x.Pid == appl.Ln))
-            //                     .Select(x => new PAppId
-            //                     {
-            //                         ApplicationId = appl.Id,
-            //                         Id = BaseEntity.GenerateNewId(),
-            //                         PersonId = x.Id
-            //                     }).ToListAsync();
-
-            //TODO: при неколкократно извикване на метода за един и същ човек
-            //се променя статуса на Added за всички траквани обекти.
-            //причината е различния начин на ползване на дб контекста
-            //в personService на ред 349 dbContext.ApplyChanges(personToUpdate, new List<IBaseIdEntity>(), true); 
-            //предизвиква проблема
-            //не зная защо само това ентити, а не и aapplication...?!
-            //foreach (var entity in dbContext.ChangeTracker.Entries<AStatusH>())
-            //{
-            //    if (entity.Entity.ApplicationId != appl.Id)
-            //    {
-            //        if (entity.Entity != null && entity.Entity.EntityState != EntityStateEnum.Detached)
-            //        {
-            //            dbContext.Entry(entity.Entity).State = EntityState.Detached;
-            //        }
-            //    }
-            //}
-
-            _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);
-            // dbContext.AApplications.Add(appl);
-            //dbContext.AStatusHes.AddRange(appl.AStatusHes);
-            // dbContext.PAppIds.AddRange(appl.PAppIds);
-            //dbContext.WApplications.Update(wapplication);
+            _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);      
            
+
             _wApplicationRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>(), true);
 
             return person;
@@ -299,19 +274,7 @@ namespace MJ_CAIS.Services
                 //await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
                 //todo: must add some FK for payment?!
                 var person = await ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
-                //await AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService, _applicationWebService,_personSevice, statusWebApprovedApplication, statusApprovedApplication);
-                // await _dbContext.SaveChangesAsync();
-                //if (person != null && person.EntityState != EntityStateEnum.Detached)
-                //{
-                //    _dbContext.Entry(person).State = EntityState.Detached;
-                //    foreach (var pIds in person.PPersonIds)
-                //    {
-                //        if (pIds != null && pIds.EntityState != EntityStateEnum.Detached)
-                //        {
-                //            _dbContext.Entry(pIds).State = EntityState.Detached;
-                //        }
-                //    }
-                //}
+               
             }
             else
             {

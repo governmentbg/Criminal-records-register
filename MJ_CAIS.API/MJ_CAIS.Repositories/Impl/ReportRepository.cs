@@ -11,7 +11,7 @@ namespace MJ_CAIS.Repositories.Impl
     {
         public ReportRepository(CaisDbContext dbContext) : base(dbContext)
         {
-           
+
         }
         public async Task<AApplication> GetApplicationData(string applicationID)
         {//todo: change
@@ -45,8 +45,15 @@ namespace MJ_CAIS.Repositories.Impl
                                                                  pids.Contains(b.IdDocNumberId) ||
                                                                  pids.Contains(b.SuidId)))
                 //&& b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId)))
-                .Select(b => new BulletindecisionDateDTO{ Id = b.Id, DecisionDate=b.DecisionDate }).Distinct().ToListAsync();
+                .Select(b => new BulletindecisionDateDTO { Id = b.Id, DecisionDate = b.DecisionDate }).Distinct().ToListAsync();
             return bulletins;
+        }
+
+        public async Task<AReport> GetReport(string reportID)
+        {
+            return await _dbContext.AReports.AsNoTracking()
+                 .Include(x => x.AReportStatusHes).AsNoTracking()
+                 .FirstOrDefaultAsync(x => x.Id == reportID);
         }
     }
 }

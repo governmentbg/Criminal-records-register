@@ -54,11 +54,13 @@ namespace AutomaticStepsExecutor
                             .Include(a => a.ApplicationType).AsNoTracking()
                             .Include(a => a.EWebRequests).AsNoTracking()
                             .Include(a => a.WStatusHes).AsNoTracking()
+                            .Include(a => a.WAppPersAliases).AsNoTracking()
+                            .Include(a=>a.WAppCitizenships).AsNoTracking()
                       //todo: дали е този статус?! 
                       .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.NewWebApplication)
                         .OrderBy(a => a.CreatedOn)
                         .Take(pageSize)
-                      .ToList<IBaseIdEntity>());
+                      .ToList<IBaseIdEntity>()); ;
             return result;
 
         }
