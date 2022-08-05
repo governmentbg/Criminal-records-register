@@ -58,16 +58,58 @@ namespace MJ_CAIS.Services
             aStatusH.EntityState = Common.Enums.EntityStateEnum.Added;
 
             certificate.AStatusHes.Add(aStatusH);
-            certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
+            if (certificate.EntityState != Common.Enums.EntityStateEnum.Added)
+            {
+                certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
+            }
             if (certificate.ModifiedProperties==null)
             {
                 certificate.ModifiedProperties = new List<string>();
             }
             certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
             certificate.ModifiedProperties.Add(nameof(certificate.AStatusHes));
+            baseAsyncRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
+            if(newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
+            {
+                 MoveCertificateToWCertificate(certificate);
+            }
+
             //dbContext.AStatusHes.Add(aStatusH);
             //dbContext.ACertificates.Update(certificate);
 
+        }
+
+        private void MoveCertificateToWCertificate(ACertificate certificate)
+        {
+            if(certificate.Doc?.DocContent == null || certificate.Doc.DocContent.Content == null 
+                || certificate.Doc.DocContent.Content.Length ==0)
+            {
+                throw new Exception("Свидетелството няма генериран pdf.");
+            }
+            WCertificate wcert = new WCertificate();
+            wcert.Id = BaseEntity.GenerateNewId();
+            wcert.ACertId = certificate.Id;
+            wcert.Md5 = certificate.Doc.DocContent.Md5Hash;
+            wcert.AccessCode1 = certificate.AccessCode1;
+            wcert.AccessCode2 = certificate.AccessCode2;
+            if (certificate.Doc.DocContent.Bytes.HasValue)
+            {
+                wcert.Bytes = certificate.Doc.DocContent.Bytes.Value;
+            }
+            wcert.Sha1 = certificate.Doc.DocContent.Sha1Hash;
+            if (certificate.ValidFrom.HasValue)
+            {
+                wcert.ValidFrom = certificate.ValidFrom.Value;
+            }
+            wcert.ValidTo = certificate.ValidTo;
+            wcert.Content = certificate.Doc.DocContent.Content;
+            wcert.MimeType  = certificate.Doc.DocContent.MimeType;
+            wcert.RegistrationNumber = certificate.RegistrationNumber;
+            wcert.WApplId = certificate.Application?.WApplicationId;
+           
+            wcert.EntityState = Common.Enums.EntityStateEnum.Added;
+            baseAsyncRepository.ApplyChanges(wcert, new List<IBaseIdEntity>());
         }
 
         public async Task UploadSignedDocumet(string certID, CertificateDocumentDTO aInDto)

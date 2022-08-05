@@ -22,6 +22,7 @@ import { NbCardModule } from "@nebular/theme";
 import { SharedModule } from "../../shared.module";
 import { ConfirmTemplateDialogComponent } from "./dialogs/confirm-template-dialog/confirm-template-dialog.component";
 import { BulletinPersonInfoComponent } from "./shared/bulletin-person-info/bulletin-person-info.component";
+import { CancelDialogComponent } from './dialogs/cancel-dialog/cancel-dialog.component';
 
 const COMPONENTS = [
   CardHeaderComponent,
@@ -41,7 +42,8 @@ const COMPONENTS = [
   PersonFormComponent,
   PersonAliasFormComponent,
   ConfirmTemplateDialogComponent,
-  BulletinPersonInfoComponent
+  BulletinPersonInfoComponent,
+  CancelDialogComponent
 ];
 
 @NgModule({

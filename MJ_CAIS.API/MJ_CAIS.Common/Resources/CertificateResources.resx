@@ -126,4 +126,7 @@
   <data name="msgStatusForRehabilitationDesc" xml:space="preserve">
     <value>Генерирана заявка за реабилитация при обработка на свидетелство</value>
   </data>
+  <data name="titleCertificates" xml:space="preserve">
+    <value>Свидетелства</value>
+  </data>
 </root>

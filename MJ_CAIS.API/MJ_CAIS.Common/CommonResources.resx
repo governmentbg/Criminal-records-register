@@ -135,6 +135,9 @@
   <data name="btnSave" xml:space="preserve">
     <value>Запис</value>
   </data>
+  <data name="lblChoose" xml:space="preserve">
+    <value>изберете...</value>
+  </data>
   <data name="lblGreetingUser" xml:space="preserve">
     <value>Здравейте,</value>
   </data>
@@ -194,6 +197,9 @@
   </data>
   <data name="MsgUserLockout" xml:space="preserve">
     <value>Потребителят е заключен</value>
+  </data>
+  <data name="titleContractInfoExt" xml:space="preserve">
+    <value>Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект: „Реализиране на Централизирана автоматизирана информационна система „Съдебен статус“, финансиран по Оперативна програма „Добро управление“, чрез ЕСФ.</value>
   </data>
   <data name="titleContractInfoExtPart1" xml:space="preserve">
     <value>Създаден в рамките на договор № BG05SFOP001-3.001-0010-C01/23.06.2017 г. по проект:</value>

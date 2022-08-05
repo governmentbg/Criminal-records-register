@@ -142,31 +142,7 @@ export abstract class CrudForm<
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
-        let title = this.dangerMessage;
-        let errorText = errorResponse.status + " " + errorResponse.statusText;
-
-        if (errorResponse.error && errorResponse.error.customMessage) {
-          title = errorResponse.error.customMessage;
-          errorText = "";
-        }
-
-        this.toastr.showBodyToast("danger", title, errorText);
-
-        // if has server side validation errors add them to the form control
-        if (errorResponse.error.errors) {
-          Object.keys(errorResponse.error.errors).forEach((prop) => {
-            var propName = prop[0].toLocaleLowerCase() + prop.slice(1);
-            const formControl = this.fullForm.group.get(propName);
-            if (formControl) {
-              // activate the error message
-              formControl.setErrors({
-                serverErrors: errorResponse.error.errors[prop],
-              });
-            }
-          });
-        }
-
-        this.scrollToValidationError();
+       this.onServiceError(errorResponse);
       },
     });
   }
@@ -285,6 +261,39 @@ export abstract class CrudForm<
     } else {
       super.prepareForCreate();
     }
+  }
+
+  protected onServiceError(errorResponse): void {
+    if(errorResponse.code == "401"){
+      this.router.navigateByUrl("pages");
+      return;
+    }
+    
+    let title = this.dangerMessage;
+    let errorText = errorResponse.status + " " + errorResponse.statusText;
+
+    if (errorResponse.error && errorResponse.error.customMessage) {
+      title = errorResponse.error.customMessage;
+      errorText = "";
+    }
+
+    this.toastr.showBodyToast("danger", title, errorText);
+
+    // if has server side validation errors add them to the form control
+    if (errorResponse.error.errors) {
+      Object.keys(errorResponse.error.errors).forEach((prop) => {
+        var propName = prop[0].toLocaleLowerCase() + prop.slice(1);
+        const formControl = this.fullForm.group.get(propName);
+        if (formControl) {
+          // activate the error message
+          formControl.setErrors({
+            serverErrors: errorResponse.error.errors[prop],
+          });
+        }
+      });
+    }
+
+    this.scrollToValidationError();
   }
 
   private setRouteParameters(): void {

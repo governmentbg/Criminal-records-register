@@ -1,5 +1,5 @@
 <igx-grid
-  #grid
+  #peopleGrid
   igxGridState
   [data]="people"
   [height]="null"
@@ -19,8 +19,10 @@
   [pinning]="pinningConfig"
   (onRowSelectionChange)="handleRowSelection($event)"
 >
-  <igx-grid-toolbar>
-    <igx-grid-toolbar-title></igx-grid-toolbar-title>
+  <igx-grid-toolbar style="justify-content: end">
+    <button igxButton="flat" (click)="dialogAdd.open()">
+      <igx-icon>add</igx-icon> Добави
+    </button>
   </igx-grid-toolbar>
 
   <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
@@ -71,3 +73,113 @@
     </ng-template></igx-column
   >
 </igx-grid>
+
+<igx-dialog #dialogAdd>
+  <div class="dialogNewRecord" style="min-width: 1000px">
+    <nb-card>
+      <nb-card-header>
+        <div class="d-flex" style="justify-content: space-between">
+          <div class="d-flex align-items-center">
+            <h5 style="font-weight: bold">Търсене</h5>
+          </div>
+          <div class="d-flex">
+            <div>
+              <button
+                nbButton
+                matRipple
+                [status]="'success'"
+                (click)="onSearch()"
+                type="button"
+                class="ml-2"
+              >
+                Търси
+              </button>
+            </div>
+            <div>
+              <button
+                nbButton
+                matRipple
+                [status]="'success'"
+                (click)="addInGrid()"
+                type="button"
+                class="ml-2"
+              >
+                Добави в таблица
+              </button>
+            </div>
+            <div>
+              <button
+                nbButton
+                matRipple
+                (click)="onCloseDialog()"
+                type="button"
+                class="ml-2"
+              >
+                Откажи
+              </button>
+            </div>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-2">
+          <div class="form-group col-md-4">
+            <cais-input
+              [type]="'text'"
+              [label]="'Име'"
+              [inputFormControl]="searchPersonForm.firstname"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'firstname'"
+            ></cais-input>
+          </div>
+          <div class="form-group col-md-4">
+            <cais-input
+              [type]="'text'"
+              [label]="'Презиме'"
+              [inputFormControl]="searchPersonForm.surname"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'surname'"
+            >
+            </cais-input>
+          </div>
+          <div class="form-group col-md-4">
+            <cais-input
+              [type]="'text'"
+              [label]="'Фамилия'"
+              [inputFormControl]="searchPersonForm.familyname"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'familyname'"
+            >
+            </cais-input>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="form-group col-md-3">
+            <cais-autocomplete
+              [label]="'Пол'"
+              [inputFormControl]="searchPersonForm.sex"
+              [parentGroup]="searchPersonForm.group"
+              [items]="dbData.genderTypes"
+              [inputName]="'sex'"
+            >
+            </cais-autocomplete>
+          </div>
+          <div class="form-group col-md-3">
+            <cais-input
+              [type]="'date'"
+              [label]="'Дата на раждане'"
+              [inputFormControl]="searchPersonForm.birthDate"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'birthDate'"
+            ></cais-input>
+          </div>
+        </div>
+
+        <cais-result-from-search-overview
+          #resultGrid
+          [searchPersonForm]="searchPersonForm"
+        ></cais-result-from-search-overview>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>

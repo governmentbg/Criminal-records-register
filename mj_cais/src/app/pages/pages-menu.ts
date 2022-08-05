@@ -100,6 +100,25 @@ export class PagesMenu {
         ],
       },
       {
+        title: "Справка за съдимост",
+        icon: { icon: "id-card", pack: "fas" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
+        children: [
+          {
+            title: "Нови искания",
+            link: "/pages/report-applications",
+          },
+          {
+            title: "В процес на обработка",
+            link: "/pages/report-applications/approved",
+          },
+          {
+            title: "Обработени",
+            link: "/pages/report-applications/delivered",
+          },
+        ],
+      },
+      {
         title: "За решение от съдия/юрист",
         icon: "message-circle-outline",
         hidden: this.hasNoRole(roles, RoleNameEnum.Judge),
@@ -210,6 +229,21 @@ export class PagesMenu {
           {
             title: "Oсвободени от плащане",
             link: "/pages/e-applicaiton/check-tax-free",
+          },
+        ],
+      },
+      {
+        title: "Журнал на Е-справки",
+        icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
+        children: [
+          {
+            title: "Справка за съдимост",
+            link: "/pages/e-applicaiton-report/reports/overview",
+          },
+          {
+            title: "Справка за идентификатори",
+            link: "/pages/e-applicaiton-report/search-pers/overview",
           },
         ],
       },

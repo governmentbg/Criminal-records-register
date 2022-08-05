@@ -1,0 +1,173 @@
+<nb-card>
+  <nb-card-header>Ново искане за справка за съдимост</nb-card-header>
+  <nb-card-body class="example-items-rows">
+    <button
+      nbButton
+      fullWidth
+      matRipple
+      [status]="'basic'"
+      (click)="searchByEGN()"
+      type="button"
+      class="mb-2"
+      style="min-width: 100px"
+    >
+      Ново искане за български гражданин по ЕГН
+    </button>
+    <button
+      nbButton
+      fullWidth
+      matRipple
+      [status]="'basic'"
+      (click)="searchByLNCH()"
+      type="button"
+      class="mb-2"
+      style="min-width: 100px"
+    >
+      Ново искане за български гражданин по ЛНЧ
+    </button>
+
+    <button
+      nbButton
+      fullWidth
+      matRipple
+      [status]="'basic'"
+      (click)="searchForForeigner()"
+      type="button"
+      class="mb-2"
+      style="min-width: 100px"
+    >
+      Ново искане за чужденец
+    </button>
+  </nb-card-body>
+</nb-card>
+
+<igx-dialog #searchByIdentifierDialog>
+  <div class="dialogNewRecord">
+    <nb-card>
+      <nb-card-body>
+        <ng-container>
+          <h2 class="mt-0">{{ titelSearchBy }}</h2>
+          <form (submit)="onSubmit()">
+            <input
+              type="text"
+              name="searchValue"
+              nbInput
+              fullWidth
+              [(ngModel)]="searchValue"
+            />
+          </form>
+        </ng-container>
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="row">
+          <div class="col-6">
+            <button nbButton matRipple fullWidth (click)="onCancel()">
+              Отказ
+            </button>
+          </div>
+          <div class="col-6">
+            <button
+              nbButton
+              matRipple
+              fullWidth
+              status="primary"
+              (click)="onSubmit()"
+              [disabled]="
+                searchValue === null ||
+                searchValue === undefined ||
+                searchValue === ''
+              "
+            >
+              Търси
+            </button>
+          </div>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</igx-dialog>
+
+<igx-dialog #searchByIdentifierErrorDialog>
+  <div class="dialogNewRecord">
+    <nb-card>
+      <nb-card-body>
+        <ng-container>
+          <h2 class="mt-0">{{ errorTitle }}</h2>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <button
+              nbButton
+              matRipple
+              [status]="'success'"
+              type="button"
+              [title]="'Ръчно въвеждане'"
+              (click)="navigateToReportApplicationCreate()"
+            >
+              Ръчно въвеждане
+            </button>
+            <button
+              nbButton
+              matRipple
+              [status]="'danger'"
+              type="button"
+              [title]="'Анулирай'"
+              (click)="changeStatusToCanceled()"
+            >
+              Анулирай
+            </button>
+          </div>
+        </ng-container>
+        <p>{{ errorMsg }}</p>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>
+
+<igx-dialog #cancelAppReportDialog>
+  <div class="dialogNewRecord">
+    <nb-card>
+      <nb-card-header>Сигурни ли сте?</nb-card-header>
+      <nb-card-body>
+        <form (submit)="onSubmitCancelReportApplication()">
+          <input
+            type="text"
+            name="description"
+            nbInput
+            fullWidth
+            [(ngModel)]="description"
+          />
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <div class="row">
+          <div class="col-6">
+            <button
+              nbButton
+              matRipple
+              fullWidth
+              status="danger"
+              [disabled]="
+                description === null ||
+                description === undefined ||
+                description === ''
+              "
+              (click)="onSubmitCancelReportApplication()"
+            >
+              Продължи
+            </button>
+          </div>
+          <div class="col-6">
+            <button nbButton matRipple fullWidth (click)="dismissCancel()">
+              Отказ
+            </button>
+          </div>
+        </div>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</igx-dialog>

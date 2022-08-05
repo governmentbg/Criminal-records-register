@@ -35,10 +35,10 @@
 
   <ItemGroup>
     <None Update="EmailTemplates\BodyDeliveryMail_BG.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EmailTemplates\SubjectDeliveryMail_BG.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

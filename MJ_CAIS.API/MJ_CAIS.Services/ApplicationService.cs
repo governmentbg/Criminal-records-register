@@ -123,14 +123,14 @@ namespace MJ_CAIS.Services
             //   .FirstOrDefaultAsync(x => x.Id == aId);
             var statusCanceledApplication = await baseAsyncRepository.SingleOrDefaultAsync<AApplicationStatus>(a =>
                     a.Code == ApplicationConstants.ApplicationStatuses.Canceled);
-               // await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a =>
-                 //   a.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+            // await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a =>
+            //   a.Code == ApplicationConstants.ApplicationStatuses.Canceled);
             SetApplicationStatus(repoObj, statusCanceledApplication, aInDto.Description);
             await _applicationRepository.SaveChangesAsync();
-           // await dbContext.SaveChangesAsync();
+            // await dbContext.SaveChangesAsync();
         }
 
-        public async Task ChangeApplicationStatusToCheckPayment(string aId, string description="")
+        public async Task ChangeApplicationStatusToCheckPayment(string aId, string description = "")
         {
             var repoObj = await baseAsyncRepository.SelectAsync(aId);
             //repoObj.StatusCode = ApplicationConstants.ApplicationStatuses.CheckPayment;
@@ -145,9 +145,9 @@ namespace MJ_CAIS.Services
 
         public async Task UpdateAsync(ApplicationInDTO aInDto, bool isFinal)
         {
-            var applicationDb = await baseAsyncRepository.SingleOrDefaultAsync<AApplication>(a=>a.Id==aInDto.Id);
+            var applicationDb = await baseAsyncRepository.SingleOrDefaultAsync<AApplication>(a => a.Id == aInDto.Id);
             //await dbContext.AApplications.AsNoTracking()
-              //  .FirstOrDefaultAsync(x => x.Id == aInDto.Id);
+            //  .FirstOrDefaultAsync(x => x.Id == aInDto.Id);
 
             if (applicationDb == null)
             {
@@ -166,13 +166,13 @@ namespace MJ_CAIS.Services
 
             if (isFinal)
             {
-                if(!string.IsNullOrEmpty(entity.RegistrationNumber))
+                if (!string.IsNullOrEmpty(entity.RegistrationNumber))
                 {
                     var regNumber =
                     await _registerTypeService.GetRegisterNumberForApplicationOnDesk(applicationDb.CsAuthorityId);
                     entity.RegistrationNumber = regNumber;
                 }
-                
+
                 await UpdatePersonDataAsync(aInDto, entity);
 
                 await GenerateCertificateFromApplication(applicationDb.Id);
@@ -253,7 +253,7 @@ namespace MJ_CAIS.Services
             return application.ACertificates.First().Id;
         }
 
-        public async Task GenerateCertificateFromApplication(AApplication application,
+        public async Task<ACertificate> GenerateCertificateFromApplication(AApplication application,
             AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus,
             AApplicationStatus certificateWithoutBulletinStatus,
             int certificateValidityMonths =
@@ -307,29 +307,32 @@ namespace MJ_CAIS.Services
                 //    .ToListAsync();
                 if (bulletins.Count() > 0)
                 {
-                    await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
+                    return await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
                         certificateValidityMonths, applicationStatus);
-                    return;
+
                 }
             }
 
-            await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus,
+            return await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus,
                 certificateValidityMonths, applicationStatus);
         }
 
-       
+
         public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description,
             bool includeInDbContext = true)
         {
             application.StatusCode = newStatus.Code;
-            application.EntityState = EntityStateEnum.Modified;
+            if (application.EntityState != EntityStateEnum.Added)
+            {
+                application.EntityState = EntityStateEnum.Modified;
+            }
             if (application.ModifiedProperties == null)
             {
                 application.ModifiedProperties = new List<string>();
             }
             application.ModifiedProperties.Add(nameof(application.StatusCode));
-            
-           //application.StatusCodeNavigation = newStatus;
+
+            //application.StatusCodeNavigation = newStatus;
             var aStatusH = new AStatusH();
             aStatusH.EntityState = EntityStateEnum.Added;
             aStatusH.Id = BaseEntity.GenerateNewId();
@@ -342,11 +345,11 @@ namespace MJ_CAIS.Services
             //}
 
             aStatusH.ReportOrder = application.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
-            
+
             aStatusH.ApplicationId = application.Id;
             //aStatusH.Application = application;
 
-           // application.AStatusHes.Add(aStatusH);
+            // application.AStatusHes.Add(aStatusH);
             //if (includeInDbContext)
             //{
             //    dbContext.AStatusHes.Add(aStatusH);
@@ -363,17 +366,17 @@ namespace MJ_CAIS.Services
 
         public async Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
         {
-            
-            var result =await _applicationRepository.FindAsync<AAppPersAlias>(x => x.ApplicationId == aId);
-                //await _applicationRepository.SelectApplicationPersAliasByApplicationIdAsync(aId);
+
+            var result = await _applicationRepository.FindAsync<AAppPersAlias>(x => x.ApplicationId == aId);
+            //await _applicationRepository.SelectApplicationPersAliasByApplicationIdAsync(aId);
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider); //AAppPersAlias
         }
 
         public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
         {
             //todo: дали е за тук?!
-        
-            var result = await  _applicationRepository.FindAsync<ACertificate>(x => x.ApplicationId == aId);
+
+            var result = await _applicationRepository.FindAsync<ACertificate>(x => x.ApplicationId == aId);
             //await _applicationRepository.SelectApplicationCertificateByApplicationIdAsync(aId);
             return result.ProjectTo<ACertificate>(mapper.ConfigurationProvider);
         }
@@ -389,7 +392,8 @@ namespace MJ_CAIS.Services
             // тодо: да се прегледат дали се сетват правилно идентификраторите
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
-            {   if(entity.ModifiedProperties == null)
+            {
+                if (entity.ModifiedProperties == null)
                 {
                     entity.ModifiedProperties = new List<string>();
                 }
@@ -417,7 +421,7 @@ namespace MJ_CAIS.Services
                     entity.SuidNavigation = personIdObj;
                 }
                 _applicationRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
-               // dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+                // dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
             }
 
             _applicationRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
@@ -437,9 +441,9 @@ namespace MJ_CAIS.Services
             await UpdateTransactionsAsync(aInDto, entity);
 
             var passedNavigationProperties = new List<IBaseIdEntity>();
-            _applicationRepository.ApplyChanges(entity, passedNavigationProperties,true);
+            _applicationRepository.ApplyChanges(entity, passedNavigationProperties, true);
 
-           // dbContext.ApplyChanges(entity, passedNavigationProperties, true);
+            // dbContext.ApplyChanges(entity, passedNavigationProperties, true);
         }
 
         private async Task UpdateTransactionsAsync(ApplicationInDTO aInDto, AApplication entity)
@@ -450,7 +454,7 @@ namespace MJ_CAIS.Services
                 aInDto.Person.Nationalities, nameof(AAppCitizenship.Id), nameof(AAppCitizenship.CountryId));
         }
 
-        private async Task ProcessApplicationWithoutBulletinsAsync(AApplication application,
+        private async Task<ACertificate> ProcessApplicationWithoutBulletinsAsync(AApplication application,
             AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
@@ -462,14 +466,17 @@ namespace MJ_CAIS.Services
             }
 
             application.ACertificates.Add(cert);
-          
+
             //dbContext.ACertificates.Add(cert);
             application.EntityState = EntityStateEnum.Modified;
-            if(application.ModifiedProperties == null)
+            if (application.ModifiedProperties == null)
             {
                 application.ModifiedProperties = new List<string>();
             }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
+            baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            return cert;
             //dbContext.AApplications.Update(application);
         }
 
@@ -507,7 +514,7 @@ namespace MJ_CAIS.Services
             return cert;
         }
 
-        private async Task ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
+        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
             AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
@@ -541,6 +548,9 @@ namespace MJ_CAIS.Services
                 application.ModifiedProperties = new List<string>();
             }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
+            baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
+            return cert;
             //dbContext.ACertificates.Add(cert);
             // dbContext.AAppBulletins.AddRange(cert.AAppBulletins);
             //dbContext.AApplications.Update(application);

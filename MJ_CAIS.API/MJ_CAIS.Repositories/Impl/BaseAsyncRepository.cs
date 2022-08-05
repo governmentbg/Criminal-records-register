@@ -62,9 +62,13 @@ namespace MJ_CAIS.Repositories.Impl
             return repoObj;
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(bool clearTracker = false)
         {
             await this._dbContext.SaveChangesAsync();
+            if (clearTracker)
+            {
+                this._dbContext.ChangeTracker.Clear();
+            }
         }
 
         public void ApplyChanges<T>(ICollection<T> listEntries, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false)

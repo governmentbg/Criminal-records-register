@@ -132,6 +132,9 @@
   <data name="editIsUnauthorized" xml:space="preserve">
     <value>Нямате право да извършите това действие!</value>
   </data>
+  <data name="fieldIsRequired" xml:space="preserve">
+    <value>Полето {0} е задължително</value>
+  </data>
   <data name="isinDataDoesNotExist" xml:space="preserve">
     <value>Изтърпяно наказание с идентификатор {0} не съществува.</value>
   </data>

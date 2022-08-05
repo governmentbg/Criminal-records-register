@@ -14,5 +14,7 @@ namespace MJ_CAIS.Services.Contracts
         Task ProcessTaxFreeAsync(string aId, bool approved);
 
         Task<PPerson> ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus);
+        Task ProcessWApplicationCheckPayment(AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebApprovedApplication, WApplicationStatus statusWebCancel, DateTime startDateWeb, WApplication wapplication);
+
     }
 }

@@ -32,7 +32,9 @@ namespace MJ_CAIS.ExternalWebServices
 
             _pdfSignerService = pdfSignerService;
             _printerService = printerService;
-     
+            _reportRepository = reportRepository;
+
+
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -42,9 +44,8 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<byte[]> CreateReport(string reportID)
         {
-            var report = await _reportRepository.SingleOrDefaultAsync<AReport>(x => x.Id == reportID); 
-                //await dbContext.AReports
-            //.FirstOrDefaultAsync(x => x.Id == reportID);
+            var report = await _reportRepository.GetReport(reportID);//.SingleOrDefaultAsync<AReport>(x => x.Id == reportID); 
+           
             if (report == null)
             {
                 //todo: resources and EH
@@ -65,12 +66,13 @@ namespace MJ_CAIS.ExternalWebServices
 
 
             await _reportRepository.SaveChangesAsync();
-
+          
+            
             return result;
         }
 
 
-        public async Task<byte[]> CreateReport(AReport report, string signingCertificateName)
+        private async Task<byte[]> CreateReport(AReport report, string signingCertificateName)
         {
 
             byte[] contentReport;
@@ -135,28 +137,10 @@ namespace MJ_CAIS.ExternalWebServices
             doc.DocContent = content;
 
             report.DocId = doc.Id;
+            report.Doc = doc;
          
 
-            //if (isExistingContent)
-            //{
-            //    dbContext.DDocContents.Update(content);
-            //}
-            //else
-            //{
-            //    dbContext.DDocContents.Add(content);
-            //}
-            //if (isExistingDoc)
-            //{
-            //    dbContext.DDocuments.Update(doc);
-            //}
-            //else
-            //{
-            //    dbContext.DDocuments.Add(doc);
-            //}
-            //dbContext.AReports.Update(report);
-
-
-
+    
             if (isExistingContent)
             {
                 content.EntityState = EntityStateEnum.Modified;
@@ -199,11 +183,30 @@ namespace MJ_CAIS.ExternalWebServices
                 report.ModifiedProperties = new List<string>();
             }
             report.ModifiedProperties.Add(nameof(report.DocId));
-          
-            _reportRepository.ApplyChanges(content, new List<IBaseIdEntity>());
-            _reportRepository.ApplyChanges(doc, new List<IBaseIdEntity>());
-            _reportRepository.ApplyChanges(report, new List<IBaseIdEntity>());
 
+            report.StatusCode = ReportApplicationConstants.Status.ReadyReport;
+
+            if(report.AReportStatusHes == null)
+            {
+                report.AReportStatusHes = new List<AReportStatusH>();
+            }
+
+            report.AReportStatusHes.Add(new AReportStatusH
+            {
+                Id= BaseEntity.GenerateNewId(),
+                EntityState = EntityStateEnum.Added,
+                AReportId = report.Id,
+                StatusCode = ReportApplicationConstants.Status.ReadyReport,
+                Descr = "Създаден PDF документ",
+                ReportOrder = report.AReportStatusHes.Count(x=>x.StatusCode== ReportApplicationConstants.Status.ReadyReport) + 1
+            });
+
+
+            //_reportRepository.ApplyChanges(content, new List<IBaseIdEntity>());
+            //_reportRepository.ApplyChanges(doc, new List<IBaseIdEntity>());
+            _reportRepository.ApplyChanges(report, new List<IBaseIdEntity>(),true);
+
+            //await _reportRepository.SaveChangesAsync();
             return contentReport;
 
         }

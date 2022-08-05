@@ -1,0 +1,60 @@
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  [paginationTemplate]="pager"
+  [allowFiltering]="false"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+  (onRowSelectionChange)="handleRowSelection($event)"
+>
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>Резултат от търсенето</igx-grid-toolbar-title>
+  </igx-grid-toolbar>
+
+  <igx-column field="firstname" header="Име" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="surname" header="Презиме" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column field="familyname" header="Фамилия" [dataType]="'string'">
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    dataType="date"
+    [formatter]="this.dateFormatService.formatDate"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>

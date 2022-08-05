@@ -130,20 +130,4 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
             context.IsActive = user != null;
         }
     }
-
-    /// <summary>
-    /// For Test purposes
-    /// </summary>
-    public class LocalCitizensProfileService : CitizensProfileService
-    {
-        public override string ClientId => "cais-citizens-local";
-
-        public LocalCitizensProfileService(
-            CaisDbContext daisDbContext,
-            IConfiguration configuration) : base(
-                daisDbContext,
-                configuration)
-        {
-        }
-    }
 }

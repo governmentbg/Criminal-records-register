@@ -33,7 +33,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? WebServiceId { get; set; }
         public bool? IsAsync { get; set; }
         public string? WApplicationId { get; set; }
+        public string? ARepApplId { get; set; }
 
+        public virtual AReportApplication? ARepAppl { get; set; }
         public virtual AApplication? Application { get; set; }
         public virtual BBulletin? Bulletin { get; set; }
         public virtual EEcrisMessage? EcrisMsg { get; set; }

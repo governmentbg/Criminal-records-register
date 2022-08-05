@@ -122,20 +122,4 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
             context.IsActive = user != null;
         }
     }
-
-    /// <summary>
-    /// For Test purposes
-    /// </summary>
-    public class LocalAdminProfileService : CAISAppProfileService
-    {
-        public override string ClientId => "cais-angular-local";
-
-        public LocalAdminProfileService(
-            CaisDbContext daisDbContext, 
-            IConfiguration configuration) : base(
-                daisDbContext, 
-                configuration)
-        {
-        }
-    }
 }

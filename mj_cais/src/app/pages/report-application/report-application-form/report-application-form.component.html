@@ -1,0 +1,288 @@
+<nb-card class="card-single-page-height">
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onSaveFunction]="submitFunction"
+      [onCancelFunction]="globalCancelFunction"
+      [setForPreview]="
+        reportApplicationStatus == ReportApplicationStatusConstants.Approved ||
+        reportApplicationStatus == ReportApplicationStatusConstants.Canceled
+      "
+    >
+      <div>
+        <button
+          *ngIf="
+            !isForPreview &&
+            isEdit() &&
+            reportApplicationStatus == ReportApplicationStatusConstants.New
+          "
+          nbButton
+          matRipple
+          [status]="'danger'"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+          (click)="onOpenDialogForCancelApplication()"
+        >
+          Анулирай
+        </button>
+        <button
+          *ngIf="
+            !isForPreview &&
+            isEdit() &&
+            reportApplicationStatus == ReportApplicationStatusConstants.New
+          "
+          nbButton
+          matRipple
+          [status]="'success'"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+          (click)="onFinalEditDialogOpen()"
+        >
+          Окончателна редакция
+        </button>
+      </div>
+    </cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
+        <nb-tab tabTitle="Искане">
+          <ng-container *ngIf="isEdit()">
+            <div class="font-weight-bold">Служебна информация</div>
+            <hr />
+            <div class="row">
+              <div class="form-group col-md-4">
+                <cais-input
+                  [type]="'text'"
+                  [label]="'Статус'"
+                  [inputFormControl]="fullForm.statusName"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
+              <div class="form-group col-md-6">
+                <cais-input
+                  [type]="'text'"
+                  [label]="'Номер на искане'"
+                  [inputFormControl]="fullForm.registrationNumberDisplay"
+                  [parentGroup]="fullForm.group"
+                ></cais-input>
+              </div>
+              <ng-container *ngIf="fullForm.csAuthorityName.value">
+                <div class="form-group col-md-6">
+                  <cais-input
+                    [type]="'text'"
+                    [label]="'Бюро съдимост'"
+                    [inputFormControl]="fullForm.csAuthorityName"
+                    [parentGroup]="fullForm.group"
+                  ></cais-input>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <div class="font-weight-bold">Заявител</div>
+          <hr />
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пълно име на заявителя'"
+                [inputFormControl]="fullForm.applicantName"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="
+                  'Допълнителна информация, свързана с получателя на справката'
+                "
+                [inputFormControl]="fullForm.applicantDescr"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="font-weight-bold">Цел</div>
+          <hr />
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [inputFormControl]="fullForm.purposeId"
+                [parentGroup]="fullForm.group"
+                [items]="dbData.purposeIds"
+                [inputName]="'purposeId'"
+              >
+              </cais-autocomplete>
+            </div>
+            <div class="form-group col-md-6" style="margin-top: 20px">
+              <cais-input
+                [type]="'text'"
+                [inputFormControl]="fullForm.purpose"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="font-weight-bold mt-2">
+            Информация, събрана по служебен път
+          </div>
+          <cais-person-form
+            [personForm]="fullForm.person"
+            [genderTypes]="dbData.genderTypes"
+            [countries]="dbData.countries"
+            [contextType]="PersonContextEnum.ReportApplication"
+            [isEditable]="
+              fullForm.statusCode.value !=
+                ReportApplicationStatusConstants.Approved && !this.isForPreview
+            "
+          >
+          </cais-person-form>
+
+          <div class="font-weight-bold">Адрес на получател</div>
+          <hr />
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име'"
+                [inputFormControl]="fullForm.addrName"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [label]="'Държава'"
+                [inputFormControl]="fullForm.addrState"
+                [parentGroup]="fullForm.group"
+                [items]="dbData.countries"
+                [inputName]="'addrState'"
+              >
+              </cais-autocomplete>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Област'"
+                [inputFormControl]="fullForm.addrDistrict"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Град'"
+                [inputFormControl]="fullForm.addrTown"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'ул. №'"
+                [inputFormControl]="fullForm.addrStr"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Мобилен телефон'"
+                [inputFormControl]="fullForm.addrPhone"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Ел. поща'"
+                [inputFormControl]="fullForm.addrEmail"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+        </nb-tab>
+
+        <nb-tab
+          [tabTitle]="reportsTabTitle"
+          *ngIf="
+            isEdit() &&
+            reportApplicationStatus == ReportApplicationStatusConstants.Approved
+          "
+        >
+          <ng-container *ngIf="showReportsTab">
+            <cais-generated-report-overview> </cais-generated-report-overview>
+          </ng-container>
+        </nb-tab>
+
+        <nb-tab [tabTitle]="historyTabTitle" *ngIf="isEdit() || isForPreview">
+          <ng-container *ngIf="showHistoryTab">
+            <cais-report-app-history-overview>
+            </cais-report-app-history-overview>
+          </ng-container>
+        </nb-tab>
+      </nb-tabset>
+    </form>
+  </nb-card-body>
+</nb-card>
+
+<igx-dialog #finalEditDialog>
+  <form autocomplete="off">
+    <div class="dialogNewRecord" style="min-width: 1000px">
+      <nb-card>
+        <nb-card-header>Окончателна редакция</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Подписващ 1'"
+                [inputFormControl]="signersformGroup.controls.firstSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'firstSignerId'"
+                [items]="dbData.users"
+              >
+              </cais-autocomplete>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-autocomplete
+                [label]="'Подписващ 2'"
+                [inputFormControl]="signersformGroup.controls.secondSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'secondSignerId'"
+                [items]="dbData.users"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row">
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                status="danger"
+                (click)="finalEdit()"
+              >
+                Запис
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                (click)="finalEditDialog.close()"
+              >
+                Отказ
+              </button>
+            </div>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+  </form>
+</igx-dialog>

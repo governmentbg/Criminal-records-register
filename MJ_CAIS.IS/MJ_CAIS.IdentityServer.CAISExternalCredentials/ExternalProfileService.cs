@@ -17,8 +17,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
         protected CaisDbContext CaisDbContext { get; set; }
 
         public ExternalProfileService(
-            CaisDbContext caisDbContext,
-            IConfiguration configuration)
+            CaisDbContext caisDbContext)
         {
             CaisDbContext = caisDbContext;
         }
@@ -61,16 +60,42 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     {
                         Name = u.Name,
                         SubjectId = u.Id,
-                        Active = u.Active,
+                        Active = true, // Allways returns active. Specific roles for inactive users is returned in the profile data
                         Username = u.Egn
                     }).FirstOrDefault();
             }
             return res;
         }
 
-        public Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
+        public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            throw new NotImplementedException();
+            if (!string.IsNullOrEmpty(userName) && userName.StartsWith("PNOBG-"))
+            {
+                var egn = userName.Replace("PNOBG-", "");
+                CaisDbContext.GUsersExt.Add(new Entities.GUsersExt()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Egn = egn,
+                    Name = name,
+                    Email = email,
+                    Active = false
+                });
+                await CaisDbContext.SaveChangesAsync();
+                return new UserRegistrationResult() { Succeeded = true };
+            }
+            else
+            {
+                return new UserRegistrationResult()
+                {
+                    Succeeded = false,
+                    Errors = new UserRegistrationError[] {
+                        new UserRegistrationError() {
+                            Code = "EGN_ONLY",
+                            Description = "Only users with EGN allowed"
+                        }
+                    }
+                };
+            }
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -92,7 +117,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 .FirstOrDefault();
             if (user != null)
             {
-                context.IssuedClaims.Add(new Claim("Name", user.Name));
+                context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
                     context.IssuedClaims.Add(new Claim("AdministrationId", user.AdministrationId));
@@ -100,6 +125,14 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 if (user.IsAdmin.HasValue && user.IsAdmin.Value)
                 {
                     context.IssuedClaims.Add(new Claim("isAdmin", "true"));
+                }
+                if (user.Active.HasValue && user.Active.Value)
+                {
+                    context.IssuedClaims.Add(new Claim("Active", "true"));
+                }
+                else
+                {
+                    context.IssuedClaims.Add(new Claim("NotActive", "true"));
                 }
             }
             throw new NotImplementedException();
@@ -112,22 +145,6 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             var subjectId = subject.Claims.Where(x => x.Type == "sub").FirstOrDefault().Value;
             var user = CaisDbContext.GUsersExt.Where(u => u.Id == subjectId).FirstOrDefault();
             context.IsActive = user != null;
-        }
-    }
-
-    /// <summary>
-    /// For Test purposes
-    /// </summary>
-    public class LocalExternalProfileService : ExternalProfileService
-    {
-        public override string ClientId => "cais-external-local";
-
-        public LocalExternalProfileService(
-            CaisDbContext daisDbContext,
-            IConfiguration configuration) : base(
-                daisDbContext,
-                configuration)
-        {
         }
     }
 }

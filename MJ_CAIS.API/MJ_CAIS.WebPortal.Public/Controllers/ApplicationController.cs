@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.Application.Public;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
@@ -19,6 +21,7 @@ using TL.EGovPayments.ControllerModels;
 using TL.EGovPayments.Interfaces;
 using TL.EGovPayments.JsonEnums;
 using TL.EGovPayments.JsonModels;
+using X.PagedList;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
 {
@@ -33,6 +36,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly IRegixService _regixService;
         private readonly IEGovPaymentService _egovPaymentService;
         private readonly IEGovIntegrationService _egovIntegrationService;
+        private readonly CaisDbContext _dbContext;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
@@ -42,7 +46,9 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                                      IRegixService regixService,
                                      IServiceProvider serviceProvider,
                                      IEGovPaymentService egovPaymentService,
-                                     IEGovIntegrationService egovIntegrationService)
+                                     IEGovIntegrationService egovIntegrationService,
+                                     CaisDbContext dbContext
+                                     )
         {
             _mapper = mapper;
             _applicationWebService = applicationWebService;
@@ -52,13 +58,14 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             _regixService = regixService;
             _egovPaymentService = egovPaymentService;
             _egovIntegrationService = egovIntegrationService;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var viewModel = new ApplicationViewModel();
-            return View(viewModel);
+            var result = _applicationWebService.SelectPublicApplications(CurrentUserID);
+            return View(result.ToPagedList(page ?? 1, 10));
         }
 
         [HttpGet]
@@ -66,6 +73,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             var viewModel = new ApplicationEditModel();
             viewModel.Egn = CurrentEgnIdentifier;
+            viewModel.Email = CurrentMail;
 
             await FillDataForEditModel(viewModel);
             return View(viewModel);
@@ -84,7 +92,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.ClientIp = _requestUtils.GetClientIpAddress(HttpContext);
 
             var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
-            var id =  await _applicationWebService.InsertPublicAsync(itemToUpdate);
+            var id = await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
             //var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
             _regixService.CreateRegixRequests(viewModel.Egn, wApplicationId: id);
@@ -101,7 +109,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                     ApplicantType = ApplicantTypes.EGN,
                     MobilePayment = false,
                     PaymentAmount = (float)price,
-                    //TODO: PaymentAmount from configuration
                     PaymentReason = "Такса свидетелство съдимост",
                     PaymentRefDate = DateTime.Now,
                     PaymentRefNumber = application.RegistrationNumber,
@@ -121,10 +128,11 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Preview(string id)
+        public async Task<ActionResult> Preview(string id, [FromQuery] string paymentStatus = "")
         {
             var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
+            viewModel.ReturnFromPaymentResult = paymentStatus;
             viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
@@ -150,22 +158,50 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
-        [GridDataSourceAction]
-        public ActionResult GetUserApplications()
+        public async Task<ActionResult> PaymentOk([FromQuery] string requestId)
         {
-            var result = _applicationWebService.SelectPublicApplications(CurrentUserID);
-            return View(result);
+            string? applicationId = await GetWApplicationId(requestId);
+            return RedirectToAction("Preview", "Application", new { id = applicationId, paymentStatus = "OK" });
         }
+
+        private async Task<string> GetWApplicationId(string requestId)
+        {
+            var userId = CurrentUserID;
+            var wApplicationId = await (from wa in _dbContext.WApplications
+                                       join ap in _dbContext.APayments on wa.Id equals ap.WApplicationId
+                                       join p in _dbContext.EPayments on ap.EPaymentId equals p.Id
+                                       where p.InvoiceNumber == requestId &&
+                                             wa.UserCitizenId == userId
+                                       select wa.Id).FirstOrDefaultAsync();
+            return wApplicationId;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> PaymentCancel([FromQuery] string requestId)
+        {
+            string? applicationId = await GetWApplicationId(requestId);
+            return RedirectToAction("Preview", "Application", new { id = applicationId, paymentStatus = "Cancel" });
+        }
+
+        //[HttpGet]
+        //[GridDataSourceAction]
+        //public ActionResult GetUserApplications()
+        //{
+        //    var result = _applicationWebService.SelectPublicApplications(CurrentUserID);
+        //    return View(result);
+        //}
 
         private async Task FillDataForEditModel(ApplicationEditModel viewModel)
         {
             var purposes = _nomenclatureDetailService.GetAllAPurposes();
             viewModel.PurposeTypes = await purposes.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
+            viewModel.PurposeTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true});
 
             var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
             viewModel.PaymentMethodTypes = await paymentMethods.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
+            viewModel.PaymentMethodTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true });
         }
     }
 }

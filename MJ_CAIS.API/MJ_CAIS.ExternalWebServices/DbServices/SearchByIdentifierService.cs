@@ -37,25 +37,30 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string applicationId = await _applicationService.InsertAsync(application);
 
             _dbContext.ChangeTracker.Clear();
+            await CallPersonDataSearch(id, registrationNumber, applicationId:applicationId);
+
+            return applicationId;
+        }
+
+        public async Task CallPersonDataSearch(string egn, string registrationNumber, string applicationId, string reportApplicationId = null)
+        {
             try
             {
-                (PersonDataResponseType, EWebRequest) result = await this._regixService.SyncCallPersonDataSearch(id, applicationId: applicationId, registrationNumber: registrationNumber);
+                (PersonDataResponseType, EWebRequest) result = await this._regixService.SyncCallPersonDataSearch(egn, applicationId: applicationId, registrationNumber: registrationNumber, reportApplicationId: reportApplicationId);
                 if (result.Item1.EGN == null)
                 {
-                    throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
+                    throw new BusinessLogicException($"Няма намерени данни:{applicationId}, {reportApplicationId}");
                 }
 
                 if (result.Item2.HasError == true)
                 {
-                    throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}");
+                    throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}, {reportApplicationId}");
                 }
             }
             catch (Exception e)
             {
-                throw new BusinessLogicException($"Възникна грешка при извършване на операцията:{applicationId}");
+                throw new BusinessLogicException($"Възникна грешка при извършване на операцията:{applicationId}, {reportApplicationId}");
             }
-
-            return applicationId;
         }
 
         public async Task<string> SearchByIdentifierLNCH(string id)
@@ -67,19 +72,23 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string applicationId = await _applicationService.InsertAsync(applicaiton);
 
             _dbContext.ChangeTracker.Clear();
-            (ForeignIdentityInfoResponseType, EWebRequest) result = await this._regixService.SyncCallForeignIdentitySearchV2(id, applicationId: applicationId, registrationNumber: registrationNumber);
-            if (result.Item1.LNCh == null) //TODO: shoud be ==
-            {
-                throw new BusinessLogicException($"Няма намерени данни:{applicationId}");
-            }
-
-            if (result.Item2.HasError == true)
-            {
-                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}");
-            }
+            await CallForeignIdentitySearch(id, registrationNumber, applicationId: applicationId);
             return applicationId;
 
         }
 
+        public async Task CallForeignIdentitySearch(string id, string registrationNumber, string applicationId, string reportApplicationId = null)
+        {
+            (ForeignIdentityInfoResponseType, EWebRequest) result = await this._regixService.SyncCallForeignIdentitySearchV2(id, applicationId: applicationId, registrationNumber: registrationNumber, reportApplicationId: reportApplicationId);
+            if (result.Item1.LNCh == null) //TODO: shoud be ==
+            {
+                throw new BusinessLogicException($"Няма намерени данни:{applicationId},{reportApplicationId}");
+            }
+
+            if (result.Item2.HasError == true)
+            {
+                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId},{reportApplicationId}");
+            }
+        }
     }
 }

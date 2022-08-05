@@ -172,7 +172,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         //}
 
         [HttpPost]
-        //[CustomAuthorize]
         public async Task<IActionResult> CreateVPOSPayment2()
         {
             try
@@ -180,22 +179,22 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 EGovPaymentRequestModel paymentRequest = JsonConvert.DeserializeObject<EGovPaymentRequestModel>(TempData["paymentRequestModel"].ToString());
                 //var res = await base.CreateVPOSPayment(paymentRequest);
                 var res = await base.CreateVPOSPayment(paymentRequest);
-                return RedirectToAction("Index", "Application");
+                // return RedirectToAction("Index", "Application");
 
-                //var objectResult = res as ObjectResult;
-                //dynamic value = objectResult.Value;
+                var objectResult = res as ObjectResult;
+                dynamic value = objectResult.Value;
 
-                //ViewBag.postUrl = value.PostUrl;
-                //ViewBag.ClientId = value.Message.ClientId;
-                //ViewBag.Data = value.Message.Data;
-                //ViewBag.HMAC = value.Message.HMAC;
+                ViewBag.postUrl = value.PostUrl;
+                ViewBag.ClientId = value.Message.ClientId;
+                ViewBag.Data = value.Message.Data;
+                ViewBag.HMAC = value.Message.HMAC;
 
-                //return new ViewResult()
-                //{
-                //    ViewName = "/Views/Application/PayEgov.cshtml",
-                //    ViewData = ViewData,
-                //    TempData = TempData
-                //};
+                return new ViewResult()
+                {
+                    ViewName = "/Views/Application/PayEgov.cshtml",
+                    ViewData = ViewData,
+                    TempData = TempData
+                };
             }
             catch(Exception ex)
             {
@@ -206,21 +205,18 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
-        //[CustomAuthorize]
         public override Task<IActionResult> CreateVPOSPaymentByRefNumber([FromQuery] string paymentRefNumber, [FromQuery] VPOSPaymentTypes paymentType, [FromQuery] bool mobilePayment = false)
         {
             return base.CreateVPOSPaymentByRefNumber(paymentRefNumber, paymentType, mobilePayment);
         }
 
         [HttpPost]
-        //[CustomAuthorize]
         public override Task<IActionResult> RegisterOfflinePayment([FromBody] EGovPaymentRequestModel paymentRequest)
         {
             return base.RegisterOfflinePayment(paymentRequest);
         }
 
         [HttpGet]
-        //[CustomAuthorize]
         public override Task<IActionResult> RegisterOfflinePayment([FromQuery] string paymentRefNumber)
         {
             return base.RegisterOfflinePayment(paymentRefNumber);
@@ -232,6 +228,20 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             //logger.LogInfo($"Payment Status Changed ClientId: {message.ClientId} Data: {message.Data}");
             return base.PaymentStatusCallback(message);
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        public override IActionResult CancelCallback([FromForm] MessageWrapper<VPOSPaymentResponse> response)
+        {
+            return base.CancelCallback(response);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public override IActionResult OkCallback([FromForm] MessageWrapper<VPOSPaymentResponse> response)
+        {
+            return base.OkCallback(response);
         }
 
         //protected override void ActionExecuting(ActionExecutingContext context)

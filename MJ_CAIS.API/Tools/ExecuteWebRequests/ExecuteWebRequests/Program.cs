@@ -31,17 +31,19 @@ namespace ExecuteWebRequests
                     {
                         if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
                         {
-                            regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName, webRequest.WApplication.RegistrationNumber);
+                            regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
                         }
                         if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
                         {
-                            regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName, webRequest.WApplication.RegistrationNumber);
+                            regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
                         }
                         if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
                         {
-                            regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, webRequest.WApplication.RegistrationNumber);
+                            regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
                         }
                     }
+                    dbContext.ChangeTracker.Clear();
+
                 }
             }
         }
