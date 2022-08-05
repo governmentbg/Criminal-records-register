@@ -48,6 +48,37 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId)
+        {
+            var query = from reports in _dbContext.AReports.AsNoTracking()
+                        join signer1 in _dbContext.GUsers.AsNoTracking() on reports.FirstSignerId equals signer1.Id
+                            into signer1Left
+                        from signer1 in signer1Left.DefaultIfEmpty()
+                        join signer2 in _dbContext.GUsers.AsNoTracking() on reports.SecondSignerId equals signer2.Id
+                        into signer2Left
+                        from signer2 in signer2Left.DefaultIfEmpty()
+
+                        join status in _dbContext.AReportStatuses.AsNoTracking() on reports.StatusCode equals status.Code
+                        into statusLeft
+                        from status in statusLeft.DefaultIfEmpty()
+                        where reports.ARepApplId == appId
+                        select new GeneratedReportDTO
+                        {
+                            Id = reports.Id,
+                            DocId = reports.DocId,
+                            FirstSigner = signer1.Firstname + " " + signer1.Surname + " " + signer1.Familyname,
+                            SecondSigner = signer2.Firstname + " " + signer2.Surname + " " + signer2.Familyname,
+                            CreatedOn = reports.CreatedOn,
+                            RegistrationNumber = reports.RegistrationNumber,
+                            StatusCode = reports.StatusCode,
+                            StatusName = status.Name,
+                            ValidFrom = reports.ValidFrom,
+                            ValidTo = reports.ValidTo,
+                        };
+
+            return query;
+        }
+
         public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string egnId, string lnchId, string lnId, string suidId)
         {
             var egnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.EgnId == egnId);

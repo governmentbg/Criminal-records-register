@@ -113,6 +113,11 @@ namespace MJ_CAIS.Services
             return filteredStatuses;
         }
 
+        public IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId)
+        {
+            return _reportApplicationRepository.SelectAllGeneratedReportsByAppId(aId);
+        }
+
         private async Task<AReportApplication> ApplyDataForUpdateAsync(ReportApplicationDTO aInDto, bool isFinal)
         {
             var reportApp = await baseAsyncRepository.SingleOrDefaultAsync<AReportApplication>(a => a.Id == aInDto.Id);

@@ -43,7 +43,9 @@ export class ReportApplicationFormComponent
   public PersonContextEnum = PersonContextEnum;
 
   public historyTabTitle = "Одит";
+  public reportsTabTitle = "Справки";
   public showHistoryTab: boolean = false;
+  public showReportsTab: boolean = false;
   private isFinalEdit: boolean;
 
   constructor(
@@ -175,6 +177,10 @@ export class ReportApplicationFormComponent
     let tabTitle = event.tabTitle;
     if (!this.showHistoryTab) {
       this.showHistoryTab = tabTitle == this.historyTabTitle;
+    }
+
+    if (!this.showReportsTab) {
+      this.showReportsTab = tabTitle == this.reportsTabTitle;
     }
   }
 }

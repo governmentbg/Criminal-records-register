@@ -95,5 +95,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = this._reportApplicationService.GetStatusHistoryByReportAppId(aId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/reports")]
+        public IActionResult GetReports(string aId)
+        {
+            var result = this._reportApplicationService.GetReportsByAppId(aId);
+            return Ok(result);
+        }
     }
 }
