@@ -19,6 +19,30 @@
             <div class="card h-100">
                 <div class="card-header h5 bg-primary text-white">@title</div>
                 <div class="card-body">
+                    @if (Model.ReturnFromPaymentResult != null)
+                    {
+                        switch (Model.ReturnFromPaymentResult)
+                        {
+                            case "OK":
+                                {
+                                    <div class="alert alert-success" role="alert">
+                                        Плащането е успешно!
+                                        @if(!Model.IsPaid.HasValue || !Model.IsPaid.Value)
+                                        {
+                                            <span>Очаква се потвърждение от системата за плащания.</span>
+                                        }
+                                    </div>
+                                    break;
+                                }
+                            case "Cancel":
+                                {
+                                    <div class="alert alert-danger" role="alert">
+                                        Плащането е отказано!
+                                    </div>
+                                    break;
+                                }
+                        }
+                    }
                     <div class="row g-3">
                         <div class="form-group col-md-6">
                             <label asp-for="RegistrationNumber" class="control-label fw-bold"></label>

@@ -92,7 +92,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.ClientIp = _requestUtils.GetClientIpAddress(HttpContext);
 
             var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
-            var id =  await _applicationWebService.InsertPublicAsync(itemToUpdate);
+            var id = await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
             //var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
             _regixService.CreateRegixRequests(viewModel.Egn, wApplicationId: id);
@@ -128,10 +128,11 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Preview(string id)
+        public async Task<ActionResult> Preview(string id, [FromQuery] string paymentStatus = "")
         {
             var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
+            viewModel.ReturnFromPaymentResult = paymentStatus;
             viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
@@ -159,29 +160,27 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         [HttpGet]
         public async Task<ActionResult> PaymentOk([FromQuery] string requestId)
         {
-            string? paymentStatus = await GetPaymentStatus(requestId);
-            var model = new PaymentResultViewModel() { Canceled = false, PaymentStatus = paymentStatus };
-            return View("Payment", model);
+            string? applicationId = await GetWApplicationId(requestId);
+            return RedirectToAction("Preview", "Application", new { id = applicationId, paymentStatus = "OK" });
         }
 
-        private async Task<string> GetPaymentStatus(string requestId)
+        private async Task<string> GetWApplicationId(string requestId)
         {
             var userId = CurrentUserID;
-            var paymentStatus = await (from wa in _dbContext.WApplications
+            var wApplicationId = await (from wa in _dbContext.WApplications
                                        join ap in _dbContext.APayments on wa.Id equals ap.WApplicationId
                                        join p in _dbContext.EPayments on ap.EPaymentId equals p.Id
                                        where p.InvoiceNumber == requestId &&
                                              wa.UserCitizenId == userId
-                                       select p.PaymentStatus).FirstOrDefaultAsync();
-            return paymentStatus;
+                                       select wa.Id).FirstOrDefaultAsync();
+            return wApplicationId;
         }
 
         [HttpGet]
         public async Task<ActionResult> PaymentCancel([FromQuery] string requestId)
         {
-            string? paymentStatus = await GetPaymentStatus(requestId);
-            var model = new PaymentResultViewModel() { Canceled = true, PaymentStatus = paymentStatus };
-            return View("Payment", model);
+            string? applicationId = await GetWApplicationId(requestId);
+            return RedirectToAction("Preview", "Application", new { id = applicationId, paymentStatus = "Cancel" });
         }
 
         //[HttpGet]
