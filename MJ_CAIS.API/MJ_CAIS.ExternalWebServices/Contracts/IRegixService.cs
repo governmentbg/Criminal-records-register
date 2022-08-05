@@ -8,12 +8,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
     {
         List<EWebRequest> GetRequestsForAsyncExecution();
         Task<(PersonDataResponseType, EWebRequest)> SyncCallPersonDataSearch(string egn,
-            string applicationId, string registrationNumber);
+            string applicationId, string registrationNumber, string  reportApplicationId);
 
         void CreateRegixRequests(string egn, string wApplicationId);
 
         Task<(ForeignIdentityInfoResponseType, EWebRequest)> SyncCallForeignIdentitySearchV2(string lnch,
-            string applicationId, string registrationNumber);
+            string applicationId, string registrationNumber, string  reportApplicationId);
 
         Task<PersonDataResponseType>  ExecutePersonDataSearch(EWebRequest request, string webServiceName, string? egn = null, string? registrationNumber = null);
         Task<RelationsResponseType> ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null, string? registrationNumber = null);

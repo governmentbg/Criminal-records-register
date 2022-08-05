@@ -1,0 +1,69 @@
+<nb-card
+  class="card-single-page-height"
+  *ngIf="formGroup"
+  [formGroup]="formGroup"
+>
+ 
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="font-weight-bold">Санкция</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Национален класификатор'"
+            [inputFormControl]="this.formGroup.controls.nationalCategoryTitle"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Размер на отделните глоби'"
+            [inputFormControl]="
+              this.formGroup.controls.sanctionAmountOfIndividualFine
+            "
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Глоба - валута'"
+            [inputFormControl]="this.formGroup.controls.sanctionCurrencyOfFine"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Специфично за непълнолетни'"
+            [inputFormControl]="
+              this.formGroup.controls.sanctionIsSpecificToMinor
+            "
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Брой глоби'"
+            [inputFormControl]="this.formGroup.controls.sanctionNumberOfFines"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Брой глоби'"
+            [inputFormControl]="this.formGroup.controls.sanctionNumberOfFines"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

@@ -10,7 +10,9 @@ import { EcrisRequestPreviewService } from "./_data/ecris-request-preview.servic
 })
 export class EcrisReqPreviewComponent implements OnInit {
   displayTitle: string = 'Запитване';
-  formGroup: FormGroup;
+  ecrisId: string;
+  ecrisType: string;
+  formGroup: FormGroup; 
   constructor(
     private formBuilder: FormBuilder,
     private ecrisRequestPreviewService: EcrisRequestPreviewService,
@@ -20,7 +22,7 @@ export class EcrisReqPreviewComponent implements OnInit {
   ngOnInit(): void {
    
     this.ecrisRequestPreviewService
-      .getEcrisRequest("0cfd5df5-a14c-436e-afa3-3bdce104bbd9")
+      .getEcrisRequest(this.ecrisId,this.ecrisType)
       .subscribe((result) => {
         debugger;
         this.formGroup = this.buildFormImpl();
@@ -48,6 +50,7 @@ export class EcrisReqPreviewComponent implements OnInit {
       cityPerson: [{ value: "", disabled: true }],
       personId: [{ value: "", disabled: true }],
       sex: [{ value: "", disabled: true }],
+      birthday: [{ value: "", disabled: true }],
       firstNameFormer: [{ value: "", disabled: true }],
       middleNameFormer: [{ value: "", disabled: true }],
       lastNameFormer: [{ value: "", disabled: true }],

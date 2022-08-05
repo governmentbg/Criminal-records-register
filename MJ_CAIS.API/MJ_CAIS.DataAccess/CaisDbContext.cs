@@ -5744,6 +5744,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
+                entity.Property(e => e.ARepApplId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("A_REP_APPL_ID");
+
                 entity.Property(e => e.ApiServiceCallId)
                     .HasMaxLength(100)
                     .HasColumnName("API_SERVICE_CALL_ID");
@@ -5836,6 +5841,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("WEB_SERVICE_ID");
+
+                entity.HasOne(d => d.ARepAppl)
+                    .WithMany(p => p.EWebRequests)
+                    .HasForeignKey(d => d.ARepApplId)
+                    .HasConstraintName("FK_WEB_REQ_REP_APPL");
 
                 entity.HasOne(d => d.Application)
                     .WithMany(p => p.EWebRequests)

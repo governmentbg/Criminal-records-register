@@ -17,6 +17,7 @@ export class EcrisRequestPreviewModel {
   public cityPerson: string;
   public personId: string;
   public sex: string;
+  public birthday: string;
   public firstNameFormer: string;
   public middleNameFormer: string;
   public lastNameFormer: string;

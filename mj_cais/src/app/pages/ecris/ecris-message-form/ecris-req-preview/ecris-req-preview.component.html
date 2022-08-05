@@ -13,10 +13,6 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <div class="d-flex justify-content-center align-items-center ml-1">
-        <h3>Запитване</h3>
-      </div>
-
       <div class="font-weight-bold">ИД</div>
       <hr />
       <div class="row">
@@ -120,7 +116,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
           <cais-input
             [type]="'text'"
             [label]="'Област'"
@@ -128,7 +124,7 @@
             [parentGroup]="formGroup"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
           <cais-input
             [type]="'text'"
             [label]="'Населено място'"
@@ -136,7 +132,7 @@
             [parentGroup]="formGroup"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
           <cais-input
             [type]="'text'"
             [label]="'Държава'"
@@ -144,11 +140,22 @@
             [parentGroup]="formGroup"
           ></cais-input>
         </div>
-        <div class="form-group col-md-3">
+  
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
           <cais-input
             [type]="'text'"
             [label]="'Пол'"
             [inputFormControl]="this.formGroup.controls.sex"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'text'"
+            [label]="'Дата на раждане'"
+            [inputFormControl]="this.formGroup.controls.birthday"
             [parentGroup]="formGroup"
           ></cais-input>
         </div>

@@ -206,13 +206,17 @@
         </nb-tab>
 
         <nb-tab
-          tabTitle="Справка"
+          [tabTitle]="reportsTabTitle"
           *ngIf="
             isEdit() &&
             reportApplicationStatus == ReportApplicationStatusConstants.Approved
           "
         >
+          <ng-container *ngIf="showReportsTab">
+            <cais-generated-report-overview> </cais-generated-report-overview>
+          </ng-container>
         </nb-tab>
+
         <nb-tab [tabTitle]="historyTabTitle" *ngIf="isEdit() || isForPreview">
           <ng-container *ngIf="showHistoryTab">
             <cais-report-app-history-overview>

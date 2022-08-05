@@ -32,7 +32,7 @@ namespace MJ_CAIS.Repositories.Impl
                             into userLeft
                         from user in userLeft.DefaultIfEmpty()
                         join status in _dbContext.AReportStatuses.AsNoTracking() on reportAppHis.StatusCode equals status.Code
-                       into statusLeft
+                        into statusLeft
                         from status in statusLeft.DefaultIfEmpty()
                         select new ReportAppStatusHistoryDTO
                         {
@@ -48,25 +48,87 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string egnId, string lnchId, string lnId, string suidId)
+        public IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId)
         {
-            var egnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.EgnId == egnId);
-            var lnchBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.LnchId == lnchId);
-            var lnBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.LnId == lnId);
-            var suidBull = _dbContext.BBulletins.AsNoTracking().Where(x => x.SuidId == suidId);
+            var query = from reports in _dbContext.AReports.AsNoTracking()
+                        join signer1 in _dbContext.GUsers.AsNoTracking() on reports.FirstSignerId equals signer1.Id
+                            into signer1Left
+                        from signer1 in signer1Left.DefaultIfEmpty()
+                        join signer2 in _dbContext.GUsers.AsNoTracking() on reports.SecondSignerId equals signer2.Id
+                        into signer2Left
+                        from signer2 in signer2Left.DefaultIfEmpty()
 
-            var result = egnBull
-                            .Union(lnchBull)
-                            .Union(lnchBull)
-                            .Union(suidBull)
-                            .Select(x => new ReportAppBulletinIdDTO
-                            {
-                                Id = x.Id,
-                                CreatedOn = x.CreatedOn,
-                                DecisionDate = x.DecisionDate
-                            });
+                        join status in _dbContext.AReportStatuses.AsNoTracking() on reports.StatusCode equals status.Code
+                        into statusLeft
+                        from status in statusLeft.DefaultIfEmpty()
+                        where reports.ARepApplId == appId
+                        select new GeneratedReportDTO
+                        {
+                            Id = reports.Id,
+                            DocId = reports.DocId,
+                            FirstSigner = signer1.Firstname + " " + signer1.Surname + " " + signer1.Familyname,
+                            SecondSigner = signer2.Firstname + " " + signer2.Surname + " " + signer2.Familyname,
+                            CreatedOn = reports.CreatedOn,
+                            RegistrationNumber = reports.RegistrationNumber,
+                            StatusCode = reports.StatusCode,
+                            StatusName = status.Name,
+                            ValidFrom = reports.ValidFrom,
+                            ValidTo = reports.ValidTo,
+                        };
 
-            return result;
+            return query;
+        }
+
+        public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId)
+        {
+            var bulletinsByEgn = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                 join egn in _dbContext.PPersonIds.AsNoTracking() on bulletin.EgnId equals egn.Id
+                                 where egn.PersonId == personId
+                                 select new ReportAppBulletinIdDTO
+                                 {
+                                     Id = bulletin.Id,
+                                     CreatedOn = bulletin.CreatedOn,
+                                     DecisionDate = bulletin.DecisionDate
+                                 };
+
+
+            var bulletinsByLnch = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                  join lnch in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnchId equals lnch.Id
+                                  where lnch.PersonId == personId
+                                  select new ReportAppBulletinIdDTO
+                                  {
+                                      Id = bulletin.Id,
+                                      CreatedOn = bulletin.CreatedOn,
+                                      DecisionDate = bulletin.DecisionDate
+                                  };
+
+
+            var bulletinsByLn = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                join ln in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnId equals ln.Id
+                                where ln.PersonId == personId
+                                select new ReportAppBulletinIdDTO
+                                {
+                                    Id = bulletin.Id,
+                                    CreatedOn = bulletin.CreatedOn,
+                                    DecisionDate = bulletin.DecisionDate
+                                };
+
+
+            var bulletinsBySuid = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                  join suid in _dbContext.PPersonIds.AsNoTracking() on bulletin.SuidId equals suid.Id
+                                  where suid.PersonId == personId
+                                  select new ReportAppBulletinIdDTO
+                                  {
+                                      Id = bulletin.Id,
+                                      CreatedOn = bulletin.CreatedOn,
+                                      DecisionDate = bulletin.DecisionDate
+                                  };
+
+            var bulletins = bulletinsByEgn
+                                .Union(bulletinsByLnch)
+                                .Union(bulletinsByLn)
+                                .Union(bulletinsBySuid);
+            return bulletins;
         }
 
     }

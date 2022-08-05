@@ -113,6 +113,11 @@ namespace MJ_CAIS.Services
             return filteredStatuses;
         }
 
+        public IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId)
+        {
+            return _reportApplicationRepository.SelectAllGeneratedReportsByAppId(aId);
+        }
+
         private async Task<AReportApplication> ApplyDataForUpdateAsync(ReportApplicationDTO aInDto, bool isFinal)
         {
             var reportApp = await baseAsyncRepository.SingleOrDefaultAsync<AReportApplication>(a => a.Id == aInDto.Id);
@@ -160,16 +165,16 @@ namespace MJ_CAIS.Services
             // if person exist then check for bulletins
             if (person.EntityState == EntityStateEnum.Modified && person.PPersonIds.Count > 0)
             {
-                var bulletins = _reportApplicationRepository.GetBulletinsByPids(entity.EgnId, entity.LnchId, entity.LnId, entity.SuidId);
-
-                if (bulletins.Any())
+                var bulletins = _reportApplicationRepository.GetBulletinsByPids(person.Id);
+                var bulletinList = await bulletins.ToListAsync();
+                if (bulletinList.Any())
                 {
-                    var bulletinList = await bulletins.ToListAsync();
 
                     var orderNumber = 0;
                     report.ARepBulletins = bulletinList
                         .OrderByDescending(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                        .ThenByDescending(b => b.DecisionDate).Select(b =>
+                        //.ThenByDescending(b => b.DecisionDate)
+                        .Select(b =>
                         {
                             orderNumber++;
                             return new ARepBulletin
@@ -178,6 +183,7 @@ namespace MJ_CAIS.Services
                                 BulletinId = b.Id,
                                 EntityState = EntityStateEnum.Added,
                                 OrderNumber = orderNumber,
+                                ReportId = report.Id
                             };
                         }).ToList();
                 }

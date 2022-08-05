@@ -10,6 +10,7 @@ namespace MJ_CAIS.DataAccess.Entities
             ARepCitizenships = new HashSet<ARepCitizenship>();
             AReportStatusHes = new HashSet<AReportStatusH>();
             AReports = new HashSet<AReport>();
+            EWebRequests = new HashSet<EWebRequest>();
         }
 
         public string Id { get; set; } = null!;
@@ -86,5 +87,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<ARepCitizenship> ARepCitizenships { get; set; }
         public virtual ICollection<AReportStatusH> AReportStatusHes { get; set; }
         public virtual ICollection<AReport> AReports { get; set; }
+        public virtual ICollection<EWebRequest> EWebRequests { get; set; }
     }
 }

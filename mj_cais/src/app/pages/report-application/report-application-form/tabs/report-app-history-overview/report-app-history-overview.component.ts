@@ -21,10 +21,10 @@ export class ReportAppHistoryOverviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    debugger
     let id = this.activatedRoute.snapshot.params["ID"];
     this.loaderService.show();
     if(this.historyData){
+      this.loaderService.hide();
       return;
     }
     this.service

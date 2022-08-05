@@ -18,7 +18,7 @@ export class EcrisRequestPreviewService {
     this.url = this.baseUrl + '/api/' + this.endpoint
   }
 
-  public getEcrisRequest(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url}/${id}/document`);
+  public getEcrisRequest(id: string,type: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url}/${id}/document/${type}`);
   }
 }

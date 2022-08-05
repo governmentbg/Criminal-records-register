@@ -66,7 +66,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestLNCHWithData()
         {
 
-            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("1001001001", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123").Result;
+            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("1001001001", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123",null).Result;
             if (result.Item1.LNCh == null) //TODO: shoud be ==
             {
                 Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
@@ -89,7 +89,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestLNCHNoData()
         {
 
-            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("10000", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123").Result;
+            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("10000", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123",null).Result;
             if (result.Item2.HasError == true)
             {
                 //throw new BusinessLogicException($"RegiX e недостъпен");
@@ -108,7 +108,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
                 try
                 {
                 //var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id, registrationNumber: "220728660123000000123").Result;
-                var result = _regixService.SyncCallPersonDataSearch("1212124563", applicationId: "329812b4-4530-466a-8d46-2dc571cb70d3", registrationNumber: "220731660101000001024").Result;
+                var result = _regixService.SyncCallPersonDataSearch("1212124563", applicationId: "329812b4-4530-466a-8d46-2dc571cb70d3", registrationNumber: "220731660101000001024",null).Result;
 
                 if (result.Item1.EGN == null) //TODO: shoud be ==
                     {
