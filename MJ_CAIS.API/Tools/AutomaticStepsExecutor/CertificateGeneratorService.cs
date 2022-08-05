@@ -79,8 +79,8 @@ namespace AutomaticStepsExecutor
 
                 }
                 var systemParameters = await Task.FromResult(_dbContext.GSystemParameters.AsNoTracking().Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
-                                                    || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME
                                                     || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME
+                                                    || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
                                                     || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToList());
                 if (systemParameters.Count != 4)
                 {
@@ -129,6 +129,7 @@ namespace AutomaticStepsExecutor
                         //{                        
                          var cert = await _applicationService.GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
                          await _dbContext.SaveChangesAsync();
+                        _dbContext.ChangeTracker.Clear();
                         if(cert.StatusCode== ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                         {
                             //създаване на pdf и завършване на процеса
@@ -136,7 +137,7 @@ namespace AutomaticStepsExecutor
                             var file = await _certificateService.CreateCertificate(cert, mailSubjectTemplate, mailBodyTemplate, signingCertificateName,
                                                                          statusCertificateServerSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, webPortalUrl);
                             await _dbContext.SaveChangesAsync();
-                            
+                            _dbContext.ChangeTracker.Clear();
                         }
                         //}
 

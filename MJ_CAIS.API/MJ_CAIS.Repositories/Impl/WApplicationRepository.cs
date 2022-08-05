@@ -24,9 +24,11 @@ namespace MJ_CAIS.Repositories.Impl
 
         public override Task<WApplication> SelectAsync(string id)
         {
-            return _dbContext.WApplications
-                .Include(x => x.StatusCodeNavigation)
-                .Include(x => x.ApplicationType)
+            return _dbContext.WApplications.AsNoTracking()
+                .Include(x => x.StatusCodeNavigation).AsNoTracking()
+                .Include(x => x.ApplicationType).AsNoTracking()
+                .Include(x => x.WAppCitizenships).AsNoTracking()
+                .Include(x => x.WAppPersAliases).AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

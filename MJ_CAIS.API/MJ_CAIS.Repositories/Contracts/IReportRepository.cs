@@ -10,5 +10,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<DDocContent> GetReportContent(string reportID);
 
         Task<List<BulletindecisionDateDTO>> GetBulletinesPerPerson(List<string> pids);
+        Task<AReport> GetReport(string reportID);
     }
 }

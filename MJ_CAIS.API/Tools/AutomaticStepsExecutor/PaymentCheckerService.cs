@@ -52,6 +52,8 @@ namespace AutomaticStepsExecutor
                                             .Include(a => a.APayments)
                                             .ThenInclude(p => p.EPayment).AsNoTracking()
                                             .Include(a => a.ApplicationType).AsNoTracking()
+                                            .Include(a=>a.WAppCitizenships).AsNoTracking()
+                                            .Include(a=>a.WAppPersAliases).AsNoTracking()
                                .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebCheckPayment)
                                  .OrderBy(a => a.CreatedOn)
                               .Take(pageSize)
@@ -114,6 +116,7 @@ namespace AutomaticStepsExecutor
                         var wapplication = (WApplication)entity;
                         await _wApplicationService.ProcessWApplicationCheckPayment(statusApprovedApplication, statusWebApprovedApplication, statusWebCancel, startDateWeb, wapplication);
                         await _dbContext.SaveChangesAsync();
+                        _dbContext.ChangeTracker.Clear();
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
