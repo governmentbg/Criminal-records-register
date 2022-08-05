@@ -123,7 +123,6 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));
                 context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
-                context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
