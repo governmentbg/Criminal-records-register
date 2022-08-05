@@ -32,8 +32,8 @@ export class ReportApplicationFormComponent
   public ReportApplicationStatusConstants = ReportApplicationStatusConstants;
   public PersonContextEnum = PersonContextEnum;
 
-  @ViewChild("cancelAppReportDialog", { read: IgxDialogComponent })
-  public cancelAppReportDialog: IgxDialogComponent;
+  public historyTabTitle = "Одит";
+  public showHistoryTab: boolean = false;
 
   constructor(
     service: ReportApplicationService,
@@ -65,9 +65,13 @@ export class ReportApplicationFormComponent
       this.fullForm.person.nationalities.isChanged.patchValue(true);
     }
 
-    this.isForPreview =  this.reportApplicationStatus == ReportApplicationStatusConstants.Approved || 
-    this.reportApplicationStatus == ReportApplicationStatusConstants.Canceled || 
-    this.reportApplicationStatus == ReportApplicationStatusConstants.Delivered ;
+    this.isForPreview =
+      this.reportApplicationStatus ==
+        ReportApplicationStatusConstants.Approved ||
+      this.reportApplicationStatus ==
+        ReportApplicationStatusConstants.Canceled ||
+      this.reportApplicationStatus ==
+        ReportApplicationStatusConstants.Delivered;
 
     this.formFinishedLoading.emit();
   }
@@ -123,7 +127,6 @@ export class ReportApplicationFormComponent
         if (x) {
           this.service.cancel(this.objectId, x).subscribe({
             next: (data) => {
-              this.cancelAppReportDialog.close();
               let message = "Успешно анулирано";
               this.toastr.showToast("success", message);
               this.router.navigate(["pages/report-applications"]);
@@ -134,5 +137,12 @@ export class ReportApplicationFormComponent
           });
         }
       });
+  }
+
+  onChangeTab(event) {
+    let tabTitle = event.tabTitle;
+    if (!this.showHistoryTab) {
+      this.showHistoryTab = tabTitle == this.historyTabTitle;
+    }
   }
 }

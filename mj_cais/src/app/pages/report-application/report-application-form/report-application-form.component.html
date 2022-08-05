@@ -5,7 +5,7 @@
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="
-        reportApplicationStatus == ReportApplicationStatusConstants.Approved || 
+        reportApplicationStatus == ReportApplicationStatusConstants.Approved ||
         reportApplicationStatus == ReportApplicationStatusConstants.Canceled
       "
     >
@@ -46,7 +46,7 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <nb-tabset #nbtabset>
+      <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
         <nb-tab tabTitle="Искане">
           <ng-container *ngIf="isEdit()">
             <div class="font-weight-bold">Служебна информация</div>
@@ -211,6 +211,12 @@
             reportApplicationStatus == ReportApplicationStatusConstants.Approved
           "
         >
+        </nb-tab>
+        <nb-tab [tabTitle]="historyTabTitle" *ngIf="isEdit() || isForPreview">
+          <ng-container *ngIf="showHistoryTab">
+            <cais-report-app-history-overview>
+            </cais-report-app-history-overview>
+          </ng-container>
         </nb-tab>
       </nb-tabset>
     </form>
