@@ -50,6 +50,22 @@ steps:
         New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.Public\bin\Release\net6.0\publish -Name "$productVersion.ver" -ItemType "file"
         git tag WebPortal-Public-$productVersion
         git push origin WebPortal-Public-$productVersion
+- task: MSBuild@1
+  displayName: 'Publish project MJ_CAIS.WebPortal.External.proj'
+  inputs:
+    solution: '$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.External\MJ_CAIS.WebPortal.External.csproj'
+    msbuildLocationMethod: location
+    msbuildLocation: 'C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin'
+    msbuildArguments: '/p:DeployOnBuild=true /p:PublishProfile="$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.External\Properties\PublishProfiles\FolderProfile.pubxml"'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+        $productVersion = Get-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.External\bin\Release\net6.0\publish\MJ_CAIS.WebPortal.External.dll |Select-Object -ExpandProperty VersionInfo|Select-Object -ExpandProperty ProductVersion
+        Remove-Item $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.External\bin\Release\net6.0\publish\*.ver        
+        New-Item -Path $(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.External\bin\Release\net6.0\publish -Name "$productVersion.ver" -ItemType "file"
+        git tag WebPortal-External-$productVersion
+        git push origin WebPortal-External-$productVersion
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: MJ_CAIS.Web'
   inputs:
@@ -60,3 +76,8 @@ steps:
   inputs:
     artifactName: 'MJ_CAIS.WebPortal.Public'
     PathtoPublish: '$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.Public\bin\Release\net6.0\publish\'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: MJ_CAIS.WebPortal.External'
+  inputs:
+    artifactName: 'MJ_CAIS.WebPortal.External'
+    PathtoPublish: '$(Build.Repository.LocalPath)\MJ_CAIS.API\MJ_CAIS.WebPortal.External\bin\Release\net6.0\publish\'
