@@ -10,6 +10,7 @@ namespace MJ_CAIS.DataAccess.Entities
             ARepCitizenships = new HashSet<ARepCitizenship>();
             AReportStatusHes = new HashSet<AReportStatusH>();
             AReports = new HashSet<AReport>();
+            EWebRequests = new HashSet<EWebRequest>();
         }
 
         public string Id { get; set; } = null!;
@@ -81,9 +82,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual PPersonId? LnNavigation { get; set; }
         public virtual PPersonId? LnchNavigation { get; set; }
         public virtual APurpose? PurposeNavigation { get; set; }
+        public virtual AReportStatus StatusCodeNavigation { get; set; } = null!;
         public virtual PPersonId? SuidNavigation { get; set; }
         public virtual ICollection<ARepCitizenship> ARepCitizenships { get; set; }
         public virtual ICollection<AReportStatusH> AReportStatusHes { get; set; }
         public virtual ICollection<AReport> AReports { get; set; }
+        public virtual ICollection<EWebRequest> EWebRequests { get; set; }
     }
 }
