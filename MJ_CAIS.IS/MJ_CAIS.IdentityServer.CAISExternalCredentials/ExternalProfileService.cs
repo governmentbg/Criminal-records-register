@@ -104,6 +104,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             var user =
                 CaisDbContext.GUsersExt
                 .AsNoTracking()
+                .Include( e => e.Administration)
                 .Where(u => u.Id == userID)
                 .Select(u => new
                 {
@@ -112,12 +113,18 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     u.IsAdmin,
                     u.Name,
                     u.Active,
-                    u.Egn
+                    u.Egn,
+                    u.Email,
+                    AdministrationName = u.Administration.Name
                 })
                 .FirstOrDefault();
             if (user != null)
             {
                 context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));
+                context.IssuedClaims.Add(new Claim("Position", user.Position));
+                context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
+                context.IssuedClaims.Add(new Claim("Position", user.Position));
+                context.IssuedClaims.Add(new Claim("Email", user.Email));
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
                     context.IssuedClaims.Add(new Claim("AdministrationId", user.AdministrationId));
