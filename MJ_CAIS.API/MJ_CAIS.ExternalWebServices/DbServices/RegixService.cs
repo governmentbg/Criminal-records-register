@@ -247,7 +247,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                    
                 }
                 _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync( acceptAllChangesOnSuccess:true);
+                _dbContext.ChangeTracker.Clear();
                 return responseObject;
             }
             return default;
@@ -901,10 +902,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
                         }
-                        //todo: Надя, виж това
-                        //стар код:
-                        //if (!string.IsNullOrEmpty(application.MotherFirstname))
-                        if (!string.IsNullOrEmpty(graoData.Item2))
+                        //идеята е, ако няма данни за Майка от regix(попълнени в application-a), данните да се вземат от локалното копие в базата - grao_person
+                        if (!string.IsNullOrEmpty(application.MotherFirstname))
+                        //if (!string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));

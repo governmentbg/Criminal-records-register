@@ -61,6 +61,12 @@ namespace MJ_CAIS.Services
                 var existingPerson = await _personRepository.GetExistingPersonWithPidsDataAsync(personToBeUpdatedId);
                 // all pids
                 var allPids = existingPerson.PPersonIds.ToList();
+                //добавено от Надя, защото за новодобавени идентификатор, personId-то оставаше BaseEntity.GenerateNewId();
+                foreach (var ppid in pids.Where(x => x.EntityState == EntityStateEnum.Added && x.PersonId != existingPerson.Id))
+                {
+                    ppid.PersonId = existingPerson.Id;
+                    ppid.Person = existingPerson;
+                }
                 allPids.AddRange(pids.Where(x => x.EntityState == EntityStateEnum.Added));
                 existingPerson.PPersonIds = allPids;
 
