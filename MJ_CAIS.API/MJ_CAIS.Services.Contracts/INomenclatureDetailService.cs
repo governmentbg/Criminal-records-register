@@ -26,7 +26,7 @@ namespace MJ_CAIS.Services.Contracts
 
         IQueryable<NomenclatureTypeDTO> GetSanctionCategories();
 
-        IQueryable<BaseNomenclatureDTO> GetAllAPurposes();
+        IQueryable<PurposeDTO> GetAllAPurposes();
 
         IQueryable<BaseNomenclatureDTO> GetAllAPaymentMethods();
 
