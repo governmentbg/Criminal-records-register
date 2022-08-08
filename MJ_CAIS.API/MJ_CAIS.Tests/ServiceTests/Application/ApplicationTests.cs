@@ -27,8 +27,8 @@ namespace MJ_CAIS.Tests.ServiceTests.Application
         private ISearchByIdentifierService _searchByIdentifierService;
         private IRegixService _regixService;
         private IRegisterTypeService _registerTypeService;
-       // private IUserContext _userContext;
-      //  private Mock<IUserContext> _userContext;
+        private IUserContext _userContext;
+      
         private IApplicationService _applicationService;
         private CaisDbContext _dbContext;
         private IMapper _mapper;
@@ -62,7 +62,7 @@ namespace MJ_CAIS.Tests.ServiceTests.Application
 
             _regixService = host.Services.GetService<IRegixService>();
             _registerTypeService = host.Services.GetService<IRegisterTypeService>();
-           // _userContext =  new Mock<IUserContext>();
+            _userContext = host.Services.GetService<IUserContext>();
             _applicationService = host.Services.GetService<IApplicationService>();
             _searchByIdentifierService = host.Services.GetService<ISearchByIdentifierService>();
             _certificateService = host.Services.GetService<ICertificateService>();
@@ -252,8 +252,8 @@ namespace MJ_CAIS.Tests.ServiceTests.Application
                 // Assert.IsNotNull(result);
                 _dbContext.ChangeTracker.Clear();
                 CertificateDTO cert = _certificateService.GetByApplicationIdAsync(appId).Result;
-                cert.FirstSignerId = _dbContext.CurrentUserId;
                 _dbContext.ChangeTracker.Clear();
+                cert.FirstSignerId = _userContext.UserId;//"bee63110-ae2b-4a7b-878b-a9abd131ee41"
                 _certificateService.SaveSignerDataAsync(cert);
             }
             catch (Exception ex)
