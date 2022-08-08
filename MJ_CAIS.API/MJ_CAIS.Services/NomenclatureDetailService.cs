@@ -122,11 +122,11 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public IQueryable<BaseNomenclatureDTO> GetAllAPurposes()
+        public IQueryable<PurposeDTO> GetAllAPurposes()
         {
             return _nomenclatureDetailRepository
                 .GetAllAPurposes()
-                .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+                .ProjectTo<PurposeDTO>(mapperConfiguration);
         }
 
         public IQueryable<BaseNomenclatureDTO> GetAllAPaymentMethods()

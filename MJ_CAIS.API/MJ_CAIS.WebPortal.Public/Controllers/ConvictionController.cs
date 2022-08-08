@@ -19,7 +19,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         [HttpGet]
         public async Task<ActionResult> ViewByCode(string id)
         {
-            var cert = await _certificateService.GetCertificateDocumentContent(id);
+            //var cert = await _certificateService.GetCertificateDocumentContent(id);
+            var cert = await _certificateService.GetWebCertificateByAccessCodeAsync(id);
             if (cert == null)
             {
                 var empty = new ConvictionCodeDisplayModel

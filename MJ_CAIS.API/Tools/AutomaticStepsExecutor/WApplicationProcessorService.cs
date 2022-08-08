@@ -179,6 +179,7 @@ namespace AutomaticStepsExecutor
                     catch (Exception ex)
                     {
                         numberOfFailedEntities++;
+                        _dbContext.ChangeTracker.Clear();
                         _logger.LogError($"ApplicationID {entity.Id}: " + ex.Message, ex.Data, ex);
                     }
 
@@ -193,7 +194,7 @@ namespace AutomaticStepsExecutor
         private async Task ProcessPayments(IConfiguration config, WApplicationStatus statusWebCheckPayment, WApplication wapplication, AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebCancel, DateTime startDateWeb, WApplicationStatus statusWebApprovedApplication)
         {
             _applicationWebService.SetWApplicationStatus(wapplication, statusWebCheckPayment, " За проверка за плащане");
-            _dbContext.ApplyChanges(wapplication, new List<IBaseIdEntity>());
+            //_dbContext.ApplyChanges(wapplication, new List<IBaseIdEntity>());
             var numberOfPayments = await _dbContext.EPayments.Where(p => p.APayments.Any(ap => ap.WApplicationId == wapplication.Id)).CountAsync();
             if (numberOfPayments == 0)
             {
@@ -201,6 +202,7 @@ namespace AutomaticStepsExecutor
                 payment.EntityState = EntityStateEnum.Added;
                 payment.Id = BaseEntity.GenerateNewId();
                 payment.WApplicationId = wapplication.Id;
+                payment.WApplication = wapplication;
 
                 EPayment ePayment = new EPayment();
                 ePayment.EntityState = EntityStateEnum.Added;

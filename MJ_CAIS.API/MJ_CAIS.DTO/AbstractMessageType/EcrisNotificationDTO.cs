@@ -69,6 +69,10 @@ namespace MJ_CAIS.DTO.AbstractMessageType
         #region Решения
         public EcrisNotificationDecision[] Decisions { get; set; }
         #endregion
+        //#region Присъди
+        //public EcrisNotificationDecision[] Decisions { get; set; }
+        //#endregion
+
     }
 
 

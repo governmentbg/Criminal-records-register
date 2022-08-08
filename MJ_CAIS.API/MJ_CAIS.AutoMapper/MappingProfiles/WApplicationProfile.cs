@@ -20,6 +20,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             //    .ForMember(d => d.ApplicationType, opt => opt.Ignore());
 
             CreateMap<WApplication, PersonDTO>();
+
+            CreateMap<WCertificate, WCertificateDTO>().ReverseMap();
         }
     }
 }

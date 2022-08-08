@@ -39,6 +39,16 @@
                         </svg>
                         switch (Model.ReturnFromPaymentResult)
                         {
+                            case "TaxFreeOrBank":
+                                {
+                                    <div class="alert alert-success d-flex align-items-center mb-0" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+                                        <div>
+                                            Успешно подаване на заявка за електронно свидетелство за съдимост
+                                        </div>
+                                    </div>
+                                    break;
+                                }
                             case "OK":
                                 {
                                     <div class="alert alert-success d-flex align-items-center" role="alert">

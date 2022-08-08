@@ -146,6 +146,7 @@ namespace AutomaticStepsExecutor
                     catch (Exception ex)
                     {
                         numberOfFailedEntities++;
+                        _dbContext.ChangeTracker.Clear();
                         _logger.LogError($"ApplicationID {entity.Id}: " + ex.Message, ex.Data, ex);
                     }
 
@@ -168,6 +169,7 @@ namespace AutomaticStepsExecutor
                                            .Include(a => a.LnNavigation).AsNoTracking()
                                            .Include(a => a.SuidNavigation).AsNoTracking()
                                            .Include(a => a.ApplicationType).AsNoTracking()
+                                           .Include(a=>a.PurposeNavigation).AsNoTracking()
                                            .Include(а=>а.AStatusHes).AsNoTracking()
                                  .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.ApprovedApplication
                                  && aa.ServiceMigrationId ==null

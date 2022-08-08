@@ -370,7 +370,8 @@ namespace MJ_CAIS.Services
             aStatusH.ReportOrder = application.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
 
             aStatusH.ApplicationId = application.Id;
-            //aStatusH.Application = application;
+            aStatusH.Application = application;
+            baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
 
             // application.AStatusHes.Add(aStatusH);
             //if (includeInDbContext)

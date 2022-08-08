@@ -72,7 +72,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         public async Task<ActionResult> New()
         {
             var viewModel = new ApplicationEditModel();
-            viewModel.Egn = CurrentEgnIdentifier;
             viewModel.Email = CurrentMail;
 
             await FillDataForEditModel(viewModel);
@@ -117,13 +116,9 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 TempData["paymentRequestModel"] = JsonConvert.SerializeObject(paymentRequestModel);
                 return RedirectToActionPreserveMethod("CreateVPOSPayment2", "EGovPayments");
             }
-            //TODO: 
-            //else if (paymentMethod !=  null && paymentMethod.Code == "FreeFromTax")
-            //{
-            //}
             else
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Preview), new { id = id, paymentStatus = "TaxFreeOrBank" });
             }
         }
 
@@ -193,11 +188,12 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
 
         private async Task FillDataForEditModel(ApplicationEditModel viewModel)
         {
-            var purposes = _nomenclatureDetailService.GetAllAPurposes();
-            viewModel.PurposeTypes = await purposes.ProjectTo<SelectListItem>(
-                _mapper.ConfigurationProvider).ToListAsync();
+            viewModel.Egn = CurrentEgnIdentifier;
+            var purposes = await _nomenclatureDetailService.GetAllAPurposes().ToListAsync();
+            viewModel.PurposeInfo = purposes.Where(p => p.RequestInfo.HasValue && p.RequestInfo.Value).ToDictionary( o => o.Code, o => o.Description);
+            viewModel.PurposeTypes = purposes.Select( p =>  new SelectListItem() { Value = p.Code, Text = p.Name}).ToList();
             viewModel.PurposeTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true});
-
+            viewModel.RequiredPurposes = string.Join(",", viewModel.PurposeInfo.Keys);
             var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
             viewModel.PaymentMethodTypes = await paymentMethods.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
