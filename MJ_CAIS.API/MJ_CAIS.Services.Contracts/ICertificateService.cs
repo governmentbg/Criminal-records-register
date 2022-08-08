@@ -1,6 +1,7 @@
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
+using MJ_CAIS.DTO.WApplicaiton;
 
 namespace MJ_CAIS.Services.Contracts
 {
@@ -20,5 +21,6 @@ namespace MJ_CAIS.Services.Contracts
         Task UploadSignedDocumet(string certID, CertificateDocumentDTO aInDto);
 
         Task UpdateCertificateStatus(string certID);
+        Task<WCertificateDTO> GetWebCertificateByAccessCodeAsync(string accessCode);
     }
 }

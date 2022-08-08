@@ -42,6 +42,25 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(result);
         }
 
+        public async Task<IQueryable<BBulletin>> SelectBulletinIdsAsync(string personId)
+        {
+            var result = this._dbContext.BBulletins.Where(b =>
+                         //(b.StatusId != BulletinConstants.Status.Deleted)
+                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId })
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                        // (b.StatusId != BulletinConstants.Status.Deleted)
+                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId }))
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                        // (b.StatusId != BulletinConstants.Status.Deleted)
+                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId }))
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                       //  (b.StatusId != BulletinConstants.Status.Deleted)
+                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId })).AsNoTracking();
+
+            return await Task.FromResult(result);
+        }
+
+
         public override async Task<AApplication> SelectAsync(string id)
         {
             var result = await this._dbContext.Set<AApplication>()
@@ -66,12 +85,6 @@ namespace MJ_CAIS.Repositories.Impl
         }
 
 
-        //public async Task<IQueryable<AAppPersAlias>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
-        //{
-        //    return await Task.FromResult(_dbContext.AAppPersAliases.AsNoTracking()
-        //        .Where(x => x.ApplicationId == aId));
-        //}
-
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
         {
             var query = from aStatusH in _dbContext.AStatusHes.AsNoTracking()
@@ -92,47 +105,6 @@ namespace MJ_CAIS.Repositories.Impl
 
             return await Task.FromResult(query);
 
-        }
-
-        //public async Task<IQueryable<ACertificate>> SelectApplicationCertificateByApplicationIdAsync(string aId)
-        //{
-        //    return await Task.FromResult(_dbContext.ACertificates.AsNoTracking()
-        //        .Where(x => x.ApplicationId == aId));
-        //}
-
-        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
-        {
-            var query = _dbContext.AApplications.AsNoTracking()
-                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (x.StatusCode == ApplicationConstants.ApplicationStatuses.NewId ||
-                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
-                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckTaxFree ||
-                                                            x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsCheck))
-                .GroupBy(x => x.StatusCode)
-                .Select(x => new ObjectStatusCountDTO
-                {
-                    Status = x.Key,
-                    Count = x.Count()
-                });
-
-            return query;
-        }
-
-        public IQueryable<ObjectStatusCountDTO> GetForJudgeCountByCurrentAuthority()
-        {
-            var query = _dbContext.AApplications.AsNoTracking()
-                .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId && (
-                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CheckPayment ||
-                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady ||
-                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
-                                                                              x.StatusCode == ApplicationConstants.ApplicationStatuses.BulletinsSelection))
-                .GroupBy(x => x.StatusCode)
-                .Select(x => new ObjectStatusCountDTO
-                {
-                    Status = x.Key,
-                    Count = x.Count()
-                });
-
-            return query;
         }
 
         public async Task<AApplication?> GetApplicationForCertificateGeneration(string id)

@@ -246,8 +246,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     }
                    
                 }
-                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>());
+                _dbContext.ApplyChanges(request, new List<IBaseIdEntity>(), true);
                 await _dbContext.SaveChangesAsync();
+                _dbContext.ChangeTracker.Clear();
                 return responseObject;
             }
             return default;
@@ -427,17 +428,23 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         var graoData = await GetCityMotherFatherFromGraoByEGN(application.Egn);
                         birtCityId = graoData.Item1;
-                        if (!string.IsNullOrEmpty(birtCityId))
+                        //тук идеятя е, ако не са попълнени място на раждане, майка, баща от regix(application), само тогава да ги слагаме от GRAO_PERSON
+                        if (string.IsNullOrEmpty(application.BirthCityId) && !string.IsNullOrEmpty(birtCityId))
                         {
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
+                            if (string.IsNullOrEmpty(application.BirthCountryId))
+                            {
+                                application.BirthCountryId = GlobalConstants.BGCountryId;
+                                application.ModifiedProperties.Add(nameof(application.BirthCountryId));
+                            }
                         }
-                        if (!string.IsNullOrEmpty(application.MotherFirstname))
+                        if (string.IsNullOrEmpty(application.MotherFullname) && !string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        if (!string.IsNullOrEmpty(application.FatherFirstname))
+                        if (string.IsNullOrEmpty(application.FatherFullname) && !string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));
@@ -699,17 +706,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         var graoData = await GetCityMotherFatherFromGraoByEGN(application.Egn);
                         birtCityId = graoData.Item1;
-                        if (!string.IsNullOrEmpty(birtCityId))
+                        if (string.IsNullOrEmpty(application.BirthCityId) && !string.IsNullOrEmpty(birtCityId))
                         {
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
                         }
-                        if (!string.IsNullOrEmpty(application.MotherFirstname))
+                        if (string.IsNullOrEmpty(application.MotherFullname) && !string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        if (!string.IsNullOrEmpty(application.FatherFirstname))
+                        if (string.IsNullOrEmpty(application.FatherFullname) && !string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));
@@ -896,21 +903,18 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         var graoData = await GetCityMotherFatherFromGraoByEGN(application.Egn);
                         birtCityId = graoData.Item1;
-                        if (!string.IsNullOrEmpty(birtCityId))
+                        //тук идеятя е, ако не са попълнени място на раждане, майка, баща от regix(application), само тогава да ги слагаме от GRAO_PERSON
+                        if (string.IsNullOrEmpty(application.BirthCityId) && !string.IsNullOrEmpty(birtCityId))
                         {
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
                         }
-                        //todo: Надя, виж това
-                        //стар код:
-                        //if (!string.IsNullOrEmpty(application.MotherFirstname))
-                        if (!string.IsNullOrEmpty(graoData.Item2))
+                        if (string.IsNullOrEmpty(application.MotherFullname) && !string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        //if (!string.IsNullOrEmpty(application.FatherFirstname))
-                        if (!string.IsNullOrEmpty(graoData.Item3))
+                        if (string.IsNullOrEmpty(application.FatherFullname) && !string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));

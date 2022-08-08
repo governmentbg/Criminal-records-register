@@ -56,22 +56,24 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId)
         {
-            var content = await (from wApp in _dbContext.WApplications.AsNoTracking()
-                                 join app in _dbContext.AApplications.AsNoTracking()
-                                 on wApp.Id equals app.WApplicationId
-                                 into appLeft
-                                 from app in appLeft.DefaultIfEmpty()
-                                 join cert in _dbContext.ACertificates.AsNoTracking()
-                                     on app.Id equals cert.ApplicationId into certLeft
-                                 from cert in certLeft.DefaultIfEmpty()
-                                 join doc in _dbContext.DDocuments.AsNoTracking()
-                                     on cert.DocId equals doc.Id into docLeft
-                                 from doc in docLeft.DefaultIfEmpty()
-                                 join docCont in _dbContext.DDocContents.AsNoTracking()
-                                     on doc.DocContentId equals docCont.Id into docContLeft
-                                 from docCont in docContLeft.DefaultIfEmpty()
-                                 where wApp.Id == webAppId
-                                 select docCont.Content).FirstOrDefaultAsync();
+            //var content = await (from wApp in _dbContext.WApplications.AsNoTracking()
+            //                     join app in _dbContext.AApplications.AsNoTracking()
+            //                     on wApp.Id equals app.WApplicationId
+            //                     into appLeft
+            //                     from app in appLeft.DefaultIfEmpty()
+            //                     join cert in _dbContext.ACertificates.AsNoTracking()
+            //                         on app.Id equals cert.ApplicationId into certLeft
+            //                     from cert in certLeft.DefaultIfEmpty()
+            //                     join doc in _dbContext.DDocuments.AsNoTracking()
+            //                         on cert.DocId equals doc.Id into docLeft
+            //                     from doc in docLeft.DefaultIfEmpty()
+            //                     join docCont in _dbContext.DDocContents.AsNoTracking()
+            //                         on doc.DocContentId equals docCont.Id into docContLeft
+            //                     from docCont in docContLeft.DefaultIfEmpty()
+            //                     where wApp.Id == webAppId
+            //                     select docCont.Content).FirstOrDefaultAsync();
+            var content = (await _dbContext.WCertificates.AsNoTracking()
+                .FirstOrDefaultAsync(wc => wc.WApplId == webAppId)).Content;
 
             return content;
         }
@@ -100,13 +102,13 @@ namespace MJ_CAIS.Repositories.Impl
 
         public  async Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID)
         {
-            return await _dbContext.ACertificates
-                                    .Include(c => c.AAppBulletins)
+            return await _dbContext.ACertificates.AsNoTracking()
+                                    .Include(c => c.AAppBulletins).AsNoTracking()
                                     .Include(c => c.Application)
-                                    .ThenInclude(appl => appl.PurposeNavigation)
-                                    .Include(c => c.Application.SrvcResRcptMeth)
-                                    .Include(c => c.AStatusHes)
-                                    .Include(c => c.Application.ApplicationType)
+                                    .ThenInclude(appl => appl.PurposeNavigation).AsNoTracking()
+                                    .Include(c => c.Application.SrvcResRcptMeth).AsNoTracking()
+                                    .Include(c => c.AStatusHes).AsNoTracking()
+                                    .Include(c => c.Application.ApplicationType).AsNoTracking()
                                     .FirstOrDefaultAsync(x => x.Id == certificateID);
         }
 

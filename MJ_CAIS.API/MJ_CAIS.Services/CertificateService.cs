@@ -8,6 +8,7 @@ using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
+using MJ_CAIS.DTO.WApplicaiton;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 
@@ -62,7 +63,7 @@ namespace MJ_CAIS.Services
             {
                 certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
             }
-            if (certificate.ModifiedProperties==null)
+            if (certificate.ModifiedProperties == null)
             {
                 certificate.ModifiedProperties = new List<string>();
             }
@@ -70,9 +71,9 @@ namespace MJ_CAIS.Services
             certificate.ModifiedProperties.Add(nameof(certificate.AStatusHes));
             baseAsyncRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
             baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
-            if(newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
+            if (newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
             {
-                 MoveCertificateToWCertificate(certificate);
+                MoveCertificateToWCertificate(certificate);
             }
 
             //dbContext.AStatusHes.Add(aStatusH);
@@ -82,8 +83,8 @@ namespace MJ_CAIS.Services
 
         private void MoveCertificateToWCertificate(ACertificate certificate)
         {
-            if(certificate.Doc?.DocContent == null || certificate.Doc.DocContent.Content == null 
-                || certificate.Doc.DocContent.Content.Length ==0)
+            if (certificate.Doc?.DocContent == null || certificate.Doc.DocContent.Content == null
+                || certificate.Doc.DocContent.Content.Length == 0)
             {
                 throw new Exception("Свидетелството няма генериран pdf.");
             }
@@ -104,10 +105,10 @@ namespace MJ_CAIS.Services
             }
             wcert.ValidTo = certificate.ValidTo;
             wcert.Content = certificate.Doc.DocContent.Content;
-            wcert.MimeType  = certificate.Doc.DocContent.MimeType;
+            wcert.MimeType = certificate.Doc.DocContent.MimeType;
             wcert.RegistrationNumber = certificate.RegistrationNumber;
             wcert.WApplId = certificate.Application?.WApplicationId;
-           
+
             wcert.EntityState = Common.Enums.EntityStateEnum.Added;
             baseAsyncRepository.ApplyChanges(wcert, new List<IBaseIdEntity>());
         }
@@ -123,8 +124,8 @@ namespace MJ_CAIS.Services
         {
             var result = await this._certificateRepository.SelectAsync(certID);
 
-            var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync< AApplicationStatus>(x =>
-              x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
+            var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync<AApplicationStatus>(x =>
+             x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
             //await dbContext.AApplicationStatuses.FirstOrDefaultAsync(x =>
             //  x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
             SetCertificateStatus(result, aapplicationStatus, "Преминаване към готово за връчване");
@@ -139,7 +140,14 @@ namespace MJ_CAIS.Services
             return content;
         }
 
-     
+        public async Task<WCertificateDTO> GetWebCertificateByAccessCodeAsync(string accessCode)
+        {
+            WCertificate? cert = await baseAsyncRepository.SingleOrDefaultAsync<WCertificate>(w => w.AccessCode1 == accessCode);
+
+            var content = _mapper.Map<WCertificate,WCertificateDTO>(cert);
+            return content;
+        }
+
 
         public async Task SaveSignerDataAsync(CertificateDTO aInDto)
         {
@@ -155,8 +163,8 @@ namespace MJ_CAIS.Services
 
             // var dbContext = _certificateRepository.GetDbContext();
 
-            IQueryable<AAppBulletin> allCertificateBulletins =await  _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certificate.Id);
-                
+            IQueryable<AAppBulletin> allCertificateBulletins = await _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certificate.Id);
+
 
             foreach (var item in allCertificateBulletins)
             {
@@ -166,7 +174,7 @@ namespace MJ_CAIS.Services
             await _certificateRepository.SaveChangesAsync();
         }
 
-       
+
 
         public async Task<CertificateDTO> GetByApplicationIdAsync(string appId)
         {
@@ -194,12 +202,12 @@ namespace MJ_CAIS.Services
             //    .AsNoTracking()
             //    .FirstOrDefaultAsync(a => a.Id == aId);
             //дали да не се ползва Select метода от репозиторито
-            var certificate = await _certificateRepository.SingleOrDefaultAsync<ACertificate>(a=>a.Id == aId);
+            var certificate = await _certificateRepository.SingleOrDefaultAsync<ACertificate>(a => a.Id == aId);
 
             if (certificate == null)
                 throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
 
-            UpdateCertificateStatus( certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
+            UpdateCertificateStatus(certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
             CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
             await _certificateRepository.SaveChangesAsync();
@@ -239,9 +247,9 @@ namespace MJ_CAIS.Services
             await _certificateRepository.SaveChangesAsync();
         }
 
-   
 
-        private  void UpdateCertificateStatus(ACertificate? certificate, string statusCode)
+
+        private void UpdateCertificateStatus(ACertificate? certificate, string statusCode)
         {
             certificate.StatusCode = statusCode;
             certificate.EntityState = Common.Enums.EntityStateEnum.Modified;

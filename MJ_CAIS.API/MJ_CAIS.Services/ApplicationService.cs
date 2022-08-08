@@ -166,7 +166,7 @@ namespace MJ_CAIS.Services
 
             if (isFinal)
             {
-                if (!string.IsNullOrEmpty(entity.RegistrationNumber))
+                if (string.IsNullOrEmpty(entity.RegistrationNumber))
                 {
                     var regNumber =
                     await _registerTypeService.GetRegisterNumberForApplicationOnDesk(applicationDb.CsAuthorityId);
@@ -264,37 +264,59 @@ namespace MJ_CAIS.Services
             //       .Include(a => a.LnchNavigation)
             //       .Include(a => a.LnNavigation)
             //       .Include(a => a.SuidNavigation)
-            var pids = new List<string>();
+            //var pids = new List<string>();
+            string personId = null;
             if (application.EgnId != null && application.EgnNavigation != null)
             {
-                pids.Add(application.EgnNavigation.PersonId);
+                personId = application.EgnNavigation.PersonId;
             }
 
             if (application.LnchId != null && application.LnchNavigation != null)
             {
-                pids.Add(application.LnchNavigation.PersonId);
+                if(personId == null)
+                {
+                    personId = application.LnchNavigation.PersonId;
+                }
+                else if(personId != application.LnchNavigation.PersonId)
+                {
+                    throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
+                }
             }
 
             if (application.LnId != null && application.LnNavigation != null)
             {
-                pids.Add(application.LnNavigation.PersonId);
+                if (personId == null)
+                {
+                    personId = application.LnNavigation.PersonId;
+                }
+                else if (personId != application.LnNavigation.PersonId)
+                {
+                    throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
+                }
             }
 
             if (application.SuidId != null && application.SuidNavigation != null)
             {
-                pids.Add(application.SuidNavigation.PersonId);
+                if (personId == null)
+                {
+                    personId = application.SuidNavigation.PersonId;
+                }
+                else if (personId != application.SuidNavigation.PersonId)
+                {
+                    throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
+                }
             }
 
-            //await dbContext.PAppIds.Where(p => p.ApplicationId == application.Id).Select(prop => prop.PersonId).ToListAsync();
-            if (pids.Count > 0)
+            if (personId != null)
             {
-                //todo: дали да не  е union?
-                var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                               (pids.Contains(b.EgnId) ||
-                               pids.Contains(b.LnchId) ||
-                               pids.Contains(b.LnId) ||
-                               pids.Contains(b.IdDocNumberId) ||
-                               pids.Contains(b.SuidId)))).ToListAsync();
+                //todo: дали да не  е union? - да добре е да е Union
+                var bulletins = await (await _applicationRepository.SelectBulletinIdsAsync(personId)).ToListAsync();//.ToListAsync();
+                //var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
+                //               (pids.Contains(b.EgnId) ||
+                //               pids.Contains(b.LnchId) ||
+                //               pids.Contains(b.LnId) ||
+                //               pids.Contains(b.IdDocNumberId) ||
+                //               pids.Contains(b.SuidId)))).ToListAsync();
                 //var bulletins = await dbContext.BBulletins
                 //    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
                 //                //&& b.PBulletinIds.Any(bulID =>
@@ -305,6 +327,7 @@ namespace MJ_CAIS.Services
                 //                 pids.Contains(b.IdDocNumberId) ||
                 //                 pids.Contains(b.SuidId)))
                 //    .ToListAsync();
+                bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
                 if (bulletins.Count() > 0)
                 {
                     return await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
@@ -347,7 +370,8 @@ namespace MJ_CAIS.Services
             aStatusH.ReportOrder = application.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
 
             aStatusH.ApplicationId = application.Id;
-            //aStatusH.Application = application;
+            aStatusH.Application = application;
+            baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
 
             // application.AStatusHes.Add(aStatusH);
             //if (includeInDbContext)
@@ -425,7 +449,7 @@ namespace MJ_CAIS.Services
             }
 
             _applicationRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
-            await _applicationRepository.SaveChangesAsync();
+            await _applicationRepository.SaveChangesAsync(clearTracker:true); //добавено от Надя, че обърква контекста.
             //dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
             //await dbContext.SaveChangesAsync();
         }
@@ -474,8 +498,8 @@ namespace MJ_CAIS.Services
                 application.ModifiedProperties = new List<string>();
             }
             application.ModifiedProperties.Add(nameof(application.ACertificates));
-            baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
             baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            //baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
             return cert;
             //dbContext.AApplications.Update(application);
         }
