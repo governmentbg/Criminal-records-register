@@ -20,7 +20,8 @@ export class ApplicationCertificateResultModel extends BaseModel {
     this.statusCode = init?.statusCode ?? null;
     this.statusName = init?.statusName ?? null;
     this.docName = init?.docName ?? null;
-    //this.docType = init?.docType.split('/')[1] ?? null;
+    debugger;
+    this.docType = init?.docType?.split('/')[1] ?? null;
     this.registrationNumber = init?.registrationNumber ?? null;
     this.firstSignerId = init?.firstSignerId ?? null;
     this.secondSignerId = init?.secondSignerId ?? null;
