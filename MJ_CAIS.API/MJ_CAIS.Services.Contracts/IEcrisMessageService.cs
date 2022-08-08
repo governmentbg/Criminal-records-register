@@ -19,7 +19,10 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<EcrisMsgNameDTO>> GetNamesAsync(string aId);
         Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId);
         Task ChangeStatusAsync(string aInDto, string statusId);
-        Task<EcrisRequestDTO> GetEcrisDocumentByIdAsync(string ecrisMessageId);
+        Task<EcrisRequestDTO> GetEcrisRequestByIdAsync(string ecrisMessageId);
+
+        Task<EcrisResponseDTO> GetEcrisResponseByIdAsync(string ecrisMessageId);
+        Task<EcrisNotificationDTO> GetEcrisNotificationByIdAsync(string ecrisMessageId);
         Task IdentifyAsync(string aInDto, string statusId);
     }
 }

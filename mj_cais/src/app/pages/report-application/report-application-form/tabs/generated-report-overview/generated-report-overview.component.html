@@ -71,4 +71,20 @@
     [sortable]="true"
   >
   </igx-column>
+  <igx-column
+  width="100px"
+  header="Действия"
+  [sortable]="false"
+  [filterable]="false"
+>
+  <ng-template igxCell let-cell="cell">
+    <button
+      igxButton="icon"
+      [title]="'Изтегляне'"
+      (click)="printReport(cell.rowData.id)"
+    >
+      <nb-icon pack="fa" icon="download"></nb-icon>
+    </button>
+  </ng-template>
+</igx-column>
 </igx-grid>

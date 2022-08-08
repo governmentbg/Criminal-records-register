@@ -290,18 +290,9 @@
             <ng-template igxCell let-cell="cell">
               <a
                 [title]="'Преглед'"
-                (click)="getDocument(cell.rowData.id)"
+                (click)="getDocument(cell.rowData)"
               >
                 <nb-icon pack="fa" icon="eye"></nb-icon>
-              </a>
-              <a
-                [title]="'Редактиране'"
-                [routerLink]="[
-                  '/pages/ecris-identification/edit',
-                  cell.rowData.id
-                ]"
-              >
-                <nb-icon pack="fa" icon="pen"></nb-icon>
               </a>
             </ng-template>
           </igx-column>

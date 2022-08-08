@@ -16,6 +16,8 @@ import { DateFormatService } from "../../../@core/services/common/date-format.se
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { EcrisMessageService } from "../../ecris/ecris-message-form/_data/ecris-message.service";
 import { EcrisReqPreviewComponent } from "../../ecris/ecris-message-form/ecris-req-preview/ecris-req-preview.component";
+import { EcrisNotPreviewComponent } from "../../ecris/ecris-message-form/ecris-not-preview/ecris-not-preview.component";
+import { EcrisResponsePreviewComponent } from "../../ecris/ecris-message-form/ecris-response-preview/ecris-response-preview.component";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -105,14 +107,42 @@ export class FbbcFormComponent
     }
   };
 
-  getDocument(id: string) {
-    debugger;
-    // this.ecrisMessageService.getEcrisDocument(id).subscribe((x) => {
-    //   debugger;
-    // });
-
-    this.dialogService
-    .open(EcrisReqPreviewComponent, CommonConstants.defaultDialogConfig)
-    .onClose.subscribe(x => {});
+  getDocument(ecrisMsg: any) {
+    //ecrisMsg.msgType = "EcrisReqResp";
+    //ecrisMsg.msgType = "EcrisNot";
+    //ecrisMsg.msgType = "EcrisRequest";
+    if (ecrisMsg.msgType == "EcrisNot") {
+      this.dialogService
+        .open(EcrisNotPreviewComponent, {
+          context: {
+            ecrisId: ecrisMsg.id,
+            ecrisType: ecrisMsg.msgType,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
+    if (ecrisMsg.msgType == "EcrisRequest") {
+      this.dialogService
+        .open(EcrisReqPreviewComponent, {
+          context: {
+            ecrisId: ecrisMsg.id,
+            ecrisType: ecrisMsg.msgType,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
+    if (ecrisMsg.msgType == "EcrisReqResp") {
+      this.dialogService
+        .open(EcrisResponsePreviewComponent, {
+          context: {
+            ecrisId: ecrisMsg.id,
+            ecrisType: ecrisMsg.msgType,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
   }
 }

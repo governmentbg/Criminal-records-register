@@ -183,6 +183,7 @@ namespace MJ_CAIS.ExternalWebServices
                 report.ModifiedProperties = new List<string>();
             }
             report.ModifiedProperties.Add(nameof(report.DocId));
+            report.ModifiedProperties.Add(nameof(report.StatusCode));
 
             report.StatusCode = ReportApplicationConstants.Status.ReadyReport;
 
@@ -196,6 +197,7 @@ namespace MJ_CAIS.ExternalWebServices
                 Id= BaseEntity.GenerateNewId(),
                 EntityState = EntityStateEnum.Added,
                 AReportId = report.Id,
+                AReportApplId = report.ARepApplId,
                 StatusCode = ReportApplicationConstants.Status.ReadyReport,
                 Descr = "Създаден PDF документ",
                 ReportOrder = report.AReportStatusHes.Count(x=>x.StatusCode== ReportApplicationConstants.Status.ReadyReport) + 1

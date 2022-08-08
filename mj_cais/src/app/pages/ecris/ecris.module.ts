@@ -8,6 +8,10 @@ import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris
 import { EcrisMsgNamesOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/ecris-msg-names-overview/ecris-msg-names-overview.component';
 import { GraoPersonOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/grao-person-overview/grao-person-overview.component';
 import { EcrisReqPreviewComponent } from './ecris-message-form/ecris-req-preview/ecris-req-preview.component';
+import { EcrisNotPreviewComponent } from './ecris-message-form/ecris-not-preview/ecris-not-preview.component';
+import { EcrisNotSanctionComponent } from './ecris-message-form/ecris-not-preview/ecris-not-sanction/ecris-not-sanction.component';
+import { EcrisNotDescisionComponent } from './ecris-message-form/ecris-not-preview/ecris-not-descision/ecris-not-descision.component';
+import { EcrisResponsePreviewComponent } from './ecris-message-form/ecris-response-preview/ecris-response-preview.component';
 import { ResultFromSearchOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/result-from-search-overview/result-from-search-overview.component';
 
 @NgModule({
@@ -19,6 +23,10 @@ import { ResultFromSearchOverviewComponent } from './ecris-message-form/ecris-id
     EcrisMsgNamesOverviewComponent,
     GraoPersonOverviewComponent,
     EcrisReqPreviewComponent,
+    EcrisNotPreviewComponent,
+    EcrisNotSanctionComponent,
+    EcrisNotDescisionComponent,
+    EcrisResponsePreviewComponent,
     ResultFromSearchOverviewComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],

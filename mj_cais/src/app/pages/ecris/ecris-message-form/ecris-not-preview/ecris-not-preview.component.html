@@ -33,34 +33,7 @@
           ></cais-input>
         </div>
       </div>
-      <div class="font-weight-bold">Запитващ орган</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="this.formGroup.controls.requestAuthorityName"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Тип'"
-            [inputFormControl]="this.formGroup.controls.requestAuthorityType"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Код'"
-            [inputFormControl]="this.formGroup.controls.requestAuthorityCode"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
+
       <div class="font-weight-bold">Основни данни за лицето</div>
       <hr />
       <div class="row">
@@ -140,7 +113,6 @@
             [parentGroup]="formGroup"
           ></cais-input>
         </div>
-  
       </div>
       <div class="row">
         <div class="form-group col-md-6">
@@ -160,34 +132,7 @@
           ></cais-input>
         </div>
       </div>
-      <div class="font-weight-bold">Информация за предишни имена</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="this.formGroup.controls.firstNameFormer"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Фамилия'"
-            [inputFormControl]="this.formGroup.controls.middleNameFormer"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пълно име'"
-            [inputFormControl]="this.formGroup.controls.lastNameFormer"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
+
       <div class="font-weight-bold">Информация за адреса</div>
       <hr />
       <div class="row">
@@ -252,74 +197,30 @@
           ></cais-input>
         </div>
       </div>
-      <div class="font-weight-bold">Цел</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Категория'"
-            [inputFormControl]="this.formGroup.controls.requestPurposeCategory"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Цел'"
-            [inputFormControl]="this.formGroup.controls.requestPurpose"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Съгласие'"
-            [inputFormControl]="this.formGroup.controls.concernedPersonConsent"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Спешен случай'"
-            [inputFormControl]="this.formGroup.controls.messageUrgency"
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div *ngIf="this.formGroup.controls.convictionSanctions.value">
+        <div
+          *ngFor="
+            let sanction of this.formGroup.controls.convictionSanctions.value;
+            let i = index
+          "
+        >
+          <cais-ecris-not-sanction
+            [sanction]="sanction"
+          ></cais-ecris-not-sanction>
         </div>
       </div>
-      <div class="font-weight-bold">Обвинение</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Категория на наказуемото деяние'"
-            [inputFormControl]="
-              this.formGroup.controls.accusationOffenceCategory
-            "
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Запитване във връзка с'"
-            [inputFormControl]="this.formGroup.controls.caseRefereranceNumber"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-12">
-          <cais-input
-            [type]="'text'"
-            [label]="'Обвинение'"
-            [inputFormControl]="
-              this.formGroup.controls.accusationOffenceCategory
-            "
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div *ngIf="this.formGroup.controls.decisions.value">
+        <div
+          *ngFor="
+            let desicion of this.formGroup.controls.decisions.value;
+            let i = index
+          "
+        >
+          <cais-ecris-not-descision
+            [decisions]="desicion"
+          ></cais-ecris-not-descision>
         </div>
       </div>
     </form>
