@@ -42,4 +42,9 @@ export class ReportApplicationService extends CaisCrudService<
   public getReportsData(id: string): Observable<GeneratedReportModel[]> {
     return this.http.get<GeneratedReportModel[]>(`${this.url}/${id}/reports`);
   }
+
+  public printReport(reportId: string) {
+    let url = `${this.url}/print-report/` + reportId;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
 }

@@ -95,11 +95,13 @@ namespace AutomaticStepsExecutor
                         await _certificateGenerationService.DeliverCertificateAsync(certificate,  mailBodyTemplate, mailSubjectTemplate, webPortalUrl);
                         _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
                         await _dbContext.SaveChangesAsync();
+                        _dbContext.ChangeTracker.Clear();
                         numberOfSuccessEntities++;
                     }
                     catch (Exception ex)
                     {
                         numberOfFailedEntities++;
+                        _dbContext.ChangeTracker.Clear();
                         _logger.LogError($"CertificateID {entity.Id}: " + ex.Message, ex.Data, ex);
                     }
 

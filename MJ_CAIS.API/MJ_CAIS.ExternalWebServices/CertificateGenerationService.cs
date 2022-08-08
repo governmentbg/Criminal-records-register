@@ -109,7 +109,10 @@ namespace MJ_CAIS.ExternalWebServices
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
         {
-
+            if(certificate.Application.PurposeNavigation == null)
+            {
+                throw new Exception("Полето 'Цел' е празно");
+            }
             byte[] contentCertificate;
             string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             bool containsBulletins = certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() != 0;

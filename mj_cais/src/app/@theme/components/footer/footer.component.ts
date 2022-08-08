@@ -13,8 +13,7 @@ import { Component } from "@angular/core";
           „Съдебен статус“, <br />
           финансиран по Оперативна програма „Добро управление“, чрез ЕСФ. <br />
         </p>
-        <img src="assets/images/eu-logo.png" alt="eu-logo" class="eu-logo" />
-        <img src="assets/images/eu-logo2.png" alt="eu-logo" class="eu-logo" />
+        <img src="assets/images/eu.png" alt="eu-logo" class="eu-logo" />
       </div>
     </span>
   `,

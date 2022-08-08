@@ -5,12 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MJ_CAIS.WebPortal.Public.Models.Application
 {
-    public class ApplicationEditModel : BaseViewModel
+    public class ApplicationEditModel : BaseViewModel, IValidatableObject
     {
         public ApplicationEditModel()
         {
             this.PurposeTypes = new List<SelectListItem>();
             this.PaymentMethodTypes = new List<SelectListItem>();
+            this.PurposeInfo = new Dictionary<string, string>();
         }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblEgn))]
@@ -36,8 +37,23 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         public string? PaymentMethodId { get; set; }
 
         public string? ClientIp { get; set; }
+        public string? RequiredPurposes { get; set; }
 
         public List<SelectListItem> PurposeTypes { get; set; }
+        public Dictionary<string, string> PurposeInfo { get; set; }
         public List<SelectListItem> PaymentMethodTypes { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrEmpty(Purpose) && 
+                !string.IsNullOrEmpty(PurposeId) &&
+                !string.IsNullOrEmpty(RequiredPurposes) &&
+                RequiredPurposes.Contains(PurposeId))
+            {
+                yield return new ValidationResult(
+                    string.Format(CommonResources.MsgRequired, ApplicationResources.lblPurpose),
+                    new[] { nameof(Purpose)});
+            }
+        }
     }
 }
