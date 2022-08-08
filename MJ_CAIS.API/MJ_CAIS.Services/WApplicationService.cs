@@ -205,6 +205,7 @@ namespace MJ_CAIS.Services
                 //ApplicationType = wapplication.ApplicationType,
                 ApplicationTypeId = wapplication.ApplicationTypeId,
                 EntityState = EntityStateEnum.Added,
+                
             
                 
             };

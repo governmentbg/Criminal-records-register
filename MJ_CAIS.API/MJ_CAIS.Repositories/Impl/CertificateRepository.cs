@@ -100,13 +100,13 @@ namespace MJ_CAIS.Repositories.Impl
 
         public  async Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID)
         {
-            return await _dbContext.ACertificates
-                                    .Include(c => c.AAppBulletins)
+            return await _dbContext.ACertificates.AsNoTracking()
+                                    .Include(c => c.AAppBulletins).AsNoTracking()
                                     .Include(c => c.Application)
-                                    .ThenInclude(appl => appl.PurposeNavigation)
-                                    .Include(c => c.Application.SrvcResRcptMeth)
-                                    .Include(c => c.AStatusHes)
-                                    .Include(c => c.Application.ApplicationType)
+                                    .ThenInclude(appl => appl.PurposeNavigation).AsNoTracking()
+                                    .Include(c => c.Application.SrvcResRcptMeth).AsNoTracking()
+                                    .Include(c => c.AStatusHes).AsNoTracking()
+                                    .Include(c => c.Application.ApplicationType).AsNoTracking()
                                     .FirstOrDefaultAsync(x => x.Id == certificateID);
         }
 
