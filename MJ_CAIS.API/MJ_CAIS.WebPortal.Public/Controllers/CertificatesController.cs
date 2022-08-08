@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.DataAccess;
+using MJ_CAIS.WebPortal.Public.Models.Certificates;
 using X.PagedList;
 
 namespace MJ_CAIS.WebPortal.Public.Controllers
@@ -27,7 +28,12 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                          join c in _caisDbContext.WCertificates on wa.Id equals c.WApplId
                          where wa.UserCitizenId == userId
                          orderby c.ValidFrom
-                         select c
+                         select new CeritificateViewModel (){
+                             ValidFrom = c.ValidFrom,
+                             WApplicationId = wa.Id,
+                             AccessCode1 = c.AccessCode1,
+                             Purpose = wa.PurposeNavigation.Name
+                         }
                         );
                 return View(v.ToPagedList(page ?? 1, 10));
             }
