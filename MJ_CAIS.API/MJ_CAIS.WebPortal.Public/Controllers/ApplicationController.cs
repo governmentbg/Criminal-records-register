@@ -197,7 +197,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
             viewModel.PaymentMethodTypes = await paymentMethods.ProjectTo<SelectListItem>(
                 _mapper.ConfigurationProvider).ToListAsync();
-            viewModel.PaymentMethodTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true });
+            viewModel.PaymentMethodTypes.Where(p => p.Value == "PayEgovBg").Select(p => p.Selected = true).ToList();
         }
     }
 }
