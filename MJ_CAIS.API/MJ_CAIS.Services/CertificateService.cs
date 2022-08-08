@@ -146,7 +146,8 @@ namespace MJ_CAIS.Services
             var entity = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
 
             //var dbContext = _certificateRepository.GetDbContext();
-            await _certificateRepository.SaveEntityAsync(entity, false);
+            await _certificateRepository.SaveEntityAsync(entity, false, clearTracker: true);
+     
         }
 
         public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
