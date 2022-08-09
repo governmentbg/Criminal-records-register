@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ReportApplication;
@@ -62,18 +64,22 @@ namespace MJ_CAIS.Repositories.Impl
                         into statusLeft
                         from status in statusLeft.DefaultIfEmpty()
                         where reports.ARepApplId == appId
+                        orderby reports.CreatedOn descending
                         select new GeneratedReportDTO
                         {
                             Id = reports.Id,
                             DocId = reports.DocId,
                             FirstSigner = signer1.Firstname + " " + signer1.Surname + " " + signer1.Familyname,
+                            FirstSignerId = reports.FirstSignerId,
                             SecondSigner = signer2.Firstname + " " + signer2.Surname + " " + signer2.Familyname,
+                            SecondSignerId = reports.SecondSignerId,
                             CreatedOn = reports.CreatedOn,
                             RegistrationNumber = reports.RegistrationNumber,
                             StatusCode = reports.StatusCode,
                             StatusName = status.Name,
                             ValidFrom = reports.ValidFrom,
                             ValidTo = reports.ValidTo,
+                            
                         };
 
             return query;
@@ -133,15 +139,14 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
         {
-            var doc = await _dbContext.AReports.AsNoTracking()
-                                        .Include(x=>x.Doc)
-                                        .ThenInclude(x=>x.DocContent).AsNoTracking()
-                                        .Select(x=> new
+            var doc = await _dbContext.DDocuments.AsNoTracking()
+                                        .Include(x => x.DocContent).AsNoTracking()
+                                        .Select(x => new
                                         {
                                             Id = x.Id,
-                                            Content = x.Doc.DocContent.Content
+                                            Content = x.DocContent.Content
                                         })
-                                        .FirstAsync(x=> x.Id == aId);
+                                        .FirstAsync(x => x.Id == aId);
 
             return doc.Content;
         }
@@ -149,11 +154,27 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<AReport> GetFullAppReportByIdAsync(string aId)
         {
             var result = await _dbContext.AReports.AsNoTracking()
-                            .Include(x=>x.ARepAppl).AsNoTracking()
-                            .FirstOrDefaultAsync(x=>x.Id == aId);
+                            .Include(x => x.ARepAppl).AsNoTracking()
+                            .FirstOrDefaultAsync(x => x.Id == aId);
 
             return result;
         }
 
+        public async Task<string> GetPersonIdByPidIdsAsync(string egnId, string lnchId, string lnId, string suidId)
+        {
+            var personIds = await _dbContext.PPersonIds.AsNoTracking()
+                            .Where(x => x.Id == egnId || x.Id == lnchId || x.Id == lnId || x.Id == suidId)
+                            .Select(x => x.PersonId)
+                            .ToListAsync();
+
+            var distinctIds = personIds?.Where(x=> !string.IsNullOrEmpty(x)).Distinct();
+
+            if (distinctIds?.Count() > 1)
+            {
+                throw new BusinessLogicException(BusinessLogicExceptionResources.mgsMoreThenOnePersonWithPids);
+            }
+
+            return distinctIds.FirstOrDefault();
+        }
     }
 }

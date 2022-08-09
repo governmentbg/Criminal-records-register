@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
@@ -6,6 +6,11 @@ import { ReportApplicationService } from "../../_data/report-application.service
 import { GeneratedReportModel } from "./_models/generated-report-grid.model";
 import * as fileSaver from "file-saver";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
+import { ReportApplicationStatusConstants } from "../../../report-application-overview/_models/report-applicarion-status.constants";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
+import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
+import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 
 @Component({
   selector: "cais-generated-report-overview",
@@ -13,17 +18,24 @@ import { CustomToastrService } from "../../../../../@core/services/common/custom
   styleUrls: ["./generated-report-overview.component.scss"],
 })
 export class GeneratedReportOverviewComponent implements OnInit {
-
   public isForPreview: boolean;
   public reports: GeneratedReportModel[];
-  
+  public ReportApplicationStatusConstants = ReportApplicationStatusConstants;
+  public cancelReportFormGroup: FormGroup;
+  public users: BaseNomenclatureModel[];
+
+  @ViewChild("cancelReportDialog", { read: IgxDialogComponent })
+  public cancelReportDialog: IgxDialogComponent;
+
   constructor(
     public dateFormatService: DateFormatService,
     private service: ReportApplicationService,
     private loaderService: NgxSpinnerService,
     private activatedRoute: ActivatedRoute,
     private toastr: CustomToastrService,
-    private router: Router
+    private loader: NgxSpinnerService,
+    private formBuilder: FormBuilder,
+    private nomenclatureService: NomenclatureService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +49,13 @@ export class GeneratedReportOverviewComponent implements OnInit {
     this.service.getReportsData(id).subscribe((res) => {
       this.reports = res;
       this.loaderService.hide();
+    });
+
+    this.cancelReportFormGroup = this.formBuilder.group({
+      description: [{ value: "", disabled: false }, Validators.required],
+      firstSignerId: [{ value: "", disabled: false }, Validators.required],
+      secondSignerId: [{ value: "", disabled: false }, Validators.required],
+      reportId: [{ value: "", disabled: false }, Validators.required],
     });
   }
 
@@ -63,8 +82,9 @@ export class GeneratedReportOverviewComponent implements OnInit {
   deliver(id: string) {
     this.service.deliver(id).subscribe(
       (res) => {
-        this.toastr.showBodyToast("success", "Успешно доставена справка","");
-        this.router.navigateByUrl("report-applications/edit/" + id);   
+        this.toastr.showBodyToast("success", "Успешно доставена справка", "");
+        this.reports = null;
+        this.ngOnInit();
       },
       (error) =>
         this.errorHandler(
@@ -72,6 +92,54 @@ export class GeneratedReportOverviewComponent implements OnInit {
           "Грешка при промяна на статус на доставена справка:"
         )
     );
+  }
+
+  onOpenCancelReportDialog(
+    id: string,
+    firstSignerId: string,
+    secondSignerId: string
+  ) {
+    if (this.users) {
+      this.cancelReportDialog.open();
+    } else {
+      this.nomenclatureService.getUsers().subscribe((resp) => {
+        this.users = resp;
+        this.cancelReportDialog.open();
+      });
+    }
+
+    this.cancelReportFormGroup.controls.reportId.patchValue(id);
+    this.cancelReportFormGroup.controls.firstSignerId.patchValue(firstSignerId);
+    this.cancelReportFormGroup.controls.secondSignerId.patchValue(secondSignerId);
+  }
+
+  cancelReport() {
+    if (!this.cancelReportFormGroup.valid) {
+      this.cancelReportFormGroup.markAllAsTouched();
+      return;
+    }
+
+    this.loader.show();
+    this.service
+      .cancelReport(this.cancelReportFormGroup.getRawValue())
+      .subscribe({
+        next: (data) => {
+          let message = "Успешно анулирана справка";
+          this.toastr.showToast("success", message);
+          this.cancelReportDialog.close();
+          this.loader.hide();
+          this.reports = null;
+          this.ngOnInit();
+        },
+        error: (errorResponse) => {
+          this.cancelReportDialog.close();
+          this.loader.hide();
+          this.errorHandler(
+            errorResponse,
+            "Възникна грешки при анулиране на справка"
+          );
+        },
+      });
   }
 
   private errorHandler(error, msg) {

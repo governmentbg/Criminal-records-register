@@ -70,7 +70,7 @@ export class RegixRequestFormComponent implements OnInit {
   onSubmit() {
     var isValidEgn = this.isEgn
       ? EgnUtils.isValid(this.searchValue)
-      : LnchUtils.isValid(this.searchValue);
+      : true//LnchUtils.isValid(this.searchValue);
     if (!isValidEgn) {
       let title = this.isEgn ? "ЕГН" : "ЛНЧ";
       this.toastr.showToast("danger", `Невалидно ${title}!`);
@@ -98,6 +98,7 @@ export class RegixRequestFormComponent implements OnInit {
           return;
         }
 
+        this.dialog.close();
         this.loaderService.hide();
         this.router.navigate([
           "pages",

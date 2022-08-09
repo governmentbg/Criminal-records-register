@@ -17,7 +17,11 @@ export class ReportApplicationService extends CaisCrudService<
   }
 
   public cancel(id: string, description: any): Observable<any[]> {
-    return this.http.post<any>(`${this.url}/cancel/${id}`, description );
+    return this.http.put<any>(`${this.url}/cancel/${id}`, description );
+  }
+
+  public cancelReport(model: any): Observable<any[]> {
+    return this.http.put<any>(`${this.url}/cancel-report/`, model );
   }
 
   public updateFinal(

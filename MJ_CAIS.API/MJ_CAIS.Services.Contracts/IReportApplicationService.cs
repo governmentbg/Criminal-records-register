@@ -17,6 +17,8 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<string> CancelAsync(string aId, string cancelDesc);
 
+        Task<string> CancelReportAsync(CancelReportDTO aInDto);
+
         IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId);
 
         IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId);

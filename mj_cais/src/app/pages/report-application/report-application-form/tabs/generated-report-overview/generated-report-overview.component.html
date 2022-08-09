@@ -78,15 +78,22 @@
     [filterable]="false"
   >
     <ng-template igxCell let-cell="cell">
-      <button
-        igxButton="icon"
-        [title]="'Изтегляне'"
-        (click)="printReport(cell.rowData.id)"
+      <ng-container *ngIf="cell.rowData.docId">
+        <button
+          igxButton="icon"
+          [title]="'Изтегляне'"
+          (click)="printReport(cell.rowData.docId)"
+        >
+          <nb-icon pack="fa" icon="download"></nb-icon>
+        </button>
+      </ng-container>
+      <ng-container
+        *ngIf="
+          !isForPreview &&
+          cell.rowData.statusCode ==
+            ReportApplicationStatusConstants.ReadyReport
+        "
       >
-        <nb-icon pack="fa" icon="download"></nb-icon>
-      </button>
-
-      <ng-container *ngIf="!isForPreview && cell.rowData.statusCode == 'ReadyReport'">
         <button
           igxButton="icon"
           [title]="'Маркирай като доставено'"
@@ -99,14 +106,22 @@
       <ng-container
         *ngIf="
           !isForPreview &&
-          (cell.rowData.statusCode != 'CanceledReport' ||
-          cell.rowData.statusCode != 'Delivered')
+          cell.rowData.statusCode !=
+            ReportApplicationStatusConstants.CanceledReport &&
+          cell.rowData.statusCode !=
+            ReportApplicationStatusConstants.DeliveredReport
         "
       >
         <button
           igxButton="icon"
           [title]="'Анулиране'"
-          (click)="reject(cell.rowData.id)"
+          (click)="
+            onOpenCancelReportDialog(
+              cell.rowData.id,
+              cell.rowData.firstSignerId,
+              cell.rowData.secondSignerId
+            )
+          "
         >
           <nb-icon pack="fa" icon="times"></nb-icon>
         </button>
@@ -114,3 +129,82 @@
     </ng-template>
   </igx-column>
 </igx-grid>
+
+<igx-dialog #cancelReportDialog>
+  <form autocomplete="off">
+    <div class="dialogNewRecord" style="min-width: 500px">
+      <nb-card>
+        <nb-card-header>Анулиране на справка</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-input
+                [type]="'text'"
+                [label]="'Основание'"
+                [inputFormControl]="cancelReportFormGroup.controls.description"
+                [parentGroup]="cancelReportFormGroup"
+                [inputName]="'remarks'"
+                [rows]="'3'"
+                [inputType]="'TextArea'"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-autocomplete
+                [label]="'Подписващ 1'"
+                [inputFormControl]="
+                  cancelReportFormGroup.controls.firstSignerId
+                "
+                [parentGroup]="cancelReportFormGroup"
+                [inputName]="'firstSignerId'"
+                [items]="users"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-autocomplete
+                [label]="'Подписващ 2'"
+                [inputFormControl]="
+                  cancelReportFormGroup.controls.secondSignerId
+                "
+                [parentGroup]="cancelReportFormGroup"
+                [inputName]="'secondSignerId'"
+                [items]="users"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row">
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                status="danger"
+                (click)="cancelReport()"
+              >
+                Запис
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                (click)="cancelReportDialog.close()"
+              >
+                Отказ
+              </button>
+            </div>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+  </form>
+</igx-dialog>

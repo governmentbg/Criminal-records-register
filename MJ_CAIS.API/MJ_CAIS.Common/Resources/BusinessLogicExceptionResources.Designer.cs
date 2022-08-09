@@ -124,6 +124,60 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to За посочените идентификатори съществуват две различни лица в системата..
+        /// </summary>
+        public static string mgsMoreThenOnePersonWithPids {
+            get {
+                return ResourceManager.GetString("mgsMoreThenOnePersonWithPids", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Искане за справка с идентификатор {0} не съществува..
+        /// </summary>
+        public static string msgAppReportDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgAppReportDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Справка с идентификатор {0} не съществува..
+        /// </summary>
+        public static string msgReportDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgReportDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Справка с идентификатор {0} вече е била анулирана..
+        /// </summary>
+        public static string msgReportIsCanceled {
+            get {
+                return ResourceManager.GetString("msgReportIsCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Справка с идентификатор {0} вече е доставена и не може да бъде анулирана..
+        /// </summary>
+        public static string msgReportIsDelivered {
+            get {
+                return ResourceManager.GetString("msgReportIsDelivered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Искане за справка с идентификатор {0} вече е било анулирано..
+        /// </summary>
+        public static string msgАppReportIsCanceled {
+            get {
+                return ResourceManager.GetString("msgАppReportIsCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Статус {0} не съществува..
         /// </summary>
         public static string statusDoesNotExist {

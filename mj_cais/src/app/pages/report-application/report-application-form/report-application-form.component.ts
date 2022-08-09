@@ -140,9 +140,9 @@ export class ReportApplicationFormComponent
     submitAction.subscribe({
       next: (data) => {
         this.toastr.showToast("success", this.successMessage);
-        this.loaderService.hide();
         setTimeout(() => {
           this.onSubmitSuccess(data);
+          this.loaderService.hide();
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {

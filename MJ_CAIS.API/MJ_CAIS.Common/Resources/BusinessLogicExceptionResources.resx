@@ -138,6 +138,24 @@
   <data name="isinDataDoesNotExist" xml:space="preserve">
     <value>Изтърпяно наказание с идентификатор {0} не съществува.</value>
   </data>
+  <data name="mgsMoreThenOnePersonWithPids" xml:space="preserve">
+    <value>За посочените идентификатори съществуват две различни лица в системата.</value>
+  </data>
+  <data name="msgAppReportDoesNotExist" xml:space="preserve">
+    <value>Искане за справка с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgReportDoesNotExist" xml:space="preserve">
+    <value>Справка с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgReportIsCanceled" xml:space="preserve">
+    <value>Справка с идентификатор {0} вече е била анулирана.</value>
+  </data>
+  <data name="msgReportIsDelivered" xml:space="preserve">
+    <value>Справка с идентификатор {0} вече е доставена и не може да бъде анулирана.</value>
+  </data>
+  <data name="msgАppReportIsCanceled" xml:space="preserve">
+    <value>Искане за справка с идентификатор {0} вече е било анулирано.</value>
+  </data>
   <data name="statusDoesNotExist" xml:space="preserve">
     <value>Статус {0} не съществува.</value>
   </data>

@@ -122,10 +122,18 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
-        [HttpPost("cancel/{aId}")]
+        [HttpPut("cancel/{aId}")]
         public virtual async Task<IActionResult> Cancel(string aId, [FromBody] CancelDTO aInDto)
         {
             await this._reportApplicationService.CancelAsync(aId, aInDto.Description);
+            return Ok();
+        }
+
+
+        [HttpPut("cancel-report")]
+        public virtual async Task<IActionResult> CancelReport([FromBody] CancelReportDTO aInDto)
+        {
+            await this._reportApplicationService.CancelReportAsync(aInDto);
             return Ok();
         }
 

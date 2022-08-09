@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
-using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
@@ -14,6 +13,7 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using static MJ_CAIS.Common.Constants.PersonConstants;
+using static MJ_CAIS.Common.Constants.ReportApplicationConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -38,6 +38,17 @@ namespace MJ_CAIS.Services
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
+        public IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId)
+            => _reportApplicationRepository.SelectAllStatusHistoryData()
+                .Where(x => x.AReportApplId == aId)
+                .OrderByDescending(x => x.CreatedOn);
+
+        public IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId)
+           => _reportApplicationRepository.SelectAllGeneratedReportsByAppId(aId);
+
+        public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
+            => await _reportApplicationRepository.GetReportAppContentByIdAsync(aId);
+
         public virtual async Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode)
         {
             var entityQuery = GetSelectAllQueryable();
@@ -58,12 +69,12 @@ namespace MJ_CAIS.Services
             var entity = mapper.MapToEntity<ReportApplicationDTO, AReportApplication>(aInDto, true);
             entity.Id = BaseEntity.GenerateNewId(); // when call regix set id manually
             entity.CsAuthorityId = _userContext.CsAuthorityId;
-            entity.StatusCode = ReportApplicationConstants.Status.New;
+            entity.StatusCode = Status.New;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForReport(entity.CsAuthorityId);
 
             entity.ARepCitizenships = CaisMapper.MapMultipleChooseToEntityList<ARepCitizenship, string, string>(
              aInDto.Person.Nationalities, nameof(ARepCitizenship.Id), nameof(ARepCitizenship.CountryId));
-            entity.AReportStatusHes = new List<AReportStatusH> { CreateH(entity.StatusCode) };
+            entity.AReportStatusHes = new List<AReportStatusH> { CreateH(entity) };
 
             await _reportApplicationRepository.SaveEntityAsync(entity, true, true);
             return entity;
@@ -79,7 +90,11 @@ namespace MJ_CAIS.Services
         public async Task<string> FinalUpdateAsync(ReportApplicationDTO aInDto)
         {
             var entity = await ApplyDataForUpdateAsync(aInDto, true);
-            var report = await GenerateReportAsync(aInDto, entity);
+
+            var person = await UpdatePersonDataAsync(aInDto, entity);
+            var personId = person.EntityState == EntityStateEnum.Modified && person.PPersonIds.Count > 0 ? person.Id : null;
+
+            var report = await GenerateReportAsync(aInDto, entity, personId);
 
             _reportApplicationRepository.ApplyChanges(entity, applyToAllLevels: true);
             _reportApplicationRepository.ApplyChanges(report, applyToAllLevels: true);
@@ -91,42 +106,59 @@ namespace MJ_CAIS.Services
         public async Task<string> CancelAsync(string aId, string cancelDesc)
         {
             var reportApp = await baseAsyncRepository.SingleOrDefaultAsync<AReportApplication>(a => a.Id == aId);
-            if (reportApp == null) return null;
+            if (reportApp == null) throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgAppReportDoesNotExist, aId));
 
             if (string.IsNullOrEmpty(cancelDesc))
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.fieldIsRequired, ReportApplicationResources.lblCancelDesc));
 
+            if (reportApp.StatusCode == Status.Canceled)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msg¿ppReportIsCanceled, aId));
+
             reportApp.EntityState = EntityStateEnum.Modified;
             reportApp.ModifiedProperties = new List<string> { nameof(reportApp.StatusCode), nameof(reportApp.Version) };
-            reportApp.StatusCode = ReportApplicationConstants.Status.Canceled;
-            // todo: add history
-            // todo: check for generated report
+            reportApp.StatusCode = Status.Canceled;
 
-            reportApp.AReportStatusHes = new List<AReportStatusH> { CreateH(reportApp.StatusCode, cancelDesc) };
+            reportApp.AReportStatusHes = new List<AReportStatusH> { CreateH(reportApp, cancelDesc) };
             await _reportApplicationRepository.SaveEntityAsync(reportApp, true);
             return reportApp.Id;
         }
 
-        public IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId)
+        public async Task<string> CancelReportAsync(CancelReportDTO aInDto)
         {
-            var statues = _reportApplicationRepository.SelectAllStatusHistoryData();
-            var filteredStatuses = statues.Where(x => x.AReportApplId == aId).OrderByDescending(x => x.CreatedOn);
-            return filteredStatuses;
+            var report = await _reportApplicationRepository.GetFullAppReportByIdAsync(aInDto.ReportId);
+            if (report == null) throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgReportDoesNotExist, aInDto.ReportId));
+
+            if (report.StatusCode == Status.CanceledReport)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgReportIsCanceled, aInDto.ReportId));
+
+            if (report.StatusCode == Status.DeliveredReport)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgReportIsDelivered, aInDto.ReportId));
+
+            // change current report data 
+            report.EntityState = EntityStateEnum.Modified;
+            report.ModifiedProperties = new List<string> { nameof(report.StatusCode), nameof(report.Version) };
+            report.StatusCode = Status.CanceledReport;
+            report.AReportStatusHes = new List<AReportStatusH> { CreateH(report, aInDto.Description) };
+            _reportApplicationRepository.ApplyChanges(report, applyToAllLevels: true);
+
+            var newReportDTO = new ReportApplicationDTO { FirstSignerId = aInDto.FirstSignerId, SecondSignerId = aInDto.SecondSignerId };
+
+            var personId = await _reportApplicationRepository.GetPersonIdByPidIdsAsync(report.ARepAppl.EgnId, report.ARepAppl.LnchId, report.ARepAppl.LnId, report.ARepAppl.SuidId);
+            var newReport = await GenerateReportAsync(newReportDTO, report.ARepAppl, personId);
+
+            _reportApplicationRepository.ApplyChanges(newReport, applyToAllLevels: true);
+
+            await _reportApplicationRepository.SaveChangesAsync();
+            return report.Id;
         }
-
-        public IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId)
-           => _reportApplicationRepository.SelectAllGeneratedReportsByAppId(aId);
-
-        public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
-            => await _reportApplicationRepository.GetReportAppContentByIdAsync(aId);
 
         public async Task<string> DeliverAsync(string aId)
         {
             var appReport = await _reportApplicationRepository.GetFullAppReportByIdAsync(aId);
             if (appReport == null) return null;
 
-            appReport.StatusCode = ReportApplicationConstants.Status.DeliveredReport;
-            appReport.ARepAppl.StatusCode = ReportApplicationConstants.Status.Delivered;
+            appReport.StatusCode = Status.DeliveredReport;
+            appReport.ARepAppl.StatusCode = Status.Delivered;
 
             appReport.EntityState = EntityStateEnum.Modified;
             appReport.ARepAppl.EntityState = EntityStateEnum.Modified;
@@ -134,8 +166,8 @@ namespace MJ_CAIS.Services
             appReport.ModifiedProperties = new List<string> { nameof(appReport.StatusCode), nameof(appReport.Version) };
             appReport.ARepAppl.ModifiedProperties = new List<string> { nameof(appReport.ARepAppl.StatusCode), nameof(appReport.ARepAppl.Version) };
 
-            var reportH = CreateH(ReportApplicationConstants.Status.DeliveredReport, ReportApplicationResources.msgDelivered, appReport.Id, appReport.ARepAppl.Id);
-            var reportAppH = CreateH(ReportApplicationConstants.Status.Delivered, ReportApplicationResources.msgDeliveredReport, appReport.Id, appReport.ARepAppl.Id);
+            var reportH = CreateH(appReport, ReportApplicationResources.msgDelivered);
+            var reportAppH = CreateH(appReport.ARepAppl, ReportApplicationResources.msgDeliveredReport);
 
             appReport.AReportStatusHes = new List<AReportStatusH> { reportH };
             appReport.ARepAppl.AReportStatusHes = new List<AReportStatusH> { reportAppH };
@@ -154,10 +186,10 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(BusinessLogicExceptionResources.editIsUnauthorized);
 
             var entity = mapper.MapToEntity<ReportApplicationDTO, AReportApplication>(aInDto, false);
-            entity.StatusCode = isFinal ? ReportApplicationConstants.Status.Approved : reportApp.StatusCode;
+            entity.StatusCode = isFinal ? Status.Approved : reportApp.StatusCode;
             if (isFinal)
             {
-                entity.AReportStatusHes = new List<AReportStatusH> { CreateH(entity.StatusCode) };
+                entity.AReportStatusHes = new List<AReportStatusH> { CreateH(entity) };
             }
 
             entity.ARepCitizenships = CaisMapper.MapMultipleChooseToEntityList<ARepCitizenship, string, string>(
@@ -166,21 +198,15 @@ namespace MJ_CAIS.Services
             return entity;
         }
 
-        private async Task<AReport> GenerateReportAsync(ReportApplicationDTO aInDto, AReportApplication entity)
+        private async Task<AReport> GenerateReportAsync(ReportApplicationDTO aInDto, AReportApplication entity, string? personId)
         {
-            var reportStatusH = CreateH(ReportApplicationConstants.Status.DraftReport);
-            reportStatusH.AReportApplId = entity.Id;
-            if (entity.AReportStatusHes == null)
-                entity.AReportStatusHes = new List<AReportStatusH>();
-
-            var person = await UpdatePersonDataAsync(aInDto, entity);
             var reportRegNumber = await _registerTypeService.GetRegisterNumberForReport(entity.CsAuthorityId);
+
             var report = new AReport
             {
                 Id = BaseEntity.GenerateNewId(),
                 ARepApplId = entity.Id,
-                StatusCode = ReportApplicationConstants.Status.DraftReport,
-                AReportStatusHes = new List<AReportStatusH> { reportStatusH },
+                StatusCode = Status.DraftReport,
                 EntityState = EntityStateEnum.Added,
                 FirstSignerId = aInDto.FirstSignerId,
                 SecondSignerId = aInDto.SecondSignerId,
@@ -189,10 +215,12 @@ namespace MJ_CAIS.Services
                 RegistrationNumber = reportRegNumber,
             };
 
-            // if person exist then check for bulletins
-            if (person.EntityState == EntityStateEnum.Modified && person.PPersonIds.Count > 0)
+            var reportStatusH = CreateH(report);
+            report.AReportStatusHes = new List<AReportStatusH> { reportStatusH };
+
+            if (!string.IsNullOrEmpty(personId))
             {
-                var bulletins = _reportApplicationRepository.GetBulletinsByPids(person.Id);
+                var bulletins = _reportApplicationRepository.GetBulletinsByPids(personId);
                 var bulletinList = await bulletins.ToListAsync();
                 if (bulletinList.Any())
                 {
@@ -219,18 +247,22 @@ namespace MJ_CAIS.Services
             return report;
         }
 
-        private static AReportStatusH CreateH(string statusCode, string desc = null, string reportId = null, string reportAppId = null)
-        {
-            return new AReportStatusH
+        private static AReportStatusH CreateH(AReport report, string desc = null)
+            => CreateH(report.StatusCode, report.ARepApplId, report.Id, desc);
+
+        private static AReportStatusH CreateH(AReportApplication reportAppl, string desc = null)
+            => CreateH(reportAppl.StatusCode, reportAppl.Id, null, desc);
+
+        private static AReportStatusH CreateH(string statusCode, string reportApplId, string reportId, string desc)
+            => new AReportStatusH
             {
                 Id = BaseEntity.GenerateNewId(),
                 Descr = desc,
                 EntityState = EntityStateEnum.Added,
                 StatusCode = statusCode,
-                AReportId = reportId,
-                AReportApplId = reportAppId,
+                AReportApplId = reportApplId,
+                AReportId = reportId
             };
-        }
 
         private async Task<PPerson> UpdatePersonDataAsync(ReportApplicationDTO aInDto, AReportApplication entity)
         {
@@ -266,6 +298,5 @@ namespace MJ_CAIS.Services
 
             return person;
         }
-
     }
 }
