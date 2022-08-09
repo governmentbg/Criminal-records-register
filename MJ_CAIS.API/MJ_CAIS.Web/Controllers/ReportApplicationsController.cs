@@ -69,7 +69,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("print-report/{aId}")]
         public async Task<IActionResult> PrintReportById(string aId)
         {
-            var result = await this._printDocumentService.PrintReport(aId);
+            var result = await this._reportApplicationService.GetReportAppContentByIdAsync(aId);
             if (result == null) return NotFound();
 
             var content = result;
@@ -86,6 +86,14 @@ namespace MJ_CAIS.Web.Controllers
         public virtual async Task<IActionResult> Cancel(string aId, [FromBody] CancelDTO aInDto)
         {
             await this._reportApplicationService.CancelAsync(aId, aInDto.Description);
+            return Ok();
+        }
+
+        [HttpPut("deliver/{aId}")]
+        public virtual async Task<IActionResult> Deliver(string aId)
+        {
+            var result = await this._reportApplicationService.DeliverAsync(aId);
+            if (result == null) return NotFound();
             return Ok();
         }
 

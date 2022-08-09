@@ -18,5 +18,9 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId);
 
         IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId);
+
+        Task<byte[]> GetReportAppContentByIdAsync(string aId);
+
+        Task<string> DeliverAsync(string aId);
     }
 }
