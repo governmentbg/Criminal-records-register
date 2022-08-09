@@ -52,7 +52,7 @@
                                 </tr>
                                 @foreach (var item in Model)
                                 {
-                                    <tr onclick="location.href = '@Url.Action("Preview", "Application", new { id=item.Id })'">
+                                    <tr onclick="location.href = '@Url.Action("Preview", "Application", new { id=item.Id })'" style="cursor: pointer">
                                         <td class="d-none d-sm-table-cell">
                                             <a href="@Url.Action("Preview", "Application", new { id=item.Id })">
                                                 @Html.DisplayFor(modelItem => item.RegistrationNumber)

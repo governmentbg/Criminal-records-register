@@ -16,8 +16,8 @@ export class ReportApplicationService extends CaisCrudService<
     super(ReportApplicationModel, injector, "a-report-applications");
   }
 
-  public cancel(id: string, cancelDesc: any): Observable<any[]> {
-    return this.http.post<any>(`${this.url}/cancel/${id}`, cancelDesc);
+  public cancel(id: string, description: any): Observable<any[]> {
+    return this.http.post<any>(`${this.url}/cancel/${id}`, description );
   }
 
   public updateFinal(
@@ -46,5 +46,9 @@ export class ReportApplicationService extends CaisCrudService<
   public printReport(reportId: string) {
     let url = `${this.url}/print-report/` + reportId;
     return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
+  public deliver(id: string): Observable<any> {
+    return this.http.put(`${this.url}/deliver/${id}`, {});
   }
 }

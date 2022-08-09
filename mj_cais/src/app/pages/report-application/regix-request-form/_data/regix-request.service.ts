@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
 export class RegixRequestService {
   baseUrl: string;
   url: string;
-  endpoint = "report-applications";
+  endpoint = "a-report-applications";
   constructor(
     private http: HttpClient,
     private configurationService: ConfigurationService
@@ -18,11 +18,11 @@ export class RegixRequestService {
     this.url = this.baseUrl + "/api/" + this.endpoint;
   }
 
-  public searchByEgn(egn: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url}/search-by-egn/${egn}`);
+  public searchByEgn(identifier: string): Observable<any[]> {
+    return this.http.post<any[]>(`${this.url}/search-by-egn/`, { identifier });
   }
 
-  public searchByLnch(lnch: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url}/search-by-lnch/${lnch}`);
+  public searchByLnch(identifier: string): Observable<any[]> {
+    return this.http.post<any[]>(`${this.url}/search-by-lnch/`, { identifier });
   }
 }

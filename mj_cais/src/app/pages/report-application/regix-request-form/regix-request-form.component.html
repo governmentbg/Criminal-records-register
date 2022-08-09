@@ -131,9 +131,10 @@
 <igx-dialog #cancelAppReportDialog>
   <div class="dialogNewRecord">
     <nb-card>
-      <nb-card-header>Сигурни ли сте?</nb-card-header>
+      <nb-card-header>Анулиране на искане</nb-card-header>
       <nb-card-body>
         <form (submit)="onSubmitCancelReportApplication()">
+          <label for="description">Основание</label>
           <input
             type="text"
             name="description"

@@ -58,16 +58,6 @@
                                 <span asp-validation-for="Purpose" class="text-danger"></span>
                             </div>
                             <div class="col-12">
-                                <label class="fw-bold"> @ApplicationResources.lblReceiving</label>
-                                <br />
-                                <input type="checkbox" disabled="disabled" class="form-check-input" checked />
-                                @ApplicationResources.lblReceivingFromPortal
-
-                                <br />
-                                <input type="checkbox" class="form-check-input" />
-                                @ApplicationResources.lblReceivingEDelivery
-                            </div>
-                            <div class="col-12">
                                 <label asp-for="PaymentMethodId" class="form-label fw-bold required"></label>
                                 @Html.DropDownListFor(model => model.PaymentMethodId, Model.PaymentMethodTypes,  new { @class = "form-select", @required=""})
                                 <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
@@ -112,7 +102,15 @@
     $(document).ready(function() {
         var purposes = @Html.Raw(Json.Serialize(Model.PurposeInfo));
         $('#paymentInfo').hide();
-        $('#paymentFreeInfo').hide();
+
+        const initPaymentId = $('#PaymentMethodId')[0].value;
+        if (initPaymentId == 'Bank' || initPaymentId == 'PayEgovBg') {
+            $('#paymentInfo').show();
+            $('#paymentFreeInfo').hide();
+        } else {
+            $('#paymentInfo').hide();
+            $('#paymentFreeInfo').show();
+        }
 
         const initPurposeValue = $('#PurposeId')[0].value;
         if (initPurposeValue in purposes) {

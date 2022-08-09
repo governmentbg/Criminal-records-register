@@ -72,19 +72,45 @@
   >
   </igx-column>
   <igx-column
-  width="100px"
-  header="Действия"
-  [sortable]="false"
-  [filterable]="false"
->
-  <ng-template igxCell let-cell="cell">
-    <button
-      igxButton="icon"
-      [title]="'Изтегляне'"
-      (click)="printReport(cell.rowData.id)"
-    >
-      <nb-icon pack="fa" icon="download"></nb-icon>
-    </button>
-  </ng-template>
-</igx-column>
+    width="100px"
+    header="Действия"
+    [sortable]="false"
+    [filterable]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <button
+        igxButton="icon"
+        [title]="'Изтегляне'"
+        (click)="printReport(cell.rowData.id)"
+      >
+        <nb-icon pack="fa" icon="download"></nb-icon>
+      </button>
+
+      <ng-container *ngIf="!isForPreview && cell.rowData.statusCode == 'ReadyReport'">
+        <button
+          igxButton="icon"
+          [title]="'Маркирай като доставено'"
+          (click)="deliver(cell.rowData.id)"
+        >
+          <i class="fas fa-check"></i>
+        </button>
+      </ng-container>
+
+      <ng-container
+        *ngIf="
+          !isForPreview &&
+          (cell.rowData.statusCode != 'CanceledReport' ||
+          cell.rowData.statusCode != 'Delivered')
+        "
+      >
+        <button
+          igxButton="icon"
+          [title]="'Анулиране'"
+          (click)="reject(cell.rowData.id)"
+        >
+          <nb-icon pack="fa" icon="times"></nb-icon>
+        </button>
+      </ng-container>
+    </ng-template>
+  </igx-column>
 </igx-grid>

@@ -9,10 +9,6 @@ label.required:after {
     display: inline;
 }
 
-tr {
-    cursor: pointer;
-}
-
 .nav-item::after {
     content: '';
     display: block;

@@ -209,7 +209,7 @@
           [tabTitle]="reportsTabTitle"
           *ngIf="
             isEdit() &&
-            reportApplicationStatus == ReportApplicationStatusConstants.Approved
+            reportApplicationStatus != ReportApplicationStatusConstants.New
           "
         >
           <ng-container *ngIf="showReportsTab">

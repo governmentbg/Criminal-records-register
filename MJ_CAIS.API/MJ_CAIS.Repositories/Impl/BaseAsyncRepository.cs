@@ -83,9 +83,13 @@ namespace MJ_CAIS.Repositories.Impl
             _dbContext.ApplyChanges(entity, passedNavigationProperties, applyToAllLevels,isRoot);
         }
 
-        public async Task SaveEntityAsync<T>(T entity, bool includeRelations) where T : class, IBaseIdEntity
+        public async Task SaveEntityAsync<T>(T entity, bool includeRelations, bool clearTracker = false) where T : class, IBaseIdEntity
         {
             await _dbContext.SaveEntityAsync(entity, includeRelations);
+            if (clearTracker)
+            {
+                this._dbContext.ChangeTracker.Clear();
+            }
         }
         public async Task<IQueryable<T>> FindAsync<T>
           (Expression<Func<T, bool>> expression) where T : class

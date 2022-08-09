@@ -21,6 +21,7 @@ namespace EcrisIntegrationServices
         private CaisDbContext _dbContext;
         private readonly ILogger<EcrisMessageCreatorService> _logger;
         const string ECRIS_REQUEST_CODE = "EcrisRequest";
+        const string SUCCESSFULL_NOTIFICATION = "NRT-00-00"; 
         private readonly IManagePersonService _personService;
 
 
@@ -64,7 +65,7 @@ namespace EcrisIntegrationServices
 
                             }
                             int insertedMessages = await _dbContext.SaveChangesAsync();
-
+                            _dbContext.ChangeTracker.Clear();
                             _logger.LogTrace($"Request ID {request.EcrisMsgId}: {insertedMessages} entities inserted to db.");
                         }
 
@@ -86,7 +87,38 @@ namespace EcrisIntegrationServices
 
         }
 
-              
+        private async Task<NotificationResponseMessageType> CreateNotificationResponse(NotificationMessageType notification)
+        {
+            
+
+            NotificationResponseMessageType response = new NotificationResponseMessageType();
+            response.MessagePerson = notification.MessagePerson;
+            response.MessageSendingMemberState = MemberStateCodeType.BG;
+            response.MessageSendingMemberStateSpecified = true;
+
+            response.MessageReceivingMemberState = new MemberStateCodeType[1] {
+                    notification.MessageSendingMemberState
+            };
+            response.MessageSendingMemberStateSpecified = true;
+            response.MessageType = EcrisMessageType.NRS;
+            response.MessageTypeSpecified = true;
+            response.MessageResponseTo = new RestrictedIdentifiableMessageType()
+            {
+                MessageEcrisIdentifier = notification.MessageEcrisIdentifier,
+                MessageIdentifier = notification.MessageIdentifier
+            };
+
+            response.RequestResponseMessageOtherMemberState = new MemberStateCodeType[1] {
+                    notification.MessageSendingMemberState
+                };
+            response.NotificationResponseMessageNotificationResponseTypeReference = new NotificationResponseTypeExternalReferenceType()
+            {
+                Value = SUCCESSFULL_NOTIFICATION// for successful - "NRT-00-00"
+
+            };
+           
+            return response;
+        }
         private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople()
         {
             //todo: кога сменяме статуса и дали не трябва винаги да връщаме първа страница?!
@@ -291,30 +323,40 @@ namespace EcrisIntegrationServices
                         _logger.LogTrace($"EcrisMessageID: {msg.Id}, person identified: {graoPerson.Egn}, number of documents which will be updated: {msg.DDocuments.Count()} .");
                         _dbContext.EEcrisMessages.Update(msg);
                         _logger.LogTrace($"EcrisMessageID: {msg.Id} updated.");
+                       
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id} NRS creation started.");
+                        var notificationResponce = await CreateNotificationResponse(notification);
+                        await ServiceHelper.AddMessageToDBContextAsync(notificationResponce, "", "", ",", _dbContext, msg.Id);
+
+                        _logger.LogTrace($"EcrisMessageID: {msg.Id} NRS creation ended.");
+
+
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message, ex.Data);
                     var entry = _dbContext.Entry(msg);
-                    entry.State = EntityState.Unchanged;
-                    if (isNewF)
-                    {
-                        var fEntry = _dbContext.Entry(f);
-                        fEntry.State = EntityState.Unchanged;
-                    }
-                    else
-                    {
-                        f = stateF;
-                        _dbContext.Fbbcs.Update(f);
-                    }
-                    _dbContext.DDocuments.UpdateRange(stateD);
+                    _dbContext.ChangeTracker.Clear();
+                    //entry.State = EntityState.Unchanged;
+                    //if (isNewF)
+                    //{
+                    //    var fEntry = _dbContext.Entry(f);
+                    //    fEntry.State = EntityState.Unchanged;
+                    //}
+                    //else
+                    //{
+                    //    f = stateF;
+                    //    _dbContext.Fbbcs.Update(f);
+                    //}
+                    //_dbContext.DDocuments.UpdateRange(stateD);
                     NLog.LogManager.Flush();
                 }
                 finally
                 {
                     _logger.LogTrace($"Pre - save changes.");
                     await _dbContext.SaveChangesAsync();
+                    _dbContext.ChangeTracker.Clear();
                     _logger.LogTrace($"Save changes to DB.");
                 }
 

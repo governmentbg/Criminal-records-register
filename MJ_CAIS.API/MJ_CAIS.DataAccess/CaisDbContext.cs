@@ -6822,6 +6822,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("CREATED_BY");
 
+                entity.Property(e => e.Role)
+                    .HasMaxLength(200)
+                    .HasColumnName("ROLE");
+
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");

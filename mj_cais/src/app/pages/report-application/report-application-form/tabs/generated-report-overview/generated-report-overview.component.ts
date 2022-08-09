@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, Input, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { ReportApplicationService } from "../../_data/report-application.service";
@@ -13,18 +13,22 @@ import { CustomToastrService } from "../../../../../@core/services/common/custom
   styleUrls: ["./generated-report-overview.component.scss"],
 })
 export class GeneratedReportOverviewComponent implements OnInit {
-  public reports: GeneratedReportModel[];
 
+  public isForPreview: boolean;
+  public reports: GeneratedReportModel[];
+  
   constructor(
     public dateFormatService: DateFormatService,
     private service: ReportApplicationService,
     private loaderService: NgxSpinnerService,
     private activatedRoute: ActivatedRoute,
-    private toastr: CustomToastrService
+    private toastr: CustomToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.params["ID"];
+    this.isForPreview = this.activatedRoute.snapshot.data["preview"];
     this.loaderService.show();
     if (this.reports) {
       this.loaderService.hide();
@@ -53,13 +57,25 @@ export class GeneratedReportOverviewComponent implements OnInit {
 
       fileSaver.saveAs(blob, fileName);
     }),
-      (error) => {
-        var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast(
-          "danger",
-          "Грешка при изтегляне на файла:",
-          errorText
-        );
-      };
+      (error) => this.errorHandler(error, "Грешка при изтегляне на файла:");
+  }
+
+  deliver(id: string) {
+    this.service.deliver(id).subscribe(
+      (res) => {
+        this.toastr.showBodyToast("success", "Успешно доставена справка","");
+        this.router.navigateByUrl("report-applications/edit/" + id);   
+      },
+      (error) =>
+        this.errorHandler(
+          error,
+          "Грешка при промяна на статус на доставена справка:"
+        )
+    );
+  }
+
+  private errorHandler(error, msg) {
+    var errorText = error.status + " " + error.statusText;
+    this.toastr.showBodyToast("danger", msg, errorText);
   }
 }

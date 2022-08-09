@@ -2,9 +2,11 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
+import { NgxSpinnerService } from "ngx-spinner";
 import { CustomToastrService } from "../../../@core/services/common/custom-toastr.service";
 import { EgnUtils } from "../../../@core/utils/egn.utils";
 import { LnchUtils } from "../../../@core/utils/lnch.utils";
+import { ReportApplicationService } from "../report-application-form/_data/report-application.service";
 import { RegixRequestService } from "./_data/regix-request.service";
 
 @Component({
@@ -17,7 +19,9 @@ export class RegixRequestFormComponent implements OnInit {
     private dialogService: NbDialogService,
     private service: RegixRequestService,
     private router: Router,
-    private toastr: CustomToastrService
+    private toastr: CustomToastrService,
+    private reportAppService: ReportApplicationService,
+    private loaderService: NgxSpinnerService
   ) {}
 
   @ViewChild("searchByIdentifierDialog", { read: IgxDialogComponent })
@@ -32,7 +36,7 @@ export class RegixRequestFormComponent implements OnInit {
   private titelSearchByEgn = "Търсене по ЕГН";
   private titelSearchByLnch = "Търсене по ЛНЧ";
   private isEgn = true;
-  private reportId;
+  private reportId: string;
   public titelSearchBy;
   public description;
   public searchValue: string = null;
@@ -44,14 +48,15 @@ export class RegixRequestFormComponent implements OnInit {
   public searchByEGN() {
     this.isEgn = true;
     this.titelSearchBy = this.titelSearchByEgn;
+    this.searchValue = null;
     this.dialog.open();
   }
 
   public searchByLNCH() {
     this.isEgn = false;
+    this.searchValue = null;
     this.titelSearchBy = this.titelSearchByLnch;
     this.dialog.open();
-
   }
 
   public searchForForeigner() {
@@ -72,12 +77,28 @@ export class RegixRequestFormComponent implements OnInit {
       return;
     }
 
+    this.loaderService.show();
     let action = this.isEgn
       ? this.service.searchByEgn(this.searchValue)
       : this.service.searchByLnch(this.searchValue);
 
     action.subscribe(
       (result: any) => {
+        if (result.id == null || result.id == undefined) {
+          this.parseError(result.error);
+          return;
+        }
+
+        if (result.errorMsg) {
+          this.reportId = result.id;
+          this.loaderService.hide();
+          this.errorTitle = "Възникна грешка";
+          this.errorMsg = result.errorMsg;
+          this.dialogError.open();
+          return;
+        }
+
+        this.loaderService.hide();
         this.router.navigate([
           "pages",
           "report-applications",
@@ -86,40 +107,53 @@ export class RegixRequestFormComponent implements OnInit {
         ]);
       },
       (error) => {
-        var parser = new DOMParser();
-        var htmlDoc = parser.parseFromString(error.error, "text/html");
-        let errMsgElement = htmlDoc.getElementById("err-message");
-        let errMsg = (errMsgElement.firstChild as any).data;
-        this.errorTitle = (errMsg as string).split(":")[0];
-        this.errorMsg = (errMsg as string).split(":")[1];
-        this.dialogError.open();
+        this.parseError(error);
       }
     );
   }
-  
+
   changeStatusToCanceled() {
     this.cancelAppReportDialog.open();
   }
 
-  onSubmitCancelReportApplication(){
-    //todo:
-    // if (this.description) {
-    //   this.applicationService
-    //     .cancelApplication(this.reportId, this.description)
-    //     .subscribe((result) => {
-    //       this.ref.close();
-    //       let message = "Успешно анулирано";
-    //       this.toastr.showToast("success", message);
-    //     });
-    // }
+  onSubmitCancelReportApplication() {
+    if (this.description) {
+      let descObj = {};
+      descObj["description"] = this.description;
+      this.reportAppService
+        .cancel(this.reportId, descObj)
+        .subscribe((result) => {
+          this.cancelAppReportDialog.close();
+          this.dialogError.close();
+          this.dialog.close();
+          let message = "Успешно анулирано искане";
+          this.toastr.showToast("success", message);
+        });
+    }
   }
 
   navigateToReportApplicationCreate() {
-    this.router.navigate(["pages", "report-applications", "edit", null]); // todo?? id
+    this.router.navigate([
+      "pages",
+      "report-applications",
+      "edit",
+      this.reportId,
+    ]);
     this.dialogError.close();
   }
 
-  dismissCancel(){
+  dismissCancel() {
     this.cancelAppReportDialog.close();
+  }
+
+  private parseError(error) {
+    this.loaderService.hide();
+    var parser = new DOMParser();
+    var htmlDoc = parser.parseFromString(error.error, "text/html");
+    let errMsgElement = htmlDoc.getElementById("err-message");
+    let errMsg = (errMsgElement.firstChild as any).data;
+    this.errorTitle = (errMsg as string).split(":")[0];
+    this.errorMsg = (errMsg as string).split(":")[1];
+    this.dialogError.open();
   }
 }

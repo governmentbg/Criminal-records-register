@@ -11,5 +11,9 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId);
 
         IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId);
+
+        Task<byte[]> GetReportAppContentByIdAsync(string aId);
+
+        Task<AReport> GetFullAppReportByIdAsync(string aId);
     }
 }

@@ -1,9 +1,5 @@
 import { Component, Injector, OnInit, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -54,7 +50,7 @@ export class ReportApplicationFormComponent
     private dialogService: NbDialogService,
     public dateFormatService: DateFormatService,
     private formBuilder: FormBuilder,
-    private loaderService: NgxSpinnerService,
+    private loaderService: NgxSpinnerService
   ) {
     super(service, injector);
     this.setDisplayTitle("искане за справка за съдимост");
@@ -104,24 +100,25 @@ export class ReportApplicationFormComponent
   }
 
   public submitFunction = () => {
-    this.loaderService.show();
     this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
 
   public finalEdit() {
-    this.loaderService.show();
-    if (this.signersformGroup.valid) {
-      this.isFinalEdit = true;
-      this.fullForm.firstSignerId.patchValue(
-        this.signersformGroup.value.firstSignerId
-      );
-      this.fullForm.secondSignerId.patchValue(
-        this.signersformGroup.value.secondSignerId
-      );
-
-      this.validateAndSave(this.fullForm);
+    if (!this.signersformGroup.valid) {
+      this.signersformGroup.markAllAsTouched();
+      return;
     }
+
+    this.isFinalEdit = true;
+    this.fullForm.firstSignerId.patchValue(
+      this.signersformGroup.value.firstSignerId
+    );
+    this.fullForm.secondSignerId.patchValue(
+      this.signersformGroup.value.secondSignerId
+    );
+
+    this.validateAndSave(this.fullForm);
   }
 
   public onFinalEditDialogOpen() {
@@ -129,6 +126,7 @@ export class ReportApplicationFormComponent
   }
 
   protected saveAndNavigate() {
+    this.loaderService.show();
     let model = this.formObject;
     let submitAction: Observable<ReportApplicationModel>;
     if (this.isFinalEdit) {

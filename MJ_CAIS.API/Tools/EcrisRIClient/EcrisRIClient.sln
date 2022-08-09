@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Services", "..\..\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Services.Contracts", "..\..\MJ_CAIS.Services.Contracts\MJ_CAIS.Services.Contracts.csproj", "{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Repositories", "..\..\MJ_CAIS.Repositories\MJ_CAIS.Repositories.csproj", "{DCE80D8C-A56A-489E-8835-DBFF9B441028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1F6DE8A-0C0D-477F-8FA9-22FE39CC3111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCE80D8C-A56A-489E-8835-DBFF9B441028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCE80D8C-A56A-489E-8835-DBFF9B441028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCE80D8C-A56A-489E-8835-DBFF9B441028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCE80D8C-A56A-489E-8835-DBFF9B441028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -37,7 +37,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string applicationId = await _applicationService.InsertAsync(application);
 
             _dbContext.ChangeTracker.Clear();
-            await CallPersonDataSearch(id, registrationNumber, applicationId:applicationId);
+            await CallPersonDataSearch(id, registrationNumber, applicationId: applicationId);
 
             return applicationId;
         }
@@ -49,17 +49,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 (PersonDataResponseType, EWebRequest) result = await this._regixService.SyncCallPersonDataSearch(egn, applicationId: applicationId, registrationNumber: registrationNumber, reportApplicationId: reportApplicationId);
                 if (result.Item1.EGN == null)
                 {
-                    throw new BusinessLogicException($"Няма намерени данни:{applicationId}, {reportApplicationId}");
+                    throw new BusinessLogicException($"Няма намерени данни:{applicationId ?? reportApplicationId}");
                 }
 
                 if (result.Item2.HasError == true)
                 {
-                    throw new BusinessLogicException($"RegiX e недостъпен:{applicationId}, {reportApplicationId}");
+                    throw new BusinessLogicException($"RegiX e недостъпен:{applicationId ?? reportApplicationId}");
                 }
             }
             catch (Exception e)
             {
-                throw new BusinessLogicException($"Възникна грешка при извършване на операцията:{applicationId}, {reportApplicationId}");
+                throw new BusinessLogicException($"Възникна грешка при извършване на операцията:{applicationId ?? reportApplicationId}");
             }
         }
 
@@ -82,12 +82,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             (ForeignIdentityInfoResponseType, EWebRequest) result = await this._regixService.SyncCallForeignIdentitySearchV2(id, applicationId: applicationId, registrationNumber: registrationNumber, reportApplicationId: reportApplicationId);
             if (result.Item1.LNCh == null) //TODO: shoud be ==
             {
-                throw new BusinessLogicException($"Няма намерени данни:{applicationId},{reportApplicationId}");
+                throw new BusinessLogicException($"Няма намерени данни:{applicationId ?? reportApplicationId}");
             }
 
             if (result.Item2.HasError == true)
             {
-                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId},{reportApplicationId}");
+                throw new BusinessLogicException($"RegiX e недостъпен:{applicationId ?? reportApplicationId}");
             }
         }
     }
