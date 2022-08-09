@@ -122,7 +122,6 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 .FirstOrDefault();
             if (user != null)
             {
-                context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));
                 context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.Name));
                 context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
