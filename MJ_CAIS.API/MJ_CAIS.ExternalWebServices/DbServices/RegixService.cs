@@ -1512,7 +1512,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             var callContext = _client.CreateSampleCallContext(serviceURI);
             // TODO: fill other data for user that created the web request
             
-            if (request.ApplicationId != null && request.CreatedBy != null)
+            if ((request.ApplicationId != null || request.ARepApplId!=null) && request.CreatedBy != null)
             {
                 var user = _dbContext.GUsers.AsNoTracking().
                     Include(x=> x.CsAuthority).AsNoTracking()
@@ -1531,6 +1531,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 }
                 callContext.Remark = "Във връзка с издаване на свидетелство/справка за съдимост";
             }
+
+           
+
             if (request.WApplicationId != null && request.WApplication != null && request.WApplication.UserExtId != null)
             {
                 var user = _dbContext.GUsersExts.AsNoTracking()
