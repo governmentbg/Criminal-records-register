@@ -115,7 +115,8 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     u.Active,
                     u.Egn,
                     u.Email,
-                    AdministrationName = u.Administration.Name
+                    AdministrationName = u.Administration.Name,
+                    Role = u.Administration.Role,
                 })
                 .FirstOrDefault();
             if (user != null)
@@ -124,6 +125,13 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
+                if (!string.IsNullOrEmpty(user.Role))
+                {
+                    foreach(var role in user.Role.Split(","))
+                    {
+                        context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+                    }
+                }
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
                     context.IssuedClaims.Add(new Claim("AdministrationId", user.AdministrationId));

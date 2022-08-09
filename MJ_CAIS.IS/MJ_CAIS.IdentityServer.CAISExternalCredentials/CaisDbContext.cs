@@ -119,6 +119,10 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.Role)
+                    .HasMaxLength(200)
+                    .HasColumnName("ROLE");
+
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
                     .HasColumnName("UPDATED_BY");
