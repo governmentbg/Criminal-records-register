@@ -87,6 +87,19 @@
           <nb-icon pack="fa" icon="download"></nb-icon>
         </button>
       </ng-container>
+      <ng-container *ngIf="
+      !isForPreview &&
+      cell.rowData.statusCode ==
+        ReportApplicationStatusConstants.DraftReport
+    ">
+        <button
+          igxButton="icon"
+          [title]="'Генерирай'"
+          (click)="generateReport(cell.rowData.id)"
+        >
+          <nb-icon pack="fa" icon="sync"></nb-icon>
+        </button>
+      </ng-container>
       <ng-container
         *ngIf="
           !isForPreview &&

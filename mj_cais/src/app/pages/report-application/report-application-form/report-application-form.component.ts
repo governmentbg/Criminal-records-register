@@ -147,7 +147,11 @@ export class ReportApplicationFormComponent
       },
       error: (errorResponse) => {
         this.loaderService.hide();
+        this.finalEditDialog.close();
         this.onServiceError(errorResponse);
+        setTimeout(() => {
+          this.onSubmitSuccess(null);
+        }, this.navigateTimeout);
       },
     });
   }

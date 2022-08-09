@@ -61,37 +61,29 @@ export class GeneratedReportOverviewComponent implements OnInit {
 
   printReport(id: string) {
     this.service.printReport(id).subscribe((response: any) => {
-      let blob = new Blob([response.body]);
-      window.URL.createObjectURL(blob);
-
-      let header = response.headers.get("Content-Disposition");
-      let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-
-      let fileName = "download";
-
-      var matches = filenameRegex.exec(header);
-      if (matches != null && matches[1]) {
-        fileName = matches[1].replace(/['"]/g, "");
-      }
-
-      fileSaver.saveAs(blob, fileName);
+      this.getPdfContent(response);
     }),
       (error) => this.errorHandler(error, "Грешка при изтегляне на файла:");
   }
 
+  generateReport(id: string) {
+    this.service.generateReport(id).subscribe((response: any) => {
+      this.getPdfContent(response);
+      this.reload();
+    }),
+      (error) => this.errorHandler(error, "Грешка при генериране на файла:");
+  }
+
   deliver(id: string) {
-    this.service.deliver(id).subscribe(
-      (res) => {
-        this.toastr.showBodyToast("success", "Успешно доставена справка", "");
-        this.reports = null;
-        this.ngOnInit();
-      },
+    this.service.deliver(id).subscribe((response: any) => {
+      this.toastr.showBodyToast("success", "Успешно доставена справка", "");
+      this.reload();
+    }),
       (error) =>
         this.errorHandler(
           error,
           "Грешка при промяна на статус на доставена справка:"
-        )
-    );
+        );
   }
 
   onOpenCancelReportDialog(
@@ -110,7 +102,9 @@ export class GeneratedReportOverviewComponent implements OnInit {
 
     this.cancelReportFormGroup.controls.reportId.patchValue(id);
     this.cancelReportFormGroup.controls.firstSignerId.patchValue(firstSignerId);
-    this.cancelReportFormGroup.controls.secondSignerId.patchValue(secondSignerId);
+    this.cancelReportFormGroup.controls.secondSignerId.patchValue(
+      secondSignerId
+    );
   }
 
   cancelReport() {
@@ -128,8 +122,7 @@ export class GeneratedReportOverviewComponent implements OnInit {
           this.toastr.showToast("success", message);
           this.cancelReportDialog.close();
           this.loader.hide();
-          this.reports = null;
-          this.ngOnInit();
+          this.reload();
         },
         error: (errorResponse) => {
           this.cancelReportDialog.close();
@@ -145,5 +138,27 @@ export class GeneratedReportOverviewComponent implements OnInit {
   private errorHandler(error, msg) {
     var errorText = error.status + " " + error.statusText;
     this.toastr.showBodyToast("danger", msg, errorText);
+  }
+
+  private getPdfContent(response) {
+    let blob = new Blob([response.body]);
+    window.URL.createObjectURL(blob);
+
+    let header = response.headers.get("Content-Disposition");
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+    let fileName = "download";
+
+    var matches = filenameRegex.exec(header);
+    if (matches != null && matches[1]) {
+      fileName = matches[1].replace(/['"]/g, "");
+    }
+
+    fileSaver.saveAs(blob, fileName);
+  }
+
+  private reload (){
+    this.reports = null;
+    this.ngOnInit();
   }
 }

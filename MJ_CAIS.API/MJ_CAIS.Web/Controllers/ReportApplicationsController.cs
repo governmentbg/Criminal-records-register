@@ -108,19 +108,11 @@ namespace MJ_CAIS.Web.Controllers
 
         [HttpGet("print-report/{aId}")]
         public async Task<IActionResult> PrintReportById(string aId)
-        {
-            var result = await this._reportApplicationService.GetReportAppContentByIdAsync(aId);
-            if (result == null) return NotFound();
+            => ReturnPdf(await this._reportApplicationService.GetReportAppContentByIdAsync(aId));
 
-            var content = result;
-            var fileName = "report.pdf";
-            var mimeType = "application/octet-stream";
-
-            Response.Headers.Add("File-Name", fileName);
-            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
-
-            return File(content, mimeType, fileName);
-        }
+        [HttpGet("generate-report/{aId}")]
+        public async Task<IActionResult> GenerateReportById(string aId)
+            => ReturnPdf(await _reportGenerationService.CreateReport(aId));
 
         [HttpPut("cancel/{aId}")]
         public virtual async Task<IActionResult> Cancel(string aId, [FromBody] CancelDTO aInDto)
@@ -128,7 +120,6 @@ namespace MJ_CAIS.Web.Controllers
             await this._reportApplicationService.CancelAsync(aId, aInDto.Description);
             return Ok();
         }
-
 
         [HttpPut("cancel-report")]
         public virtual async Task<IActionResult> CancelReport([FromBody] CancelReportDTO aInDto)
@@ -157,6 +148,20 @@ namespace MJ_CAIS.Web.Controllers
         {
             var result = this._reportApplicationService.GetReportsByAppId(aId);
             return Ok(result);
+        }
+
+        private IActionResult ReturnPdf(byte[] result)
+        {
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "report.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
         }
     }
 }
