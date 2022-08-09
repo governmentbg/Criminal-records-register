@@ -9,6 +9,8 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode);
 
+        Task<AReportApplication> CreateAppReportAsync(ReportApplicationDTO aInDto);
+
         Task<string> UpdateAsync(ReportApplicationDTO aInDto);
 
         Task<string> FinalUpdateAsync(ReportApplicationDTO aInDto);

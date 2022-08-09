@@ -100,7 +100,6 @@ export class ReportApplicationFormComponent
   }
 
   public submitFunction = () => {
-    this.loaderService.show();
     this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
@@ -111,7 +110,6 @@ export class ReportApplicationFormComponent
       return;
     }
 
-    this.loaderService.show();
     this.isFinalEdit = true;
     this.fullForm.firstSignerId.patchValue(
       this.signersformGroup.value.firstSignerId
@@ -128,6 +126,7 @@ export class ReportApplicationFormComponent
   }
 
   protected saveAndNavigate() {
+    this.loaderService.show();
     let model = this.formObject;
     let submitAction: Observable<ReportApplicationModel>;
     if (this.isFinalEdit) {

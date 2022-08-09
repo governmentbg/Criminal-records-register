@@ -16,8 +16,8 @@ export class ReportApplicationService extends CaisCrudService<
     super(ReportApplicationModel, injector, "a-report-applications");
   }
 
-  public cancel(id: string, cancelDesc: any): Observable<any[]> {
-    return this.http.post<any>(`${this.url}/cancel/${id}`, cancelDesc);
+  public cancel(id: string, description: any): Observable<any[]> {
+    return this.http.post<any>(`${this.url}/cancel/${id}`, description );
   }
 
   public updateFinal(

@@ -53,9 +53,10 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public override async Task<string> InsertAsync(ReportApplicationDTO aInDto)
+        public async Task<AReportApplication> CreateAppReportAsync(ReportApplicationDTO aInDto)
         {
             var entity = mapper.MapToEntity<ReportApplicationDTO, AReportApplication>(aInDto, true);
+            entity.Id = BaseEntity.GenerateNewId(); // when call regix set id manually
             entity.CsAuthorityId = _userContext.CsAuthorityId;
             entity.StatusCode = ReportApplicationConstants.Status.New;
             entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForReport(entity.CsAuthorityId);
@@ -64,8 +65,8 @@ namespace MJ_CAIS.Services
              aInDto.Person.Nationalities, nameof(ARepCitizenship.Id), nameof(ARepCitizenship.CountryId));
             entity.AReportStatusHes = new List<AReportStatusH> { CreateH(entity.StatusCode) };
 
-            await _reportApplicationRepository.SaveEntityAsync(entity, true);
-            return entity.Id;
+            await _reportApplicationRepository.SaveEntityAsync(entity, true, true);
+            return entity;
         }
 
         public async Task<string> UpdateAsync(ReportApplicationDTO aInDto)
@@ -109,7 +110,7 @@ namespace MJ_CAIS.Services
         public IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId)
         {
             var statues = _reportApplicationRepository.SelectAllStatusHistoryData();
-            var filteredStatuses = statues.Where(x => x.AReportApplId == aId).OrderByDescending(x=>x.CreatedOn);
+            var filteredStatuses = statues.Where(x => x.AReportApplId == aId).OrderByDescending(x => x.CreatedOn);
             return filteredStatuses;
         }
 
