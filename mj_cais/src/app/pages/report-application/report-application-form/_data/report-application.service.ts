@@ -16,6 +16,12 @@ export class ReportApplicationService extends CaisCrudService<
     super(ReportApplicationModel, injector, "a-report-applications");
   }
 
+  public getWithPersonData(personId: string): Observable<ReportApplicationModel> {
+    return this.http.get<ReportApplicationModel>(
+      `${this.url}/create?personId=${personId}`
+    );
+  }
+
   public cancel(id: string, description: any): Observable<any[]> {
     return this.http.put<any>(`${this.url}/cancel/${id}`, description );
   }

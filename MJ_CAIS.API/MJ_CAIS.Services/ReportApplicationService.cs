@@ -8,6 +8,7 @@ using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.ReportApplication;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -175,6 +176,19 @@ namespace MJ_CAIS.Services
             await _reportApplicationRepository.SaveEntityAsync(appReport, true);
 
             return appReport.Id;
+        }
+
+        public async Task<ReportApplicationDTO> SelectWithPersonDataAsync(string personId)
+        {
+            var result = new ReportApplicationDTO
+            {
+                Id = BaseEntity.GenerateNewId(),
+                CsAuthorityId = _userContext.CsAuthorityId
+            };
+
+            var person = await _managePersonService.SelectWithBirthInfoAsync(personId);
+            result.Person = person ?? new PersonDTO();
+            return result;
         }
 
         private async Task<AReportApplication> ApplyDataForUpdateAsync(ReportApplicationDTO aInDto, bool isFinal)

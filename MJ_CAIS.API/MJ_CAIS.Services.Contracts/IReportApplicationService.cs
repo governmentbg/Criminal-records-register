@@ -26,5 +26,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<byte[]> GetReportAppContentByIdAsync(string aId);
 
         Task<string> DeliverAsync(string aId);
+
+        Task<ReportApplicationDTO> SelectWithPersonDataAsync(string personId);
     }
 }

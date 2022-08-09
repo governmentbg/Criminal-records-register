@@ -13,6 +13,7 @@ using MJ_CAIS.Web.Controllers.Common;
 
 namespace MJ_CAIS.Web.Controllers
 {
+    // todo: remove 
     [Route("reports")]
     [Authorize]
     public class ReportController : BaseApiCrudController<ApplicationInDTO, ApplicationOutDTO, ApplicationGridDTO, AApplication, string>

@@ -33,8 +33,7 @@ export class ReportApplicationResolver implements Resolve<any> {
     if (isEdit) {
       element = this.service.find(reportAppId);
     } else if (personId) {
-      // todo: load from search person form
-      //element = this.service.getWithPersonData(personId);
+      element = this.service.getWithPersonData(personId);
     } else {
       element = of(null);
     }
