@@ -16,6 +16,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities
 
         public string Id { get; set; } = null!;
         public string? Name { get; set; }
+        public string? Role { get; set; }
         public string? Descr { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
