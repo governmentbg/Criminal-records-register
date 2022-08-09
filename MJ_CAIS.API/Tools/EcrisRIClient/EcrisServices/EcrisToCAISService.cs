@@ -33,7 +33,7 @@ namespace EcrisIntegrationServices
             _personValidatorClient = personValidatorClient;
         }
 
-        public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage,  string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders,  bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
+        public async Task SynchRequests(string username, string password, string searchFolderName, string itemsPerPage, string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders, bool skipDataExtraction = false, string joinSeparator = " ", string paramRequestSynch = PARAM_REQUEST_NAME)
         {
             _logger.LogInformation($"Synchronization of requests started.Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramRequestSynch: {paramRequestSynch}.");
             await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.REQ, skipDataExtraction, paramRequestSynch, endpointAuth, endpointStorage, endPointAddressSearch, includeSubfolders, joinSeparator);
@@ -42,11 +42,11 @@ namespace EcrisIntegrationServices
         public async Task SynchNotifications(string username, string password, string searchFolderName, string itemsPerPage, string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders, bool skipDataExtraction = false, string joinSeparator = " ", string paramNotificationSynch = PARAM_NOTIFICATION_NAME)
         {
             _logger.LogInformation($"Synchronization of notifications started. Username: {username}; Folder: {searchFolderName}; Page size: {itemsPerPage}; skipDataExtraction: {skipDataExtraction}; joinSeparator: {joinSeparator}; paramNotificationSynch: {paramNotificationSynch}.)");
-            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.NOT, skipDataExtraction, paramNotificationSynch,   endpointAuth,  endpointStorage,  endPointAddressSearch, includeSubfolders, joinSeparator);
+            await BaseSync(username, password, searchFolderName, itemsPerPage, EcrisMessageTypeOrAliasMessageType.NOT, skipDataExtraction, paramNotificationSynch, endpointAuth, endpointStorage, endPointAddressSearch, includeSubfolders, joinSeparator);
             _logger.LogInformation("Synchronization of notifications ended.");
         }
 
-        private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch,string  endpointAuth, string endpointStorage, string endPointAddressSearch,bool includeSubfolders, string joinSeparator = " ")
+        private async Task BaseSync(string username, string password, string searchFolderName, string itemsPerPage, EcrisMessageTypeOrAliasMessageType messageType, bool skipDataExtraction, string paramNameForSynch, string endpointAuth, string endpointStorage, string endPointAddressSearch, bool includeSubfolders, string joinSeparator = " ")
         {
             bool isLoggedIn = false;
             string sessionID = "";
@@ -65,7 +65,7 @@ namespace EcrisIntegrationServices
                     throw new Exception($"Folder {searchFolderName} does not exist.");
                 }
 
-                _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {string.Join(", ",inboxFolderId)}.");
+                _logger.LogTrace($"{messageType.ToString()}: Folder {searchFolderName} identified as {string.Join(", ", inboxFolderId)}.");
                 MJ_CAIS.DTO.EcrisService.QueryType query;
                 DateTime lastUpdatedTime;
                 string docTypeCode = "";
@@ -117,14 +117,14 @@ namespace EcrisIntegrationServices
                         if (r != null)
                         {
                             await AddMessageToDBContext(r, client, sessionID, skipDataExtraction, joinSeparator, docTypeCode);
-                            
+
                         }
 
                     }
 
                     if (filteredMessages.Count > 0)
                     {
-                        var newDate = filteredMessages.Where(r => r.MessageSenderTimestampSpecified).Select(r =>  r.MessageSenderTimestamp)?.Max(d => d);
+                        var newDate = filteredMessages.Where(r => r.MessageSenderTimestampSpecified).Select(r => r.MessageSenderTimestamp)?.Max(d => d);
                         lastUpdatedTime = newDate.HasValue && newDate.Value != DateTime.MinValue ? newDate.Value : lastUpdatedTime;
 
 
@@ -215,8 +215,8 @@ namespace EcrisIntegrationServices
         {
             MJ_CAIS.DTO.EcrisService.QueryType query = new MJ_CAIS.DTO.EcrisService.QueryType();
             query.QueryParameters = new MJ_CAIS.DTO.EcrisService.QueryTypeQueryParameters();
-            query.QueryParameters.FolderQueryParameter = searchFolderID.Where(p=>!string.IsNullOrEmpty(p)).ToArray();
-            
+            query.QueryParameters.FolderQueryParameter = searchFolderID.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+
 
             var period = new MJ_CAIS.DTO.EcrisService.StrictDateRange();
             period.FromDate = new MJ_CAIS.DTO.EcrisService.StrictDateType()
@@ -246,7 +246,7 @@ namespace EcrisIntegrationServices
             query.QueryParameters.MemberStateQueryParameter.MemberStateCodes = new MemberStateCodeType[1];
             query.QueryParameters.MemberStateQueryParameter.MemberStateCodes[0] = MemberStateCodeType.BG;
 
-           
+
             return query;
 
         }
@@ -257,9 +257,9 @@ namespace EcrisIntegrationServices
                 throw new Exception(String.Format($"Unknown type - MessageEcrisID  = {0}", msg.MessageEcrisIdentifier));
             }
             var identifier = msg.MessageIdentifier;
-            var id = "PL-BG-NOT-000000000012055";
-            var messageContent = await client.ReadMessage(sessionId, id);
-            
+
+            var messageContent = await client.ReadMessage(sessionId, identifier);
+
             //var messageContent = await client.ReadMessage(sessionId, identifier);
             EEcrisInbox inbox = new EEcrisInbox();
             inbox.Id = BaseEntity.GenerateNewId();
@@ -284,7 +284,7 @@ namespace EcrisIntegrationServices
                         //todo: use methods from CommonService
 
                         var m = ParseMessageTraits(msg, joinSeparator);
-                        m.MsgTypeId = docTypeCode;                  
+                        m.MsgTypeId = docTypeCode;
 
                         inbox.EcrisMsg = m;
                         inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
@@ -334,239 +334,251 @@ namespace EcrisIntegrationServices
 
                         d.DocContent = content;
                         content.DDocuments.Add(d);
-
+                        m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForIdentification;
                         if (m.Sex != 0 && m.Sex != null
                             && !string.IsNullOrEmpty(m.EEcrisMsgNames.FirstOrDefault()?.Firstname)
                             && m.BirthDate.HasValue)
                         {
                             //при тези условия има смисъл да включваме идентификацията, иначе остава за ръчна обработка
 
-                         
-                            var gender = m.Sex == 1 ? PersonInfoGenderType.male : PersonInfoGenderType.female;
-                            var graoPersons = await _personValidatorClient.GetPersonInfo(m.EEcrisMsgNames.FirstOrDefault().Firstname,
-                                m.EEcrisMsgNames.FirstOrDefault()?.Surname,  m.EEcrisMsgNames.FirstOrDefault()?.Familyname, gender, m.BirthDate.Value, PersonIdentificationConstants.Tresholds.PartialMatch);
-                    
-
-                            if (graoPersons.Count > 0)
+                            try
                             {
-                                var egns = graoPersons.Select(p => p.person.personalNumber).ToList();
-                                m.EEcrisIdentifications = await _dbContext.GraoPeople.Where(p => egns.Contains(p.Egn))
-                                    .Select(x => new EEcrisIdentification
+                                var gender = m.Sex == 1 ? PersonInfoGenderType.male : PersonInfoGenderType.female;
+                                var graoPersons = await _personValidatorClient.GetPersonInfo(m.EEcrisMsgNames.FirstOrDefault().Firstname,
+                                    m.EEcrisMsgNames.FirstOrDefault()?.Surname, m.EEcrisMsgNames.FirstOrDefault()?.Familyname, gender, m.BirthDate.Value, PersonIdentificationConstants.Tresholds.PartialMatch);
+
+
+                                if (graoPersons.Count > 0)
+                                {
+                                    var egns = graoPersons.Select(p => p.person.personalNumber).ToList();
+                                    m.EEcrisIdentifications = await _dbContext.GraoPeople.AsNoTracking().Where(p => egns.Contains(p.Egn))
+                                        .Select(x => new EEcrisIdentification
+                                        {
+                                            Id = BaseEntity.GenerateNewId(),
+                                            EcrisMsgId = m.Id,
+                                            EcrisMsg = m,
+                                            GraoPersonId = x.Id
+                                        })
+                                        .ToListAsync();
+                                    if (m.EEcrisIdentifications.Count == 1)
                                     {
-                                        Id = BaseEntity.GenerateNewId(),
-                                        EcrisMsgId = m.Id,
-                                        EcrisMsg = m,
-                                        GraoPersonId = x.Id
-                                    })
-                                    .ToListAsync();
-                                _dbContext.EEcrisIdentifications.AddRange(m.EEcrisIdentifications);
+                                        m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Identified;
+                                        m.EEcrisIdentifications.First().Approved = 1;
+                                    }
+                                    _dbContext.EEcrisIdentifications.AddRange(m.EEcrisIdentifications);
+                                }
                             }
-                        }
-                        _dbContext.EEcrisMessages.Add(m);
-                     
-                        _dbContext.DDocuments.Add(d);
-                        _dbContext.DDocContents.Add(content);
-                        if (m.EEcrisMsgNationalities?.Count > 0)
-                        {
-                            _dbContext.EEcrisMsgNationalities.AddRange(m.EEcrisMsgNationalities);
-                        }
-                        if (m.EEcrisMsgNames.Count > 0)
-                        {
-                            _dbContext.EEcrisMsgNames.AddRange(m.EEcrisMsgNames);
-                        }
-                      
-
-
+                            catch (Exception ex)
+                            {
+                                _logger.LogError("Person identification failed: " + ex.Message, ex.Data, ex);
+                            }
+                        
                     }
-                    else
+                    _dbContext.EEcrisMessages.Add(m);
+
+                    _dbContext.DDocuments.Add(d);
+                    _dbContext.DDocContents.Add(content);
+                    if (m.EEcrisMsgNationalities?.Count > 0)
                     {
-                        inbox.EcrisMsgId = existingMSg.Id;
-                        inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
+                        _dbContext.EEcrisMsgNationalities.AddRange(m.EEcrisMsgNationalities);
                     }
-                    
+                    if (m.EEcrisMsgNames.Count > 0)
+                    {
+                        _dbContext.EEcrisMsgNames.AddRange(m.EEcrisMsgNames);
+                    }
+
+
 
                 }
-                catch (Exception ex)
+                    else
                 {
-                    _logger.LogError(ex.Message, ex.Data, ex);
-                    inbox.Status = ECRISConstants.EcrisInboxStatuses.Error;
+                    inbox.EcrisMsgId = existingMSg.Id;
+                    inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
                 }
 
 
             }
-            _dbContext.EEcrisInboxes.Add(inbox);
+                catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex.Data, ex);
+                inbox.Status = ECRISConstants.EcrisInboxStatuses.Error;
+            }
+
+
+        }
+        _dbContext.EEcrisInboxes.Add(inbox);
 
         }
 
-  
 
-        private EEcrisMessage ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
+
+    private EEcrisMessage ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
+    {
+        EEcrisMessage m = new EEcrisMessage();
+
+        m.Id = BaseEntity.GenerateNewId();
+        m.EcrisIdentifier = msg.MessageEcrisIdentifier;
+        m.Identifier = msg.MessageIdentifier;//или да се пази в m.RequestMsgId???
+
+        //има данни в msg.MessageShortViewPerson.PersonAlias - те интересуват ли ни?!
+        ////има данни и за майка и баща - биха били полезни за идентификацията
+        m.BirthCity = string.Join(joinSeparator, msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownName.Select(p => p.Value)); //msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownReference???
+        m.BirthDate = new DateTime(Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateYear)),
+                                   Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateMonth)),
+                                   Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateDay)));
+        m.BirthCountry = msg.MessageShortViewPerson.PersonBirthPlace.PlaceCountryReference.Value;
+        m.Sex = msg.MessageShortViewPerson.PersonSex == 0 ? 1 : 2;
+
+        var forenames = msg.MessageShortViewPerson.PersonName?.Forename?.ToList();
+        if (forenames != null)
         {
-            EEcrisMessage m = new EEcrisMessage();
-
-            m.Id = BaseEntity.GenerateNewId();
-            m.EcrisIdentifier = msg.MessageEcrisIdentifier;
-            m.Identifier = msg.MessageIdentifier;//или да се пази в m.RequestMsgId???
-
-            //има данни в msg.MessageShortViewPerson.PersonAlias - те интересуват ли ни?!
-            ////има данни и за майка и баща - биха били полезни за идентификацията
-            m.BirthCity = string.Join(joinSeparator, msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownName.Select(p => p.Value)); //msg.MessageShortViewPerson.PersonBirthPlace.PlaceTownReference???
-            m.BirthDate = new DateTime(Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateYear)),
-                                       Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateMonth)),
-                                       Int32.Parse(XmlUtils.GetNumbersFromString(msg.MessageShortViewPerson.PersonBirthDate.DateMonthDay.DateDay)));
-            m.BirthCountry = msg.MessageShortViewPerson.PersonBirthPlace.PlaceCountryReference.Value;
-            m.Sex = msg.MessageShortViewPerson.PersonSex == 0 ? 1:2;
-
-            var forenames = msg.MessageShortViewPerson.PersonName?.Forename?.ToList();
-            if (forenames != null)
+            foreach (var forename in forenames)
             {
-                foreach (var forename in forenames)
+                EEcrisMsgName name = new EEcrisMsgName();
+                name.Id = BaseEntity.GenerateNewId();
+                name.LangCode = forename.languageCode;
+                name.Firstname = forename.Value;
+                name.EEcrisMsgId = m.Id;
+                m.EEcrisMsgNames.Add(name);
+            }
+        }
+
+        var familyNames = msg.MessageShortViewPerson.PersonName?.SecondSurname?.ToList();
+        if (familyNames != null)
+        {
+            foreach (var familyName in familyNames)
+            {
+                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
+                if (nameByLang == null)
                 {
                     EEcrisMsgName name = new EEcrisMsgName();
                     name.Id = BaseEntity.GenerateNewId();
-                    name.LangCode = forename.languageCode;
-                    name.Firstname = forename.Value;
+                    name.LangCode = familyName.languageCode;
+                    name.Firstname = familyName.Value;
                     name.EEcrisMsgId = m.Id;
                     m.EEcrisMsgNames.Add(name);
                 }
-            }
-
-            var familyNames = msg.MessageShortViewPerson.PersonName?.SecondSurname?.ToList();
-            if (familyNames!=null)
-            {
-                foreach (var familyName in familyNames)
+                else
                 {
-                    var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == familyName.languageCode);
-                    if (nameByLang == null)
-                    {
-                        EEcrisMsgName name = new EEcrisMsgName();
-                        name.Id = BaseEntity.GenerateNewId();
-                        name.LangCode = familyName.languageCode;
-                        name.Firstname = familyName.Value;
-                        name.EEcrisMsgId = m.Id;
-                        m.EEcrisMsgNames.Add(name);
-                    }
-                    else
-                    {
-                        nameByLang.Familyname = familyName.Value;
-                    }
+                    nameByLang.Familyname = familyName.Value;
                 }
             }
+        }
 
-            var surnameNames = msg.MessageShortViewPerson.PersonName?.Surname?.ToList();
-            if (surnameNames != null)
+        var surnameNames = msg.MessageShortViewPerson.PersonName?.Surname?.ToList();
+        if (surnameNames != null)
+        {
+            foreach (var surname in surnameNames)
             {
-                foreach (var surname in surnameNames)
+                var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
+                if (nameByLang == null)
                 {
-                    var nameByLang = m.EEcrisMsgNames.FirstOrDefault(n => n.LangCode == surname.languageCode);
-                    if (nameByLang == null)
-                    {
-                        EEcrisMsgName name = new EEcrisMsgName();
-                        name.Id = BaseEntity.GenerateNewId();
-                        name.LangCode = surname.languageCode;
-                        name.Firstname = surname.Value;
-                        name.EEcrisMsgId = m.Id;
-                        m.EEcrisMsgNames.Add(name);
-                    }
-                    else
-                    {
-                        nameByLang.Surname = surname.Value;
-                    }
+                    EEcrisMsgName name = new EEcrisMsgName();
+                    name.Id = BaseEntity.GenerateNewId();
+                    name.LangCode = surname.languageCode;
+                    name.Firstname = surname.Value;
+                    name.EEcrisMsgId = m.Id;
+                    m.EEcrisMsgNames.Add(name);
+                }
+                else
+                {
+                    nameByLang.Surname = surname.Value;
                 }
             }
+        }
 
 
-            var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
-            && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
-            || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
-            if (msg.MessageSendingMemberStateSpecified)
-            {
-                m.FromAuthId = countriesAuthorities.FirstOrDefault(c => c.MemberStateCode?.ToLower() == msg.MessageSendingMemberState.ToString().ToLower())?.Id;
-            }
+        var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
+        && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
+        || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
+        if (msg.MessageSendingMemberStateSpecified)
+        {
+            m.FromAuthId = countriesAuthorities.FirstOrDefault(c => c.MemberStateCode?.ToLower() == msg.MessageSendingMemberState.ToString().ToLower())?.Id;
+        }
 
-            if (msg.MessageReceivingMemberState.Select(c => c.ToString().ToLower()).Contains("bg"))
-            {
-                m.ToAuthId = countriesAuthorities.FirstOrDefault(c => c.MemberStateCode?.ToLower() == "bg")?.Id;
-            }
-            else
-            {
-                m.ToAuthId = countriesAuthorities.Where(c => msg.MessageReceivingMemberState
-                .Select(p => p.ToString().ToLower()).Contains(c.MemberStateCode?.ToLower()))
-                        .FirstOrDefault()?.Id;
-            }
+        if (msg.MessageReceivingMemberState.Select(c => c.ToString().ToLower()).Contains("bg"))
+        {
+            m.ToAuthId = countriesAuthorities.FirstOrDefault(c => c.MemberStateCode?.ToLower() == "bg")?.Id;
+        }
+        else
+        {
+            m.ToAuthId = countriesAuthorities.Where(c => msg.MessageReceivingMemberState
+            .Select(p => p.ToString().ToLower()).Contains(c.MemberStateCode?.ToLower()))
+                    .FirstOrDefault()?.Id;
+        }
 
-            var nationalities = msg.MessageShortViewPerson.PersonNationalityReference?.Select(p => p.Value)?.ToList();
-            if (nationalities != null)
+        var nationalities = msg.MessageShortViewPerson.PersonNationalityReference?.Select(p => p.Value)?.ToList();
+        if (nationalities != null)
+        {
+            var countries = _dbContext.GCountries.Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
+                                                           && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
+            foreach (var nationality in nationalities)
             {
-                var countries = _dbContext.GCountries.Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
-                                                               && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
-                foreach (var nationality in nationalities)
+                var countryID = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
+                if (countryID != null)
                 {
-                    var countryID = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
-                    if (countryID != null)
-                    {
-                        EEcrisMsgNationality nat = new EEcrisMsgNationality();
-                        nat.Id = BaseEntity.GenerateNewId();
-                        nat.EEcrisMsgId = m.Id;
-                        nat.CountryId = countryID;
-                        m.EEcrisMsgNationalities.Add(nat);
-                    }
+                    EEcrisMsgNationality nat = new EEcrisMsgNationality();
+                    nat.Id = BaseEntity.GenerateNewId();
+                    nat.EEcrisMsgId = m.Id;
+                    nat.CountryId = countryID;
+                    m.EEcrisMsgNationalities.Add(nat);
                 }
             }
-
-            if (msg.MessageVersionTimestampSpecified)
-            {
-                m.MsgTimestamp = msg.MessageVersionTimestamp;
-            }
-
-
-            m.Deadline = msg.MessageDeadline?.Value;
-            m.Pin = msg.MessageShortViewPerson?.PersonIdentityNumber?.Value;
-
-            m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForIdentification;
-
-            return m;
         }
 
-
-        private DateTime GetLastSynchDateForNotifications(string paramNameForSynch)
+        if (msg.MessageVersionTimestampSpecified)
         {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
-            if (parameter?.LastDate == null)
-            {
-                throw new Exception($"{paramNameForSynch} is not set.");
-            }
-            return parameter.LastDate.Value;
+            m.MsgTimestamp = msg.MessageVersionTimestamp;
         }
-        private DateTime GetLastSynchDateForRequests(string paramNameForSynch)
-        {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
-            if (parameter?.LastDate == null)
-            {
-                throw new Exception($"{paramNameForSynch} is not set.");
-            }
-            return parameter.LastDate.Value;
 
-        }
-        private void SetLastSynchDateForNotifications(DateTime lastUpdate, string paramNameForSynch)
-        {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
-            if (parameter == null)
-            {
 
-                throw new Exception($"{paramNameForSynch} does not exist.");
-            }
-            parameter.LastDate = lastUpdate;
-        }
-        private void SetLastSynchDateForRequests(DateTime lastUpdate, string paramNameForSynch)
-        {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
-            if (parameter == null)
-            {
-                throw new Exception($"{paramNameForSynch} does not exist.");
-            }
-            parameter.LastDate = lastUpdate;
+        m.Deadline = msg.MessageDeadline?.Value;
+        m.Pin = msg.MessageShortViewPerson?.PersonIdentityNumber?.Value;
 
-        }
+        m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForIdentification;
+
+        return m;
     }
+
+
+    private DateTime GetLastSynchDateForNotifications(string paramNameForSynch)
+    {
+        var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+        if (parameter?.LastDate == null)
+        {
+            throw new Exception($"{paramNameForSynch} is not set.");
+        }
+        return parameter.LastDate.Value;
+    }
+    private DateTime GetLastSynchDateForRequests(string paramNameForSynch)
+    {
+        var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+        if (parameter?.LastDate == null)
+        {
+            throw new Exception($"{paramNameForSynch} is not set.");
+        }
+        return parameter.LastDate.Value;
+
+    }
+    private void SetLastSynchDateForNotifications(DateTime lastUpdate, string paramNameForSynch)
+    {
+        var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+        if (parameter == null)
+        {
+
+            throw new Exception($"{paramNameForSynch} does not exist.");
+        }
+        parameter.LastDate = lastUpdate;
+    }
+    private void SetLastSynchDateForRequests(DateTime lastUpdate, string paramNameForSynch)
+    {
+        var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+        if (parameter == null)
+        {
+            throw new Exception($"{paramNameForSynch} does not exist.");
+        }
+        parameter.LastDate = lastUpdate;
+
+    }
+}
 }
