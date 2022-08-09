@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using IdentityModel;
 
 namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 {
@@ -122,6 +123,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             if (user != null)
             {
                 context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name));
+                context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.Name));
                 context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
@@ -129,7 +131,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 {
                     foreach(var role in user.Role.Split(","))
                     {
-                        context.IssuedClaims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+                        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
                     }
                 }
                 if (!string.IsNullOrEmpty(user.AdministrationId))
