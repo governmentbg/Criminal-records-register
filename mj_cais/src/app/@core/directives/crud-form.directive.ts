@@ -119,7 +119,6 @@ export abstract class CrudForm<
       this.scrollToValidationError();
     } else {
       this.formObject = form.group.value;
-
       this.saveAndNavigate();
     }
   }

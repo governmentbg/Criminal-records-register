@@ -20,7 +20,7 @@ export class EcrisReqPreviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-   
+   debugger
     this.ecrisRequestPreviewService
       .getEcrisRequest(this.ecrisId,this.ecrisType)
       .subscribe((result) => {

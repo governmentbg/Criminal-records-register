@@ -1,10 +1,12 @@
-import { Component, OnInit, Injector, ViewChild } from "@angular/core";
+import { Component, OnInit, Injector } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { NbDialogService } from "@nebular/theme";
 import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
-import { IsinDataStatusConstants } from "../../../isin/isin-data-form/_models/isin-data-status.constants";
-import { EcrisMessageStatusConstants } from "../../ecris-message-overivew/_models/ecris-message-status.constants";
+import { EcrisNotPreviewComponent } from "../ecris-not-preview/ecris-not-preview.component";
+import { EcrisReqPreviewComponent } from "../ecris-req-preview/ecris-req-preview.component";
+import { EcrisResponsePreviewComponent } from "../ecris-response-preview/ecris-response-preview.component";
 import { EcrisMessageService } from "../_data/ecris-message.service";
 import { EcrisMessageForm } from "../_models/ecris-message.form";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
@@ -24,6 +26,7 @@ export class EcrisIdentificationFormComponent
   >
   implements OnInit
 {
+ 
   // @ViewChild("ecrisMsgNames", {
   //   read: EcrisMsgNamesOverviewComponent,
   // })
@@ -31,7 +34,8 @@ export class EcrisIdentificationFormComponent
   constructor(
     service: EcrisMessageService,
     public injector: Injector,
-    private nomenclatureService: NomenclatureService
+    private nomenclatureService: NomenclatureService,
+    private dialogService: NbDialogService,
   ) {
     super(service, injector);
     this.backUrl = "pages/ecris/identification";
@@ -97,6 +101,46 @@ export class EcrisIdentificationFormComponent
         this.reloadCurrentRoute();
       });
   };
+
+  getDocument() {
+    //ecrisMsg.msgType = "EcrisReqResp";
+    //ecrisMsg.msgType = "EcrisNot";
+    //ecrisMsg.msgType = "EcrisRequest";
+    debugger;
+    if (this.model.msgTypeId == "EcrisNot") {
+      this.dialogService
+        .open(EcrisNotPreviewComponent, {
+          context: {
+            ecrisId: this.model.id,
+            ecrisType: this.model.msgTypeId,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
+    if (this.model.msgTypeId == "EcrisRequest") {
+      this.dialogService
+        .open(EcrisReqPreviewComponent, {
+          context: {
+            ecrisId: this.model.id,
+            ecrisType: this.model.msgTypeId,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
+    if (this.model.msgTypeId == "EcrisReqResp") {
+      this.dialogService
+        .open(EcrisResponsePreviewComponent, {
+          context: {
+            ecrisId: this.model.id,
+            ecrisType: this.model.msgTypeId,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
+  }
 
   handleSelectedRow(event) {
     this.graoPersonId = event;
