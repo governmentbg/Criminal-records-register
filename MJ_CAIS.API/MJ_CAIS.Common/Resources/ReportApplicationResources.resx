@@ -129,6 +129,12 @@
   <data name="lblCancelDesc" xml:space="preserve">
     <value>Основание</value>
   </data>
+  <data name="msgDelivered" xml:space="preserve">
+    <value>Доставенo искане</value>
+  </data>
+  <data name="msgDeliveredReport" xml:space="preserve">
+    <value>Доставена справка</value>
+  </data>
   <data name="statusNew" xml:space="preserve">
     <value>Ново искане</value>
   </data>
