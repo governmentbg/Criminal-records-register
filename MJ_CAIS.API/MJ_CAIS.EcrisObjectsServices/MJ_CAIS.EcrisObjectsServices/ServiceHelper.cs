@@ -615,6 +615,26 @@ namespace MJ_CAIS.EcrisObjectsServices
 
              
             }
+            if (msg.MessageType == EcrisMessageType.NRS)
+            {
+                person = ((NotificationResponseMessageType)msg).MessagePerson;
+                m.MsgTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NRS, dbContext);
+                if (((NotificationResponseMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
+                {
+                    m.Urgent = true;
+                };
+                if (((NotificationResponseMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "no")
+                {
+                    m.Urgent = false;
+                };
+                
+                m.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForSending;
+
+                   
+                m.RequestMsgId = requestMsgId;
+
+
+            }
             if (msg.MessageType == EcrisMessageType.NOT)
             {
                 person = ((NotificationMessageType)msg).MessagePerson;

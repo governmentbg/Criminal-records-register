@@ -47,4 +47,8 @@ export class ReportApplicationService extends CaisCrudService<
     let url = `${this.url}/print-report/` + reportId;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
+
+  public deliver(id: string): Observable<any> {
+    return this.http.put(`${this.url}/deliver/${id}`, {});
+  }
 }

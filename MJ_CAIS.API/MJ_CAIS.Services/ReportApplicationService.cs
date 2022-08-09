@@ -109,13 +109,39 @@ namespace MJ_CAIS.Services
         public IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId)
         {
             var statues = _reportApplicationRepository.SelectAllStatusHistoryData();
-            var filteredStatuses = statues.Where(x => x.AReportApplId == aId);
+            var filteredStatuses = statues.Where(x => x.AReportApplId == aId).OrderByDescending(x=>x.CreatedOn);
             return filteredStatuses;
         }
 
         public IQueryable<GeneratedReportDTO> GetReportsByAppId(string aId)
+           => _reportApplicationRepository.SelectAllGeneratedReportsByAppId(aId);
+
+        public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
+            => await _reportApplicationRepository.GetReportAppContentByIdAsync(aId);
+
+        public async Task<string> DeliverAsync(string aId)
         {
-            return _reportApplicationRepository.SelectAllGeneratedReportsByAppId(aId);
+            var appReport = await _reportApplicationRepository.GetFullAppReportByIdAsync(aId);
+            if (appReport == null) return null;
+
+            appReport.StatusCode = ReportApplicationConstants.Status.DeliveredReport;
+            appReport.ARepAppl.StatusCode = ReportApplicationConstants.Status.Delivered;
+
+            appReport.EntityState = EntityStateEnum.Modified;
+            appReport.ARepAppl.EntityState = EntityStateEnum.Modified;
+
+            appReport.ModifiedProperties = new List<string> { nameof(appReport.StatusCode), nameof(appReport.Version) };
+            appReport.ARepAppl.ModifiedProperties = new List<string> { nameof(appReport.ARepAppl.StatusCode), nameof(appReport.ARepAppl.Version) };
+
+            var reportH = CreateH(ReportApplicationConstants.Status.DeliveredReport, ReportApplicationResources.msgDelivered, appReport.Id, appReport.ARepAppl.Id);
+            var reportAppH = CreateH(ReportApplicationConstants.Status.Delivered, ReportApplicationResources.msgDeliveredReport, appReport.Id, appReport.ARepAppl.Id);
+
+            appReport.AReportStatusHes = new List<AReportStatusH> { reportH };
+            appReport.ARepAppl.AReportStatusHes = new List<AReportStatusH> { reportAppH };
+
+            await _reportApplicationRepository.SaveEntityAsync(appReport, true);
+
+            return appReport.Id;
         }
 
         private async Task<AReportApplication> ApplyDataForUpdateAsync(ReportApplicationDTO aInDto, bool isFinal)
@@ -192,7 +218,7 @@ namespace MJ_CAIS.Services
             return report;
         }
 
-        private static AReportStatusH CreateH(string statusCode, string desc = null)
+        private static AReportStatusH CreateH(string statusCode, string desc = null, string reportId = null, string reportAppId = null)
         {
             return new AReportStatusH
             {
@@ -200,6 +226,8 @@ namespace MJ_CAIS.Services
                 Descr = desc,
                 EntityState = EntityStateEnum.Added,
                 StatusCode = statusCode,
+                AReportId = reportId,
+                AReportApplId = reportAppId,
             };
         }
 

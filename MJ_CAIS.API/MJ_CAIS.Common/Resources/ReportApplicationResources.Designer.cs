@@ -97,6 +97,24 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Доставенo искане.
+        /// </summary>
+        public static string msgDelivered {
+            get {
+                return ResourceManager.GetString("msgDelivered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Доставена справка.
+        /// </summary>
+        public static string msgDeliveredReport {
+            get {
+                return ResourceManager.GetString("msgDeliveredReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ново искане.
         /// </summary>
         public static string statusNew {

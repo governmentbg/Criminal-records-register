@@ -131,5 +131,29 @@ namespace MJ_CAIS.Repositories.Impl
             return bulletins;
         }
 
+        public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
+        {
+            var doc = await _dbContext.AReports.AsNoTracking()
+                                        .Include(x=>x.Doc)
+                                        .ThenInclude(x=>x.DocContent).AsNoTracking()
+                                        .Select(x=> new
+                                        {
+                                            Id = x.Id,
+                                            Content = x.Doc.DocContent.Content
+                                        })
+                                        .FirstAsync(x=> x.Id == aId);
+
+            return doc.Content;
+        }
+
+        public async Task<AReport> GetFullAppReportByIdAsync(string aId)
+        {
+            var result = await _dbContext.AReports.AsNoTracking()
+                            .Include(x=>x.ARepAppl).AsNoTracking()
+                            .FirstOrDefaultAsync(x=>x.Id == aId);
+
+            return result;
+        }
+
     }
 }
