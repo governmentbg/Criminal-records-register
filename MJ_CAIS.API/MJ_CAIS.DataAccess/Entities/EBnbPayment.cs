@@ -5,6 +5,11 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class EBnbPayment : BaseEntity, IBaseIdEntity
     {
+        public EBnbPayment()
+        {
+            EPayments = new HashSet<EPayment>();
+        }
+
         public string Id { get; set; } = null!;
         public decimal? SentAmount { get; set; }
         public DateTime? PaymentDate { get; set; }
@@ -36,5 +41,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? CorrReference { get; set; }
+
+        public virtual ICollection<EPayment> EPayments { get; set; }
     }
 }

@@ -21,7 +21,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public string? BnbPayId { get; set; }
 
+        public virtual EBnbPayment? BnbPay { get; set; }
         public virtual ICollection<APayment> APayments { get; set; }
     }
 }
