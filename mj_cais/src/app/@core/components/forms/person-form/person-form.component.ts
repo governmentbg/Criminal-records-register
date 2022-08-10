@@ -26,11 +26,9 @@ export class PersonFormComponent implements OnInit {
   public isPersonContext: boolean;
   public isApplicationContext: boolean;
   public isReportApplicationContext: boolean;
-  public showEgnDisplay: boolean;
   public showInvalidEgnMessage: boolean = false;
   public showInvalidLnchMessage: boolean = false;
   public showInvalidEgnOrLnchMessage: boolean = false;
-  //public hasDataFromRegix: boolean = false;
 
   ngOnInit(): void {
     this.isFbbcContext = this.contextType == PersonContextEnum.Fbbc;
@@ -42,9 +40,7 @@ export class PersonFormComponent implements OnInit {
       this.contextType == PersonContextEnum.ReportApplication;
 
     if (this.isFbbcContext && this.personForm.egn.value) {
-     // this.personForm.egnDisplay.patchValue(this.personForm.egn.value);
-      //this.personForm.egnDisplay.disable();
-      this.showEgnDisplay = true;
+      this.personForm.egn.disable();
     }
 
     if (
@@ -53,13 +49,13 @@ export class PersonFormComponent implements OnInit {
       this.personForm.ln.value !== null ||
       this.personForm.egn.value !== null
     ) {
+      this.showInvalidEgnOrLnchMessage = false;
       this.personForm.egn.disable();
       this.personForm.lnch.disable();
       this.personForm.ln.disable();
-      this.personForm.suid.disable();
     }
 
-    //this.personForm.suidDisplay.patchValue(this.personForm.suid.value);
+    this.personForm.suid.disable();
     this.setPidWarningMessages();
   }
 

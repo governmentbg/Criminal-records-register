@@ -70,6 +70,12 @@ namespace MJ_CAIS.Services
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
         }
 
+        public async Task<IgPageResult<PersonGeneratedReportGridDTO>> SelectPersonReportApplAllWithPaginationAsync(ODataQueryOptions<PersonGeneratedReportGridDTO> aQueryOptions, string personId)
+        {
+            var entityQuery = _personRepository.GetAllReportApplByPersonId(personId);
+            return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
         public async Task<IgPageResult<PersonFbbcGridDTO>> SelectPersonFbbcAllWithPaginationAsync(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
             var entityQuery = _personRepository.GetFbbcByPersonId(personId);

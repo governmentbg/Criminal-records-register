@@ -114,36 +114,24 @@
     ></cais-input>
   </div>
   <ng-container *ngIf="isFbbcContext">
-    <ng-container *ngIf="!showEgnDisplay">
-      <div class="form-group col-md-3">
-        <cais-input
-          [type]="'text'"
-          [label]="'ЕГН/ЛНЧ'"
-          [inputFormControl]="personForm.egn"
-          [parentGroup]="personForm.group"
-        ></cais-input>
-        <ng-container *ngIf="showInvalidEgnOrLnchMessage">
-          <span class="text-warning">
-            Въведената стойност за ЕГН/ЛНЧ е невалидна</span
-          >
-        </ng-container>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="showEgnDisplay">
-      <div class="form-group col-md-3">
-        <cais-input
-          [type]="'text'"
-          [label]="'ЕГН/ЛНЧ'"
-          [inputFormControl]="personForm.egnDisplay"
-          [parentGroup]="personForm.group"
-        ></cais-input>
-      </div>
-    </ng-container>
+    <div class="form-group col-md-3">
+      <cais-input
+        [type]="'text'"
+        [label]="'ЕГН/ЛНЧ'"
+        [inputFormControl]="personForm.egn"
+        [parentGroup]="personForm.group"
+      ></cais-input>
+      <ng-container *ngIf="showInvalidEgnOrLnchMessage">
+        <span class="text-warning">
+          Въведената стойност за ЕГН/ЛНЧ е невалидна</span
+        >
+      </ng-container>
+    </div>
     <div class="form-group col-md-3">
       <cais-input
         [type]="'text'"
         [label]="'Вътрешен системен идентификатор'"
-        [inputFormControl]="personForm.suidDisplay"
+        [inputFormControl]="personForm.suid"
         [parentGroup]="personForm.group"
       >
       </cais-input>
@@ -190,7 +178,7 @@
       <cais-input
         [type]="'text'"
         [label]="'Вътрешен системен идентификатор'"
-        [inputFormControl]="personForm.suidDisplay"
+        [inputFormControl]="personForm.suid"
         [parentGroup]="personForm.group"
       >
       </cais-input>

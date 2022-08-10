@@ -141,6 +141,14 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<PersonGeneratedReportGridDTO> GetAllReportApplByPersonId(string personId)
+        {
+            var reportAppl = _personHelperRepository.GetAllReportApplByPersonId(personId);
+     
+            return reportAppl;
+        }
+
+
         public IQueryable<PersonFbbcGridDTO> GetFbbcByPersonId(string personId)
         {
             var allFbbcs = _personHelperRepository.GetAllFbbcsByPersonId(personId);

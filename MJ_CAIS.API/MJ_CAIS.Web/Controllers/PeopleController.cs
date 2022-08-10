@@ -66,6 +66,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("report-applications")]
+        public async Task<IActionResult> GetAllGeneratedReports(ODataQueryOptions<PersonGeneratedReportGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonReportApplAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
         [HttpGet("fbbcs")]
         public async Task<IActionResult> GetAllFbbcs(ODataQueryOptions<PersonFbbcGridDTO> aQueryOptions, string personId)
         {
