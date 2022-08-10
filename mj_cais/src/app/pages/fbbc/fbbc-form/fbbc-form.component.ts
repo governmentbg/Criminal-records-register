@@ -86,6 +86,19 @@ export class FbbcFormComponent
     this.validateAndSave(this.fullForm);
   };
 
+  protected validateAndSave(form: any) {
+    console.log(form.group);
+    if (!form.group.valid) {
+      form.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+
+      this.scrollToValidationError();
+    } else {
+      this.formObject = form.group.getRawValue();
+      this.saveAndNavigate();
+    }
+  }
+
   deleteFunction = () => {
     let id = this.activatedRoute.snapshot.params["ID"];
     this.service

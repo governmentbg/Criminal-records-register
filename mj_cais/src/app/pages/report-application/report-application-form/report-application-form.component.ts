@@ -124,6 +124,19 @@ export class ReportApplicationFormComponent
   public onFinalEditDialogOpen() {
     this.finalEditDialog.open();
   }
+  protected validateAndSave(form: any) {
+    console.log(form.group);
+    if (!form.group.valid) {
+      form.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+
+      this.scrollToValidationError();
+    } else {
+      debugger
+      this.formObject = form.group.getRawValue();
+      this.saveAndNavigate();
+    }
+  }
 
   protected saveAndNavigate() {
     this.loaderService.show();

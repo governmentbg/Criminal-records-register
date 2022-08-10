@@ -3,6 +3,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Fbbc;
+using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
@@ -15,5 +16,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<ApplicationsByPersonIdDTO> GetAllAplicationsByPersonId(string personId);
 
         IQueryable<FbbcByPersonIdDTO> GetAllFbbcsByPersonId(string personId);
+
+        IQueryable<PersonGeneratedReportGridDTO> GetAllReportApplByPersonId(string personId);
     }
 }

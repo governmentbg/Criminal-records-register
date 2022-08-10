@@ -33,12 +33,14 @@ export class PersonDetailsFormComponent
   public bulletinsTabTitle = "Бюлетини";
   public applicationsTabTitle = "Документи на гише";
   public eApplicationsTabTitle = "Е-Свидетелства";
+  public reportsTabTitle = "Справки";
   public fbbcsTabTitle = "Сведения за осъждане в чужбина";
   public pidsTabTitle = "Идентификатори на лице";
   public showApplicationsTab: boolean = false;
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;
   public showPidsTab: boolean = false;
+  public showReportsTab: boolean = false;
 
   constructor(
     service: PersonDetailsService,
@@ -67,6 +69,10 @@ export class PersonDetailsFormComponent
     let tabTitle = event.tabTitle;
     if (!this.showApplicationsTab) {
       this.showApplicationsTab = tabTitle == this.applicationsTabTitle;
+    }
+
+    if (!this.showReportsTab) {
+      this.showReportsTab = tabTitle == this.reportsTabTitle;
     }
 
     if (!this.showFbbcsTab) {

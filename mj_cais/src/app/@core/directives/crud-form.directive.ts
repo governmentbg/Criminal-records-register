@@ -263,7 +263,7 @@ export abstract class CrudForm<
   }
 
   protected onServiceError(errorResponse): void {
-    if(errorResponse.code == "401"){
+    if(errorResponse.status == "401"){
       this.router.navigateByUrl("pages");
       return;
     }

@@ -30,6 +30,10 @@ namespace MJ_CAIS.Common.Constants
             public const string REGIX_DAYS_CACHE = "REGIX_DAYS_CACHE";
             // 'Максимален брой опити до успешно изпращане през ЕДеливери',
             public const string EDELIVERY_NUMBER_OF_ATTEMPTS = "EDELIVERY_NUMBER_OF_ATTEMPTS";
+
+            // 'IBAN на МП',
+            public const string MJ_IBAN_BNB = "MJ_IBAN_BNB";
+           
         }
     }
 }

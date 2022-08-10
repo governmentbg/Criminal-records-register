@@ -28,6 +28,7 @@
             public const string WebCheckTaxFree = "WebCheckTaxFree";
             public const string WebCheckPayment = "WebCheckPayment";
             public const string WebApprovedApplication = "WebApprovedApplication";
+            public const string DeliveredApplication = "DeliveredApplication";
 
             //todo: add to db
             public const string CertificateUserSigned = "CertificateUserSigned";

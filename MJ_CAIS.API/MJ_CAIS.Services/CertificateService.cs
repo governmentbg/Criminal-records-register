@@ -69,13 +69,39 @@ namespace MJ_CAIS.Services
             }
             certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
             certificate.ModifiedProperties.Add(nameof(certificate.AStatusHes));
-            baseAsyncRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
-            baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
+        
             if (newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
             {
                 MoveCertificateToWCertificate(certificate);
-            }
+                
+                if (certificate.Application == null)
+                {
+                    AApplication a = new AApplication();
+                    a.Id = certificate.ApplicationId;
+                    a.EntityState = Common.Enums.EntityStateEnum.Modified;
+                    a.ModifiedProperties = new List<string>() { nameof(a.StatusCode) };
+                    a.StatusCode = ApplicationConstants.ApplicationStatuses.DeliveredApplication;
+                    certificate.Application = a;                   
 
+                }
+                else
+                {
+                    certificate.Application.EntityState = Common.Enums.EntityStateEnum.Modified;
+                    if (certificate.Application.ModifiedProperties == null)
+                    {
+                        certificate.Application.ModifiedProperties = new List<string>() { nameof(certificate.Application.StatusCode) };
+
+                    }
+                    else
+                    {
+                        certificate.Application.ModifiedProperties.Add(nameof(certificate.Application.StatusCode));
+                    }
+                    certificate.Application.StatusCode = ApplicationConstants.ApplicationStatuses.DeliveredApplication;
+                }
+                CreateAStatusH(certificate.ApplicationId, null, ApplicationConstants.ApplicationStatuses.DeliveredApplication, "Доставено свидетелство");
+            }
+            baseAsyncRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
             //dbContext.AStatusHes.Add(aStatusH);
             //dbContext.ACertificates.Update(certificate);
 
