@@ -130,6 +130,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<WApplication> WApplications { get; set; } = null!;
         public virtual DbSet<WApplicationStatus> WApplicationStatuses { get; set; } = null!;
         public virtual DbSet<WCertificate> WCertificates { get; set; } = null!;
+        public virtual DbSet<WDocument> WDocuments { get; set; } = null!;
         public virtual DbSet<WReport> WReports { get; set; } = null!;
         public virtual DbSet<WReportSearchPer> WReportSearchPers { get; set; } = null!;
         public virtual DbSet<WStatusH> WStatusHes { get; set; } = null!;
@@ -9518,6 +9519,70 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.WCertificates)
                     .HasForeignKey(d => d.WApplId)
                     .HasConstraintName("FK_W_CERTIFICATES_W_APPLICATIO");
+            });
+
+            modelBuilder.Entity<WDocument>(entity =>
+            {
+                entity.ToTable("W_DOCUMENTS");
+
+                entity.HasIndex(e => e.WApplId, "XIF1W_Documents");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Bytes)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("BYTES");
+
+                entity.Property(e => e.Content)
+                    .HasColumnType("BLOB")
+                    .HasColumnName("CONTENT");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.Md5Hash).HasColumnName("MD5_HASH");
+
+                entity.Property(e => e.MimeType)
+                    .HasMaxLength(200)
+                    .HasColumnName("MIME_TYPE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.Sha1Hash)
+                    .HasMaxLength(18)
+                    .IsUnicode(false)
+                    .HasColumnName("SHA1_HASH")
+                    .IsFixedLength();
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.Property(e => e.WApplId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("W_APPL_ID");
+
+                entity.HasOne(d => d.WAppl)
+                    .WithMany(p => p.WDocuments)
+                    .HasForeignKey(d => d.WApplId)
+                    .HasConstraintName("FK_W_DOCUMENTS_W_APPLICATIO");
             });
 
             modelBuilder.Entity<WReport>(entity =>
