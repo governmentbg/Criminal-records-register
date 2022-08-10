@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisMessage;
+using MJ_CAIS.ExternalWebServices;
+using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
@@ -14,11 +16,13 @@ namespace MJ_CAIS.Web.Controllers
     public class EcrisMessagesController : BaseApiCrudController<EcrisMessageDTO, EcrisMessageDTO, EcrisMessageGridDTO, EEcrisMessage, string>
     {
         private readonly IEcrisMessageService _ecrisMessageService;
+        private readonly PersonValidatorClient _personValidatorClient;
 
-        public EcrisMessagesController(IEcrisMessageService ecrisMessageService)
+        public EcrisMessagesController(IEcrisMessageService ecrisMessageService, PersonValidatorClient personValidatorClient)
             : base(ecrisMessageService)
         {
             _ecrisMessageService = ecrisMessageService;
+            _personValidatorClient = personValidatorClient;
         }
 
         [HttpGet("")]
@@ -107,7 +111,6 @@ namespace MJ_CAIS.Web.Controllers
                 return BadRequest();
             }
 
-
         }
 
         [HttpPut("{aId}/change-status/{statusId}")]
@@ -117,6 +120,15 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._ecrisMessageService.IdentifyAsync(aId, graoPersonId);
             return Ok();
+        }
+
+        [HttpGet("search-person")]
+        public async Task<IActionResult> SearchPerson([FromQuery] SearchParamsDTO searchParams)
+        {
+            var sex = searchParams.Sex == 1 ? PersonInfoGenderType.male : searchParams.Sex == 2 ? PersonInfoGenderType.female : PersonInfoGenderType.female;
+            var result = await _personValidatorClient.GetPersonInfo(searchParams.Firstname, searchParams.Surname, searchParams.Familyname, sex, searchParams.BirthDate);
+            return Ok(result);
+            
         }
     }
 }

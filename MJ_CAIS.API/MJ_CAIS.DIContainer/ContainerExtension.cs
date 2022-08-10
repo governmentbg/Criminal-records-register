@@ -55,6 +55,7 @@ namespace MJ_CAIS.DIContainer
             //var servicesTypesExternal = typeof(CertificateGenerationService).Assembly.GetClassTypes("Service");
             //var interfaceTypesExternal = typeof(ICertificateGenerationService).Assembly.GetInterfaceTypes("Service");
             //AddTransientTypes(services, servicesTypesExternal, interfaceTypesExternal);
+            services.AddScoped<PersonValidatorClient>();
         }
 
         private static List<Type> GetClassTypes(this Assembly assembly, string endingName)

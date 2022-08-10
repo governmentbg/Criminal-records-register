@@ -159,7 +159,7 @@
               [label]="'Пол'"
               [inputFormControl]="searchPersonForm.sex"
               [parentGroup]="searchPersonForm.group"
-              [items]="dbData.genderTypes"
+              [items]="dbData.genderTypes.slice(0, 2)"
               [inputName]="'sex'"
             >
             </cais-autocomplete>
@@ -178,6 +178,7 @@
         <cais-result-from-search-overview
           #resultGrid
           [searchPersonForm]="searchPersonForm"
+          (selectRow)="handleSelectedRow($event)"
         ></cais-result-from-search-overview>
       </nb-card-body>
     </nb-card>
