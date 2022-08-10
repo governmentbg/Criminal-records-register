@@ -64,8 +64,10 @@ namespace MJ_CAIS.Services
             if (!string.IsNullOrEmpty(statusId))
             {
                 var statues = statusId.Split(',');
-                entityQuery = entityQuery.Where(x =>
-                    statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
+                //entityQuery = entityQuery.Where(x =>
+                //    statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
+                entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode)).Select(e => e)
+                    .Union(entityQuery.Where(x => x.ACertificates.Any(c => statues.Contains(c.StatusCode)))).Select(e => e);
             }
 
             var baseQuery = entityQuery.ProjectTo<ApplicationGridDTO>(mapperConfiguration);
@@ -273,11 +275,11 @@ namespace MJ_CAIS.Services
 
             if (application.LnchId != null && application.LnchNavigation != null)
             {
-                if(personId == null)
+                if (personId == null)
                 {
                     personId = application.LnchNavigation.PersonId;
                 }
-                else if(personId != application.LnchNavigation.PersonId)
+                else if (personId != application.LnchNavigation.PersonId)
                 {
                     throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
                 }
@@ -449,7 +451,7 @@ namespace MJ_CAIS.Services
             }
 
             _applicationRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
-            await _applicationRepository.SaveChangesAsync(clearTracker:true); //добавено от Надя, че обърква контекста.
+            await _applicationRepository.SaveChangesAsync(clearTracker: true); //добавено от Надя, че обърква контекста.
             //dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
             //await dbContext.SaveChangesAsync();
         }
