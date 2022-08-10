@@ -18,14 +18,12 @@ namespace MJ_CAIS.Repositories.Impl
 
         public override IQueryable<NInternalRequest> SelectAll()
         {
-            //var query = this._dbContext.NInternalRequests.AsNoTracking()
-            //    //.Include(x => x.Bulletin)
-            //    .Include(x => x.ReqStatusCodeNavigation)
-            //    .Where(x => x.Bulletin.CsAuthorityId == _userContext.CsAuthorityId);
+            var query = this._dbContext.NInternalRequests.AsNoTracking()
+                .Include(x => x.ReqStatusCodeNavigation)
+                .Include(x => x.FromAuthority)
+                .Include(x => x.ToAuthority);
 
-            //return query;
-
-            throw new NotImplementedException();
+            return query;
         }
 
         public override async Task<NInternalRequest> SelectAsync(string id)

@@ -11,13 +11,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public InternalRequestsProfile()
         {
-            //CreateMap<BInternalRequest, InternalRequestGridDTO>()
-            //   .ForMember(d => d.BulletinNumber, opt => opt.MapFrom(src => src.Bulletin.RegistrationNumber))
-            //   .ForMember(d => d.ReqStatus, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
-            //   .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.Bulletin.Firstname))
-            //   .ForMember(d => d.SurName, opt => opt.MapFrom(src => src.Bulletin.Surname))
-            //   .ForMember(d => d.FamilyName, opt => opt.MapFrom(src => src.Bulletin.Familyname))
-            //   .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Bulletin.Id));
+            CreateMap<NInternalRequest, InternalRequestGridDTO>()
+               .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
+               .ForMember(d => d.FromAuthorityName, opt => opt.MapFrom(src => src.FromAuthority.Name))
+               .ForMember(d => d.ToAuthorityName, opt => opt.MapFrom(src => src.ToAuthority.Name));
 
             //CreateMap<BInternalRequest, InternalRequestDTO>()
             // .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))

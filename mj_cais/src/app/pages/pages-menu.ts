@@ -40,6 +40,14 @@ export class PagesMenu {
           this.hasNoRole(roles, RoleNameEnum.Judge),
       },
       {
+        title: "Заявки",
+        icon: { icon: "mail-bulk", pack: "fa" },      
+        link: "/pages/internal-requests/box",
+        hidden:
+          this.hasNoRole(roles, RoleNameEnum.Normal) &&
+          this.hasNoRole(roles, RoleNameEnum.Judge),
+      },
+      {
         title: "Бюлетини",
         icon: { icon: "file-alt", pack: "fa" },
         hidden:

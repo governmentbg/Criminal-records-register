@@ -64,7 +64,7 @@ namespace EmailSender
             var emailsToSend = dbContext.EEmailEvents
                 .Where(e => e.EmailStatus == EmailStatusConstants.Pending || (e.EmailStatus == EmailStatusConstants.Rejected && e.Attempts < 5))
                 .Where(x => !string.IsNullOrEmpty(x.EmailAddress))
-                .Where(x => x.EmailAddress.EndsWith("technologica.com")) // TODO: remove later
+               // .Where(x => x.EmailAddress.EndsWith("technologica.com")) // TODO: remove later
                 .ToList();
 
             // _logger.Info("Брой мейли за изпращане: " + emailsToSend.Count);
