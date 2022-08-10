@@ -20,37 +20,32 @@ namespace MJ_CAIS.Services
     public class InternalRequestService : BaseAsyncService<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, NInternalRequest, string, CaisDbContext>, IInternalRequestService
     {
         private readonly IInternalRequestRepository _internalRequestRepository;
-        private readonly IBulletinRepository _bulletinRepository;
+        private readonly IUserContext _userContext;
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
-        public InternalRequestService(IMapper mapper, IInternalRequestRepository internalRequestRepository, IBulletinRepository bulletinRepository)
+        public InternalRequestService(IMapper mapper, IInternalRequestRepository internalRequestRepository, IUserContext userContext)
             : base(mapper, internalRequestRepository)
         {
             _internalRequestRepository = internalRequestRepository;
-            _bulletinRepository = bulletinRepository;
+            _userContext = userContext;
         }
 
-        /// <summary>
-        /// Връща списък от заявки.
-        /// Когато адвокат разглежда заявки вижда всички. 
-        /// Когато служител БС разглежда вижда всички заявки към конкретен бюлетин в неговото БС 
-        /// </summary>
-        /// <param name="aQueryOptions"></param>
-        /// <param name="bulletinId"></param>
-        /// <returns></returns>
-        public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string? statusId, string? bulletinId)
+        public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool isForSender)
         {
             var entityQuery = this.GetSelectAllQueryable();
 
-            if (!string.IsNullOrEmpty(bulletinId))
-            {//todo: change
-                //entityQuery = entityQuery.Where(x => x.BulletinId == bulletinId);
+            if (isForSender)
+            {
+                entityQuery.Where(x => x.FromAuthorityId == _userContext.CsAuthorityId);
+            }
+            else
+            {
+                entityQuery.Where(x => x.ToAuthorityId == _userContext.CsAuthorityId);
             }
 
-            if (!string.IsNullOrEmpty(statusId))
-            {
-                entityQuery = entityQuery.Where(x => x.ReqStatusCode == statusId);
-            }
+            var statuesArr = statuses.Split(',');
+            entityQuery = entityQuery.Where(x => statuesArr.Contains(x.ReqStatusCode));
 
             var baseQuery = entityQuery.ProjectTo<InternalRequestGridDTO>(mapperConfiguration);
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
@@ -117,8 +112,8 @@ namespace MJ_CAIS.Services
 
             var certId = currentBull.CertificateId;
 
-            var bullIdsForCert = await  (await _internalRequestRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certId))//await dbContext.AAppBulletins.AsNoTracking()
-                //.Where(x => x.CertificateId == certId)
+            var bullIdsForCert = await (await _internalRequestRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certId))//await dbContext.AAppBulletins.AsNoTracking()
+                                                                                                                                 //.Where(x => x.CertificateId == certId)
                 .Select(x => x.Id).ToListAsync();
 
             if (bullIdsForCert.Any())
@@ -152,7 +147,7 @@ namespace MJ_CAIS.Services
             await _internalRequestRepository.SaveEntityAsync(bulletin, true);
         }
 
-   
+
 
         /// <summary>
         /// Основна информация за бюлетин и лицето към него, 
@@ -162,32 +157,33 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
         {
-            var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
-            if (bulletin == null) return null;
+            throw new NotImplementedException();
+            //var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
+            //if (bulletin == null) return null;
 
-            var result = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
-            if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
-            {
-                result.PersonId = bulletin.EgnNavigation.PersonId;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
-            {
-                result.PersonId = bulletin.LnchNavigation.PersonId;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
-            {
-                result.PersonId = bulletin.LnNavigation.PersonId;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
-            {
-                result.PersonId = bulletin.IdDocNumberNavigation.PersonId;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
-            {
-                result.PersonId = bulletin.SuidNavigation.PersonId;
-            }
+            //var result = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
+            //if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
+            //{
+            //    result.PersonId = bulletin.EgnNavigation.PersonId;
+            //}
+            //else if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
+            //{
+            //    result.PersonId = bulletin.LnchNavigation.PersonId;
+            //}
+            //else if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
+            //{
+            //    result.PersonId = bulletin.LnNavigation.PersonId;
+            //}
+            //else if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
+            //{
+            //    result.PersonId = bulletin.IdDocNumberNavigation.PersonId;
+            //}
+            //else if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
+            //{
+            //    result.PersonId = bulletin.SuidNavigation.PersonId;
+            //}
 
-            return result;
+            //return result;
         }
     }
 }
