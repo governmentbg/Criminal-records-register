@@ -9,11 +9,17 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode);
 
+        Task<IgPageResult<GeneratedReportGridDTO>> SelectAllGeneratedReportsWithPaginationAsync(ODataQueryOptions<GeneratedReportGridDTO> aQueryOptions);
+
+        Task<AReportApplication> CreateAppReportAsync(ReportApplicationDTO aInDto);
+
         Task<string> UpdateAsync(ReportApplicationDTO aInDto);
 
         Task<string> FinalUpdateAsync(ReportApplicationDTO aInDto);
 
         Task<string> CancelAsync(string aId, string cancelDesc);
+
+        Task<string> CancelReportAsync(CancelReportDTO aInDto);
 
         IQueryable<ReportAppStatusHistoryDTO> GetStatusHistoryByReportAppId(string aId);
 
@@ -22,5 +28,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<byte[]> GetReportAppContentByIdAsync(string aId);
 
         Task<string> DeliverAsync(string aId);
+
+        Task<ReportApplicationDTO> SelectWithPersonDataAsync(string personId);
     }
 }

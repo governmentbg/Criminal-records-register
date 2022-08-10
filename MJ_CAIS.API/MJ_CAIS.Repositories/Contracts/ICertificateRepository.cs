@@ -1,5 +1,6 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Certificate;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
@@ -18,7 +19,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<ACertificate> GetCertificateWithDocumentContent(string certificateID);
         Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID);
         Task<ACertificate> GetCertificateDataWithContentAndType(string certificateID);
-
-
+        Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId);
+        Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId);
     }
 }

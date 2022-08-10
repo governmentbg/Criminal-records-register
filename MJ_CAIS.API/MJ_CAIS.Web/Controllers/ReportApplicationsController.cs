@@ -8,6 +8,8 @@ using MJ_CAIS.Common.Constants;
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DTO.Common;
 using MJ_CAIS.ExternalWebServices.Contracts;
+using MJ_CAIS.DTO.Person;
+using MJ_CAIS.ExternalWebServices.DbServices;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -18,15 +20,18 @@ namespace MJ_CAIS.Web.Controllers
         private readonly IReportApplicationService _reportApplicationService;
         private readonly IReportGenerationService _reportGenerationService;
         private readonly IPrintDocumentService _printDocumentService;
+        private readonly ISearchByIdentifierService _searchByIdentifierService;
 
         public ReportApplicationsController(IReportApplicationService reportApplicationService,
             IReportGenerationService reportGenerationService,
-            IPrintDocumentService printDocumentService)
+            IPrintDocumentService printDocumentService,
+            ISearchByIdentifierService searchByIdentifierService)
             : base(reportApplicationService)
         {
             _reportApplicationService = reportApplicationService;
             _reportGenerationService = reportGenerationService;
             _printDocumentService = printDocumentService;
+            _searchByIdentifierService = searchByIdentifierService;
         }
 
         [HttpGet("")]
@@ -36,16 +41,67 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("all-generated-reports")]
+        public virtual async Task<IActionResult> GetAllGeneratedReports(ODataQueryOptions<GeneratedReportGridDTO> aQueryOptions)
+        {
+            var result = await this._reportApplicationService.SelectAllGeneratedReportsWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
         [HttpPost("")]
         public new async Task<IActionResult> Post([FromBody] ReportApplicationDTO aInDto)
         {
-            return await base.Post(aInDto);
+            var report = await _reportApplicationService.CreateAppReportAsync(aInDto);
+            return Ok(new { report.Id });
         }
 
         [HttpGet("{aId}")]
         public new async Task<IActionResult> Get(string aId)
         {
             return await base.Get(aId);
+        }
+
+        [HttpGet("create")]
+        public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)
+        {
+            var result = await this._reportApplicationService.SelectWithPersonDataAsync(personId);
+            if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("search-by-egn")]
+        public async Task<IActionResult> SearchByEgn([FromBody] SearchByIdentifierDTO aInDto)
+        {
+            var reportId = string.Empty;
+            try
+            {
+                var report = await _reportApplicationService.CreateAppReportAsync(new ReportApplicationDTO { Person = new PersonDTO() { Egn = aInDto.Identifier } });
+                reportId = report.Id;
+                await _searchByIdentifierService.CallPersonDataSearch(aInDto.Identifier, report.RegistrationNumber, null, report.Id);
+                return Ok(new { id = reportId });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { id = reportId, errorMsg = ex.Message });
+            }
+        }
+
+        [HttpPost("search-by-lnch")]
+        public async Task<IActionResult> SearchByLnch([FromBody] SearchByIdentifierDTO aInDto)
+        {
+            var reportId = string.Empty;
+            try
+            {
+                var report = await _reportApplicationService.CreateAppReportAsync(new ReportApplicationDTO { Person = new PersonDTO() { Lnch = aInDto.Identifier } });
+                reportId = report.Id;
+                await _searchByIdentifierService.CallForeignIdentitySearch(aInDto.Identifier, report.RegistrationNumber, null, report.Id);
+                return Ok(new { id = reportId });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { id = reportId, errorMsg = ex.Message });
+            }
         }
 
         [HttpPut("{aId}")]
@@ -68,24 +124,23 @@ namespace MJ_CAIS.Web.Controllers
 
         [HttpGet("print-report/{aId}")]
         public async Task<IActionResult> PrintReportById(string aId)
-        {
-            var result = await this._reportApplicationService.GetReportAppContentByIdAsync(aId);
-            if (result == null) return NotFound();
+            => ReturnPdf(await this._reportApplicationService.GetReportAppContentByIdAsync(aId));
 
-            var content = result;
-            var fileName = "report.pdf";
-            var mimeType = "application/octet-stream";
+        [HttpGet("generate-report/{aId}")]
+        public async Task<IActionResult> GenerateReportById(string aId)
+            => ReturnPdf(await _reportGenerationService.CreateReport(aId));
 
-            Response.Headers.Add("File-Name", fileName);
-            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
-
-            return File(content, mimeType, fileName);
-        }
-
-        [HttpPost("cancel/{aId}")]
+        [HttpPut("cancel/{aId}")]
         public virtual async Task<IActionResult> Cancel(string aId, [FromBody] CancelDTO aInDto)
         {
             await this._reportApplicationService.CancelAsync(aId, aInDto.Description);
+            return Ok();
+        }
+
+        [HttpPut("cancel-report")]
+        public virtual async Task<IActionResult> CancelReport([FromBody] CancelReportDTO aInDto)
+        {
+            await this._reportApplicationService.CancelReportAsync(aInDto);
             return Ok();
         }
 
@@ -109,6 +164,20 @@ namespace MJ_CAIS.Web.Controllers
         {
             var result = this._reportApplicationService.GetReportsByAppId(aId);
             return Ok(result);
+        }
+
+        private IActionResult ReturnPdf(byte[] result)
+        {
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "report.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
         }
     }
 }

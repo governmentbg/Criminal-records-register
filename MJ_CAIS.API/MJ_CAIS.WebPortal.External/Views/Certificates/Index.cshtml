@@ -1,0 +1,72 @@
+﻿@using Infragistics.Web.Mvc
+@using MJ_CAIS.Common.Resources
+@using MJ_CAIS.DTO.Certificate
+@using MJ_CAIS.WebPortal.External.Controllers
+@using MJ_CAIS.WebPortal.External.Models.Certificates
+@using MJ_CAIS.WebPortal.External.Utils
+@model CertificateViewModel
+
+@{
+    ViewData["Title"] = CertificateResources.titleCertificates;
+    var accessCode1 = nameof(CertificateExternalDTO.AccessCode1);
+    var wAppIdName = nameof(CertificateExternalDTO.WAppId);
+    var buttonPreviewTemplate = 
+        ButtonTemplates.PreviewButton(Url.Action(nameof(ApplicationController.Preview), "Application") + $"/${{{wAppIdName}}}") +
+        ButtonTemplates.DownloadButton(Url.Action(nameof(ConvictionController.ViewByCode), "Conviction") + $"/${{{accessCode1}}}");
+}
+
+<div class="container">
+    <div class="row">
+        <a ></a>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@ViewData["Title"]</div>
+                <div class="card-body">
+                    <partial name="_InfragisticsLoader" />
+                    <div class="page-content scrollable-page">
+                        <div class="box-content">
+                            @(Html.Infragistics()
+                            .Grid(Model.Certificates)
+                            .ID("certificates")
+                            .Language(ViewData["Culture"].ToString())
+                            .Width("100%")
+                            .PrimaryKey("AccessCode1")
+                            .AutoGenerateColumns(false)
+                            .AutoGenerateLayouts(false)
+                            .Columns(column =>
+                            {
+                            @*column.For(x => x.Id).HeaderText("Id").Hidden(true);*@
+                            column.For(x => x.Egn).HeaderText(ApplicationResources.lblEgn).Width("10%");
+                            column.For(x => x.Names).HeaderText(ApplicationResources.lblName).Width("35%");
+                            column.For(x => x.ValidFrom).HeaderText(CertificateResources.lblValidFrom).Width("15%");
+                            column.For(x => x.PurposeName).HeaderText(ApplicationResources.lblPurposeId).Width("15%");
+                            column.For(x => x.Purpose).HeaderText(ApplicationResources.lblPurpose).Width("30%");
+                            column.For(x => x.AccessCode1).HeaderText("AccessCode1").Hidden(true);
+                            column.For(x => x.WAppId).HeaderText("WAppId").Hidden(true);
+                            column.Unbound("buttons").HeaderText("").Template(buttonPreviewTemplate).Width("8%");
+                            })
+                            .Features(feature =>
+                            {
+                            feature
+                            .Sorting()
+                            .Type(OpType.Remote);
+                            feature
+                            .Paging()
+                            .Type(OpType.Remote)
+                            .PageSize(10)
+                            .PageSizeDropDownLocation("inpager");
+                            feature
+                            .Filtering()
+                            .Mode(FilterMode.Simple)
+                            .Type(OpType.Remote);
+                            feature.Tooltips().Visibility(TooltipsVisibility.Overflow).Style(TooltipsStyle.Popover);
+                            })
+                            .DataSourceUrl(Url.Action(nameof(CertificatesController.GetCertificates), "Certificates"))
+                            .Render())
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

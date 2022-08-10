@@ -7,35 +7,24 @@
     var controller = ViewData["Controller"] as BaseController;
 }
 
-<style>
-    .dropdown-item.btn-logout {
-        display: inline;
-    }
-</style>
-
 @if (isAuthenticated)
 {
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Application" asp-action="Index">@ApplicationResources.titleApplications</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="UserExternal" asp-action="Index">@UsersResources.titleUsers</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="navbar-collapse collapse flex-grow-0" id="navbarSupportedContent">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <form asp-controller="Account" asp-action="Logoff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
-                        <span>ЕГН: @controller.CurrentEgnIdentifier</span>
-                        <a class="btn-logout" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout" class="ml-3">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
-                    </form>
-                </li>
-            </ul>
-        </div>
+    <div class="flex-shrink-0 dropdown">
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+            </svg>
+            <div class="d-none d-md-inline">@controller?.CurrentUserName</div>
+        </a>
+        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
+            <form asp-controller="Account" asp-action="Logoff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
+            <li>
+                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout">
+                    <i class="fas fa-sign-out-alt me-2"></i>@CommonResources.lblLogout
+                </a>
+            </li>
+            </form>
+        </ul>
+    </div>
 }

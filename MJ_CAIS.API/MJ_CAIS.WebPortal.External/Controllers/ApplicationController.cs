@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
@@ -14,9 +15,11 @@ using MJ_CAIS.DTO.Application.External;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.External.Models.Application;
+using MJ_CAIS.WebPortal.External.Models.Reports;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
+    [RedirectNotActive("Inactive", "Account")]
     [Authorize]
     public class ApplicationController : BaseController
     {
@@ -25,18 +28,21 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         private readonly INomenclatureDetailService _nomenclatureDetailService;
         private readonly ICertificateService _certificateService;
         private readonly IRegixService _regixService;
+        private readonly ICriminalRecordsReportService _criminalRecordsReportService;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
                                      INomenclatureDetailService nomenclatureDetailService,
                                      ICertificateService certificateService,
-                                     IRegixService regixService)
+                                     IRegixService regixService,
+                                     ICriminalRecordsReportService criminalRecordsReportService)
         {
             _mapper = mapper;
             _applicationWebService = applicationWebService;
             _nomenclatureDetailService = nomenclatureDetailService;
             _certificateService = certificateService;
             _regixService = regixService;
+            _criminalRecordsReportService = criminalRecordsReportService;
         }
 
         [HttpGet]
@@ -69,12 +75,13 @@ namespace MJ_CAIS.WebPortal.External.Controllers
                 await FillDataForEditModel(viewModel);
                 return View(viewModel);
             }
-                     
+            viewModel.Email = CurrentUserEmail;
+
             var itemToUpdate = _mapper.Map<ExternalApplicationDTO>(viewModel);
             var id = await _applicationWebService.InsertExternalAsync(itemToUpdate);
             _regixService.CreateRegixRequests(viewModel.Egn, wApplicationId: id);
 
-            TempData["createSuccessfull"] = true;         
+            TempData["createSuccessfull"] = true;
             return RedirectToAction(nameof(Index));
         }
 
@@ -117,9 +124,12 @@ namespace MJ_CAIS.WebPortal.External.Controllers
 
         private async Task FillDataForEditModel(ApplicationEditModel viewModel)
         {
-            var purposes = _nomenclatureDetailService.GetAllAPurposes();
-            viewModel.PurposeTypes = await purposes.ProjectTo<SelectListItem>(
-                _mapper.ConfigurationProvider).ToListAsync();
+            var purposes = await _nomenclatureDetailService.GetAllAPurposes().ToListAsync();
+            viewModel.PurposeInfo = purposes.Where(p => p.RequestInfo.HasValue && p.RequestInfo.Value).ToDictionary(o => o.Code, o => o.Description);
+            viewModel.PurposeTypes = purposes.Select(p => new SelectListItem() { Value = p.Code, Text = p.Name }).ToList();
+            viewModel.PurposeTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true });
+            viewModel.RequiredPurposes = string.Join(",", viewModel.PurposeInfo.Keys);
+            var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
         }
     }
 }

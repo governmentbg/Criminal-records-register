@@ -34,7 +34,8 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         public string? CurrentRoleName => CurrentUser.FindFirst(ClaimsIdentity.DefaultRoleClaimType)?.Value;
 
         public string? CurrentUserID => CurrentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        public string? CurrentEgnIdentifier => CurrentUser.FindFirst("EgnIdentifier")?.Value;
+        public string? CurrentUserPosition => CurrentUser.FindFirst("Position")?.Value;
+        public string? CurrentUserAdministrationName => CurrentUser.FindFirst("AdministrationName")?.Value;
+        public string? CurrentUserEmail => CurrentUser.FindFirst("Email")?.Value;
     }
 }

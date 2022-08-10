@@ -10,6 +10,6 @@ export class ResultGridService extends CaisCrudService<
   string
 > {
   constructor(injector: Injector) {
-    super(ResultGridModel, injector, "people");
+    super(ResultGridModel, injector, "ecris-messages");
   }
 }

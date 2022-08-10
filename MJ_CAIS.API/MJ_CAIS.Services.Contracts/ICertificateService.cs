@@ -22,5 +22,7 @@ namespace MJ_CAIS.Services.Contracts
 
         Task UpdateCertificateStatus(string certID);
         Task<WCertificateDTO> GetWebCertificateByAccessCodeAsync(string accessCode);
+        Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId);
+        Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId);
     }
 }

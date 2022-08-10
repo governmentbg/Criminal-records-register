@@ -13,7 +13,7 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             _logger = logger;
         }
 
-        [RedirectAuthenticatedRequests("Index", "Application")]
+        //[RedirectAuthenticatedRequests("Index", "Application")]
         public IActionResult Index()
         {
             return View();
@@ -23,6 +23,13 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         public IActionResult Info()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Login()
+        {
+            
+            return View("Index");
         }
 
         [AllowAnonymous]

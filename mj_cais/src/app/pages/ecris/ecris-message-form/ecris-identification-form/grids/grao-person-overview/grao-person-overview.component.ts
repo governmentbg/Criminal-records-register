@@ -33,8 +33,7 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
   constructor(
     public service: GraoPersonGridService,
     public injector: Injector,
-    public dateFormatService: DateFormatService,
-    public nomenclatureService: NomenclatureService
+    public dateFormatService: DateFormatService
   ) {
     super("grao-people-search", service, injector);
   }
@@ -60,18 +59,14 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
 
   public selectedItem: any;
   public selectedRows = [];
+  private toAdd: any;
 
   @Output() selectRow = new EventEmitter<string>();
 
   public searchPersonForm = new SearchPersonForm();
 
-  public genderTypes: BaseNomenclatureModel[];
-
   ngOnInit(): void {
     super.ngOnInit();
-    this.nomenclatureService.getGenderTypes().subscribe((data) => {
-      this.genderTypes = data;
-    });
   }
 
   handleRowSelection(event) {
@@ -83,9 +78,12 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
     this.dialog.close();
   }
 
-  //предава данните на основния грид с данните от ГРАО
+  handleSelectedRow(event) {
+    this.toAdd = event;
+  }
+
   addInGrid() {
-    this.peopleGrid.addRow(this.searchPersonForm.group.value);//избрания ред от табличката
+    this.peopleGrid.addRow(this.toAdd);
     this.onCloseDialog();
   }
 

@@ -100,7 +100,6 @@ export class ReportApplicationFormComponent
   }
 
   public submitFunction = () => {
-    this.loaderService.show();
     this.isFinalEdit = false;
     this.validateAndSave(this.fullForm);
   };
@@ -111,7 +110,6 @@ export class ReportApplicationFormComponent
       return;
     }
 
-    this.loaderService.show();
     this.isFinalEdit = true;
     this.fullForm.firstSignerId.patchValue(
       this.signersformGroup.value.firstSignerId
@@ -126,8 +124,22 @@ export class ReportApplicationFormComponent
   public onFinalEditDialogOpen() {
     this.finalEditDialog.open();
   }
+  protected validateAndSave(form: any) {
+    console.log(form.group);
+    if (!form.group.valid) {
+      form.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+
+      this.scrollToValidationError();
+    } else {
+      debugger
+      this.formObject = form.group.getRawValue();
+      this.saveAndNavigate();
+    }
+  }
 
   protected saveAndNavigate() {
+    this.loaderService.show();
     let model = this.formObject;
     let submitAction: Observable<ReportApplicationModel>;
     if (this.isFinalEdit) {
@@ -141,14 +153,18 @@ export class ReportApplicationFormComponent
     submitAction.subscribe({
       next: (data) => {
         this.toastr.showToast("success", this.successMessage);
-        this.loaderService.hide();
         setTimeout(() => {
           this.onSubmitSuccess(data);
+          this.loaderService.hide();
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
         this.loaderService.hide();
+        this.finalEditDialog.close();
         this.onServiceError(errorResponse);
+        setTimeout(() => {
+          this.onSubmitSuccess(null);
+        }, this.navigateTimeout);
       },
     });
   }

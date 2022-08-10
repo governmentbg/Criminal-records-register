@@ -119,7 +119,6 @@ export abstract class CrudForm<
       this.scrollToValidationError();
     } else {
       this.formObject = form.group.value;
-
       this.saveAndNavigate();
     }
   }
@@ -264,7 +263,7 @@ export abstract class CrudForm<
   }
 
   protected onServiceError(errorResponse): void {
-    if(errorResponse.code == "401"){
+    if(errorResponse.status == "401"){
       this.router.navigateByUrl("pages");
       return;
     }

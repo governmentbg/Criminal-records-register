@@ -1,4 +1,5 @@
 ﻿@using Infragistics.Web.Mvc
+@using MJ_CAIS.DTO.Certificate
 @using MJ_CAIS.WebPortal.Public.Controllers
 @using MJ_CAIS.WebPortal.Public.Models.Certificates
 @using MJ_CAIS.WebPortal.Public.Models.Feedback
@@ -7,7 +8,7 @@
 @using MJ_CAIS.Common
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
-@model X.PagedList.IPagedList<CeritificateViewModel>
+@model X.PagedList.IPagedList<CertificatePublicDTO>
 
 @{
     var title = CertificateResources.titleCertificates;
@@ -47,7 +48,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-end gap-2">
-                                                <a asp-action="Preview" asp-controller="Application" asp-route-id="@item.WApplicationId" class="btn btn-primary">Заявление</a>
+                                                <a asp-action="Preview" asp-controller="Application" asp-route-id="@item.WAppId" class="btn btn-primary">Заявление</a>
                                                 <a asp-action="ViewByCode" asp-controller="Conviction" asp-route-id="@item.AccessCode1" class="btn btn-primary" target="_blank"><i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate</a>
                                             </div>
                                         </td>

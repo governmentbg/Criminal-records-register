@@ -8,10 +8,13 @@
   [clipboardOptions]="{ copyHeaders: false }"
   [displayDensity]="'cosy'"
   [paginationTemplate]="pager"
+  (onSelection)="cellSelection($event)"
   [allowFiltering]="false"
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
+  [rowSelection]="selectionMode"
+  [selectedRows]="selectedRows"
   (onRowSelectionChange)="handleRowSelection($event)"
 >
   <igx-grid-toolbar>

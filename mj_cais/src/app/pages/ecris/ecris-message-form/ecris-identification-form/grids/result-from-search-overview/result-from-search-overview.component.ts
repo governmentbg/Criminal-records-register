@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Injector, Input, OnInit, Output } from "@angular/core";
+import { GridSelectionMode } from "@infragistics/igniteui-angular";
 import { RemoteGridWithStatePersistance } from "../../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../../@core/services/common/loader.service";
@@ -27,6 +28,13 @@ export class ResultFromSearchOverviewComponent extends RemoteGridWithStatePersis
   @Input() searchPersonForm: SearchPersonForm;
   @Output() selectRow = new EventEmitter<string>();
 
+  public selectionMode: GridSelectionMode = "single";
+  public currentPage = 0;
+  public itemsPerPage = 5;
+
+  public selectedItem: any;
+  public selectedRows = [];
+
   ngOnInit(): void {}
 
   public onSearch = () => {
@@ -35,7 +43,7 @@ export class ResultFromSearchOverviewComponent extends RemoteGridWithStatePersis
       this.toastr.showToast("danger", "Грешка при валидациите!");
       return;
     }
-
+    
     this.loader.showSpinner(this.service);
     let formObj = this.searchPersonForm.group.getRawValue();
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");

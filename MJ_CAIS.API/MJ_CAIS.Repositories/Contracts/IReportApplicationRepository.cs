@@ -8,6 +8,8 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         IQueryable<ReportAppStatusHistoryDTO> SelectAllStatusHistoryData();
 
+        IQueryable<GeneratedReportGridDTO> SelectAllGeneratedReports();
+
         IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId);
 
         IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId);
@@ -15,5 +17,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<byte[]> GetReportAppContentByIdAsync(string aId);
 
         Task<AReport> GetFullAppReportByIdAsync(string aId);
+
+        Task<string> GetPersonIdByPidIdsAsync(string egnId, string lnchId, string lnId, string suidId);
     }
 }

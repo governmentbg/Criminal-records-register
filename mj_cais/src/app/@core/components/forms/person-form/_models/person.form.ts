@@ -27,7 +27,6 @@ export class PersonForm {
   public birthDate: FormControl;
   public birthPlace: AddressForm;
   public egn: FormControl;
-  public egnDisplay: FormControl;
   public lnch: FormControl;
   public ln: FormControl;
   public nationalities: MultipleChooseForm;
@@ -51,7 +50,7 @@ export class PersonForm {
   constructor(context: string, isDisabled: boolean = true) {
     this.id = new FormControl(null);
     this.suid = new FormControl(null);
-    this.suid.disable();
+    
     this.version = new FormControl(null);
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
@@ -67,9 +66,11 @@ export class PersonForm {
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
     this.egn = new FormControl(null);
-    this.egnDisplay = new FormControl(null);
+    
     this.lnch = new FormControl(null);
+    
     this.ln = new FormControl(null);
+  
     this.nationalities = new MultipleChooseForm();
     this.afisNumber = new FormControl(null);
     this.idDocNumber = new FormControl(null);
@@ -187,7 +188,6 @@ export class PersonForm {
       birthDate: this.birthDate,
       birthPlace: this.birthPlace.group,
       egn: this.egn,
-      egnDisplay: this.egnDisplay,
       lnch: this.lnch,
       ln: this.ln,
       nationalities: this.nationalities.group,

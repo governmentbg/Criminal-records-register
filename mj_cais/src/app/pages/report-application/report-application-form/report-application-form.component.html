@@ -230,12 +230,12 @@
 
 <igx-dialog #finalEditDialog>
   <form autocomplete="off">
-    <div class="dialogNewRecord" style="min-width: 1000px">
+    <div class="dialogNewRecord" style="min-width: 500px">
       <nb-card>
         <nb-card-header>Окончателна редакция</nb-card-header>
         <nb-card-body>
           <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
               <cais-autocomplete
                 [label]="'Подписващ 1'"
                 [inputFormControl]="signersformGroup.controls.firstSignerId"
@@ -245,7 +245,9 @@
               >
               </cais-autocomplete>
             </div>
-            <div class="form-group col-md-6">
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
               <cais-autocomplete
                 [label]="'Подписващ 2'"
                 [inputFormControl]="signersformGroup.controls.secondSignerId"

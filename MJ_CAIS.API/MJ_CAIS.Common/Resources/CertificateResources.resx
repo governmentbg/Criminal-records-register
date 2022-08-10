@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblValidFrom" xml:space="preserve">
+    <value>Валидно от</value>
+  </data>
   <data name="msgCertificateDoesNotExist" xml:space="preserve">
     <value>Свидетелство с идентификатор {0} не съществува</value>
   </data>

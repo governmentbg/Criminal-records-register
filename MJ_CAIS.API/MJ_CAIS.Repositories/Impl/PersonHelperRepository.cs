@@ -4,6 +4,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.Fbbc;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -366,6 +367,80 @@ namespace MJ_CAIS.Repositories.Impl
                 .Union(applicationsBySuid);
 
             return allApplications;
+        }
+
+        public IQueryable<PersonGeneratedReportGridDTO> GetAllReportApplByPersonId(string personId)
+        {
+            var reportApplByEgn = from reportAppl in _dbContext.AReportApplications.AsNoTracking()
+                                    join egn in _dbContext.PPersonIds.AsNoTracking() on reportAppl.EgnId equals egn.Id
+                                    where egn.PersonId == personId
+                                    select new PersonGeneratedReportGridDTO
+                                    { 
+                                        BirthDate = reportAppl.BirthDate,
+                                        CreatedOn = reportAppl.CreatedOn,
+                                        Familyname = reportAppl.Firstname,
+                                        Firstname = reportAppl.Firstname,
+                                        FullName = reportAppl.Fullname, 
+                                        Id = reportAppl.Id,
+                                        Purpose = reportAppl.Purpose,
+                                        RegistrationNumber = reportAppl.RegistrationNumber,
+                                        Surname = reportAppl.Surname,
+                                    };
+
+            var reportApplByLnch = from reportAppl in _dbContext.AReportApplications.AsNoTracking()
+                                     join lnch in _dbContext.PPersonIds.AsNoTracking() on reportAppl.LnchId equals lnch.Id
+                                     where lnch.PersonId == personId
+                                     select new PersonGeneratedReportGridDTO
+                                     {
+                                         BirthDate = reportAppl.BirthDate,
+                                         CreatedOn = reportAppl.CreatedOn,
+                                         Familyname = reportAppl.Firstname,
+                                         Firstname = reportAppl.Firstname,
+                                         FullName = reportAppl.Fullname,
+                                         Id = reportAppl.Id,
+                                         Purpose = reportAppl.Purpose,
+                                         RegistrationNumber = reportAppl.RegistrationNumber,
+                                         Surname = reportAppl.Surname,
+                                     };
+
+            var reportApplByLn = from reportAppl in _dbContext.AReportApplications.AsNoTracking()
+                                   join ln in _dbContext.PPersonIds.AsNoTracking() on reportAppl.LnId equals ln.Id
+                                   where ln.PersonId == personId
+                                   select new PersonGeneratedReportGridDTO
+                                   {
+                                       BirthDate = reportAppl.BirthDate,
+                                       CreatedOn = reportAppl.CreatedOn,
+                                       Familyname = reportAppl.Firstname,
+                                       Firstname = reportAppl.Firstname,
+                                       FullName = reportAppl.Fullname,
+                                       Id = reportAppl.Id,
+                                       Purpose = reportAppl.Purpose,
+                                       RegistrationNumber = reportAppl.RegistrationNumber,
+                                       Surname = reportAppl.Surname,
+                                   };
+
+            var reportApplBySuid = from reportAppl in _dbContext.AReportApplications.AsNoTracking()
+                                     join suid in _dbContext.PPersonIds.AsNoTracking() on reportAppl.SuidId equals suid.Id
+                                     where suid.PersonId == personId
+                                     select new PersonGeneratedReportGridDTO
+                                     {
+                                         BirthDate = reportAppl.BirthDate,
+                                         CreatedOn = reportAppl.CreatedOn,
+                                         Familyname = reportAppl.Firstname,
+                                         Firstname = reportAppl.Firstname,
+                                         FullName = reportAppl.Fullname,
+                                         Id = reportAppl.Id,
+                                         Purpose = reportAppl.Purpose,
+                                         RegistrationNumber = reportAppl.RegistrationNumber,
+                                         Surname = reportAppl.Surname,
+                                     };
+
+            var allReportApplications = reportApplByEgn
+                .Union(reportApplByLnch)
+                .Union(reportApplByLn)
+                .Union(reportApplBySuid);
+
+            return allReportApplications;
         }
 
         public IQueryable<FbbcByPersonIdDTO> GetAllFbbcsByPersonId(string personId)

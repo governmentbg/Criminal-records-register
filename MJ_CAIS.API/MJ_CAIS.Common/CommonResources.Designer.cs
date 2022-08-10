@@ -358,6 +358,15 @@ namespace MJ_CAIS.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Служебен достъп.
+        /// </summary>
+        public static string titleExternalPortalShort {
+            get {
+                return ResourceManager.GetString("titleExternalPortalShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Общи условия.
         /// </summary>
         public static string titleGeneralTerms {

@@ -30,10 +30,17 @@ namespace MJ_CAIS.Services
 
         public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value)
         {
-            var personDb = await _bulletinRepository.GetPersonIdByPidAsync(value.CriminalRecordsRequest.PID, value.CriminalRecordsRequest.IdentifierType.ToString());
+            var pidTypeCode = value.CriminalRecordsRequest.IdentifierType == IdentifierType.SUID ?
+                        "SYS" :
+                        value.CriminalRecordsRequest.IdentifierType.ToString();
+            var personDb =
+                await _bulletinRepository.GetPersonIdByPidAsync(
+                    value.CriminalRecordsRequest.PID,
+                    pidTypeCode
+                );
             var person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
-
-            var pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == value.CriminalRecordsRequest.PID && x.PidType.Code == value.CriminalRecordsRequest.IdentifierType.ToString())?.Id;
+            var pid = value.CriminalRecordsRequest.PID;
+            var pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == pid && x.PidType.Code == pidTypeCode)?.Id;
             var bulletins = await _bulletinRepository.GetBulletinsByPidIdAsync(pidId);
             var bulletinsList = await bulletins.ToListAsync();
 
@@ -95,9 +102,9 @@ namespace MJ_CAIS.Services
             var birthdateTo = birthdateFrom.AddMonths(1).AddDays(-1);
             var birthdateYear = birthdate.Year;
 
-            IQueryable<string> personIds = _personRepository.GetPersonIDsByPersonData( firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname, birthdateFrom, birthdateTo, birthdateYear);
+            IQueryable<string> personIds = _personRepository.GetPersonIDsByPersonData(firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname, birthdateFrom, birthdateTo, birthdateYear);
 
-            List<PPerson> res = await _personRepository.GetPersonByID( personIds);
+            List<PPerson> res = await _personRepository.GetPersonByID(personIds);
 
             var result = _mapper.Map<List<PPerson>, PersonIdentifierSearchResponseType>(res);
 
@@ -106,7 +113,7 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-     
+
 
         public static string ApplyTransformation(string xmlString, string xslt)
         {

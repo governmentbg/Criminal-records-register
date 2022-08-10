@@ -299,6 +299,14 @@ namespace MJ_CAIS.Services
             _certificateRepository.ApplyChanges(result, new List<IBaseIdEntity>());
         }
 
-     
+
+        public Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId)
+        {
+            return _certificateRepository.SelectExternalCertificates(userId);
+        }
+        public Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId)
+        {
+            return _certificateRepository.SelectPublicCertificates(userId);
+        }
     }
 }

@@ -1,0 +1,251 @@
+﻿@using MJ_CAIS.Common
+@using MJ_CAIS.Common.Resources
+@using MJ_CAIS.WebPortal.External.Models.Application
+@using MJ_CAIS.WebPortal.External.Models.Reports
+
+@model PersonSearchModel
+
+@{
+    var title = "Търсене на лица";
+    ViewData["Title"] = title;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@title</div>
+                <div class="card-body">
+                    <form method="post" autocomplete="off">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label asp-for="Firstame" class="form-label fw-bold"></label>
+                                <input asp-for="Firstame" class="form-control" />
+                                <span asp-validation-for="Firstame" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Surname" class="form-label fw-bold"></label>
+                                <input asp-for="Surname" class="form-control" />
+                                <span asp-validation-for="Surname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Familyname" class="form-label fw-bold"></label>
+                                <input asp-for="Familyname" class="form-control" />
+                                <span asp-validation-for="Familyname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Fullname" class="form-label fw-bold"></label>
+                                <input asp-for="Fullname" class="form-control" />
+                                <span asp-validation-for="Fullname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="BirthDatePrec" class="form-label fw-bold required"></label>
+                                @Html.DropDownListFor(model => model.BirthDatePrec, Model.BirthDatePrecList,
+                                new { @class = "form-select"})
+                                <span asp-validation-for="BirthDatePrec" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Birthdate" class="form-label fw-bold"></label>
+                                <input asp-for="Birthdate" class="form-control" />
+                                <span asp-validation-for="Birthdate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="BirthCountry" class="form-label fw-bold"></label>
+                                <input asp-for="BirthCountry" class="form-control" />
+                                <span asp-validation-for="BirthCountry" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Birthplace" class="form-label fw-bold"></label>
+                                <input asp-for="Birthplace" class="form-control" />
+                                <span asp-validation-for="Birthplace" class="text-danger"></span>
+                            </div>
+                            <hr />
+                            <div class="col-md-6">
+                                <label asp-for="LawReason" class="form-label fw-bold required"></label>
+                                <textarea asp-for="LawReason" type="text" class="form-control" required rows="2"></textarea>
+                                <span asp-validation-for="LawReason" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Remark" class="form-label fw-bold"></label>
+                                <textarea asp-for="Remark" type="text" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="Remark" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-2">
+                                <button class="btn btn-primary btn-lg" type="submit">Търсене</button>
+                            </div>
+                            @if (Model.CriminalRecordsPerson.Count != 0)
+                            {
+                                <div class="col-12 table-responsive">
+                                    <table class="table table-striped table-hover table-bordered">
+                                        <tr>
+                                            <th class="d-none d-sm-table-cell">
+                                                @ReportResources.lblIdentifiers
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                @ReportResources.lblFirstName
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                @ReportResources.lblSurname
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                @ReportResources.lblFamilyname
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                FirstNameEn
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                SurNameEn
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                FamilyNameEn
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                @ReportResources.lblBirthCountry
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                @ReportResources.lblBirthPlace
+                                            </th>
+                                            <th class="d-none d-sm-table-cell">
+                                                Birthday Description
+                                            </th>
+                                        </tr>
+                                        @foreach (var item in Model.CriminalRecordsPerson)
+                                        {
+                                            <tr>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @{
+                                                        if (!string.IsNullOrEmpty(item.IdentityNumber.EGN))
+                                                        {
+                                                            var crrEGNModel =
+                                                            new CriminalRecordsReportRequestView()
+                                                            {
+                                                                IdentifierType = "EGN",
+                                                                PID = item.IdentityNumber.EGN,
+                                                                LawReason = Model.LawReason,
+                                                                Remark = Model.Remark,
+                                                                ServiceType = Model.ServiceType,
+                                                                ServiceURI = Model.ServiceURI,
+                                                                Title = item.IdentityNumber.EGN
+                                                            };
+                                                            await Html.RenderPartialAsync("_CriminalRecordPDF", crrEGNModel);
+                                                        }
+                                                        if (!string.IsNullOrEmpty(item.IdentityNumber.LN))
+                                                        {
+                                                            var crrLNodel =
+                                                            new CriminalRecordsReportRequestView()
+                                                            {
+                                                                IdentifierType = "LN",
+                                                                PID = item.IdentityNumber.LN,
+                                                                LawReason = Model.LawReason,
+                                                                Remark = Model.Remark,
+                                                                ServiceType = Model.ServiceType,
+                                                                ServiceURI = Model.ServiceURI,
+                                                                Title = item.IdentityNumber.LN
+                                                            };
+                                                            await Html.RenderPartialAsync("_CriminalRecordPDF", crrLNodel);
+                                                        }
+                                                        if (!string.IsNullOrEmpty(item.IdentityNumber.LNCh))
+                                                        {
+                                                            var crrLNChModel =
+                                                            new CriminalRecordsReportRequestView()
+                                                            {
+                                                                IdentifierType = "EGN",
+                                                                PID = item.IdentityNumber.LNCh,
+                                                                LawReason = Model.LawReason,
+                                                                Remark = Model.Remark,
+                                                                ServiceType = Model.ServiceType,
+                                                                ServiceURI = Model.ServiceURI,
+                                                                Title = item.IdentityNumber.LNCh
+                                                            };
+                                                            await Html.RenderPartialAsync("_CriminalRecordPDF", crrLNChModel);
+                                                        }
+                                                        if (!string.IsNullOrEmpty(item.IdentityNumber.SUID))
+                                                        {
+                                                            var crrSUIDModel =
+                                                            new CriminalRecordsReportRequestView()
+                                                            {
+                                                                IdentifierType = "SUID",
+                                                                PID = item.IdentityNumber.SUID,
+                                                                LawReason = Model.LawReason,
+                                                                Remark = Model.Remark,
+                                                                ServiceType = Model.ServiceType,
+                                                                ServiceURI = Model.ServiceURI,
+                                                                Title = item.IdentityNumber.SUID
+                                                            };
+                                                            await Html.RenderPartialAsync("_CriminalRecordPDF", crrSUIDModel);
+                                                        }
+                                                    }
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.NamesBg.FirstName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.NamesBg.SurName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.NamesBg.FamilyName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.NamesEn.FirstName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.NamesEn.SurName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.NamesEn.FamilyName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.BirthPlace.Country.CountryName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.BirthPlace.City.CityName)
+                                                </td>
+                                                <td class="d-none d-sm-table-cell">
+                                                    @Html.DisplayFor(modelItem => item.BirthPlace.Descr)
+                                                </td>
+                                                @*  <td class="d-none d-sm-table-cell">
+                                        @{
+                                        var crrPDFModel2 =
+                                        new CriminalRecordsReportRequestView()
+                                        {
+                                        IdentifierType = "SUID",
+                                        PID = item.IdentityNumber.SUID,
+                                        LawReason = Model.LawReason,
+                                        Remark = Model.Remark,
+                                        ServiceType = Model.ServiceType,
+                                        ServiceURI = Model.ServiceURI,
+                                        Title = "PDF"
+                                        };
+                                        await Html.RenderPartialAsync("_CriminalRecordPDF", crrPDFModel2);
+                                        }
+                                        </td>*@
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            }
+                            else if (!Model.Initial)
+                            {
+                                <div class="col-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                                        </symbol>
+                                    </svg>
+
+                                    <div class="alert alert-primary d-flex align-items-center mb-0" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
+                                        <div>
+                                            Не са намерени лица - @Model.CriminalRecordsPerson.Count
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,5 +1,12 @@
-﻿@using Microsoft.AspNetCore.Http.Extensions
+﻿@using MJ_CAIS.WebSetup.Utils
+@using Microsoft.AspNetCore.Http.Extensions
 @using MJ_CAIS.Common
+@using System.Security.Claims
+
+@{
+    var isAuthenticated = Convert.ToBoolean(ViewData["IsAuthenticated"]);
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,82 +33,92 @@
     <script src="~/js/custom/commonUtils.js" asp-append-version="true"></script>
 
 </head>
-<body>
-    <header>
-        <div class="container-fluid">
-            <h4 style="float: right;padding-top: 20px;padding-right: 20px;">
-                @CommonResources.titleExternalPortal
-            </h4>
-            <div class="cais-headerbar">
-                <div class="cais-logo-wrapper">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                        <img src="@Url.Content("~/images/logo.png")" class="cais-logo" />
-                    </a>
-                </div>
-                <div class="cais-header-text">
-                    <div class="row main-header">
-                        @CommonResources.titleRepublicOfBulgaria
+<body class="d-flex flex-column h-100 bg-light">
 
+    <main class="flex-shrink-0">
+
+        <header class="py-2 bg-white">
+            <div class="d-flex justify-content-between container">
+                <div class="d-flex gap-2 align-items-center">
+                    <div>
+                        <img class="img-fluid" style="height: 73px" src="@Url.Content("~/images/logo.svg")" />
                     </div>
-                    <div class="row" style="font-size: 14px;">
-                        @CommonResources.titleMinistryOfJustice
+                    <div class="d-flex flex-column pl-2">
+                        <div class="h3">
+                            @CommonResources.titleRepublicOfBulgaria
+                        </div>
+                        <div class="h5">
+                            @CommonResources.titleMinistryOfJustice
+                        </div>
                     </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <partial name="_ContextualMenu" />
                 </div>
             </div>
-            <div class="cais-navbar">
-                <nav class="navbar navbar-expand-lg">
-                    <h1><a class="navbar-brand" asp-controller="Home" asp-action="Index">@CommonResources.titleMjCais</a></h1>
+        </header>
+        <div class="bg-primary shadow">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-rimary" aria-label="Fourth navbar example">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="/">@CommonResources.titleExternalPortalShort</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon cais-nav-icon">
-                            <i class="fa fa-bars fa-lg"></i>
-                        </span>
-                    </button>
-
-                    <partial name="_ContextualMenu" />
+                        <div class="collapse navbar-collapse ps-4" id="navbarsExample04">
+                            <ul class="navbar-nav">
+                                @if (isAuthenticated)
+                                {
+                                    @if (this.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "ECertificates"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link @Html.IsSelected("Index", "Application")" href="@Url.Action("Index", "Application")">Заявления</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link @Html.IsSelected("Index", "Certificates")" href="@Url.Action("Index", "Certificates")">Свидетелства</a>
+                                        </li>
+                                    }
+                                    @if (this.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "EReports"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link @Html.IsSelected("PersonSearch", "Reports")" href="@Url.Action("PersonSearch", "Reports")">Търсене на лица</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link @Html.IsSelected("Index", "Reports")" href="@Url.Action("Index", "Reports")">Справки</a>
+                                        </li>
+                                    }
+                                    @if (this.User.HasClaim("isAdmin", "true"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link @Html.IsSelected("Index", "UserExternal")" href="@Url.Action("Index", "UserExternal")">Потребители</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </nav>
             </div>
         </div>
-    </header>
 
-    <div class="container-fluid">
-        <main role="main" class="pt-4 pb-5 ps-5 pe-5">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-
-        <div class="d-flex flex-column flex-sm-row justify-content-between">
-            <div class="row col-md-12" style="justify-content: space-between;">
-                <div class="col-sm-2 cais-footer-link">
-                    <div class="row">
-                        <a class="navbar-brand" asp-controller="Home" asp-action="Info">
-                            @CommonResources.titleEAppInfo
-                        </a>
-                        <a class="navbar-brand" asp-controller="Home" asp-action="GeneralTerms">
-                            @CommonResources.titleGeneralTerms
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-2 cais-footer-text">
-                    <p>
-                        <div>@CommonResources.titleContractInfoExtPart1</div>
-                        <div>@CommonResources.titleContractInfoExtPart2</div>
-                        <div>@CommonResources.titleContractInfoExtPart3</div>
-                    </p>
-                </div>
-
-                <div class="col-sm-1 cais-footer-img-container">
-                    <ul class="list-unstyled d-flex">
-                        <li class="ms-2">
-                            <img src="@Url.Content("~/images/eu-logo.png")" class="eu-logo">
-                            <img src="@Url.Content("~/images/eu-logo2.png")" class="eu-logo">
-                        </li>
-                    </ul>
-                </div>
+        <div class="content container-fluid">
+            <div class="container py-4">
+                <main role="main">
+                    @RenderBody()
+                </main>
             </div>
+        </div>
+    </main>
 
+    <footer class="footer mt-auto py-2 bg-white shadow">
+        <div class="d-flex flex-md-row flex-column justify-content-evenly container gap-3 align-items-center">
+            <p class="text-center small">
+                @CommonResources.titleContractInfoExt
+            </p>
+            <div>
+                <img style="height: 73px; width: 177px" src="@Url.Content("~/images/eu.png")" />
+            </div>
         </div>
     </footer>
 

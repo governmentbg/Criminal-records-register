@@ -216,6 +216,9 @@
   <data name="titleExternalPortal" xml:space="preserve">
     <value>Портал за служебен достъп</value>
   </data>
+  <data name="titleExternalPortalShort" xml:space="preserve">
+    <value>Служебен достъп</value>
+  </data>
   <data name="titleGeneralTerms" xml:space="preserve">
     <value>Общи условия</value>
   </data>

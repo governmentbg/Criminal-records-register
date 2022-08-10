@@ -1,0 +1,54 @@
+﻿@using MJ_CAIS.Common
+@using MJ_CAIS.WebPortal.External.Models.Account
+
+@model InactiveViewModel
+
+@{
+    var title = "Неактивен потребител";
+    ViewData["Title"] = title;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@title</div>
+                <div class="card-body">
+                    <form asp-action="Inactive" method="post" autocomplete="off">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label fw-bold required"></label>
+                                <input asp-for="Name" class="form-control" required />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-bold required"></label>
+                                <input asp-for="Email" class="form-control" required />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Position" class="form-label fw-bold required"></label>
+                                <input asp-for="Position" class="form-control" required />
+                                <span asp-validation-for="Position" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="AdministrationId" class="form-label fw-bold required"></label>
+                                @Html.DropDownListFor(model => model.AdministrationId, Model.Administrations,
+                                new { @class = "form-select", @required=""})
+                                <span asp-validation-for="AdministrationId" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" asp-for="Version"/>
+                            <div class="col-12 d-flex justify-content-end gap-2">
+                                <a class="btn btn-light btn-lg" asp-controller="Home" asp-action="Index">
+                                    @CommonResources.btnCancel
+                                </a>
+                                <button class="btn btn-primary btn-lg" type="submit">Заяви</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
