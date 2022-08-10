@@ -1,0 +1,53 @@
+﻿@using Infragistics.Web.Mvc
+@using MJ_CAIS.WebPortal.External.Models.Application
+@using MJ_CAIS.Common.Resources
+@using MJ_CAIS.WebPortal.External.Controllers
+@using MJ_CAIS.WebPortal.External.Models.Reports
+@using MJ_CAIS.WebPortal.External.Utils;
+@using MJ_CAIS.DTO.Application.Public
+@model CriminalRecordsReportRequestView
+
+@{
+    var title = "Справки";
+    ViewData["Title"] = title;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@title</div>
+                <div class="card-body">
+                    <form asp-action="CriminalRecordsReportPDF" method="post" autocomplete="off" target="_blank">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="IdentifierType" class="form-label fw-bold required"></label>
+                                @Html.DropDownListFor(model => model.IdentifierType, Model.IdentifierTypes,
+                                new { @class = "form-select"})
+                                <span asp-validation-for="IdentifierType" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="PID" class="form-label fw-bold"></label>
+                                <input asp-for="PID" class="form-control" />
+                                <span asp-validation-for="PID" class="text-danger"></span>
+                            </div>
+                            <hr />
+                            <div class="col-md-6">
+                                <label asp-for="LawReason" class="form-label fw-bold required"></label>
+                                <textarea asp-for="LawReason" type="text" class="form-control" required rows="2"></textarea>
+                                <span asp-validation-for="LawReason" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Remark" class="form-label fw-bold"></label>
+                                <textarea asp-for="Remark" type="text" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="Remark" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-2">
+                                <button class="btn btn-primary" type="submit">Справка</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

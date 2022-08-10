@@ -1,0 +1,10 @@
+﻿@using MJ_CAIS.WebPortal.External.Models.Reports
+@model CriminalRecordsReportRequestView
+
+<form asp-action="Index" asp-controller="Reports" method="post" autocomplete="off">
+    <input asp-for="PID" hidden />
+    <input asp-for="IdentifierType" hidden />
+    <input asp-for="LawReason" hidden />
+    <input asp-for="Remark" hidden />
+    <button class="btn btn-link" type="submit">@Model.IdentifierType: @Model.Title</button>
+</form>

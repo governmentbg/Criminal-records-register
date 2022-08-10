@@ -13,69 +13,63 @@
     var messageCreateSuccessfullApp = ApplicationResources.messageCreateSuccessfull;
 }
 
-<partial name="_InfragisticsLoader" />
-
-<div class="d-flex" style="justify-content: space-between">
-    <div class="d-flex align-items-center">
-        <h3 class="pull-left">@ViewData["Title"]</h3>
-    </div>
-    <div class="d-flex">
-        <div>
+<div class="container">
+    <div class="row">
+        <div class="mb-3 d-flex justify-content-end align-items-start">
             <a class="btn btn-primary" asp-controller="Application" asp-action="New">
                 @ApplicationResources.btnNewApp
             </a>
         </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@ViewData["Title"]</div>
+                <div class="card-body">
+                    <partial name="_InfragisticsLoader" />
+                    <div class="page-content scrollable-page">
+                        <div class="box-content">
+                            @(Html.Infragistics()
+                            .Grid(Model.Applications)
+                            .ID("applications")
+                            .Language(ViewData["Culture"].ToString())
+                            .Width("100%")
+                            .PrimaryKey("Id")
+                            .AutoGenerateColumns(false)
+                            .AutoGenerateLayouts(false)
+                            .Columns(column =>
+                            {
+                            column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
+                            column.For(x => x.Egn).HeaderText(ApplicationResources.lblEgn).Width("20%");
+                            column.For(x => x.Name).HeaderText(ApplicationResources.lblName).Width("20%");
+                            column.For(x => x.RegistrationNumber).HeaderText(ApplicationResources.lblRegistrationNumber).Width("20%");
+                            column.For(x => x.CreatedOn).HeaderText(ApplicationResources.lblCreatedOn).Width("15%");
+                            column.For(x => x.StatusName).HeaderText(ApplicationResources.lblStatus).Width("20%");
+                            column.For(x => x.PurposeName).HeaderText(ApplicationResources.lblPurposeId).Width("25%");
+                            column.For(x => x.Purpose).HeaderText(ApplicationResources.lblPurpose).Width("25%");
+                            @*column.For(x => x.Email).HeaderText(ApplicationResources.lblEmail).Width("25%");*@
+                            column.Unbound("buttons").HeaderText("").Template(buttonPreviewTemplate).Width("8%");
+                            })
+                            .Features(feature =>
+                            {
+                            feature
+                            .Sorting()
+                            .Type(OpType.Remote);
+                            feature
+                            .Paging()
+                            .Type(OpType.Remote)
+                            .PageSize(10)
+                            .PageSizeDropDownLocation("inpager");
+                            feature
+                            .Filtering()
+                            .Mode(FilterMode.Simple)
+                            .Type(OpType.Remote);
+                            feature.Tooltips().Visibility(TooltipsVisibility.Overflow).Style(TooltipsStyle.Popover);
+                            })
+                            .DataSourceUrl(Url.Action(nameof(ApplicationController.GetUserApplications), "Application"))
+                            .Render())
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<hr />
-
-<div class="page-content scrollable-page">
-    <div class="box-content">
-        @(Html.Infragistics()
-            .Grid(Model.Applications)
-            .ID("applications")
-            .Language(ViewData["Culture"].ToString())
-            .Width("100%")
-            .PrimaryKey("Id")
-            .AutoGenerateColumns(false)
-            .AutoGenerateLayouts(false)
-            .Columns(column =>
-            {
-            column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
-            column.For(x => x.Egn).HeaderText(ApplicationResources.lblEgn).Width("20%");
-            column.For(x => x.Name).HeaderText(ApplicationResources.lblName).Width("20%");
-            column.For(x => x.RegistrationNumber).HeaderText(ApplicationResources.lblRegistrationNumber).Width("20%");
-            column.For(x => x.CreatedOn).HeaderText(ApplicationResources.lblCreatedOn).Width("15%");
-            column.For(x => x.StatusName).HeaderText(ApplicationResources.lblStatus).Width("20%");
-            column.For(x => x.PurposeName).HeaderText(ApplicationResources.lblPurposeId).Width("25%");
-            column.For(x => x.Purpose).HeaderText(ApplicationResources.lblPurpose).Width("25%");
-            column.For(x => x.Email).HeaderText(ApplicationResources.lblEmail).Width("25%");
-            column.Unbound("buttons").HeaderText("").Template(buttonPreviewTemplate).Width("8%");
-            })
-            .Features(feature =>
-            {
-                feature
-                    .Sorting()
-                    .Type(OpType.Remote);
-                feature
-                    .Paging()
-                    .Type(OpType.Remote)
-                    .PageSize(10)
-                    .PageSizeDropDownLocation("inpager");
-                feature
-                    .Filtering()
-                    .Mode(FilterMode.Simple)
-                    .Type(OpType.Remote);
-                feature.Tooltips().Visibility(TooltipsVisibility.Overflow).Style(TooltipsStyle.Popover);
-            })
-            .DataSourceUrl(Url.Action(nameof(ApplicationController.GetUserApplications), "Application"))
-            .Render())
-    </div>
-</div>
-@* <script>
-       @if(TempData["createSuccessfull"] != null)
-        {
-            @: cais.commonUtils.showSuccessMessageInToast('@messageCreateSuccessfullApp');
-        }
-</script> *@

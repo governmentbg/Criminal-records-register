@@ -15,25 +15,20 @@
     //var buttonPreview = ButtonTemplates.PreviewButton(Url.Action(nameof(UserExternalController.Preview), "UserExternal") + $"/${{{pkName}}}");
 }
 
-<partial name="_InfragisticsLoader" />
-
-<div class="d-flex" style="justify-content: space-between">
-    <div class="d-flex align-items-center">
-        <h3 class="pull-left">@titile</h3>
-    </div>
-    <div class="d-flex">
-        <div>
+<div class="container">
+    <div class="row">
+        <div class="mb-3 d-flex justify-content-end align-items-start">
             <a class="btn btn-primary" asp-controller="UserExternal" asp-action="New">
                @UsersResources.btnCreateNewUser  
             </a>
         </div>
-    </div>
-</div>
-
-<hr />
-
-<div class="page-content scrollable-page">
-    <div class="box-content">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header h5 bg-primary text-white">@ViewData["Title"]</div>
+                <div class="card-body">
+                    <partial name="_InfragisticsLoader" />
+                    <div class="page-content scrollable-page">
+                        <div class="box-content">
         @(Html.Infragistics()
         .Grid(Model.Users)
         .ID("users_grid")
@@ -73,5 +68,10 @@
         })
         .DataSourceUrl(Url.Action(nameof(UserExternalController.GetUsers), "UserExternal"))
         .Render())
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

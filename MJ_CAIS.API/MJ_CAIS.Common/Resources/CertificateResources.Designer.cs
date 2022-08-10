@@ -61,6 +61,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Валидно от.
+        /// </summary>
+        public static string lblValidFrom {
+            get {
+                return ResourceManager.GetString("lblValidFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Свидетелство с идентификатор {0} не съществува.
         /// </summary>
         public static string msgCertificateDoesNotExist {

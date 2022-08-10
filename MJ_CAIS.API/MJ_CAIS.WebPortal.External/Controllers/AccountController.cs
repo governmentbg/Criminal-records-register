@@ -1,71 +1,39 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Services.Contracts;
-using MJ_CAIS.WebSetup.Utils;
-using System.Security.Claims;
+using MJ_CAIS.WebPortal.External.Models.Account;
+using System.Linq;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly IUserExternalService _userExternalService;
+        private readonly IMapper _mapper;
+        private readonly IUserExternalService _externalUsers;
+        private readonly IExtAdministrationService _extAdministrationService;
 
-        public AccountController(IUserExternalService userExternalService)
+        public AccountController(
+            IMapper mapper,
+            IExtAdministrationService extAdministrationService,
+            IUserExternalService externalUsers)
         {
-            _userExternalService = userExternalService;
-        }
-
-        [HttpGet]
-        //[AllowAnonymous]
-        [RedirectAuthenticatedRequests("Index", "Application")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> Login(string returnUrl = null)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [RedirectAuthenticatedRequests("Index", "Application")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> Login()
-        {
-            var returnUrl = "";
-            var userDTO = new UserExternalDTO
-            {
-                Egn = "9201010101",
-                Name = "Петър Иванов Петров",
-                Email = "ivan.ivanov@test.bg",
-                Active = true,
-                IsAdmin = true,
-                Position = "Тестов Админстратор",
-            };
-
-            if (ModelState.IsValid)
-            {
-                var user = await _userExternalService.AuthenticateExternalUserAsync(userDTO);
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim("EgnIdentifier", user.Egn),
-                };
-
-                await SingInWithHttpContext(claims);
-
-                return LocalRedirect(GetLocalUrl(returnUrl));
-            }
-
-            return View();
+            _mapper = mapper;
+            _extAdministrationService = extAdministrationService;
+            _externalUsers = externalUsers;
         }
 
         [HttpPost]
-        public async Task<ActionResult> LogOff()
+        public ActionResult LogOff()
         {
             // Clear the existing external cookie
             return new SignOutResult(new[]
@@ -77,49 +45,45 @@ namespace MJ_CAIS.WebPortal.External.Controllers
                 );
         }
 
-        private string GetLocalUrl(string returnUrl)
+        [HttpGet]
+        public async Task<ActionResult> Inactive()
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return returnUrl;
-            }
-            else
-            {
-                return Url.Action("Index", "Application");
-            }
+            var userData = await _externalUsers.SelectAsync(CurrentUserID);
+            var administrations = await _extAdministrationService.SelectAllAsync();
+            var model = _mapper.Map<InactiveViewModel>(userData);
+            model.Administrations = administrations.OrderBy(a => a.Name).Select(a => new SelectListItem(a.Name, a.Id, (model.AdministrationId == a.Id))).ToList();
+            model.Administrations.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = (model.AdministrationId == null) });
+            return View(model);
         }
 
-        private async Task SingInWithHttpContext(List<Claim> claims)
+        [HttpPost]
+        public async Task<ActionResult> Inactive(InactiveViewModel viewModel)
         {
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var authProperties = new AuthenticationProperties
+            var userData = await _externalUsers.SelectAsync(CurrentUserID);
+            var itemToUpdate = _mapper.Map<UserExternalDTO>(viewModel);
+            itemToUpdate.Id = CurrentUserID;
+            itemToUpdate.Egn = userData.Egn;
+            try
             {
-                //AllowRefresh = <bool>,
-                // Refreshing the authentication session should be allowed.
+                await _externalUsers.UpdateAsync(CurrentUserID, itemToUpdate);
+                return RedirectToAction("InactiveNotification", new { success = true });
+            }
+            catch(DbUpdateConcurrencyException ce)
+            {
+                return RedirectToAction("InactiveNotification", new { success = false });
+            }
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> InactiveNotification(bool success)
+        {
+            return View(new InactiveNotificationModel() { Result = success });
+        }
 
-                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                // The time at which the authentication ticket expires. A 
-                // value set here overrides the ExpireTimeSpan option of 
-                // CookieAuthenticationOptions set with AddCookie.
-
-                //IsPersistent = true,
-                // Whether the authentication session is persisted across 
-                // multiple requests. When used with cookies, controls
-                // whether the cookie's lifetime is absolute (matching the
-                // lifetime of the authentication ticket) or session-based.
-
-                //IssuedUtc = <DateTimeOffset>,
-                // The time at which the authentication ticket was issued.
-
-                //RedirectUri = <string>
-                // The full path or absolute URI to be used as an http 
-                // redirect response value.
-            };
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+        [AllowAnonymous]
+        public IActionResult ErrorAuthentication()
+        {
+            return View();
         }
     }
 }

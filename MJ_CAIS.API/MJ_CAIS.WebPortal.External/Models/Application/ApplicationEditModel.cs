@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MJ_CAIS.WebPortal.External.Models.Application
 {
-    public class ApplicationEditModel : BaseViewModel
+    public class ApplicationEditModel : BaseViewModel, IValidatableObject
     {
         public ApplicationEditModel()
         {
@@ -13,6 +13,7 @@ namespace MJ_CAIS.WebPortal.External.Models.Application
         }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblEgn))]
+        [Required(ErrorMessageResourceType = typeof(CommonResources), ErrorMessageResourceName = nameof(CommonResources.MsgRequired))]
         public string? Egn { get; set; }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblRegistrationNumber))]
@@ -29,7 +30,21 @@ namespace MJ_CAIS.WebPortal.External.Models.Application
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblPurpose))]
         public string? Purpose { get; set; }
+        public string? RequiredPurposes { get; set; }
 
         public List<SelectListItem> PurposeTypes { get; set; }
+        public Dictionary<string, string> PurposeInfo { get; set; }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrEmpty(Purpose) &&
+                !string.IsNullOrEmpty(PurposeId) &&
+                !string.IsNullOrEmpty(RequiredPurposes) &&
+                RequiredPurposes.Contains(PurposeId))
+            {
+                yield return new ValidationResult(
+                    string.Format(CommonResources.MsgRequired, ApplicationResources.lblPurpose),
+                    new[] { nameof(Purpose) });
+            }
+        }
     }
 }

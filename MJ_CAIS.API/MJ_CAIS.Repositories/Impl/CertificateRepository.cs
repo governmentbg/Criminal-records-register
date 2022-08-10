@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Certificate;
 using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -83,14 +84,14 @@ namespace MJ_CAIS.Repositories.Impl
             return await _dbContext.ACertificates.Where(x => x.AccessCode1 == accessCode && x.Doc != null).Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
         }
 
-        public  async Task<ACertificate> GetCertificateData(string aId)
+        public async Task<ACertificate> GetCertificateData(string aId)
         {
             return await _dbContext.ACertificates.AsNoTracking()
                 .Include(x => x.AAppBulletins)
                 .Where(x => x.Id == aId)
                 .FirstOrDefaultAsync();
         }
-        public  async Task<ACertificate> GetCertificateWithDocumentContent(string certificateID)
+        public async Task<ACertificate> GetCertificateWithDocumentContent(string certificateID)
         {
             return await _dbContext.ACertificates
                                   .Include(c => c.Doc)
@@ -100,7 +101,7 @@ namespace MJ_CAIS.Repositories.Impl
                                   .FirstOrDefaultAsync();
         }
 
-        public  async Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID)
+        public async Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID)
         {
             return await _dbContext.ACertificates.AsNoTracking()
                                     .Include(c => c.AAppBulletins).AsNoTracking()
@@ -120,6 +121,40 @@ namespace MJ_CAIS.Repositories.Impl
                                     .ThenInclude(d => d.DocContent)
                                     .Where(x => x.Id == certificateID)
                                     .FirstOrDefaultAsync();
+        }
+
+        public async Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId)
+        {
+            return (from c in _dbContext.WCertificates
+                    join wa in _dbContext.WApplications on c.WApplId equals wa.Id
+                    join p in _dbContext.APurposes on wa.PurposeId equals p.Id
+                    where wa.UserExtId == userId
+                    select new CertificateExternalDTO()
+                    {
+                        Egn = wa.Egn,
+                        Names = wa.Firstname + " " + wa.Surname + " " + wa.Familyname,
+                        ValidFrom = c.ValidFrom,
+                        AccessCode1 = c.AccessCode1,
+                        PurposeName = p.Name,
+                        Purpose = wa.Purpose,
+                        WAppId = wa.Id
+                    }).AsQueryable();
+        }
+        public async Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId)
+        {
+            return (from c in _dbContext.WCertificates
+                    join wa in _dbContext.WApplications on c.WApplId equals wa.Id
+                    join p in _dbContext.APurposes on wa.PurposeId equals p.Id
+                    where wa.UserId == userId
+                    orderby c.ValidFrom descending
+                    select new CertificatePublicDTO()
+                    {
+                        ValidFrom = c.ValidFrom,
+                        AccessCode1 = c.AccessCode1,
+                        PurposeName = p.Name,
+                        Purpose = wa.Purpose,
+                        WAppId = wa.Id
+                    }).AsQueryable();
         }
     }
 }

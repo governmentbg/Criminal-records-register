@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using MJ_CAIS.WebPortal.External.Utils.Mappings;
 using MJ_CAIS.WebSetup;
+using System.Security.Claims;
 
 namespace MJ_CAIS.WebPortal.External
 {
@@ -48,8 +49,16 @@ namespace MJ_CAIS.WebPortal.External
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = JwtClaimTypes.Name,
-                        RoleClaimType = JwtClaimTypes.Role,
+                        RoleClaimType = ClaimsIdentity.DefaultRoleClaimType,
                     };
+
+                    options.AccessDeniedPath = "/Account/ErrorAuthentication";
+                });
+            builder.Services.AddAuthorization(
+                options =>
+                {
+                    options.AddPolicy("Active", policy =>
+                                      policy.RequireClaim("Active", "true"));
                 });
 
             var app = builder.Build();
