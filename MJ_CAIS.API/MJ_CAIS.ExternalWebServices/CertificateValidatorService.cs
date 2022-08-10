@@ -3,6 +3,7 @@ using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.DataAccess;
 using TL.Signer;
+using TL.Signer.Models;
 
 namespace MJ_CAIS.ExternalWebServices
 {
