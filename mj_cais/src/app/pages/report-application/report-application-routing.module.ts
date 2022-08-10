@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { NgxPermissionsGuard } from "ngx-permissions";
 import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
+import { AllGeneratedReportOverviewComponent } from "./all-generated-report-overview/all-generated-report-overview.component";
 import { RegixRequestFormComponent } from "./regix-request-form/regix-request-form.component";
 import { ReportApplicationFormComponent } from "./report-application-form/report-application-form.component";
 import { ReportApplicationResolver } from "./report-application-form/_data/report-application.resolver";
@@ -85,7 +86,16 @@ const routes: Routes = [
       },
     },
   },
-
+  {
+    path: "all-generated-reports",
+    component: AllGeneratedReportOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal],
+      },
+    },
+  },
   {
     path: "",
     redirectTo: "report-applications",

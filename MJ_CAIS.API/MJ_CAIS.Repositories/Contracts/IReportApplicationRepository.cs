@@ -8,6 +8,8 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         IQueryable<ReportAppStatusHistoryDTO> SelectAllStatusHistoryData();
 
+        IQueryable<GeneratedReportGridDTO> SelectAllGeneratedReports();
+
         IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId);
 
         IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId);

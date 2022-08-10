@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
@@ -52,7 +53,7 @@ namespace MJ_CAIS.Services
 
         public virtual async Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode)
         {
-            var entityQuery = GetSelectAllQueryable();
+            var entityQuery = GetSelectAllQueryable().Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
             if (!string.IsNullOrEmpty(statusCode))
             {
                 entityQuery = entityQuery.Where(x => x.StatusCode == statusCode);
@@ -62,6 +63,19 @@ namespace MJ_CAIS.Services
             var resultQuery = await ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<ReportApplicationGridDTO>();
             PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
+        }
+
+        public async Task<IgPageResult<GeneratedReportGridDTO>> SelectAllGeneratedReportsWithPaginationAsync(ODataQueryOptions<GeneratedReportGridDTO> aQueryOptions)
+        {
+            var entityQuery = _reportApplicationRepository.SelectAllGeneratedReports()
+                .Where(x => x.StatusCode == Status.ReadyReport ||
+                            x.StatusCode == Status.DeliveredReport &&
+                            x.CsAuthorityId == _userContext.CsAuthorityId);
+
+            var resultQuery = await ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<GeneratedReportGridDTO>();
+            PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
             return pageResult;
         }
 

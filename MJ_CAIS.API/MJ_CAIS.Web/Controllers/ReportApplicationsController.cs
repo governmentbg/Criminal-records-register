@@ -41,6 +41,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("all-generated-reports")]
+        public virtual async Task<IActionResult> GetAllGeneratedReports(ODataQueryOptions<GeneratedReportGridDTO> aQueryOptions)
+        {
+            var result = await this._reportApplicationService.SelectAllGeneratedReportsWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
         [HttpPost("")]
         public new async Task<IActionResult> Post([FromBody] ReportApplicationDTO aInDto)
         {

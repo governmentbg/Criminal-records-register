@@ -113,8 +113,12 @@ export class PagesMenu {
             link: "/pages/report-applications/approved",
           },
           {
-            title: "Обработени",
+            title: "Обработени искания",
             link: "/pages/report-applications/delivered",
+          },
+          {
+            title: "Обработени справки",
+            link: "/pages/report-applications/all-generated-reports",
           },
         ],
       },

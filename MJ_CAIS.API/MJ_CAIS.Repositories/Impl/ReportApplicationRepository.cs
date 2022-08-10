@@ -50,6 +50,32 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<GeneratedReportGridDTO> SelectAllGeneratedReports()
+        {
+            var query = from reports in _dbContext.AReports.AsNoTracking()
+                        join reportAppl in _dbContext.AReportApplications.AsNoTracking() on reports.ARepApplId equals reportAppl.Id
+                            into reportApplLeft
+                        from reportAppl in reportApplLeft.DefaultIfEmpty()
+
+                        select new GeneratedReportGridDTO
+                        {
+                            Id = reports.Id,
+                            StatusCode = reports.StatusCode,
+                            BirthDate = reportAppl.BirthDate,
+                            CreatedOn = reports.CreatedOn,
+                            Familyname = reportAppl.Familyname,
+                            Firstname = reportAppl.Firstname,
+                            Purpose = reportAppl.Purpose,
+                            RegistrationNumber = reports.RegistrationNumber,
+                            ReportApplId = reportAppl.Id,
+                            ReportApplRegNumber = reportAppl.RegistrationNumber,
+                            Surname = reportAppl.Surname,
+                            CsAuthorityId = reportAppl.CsAuthorityId
+                        };
+
+            return query;
+        }
+
         public IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId)
         {
             var query = from reports in _dbContext.AReports.AsNoTracking()
@@ -79,7 +105,7 @@ namespace MJ_CAIS.Repositories.Impl
                             StatusName = status.Name,
                             ValidFrom = reports.ValidFrom,
                             ValidTo = reports.ValidTo,
-                            
+
                         };
 
             return query;
@@ -167,7 +193,7 @@ namespace MJ_CAIS.Repositories.Impl
                             .Select(x => x.PersonId)
                             .ToListAsync();
 
-            var distinctIds = personIds?.Where(x=> !string.IsNullOrEmpty(x)).Distinct();
+            var distinctIds = personIds?.Where(x => !string.IsNullOrEmpty(x)).Distinct();
 
             if (distinctIds?.Count() > 1)
             {

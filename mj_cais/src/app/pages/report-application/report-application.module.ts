@@ -7,7 +7,8 @@ import { ReportApplicationFormComponent } from './report-application-form/report
 import { ReportAppHistoryOverviewComponent } from './report-application-form/tabs/report-app-history-overview/report-app-history-overview.component';
 import { ReportApplicationApprovedOverviewComponent } from './report-application-overview/report-application-approved-overview/report-application-approved-overview.component';
 import { ReportApplicationDeliveredOverviewComponent } from './report-application-overview/report-application-delivered-overview/report-application-delivered-overview.component';
-import { GeneratedReportOverviewComponent } from './report-application-form/tabs/generated-report-overview/generated-report-overview.component';
+import { AllGeneratedReportOverviewComponent } from "./all-generated-report-overview/all-generated-report-overview.component";
+import { GeneratedReportOverviewComponent } from "./report-application-form/tabs/generated-report-overview/generated-report-overview.component";
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { GeneratedReportOverviewComponent } from './report-application-form/tabs
     ReportApplicationApprovedOverviewComponent,
     ReportApplicationDeliveredOverviewComponent,
     GeneratedReportOverviewComponent,
+    AllGeneratedReportOverviewComponent, 
   ],
   imports: [CoreComponentModule, ReportApplicationRoutingModule],
 })
