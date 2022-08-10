@@ -1,0 +1,29 @@
+::ng-deep nb-tabset.custom-tabset {
+  ul.tabset {
+    flex-direction: column !important;
+    li {
+      border-bottom: 1px solid #e7eaec;
+      display: block;
+      a {
+        padding: 10px 0;
+      }
+    }
+  }
+
+  .tab.active .tab-link::before,
+  .tab:hover .tab-link::before {
+    background-color: transparent !important;
+  }
+
+  .tab-link {
+    text-transform: none;
+  }
+
+  nb-badge {
+    top: 10px !important;
+  }
+}
+
+.card-min-height {
+  min-height: 450px;
+}

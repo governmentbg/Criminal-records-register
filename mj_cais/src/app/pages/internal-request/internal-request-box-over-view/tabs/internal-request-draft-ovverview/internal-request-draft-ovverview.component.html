@@ -1,0 +1,106 @@
+<!-- <tl-linear-progress
+  [visible]="this.remoteService.isLoading"
+></tl-linear-progress> -->
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [sortStrategy]="noopSortStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  (onSortingDone)="sortingDone($event)"
+  (onFilteringDone)="filteringDone($event)"
+  (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
+  [allowFiltering]="true"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+  >
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="true"
+    [dataType]="'number'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="createOn"
+    header="Дата на зъздаване"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value | date }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="reqestType"
+    header="Тип на заявката"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="toAuthorityName"
+    header="До бюро съдимост"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    width="150px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/internal-request/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>
+      <a
+        [title]="'Редактиране'"
+        [routerLink]="['/pages/internal-request/edit', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="pen"></nb-icon>
+      </a>
+      <a
+      [title]="'Изпращане'"
+      [routerLink]="['/pages/internal-request/send', cell.rowData.id]"
+    >
+      <nb-icon pack="fa" icon="paper-plane"></nb-icon>
+    </a>
+    </ng-template>
+  </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>
