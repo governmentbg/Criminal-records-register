@@ -25,24 +25,6 @@
 									</td>
 									<td align="right">
 										<span>
-											<xsl:text>Важи за срок от</xsl:text>
-										</span>
-										<span style="font-weight:bold; ">
-											<xsl:text> 6 месеца</xsl:text>
-										</span>
-										<span>
-											<xsl:text>&#160;</xsl:text>
-										</span>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<span>
-											<xsl:text>ЦАИС &quot;СЪДЕБЕН СТАТУС&quot;</xsl:text>
-										</span>
-									</td>
-									<td align="right">
-										<span>
 											<xsl:text>Дата на издаване: </xsl:text>
 										</span>
 										<xsl:for-each select="n1:ReportDate">
@@ -58,10 +40,17 @@
 												<xsl:value-of select="format-number(number(substring(string(string(.)), 15, 2)), '00', 'format1')"/>
 											</span>
 										</xsl:for-each>
+										<span>
+											<xsl:text>&#160;</xsl:text>
+										</span>
 									</td>
 								</tr>
 								<tr>
-									<td/>
+									<td>
+										<span>
+											<xsl:text>ЦАИС &quot;СЪДЕБЕН СТАТУС&quot;</xsl:text>
+										</span>
+									</td>
 									<td align="right" height="20">
 										<xsl:for-each select="n1:ReportCriteria">
 											<span>
@@ -442,12 +431,24 @@
 																</span>
 															</td>
 															<td align="left">
-																<span style="font-weight:bold; ">
-																	<xsl:text>България</xsl:text>
-																</span>
-																<span>
-																	<xsl:text> (BG)</xsl:text>
-																</span>
+																<xsl:for-each select="bul:PersonNationality">
+																	<div>
+																		<xsl:for-each select="bul:CountryName">
+																			<span style="font-weight:bold; ">
+																				<xsl:apply-templates/>
+																			</span>
+																		</xsl:for-each>
+																		<xsl:for-each select="bul:CountryISOAlpha3">
+																			<span>
+																				<xsl:text>(</xsl:text>
+																			</span>
+																			<xsl:apply-templates/>
+																			<span>
+																				<xsl:text>)</xsl:text>
+																			</span>
+																		</xsl:for-each>
+																	</div>
+																</xsl:for-each>
 															</td>
 														</tr>
 													</tbody>
@@ -482,14 +483,8 @@
 																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseYear">
-																				<span>
-																					<xsl:text> / </xsl:text>
-																				</span>
 																				<span style="font-weight:bold; ">
-																					<xsl:text>2021</xsl:text>
-																				</span>
-																				<span>
-																					<xsl:text> г.</xsl:text>
+																					<xsl:apply-templates/>
 																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseType">
@@ -920,9 +915,6 @@
 																												<xsl:text>&#160; </xsl:text>
 																											</span>
 																											<span style="font-weight:bold; ">
-																												<xsl:text>1</xsl:text>
-																											</span>
-																											<span style="font-weight:bold; ">
 																												<xsl:variable name="sDurationYear">
 																													<xsl:call-template name="DurationToYear">
 																														<xsl:with-param name="sDuration" select="string(string(.))"/>
@@ -991,9 +983,6 @@
 																												</span>
 																												<span>
 																													<xsl:text> г. </xsl:text>
-																												</span>
-																												<span style="font-weight:bold; ">
-																													<xsl:text>1</xsl:text>
 																												</span>
 																												<span style="font-weight:bold; ">
 																													<xsl:variable name="sDurationMonth">
