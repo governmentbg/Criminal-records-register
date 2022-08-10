@@ -143,7 +143,7 @@
       <cais-input
         [type]="'text'"
         [label]="'Вътрешен системен идентификатор'"
-        [inputFormControl]="personForm.suid"
+        [inputFormControl]="personForm.suidDisplay"
         [parentGroup]="personForm.group"
       >
       </cais-input>
@@ -152,50 +152,96 @@
 </div>
 <ng-container *ngIf="!isFbbcContext">
   <div class="row">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЕГН'"
-        [inputFormControl]="personForm.egn"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-      <ng-container *ngIf="showInvalidEgnMessage">
-        <span class="text-warning">
-          Въведената стойност за ЕГН е невалидна</span
+    <ng-container *ngIf="hasDataFromRegix">
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'ЕГН'"
+          [inputFormControl]="personForm.egnDisplay"
+          [parentGroup]="personForm.group"
+        ></cais-input>
+        <ng-container *ngIf="showInvalidEgnMessage">
+          <span class="text-warning">
+            Въведената стойност за ЕГН е невалидна</span
+          >
+        </ng-container>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'ЛНЧ'"
+          [inputFormControl]="personForm.lnchDisplay"
+          [parentGroup]="personForm.group"
+        ></cais-input>
+        <ng-container *ngIf="showInvalidLnchMessage">
+          <span class="text-warning">
+            Въведената стойност за ЛНЧ е невалидна
+          </span>
+        </ng-container>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'ЛН'"
+          [inputFormControl]="personForm.lnDisplay"
+          [parentGroup]="personForm.group"
+        ></cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'Вътрешен системен идентификатор'"
+          [inputFormControl]="personForm.suidDisplay"
+          [parentGroup]="personForm.group"
         >
-      </ng-container>
-    </div>
-
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЛНЧ'"
-        [inputFormControl]="personForm.lnch"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-      <ng-container *ngIf="showInvalidLnchMessage">
-        <span class="text-warning">
-          Въведената стойност за ЛНЧ е невалидна
-        </span>
-      </ng-container>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЛН'"
-        [inputFormControl]="personForm.ln"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Вътрешен системен идентификатор'"
-        [inputFormControl]="personForm.suid"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div></div
+        </cais-input>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!hasDataFromRegix">
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'ЕГН'"
+          [inputFormControl]="personForm.egn"
+          [parentGroup]="personForm.group"
+        ></cais-input>
+        <ng-container *ngIf="showInvalidEgnMessage">
+          <span class="text-warning">
+            Въведената стойност за ЕГН е невалидна</span
+          >
+        </ng-container>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'ЛНЧ'"
+          [inputFormControl]="personForm.lnch"
+          [parentGroup]="personForm.group"
+        ></cais-input>
+        <ng-container *ngIf="showInvalidLnchMessage">
+          <span class="text-warning">
+            Въведената стойност за ЛНЧ е невалидна
+          </span>
+        </ng-container>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'ЛН'"
+          [inputFormControl]="personForm.ln"
+          [parentGroup]="personForm.group"
+        ></cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input
+          [type]="'text'"
+          [label]="'Вътрешен системен идентификатор'"
+          [inputFormControl]="personForm.suidDisplay"
+          [parentGroup]="personForm.group"
+        >
+        </cais-input>
+      </div>
+    </ng-container></div
 ></ng-container>
 <div class="font-weight-bold">Място на раждане</div>
 <hr />

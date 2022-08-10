@@ -318,7 +318,9 @@ namespace MJ_CAIS.Services
                 else if (personIdObj.PidTypeId == PidType.Suid)
                 {
                     entity.ModifiedProperties.Add(nameof(entity.SuidId));
+                    entity.ModifiedProperties.Add(nameof(entity.Suid));
                     entity.SuidId = personIdObj.Id;
+                    entity.Suid = personIdObj.Pid;
                 }
 
                 _reportApplicationRepository.ApplyChanges(personIdObj);
