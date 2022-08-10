@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.12" />
     <PackageReference Include="Microsoft.AspNetCore.OData.Versioning.ApiExplorer" Version="5.0.0" />
-    <PackageReference Include="TL.Signer" Version="22.76.38469" />
+    <PackageReference Include="TL.Signer" Version="22.222.42469" />
   </ItemGroup>
 
   <ItemGroup>
