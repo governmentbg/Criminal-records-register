@@ -30,7 +30,7 @@ export class PersonFormComponent implements OnInit {
   public showInvalidEgnMessage: boolean = false;
   public showInvalidLnchMessage: boolean = false;
   public showInvalidEgnOrLnchMessage: boolean = false;
-  public hasDataFromRegix: boolean = false;
+  //public hasDataFromRegix: boolean = false;
 
   ngOnInit(): void {
     this.isFbbcContext = this.contextType == PersonContextEnum.Fbbc;
@@ -42,30 +42,33 @@ export class PersonFormComponent implements OnInit {
       this.contextType == PersonContextEnum.ReportApplication;
 
     if (this.isFbbcContext && this.personForm.egn.value) {
-      this.personForm.egnDisplay.patchValue(this.personForm.egn.value);
-      this.personForm.egnDisplay.disable();
+     // this.personForm.egnDisplay.patchValue(this.personForm.egn.value);
+      //this.personForm.egnDisplay.disable();
       this.showEgnDisplay = true;
     }
 
-    if(this.isApplicationContext || this.isReportApplicationContext) {
-      // has data from regix
-      this.hasDataFromRegix = this.personForm.egn.value !== null ||
-      this.personForm.lnch.value !== null;
-      this.personForm.ln.value !== null;
-      if(this.hasDataFromRegix){
-        this.personForm.egnDisplay.patchValue(this.personForm.egn.value);
-        this.personForm.lnchDisplay.patchValue(this.personForm.lnch.value);
-        this.personForm.lnDisplay.patchValue(this.personForm.ln.value);
-        this.personForm.suidDisplay.patchValue(this.personForm.suid.value);
-      }
+    if (
+      ((this.isApplicationContext || this.isReportApplicationContext) &&
+        this.personForm.lnch.value !== null) ||
+      this.personForm.ln.value !== null ||
+      this.personForm.egn.value !== null
+    ) {
+      this.personForm.egn.disable();
+      this.personForm.lnch.disable();
+      this.personForm.ln.disable();
+      this.personForm.suid.disable();
     }
 
-    this.personForm.suidDisplay.patchValue(this.personForm.suid.value);
+    //this.personForm.suidDisplay.patchValue(this.personForm.suid.value);
     this.setPidWarningMessages();
   }
 
   private setPidWarningMessages() {
-    if (this.isApplicationContext || this.isBulletinContext || this.isReportApplicationContext) {
+    if (
+      this.isApplicationContext ||
+      this.isBulletinContext ||
+      this.isReportApplicationContext
+    ) {
       this.personForm.group
         .get("egn")
         .valueChanges.subscribe((selectedValue) => {

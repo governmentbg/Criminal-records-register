@@ -9,7 +9,6 @@ export class PersonForm {
   public group: FormGroup;
   public id: FormControl;
   public suid: FormControl;
-  public suidDisplay: FormControl;
   public version: FormControl;
   // applying validation rules,
   // showing or hiding form controls
@@ -28,11 +27,8 @@ export class PersonForm {
   public birthDate: FormControl;
   public birthPlace: AddressForm;
   public egn: FormControl;
-  public egnDisplay: FormControl;
   public lnch: FormControl;
-  public lnchDisplay: FormControl;
   public ln: FormControl;
-  public lnDisplay: FormControl;
   public nationalities: MultipleChooseForm;
   public afisNumber: FormControl;
   public idDocNumber: FormControl;
@@ -54,8 +50,7 @@ export class PersonForm {
   constructor(context: string, isDisabled: boolean = true) {
     this.id = new FormControl(null);
     this.suid = new FormControl(null);
-    this.suidDisplay = new FormControl(null);
-    this.suidDisplay.disable();
+    
     this.version = new FormControl(null);
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
@@ -71,14 +66,11 @@ export class PersonForm {
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
     this.egn = new FormControl(null);
-    this.egnDisplay = new FormControl(null);
-    this.egnDisplay.disable();
+    
     this.lnch = new FormControl(null);
-    this.lnchDisplay = new FormControl(null);
-    this.lnchDisplay.disable();
+    
     this.ln = new FormControl(null);
-    this.lnDisplay = new FormControl(null);
-    this.lnDisplay.disable();
+  
     this.nationalities = new MultipleChooseForm();
     this.afisNumber = new FormControl(null);
     this.idDocNumber = new FormControl(null);
@@ -180,7 +172,6 @@ export class PersonForm {
     this.group = new FormGroup({
       id: this.id,
       suid: this.suid,
-      suidDisplay: this.suidDisplay,
       version: this.version,
       contextType: this.contextType,
       firstname: this.firstname,
@@ -197,11 +188,8 @@ export class PersonForm {
       birthDate: this.birthDate,
       birthPlace: this.birthPlace.group,
       egn: this.egn,
-      egnDisplay: this.egnDisplay,
       lnch: this.lnch,
-      lnchDisplay: this.lnchDisplay,
       ln: this.ln,
-      lnDisplay: this.lnDisplay,
       nationalities: this.nationalities.group,
       afisNumber: this.afisNumber,
       idDocNumber: this.idDocNumber,
