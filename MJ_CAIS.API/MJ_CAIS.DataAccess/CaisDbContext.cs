@@ -9288,19 +9288,9 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("PURPOSE_ID");
 
-                entity.Property(e => e.RegNumberReqId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("REG_NUMBER_REQ_ID");
-
                 entity.Property(e => e.RegistrationNumber)
                     .HasMaxLength(100)
                     .HasColumnName("REGISTRATION_NUMBER");
-
-                entity.Property(e => e.ResponseAddress)
-                    .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("RESPONSE_ADDRESS");
 
                 entity.Property(e => e.Sex)
                     .HasColumnType("NUMBER(38)")
@@ -9353,14 +9343,6 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("W_APPLICATION_ID");
-
-                entity.Property(e => e.WebCheckPaymentReady)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("WEB_CHECK_PAYMENT_READY");
-
-                entity.Property(e => e.WebCheckTaxFreeReady)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("WEB_CHECK_TAX_FREE_READY");
 
                 entity.HasOne(d => d.ApplicationType)
                     .WithMany(p => p.WApplications)
