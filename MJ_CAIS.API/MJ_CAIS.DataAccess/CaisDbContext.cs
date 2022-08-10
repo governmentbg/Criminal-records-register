@@ -4293,6 +4293,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("CORR_PAYMENT_TYPE");
 
+                entity.Property(e => e.CorrReference)
+                    .HasMaxLength(30)
+                    .HasColumnName("CORR_REFERENCE");
+
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
                 entity.Property(e => e.CreatedOn)
@@ -6822,10 +6826,6 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("CREATED_BY");
 
-                entity.Property(e => e.Role)
-                    .HasMaxLength(200)
-                    .HasColumnName("ROLE");
-
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
@@ -6835,6 +6835,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
+
+                entity.Property(e => e.Role)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("ROLE");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
