@@ -139,16 +139,16 @@ namespace MJ_CAIS.Services
   
             _webApplicationService.SetWApplicationStatus(wapplication, wapplicationStatus, ApplicationResources.descAprovedApp);
      
-            string regNumber = "";
+            //string regNumber = "";
 
-            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
-            {
-                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(wapplication.CsAuthorityId);
-            }
-            if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate)
-            {
-                regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebExternal(wapplication.CsAuthorityId);
-            }
+            //if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
+            //{
+            //    regNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(wapplication.CsAuthorityId);
+            //}
+            //if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate)
+            //{
+            //    regNumber = await _registerTypeService.GetRegisterNumberForCertificateWebExternal(wapplication.CsAuthorityId);
+            //}
 
             AApplication appl = new AApplication()
             {
@@ -201,7 +201,7 @@ namespace MJ_CAIS.Services
                 UserExtId = wapplication.UserExtId,
                 UserId = wapplication.UserId,
                 WApplicationId = wapplication.Id,                
-                RegistrationNumber = regNumber,
+                RegistrationNumber = wapplication.RegistrationNumber,
                 //ApplicationType = wapplication.ApplicationType,
                 ApplicationTypeId = wapplication.ApplicationTypeId,
                 EntityState = EntityStateEnum.Added,
