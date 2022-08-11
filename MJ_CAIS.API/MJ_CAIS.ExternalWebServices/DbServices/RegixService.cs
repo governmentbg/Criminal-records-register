@@ -439,12 +439,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                                 application.ModifiedProperties.Add(nameof(application.BirthCountryId));
                             }
                         }
-                        if (string.IsNullOrEmpty(application.MotherFullname) && !string.IsNullOrEmpty(graoData.Item2))
+                        if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        if (string.IsNullOrEmpty(application.FatherFullname) && !string.IsNullOrEmpty(graoData.Item3))
+                        if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));
