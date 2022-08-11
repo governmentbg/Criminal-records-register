@@ -255,7 +255,28 @@ namespace MJ_CAIS.Services
             var person = await _managePersonService.CreatePersonAsync(personDto);
 
             appl.EgnId = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Id;
-                 
+            var documents = await baseAsyncRepository.FindAsync<WDocument>(d => d.WApplId == wapplication.Id);
+            foreach(var document in documents)
+            {
+                DDocContent dDocContent = new DDocContent();
+                dDocContent.EntityState = EntityStateEnum.Added;
+                dDocContent.Id = BaseEntity.GenerateNewId();
+                dDocContent.Bytes = document.Bytes;
+                dDocContent.Content = document.Content;
+                dDocContent.MimeType = document.MimeType;
+                dDocContent.Md5Hash = document.Md5Hash;
+                dDocContent.Sha1Hash = document.Sha1Hash;
+                
+                DDocument d= new DDocument();
+                d.EntityState = EntityStateEnum.Added;
+                d.Id = BaseEntity.GenerateNewId();
+                d.ApplicationId = appl.Id;
+                d.DocContentId = dDocContent.Id;
+                d.DocContent = dDocContent; ;
+                d.Name= document.Name;
+                d.Descr = document.Descr;
+                _wApplicationRepository.ApplyChanges(d, new List<IBaseIdEntity>());
+            }
 
             _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);      
            
