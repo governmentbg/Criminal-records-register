@@ -21,14 +21,19 @@ namespace MJ_CAIS.Services
     {
         private readonly IInternalRequestRepository _internalRequestRepository;
         private readonly IUserContext _userContext;
+        private readonly IRegisterTypeService _registerTypeService;
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
-        public InternalRequestService(IMapper mapper, IInternalRequestRepository internalRequestRepository, IUserContext userContext)
+        public InternalRequestService(IMapper mapper,
+            IInternalRequestRepository internalRequestRepository,
+            IUserContext userContext,
+            IRegisterTypeService registerTypeService)
             : base(mapper, internalRequestRepository)
         {
             _internalRequestRepository = internalRequestRepository;
             _userContext = userContext;
+            _registerTypeService = registerTypeService;
         }
 
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool isForSender)
@@ -54,100 +59,60 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public override Task<string> InsertAsync(InternalRequestDTO aInDto)
+        public override async Task<string> InsertAsync(InternalRequestDTO aInDto)
         {
-            aInDto.ReqStatusCode = InternalRequestStatusTypeConstants.New;
-            return base.InsertAsync(aInDto);
+            aInDto.ReqStatusCode = InternalRequestStatusTypeConstants.Draft;
+            aInDto.FromAuthorityId = _userContext.CsAuthorityId;
+            aInDto.RegNumber = await _registerTypeService.GetRegisterNumberForInternalRequest(_userContext.CsAuthorityId);
+            return await base.InsertAsync(aInDto);
         }
 
-        /// <summary>
-        /// При одобрение на заявката от адвокат, статуса на бюлетин към нея се променя на реабилитиран,
-        /// при отхвърляне статуса от 'Подлежащ на реабилитация' се променя на 'Активен'
-        /// </summary>
-        /// <param name="aId"></param>
-        /// <param name="aInDto"></param>
-        /// <returns></returns>
         public override async Task UpdateAsync(string aId, InternalRequestDTO aInDto)
         {
+            var dbEntity = await _internalRequestRepository.SingleOrDefaultAsync<NInternalRequest>(x => x.Id == aInDto.Id);
+
+            if (dbEntity == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgRequestDoesNotExist, aId));
+
+            if (dbEntity.ReqStatusCode != InternalRequestStatusTypeConstants.Draft)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.mgsNotAllowedToEditRequest);
+
             var entity = mapper.MapToEntity<InternalRequestDTO, NInternalRequest>(aInDto, false);
 
-            var bulletinStatus = entity.ReqStatusCode == InternalRequestStatusTypeConstants.Approved ?
-                BulletinConstants.Status.Rehabilitated : BulletinConstants.Status.Active;
+            await _internalRequestRepository.SaveEntityAsync(entity, true);
+        }
 
-            var bulletin = new BBulletin
-            {
-                StatusId = bulletinStatus,
-                EntityState = EntityStateEnum.Modified,
-                Version = aInDto.BulletinVersion,
-                ModifiedProperties = new List<string> { nameof(BBulletin.StatusId), nameof(BBulletin.Version) },
-            };
+        public override async Task DeleteAsync(string aId)
+        {
+            var dbEntity = await _internalRequestRepository.SingleOrDefaultAsync<NInternalRequest>(x => x.Id == aId);
 
-            var statusHistory = new BBulletinStatusH
-            {
-                Id = Guid.NewGuid().ToString(),
-                //todo: change
-                //BulletinId = entity.BulletinId,
-                OldStatusCode = aInDto.BulletinStatusId,
-                NewStatusCode = bulletinStatus,
-                EntityState = EntityStateEnum.Added,
-                Locked = true,
-            };
-            //todo: change
-            //bulletin.BInternalRequests = new List<BInternalRequest>() { entity };
-            bulletin.BBulletinStatusHes = new List<BBulletinStatusH>() { statusHistory };
-            //todo: change
+            if (dbEntity == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgRequestDoesNotExist, aId));
 
-            //if (string.IsNullOrEmpty(entity.AAppBulletinId))
-            //{
-            //    bulletin.Id = entity.BulletinId;
-            //    await _internalRequestRepository.SaveEntityAsync(bulletin, true);
-            //    return;
-            //}
+            if (dbEntity.ReqStatusCode != InternalRequestStatusTypeConstants.Draft)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.mgsNotAllowedToDeleteRequest);
 
-            // from application form
-            //todo: change
-            AAppBulletin? currentBull = null; // await _internalRequestRepository.GetBulletinsInCertificate(entity);
-
-            bulletin.Id = currentBull.BulletinId;
-
-            var certId = currentBull.CertificateId;
-
-            var bullIdsForCert = await (await _internalRequestRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certId))//await dbContext.AAppBulletins.AsNoTracking()
-                                                                                                                                 //.Where(x => x.CertificateId == certId)
-                .Select(x => x.Id).ToListAsync();
-
-            if (bullIdsForCert.Any())
-            {
-                //todo:change
-                bool hasRequests = false; //await _internalRequestRepository.HasRequests(entity, bullIdsForCert);
-
-                // change status of certificate
-                if (!hasRequests)
-                {
-                    var cert = currentBull.Certificate;
-                    cert.EntityState = EntityStateEnum.Modified;
-                    cert.StatusCode = ApplicationConstants.ApplicationStatuses.BulletinsSelection;
-                    cert.ModifiedProperties = new List<string> { nameof(cert.StatusCode), nameof(cert.Version) };
-                    _internalRequestRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
-
-                    var result = new AStatusH
-                    {
-                        Id = BaseEntity.GenerateNewId(),
-                        ApplicationId = cert.ApplicationId,
-                        CertificateId = certId,
-                        StatusCode = cert.StatusCode,
-                        Descr = ApplicationResources.descChangeStatus,
-                        EntityState = EntityStateEnum.Added
-                    };
-
-                    _internalRequestRepository.ApplyChanges(result, new List<IBaseIdEntity>());
-                }
-            }
-
-            await _internalRequestRepository.SaveEntityAsync(bulletin, true);
+            dbEntity.EntityState = EntityStateEnum.Deleted;
+            await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
         }
 
 
+        public async Task ChangeStatusAsync(string aId, string status)
+        {
+            var dbEntity = await _internalRequestRepository.SingleOrDefaultAsync<NInternalRequest>(x => x.Id == aId);
+
+            if (dbEntity == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgRequestDoesNotExist, aId));
+
+            if (status == InternalRequestStatusTypeConstants.Sent && dbEntity.ReqStatusCode != InternalRequestStatusTypeConstants.Draft)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgRequestIsNotDraft);
+
+            dbEntity.ReqStatusCode = status;
+            dbEntity.EntityState = EntityStateEnum.Modified;
+            dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version) };
+
+            await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
+        }
 
         /// <summary>
         /// Основна информация за бюлетин и лицето към него, 

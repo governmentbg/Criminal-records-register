@@ -28,11 +28,10 @@ namespace MJ_CAIS.Repositories.Impl
 
         public override async Task<NInternalRequest> SelectAsync(string id)
         {
-            //return await this._dbContext.BInternalRequests.AsNoTracking()
-            //         .Include(x => x.Bulletin)
-            //         .Include(x => x.ReqStatusCodeNavigation)
-            //         .FirstOrDefaultAsync(x => x.Id == id);
-            throw new NotImplementedException();
+            return await this._dbContext.NInternalRequests.AsNoTracking()
+                        .Include(x => x.FromAuthority)
+                        .Include(x => x.ToAuthority)
+                        .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<int> GetCountOfNewRequestsAsync()

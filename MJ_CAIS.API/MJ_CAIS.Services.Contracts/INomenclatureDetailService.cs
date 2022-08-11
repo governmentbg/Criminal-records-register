@@ -20,7 +20,7 @@ namespace MJ_CAIS.Services.Contracts
 
         IQueryable<BaseNomenclatureDTO> GetAllFbbcSanctTypes();
 
-        IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses();
+        IQueryable<BaseNomenclatureDTO> GetInternalRequestTypes();
 
         Task<IgPageResult<CountryDTO>> GetCountriesAsync(ODataQueryOptions<CountryDTO> aQueryOptions);
 

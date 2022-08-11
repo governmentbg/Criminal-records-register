@@ -133,6 +133,24 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заявката не е чернова и не може да бъде изтрита.
+        /// </summary>
+        public static string mgsNotAllowedToDeleteRequest {
+            get {
+                return ResourceManager.GetString("mgsNotAllowedToDeleteRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявката не е чернова и не може да бъде актуализирана.
+        /// </summary>
+        public static string mgsNotAllowedToEditRequest {
+            get {
+                return ResourceManager.GetString("mgsNotAllowedToEditRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Искане за справка с идентификатор {0} не съществува..
         /// </summary>
         public static string msgAppReportDoesNotExist {
@@ -165,6 +183,24 @@ namespace MJ_CAIS.Common.Resources {
         public static string msgReportIsDelivered {
             get {
                 return ResourceManager.GetString("msgReportIsDelivered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявка с идентификатор {0} не съществува..
+        /// </summary>
+        public static string msgRequestDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgRequestDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявката не е чернова и не може да бъде изпратена..
+        /// </summary>
+        public static string msgRequestIsNotDraft {
+            get {
+                return ResourceManager.GetString("msgRequestIsNotDraft", resourceCulture);
             }
         }
         

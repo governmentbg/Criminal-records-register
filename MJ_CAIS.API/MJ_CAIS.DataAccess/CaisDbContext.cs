@@ -110,6 +110,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GraoPerson> GraoPeople { get; set; } = null!;
         public virtual DbSet<NInternalReqBulletin> NInternalReqBulletins { get; set; } = null!;
         public virtual DbSet<NInternalRequest> NInternalRequests { get; set; } = null!;
+        public virtual DbSet<NIntternalReqType> NIntternalReqTypes { get; set; } = null!;
         public virtual DbSet<NReqStatus> NReqStatuses { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
         public virtual DbSet<PPersonCitizenship> PPersonCitizenships { get; set; } = null!;
@@ -5369,6 +5370,8 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("E_PAYMENTS");
 
+                entity.HasIndex(e => e.BnbPayId, "XIF1E_PAYMENTS");
+
                 entity.HasIndex(e => e.InvoiceNumber, "XUKE_PAYMENTS")
                     .IsUnique();
 
@@ -5380,6 +5383,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Amount)
                     .HasColumnType("NUMBER(18,2)")
                     .HasColumnName("AMOUNT");
+
+                entity.Property(e => e.BnbPayId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BNB_PAY_ID");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
@@ -5415,6 +5423,11 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.BnbPay)
+                    .WithMany(p => p.EPayments)
+                    .HasForeignKey(d => d.BnbPayId)
+                    .HasConstraintName("TAB1_C1_FK");
             });
 
             modelBuilder.Entity<EPaymentNotification>(entity =>
@@ -7323,11 +7336,13 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.Bulletin)
                     .WithMany(p => p.NInternalReqBulletins)
                     .HasForeignKey(d => d.BulletinId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_N_INTERNAL_REQ_BUL_BU");
 
                 entity.HasOne(d => d.InternalReq)
                     .WithMany(p => p.NInternalReqBulletins)
                     .HasForeignKey(d => d.InternalReqId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_N_INTERNAL_REQ_BUL_IN");
             });
 
@@ -7336,6 +7351,8 @@ namespace MJ_CAIS.DataAccess
                 entity.ToTable("N_INTERNAL_REQUESTS");
 
                 entity.HasIndex(e => e.ReqStatusCode, "XIF2N_INTERNAL_REQUESTS");
+
+                entity.HasIndex(e => e.NIntReqTypeId, "XIF2N_INTERNAL_REQ_TYPES");
 
                 entity.HasIndex(e => e.PPersIdId, "XIF3N_INTERNAL_REQUESTS");
 
@@ -7363,6 +7380,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("FROM_AUTHORITY_ID");
 
+                entity.Property(e => e.NIntReqTypeId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("N_INT_REQ_TYPE_ID");
+
                 entity.Property(e => e.PPersIdId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -7376,10 +7398,6 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("REQ_STATUS_CODE");
-
-                entity.Property(e => e.ReqestType)
-                    .HasMaxLength(200)
-                    .HasColumnName("REQEST_TYPE");
 
                 entity.Property(e => e.RequestDate)
                     .HasColumnType("DATE")
@@ -7409,6 +7427,12 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.FromAuthorityId)
                     .HasConstraintName("FK_N_INTERNAL_REQUESTS_G_FR_AU");
 
+                entity.HasOne(d => d.NIntReqType)
+                    .WithMany(p => p.NInternalRequests)
+                    .HasForeignKey(d => d.NIntReqTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("N_INTERNAL_REQUESTS_REQ_TYPES");
+
                 entity.HasOne(d => d.PPersId)
                     .WithMany(p => p.NInternalRequests)
                     .HasForeignKey(d => d.PPersIdId)
@@ -7423,6 +7447,43 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.NInternalRequestToAuthorities)
                     .HasForeignKey(d => d.ToAuthorityId)
                     .HasConstraintName("FK_N_INTERNAL_REQUESTS_G_TO_AU");
+            });
+
+            modelBuilder.Entity<NIntternalReqType>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKD_INT_REQ_TYPES");
+
+                entity.ToTable("N_INTTERNAL_REQ_TYPES");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<NReqStatus>(entity =>

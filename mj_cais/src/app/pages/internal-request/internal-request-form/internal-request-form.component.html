@@ -5,115 +5,83 @@
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="isForPreview"
-    ></cais-card-header>
+    >
+    <div>
+      <button
+        *ngIf="requestStatusCode == InternalRequestStatusCodeConstants.Draft"
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="send()"
+        type="button"
+        class="ml-2"
+        style="min-width: 100px"
+      >
+        Изпрати
+      </button>
+    </div>
+  </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <ng-container *ngIf="isCreate">
-        <div class="row">
-          <!-- <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Регистрационен номер'"
-              [inputFormControl]="fullForm.regNumber"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
-          </div> -->
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'date'"
-              [label]="'Датата на създаване'"
-              [inputFormControl]="fullForm.requestDate"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
-          </div>
+      <div class="row mt-2">
+        <div class="form-group col-md-4">
+          <cais-autocomplete
+            [label]="'До Бюро съдимост'"
+            [inputFormControl]="fullForm.toAuthorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'toAuthorityId'"
+            [items]="dbData.csAuthorities"
+          ></cais-autocomplete>
         </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Забележки'"
-              [inputFormControl]="fullForm.description"
-              [parentGroup]="fullForm.group"
-              [inputType]="InputTypeConstants.TextArea"
-            ></cais-input>
-          </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'date'"
+            [label]="'Датата на създаване'"
+            [inputFormControl]="fullForm.requestDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
         </div>
-      </ng-container>
-      <ng-container *ngIf="!isCreate">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Регистрационен номер: </span>
-              <span>
-                {{ fullForm.regNumber.value }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Датата на създаване: </span>
-              <span>
-                {{ fullForm.requestDate.value | date }}
-              </span>
-            </div>
-          </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Регистрационен номер'"
+            [inputFormControl]="fullForm.regNumberDisplay"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
         </div>
-        <div class="row mt-3 nmb-3">
-          <div class="col-md-12">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Забележки: </span>
-            </div>
-            <span style="word-break: break-all">{{ fullForm.description.value }}</span>
-          </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-autocomplete
+            [label]="'Тип на заявка'"
+            [inputFormControl]="fullForm.nIntReqTypeId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'nIntReqTypeId'"
+            [items]="dbData.requestTypes"
+          ></cais-autocomplete>
         </div>
-      </ng-container>
-      <ng-container *ngIf="isEdit()">
-        <ng-container *ngIf="!this.isForPreview">
-          <div class="row mt-2">
-            <div class="form-group col-md-6">
-              <cais-autocomplete
-                [label]="'Статус'"
-                [inputFormControl]="fullForm.reqStatusCode"
-                [parentGroup]="fullForm.group"
-                [inputName]="'reqStatusCode'"
-                [items]="dbData.requestTypes"
-              ></cais-autocomplete>
-            </div>
-          </div>
-        </ng-container>
+        <div class="form-group col-md-4">
+          <cais-lookup
+            [label]="'Лице'"
+            [inputControl]="fullForm.pPersIdId"
+            [parentGroup]="fullForm.pPersIdId.group"
+            [openFunction]="openPidDialog"
+          ></cais-lookup>
+        </div>
+      </div>
 
-        <ng-container *ngIf="this.isForPreview">
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Статус'"
-                [inputFormControl]="fullForm.reqStatusName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
-            </div>
-          </div>
-        </ng-container>
-
-        <div class="row">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Мотиви на съдия/юрист'"
-              [inputFormControl]="fullForm.responseDescr"
-              [parentGroup]="fullForm.group"
-              [inputType]="InputTypeConstants.TextArea"
-            ></cais-input>
-          </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'text'"
+            [label]="'Описание'"
+            [inputFormControl]="fullForm.description"
+            [parentGroup]="fullForm.group"
+            [inputType]="InputTypeConstants.TextArea"
+          ></cais-input>
         </div>
-      </ng-container>
-
-      <cais-bulletin-person-info
-        *ngIf="this.dbData.bulletinPersonInfo"
-        [model]="this.dbData.bulletinPersonInfo"
-      >
-      </cais-bulletin-person-info>
+      </div>
     </form>
   </nb-card-body>
 </nb-card>

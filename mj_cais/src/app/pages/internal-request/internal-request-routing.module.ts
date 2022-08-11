@@ -35,25 +35,37 @@ const routes: Routes = [
     },
   },
   {
-    path: ":ID", // this id is bulletin id
-    component: InternalRequestOverviewComponent,
-  },
-  {
-    path: "create/:ID",
+    path: "create",
     component: InternalRequestFormComponent,
     resolve: { dbData: InternalRequestResolver },
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "edit/:ID",
     component: InternalRequestFormComponent,
     resolve: { dbData: InternalRequestResolver },
-    data: { edit: true },
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "preview/:ID",
     component: InternalRequestFormComponent,
     resolve: { dbData: InternalRequestResolver },
-    data: { edit: true, preview: true },
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "",

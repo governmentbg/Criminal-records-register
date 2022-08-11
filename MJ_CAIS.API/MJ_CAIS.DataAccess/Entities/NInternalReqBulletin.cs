@@ -6,8 +6,8 @@ namespace MJ_CAIS.DataAccess.Entities
     public partial class NInternalReqBulletin : BaseEntity, IBaseIdEntity
     {
         public string Id { get; set; } = null!;
-        public string? BulletinId { get; set; }
-        public string? InternalReqId { get; set; }
+        public string BulletinId { get; set; } = null!;
+        public string InternalReqId { get; set; } = null!;
         public string? Remarks { get; set; }
         public string? BOffenceId { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -16,7 +16,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public virtual BOffence? BOffence { get; set; }
-        public virtual BBulletin? Bulletin { get; set; }
-        public virtual NInternalRequest? InternalReq { get; set; }
+        public virtual BBulletin Bulletin { get; set; } = null!;
+        public virtual NInternalRequest InternalReq { get; set; } = null!;
     }
 }

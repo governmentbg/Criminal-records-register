@@ -86,10 +86,10 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("internal-request-statuses")]
-        public IActionResult GetInternalRequestStatuses()
+        [HttpGet("internal-request-types")]
+        public IActionResult GetInternalRequestTypes()
         {
-            var result = _nomenclatureDetailService.GetInternalRequestStatuses();
+            var result = _nomenclatureDetailService.GetInternalRequestTypes();
             return Ok(result);
         }
 
