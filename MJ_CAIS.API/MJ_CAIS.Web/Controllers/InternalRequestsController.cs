@@ -21,9 +21,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool isForSender)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {
-            var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, statuses, isForSender);
+            var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, statuses, fromAuth);
             return Ok(result);
         }
 

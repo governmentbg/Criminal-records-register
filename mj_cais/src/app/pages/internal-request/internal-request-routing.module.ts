@@ -7,15 +7,10 @@ import { InternalRequestBoxOverViewComponent } from "./internal-request-box-over
 import { InternalRequestDraftOvverviewComponent } from "./internal-request-box-over-view/tabs/internal-request-draft-ovverview/internal-request-draft-ovverview.component";
 import { InternalRequestFormComponent } from "./internal-request-form/internal-request-form.component";
 import { InternalRequestResolver } from "./internal-request-form/_data/internal-request.resolver";
-import { InternalRequestOverviewComponent } from "./internal-request-overview/internal-request-overview.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: InternalRequestOverviewComponent,
-  },
-  {
-    path: "box",
     component: InternalRequestBoxOverViewComponent,
     canActivate: [NgxPermissionsGuard],
     data: {
