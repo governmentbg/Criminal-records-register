@@ -13,6 +13,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<PPerson> SelectWithBirthInfoAsync(string id);
 
+        IQueryable<SelectPidGridDTO> SelectAllPidsForSelection();
+
         IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId);
 
         IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId);

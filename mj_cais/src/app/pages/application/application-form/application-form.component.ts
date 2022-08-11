@@ -108,13 +108,60 @@ export class ApplicationFormComponent
 
       this.scrollToValidationError();
     } else {
-      debugger
+      debugger;
       this.formObject = form.group.getRawValue();
       this.saveAndNavigate();
     }
   }
 
-  
+  protected saveAndNavigate() {
+    let model = this.formObject;
+    let submitAction: Observable<ApplicationModel>;
+    if (this.isFinalEdit) {
+      submitAction = this.service.updateFinal(this.formObject.id, model);
+    } else if (this.isEdit()) {
+      submitAction = this.service.update(this.formObject.id, model);
+    } else {
+      submitAction = this.service.save(model);
+    }
+
+    submitAction.subscribe({
+      next: (data) => {
+        this.toastr.showToast("success", this.successMessage);
+
+        setTimeout(() => {
+          this.onSubmitSuccess(data);
+        }, this.navigateTimeout);
+      },
+      error: (errorResponse) => {
+        let title = this.dangerMessage;
+        let errorText = errorResponse.status + " " + errorResponse.statusText;
+
+        if (errorResponse.error && errorResponse.error.customMessage) {
+          title = errorResponse.error.customMessage;
+          errorText = "";
+        }
+
+        this.toastr.showBodyToast("danger", title, errorText);
+
+        // if has server side validation errors add them to the form control
+        if (errorResponse.error.errors) {
+          Object.keys(errorResponse.error.errors).forEach((prop) => {
+            var propName = prop[0].toLocaleLowerCase() + prop.slice(1);
+            const formControl = this.fullForm.group.get(propName);
+            if (formControl) {
+              // activate the error message
+              formControl.setErrors({
+                serverErrors: errorResponse.error.errors[prop],
+              });
+            }
+          });
+        }
+
+        this.scrollToValidationError();
+      },
+    });
+  }
 
   public printApplication() {
     this.service.printApplication(this.objectId).subscribe((response) => {

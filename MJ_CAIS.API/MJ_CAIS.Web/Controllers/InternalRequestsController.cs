@@ -21,9 +21,16 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool isForSender)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {
-            var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, statuses, isForSender);
+            var result = await this._internalRequestService.SelectAllWithPaginationAsync(aQueryOptions, statuses, fromAuth);
+            return Ok(result);
+        }
+
+        [HttpGet("requests-count")]
+        public async Task<IActionResult> GetRequestCount()
+        {
+            var result = await this._internalRequestService.GetInternalRequestsCount();
             return Ok(result);
         }
 
@@ -45,13 +52,19 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Put(aId, aInDto);
         }
 
-        [HttpGet("bulletin-person-info/{bulletinId}")]
-        public async Task<IActionResult> GetBulletinPersonInfo(string bulletinId)
+        [HttpDelete("{aId}")]
+        public new async Task<IActionResult> Delete(string aId)
         {
-            var result = await this._internalRequestService.GetBulletinPersonInfoAsync(bulletinId);
-            if (result == null) return NotFound();
-
-            return Ok(result);
+            await this.baseService.DeleteAsync(aId);
+            return Ok();
         }
+
+        [HttpPut("{aId}/change-status/{statusId}")]
+        public async Task<IActionResult> ChangeStatus(string aId, string statusId)
+        {
+            await this._internalRequestService.ChangeStatusAsync(aId, statusId);
+            return Ok();
+        }
+
     }
 }

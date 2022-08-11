@@ -21,5 +21,7 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<string> GetRegisterNumberForBulletin(string authorityID, string bulletinType);
         Task<string> GetRegisterNumberForReport(string authorityID);
+
+        Task<string> GetRegisterNumberForInternalRequest(string authorityID);
     }
 }

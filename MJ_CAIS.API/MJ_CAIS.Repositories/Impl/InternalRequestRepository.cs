@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.InternalRequest;
 using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -28,39 +29,28 @@ namespace MJ_CAIS.Repositories.Impl
 
         public override async Task<NInternalRequest> SelectAsync(string id)
         {
-            //return await this._dbContext.BInternalRequests.AsNoTracking()
-            //         .Include(x => x.Bulletin)
-            //         .Include(x => x.ReqStatusCodeNavigation)
-            //         .FirstOrDefaultAsync(x => x.Id == id);
-            throw new NotImplementedException();
+            return await this._dbContext.NInternalRequests.AsNoTracking()
+                        .Include(x => x.FromAuthority)
+                        .Include(x => x.ToAuthority)
+                        .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<int> GetCountOfNewRequestsAsync()
+        public async Task<RequestCountDTO> GetInternalRequestsCountAsync()
         {
-            //var result = await
-            //    _dbContext.BInternalRequests
-            //        .Include(x => x.Bulletin)
-            //        .CountAsync(x => x.Bulletin.CsAuthorityId == _userContext.CsAuthorityId && x.ReqStatusCode == InternalRequestStatusTypeConstants.New);
+            var inboxCount = await _dbContext.NInternalRequests.AsNoTracking()
+                .CountAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.Sent && x.ToAuthorityId == _userContext.CsAuthorityId);
 
-            //return result;
-            throw new NotImplementedException();
-        }
+            var outboxCount = await _dbContext.NInternalRequests.AsNoTracking()
+                .CountAsync(x => (x.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ||
+                    x.ReqStatusCode == InternalRequestStatusTypeConstants.Ready) &&
+                 x.ToAuthorityId == _userContext.CsAuthorityId);
 
-        public async Task<bool> HasRequests(NInternalRequest entity, List<string> bullIdsForCert)
-        {
-            //return await _dbContext.BInternalRequests.AsNoTracking()
-            //    .AnyAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.New &&
-            //    x.Id != entity.Id &&
-            //    bullIdsForCert.Contains(x.AAppBulletinId));
-            throw new NotImplementedException();
-        }
 
-        public async Task<AAppBulletin> GetBulletinsInCertificate(NInternalRequest entity)
-        {
-            //return await _dbContext.AAppBulletins.AsNoTracking()
-            //    .Include(x => x.Certificate)
-            //   .FirstOrDefaultAsync(x => x.Id == entity.AAppBulletinId);
-            throw new NotImplementedException();
+            return new RequestCountDTO
+            {
+                InboxCount = inboxCount,
+                OutboxCount = outboxCount
+            };
         }
     }
 }

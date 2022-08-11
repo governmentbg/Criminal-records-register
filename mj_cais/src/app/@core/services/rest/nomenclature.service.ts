@@ -74,22 +74,12 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
-  public getInternalRequestStatuses(): Observable<BaseNomenclatureModel[]> {
+  public getInternalRequestTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
-      `${this.url}/internal-request-statuses`
+      `${this.url}/internal-request-types`
     );
   }
-
-  public getInternalRequestStatusesFiltered(code: string) {
-    return this.http
-      .get<BaseNomenclatureModel[]>(`${this.url}/internal-request-statuses`)
-      .pipe(
-        map((items: BaseNomenclatureModel[]) => {
-          return items.filter((t) => t.code != code);
-        })
-      );
-  }
-
+  
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/b_case_types`);
   }

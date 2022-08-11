@@ -42,7 +42,7 @@ export class PagesMenu {
       {
         title: "Заявки",
         icon: { icon: "mail-bulk", pack: "fa" },      
-        link: "/pages/internal-requests/box",
+        link: "/pages/internal-requests",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
           this.hasNoRole(roles, RoleNameEnum.Judge),

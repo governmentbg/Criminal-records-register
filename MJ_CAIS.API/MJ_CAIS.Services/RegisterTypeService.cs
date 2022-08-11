@@ -92,5 +92,10 @@ namespace MJ_CAIS.Services
 
             return await _registerTypeRepository.GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.BulletinUndefined);
         }
+
+        public async Task<string> GetRegisterNumberForInternalRequest(string authorityID)
+        {
+            return await _registerTypeRepository.GetRegisterNumber(authorityID, RegistrationConstants.RegisterCodes.InternalRequest);
+        }
     }
 }

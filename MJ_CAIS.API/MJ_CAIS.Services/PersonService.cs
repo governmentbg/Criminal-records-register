@@ -49,6 +49,15 @@ namespace MJ_CAIS.Services
             return await Task.FromResult(pageResult);
         }
 
+        public async Task<IgPageResult<SelectPidGridDTO>> SelectAllPidsForSelectionWithPaginationAsync(ODataQueryOptions<SelectPidGridDTO> aQueryOptions)
+        {
+            var entityQuery = _personRepository.SelectAllPidsForSelection(); 
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<SelectPidGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
+            return pageResult;
+        }
+
         public IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId)
             => _personRepository.GetBulletinsCountByPersonId(personId);
 
