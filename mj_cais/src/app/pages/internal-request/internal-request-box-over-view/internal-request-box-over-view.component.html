@@ -8,8 +8,7 @@
           #nbtabset
           (changeTab)="onChangeTab($event)"
         >
-          <nb-tab #draftTab [tabTitle]="draftTabTitle" tabIcon="file">
-          </nb-tab>
+          <nb-tab #draftTab [tabTitle]="draftTabTitle" tabIcon="file"> </nb-tab>
           <nb-tab
             #inboxTab
             [tabTitle]="inboxTabTitle"
@@ -58,8 +57,12 @@
         <ng-container *ngIf="showDraftTab">
           <cais-internal-request-draft-ovverview></cais-internal-request-draft-ovverview>
         </ng-container>
-        <ng-container *ngIf="showInboxTab"> </ng-container>
-        <ng-container *ngIf="showOutboxTab"> </ng-container>
+        <ng-container *ngIf="showInboxTab">
+          <cais-internal-request-inbox-overview></cais-internal-request-inbox-overview>
+        </ng-container>
+        <ng-container *ngIf="showOutboxTab">
+          <cais-internal-request-outbox-overview></cais-internal-request-outbox-overview>
+        </ng-container>
       </nb-card-body>
     </nb-card>
   </div>

@@ -36,17 +36,17 @@ namespace MJ_CAIS.Services
             _registerTypeService = registerTypeService;
         }
 
-        public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool isForSender)
+        public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {
             var entityQuery = this.GetSelectAllQueryable();
 
-            if (isForSender)
+            if (fromAuth)
             {
-                entityQuery.Where(x => x.FromAuthorityId == _userContext.CsAuthorityId);
+                entityQuery = entityQuery.Where(x => x.FromAuthorityId == _userContext.CsAuthorityId);
             }
             else
             {
-                entityQuery.Where(x => x.ToAuthorityId == _userContext.CsAuthorityId);
+                entityQuery = entityQuery.Where(x => x.ToAuthorityId == _userContext.CsAuthorityId);
             }
 
             var statuesArr = statuses.Split(',');

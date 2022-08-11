@@ -81,7 +81,7 @@ export class InternalRequestFormComponent
         this.loaderService.hide();
 
         this.toastr.showToast("success", "Успешно изпратена заявка");
-        this.router.navigate(["pages/internal-requests/box"]);
+        this.router.navigate(["pages/internal-requests"]);
       },
       (error) => {
         this.onServiceError(error);
