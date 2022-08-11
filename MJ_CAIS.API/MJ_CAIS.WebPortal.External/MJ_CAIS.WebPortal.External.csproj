@@ -35,14 +35,9 @@
     <None Update="cais.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ExternalServicesHost\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\MJ_CAIS.DTO\ExternalServicesHost\ESCSC.xslt" Link="ExternalServicesHost\ESCSC.xslt" />
+    <None Update="ExternalServicesHost\ESCSC.xslt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

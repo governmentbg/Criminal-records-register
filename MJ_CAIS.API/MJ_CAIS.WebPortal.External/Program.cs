@@ -59,6 +59,8 @@ namespace MJ_CAIS.WebPortal.External
                 {
                     options.AddPolicy("Active", policy =>
                                       policy.RequireClaim("Active", "true"));
+                    options.AddPolicy("Admin", policy =>
+                                      policy.RequireClaim("isAdmin", "true"));
                 });
 
             var app = builder.Build();

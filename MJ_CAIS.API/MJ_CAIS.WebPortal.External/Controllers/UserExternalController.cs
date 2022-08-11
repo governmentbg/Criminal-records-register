@@ -10,7 +10,7 @@ using MJ_CAIS.WebPortal.External.Models.UserExternal;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
-    //[Authorize]
+    [Authorize("Admin")]
     public class UserExternalController : BaseController
     {
         private readonly IMapper _mapper;
