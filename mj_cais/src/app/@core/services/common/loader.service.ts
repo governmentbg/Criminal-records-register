@@ -19,6 +19,14 @@ export class LoaderService {
     }, 500);
   }
 
+  public show() {
+    this.spinner.show();
+  }
+
+  public hide() {
+    this.spinner.hide();
+  }
+
   public hideSpinner(service): boolean {
     if (!service.isLoading) {
       this.spinner.hide();

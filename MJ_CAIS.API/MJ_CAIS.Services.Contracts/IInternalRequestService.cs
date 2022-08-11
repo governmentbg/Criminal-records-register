@@ -1,7 +1,6 @@
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
-using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Services.Contracts.Utils;
 
 namespace MJ_CAIS.Services.Contracts
@@ -12,6 +11,10 @@ namespace MJ_CAIS.Services.Contracts
 
         Task ChangeStatusAsync(string aId, string status);
 
-        Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId);
+        Task<RequestCountDTO> GetInternalRequestsCount();
+
+        Task ReplayAsync(string aId, bool accepted, string responseDesc);
+
+        Task MarkAsReaded(List<string> ids);
     }
 }

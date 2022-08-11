@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
 import { SelectPidDialogComponent } from "../../../@core/components/dialogs/select-pid-dialog/select-pid-dialog.component";
@@ -32,19 +32,50 @@ export class InternalRequestFormComponent
     private loaderService: NgxSpinnerService
   ) {
     super(service, injector);
-    this.setDisplayTitle("заявка за реабилитация или корекция на бюлетин");
   }
 
+  public title: string = "Добавяне на заявка";
   public InternalRequestStatusCodeConstants =
     InternalRequestStatusCodeConstants;
   public requestStatusCode;
+  public showReplayBtn: boolean = false;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
     this.fullForm.regNumberDisplay.patchValue(this.fullForm.regNumber.value);
     this.requestStatusCode = this.fullForm.reqStatusCode.value;
-    this.formFinishedLoading.emit();
+
+    // this is replay
+    if (this.requestStatusCode == InternalRequestStatusCodeConstants.Sent) {
+      this.fullForm.group.disable();
+      this.fullForm.responseDescr.enable();
+      this.fullForm.responseDescr.setValidators(Validators.required);
+
+      if (this.isEdit()) {
+        this.showReplayBtn = true;
+        this.title = "Отговор на заявка";
+      }
+
+      // check before change prop
+      if (this.isForPreview) {
+        this.showReplayBtn = false;
+        this.title = "Преглед на заявка";
+      }
+
+      this.formFinishedLoading.emit();
+
+      this.isForPreview = true;
+    } else {
+      if (this.isEdit()) {
+        this.title = "Редакция на заявка";
+      }
+
+      if (this.isForPreview) {
+        this.title = "Преглед на заявка";
+      }
+      this.formFinishedLoading.emit();
+    }
   }
 
   buildFormImpl(): FormGroup {
@@ -59,6 +90,33 @@ export class InternalRequestFormComponent
     this.validateAndSave(this.fullForm);
   };
 
+  replay(accepted) {
+    debugger;
+    if (!this.fullForm.responseDescr.valid) {
+      this.fullForm.responseDescr.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+      this.scrollToValidationError();
+      return;
+    }
+
+    let replayObj = {
+      accepted: accepted,
+      responseDescr: this.fullForm.responseDescr.value,
+    };
+
+    this.service.replay(this.fullForm.id.value, replayObj).subscribe(
+      (res) => {
+        this.loaderService.hide();
+
+        this.toastr.showToast("success", "Успешно изпратена заявка");
+        this.router.navigate(["pages/internal-requests"]);
+      },
+      (error) => {
+        this.onServiceError(error);
+      }
+    );
+  }
+
   public openPidDialog = () => {
     this.dialogService
       .open(SelectPidDialogComponent, CommonConstants.defaultDialogConfig)
@@ -72,7 +130,10 @@ export class InternalRequestFormComponent
   };
 
   public send() {
-    this.changeStatus(this.fullForm.id.value, InternalRequestStatusCodeConstants.Sent);
+    this.changeStatus(
+      this.fullForm.id.value,
+      InternalRequestStatusCodeConstants.Sent
+    );
   }
 
   private changeStatus(id: string, status: string) {

@@ -12,6 +12,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public InternalRequestsProfile()
         {
             CreateMap<NInternalRequest, InternalRequestGridDTO>()
+               .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
                .ForMember(d => d.ReqestType, opt => opt.MapFrom(src => src.NIntReqType.Name))
                .ForMember(d => d.FromAuthorityName, opt => opt.MapFrom(src => src.FromAuthority.Name))
                .ForMember(d => d.ToAuthorityName, opt => opt.MapFrom(src => src.ToAuthority.Name));

@@ -16,20 +16,40 @@
   [primaryKey]="'id'"
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
+  [rowSelection]="'multiple'"
+  [selectedRows]="selectedRows"
+  [hideRowSelectors]="!hideStatus"
 >
-<igx-grid-toolbar>
-  <igx-grid-toolbar-title>Изпратени</igx-grid-toolbar-title>
-  <igx-grid-toolbar-actions>
-    <div class="ml-auto">
-      <nb-toggle
-        (checkedChange)="onShowAllChange($event)"
-        status="info"
-        labelPosition="left"
-        >Всички бюлетини</nb-toggle
-      >
-    </div>
-  </igx-grid-toolbar-actions>
-</igx-grid-toolbar>
+  <igx-grid-toolbar style="padding-left: 0.8rem;">
+    <igx-grid-toolbar-title>
+      <div class="row">
+        <button 
+        (click)="refresh()"
+        class="btn btn-white btn-sm ml-3 mr-1" nbTooltip="Презареждане">
+          <i class="fa fa-sync-alt"></i>
+        </button>
+        <ng-container *ngIf="hideStatus">
+          <button
+           (click)="markAsRead()"
+            class="btn btn-white btn-sm mr-1"
+            nbTooltip="Маркирай, като прочетени"
+          >
+            <i class="fa fa-eye"></i>
+          </button>
+        </ng-container>
+      </div>
+    </igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <nb-toggle
+          (checkedChange)="onShowAllChange($event)"
+          status="info"
+          labelPosition="left"
+          >Всички</nb-toggle
+        >
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
 
   <igx-column
     field="id"
@@ -54,7 +74,7 @@
     </ng-template>
   </igx-column>
   <igx-column
-    field="statusName"
+    field="reqStatusName"
     header="Статус"
     [sortable]="true"
     [dataType]="'string'"
@@ -86,7 +106,7 @@
   </igx-column>
 
   <igx-column
-    width="150px"
+    width="50px"
     header=""
     [sortable]="false"
     [filterable]="false"

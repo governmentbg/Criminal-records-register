@@ -27,6 +27,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("requests-count")]
+        public async Task<IActionResult> GetRequestCount()
+        {
+            var result = await this._internalRequestService.GetInternalRequestsCount();
+            return Ok(result);
+        }
+
         [HttpGet("{aId}")]
         public new async Task<IActionResult> Get(string aId)
         {
@@ -59,13 +66,18 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
-        [HttpGet("bulletin-person-info/{bulletinId}")]
-        public async Task<IActionResult> GetBulletinPersonInfo(string bulletinId)
+        [HttpPut("{aId}/replay")]
+        public async Task<IActionResult> ChangeStatus(string aId, [FromBody] InternalRequstReplayDTO aInDto)
         {
-            var result = await this._internalRequestService.GetBulletinPersonInfoAsync(bulletinId);
-            if (result == null) return NotFound();
-
-            return Ok(result);
+            await this._internalRequestService.ReplayAsync(aId, aInDto.Accepted, aInDto.ResponseDescr);
+            return Ok();
         }
+
+        [HttpPut("mark-as-read")]
+        public async Task<IActionResult> MarkAsRead([FromBody] List<string> ids)
+        {
+            await this._internalRequestService.MarkAsReaded(ids);
+            return Ok();
+        }      
     }
 }

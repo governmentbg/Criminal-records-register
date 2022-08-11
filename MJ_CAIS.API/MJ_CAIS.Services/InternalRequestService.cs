@@ -36,6 +36,9 @@ namespace MJ_CAIS.Services
             _registerTypeService = registerTypeService;
         }
 
+        public async Task<RequestCountDTO> GetInternalRequestsCount()
+            => await _internalRequestRepository.GetInternalRequestsCountAsync();
+
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {
             var entityQuery = this.GetSelectAllQueryable();
@@ -114,41 +117,62 @@ namespace MJ_CAIS.Services
             await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
         }
 
-        /// <summary>
-        /// Основна информация за бюлетин и лицето към него, 
-        /// което се отнася за текущата заявка за реабилитация
-        /// </summary>
-        /// <param name="bulletinId"></param>
-        /// <returns></returns>
-        public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
+        public async Task ReplayAsync(string aId, bool accepted, string responseDesc)
         {
-            throw new NotImplementedException();
-            //var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
-            //if (bulletin == null) return null;
+            if (string.IsNullOrEmpty(responseDesc))
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.fieldIsRequired, nameof(responseDesc)));
 
-            //var result = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
-            //if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.EgnNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.LnchNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.LnNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.IdDocNumberNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.SuidNavigation.PersonId;
-            //}
+            var dbEntity = await _internalRequestRepository.SingleOrDefaultAsync<NInternalRequest>(x => x.Id == aId);
 
-            //return result;
+            if (dbEntity == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgRequestDoesNotExist, aId));
+
+            var myAuthId = _userContext.CsAuthorityId;
+            if (dbEntity.ToAuthorityId != myAuthId)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgRequestForDifferentAuth);
+
+            if (dbEntity.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ||
+                dbEntity.ReqStatusCode == InternalRequestStatusTypeConstants.Ready)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgReplayExist);
+
+            if (dbEntity.ReqStatusCode == InternalRequestStatusTypeConstants.Draft)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgReplayNotAllowed);
+
+            dbEntity.ReqStatusCode = accepted ? InternalRequestStatusTypeConstants.Ready : InternalRequestStatusTypeConstants.Cancelled;
+            dbEntity.EntityState = EntityStateEnum.Modified;
+            dbEntity.ResponseDescr = responseDesc;
+            dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version), nameof(dbEntity.ResponseDescr) };
+
+            await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
+        }
+
+        public async Task MarkAsReaded(List<string> ids)
+        {
+            // todo: parameters from base class
+            // this is max page size 
+            if (ids.Count > 25)
+            {
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgMoreThenAllowedMsgIsReaded, 25));
+            }
+
+            var query = _internalRequestRepository.SelectAllByIdsAsync(ids);
+
+            var entities = await query.ToListAsync();
+
+            foreach (var entity in entities)
+            {
+                if (entity.ReqStatusCode != InternalRequestStatusTypeConstants.Cancelled &&
+                    entity.ReqStatusCode != InternalRequestStatusTypeConstants.Ready)
+                    throw new BusinessLogicException(BusinessLogicExceptionResources.msgReadIsNotAllowed);
+
+                entity.ReqStatusCode = entity.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ?
+                    InternalRequestStatusTypeConstants.ReadCancelled : InternalRequestStatusTypeConstants.ReadReady;
+
+                entity.EntityState = EntityStateEnum.Modified;
+                entity.ModifiedProperties = new List<string> { nameof(entity.ReqStatusCode), nameof(entity.Version) };
+            }
+
+            await _internalRequestRepository.SaveEntityListAsync(entities, false);
         }
     }
 }

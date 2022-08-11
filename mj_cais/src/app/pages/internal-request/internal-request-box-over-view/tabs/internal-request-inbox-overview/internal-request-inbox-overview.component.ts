@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from "@angular/core";
-import { NgxSpinnerService } from "ngx-spinner";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { LoaderService } from "../../../../../@core/services/common/loader.service";
 import { InternalRequestMailBoxGridService } from "../_data/internal-request-mail-box-grid.service";
 import { InternalRequestMailBoxGridModel } from "../_models/internal-request-mail-box-grid.model";
 import { InternalRequestStatusType } from "../_models/internal-request-status.type";
@@ -19,7 +19,7 @@ export class InternalRequestInboxOverviewComponent extends RemoteGridWithStatePe
     service: InternalRequestMailBoxGridService,
     injector: Injector,
     public dateFormatService: DateFormatService,
-    private loaderService: NgxSpinnerService
+    private loaderService: LoaderService
   ) {
     super("bulletins-search", service, injector);
     this.service.updateUrlStatus(InternalRequestStatusType.Inbox, false);
@@ -31,7 +31,7 @@ export class InternalRequestInboxOverviewComponent extends RemoteGridWithStatePe
     super.ngOnInit();
   }
 
-  onShowAllBulletinChange(isChacked: boolean) {
+  onShowAllChange(isChacked: boolean) {
     if (isChacked) {
       this.service.updateUrlStatus(InternalRequestStatusType.InboxAll, false);
     } else {
@@ -39,5 +39,10 @@ export class InternalRequestInboxOverviewComponent extends RemoteGridWithStatePe
     }
     this.hideStatus = !isChacked;
     this.ngOnInit();
+  }
+
+  refresh() {
+    this.loaderService.showSpinner(this.service);
+    super.ngOnInit();
   }
 }
