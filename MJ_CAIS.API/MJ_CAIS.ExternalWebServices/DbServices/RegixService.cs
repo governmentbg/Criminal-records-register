@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
@@ -18,13 +19,15 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         private readonly WebServiceClient _client;
         private readonly IConfiguration _config;
         private readonly CaisDbContext _dbContext;
+        private readonly ILogger<RegixService> _logger;
         private Dictionary<string, (string Id, string WebServiceName)> webServiceTypes;
 
-        public RegixService(CaisDbContext dbContext, IConfiguration config)
+        public RegixService(CaisDbContext dbContext, IConfiguration config, ILogger<RegixService> logger)
         {
             _dbContext = dbContext;
             _config = config;
             _client = new WebServiceClient(config);
+            _logger = logger;
         }
 
         public List<EWebRequest> GetRequestsForAsyncExecution()
@@ -218,7 +221,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             if (citizenEgn != null)
             {
                 CallRegixAndUpdateRequest(request, webServiceNameRelations, citizenEgn, registrationNumber);
-
+                _logger.LogTrace($"{request.Id}: CallRegix and update request executed.");
                 TResponce responseObject = default;
                 if (request.HasError != true && request.ResponseXml != null)
                 {
@@ -229,27 +232,39 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                    
                     if (request.WApplicationId != null)
                     {
+                        _logger.LogTrace($"{request.Id}: PopulateWApplication started.");
                         WApplication application = await PopulateWApplication(request, cache);
                         request.WApplication = application;
+                        _logger.LogTrace($"{request.Id}: PopulateWApplication ended.");
                         // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                     if (request.ApplicationId != null)
                     {
+                        _logger.LogTrace($"{request.Id}: PopulateAApplication started.");
                         AApplication application = await PopulateAApplication(request, cache);
                         request.Application = application;
+                        _logger.LogTrace($"{request.Id}: PopulateAApplication ended.");
                         // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                   if(request.ARepApplId != null)
                     {
+                        _logger.LogTrace($"{request.Id}: PopulateAReportApplication started.");
                         AReportApplication application = await PopulateAReportApplication(request, cache);
                         request.ARepAppl = application;
+                        _logger.LogTrace($"{request.Id}: PopulateAReportApplication ended.");
                     }
                    
                 }
+                _logger.LogTrace($"{request.Id}: Before ApplyChanges");
                 _dbContext.ApplyChanges(request, new List<IBaseIdEntity>(), true);
+                _logger.LogTrace($"{request.Id}: Before SaveChangesAsync");
                 await _dbContext.SaveChangesAsync();
                 _dbContext.ChangeTracker.Clear();
                 return responseObject;
+            }
+            else
+            {
+                _logger.LogInformation($"{request.Id}: CitizenEgn is null.");
             }
             return default;
         }
