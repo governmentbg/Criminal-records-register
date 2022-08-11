@@ -18,6 +18,14 @@ export class InternalRequestService extends CaisCrudService<
     return this.http.put(`${this.url}/${aId}/change-status/${statusId}`, {});
   }
 
+  public replay(aId, aInDto: any): Observable<any> {
+    return this.http.put(`${this.url}/${aId}/replay`, aInDto);
+  }
+
+  public markAsRead(ids: string[]): Observable<any> {
+    return this.http.put(`${this.url}/mark-as-read`, ids);
+  }
+
   public getRequestsCount() {
     return this.http.get<any>(`${this.url}/requests-count`);
   }

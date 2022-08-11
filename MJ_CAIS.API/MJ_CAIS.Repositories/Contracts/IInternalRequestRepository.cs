@@ -6,6 +6,7 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IInternalRequestRepository : IBaseAsyncRepository<NInternalRequest, string, CaisDbContext>
     {
+        IQueryable<NInternalRequest> SelectAllByIdsAsync(List<string> ids);
         Task<RequestCountDTO> GetInternalRequestsCountAsync();
     }
 }

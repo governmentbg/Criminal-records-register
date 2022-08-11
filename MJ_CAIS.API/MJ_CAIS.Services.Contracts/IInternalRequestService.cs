@@ -12,5 +12,9 @@ namespace MJ_CAIS.Services.Contracts
         Task ChangeStatusAsync(string aId, string status);
 
         Task<RequestCountDTO> GetInternalRequestsCount();
+
+        Task ReplayAsync(string aId, bool accepted, string responseDesc);
+
+        Task MarkAsReaded(List<string> ids);
     }
 }

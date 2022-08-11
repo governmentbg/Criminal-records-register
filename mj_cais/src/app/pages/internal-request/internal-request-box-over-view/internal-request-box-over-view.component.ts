@@ -18,6 +18,12 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
 
   public inboxCount: number = 0;
   public outboxCount: number = 0;
+
+  public titleDraft = "Съдадени заявки";
+  public titleInbox = "Получени и необработени заявки";
+  public titleOutbox = "Изпратени и обработени от получателя";
+  public title = this.titleDraft;
+
   constructor(
     public service: InternalRequestService,
     private loaderService: NgxSpinnerService,
@@ -43,8 +49,23 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
   }
 
   onChangeTab(event) {
-    this.showDraftTab = event.tabTitle == this.draftTabTitle;
-    this.showInboxTab = event.tabTitle == this.inboxTabTitle;
-    this.showOutboxTab = event.tabTitle == this.outboxTabTitle;
+    this.showDraftTab = false;
+    this.showInboxTab = false;
+    this.showOutboxTab = false;
+
+    if (event.tabTitle == this.draftTabTitle) {
+      this.showDraftTab = true;
+      this.title = this.titleDraft;
+    }
+
+    if (event.tabTitle == this.inboxTabTitle) {
+      this.showInboxTab = true;
+      this.title = this.titleInbox;
+    }
+
+    if (event.tabTitle == this.outboxTabTitle) {
+      this.showOutboxTab = true;
+      this.title = this.titleOutbox;
+    }
   }
 }

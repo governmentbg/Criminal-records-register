@@ -150,6 +150,18 @@
   <data name="msgAppReportDoesNotExist" xml:space="preserve">
     <value>Искане за справка с идентификатор {0} не съществува.</value>
   </data>
+  <data name="msgMoreThenAllowedMsgIsReaded" xml:space="preserve">
+    <value>Маркирани са повече от позволените {0} на брой заявки.</value>
+  </data>
+  <data name="msgReadIsNotAllowed" xml:space="preserve">
+    <value>Нямате права да маркирате необработена заявка, като прочетене</value>
+  </data>
+  <data name="msgReplayExist" xml:space="preserve">
+    <value>Заявката е била обработена</value>
+  </data>
+  <data name="msgReplayNotAllowed" xml:space="preserve">
+    <value>Нямате права да обработите заявката</value>
+  </data>
   <data name="msgReportDoesNotExist" xml:space="preserve">
     <value>Справка с идентификатор {0} не съществува.</value>
   </data>
@@ -161,6 +173,9 @@
   </data>
   <data name="msgRequestDoesNotExist" xml:space="preserve">
     <value>Заявка с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgRequestForDifferentAuth" xml:space="preserve">
+    <value>Нямате права да обработвате заявки към друго БС.</value>
   </data>
   <data name="msgRequestIsNotDraft" xml:space="preserve">
     <value>Заявката не е чернова и не може да бъде изпратена.</value>

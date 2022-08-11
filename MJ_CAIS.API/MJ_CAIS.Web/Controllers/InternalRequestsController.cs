@@ -66,5 +66,18 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
+        [HttpPut("{aId}/replay")]
+        public async Task<IActionResult> ChangeStatus(string aId, [FromBody] InternalRequstReplayDTO aInDto)
+        {
+            await this._internalRequestService.ReplayAsync(aId, aInDto.Accepted, aInDto.ResponseDescr);
+            return Ok();
+        }
+
+        [HttpPut("mark-as-read")]
+        public async Task<IActionResult> MarkAsRead([FromBody] List<string> ids)
+        {
+            await this._internalRequestService.MarkAsReaded(ids);
+            return Ok();
+        }      
     }
 }

@@ -17,6 +17,9 @@ namespace MJ_CAIS.Repositories.Impl
             this._userContext = userContext;
         }
 
+        public IQueryable<NInternalRequest> SelectAllByIdsAsync(List<string> ids)
+            => this._dbContext.NInternalRequests.AsNoTracking()
+                       .Where(x => ids.Contains(x.Id));
         public override IQueryable<NInternalRequest> SelectAll()
         {
             var query = this._dbContext.NInternalRequests.AsNoTracking()
@@ -43,7 +46,7 @@ namespace MJ_CAIS.Repositories.Impl
             var outboxCount = await _dbContext.NInternalRequests.AsNoTracking()
                 .CountAsync(x => (x.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ||
                     x.ReqStatusCode == InternalRequestStatusTypeConstants.Ready) &&
-                 x.ToAuthorityId == _userContext.CsAuthorityId);
+                 x.FromAuthorityId == _userContext.CsAuthorityId);
 
 
             return new RequestCountDTO

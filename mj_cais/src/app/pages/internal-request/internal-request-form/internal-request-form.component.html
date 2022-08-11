@@ -1,26 +1,55 @@
 <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
   <nb-card-header class="card-header-shadow">
     <cais-card-header
-      [label]="displayTitle"
+      [label]="this.title"
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="isForPreview"
     >
-    <div>
-      <button
-        *ngIf="requestStatusCode == InternalRequestStatusCodeConstants.Draft"
-        nbButton
-        matRipple
-        [status]="'success'"
-        (click)="send()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px"
-      >
-        Изпрати
-      </button>
-    </div>
-  </cais-card-header>
+      <div>
+        <button
+          *ngIf="
+            !this.isForPreview &&
+            requestStatusCode == InternalRequestStatusCodeConstants.Draft
+          "
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="send()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Изпрати
+        </button>
+      </div>
+      <ng-container *ngIf="showReplayBtn">
+        <div>
+          <button
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="replay(true)"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px"
+          >
+            Обработена заявка
+          </button>
+          <button
+            nbButton
+            matRipple
+            [status]="'danger'"
+            (click)="replay(false)"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px"
+          >
+            Отказана заявка
+          </button>
+        </div>
+      </ng-container>
+    </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
@@ -82,6 +111,21 @@
           ></cais-input>
         </div>
       </div>
+      <ng-container
+        *ngIf="isEdit() && requestStatusCode != InternalRequestStatusCodeConstants.Draft"
+      >
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Отговор'"
+              [inputFormControl]="fullForm.responseDescr"
+              [parentGroup]="fullForm.group"
+              [inputType]="InputTypeConstants.TextArea"
+            ></cais-input>
+          </div>
+        </div>
+      </ng-container>
     </form>
   </nb-card-body>
 </nb-card>

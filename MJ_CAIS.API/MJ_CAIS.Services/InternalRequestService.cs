@@ -116,5 +116,63 @@ namespace MJ_CAIS.Services
 
             await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
         }
+
+        public async Task ReplayAsync(string aId, bool accepted, string responseDesc)
+        {
+            if (string.IsNullOrEmpty(responseDesc))
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.fieldIsRequired, nameof(responseDesc)));
+
+            var dbEntity = await _internalRequestRepository.SingleOrDefaultAsync<NInternalRequest>(x => x.Id == aId);
+
+            if (dbEntity == null)
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgRequestDoesNotExist, aId));
+
+            var myAuthId = _userContext.CsAuthorityId;
+            if (dbEntity.ToAuthorityId != myAuthId)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgRequestForDifferentAuth);
+
+            if (dbEntity.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ||
+                dbEntity.ReqStatusCode == InternalRequestStatusTypeConstants.Ready)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgReplayExist);
+
+            if (dbEntity.ReqStatusCode == InternalRequestStatusTypeConstants.Draft)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgReplayNotAllowed);
+
+            dbEntity.ReqStatusCode = accepted ? InternalRequestStatusTypeConstants.Ready : InternalRequestStatusTypeConstants.Cancelled;
+            dbEntity.EntityState = EntityStateEnum.Modified;
+            dbEntity.ResponseDescr = responseDesc;
+            dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version), nameof(dbEntity.ResponseDescr) };
+
+            await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
+        }
+
+        public async Task MarkAsReaded(List<string> ids)
+        {
+            // todo: parameters from base class
+            // this is max page size 
+            if (ids.Count > 25)
+            {
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgMoreThenAllowedMsgIsReaded, 25));
+            }
+
+            var query = _internalRequestRepository.SelectAllByIdsAsync(ids);
+
+            var entities = await query.ToListAsync();
+
+            foreach (var entity in entities)
+            {
+                if (entity.ReqStatusCode != InternalRequestStatusTypeConstants.Cancelled &&
+                    entity.ReqStatusCode != InternalRequestStatusTypeConstants.Ready)
+                    throw new BusinessLogicException(BusinessLogicExceptionResources.msgReadIsNotAllowed);
+
+                entity.ReqStatusCode = entity.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ?
+                    InternalRequestStatusTypeConstants.ReadCancelled : InternalRequestStatusTypeConstants.ReadReady;
+
+                entity.EntityState = EntityStateEnum.Modified;
+                entity.ModifiedProperties = new List<string> { nameof(entity.ReqStatusCode), nameof(entity.Version) };
+            }
+
+            await _internalRequestRepository.SaveEntityListAsync(entities, false);
+        }
     }
 }
