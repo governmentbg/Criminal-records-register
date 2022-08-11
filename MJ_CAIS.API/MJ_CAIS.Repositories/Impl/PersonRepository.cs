@@ -45,6 +45,27 @@ namespace MJ_CAIS.Repositories.Impl
                 .FirstAsync(x => x.Id == id);
         }
 
+
+        public IQueryable<SelectPidGridDTO> SelectAllPidsForSelection()
+        {
+            var result = this._dbContext.PPersonIds.AsNoTracking()
+                  .Include(x => x.Person)
+                  .Include(x => x.PidType)
+                  .Select(x => new SelectPidGridDTO
+                  {
+                      Id = x.Id,
+                      CreatedOn = x.CreatedOn,
+                      PersonBirthDate = x.Person.BirthDate,
+                      Firstname = x.Person.Firstname,
+                      Surname= x.Person.Surname,
+                      Familyname = x.Person.Familyname,
+                      Pid = x.Id,
+                      PidType = x.PidType.Name
+                  });
+
+            return result;
+        }
+
         public IQueryable<PersonBulletinGridDTO> GetBulletinsByPersonId(string personId)
         {
             var bulletins = _personHelperRepository.GetAllBulletinsByPersonId(personId);

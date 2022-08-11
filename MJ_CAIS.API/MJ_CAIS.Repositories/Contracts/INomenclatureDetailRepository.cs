@@ -15,7 +15,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<FbbcSanctType> GetAllFbbcSanctTypes();
 
-        IQueryable<NReqStatus> GetInternalRequestStatuses();
+        IQueryable<NIntternalReqType> GetInternalRequestStatuses();
 
         IQueryable<GCountry> GetCountries();
 

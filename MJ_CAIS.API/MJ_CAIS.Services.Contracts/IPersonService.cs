@@ -10,6 +10,8 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, PersonSearchParamsDTO searchParams);
 
+        Task<IgPageResult<SelectPidGridDTO>> SelectAllPidsForSelectionWithPaginationAsync(ODataQueryOptions<SelectPidGridDTO> aQueryOptions);
+
         Task<IgPageResult<PersonBulletinGridDTO>> SelectPersonBulletinAllWithPaginationAsync(ODataQueryOptions<PersonBulletinGridDTO> aQueryOptions, string personId);
 
         Task<IgPageResult<PersonApplicationGridDTO>> SelectPersonApplicationAllWithPaginationAsync(ODataQueryOptions<PersonApplicationGridDTO> aQueryOptions, string personId);

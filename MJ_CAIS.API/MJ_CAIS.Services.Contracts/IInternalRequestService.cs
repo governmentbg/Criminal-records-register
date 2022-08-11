@@ -10,6 +10,8 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool isForSender);
 
+        Task ChangeStatusAsync(string aId, string status);
+
         Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId);
     }
 }

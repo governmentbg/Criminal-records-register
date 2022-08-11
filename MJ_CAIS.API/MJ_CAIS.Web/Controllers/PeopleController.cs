@@ -31,6 +31,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("get-pids-for-selection-dialog")]
+        public async Task<IActionResult> GetAllPidsForSelection(ODataQueryOptions<SelectPidGridDTO> aQueryOptions)
+        {
+            var result = await this._personService.SelectAllPidsForSelectionWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
         [HttpGet("{aId}")]
         public new async Task<IActionResult> Get(string aId)
         {

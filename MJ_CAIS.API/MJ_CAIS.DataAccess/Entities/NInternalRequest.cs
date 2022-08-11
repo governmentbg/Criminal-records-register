@@ -21,7 +21,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? PPersIdId { get; set; }
-        public string ReqestType { get; set; } = null!;
         public string? FromAuthorityId { get; set; }
         public string? ToAuthorityId { get; set; }
         public string NIntReqTypeId { get; set; } = null!;

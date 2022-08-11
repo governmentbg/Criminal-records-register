@@ -7399,10 +7399,6 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("REQ_STATUS_CODE");
 
-                entity.Property(e => e.ReqestType)
-                    .HasMaxLength(200)
-                    .HasColumnName("REQEST_TYPE");
-
                 entity.Property(e => e.RequestDate)
                     .HasColumnType("DATE")
                     .HasColumnName("REQUEST_DATE");

@@ -37,7 +37,8 @@ namespace MJ_CAIS.Common.Constants
             public const string Ecris = "501";
             //601	Справка за съдимост
             public const string ConvictionRequest = "601";
-
+            //701	Вътрешни заявки
+            public const string InternalRequest = "701";
 
         }
     }

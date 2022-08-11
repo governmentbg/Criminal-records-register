@@ -21,8 +21,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<FbbcSanctType, BaseNomenclatureDTO>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
-            //CreateMap<BReqStatus, BaseNomenclatureDTO>()
-            //   .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
+            CreateMap<NIntternalReqType, BaseNomenclatureDTO>()
+               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
 
             CreateMap<APurpose, PurposeDTO>();
 
