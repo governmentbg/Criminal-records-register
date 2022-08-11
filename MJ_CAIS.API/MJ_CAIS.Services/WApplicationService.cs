@@ -312,6 +312,14 @@ namespace MJ_CAIS.Services
 
         private bool CheckPayment(WApplication wapplication)
         {
+            if (wapplication.APayments == null || wapplication.APayments.Count == 0)
+            {
+                return false;
+            }
+            if (wapplication.APayments.Select(x=>x.EPayment).Count() == 0)
+            {
+                return false;
+            }
             return wapplication.APayments.All(x => x.EPayment.PaymentStatus == PaymentConstants.PaymentStatuses.Payed);
         }
     }
