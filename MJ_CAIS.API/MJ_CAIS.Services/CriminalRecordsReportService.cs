@@ -2,6 +2,7 @@
 using EO.Pdf;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.Repositories.Contracts;
@@ -16,16 +17,26 @@ namespace MJ_CAIS.Services
     public class CriminalRecordsReportService : ICriminalRecordsReportService
     {
         private readonly IPdfSigner _pdfSignerService;
+        private readonly IWApplicationReportRepository _wApplicationReportRepository;
         private readonly IBulletinRepository _bulletinRepository;
         private readonly IMapper _mapper;
         private readonly IPersonRepository _personRepository;
+        private readonly IReportSearchPersonsRepository _reportSearchPersonsRepository;
 
-        public CriminalRecordsReportService(IMapper mapper, IPdfSigner pdfSignerService, IBulletinRepository bulletinRepository, IPersonRepository personRepository)
+        public CriminalRecordsReportService(
+            IMapper mapper,
+            IPdfSigner pdfSignerService,
+            IBulletinRepository bulletinRepository,
+            IPersonRepository personRepository,
+            IReportSearchPersonsRepository reportSearchPersonsRepository,
+            IWApplicationReportRepository wApplicationReportRepository)
         {
             _mapper = mapper;
             _pdfSignerService = pdfSignerService;
             _bulletinRepository = bulletinRepository;
             _personRepository = personRepository;
+            _reportSearchPersonsRepository = reportSearchPersonsRepository;
+            _wApplicationReportRepository = wApplicationReportRepository;
         }
 
         public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value)
@@ -64,6 +75,14 @@ namespace MJ_CAIS.Services
                     }
                 }
             };
+            
+            //TODO: Should resultID and RegistrationNumber be populated?
+            //RESULT_ID
+            //REGISTRATION_NUMBER
+            //RESULT_TYPE - set to PDF by default
+            var report = 
+                _mapper.MapToEntity<CriminalRecordsExtendedRequestType, WReport>(value, true);
+            await _wApplicationReportRepository.InsertAsync(report);
 
             return result;
         }
@@ -105,6 +124,29 @@ namespace MJ_CAIS.Services
             IQueryable<string> personIds = _personRepository.GetPersonIDsByPersonData(firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname, birthdateFrom, birthdateTo, birthdateYear);
 
             List<PPerson> res = await _personRepository.GetPersonByID(personIds);
+
+            var reportSearchPer = _mapper.MapToEntity<PersonIdentifierSearchExtendedRequestType, WReportSearchPer>(value, true);
+            var foundIds =
+                res.Aggregate(
+                    reportSearchPer.ARepPers,
+                    (list, v) =>
+                    {
+                        foreach (var pPersonId in v.PPersonIds)
+                        {
+                            list.Add(new ARepPer()
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                Pid = pPersonId.Pid,
+                                PidType = pPersonId.PidTypeId,
+                                ReportId = reportSearchPer.Id,
+                                EntityState = Common.Enums.EntityStateEnum.Added
+                            });
+                        }
+                        return list;
+                    }
+                );
+            _reportSearchPersonsRepository.ApplyChanges(reportSearchPer, applyToAllLevels: true);
+            await _reportSearchPersonsRepository.InsertAsync(reportSearchPer);
 
             var result = _mapper.Map<List<PPerson>, PersonIdentifierSearchResponseType>(res);
 

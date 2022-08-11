@@ -17,7 +17,7 @@ using System.Linq;
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
     [RedirectNotActive("Inactive", "Account")]
-    [Authorize]
+    [Authorize(Roles = "EReports")]
     public class ReportsController : BaseController
     {
         private readonly IMapper _mapper;
@@ -106,7 +106,7 @@ namespace MJ_CAIS.WebPortal.External.Controllers
                         ServiceURI = model.ServiceURI
                         //AdministrationOId,
                         //EmployeeAditionalIdentifier,
-                        //ResponsiblePersonIdentifier                     
+                        //ResponsiblePersonIdentifier
                     },
                     CriminalRecordsRequest = new DTO.ExternalServicesHost.CriminalRecordsRequestType()
                     {

@@ -37,12 +37,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ExternalServicesHost\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\MJ_CAIS.DTO\ExternalServicesHost\ESCSC.xslt" Link="ExternalServicesHost\ESCSC.xslt" />
-  </ItemGroup>
-
 </Project>

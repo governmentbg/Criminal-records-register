@@ -8,7 +8,7 @@ using MJ_CAIS.WebPortal.External.Models.Certificates;
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
     [RedirectNotActive("Inactive", "Account")]
-    [Authorize]
+    [Authorize(Roles = "ECertificates")]
     public class CertificatesController : BaseController
     {
         private readonly IMapper _mapper;

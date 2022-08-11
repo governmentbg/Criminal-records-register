@@ -20,7 +20,7 @@ using MJ_CAIS.WebPortal.External.Models.Reports;
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
     [RedirectNotActive("Inactive", "Account")]
-    [Authorize]
+    [Authorize(Roles = "ECertificates")]
     public class ApplicationController : BaseController
     {
         private readonly IMapper _mapper;

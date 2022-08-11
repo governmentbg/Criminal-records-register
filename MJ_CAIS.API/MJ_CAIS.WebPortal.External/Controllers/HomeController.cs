@@ -4,16 +4,14 @@ using MJ_CAIS.WebSetup.Utils;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
+    [Authorize]
     public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
         }
 
-        //[RedirectAuthenticatedRequests("Index", "Application")]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -25,7 +23,6 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             return View();
         }
 
-        [Authorize]
         public IActionResult Login()
         {
             
