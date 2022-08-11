@@ -10,21 +10,37 @@
         >
           <nb-tab #draftTab [tabTitle]="draftTabTitle" tabIcon="file"> </nb-tab>
           <nb-tab
+            *ngIf="inboxCount > 0"
             #inboxTab
             [tabTitle]="inboxTabTitle"
             tabIcon="inbox"
-            badgeText="1"
+            badgeText="{{ inboxCount }}"
             badgePosition="top right"
-            badgeStatus="danger"
+            badgeStatus="success"
           >
           </nb-tab>
           <nb-tab
+            *ngIf="inboxCount == 0"
+            #inboxTab
+            [tabTitle]="inboxTabTitle"
+            tabIcon="inbox"
+          >
+          </nb-tab>
+          <nb-tab
+            *ngIf="outboxCount > 0"
+            #outboxTab
+            [tabTitle]="outboxTabTitle"
+            badgeText="{{ outboxCount }}"
+            tabIcon="email-outline"
+            badgePosition="top  right"
+            badgeStatus="warning"
+          >
+          </nb-tab>
+          <nb-tab
+            *ngIf="outboxCount == 0"
             #outboxTab
             [tabTitle]="outboxTabTitle"
             tabIcon="email-outline"
-            badgeText="10"
-            badgePosition="top  right"
-            badgeStatus="warning"
           >
           </nb-tab>
         </nb-tabset>

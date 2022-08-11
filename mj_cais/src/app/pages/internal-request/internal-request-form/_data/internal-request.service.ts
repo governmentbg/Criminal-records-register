@@ -17,4 +17,8 @@ export class InternalRequestService extends CaisCrudService<
   public changeStatus(aId: string, statusId: string): Observable<any> {
     return this.http.put(`${this.url}/${aId}/change-status/${statusId}`, {});
   }
+
+  public getRequestsCount() {
+    return this.http.get<any>(`${this.url}/requests-count`);
+  }
 }

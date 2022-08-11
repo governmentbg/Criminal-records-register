@@ -36,6 +36,9 @@ namespace MJ_CAIS.Services
             _registerTypeService = registerTypeService;
         }
 
+        public async Task<RequestCountDTO> GetInternalRequestsCount()
+            => await _internalRequestRepository.GetInternalRequestsCountAsync();
+
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {
             var entityQuery = this.GetSelectAllQueryable();
@@ -112,43 +115,6 @@ namespace MJ_CAIS.Services
             dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version) };
 
             await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
-        }
-
-        /// <summary>
-        /// Основна информация за бюлетин и лицето към него, 
-        /// което се отнася за текущата заявка за реабилитация
-        /// </summary>
-        /// <param name="bulletinId"></param>
-        /// <returns></returns>
-        public async Task<BulletinPersonInfoModelDTO> GetBulletinPersonInfoAsync(string bulletinId)
-        {
-            throw new NotImplementedException();
-            //var bulletin = await _bulletinRepository.SelectBulletinPersonInfoAsync(bulletinId);
-            //if (bulletin == null) return null;
-
-            //var result = mapper.Map<BulletinPersonInfoModelDTO>(bulletin);
-            //if (!string.IsNullOrEmpty(bulletin.EgnNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.EgnNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.LnchNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.LnchNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.LnNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.LnNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.IdDocNumberNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.IdDocNumberNavigation.PersonId;
-            //}
-            //else if (!string.IsNullOrEmpty(bulletin.SuidNavigation?.PersonId))
-            //{
-            //    result.PersonId = bulletin.SuidNavigation.PersonId;
-            //}
-
-            //return result;
         }
     }
 }
