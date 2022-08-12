@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DIContainer;
+using NLog;
+using NLog.Web;
 using System.Net;
 using System.Net.Mail;
 
@@ -21,11 +24,27 @@ namespace EmailSender
 
         static void Main(string[] args)
         {
-            // _logger.Info("Започване на работа по изпращане на мейли");
-
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            IHost host = Host.CreateDefaultBuilder()
+            var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+
+            try
+            {
+                logger.Info($"Execution started.");
+                IHost host = Host.CreateDefaultBuilder()
                 .ConfigureServices(services => ContainerExtension.Initialize(services, config))
+                  .ConfigureServices(services => services.AddSingleton<IUserContext>(new UserContext()
+                  {
+                      UserId = config.GetValue<string>("ContextUser:UserId"),
+                      UserName = config.GetValue<string>("ContextUser:UserName")
+                  }))
+
+                    .ConfigureLogging(logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+
+                    })
+                    .UseNLog()
                 .Build();
 
             using (host)
@@ -44,7 +63,21 @@ namespace EmailSender
                     //_logger.Error(ex);
                     throw;
                 }
+                }
             }
+            catch (Exception ex)
+
+            {
+                logger.Error(ex, ex.Message, ex.Data);
+
+            }
+            finally
+            {
+                logger.Info($"Execution ended.");
+                NLog.LogManager.Flush();
+                NLog.LogManager.Shutdown();
+            }
+
         }
 
         static void FillConfigValues(IConfiguration config)
@@ -64,7 +97,7 @@ namespace EmailSender
             var emailsToSend = dbContext.EEmailEvents
                 .Where(e => e.EmailStatus == EmailStatusConstants.Pending || (e.EmailStatus == EmailStatusConstants.Rejected && e.Attempts < 5))
                 .Where(x => !string.IsNullOrEmpty(x.EmailAddress))
-               // .Where(x => x.EmailAddress.EndsWith("technologica.com")) // TODO: remove later
+                //.Where(x => x.EmailAddress.EndsWith("technologica.com")) // TODO: remove later
                 .ToList();
 
             // _logger.Info("Брой мейли за изпращане: " + emailsToSend.Count);
