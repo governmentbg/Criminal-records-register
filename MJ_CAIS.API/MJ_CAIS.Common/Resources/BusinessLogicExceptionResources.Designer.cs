@@ -133,11 +133,65 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заявката не е чернова и не може да бъде изтрита.
+        /// </summary>
+        public static string mgsNotAllowedToDeleteRequest {
+            get {
+                return ResourceManager.GetString("mgsNotAllowedToDeleteRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявката не е чернова и не може да бъде актуализирана.
+        /// </summary>
+        public static string mgsNotAllowedToEditRequest {
+            get {
+                return ResourceManager.GetString("mgsNotAllowedToEditRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Искане за справка с идентификатор {0} не съществува..
         /// </summary>
         public static string msgAppReportDoesNotExist {
             get {
                 return ResourceManager.GetString("msgAppReportDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Маркирани са повече от позволените {0} на брой заявки..
+        /// </summary>
+        public static string msgMoreThenAllowedMsgIsReaded {
+            get {
+                return ResourceManager.GetString("msgMoreThenAllowedMsgIsReaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нямате права да маркирате необработена заявка, като прочетене.
+        /// </summary>
+        public static string msgReadIsNotAllowed {
+            get {
+                return ResourceManager.GetString("msgReadIsNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявката е била обработена.
+        /// </summary>
+        public static string msgReplayExist {
+            get {
+                return ResourceManager.GetString("msgReplayExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нямате права да обработите заявката.
+        /// </summary>
+        public static string msgReplayNotAllowed {
+            get {
+                return ResourceManager.GetString("msgReplayNotAllowed", resourceCulture);
             }
         }
         
@@ -165,6 +219,33 @@ namespace MJ_CAIS.Common.Resources {
         public static string msgReportIsDelivered {
             get {
                 return ResourceManager.GetString("msgReportIsDelivered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявка с идентификатор {0} не съществува..
+        /// </summary>
+        public static string msgRequestDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgRequestDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нямате права да обработвате заявки към друго БС..
+        /// </summary>
+        public static string msgRequestForDifferentAuth {
+            get {
+                return ResourceManager.GetString("msgRequestForDifferentAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Заявката не е чернова и не може да бъде изпратена..
+        /// </summary>
+        public static string msgRequestIsNotDraft {
+            get {
+                return ResourceManager.GetString("msgRequestIsNotDraft", resourceCulture);
             }
         }
         

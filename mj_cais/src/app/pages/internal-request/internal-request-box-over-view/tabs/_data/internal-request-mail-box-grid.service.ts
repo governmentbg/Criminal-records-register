@@ -15,9 +15,9 @@ export class InternalRequestMailBoxGridService extends CaisCrudService<
     super(InternalRequestMailBoxGridModel, injector, currentEndpoint);
   }
 
-  public updateUrlStatus(statuses: string, isForSender: boolean) {
+  public updateUrlStatus(statuses: string, fromAuth: boolean) {
     this.updateUrl(
-      `${currentEndpoint}?statuses=${statuses}&isForSender=${isForSender}`
+      `${currentEndpoint}?statuses=${statuses}&fromAuth=${fromAuth}`
     );
   }
 }

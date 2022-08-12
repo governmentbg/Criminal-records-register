@@ -109,10 +109,11 @@ namespace MJ_CAIS.ExternalWebServices
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateServerSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
         {
-            if(certificate.Application.PurposeNavigation == null)
-            {
-                throw new Exception("Полето 'Цел' е празно");
-            }
+            //целта може да е null -> тогава важи за всички; при null изпраща се директно, а не за подпис от съдия
+            //if(certificate.Application.PurposeNavigation == null)
+            //{
+            //    throw new Exception("Полето 'Цел' е празно");
+            //}
             byte[] contentCertificate;
             string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             bool containsBulletins = certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() != 0;
@@ -245,7 +246,7 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                if (containsBulletins || certificate.Application.PurposeNavigation.ForSecondSignature == true)
+                if (containsBulletins || (certificate.Application.PurposeNavigation!=null && certificate.Application.PurposeNavigation.ForSecondSignature == true))
                 {
                     //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
                     _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");

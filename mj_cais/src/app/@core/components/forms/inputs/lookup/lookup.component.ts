@@ -13,14 +13,11 @@ export class LookupComponent implements OnInit {
   @Input() label: string;
   @Input() inputControl: LookupForm;
   @Input() parentGroup: FormGroup;
-  //@Input() isLoading: boolean = false;
   @Input() openFunction: () => any;
   @Output() onClearSelection: EventEmitter<void> = new EventEmitter<void>();
 
   inputId: string = "id";
   inputName: string = "displayName";
-
-  //private interval;
 
   constructor(
     public formUtils: FormUtils,
@@ -29,12 +26,6 @@ export class LookupComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  // ngOnDestroy() {
-  //   if (this.interval) {
-  //     clearInterval(this.interval);
-  //   }
-  // }
-
   public openLookupFunction() {
     this.spinner.show();
     setTimeout(() => {
@@ -42,13 +33,6 @@ export class LookupComponent implements OnInit {
       this.spinner.hide();
     }, 500);
 
-    // todo: get isLoading from dialog component?
-    // this.interval = setInterval(() => {
-    //   let isHiden = this.hideSpinner();
-    //   if (isHiden) {
-    //     clearInterval(this.interval);
-    //   }
-    // }, 500);
     this.openFunction();
   }
 
@@ -75,17 +59,10 @@ export class LookupComponent implements OnInit {
     );
   }
 
- public clearSelection(): void {
+  public clearSelection(): void {
     this.inputControl.id.setValue(null);
     this.inputControl.displayName.setValue(null);
     this.onClearSelection.emit();
   }
-
-  // private hideSpinner(): boolean {
-  //   if (!this.isLoading) {
-  //     this.spinner.hide();
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  
 }

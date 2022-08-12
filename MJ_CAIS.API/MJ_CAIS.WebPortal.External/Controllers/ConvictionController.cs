@@ -6,7 +6,7 @@ using MJ_CAIS.WebPortal.External.Models.Conviction;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
-    [Authorize(Roles = "ECertificates")]
+    [AllowAnonymous]
     public class ConvictionController : BaseController
     {
         private readonly IMapper _mapper;

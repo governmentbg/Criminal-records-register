@@ -15,7 +15,7 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
     <PackageReference Include="TL.EDelivery" Version="22.59.37750" />
     <PackageReference Include="TL.JasperReports.Integration" Version="22.138.40192" />
-    <PackageReference Include="TL.Signer" Version="22.222.42469" />
+    <PackageReference Include="TL.Signer" Version="22.223.42516" />
   </ItemGroup>
 
   <ItemGroup>

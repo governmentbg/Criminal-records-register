@@ -1,6 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
-import { BulletinPersonInfoModel } from "../../../../@core/components/shared/bulletin-person-info/_models/bulletin-person-info.model";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { InternalRequestModel } from "../_models/internal-request.model";
 
@@ -15,9 +14,19 @@ export class InternalRequestService extends CaisCrudService<
     super(InternalRequestModel, injector, "internal-requests");
   }
 
-  public getBulletinPersonInfo(bulletinId: boolean): Observable<BulletinPersonInfoModel> {
-    return this.http.get<BulletinPersonInfoModel>(
-      `${this.url}/bulletin-person-info/${bulletinId}`
-    );
+  public changeStatus(aId: string, statusId: string): Observable<any> {
+    return this.http.put(`${this.url}/${aId}/change-status/${statusId}`, {});
+  }
+
+  public replay(aId, aInDto: any): Observable<any> {
+    return this.http.put(`${this.url}/${aId}/replay`, aInDto);
+  }
+
+  public markAsRead(ids: string[]): Observable<any> {
+    return this.http.put(`${this.url}/mark-as-read`, ids);
+  }
+
+  public getRequestsCount() {
+    return this.http.get<any>(`${this.url}/requests-count`);
   }
 }

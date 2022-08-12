@@ -141,8 +141,26 @@
   <data name="mgsMoreThenOnePersonWithPids" xml:space="preserve">
     <value>За посочените идентификатори съществуват две различни лица в системата.</value>
   </data>
+  <data name="mgsNotAllowedToDeleteRequest" xml:space="preserve">
+    <value>Заявката не е чернова и не може да бъде изтрита</value>
+  </data>
+  <data name="mgsNotAllowedToEditRequest" xml:space="preserve">
+    <value>Заявката не е чернова и не може да бъде актуализирана</value>
+  </data>
   <data name="msgAppReportDoesNotExist" xml:space="preserve">
     <value>Искане за справка с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgMoreThenAllowedMsgIsReaded" xml:space="preserve">
+    <value>Маркирани са повече от позволените {0} на брой заявки.</value>
+  </data>
+  <data name="msgReadIsNotAllowed" xml:space="preserve">
+    <value>Нямате права да маркирате необработена заявка, като прочетене</value>
+  </data>
+  <data name="msgReplayExist" xml:space="preserve">
+    <value>Заявката е била обработена</value>
+  </data>
+  <data name="msgReplayNotAllowed" xml:space="preserve">
+    <value>Нямате права да обработите заявката</value>
   </data>
   <data name="msgReportDoesNotExist" xml:space="preserve">
     <value>Справка с идентификатор {0} не съществува.</value>
@@ -152,6 +170,15 @@
   </data>
   <data name="msgReportIsDelivered" xml:space="preserve">
     <value>Справка с идентификатор {0} вече е доставена и не може да бъде анулирана.</value>
+  </data>
+  <data name="msgRequestDoesNotExist" xml:space="preserve">
+    <value>Заявка с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgRequestForDifferentAuth" xml:space="preserve">
+    <value>Нямате права да обработвате заявки към друго БС.</value>
+  </data>
+  <data name="msgRequestIsNotDraft" xml:space="preserve">
+    <value>Заявката не е чернова и не може да бъде изпратена.</value>
   </data>
   <data name="msgАppReportIsCanceled" xml:space="preserve">
     <value>Искане за справка с идентификатор {0} вече е било анулирано.</value>

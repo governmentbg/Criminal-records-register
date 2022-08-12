@@ -66,7 +66,7 @@ namespace MJ_CAIS.Services
                 .ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
-        public IQueryable<BaseNomenclatureDTO> GetInternalRequestStatuses()
+        public IQueryable<BaseNomenclatureDTO> GetInternalRequestTypes()
         {
             return _nomenclatureDetailRepository
                 .GetInternalRequestStatuses()

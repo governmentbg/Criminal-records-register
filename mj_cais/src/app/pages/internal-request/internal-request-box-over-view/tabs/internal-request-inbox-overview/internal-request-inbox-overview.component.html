@@ -1,0 +1,119 @@
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [sortStrategy]="noopSortStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  (onSortingDone)="sortingDone($event)"
+  (onFilteringDone)="filteringDone($event)"
+  (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
+  [allowFiltering]="true"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+>
+  <igx-grid-toolbar style="padding-left: 0.8rem">
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <nb-toggle
+          (checkedChange)="onShowAllChange($event)"
+          status="info"
+          labelPosition="left"
+          >Всички</nb-toggle
+        >
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="true"
+    [dataType]="'number'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="requestDate"
+    header="Дата на зъздаване"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value | date }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="reqStatusName"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="hideStatus"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="reqestType"
+    header="Тип на заявката"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="toAuthorityName"
+    header="До бюро съдимост"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    width="150px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>
+      <a
+        [title]="'Обработка'"
+        [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
+      >
+        <nb-icon pack="far" icon="paper-plane"></nb-icon>
+      </a>
+    </ng-template>
+  </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>

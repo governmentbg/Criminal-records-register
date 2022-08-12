@@ -1,53 +1,51 @@
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { LookupForm } from "../../../../@core/components/forms/inputs/lookup/models/lookup.form";
 import { BaseForm } from "../../../../@core/models/common/base.form";
 
 export class InternalRequestForm extends BaseForm {
   public group: FormGroup;
 
   public regNumber: FormControl;
-  public requestDate: FormControl;
-  public requestDateDisplay: FormControl;
+  public regNumberDisplay: FormControl;
   public description: FormControl;
-  public descriptionDisplay: FormControl;
-  public bulletinId: FormControl;
   public reqStatusCode: FormControl;
   public responseDescr: FormControl;
+  public requestDate: FormControl;
+  public pPersIdId: LookupForm;
   public reqStatusName: FormControl;
-  public bulletinVersion: FormControl;
-  public bulletinStatusId: FormControl;
-  public aAppBulletinId: FormControl;
+  public fromAuthorityId: FormControl;
+  public toAuthorityId: FormControl;
+  public nIntReqTypeId: FormControl;
 
   constructor() {
     super();
     this.regNumber = new FormControl(null);
-    this.requestDate = new FormControl(new Date());
-    this.requestDateDisplay = new FormControl(new Date());
-    this.description = new FormControl(null);
-    this.descriptionDisplay = new FormControl(null);
-    this.bulletinId = new FormControl(null);
+    this.regNumberDisplay = new FormControl(null);
+    this.regNumberDisplay.disable();
+    this.description = new FormControl(null, Validators.required);
     this.reqStatusCode = new FormControl(null);
     this.responseDescr = new FormControl(null);
+    this.requestDate = new FormControl(new Date());
+    this.pPersIdId = new LookupForm(false);
     this.reqStatusName = new FormControl(null);
-    this.bulletinVersion = new FormControl(null);
-    this.bulletinStatusId = new FormControl(null);
-    this.aAppBulletinId = new FormControl(null);
+    this.fromAuthorityId = new FormControl(null);
+    this.toAuthorityId = new FormControl(null, Validators.required);
+    this.nIntReqTypeId =  new FormControl(null,Validators.required);
 
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
       regNumber: this.regNumber,
-      regNumberDisplay: this.regNumber,
-      requestDate: this.requestDate,
-      requestDateDisplay: this.requestDate,
+      regNumberDisplay: this.regNumberDisplay,
       description: this.description,
-      descriptionDisplay: this.description,
-      bulletinId: this.bulletinId,
       reqStatusCode: this.reqStatusCode,
       responseDescr: this.responseDescr,
+      requestDate: this.requestDate,
+      pPersIdId: this.pPersIdId.group,
       reqStatusName: this.reqStatusName,
-      bulletinVersion: this.bulletinVersion,
-      bulletinStatusId: this.bulletinStatusId,
-      aAppBulletinId: this.aAppBulletinId,
+      fromAuthorityId: this.fromAuthorityId,
+      toAuthorityId: this.toAuthorityId,
+      nIntReqTypeId: this.nIntReqTypeId,
     });
   }
 }

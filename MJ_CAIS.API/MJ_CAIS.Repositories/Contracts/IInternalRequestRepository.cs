@@ -1,12 +1,12 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.InternalRequest;
 
 namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IInternalRequestRepository : IBaseAsyncRepository<NInternalRequest, string, CaisDbContext>
     {
-        Task<int> GetCountOfNewRequestsAsync();
-        Task<bool> HasRequests(NInternalRequest entity, List<string> bullIdsForCert);
-        Task<AAppBulletin> GetBulletinsInCertificate(NInternalRequest entity);
+        IQueryable<NInternalRequest> SelectAllByIdsAsync(List<string> ids);
+        Task<RequestCountDTO> GetInternalRequestsCountAsync();
     }
 }

@@ -7,15 +7,10 @@ import { InternalRequestBoxOverViewComponent } from "./internal-request-box-over
 import { InternalRequestDraftOvverviewComponent } from "./internal-request-box-over-view/tabs/internal-request-draft-ovverview/internal-request-draft-ovverview.component";
 import { InternalRequestFormComponent } from "./internal-request-form/internal-request-form.component";
 import { InternalRequestResolver } from "./internal-request-form/_data/internal-request.resolver";
-import { InternalRequestOverviewComponent } from "./internal-request-overview/internal-request-overview.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: InternalRequestOverviewComponent,
-  },
-  {
-    path: "box",
     component: InternalRequestBoxOverViewComponent,
     canActivate: [NgxPermissionsGuard],
     data: {
@@ -35,25 +30,37 @@ const routes: Routes = [
     },
   },
   {
-    path: ":ID", // this id is bulletin id
-    component: InternalRequestOverviewComponent,
-  },
-  {
-    path: "create/:ID",
+    path: "create",
     component: InternalRequestFormComponent,
     resolve: { dbData: InternalRequestResolver },
+    data: {
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "edit/:ID",
     component: InternalRequestFormComponent,
     resolve: { dbData: InternalRequestResolver },
-    data: { edit: true },
+    data: {
+      edit: true,
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "preview/:ID",
     component: InternalRequestFormComponent,
     resolve: { dbData: InternalRequestResolver },
-    data: { edit: true, preview: true },
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.Normal, RoleNameEnum.Judge],
+      },
+    },
   },
   {
     path: "",

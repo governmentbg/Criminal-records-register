@@ -1,9 +1,13 @@
 import { Component, Injector, OnInit } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
-import { EActions } from "@tl/tl-common";
+import { NbDialogService } from "@nebular/theme";
+import { NgxSpinnerService } from "ngx-spinner";
+import { SelectPidDialogComponent } from "../../../@core/components/dialogs/select-pid-dialog/select-pid-dialog.component";
+import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { InternalRequestResolverData } from "./_data/internal-request.resolver";
 import { InternalRequestService } from "./_data/internal-request.service";
+import { InternalRequestStatusCodeConstants } from "./_models/internal-request-status-code.constants";
 import { InternalRequestForm } from "./_models/internal-request.form";
 import { InternalRequestModel } from "./_models/internal-request.model";
 
@@ -21,50 +25,59 @@ export class InternalRequestFormComponent
   >
   implements OnInit
 {
-  private readonly PREVIEW_ACTION = "preview";
-  
-  private readonly BULLETIN_OVERVIEW_URL =
-    "/pages/bulletins/for-rehabilitation";
-    private readonly INTERNAL_REQUEST_OVERVIEW_URL =
-    "/pages/internal-requests";
-
-  public isCreate: boolean;
-
-  constructor(service: InternalRequestService, public injector: Injector) {
+  constructor(
+    service: InternalRequestService,
+    public injector: Injector,
+    private dialogService: NbDialogService,
+    private loaderService: NgxSpinnerService
+  ) {
     super(service, injector);
-    this.setDisplayTitle("заявка към бюлетин");
   }
+
+  public title: string = "Добавяне на заявка";
+  public InternalRequestStatusCodeConstants =
+    InternalRequestStatusCodeConstants;
+  public requestStatusCode;
+  public showReplayBtn: boolean = false;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
-    let currentUrl = this.router.url.toLocaleLowerCase();
-    let index = currentUrl.indexOf(this.PREVIEW_ACTION);
-    if (index > -1) {
+    this.fullForm.regNumberDisplay.patchValue(this.fullForm.regNumber.value);
+    this.requestStatusCode = this.fullForm.reqStatusCode.value;
+
+    // this is replay
+    if (this.requestStatusCode == InternalRequestStatusCodeConstants.Sent) {
+      this.fullForm.group.disable();
+      this.fullForm.responseDescr.enable();
+      this.fullForm.responseDescr.setValidators(Validators.required);
+
+      if (this.isEdit()) {
+        this.showReplayBtn = true;
+        this.title = "Отговор на заявка";
+      }
+
+      // check before change prop
+      if (this.isForPreview) {
+        this.showReplayBtn = false;
+        this.title = "Преглед на заявка";
+      }
+
+      this.formFinishedLoading.emit();
+
       this.isForPreview = true;
-    }
-
-    if (this.isEdit()) {
-      this.fullForm.reqStatusCode.patchValue(null);
-      this.fullForm.reqStatusCode.setValidators([Validators.required]);
     } else {
-      var bulletinId = this.activatedRoute.snapshot.params["ID"];
-      this.fullForm.bulletinId.patchValue(bulletinId);
+      if (this.isEdit()) {
+        this.title = "Редакция на заявка";
+      }
+
+      if (this.isForPreview) {
+        this.title = "Преглед на заявка";
+      }
+      this.formFinishedLoading.emit();
     }
-    
-    this.isCreate = this.currentAction != EActions.EDIT;
-    this.formFinishedLoading.emit();
   }
 
-  //override submit function
-  onSubmitSuccess(data: any) {
-    if(!this.isEdit()){
-      this.router.navigateByUrl(this.BULLETIN_OVERVIEW_URL);
-    }else{
-      this.router.navigateByUrl(this.INTERNAL_REQUEST_OVERVIEW_URL);
-    }
-  }
-  
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
   }
@@ -76,4 +89,64 @@ export class InternalRequestFormComponent
   submitFunction = () => {
     this.validateAndSave(this.fullForm);
   };
+
+  replay(accepted) {
+    debugger;
+    if (!this.fullForm.responseDescr.valid) {
+      this.fullForm.responseDescr.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+      this.scrollToValidationError();
+      return;
+    }
+
+    let replayObj = {
+      accepted: accepted,
+      responseDescr: this.fullForm.responseDescr.value,
+    };
+
+    this.service.replay(this.fullForm.id.value, replayObj).subscribe(
+      (res) => {
+        this.loaderService.hide();
+
+        this.toastr.showToast("success", "Успешно изпратена заявка");
+        this.router.navigate(["pages/internal-requests"]);
+      },
+      (error) => {
+        this.onServiceError(error);
+      }
+    );
+  }
+
+  public openPidDialog = () => {
+    this.dialogService
+      .open(SelectPidDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe(this.onSelectPid);
+  };
+
+  public onSelectPid = (item) => {
+    if (item) {
+      this.fullForm.pPersIdId.setValue(item.id, item.pid);
+    }
+  };
+
+  public send() {
+    this.changeStatus(
+      this.fullForm.id.value,
+      InternalRequestStatusCodeConstants.Sent
+    );
+  }
+
+  private changeStatus(id: string, status: string) {
+    this.service.changeStatus(id, status).subscribe(
+      (res) => {
+        this.loaderService.hide();
+
+        this.toastr.showToast("success", "Успешно изпратена заявка");
+        this.router.navigate(["pages/internal-requests"]);
+      },
+      (error) => {
+        this.onServiceError(error);
+      }
+    );
+  }
 }
