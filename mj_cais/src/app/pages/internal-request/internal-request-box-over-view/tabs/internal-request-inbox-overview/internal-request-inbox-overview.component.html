@@ -84,7 +84,7 @@
   </igx-column>
 
   <igx-column
-    width="150px"
+    width="100px"
     header=""
     [sortable]="false"
     [filterable]="false"
@@ -93,12 +93,15 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
+        [queryParams]="{ activeTab: 'inbox' }"
         [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
+        *ngIf="hideStatus"
         [title]="'Обработка'"
+        [queryParams]="{ activeTab: 'inbox' }"
         [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
       >
         <nb-icon pack="far" icon="paper-plane"></nb-icon>

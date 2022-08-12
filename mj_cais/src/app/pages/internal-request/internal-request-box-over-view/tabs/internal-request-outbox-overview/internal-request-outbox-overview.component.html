@@ -73,7 +73,6 @@
     header="Статус"
     [sortable]="true"
     [dataType]="'string'"
-    [hidden]="hideStatus"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
@@ -110,6 +109,7 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
+        [queryParams]="{ activeTab: 'outbox' }"
         [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>

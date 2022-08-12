@@ -91,7 +91,6 @@ export class InternalRequestFormComponent
   };
 
   replay(accepted) {
-    debugger;
     if (!this.fullForm.responseDescr.valid) {
       this.fullForm.responseDescr.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");
@@ -109,7 +108,9 @@ export class InternalRequestFormComponent
         this.loaderService.hide();
 
         this.toastr.showToast("success", "Успешно изпратена заявка");
-        this.router.navigate(["pages/internal-requests"]);
+        this.router.navigate(["pages/internal-requests"], {
+          queryParams: { activeTab: "inbox" },
+        });
       },
       (error) => {
         this.onServiceError(error);
@@ -130,23 +131,33 @@ export class InternalRequestFormComponent
   };
 
   public send() {
-    this.changeStatus(
-      this.fullForm.id.value,
-      InternalRequestStatusCodeConstants.Sent
-    );
+    this.service
+      .changeStatus(
+        this.fullForm.id.value,
+        InternalRequestStatusCodeConstants.Sent
+      )
+      .subscribe(
+        (res) => {
+          this.loaderService.hide();
+          this.toastr.showToast("success", "Успешно изпратена заявка");
+          this.router.navigate(["pages/internal-requests"], {
+            queryParams: { activeTab: "draft" },
+          });
+        },
+        (error) => {
+          this.onServiceError(error);
+        }
+      );
   }
 
-  private changeStatus(id: string, status: string) {
-    this.service.changeStatus(id, status).subscribe(
-      (res) => {
-        this.loaderService.hide();
-
-        this.toastr.showToast("success", "Успешно изпратена заявка");
-        this.router.navigate(["pages/internal-requests"]);
-      },
-      (error) => {
-        this.onServiceError(error);
-      }
-    );
-  }
+  public onCancelFunction = () => {
+    let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
+    if (activeTab) {
+      this.router.navigateByUrl(
+        `pages/internal-requests?activeTab=${activeTab}`
+      );
+    } else {
+      this.router.navigateByUrl(`pages/internal-requests?activeTab=draft`);
+    }
+  };
 }
