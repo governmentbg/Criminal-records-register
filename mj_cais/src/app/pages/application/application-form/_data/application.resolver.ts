@@ -54,6 +54,7 @@ export class ApplicationResolver implements Resolve<any> {
         this.service.getApplicationStatusHistoryData(applicationId),
       users: this.nomenclatureService.getUsers(),
       certificate: this.certificateService.getCertificateByAppId(applicationId),
+      applicationCertificateCanceled: this.certificateService.getCanceledCertificateByAppId(applicationId),
     };
     return forkJoin(result);
   }

@@ -107,6 +107,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("by-application-canceled/{appId}")]
+        public async Task<IActionResult> GetCanceledByApplication(string appId)
+        {
+            var result = await this._certificateService.GetCanceledByApplicationIdAsync(appId);
+            return Ok(result);
+        }
+
         [HttpGet("{appId}/bulletins-check/{onlyApproved}")]
         public async Task<IActionResult> GetBulletinsCheck(string appId)
         {

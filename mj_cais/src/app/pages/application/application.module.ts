@@ -18,6 +18,7 @@ import { ApplicationRequestComponent } from "./application-request/application-r
 import { ApplicationEWebRequestsComponent } from './application-form/tabs/application-e-web-requests/application-e-web-requests.component';
 import { ApplicationCertificateDocumentResultComponent } from './application-form/tabs/application-certificate-document-result/application-certificate-document-result.component';
 import { CancelDialogComponent } from './application-form/cancel-dialog/cancel-dialog.component';
+import { ApplicationCertificateCanceledComponent } from './application-form/tabs/application-certificate-canceled/application-certificate-canceled.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { CancelDialogComponent } from './application-form/cancel-dialog/cancel-d
     ApplicationRequestComponent,
     ApplicationEWebRequestsComponent,
     ApplicationCertificateDocumentResultComponent,
-    CancelDialogComponent
+    CancelDialogComponent,
+    ApplicationCertificateCanceledComponent
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
 })

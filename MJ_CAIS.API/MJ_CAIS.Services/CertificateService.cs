@@ -1,5 +1,5 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper.QueryableExtensions;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
@@ -69,11 +69,11 @@ namespace MJ_CAIS.Services
             }
             certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
             certificate.ModifiedProperties.Add(nameof(certificate.AStatusHes));
-        
+
             if (newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
             {
                 MoveCertificateToWCertificate(certificate);
-                
+
                 if (certificate.Application == null)
                 {
                     AApplication a = new AApplication();
@@ -81,7 +81,7 @@ namespace MJ_CAIS.Services
                     a.EntityState = Common.Enums.EntityStateEnum.Modified;
                     a.ModifiedProperties = new List<string>() { nameof(a.StatusCode) };
                     a.StatusCode = ApplicationConstants.ApplicationStatuses.DeliveredApplication;
-                    certificate.Application = a;                   
+                    certificate.Application = a;
 
                 }
                 else
@@ -106,6 +106,7 @@ namespace MJ_CAIS.Services
             //dbContext.ACertificates.Update(certificate);
 
         }
+
 
         private void MoveCertificateToWCertificate(ACertificate certificate)
         {
@@ -170,7 +171,7 @@ namespace MJ_CAIS.Services
         {
             WCertificate? cert = await baseAsyncRepository.SingleOrDefaultAsync<WCertificate>(w => w.AccessCode1 == accessCode);
 
-            var content = _mapper.Map<WCertificate,WCertificateDTO>(cert);
+            var content = _mapper.Map<WCertificate, WCertificateDTO>(cert);
             return content;
         }
 
@@ -181,7 +182,7 @@ namespace MJ_CAIS.Services
 
             //var dbContext = _certificateRepository.GetDbContext();
             await _certificateRepository.SaveEntityAsync(entity, false, clearTracker: true);
-     
+
         }
 
         public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
@@ -212,6 +213,17 @@ namespace MJ_CAIS.Services
             result.CurrentUserAuthId = _userContext.CsAuthorityId;
             return result;
         }
+
+        public async Task<List<CertificateGridDTO>> GetCanceledByApplicationIdAsync(string appId)
+        {
+            var query = _certificateRepository.GetCanceledByApplicationId(appId);
+            var baseQuery = query.ProjectTo<CertificateGridDTO>(mapperConfiguration);
+            var result = baseQuery.ToList();
+
+            return await Task.FromResult(result);
+        }
+
+
 
         public async Task<IQueryable<BulletinCheckDTO>> GetBulletinsCheckByIdAsync(string certId)
         {

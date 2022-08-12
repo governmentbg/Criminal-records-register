@@ -14,6 +14,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.DocType, opt => opt.MapFrom(src => src.Doc.DocContent.MimeType))
                 .ForMember(d => d.DocName, opt => opt.MapFrom(src => src.Doc.Name));
 
+            CreateMap<ACertificate, CertificateGridDTO>();
+
             CreateMap<CertificateDTO, ACertificate>()
                 .ForMember(d => d.StatusCodeNavigation, opt => opt.Ignore())
                 .ForMember(d => d.Doc, opt => opt.Ignore());
