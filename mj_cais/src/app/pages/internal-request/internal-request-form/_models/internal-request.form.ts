@@ -26,7 +26,7 @@ export class InternalRequestForm extends BaseForm {
     this.reqStatusCode = new FormControl(null);
     this.responseDescr = new FormControl(null);
     this.requestDate = new FormControl(new Date());
-    this.pPersIdId = new LookupForm(true);
+    this.pPersIdId = new LookupForm(false);
     this.reqStatusName = new FormControl(null);
     this.fromAuthorityId = new FormControl(null);
     this.toAuthorityId = new FormControl(null, Validators.required);

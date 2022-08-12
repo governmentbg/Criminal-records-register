@@ -20,18 +20,13 @@
   [selectedRows]="selectedRows"
   [hideRowSelectors]="!hideStatus"
 >
-  <igx-grid-toolbar style="padding-left: 0.8rem;">
+  <igx-grid-toolbar style="padding-left: 0.8rem">
     <igx-grid-toolbar-title>
       <div class="row">
-        <button 
-        (click)="refresh()"
-        class="btn btn-white btn-sm ml-3 mr-1" nbTooltip="Презареждане">
-          <i class="fa fa-sync-alt"></i>
-        </button>
         <ng-container *ngIf="hideStatus">
           <button
-           (click)="markAsRead()"
-            class="btn btn-white btn-sm mr-1"
+            (click)="markAsRead()"
+            class="btn btn-white btn-sm ml-3 mr-1"
             nbTooltip="Маркирай, като прочетени"
           >
             <i class="fa fa-eye"></i>

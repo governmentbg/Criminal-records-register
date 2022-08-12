@@ -48,6 +48,10 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
     );
   }
 
+ public onOutBoxReadMessageClicked(valueEmitted: number) {
+    this.outboxCount -= valueEmitted
+  }
+
   onChangeTab(event) {
     this.showDraftTab = false;
     this.showInboxTab = false;
