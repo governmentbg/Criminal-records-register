@@ -27,13 +27,15 @@ export class InternalRequestResolver implements Resolve<any> {
   ): Observable<any> {
     let id = route.params["ID"];
     let isEdit = route.data["edit"];
+    let bulletinId = route.queryParams["bulletinId"];
     let element = isEdit ? this.service.find(id) : of(null);
-
+    
     let result: InternalRequestResolverData = {
       element: element,
       requestTypes: this.nomenclatureService.getInternalRequestTypes(),
       csAuthorities: this.nomenclatureService.getCsAuthorities(),
       personBulletins: this.service.getSelectedBulltins(id),
+      bulletinInfo: this.service.getBulletinWithPidData(bulletinId)
     };
     return forkJoin(result);
   }
@@ -43,4 +45,5 @@ export class InternalRequestResolverData extends BaseResolverData<InternalReques
   public requestTypes: Observable<BaseNomenclatureModel[]>;
   public csAuthorities: Observable<BaseNomenclatureModel[]>;
   public personBulletins: Observable<PersonBulletinsGridModel[]>;
+  public bulletinInfo: Observable<PersonBulletinsGridModel>;
 }

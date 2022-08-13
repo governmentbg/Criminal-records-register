@@ -115,6 +115,7 @@
           [addRowEmptyTemplate]="emptyTemplate"
           displayDensity="compact"
           (onRowDeleted)="onBulletinDeleted($event)"
+          (rendered)="onBulletinGridRendered()"
         >
           <igx-column
             field="id"

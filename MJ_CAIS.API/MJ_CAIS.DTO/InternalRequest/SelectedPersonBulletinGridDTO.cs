@@ -10,5 +10,7 @@
         public string? BulletinAuthorityId { get; set; }
         public string? BulletinType { get; set; }
         public string? Remarks { get; set; }
+        public string? PidId  { get; set; }
+        public string? Pid  { get; set; }
     }
 }

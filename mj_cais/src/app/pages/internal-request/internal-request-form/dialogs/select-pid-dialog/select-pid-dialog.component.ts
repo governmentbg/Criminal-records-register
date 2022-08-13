@@ -38,7 +38,6 @@ export class SelectPidDialogComponent extends RemoteGridWithStatePersistance<
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.loaderService.showSpinner(this.remoteService);
   }
   handleRowSelection(event) {
     let selectedId = event.newSelection[0];

@@ -108,5 +108,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = this._internalRequestService.GetPersonBulletins(personId);
             return Ok(result);
         }
+
+        [HttpGet("bulletin-with-pid/{bulletinId}")]
+        public async Task<IActionResult> GetBulletinWithPid(string bulletinId)
+        {
+            var result = await this._internalRequestService.GetBulletinWithPidDataAsync(bulletinId);
+            return Ok(result);
+        }
     }
 }

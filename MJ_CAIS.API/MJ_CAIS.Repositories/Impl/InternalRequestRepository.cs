@@ -37,7 +37,7 @@ namespace MJ_CAIS.Repositories.Impl
             var query = this._dbContext.NInternalRequests.AsNoTracking()
                  .Include(x => x.ReqStatusCodeNavigation)
                  .Include(x => x.FromAuthority);
- 
+
             return query;
         }
 
@@ -215,6 +215,85 @@ namespace MJ_CAIS.Repositories.Impl
                         };
 
             return query;
+        }
+
+        public async Task<SelectedPersonBulletinGridDTO> GetBulletinWithPidDataAsync(string aId)
+        {
+            var bulletin = await (from bulletins in _dbContext.BBulletins.AsNoTracking()
+                                  join status in _dbContext.BBulletinStatuses.AsNoTracking() on bulletins.StatusId equals status.Code
+
+                                  join auth in _dbContext.GDecidingAuthorities.AsNoTracking() on bulletins.BulletinAuthorityId equals auth.Id
+                                  into authLeft
+                                  from auth in authLeft.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      BulletinId = bulletins.Id,
+                                      BulletinType = bulletins.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                     bulletins.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                     BulletinResources.Unspecified,
+                                      RegistrationNumber = bulletins.RegistrationNumber,
+                                      StatusId = bulletins.StatusId,
+                                      CreatedOn = bulletins.CreatedOn,
+                                      BulletinAuthorityId = bulletins.BulletinAuthorityId,
+                                      Version = bulletins.Version,
+                                      BulletinAuthorityName = auth.Name,
+                                      StatusName = status.Name,
+                                      EgnId = bulletins.EgnId,
+                                      Egn = bulletins.Egn,
+                                      LnchId = bulletins.LnchId,
+                                      Lnch = bulletins.Lnch,
+                                      LnId = bulletins.LnId,
+                                      Ln = bulletins.Ln,
+                                      IdDocNumberId = bulletins.IdDocNumberId,
+                                      IdDocNumber = bulletins.IdDocNumber,
+                                      SuidId = bulletins.SuidId,
+                                      Suid = bulletins.Suid,
+                                  }).FirstOrDefaultAsync(x => x.BulletinId == aId);
+
+            var result = new SelectedPersonBulletinGridDTO
+            {
+                BulletinId = bulletin.BulletinId,
+                BulletinType = bulletin.BulletinType,
+                RegistrationNumber = bulletin.RegistrationNumber,
+                StatusId = bulletin.StatusId,
+                CreatedOn = bulletin.CreatedOn,
+                BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                Version = bulletin.Version,
+                BulletinAuthorityName = bulletin.BulletinAuthorityName,
+                StatusName = bulletin.StatusName,
+            };
+
+            var pidId = string.Empty;
+            var pid = string.Empty;
+            if (!string.IsNullOrEmpty(bulletin.EgnId))
+            {
+                pidId = bulletin.EgnId;
+                pid = bulletin.Egn;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.LnchId))
+            {
+                pidId = bulletin.LnchId;
+                pid = bulletin.Lnch;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.LnId))
+            {
+                pidId = bulletin.LnId;
+                pid = bulletin.Ln;
+            }
+            else if (!string.IsNullOrEmpty(bulletin.IdDocNumberId))
+            {
+                pidId = bulletin.IdDocNumberId;
+                pid = bulletin.IdDocNumber;
+            }
+            else
+            {
+                pidId = bulletin.SuidId;
+                pid = bulletin.Suid;
+            }
+
+            result.PidId = pidId;
+            result.Pid = pid;
+            return result;
         }
     }
 }

@@ -13,6 +13,7 @@ import { InternalRequestModel } from "./_models/internal-request.model";
 import { IgxGridComponent } from "@infragistics/igniteui-angular";
 import { PersonBulletinsGridModel } from "./_models/person-bulletin-grid-model";
 import { Guid } from "guid-typescript";
+import { InternalRequestTypeCodeConstants } from "./_models/internal-request-type-code.constants";
 
 @Component({
   selector: "cais-internal-request-form",
@@ -50,8 +51,8 @@ export class InternalRequestFormComponent
     read: IgxGridComponent,
   })
   public personBulletinsGrid: IgxGridComponent;
-
   public dbData: any;
+
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
@@ -59,31 +60,22 @@ export class InternalRequestFormComponent
     this.requestStatusCode = this.fullForm.reqStatusCode.value;
     this.personBulletins = this.dbData.personBulletins;
 
+    // when has create from bulletin
+    if (this.dbData.bulletinInfo) {
+      this.fullForm.nIntReqTypeId.patchValue(
+        InternalRequestTypeCodeConstants.Rehabilitation
+      );
+      this.setPidData();
+    }
+
     // this is replay
     if (this.requestStatusCode == InternalRequestStatusCodeConstants.Sent) {
-      this.fullForm.group.disable();
-      this.fullForm.responseDescr.enable();
-      this.fullForm.responseDescr.setValidators(Validators.required);
-
-      if (this.isEdit()) {
-        this.showReplayBtn = true;
-        this.title = "Отговор на заявка";
-      }
-
-      // check before change prop
-      if (this.isForPreview) {
-        this.showReplayBtn = false;
-        this.title = "Преглед на заявка";
-      }
-
-      this.formFinishedLoading.emit();
-
-      this.isForPreview = true;
+      this.initDataForSend();
     } else {
       if (this.isEdit()) {
         this.canEditGrid = true;
         this.title = "Редакция на заявка";
-      }else{
+      } else {
         this.canEditGrid = true;
       }
 
@@ -131,7 +123,6 @@ export class InternalRequestFormComponent
 
     this.service.replay(this.fullForm.id.value, replayObj).subscribe(
       (res) => {
-        debugger;
         this.loaderService.hide();
         this.toastr.showToast("success", "Успешно изпратена заявка");
         let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
@@ -163,7 +154,7 @@ export class InternalRequestFormComponent
       .subscribe(
         (res) => {
           this.loaderService.hide();
-          this.toastr.showToast("success", "Успешно изпратена заявка");        
+          this.toastr.showToast("success", "Успешно изпратена заявка");
           this.router.navigate(["pages/internal-requests"], {
             queryParams: { activeTab: "draft" },
           });
@@ -202,7 +193,6 @@ export class InternalRequestFormComponent
       this.fullForm.pPersIdId.setValue(item.id, item.pid);
       // call service for bulletins
       this.service.getBulletinForPerson(item.id).subscribe((response) => {
-        debugger;
         // if select new person, delete old bulletins
         if (oldSelectedPid != item.id) {
           this.deleteOldBulletins();
@@ -215,10 +205,46 @@ export class InternalRequestFormComponent
     }
   };
 
+  private initDataForSend() {
+    this.fullForm.group.disable();
+    this.fullForm.responseDescr.enable();
+    this.fullForm.responseDescr.setValidators(Validators.required);
+
+    if (this.isEdit()) {
+      this.showReplayBtn = true;
+      this.title = "Отговор на заявка";
+    }
+
+    // check before change prop
+    if (this.isForPreview) {
+      this.showReplayBtn = false;
+      this.title = "Преглед на заявка";
+    }
+
+    this.formFinishedLoading.emit();
+    this.isForPreview = true;
+  }
+
   public onBulletinDeleted(rowContext) {
     let pk = rowContext.data.id;
     this.personBulletins = this.personBulletinsGrid.data.filter(
       (d) => d.id != pk
+    );
+  }
+
+  public onBulletinGridRendered() {
+    if (this.dbData.bulletinInfo) {
+      var guid = Guid.create().toString();
+      let newBulletin = this.dbData.bulletinInfo;
+      newBulletin.id = guid;
+      this.personBulletinsGrid.addRow(newBulletin);
+    }
+  }
+
+  private setPidData() {
+    this.fullForm.pPersIdId.setValue(
+      this.dbData.bulletinInfo.pidId,
+      this.dbData.bulletinInfo.pid
     );
   }
 

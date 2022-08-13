@@ -8,6 +8,8 @@ export class PersonBulletinsGridModel extends BaseModel {
   public bulletinType: string = null;
   public remarks: string = null;
   public bulletinId: string = null;
+  public pidId: string = null;
+  public pid: string = null;
 
   constructor(init?: Partial<PersonBulletinsGridModel>) {
     super(init);
@@ -18,5 +20,7 @@ export class PersonBulletinsGridModel extends BaseModel {
     this.bulletinType = init?.bulletinType ?? null;
     this.remarks = init?.remarks ?? null;
     this.bulletinId = init?.bulletinId ?? null;
+    this.pidId = init?.pidId ?? null;
+    this.pid = init?.pid ?? null;
   }
 }

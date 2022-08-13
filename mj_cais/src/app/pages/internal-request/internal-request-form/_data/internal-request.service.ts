@@ -40,7 +40,6 @@ export class InternalRequestService extends CaisCrudService<
   }
 
   public getSelectedBulltins(id: string){
-    debugger;
     if(id){
       return this.http.get<PersonBulletinsGridModel[]>(
         `${this.url}/selected-bulletins/${id}/`
@@ -48,5 +47,15 @@ export class InternalRequestService extends CaisCrudService<
     }
 
     return of([]);
+  }
+
+  public getBulletinWithPidData(bulletinId){
+    if(bulletinId){
+      return this.http.get<PersonBulletinsGridModel>(
+        `${this.url}/bulletin-with-pid/${bulletinId}/`
+      );
+    }
+
+    return of(null);
   }
 }

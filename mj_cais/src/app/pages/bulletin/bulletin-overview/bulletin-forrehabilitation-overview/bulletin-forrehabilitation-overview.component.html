@@ -49,11 +49,11 @@
     [sortable]="true"
     [dataType]="'date'"
   >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDate(cell.value)">
-      {{ this.dateFormatService.displayDate(cell.value) }}
-    </span>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
   </igx-column>
   <igx-column
     field="createdOn"
@@ -61,11 +61,11 @@
     [sortable]="true"
     [dataType]="'date'"
   >
-  <ng-template igxCell let-cell="cell">
-    <span [title]="this.dateFormatService.displayDate(cell.value)">
-      {{ this.dateFormatService.displayDate(cell.value) }}
-    </span>
-  </ng-template>
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
   </igx-column>
 
   <igx-column
@@ -126,7 +126,8 @@
       <mat-menu #menu="matMenu">
         <button
           mat-menu-item
-          [routerLink]="['/pages/internal-requests/create', cell.rowData.id]"
+          [queryParams]="{ bulletinId: cell.rowData.id }"
+          [routerLink]="['/pages/internal-requests/create']"
         >
           <span class="ml-1">Създай заявка</span>
         </button>

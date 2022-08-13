@@ -24,5 +24,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<SelectedPersonBulletinGridDTO> GetPersonBulletins(string personId);
 
         IQueryable<SelectedPersonBulletinGridDTO> GetSelectedBulletins(string aId);
+
+        Task<SelectedPersonBulletinGridDTO> GetBulletinWithPidDataAsync(string aId);
     }
 }
