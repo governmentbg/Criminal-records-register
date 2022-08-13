@@ -9,6 +9,8 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth);
 
+        Task<IgPageResult<SelectPidGridDTO>> SelectAllPidsForSelectionWithPaginationAsync(ODataQueryOptions<SelectPidGridDTO> aQueryOptions);
+
         Task ChangeStatusAsync(string aId, string status);
 
         Task<RequestCountDTO> GetInternalRequestsCount();
@@ -16,5 +18,9 @@ namespace MJ_CAIS.Services.Contracts
         Task ReplayAsync(string aId, bool accepted, string responseDesc);
 
         Task MarkAsReaded(List<string> ids);
+
+        IQueryable<SelectedPersonBulletinGridDTO> GetPersonBulletins(string personId);
+
+        IQueryable<SelectedPersonBulletinGridDTO> GetSelectedBulletins(string aId);
     }
 }

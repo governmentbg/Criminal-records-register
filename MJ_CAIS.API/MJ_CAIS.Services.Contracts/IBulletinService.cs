@@ -22,10 +22,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto);
 
-        //Task DeleteDocumentAsync(string documentId);
-
-       // Task<DocumentDTO> GetDocumentContentAsync(string documentId);
-
         Task<IQueryable<PersonAliasDTO>> GetPersonAliasByBulletinIdAsync(string aId);
 
         Task<string> InsertAsync(BulletinAddDTO aInDto);

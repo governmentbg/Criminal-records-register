@@ -1,7 +1,8 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { InternalRequestModel } from "../_models/internal-request.model";
+import { PersonBulletinsGridModel } from "../_models/person-bulletin-grid-model";
 
 @Injectable({
   providedIn: "root",
@@ -28,5 +29,24 @@ export class InternalRequestService extends CaisCrudService<
 
   public getRequestsCount() {
     return this.http.get<any>(`${this.url}/requests-count`);
+  }
+
+  public getBulletinForPerson(
+    id: string
+  ): Observable<PersonBulletinsGridModel[]> {
+    return this.http.get<PersonBulletinsGridModel[]>(
+      `${this.url}/person-bulletins/${id}`
+    );
+  }
+
+  public getSelectedBulltins(id: string){
+    debugger;
+    if(id){
+      return this.http.get<PersonBulletinsGridModel[]>(
+        `${this.url}/selected-bulletins/${id}/`
+      );
+    }
+
+    return of([]);
   }
 }

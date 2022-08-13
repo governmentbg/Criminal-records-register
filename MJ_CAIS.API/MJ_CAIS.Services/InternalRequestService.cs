@@ -10,7 +10,6 @@ using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
-using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -39,6 +38,12 @@ namespace MJ_CAIS.Services
         public async Task<RequestCountDTO> GetInternalRequestsCount()
             => await _internalRequestRepository.GetInternalRequestsCountAsync();
 
+        public IQueryable<SelectedPersonBulletinGridDTO> GetPersonBulletins(string personId)
+            => _internalRequestRepository.GetPersonBulletins(personId);
+
+        public IQueryable<SelectedPersonBulletinGridDTO> GetSelectedBulletins(string aId)
+            => _internalRequestRepository.GetSelectedBulletins(aId);
+
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {
             var entityQuery = this.GetSelectAllQueryable();
@@ -62,12 +67,26 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
+        public async Task<IgPageResult<SelectPidGridDTO>> SelectAllPidsForSelectionWithPaginationAsync(ODataQueryOptions<SelectPidGridDTO> aQueryOptions)
+        {
+            var entityQuery = _internalRequestRepository.SelectAllPidsForSelection();
+            var resultQuery = await this.ApplyOData(entityQuery, aQueryOptions);
+            var pageResult = new IgPageResult<SelectPidGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, entityQuery, resultQuery);
+            return pageResult;
+        }
+
         public override async Task<string> InsertAsync(InternalRequestDTO aInDto)
         {
             aInDto.ReqStatusCode = InternalRequestStatusTypeConstants.Draft;
             aInDto.FromAuthorityId = _userContext.CsAuthorityId;
             aInDto.RegNumber = await _registerTypeService.GetRegisterNumberForInternalRequest(_userContext.CsAuthorityId);
-            return await base.InsertAsync(aInDto);
+
+            var entity = mapper.MapToEntity<InternalRequestDTO, NInternalRequest>(aInDto, isAdded: true);
+            entity.NInternalReqBulletins = mapper.MapTransactions<SelectedPersonBulletinGridDTO, NInternalReqBulletin>(aInDto.SelectedBulletinsTransactions);
+
+            await this.SaveEntityAsync(entity, true);
+            return entity.Id;
         }
 
         public override async Task UpdateAsync(string aId, InternalRequestDTO aInDto)
@@ -81,13 +100,14 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(BusinessLogicExceptionResources.mgsNotAllowedToEditRequest);
 
             var entity = mapper.MapToEntity<InternalRequestDTO, NInternalRequest>(aInDto, false);
+            entity.NInternalReqBulletins = mapper.MapTransactions<SelectedPersonBulletinGridDTO, NInternalReqBulletin>(aInDto.SelectedBulletinsTransactions);
 
             await _internalRequestRepository.SaveEntityAsync(entity, true);
         }
 
         public override async Task DeleteAsync(string aId)
         {
-            var dbEntity = await _internalRequestRepository.SingleOrDefaultAsync<NInternalRequest>(x => x.Id == aId);
+            var dbEntity = await _internalRequestRepository.SelectForDeleteAsync(aId);
 
             if (dbEntity == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgRequestDoesNotExist, aId));
@@ -96,7 +116,13 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(BusinessLogicExceptionResources.mgsNotAllowedToDeleteRequest);
 
             dbEntity.EntityState = EntityStateEnum.Deleted;
-            await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
+
+            foreach (var bulletin in dbEntity.NInternalReqBulletins)
+            {
+                bulletin.EntityState = EntityStateEnum.Deleted;
+            }
+
+            await _internalRequestRepository.SaveEntityAsync(dbEntity, true);
         }
 
 

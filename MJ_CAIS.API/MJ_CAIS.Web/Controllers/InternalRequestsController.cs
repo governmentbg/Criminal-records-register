@@ -40,6 +40,13 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("selected-bulletins/{aId}")]
+        public IActionResult GetSelectedBulletins(string aId)
+        {
+            var result = this._internalRequestService.GetSelectedBulletins(aId);
+            return Ok(result);
+        }
+
         [HttpPost("")]
         public new async Task<IActionResult> Post([FromBody] InternalRequestDTO aInDto)
         {
@@ -78,6 +85,20 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._internalRequestService.MarkAsReaded(ids);
             return Ok();
-        }      
+        }
+
+        [HttpGet("get-pids-for-selection-dialog")]
+        public async Task<IActionResult> GetAllPidsForSelection(ODataQueryOptions<SelectPidGridDTO> aQueryOptions)
+        {
+            var result = await this._internalRequestService.SelectAllPidsForSelectionWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
+        [HttpGet("person-bulletins/{personId}")]
+        public IActionResult GetPersonBulletins(string personId)
+        {
+            var result = this._internalRequestService.GetPersonBulletins(personId);
+            return Ok(result);
+        }
     }
 }

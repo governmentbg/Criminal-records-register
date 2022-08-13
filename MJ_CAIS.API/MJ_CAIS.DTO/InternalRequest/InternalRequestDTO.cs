@@ -14,5 +14,7 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string? FromAuthorityId { get; set; }
         public string? ToAuthorityId { get; set; }
         public string NIntReqTypeId { get; set; }
+        public List<TransactionDTO<SelectedPersonBulletinGridDTO>> SelectedBulletinsTransactions { get; set; }
+
     }
 }

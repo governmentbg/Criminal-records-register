@@ -9,6 +9,7 @@ import { BaseResolverData } from "../../../../@core/models/common/base-resolver.
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { InternalRequestModel } from "../_models/internal-request.model";
+import { PersonBulletinsGridModel } from "../_models/person-bulletin-grid-model";
 import { InternalRequestService } from "./internal-request.service";
 
 @Injectable({
@@ -32,6 +33,7 @@ export class InternalRequestResolver implements Resolve<any> {
       element: element,
       requestTypes: this.nomenclatureService.getInternalRequestTypes(),
       csAuthorities: this.nomenclatureService.getCsAuthorities(),
+      personBulletins: this.service.getSelectedBulltins(id),
     };
     return forkJoin(result);
   }
@@ -40,4 +42,5 @@ export class InternalRequestResolver implements Resolve<any> {
 export class InternalRequestResolverData extends BaseResolverData<InternalRequestModel> {
   public requestTypes: Observable<BaseNomenclatureModel[]>;
   public csAuthorities: Observable<BaseNomenclatureModel[]>;
+  public personBulletins: Observable<PersonBulletinsGridModel[]>;
 }

@@ -7,6 +7,15 @@ namespace MJ_CAIS.Repositories.Contracts
     public interface IInternalRequestRepository : IBaseAsyncRepository<NInternalRequest, string, CaisDbContext>
     {
         IQueryable<NInternalRequest> SelectAllByIdsAsync(List<string> ids);
+
+        Task<NInternalRequest> SelectForDeleteAsync(string id);
+
         Task<RequestCountDTO> GetInternalRequestsCountAsync();
+
+        IQueryable<SelectPidGridDTO> SelectAllPidsForSelection();
+
+        IQueryable<SelectedPersonBulletinGridDTO> GetPersonBulletins(string personId);
+
+        IQueryable<SelectedPersonBulletinGridDTO> GetSelectedBulletins(string aId);
     }
 }

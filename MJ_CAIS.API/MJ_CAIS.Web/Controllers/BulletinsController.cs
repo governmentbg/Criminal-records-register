@@ -32,7 +32,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("getAll")]
-        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")] // todo: remove ??
         public async Task<IActionResult> GetAllNoWrap(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._bulletinService.SelectAllNoWrapAsync(aQueryOptions, statusId);

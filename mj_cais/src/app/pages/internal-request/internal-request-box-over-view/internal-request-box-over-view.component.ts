@@ -21,7 +21,7 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
   public inboxCount: number = 0;
   public outboxCount: number = 0;
 
-  public titleDraft = "Съдадени заявки";
+  public titleDraft = "Създадени заявки";
   public titleInbox = "Получени и необработени заявки";
   public titleOutbox = "Изпратени и обработени от получателя";
   public title = this.titleDraft;
