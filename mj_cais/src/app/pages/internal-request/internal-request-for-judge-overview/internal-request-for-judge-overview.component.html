@@ -73,8 +73,8 @@
     </ng-template>
   </igx-column>
   <igx-column
-    field="toAuthorityName"
-    header="До бюро съдимост"
+    field="fromAuthorityName"
+    header="От бюро съдимост"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -93,7 +93,7 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
-        [queryParams]="{ activeTab: 'inbox' }"
+        [queryParams]="{ activeTab: 'for-judge' }"
         [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
@@ -101,7 +101,7 @@
       <a
         *ngIf="hideStatus"
         [title]="'Обработка'"
-        [queryParams]="{ activeTab: 'inbox' }"
+        [queryParams]="{ activeTab: 'for-judge' }"
         [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
       >
         <nb-icon pack="far" icon="paper-plane"></nb-icon>

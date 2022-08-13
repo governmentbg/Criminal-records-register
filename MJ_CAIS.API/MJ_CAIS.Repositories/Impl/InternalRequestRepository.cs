@@ -5,6 +5,7 @@ using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
 using MJ_CAIS.Repositories.Contracts;
+using static MJ_CAIS.Common.Constants.InternalRequestConstants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -31,6 +32,15 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<NInternalRequest> SelectAllForJudge()
+        {
+            var query = this._dbContext.NInternalRequests.AsNoTracking()
+                 .Include(x => x.ReqStatusCodeNavigation)
+                 .Include(x => x.FromAuthority);
+ 
+            return query;
+        }
+
         public override async Task<NInternalRequest> SelectAsync(string id)
         {
             return await this._dbContext.NInternalRequests.AsNoTracking()
@@ -50,11 +60,11 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<RequestCountDTO> GetInternalRequestsCountAsync()
         {
             var inboxCount = await _dbContext.NInternalRequests.AsNoTracking()
-                .CountAsync(x => x.ReqStatusCode == InternalRequestStatusTypeConstants.Sent && x.ToAuthorityId == _userContext.CsAuthorityId);
+                .CountAsync(x => x.ReqStatusCode == Status.Sent && x.ToAuthorityId == _userContext.CsAuthorityId);
 
             var outboxCount = await _dbContext.NInternalRequests.AsNoTracking()
-                .CountAsync(x => (x.ReqStatusCode == InternalRequestStatusTypeConstants.Cancelled ||
-                    x.ReqStatusCode == InternalRequestStatusTypeConstants.Ready) &&
+                .CountAsync(x => (x.ReqStatusCode == Status.Cancelled ||
+                    x.ReqStatusCode == Status.Ready) &&
                  x.FromAuthorityId == _userContext.CsAuthorityId);
 
 

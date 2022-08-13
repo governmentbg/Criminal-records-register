@@ -27,6 +27,14 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("for-judge")]
+        [Authorize(Roles = $"{RoleConstants.Judge}")]
+        public async Task<IActionResult> GetAllForJudge(ODataQueryOptions<InternalRequestForJudgeGridDTO> aQueryOptions, string statuses, bool fromAuth)
+        {
+            var result = await this._internalRequestService.SelectAllForJudgeWithPaginationAsync(aQueryOptions, statuses);
+            return Ok(result);
+        }
+
         [HttpGet("requests-count")]
         public async Task<IActionResult> GetRequestCount()
         {

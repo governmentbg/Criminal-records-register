@@ -83,6 +83,8 @@ export class InternalRequestFormComponent
       if (this.isEdit()) {
         this.canEditGrid = true;
         this.title = "Редакция на заявка";
+      }else{
+        this.canEditGrid = true;
       }
 
       if (this.isForPreview) {
@@ -129,9 +131,19 @@ export class InternalRequestFormComponent
 
     this.service.replay(this.fullForm.id.value, replayObj).subscribe(
       (res) => {
+        debugger;
         this.loaderService.hide();
-
         this.toastr.showToast("success", "Успешно изпратена заявка");
+        let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
+        // is opened by judge
+        if (activeTab) {
+          if (activeTab == "for-judge") {
+            this.router.navigateByUrl("pages/internal-requests/for-judge");
+            return;
+          }
+        }
+
+        // is normal employee
         this.router.navigate(["pages/internal-requests"], {
           queryParams: { activeTab: "inbox" },
         });
@@ -151,7 +163,7 @@ export class InternalRequestFormComponent
       .subscribe(
         (res) => {
           this.loaderService.hide();
-          this.toastr.showToast("success", "Успешно изпратена заявка");
+          this.toastr.showToast("success", "Успешно изпратена заявка");        
           this.router.navigate(["pages/internal-requests"], {
             queryParams: { activeTab: "draft" },
           });
@@ -164,13 +176,17 @@ export class InternalRequestFormComponent
 
   public onCancelFunction = () => {
     let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
+    let url = "pages/internal-requests?activeTab=draft";
+
     if (activeTab) {
-      this.router.navigateByUrl(
-        `pages/internal-requests?activeTab=${activeTab}`
-      );
-    } else {
-      this.router.navigateByUrl(`pages/internal-requests?activeTab=draft`);
+      if (activeTab == "for-judge") {
+        url = "pages/internal-requests/for-judge";
+      } else {
+        url = `pages/internal-requests?activeTab=${activeTab}`;
+      }
     }
+
+    this.router.navigateByUrl(url);
   };
 
   public openPidDialog = () => {

@@ -17,5 +17,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<SelectedPersonBulletinGridDTO> GetPersonBulletins(string personId);
 
         IQueryable<SelectedPersonBulletinGridDTO> GetSelectedBulletins(string aId);
+
+        IQueryable<NInternalRequest> SelectAllForJudge();
     }
 }
