@@ -1,15 +1,19 @@
-import { Component, Injector, OnInit } from "@angular/core";
+import { Component, Injector, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
-import { SelectPidDialogComponent } from "../../../@core/components/dialogs/select-pid-dialog/select-pid-dialog.component";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { SelectPidDialogComponent } from "./dialogs/select-pid-dialog/select-pid-dialog.component";
 import { InternalRequestResolverData } from "./_data/internal-request.resolver";
 import { InternalRequestService } from "./_data/internal-request.service";
 import { InternalRequestStatusCodeConstants } from "./_models/internal-request-status-code.constants";
 import { InternalRequestForm } from "./_models/internal-request.form";
 import { InternalRequestModel } from "./_models/internal-request.model";
+import { IgxGridComponent } from "@infragistics/igniteui-angular";
+import { PersonBulletinsGridModel } from "./_models/person-bulletin-grid-model";
+import { Guid } from "guid-typescript";
+import { InternalRequestTypeCodeConstants } from "./_models/internal-request-type-code.constants";
 
 @Component({
   selector: "cais-internal-request-form",
@@ -39,36 +43,40 @@ export class InternalRequestFormComponent
     InternalRequestStatusCodeConstants;
   public requestStatusCode;
   public showReplayBtn: boolean = false;
+  public canEditGrid: boolean = false;
+
+  public personBulletinsGridTransactions: string;
+  public personBulletins: PersonBulletinsGridModel[];
+  @ViewChild("personBulletinsGrid", {
+    read: IgxGridComponent,
+  })
+  public personBulletinsGrid: IgxGridComponent;
+  public dbData: any;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
     this.fullForm.group.patchValue(this.dbData.element);
     this.fullForm.regNumberDisplay.patchValue(this.fullForm.regNumber.value);
     this.requestStatusCode = this.fullForm.reqStatusCode.value;
+    this.personBulletins = this.dbData.personBulletins;
+
+    // when has create from bulletin
+    if (this.dbData.bulletinInfo) {
+      this.fullForm.nIntReqTypeId.patchValue(
+        InternalRequestTypeCodeConstants.Rehabilitation
+      );
+      this.setPidData();
+    }
 
     // this is replay
     if (this.requestStatusCode == InternalRequestStatusCodeConstants.Sent) {
-      this.fullForm.group.disable();
-      this.fullForm.responseDescr.enable();
-      this.fullForm.responseDescr.setValidators(Validators.required);
-
-      if (this.isEdit()) {
-        this.showReplayBtn = true;
-        this.title = "Отговор на заявка";
-      }
-
-      // check before change prop
-      if (this.isForPreview) {
-        this.showReplayBtn = false;
-        this.title = "Преглед на заявка";
-      }
-
-      this.formFinishedLoading.emit();
-
-      this.isForPreview = true;
+      this.initDataForSend();
     } else {
       if (this.isEdit()) {
+        this.canEditGrid = true;
         this.title = "Редакция на заявка";
+      } else {
+        this.canEditGrid = true;
       }
 
       if (this.isForPreview) {
@@ -87,11 +95,20 @@ export class InternalRequestFormComponent
   }
 
   submitFunction = () => {
+    if (this.personBulletinsGrid) {
+      let selectedBulletinsTransaction =
+        this.personBulletinsGrid.transactions.getAggregatedChanges(true);
+
+      this.fullForm.selectedBulletinsTransactions.setValue(
+        selectedBulletinsTransaction
+      );
+    } else {
+      this.fullForm.selectedBulletinsTransactions.setValue([]);
+    }
     this.validateAndSave(this.fullForm);
   };
 
   replay(accepted) {
-    debugger;
     if (!this.fullForm.responseDescr.valid) {
       this.fullForm.responseDescr.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");
@@ -107,15 +124,61 @@ export class InternalRequestFormComponent
     this.service.replay(this.fullForm.id.value, replayObj).subscribe(
       (res) => {
         this.loaderService.hide();
-
         this.toastr.showToast("success", "Успешно изпратена заявка");
-        this.router.navigate(["pages/internal-requests"]);
+        let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
+        // is opened by judge
+        if (activeTab) {
+          if (activeTab == "for-judge") {
+            this.router.navigateByUrl("pages/internal-requests/for-judge");
+            return;
+          }
+        }
+
+        // is normal employee
+        this.router.navigate(["pages/internal-requests"], {
+          queryParams: { activeTab: "inbox" },
+        });
       },
       (error) => {
         this.onServiceError(error);
       }
     );
   }
+
+  public send() {
+    this.service
+      .changeStatus(
+        this.fullForm.id.value,
+        InternalRequestStatusCodeConstants.Sent
+      )
+      .subscribe(
+        (res) => {
+          this.loaderService.hide();
+          this.toastr.showToast("success", "Успешно изпратена заявка");
+          this.router.navigate(["pages/internal-requests"], {
+            queryParams: { activeTab: "draft" },
+          });
+        },
+        (error) => {
+          this.onServiceError(error);
+        }
+      );
+  }
+
+  public onCancelFunction = () => {
+    let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
+    let url = "pages/internal-requests?activeTab=draft";
+
+    if (activeTab) {
+      if (activeTab == "for-judge") {
+        url = "pages/internal-requests/for-judge";
+      } else {
+        url = `pages/internal-requests?activeTab=${activeTab}`;
+      }
+    }
+
+    this.router.navigateByUrl(url);
+  };
 
   public openPidDialog = () => {
     this.dialogService
@@ -125,28 +188,97 @@ export class InternalRequestFormComponent
 
   public onSelectPid = (item) => {
     if (item) {
+      this.loaderService.show();
+      let oldSelectedPid = this.fullForm.pPersIdId.id.value;
       this.fullForm.pPersIdId.setValue(item.id, item.pid);
+      // call service for bulletins
+      this.service.getBulletinForPerson(item.id).subscribe((response) => {
+        // if select new person, delete old bulletins
+        if (oldSelectedPid != item.id) {
+          this.deleteOldBulletins();
+        }
+
+        // add or update person bulletins
+        this.addOrUpdateBulletins(response);
+        this.loaderService.hide();
+      });
     }
   };
 
-  public send() {
-    this.changeStatus(
-      this.fullForm.id.value,
-      InternalRequestStatusCodeConstants.Sent
+  private initDataForSend() {
+    this.fullForm.group.disable();
+    this.fullForm.responseDescr.enable();
+    this.fullForm.responseDescr.setValidators(Validators.required);
+
+    if (this.isEdit()) {
+      this.showReplayBtn = true;
+      this.title = "Отговор на заявка";
+    }
+
+    // check before change prop
+    if (this.isForPreview) {
+      this.showReplayBtn = false;
+      this.title = "Преглед на заявка";
+    }
+
+    this.formFinishedLoading.emit();
+    this.isForPreview = true;
+  }
+
+  public onBulletinDeleted(rowContext) {
+    let pk = rowContext.data.id;
+    this.personBulletins = this.personBulletinsGrid.data.filter(
+      (d) => d.id != pk
     );
   }
 
-  private changeStatus(id: string, status: string) {
-    this.service.changeStatus(id, status).subscribe(
-      (res) => {
-        this.loaderService.hide();
+  public onBulletinGridRendered() {
+    if (this.dbData.bulletinInfo) {
+      var guid = Guid.create().toString();
+      let newBulletin = this.dbData.bulletinInfo;
+      newBulletin.id = guid;
+      this.personBulletinsGrid.addRow(newBulletin);
+    }
+  }
 
-        this.toastr.showToast("success", "Успешно изпратена заявка");
-        this.router.navigate(["pages/internal-requests"]);
-      },
-      (error) => {
-        this.onServiceError(error);
-      }
+  private setPidData() {
+    this.fullForm.pPersIdId.setValue(
+      this.dbData.bulletinInfo.pidId,
+      this.dbData.bulletinInfo.pid
     );
+  }
+
+  private deleteRow(pk) {
+    this.personBulletinsGrid.deleteRow(pk);
+    this.personBulletinsGrid.data = this.personBulletinsGrid.data.filter(
+      (d) => d.id != pk
+    );
+  }
+
+  private deleteOldBulletins() {
+    this.personBulletinsGrid.groupingFlatResult.forEach((currentBulletins) => {
+      let currentRow = this.personBulletinsGrid.getRowByKey(
+        currentBulletins.id
+      );
+
+      if (currentRow) {
+        let pk = currentBulletins.id;
+        this.deleteRow(pk);
+      }
+    });
+  }
+
+  private addOrUpdateBulletins(response) {
+    response.forEach((bulletin) => {
+      let currentRow = this.personBulletinsGrid.getRowByKey(bulletin.id);
+
+      if (currentRow) {
+        currentRow.update(bulletin);
+      } else {
+        var guid = Guid.create().toString();
+        bulletin.id = guid;
+        this.personBulletinsGrid.addRow(bulletin);
+      }
+    });
   }
 }

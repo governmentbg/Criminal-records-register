@@ -1,4 +1,4 @@
-﻿namespace MJ_CAIS.DTO.Person
+﻿namespace MJ_CAIS.DTO.InternalRequest
 {
     public class SelectPidGridDTO : BaseGridDTO
     {

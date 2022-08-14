@@ -137,7 +137,7 @@ export class PagesMenu {
         children: [
           {
             title: "Заявки за реабилитация",
-            link: "/pages/internal-requests",
+            link: "/pages/internal-requests/for-judge",
           },
           {
             title: "Oсвободени от плащане",

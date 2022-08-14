@@ -41,8 +41,8 @@ export class InternalRequestInboxOverviewComponent extends RemoteGridWithStatePe
     this.ngOnInit();
   }
 
-  refresh() {
-    this.loaderService.showSpinner(this.service);
-    super.ngOnInit();
-  }
+  // refresh() {
+  //   this.loaderService.showSpinner(this.service);
+  //   super.ngOnInit();
+  // }
 }
