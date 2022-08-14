@@ -11,7 +11,7 @@
         public string? lname { get; set; }
         public string threshold { get; set; }
 
-        public string fullname { get { return fname + " " + sname + " " + lname; } }
+       // public string fullname { get { return fname + " " + sname + " " + lname; } }
         public Dictionary<string, string?> GetKeyValuePairs()
         {
             var properties = this.GetType().GetProperties();
