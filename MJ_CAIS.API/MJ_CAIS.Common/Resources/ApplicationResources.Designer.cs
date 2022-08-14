@@ -241,6 +241,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заявление с идентификатор {0} не съществува.
+        /// </summary>
+        public static string msgApplicationDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgApplicationDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to При избор на &quot;Освободено от плащане&quot; трябва да прикачите документ удостоверяващ това право..
         /// </summary>
         public static string msgPaymentFreeInfo {

@@ -117,6 +117,9 @@ namespace MJ_CAIS.Services
             if (dbEntity.ReqStatusCode != Status.Draft)
                 throw new BusinessLogicException(BusinessLogicExceptionResources.mgsNotAllowedToEditRequest);
 
+            if (aInDto.ReqStatusCode == Status.Sent && dbEntity.ReqStatusCode != Status.Draft)
+                throw new BusinessLogicException(BusinessLogicExceptionResources.msgRequestIsNotDraft);
+
             var entity = mapper.MapToEntity<InternalRequestDTO, NInternalRequest>(aInDto, false);
             entity.NInternalReqBulletins = mapper.MapTransactions<SelectedPersonBulletinGridDTO, NInternalReqBulletin>(aInDto.SelectedBulletinsTransactions);
 

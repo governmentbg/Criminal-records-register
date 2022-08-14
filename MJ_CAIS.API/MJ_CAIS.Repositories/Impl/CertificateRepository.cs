@@ -87,6 +87,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<ACertificate> GetCertificateData(string aId)
         {
             return await _dbContext.ACertificates.AsNoTracking()
+                .Include(x => x.Application)
                 .Include(x => x.AAppBulletins)
                 .Where(x => x.Id == aId)
                 .FirstOrDefaultAsync();
