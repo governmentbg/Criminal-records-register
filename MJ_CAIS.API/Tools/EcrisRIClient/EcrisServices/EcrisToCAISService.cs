@@ -72,7 +72,7 @@ namespace EcrisIntegrationServices
                 if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
                     lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
-                    docTypeCode = await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ, _dbContext);
+                    docTypeCode = (await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ, _dbContext)).FirstOrDefault(x=>!x.EndsWith("Old"));
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
 
                 }
@@ -80,7 +80,7 @@ namespace EcrisIntegrationServices
                 {
                     if (messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                     {
-                        docTypeCode = await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
+                        docTypeCode = (await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT, _dbContext)).FirstOrDefault(x=>!x.EndsWith("Old"));
                         lastUpdatedTime = GetLastSynchDateForNotifications(paramNameForSynch);
                         query = GetNotificationsQuery(inboxFolderId, lastUpdatedTime);
 

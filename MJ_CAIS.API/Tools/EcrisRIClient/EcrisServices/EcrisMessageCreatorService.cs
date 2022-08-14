@@ -152,7 +152,7 @@ namespace EcrisIntegrationServices
             _logger.LogTrace($"Notification type: {notificationType}.");
             var ecrisMsgs = await _dbContext.EEcrisMessages
                                 .Include(m=>m.DDocuments)
-                                .Where(em => em.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.Identified && em.MsgTypeId == notificationType && em.FbbcId==null).ToListAsync();
+                                .Where(em => em.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.Identified && notificationType.Contains(em.MsgTypeId) && em.FbbcId==null).ToListAsync();
             if (ecrisMsgs.Count > 0)
             {
                 //todo: тук каква е стойността и от къде се взема?!
