@@ -55,14 +55,13 @@ export class ApplicationCertificateService extends CaisCrudService<
     );
   }
 
-
   public updateStatus(certId: string) {
-    return this.http.get<any>(
-      `${this.url}/updateCertificateStatus/${certId}`
-    );
+    return this.http.get<any>(`${this.url}/updateCertificateStatus/${certId}`);
   }
 
-  public getCertificateByAppId(appId: string) : Observable<ApplicationCertificateResultModel> {
+  public getCertificateByAppId(
+    appId: string
+  ): Observable<ApplicationCertificateResultModel> {
     return this.http.get<ApplicationCertificateResultModel>(
       `${this.url}/by-application/${appId}`
     );
@@ -86,10 +85,11 @@ export class ApplicationCertificateService extends CaisCrudService<
 
   public sendBulletinsForRehabilitation(
     id: string,
+    newRequestId: string,
     ids: string[]
   ): Observable<any> {
     return this.http.put<ApplicationCertificateResultModel>(
-      `${this.url}/${id}/bulletins-rehabilitation`,
+      `${this.url}/${id}/bulletins-rehabilitation/${newRequestId}`,
       ids
     );
   }

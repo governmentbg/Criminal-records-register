@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
@@ -20,12 +21,13 @@ namespace MJ_CAIS.Services
         private readonly IUserContext _userContext;
         private readonly IDDocContentRepository _dDocContentRepository;
         private readonly IMapper _mapper;
-
+        private readonly IRegisterTypeService _registerTypeService;
 
         public CertificateService(IMapper mapper,
             ICertificateRepository certificateRepository,
             IUserContext userContext,
-            IDDocContentRepository dDocContentRepository
+            IDDocContentRepository dDocContentRepository,
+            IRegisterTypeService registerTypeService
             )
             : base(mapper, certificateRepository)
         {
@@ -33,6 +35,7 @@ namespace MJ_CAIS.Services
             _mapper = mapper;
             _userContext = userContext;
             _dDocContentRepository = dDocContentRepository;
+            _registerTypeService = registerTypeService;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
@@ -69,11 +72,11 @@ namespace MJ_CAIS.Services
             }
             certificate.ModifiedProperties.Add(nameof(certificate.StatusCode));
             certificate.ModifiedProperties.Add(nameof(certificate.AStatusHes));
-        
+
             if (newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
             {
                 MoveCertificateToWCertificate(certificate);
-                
+
                 if (certificate.Application == null)
                 {
                     AApplication a = new AApplication();
@@ -81,7 +84,7 @@ namespace MJ_CAIS.Services
                     a.EntityState = Common.Enums.EntityStateEnum.Modified;
                     a.ModifiedProperties = new List<string>() { nameof(a.StatusCode) };
                     a.StatusCode = ApplicationConstants.ApplicationStatuses.DeliveredApplication;
-                    certificate.Application = a;                   
+                    certificate.Application = a;
 
                 }
                 else
@@ -170,7 +173,7 @@ namespace MJ_CAIS.Services
         {
             WCertificate? cert = await baseAsyncRepository.SingleOrDefaultAsync<WCertificate>(w => w.AccessCode1 == accessCode);
 
-            var content = _mapper.Map<WCertificate,WCertificateDTO>(cert);
+            var content = _mapper.Map<WCertificate, WCertificateDTO>(cert);
             return content;
         }
 
@@ -181,7 +184,7 @@ namespace MJ_CAIS.Services
 
             //var dbContext = _certificateRepository.GetDbContext();
             await _certificateRepository.SaveEntityAsync(entity, false, clearTracker: true);
-     
+
         }
 
         public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
@@ -240,10 +243,17 @@ namespace MJ_CAIS.Services
             await _certificateRepository.SaveChangesAsync();
         }
 
-        public async Task SetBulletinsForRehabilitationAsync(string aId, string[] ids)
+        /// <summary>
+        /// newRequestId generated from client
+        /// PUT API Response 201 (Created), 200 (OK) or 204 (No Content) 
+        /// </summary>
+        /// <param name="aId"></param>
+        /// <param name="newRequestId"></param>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        /// <exception cref="BusinessLogicException"></exception>
+        public async Task SetBulletinsForRehabilitationAsync(string aId, string newRequestId, string[] ids)
         {
-            //var dbContext = _certificateRepository.GetDbContext();
-
             ACertificate? certificate = await _certificateRepository.GetCertificateData(aId);
 
             if (certificate == null)
@@ -253,27 +263,58 @@ namespace MJ_CAIS.Services
 
             CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
-            //todo: change
-            var request = new List<IBaseIdEntity>();
-            //var request = new List<BInternalRequest>();
-            //foreach (var appBullId in ids)
-            //{
-            //    request.Add(new BInternalRequest
-            //    {
-            //        Id = BaseEntity.GenerateNewId(),
-            //        BulletinId = certificate.AAppBulletins.FirstOrDefault(x => x.Id == appBullId)?.BulletinId,
-            //        AAppBulletinId = appBullId,
-            //        ReqStatusCode = InternalRequestStatusTypeConstants.New,
-            //        Description = CertificateResources.msgStatusForRehabilitationDesc,
-            //        EntityState = Common.Enums.EntityStateEnum.Added,
-            //        RequestDate = DateTime.Now
-            //    });
-            //}
+            var currentAppl = certificate.Application;
+            if (currentAppl == null)
+                throw new BusinessLogicException(string.Format(ApplicationResources.msgApplicationDoesNotExist, aId));
 
-            _certificateRepository.ApplyChanges(request, new List<IBaseIdEntity>());
+            var pidId = string.Empty;
+
+            if (!string.IsNullOrEmpty(currentAppl.EgnId))
+            {
+                pidId = currentAppl.EgnId;
+            }
+            else if (!string.IsNullOrEmpty(currentAppl.LnchId))
+            {
+                pidId = currentAppl.LnchId;
+            }
+            else if (!string.IsNullOrEmpty(currentAppl.LnId))
+            {
+                pidId = currentAppl.LnId;
+            }
+            else
+            {
+                pidId = currentAppl.SuidId;
+            }
+
+            var regNumberr = await _registerTypeService.GetRegisterNumberForInternalRequest(_userContext.CsAuthorityId);
+
+            var request = new NInternalRequest
+            {
+                Id = newRequestId, // used for redirect
+                RequestDate = DateTime.Now,
+                FromAuthorityId = _userContext.CsAuthorityId,
+                PPersIdId = pidId,
+                ReqStatusCode = InternalRequestConstants.Status.Draft,
+                RegNumber = regNumberr,
+                NIntReqTypeId = InternalRequestConstants.Types.Rehabilitation,
+                EntityState = EntityStateEnum.Added,
+                NInternalReqBulletins = new List<NInternalReqBulletin>()
+            };
+
+            foreach (var appBullId in ids)
+            {
+                request.NInternalReqBulletins.Add(new NInternalReqBulletin
+                {
+                    Id = BaseEntity.GenerateNewId(),
+                    BulletinId = certificate.AAppBulletins.FirstOrDefault(x => x.Id == appBullId)?.BulletinId,
+                    InternalReqId = request.Id,
+                    EntityState = EntityStateEnum.Added,
+                });
+            }
+
+            _certificateRepository.ApplyChanges(request, applyToAllLevels: true);
             await _certificateRepository.SaveChangesAsync();
         }
-
 
 
         private void UpdateCertificateStatus(ACertificate? certificate, string statusCode)

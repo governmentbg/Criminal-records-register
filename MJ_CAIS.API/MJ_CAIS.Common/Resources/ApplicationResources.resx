@@ -177,6 +177,9 @@
   <data name="messageCreateSuccessfull" xml:space="preserve">
     <value>Успешно създадено заявление</value>
   </data>
+  <data name="msgApplicationDoesNotExist" xml:space="preserve">
+    <value>Заявление с идентификатор {0} не съществува</value>
+  </data>
   <data name="msgPaymentFreeInfo" xml:space="preserve">
     <value>При избор на "Освободено от плащане" трябва да прикачите документ удостоверяващ това право.</value>
   </data>

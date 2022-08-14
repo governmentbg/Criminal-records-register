@@ -52,6 +52,7 @@ export class InternalRequestFormComponent
   })
   public personBulletinsGrid: IgxGridComponent;
   public dbData: any;
+  public isSend: boolean = false;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
@@ -146,23 +147,27 @@ export class InternalRequestFormComponent
   }
 
   public send() {
-    this.service
-      .changeStatus(
-        this.fullForm.id.value,
-        InternalRequestStatusCodeConstants.Sent
-      )
-      .subscribe(
-        (res) => {
-          this.loaderService.hide();
-          this.toastr.showToast("success", "Успешно изпратена заявка");
-          this.router.navigate(["pages/internal-requests"], {
-            queryParams: { activeTab: "draft" },
-          });
-        },
-        (error) => {
-          this.onServiceError(error);
-        }
-      );
+    this.isSend = true;
+    this.fullForm.reqStatusCode.patchValue(InternalRequestStatusCodeConstants.Sent);
+    this.submitFunction();
+  }
+
+  protected onSubmitSuccess(data: any) {
+    if(this.isSend){
+      this.router.navigateByUrl("pages/internal-requests?activeTab=draft");
+      return;
+    }
+
+    let currentUrl = this.router.url.toLocaleLowerCase();
+    let index = currentUrl.indexOf(this.CREATE_ACTION);
+    let editUrl = currentUrl.substr(0, index) + this.EDIT_ACTION;
+    if (data?.id) {
+      let newUrl = editUrl + "/" + data.id;
+      this.router.navigateByUrl(newUrl);
+    } else {
+      // Important, if we modify some navigation properties they must refresh
+      this.reloadCurrentRoute();
+    }
   }
 
   public onCancelFunction = () => {

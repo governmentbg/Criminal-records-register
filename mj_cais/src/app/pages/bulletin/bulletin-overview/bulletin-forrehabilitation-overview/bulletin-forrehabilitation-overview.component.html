@@ -120,41 +120,26 @@
     [pinned]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
-        <nb-icon pack="fa" icon="bars"></nb-icon>
+      <a
+        [title]="'Преглед на бюлетин'"
+        [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
-      <mat-menu #menu="matMenu">
-        <button
-          mat-menu-item
-          [queryParams]="{ bulletinId: cell.rowData.id }"
-          [routerLink]="['/pages/internal-requests/create']"
-        >
-          <span class="ml-1">Създай заявка</span>
-        </button>
+      <a
+        [title]="'Редакция на бюлетин'"
+        [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="pen"></nb-icon>
+      </a>
 
-        <button mat-menu-item (click)="onCancelRehabilitation(cell.rowData.id)">
-          <span>Откажи</span>
-        </button>
-        <button
-          mat-menu-item
-          [routerLink]="['/pages/internal-requests', cell.rowData.id]"
-        >
-          <span class="ml-1">Виж заявки</span>
-        </button>
-        <button
-          mat-menu-item
-          [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
-        >
-          <span class="ml-1">Преглед на бюлетин</span>
-        </button>
-
-        <button
-          mat-menu-item
-          [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
-        >
-          <span class="ml-1">Редакция на бюлетин</span>
-        </button>
-      </mat-menu>
+      <a
+        [title]="'Създай заявка'"
+        [queryParams]="{ bulletinId: cell.rowData.id }"
+        [routerLink]="['/pages/internal-requests/create']"
+      >
+        <nb-icon pack="fa" icon="plus-circle"></nb-icon>
+      </a>
     </ng-template>
   </igx-column>
 
