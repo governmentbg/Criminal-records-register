@@ -7,7 +7,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface ICertificateService : IBaseAsyncService<CertificateDTO, CertificateDTO, CertificateGridDTO, ACertificate, string>
     {
-        public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description);
+        Task SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description);
         Task<DDocContent> GetCertificateDocumentContent(string accessCode);
         Task SaveSignerDataAsync(CertificateDTO aInDto);
         Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto);

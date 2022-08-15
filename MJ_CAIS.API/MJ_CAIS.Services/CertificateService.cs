@@ -43,7 +43,7 @@ namespace MJ_CAIS.Services
         public async Task<byte[]> GetCertificateContentByWebAppIdAsync(string webAppId)
             => await _certificateRepository.GetCertificateContentByWebAppIdAsync(webAppId);
 
-        public void SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description)
+        public async Task SetCertificateStatus(ACertificate certificate, AApplicationStatus newStatus, string description)
         {
             certificate.StatusCode = newStatus.Code;
             //certificate.StatusCodeNavigation = newStatus;
@@ -79,8 +79,9 @@ namespace MJ_CAIS.Services
 
                 if (certificate.Application == null)
                 {
-                    AApplication a = new AApplication();
-                    a.Id = certificate.ApplicationId;
+
+                    AApplication a = await _certificateRepository.SingleOrDefaultAsync<AApplication>(x => x.Id == certificate.ApplicationId);
+                    //a.Id = certificate.ApplicationId;
                     a.EntityState = Common.Enums.EntityStateEnum.Modified;
                     a.ModifiedProperties = new List<string>() { nameof(a.StatusCode) };
                     a.StatusCode = ApplicationConstants.ApplicationStatuses.DeliveredApplication;
@@ -157,7 +158,7 @@ namespace MJ_CAIS.Services
              x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
             //await dbContext.AApplicationStatuses.FirstOrDefaultAsync(x =>
             //  x.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
-            SetCertificateStatus(result, aapplicationStatus, "Преминаване към готово за връчване");
+           await SetCertificateStatus(result, aapplicationStatus, "Преминаване към готово за връчване");
             await _certificateRepository.SaveChangesAsync();
 
         }

@@ -240,7 +240,7 @@ namespace MJ_CAIS.ExternalWebServices
                 && certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebCertificate)
             {
                 //ako не е електронно -> за печат
-                _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
+                await _certificateService.SetCertificateStatus(certificate, statusCertificatePaperPrint, "За отпечатване");
                 // certificate.StatusCode = statusCodeCertificatePaperPrint;
 
             }
@@ -249,7 +249,7 @@ namespace MJ_CAIS.ExternalWebServices
                 if (containsBulletins || (certificate.Application.PurposeNavigation!=null && certificate.Application.PurposeNavigation.ForSecondSignature == true))
                 {
                     //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
-                    _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
+                   await _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
   
                 }
                 else
@@ -260,7 +260,7 @@ namespace MJ_CAIS.ExternalWebServices
 
                     await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
 
-                    _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
+                    await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
 
                 }
             }
