@@ -48,7 +48,7 @@ namespace MJ_CAIS.IdentityServer.CAISCitizensCredentials
             throw new NotImplementedException();
         }
 
-        public async Task<UserInfo> FindByUsername(string scheme, string username)
+        public async Task<UserInfo> FindByUsername(string scheme, string username, List<Claim> externalClaims)
         {
             UserInfo res = null;
             if (!string.IsNullOrEmpty(username))

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using IdentityModel;
+using TechnoLogica.Authentication.EAuthV2;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 {
@@ -48,7 +50,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             throw new NotImplementedException();
         }
 
-        public async Task<UserInfo> FindByUsername(string scheme, string username)
+        public async Task<UserInfo> FindByUsername(string scheme, string username, List<Claim> externalClaims)
         {
             UserInfo res = null;
             if (!string.IsNullOrEmpty(username))
@@ -73,6 +75,13 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             if (!string.IsNullOrEmpty(userName) && userName.StartsWith("PNOBG-"))
             {
                 var egn = userName.Replace("PNOBG-", "");
+                additionalAttributes.TryGetValue(EAuthClaims.Certificate, out string certificate);
+                string? certSubject = null;
+                if (!string.IsNullOrEmpty(certificate))
+                {
+                    var cert = new X509Certificate2(Convert.FromBase64String(certificate));
+                    certSubject = cert.Subject;
+                }
                 CaisDbContext.GUsersExt.Add(new Entities.GUsersExt()
                 {
                     Id = Guid.NewGuid().ToString(),
