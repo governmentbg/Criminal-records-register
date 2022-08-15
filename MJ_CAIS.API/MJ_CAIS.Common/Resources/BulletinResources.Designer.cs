@@ -97,6 +97,24 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to История на статус с идентификатор {0} не съдържа документ за визуализация на предишна версия на бюлетин..
+        /// </summary>
+        public static string msgHistoryObjContentDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgHistoryObjContentDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to История на статус с идентификатор {0} не съществува.
+        /// </summary>
+        public static string msgHistoryObjDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgHistoryObjDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Въведени бюлетини.
         /// </summary>
         public static string titleBulletinsForStatistics {

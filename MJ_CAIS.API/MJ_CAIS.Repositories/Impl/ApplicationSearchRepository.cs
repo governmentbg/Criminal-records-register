@@ -21,8 +21,10 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.Application)
                 .Include(x => x.FirstSigner)
                 .Include(x => x.SecondSigner)
+                .Include(x => x.StatusCodeNavigation)
                 .Where(x => x.Application.CsAuthorityId == _userContext.CsAuthorityId)
-                .OrderByDescending(x => x.ValidFrom).Select(x => new ApplicationSearchGridDTO
+                .OrderByDescending(x => x.ValidFrom)
+                .Select(x => new ApplicationSearchGridDTO
                 {
                     Id = x.Id,
                     CertificateRegistrationNumber = x.RegistrationNumber,
@@ -33,9 +35,10 @@ namespace MJ_CAIS.Repositories.Impl
                     RegistrationNumber = x.Application.RegistrationNumber,
                     PersonIdentificator = x.Application.Egn + "/" + x.Application.Lnch,
                     Names = x.Application.Firstname + " " + x.Application.Surname + " " + x.Application.Familyname,
-                    FirstSigner = x.FirstSigner != null ? x.FirstSigner.Firstname + " " + x.FirstSigner.Surname + " " + x.FirstSigner.Familyname : null,
-                    SecondSigner = x.SecondSigner != null ? x.SecondSigner.Firstname + " " + x.SecondSigner.Surname + " " + x.SecondSigner.Familyname : null,
-                    AccessCode = x.AccessCode1
+                    FirstSigner = x.FirstSigner.Firstname + " " + x.FirstSigner.Surname + " " + x.FirstSigner.Familyname,
+                    SecondSigner = x.SecondSigner.Firstname + " " + x.SecondSigner.Surname + " " + x.SecondSigner.Familyname,
+                    AccessCode = x.AccessCode1,
+                    CreatedOn = x.CreatedOn
                 });
 
             return query;

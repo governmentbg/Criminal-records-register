@@ -68,6 +68,11 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
+  public downloadHistoryObject(id: string) {
+    let url = `${this.url}/${id}/status-history-content/`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
+
   public getBulletinTypes(): Observable<BaseNomenclatureModel[]> {
     return of(BulletinTypeConstants.allData);
   }

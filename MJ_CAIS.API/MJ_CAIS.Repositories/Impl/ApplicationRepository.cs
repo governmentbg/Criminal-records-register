@@ -1,10 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.AStatusH;
-using MJ_CAIS.DTO.Home;
 using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
@@ -45,7 +42,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<BBulletin>> SelectBulletinIdsAsync(string personId)
         {
             var result = this._dbContext.BBulletins.Where(b =>
-                         //(b.StatusId != BulletinConstants.Status.Deleted)
+                        //(b.StatusId != BulletinConstants.Status.Deleted)
                         b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId })
                         .Union(this._dbContext.BBulletins.Where(b =>
                         // (b.StatusId != BulletinConstants.Status.Deleted)
@@ -54,7 +51,7 @@ namespace MJ_CAIS.Repositories.Impl
                         // (b.StatusId != BulletinConstants.Status.Deleted)
                         b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId }))
                         .Union(this._dbContext.BBulletins.Where(b =>
-                       //  (b.StatusId != BulletinConstants.Status.Deleted)
+                         //  (b.StatusId != BulletinConstants.Status.Deleted)
                          b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId })).AsNoTracking();
 
             return await Task.FromResult(result);
@@ -88,6 +85,8 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
         {
             var query = from aStatusH in _dbContext.AStatusHes.AsNoTracking()
+                        join aApplication in _dbContext.AApplications.AsNoTracking() on aStatusH.ApplicationId equals aApplication.Id
+                        join aCertificates in _dbContext.ACertificates.AsNoTracking() on aStatusH.CertificateId equals aCertificates.Id
                         join status in _dbContext.AApplicationStatuses.AsNoTracking() on aStatusH.StatusCode equals status.Code
                         join users in _dbContext.GUsers.AsNoTracking() on aStatusH.CreatedBy equals users.Id
                             into astatusHLeft
@@ -101,6 +100,8 @@ namespace MJ_CAIS.Repositories.Impl
                             CreatedOn = aStatusH.CreatedOn,
                             StatusCode = status.Name,
                             Version = aStatusH.Version,
+                            ApplicationRegistrationNumber = aApplication.RegistrationNumber,
+                            CertificateRegistrationNumber = aCertificates.RegistrationNumber,
                         };
 
             return await Task.FromResult(query);
@@ -109,14 +110,14 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<AApplication?> GetApplicationForCertificateGeneration(string id)
         {
-           return await _dbContext.AApplications.AsNoTracking()
-                .Include(a => a.EgnNavigation).AsNoTracking()
-                .Include(a => a.LnchNavigation).AsNoTracking()
-                .Include(a => a.LnNavigation).AsNoTracking()
-                .Include(a => a.SuidNavigation).AsNoTracking()
-                .Include(a => a.ApplicationType).AsNoTracking()
-                .Include(a => a.AStatusHes).AsNoTracking()
-                .FirstOrDefaultAsync(aa => aa.Id == id);
+            return await _dbContext.AApplications.AsNoTracking()
+                 .Include(a => a.EgnNavigation).AsNoTracking()
+                 .Include(a => a.LnchNavigation).AsNoTracking()
+                 .Include(a => a.LnNavigation).AsNoTracking()
+                 .Include(a => a.SuidNavigation).AsNoTracking()
+                 .Include(a => a.ApplicationType).AsNoTracking()
+                 .Include(a => a.AStatusHes).AsNoTracking()
+                 .FirstOrDefaultAsync(aa => aa.Id == id);
         }
 
 

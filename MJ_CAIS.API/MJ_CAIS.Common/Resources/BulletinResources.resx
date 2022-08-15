@@ -129,6 +129,12 @@
   <data name="ConvictionBulletinForStatistics" xml:space="preserve">
     <value>Въведени бюлетини за съдимост</value>
   </data>
+  <data name="msgHistoryObjContentDoesNotExist" xml:space="preserve">
+    <value>История на статус с идентификатор {0} не съдържа документ за визуализация на предишна версия на бюлетин.</value>
+  </data>
+  <data name="msgHistoryObjDoesNotExist" xml:space="preserve">
+    <value>История на статус с идентификатор {0} не съществува</value>
+  </data>
   <data name="titleBulletinsForStatistics" xml:space="preserve">
     <value>Въведени бюлетини</value>
   </data>

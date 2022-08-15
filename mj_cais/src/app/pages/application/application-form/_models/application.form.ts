@@ -3,6 +3,7 @@ import { AddressForm } from "../../../../@core/components/forms/address-form/_mo
 import { PersonContextEnum } from "../../../../@core/components/forms/person-form/_models/person-context-enum";
 import { PersonForm } from "../../../../@core/components/forms/person-form/_models/person.form";
 import { BaseForm } from "../../../../@core/models/common/base.form";
+import { ReportApplicationStatusConstants } from "../../../report-application/report-application-overview/_models/report-applicarion-status.constants";
 
 export class ApplicationForm extends BaseForm {
   public group: FormGroup;
@@ -124,6 +125,8 @@ export class ApplicationForm extends BaseForm {
     //Validators
     this.registrationNumber.disable();
     this.currentApplicationStatus.disable();
+   
+    
     
     this.group = new FormGroup({
       id: this.id,

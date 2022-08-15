@@ -365,9 +365,9 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<BBulletin> GetBulletinData(string bulletinId)
         {
-            return await _dbContext.BBulletins
+            return await _dbContext.BBulletins.AsNoTracking()
                 .Include(x => x.BPersNationalities)
-                    .ThenInclude(x => x.Country)
+                    .ThenInclude(x => x.Country).AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == bulletinId);
         }
 

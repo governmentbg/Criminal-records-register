@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import * as fileSaver from "file-saver";
 import { NgxSpinnerService } from "ngx-spinner";
+import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { BulletinService } from "../../_data/bulletin.service";
 import { BulletinStatusHistoryModel } from "./_models/bulletin-status-history.model";
@@ -17,7 +19,8 @@ export class BulletinStatusHistoryOverviewComponent implements OnInit {
     public dateFormatService: DateFormatService,
     private bulletinService: BulletinService,
     private loaderService: NgxSpinnerService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastr: CustomToastrService
   ) {}
 
   ngOnInit(): void {
@@ -29,5 +32,37 @@ export class BulletinStatusHistoryOverviewComponent implements OnInit {
         this.historyData = res;
         this.loaderService.hide();
       });
+  }
+
+  download(id: string) {
+    this.loaderService.show();
+    this.bulletinService.downloadHistoryObject(id).subscribe(
+      (response: any) => {
+        let blob = new Blob([response.body]);
+        window.URL.createObjectURL(blob);
+
+        let header = response.headers.get("Content-Disposition");
+        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+        let fileName = "download";
+
+        var matches = filenameRegex.exec(header);
+        if (matches != null && matches[1]) {
+          fileName = matches[1].replace(/['"]/g, "");
+        }
+
+        fileSaver.saveAs(blob, fileName);
+        this.loaderService.hide();
+      },
+      (error) => {
+        this.loaderService.hide();
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast(
+          "danger",
+          "Грешка при изтегляне на файла: ",
+          errorText
+        );
+      }
+    );
   }
 }

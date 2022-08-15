@@ -18,6 +18,8 @@ using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
+using System.Text;
+using System.Xml.Xsl;
 using static MJ_CAIS.Common.Constants.BulletinConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
@@ -204,7 +206,7 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
             var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(bulletin,oldBulletinStatus, statusId, bulletinId);
+            AddBulletinStatusH(bulletin, oldBulletinStatus, statusId, bulletinId);
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
                 statusId == Status.Active;
@@ -294,6 +296,23 @@ namespace MJ_CAIS.Services
             return filteredStatuses;
         }
 
+        public async Task<byte[]> GetHistoryContentAsync(string aId)
+        {
+            var historyObj = await _bulletinRepository.SingleOrDefaultAsync<BBulletinStatusH>(x => x.Id == aId);
+            if (historyObj == null)
+                throw new BusinessLogicException(string.Format(BulletinResources.msgHistoryObjDoesNotExist, aId));
+
+            if (historyObj.Content == null)
+                throw new BusinessLogicException(string.Format(BulletinResources.msgHistoryObjContentDoesNotExist, aId));
+
+            var xsltContent = File.ReadAllText("../MJ_CAIS.DTO/ExternalServicesHost/Bulletin.xslt");
+
+            var html = XmlUtils.XmlTransform(xsltContent, historyObj.Content);
+            var result = Encoding.UTF8.GetBytes(html);
+
+            return await Task.FromResult(result);
+        }
+
         public async Task InsertBulletinDocumentAsync(string bulletinId, DocumentDTO aInDto)
         {
             if (aInDto.DocumentContent?.Length == 0)
@@ -303,7 +322,7 @@ namespace MJ_CAIS.Services
                 Guid.NewGuid().ToString() :
                 aInDto.DocumentContentId;
 
-            var document = mapper.MapToEntity<DocumentDTO, DDocument>(aInDto,true);
+            var document = mapper.MapToEntity<DocumentDTO, DDocument>(aInDto, true);
             document.BulletinId = bulletinId;
             document.DocContentId = docContentId;
 
@@ -423,7 +442,7 @@ namespace MJ_CAIS.Services
             }
 
             // save old status
-            var isAddedHistory = AddBulletinStatusH(entity,oldStatus, entity.StatusId, entity.Id);
+            var isAddedHistory = AddBulletinStatusH(entity, oldStatus, entity.StatusId, entity.Id);
             if (isAddedHistory)
             {
                 UpdateModifiedProperties(entity, nameof(entity.StatusId));
@@ -541,7 +560,7 @@ namespace MJ_CAIS.Services
                 var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
                 var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
                 statusHistory.Content = xml;
-                statusHistory.Version = 1; 
+                statusHistory.Version = 1;
             }
 
             _bulletinRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
@@ -589,7 +608,7 @@ namespace MJ_CAIS.Services
             int caseNum;
             try
             {
-                if(string.IsNullOrEmpty(bulletin.CaseNumber))
+                if (string.IsNullOrEmpty(bulletin.CaseNumber))
                 {
                     throw new Exception();
                 }
@@ -608,14 +627,14 @@ namespace MJ_CAIS.Services
             {
                 throw new Exception("Некоректен идентификатор на бюро съдимост.");
             }
-            if (!bulletin.CaseYear.HasValue || bulletin.CaseYear>9999 || bulletin.CaseYear < 1000)
+            if (!bulletin.CaseYear.HasValue || bulletin.CaseYear > 9999 || bulletin.CaseYear < 1000)
             {
                 throw new Exception("Некоректена година.");
             }
 
             if (string.IsNullOrEmpty(bulletin.CaseTypeId))
             {
-                
+
                 throw new Exception("Некоректен идентификатор на вид дело.");
             }
 
@@ -630,17 +649,17 @@ namespace MJ_CAIS.Services
             //        < option value = "08" > ВНЧХД </ option >         
             //         < option value = "09" > КНАХД </ option >          
             //          </ select >
-//            sign_naxd
-//sign_noxd
-//sign_ncd
-//sign_ncxd
+            //            sign_naxd
+            //sign_noxd
+            //sign_ncd
+            //sign_ncxd
             string caseTypeID;
             switch (bulletin.CaseTypeId)
             {
                 //todo: да се допълни номенклатурата
                 case "sign_noxd":
                     caseTypeID = "01";
-                        break;
+                    break;
                 case "sign_naxd":
                 case "sign_and":
                     caseTypeID = "02";
@@ -654,19 +673,19 @@ namespace MJ_CAIS.Services
                 default:
                     throw new Exception("Некоректен идентификатор на вид дело.");
             }
-                      bulletin.EcrisConvictionId = "BG-C-" + bulletin.CsAuthorityId + caseTypeID
-                + "1" + Math.Truncate(bulletin.CaseYear.Value) + caseNum.ToString("D5");
+            bulletin.EcrisConvictionId = "BG-C-" + bulletin.CsAuthorityId + caseTypeID
+      + "1" + Math.Truncate(bulletin.CaseYear.Value) + caseNum.ToString("D5");
 
         }
-            /// <summary>
-            /// Set data for nationalities.
-            /// If person is EU Citizen message to ecris must be sent
-            /// If person is not EU Citizen message to ecris tcn must be sent
-            /// The person may be bouth
-            /// </summary>
-            /// <param name="bulletin"></param>
-            /// <returns></returns>
-            private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
+        /// <summary>
+        /// Set data for nationalities.
+        /// If person is EU Citizen message to ecris must be sent
+        /// If person is not EU Citizen message to ecris tcn must be sent
+        /// The person may be bouth
+        /// </summary>
+        /// <param name="bulletin"></param>
+        /// <returns></returns>
+        private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
         {
             bulletin.BgCitizen = bulletin.BPersNationalities.Any(x => x.CountryId == BG);
 
@@ -694,7 +713,7 @@ namespace MJ_CAIS.Services
             }
         }
 
-        
+
         private async Task SendMessageToEcrisAsync(bool? isEuCitizen, bool? isTcnCitizen, string bulletinId, string bOldStatus, string bNewStatus)
         {
             if (isEuCitizen == true)

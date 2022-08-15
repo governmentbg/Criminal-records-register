@@ -109,10 +109,23 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/status-history")]
-        public async Task<IActionResult> GetStatusHistory(string aId)
+        public IActionResult GetStatusHistory(string aId)
         {
             var result = this._bulletinService.GetStatusHistoryByBulletinId(aId);
             return Ok(result);
+        }
+
+        [HttpGet("{aId}/status-history-content")]
+        public async Task<IActionResult> GetContentOnly(string aId)
+        {
+            var resultXML = await this._bulletinService.GetHistoryContentAsync(aId);
+            var fileNameHtml = "bulletin-history.html";
+            var mimeTypeHtml = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileNameHtml);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(resultXML, mimeTypeHtml, fileNameHtml);
         }
 
         [HttpPost("{aId}/documents")]

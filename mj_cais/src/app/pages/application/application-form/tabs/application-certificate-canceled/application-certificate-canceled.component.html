@@ -1,0 +1,46 @@
+<igx-grid
+  #decisionsGrid
+  [height]="null"
+  [data]="applicationCertificateCanceled"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+>
+  <igx-column
+    field="statusCode"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+
+  <igx-column
+    field="registrationNumber"
+    header="Номер"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    field="firstSigner"
+    header="Подписващ1"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    field="secondSigner"
+    header="Подписващ2"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
+  <igx-column
+    width="50px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a [title]="'Преглед'">
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>
+    </ng-template>
+  </igx-column>
+</igx-grid>

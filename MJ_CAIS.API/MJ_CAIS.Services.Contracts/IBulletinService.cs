@@ -30,6 +30,8 @@ namespace MJ_CAIS.Services.Contracts
 
         IQueryable<BulletinStatusHistoryDTO> GetStatusHistoryByBulletinId(string aId);
 
+        Task<byte[]> GetHistoryContentAsync(string aId);
+
         Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId);
 
         Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId);
