@@ -4,6 +4,7 @@ namespace MJ_CAIS.DTO.Application
     {
         public string? RegistrationNumber { get; set; }
         public string? Purpose { get; set; }
+        //public string? EgnLnch { get; set; }
         public string? Egn { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }

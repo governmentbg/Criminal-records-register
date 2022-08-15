@@ -69,6 +69,12 @@ export class ApplicationCertificateService extends CaisCrudService<
     );
   }
 
+  public setStatusToDelivered(appId: string) : Observable<any> {
+    return this.http.get<any>(
+      `${this.url}/set-status-to-delivered/${appId}`
+    );
+  }
+
   public getCanceledCertificateByAppId(appId: string) : Observable<ApplicationCertificateCanceldModel> {
     return this.http.get<ApplicationCertificateCanceldModel>(
       `${this.url}/by-application-canceled/${appId}`

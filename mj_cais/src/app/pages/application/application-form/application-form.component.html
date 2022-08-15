@@ -178,6 +178,8 @@
             [isEditable]="
               fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
+              fullForm.statusCode.value !=
+                ApplicationTypeStatusConstants.Canceled &&
               !this.isForPreview
             "
           >

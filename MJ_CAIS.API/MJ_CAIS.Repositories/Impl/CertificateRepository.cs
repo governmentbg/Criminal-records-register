@@ -166,6 +166,8 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var certificate = _dbContext.ACertificates
                 .Include(x => x.StatusCodeNavigation)
+                .Include(x => x.FirstSigner)
+                .Include(x => x.SecondSigner)
                 .AsNoTracking()
                 .Where(x => x.ApplicationId == appId)
                 .Where(x => x.StatusCode == "CanceledCertificate");

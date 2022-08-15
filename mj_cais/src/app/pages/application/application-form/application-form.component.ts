@@ -69,11 +69,12 @@ export class ApplicationFormComponent
     this.applicationStatus = this.fullForm.statusCode.value;
     if (
       this.fullForm.statusCode.value ==
-      ApplicationTypeStatusConstants.ApprovedApplication
+      ApplicationTypeStatusConstants.ApprovedApplication || this.fullForm.statusCode.value ==
+      ApplicationTypeStatusConstants.Canceled
     ) {
       this.fullForm.group.disable();
     }
-
+   
     this.formFinishedLoading.emit();
     if (
       this.fullForm.statusCode.value ==
