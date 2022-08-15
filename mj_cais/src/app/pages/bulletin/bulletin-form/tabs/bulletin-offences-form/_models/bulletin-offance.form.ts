@@ -21,7 +21,7 @@ export class BulletinOffenceForm extends BaseForm {
   constructor() {
     super();
     this.offenceCategory = new LookupForm(true);
-    this.formOfGuiltId = new FormControl(null, [Validators.required]);
+    this.formOfGuiltId = new FormControl(null);
     this.formOfGuiltName = new FormControl(null);
     this.remarks = new FormControl(null, [Validators.required]);
     this.ecrisOffCatId = new FormControl(null, [Validators.maxLength(50)]);
