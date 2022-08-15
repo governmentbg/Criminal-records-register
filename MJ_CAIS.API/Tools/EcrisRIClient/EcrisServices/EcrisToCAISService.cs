@@ -71,7 +71,7 @@ namespace EcrisIntegrationServices
                 string docTypeCode = "";
                 if (messageType == MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ)
                 {
-                    lastUpdatedTime = GetLastSynchDateForRequests(paramNameForSynch);
+                    lastUpdatedTime = await GetLastSynchDateForRequests(paramNameForSynch);
                     docTypeCode = (await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.REQ, _dbContext)).FirstOrDefault(x=>!x.EndsWith("Old"));
                     query = GetRequestsQuery(inboxFolderId, lastUpdatedTime);
 
@@ -81,7 +81,7 @@ namespace EcrisIntegrationServices
                     if (messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                     {
                         docTypeCode = (await ServiceHelper.GetDocTypeCodeAsync(MJ_CAIS.DTO.EcrisService.EcrisMessageTypeOrAliasMessageType.NOT, _dbContext)).FirstOrDefault(x=>!x.EndsWith("Old"));
-                        lastUpdatedTime = GetLastSynchDateForNotifications(paramNameForSynch);
+                        lastUpdatedTime =await GetLastSynchDateForNotifications(paramNameForSynch);
                         query = GetNotificationsQuery(inboxFolderId, lastUpdatedTime);
 
                     }
@@ -101,6 +101,7 @@ namespace EcrisIntegrationServices
                 //lastUpdatedTime = lastUpdatedTime.AddSeconds(1);
                 do
                 {
+                    //ползваме този код ако искаме да извлечем конкретно съобщение
                     //var id = "RI-RRS-000000001382773";
                     //var messageContent = await client.ReadMessage(sessionID, id);
                     //var p = XmlUtils.SerializeToXml(((ReadMessageWSOutputDataType)messageContent).EcrisRiMessage);
@@ -131,12 +132,12 @@ namespace EcrisIntegrationServices
                         if (newDate != DateTime.MinValue && messageType == EcrisMessageTypeOrAliasMessageType.REQ)
                         {
 
-                            SetLastSynchDateForRequests(lastUpdatedTime, paramNameForSynch);
+                           await  SetLastSynchDateForRequests(lastUpdatedTime, paramNameForSynch);
 
                         };
                         if (newDate != DateTime.MinValue && messageType == EcrisMessageTypeOrAliasMessageType.NOT)
                         {
-                            SetLastSynchDateForNotifications(lastUpdatedTime, paramNameForSynch);
+                         await   SetLastSynchDateForNotifications(lastUpdatedTime, paramNameForSynch);
 
                         };
                     }
@@ -265,7 +266,7 @@ namespace EcrisIntegrationServices
             //var messageContent = await client.ReadMessage(sessionId, identifier);
             EEcrisInbox inbox = new EEcrisInbox();
             inbox.Id = BaseEntity.GenerateNewId();
-            //todo: get from enum
+            
             inbox.Status = ECRISConstants.EcrisInboxStatuses.Pending;
             inbox.XmlMessageTraits = msg.SerializedXMLFromService;// XmlUtils.SerializeToXml(msg);
             //var outputData = (ReadMessageWSOutputDataType)messageContent.WSData;
@@ -280,12 +281,12 @@ namespace EcrisIntegrationServices
                 try
                 {
 
-                    var existingMSg = _dbContext.EEcrisMessages.FirstOrDefault(ee => ee.EcrisIdentifier == msg.MessageEcrisIdentifier);
+                    var existingMSg = await _dbContext.EEcrisMessages.AsNoTracking().FirstOrDefaultAsync(ee => ee.EcrisIdentifier == msg.MessageEcrisIdentifier);
                     if (existingMSg == null)
                     {
                         //todo: use methods from CommonService
 
-                        var m = ParseMessageTraits(msg, joinSeparator);
+                        var m = await ParseMessageTraits(msg, joinSeparator);
                         m.MsgTypeId = docTypeCode;
 
                         inbox.EcrisMsg = m;
@@ -327,7 +328,7 @@ namespace EcrisIntegrationServices
                             names = m.EEcrisMsgNames.FirstOrDefault();
                         }
 
-                        DDocument d = ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, _dbContext);
+                        DDocument d = await ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, _dbContext);
 
                         d.EcrisMsg = m;
                         m.DDocuments.Add(d);
@@ -436,7 +437,7 @@ namespace EcrisIntegrationServices
 
 
 
-        private EEcrisMessage ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
+        private async Task<EEcrisMessage> ParseMessageTraits(MJ_CAIS.DTO.EcrisService.MessageShortViewType msg, string joinSeparator)
         {
             EEcrisMessage m = new EEcrisMessage();
 
@@ -513,9 +514,9 @@ namespace EcrisIntegrationServices
             }
 
 
-            var countriesAuthorities = _dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
+            var countriesAuthorities = await _dbContext.EEcrisAuthorities.AsNoTracking().Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
-            || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
+            || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToListAsync();
             if (msg.MessageSendingMemberStateSpecified)
             {
                 m.FromAuthId = countriesAuthorities.FirstOrDefault(c => c.MemberStateCode?.ToLower() == msg.MessageSendingMemberState.ToString().ToLower())?.Id;
@@ -535,8 +536,8 @@ namespace EcrisIntegrationServices
             var nationalities = msg.MessageShortViewPerson.PersonNationalityReference?.Select(p => p.Value)?.ToList();
             if (nationalities != null)
             {
-                var countries = _dbContext.GCountries.Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
-                                                               && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
+                var countries = await _dbContext.GCountries.AsNoTracking().Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
+                                                               && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToListAsync();
                 foreach (var nationality in nationalities)
                 {
                     var countryID = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
@@ -566,18 +567,18 @@ namespace EcrisIntegrationServices
         }
 
 
-        private DateTime GetLastSynchDateForNotifications(string paramNameForSynch)
+        private async Task< DateTime> GetLastSynchDateForNotifications(string paramNameForSynch)
         {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+            var parameter = await _dbContext.ESynchronizationParameters.AsNoTracking().FirstOrDefaultAsync(p => p.Name == paramNameForSynch);
             if (parameter?.LastDate == null)
             {
                 throw new Exception($"{paramNameForSynch} is not set.");
             }
             return parameter.LastDate.Value;
         }
-        private DateTime GetLastSynchDateForRequests(string paramNameForSynch)
+        private async Task<DateTime> GetLastSynchDateForRequests(string paramNameForSynch)
         {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+            var parameter = await _dbContext.ESynchronizationParameters.AsNoTracking().FirstOrDefaultAsync(p => p.Name == paramNameForSynch);
             if (parameter?.LastDate == null)
             {
                 throw new Exception($"{paramNameForSynch} is not set.");
@@ -585,9 +586,9 @@ namespace EcrisIntegrationServices
             return parameter.LastDate.Value;
 
         }
-        private void SetLastSynchDateForNotifications(DateTime lastUpdate, string paramNameForSynch)
+        private async Task SetLastSynchDateForNotifications(DateTime lastUpdate, string paramNameForSynch)
         {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+            var parameter = await _dbContext.ESynchronizationParameters.AsNoTracking().FirstOrDefaultAsync(p => p.Name == paramNameForSynch);
             if (parameter == null)
             {
 
@@ -595,9 +596,9 @@ namespace EcrisIntegrationServices
             }
             parameter.LastDate = lastUpdate;
         }
-        private void SetLastSynchDateForRequests(DateTime lastUpdate, string paramNameForSynch)
+        private async Task SetLastSynchDateForRequests(DateTime lastUpdate, string paramNameForSynch)
         {
-            var parameter = _dbContext.ESynchronizationParameters.FirstOrDefault(p => p.Name == paramNameForSynch);
+            var parameter = await _dbContext.ESynchronizationParameters.AsNoTracking().FirstOrDefaultAsync(p => p.Name == paramNameForSynch);
             if (parameter == null)
             {
                 throw new Exception($"{paramNameForSynch} does not exist.");

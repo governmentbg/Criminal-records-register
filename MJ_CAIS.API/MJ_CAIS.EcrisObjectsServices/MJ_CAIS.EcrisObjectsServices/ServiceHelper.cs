@@ -25,11 +25,11 @@ namespace MJ_CAIS.EcrisObjectsServices
             return code.Select(x=>x.Id).ToList();
         }
 
-        public static DDocument GetDDocument(MJ_CAIS.DTO.EcrisService.EcrisMessageType t, string? name, string? firstName, string? surName, string? familyName, CaisDbContext dbContext)
+        public static async Task<DDocument> GetDDocument(MJ_CAIS.DTO.EcrisService.EcrisMessageType t, string? name, string? firstName, string? surName, string? familyName, CaisDbContext dbContext)
         {
             DDocument d = new DDocument();
             d.Id = BaseEntity.GenerateNewId();
-            var docType = dbContext.DDocTypes.FirstOrDefault(dt => dt.Code != null && dt.Code.ToLower() == t.ToString().ToLower());
+            var docType =await dbContext.DDocTypes.AsNoTracking().FirstOrDefaultAsync(dt => dt.Code != null && dt.Code.ToLower() == t.ToString().ToLower()&& !dt.Id.EndsWith("Old"));
             d.DocTypeId = docType?.Id;
             if (name == null) {
                 d.Name = "ecris_message"; 
@@ -68,7 +68,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 
         public static async Task<GraoPerson?> GetPersonIDForEcrisMessages(string ecrisMsgID, CaisDbContext dbContext)
         {
-            var identification = (await dbContext.EEcrisIdentifications.Include(ei=>ei.GraoPerson).FirstOrDefaultAsync(p => p.EcrisMsgId == ecrisMsgID && p.Approved == 1));
+            var identification = (await dbContext.EEcrisIdentifications.AsNoTracking().Include(ei=>ei.GraoPerson).FirstOrDefaultAsync(p => p.EcrisMsgId == ecrisMsgID && p.Approved == 1));
            
             return identification?.GraoPerson;
 
@@ -196,22 +196,22 @@ namespace MJ_CAIS.EcrisObjectsServices
             ConvictionType conv = new ConvictionType();
             //load nomenclatures:
             var sancIDs = buletin.BSanctions.Select(s => s.SanctCategoryId).ToList();
-            var sanctCategories = await dbContext.BSanctionCategories.Where(cat => sancIDs.Contains(cat.Id)).ToListAsync();
+            var sanctCategories = await dbContext.BSanctionCategories.AsNoTracking().Where(cat => sancIDs.Contains(cat.Id)).ToListAsync();
             var ecrisSancIDs = buletin.BSanctions.Select(s => s.EcrisSanctCategId).ToList();
-            var ecrisSanctCategories = await dbContext.BEcrisStanctCategs.Where(cat => ecrisSancIDs.Contains(cat.Id)).ToListAsync();
+            var ecrisSanctCategories = await dbContext.BEcrisStanctCategs.AsNoTracking().Where(cat => ecrisSancIDs.Contains(cat.Id)).ToListAsync();
             var offenceCatIDs = buletin.BOffences.Select(s => s.OffenceCatId).ToList();
-            var offenceCategories = await dbContext.BOffenceCategories.Where(cat => offenceCatIDs.Contains(cat.Id)).ToListAsync();
+            var offenceCategories = await dbContext.BOffenceCategories.AsNoTracking().Where(cat => offenceCatIDs.Contains(cat.Id)).ToListAsync();
             var offenceCountriesIDs = buletin.BOffences.Select(s => s.OffPlaceCountryId).ToList();
-            var offenceCountries = await dbContext.GCountries.Where(cat => offenceCountriesIDs.Contains(cat.Id)).ToListAsync();
+            var offenceCountries = await dbContext.GCountries.AsNoTracking().Where(cat => offenceCountriesIDs.Contains(cat.Id)).ToListAsync();
             var offenceCitiesIDs = buletin.BOffences.Select(s => s.OffPlaceCityId).ToList();
-            var offenceCities = await dbContext.GCities.Where(cat => offenceCitiesIDs.Contains(cat.Id)).ToListAsync();
+            var offenceCities = await dbContext.GCities.AsNoTracking().Where(cat => offenceCitiesIDs.Contains(cat.Id)).ToListAsync();
             var decisionChType = buletin.BDecisions.Select(s => s.DecisionChTypeId).ToList();
-            var decisionChTypes = await dbContext.BDecisionChTypes.Where(cat => decisionChType.Contains(cat.Id)).ToListAsync();
+            var decisionChTypes = await dbContext.BDecisionChTypes.AsNoTracking().Where(cat => decisionChType.Contains(cat.Id)).ToListAsync();
             var desidingAuthoritiesIDs = buletin.BDecisions.Select(s => s.DecisionAuthId).ToList();
             desidingAuthoritiesIDs.Add(buletin.DecidingAuthId);
-            var desidingAuthorities = await dbContext.GDecidingAuthorities.Where(cat => desidingAuthoritiesIDs.Contains(cat.Id)).ToListAsync();
+            var desidingAuthorities = await dbContext.GDecidingAuthorities.AsNoTracking().Where(cat => desidingAuthoritiesIDs.Contains(cat.Id)).ToListAsync();
             var offenceCategoriesIDs = buletin.BOffences.Select(s => s.EcrisOffCatId).ToList();
-            var ecrisOffenceCategories = await dbContext.BEcrisOffCategories.Where(cat => offenceCategoriesIDs.Contains(cat.Id)).ToListAsync();
+            var ecrisOffenceCategories = await dbContext.BEcrisOffCategories.AsNoTracking().Where(cat => offenceCategoriesIDs.Contains(cat.Id)).ToListAsync();
 
             conv.ConvictionSanction = GetSanctions(buletin, sanctCategories, ecrisSanctCategories);
             conv.ConvictionDecision = GetDecisions(buletin, decisionChTypes, desidingAuthorities);
@@ -534,7 +534,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                 names = m.EEcrisMsgNames.FirstOrDefault();
             }
           
-            DDocument d = ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, dbContext);
+            DDocument d = await ServiceHelper.GetDDocument(msg.MessageType, msg.MessageEcrisIdentifier, names?.Firstname, names?.Surname, names?.Familyname, dbContext);
             if (!string.IsNullOrEmpty(buletinID))
             {
                 d.BulletinId = buletinID;
@@ -723,9 +723,9 @@ namespace MJ_CAIS.EcrisObjectsServices
             }
 
 
-            var countriesAuthorities = dbContext.EEcrisAuthorities.Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
+            var countriesAuthorities = await dbContext.EEcrisAuthorities.AsNoTracking().Where(ea => ea.ValidFrom <= DateTime.Now && ea.ValidTo >= DateTime.Now
             && ea.MemberStateCode != null && (ea.MemberStateCode.ToLower() == msg.MessageSendingMemberState.ToString().ToLower()
-            || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToList();
+            || msg.MessageReceivingMemberState.Select(p => p.ToString().ToLower()).Contains(ea.MemberStateCode.ToLower()))).ToListAsync();
             if (msg.MessageSendingMemberStateSpecified)
             {
                 m.FromAuthId = countriesAuthorities.FirstOrDefault(c => c.MemberStateCode?.ToLower() == "bg")?.Id;
@@ -740,8 +740,8 @@ namespace MJ_CAIS.EcrisObjectsServices
             var nationalities = person?.PersonNationalityReference?.Select(p => p.Value)?.ToList();
             if (nationalities != null)
             {
-                var countries = dbContext.GCountries.Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
-                                                               && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToList();
+                var countries = await dbContext.GCountries.AsNoTracking().Where(c => c.EcrisTechnId != null && nationalities.Contains(c.EcrisTechnId)
+                                                               && c.ValidFrom <= DateTime.Now && c.ValidTo >= DateTime.Now).ToListAsync();
                 foreach (var nationality in nationalities)
                 {
                     var countryID = countries.FirstOrDefault(c => c.EcrisTechnId == nationality)?.Id;
@@ -774,10 +774,10 @@ namespace MJ_CAIS.EcrisObjectsServices
 
         public static async Task<List<PPersonId>> GetPersonIDsByEGN(string Egn, CaisDbContext dbContext, string? graoIssuer, string? countryBGcode, string? egnType)
         {
-            var pid = await dbContext.PPersonIds.FirstOrDefaultAsync(pp => pp.Pid == Egn && pp.Issuer == graoIssuer && pp.CountryId == countryBGcode && pp.PidTypeId == egnType);
+            var pid = await dbContext.PPersonIds.AsNoTracking().FirstOrDefaultAsync(pp => pp.Pid == Egn && pp.Issuer == graoIssuer && pp.CountryId == countryBGcode && pp.PidTypeId == egnType);
             if (pid != null)
             {
-                var personIds = await dbContext.PPersonIds.Where(pp => pp.PersonId == pid.PersonId).ToListAsync();
+                var personIds = await dbContext.PPersonIds.AsNoTracking().Where(pp => pp.PersonId == pid.PersonId).ToListAsync();
                 return personIds;
             }
             else
