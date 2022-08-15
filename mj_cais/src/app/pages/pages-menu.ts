@@ -105,6 +105,10 @@ export class PagesMenu {
             title: "За подпис",
             link: "/pages/applications/for-signing",
           },
+          {
+            title: "Търсене на свидетелства",
+            link: "/pages/applications/search",
+          },
         ],
       },
       {
@@ -270,6 +274,10 @@ export class PagesMenu {
           {
             title: "Xарактеристики на лице",
             link: "/pages/inquiry/search-people",
+          },
+          {
+            title: "Търсене на справки",
+            link: "/pages/inquiry/search-inquiry",
           },
         ],
       },
