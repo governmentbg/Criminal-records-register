@@ -661,6 +661,7 @@ namespace MJ_CAIS.Services
                     caseTypeID = "01";
                     break;
                 case "sign_naxd":
+                case "sign_and":
                     caseTypeID = "02";
                     break;
                 case "sign_ncd":
