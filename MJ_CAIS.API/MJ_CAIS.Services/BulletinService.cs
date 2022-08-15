@@ -307,9 +307,6 @@ namespace MJ_CAIS.Services
 
             var xsltContent = File.ReadAllText("../MJ_CAIS.DTO/ExternalServicesHost/Bulletin.xslt");
 
-            //var xslt = new XslCompiledTransform();
-            // xslt.Load("", new XsltSettings { EnableDocumentFunction = true, EnableScript = true }, null);
-
             var html = XmlUtils.XmlTransform(xsltContent, historyObj.Content);
             var result = Encoding.UTF8.GetBytes(html);
 
