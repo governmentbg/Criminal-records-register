@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.Application.Public;
+using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.DTO.NomenclatureDetail;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.Public.Models.Application;
@@ -28,6 +31,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
     [Authorize]
     public class ApplicationController : BaseController
     {
+        public const string WEB_APPLICATION_TYPE = "4";
         private readonly IMapper _mapper;
         private readonly IApplicationWebService _applicationWebService;
         private readonly INomenclatureDetailService _nomenclatureDetailService;
@@ -37,6 +41,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly IEGovPaymentService _egovPaymentService;
         private readonly IEGovIntegrationService _egovIntegrationService;
         private readonly CaisDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
         public ApplicationController(IMapper mapper,
                                      IApplicationWebService applicationWebService,
@@ -47,7 +52,8 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                                      IServiceProvider serviceProvider,
                                      IEGovPaymentService egovPaymentService,
                                      IEGovIntegrationService egovIntegrationService,
-                                     CaisDbContext dbContext
+                                     CaisDbContext dbContext,
+                                     IConfiguration configuration
                                      )
         {
             _mapper = mapper;
@@ -59,6 +65,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             _egovPaymentService = egovPaymentService;
             _egovIntegrationService = egovIntegrationService;
             _dbContext = dbContext;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -97,9 +104,9 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             _regixService.CreateRegixRequests(viewModel.Egn, wApplicationId: id);
 
             var paymentMethod = _nomenclatureDetailService.GetWebAPaymentMethods().Where(pm => pm.Id == viewModel.PaymentMethodId).FirstOrDefault();
-            if (paymentMethod != null && paymentMethod.Code == "PayEgovBg")
+            if (paymentMethod != null && (paymentMethod.Code == "PayEgovBg" || paymentMethod.Code == "PayEgovBgEPay"))
             {
-                var price = await _applicationWebService.GetPriceByApplicationType("4");
+                var price = await _applicationWebService.GetPriceByApplicationType(WEB_APPLICATION_TYPE);
                 var application = await _applicationWebService.SelectAsync(id);
                 var paymentRequestModel = new EGovPaymentRequestModel()
                 {
@@ -111,7 +118,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                     PaymentReason = "Такса свидетелство съдимост",
                     PaymentRefDate = DateTime.Now,
                     PaymentRefNumber = application.RegistrationNumber,
-                    PaymentType = VPOSPaymentTypes.EPAY
+                    PaymentType = (paymentMethod.Code == "PayEgovBgEPay") ? VPOSPaymentTypes.EPAY : VPOSPaymentTypes.BANK
                 };
                 TempData["paymentRequestModel"] = JsonConvert.SerializeObject(paymentRequestModel);
                 return RedirectToActionPreserveMethod("CreateVPOSPayment2", "EGovPayments");
@@ -128,6 +135,10 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
             viewModel.ReturnFromPaymentResult = paymentStatus;
+            viewModel.ServiceProviderBank = _configuration.GetValue<string?>("EGovPayments:ServiceProviderBank");
+            viewModel.ServiceProviderBIC = _configuration.GetValue<string?>("EGovPayments:ServiceProviderBIC");
+            viewModel.ServiceProviderIBAN = _configuration.GetValue<string?>("EGovPayments:ServiceProviderIBAN");
+            viewModel.ServiceProviderName = _configuration.GetValue<string?>("EGovPayments:ServiceProviderName");
             viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
@@ -149,7 +160,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             Response.Headers.Add("File-Name", fileName);
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
-            return File(content, mimeType, fileName);         
+            return File(content, mimeType, fileName);
         }
 
         [HttpGet]
@@ -190,14 +201,12 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             viewModel.Egn = CurrentEgnIdentifier;
             var purposes = await _nomenclatureDetailService.GetAllAPurposes().ToListAsync();
+            viewModel.Price = await _applicationWebService.GetPriceByApplicationType(WEB_APPLICATION_TYPE);
             viewModel.PurposeInfo = purposes.Where(p => p.RequestInfo.HasValue && p.RequestInfo.Value).ToDictionary( o => o.Code, o => o.Description);
             viewModel.PurposeTypes = purposes.Select( p =>  new SelectListItem() { Value = p.Code, Text = p.Name}).ToList();
             viewModel.PurposeTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true});
             viewModel.RequiredPurposes = string.Join(",", viewModel.PurposeInfo.Keys);
-            var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
-            viewModel.PaymentMethodTypes = await paymentMethods.ProjectTo<SelectListItem>(
-                _mapper.ConfigurationProvider).ToListAsync();
-            viewModel.PaymentMethodTypes.Where(p => p.Value == "PayEgovBg").Select(p => p.Selected = true).ToList();
+            viewModel.PaymentMethodTypes = await _nomenclatureDetailService.GetWebAPaymentMethods().ToListAsync();
         }
     }
 }

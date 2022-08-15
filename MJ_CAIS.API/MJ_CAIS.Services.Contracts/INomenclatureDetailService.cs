@@ -32,7 +32,7 @@ namespace MJ_CAIS.Services.Contracts
 
         IQueryable<BaseNomenclatureDTO> GetDeskAPaymentMethods();
 
-        IQueryable<BaseNomenclatureDTO> GetWebAPaymentMethods();
+        IQueryable<PaymentMethodDTO> GetWebAPaymentMethods();
 
         IQueryable<BaseNomenclatureDTO> GetSrvcResRcptMethods();
 

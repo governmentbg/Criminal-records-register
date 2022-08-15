@@ -10,6 +10,7 @@ import { ApplicationForCheckComponent } from "./application-overview/application
 import { ApplicationForSigningComponent } from "./application-overview/application-for-signing/application-for-signing.component";
 import { ApplicationForSiningByJudgeComponent } from "./application-overview/application-for-sining-by-judge/application-for-sining-by-judge.component";
 import { ApplicationNewOverviewComponent } from "./application-overview/application-new-overview/application-new-overview.component";
+import { ApplicationSearchOverviewComponent } from "./application-overview/application-search-overview/application-search-overview.component";
 import { ApplicationTaxFreeOverviewComponent } from "./application-overview/application-tax-free-overview/application-tax-free-overview.component";
 import { ApplicationWaitingPaymentComponent } from "./application-overview/application-waiting-payment/application-waiting-payment.component";
 import { ApplicationRequestComponent } from "./application-request/application-request.component";
@@ -100,6 +101,10 @@ const routes: Routes = [
   {
     path: "bulletin-selection",
     component: ApplicationBulletinsSelectionComponent,
+  },
+  {
+    path: "search",
+    component: ApplicationSearchOverviewComponent,
   },
   {
     path: "",
