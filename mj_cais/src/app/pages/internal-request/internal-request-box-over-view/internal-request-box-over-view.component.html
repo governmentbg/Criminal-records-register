@@ -20,7 +20,7 @@
           >
           </nb-tab>
           <nb-tab
-            *ngIf="inboxCount == 0"
+            *ngIf="inboxCount <= 0"
             #inboxTab
             [tabTitle]="inboxTabTitle"
             tabIcon="inbox"
@@ -37,7 +37,7 @@
           >
           </nb-tab>
           <nb-tab
-            *ngIf="outboxCount == 0"
+            *ngIf="outboxCount <= 0"
             #outboxTab
             [tabTitle]="outboxTabTitle"
             tabIcon="email-outline"
@@ -53,11 +53,12 @@
         style="
           display: flex;
           align-items: center;
-          justify-content: end;
+          justify-content: space-between;
           padding-top: 5px;
           padding-bottom: 5px;
         "
       >
+        <div>{{ this.title }}</div>
         <a
           nbButton
           matRipple
@@ -77,7 +78,9 @@
           <cais-internal-request-inbox-overview></cais-internal-request-inbox-overview>
         </ng-container>
         <ng-container *ngIf="showOutboxTab">
-          <cais-internal-request-outbox-overview></cais-internal-request-outbox-overview>
+          <cais-internal-request-outbox-overview
+            (onReadClicked)="onOutBoxReadMessageClicked($event)"
+          ></cais-internal-request-outbox-overview>
         </ng-container>
       </nb-card-body>
     </nb-card>

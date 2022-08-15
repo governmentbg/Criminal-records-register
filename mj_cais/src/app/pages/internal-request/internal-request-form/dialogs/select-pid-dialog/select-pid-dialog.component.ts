@@ -4,10 +4,10 @@ import {
   IgxGridComponent,
 } from "@infragistics/igniteui-angular";
 import { NbDialogRef } from "@nebular/theme";
-import { RemoteGridWithStatePersistance } from "../../../directives/remote-grid-with-state-persistance.directive";
-import { DateFormatService } from "../../../services/common/date-format.service";
-import { LoaderService } from "../../../services/common/loader.service";
-import { FormUtils } from "../../../utils/form.utils";
+import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { LoaderService } from "../../../../../@core/services/common/loader.service";
+import { FormUtils } from "../../../../../@core/utils/form.utils";
 import { SelectPidGridService } from "./_data/select-pid-grid.service";
 import { SelecrPidGridModel } from "./_models/select-pid-grid.model";
 
@@ -34,9 +34,11 @@ export class SelectPidDialogComponent extends RemoteGridWithStatePersistance<
     private loaderService: LoaderService
   ) {
     super("pids-dialog", service, injector);
-    this.loaderService.showSpinner(this.service);
   }
 
+  ngOnInit(): void {
+    super.ngOnInit();
+  }
   handleRowSelection(event) {
     let selectedId = event.newSelection[0];
     if (selectedId) {

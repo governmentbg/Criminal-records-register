@@ -27,6 +27,14 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("for-judge")]
+        [Authorize(Roles = $"{RoleConstants.Judge}")]
+        public async Task<IActionResult> GetAllForJudge(ODataQueryOptions<InternalRequestForJudgeGridDTO> aQueryOptions, string statuses, bool fromAuth)
+        {
+            var result = await this._internalRequestService.SelectAllForJudgeWithPaginationAsync(aQueryOptions, statuses);
+            return Ok(result);
+        }
+
         [HttpGet("requests-count")]
         public async Task<IActionResult> GetRequestCount()
         {
@@ -38,6 +46,13 @@ namespace MJ_CAIS.Web.Controllers
         public new async Task<IActionResult> Get(string aId)
         {
             return await base.Get(aId);
+        }
+
+        [HttpGet("selected-bulletins/{aId}")]
+        public IActionResult GetSelectedBulletins(string aId)
+        {
+            var result = this._internalRequestService.GetSelectedBulletins(aId);
+            return Ok(result);
         }
 
         [HttpPost("")]
@@ -66,5 +81,39 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
+        [HttpPut("{aId}/replay")]
+        public async Task<IActionResult> ChangeStatus(string aId, [FromBody] InternalRequstReplayDTO aInDto)
+        {
+            await this._internalRequestService.ReplayAsync(aId, aInDto.Accepted, aInDto.ResponseDescr);
+            return Ok();
+        }
+
+        [HttpPut("mark-as-read")]
+        public async Task<IActionResult> MarkAsRead([FromBody] List<string> ids)
+        {
+            await this._internalRequestService.MarkAsReaded(ids);
+            return Ok();
+        }
+
+        [HttpGet("get-pids-for-selection-dialog")]
+        public async Task<IActionResult> GetAllPidsForSelection(ODataQueryOptions<SelectPidGridDTO> aQueryOptions)
+        {
+            var result = await this._internalRequestService.SelectAllPidsForSelectionWithPaginationAsync(aQueryOptions);
+            return Ok(result);
+        }
+
+        [HttpGet("person-bulletins/{personId}")]
+        public IActionResult GetPersonBulletins(string personId)
+        {
+            var result = this._internalRequestService.GetPersonBulletins(personId);
+            return Ok(result);
+        }
+
+        [HttpGet("bulletin-with-pid/{bulletinId}")]
+        public async Task<IActionResult> GetBulletinWithPid(string bulletinId)
+        {
+            var result = await this._internalRequestService.GetBulletinWithPidDataAsync(bulletinId);
+            return Ok(result);
+        }
     }
 }

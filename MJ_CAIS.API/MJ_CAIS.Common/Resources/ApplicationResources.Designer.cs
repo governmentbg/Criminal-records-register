@@ -241,6 +241,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заявление с идентификатор {0} не съществува.
+        /// </summary>
+        public static string msgApplicationDoesNotExist {
+            get {
+                return ResourceManager.GetString("msgApplicationDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ако попълвате ръчно бюджетното платежно нареждане през Вашето електронно банкиране или на гише в някоя банка, моля, задължително в полетата „Основание за плащане“ и „Номер на документа, по който се плаща“ да посочите регистрационния номер на Вашето заявление. Номерът на заявлението, както и информация за извършване на плащането ще получите след подаване на заявлението..
         /// </summary>
         public static string msgBankPaymentInfo {

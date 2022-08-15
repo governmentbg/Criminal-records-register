@@ -14,14 +14,15 @@ namespace MJ_CAIS.EcrisObjectsServices
 {
     public class ServiceHelper
     {
-        public static async Task<string> GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType rEQ, CaisDbContext dbContext)
+        public static async Task<List<string>> GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType rEQ, CaisDbContext dbContext)
         {
-            var code = await dbContext.DDocTypes.FirstOrDefaultAsync(d => d.Code == rEQ.ToString());
-            if (code == null)
+            var code = await dbContext.DDocTypes.AsNoTracking().Where(d => d.Code == rEQ.ToString()
+            && !d.Id.EndsWith("Old")).ToListAsync();
+            if (code == null || code.Count==0)
             {
                 throw new Exception($"D_DOC_TYPES does not contain record with code {rEQ.ToString()}");
             }
-            return code.Id;
+            return code.Select(x=>x.Id).ToList();
         }
 
         public static DDocument GetDDocument(MJ_CAIS.DTO.EcrisService.EcrisMessageType t, string? name, string? firstName, string? surName, string? familyName, CaisDbContext dbContext)
@@ -576,7 +577,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             if (msg.MessageType == EcrisMessageType.RRS)
             {
                 person = ((RequestResponseMessageType)msg).MessagePerson;
-                m.MsgTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, dbContext);
+                m.MsgTypeId = (await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, dbContext)).FirstOrDefault();
                 if (((RequestResponseMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;
@@ -618,7 +619,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             if (msg.MessageType == EcrisMessageType.NRS)
             {
                 person = ((NotificationResponseMessageType)msg).MessagePerson;
-                m.MsgTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NRS, dbContext);
+                m.MsgTypeId = (await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NRS, dbContext)).FirstOrDefault(x=>!x.EndsWith("Old"));
                 if (((NotificationResponseMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;
@@ -638,7 +639,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             if (msg.MessageType == EcrisMessageType.NOT)
             {
                 person = ((NotificationMessageType)msg).MessagePerson;
-                m.MsgTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, dbContext);
+                m.MsgTypeId = (await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, dbContext)).FirstOrDefault(x=>!x.EndsWith("Old"));
                 if (((NotificationMessageType)msg).RequestMessageUrgency?.Value.ToLower() == "yes")
                 {
                     m.Urgent = true;

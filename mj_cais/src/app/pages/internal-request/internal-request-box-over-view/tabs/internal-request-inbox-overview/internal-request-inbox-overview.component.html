@@ -17,6 +17,18 @@
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
+  <igx-grid-toolbar style="padding-left: 0.8rem">
+    <igx-grid-toolbar-actions>
+      <div class="ml-auto">
+        <nb-toggle
+          (checkedChange)="onShowAllChange($event)"
+          status="info"
+          labelPosition="left"
+          >Всички</nb-toggle
+        >
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
   <igx-column
     field="id"
     header="Идентификатор"
@@ -31,7 +43,7 @@
 
   <igx-column
     field="requestDate"
-    header="Дата на зъздаване"
+    header="Дата на създаване"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -40,7 +52,7 @@
     </ng-template>
   </igx-column>
   <igx-column
-    field="statusName"
+    field="reqStatusName"
     header="Статус"
     [sortable]="true"
     [dataType]="'string'"
@@ -72,7 +84,7 @@
   </igx-column>
 
   <igx-column
-    width="150px"
+    width="100px"
     header=""
     [sortable]="false"
     [filterable]="false"
@@ -81,9 +93,18 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
+        [queryParams]="{ activeTab: 'inbox' }"
         [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>
+      <a
+        *ngIf="hideStatus"
+        [title]="'Обработка'"
+        [queryParams]="{ activeTab: 'inbox' }"
+        [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
+      >
+        <nb-icon pack="far" icon="paper-plane"></nb-icon>
       </a>
     </ng-template>
   </igx-column>

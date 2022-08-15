@@ -71,7 +71,7 @@ namespace EcrisToCAISExporter
                     {
                         var ecrisTOService = host.Services.GetService<EcrisToCAISService>();
 
-                        await ecrisTOService.SynchRequests(username, password, folderNameRequests, pageSize,endpointAuth,endpointStore,endpointSearch, folderRequestsIncludeSubfolders, skipDataExtractionForRequests, joinSeparator, paramRequestSynch);
+                        await ecrisTOService.SynchRequests(username, password, folderNameRequests, pageSize, endpointAuth, endpointStore, endpointSearch, folderRequestsIncludeSubfolders, skipDataExtractionForRequests, joinSeparator, paramRequestSynch);
                     }
                     //});
                     //var t2 = Task.Run(async () =>

@@ -34,7 +34,7 @@
 
   <igx-column
     field="requestDate"
-    header="Дата на зъздаване"
+    header="Дата на създаване"
     [sortable]="true"
     [dataType]="'string'"
   >
@@ -74,25 +74,27 @@
     <ng-template igxCell let-cell="cell">
       <a
         [title]="'Преглед'"
+        [queryParams]="{ activeTab: 'draft' }"
         [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
         [title]="'Редактиране'"
+        [queryParams]="{ activeTab: 'draft' }"
         [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
       >
         <nb-icon pack="fa" icon="pen"></nb-icon>
       </a>
       <a
       [title]="'Изтриване'"
-      (click)="delete(cell.rowData.id)"
+      (click)="onDelete(cell.rowData.id)"
     >
       <nb-icon pack="fa" icon="trash"></nb-icon>
     </a>
       <a
       [title]="'Изпращане'"
-      (click)="send(cell.rowData.id)"
+      (click)="onSend(cell.rowData.id)"
     >
       <nb-icon pack="fa" icon="paper-plane"></nb-icon>
     </a>
