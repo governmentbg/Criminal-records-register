@@ -7,6 +7,8 @@ import { InternalRequestDraftOvverviewComponent } from "./internal-request-box-o
 import { InternalRequestInboxOverviewComponent } from "./internal-request-box-over-view/tabs/internal-request-inbox-overview/internal-request-inbox-overview.component";
 import { InternalRequestOutboxOverviewComponent } from "./internal-request-box-over-view/tabs/internal-request-outbox-overview/internal-request-outbox-overview.component";
 import { NbTooltipModule } from "@nebular/theme";
+import { SelectPidDialogComponent } from "./internal-request-form/dialogs/select-pid-dialog/select-pid-dialog.component";
+import { InternalRequestForJudgeOverviewComponent } from './internal-request-for-judge-overview/internal-request-for-judge-overview.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,13 @@ import { NbTooltipModule } from "@nebular/theme";
     InternalRequestDraftOvverviewComponent,
     InternalRequestInboxOverviewComponent,
     InternalRequestOutboxOverviewComponent,
+    SelectPidDialogComponent,
+    InternalRequestForJudgeOverviewComponent,
   ],
-  imports: [CoreComponentModule, InternalRequestRoutingModule, NbTooltipModule],
+  imports: [
+    CoreComponentModule,
+    InternalRequestRoutingModule,
+    NbTooltipModule,
+  ],
 })
 export class InternalRequestModule {}

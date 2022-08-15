@@ -100,7 +100,105 @@
         </div>
       </div>
 
-      <div class="row">
+      <label class="label">Бюлетини на лице</label>
+      <hr />
+      <ng-template #emptyTemplate> </ng-template>
+      <app-grid-with-transactions
+        [gridTransactions]="personBulletinsGridTransactions"
+      >
+        <igx-grid
+          #personBulletinsGrid
+          [height]="null"
+          [data]="this.personBulletins"
+          [primaryKey]="'id'"
+          [rowEditable]="true"
+          [addRowEmptyTemplate]="emptyTemplate"
+          displayDensity="compact"
+          (onRowDeleted)="onBulletinDeleted($event)"
+          (rendered)="onBulletinGridRendered()"
+        >
+          <igx-column
+            field="id"
+            header="Идентификатор"
+            [editable]="false"
+            [dataType]="'string'"
+            [hidden]="true"
+          >
+            <ng-template igxCell let-cell="cell">
+              <span [title]="cell.value">{{ cell.value }}</span>
+            </ng-template>
+          </igx-column>
+          <igx-column
+            [width]="'15%'"
+            field="bulletinType"
+            header="Тип"
+            [editable]="false"
+            [dataType]="'string'"
+          >
+            <ng-template igxCell let-cell="cell">
+              <span [title]="cell.value">{{ cell.value }}</span>
+            </ng-template>
+          </igx-column>
+          <igx-column
+            [width]="'15%'"
+            field="statusName"
+            header="Статус"
+            [editable]="false"
+            [dataType]="'string'"
+          >
+            <ng-template igxCell let-cell="cell">
+              <span [title]="cell.value">{{ cell.value }}</span>
+            </ng-template>
+          </igx-column>
+
+          <igx-column
+            field="registrationNumber"
+            header="Номер на бюлетин"
+            [editable]="false"
+            [dataType]="'string'"
+          >
+            <ng-template igxCell let-cell="cell">
+              <span [title]="cell.value">{{ cell.value }}</span>
+            </ng-template>
+          </igx-column>
+          <igx-column
+            field="bulletinAuthorityName"
+            header="Съд изготвил бюлетина"
+            [editable]="false"
+            [dataType]="'string'"
+          >
+            <ng-template igxCell let-cell="cell">
+              <span [title]="cell.value">{{ cell.value }}</span>
+            </ng-template>
+          </igx-column>
+          <igx-column
+            [width]="'30%'"
+            field="remarks"
+            header="Описание"
+            [dataType]="'string'"
+            [editable]="canEditGrid"
+          >
+            <ng-template igxCell let-cell="cell">
+              <span [title]="cell.value">{{ cell.value }}</span>
+            </ng-template>
+          </igx-column>
+          <ng-template igxRowEditActions let-endRowEdit>
+            <div class="custom-buttons">
+              <button igxButton igxRowEditTabStop (click)="endRowEdit(false)">
+                <igx-icon>clear</igx-icon> Отказ
+              </button>
+              <button igxButton igxRowEditTabStop (click)="endRowEdit(true)">
+                <igx-icon>add</igx-icon> Запис
+              </button>
+            </div>
+          </ng-template>
+          <igx-action-strip #actionstrip *ngIf="canEditGrid">
+            <igx-grid-editing-actions [addRow]="false" [contentEditable]="canEditGrid">
+            </igx-grid-editing-actions>
+          </igx-action-strip>
+        </igx-grid>
+      </app-grid-with-transactions>
+      <div class="row mt-2">
         <div class="form-group col-md-6">
           <cais-input
             [type]="'text'"
@@ -112,7 +210,10 @@
         </div>
       </div>
       <ng-container
-        *ngIf="isEdit() && requestStatusCode != InternalRequestStatusCodeConstants.Draft"
+        *ngIf="
+          isEdit() &&
+          requestStatusCode != InternalRequestStatusCodeConstants.Draft
+        "
       >
         <div class="row">
           <div class="form-group col-md-6">

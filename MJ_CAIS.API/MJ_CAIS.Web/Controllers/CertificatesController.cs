@@ -121,10 +121,10 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
-        [HttpPut("{aId}/bulletins-rehabilitation")]
-        public async Task<IActionResult> BulletinsRehabilitation(string aId, [FromBody] string[] ids)
+        [HttpPut("{aId}/bulletins-rehabilitation/{newRequestId}")]
+        public async Task<IActionResult> BulletinsRehabilitation(string aId, string newRequestId, [FromBody] string[] ids)
         {
-            await this._certificateService.SetBulletinsForRehabilitationAsync(aId, ids);
+            await this._certificateService.SetBulletinsForRehabilitationAsync(aId, newRequestId, ids);
             return Ok();
         }
     }
