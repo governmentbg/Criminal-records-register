@@ -513,7 +513,7 @@ namespace MJ_CAIS.Services
             cert.Id = BaseEntity.GenerateNewId();
             cert.EntityState = EntityStateEnum.Added;
             cert.ApplicationId = applicationId;
-            _certificateService.SetCertificateStatus(cert, aStatus, "Създаване на сертификат");
+            await _certificateService.SetCertificateStatus(cert, aStatus, "Създаване на сертификат");
 
 
             if (applicationTypeCode == ApplicationConstants.ApplicationTypes.DeskCertificate)

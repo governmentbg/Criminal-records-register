@@ -21,6 +21,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .ThenInclude(x => x.DocContent)
                 .AsNoTracking()
                 .Where(x => x.ApplicationId == appId)
+                .Where(x => x.StatusCode != "CanceledCertificate")
                 .OrderByDescending(x => x.CreatedOn)
                 .FirstOrDefaultAsync();
 
@@ -81,7 +82,8 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<DDocContent> GetCertificateDocumentByAccessCode(string accessCode)
         {
-            return await _dbContext.ACertificates.Where(x => x.AccessCode1 == accessCode && x.Doc != null).Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
+            return await _dbContext.ACertificates.Where(x => x.AccessCode1 == accessCode && x.Doc != null)
+                .Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
         }
 
         public async Task<ACertificate> GetCertificateData(string aId)
@@ -92,36 +94,37 @@ namespace MJ_CAIS.Repositories.Impl
                 .Where(x => x.Id == aId)
                 .FirstOrDefaultAsync();
         }
+
         public async Task<ACertificate> GetCertificateWithDocumentContent(string certificateID)
         {
             return await _dbContext.ACertificates
-                                  .Include(c => c.Doc)
-                                  .ThenInclude(d => d.DocContent)
-                                  .Include(c => c.Application)
-                                  .Where(x => x.Id == certificateID)
-                                  .FirstOrDefaultAsync();
+                .Include(c => c.Doc)
+                .ThenInclude(d => d.DocContent)
+                .Include(c => c.Application)
+                .Where(x => x.Id == certificateID)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<ACertificate> GetCertificateWithIncludedDataForApplicationAndBulletins(string certificateID)
         {
             return await _dbContext.ACertificates.AsNoTracking()
-                                    .Include(c => c.AAppBulletins).AsNoTracking()
-                                    .Include(c => c.Application)
-                                    .ThenInclude(appl => appl.PurposeNavigation).AsNoTracking()
-                                    .Include(c => c.Application.SrvcResRcptMeth).AsNoTracking()
-                                    .Include(c => c.AStatusHes).AsNoTracking()
-                                    .Include(c => c.Application.ApplicationType).AsNoTracking()
-                                    .FirstOrDefaultAsync(x => x.Id == certificateID);
+                .Include(c => c.AAppBulletins).AsNoTracking()
+                .Include(c => c.Application)
+                .ThenInclude(appl => appl.PurposeNavigation).AsNoTracking()
+                .Include(c => c.Application.SrvcResRcptMeth).AsNoTracking()
+                .Include(c => c.AStatusHes).AsNoTracking()
+                .Include(c => c.Application.ApplicationType).AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == certificateID);
         }
 
         public async Task<ACertificate> GetCertificateDataWithContentAndType(string certificateID)
         {
             return await _dbContext.ACertificates
-                                    .Include(c => c.Doc.DocType)
-                                    .Include(c => c.Doc)
-                                    .ThenInclude(d => d.DocContent)
-                                    .Where(x => x.Id == certificateID)
-                                    .FirstOrDefaultAsync();
+                .Include(c => c.Doc.DocType)
+                .Include(c => c.Doc)
+                .ThenInclude(d => d.DocContent)
+                .Where(x => x.Id == certificateID)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId)
@@ -130,7 +133,7 @@ namespace MJ_CAIS.Repositories.Impl
                     join wa in _dbContext.WApplications on c.WApplId equals wa.Id
                     join p in _dbContext.APurposes on wa.PurposeId equals p.Id
                     where wa.UserExtId == userId
-                    select new CertificateExternalDTO()
+                    select new CertificateExternalDTO
                     {
                         Egn = wa.Egn,
                         Names = wa.Firstname + " " + wa.Surname + " " + wa.Familyname,
@@ -141,6 +144,7 @@ namespace MJ_CAIS.Repositories.Impl
                         WAppId = wa.Id
                     }).AsQueryable();
         }
+
         public async Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId)
         {
             return (from c in _dbContext.WCertificates
@@ -148,7 +152,7 @@ namespace MJ_CAIS.Repositories.Impl
                     join p in _dbContext.APurposes on wa.PurposeId equals p.Id
                     where wa.UserId == userId
                     orderby c.ValidFrom descending
-                    select new CertificatePublicDTO()
+                    select new CertificatePublicDTO
                     {
                         ValidFrom = c.ValidFrom,
                         AccessCode1 = c.AccessCode1,
@@ -156,6 +160,20 @@ namespace MJ_CAIS.Repositories.Impl
                         Purpose = wa.Purpose,
                         WAppId = wa.Id
                     }).AsQueryable();
+        }
+
+
+        public IQueryable<ACertificate> GetCanceledByApplicationId(string appId)
+        {
+            var certificate = _dbContext.ACertificates
+                .Include(x => x.StatusCodeNavigation)
+                .Include(x => x.FirstSigner)
+                .Include(x => x.SecondSigner)
+                .AsNoTracking()
+                .Where(x => x.ApplicationId == appId)
+                .Where(x => x.StatusCode == "CanceledCertificate");
+
+            return certificate;
         }
     }
 }

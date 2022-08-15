@@ -29,5 +29,7 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._applicationSearchService.SelectAllWithPaginationAsync(aQueryOptions);
             return Ok(result);
         }
+
+        //[HttpGet("{aId}")]
     }
 }

@@ -21,5 +21,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<ACertificate> GetCertificateDataWithContentAndType(string certificateID);
         Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId);
         Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId);
+        IQueryable<ACertificate> GetCanceledByApplicationId(string appId);
     }
 }

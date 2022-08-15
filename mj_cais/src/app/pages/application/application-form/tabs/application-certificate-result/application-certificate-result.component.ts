@@ -171,7 +171,7 @@ export class ApplicationCertificateResultComponent
 
       this.scrollToValidationError();
     } else {
-      let model = this.fullForm.group.value;
+      let model = this.fullForm.group.getRawValue();
       let id = this.fullForm.id.value;
       this.service.saveSignerData(id, model).subscribe((response: any) => {
         this.downloadSertificate(id);
@@ -292,6 +292,13 @@ export class ApplicationCertificateResultComponent
       };
   }
 
+  deliver(){
+    this.service.setStatusToDelivered(this.model.applicationId).subscribe(x =>{
+      debugger;
+      this.redirectLocationBack();
+    })
+  }
+
   downloadSertificate(id) {
     this.service.downloadSertificate(id).subscribe((response: any) => {
       this.model.statusCode = CertificateStatuTypeEnum.CertificatePaperPrint;
@@ -310,6 +317,42 @@ export class ApplicationCertificateResultComponent
       }
 
       fileSaver.saveAs(blob, fileName);
+      this.service.getCertificateByAppId(this.model.applicationId).subscribe(x => {
+        debugger;
+        this.model = x;
+        this.fullForm.group.patchValue(new ApplicationCertificateResultModel(this.model));
+        if (this.model) {
+          if (
+            this.model.statusCode ==
+              CertificateStatuTypeEnum.CertificatePaperPrint ||
+            this.model.statusCode == CertificateStatuTypeEnum.Delivered
+          ) {
+            this.fullForm.group.disable();
+          }
+    
+          if (
+            this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck ||
+            this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
+          ) {
+            this.service
+              .getBulletinsCheck(
+                this.fullForm.id.value,
+                this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
+              )
+              .subscribe((response) => {
+                this.bulletinsCheckData = response;
+              });
+          }
+          if (this.model.firstSignerId == null) {
+            this.model.firstSignerId = this.userInfoService.userId;
+            this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
+          }
+        }
+    
+        if (this.isForPreview) {
+          this.fullForm.group.disable();
+        }
+      })
     }),
       (error) => {
         var errorText = error.status + " " + error.statusText;

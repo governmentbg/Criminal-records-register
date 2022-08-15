@@ -1,4 +1,4 @@
-<nb-card class="card-single-page-height" >
+<nb-card class="card-single-page-height">
   <nb-card-header class="card-header-shadow">
     <cais-card-header
       [label]="displayTitle"
@@ -69,7 +69,7 @@
           Отхвърляне
         </button>
         <button
-          *ngIf="!isForPreview &&  !isCreate"
+          *ngIf="!isForPreview && !isCreate"
           nbButton
           matRipple
           [status]="'success'"
@@ -178,6 +178,8 @@
             [isEditable]="
               fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
+              fullForm.statusCode.value !=
+                ApplicationTypeStatusConstants.Canceled &&
               !this.isForPreview
             "
           >
@@ -306,6 +308,15 @@
         <nb-tab tabTitle="Проверка в регистри">
           <cais-application-e-web-requests [historyData]="dbData.eWebRequest">
           </cais-application-e-web-requests>
+        </nb-tab>
+
+        <nb-tab tabTitle="История на свидетелствата">
+          <cais-application-certificate-canceled
+            [applicationCertificateCanceled]="
+              dbData.applicationCertificateCanceled
+            "
+          >
+          </cais-application-certificate-canceled>
         </nb-tab>
       </nb-tabset>
     </form>

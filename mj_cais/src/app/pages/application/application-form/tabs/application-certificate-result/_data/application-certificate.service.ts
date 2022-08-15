@@ -1,6 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
+import { ApplicationCertificateCanceldModel } from "../../application-certificate-canceled/_data/application-certificate-cancled.model";
 import { ApplicationCertificateDocumentModel } from "../_models/application-certificate-document.model";
 import { ApplicationCertificateResultModel } from "../_models/application-certificate-result.model";
 import { BulletinCheckGridModel } from "../_models/bulletin-check-grid.model";
@@ -64,6 +65,18 @@ export class ApplicationCertificateService extends CaisCrudService<
   ): Observable<ApplicationCertificateResultModel> {
     return this.http.get<ApplicationCertificateResultModel>(
       `${this.url}/by-application/${appId}`
+    );
+  }
+
+  public setStatusToDelivered(appId: string) : Observable<any> {
+    return this.http.get<any>(
+      `${this.url}/set-status-to-delivered/${appId}`
+    );
+  }
+
+  public getCanceledCertificateByAppId(appId: string) : Observable<ApplicationCertificateCanceldModel> {
+    return this.http.get<ApplicationCertificateCanceldModel>(
+      `${this.url}/by-application-canceled/${appId}`
     );
   }
 

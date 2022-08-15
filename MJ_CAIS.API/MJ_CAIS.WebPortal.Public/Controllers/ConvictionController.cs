@@ -19,6 +19,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> ViewByCode(string id)
         {
             //var cert = await _certificateService.GetCertificateDocumentContent(id);
