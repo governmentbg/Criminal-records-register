@@ -29,6 +29,9 @@
                         <th>
                             Цел
                         </th>
+                        <th>
+                            Описание на целта
+                        </th>
                         <th class="col-md-4">
                             Действия
                         </th>
@@ -40,12 +43,15 @@
                                 @Html.DisplayFor(modelItem => item.ValidFrom)
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.PurposeName)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Purpose)
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a asp-action="Preview" asp-controller="Application" asp-route-id="@item.WAppId" class="btn btn-primary">Заявление</a>
-                                    <a asp-action="ViewByCode" asp-controller="Conviction" asp-route-id="@item.AccessCode1" class="btn btn-primary" target="_blank"><i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate</a>
+                                    <a asp-action="Preview" asp-controller="Application" asp-route-id="@item.WAppId">Заявление</a>
+                                    <a asp-action="ViewByCode" asp-controller="Conviction" asp-route-id="@item.AccessCode1" target="_blank"><i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate</a>
                                 </div>
                             </td>
                         </tr>
