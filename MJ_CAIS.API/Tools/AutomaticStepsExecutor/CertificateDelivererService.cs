@@ -93,7 +93,7 @@ namespace AutomaticStepsExecutor
                     {
                         var certificate = (ACertificate)entity;
                         await _certificateGenerationService.DeliverCertificateAsync(certificate,  mailBodyTemplate, mailSubjectTemplate, webPortalUrl);
-                        _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
+                        await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
                         await _dbContext.SaveChangesAsync();
                         _dbContext.ChangeTracker.Clear();
                         numberOfSuccessEntities++;
