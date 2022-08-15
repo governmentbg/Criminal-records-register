@@ -241,6 +241,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ако попълвате ръчно бюджетното платежно нареждане през Вашето електронно банкиране или на гише в някоя банка, моля, задължително в полетата „Основание за плащане“ и „Номер на документа, по който се плаща“ да посочите регистрационния номер на Вашето заявление. Номерът на заявлението, както и информация за извършване на плащането ще получите след подаване на заявлението..
+        /// </summary>
+        public static string msgBankPaymentInfo {
+            get {
+                return ResourceManager.GetString("msgBankPaymentInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to При избор на &quot;Освободено от плащане&quot; трябва да прикачите документ удостоверяващ това право..
         /// </summary>
         public static string msgPaymentFreeInfo {
@@ -250,11 +259,29 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to За да се обработи заявката, е необходимо в 14-дневен срок да заплатите държавна такса за издаване на свидетелство за съдимост в размер на 3.00 лв..
+        ///   Looks up a localized string similar to За да се обработи заявката, е необходимо в 14-дневен срок да заплатите държавна такса за издаване на свидетелство за съдимост в размер на {0} лв..
         /// </summary>
         public static string msgPaymentInfo {
             get {
                 return ResourceManager.GetString("msgPaymentInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ще бъде създадено задължение за плащане в единната входна точка за електронни плащания за централната и местната администрации - pay.egov.bg, след което ще бъдете пренасочени към виртуален ПОС терминал за извършване на плащането..
+        /// </summary>
+        public static string msgPaymentInfoCard {
+            get {
+                return ResourceManager.GetString("msgPaymentInfoCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ще бъде създадено задължение за плащане в единната входна точка за електронни плащания за централната и местната администрации - pay.egov.bg, след което ще бъдете пренасочени към страницата на ePay/EasyPay за извършване на плащането..
+        /// </summary>
+        public static string msgPaymentInfoEPayEasyPay {
+            get {
+                return ResourceManager.GetString("msgPaymentInfoEPayEasyPay", resourceCulture);
             }
         }
         

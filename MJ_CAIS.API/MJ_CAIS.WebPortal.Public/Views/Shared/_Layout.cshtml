@@ -29,7 +29,7 @@
     <main class="flex-shrink-0">
 
         <header class="py-2 bg-white">
-            <div class="d-flex justify-content-between container">
+            <div class="d-flex justify-content-between container-lg">
                 <div class="d-flex gap-2 align-items-center">
                     <div>
                         <img class="img-fluid" style="height: 73px" src="@Url.Content("~/images/logo.svg")" />
@@ -49,7 +49,7 @@
             </div>
         </header>
         <div class="bg-primary shadow">
-            <div class="container">
+            <div class="container-lg">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-rimary" aria-label="Fourth navbar example">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="/">@CommonResources.titlePublicPortal</a>
@@ -82,7 +82,7 @@
         </div>
 
         <div class="content container-fluid">
-            <div class="container py-4">
+            <div class="container-lg py-4">
                 <main role="main">
                     @RenderBody()
                 </main>
@@ -91,7 +91,7 @@
     </main>
 
     <footer class="footer mt-auto py-2 bg-white shadow">
-        <div class="d-flex flex-md-row flex-column justify-content-evenly container gap-3 align-items-center">
+        <div class="d-flex flex-md-row flex-column justify-content-evenly container-lg gap-3 align-items-center">
             <p class="text-center small">
                 @CommonResources.titleContractInfoExt
             </p>
