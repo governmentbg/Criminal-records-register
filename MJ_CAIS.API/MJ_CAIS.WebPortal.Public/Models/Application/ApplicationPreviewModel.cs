@@ -28,6 +28,8 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblPaymentMethodId))]
         public string? PaymentMethodName { get; set; }
 
+        public string? PaymentMethodCode { get; set; }
+
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblIsPaid))]
         public bool? IsPaid { get; set; }
 
@@ -37,5 +39,10 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         public bool HasGeneratedCertificate { get; set; }
 
         public string? ReturnFromPaymentResult { get; set; }
+
+        public string? ServiceProviderBIC { get; set; }
+        public string? ServiceProviderBank { get; set; }
+        public string? ServiceProviderIBAN { get; set; }
+        public string? ServiceProviderName { get; set; }
     }
 }

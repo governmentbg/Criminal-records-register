@@ -34,12 +34,12 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
     super.ngOnInit();
   }
 
-  public send(id) {
+  public onSend(id) {
     this.loaderService.show();
     this.changeStatus(id, InternalRequestStatusCodeConstants.Sent);
   }
 
-  public delete(id) {
+  public onDelete(id) {
     this.loaderService.show();
     this.internalRequestFormService.delete(id).subscribe(
       (res) => {

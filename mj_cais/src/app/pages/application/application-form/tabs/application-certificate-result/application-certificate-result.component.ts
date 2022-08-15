@@ -15,6 +15,8 @@ import { NbDialogService } from "@nebular/theme";
 import { CommonConstants } from "../../../../../@core/constants/common.constants";
 import { ApplicationCertificateDocumentResultComponent } from "../application-certificate-document-result/application-certificate-document-result.component";
 import { ApplicationCertificateDocumentModel } from "./_models/application-certificate-document.model";
+import { Guid } from "guid-typescript";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -48,14 +50,17 @@ export class ApplicationCertificateResultComponent
     public injector: Injector,
     public dateFormatService: DateFormatService,
     private userInfoService: UserInfoService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private loaderService: NgxSpinnerService
   ) {
     super(service, injector);
   }
 
   ngOnInit(): void {
     this.fullForm = new ApplicationCertificateResultForm();
-    this.fullForm.group.patchValue(new ApplicationCertificateResultModel(this.model));
+    this.fullForm.group.patchValue(
+      new ApplicationCertificateResultModel(this.model)
+    );
     if (this.model) {
       if (
         this.model.statusCode ==
@@ -121,21 +126,24 @@ export class ApplicationCertificateResultComponent
           object.documentContent = x.documentContent;
           this.service
             .uploadSignedCertificate(this.fullForm.id.value, object)
-            .subscribe((y) => {
-              let res = y;
-              this.toastr.showBodyToast(
-                "success",
-                "Успешно качване на файл",
-                ""
-              );
-            },   (error) => {
-              var errorText = error.status + " " + error.statusText;
-              this.toastr.showBodyToast(
-                "danger",
-                "Грешка при качване на файла:",
-                errorText
-              );
-            });
+            .subscribe(
+              (y) => {
+                let res = y;
+                this.toastr.showBodyToast(
+                  "success",
+                  "Успешно качване на файл",
+                  ""
+                );
+              },
+              (error) => {
+                var errorText = error.status + " " + error.statusText;
+                this.toastr.showBodyToast(
+                  "danger",
+                  "Грешка при качване на файла:",
+                  errorText
+                );
+              }
+            );
         }
       }),
       (error) => {
@@ -181,7 +189,7 @@ export class ApplicationCertificateResultComponent
 
   printCertificate() {
     this.service
-      .downloadSertificateContent(this.model.id,this.applicationCode)
+      .downloadSertificateContent(this.model.id, this.applicationCode)
       .subscribe((response: any) => {
         this.fullForm.group.disable();
         let blob = new Blob([response.body]);
@@ -223,18 +231,38 @@ export class ApplicationCertificateResultComponent
   }
 
   sendBulltinsForRehabilitation() {
-    var selectedItesm = this.bulletinsCheckGrid.selectedRows;
+    var selectedItems = this.bulletinsCheckGrid.selectedRows;
+    if (
+      selectedItems == null ||
+      selectedItems == undefined ||
+      selectedItems.length == 0
+    ) {
+      this.toastr.showBodyToast("danger", "Няма избрани бюлетини", "");
+      return;
+    }
+
+    this.loaderService.show();
+    let newRequestId = Guid.create().toString();
     this.service
-      .sendBulletinsForRehabilitation(this.model.id, selectedItesm)
+      .sendBulletinsForRehabilitation(
+        this.model.id,
+        newRequestId,
+        selectedItems
+      )
       .subscribe((response: any) => {
+        this.loaderService.hide();
+
         this.model.statusCode =
           CertificateStatuTypeEnum.BulletinsRehabilitation;
-        this.router.navigate(["pages/applications/for-check"]);
-      }),
+
+        this.router.navigate(["pages/internal-requests/edit", newRequestId]);
+      },
       (error) => {
+        this.loaderService.hide();
+
         var errorText = error.status + " " + error.statusText;
         this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
-      };
+      });
   }
 
   generateCertificateByJudge() {

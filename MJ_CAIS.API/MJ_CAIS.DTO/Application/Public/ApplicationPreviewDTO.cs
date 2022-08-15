@@ -18,6 +18,8 @@
 
         public string? PaymentMethodName { get; set; }
 
+        public string? PaymentMethodCode { get; set; }
+
         public bool? IsPaid { get; set; }
 
         public string? Status { get; set; }

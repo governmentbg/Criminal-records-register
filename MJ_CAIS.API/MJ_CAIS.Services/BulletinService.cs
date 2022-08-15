@@ -584,16 +584,88 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties ??= new List<string>();
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
+        private void SetEcrisConvID(BBulletin bulletin)
+        {
+            int caseNum;
+            try
+            {
+                if(string.IsNullOrEmpty(bulletin.CaseNumber))
+                {
+                    throw new Exception();
+                }
+                caseNum = Int32.Parse(bulletin.CaseNumber);
+                if (caseNum > 99999)
+                {
+                    //слагаме му водещи нули
+                    throw new Exception();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Номерът на осъждане е в грешен формат.");
+            }
+            if (string.IsNullOrEmpty(bulletin.CsAuthorityId) || bulletin.CsAuthorityId.Length != 3)
+            {
+                throw new Exception("Некоректен идентификатор на бюро съдимост.");
+            }
+            if (!bulletin.CaseYear.HasValue || bulletin.CaseYear>9999 || bulletin.CaseYear < 1000)
+            {
+                throw new Exception("Некоректена година.");
+            }
 
-        /// <summary>
-        /// Set data for nationalities.
-        /// If person is EU Citizen message to ecris must be sent
-        /// If person is not EU Citizen message to ecris tcn must be sent
-        /// The person may be bouth
-        /// </summary>
-        /// <param name="bulletin"></param>
-        /// <returns></returns>
-        private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
+            if (string.IsNullOrEmpty(bulletin.CaseTypeId))
+            {
+                
+                throw new Exception("Некоректен идентификатор на вид дело.");
+            }
+
+            //< select id = "case_id" > 
+            // < option value = "01" > НОХД </ option >  
+            //  < option value = "02" > НАХД </ option >   
+            //   < option value = "03" > ЧНД </ option >    
+            //    < option value = "04" > НЧХД </ option >     
+            //     < option value = "05" > ВНОХД </ option >      
+            //      < option value = "06" > ВНАХД </ option >       
+            //       < option value = "07" > ВЧНД </ option >        
+            //        < option value = "08" > ВНЧХД </ option >         
+            //         < option value = "09" > КНАХД </ option >          
+            //          </ select >
+//            sign_naxd
+//sign_noxd
+//sign_ncd
+//sign_ncxd
+            string caseTypeID;
+            switch (bulletin.CaseTypeId)
+            {
+                //todo: да се допълни номенклатурата
+                case "sign_noxd":
+                    caseTypeID = "01";
+                        break;
+                case "sign_naxd":
+                    caseTypeID = "02";
+                    break;
+                case "sign_ncd":
+                    caseTypeID = "03";
+                    break;
+                case "sign_ncxd":
+                    caseTypeID = "04";
+                    break;
+                default:
+                    throw new Exception("Некоректен идентификатор на вид дело.");
+            }
+                      bulletin.EcrisConvictionId = "BG-C-" + bulletin.CsAuthorityId + caseTypeID
+                + "1" + Math.Truncate(bulletin.CaseYear.Value) + caseNum.ToString("D5");
+
+        }
+            /// <summary>
+            /// Set data for nationalities.
+            /// If person is EU Citizen message to ecris must be sent
+            /// If person is not EU Citizen message to ecris tcn must be sent
+            /// The person may be bouth
+            /// </summary>
+            /// <param name="bulletin"></param>
+            /// <returns></returns>
+            private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
         {
             bulletin.BgCitizen = bulletin.BPersNationalities.Any(x => x.CountryId == BG);
 
@@ -608,6 +680,7 @@ namespace MJ_CAIS.Services
             if (isEuCitizen)
             {
                 bulletin.EuCitizen = true;
+                SetEcrisConvID(bulletin);
             }
 
             var createEcrisTcn = personNationalities.Except(

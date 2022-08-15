@@ -41,12 +41,12 @@ namespace MJ_CAIS.EcrisObjectsServices
                 throw new Exception("Person is not identified.");
             }
             string graoIssuer = PersonConstants.IssuerType.GRAO;
-            string countryBGcode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2.ToUpper() == "BG"))?.Id;
+            string countryBGcode = (await _dbContext.GCountries.AsNoTracking().FirstOrDefaultAsync(c => c.Iso3166Alpha2.ToUpper() == "BG"))?.Id;
             if (string.IsNullOrEmpty(countryBGcode))
             {
                 throw new Exception("Country c.Iso3166Alpha2 == \"BG\" does not exist.");
             }
-            string egnType = (await _dbContext.PPersonIdTypes.FirstOrDefaultAsync(c => c.Code.ToUpper() == PersonConstants.PidType.Egn.ToUpper()))?.Id;
+            string egnType = (await _dbContext.PPersonIdTypes.AsNoTracking().FirstOrDefaultAsync(c => c.Code.ToUpper() == PersonConstants.PidType.Egn.ToUpper()))?.Id;
             if (string.IsNullOrEmpty(egnType))
             {
                 throw new Exception("Person Id type  Code== \"EGN\" does not exist.");

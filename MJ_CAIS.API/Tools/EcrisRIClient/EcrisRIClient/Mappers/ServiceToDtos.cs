@@ -197,7 +197,11 @@ namespace EcrisRIClient.Mappers
             CreateMap<EcrisRIClient.EcrisService.PersonAddressType, MJ_CAIS.DTO.EcrisService.PersonAddressType>()
                 .ReverseMap();
             CreateMap<EcrisRIClient.EcrisService.PersonAliasType, MJ_CAIS.DTO.EcrisService.PersonAliasType>()
-                .ReverseMap();
+                   .ForMember(dest => dest.PersonBirthPlace, opt => opt.MapFrom(src => AbstractTypeResolver<EcrisRIClient.EcrisService.AbstractPlaceType,
+                 MJ_CAIS.DTO.EcrisService.AbstractPlaceType>(src.PersonBirthPlace)))
+                .ReverseMap()
+                .ForMember(dest => dest.PersonBirthPlace, opt => opt.MapFrom(src => AbstractTypeResolver<MJ_CAIS.DTO.EcrisService.AbstractPlaceType,
+                 EcrisRIClient.EcrisService.AbstractPlaceType>(src.PersonBirthPlace))); 
             CreateMap<EcrisRIClient.EcrisService.UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation, MJ_CAIS.DTO.EcrisService.UncollapsedMultilingualTextTypeMultilingualTextLinguisticRepresentation>()
                 .ReverseMap();
             CreateMap<EcrisRIClient.EcrisService.PlaceType, MJ_CAIS.DTO.EcrisService.PlaceType>()

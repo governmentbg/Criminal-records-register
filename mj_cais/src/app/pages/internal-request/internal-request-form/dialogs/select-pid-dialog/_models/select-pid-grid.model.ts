@@ -1,4 +1,4 @@
-import { BaseGridModel } from "../../../../models/common/base-grid.model";
+import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.model";
 
 export class SelecrPidGridModel extends BaseGridModel {
   public pid: string = null;

@@ -30,6 +30,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<APaymentMethod, BaseNomenclatureDTO>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
 
+            CreateMap<APaymentMethod, PaymentMethodDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
+
             CreateMap<ASrvcResRcptMeth, BaseNomenclatureDTO>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code));
 

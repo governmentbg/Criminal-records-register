@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { CaisCrudService } from "../../../../services/rest/cais-crud.service";
+import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
 import { SelecrPidGridModel } from "../_models/select-pid-grid.model";
 
 @Injectable({
@@ -10,6 +10,6 @@ export class SelectPidGridService extends CaisCrudService<
   string
 > {
   constructor(injector: Injector) {
-    super(SelecrPidGridModel, injector, "people/get-pids-for-selection-dialog");
+    super(SelecrPidGridModel, injector, "internal-requests/get-pids-for-selection-dialog");
   }
 }

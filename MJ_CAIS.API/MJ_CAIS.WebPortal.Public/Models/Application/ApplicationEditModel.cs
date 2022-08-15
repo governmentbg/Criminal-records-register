@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using MJ_CAIS.Common;
 using MJ_CAIS.Common.Resources;
+using MJ_CAIS.DTO.NomenclatureDetail;
 using System.ComponentModel.DataAnnotations;
 
 namespace MJ_CAIS.WebPortal.Public.Models.Application
@@ -10,7 +11,7 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         public ApplicationEditModel()
         {
             this.PurposeTypes = new List<SelectListItem>();
-            this.PaymentMethodTypes = new List<SelectListItem>();
+            this.PaymentMethodTypes = new List<PaymentMethodDTO>();
             this.PurposeInfo = new Dictionary<string, string>();
         }
 
@@ -38,10 +39,11 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
 
         public string? ClientIp { get; set; }
         public string? RequiredPurposes { get; set; }
+        public decimal? Price { get; set; }
 
         public List<SelectListItem> PurposeTypes { get; set; }
         public Dictionary<string, string> PurposeInfo { get; set; }
-        public List<SelectListItem> PaymentMethodTypes { get; set; }
+        public List<PaymentMethodDTO> PaymentMethodTypes { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

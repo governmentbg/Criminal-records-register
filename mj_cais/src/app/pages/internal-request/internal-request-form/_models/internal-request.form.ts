@@ -16,6 +16,7 @@ export class InternalRequestForm extends BaseForm {
   public fromAuthorityId: FormControl;
   public toAuthorityId: FormControl;
   public nIntReqTypeId: FormControl;
+  public selectedBulletinsTransactions: FormControl;
 
   constructor() {
     super();
@@ -26,11 +27,12 @@ export class InternalRequestForm extends BaseForm {
     this.reqStatusCode = new FormControl(null);
     this.responseDescr = new FormControl(null);
     this.requestDate = new FormControl(new Date());
-    this.pPersIdId = new LookupForm(false);
+    this.pPersIdId = new LookupForm(true);
     this.reqStatusName = new FormControl(null);
     this.fromAuthorityId = new FormControl(null);
     this.toAuthorityId = new FormControl(null, Validators.required);
     this.nIntReqTypeId =  new FormControl(null,Validators.required);
+    this.selectedBulletinsTransactions = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -46,6 +48,7 @@ export class InternalRequestForm extends BaseForm {
       fromAuthorityId: this.fromAuthorityId,
       toAuthorityId: this.toAuthorityId,
       nIntReqTypeId: this.nIntReqTypeId,
+      selectedBulletinsTransactions: this.selectedBulletinsTransactions
     });
   }
 }

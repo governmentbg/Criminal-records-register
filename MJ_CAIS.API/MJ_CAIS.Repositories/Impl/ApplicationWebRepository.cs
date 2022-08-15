@@ -93,7 +93,8 @@ namespace MJ_CAIS.Repositories.Impl
                                     Status = status.Name,
                                     StatusCode = status.Code,
                                     IsPaid = ePayments.PaymentStatus == "Payed",
-                                    CertificateStatusCode = cert.StatusCode
+                                    CertificateStatusCode = cert.StatusCode,
+                                    PaymentMethodCode = paymentMethods.Code
                                 }).FirstOrDefaultAsync(x => x.Id == id);
 
             return result;
