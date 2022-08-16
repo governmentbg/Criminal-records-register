@@ -77,7 +77,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             await  CreateNotificationFromBulletin(buletin, joinSeparator);
         }
 
-            private async Task LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
+        private async Task LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
         {
             msg.MessageType = EcrisMessageType.NOT;
             msg.MessageTypeSpecified = true;
@@ -256,9 +256,61 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
         }
-       
 
 
+        private async Task<NotificationResponseMessageType> CreateNotificationResponse(NotificationMessageType notification, string notResponseType)
+        {
+
+
+            NotificationResponseMessageType response = new NotificationResponseMessageType();
+            response.MessagePerson = notification.MessagePerson;
+            response.MessageSendingMemberState = MemberStateCodeType.BG;
+            response.MessageSendingMemberStateSpecified = true;
+
+            response.MessageReceivingMemberState = new MemberStateCodeType[1] {
+                    notification.MessageSendingMemberState
+            };
+            response.MessageSendingMemberStateSpecified = true;
+            response.MessageType = EcrisMessageType.NRS;
+            response.MessageTypeSpecified = true;
+            response.MessageResponseTo = new RestrictedIdentifiableMessageType()
+            {
+                MessageEcrisIdentifier = notification.MessageEcrisIdentifier,
+                MessageIdentifier = notification.MessageIdentifier
+            };
+
+            response.RequestResponseMessageOtherMemberState = new MemberStateCodeType[1] {
+                    notification.MessageSendingMemberState
+                };
+            response.NotificationResponseMessageNotificationResponseTypeReference = new NotificationResponseTypeExternalReferenceType()
+            {
+                Value = notResponseType// for successful - "NRT-00-00"
+
+            };
+
+            return response;
+        }
+         
+        public async Task CreateNotificationResponseInContext(NotificationMessageType notification, string notResponseType, string msgId)
+        {
+            var notificationResponce = await CreateNotificationResponse(notification, notResponseType);
+            await ServiceHelper.AddMessageToDBContextAsync(notificationResponce, "", "", ",", _dbContext, msgId);
+        }
+        public async Task CreateNotificationResponseInContext(string notificationEcrisMsgID, string notResponseType)
+        {
+           
+
+            var content = await _dbContext.DDocuments.AsNoTracking().Where(dd => dd.DocContent.MimeType == "application/xml" && dd.EcrisMsgId == notificationEcrisMsgID && dd.DocType.Code==EcrisMessageType.NOT.ToString()).Select(d => d.DocContent.Content).FirstOrDefaultAsync();
+
+            if (content == null)
+            {
+                throw new Exception("Не съществува такъв документ или документа не е нотификация.");
+            }
+            NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
+
+            await CreateNotificationResponseInContext(notification, notResponseType, notificationEcrisMsgID);
+      
+        }
 
     }
 }

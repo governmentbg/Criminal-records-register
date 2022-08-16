@@ -7,6 +7,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisService;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.EcrisObjectsServices;
+using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -23,15 +24,16 @@ namespace EcrisIntegrationServices
         const string ECRIS_REQUEST_CODE = "EcrisRequest";
         const string SUCCESSFULL_NOTIFICATION = "NRT-00-00"; 
         private readonly IManagePersonService _personService;
-
+        private readonly INotificationService _notificationService;
 
         RequestService _requestService;
-        public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService, IManagePersonService personService)
+        public EcrisMessageCreatorService(CaisDbContext dbContext, ILogger<EcrisMessageCreatorService> logger, RequestService requestService, IManagePersonService personService, INotificationService notificationService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _requestService = requestService;
             _personService = personService;
+            _notificationService = notificationService;
         }
         public async Task CreateResponsesToRequests(int pageSize, string joinSeparator)
         {
@@ -87,38 +89,7 @@ namespace EcrisIntegrationServices
 
         }
 
-        private async Task<NotificationResponseMessageType> CreateNotificationResponse(NotificationMessageType notification)
-        {
-            
-
-            NotificationResponseMessageType response = new NotificationResponseMessageType();
-            response.MessagePerson = notification.MessagePerson;
-            response.MessageSendingMemberState = MemberStateCodeType.BG;
-            response.MessageSendingMemberStateSpecified = true;
-
-            response.MessageReceivingMemberState = new MemberStateCodeType[1] {
-                    notification.MessageSendingMemberState
-            };
-            response.MessageSendingMemberStateSpecified = true;
-            response.MessageType = EcrisMessageType.NRS;
-            response.MessageTypeSpecified = true;
-            response.MessageResponseTo = new RestrictedIdentifiableMessageType()
-            {
-                MessageEcrisIdentifier = notification.MessageEcrisIdentifier,
-                MessageIdentifier = notification.MessageIdentifier
-            };
-
-            response.RequestResponseMessageOtherMemberState = new MemberStateCodeType[1] {
-                    notification.MessageSendingMemberState
-                };
-            response.NotificationResponseMessageNotificationResponseTypeReference = new NotificationResponseTypeExternalReferenceType()
-            {
-                Value = SUCCESSFULL_NOTIFICATION// for successful - "NRT-00-00"
-
-            };
-           
-            return response;
-        }
+    
         private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople()
         {
             //todo: кога сменяме статуса и дали не трябва винаги да връщаме първа страница?!
@@ -326,8 +297,10 @@ namespace EcrisIntegrationServices
                             _logger.LogTrace($"EcrisMessageID: {msg.Id} updated.");
 
                             _logger.LogTrace($"EcrisMessageID: {msg.Id} NRS creation started.");
-                            var notificationResponce = await CreateNotificationResponse(notification);
-                            await ServiceHelper.AddMessageToDBContextAsync(notificationResponce, "", "", ",", _dbContext, msg.Id);
+
+                            _notificationService.CreateNotificationResponseInContext(notification, SUCCESSFULL_NOTIFICATION, msg.Id);
+                            //var notificationResponce = await CreateNotificationResponse(notification);
+                            //await ServiceHelper.AddMessageToDBContextAsync(notificationResponce, "", "", ",", _dbContext, msg.Id);
 
                             _logger.LogTrace($"EcrisMessageID: {msg.Id} NRS creation ended.");
 
