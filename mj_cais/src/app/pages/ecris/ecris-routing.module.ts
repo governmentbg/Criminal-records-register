@@ -3,6 +3,9 @@ import { RouterModule, Routes } from "@angular/router";
 import { NgxPermissionsGuard } from "ngx-permissions";
 import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
+import { EcrisInboxFormComponent } from "./ecris-inbox-form/ecris-inbox-form.component";
+import { EcrisInboxResolver } from "./ecris-inbox-form/_data/ecris-inbox.resolver";
+import { EcrisInboxOverviewComponent } from "./ecris-inbox-overview/ecris-inbox-overview.component";
 import { EcrisIdentificationFormComponent } from "./ecris-message-form/ecris-identification-form/ecris-identification-form.component";
 import { EcrisIdentificationResolver } from "./ecris-message-form/ecris-identification-form/_data/ecris-identification.resolver";
 import { EcrisReqWaitingFormComponent } from "./ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
@@ -83,6 +86,29 @@ const routes: Routes = [
     path: "req-waiting/preview/:ID",
     component: EcrisReqWaitingFormComponent,
     resolve: { dbData: EcrisReqWaitingResolver },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
+  },
+  {
+    path: "inbox",
+    component: EcrisInboxOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
+  },
+  {
+    path: "inbox/preview/:ID",
+    component: EcrisInboxFormComponent,
+    resolve: { dbData: EcrisInboxResolver },
     canActivate: [NgxPermissionsGuard],
     data: {
       edit: true,

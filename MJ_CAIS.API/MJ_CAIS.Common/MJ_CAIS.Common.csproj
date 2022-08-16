@@ -32,6 +32,11 @@
 		  <AutoGen>True</AutoGen>
 		  <DependentUpon>ReportResources.resx</DependentUpon>
 		</Compile>
+		<Compile Update="Resources\EcrisResources.Designer.cs">
+		  <DependentUpon>EcrisResources.resx</DependentUpon>
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		</Compile>
 		<Compile Update="Resources\UsersResources.Designer.cs">
 			<DependentUpon>UsersResources.resx</DependentUpon>
 			<DesignTime>True</DesignTime>
@@ -79,6 +84,10 @@
 		<EmbeddedResource Update="Resources\ReportResources.resx">
 		  <Generator>PublicResXFileCodeGenerator</Generator>
 		  <LastGenOutput>ReportResources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\EcrisResources.resx">
+		  <LastGenOutput>EcrisResources.Designer.cs</LastGenOutput>
+		  <Generator>PublicResXFileCodeGenerator</Generator>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Resources\UsersResources.resx">
 			<LastGenOutput>UsersResources.Designer.cs</LastGenOutput>

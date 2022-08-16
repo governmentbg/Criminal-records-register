@@ -41,7 +41,7 @@ export class PagesMenu {
       },
       {
         title: "Заявки",
-        icon: { icon: "mail-bulk", pack: "fa" },      
+        icon: { icon: "mail-bulk", pack: "fa" },
         link: "/pages/internal-requests",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
@@ -188,6 +188,10 @@ export class PagesMenu {
           {
             title: "Запитвания",
             link: "/pages/ecris/req-waiting",
+          },
+          {
+            title: "Входящи съобщения",
+            link: "/pages/ecris/inbox",
           },
           {
             title: "ECRIS-TCN",

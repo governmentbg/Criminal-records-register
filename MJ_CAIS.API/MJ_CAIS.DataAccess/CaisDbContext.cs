@@ -69,6 +69,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<DRegisterType> DRegisterTypes { get; set; } = null!;
         public virtual DbSet<EBnbPayment> EBnbPayments { get; set; } = null!;
         public virtual DbSet<EEcrisAuthority> EEcrisAuthorities { get; set; } = null!;
+        public virtual DbSet<EEcrisCommunStatus> EEcrisCommunStatuses { get; set; } = null!;
         public virtual DbSet<EEcrisIdentification> EEcrisIdentifications { get; set; } = null!;
         public virtual DbSet<EEcrisInbox> EEcrisInboxes { get; set; } = null!;
         public virtual DbSet<EEcrisMessage> EEcrisMessages { get; set; } = null!;
@@ -4426,6 +4427,30 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VERSION");
             });
 
+            modelBuilder.Entity<EEcrisCommunStatus>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("XPKE_ECRIS_COMMUN_STATUS");
+
+                entity.ToTable("E_ECRIS_COMMUN_STATUS");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.StatusType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("STATUS_TYPE");
+            });
+
             modelBuilder.Entity<EEcrisIdentification>(entity =>
             {
                 entity.ToTable("E_ECRIS_IDENTIFICATION");
@@ -4543,6 +4568,12 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.EEcrisInboxes)
                     .HasForeignKey(d => d.EcrisMsgId)
                     .HasConstraintName("FK_E_ECRIS_INBOX_E_ECRIS_MESSA");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.EEcrisInboxes)
+                    .HasForeignKey(d => d.Status)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ECRIS_INBOX_STATUS");
             });
 
             modelBuilder.Entity<EEcrisMessage>(entity =>
@@ -4942,6 +4973,12 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.EEcrisOutboxes)
                     .HasForeignKey(d => d.EcrisMsgId)
                     .HasConstraintName("FK_E_ECRIS_OUTBOX_E_ECRIS_MESS");
+
+                entity.HasOne(d => d.StatusNavigation)
+                    .WithMany(p => p.EEcrisOutboxes)
+                    .HasForeignKey(d => d.Status)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ECRIS_OUTBOX_STATUS");
             });
 
             modelBuilder.Entity<EEcrisReference>(entity =>
