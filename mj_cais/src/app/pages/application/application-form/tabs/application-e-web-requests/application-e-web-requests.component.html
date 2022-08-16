@@ -5,12 +5,7 @@
   [data]="historyData"
   [primaryKey]="'id'"
 >
-  <igx-column
-    field="apiServiceCallId"
-    header="ID"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
+
   
   <igx-column
     field="createdOn"
@@ -46,6 +41,12 @@
     [sortable]="true"
     [dataType]="'string'"
   ></igx-column>
+  <igx-column
+  field="apiServiceCallId"
+  header="Regix_ID"
+  [sortable]="true"
+  [dataType]="'string'"
+></igx-column>
   <igx-column
     width="150px"
     header=""

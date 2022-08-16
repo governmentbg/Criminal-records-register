@@ -192,16 +192,19 @@ namespace MJ_CAIS.Services
 
         public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
         {
-            var certificate = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
+            //var certificate = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
 
             // var dbContext = _certificateRepository.GetDbContext();
 
-            IQueryable<AAppBulletin> allCertificateBulletins = await _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certificate.Id);
+            IQueryable<AAppBulletin> allCertificateBulletins = await _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == aInDto.Id);
 
 
             foreach (var item in allCertificateBulletins)
             {
                 item.Approved = aInDto.SelectedBulletinsIds.Contains(item.Id);
+                item.ModifiedProperties = new List<string>() { nameof(item.Approved) };
+                item.EntityState = EntityStateEnum.Modified;
+                _certificateRepository.ApplyChanges(item);
             }
 
             await _certificateRepository.SaveChangesAsync();

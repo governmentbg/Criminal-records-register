@@ -24,8 +24,29 @@ namespace MJ_CAIS.Repositories.Impl
             return
                 await Task.FromResult(
                     _dbContext.Set<EWebRequest>()
-                        .Include(x => x.WebService)
                         .Where(x => x.ApplicationId == aId)
+                        .Select(x => new EWebRequest
+                        {
+                            Id = x.Id,
+                            CreatedOn = x.CreatedOn,
+                            Error = x.Error,
+                            HasError = x.HasError,
+                            WebService = new EWebService { Id = x.WebService.Id, Name = x.WebService.Name },
+                            WebServiceId = x.WebServiceId,
+                            ApiServiceCallId = x.ApiServiceCallId
+                        })
+                        .Union(_dbContext.Set<EWebRequest>()
+                            .Where(x => _dbContext.Set<AApplication>().Where(a => a.Id == aId).Select(a => a.WApplicationId).Contains(x.WApplicationId))
+                            .Select(x => new EWebRequest
+                            {
+                                Id = x.Id,
+                                CreatedOn = x.CreatedOn,
+                                Error = x.Error,
+                                HasError = x.HasError,
+                                WebService = new EWebService { Id = x.WebService.Id, Name = x.WebService.Name },
+                                WebServiceId = x.WebServiceId,
+                                ApiServiceCallId = x.ApiServiceCallId
+                            }))
                         .AsNoTracking()
                 );
         }
