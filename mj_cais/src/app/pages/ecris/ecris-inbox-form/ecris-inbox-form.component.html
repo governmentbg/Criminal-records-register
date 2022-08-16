@@ -1,0 +1,87 @@
+<nb-card class="card-single-page-height">
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onSaveFunction]=""
+      [onCancelFunction]="globalCancelFunction"
+      [setForPreview]="true"
+    >
+    </cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <div class="inner-card-body">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">Импортирано на: </span>
+            <span>
+              {{ model.importedOn | date }}
+            </span>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">Стаус: </span>
+            <span> {{ model.status }} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">ECRIS ID: </span>
+            <span> {{ model.ecrisMsgId }} </span>
+          </div>
+        </div>
+      </div>
+      <div class="cais-display-form-group">
+        <div class="label">Съдържание</div>
+      </div>
+      <hr />
+  
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">XML Message: </span>
+            <pre>
+              <code> {{ model.xmlMessage }}</code>
+            </pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">XML Message Traits: </span>
+            <pre>
+                <code> {{ model.xmlMessageTraits }}</code>
+              </pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- <ng-container *ngIf="model.hasError"> -->
+      <div class="cais-display-form-group">
+        <div class="label">Информация за възникнала грешка</div>
+      </div>
+      <hr />
+
+      <div class="row mb-3">
+        <div class="col-md-2">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">Грешка: </span>
+            <span> {{ model.error }} </span>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="row col-md-12 cais-display-form-group">
+            <span class="label">Stack Trace: </span>
+            <span>
+              {{ model.stackTrace }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- </ng-container> -->
+    </div>
+  </nb-card-body>
+</nb-card>
