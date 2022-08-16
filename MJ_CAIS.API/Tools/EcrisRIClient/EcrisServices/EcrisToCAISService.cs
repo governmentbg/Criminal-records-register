@@ -273,6 +273,9 @@ namespace EcrisIntegrationServices
             inbox.XmlMessage = messageContent.SerializedXMLFromService;//XmlUtils.SerializeToXml(outputData);
 
             inbox.ImportedOn = DateTime.Now;
+            inbox.Error = null;
+            inbox.StackTrace = null;
+            inbox.HasError = false;
 
 
             //ако съществува такъв запис, не добавяме
@@ -419,14 +422,18 @@ namespace EcrisIntegrationServices
                     {
                         inbox.EcrisMsgId = existingMSg.Id;
                         inbox.Status = ECRISConstants.EcrisInboxStatuses.Processed;
+                      
                     }
 
 
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.Message, ex.Data, ex);
+                    _logger.LogError($"{identifier} : {ex.Message}", ex.Data, ex);
                     inbox.Status = ECRISConstants.EcrisInboxStatuses.Error;
+                    inbox.Error = $"{identifier} : {ex.Message}";
+                    inbox.StackTrace = ex.StackTrace;
+                    inbox.HasError = true;
                 }
 
 

@@ -111,42 +111,28 @@ namespace MJ_CAIS.ExternalWebServices
             try
             {
                 PersonInfoRequest reqidentifiacition = new PersonInfoRequest();
-                if (String.IsNullOrEmpty(firstname) || String.IsNullOrEmpty(surname) || String.IsNullOrEmpty(familyname))
-                {
-                    string fullname = String.Join(' ', firstname?.Trim(), surname?.Trim(), familyname?.Trim());
-                    var separatedNames = fullname.Split(' ');
-                    if (separatedNames.Length > 0)
-                    {
-                        reqidentifiacition.fname = separatedNames[0].Trim();
-                        reqidentifiacition.sname = separatedNames.Length>2 ? separatedNames[1].Trim() : throw new Exception("Невалидни параметри");
-                        reqidentifiacition.lname = separatedNames.Length > 3 ? string.Join(' ',separatedNames.Skip(2)).Trim() : throw new Exception("Невалидни параметри");
-                    }
-                    else
-                    {
-                        throw new Exception("Невалидни параметри");
-                    }
-                    //    reqidentifiacition.fname = firstname;
-                    //reqidentifiacition.sname = string.IsNullOrEmpty(surname) ?
-                    //    firstname.Split(' ').Length > 1 ?
-                    //        firstname.Split(' ')[firstname.Split(' ').Length - 1]
-                    //         : familyname.Split(' ').Length > 1 ?
-                    //             familyname.Split(' ')[0]
-                    //                : "IVANOV"
-
-                    //    : surname;
-                    //reqidentifiacition.lname = string.IsNullOrEmpty(familyname) ?
-                    //    surname.Split(' ').Length > 1 ?
-                    //            surname.Split(' ')[surname.Split(' ').Length - 1]
-                    //                     : "IVANOV"
-                    //    : familyname;
-                }
-                else
-                {
+                //if (String.IsNullOrEmpty(firstname) || String.IsNullOrEmpty(surname) || String.IsNullOrEmpty(familyname))
+                //{
+                //    string fullname = String.Join(' ', firstname?.Trim(), surname?.Trim(), familyname?.Trim());
+                //    var separatedNames = fullname.Split(' ');
+                //    if (separatedNames.Length > 0)
+                //    {
+                //        reqidentifiacition.fname = separatedNames[0].Trim();
+                //        reqidentifiacition.sname = separatedNames.Length>2 ? separatedNames[1].Trim() : throw new Exception("Невалидни параметри");
+                //        reqidentifiacition.lname = separatedNames.Length > 3 ? string.Join(' ',separatedNames.Skip(2)).Trim() : throw new Exception("Невалидни параметри");
+                //    }
+                //    else
+                //    {
+                //        throw new Exception("Невалидни параметри");
+                //    }
+                //}
+                //else
+                //{
                     reqidentifiacition.fname = firstname;
                     reqidentifiacition.sname = surname;
                     reqidentifiacition.lname = familyname;
 
-                }
+               // }
                 reqidentifiacition.threshold = matchTreshold;
                 reqidentifiacition.gender = sex;
                 reqidentifiacition.month = birthDate.Month.ToString();
