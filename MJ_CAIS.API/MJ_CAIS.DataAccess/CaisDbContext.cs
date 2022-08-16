@@ -4502,9 +4502,19 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ECRIS_MSG_ID");
 
+                entity.Property(e => e.Error).HasColumnName("ERROR");
+
+                entity.Property(e => e.HasError)
+                    .HasPrecision(1)
+                    .HasColumnName("HAS_ERROR");
+
                 entity.Property(e => e.ImportedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("IMPORTED_ON");
+
+                entity.Property(e => e.StackTrace)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("STACK_TRACE");
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(50)
@@ -7204,6 +7214,8 @@ namespace MJ_CAIS.DataAccess
             modelBuilder.Entity<GraoPerson>(entity =>
             {
                 entity.ToTable("GRAO_PERSON");
+
+                entity.HasIndex(e => new { e.BirthDate, e.Sex }, "GP_SEX_AND_BIRTHDATE");
 
                 entity.HasIndex(e => e.Egn, "XUKGRAO_PERSON")
                     .IsUnique();
