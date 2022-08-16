@@ -30,6 +30,11 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        //[HttpGet("{aId}")]
+        [HttpGet("{aId}")]
+        public async Task<IActionResult> GetById(string aId)
+        {
+            var result = await this._applicationSearchService.SelectByIdAsync(aId);
+            return Ok(result);
+        }
     }
 }
