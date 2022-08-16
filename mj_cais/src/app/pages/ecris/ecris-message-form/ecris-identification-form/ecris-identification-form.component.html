@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="d-flex">
-          <div> 
+          <div>
             <button
               nbButton
               matRipple
@@ -21,6 +21,7 @@
               Виж документа
             </button>
             <button
+              *ngIf="!this.isForPreview"
               nbButton
               matRipple
               [status]="'success'"
@@ -148,6 +149,7 @@
             (selectRow)="handleSelectedRow($event)"
             [people]="dbData.graoPeople"
             [dbData]="dbData"
+            [isForPreview]="this.isForPreview"
           >
           </cais-grao-person-overview>
         </div>

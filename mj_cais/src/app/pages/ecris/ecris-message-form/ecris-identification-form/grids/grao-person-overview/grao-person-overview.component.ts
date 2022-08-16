@@ -40,6 +40,7 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
 
   @Input() people: any;
   @Input() dbData: any;
+  @Input() isForPreview: boolean;
 
   @ViewChild("dialogAdd", { read: IgxDialogComponent })
   public dialog: IgxDialogComponent;
@@ -53,7 +54,7 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
   resultFromSearchPersonGridForm: ResultFromSearchOverviewComponent;
 
   public model: GraoPersonModel[];
-  public selectionMode: GridSelectionMode = "single";
+  public selectionMode: GridSelectionMode = GridSelectionMode.single;
   public currentPage = 0;
   public itemsPerPage = 5;
 
@@ -66,6 +67,9 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
   public searchPersonForm = new SearchPersonForm();
 
   ngOnInit(): void {
+    if (this.isForPreview) {
+      this.selectionMode = GridSelectionMode.none;
+    }
     super.ngOnInit();
   }
 
