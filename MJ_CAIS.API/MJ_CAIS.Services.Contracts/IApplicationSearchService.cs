@@ -8,5 +8,6 @@ namespace MJ_CAIS.Services.Contracts
     public interface IApplicationSearchService : IBaseAsyncService<ApplicationSearchDTO, ApplicationSearchDTO, ApplicationSearchGridDTO, AApplication, string>
     {
         Task<IgPageResult<ApplicationSearchGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ApplicationSearchGridDTO> aQueryOptions);
+        Task<ApplicationSearchDTO> SelectByIdAsync(string aId);
     }
 }

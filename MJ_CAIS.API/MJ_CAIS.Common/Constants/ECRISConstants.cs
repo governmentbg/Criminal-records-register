@@ -25,16 +25,16 @@ namespace MJ_CAIS.Common.Constants
         }
         public static class EcrisInboxStatuses
         {
-            public const string Pending = "PENDING";
-            public const string Processed = "PROCESSED";
-            public const string Error = "ERROR";
+            public const string Pending = "PENDING_IN";
+            public const string Processed = "PROCESSED_IN";
+            public const string Error = "ERROR_IN";
 
         }
         public static class EcrisOutboxStatuses
         {
-            public const string Pending = "PENDING";
-            public const string Sent = "SENT";
-            public const string Error = "ERROR";
+            public const string Pending = "PENDING_OUT";
+            public const string Sent = "SENT_OUT";
+            public const string Error = "ERROR_OUT";
 
         }
         public static class EcrisOutboxOperations

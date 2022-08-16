@@ -7,5 +7,6 @@ namespace MJ_CAIS.Repositories.Contracts
     public interface IApplicationSearchRepository : IBaseAsyncRepository<AApplication, string, CaisDbContext>
     {
         Task<IQueryable<ApplicationSearchGridDTO>> SelectAllAsync();
+        Task<ApplicationSearchDTO> SelectByIdAsync(string aId);
     }
 }

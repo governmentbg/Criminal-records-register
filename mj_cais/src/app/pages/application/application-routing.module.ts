@@ -4,6 +4,8 @@ import { NgxPermissionsGuard } from "ngx-permissions";
 import { RoleNameEnum } from "../../@core/constants/role-name.enum";
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
 import { ApplicationFormComponent } from "./application-form/application-form.component";
+import { ApplicationSearchFormComponent } from "./application-form/application-search-form/application-search-form.component";
+import { ApplicationSearchResolver } from "./application-form/_data/application-search.resolver";
 import { ApplicationResolver } from "./application-form/_data/application.resolver";
 import { ApplicationBulletinsSelectionComponent } from "./application-overview/application-bulletins-selection/application-bulletins-selection.component";
 import { ApplicationForCheckComponent } from "./application-overview/application-for-check/application-for-check.component";
@@ -105,6 +107,12 @@ const routes: Routes = [
   {
     path: "search",
     component: ApplicationSearchOverviewComponent,
+  },
+  {
+    path: "search/preview/:ID",
+    component: ApplicationSearchFormComponent,
+    resolve: { dbData: ApplicationSearchResolver },
+    data: { edit: true, preview: true },
   },
   {
     path: "",

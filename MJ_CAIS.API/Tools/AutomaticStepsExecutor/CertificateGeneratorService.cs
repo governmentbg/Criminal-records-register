@@ -67,14 +67,14 @@ namespace AutomaticStepsExecutor
                                                       a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck
                                                    || a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
                                                    || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication
-                                                   || a.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign
+                                                   || a.Code == ApplicationConstants.ApplicationStatuses.CertificateUserSign
                                                    || a.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery
                                                    || a.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint
                                                    || a.Code == ApplicationConstants.ApplicationStatuses.Delivered).ToList());
                 if (statuses.Count != 7)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}," +
-                        $" {ApplicationConstants.ApplicationStatuses.CertificateServerSign},{ ApplicationConstants.ApplicationStatuses.CertificateForDelivery },                                                   { ApplicationConstants.ApplicationStatuses.CertificatePaperPrint},"+
+                        $" {ApplicationConstants.ApplicationStatuses.CertificateUserSign},{ ApplicationConstants.ApplicationStatuses.CertificateForDelivery },                                                   { ApplicationConstants.ApplicationStatuses.CertificatePaperPrint},"+
                          $"{ ApplicationConstants.ApplicationStatuses.Delivered} ");
 
                 }
@@ -101,7 +101,7 @@ namespace AutomaticStepsExecutor
                 var applicationStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
                 var certificateContentReadyStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady);
                 var bulletinCheckStatus = statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck);
-                var statusCertificateServerSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateServerSign);
+                var statusCertificateUserSign = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateUserSign);
                 var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
                 var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
                 var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
@@ -135,7 +135,7 @@ namespace AutomaticStepsExecutor
                             //създаване на pdf и завършване на процеса
                           
                             var file = await _certificateService.CreateCertificate(cert, mailSubjectTemplate, mailBodyTemplate, signingCertificateName,
-                                                                         statusCertificateServerSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, webPortalUrl);
+                                                                         statusCertificateUserSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, webPortalUrl);
                             await _dbContext.SaveChangesAsync();
                             _dbContext.ChangeTracker.Clear();
                         }
