@@ -4,6 +4,7 @@ export class ApplicationGridModel extends BaseGridModel {
   public registrationNumber: string;
   public purpose: string;
   public firstname: string;
+  public identificatiors: string;
   public egn: string;
   public surname: string;
   public familyname: string;
@@ -20,6 +21,7 @@ export class ApplicationGridModel extends BaseGridModel {
       this.registrationNumber = init.registrationNumber ?? null;
       this.purpose = init.purpose ?? null;
       this.firstname = init.firstname ?? null;
+      this.identificatiors = init.identificatiors ?? null;
       this.egn = init.egn ?? null;
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;

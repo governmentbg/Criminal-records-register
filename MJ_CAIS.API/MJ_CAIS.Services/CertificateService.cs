@@ -164,6 +164,8 @@ namespace MJ_CAIS.Services
         }
 
 
+
+
         public async Task<DDocContent> GetCertificateDocumentContent(string accessCode)
         {
             DDocContent? content = await _certificateRepository.GetCertificateDocumentByAccessCode(accessCode);
@@ -232,6 +234,95 @@ namespace MJ_CAIS.Services
 
             await _certificateRepository.SaveEntityAsync(certificate, false, true);
         }
+
+        public async Task SetStatusToCanceled(string appId)
+        {
+            var certificate = await _certificateRepository.GetByApplicationIdAsync(appId);
+            if (certificate == null)
+            {
+                throw new BusinessLogicException("Invalid application Id!");
+            }
+
+            var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync<AApplicationStatus>(x =>
+                x.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+            SetCertificateStatus(certificate, aapplicationStatus,
+                "�������!");
+
+            // await GenerateCertificateFromApplication(applicationDb.Id);
+
+            await _certificateRepository.SaveEntityAsync(certificate, false, true);
+        }
+
+        //public async Task<string> GenerateCertificateFromApplication(string id)
+        //{
+        //    var statuses = (await _applicationRepository.FindAsync<AApplicationStatus>(a =>
+        //      a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+        //      a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
+        //      || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication));
+        //    //var statuses = await Task.FromResult(dbContext.AApplicationStatuses.Where(a =>
+        //    //    a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+        //    //    a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
+        //    //    || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToList());
+        //    if (statuses.Count() != 3)
+        //    {
+        //        throw new Exception(
+        //            $"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
+        //    }
+
+        //    var systemParameters = //await Task.FromResult(dbContext.GSystemParameters.Where(x =>
+        //         await _applicationRepository.FindAsync<GSystemParameter>(x =>
+        //        x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+        //        || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME);
+        //    if (systemParameters.Count() != 2)
+        //    {
+        //        throw new Exception(
+        //            $"Application statuses do not exist. Statuses: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
+        //    }
+
+        //    var certificateValidityMonths = systemParameters.First(x =>
+        //            x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS)
+        //        .ValueNumber;
+        //    if (certificateValidityMonths == null)
+        //    {
+        //        throw new Exception(
+        //            $"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
+        //    }
+
+        //    var signingCertificateName = systemParameters.First(x =>
+        //        x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ValueString;
+        //    if (signingCertificateName == null)
+        //    {
+        //        throw new Exception(
+        //            $"System parameter {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} not set.");
+        //    }
+
+        //    var applicationStatus =
+        //        statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
+        //    var certificateContentReadyStatus = statuses.First(a =>
+        //        a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady);
+        //    var bulletinCheckStatus =
+        //        statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+        //    var application = await _applicationRepository.GetApplicationForCertificateGeneration(id);
+        //    //var application = await dbContext.AApplications
+        //    //    .Include(a => a.EgnNavigation)
+        //    //    .Include(a => a.LnchNavigation)
+        //    //    .Include(a => a.LnNavigation)
+        //    //    .Include(a => a.SuidNavigation)
+        //    //    .Include(a => a.ApplicationType)
+        //    //    .Include(a => a.AStatusHes)
+        //    //    .FirstOrDefaultAsync(aa => aa.Id == id);
+        //    if (application == null)
+        //    {
+        //        throw new Exception($"Application with id = {id} does not exist.");
+        //    }
+
+        //    await GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus,
+        //        certificateContentReadyStatus, (int)certificateValidityMonths);
+        //    await _applicationRepository.SaveChangesAsync();
+        //    //await dbContext.SaveChangesAsync();
+
+        //    return application.ACertificates.First().Id;
+        //}
 
         public async Task<List<CertificateGridDTO>> GetCanceledByApplicationIdAsync(string appId)
         {
@@ -342,7 +433,6 @@ namespace MJ_CAIS.Services
             await _certificateRepository.SaveChangesAsync();
         }
 
-
         private void UpdateCertificateStatus(ACertificate? certificate, string statusCode)
         {
             certificate.StatusCode = statusCode;
@@ -365,7 +455,6 @@ namespace MJ_CAIS.Services
 
             _certificateRepository.ApplyChanges(result, new List<IBaseIdEntity>());
         }
-
 
         public Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId)
         {

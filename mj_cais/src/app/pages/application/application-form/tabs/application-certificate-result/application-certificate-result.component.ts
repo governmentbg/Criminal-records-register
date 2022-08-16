@@ -299,6 +299,13 @@ export class ApplicationCertificateResultComponent
     })
   }
 
+  cancelCertificate(){
+    this.service.setStatusToDelivered(this.model.applicationId).subscribe(x =>{
+      debugger;
+      this.reloadCurrentRoute();
+    })
+  }
+
   downloadSertificate(id) {
     this.service.downloadSertificate(id).subscribe((response: any) => {
       this.model.statusCode = CertificateStatuTypeEnum.CertificatePaperPrint;

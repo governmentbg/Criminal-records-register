@@ -227,7 +227,7 @@ namespace MJ_CAIS.ExternalWebServices
             }
             //dbContext.ACertificates.Update(certificate);
             certificate.EntityState = EntityStateEnum.Modified;
-           
+
 
             if (certificate.ModifiedProperties == null)
             {
@@ -235,7 +235,7 @@ namespace MJ_CAIS.ExternalWebServices
             }
 
             certificate.ModifiedProperties.Add(nameof(certificate.DocId));
-           
+
             if (certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebExternalCertificate
                 && certificate.Application.ApplicationTypeId != ApplicationConstants.ApplicationTypes.WebCertificate)
             {
@@ -246,11 +246,11 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                if (containsBulletins || (certificate.Application.PurposeNavigation!=null && certificate.Application.PurposeNavigation.ForSecondSignature == true))
+                if (containsBulletins || (certificate.Application.PurposeNavigation != null && certificate.Application.PurposeNavigation.ForSecondSignature == true))
                 {
                     //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
-                   await _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
-  
+                    await _certificateService.SetCertificateStatus(certificate, statusCertificateServerSign, "За подпис от съдия");
+
                 }
                 else
                 {
@@ -258,7 +258,7 @@ namespace MJ_CAIS.ExternalWebServices
                     //_certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне на заявител");
                     //certificate.StatusCode = statusCodeCertificateForDelivery;
 
-                    await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
+                    //await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
 
                     await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Приключена обработка");
 
@@ -302,7 +302,7 @@ namespace MJ_CAIS.ExternalWebServices
             _certificateRepository.ApplyChanges(mail, new List<IBaseIdEntity>());
             //dbContext.EEmailEvents.Add(mail);
         }
-        
+
         private async Task<string?> GetBodyForCertificateMailAsync(ACertificate certificate, string mailBodyPattern, string webportalUrl)
         {
             Dictionary<string, string> placeholdersAndValues = new Dictionary<string, string>();
@@ -337,7 +337,7 @@ namespace MJ_CAIS.ExternalWebServices
                     fileArray = await _printerService.PrintExternalElectronicCertificate(certificateID, checkUrl);
                     break;
             }
-            
+
             //todo: кои полета да се добавят за валидиране?!
             fileArray = _pdfSignerService.SignPdf(fileArray, signingCertificateName, null);
 
