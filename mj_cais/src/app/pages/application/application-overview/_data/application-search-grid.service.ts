@@ -1,8 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { ApplicationSearchGridModel } from "../_models/application-search-overview/application-search-grid.model";
-
 
 @Injectable({ providedIn: "root" })
 export class ApplicationSearchGridService extends CaisCrudService<

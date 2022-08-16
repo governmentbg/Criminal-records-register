@@ -1,0 +1,110 @@
+<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onCancelFunction]="globalCancelFunction"
+    ></cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Регистрационен номер на сертификат'"
+            [inputFormControl]="fullForm.certificateRegistrationNumber"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Статус код'"
+            [inputFormControl]="fullForm.statusCodeDisplayValue"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Валиден от'"
+            [inputFormControl]="fullForm.validFrom"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Валиден до'"
+            [inputFormControl]="fullForm.validTo"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Регистрационен номер на справка'"
+            [inputFormControl]="fullForm.registrationNumber"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'ЕГН/ЛНЧ'"
+            [inputFormControl]="fullForm.personIdentificator"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Имена'"
+            [inputFormControl]="fullForm.names"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Имена на първи подписващ'"
+            [inputFormControl]="fullForm.firstSigner"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Имена на втори подписващ'"
+            [inputFormControl]="fullForm.secondSigner"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Код за достъп'"
+            [inputFormControl]="fullForm.accessCode"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

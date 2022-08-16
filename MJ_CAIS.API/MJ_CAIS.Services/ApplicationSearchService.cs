@@ -37,5 +37,10 @@ namespace MJ_CAIS.Services
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
         }
+
+        public async Task<ApplicationSearchDTO> SelectByIdAsync(string aId)
+        {
+            return await this._applicationSearchRepository.SelectByIdAsync(aId);
+        }
     }
 }

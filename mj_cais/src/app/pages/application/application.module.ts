@@ -20,6 +20,7 @@ import { ApplicationCertificateDocumentResultComponent } from './application-for
 import { CancelDialogComponent } from './application-form/cancel-dialog/cancel-dialog.component';
 import { ApplicationCertificateCanceledComponent } from './application-form/tabs/application-certificate-canceled/application-certificate-canceled.component';
 import { ApplicationSearchOverviewComponent } from './application-overview/application-search-overview/application-search-overview.component';
+import { ApplicationSearchFormComponent } from './application-form/application-search-form/application-search-form.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ApplicationSearchOverviewComponent } from './application-overview/appli
     ApplicationCertificateDocumentResultComponent,
     CancelDialogComponent,
     ApplicationCertificateCanceledComponent,
-    ApplicationSearchOverviewComponent
+    ApplicationSearchOverviewComponent,
+    ApplicationSearchFormComponent
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
 })
