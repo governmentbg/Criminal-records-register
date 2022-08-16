@@ -32,6 +32,82 @@ namespace MJ_CAIS.EcrisObjectsServices
             _dbContext = dbContext;
             _logger = logger;
         }
+        public async Task RecreateResponseToRequest(string responseId)
+        {
+            var emsg = await _dbContext.EEcrisMessages.AsNoTracking()
+                .Include(m=>m.EEcrisReferences).AsNoTracking().FirstOrDefaultAsync(x => x.Id == responseId);
+            if (emsg == null)
+            {
+                throw new Exception($"Съобщение {responseId} не съществува.");
+            }
+            if (string.IsNullOrEmpty(emsg.RequestMsgId))
+            {
+                throw new Exception($"Няма отговор за съобщение {responseId}");
+            }
+
+            var reqEM = await _dbContext.EEcrisMessages.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == emsg.RequestMsgId);
+
+            var content = await _dbContext.DDocContents.AsNoTracking().Where(cont => cont.DDocuments
+                              .Where(dd => dd.EcrisMsgId == emsg.RequestMsgId).Any()
+                              && cont.Content != null 
+                              && cont.MimeType == "application/xml")
+                .Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
+                              .FirstOrDefaultAsync();
+            if(content== null)
+            {
+                throw new Exception("Няма съдържание на запитване.");
+            }
+
+            var request = XmlUtils.DeserializeXml<AbstractMessageType>(
+                Encoding.UTF8.GetString(content.Content)
+                ) as RequestMessageType;
+                           
+
+            var reqResp = await GenerateResponseToRequest(request);                   
+
+            var contentXML = XmlUtils.SerializeToXml(reqResp);
+            
+            var doc = await _dbContext.DDocContents.AsNoTracking().Where(c => c.MimeType == "application/xml" &&
+            c.DDocuments.Any(x => x.EcrisMsgId ==responseId)).ToListAsync();
+           
+            doc.ForEach(x => {
+                x.MimeType = "application/xml";
+                x.Content = Encoding.UTF8.GetBytes(contentXML);
+                x.Bytes = x.Content.Length;
+            });
+
+            emsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForSending;
+            if (emsg.EEcrisReferences.Count > 0)
+            {
+                _dbContext.RemoveRange(emsg.EEcrisReferences);
+                
+            }
+            emsg.EEcrisReferences = new List<EEcrisReference>();
+            foreach (var conv in reqResp.RequestResponseMessageConviction)
+            {
+                
+                if (!string.IsNullOrEmpty(conv.BuletinId) || !string.IsNullOrEmpty(conv.FbbcId))
+                {
+                    EEcrisReference eref = new EEcrisReference();
+                    eref.Id = BaseEntity.GenerateNewId();
+                    eref.EcrisMsgId = emsg.Id;
+                    eref.BulletinId = conv.BuletinId;
+                    eref.FbbcId = conv.FbbcId;
+                    emsg.EEcrisReferences.Add(eref);
+
+                }
+            }
+            if (emsg.EEcrisReferences?.Count > 0)
+            {
+                _dbContext.EEcrisReferences.AddRange(emsg.EEcrisReferences);
+            }
+            _dbContext.Update(emsg);
+            
+            _dbContext.UpdateRange(doc);
+
+            await _dbContext.SaveChangesAsync();
+        }
         public async Task<RequestResponseMessageType> GenerateResponseToRequest(RequestMessageType request)
         {
             var reqResp = CreateRequestResponseNoConvictionSuccessful(request);

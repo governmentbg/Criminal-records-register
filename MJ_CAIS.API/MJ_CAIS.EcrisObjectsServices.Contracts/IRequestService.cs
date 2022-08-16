@@ -8,5 +8,6 @@ namespace MJ_CAIS.EcrisObjectsServices.Contracts
 {
     public interface IRequestService
     {
+        Task RecreateResponseToRequest(string responseId);
     }
 }

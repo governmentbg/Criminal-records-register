@@ -24,9 +24,13 @@ namespace MJ_CAIS.EcrisObjectsServices
             _dbContext = dbContext;
             _logger = logger;
         }
-        public async Task CreateNotificationFromBulletin(BBulletin bulletin, string joinSeparator = " ")
+        public async Task CreateNotificationFromBulletin(BBulletin bulletin, string joinSeparator = " ", bool recreate = false, List<string> ecrisMsgIds = null)
         {
-            string? bgCode = (await _dbContext.GCountries.FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
+            if (recreate && ecrisMsgIds == null || ecrisMsgIds.Count == 0 || ecrisMsgIds.Where(x=>!string.IsNullOrEmpty(x)).Count() == 0)
+            {
+                return;
+            }
+            string? bgCode = (await _dbContext.GCountries.AsNoTracking().FirstOrDefaultAsync(c => c.Iso3166Alpha2 == "BG"))?.EcrisTechnId;
             NotificationMessageType msg = new NotificationMessageType();
 
             msg.NotificationMessageConviction = await ServiceHelper.GetConvictionFromBuletin(bulletin, bgCode, _dbContext);
@@ -43,16 +47,33 @@ namespace MJ_CAIS.EcrisObjectsServices
             //msg.NotificationMessageUpdatedConvictionReference = new UpdateConvictionReferenceType();
             //msg.NotificationMessageUpdatedConvictionReference.Item = ?
 
+            if (recreate)
+            {
+                var ecrisMsgIdsNotNull = ecrisMsgIds.Where(x => !string.IsNullOrEmpty(x)).ToList();
+                var contentXML = XmlUtils.SerializeToXml(msg);
+                var doc = await _dbContext.DDocContents.AsNoTracking().Where(c => c.MimeType == "application/xml"&&
+                c.DDocuments.Any(x=> x.EcrisMsgId!=null && ecrisMsgIdsNotNull.Contains(x.EcrisMsgId))).ToListAsync();
+                doc.ForEach(x => {x.MimeType = "application/xml";
+                    x.Content = Encoding.UTF8.GetBytes(contentXML);
+                    x.Bytes = x.Content.Length; 
+                });
 
+                var emsg = await _dbContext.EEcrisMessages.AsNoTracking().Where(x => ecrisMsgIdsNotNull.Contains(x.Id)).ToListAsync();
+                emsg.ForEach(x => x.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ForSending);
+                _dbContext.UpdateRange(doc);
+                _dbContext.UpdateRange(emsg);
+            }
+            else
+            {
 
-            await ServiceHelper.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId,bulletin.Id, joinSeparator,_dbContext, "");
+                await ServiceHelper.AddMessageToDBContextAsync(msg, bulletin.EcrisConvictionId, bulletin.Id, joinSeparator, _dbContext, "");
 
-
+            }
 
             await _dbContext.SaveChangesAsync();
 
         }
-        public async Task CreateNotificationFromBulletin(string bulletinID, string joinSeparator = " ")
+        public async Task CreateNotificationFromBulletin(string bulletinID, string joinSeparator = " ", bool recreate = false, List<string> ecrisMsgIds = null)
         {
             //todo: дали да проверявам за статус, националност и някакви други условия?!
             var buletin = await  _dbContext.BBulletins
@@ -74,7 +95,7 @@ namespace MJ_CAIS.EcrisObjectsServices
                 throw new Exception($"Bulletin with ID {bulletinID} does not exist.");
             }
 
-            await  CreateNotificationFromBulletin(buletin, joinSeparator);
+            await  CreateNotificationFromBulletin(buletin, joinSeparator,recreate, ecrisMsgIds);
         }
 
         private async Task LoadCommonDataFromBulletin(NotificationMessageType msg, BBulletin bulletin)
@@ -85,7 +106,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             msg.MessageSendingMemberStateSpecified = true;
             msg.MessageSendingMemberState = MemberStateCodeType.BG;
             var countriesIds = bulletin.BPersNationalities.Select(n => n.CountryId);
-            var notBGNacionality = await _dbContext.GCountries.Where(c => countriesIds.Contains(c.Id) && c.Iso3166Alpha2 != "BG").ToListAsync();
+            var notBGNacionality = await _dbContext.GCountries.AsNoTracking().Where(c => countriesIds.Contains(c.Id) && c.Iso3166Alpha2 != "BG").ToListAsync();
                // bulletin.BPersNationalities.Where(nacionality => nacionality.Country != null && nacionality.Country.Iso3166Alpha2 != "BG");
             List<MemberStateCodeType> notBGNacionalityInEU = new List<MemberStateCodeType>();
             foreach (var nacionality in notBGNacionality)
