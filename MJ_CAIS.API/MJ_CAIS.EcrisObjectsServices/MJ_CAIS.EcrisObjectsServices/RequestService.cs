@@ -108,6 +108,42 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task GenerateUnsuccessfulResponce(string requestId, string reasonCode, string joinSeparator=" ")
+        {
+            var reqMsg = await _dbContext.EEcrisMessages.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == requestId);
+
+            var content = await _dbContext.DDocContents.AsNoTracking().Where(cont => cont.DDocuments
+                              .Where(dd => dd.EcrisMsgId == requestId).Any()
+                              && cont.Content != null
+                              && cont.MimeType == "application/xml")
+                .Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
+                              .FirstOrDefaultAsync();
+            if (content == null)
+            {
+                throw new Exception("Няма съдържание на запитване.");
+            }
+
+            var request = XmlUtils.DeserializeXml<AbstractMessageType>(
+                Encoding.UTF8.GetString(content.Content)
+                ) as RequestMessageType;
+
+
+            if (request != null)
+            {
+                var reqResp = CreateRequestResponseNoConvictionBase(request, reasonCode);
+
+                //var reqMsg = _dbContext.EEcrisMessages.First(mes => mes.Id == request.EcrisMsgId);
+                reqMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ReplyCreated;
+                
+                await ServiceHelper.AddMessageToDBContextAsync(reqResp, "", "", joinSeparator, _dbContext, requestId);
+
+                _dbContext.EEcrisMessages.Update(reqMsg);
+
+            }
+            int insertedMessages = await _dbContext.SaveChangesAsync();
+        }
         public async Task<RequestResponseMessageType> GenerateResponseToRequest(RequestMessageType request)
         {
             var reqResp = CreateRequestResponseNoConvictionSuccessful(request);

@@ -9,5 +9,6 @@ namespace MJ_CAIS.EcrisObjectsServices.Contracts
     public interface IRequestService
     {
         Task RecreateResponseToRequest(string responseId);
+        Task GenerateUnsuccessfulResponce(string requestId, string reasonCode, string joinSeparator = " ");
     }
 }
