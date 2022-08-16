@@ -84,8 +84,8 @@ export class ReportApplicationFormComponent
         ReportApplicationStatusConstants.Delivered;
 
     this.signersformGroup = this.formBuilder.group({
-      firstSignerId: [{ value: "", disabled: false }, Validators.required],
-      secondSignerId: [{ value: "", disabled: false }, Validators.required],
+      firstSignerId: [{ value: "", disabled: false }],
+      secondSignerId: [{ value: "", disabled: false }],
     });
 
     this.formFinishedLoading.emit();
