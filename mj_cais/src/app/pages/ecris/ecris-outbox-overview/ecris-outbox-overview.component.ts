@@ -3,29 +3,29 @@ import * as fileSaver from "file-saver";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../@core/services/common/loader.service";
-import { EcrisInboxGridService } from "./_data/ecris-inbox-grid.service";
-import { EcrisInboxGridModel } from "./_models/ecris-inbox-grid.model";
-import { EcrisInboxStatusConstants } from "./_models/ecris-inbox-status.constants";
+import { EcrisOutboxGridService } from "./_data/ecris-outbox-grid.service";
+import { EcrisOutboxGridModel } from "./_models/ecris-outbox-grid.model";
+import { EcrisOutboxStatusConstants } from "./_models/ecris-outbox-status.constants";
 
 @Component({
-  selector: "cais-ecris-inbox-overview",
-  templateUrl: "./ecris-inbox-overview.component.html",
-  styleUrls: ["./ecris-inbox-overview.component.scss"],
+  selector: "cais-ecris-outbox-overview",
+  templateUrl: "./ecris-outbox-overview.component.html",
+  styleUrls: ["./ecris-outbox-overview.component.scss"],
 })
-export class EcrisInboxOverviewComponent extends RemoteGridWithStatePersistance<
-  EcrisInboxGridModel,
-  EcrisInboxGridService
+export class EcrisOutboxOverviewComponent extends RemoteGridWithStatePersistance<
+  EcrisOutboxGridModel,
+  EcrisOutboxGridService
 > {
   public hideStatus: boolean = true;
 
   constructor(
     public dateFormatService: DateFormatService,
-    service: EcrisInboxGridService,
+    service: EcrisOutboxGridService,
     injector: Injector,
     public loaderService: LoaderService
   ) {
     super("ecris-inbox-search", service, injector);
-    this.service.updateUrlStatus(EcrisInboxStatusConstants.Error);
+    this.service.updateUrlStatus(EcrisOutboxStatusConstants.Error);
   }
 
   ngOnInit() {
@@ -38,23 +38,15 @@ export class EcrisInboxOverviewComponent extends RemoteGridWithStatePersistance<
       //removed filter entirely
       this.service.updateUrlStatus();
     } else {
-      this.service.updateUrlStatus(EcrisInboxStatusConstants.Error);
+      this.service.updateUrlStatus(EcrisOutboxStatusConstants.Error);
     }
     this.hideStatus = !isChacked;
     this.ngOnInit();
   }
 
   downloadXml(id: string) {
-    this.download(id, false);
-  }
-
-  downloadXmlTraits(id: string) {
-    this.download(id, true);
-  }
-
-  download(id: string, traits: boolean) {
     this.loaderService.show();
-    this.service.download(id, traits).subscribe(
+    this.service.download(id).subscribe(
       (response: any) => {
         let blob = new Blob([response.body]);
         window.URL.createObjectURL(blob);
@@ -80,6 +72,23 @@ export class EcrisInboxOverviewComponent extends RemoteGridWithStatePersistance<
           "Грешка при изтегляне на файла: ",
           errorText
         );
+      }
+    );
+  }
+
+  resend(ecrisMsgId: string) {
+    this.service.resend(ecrisMsgId).subscribe(
+      (res) => {
+        this.toastr.showToast(
+          "success",
+          "Успешно повторно изпращане на съобщение"
+        );
+        this.ngOnInit();
+      },
+      (error) => {
+        let errorText = error.status + " " + error.statusText;
+
+        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
       }
     );
   }

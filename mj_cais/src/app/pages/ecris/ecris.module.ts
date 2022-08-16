@@ -15,6 +15,8 @@ import { EcrisResponsePreviewComponent } from './ecris-message-form/ecris-respon
 import { ResultFromSearchOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/result-from-search-overview/result-from-search-overview.component';
 import { EcrisInboxOverviewComponent } from './ecris-inbox-overview/ecris-inbox-overview.component';
 import { EcrisInboxFormComponent } from './ecris-inbox-form/ecris-inbox-form.component';
+import { EcrisOutboxOverviewComponent } from './ecris-outbox-overview/ecris-outbox-overview.component';
+import { EcrisOutboxFormComponent } from './ecris-outbox-form/ecris-outbox-form.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { EcrisInboxFormComponent } from './ecris-inbox-form/ecris-inbox-form.com
     ResultFromSearchOverviewComponent,
     EcrisInboxOverviewComponent,
     EcrisInboxFormComponent,
+    EcrisOutboxOverviewComponent,
+    EcrisOutboxFormComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],
 })

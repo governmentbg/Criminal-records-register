@@ -1,15 +1,15 @@
 import { Injectable, Injector } from "@angular/core";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
-import { EcrisInboxModel } from "../_models/ecris-inbox.model";
+import { EcrisOutboxModel } from "../_models/ecris.outbox.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class EcrisInboxService extends CaisCrudService<
-  EcrisInboxModel,
+export class EcrisOutboxService extends CaisCrudService<
+  EcrisOutboxModel,
   string
 > {
   constructor(injector: Injector) {
-    super(EcrisInboxModel, injector, "ecris-inboxes");
+    super(EcrisOutboxModel, injector, "ecris-outboxes");
   }
 }

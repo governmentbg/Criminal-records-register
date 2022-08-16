@@ -12,6 +12,9 @@ import { EcrisReqWaitingFormComponent } from "./ecris-message-form/ecris-req-wai
 import { EcrisReqWaitingResolver } from "./ecris-message-form/ecris-req-waiting-form/_data/ecris-req-waiting.resolver";
 import { EcrisIdentificationOverviewComponent } from "./ecris-message-overivew/ecris-identification-overview/ecris-identification-overview.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
+import { EcrisOutboxFormComponent } from "./ecris-outbox-form/ecris-outbox-form.component";
+import { EcrisOutboxResolver } from "./ecris-outbox-form/_data/ecris-outbox.resolver";
+import { EcrisOutboxOverviewComponent } from "./ecris-outbox-overview/ecris-outbox-overview.component";
 
 const routes: Routes = [
   {
@@ -109,6 +112,29 @@ const routes: Routes = [
     path: "inbox/preview/:ID",
     component: EcrisInboxFormComponent,
     resolve: { dbData: EcrisInboxResolver },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      edit: true,
+      preview: true,
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
+  },
+  {
+    path: "outbox",
+    component: EcrisOutboxOverviewComponent,
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [RoleNameEnum.CentralAuth],
+      },
+    },
+  },
+  {
+    path: "outbox/preview/:ID",
+    component: EcrisOutboxFormComponent,
+    resolve: { dbData: EcrisOutboxResolver },
     canActivate: [NgxPermissionsGuard],
     data: {
       edit: true,

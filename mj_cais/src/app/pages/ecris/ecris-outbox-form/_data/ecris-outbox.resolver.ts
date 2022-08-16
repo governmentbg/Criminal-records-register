@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core";
 import { Resolve, ActivatedRouteSnapshot } from "@angular/router";
 import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
-import { EcrisInboxModel } from "../_models/ecris-inbox.model";
-import { EcrisInboxService } from "./ecris-inbox.service";
+import { EcrisOutboxModel } from "../_models/ecris.outbox.model";
+import { EcrisOutboxService } from "./ecris-outbox.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class EcrisInboxResolver implements Resolve<any> {
-  constructor(private service: EcrisInboxService) {}
+export class EcrisOutboxResolver implements Resolve<any> {
+  constructor(private service: EcrisOutboxService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
     let id = route.params["ID"];
@@ -22,11 +22,11 @@ export class EcrisInboxResolver implements Resolve<any> {
       element = of(null);
     }
 
-    let result: EcrisInboxResolverData = {
+    let result: EcrisOutboxResolverData = {
       element: element,
     };
     return forkJoin(result);
   }
 }
 
-export class EcrisInboxResolverData extends BaseResolverData<EcrisInboxModel> {}
+export class EcrisOutboxResolverData extends BaseResolverData<EcrisOutboxModel> {}

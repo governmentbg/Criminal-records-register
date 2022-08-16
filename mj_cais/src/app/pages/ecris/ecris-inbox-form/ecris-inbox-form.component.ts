@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { EcrisInboxResolverData } from "./_data/ecris-inbox.resolver";
 import { EcrisInboxService } from "./_data/ecris-inbox.service";
-import { EcrisInboxModel } from "./_model/ecris-inbox.model";
+import { EcrisInboxModel } from "./_models/ecris-inbox.model";
 
 @Component({
   selector: "cais-ecris-inbox-form",

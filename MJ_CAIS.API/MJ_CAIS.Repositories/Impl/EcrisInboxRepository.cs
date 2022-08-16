@@ -23,6 +23,7 @@ namespace MJ_CAIS.Repositories.Impl
                             Id = ecrisInbox.Id,
                             CreatedOn = ecrisInbox.CreatedOn,
                             EcrisMsgId = ecrisInbox.EcrisMsgId,
+                            Error = ecrisInbox.Error,
                             HasError = ecrisInbox.HasError,
                             ImportedOn = ecrisInbox.ImportedOn,
                             Status = ecrisInbox.Status,

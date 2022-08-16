@@ -194,6 +194,10 @@ export class PagesMenu {
             link: "/pages/ecris/inbox",
           },
           {
+            title: "Изходящи съобщения",
+            link: "/pages/ecris/outbox",
+          },
+          {
             title: "ECRIS-TCN",
             link: "/pages/ecris-tcn",
           },
