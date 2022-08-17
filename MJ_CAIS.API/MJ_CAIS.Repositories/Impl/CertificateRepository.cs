@@ -172,7 +172,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.SecondSigner)
                 .AsNoTracking()
                 .Where(x => x.ApplicationId == appId)
-                .Where(x => x.StatusCode == ApplicationConstants.ApplicationStatuses.Canceled);
+                .Where(x => x.StatusCode == ApplicationConstants.ApplicationCertificateStatuses.CanceledCertificate);
 
             return certificate;
         }

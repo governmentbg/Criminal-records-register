@@ -255,7 +255,7 @@ namespace MJ_CAIS.Services
             }
 
             var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync<AApplicationStatus>(x =>
-                x.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+                x.Code == ApplicationConstants.ApplicationCertificateStatuses.CanceledCertificate);
             SetCertificateStatus(certificate, aapplicationStatus,
                 "�������!");
 
