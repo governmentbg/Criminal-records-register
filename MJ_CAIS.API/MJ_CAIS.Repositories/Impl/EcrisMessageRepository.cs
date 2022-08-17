@@ -111,7 +111,9 @@ namespace MJ_CAIS.Repositories.Impl
                 join graoPers in _dbContext.GraoPeople.AsNoTracking()
                     on ecrisIdentif.GraoPersonId equals graoPers.Id
 
-                where ecrisIdentif.EcrisMsgId == aId
+                where ecrisIdentif.EcrisMsgId == aId &&
+                ((ecrisMsg.EcrisMsgStatus == EcrisMessageStatuses.Identified && ecrisIdentif.Approved == 1)
+                || ecrisMsg.EcrisMsgStatus != EcrisMessageStatuses.Identified)
                 select new GraoPersonGridDTO
                 {
                     Id = graoPers.Id,
