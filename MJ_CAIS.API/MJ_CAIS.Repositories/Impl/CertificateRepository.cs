@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Certificate;
@@ -171,7 +172,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .Include(x => x.SecondSigner)
                 .AsNoTracking()
                 .Where(x => x.ApplicationId == appId)
-                .Where(x => x.StatusCode == "CanceledCertificate");
+                .Where(x => x.StatusCode == ApplicationConstants.ApplicationStatuses.Canceled);
 
             return certificate;
         }
