@@ -37,9 +37,16 @@ namespace EcrisServices
             EcrisClient? client = null;
             try
             {
+                var numAttempts = (await _dbContext.GSystemParameters.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.ECRIS_MAX_NUMBER_OF_ATTEMPTS))?.ValueNumber;
+                if (numAttempts != null)
+                {
+                    throw new Exception($"{SystemParametersConstants.SystemParametersNames.ECRIS_MAX_NUMBER_OF_ATTEMPTS} not set.");
+                }
                 var contents = await _dbContext.DDocContents.AsNoTracking()
                                         .Include(dd => dd.DDocuments).AsNoTracking()
-                                        .Where(cont => cont.DDocuments.Where(dd => dd.EcrisMsg != null && dd.EcrisMsg.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.ForSending).Any()
+                                        .Where(cont => cont.DDocuments.Where(dd => dd.EcrisMsg != null 
+                                        && dd.EcrisMsg.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.ForSending).Any()
                                             && cont.MimeType == "application/xml").ToListAsync();
                 if (contents.Count > 0)
                 {
@@ -179,7 +186,14 @@ namespace EcrisServices
                                     ecrisOutbox.HasError = true;
                                     ecrisOutbox.StackTrace = ex.StackTrace;
                                     ecrisOutbox.Error = ex.Message;
-                             
+                                    ecrisOutbox.Attempts = ecrisOutbox.Attempts == null ? 1 : ecrisOutbox.Attempts + 1;
+                                    if (ecrisOutbox.Attempts > numAttempts)
+                                    {
+                                        var emsg = await _dbContext.EEcrisMessages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == ecrisOutbox.EcrisMsgId);
+                                        emsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Error;
+                                        _dbContext.Update(emsg);
+                                    }
+                                    _dbContext.Update(ecrisOutbox);
                                     await _dbContext.SaveChangesAsync();
                                     _dbContext.ChangeTracker.Clear();
                                 }
