@@ -63,7 +63,7 @@
                     <div class="row gy-2 gx-2">
                         @foreach (var payment in Model.PaymentMethodTypes)
                         {
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label>
                                     <input type="radio" class="card-input-element"
                                        asp-for="PaymentMethodId" value="@payment.Id" hidden />
@@ -104,6 +104,20 @@
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
                         <div>
                             @string.Format(ApplicationResources.msgPaymentInfoEPayEasyPay, Model.Price)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" id="paymentInfoEPayByCode">
+                    <div class="alert alert-primary d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
+                        <div>
+                            @string.Format(ApplicationResources.msgPaymentInfo, Model.Price)
+                        </div>
+                    </div>
+                    <div class="alert alert-primary d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
+                        <div>
+                            @string.Format(ApplicationResources.msgPaymentInfoEPayCode, Model.Price)
                         </div>
                     </div>
                 </div>
@@ -153,6 +167,7 @@
         $('#paymentFreeInfo').hide();
         $('#bankPaymentInfo').hide();
         $('#paymentInfoEPayEasyPay').hide();
+        $('#paymentInfoEPayByCode').hide();
 
         const initPurposeValue = $('#PurposeId')[0].value;
         if (initPurposeValue in purposes) {
@@ -168,6 +183,7 @@
             $('#paymentFreeInfo').hide();
             $('#bankPaymentInfo').hide();
             $('#paymentInfoEPayEasyPay').hide();
+            $('#paymentInfoEPayByCode').hide();
 
             if (valueSelected == 'PayEgovBg') {
                 $('#paymentInfo').show();
@@ -177,6 +193,8 @@
                 $('#paymentFreeInfo').show();
             } else if (valueSelected == 'Bank') {
                 $('#bankPaymentInfo').show();
+            } else if (valueSelected == 'PayEgovBgCode') {
+                $('#paymentInfoEPayByCode').show();
             }
         });
 

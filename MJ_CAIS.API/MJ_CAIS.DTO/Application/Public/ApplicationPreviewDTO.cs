@@ -27,5 +27,9 @@
         public string? StatusCode { get; set; }
 
         public string CertificateStatusCode { get; set; }
+
+        public string? InvoiceNumber { get; set; }
+
+        public string? PayEgovBGCode { get; set; }
     }
 }

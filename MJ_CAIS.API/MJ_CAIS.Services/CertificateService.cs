@@ -1,5 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
@@ -22,12 +24,16 @@ namespace MJ_CAIS.Services
         private readonly IDDocContentRepository _dDocContentRepository;
         private readonly IMapper _mapper;
         private readonly IRegisterTypeService _registerTypeService;
+        private readonly IApplicationRepository _applicationRepository;
+        private readonly ILogger<ApplicationService> _logger;
 
         public CertificateService(IMapper mapper,
             ICertificateRepository certificateRepository,
             IUserContext userContext,
             IDDocContentRepository dDocContentRepository,
-            IRegisterTypeService registerTypeService
+            IRegisterTypeService registerTypeService,
+            IApplicationRepository applicationRepository,
+            ILogger<ApplicationService> logger
             )
             : base(mapper, certificateRepository)
         {
@@ -36,6 +42,8 @@ namespace MJ_CAIS.Services
             _userContext = userContext;
             _dDocContentRepository = dDocContentRepository;
             _registerTypeService = registerTypeService;
+            _applicationRepository = applicationRepository;
+            _logger = logger;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
@@ -164,6 +172,8 @@ namespace MJ_CAIS.Services
         }
 
 
+
+
         public async Task<DDocContent> GetCertificateDocumentContent(string accessCode)
         {
             DDocContent? content = await _certificateRepository.GetCertificateDocumentByAccessCode(accessCode);
@@ -190,16 +200,19 @@ namespace MJ_CAIS.Services
 
         public async Task SaveSignerDataByJudgeAsync(CertificateDTO aInDto)
         {
-            var certificate = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
+            //var certificate = _mapper.MapToEntity<CertificateDTO, ACertificate>(aInDto, false);
 
             // var dbContext = _certificateRepository.GetDbContext();
 
-            IQueryable<AAppBulletin> allCertificateBulletins = await _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == certificate.Id);
+            IQueryable<AAppBulletin> allCertificateBulletins = await _certificateRepository.FindAsync<AAppBulletin>(x => x.CertificateId == aInDto.Id);
 
 
             foreach (var item in allCertificateBulletins)
             {
                 item.Approved = aInDto.SelectedBulletinsIds.Contains(item.Id);
+                item.ModifiedProperties = new List<string>() { nameof(item.Approved) };
+                item.EntityState = EntityStateEnum.Modified;
+                _certificateRepository.ApplyChanges(item);
             }
 
             await _certificateRepository.SaveChangesAsync();
@@ -231,6 +244,327 @@ namespace MJ_CAIS.Services
                 "�������!");
 
             await _certificateRepository.SaveEntityAsync(certificate, false, true);
+        }
+
+        public async Task SetStatusToCanceled(string appId)
+        {
+            var certificate = await _certificateRepository.GetByApplicationIdAsync(appId);
+            if (certificate == null)
+            {
+                throw new BusinessLogicException("Invalid application Id!");
+            }
+
+            var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync<AApplicationStatus>(x =>
+                x.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+            SetCertificateStatus(certificate, aapplicationStatus,
+                "�������!");
+
+            await GenerateCertificateFromApplication(appId);
+
+            await _certificateRepository.SaveEntityAsync(certificate, false, true);
+        }
+
+        public async Task<string> GenerateCertificateFromApplication(string id)
+        {
+            var statuses = (await _applicationRepository.FindAsync<AApplicationStatus>(a =>
+              a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+              a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
+              || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication));
+            //var statuses = await Task.FromResult(dbContext.AApplicationStatuses.Where(a =>
+            //    a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck ||
+            //    a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady
+            //    || a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication).ToList());
+            if (statuses.Count() != 3)
+            {
+                throw new Exception(
+                    $"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.ApprovedApplication}, {ApplicationConstants.ApplicationStatuses.BulletinsCheck}, {ApplicationConstants.ApplicationStatuses.CertificateContentReady}");
+            }
+
+            var systemParameters = //await Task.FromResult(dbContext.GSystemParameters.Where(x =>
+                 await _applicationRepository.FindAsync<GSystemParameter>(x =>
+                x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+                || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME);
+            if (systemParameters.Count() != 2)
+            {
+                throw new Exception(
+                    $"Application statuses do not exist. Statuses: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
+            }
+
+            var certificateValidityMonths = systemParameters.First(x =>
+                    x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS)
+                .ValueNumber;
+            if (certificateValidityMonths == null)
+            {
+                throw new Exception(
+                    $"System parameter {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS} not set.");
+            }
+
+            var signingCertificateName = systemParameters.First(x =>
+                x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ValueString;
+            if (signingCertificateName == null)
+            {
+                throw new Exception(
+                    $"System parameter {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} not set.");
+            }
+
+            var applicationStatus =
+                statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.ApprovedApplication);
+            var certificateContentReadyStatus = statuses.First(a =>
+                a.Code == ApplicationConstants.ApplicationStatuses.CertificateContentReady);
+            var bulletinCheckStatus =
+                statuses.First(a => a.Code == ApplicationConstants.ApplicationStatuses.BulletinsCheck);
+            var application = await _applicationRepository.GetApplicationForCertificateGeneration(id);
+            //var application = await dbContext.AApplications
+            //    .Include(a => a.EgnNavigation)
+            //    .Include(a => a.LnchNavigation)
+            //    .Include(a => a.LnNavigation)
+            //    .Include(a => a.SuidNavigation)
+            //    .Include(a => a.ApplicationType)
+            //    .Include(a => a.AStatusHes)
+            //    .FirstOrDefaultAsync(aa => aa.Id == id);
+            if (application == null)
+            {
+                throw new Exception($"Application with id = {id} does not exist.");
+            }
+
+            await GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus,
+                certificateContentReadyStatus, (int)certificateValidityMonths);
+            await _applicationRepository.SaveChangesAsync();
+            //await dbContext.SaveChangesAsync();
+
+            return application.ACertificates.First().Id;
+        }
+
+        public async Task<ACertificate> GenerateCertificateFromApplication(AApplication application,
+          AApplicationStatus applicationStatus, AApplicationStatus certificateWithBulletinStatus,
+          AApplicationStatus certificateWithoutBulletinStatus,
+          int certificateValidityMonths =
+              6) //string certificateWithoutBulletinStatusID = ApplicationConstants.ApplicationStatuses.CertificateContentReady, string certificateWithBulletinStatusID = ApplicationConstants.ApplicationStatuses.BulletinsCheck)
+        {
+            //трябва да са попълнени следните стойности:
+            //       .Include(a => a.EgnNavigation)
+            //       .Include(a => a.LnchNavigation)
+            //       .Include(a => a.LnNavigation)
+            //       .Include(a => a.SuidNavigation)
+            //var pids = new List<string>();
+            string personId = null;
+            if (application.EgnId != null && application.EgnNavigation != null)
+            {
+                personId = application.EgnNavigation.PersonId;
+            }
+
+            if (application.LnchId != null && application.LnchNavigation != null)
+            {
+                if (personId == null)
+                {
+                    personId = application.LnchNavigation.PersonId;
+                }
+                else if (personId != application.LnchNavigation.PersonId)
+                {
+                    throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
+                }
+            }
+
+            if (application.LnId != null && application.LnNavigation != null)
+            {
+                if (personId == null)
+                {
+                    personId = application.LnNavigation.PersonId;
+                }
+                else if (personId != application.LnNavigation.PersonId)
+                {
+                    throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
+                }
+            }
+
+            if (application.SuidId != null && application.SuidNavigation != null)
+            {
+                if (personId == null)
+                {
+                    personId = application.SuidNavigation.PersonId;
+                }
+                else if (personId != application.SuidNavigation.PersonId)
+                {
+                    throw new BusinessLogicException("Идентификаторите на това заявление са за повече от един човек!");
+                }
+            }
+
+            if (personId != null)
+            {
+                //todo: дали да не  е union? - да добре е да е Union
+                _logger.LogTrace($"{application.Id}: Before _applicationRepository.SelectBulletinIdsAsync.");
+                var bulletins = await (await _applicationRepository.SelectBulletinIdsAsync(personId)).ToListAsync();//.ToListAsync();
+                _logger.LogTrace($"{application.Id}: After _applicationRepository.SelectBulletinIdsAsync.");
+                //var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
+                //               (pids.Contains(b.EgnId) ||
+                //               pids.Contains(b.LnchId) ||
+                //               pids.Contains(b.LnId) ||
+                //               pids.Contains(b.IdDocNumberId) ||
+                //               pids.Contains(b.SuidId)))).ToListAsync();
+                //var bulletins = await dbContext.BBulletins
+                //    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
+                //                //&& b.PBulletinIds.Any(bulID =>
+                //                //    pids.Contains(bulID.Person.PersonId
+                //                (pids.Contains(b.EgnId) ||
+                //                 pids.Contains(b.LnchId) ||
+                //                 pids.Contains(b.LnId) ||
+                //                 pids.Contains(b.IdDocNumberId) ||
+                //                 pids.Contains(b.SuidId)))
+                //    .ToListAsync();
+                bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
+                if (bulletins.Count() > 0)
+                {
+                    _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithBulletinsAsync.");
+                    return await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
+                        certificateValidityMonths, applicationStatus);
+
+                }
+            }
+            _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithoutBulletinsAsync.");
+            return await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus,
+                certificateValidityMonths, applicationStatus);
+        }
+
+        private async Task<ACertificate> ProcessApplicationWithoutBulletinsAsync(AApplication application,
+            AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
+        {
+            var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
+                application.CsAuthorityId, application.ApplicationType.Code);
+            //todo: add resources
+            if (application.StatusCode != aStatus.Code)
+            {
+                SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            }
+
+            application.ACertificates.Add(cert);
+
+            //dbContext.ACertificates.Add(cert);
+            application.EntityState = EntityStateEnum.Modified;
+            if (application.ModifiedProperties == null)
+            {
+                application.ModifiedProperties = new List<string>();
+            }
+            application.ModifiedProperties.Add(nameof(application.ACertificates));
+            baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            //baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
+            return cert;
+            //dbContext.AApplications.Update(application);
+        }
+
+        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
+           AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
+        {
+            var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
+                application.CsAuthorityId, application.ApplicationType.Code);
+            var orderNumber = 0;
+            cert.AAppBulletins = bulletins
+                .OrderByDescending(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
+                .ThenByDescending(b => b.DecisionDate).Select(b =>
+                {
+                    orderNumber++;
+                    return new AAppBulletin
+                    {
+                        Id = BaseEntity.GenerateNewId(),
+                        BulletinId = b.Id,
+                        CertificateId = cert.Id,
+                        ConvictionText = b.ConvRemarks,
+                        OrderNumber = orderNumber,
+                        EntityState = EntityStateEnum.Added
+                    };
+                }).ToList();
+            //todo: add resources
+            if (application.StatusCode != aStatus.Code)
+            {
+                SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+            }
+
+            application.ACertificates.Add(cert);
+            application.EntityState = EntityStateEnum.Modified;
+            if (application.ModifiedProperties == null)
+            {
+                application.ModifiedProperties = new List<string>();
+            }
+            application.ModifiedProperties.Add(nameof(application.ACertificates));
+            baseAsyncRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            baseAsyncRepository.ApplyChanges(cert, new List<IBaseIdEntity>());
+            return cert;
+            //dbContext.ACertificates.Add(cert);
+            // dbContext.AAppBulletins.AddRange(cert.AAppBulletins);
+            //dbContext.AApplications.Update(application);
+        }
+
+        public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description,
+            bool includeInDbContext = true)
+        {
+            application.StatusCode = newStatus.Code;
+            if (application.EntityState != EntityStateEnum.Added)
+            {
+                application.EntityState = EntityStateEnum.Modified;
+            }
+            if (application.ModifiedProperties == null)
+            {
+                application.ModifiedProperties = new List<string>();
+            }
+            application.ModifiedProperties.Add(nameof(application.StatusCode));
+
+            //application.StatusCodeNavigation = newStatus;
+            var aStatusH = new AStatusH();
+            aStatusH.EntityState = EntityStateEnum.Added;
+            aStatusH.Id = BaseEntity.GenerateNewId();
+            aStatusH.Descr = description;
+            aStatusH.StatusCode = newStatus.Code;
+            aStatusH.StatusCodeNavigation = newStatus;
+            //if (application.AStatusHes == null)
+            //{
+            //    application.AStatusHes = new List<AStatusH>();
+            //}
+
+            aStatusH.ReportOrder = application.AStatusHes.Count(x => x.StatusCode == newStatus.Code) + 1;
+
+            aStatusH.ApplicationId = application.Id;
+            aStatusH.Application = application;
+            baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
+
+            // application.AStatusHes.Add(aStatusH);
+            //if (includeInDbContext)
+            //{
+            //    dbContext.AStatusHes.Add(aStatusH);
+            //    dbContext.AApplications.Update(application);
+            //}
+        }
+
+        private async Task<ACertificate> CreateCertificateAsync(string applicationId, AApplicationStatus aStatus,
+            int certificateValidityMonths, string csAuthorityId, string applicationTypeCode)
+        {
+            var cert = new ACertificate();
+            cert.Id = BaseEntity.GenerateNewId();
+            cert.EntityState = EntityStateEnum.Added;
+            cert.ApplicationId = applicationId;
+            await SetCertificateStatus(cert, aStatus, "Създаване на сертификат");
+
+
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.DeskCertificate)
+            {
+                cert.RegistrationNumber =
+                    await _registerTypeService.GetRegisterNumberForCertificateOnDesk(csAuthorityId);
+            }
+
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                cert.RegistrationNumber = await _registerTypeService.GetRegisterNumberForCertificateWeb(csAuthorityId);
+            }
+
+            if (applicationTypeCode == ApplicationConstants.ApplicationTypes.WebExternalCertificate)
+            {
+                cert.RegistrationNumber =
+                    await _registerTypeService.GetRegisterNumberForCertificateWebExternal(csAuthorityId);
+            }
+
+            cert.AccessCode1 = Guid.NewGuid().ToString();
+            cert.ValidFrom = DateTime.Now;
+            cert.ValidTo = DateTime.Now.AddMonths(certificateValidityMonths);
+            // cert.AccessCode2 = Guid.NewGuid().ToString();
+            return cert;
         }
 
         public async Task<List<CertificateGridDTO>> GetCanceledByApplicationIdAsync(string appId)
@@ -342,7 +676,6 @@ namespace MJ_CAIS.Services
             await _certificateRepository.SaveChangesAsync();
         }
 
-
         private void UpdateCertificateStatus(ACertificate? certificate, string statusCode)
         {
             certificate.StatusCode = statusCode;
@@ -365,7 +698,6 @@ namespace MJ_CAIS.Services
 
             _certificateRepository.ApplyChanges(result, new List<IBaseIdEntity>());
         }
-
 
         public Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId)
         {

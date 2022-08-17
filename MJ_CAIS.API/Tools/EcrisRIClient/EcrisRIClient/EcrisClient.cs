@@ -203,6 +203,16 @@ namespace EcrisRIClient
 
             return result;
         }
+        public async Task<MJ_CAIS.DTO.EcrisService.AbstractMessageType> InsertNotificationResponse(MJ_CAIS.DTO.EcrisService.NotificationResponseMessageType incommingMessage, string sessionID, string folderID)
+        {
+            var msg = CreateNotificationResponseMessage(incommingMessage);
+            EcrisRIClient.EcrisService.NotificationResponseMessageType msgResult = (EcrisRIClient.EcrisService.NotificationResponseMessageType)await InsertMessage(msg, folderID, sessionID);
+
+            var result = _mapper.Map<EcrisRIClient.EcrisService.NotificationResponseMessageType,
+                MJ_CAIS.DTO.EcrisService.NotificationResponseMessageType>(msgResult);
+
+            return result;
+        }
         public async Task<MJ_CAIS.DTO.EcrisService.AbstractMessageType> InsertNotification(MJ_CAIS.DTO.EcrisService.NotificationMessageType incommingMessage, string sessionID, string folderID)
         {
             var msg = CreateNotificationMessage(incommingMessage);
@@ -217,6 +227,12 @@ namespace EcrisRIClient
         {
             var result = _mapper.Map<MJ_CAIS.DTO.EcrisService.RequestResponseMessageType,
                 EcrisRIClient.EcrisService.RequestResponseMessageType>(incommingMessage);
+            return result;
+        }
+        private AbstractMessageType CreateNotificationResponseMessage(MJ_CAIS.DTO.EcrisService.NotificationResponseMessageType incommingMessage)
+        {
+            var result = _mapper.Map<MJ_CAIS.DTO.EcrisService.NotificationResponseMessageType,
+                EcrisRIClient.EcrisService.NotificationResponseMessageType>(incommingMessage);
             return result;
         }
 

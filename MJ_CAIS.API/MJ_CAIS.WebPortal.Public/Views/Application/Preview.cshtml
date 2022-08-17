@@ -11,12 +11,17 @@
     ViewData["Title"] = title;
 }
 <div class="card">
-    <h5 class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <div class="h5 card-header bg-primary text-white d-flex justify-content-between align-items-center">
         @title
-        <a class="btn btn-sm btn-light" asp-controller="Application" asp-action="Index">
-            Заявления
-        </a>
-    </h5>
+        <div>
+            <a class="btn btn-sm btn-light" asp-controller="Application" asp-action="Preview" asp-route-id="@Model.Id">
+                Обновяване
+            </a>
+            <a class="btn btn-sm btn-light" asp-controller="Application" asp-action="Index">
+                Заявления
+            </a>
+        </div>
+    </div>
     <div class="card-body">
         <div class="row g-3">
             @if (Model.ReturnFromPaymentResult != null)
@@ -34,6 +39,7 @@
                 </svg>
                 switch (Model.ReturnFromPaymentResult)
                 {
+                    case "PayEgovBgCode":
                     case "TaxFreeOrBank":
                         {
                             <div class="col-12">
@@ -121,6 +127,24 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if ((!Model.IsPaid.HasValue || !Model.IsPaid.Value) && Model.PaymentMethodCode == "PayEgovBgCode")
+                {
+                    <div class="col-12">
+                        <div class="card text-dark bg-light">
+                            <h6 class="card-header bg-secondary text-white">Плащане с pay.egov.bg</h6>
+                            <div class="card-body">
+                                Плащането може да бъде извършено в страницата на pay.egov.bg с натискане на бутона "Плащане". <br/>
+                                В случай, че вече сте извършили плащането - очаква се да постъпи неговото потвърждение.
+                                <div class="pt-2">
+                                    <a href="@Model.PayEgovBGCodeLink" title=""
+                               class="btn btn-primary btn-lg w-100" target="_blank">
+                                        Плащане
+                                    </a>
                                 </div>
                             </div>
                         </div>

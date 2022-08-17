@@ -26,5 +26,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<CertificatePublicDTO>> SelectPublicCertificates(string userId);
         Task<List<CertificateGridDTO>> GetCanceledByApplicationIdAsync(string appId);
         Task SetStatusToDelivered(string appId);
+
+        Task SetStatusToCanceled(string appId);
     }
 }
