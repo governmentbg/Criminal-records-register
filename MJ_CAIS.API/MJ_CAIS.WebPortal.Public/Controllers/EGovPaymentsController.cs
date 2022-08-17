@@ -226,7 +226,6 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         [AllowAnonymous]
         public override IActionResult PaymentStatusCallback([FromForm] MessageWrapper<PaymentStatus> message)
         {
-            //logger.LogInfo($"Payment Status Changed ClientId: {message.ClientId} Data: {message.Data}");
             return base.PaymentStatusCallback(message);
         }
         

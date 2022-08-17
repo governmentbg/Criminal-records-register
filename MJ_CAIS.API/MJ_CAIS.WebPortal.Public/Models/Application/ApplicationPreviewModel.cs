@@ -44,5 +44,8 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         public string? ServiceProviderBank { get; set; }
         public string? ServiceProviderIBAN { get; set; }
         public string? ServiceProviderName { get; set; }
+        public string? InvoiceNumber { get; set; }
+        public string? PayEgovBGCode { get; set; }
+        public string? PayEgovBGCodeLink { get; set; }
     }
 }

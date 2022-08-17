@@ -26,16 +26,17 @@ import { ResultFromSearchOverviewComponent } from "../result-from-search-overvie
   templateUrl: "./grao-person-overview.component.html",
   styleUrls: ["./grao-person-overview.component.scss"],
 })
-export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
-  GraoPersonModel,
-  GraoPersonGridService
-> {
+ export class GraoPersonOverviewComponent //extends RemoteGridWithStatePersistance<
+//   GraoPersonModel,
+//   GraoPersonGridService
+// > 
+{
   constructor(
     public service: GraoPersonGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService
   ) {
-    super("grao-people-search", service, injector);
+    //super("grao-people-search", service, injector);
   }
 
   @Input() people: any;
@@ -70,7 +71,7 @@ export class GraoPersonOverviewComponent extends RemoteGridWithStatePersistance<
     if (this.isForPreview) {
       this.selectionMode = GridSelectionMode.none;
     }
-    super.ngOnInit();
+    //super.ngOnInit();
   }
 
   handleRowSelection(event) {

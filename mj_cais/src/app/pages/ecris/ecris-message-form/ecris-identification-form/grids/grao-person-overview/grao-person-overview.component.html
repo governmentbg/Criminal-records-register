@@ -3,21 +3,15 @@
   igxGridState
   [data]="people"
   [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
   [clipboardOptions]="{ copyHeaders: false }"
   [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
   [allowFiltering]="true"
   [primaryKey]="'id'"
-  [pinning]="pinningConfig"
   [cellSelection]="'none'"
   [rowSelection]="selectionMode"
   [selectedRows]="selectedRows"
-  [pinning]="pinningConfig"
   (onRowSelectionChange)="handleRowSelection($event)"
+  [paginationTemplate]="pager"
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>Лица</igx-grid-toolbar-title>

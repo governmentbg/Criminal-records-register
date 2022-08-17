@@ -19,7 +19,7 @@ namespace MJ_CAIS.WebPortal.Public
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IEGovPaymentService, EGovPaymentService>();
-            builder.Services.AddScoped<IEGovIntegrationService, EGovPaymentsService>();
+            builder.Services.AddScoped<ICAISEGovIntegrationService, EGovPaymentsService>();
 
             var configuration = builder.Configuration;
 
