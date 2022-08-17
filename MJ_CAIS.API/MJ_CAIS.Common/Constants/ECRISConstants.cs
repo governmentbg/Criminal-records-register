@@ -42,6 +42,7 @@ namespace MJ_CAIS.Common.Constants
         {
             public const string StoreNotification = "STORE_NOTIFICATION";
             public const string StoreResponce = "STORE_RESPONSE";
+            public const string StoreNotResponce = "STORE_NOT_RESPONSE";
         }
 
         public static class LanguageCodes
