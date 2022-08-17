@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
@@ -61,7 +62,7 @@ namespace MJ_CAIS.Services
             {
                 baseQuery = baseQuery.Where(x => x.EcrisMsgStatus == statusId);
             }
-                        
+
             var resultQuery = await ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<EcrisMessageGridDTO>();
             PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
@@ -151,34 +152,57 @@ namespace MJ_CAIS.Services
             return filteredNames.ProjectTo<EcrisMsgNameDTO>(mapperConfiguration);
         }
 
-
-        public async Task IdentifyAsync(string aInDto, string graoPersonId)
+        public async Task IdentifyAsync(string aInDto, string egn)
         {
-            var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
-            //await dbContext.EEcrisMessages
-            //.FirstOrDefaultAsync(x => x.Id == aInDto);
-            var ecrisIdentif =
-                await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisIdentification>(x =>
-                    x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId);
-            //await dbContext.EEcrisIdentifications
-            //    .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
-            //    .FirstOrDefaultAsync();
-
-            if (ecrisMessage == null)
+            var graoPersonId = (await _ecrisMessageRepository.SingleOrDefaultAsync<GraoPerson>(x => x.Egn == egn))?.Id;
+            if (string.IsNullOrEmpty(graoPersonId))
             {
-                throw new ArgumentException($"Ecris message with id: {aInDto} is missing");
+                throw new BusinessLogicException($"Grao person with egn: {aInDto} is missing");
+            }
+
+            var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
+            var ecrisIdentificationsQuery = _ecrisMessageRepository.GetEcrisIdentificationsById(aInDto);
+            var ecrisIdentifications = await ecrisIdentificationsQuery.ToListAsync();
+
+            var addIdentification = true;
+            if (ecrisIdentifications != null && ecrisIdentifications.Count > 0)
+            {
+                foreach (var item in ecrisIdentifications)
+                {
+                    item.EntityState = EntityStateEnum.Modified;
+                    item.ModifiedProperties = new List<string> { nameof(item.Version), nameof(item.Approved) };
+                    item.Approved = 0;
+                    if (item.GraoPersonId == graoPersonId)
+                    {
+                        addIdentification = false;
+                        item.Approved = 1;
+                    }
+                }
+            }
+
+            if (addIdentification)
+            {
+                ecrisIdentifications.Add(
+                    new EEcrisIdentification
+                    {
+                        EntityState = EntityStateEnum.Added,
+                        Id = BaseEntity.GenerateNewId(),
+                        Approved = 1,
+                        GraoPersonId = graoPersonId,
+                    }
+                );
             }
 
             ecrisMessage.EcrisMsgStatus = "Identified";
-            ecrisIdentif.Approved = 1;
-
+            ecrisMessage.EntityState = EntityStateEnum.Modified;
+            ecrisMessage.ModifiedProperties = new List<string> { nameof(ecrisMessage.EcrisMsgStatus), nameof(ecrisMessage.Version) };
+            ecrisMessage.EEcrisIdentifications = ecrisIdentifications;
+            _ecrisMessageRepository.ApplyChanges(ecrisMessage, applyToAllLevels: true);
             await _ecrisMessageRepository.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId)
-        {
-            return await _ecrisMessageRepository.GetGraoPeopleAsync(aId);
-        }
+        public IQueryable<GraoPersonGridDTO> GetEcrisIdentifiedPeople(string aId)
+            => _ecrisMessageRepository.GetEcrisIdentifiedPeople(aId);
 
         public async Task<EcrisNotificationDTO> GetEcrisNotificationByIdAsync(string ecrisMessageId)
         {

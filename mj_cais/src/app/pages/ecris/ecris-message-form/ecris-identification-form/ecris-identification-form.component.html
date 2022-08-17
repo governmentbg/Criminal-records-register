@@ -104,13 +104,32 @@
         <div class="">Псевдоними</div>
 
         <div class="mt-2 mb-4">
-          <cais-ecris-msg-names-overview
-            #ecrisMsgNames
-            [ecrisMsgForm]="fullForm"
-            [names]="dbData.ecrisMsgNames"
-            [dbData]="dbData"
+          <igx-grid
+            #namesGrid
+            [height]="null"
+            [data]="dbData.ecrisMsgNames"
+            [primaryKey]="'id'"
+            [displayDensity]="'compact'"
           >
-          </cais-ecris-msg-names-overview>
+            <igx-column
+              field="firstname"
+              header="Име"
+              [sortable]="true"
+              [dataType]="'string'"
+            ></igx-column>
+            <igx-column
+              field="surname"
+              header="Презиме"
+              [sortable]="true"
+              [dataType]="'string'"
+            ></igx-column>
+            <igx-column
+              field="familyname"
+              header="Фамилия"
+              [sortable]="true"
+              [dataType]="'string'"
+            ></igx-column>
+          </igx-grid>
         </div>
 
         <div class="row mb-3">
@@ -166,7 +185,7 @@
             #graoPeople
             (selectRow)="handleSelectedRow($event)"
             [people]="dbData.graoPeople"
-            [dbData]="dbData"
+            [genderTypes]="dbData.genderTypes"
             [isForPreview]="this.isForPreview"
           >
           </cais-grao-person-overview>
@@ -186,7 +205,9 @@
             <div class="form-group col-md-12">
               <cais-autocomplete
                 [label]="'Причина'"
-                [inputFormControl]="cancelIdentificationFormGroup.controls.reasonId"
+                [inputFormControl]="
+                  cancelIdentificationFormGroup.controls.reasonId
+                "
                 [parentGroup]="cancelIdentificationFormGroup"
                 [inputName]="'reasonId'"
                 [items]="dbData.cancelIdentificationTypes"

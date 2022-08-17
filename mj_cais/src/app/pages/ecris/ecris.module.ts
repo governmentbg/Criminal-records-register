@@ -5,7 +5,6 @@ import { EcrisIdentificationFormComponent } from "./ecris-message-form/ecris-ide
 import { EcrisReqWaitingFormComponent } from "./ecris-message-form/ecris-req-waiting-form/ecris-req-waiting-form.component";
 import { EcrisIdentificationOverviewComponent } from "./ecris-message-overivew/ecris-identification-overview/ecris-identification-overview.component";
 import { EcrisReqWaitingOverviewComponent } from "./ecris-message-overivew/ecris-req-waiting-overview/ecris-req-waiting-overview.component";
-import { EcrisMsgNamesOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/ecris-msg-names-overview/ecris-msg-names-overview.component';
 import { GraoPersonOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/grao-person-overview/grao-person-overview.component';
 import { EcrisReqPreviewComponent } from './ecris-message-form/ecris-req-preview/ecris-req-preview.component';
 import { EcrisNotPreviewComponent } from './ecris-message-form/ecris-not-preview/ecris-not-preview.component';
@@ -24,7 +23,6 @@ import { EcrisOutboxFormComponent } from './ecris-outbox-form/ecris-outbox-form.
     EcrisReqWaitingFormComponent,
     EcrisReqWaitingOverviewComponent,
     EcrisIdentificationFormComponent,
-    EcrisMsgNamesOverviewComponent,
     GraoPersonOverviewComponent,
     EcrisReqPreviewComponent,
     EcrisNotPreviewComponent,

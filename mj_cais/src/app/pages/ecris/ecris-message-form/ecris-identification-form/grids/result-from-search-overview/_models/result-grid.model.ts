@@ -1,18 +1,15 @@
-import { BaseGridModel } from "../../../../../../../@core/models/common/base-grid.model";
-
 export class ResultGridModel {
-  public id: number = null;
-  public firstname: string = null;
-  public surname: string = null;
-  public familyname: string = null;
+  public identifier: number = null;
+  public firstName: string = null;
+  public surName: string = null;
+  public familyName: string = null;
   public birthDate: Date = null;
-  public createdOn: Date = null;
 
   constructor(init?: Partial<ResultGridModel>) {
-    this.id = init.id ?? null;
-    this.firstname = init?.firstname ?? null;
-    this.surname = init?.surname ?? null;
-    this.familyname = init?.familyname ?? null;
+    this.identifier = init.identifier ?? null;
+    this.firstName = init?.firstName ?? null;
+    this.surName = init?.surName ?? null;
+    this.familyName = init?.familyName ?? null;
     this.birthDate = init?.birthDate ?? null;
   }
 }

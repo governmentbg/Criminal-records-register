@@ -100,7 +100,8 @@ namespace MJ_CAIS.Repositories.Impl
 
             return result;
         }
-        public async Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId)
+
+        public IQueryable<GraoPersonGridDTO> GetEcrisIdentifiedPeople(string aId)
         {
             var result =
                 from ecrisIdentif in _dbContext.EEcrisIdentifications.AsNoTracking()
@@ -110,16 +111,26 @@ namespace MJ_CAIS.Repositories.Impl
                 join graoPers in _dbContext.GraoPeople.AsNoTracking()
                     on ecrisIdentif.GraoPersonId equals graoPers.Id
 
+                where ecrisIdentif.EcrisMsgId == aId
                 select new GraoPersonGridDTO
                 {
                     Id = graoPers.Id,
-                    Egn = graoPers.Egn,
-                    Firstname = graoPers.Firstname,
-                    Surname = graoPers.Surname,
-                    Familyname = graoPers.Familyname,
+                    Identifier = graoPers.Egn,
+                    FirstName = graoPers.Firstname,
+                    SurName = graoPers.Surname,
+                    FamilyName = graoPers.Familyname,
                     BirthDate = graoPers.BirthDate,
                     Sex = graoPers.Sex
                 };
+
+            return result;
+        }
+
+        public IQueryable<EEcrisIdentification> GetEcrisIdentificationsById(string aId)
+        {
+            var result = _dbContext.EEcrisIdentifications.AsNoTracking()
+                .Where(x => x.EcrisMsgId == aId);
+
             return result;
         }
     }
