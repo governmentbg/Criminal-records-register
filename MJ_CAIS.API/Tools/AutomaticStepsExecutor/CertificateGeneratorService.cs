@@ -126,17 +126,22 @@ namespace AutomaticStepsExecutor
                         //    //System.IO.File.WriteAllBytes($"hello{application.Id}.pdf", file);
                         //}
                         //else
-                        //{                        
+                        //{
+                        _logger.LogTrace($"{application.Id} : Before GenerateCertificateFromApplication.");
                          var cert = await _applicationService.GenerateCertificateFromApplication(application, applicationStatus, bulletinCheckStatus, certificateContentReadyStatus, (int)certificateValidityMonths);
-                         await _dbContext.SaveChangesAsync();
+                        _logger.LogTrace($"{application.Id} : After GenerateCertificateFromApplication.");
+                        await _dbContext.SaveChangesAsync();
+                        _logger.LogTrace($"{application.Id} : After SaveChanges.");
                         _dbContext.ChangeTracker.Clear();
                         if(cert.StatusCode== ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                         {
                             //създаване на pdf и завършване на процеса
-                          
+                            _logger.LogTrace($"{application.Id} : Before CreateCertificate.");
                             var file = await _certificateService.CreateCertificate(cert, mailSubjectTemplate, mailBodyTemplate, signingCertificateName,
                                                                          statusCertificateUserSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, webPortalUrl);
+                            _logger.LogTrace($"{application.Id} : Before SaveChangesAsync.");
                             await _dbContext.SaveChangesAsync();
+                            _logger.LogTrace($"{application.Id} : After SaveChangesAsync.");
                             _dbContext.ChangeTracker.Clear();
                         }
                         //}
