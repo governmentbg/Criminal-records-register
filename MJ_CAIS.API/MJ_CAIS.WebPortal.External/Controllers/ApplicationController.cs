@@ -82,14 +82,15 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             _regixService.CreateRegixRequests(viewModel.Egn, wApplicationId: id);
 
             TempData["createSuccessfull"] = true;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Preview), new { id = id, fromNew = true });
         }
 
         [HttpGet]
-        public async Task<ActionResult> Preview(string id)
+        public async Task<ActionResult> Preview(string id, bool? fromNew = false)
         {
             var app = await _applicationWebService.GetExternalForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
+            viewModel.FromNew = fromNew;
             viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
                  app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
@@ -129,6 +130,7 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             viewModel.PurposeTypes = purposes.Select(p => new SelectListItem() { Value = p.Code, Text = p.Name }).ToList();
             viewModel.PurposeTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true });
             viewModel.RequiredPurposes = string.Join(",", viewModel.PurposeInfo.Keys);
+            viewModel.Email = CurrentUserEmail;
             var paymentMethods = _nomenclatureDetailService.GetWebAPaymentMethods();
         }
     }

@@ -10,6 +10,7 @@ namespace MJ_CAIS.WebPortal.External.Models.Application
         public ApplicationEditModel()
         {
             this.PurposeTypes = new List<SelectListItem>();
+            this.PurposeInfo = new Dictionary<string, string>();
         }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblEgn))]

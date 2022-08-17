@@ -14,58 +14,76 @@
     var createdOn = Model.CreatedOn.HasValue ? Model.CreatedOn.Value.ToString("dd.MM.yyyy HH:mm") : "";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="mb-3 d-flex justify-content-end align-items-start">
-                <a class="btn btn-primary" asp-controller="Application" asp-action="Index">
+<div class="col-md-12">
+    <div class="card">
+        <div class="h5 card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            @title
+            <div>
+                <a class="btn btn-sm btn-light" asp-controller="Application" asp-action="Preview" asp-route-id="@Model.Id">
+                    Обновяване
+                </a>
+                <a class="btn btn-sm btn-light" asp-controller="Application" asp-action="Index">
                     Заявления
                 </a>
             </div>
-            <div class="card">
-                <div class="card-header h5 bg-primary text-white">@title</div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="form-group col-md-4">
-                            <label asp-for="RegistrationNumber" class="control-label fw-bold"></label>
-                            <input asp-for="RegistrationNumber" class="form-control" disabled="disabled" />
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="CreatedOn" class="control-label fw-bold"></label>
-                            <input asp-for="CreatedOn" class="form-control" disabled="disabled" />
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="Status" class="control-label fw-bold"></label>
-                            <input asp-for="Status" class="form-control" disabled="disabled" />
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="Egn" class="control-label fw-bold"></label>
-                            <input asp-for="Egn" class="form-control" disabled="disabled" />
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="Email" class="control-label fw-bold"></label>
-                            <input asp-for="Email" class="form-control" disabled="disabled" />
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="PurposeName" class="control-label fw-bold"></label>
-                            <input asp-for="PurposeName" class="form-control" disabled="disabled" />
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label asp-for="Purpose" class="control-label fw-bold"></label>
-                            <textarea asp-for="Purpose" type="text" class="form-control" rows="3" disabled="disabled"></textarea>
-                        </div>
-                        @if (Model.HasGeneratedCertificate)
-                        {
-                            var downloadFileUrl = Url.Action(nameof(ApplicationController.DownloadCertificate)) + $"/{Model.Id}";
-                            <div class="col-12">
-                                <a href="@downloadFileUrl" title="@ApplicationResources.titleDownloadCertificate"
-                               class="btn btn-primary btn-lg w-100" target="_blank">
-                                    <i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate
-                                </a>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                @if (Model.FromNew.HasValue && Model.FromNew.Value)
+                {
+
+                    <div class="col-12">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </symbol>
+                        </svg>
+                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+                            <div>
+                                Успешно подаване на заявка за електронно свидетелство за съдимост
                             </div>
-                        }
+                        </div>
                     </div>
+                }
+                <div class="form-group col-md-4">
+                    <label asp-for="RegistrationNumber" class="control-label fw-bold"></label>
+                    <input asp-for="RegistrationNumber" class="form-control" disabled="disabled" />
                 </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="CreatedOn" class="control-label fw-bold"></label>
+                    <input asp-for="CreatedOn" class="form-control" disabled="disabled" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Status" class="control-label fw-bold"></label>
+                    <input asp-for="Status" class="form-control" disabled="disabled" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Egn" class="control-label fw-bold"></label>
+                    <input asp-for="Egn" class="form-control" disabled="disabled" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Email" class="control-label fw-bold"></label>
+                    <input asp-for="Email" class="form-control" disabled="disabled" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="PurposeName" class="control-label fw-bold"></label>
+                    <input asp-for="PurposeName" class="form-control" disabled="disabled" />
+                </div>
+                <div class="form-group col-md-12">
+                    <label asp-for="Purpose" class="control-label fw-bold"></label>
+                    <textarea asp-for="Purpose" type="text" class="form-control" rows="3" disabled="disabled"></textarea>
+                </div>
+                @if (Model.HasGeneratedCertificate)
+                {
+                    var downloadFileUrl = Url.Action(nameof(ApplicationController.DownloadCertificate)) + $"/{Model.Id}";
+                    <div class="col-12">
+                        <a href="@downloadFileUrl" title="@ApplicationResources.titleDownloadCertificate"
+                       class="btn btn-primary btn-lg w-100" target="_blank">
+                            <i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>
