@@ -21,5 +21,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public virtual EEcrisMessage? EcrisMsg { get; set; }
+        public virtual EEcrisCommunStatus StatusNavigation { get; set; } = null!;
     }
 }

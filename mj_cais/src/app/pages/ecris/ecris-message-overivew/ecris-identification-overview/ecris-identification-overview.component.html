@@ -22,6 +22,16 @@
 >
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>Чакащи идентификация</igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions>
+      <div class="ml-2">
+        <nb-toggle
+          (checkedChange)="onShowAllMessageChange($event)"
+          status="info"
+          labelPosition="left"
+          >Всички съобщения</nb-toggle
+        >
+      </div>
+    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
   <igx-column
@@ -43,11 +53,15 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
-
+  <igx-column
+    field="ecrisMsgStatusName"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="hideStatus"
+  >
+  </igx-column>
   <igx-column
     field="ecrisIdentifier"
     header="ECRIS Идентификатор"
@@ -55,9 +69,6 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
@@ -67,9 +78,6 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
@@ -80,8 +88,8 @@
     [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
       </span>
     </ng-template>
   </igx-column>
@@ -94,8 +102,8 @@
     [formatter]="this.dateFormatService.formatDate"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
       </span>
     </ng-template>
   </igx-column>
@@ -107,9 +115,6 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
@@ -119,9 +124,6 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
@@ -131,9 +133,6 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
@@ -143,9 +142,6 @@
     [dataType]="'string'"
     [hidden]="false"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
@@ -163,6 +159,7 @@
         <nb-icon pack="fa" icon="eye"></nb-icon>
       </a>
       <a
+        *ngIf="hideStatus"
         [title]="'Редактиране'"
         [routerLink]="['/pages/ecris/identification/edit', cell.rowData.id]"
       >

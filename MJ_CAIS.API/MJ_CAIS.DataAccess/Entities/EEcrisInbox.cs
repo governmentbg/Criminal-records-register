@@ -20,5 +20,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? StackTrace { get; set; }
 
         public virtual EEcrisMessage? EcrisMsg { get; set; }
+        public virtual EEcrisCommunStatus StatusNavigation { get; set; } = null!;
     }
 }

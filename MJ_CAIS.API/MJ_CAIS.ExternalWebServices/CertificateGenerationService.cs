@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.XmlData;
@@ -21,19 +22,21 @@ namespace MJ_CAIS.ExternalWebServices
         private readonly IPdfSigner _pdfSignerService;
         private readonly IPrintDocumentService _printerService;
         private readonly ICertificateService _certificateService;
+        private readonly ILogger<CertificateGenerationService> _logger;
 
         const string CERTIFICATE = "CERT";
         const string ELECTRONIC_CERTIFICATE = "ECERT";
         const string EXTERNAL_ELECTRONIC_CERTIFICATE = "EECERT";
 
         public CertificateGenerationService(IMapper mapper, ICertificateRepository certificateRepository,
-            IPdfSigner pdfSignerService, IPrintDocumentService printerService, ICertificateService certificateService)
+            IPdfSigner pdfSignerService, IPrintDocumentService printerService, ICertificateService certificateService, ILogger<CertificateGenerationService> logger)
             : base(mapper, certificateRepository)
         {
             _certificateRepository = certificateRepository;
             _pdfSignerService = pdfSignerService;
             _printerService = printerService;
             _certificateService = certificateService;
+            _logger = logger;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -117,7 +120,7 @@ namespace MJ_CAIS.ExternalWebServices
             byte[] contentCertificate;
             string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             bool containsBulletins = certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() != 0;
-
+            _logger.LogTrace($"{certificate.Id}: Before CreatePdf. ");
             switch (certificate.Application.ApplicationType.Code)
             {
                 case ApplicationConstants.ApplicationTypes.WebExternalCertificate:
@@ -130,7 +133,7 @@ namespace MJ_CAIS.ExternalWebServices
                     contentCertificate = await CreatePdf(certificate.Id, checkUrl, CERTIFICATE, signingCertificateName);
                     break;
             }
-
+            _logger.LogTrace($"{certificate.Id}: After CreatePdf. ");
             bool isExistingDoc = false;
             bool isExistingContent = false;
             DDocument doc;
@@ -265,7 +268,7 @@ namespace MJ_CAIS.ExternalWebServices
             _certificateRepository.ApplyChanges(content, new List<IBaseIdEntity>());
             _certificateRepository.ApplyChanges(doc, new List<IBaseIdEntity>());
             _certificateRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
-
+            _logger.LogTrace($"{certificate.Id}: Exit method. ");
             return contentCertificate;
 
         }

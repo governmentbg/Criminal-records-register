@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
@@ -31,14 +32,15 @@ namespace MJ_CAIS.Services
         private readonly IManagePersonService _managePersonService;
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IUserContext _userContext;
-
+        private readonly ILogger<ApplicationService> _logger;
         public ApplicationService(IMapper mapper,
             IApplicationRepository applicationRepository,
             IRegisterTypeService registerTypeService,
             ICertificateService certificateService,
             IUserContext userContext,
             IEWebRequestsRepository eWebRequestsRepository,
-            IManagePersonService managePersonService)
+            IManagePersonService managePersonService,
+            ILogger<ApplicationService> logger)
             : base(mapper, applicationRepository)
         {
             _applicationRepository = applicationRepository;
@@ -47,6 +49,7 @@ namespace MJ_CAIS.Services
             _userContext = userContext;
             _eWebRequestsRepository = eWebRequestsRepository;
             _managePersonService = managePersonService;
+            _logger = logger;
         }
 
 
@@ -312,7 +315,9 @@ namespace MJ_CAIS.Services
             if (personId != null)
             {
                 //todo: дали да не  е union? - да добре е да е Union
+                _logger.LogTrace($"{application.Id}: Before _applicationRepository.SelectBulletinIdsAsync.");
                 var bulletins = await (await _applicationRepository.SelectBulletinIdsAsync(personId)).ToListAsync();//.ToListAsync();
+                _logger.LogTrace($"{application.Id}: After _applicationRepository.SelectBulletinIdsAsync.");
                 //var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
                 //               (pids.Contains(b.EgnId) ||
                 //               pids.Contains(b.LnchId) ||
@@ -332,12 +337,13 @@ namespace MJ_CAIS.Services
                 bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
                 if (bulletins.Count() > 0)
                 {
+                    _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithBulletinsAsync.");
                     return await ProcessApplicationWithBulletinsAsync(application, bulletins, certificateWithBulletinStatus,
                         certificateValidityMonths, applicationStatus);
 
                 }
             }
-
+            _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithoutBulletinsAsync.");
             return await ProcessApplicationWithoutBulletinsAsync(application, certificateWithoutBulletinStatus,
                 certificateValidityMonths, applicationStatus);
         }

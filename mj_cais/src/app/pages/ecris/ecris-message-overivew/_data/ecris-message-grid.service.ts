@@ -13,7 +13,12 @@ export class EcrisMessageGridService extends CaisCrudService<
     super(EcrisMessageGridModel, injector, currentEndpoint);
   }
 
-  public updateUrlStatus(statusId: string) {
-    this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
+  public updateUrlStatus(statusId?: string) {
+    if (statusId) {
+      this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
+      return;
+    }
+
+    this.updateUrl(`${currentEndpoint}`);
   }
 }

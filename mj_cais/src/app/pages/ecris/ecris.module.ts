@@ -13,6 +13,10 @@ import { EcrisNotSanctionComponent } from './ecris-message-form/ecris-not-previe
 import { EcrisNotDescisionComponent } from './ecris-message-form/ecris-not-preview/ecris-not-descision/ecris-not-descision.component';
 import { EcrisResponsePreviewComponent } from './ecris-message-form/ecris-response-preview/ecris-response-preview.component';
 import { ResultFromSearchOverviewComponent } from './ecris-message-form/ecris-identification-form/grids/result-from-search-overview/result-from-search-overview.component';
+import { EcrisInboxOverviewComponent } from './ecris-inbox-overview/ecris-inbox-overview.component';
+import { EcrisInboxFormComponent } from './ecris-inbox-form/ecris-inbox-form.component';
+import { EcrisOutboxOverviewComponent } from './ecris-outbox-overview/ecris-outbox-overview.component';
+import { EcrisOutboxFormComponent } from './ecris-outbox-form/ecris-outbox-form.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,10 @@ import { ResultFromSearchOverviewComponent } from './ecris-message-form/ecris-id
     EcrisNotDescisionComponent,
     EcrisResponsePreviewComponent,
     ResultFromSearchOverviewComponent,
+    EcrisInboxOverviewComponent,
+    EcrisInboxFormComponent,
+    EcrisOutboxOverviewComponent,
+    EcrisOutboxFormComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],
 })
