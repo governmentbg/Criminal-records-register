@@ -35,6 +35,8 @@ export class EcrisIdentificationResolver implements Resolve<any> {
       countries: this.nomenclatureService.getCountries(),
       ecrisMsgNames: this.service.getEcrisMsgNames(id),
       graoPeople: this.service.getGraoPeople(id),
+      cancelIdentificationTypes:
+        this.nomenclatureService.getEcrisRequestTypes(),
     };
     return forkJoin(result);
   }
@@ -44,4 +46,5 @@ export class EcrisIdentificationResolverData extends BaseResolverData<EcrisMessa
   public ecrisAuthorities: Observable<BaseNomenclatureModel[]>;
   public genderTypes: Observable<BaseNomenclatureModel[]>;
   public countries: Observable<BaseNomenclatureModel[]>;
+  public cancelIdentificationTypes: Observable<BaseNomenclatureModel[]>;
 }

@@ -183,6 +183,11 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
+  public getEcrisRequestTypes(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/ecris_request_types`
+    );
+  }
   public getDocumentTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/d_doc_types`);
   }

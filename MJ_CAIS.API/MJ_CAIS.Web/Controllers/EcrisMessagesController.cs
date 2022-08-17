@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisMessage;
+using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
 using MJ_CAIS.Services.Contracts;
@@ -17,12 +18,16 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly IEcrisMessageService _ecrisMessageService;
         private readonly PersonValidatorClient _personValidatorClient;
+        private readonly IRequestService _requestService;
 
-        public EcrisMessagesController(IEcrisMessageService ecrisMessageService, PersonValidatorClient personValidatorClient)
+        public EcrisMessagesController(IEcrisMessageService ecrisMessageService,
+            PersonValidatorClient personValidatorClient, 
+            IRequestService requestService)
             : base(ecrisMessageService)
         {
             _ecrisMessageService = ecrisMessageService;
             _personValidatorClient = personValidatorClient;
+            _requestService = requestService;
         }
 
         [HttpGet("")]
@@ -129,6 +134,13 @@ namespace MJ_CAIS.Web.Controllers
             var result = await _personValidatorClient.GetPersonInfo(searchParams.Firstname, searchParams.Surname, searchParams.Familyname, sex, searchParams.BirthDate);
             return Ok(result);
             
+        }
+
+        [HttpPut("{aId}/cancel-identification/{reasonId}")]
+        public async Task<IActionResult> CancelIdentification(string aId, string reasonId)
+        {
+            await this._requestService.GenerateUnsuccessfulResponce(aId,reasonId);
+            return Ok();
         }
     }
 }

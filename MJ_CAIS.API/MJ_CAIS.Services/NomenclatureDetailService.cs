@@ -97,6 +97,14 @@ namespace MJ_CAIS.Services
             return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
+        public IQueryable<BaseNomenclatureDTO> GetEcrisRequestTypes()
+        {
+            var query = _nomenclatureDetailRepository
+                .GetEcrisRequestTypes();
+
+            return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+        }
+
         public async Task<IQueryable<BaseNomenclatureDTO>> GetGUsersAsync()
         {
             var query = await _nomenclatureDetailRepository
@@ -187,6 +195,6 @@ namespace MJ_CAIS.Services
             return _nomenclatureDetailRepository.GetDbSet(propertyName);
         }
 
-     
+
     }
 }
