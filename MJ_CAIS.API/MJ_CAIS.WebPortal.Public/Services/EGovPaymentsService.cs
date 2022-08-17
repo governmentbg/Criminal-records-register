@@ -10,12 +10,19 @@ using TL.EGovPayments.JsonModels;
 
 namespace MJ_CAIS.WebPortal.Public.Services
 {
-    public class EGovPaymentsService : IEGovIntegrationService
+    public interface ICAISEGovIntegrationService: IEGovIntegrationService
     {
+        void SavePaymentId(string paymentRefNumber, string paymentId, string? accessCode);
+    }
+
+    public class EGovPaymentsService : ICAISEGovIntegrationService
+    {
+        private ILogger<EGovPaymentsService> _logger;
         private CaisDbContext _dbContext;
-        public EGovPaymentsService(CaisDbContext dbContext)
+        public EGovPaymentsService(CaisDbContext dbContext, ILogger<EGovPaymentsService> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public bool ChangePaymentStatusCallback(PaymentStatus paymentStatus)
@@ -65,6 +72,7 @@ namespace MJ_CAIS.WebPortal.Public.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error in processing ChangePaymentStatusCallback");
                 return false;
             }
         }
@@ -130,7 +138,11 @@ namespace MJ_CAIS.WebPortal.Public.Services
 
         public void SavePaymentId(string paymentRefNumber, string paymentId)
         {
-            var wApplication = 
+            SavePaymentId(paymentRefNumber, paymentId, "");
+        }
+        public void SavePaymentId(string paymentRefNumber, string paymentId, string? accessCode)
+        {
+            var wApplication =
                 _dbContext
                 .WApplications
                 .Include("ApplicationType")
@@ -150,6 +162,7 @@ namespace MJ_CAIS.WebPortal.Public.Services
                 ePayment.Amount = wApplication.ApplicationType.Price;
                 ePayment.PaymentStatus = PaymentConstants.PaymentStatuses.Pending;
                 ePayment.InvoiceNumber = paymentId;
+                ePayment.AccessCode = accessCode;
                 payment.EPaymentId = ePayment.Id;
                 payment.EPayment = ePayment;
                 wApplication.APayments.Add(payment);

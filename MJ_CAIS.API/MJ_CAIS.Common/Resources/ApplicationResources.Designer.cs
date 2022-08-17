@@ -286,6 +286,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ще бъде създадено задължение за плащане в единната входна точка за електронни плащания за централната и местната администрации - pay.egov.bg. След регистрация на заявлението ще бъде визуализирана връзка към системата за извършване на плащането..
+        /// </summary>
+        public static string msgPaymentInfoEPayCode {
+            get {
+                return ResourceManager.GetString("msgPaymentInfoEPayCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ще бъде създадено задължение за плащане в единната входна точка за електронни плащания за централната и местната администрации - pay.egov.bg, след което ще бъдете пренасочени към страницата на ePay/EasyPay за извършване на плащането..
         /// </summary>
         public static string msgPaymentInfoEPayEasyPay {
