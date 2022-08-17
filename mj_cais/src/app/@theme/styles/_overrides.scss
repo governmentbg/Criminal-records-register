@@ -22,6 +22,10 @@
   }
 }
 
+.igx-grid__tbody-message {
+  padding: 0.8rem !important;
+}
+
 .nb-theme-default {
   .mat-icon-button.mat-button-disabled {
     background-color: #eee !important;
@@ -231,11 +235,11 @@
     }
   }
 
-  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option{
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
     background-color: #222b45;
     color: white;
   }
-  
+
   .ng-select {
     .ng-select-container {
       background-color: #192038 !important;

@@ -53,8 +53,8 @@ export class GeneratedReportOverviewComponent implements OnInit {
 
     this.cancelReportFormGroup = this.formBuilder.group({
       description: [{ value: "", disabled: false }, Validators.required],
-      firstSignerId: [{ value: "", disabled: false }, Validators.required],
-      secondSignerId: [{ value: "", disabled: false }, Validators.required],
+      firstSignerId: [{ value: "", disabled: false }],
+      secondSignerId: [{ value: "", disabled: false }],
       reportId: [{ value: "", disabled: false }, Validators.required],
     });
   }

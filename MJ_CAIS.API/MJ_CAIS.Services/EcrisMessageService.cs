@@ -54,9 +54,14 @@ namespace MJ_CAIS.Services
         }
 
         public virtual async Task<IgPageResult<EcrisMessageGridDTO>> SelectAllWithPaginationAsync(
-            ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string statusId)
+            ODataQueryOptions<EcrisMessageGridDTO> aQueryOptions, string? statusId)
         {
-            var baseQuery = _ecrisMessageRepository.CustomGetAll().Where(x => x.EcrisMsgStatus == statusId);
+            var baseQuery = _ecrisMessageRepository.CustomGetAll();
+            if (!string.IsNullOrEmpty(statusId))
+            {
+                baseQuery = baseQuery.Where(x => x.EcrisMsgStatus == statusId);
+            }
+                        
             var resultQuery = await ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<EcrisMessageGridDTO>();
             PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
