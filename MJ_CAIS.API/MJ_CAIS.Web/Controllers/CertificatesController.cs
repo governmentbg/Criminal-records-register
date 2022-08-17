@@ -114,6 +114,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
+        [HttpGet("set-status-to-canceled/{appId}")]
+        public async Task<IActionResult> SetStatusToCanceled(string appId)
+        {
+            await this._certificateService.SetStatusToCanceled(appId);
+            return Ok();
+        }
+
         [HttpGet("by-application-canceled/{appId}")]
         public async Task<IActionResult> GetCanceledByApplication(string appId)
         {

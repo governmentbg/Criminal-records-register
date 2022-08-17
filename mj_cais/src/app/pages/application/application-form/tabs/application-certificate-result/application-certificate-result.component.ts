@@ -300,7 +300,7 @@ export class ApplicationCertificateResultComponent
   }
 
   cancelCertificate(){
-    this.service.setStatusToDelivered(this.model.applicationId).subscribe(x =>{
+    this.service.setStatusToCanceled(this.model.applicationId).subscribe(x =>{
       debugger;
       this.reloadCurrentRoute();
     })
