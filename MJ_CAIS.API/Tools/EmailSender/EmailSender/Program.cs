@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -94,8 +95,13 @@ namespace EmailSender
 
         static void SendAllMails(CaisDbContext dbContext)
         {
+            var numberOfAttempts =  dbContext.GSystemParameters.AsNoTracking().FirstOrDefault(x => x.Code == "EMAIL_NUMBER_OF_ATTEMPTS")?.ValueNumber;
+            if(numberOfAttempts == null)
+            {
+                throw new Exception("Parameter EMAIL_NUMBER_OF_ATTEMPTS is not set.");
+            }
             var emailsToSend = dbContext.EEmailEvents
-                .Where(e => e.EmailStatus == EmailStatusConstants.Pending || (e.EmailStatus == EmailStatusConstants.Rejected && e.Attempts < 5))
+                .Where(e => e.EmailStatus == EmailStatusConstants.Pending || (e.EmailStatus == EmailStatusConstants.Rejected && e.Attempts < numberOfAttempts))
                 .Where(x => !string.IsNullOrEmpty(x.EmailAddress))
                 //.Where(x => x.EmailAddress.EndsWith("technologica.com")) // TODO: remove later
                 .ToList();
@@ -119,17 +125,19 @@ namespace EmailSender
                     entity.HasError = true;
                     entity.Error = ex.GetType().FullName + ": " + ex.Message;
                     entity.StackTrace = ex.StackTrace;
-                    entity.Attempts = entity.Attempts ?? 0 + 1;
+                    entity.Attempts = (byte)(entity.Attempts==0 ? 1 : entity.Attempts + 1);
                     entity.SentDate = DateTime.Now;
                     entity.EmailStatus = EmailStatusConstants.Rejected;
+                    //dbContext.Update(entity);
                     dbContext.SaveChanges();
                 }
 
                 if (success)
                 {
-                    entity.Attempts = entity.Attempts ?? 0 + 1;
+                    entity.Attempts = (byte)(entity.Attempts == 0 ? 1 : entity.Attempts + 1);
                     entity.SentDate = DateTime.Now;
                     entity.EmailStatus = EmailStatusConstants.Accepted;
+                    //dbContext.Update(entity);
                     dbContext.SaveChanges();
                 }
             }

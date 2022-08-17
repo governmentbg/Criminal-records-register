@@ -33,7 +33,10 @@ namespace MJ_CAIS.Common.Constants
 
             // 'IBAN на МП',
             public const string MJ_IBAN_BNB = "MJ_IBAN_BNB";
-           
+            //брой опити за екрис
+            public const string ECRIS_MAX_NUMBER_OF_ATTEMPTS = "ECRIS_MAX_NUMBER_OF_ATTEMPTS";
+
+
         }
     }
 }

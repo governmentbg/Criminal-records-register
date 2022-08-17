@@ -5,6 +5,8 @@ import { ReportBulletinSearchFormComponent } from "./report-bulletin-search-form
 import { ReportBulletinSearchOverviewComponent } from "./report-bulletin-search-form/grids/report-bulletin-search-overview/report-bulletin-search-overview.component";
 import { ReportPersonSearchFormComponent } from "./report-person-search-form/report-person-search-form.component";
 import { ReportPersonSearchOverviewComponent } from "./report-person-search-form/grids/report-person-search-overview/report-person-search-overview.component";
+import { SearchInquiryOverviewComponent } from './search-inquiry-overview/search-inquiry-overview.component';
+import { SearchInquiryFormComponent } from './search-inquiry-form/search-inquiry-form.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,8 @@ import { ReportPersonSearchOverviewComponent } from "./report-person-search-form
     ReportBulletinSearchOverviewComponent,
     ReportPersonSearchFormComponent,
     ReportPersonSearchOverviewComponent,
+    SearchInquiryOverviewComponent,
+    SearchInquiryFormComponent,
   ],
   imports: [CoreComponentModule, InquiryRoutingModule],
 })

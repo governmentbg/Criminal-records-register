@@ -37,13 +37,20 @@ namespace EcrisServices
             EcrisClient? client = null;
             try
             {
+                var numAttempts = (await _dbContext.GSystemParameters.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Code == SystemParametersConstants.SystemParametersNames.ECRIS_MAX_NUMBER_OF_ATTEMPTS))?.ValueNumber;
+                if (numAttempts != null)
+                {
+                    throw new Exception($"{SystemParametersConstants.SystemParametersNames.ECRIS_MAX_NUMBER_OF_ATTEMPTS} not set.");
+                }
                 var contents = await _dbContext.DDocContents.AsNoTracking()
                                         .Include(dd => dd.DDocuments).AsNoTracking()
-                                        .Where(cont => cont.DDocuments.Where(dd => dd.EcrisMsg != null && dd.EcrisMsg.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.ForSending).Any()
+                                        .Where(cont => cont.DDocuments.Where(dd => dd.EcrisMsg != null
+                                        && dd.EcrisMsg.EcrisMsgStatus == ECRISConstants.EcrisMessageStatuses.ForSending).Any()
                                             && cont.MimeType == "application/xml").ToListAsync();
                 if (contents.Count > 0)
                 {
-                   
+
                     client = new EcrisClient(username, password, endpointAuth, endpointStorage, endPointAddressSearch);
                     _logger.LogTrace($" EcrisClient created.");
                     sessionID = await client.GetActiveSessionId();
@@ -58,6 +65,7 @@ namespace EcrisServices
                     _logger.LogTrace($" Folder {folderName} identified as {folderId}.");
                     var notificationTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NOT, _dbContext);
                     var responseTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.RRS, _dbContext);
+                    var notResponceTypeId = await ServiceHelper.GetDocTypeCodeAsync(EcrisMessageTypeOrAliasMessageType.NRS, _dbContext);
                     foreach (var content in contents)
                     {
                         if (content.Content == null)
@@ -83,7 +91,7 @@ namespace EcrisServices
                             ecrisOutbox.EcrisMsg = null;
                             string xml = Encoding.UTF8.GetString(content.Content);
                             ecrisOutbox.XmlObject = xml;
-                          
+
                             ecrisOutbox.Status = ECRISConstants.EcrisOutboxStatuses.Pending;
                             ecrisOutbox.Error = null;
                             ecrisOutbox.HasError = false;
@@ -93,11 +101,11 @@ namespace EcrisServices
                             ecrisOutbox.ExecutionDate = DateTime.Now;
 
                             AbstractMessageType msg = XmlUtils.DeserializeXml<AbstractMessageType>(xml);
-                          
+
                             AbstractMessageType? resp = null;
 
                             var msgTypeID = ecrisMsg?.MsgTypeId;
-                      if(!notificationTypeId.Contains(msgTypeID) && !responseTypeId.Contains(msgTypeID))
+                            if (!notificationTypeId.Contains(msgTypeID) && !responseTypeId.Contains(msgTypeID) && !notResponceTypeId.Contains(msgTypeID))
                             {
                                 throw new Exception($"Ecris msg {ecrisMsg.Id} is of type {msgTypeID} which is not suitable for sending to Ecris");
                             }
@@ -114,7 +122,7 @@ namespace EcrisServices
                                     }
                                     else
                                     {
-                                       
+
                                         _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
                                     }
                                     _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending pre-save.");
@@ -142,7 +150,27 @@ namespace EcrisServices
                                     _dbContext.ChangeTracker.Clear();
                                     _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending saved.");
                                     _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Response pre-insert.");
-                                     resp = await client.InsertRequestResponse(reqResp, sessionID, folderId);
+                                    resp = await client.InsertRequestResponse(reqResp, sessionID, folderId);
+                                    _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Response post-insert.");
+                                }
+                                if (notResponceTypeId.Contains(msgTypeID))
+                                {
+                                    var reqResp = (NotificationResponseMessageType)msg;
+                                    ecrisOutbox.Operation = ECRISConstants.EcrisOutboxOperations.StoreNotResponce;
+                                    if (isNew)
+                                    {
+                                        _dbContext.EEcrisOutboxes.Add(ecrisOutbox);
+                                    }
+                                    else
+                                    {
+                                        _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
+                                    }
+                                    _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending pre-save.");
+                                    await _dbContext.SaveChangesAsync();
+                                    _dbContext.ChangeTracker.Clear();
+                                    _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Outbox for pending saved.");
+                                    _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Response pre-insert.");
+                                    resp = await client.InsertNotificationResponse(reqResp, sessionID, folderId);
                                     _logger.LogTrace($"EcrisMessage({ecrisMsg?.Id}) : Response post-insert.");
                                 }
 
@@ -150,9 +178,9 @@ namespace EcrisServices
                                 ecrisMsg.Identifier = resp?.MessageIdentifier;
                                 ecrisMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Sent;
                                 ecrisOutbox.Status = ECRISConstants.EcrisOutboxStatuses.Sent;
-                              
+
                                 ecrisMsg.EEcrisOutboxes.Clear();
-                        
+
                                 _dbContext.EEcrisMessages.Update(ecrisMsg);
 
                                 _dbContext.EEcrisOutboxes.Update(ecrisOutbox);
@@ -179,16 +207,23 @@ namespace EcrisServices
                                     ecrisOutbox.HasError = true;
                                     ecrisOutbox.StackTrace = ex.StackTrace;
                                     ecrisOutbox.Error = ex.Message;
-                             
+                                    ecrisOutbox.Attempts = ecrisOutbox.Attempts == null ? 1 : ecrisOutbox.Attempts + 1;
+                                    if (ecrisOutbox.Attempts > numAttempts)
+                                    {
+                                        var emsg = await _dbContext.EEcrisMessages.AsNoTracking().FirstOrDefaultAsync(x => x.Id == ecrisOutbox.EcrisMsgId);
+                                        emsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Error;
+                                        _dbContext.Update(emsg);
+                                    }
+                                    _dbContext.Update(ecrisOutbox);
                                     await _dbContext.SaveChangesAsync();
                                     _dbContext.ChangeTracker.Clear();
                                 }
-                            
-                            catch (Exception ex1)
-                            {
-                                _logger.LogError(ex1.Message, ex1.Data, ex1);
-                                _dbContext.ChangeTracker.Clear();
-                            }
+
+                                catch (Exception ex1)
+                                {
+                                    _logger.LogError(ex1.Message, ex1.Data, ex1);
+                                    _dbContext.ChangeTracker.Clear();
+                                }
 
                             }
 
@@ -201,7 +236,7 @@ namespace EcrisServices
                 }
             }
             catch (Exception ex)
-            
+
             {
                 //todo: транзакции и промени в базата?!
                 _logger.LogError(ex.Message, ex.Data, ex);
@@ -211,7 +246,7 @@ namespace EcrisServices
             {
                 if (string.IsNullOrEmpty(sessionID))
                 {
-             
+
                     client?.Logout(sessionID);
                     _logger.LogTrace($" EcrisClient logged out.");
                 }

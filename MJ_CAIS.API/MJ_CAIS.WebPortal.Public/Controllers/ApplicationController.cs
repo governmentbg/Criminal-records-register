@@ -17,6 +17,7 @@ using MJ_CAIS.DTO.NomenclatureDetail;
 using MJ_CAIS.ExternalWebServices.DbServices;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.Public.Models.Application;
+using MJ_CAIS.WebPortal.Public.Services;
 using MJ_CAIS.WebSetup.Utils;
 using Newtonsoft.Json;
 using TL.EGovPayments;
@@ -39,7 +40,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         private readonly ICertificateService _certificateService;
         private readonly IRegixService _regixService;
         private readonly IEGovPaymentService _egovPaymentService;
-        private readonly IEGovIntegrationService _egovIntegrationService;
+        private readonly ICAISEGovIntegrationService _egovIntegrationService;
         private readonly CaisDbContext _dbContext;
         private readonly IConfiguration _configuration;
 
@@ -51,7 +52,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                                      IRegixService regixService,
                                      IServiceProvider serviceProvider,
                                      IEGovPaymentService egovPaymentService,
-                                     IEGovIntegrationService egovIntegrationService,
+                                     ICAISEGovIntegrationService egovIntegrationService,
                                      CaisDbContext dbContext,
                                      IConfiguration configuration
                                      )
@@ -123,6 +124,29 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 TempData["paymentRequestModel"] = JsonConvert.SerializeObject(paymentRequestModel);
                 return RedirectToActionPreserveMethod("CreateVPOSPayment2", "EGovPayments");
             }
+            else if (paymentMethod != null && paymentMethod.Code == "PayEgovBgCode")
+            {
+                var price = await _applicationWebService.GetPriceByApplicationType(WEB_APPLICATION_TYPE);
+                var application = await _applicationWebService.SelectAsync(id);
+                var paymentRequestModel = new EGovPaymentRequestModel()
+                {
+                    ApplicantIdentifier = CurrentEgnIdentifier,
+                    ApplicantName = CurrentUserName,
+                    ApplicantType = ApplicantTypes.EGN,
+                    MobilePayment = false,
+                    PaymentAmount = (float)price,
+                    PaymentReason = "Такса свидетелство съдимост",
+                    PaymentRefDate = DateTime.Now,
+                    PaymentRefNumber = application.RegistrationNumber,
+                    PaymentType = (paymentMethod.Code == "PayEgovBgEPay") ? VPOSPaymentTypes.EPAY : VPOSPaymentTypes.BANK
+                };
+
+                PaymentReceipt receipt = await CreatePaymentRequest(paymentRequestModel);
+                string accessCode = await _egovPaymentService.GetPaymentRequestAccessCode(receipt.ID);
+                _egovIntegrationService.SavePaymentId(paymentRequestModel.PaymentRefNumber, receipt.ID, accessCode);
+
+                return RedirectToAction(nameof(Preview), new { id = id, paymentStatus = "PayEgovBgCode" });
+            }
             else
             {
                 return RedirectToAction(nameof(Preview), new { id = id, paymentStatus = "TaxFreeOrBank" });
@@ -135,6 +159,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             var app = await _applicationWebService.GetPublicForPreviewAsync(id);
             var viewModel = _mapper.Map<ApplicationPreviewModel>(app);
             viewModel.ReturnFromPaymentResult = paymentStatus;
+            viewModel.PayEgovBGCodeLink = $"{_configuration.GetValue<string?>("EGovPayments:VPOS:BasePortalUrl")}/Home/AccessByCode?code={viewModel.PayEgovBGCode}";
             viewModel.ServiceProviderBank = _configuration.GetValue<string?>("EGovPayments:ServiceProviderBank");
             viewModel.ServiceProviderBIC = _configuration.GetValue<string?>("EGovPayments:ServiceProviderBIC");
             viewModel.ServiceProviderIBAN = _configuration.GetValue<string?>("EGovPayments:ServiceProviderIBAN");
@@ -143,6 +168,28 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
             return View(viewModel);
+        }
+
+        private async Task<PaymentReceipt> CreatePaymentRequest(EGovPaymentRequestModel paymentRequest)
+        {
+            PaymentRequest request = new PaymentRequest
+            {
+                PaymentReason = paymentRequest.PaymentReason,
+                PaymentAmount = paymentRequest.PaymentAmount,
+                PaymentReferenceDate = paymentRequest.PaymentRefDate,
+                PaymentReferenceNumber = paymentRequest.PaymentRefNumber,
+                ApplicantUinTypeId = paymentRequest.ApplicantType.Value,
+                ApplicantUin = paymentRequest.ApplicantIdentifier,
+                ApplicantName = paymentRequest.ApplicantName,
+            };
+
+            if (!paymentRequest.PaymentRequestExpiration.HasValue)
+            {
+                request.ExpirationDate = DateTime.Now.Date.AddDays(EGovPaymentSettings.Default.PaymentRequestExpirationDays);
+            }
+
+            request.AisPaymentId = _egovIntegrationService.GeneratePaymentNumber(request);
+            return await _egovPaymentService.CreatePaymentRequest(request);
         }
 
         [HttpGet]

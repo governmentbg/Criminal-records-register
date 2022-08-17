@@ -5461,6 +5461,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("PAYMENT_STATUS");
 
+                entity.Property(e => e.AccessCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ACCESS_CODE");
+
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
                 entity.Property(e => e.UpdatedOn)

@@ -22,6 +22,7 @@ namespace MJ_CAIS.Common.Constants
             public const string Sent = "Sent";
             public const string Identified = "Identified";
             public const string ReplyCreated = "ReplyCreated";
+            public const string Error = "Error";
         }
         public static class EcrisInboxStatuses
         {
@@ -41,6 +42,7 @@ namespace MJ_CAIS.Common.Constants
         {
             public const string StoreNotification = "STORE_NOTIFICATION";
             public const string StoreResponce = "STORE_RESPONSE";
+            public const string StoreNotResponce = "STORE_NOT_RESPONSE";
         }
 
         public static class LanguageCodes
