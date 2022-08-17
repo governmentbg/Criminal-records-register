@@ -11,17 +11,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MJ_CAIS.Common.Constants.ECRISConstants;
 
 namespace MJ_CAIS.EcrisObjectsServices
 {
     public class RequestService : IRequestService
     {
-        const string REQUEST_SUCCESSFUL = "RRT-00-00";
-        const string REQUEST_DENIAL = "RRT-00-01";
-        const string REQUEST_NOT_FROM_MEMBER_STATE = "RRT-00-02";
-        const string REQUEST_DEAD_PERSON = "RRT-00-03";
-        const string REQUEST_NIST_NOT_MATCH = "RRT-00-04";
-        const string REQUEST_MULTIPLE_PEOPLE_FOUND = "RRT-00-05";
+       
         const string ECRIS_REQUEST_CODE = "EcrisReq";
         const string ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON = "Identified";
         const string ECRIS_MESSAGE_STATUS_UNIDENTIFIED_PERSON = "Unidentified";
@@ -338,32 +334,32 @@ namespace MJ_CAIS.EcrisObjectsServices
 
         public RequestResponseMessageType CreateRequestResponseNoConvictionSuccessful(RequestMessageType request)
         {
-            return CreateRequestResponseNoConvictionBase(request, REQUEST_SUCCESSFUL);
+            return CreateRequestResponseNoConvictionBase(request, EcrisRequestTypes.REQUEST_SUCCESSFUL);
 
         }
         public RequestResponseMessageType CreateRequestResponseNoConvictionDenial(RequestMessageType request)
         {
-            return CreateRequestResponseNoConvictionBase(request, REQUEST_DENIAL);
+            return CreateRequestResponseNoConvictionBase(request, EcrisRequestTypes.REQUEST_DENIAL);
 
         }
         public RequestResponseMessageType CreateRequestResponseNoConvictionMultiplePeopleFound(RequestMessageType request)
         {
-            return CreateRequestResponseNoConvictionBase(request, REQUEST_MULTIPLE_PEOPLE_FOUND);
+            return CreateRequestResponseNoConvictionBase(request, EcrisRequestTypes.REQUEST_MULTIPLE_PEOPLE_FOUND);
 
         }
         public RequestResponseMessageType CreateRequestResponseNoConvictionNISTNotMatch(RequestMessageType request)
         {
-            return CreateRequestResponseNoConvictionBase(request, REQUEST_NIST_NOT_MATCH);
+            return CreateRequestResponseNoConvictionBase(request, EcrisRequestTypes.REQUEST_NIST_NOT_MATCH);
 
         }
         public RequestResponseMessageType CreateRequestResponseNoConvictionNotFromMemberState(RequestMessageType request)
         {
-            return CreateRequestResponseNoConvictionBase(request, REQUEST_NOT_FROM_MEMBER_STATE);
+            return CreateRequestResponseNoConvictionBase(request, EcrisRequestTypes.REQUEST_NOT_FROM_MEMBER_STATE);
 
         }
         public RequestResponseMessageType CreateRequestResponseNoConvictionDeadPerson(RequestMessageType request)
         {
-            return CreateRequestResponseNoConvictionBase(request, REQUEST_DEAD_PERSON);
+            return CreateRequestResponseNoConvictionBase(request, EcrisRequestTypes.REQUEST_DEAD_PERSON);
 
         }
 

@@ -64,6 +64,17 @@ namespace MJ_CAIS.Common.Constants
             public const string Approved = "Обработен";
             public const string Canceled = "Отказан";
         }
+
+
+        public static class EcrisRequestTypes
+        {
+            public const string REQUEST_SUCCESSFUL = "RRT-00-00";
+            public const string REQUEST_DENIAL = "RRT-00-01";
+            public const string REQUEST_NOT_FROM_MEMBER_STATE = "RRT-00-02";
+            public const string REQUEST_DEAD_PERSON = "RRT-00-03";
+            public const string REQUEST_NIST_NOT_MATCH = "RRT-00-04";
+            public const string REQUEST_MULTIPLE_PEOPLE_FOUND = "RRT-00-05";
+        }
     }
 }
 

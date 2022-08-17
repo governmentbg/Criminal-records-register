@@ -6,7 +6,7 @@
         public string? StatusCodeDisplayValue { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
-        public string? ReportApplicationRegistrationNumber { get; set; }
+        public string? RepApplRegistrationNumber { get; set; }
         public string? ApplicantData { get; set; }
         public string PersonIdentificators { get; set; }
         public string? Names { get; set; }

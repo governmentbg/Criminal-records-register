@@ -43,5 +43,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<BaseNomenclatureDTO> GetCountriesOrdered();
 
         Task<IQueryable<BaseNomenclatureDTO>> GetGUsersAsync();
+
+        IQueryable<BaseNomenclatureDTO> GetEcrisRequestTypes();
     }
 }

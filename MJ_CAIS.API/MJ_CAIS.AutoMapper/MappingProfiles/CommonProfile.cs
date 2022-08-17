@@ -54,6 +54,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<GUser, BaseNomenclatureDTO>()
                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
                .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Firstname + " " + src.Familyname));
+
+            CreateMap<EEcrisNomenclature, BaseNomenclatureDTO>()
+                .ForMember(d => d.Code, opt => opt.MapFrom(src => src.Id))
+                .ForMember(d => d.Name, opt => opt.MapFrom(src => src.NameBg))
+                .ForMember(d => d.NameEn, opt => opt.MapFrom(src => src.NameEn));
         }
     }
 }

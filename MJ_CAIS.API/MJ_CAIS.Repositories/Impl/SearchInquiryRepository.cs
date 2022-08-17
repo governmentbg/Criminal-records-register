@@ -55,12 +55,12 @@ namespace MJ_CAIS.Repositories.Impl
                 .OrderByDescending(x => x.ValidFrom)
                 .Select(x => new SearchInquiryDTO
                 {
-                    Id = x.Id,
+                    Id=x.Id,
                     RegistrationNumber = x.RegistrationNumber,
                     StatusCodeDisplayValue = x.StatusCodeNavigation.Name,
                     ValidFrom = x.ValidFrom,
                     ValidTo = x.ValidTo,
-                    ReportApplicationRegistrationNumber = x.ARepAppl.RegistrationNumber,
+                    RepApplRegistrationNumber = x.ARepAppl.RegistrationNumber,
                     ApplicantData = x.ARepAppl.ApplicantName + " / " + x.ARepAppl.ApplicantId + " / " + x.ARepAppl.ApplicantDescr,
                     PersonIdentificators = x.ARepAppl.Egn + " / " + x.ARepAppl.Lnch,
                     Names = x.ARepAppl.Firstname + " " + x.ARepAppl.Surname + " " + x.ARepAppl.Familyname,

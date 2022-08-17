@@ -135,5 +135,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await _nomenclatureDetailService.GetGUsersAsync();
             return Ok(result);
         }
+
+        [HttpGet("ecris_request_types")]
+        public IActionResult GetEcrisRequestTypes()
+        {
+            var result = _nomenclatureDetailService.GetEcrisRequestTypes();
+            return Ok(result);
+        }
     }
 }

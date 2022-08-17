@@ -7,6 +7,8 @@ import { ReportBulletinSearchFormComponent } from "./report-bulletin-search-form
 import { ReportBulletinResolver } from "./report-bulletin-search-form/_data/report-bulletin.resolver";
 import { ReportPersonSearchFormComponent } from "./report-person-search-form/report-person-search-form.component";
 import { ReportPersonResolver } from "./report-person-search-form/_data/report-person.resolver";
+import { SearchInquiryFormComponent } from "./search-inquiry-form/search-inquiry-form.component";
+import { SearchInquiryResolver } from "./search-inquiry-form/_data/search-inquiry.resolver";
 import { SearchInquiryOverviewComponent } from "./search-inquiry-overview/search-inquiry-overview.component";
 
 const routes: Routes = [
@@ -50,7 +52,9 @@ const routes: Routes = [
   },
   {
     path: "search-inquiry/preview/:ID",
-    component: SearchInquiryOverviewComponent,
+    component: SearchInquiryFormComponent,
+    resolve: { dbData: SearchInquiryResolver },
+    data: { edit: true, preview: true },
   },
   {
     path: "",

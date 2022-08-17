@@ -1,8 +1,10 @@
-import { Component, OnInit, Injector } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { Component, OnInit, Injector, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
 import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
+import { LoaderService } from "../../../../@core/services/common/loader.service";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { EcrisNotPreviewComponent } from "../ecris-not-preview/ecris-not-preview.component";
 import { EcrisReqPreviewComponent } from "../ecris-req-preview/ecris-req-preview.component";
@@ -26,24 +28,24 @@ export class EcrisIdentificationFormComponent
   >
   implements OnInit
 {
- 
-  // @ViewChild("ecrisMsgNames", {
-  //   read: EcrisMsgNamesOverviewComponent,
-  // })
+  @ViewChild("cancelIdentificationDialog", { read: IgxDialogComponent })
+  public cancelIdentificationDialog: IgxDialogComponent;
+  public cancelIdentificationFormGroup: FormGroup;
+  public model: EcrisMessageModel;
+  private graoPersonId: string;
 
   constructor(
     service: EcrisMessageService,
     public injector: Injector,
     private nomenclatureService: NomenclatureService,
     private dialogService: NbDialogService,
+    private formBuilder: FormBuilder,
+    public loaderService: LoaderService
   ) {
     super(service, injector);
     this.backUrl = "pages/ecris/identification";
     this.setDisplayTitle("запитване за идентификация");
   }
-
-  public model: EcrisMessageModel;
-  private graoPersonId: string;
 
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
@@ -57,9 +59,9 @@ export class EcrisIdentificationFormComponent
     this.fullForm = new EcrisMessageForm();
     this.fullForm.group.disable();
     this.fullForm.group.patchValue(this.dbData.element);
-    this.formFinishedLoading.emit();
 
     let id = this.activatedRoute.snapshot.params["ID"];
+
     this.service.get(id).subscribe((response) => {
       this.model = response;
 
@@ -83,6 +85,12 @@ export class EcrisIdentificationFormComponent
         }
       });
     });
+
+    this.cancelIdentificationFormGroup = this.formBuilder.group({
+      reasonId: [{ value: "", disabled: false }, Validators.required],
+    });
+
+    this.formFinishedLoading.emit();
   }
 
   updateFunction = () => {
@@ -94,12 +102,48 @@ export class EcrisIdentificationFormComponent
   };
 
   identifyFunction = () => {
-    let id = this.activatedRoute.snapshot.params["ID"];
-    this.service
-      .identify(id, this.graoPersonId)
-      .subscribe((res) => {
+    if (this.graoPersonId) {
+      let id = this.activatedRoute.snapshot.params["ID"];
+      this.service.identify(id, this.graoPersonId).subscribe((res) => {
         this.reloadCurrentRoute();
       });
+    } else {
+      this.toastr.showBodyToast("danger", "Не е избрано лице", "");
+    }
+  };
+
+  onOpenCancelIdentificationDialog = () => {
+    this.cancelIdentificationDialog.open();
+  };
+
+  onCancelIdentification = () => {
+    if (!this.cancelIdentificationFormGroup.valid) {
+      this.cancelIdentificationFormGroup.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+      this.scrollToValidationError();
+      return;
+    } 
+
+    this.loaderService.show();
+
+    this.service
+      .cancelIdentification(
+        this.fullForm.id.value,
+        this.cancelIdentificationFormGroup.controls.reasonId.value
+      )
+      .subscribe(
+        (response: any) => {
+          this.loaderService.hide();
+
+          this.router.navigate(["pages/ecris/requests/for-identification"]);
+        },
+        (error) => {
+          this.loaderService.hide();
+
+          var errorText = error.status + " " + error.statusText;
+          this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+        }
+      );
   };
 
   getDocument() {

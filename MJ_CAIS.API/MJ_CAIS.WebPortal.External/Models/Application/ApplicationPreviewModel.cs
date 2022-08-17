@@ -32,5 +32,6 @@ namespace MJ_CAIS.WebPortal.External.Models.Application
         public string? Status { get; set; }
 
         public bool HasGeneratedCertificate { get; set; }
+        public bool? FromNew { get; set; }
     }
 }
