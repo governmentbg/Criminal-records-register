@@ -17,6 +17,7 @@ export class EcrisMessageForm extends BaseForm {
   public birthCountry: FormControl;
   public birthCity: FormControl;
   public fbbcId: FormControl;
+  public bulletinId: FormControl;
   public firstname: FormControl;
   public surname: FormControl;
   public familyname: FormControl;
@@ -39,6 +40,7 @@ export class EcrisMessageForm extends BaseForm {
     this.birthCountry = new FormControl(null);
     this.birthCity = new FormControl(null);
     this.fbbcId = new FormControl(null);
+    this.bulletinId = new FormControl(null);
     this.firstname = new FormControl(null);
     this.surname = new FormControl(null);
     this.familyname = new FormControl(null);
@@ -62,6 +64,7 @@ export class EcrisMessageForm extends BaseForm {
       birthCountry: this.birthCountry,
       birthCity: this.birthCity,
       fbbcId: this.fbbcId,
+      bulletinId: this.bulletinId,
       firstname: this.firstname,
       surname: this.surname,
       familyname: this.familyname,
