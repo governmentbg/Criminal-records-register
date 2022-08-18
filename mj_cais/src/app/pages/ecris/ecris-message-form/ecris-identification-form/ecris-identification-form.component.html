@@ -89,6 +89,33 @@
         </div>
         <div class="inner-card-header">
           <div class="float-left">Данни за лицето</div>
+          <div class="float-rigth">
+            <ng-container *ngIf="this.fullForm.bulletinId.value">
+              <button
+                nbButton
+                size="small"
+                [routerLink]="[
+                  '/pages/bulletins/preview',
+                  this.fullForm.bulletinId.value
+                ]"
+              >
+                Бюлетин
+              </button>
+            </ng-container>
+            <ng-container *ngIf="this.fullForm.fbbcId.value">
+              <button
+                nbButton
+                size="small"
+                class="ml-1"
+                [routerLink]="[
+                  '/pages/fbbcs/preview',
+                  this.fullForm.fbbcId.value
+                ]"
+              >
+                Осъждане в чужбина
+              </button>
+            </ng-container>
+          </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-4">

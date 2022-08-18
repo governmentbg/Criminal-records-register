@@ -137,7 +137,6 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-
         public async Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId)
         {
             var nationalities = await _ecrisMessageRepository.SelectAllNationalitiesAsync();
