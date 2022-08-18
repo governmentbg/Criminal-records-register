@@ -1,8 +1,8 @@
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.EcrisOutbox;
-using MJ_CAIS.EcrisObjectsServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
@@ -12,12 +12,10 @@ namespace MJ_CAIS.Web.Controllers
     public class EEcrisOutboxesController : BaseApiCrudController<EcrisOutboxDTO, EcrisOutboxDTO, EcrisOutboxGridDTO, EEcrisOutbox, string>
     {
         private readonly IEcrisOutboxService _ecrisOutboxService;
-        private readonly IRequestService _requestService;
 
-        public EEcrisOutboxesController(IEcrisOutboxService ecrisOutboxService, IRequestService requestService) : base(ecrisOutboxService)
+        public EEcrisOutboxesController(IEcrisOutboxService ecrisOutboxService) : base(ecrisOutboxService)
         {
             _ecrisOutboxService = ecrisOutboxService;
-            _requestService = requestService;
         }
 
         [HttpGet("")]
@@ -49,7 +47,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("resend/{ecrisMsgId}")]
         public async Task<IActionResult> Resend(string ecrisMsgId)
         {
-            await this._requestService.RecreateResponseToRequest(ecrisMsgId);
+            await this._ecrisOutboxService.ChangeEcrisMessageStatusAsync(ecrisMsgId, ECRISConstants.EcrisMessageStatuses.ForSending);
             return Ok();
         }
     }

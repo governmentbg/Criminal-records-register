@@ -10,6 +10,7 @@ import { ReportApplicationResolver } from "./report-application-form/_data/repor
 import { ReportApplicationApprovedOverviewComponent } from "./report-application-overview/report-application-approved-overview/report-application-approved-overview.component";
 import { ReportApplicationDeliveredOverviewComponent } from "./report-application-overview/report-application-delivered-overview/report-application-delivered-overview.component";
 import { ReportApplicationNewOverviewComponent } from "./report-application-overview/report-application-new-overview/report-application-new-overview.component";
+import { SearchReportApplicationOverviewComponent } from "./search-report-application-overview/search-report-application-overview.component";
 
 const routes: Routes = [
   {
@@ -95,6 +96,10 @@ const routes: Routes = [
         only: [RoleNameEnum.Normal],
       },
     },
+  },
+  {
+    path: "search",
+    component: SearchReportApplicationOverviewComponent,
   },
   {
     path: "",

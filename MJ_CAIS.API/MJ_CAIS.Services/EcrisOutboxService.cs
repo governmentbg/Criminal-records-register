@@ -43,7 +43,7 @@ namespace MJ_CAIS.Services
         {
             var msg = await _ecrisOutboxRepository.SingleOrDefaultAsync<EEcrisOutbox>(x => x.Id == aId);
             if (msg == null)
-                throw new BusinessLogicException(string.Format(EcrisResources.msgExrisInboxMsgNotExist, aId));
+                throw new BusinessLogicException(string.Format(EcrisResources.msgEcrisInboxMsgNotExist, aId));
 
             return Encoding.Default.GetBytes(msg.XmlObject);
         }
@@ -51,6 +51,19 @@ namespace MJ_CAIS.Services
         public override async Task<EcrisOutboxDTO> SelectAsync(string aId)
         {
             return await _ecrisOutboxRepository.SelectWithStatusDataAsync(aId);
+        }
+
+        public async Task ChangeEcrisMessageStatusAsync(string aId, string status)
+        {
+            var msg = await _ecrisOutboxRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aId);
+            if (msg == null)
+                throw new BusinessLogicException(string.Format(EcrisResources.msgEcrisMsgNotExist, aId));
+
+            msg.EcrisMsgStatus = status;
+            msg.EntityState = Common.Enums.EntityStateEnum.Modified;
+            msg.ModifiedProperties = new List<string> { nameof(msg.EcrisMsgStatus), nameof(msg.Version) };
+
+            await _ecrisOutboxRepository.SaveEntityAsync(msg, false);
         }
     }
 }

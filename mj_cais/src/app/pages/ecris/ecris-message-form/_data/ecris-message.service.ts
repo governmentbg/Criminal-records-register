@@ -56,4 +56,9 @@ export class EcrisMessageService extends CaisCrudService<
     let url = `${this.url}/${aId}/cancel-identification/${egn}`;
     return this.http.put(url, {});
   }
+
+  public recreateMessage(aId: string): Observable<any> {
+    let url = `${this.url}/${aId}/recreate-message`;
+    return this.http.put(url, {});
+  }
 }
