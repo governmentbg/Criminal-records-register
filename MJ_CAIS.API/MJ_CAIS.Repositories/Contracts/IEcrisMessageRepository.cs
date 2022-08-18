@@ -11,6 +11,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<EEcrisMsgNationality>> SelectAllNationalitiesAsync();
         Task<IQueryable<EEcrisMsgName>> SelectAllNamesAsync();
         IQueryable<EcrisMessageGridDTO> CustomGetAll();
-        Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId);
+        IQueryable<GraoPersonGridDTO> GetEcrisIdentifiedPeople(string aId);
+        IQueryable<EEcrisIdentification> GetEcrisIdentificationsById(string aId);
     }
 }

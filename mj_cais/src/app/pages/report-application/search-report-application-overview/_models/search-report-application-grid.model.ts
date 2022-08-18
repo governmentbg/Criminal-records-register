@@ -1,6 +1,6 @@
 import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
-export class SearchInquiryGridModel extends BaseGridModel {
+export class SearchReportApplicationGridModel extends BaseGridModel {
   public registrationNumber: string;
   public statusCodeDisplayValue: string;
   public validFrom: Date;
@@ -13,7 +13,7 @@ export class SearchInquiryGridModel extends BaseGridModel {
   public firstSigner: string;
   public secondSigner: string;
 
-  constructor(init?: Partial<SearchInquiryGridModel>) {
+  constructor(init?: Partial<SearchReportApplicationGridModel>) {
     super(init);
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;

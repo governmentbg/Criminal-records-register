@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,18 @@ namespace MJ_CAIS.Web.Controllers
         private readonly IEcrisMessageService _ecrisMessageService;
         private readonly PersonValidatorClient _personValidatorClient;
         private readonly IRequestService _requestService;
+        private readonly IMapper _mapper;
 
         public EcrisMessagesController(IEcrisMessageService ecrisMessageService,
-            PersonValidatorClient personValidatorClient, 
-            IRequestService requestService)
+            PersonValidatorClient personValidatorClient,
+            IRequestService requestService,
+            IMapper mapper)
             : base(ecrisMessageService)
         {
             _ecrisMessageService = ecrisMessageService;
             _personValidatorClient = personValidatorClient;
             _requestService = requestService;
+            _mapper = mapper;
         }
 
         [HttpGet("")]
@@ -87,9 +91,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("{aId}/grao-people")]
-        public async Task<IActionResult> GetGraoPeople(string aId)
+        public IActionResult GetEcrisIdentifiedPeople(string aId)
         {
-            var result = await this._ecrisMessageService.GetGraoPeopleAsync(aId);
+            var result = this._ecrisMessageService.GetEcrisIdentifiedPeople(aId);
             return Ok(result);
         }
 
@@ -118,12 +122,11 @@ namespace MJ_CAIS.Web.Controllers
 
         }
 
-        [HttpPut("{aId}/change-status/{statusId}")]
-        [HttpPut("{aId}/identify/{graoPersonId}")]
+        [HttpPut("{aId}/identify/{egn}")]
         [Authorize(Roles = RoleConstants.CentralAuth)]
-        public async Task<IActionResult> Identify(string aId, string graoPersonId)
+        public async Task<IActionResult> Identify(string aId, string egn)
         {
-            await this._ecrisMessageService.IdentifyAsync(aId, graoPersonId);
+            await this._ecrisMessageService.IdentifyAsync(aId, egn);
             return Ok();
         }
 
@@ -131,15 +134,43 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> SearchPerson([FromQuery] SearchParamsDTO searchParams)
         {
             var sex = searchParams.Sex == 1 ? PersonInfoGenderType.male : searchParams.Sex == 2 ? PersonInfoGenderType.female : PersonInfoGenderType.female;
-            var result = await _personValidatorClient.GetPersonInfo(searchParams.Firstname, searchParams.Surname, searchParams.Familyname, sex, searchParams.BirthDate);
+            var people = await _personValidatorClient.GetPersonInfo(searchParams.Firstname, searchParams.Surname, searchParams.Familyname, sex, searchParams.BirthDate);
+
+            var result = new List<PersonSearchResultDataDTO>();
+            foreach (var item in people)
+            {
+                var person = new PersonSearchResultDataDTO
+                {
+                    Identifier = item.person.personalNumber,
+                    FirstName = item.person.name.firstName,
+                    SurName = item.person.name.secondName,
+                    FamilyName = item.person.name.familyName
+                };
+
+                var birthDate = item.person.birthDate;
+                if (birthDate != null)
+                {
+                    person.BirthDate = new DateTime(birthDate.year, birthDate.month, birthDate.day);
+                }
+
+                result.Add(person);
+            }
+
             return Ok(result);
-            
+
         }
 
         [HttpPut("{aId}/cancel-identification/{reasonId}")]
         public async Task<IActionResult> CancelIdentification(string aId, string reasonId)
         {
-            await this._requestService.GenerateUnsuccessfulResponce(aId,reasonId);
+            await this._requestService.GenerateUnsuccessfulResponce(aId, reasonId);
+            return Ok();
+        }
+
+        [HttpPut("{aId}/recreate-message")]
+        public async Task<IActionResult> RecreateMessage(string aId)
+        {
+            await this._ecrisMessageService.RecreateMessageAsync(aId);
             return Ok();
         }
     }

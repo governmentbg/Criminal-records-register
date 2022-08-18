@@ -6,12 +6,14 @@ import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { LoaderService } from "../../../../@core/services/common/loader.service";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { EcrisMessageStatusConstants } from "../../ecris-message-overivew/_models/ecris-message-status.constants";
 import { EcrisNotPreviewComponent } from "../ecris-not-preview/ecris-not-preview.component";
 import { EcrisReqPreviewComponent } from "../ecris-req-preview/ecris-req-preview.component";
 import { EcrisResponsePreviewComponent } from "../ecris-response-preview/ecris-response-preview.component";
 import { EcrisMessageService } from "../_data/ecris-message.service";
 import { EcrisMessageForm } from "../_models/ecris-message.form";
 import { EcrisMessageModel } from "../_models/ecris-message.model";
+import { EcrisMsgTypeConstants } from "../_models/ecris-msg-type.constants";
 import { EcrisIdentificationResolverData } from "./_data/ecris-identification.resolver";
 
 @Component({
@@ -33,6 +35,7 @@ export class EcrisIdentificationFormComponent
   public cancelIdentificationFormGroup: FormGroup;
   public model: EcrisMessageModel;
   private graoPersonId: string;
+  public showBtnRecreate: boolean = false;
 
   constructor(
     service: EcrisMessageService,
@@ -61,7 +64,7 @@ export class EcrisIdentificationFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
 
     let id = this.activatedRoute.snapshot.params["ID"];
-
+    this.isForPreview = this.isForPreview || this.fullForm.ecrisMsgStatus.value != EcrisMessageStatusConstants.ForIdentification;
     this.service.get(id).subscribe((response) => {
       this.model = response;
 
@@ -89,6 +92,9 @@ export class EcrisIdentificationFormComponent
     this.cancelIdentificationFormGroup = this.formBuilder.group({
       reasonId: [{ value: "", disabled: false }, Validators.required],
     });
+
+    this.showBtnRecreate = this.fullForm.ecrisMsgStatus.value == EcrisMessageStatusConstants.ReplyCreated &&
+    this.fullForm.msgTypeId.value ==  EcrisMsgTypeConstants.EcrisRequest;
 
     this.formFinishedLoading.emit();
   }
@@ -188,5 +194,21 @@ export class EcrisIdentificationFormComponent
 
   handleSelectedRow(event) {
     this.graoPersonId = event;
+  }
+
+  onRecreateMsg(){
+    this.service.recreateMessage(this.fullForm.id.value)
+    .subscribe(
+      (response: any) => {
+        this.loaderService.hide();
+        this.router.navigate(["pages/ecris/identification"]);
+      },
+      (error) => {
+        this.loaderService.hide();
+
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+      }
+    );
   }
 }

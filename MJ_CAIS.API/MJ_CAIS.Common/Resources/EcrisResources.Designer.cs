@@ -63,9 +63,18 @@ namespace MJ_CAIS.Common.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Входящо съобщение с идентификатор {0} не съществува..
         /// </summary>
-        public static string msgExrisInboxMsgNotExist {
+        public static string msgEcrisInboxMsgNotExist {
             get {
-                return ResourceManager.GetString("msgExrisInboxMsgNotExist", resourceCulture);
+                return ResourceManager.GetString("msgEcrisInboxMsgNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Съобщение с идентификатор {0} не съществува..
+        /// </summary>
+        public static string msgEcrisMsgNotExist {
+            get {
+                return ResourceManager.GetString("msgEcrisMsgNotExist", resourceCulture);
             }
         }
         

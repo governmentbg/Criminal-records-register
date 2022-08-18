@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DTO.EcrisMessage;
 using MJ_CAIS.ExternalWebServices.Schemas.PersonValidator;
 using System.Net.Http.Headers;
 using System.Text;

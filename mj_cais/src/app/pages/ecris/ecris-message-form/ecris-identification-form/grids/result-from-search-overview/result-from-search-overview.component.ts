@@ -1,6 +1,14 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Injector,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { GridSelectionMode } from "@infragistics/igniteui-angular";
 import { RemoteGridWithStatePersistance } from "../../../../../../@core/directives/remote-grid-with-state-persistance.directive";
+import { CustomToastrService } from "../../../../../../@core/services/common/custom-toastr.service";
 import { DateFormatService } from "../../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../../@core/services/common/loader.service";
 import { SearchPersonForm } from "../grao-person-overview/_models/search-person.form";
@@ -12,23 +20,19 @@ import { ResultGridModel } from "./_models/result-grid.model";
   templateUrl: "./result-from-search-overview.component.html",
   styleUrls: ["./result-from-search-overview.component.scss"],
 })
-export class ResultFromSearchOverviewComponent extends RemoteGridWithStatePersistance<
-  ResultGridModel,
-  ResultGridService
-> {
+export class ResultFromSearchOverviewComponent {
   constructor(
-    service: ResultGridService,
-    injector: Injector,
+    public service: ResultGridService,
     public dateFormatService: DateFormatService,
-    private loader: LoaderService
-  ) {
-    super("result-search", service, injector);
-  }
+    private loader: LoaderService,
+    public toastr: CustomToastrService
+  ) {}
 
   @Input() searchPersonForm: SearchPersonForm;
   @Output() selectRow = new EventEmitter<string>();
+  public searchPersonGridResult: ResultGridModel[] = [];
 
-  public selectionMode: GridSelectionMode = "single";
+  public selectionMode: GridSelectionMode = GridSelectionMode.single;
   public currentPage = 0;
   public itemsPerPage = 5;
 
@@ -43,14 +47,25 @@ export class ResultFromSearchOverviewComponent extends RemoteGridWithStatePersis
       this.toastr.showToast("danger", "Грешка при валидациите!");
       return;
     }
-    
-    this.loader.showSpinner(this.service);
-    let formObj = this.searchPersonForm.group.getRawValue();
-    let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
-    this.service.updateUrl(`ecris-messages/search-person?${filterQuery}`);
 
-    super.ngOnInit();
-    this.loader.hideSpinner(this.service);
+    this.loader.show();
+    let formObj = this.searchPersonForm.group.getRawValue();
+    let filterQuery = this.service.constructQueryParamsByFiltersForLocalGrid(
+      formObj,
+      ""
+    );
+
+    this.service.personSearch(filterQuery).subscribe(
+      (response: any) => {
+        this.searchPersonGridResult = response;
+        this.loader.hide();
+      },
+      (error) => {
+        this.loader.hide();
+        var errorText = error.status + " " + error.statusText;
+        this.toastr.showBodyToast("danger", "Грешка при търсене:", errorText);
+      }
+    );
   };
 
   handleRowSelection(event) {

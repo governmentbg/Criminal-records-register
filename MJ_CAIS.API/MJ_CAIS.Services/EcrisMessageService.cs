@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
@@ -17,6 +18,7 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
 using System.Xml;
+using MJ_CAIS.Common.Resources;
 
 namespace MJ_CAIS.Services
 {
@@ -61,7 +63,7 @@ namespace MJ_CAIS.Services
             {
                 baseQuery = baseQuery.Where(x => x.EcrisMsgStatus == statusId);
             }
-                        
+
             var resultQuery = await ApplyOData(baseQuery, aQueryOptions);
             var pageResult = new IgPageResult<EcrisMessageGridDTO>();
             PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
@@ -136,7 +138,6 @@ namespace MJ_CAIS.Services
             return result;
         }
 
-
         public async Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId)
         {
             var nationalities = await _ecrisMessageRepository.SelectAllNationalitiesAsync();
@@ -151,34 +152,57 @@ namespace MJ_CAIS.Services
             return filteredNames.ProjectTo<EcrisMsgNameDTO>(mapperConfiguration);
         }
 
-
-        public async Task IdentifyAsync(string aInDto, string graoPersonId)
+        public async Task IdentifyAsync(string aInDto, string egn)
         {
-            var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
-            //await dbContext.EEcrisMessages
-            //.FirstOrDefaultAsync(x => x.Id == aInDto);
-            var ecrisIdentif =
-                await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisIdentification>(x =>
-                    x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId);
-            //await dbContext.EEcrisIdentifications
-            //    .Where(x => x.EcrisMsgId == aInDto && x.GraoPersonId == graoPersonId)
-            //    .FirstOrDefaultAsync();
-
-            if (ecrisMessage == null)
+            var graoPersonId = (await _ecrisMessageRepository.SingleOrDefaultAsync<GraoPerson>(x => x.Egn == egn))?.Id;
+            if (string.IsNullOrEmpty(graoPersonId))
             {
-                throw new ArgumentException($"Ecris message with id: {aInDto} is missing");
+                throw new BusinessLogicException($"Grao person with egn: {aInDto} is missing");
+            }
+
+            var ecrisMessage = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aInDto);
+            var ecrisIdentificationsQuery = _ecrisMessageRepository.GetEcrisIdentificationsById(aInDto);
+            var ecrisIdentifications = await ecrisIdentificationsQuery.ToListAsync();
+
+            var addIdentification = true;
+            if (ecrisIdentifications != null && ecrisIdentifications.Count > 0)
+            {
+                foreach (var item in ecrisIdentifications)
+                {
+                    item.EntityState = EntityStateEnum.Modified;
+                    item.ModifiedProperties = new List<string> { nameof(item.Version), nameof(item.Approved) };
+                    item.Approved = 0;
+                    if (item.GraoPersonId == graoPersonId)
+                    {
+                        addIdentification = false;
+                        item.Approved = 1;
+                    }
+                }
+            }
+
+            if (addIdentification)
+            {
+                ecrisIdentifications.Add(
+                    new EEcrisIdentification
+                    {
+                        EntityState = EntityStateEnum.Added,
+                        Id = BaseEntity.GenerateNewId(),
+                        Approved = 1,
+                        GraoPersonId = graoPersonId,
+                    }
+                );
             }
 
             ecrisMessage.EcrisMsgStatus = "Identified";
-            ecrisIdentif.Approved = 1;
-
+            ecrisMessage.EntityState = EntityStateEnum.Modified;
+            ecrisMessage.ModifiedProperties = new List<string> { nameof(ecrisMessage.EcrisMsgStatus), nameof(ecrisMessage.Version) };
+            ecrisMessage.EEcrisIdentifications = ecrisIdentifications;
+            _ecrisMessageRepository.ApplyChanges(ecrisMessage, applyToAllLevels: true);
             await _ecrisMessageRepository.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId)
-        {
-            return await _ecrisMessageRepository.GetGraoPeopleAsync(aId);
-        }
+        public IQueryable<GraoPersonGridDTO> GetEcrisIdentifiedPeople(string aId)
+            => _ecrisMessageRepository.GetEcrisIdentifiedPeople(aId);
 
         public async Task<EcrisNotificationDTO> GetEcrisNotificationByIdAsync(string ecrisMessageId)
         {
@@ -209,6 +233,19 @@ namespace MJ_CAIS.Services
             var msg = XmlUtils.DeserializeXml<AbstractMessageType>("<?xml version=\"1.0\" encoding=\"utf-8\"?><AbstractMessageType xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:q1=\"http://ec.europa.eu/ECRIS-RI/domain-v1.0\" xsi:type=\"q1:RequestResponseMessageType\"><q1:MessageIdentifier>RI-RRS-000000001382773</q1:MessageIdentifier><q1:MessageEcrisIdentifier>BG-BE-RRS-000000000019318</q1:MessageEcrisIdentifier><q1:MessageResponseTo><q1:MessageIdentifier>RI-REQ-000000001369858</q1:MessageIdentifier><q1:MessageEcrisIdentifier>BE-BG-REQ-000000000019444</q1:MessageEcrisIdentifier></q1:MessageResponseTo><q1:MessageSendingMemberState>BG</q1:MessageSendingMemberState><q1:MessageReceivingMemberState>BE</q1:MessageReceivingMemberState><q1:MessageType>RRS</q1:MessageType><q1:MessageVersionTimestamp>2021-12-07T12:59:36.399+02:00</q1:MessageVersionTimestamp><q1:MessageLastModifiedByUser>IVA</q1:MessageLastModifiedByUser><q1:AuthoringLanguage>bg</q1:AuthoringLanguage><q1:MessagePerson><q1:PersonName><q1:Forename languageCode=\"bg\">VELI</q1:Forename><q1:Surname languageCode=\"bg\">CHOBAN</q1:Surname><q1:SecondSurname languageCode=\"bg\">ALI</q1:SecondSurname></q1:PersonName><q1:PersonSex>1</q1:PersonSex><q1:PersonBirthDate><DateYear xmlns=\"http://ec.europa.eu/ECRIS-RI/commons-v1.0\">1987</DateYear><DateMonthDay xmlns=\"http://ec.europa.eu/ECRIS-RI/commons-v1.0\"><DateMonth>--04</DateMonth><DateDay>---29</DateDay></DateMonthDay></q1:PersonBirthDate><q1:PersonBirthPlace xsi:type=\"q1:PlaceType\"><q1:PlaceCountryReference>CO-00-100-BGR</q1:PlaceCountryReference><q1:PlaceTownName><MultilingualTextLinguisticRepresentation languageCode=\"bg\" translated=\"false\" xmlns=\"http://ec.europa.eu/ECRIS-RI/commons-v1.0\">Kotel</MultilingualTextLinguisticRepresentation></q1:PlaceTownName></q1:PersonBirthPlace><q1:PersonNationalityReference>CO-00-100-BGR</q1:PersonNationalityReference><q1:PersonIdentityNumber>8704295867</q1:PersonIdentityNumber></q1:MessagePerson><q1:RequestResponseMessageRequestResponseTypeReference>RRT-00-00</q1:RequestResponseMessageRequestResponseTypeReference></AbstractMessageType>\r\n");
             var result = mapper.Map<EcrisResponseDTO>((RequestResponseMessageType)msg);
             return result;
+        }
+
+        public async Task RecreateMessageAsync(string aId)
+        {
+            var msg = await _ecrisMessageRepository.SingleOrDefaultAsync<EEcrisMessage>(x => x.Id == aId);
+            if (msg == null)
+                throw new BusinessLogicException(string.Format(EcrisResources.msgEcrisMsgNotExist, aId));
+
+            msg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Identified;
+            msg.EntityState =  EntityStateEnum.Modified;
+            msg.ModifiedProperties = new List<string> { nameof(msg.EcrisMsgStatus), nameof(msg.Version) };
+
+            await _ecrisMessageRepository.SaveEntityAsync(msg, false);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

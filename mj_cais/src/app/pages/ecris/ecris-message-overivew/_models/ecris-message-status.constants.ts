@@ -6,4 +6,5 @@ export enum EcrisMessageStatusConstants {
   ReqWithRespUnconvicted = "ReqWithRespUnconvicted", // Изпратен отговор за неосъждано лице
   ReqWaitingForCSAuthority = "ReqWaitingForCSAuthority", // Запитване, чакащо отговор за решение към БС по месторождение
   ReqWihtRespConvicted = "ReqWihtRespConvicted", // Изготвен отговор на запитване от БС по месторождение
+  ReplyCreated = "ReplyCreated",
 }

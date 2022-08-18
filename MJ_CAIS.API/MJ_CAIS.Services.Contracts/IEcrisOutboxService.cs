@@ -10,5 +10,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IgPageResult<EcrisOutboxGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<EcrisOutboxGridDTO> aQueryOptions, string? statusId);
 
         Task<byte[]> GetXmlContentAsync(string aId);
+
+        Task ChangeEcrisMessageStatusAsync(string aId, string status);
     }
 }

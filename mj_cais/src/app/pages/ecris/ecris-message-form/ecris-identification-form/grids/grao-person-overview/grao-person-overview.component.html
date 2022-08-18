@@ -6,15 +6,14 @@
   [clipboardOptions]="{ copyHeaders: false }"
   [displayDensity]="'cosy'"
   [allowFiltering]="true"
-  [primaryKey]="'id'"
+  [primaryKey]="'identifier'"
   [cellSelection]="'none'"
   [rowSelection]="selectionMode"
   [selectedRows]="selectedRows"
   (onRowSelectionChange)="handleRowSelection($event)"
-  [paginationTemplate]="pager"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Лица</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>Идентифицирани лица</igx-grid-toolbar-title>
     <igx-grid-toolbar-actions>
       <div class="ml-auto">
         <button
@@ -22,18 +21,23 @@
           igxButton="flat"
           (click)="dialogAdd.open()"
         >
-          <igx-icon>add</igx-icon> Добави
+          <igx-icon>search</igx-icon> Търсене
         </button>
       </div>
     </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
-  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="identifier"
+    header="ЕГН"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template></igx-column
   >
   <igx-column
-    field="firstname"
+    field="firstName"
     header="Име"
     [sortable]="true"
     [dataType]="'string'"
@@ -43,7 +47,7 @@
     </ng-template></igx-column
   >
   <igx-column
-    field="surname"
+    field="surName"
     header="Презиме"
     [sortable]="true"
     [dataType]="'string'"
@@ -53,7 +57,7 @@
     </ng-template></igx-column
   >
   <igx-column
-    field="familyname"
+    field="familyName"
     header="Фамилия"
     [sortable]="true"
     [dataType]="'string'"
@@ -74,16 +78,6 @@
       </span>
     </ng-template></igx-column
   >
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
-    </div>
-  </ng-template>
 </igx-grid>
 
 <igx-dialog #dialogAdd>
@@ -107,7 +101,7 @@
                 Търси
               </button>
             </div>
-            <div>
+            <!-- <div>
               <button
                 nbButton
                 matRipple
@@ -118,7 +112,7 @@
               >
                 Добави в таблица
               </button>
-            </div>
+            </div> -->
             <div>
               <button
                 nbButton
@@ -171,7 +165,7 @@
               [label]="'Пол'"
               [inputFormControl]="searchPersonForm.sex"
               [parentGroup]="searchPersonForm.group"
-              [items]="dbData.genderTypes.slice(0, 2)"
+              [items]="genderTypes.slice(0, 2)"
               [inputName]="'sex'"
             >
             </cais-autocomplete>

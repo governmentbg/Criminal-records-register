@@ -43,7 +43,7 @@ namespace MJ_CAIS.Services
         {
             var msg = await _ecrisInboxRepository.SingleOrDefaultAsync<EEcrisInbox>(x => x.Id == aId);
             if (msg == null)
-                throw new BusinessLogicException(string.Format(EcrisResources.msgExrisInboxMsgNotExist, aId));
+                throw new BusinessLogicException(string.Format(EcrisResources.msgEcrisInboxMsgNotExist, aId));
 
             var xml = traits ? msg.XmlMessageTraits : msg.XmlMessage;
 

@@ -45,6 +45,12 @@
             public const string WebApprovedApplication = "WebApprovedApplication";
         }
 
+        public static class ApplicationCertificateStatuses
+        {
+            public const string CanceledCertificate = "CanceledCertificate";
+
+        }
+
         public static class ApplicationTypes
         {
             //todo: дали това са им имената

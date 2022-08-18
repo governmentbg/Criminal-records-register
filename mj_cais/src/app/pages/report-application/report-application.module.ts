@@ -9,6 +9,7 @@ import { ReportApplicationApprovedOverviewComponent } from './report-application
 import { ReportApplicationDeliveredOverviewComponent } from './report-application-overview/report-application-delivered-overview/report-application-delivered-overview.component';
 import { AllGeneratedReportOverviewComponent } from "./all-generated-report-overview/all-generated-report-overview.component";
 import { GeneratedReportOverviewComponent } from "./report-application-form/tabs/generated-report-overview/generated-report-overview.component";
+import { SearchReportApplicationOverviewComponent } from "./search-report-application-overview/search-report-application-overview.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { GeneratedReportOverviewComponent } from "./report-application-form/tabs
     ReportApplicationApprovedOverviewComponent,
     ReportApplicationDeliveredOverviewComponent,
     GeneratedReportOverviewComponent,
-    AllGeneratedReportOverviewComponent, 
+    AllGeneratedReportOverviewComponent,
+    SearchReportApplicationOverviewComponent
   ],
   imports: [CoreComponentModule, ReportApplicationRoutingModule],
 })

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.Common.Enums;
 
 namespace MJ_CAIS.Services
 {
@@ -54,7 +55,14 @@ namespace MJ_CAIS.Services
             }
 
             ecrisTcn.Status = statusId;
-            await _ecrisTcnRepository.SaveChangesAsync();
+            ecrisTcn.EntityState = EntityStateEnum.Modified;
+            ecrisTcn.ModifiedProperties = new List<string>
+            {
+                nameof(ecrisTcn.Status),
+                nameof(ecrisTcn.Version),
+            };
+            await _ecrisTcnRepository.SaveEntityAsync(ecrisTcn, false);
+            //await _ecrisTcnRepository.SaveChangesAsync();
         }
     }
 }

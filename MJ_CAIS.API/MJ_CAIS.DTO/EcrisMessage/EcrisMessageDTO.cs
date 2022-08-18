@@ -14,6 +14,7 @@ namespace MJ_CAIS.DTO.EcrisMessage
         public string? BirthCountry { get; set; }
         public string? BirthCity { get; set; }
         public string? FbbcId { get; set; }
+        public string? BulletinId { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
         public string? Familyname { get; set; }

@@ -47,13 +47,14 @@ namespace EcrisFromCAISExporter
                 var endpointSearch = config.GetValue<string>("EcrisRiSettings:endPointAddressSearch");
                 var endpointStore = config.GetValue<string>("EcrisRiSettings:endPointAddressMessageStorage");
                 string folderName = config.GetValue<string>("ExportSettings:folderName");
+                int pageSize = config.GetValue<int>("ExportSettings:pageSize");
                 //todo: repeat?check if exists?
                 using (host)
                 {
 
                     
                      var ecrisFromService = host.Services.GetService<EcrisFromCAISService>();
-                     await ecrisFromService.SendMessagesToEcris(username, password, folderName,endpointAuth, endpointStore, endpointSearch);
+                     await ecrisFromService.SendMessagesToEcris(username, password, folderName,endpointAuth, endpointStore, endpointSearch, pageSize);
                    
                    
 

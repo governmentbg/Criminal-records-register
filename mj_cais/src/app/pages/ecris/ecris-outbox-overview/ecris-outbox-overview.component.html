@@ -120,7 +120,6 @@
         <nb-icon pack="fa" icon="file-download"></nb-icon>
       </button>
       <button
-        *ngIf="hideStatus"
         igxButton="icon"
         [title]="'Повторно изпращане'"
         (click)="resend(cell.rowData.ecrisMsgId)"

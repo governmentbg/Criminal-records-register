@@ -83,7 +83,7 @@ namespace MJ_CAIS.Services
 
             if (newStatus.Code == ApplicationConstants.ApplicationStatuses.Delivered)
             {
-                MoveCertificateToWCertificate(certificate);
+                await MoveCertificateToWCertificate(certificate);
 
                 if (certificate.Application == null)
                 {
@@ -119,31 +119,48 @@ namespace MJ_CAIS.Services
 
         }
 
-        private void MoveCertificateToWCertificate(ACertificate certificate)
+        private async Task MoveCertificateToWCertificate(ACertificate certificate)
         {
+            ACertificate certificateFromDb = new ACertificate();
+            bool isFromDB = false;
             if (certificate.Doc?.DocContent == null || certificate.Doc.DocContent.Content == null
                 || certificate.Doc.DocContent.Content.Length == 0)
             {
-                throw new Exception("Свидетелството няма генериран pdf.");
+                try
+                {
+                    certificateFromDb = await _certificateRepository.GetCertificateWithDocumentContent(certificate.Id);
+                   isFromDB = true;
+                    if (certificateFromDb.Doc?.DocContent == null || certificateFromDb.Doc.DocContent.Content == null
+               || certificateFromDb.Doc.DocContent.Content.Length == 0)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Свидетелството няма генериран pdf.");
+                }
+
             }
             WCertificate wcert = new WCertificate();
             wcert.Id = BaseEntity.GenerateNewId();
             wcert.ACertId = certificate.Id;
-            wcert.Md5 = certificate.Doc.DocContent.Md5Hash;
+            wcert.Md5 = isFromDB ? certificateFromDb.Doc.DocContent.Md5Hash : certificate.Doc.DocContent.Md5Hash;
             wcert.AccessCode1 = certificate.AccessCode1;
             wcert.AccessCode2 = certificate.AccessCode2;
-            if (certificate.Doc.DocContent.Bytes.HasValue)
+            if (!isFromDB && certificate.Doc.DocContent.Bytes.HasValue)
             {
                 wcert.Bytes = certificate.Doc.DocContent.Bytes.Value;
             }
-            wcert.Sha1 = certificate.Doc.DocContent.Sha1Hash;
-            if (certificate.ValidFrom.HasValue)
+            if (isFromDB && certificateFromDb.Doc.DocContent.Bytes.HasValue)
             {
-                wcert.ValidFrom = certificate.ValidFrom.Value;
+                wcert.Bytes = certificateFromDb.Doc.DocContent.Bytes.Value;
             }
+            wcert.Sha1 = isFromDB ? certificateFromDb.Doc.DocContent.Sha1Hash : certificate.Doc.DocContent.Sha1Hash;
+           
             wcert.ValidTo = certificate.ValidTo;
-            wcert.Content = certificate.Doc.DocContent.Content;
-            wcert.MimeType = certificate.Doc.DocContent.MimeType;
+            wcert.Content = isFromDB ? certificateFromDb.Doc.DocContent.Content :certificate.Doc.DocContent.Content;
+            wcert.MimeType = isFromDB ? certificateFromDb.Doc.DocContent.MimeType : certificate.Doc.DocContent.MimeType;
             wcert.RegistrationNumber = certificate.RegistrationNumber;
             wcert.WApplId = certificate.Application?.WApplicationId;
 
@@ -255,7 +272,7 @@ namespace MJ_CAIS.Services
             }
 
             var aapplicationStatus = await _certificateRepository.SingleOrDefaultAsync<AApplicationStatus>(x =>
-                x.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+                x.Code == ApplicationConstants.ApplicationCertificateStatuses.CanceledCertificate);
             SetCertificateStatus(certificate, aapplicationStatus,
                 "�������!");
 
