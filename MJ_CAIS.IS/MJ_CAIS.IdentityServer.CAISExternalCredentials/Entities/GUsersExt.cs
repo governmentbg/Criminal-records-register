@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
-
 namespace MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities
 {
     public partial class GUsersExt
@@ -22,6 +18,8 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public decimal? Version { get; set; }
-        public virtual GExtAdministration? Administration { get; set; }
+        public string RegCertSubject { get; set; }
+
+        public virtual GExtAdministration Administration { get; set; }
     }
 }

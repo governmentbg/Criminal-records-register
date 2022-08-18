@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using IdentityModel;
 using TechnoLogica.Authentication.EAuthV2;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 
 namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 {
@@ -55,19 +56,43 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             UserInfo res = null;
             if (!string.IsNullOrEmpty(username))
             {
+                var certificateClaim = externalClaims.Where(c => c.Type == EAuthClaims.Certificate).FirstOrDefault();
+                if (certificateClaim == null)
+                {
+                    return res;
+                }
                 var egn = username.Replace("PNOBG-", "");
+                var x509Cert = new X509Certificate2(Convert.FromBase64String(certificateClaim.Value));
+                string uicValue = ExtractdUIC(x509Cert);
+                var subject = x509Cert.Subject;
+
+                if (uicValue == null)
+                {
+                    return res;
+                }
                 res =
-                (from u in CaisDbContext.GUsersExt
-                    where u.Egn == egn
-                    select new UserInfo()
-                    {
-                        Name = u.Name,
-                        SubjectId = u.Id,
-                        Active = true, // Allways returns active. Specific roles for inactive users is returned in the profile data
-                        Username = u.Egn
-                    }).FirstOrDefault();
+                (from u in CaisDbContext.GUsersExts
+                 join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id
+                 join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
+                 where u.Egn == egn
+                    && (uic.Value == uicValue || u.RegCertSubject == subject)
+                 select new UserInfo()
+                 {
+                     Name = u.Name,
+                     SubjectId = u.Id,
+                     Active = true, // Allways returns active. Specific roles for inactive users is returned in the profile data
+                     Username = u.Egn
+                 }).FirstOrDefault();
             }
             return res;
+        }
+
+        private static string ExtractdUIC(X509Certificate2 x509Cert)
+        {
+            Regex regx = new Regex("(NTRBG-(?<EIK>[0-9]*))");
+            var matches = regx.Matches(x509Cert.Subject);
+            var uicValue = matches.Where(m => !string.IsNullOrEmpty(m.Groups["EIK"]?.Value)).Select(m => m.Groups["EIK"].Value).FirstOrDefault();
+            return uicValue;
         }
 
         public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
@@ -77,18 +102,39 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 var egn = userName.Replace("PNOBG-", "");
                 additionalAttributes.TryGetValue(EAuthClaims.Certificate, out string certificate);
                 string? certSubject = null;
+                string? adminId = null;
                 if (!string.IsNullOrEmpty(certificate))
                 {
                     var cert = new X509Certificate2(Convert.FromBase64String(certificate));
+                    string uicValue = ExtractdUIC(cert);
+                    if (uicValue == null)
+                    {
+                        return new UserRegistrationResult()
+                        {
+                            Succeeded = false,
+                            Errors = new UserRegistrationError[] {
+                                new UserRegistrationError() {
+                                    Code = "NTRBG_NOT_PRESENT",
+                                    Description = "The certificate should contain information for the administration"
+                                }
+                            }
+                        };
+                    }
                     certSubject = cert.Subject;
+                    adminId = (from a in CaisDbContext.GExtAdministrations
+                             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
+                             select a.Id).FirstOrDefault();
+
                 }
-                CaisDbContext.GUsersExt.Add(new Entities.GUsersExt()
+                CaisDbContext.GUsersExts.Add(new Entities.GUsersExt()
                 {
                     Id = Guid.NewGuid().ToString(),
                     Egn = egn,
                     Name = name,
                     Email = email,
-                    Active = false
+                    Active = false,
+                    AdministrationId = adminId,
+                    RegCertSubject = (adminId == null) ? certSubject : null
                 });
                 await CaisDbContext.SaveChangesAsync();
                 return new UserRegistrationResult() { Succeeded = true };
@@ -112,9 +158,9 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
         {
             var userID = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "sub").Value;
             var user =
-                CaisDbContext.GUsersExt
+                CaisDbContext.GUsersExts
                 .AsNoTracking()
-                .Include( e => e.Administration)
+                .Include(e => e.Administration)
                 .Where(u => u.Id == userID)
                 .Select(u => new
                 {
@@ -137,7 +183,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
                 if (!string.IsNullOrEmpty(user.Role))
                 {
-                    foreach(var role in user.Role.Split(","))
+                    foreach (var role in user.Role.Split(","))
                     {
                         context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
                     }
@@ -167,7 +213,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             var subject = context.Subject ?? throw new ArgumentNullException(nameof(context.Subject));
 
             var subjectId = subject.Claims.Where(x => x.Type == "sub").FirstOrDefault().Value;
-            var user = CaisDbContext.GUsersExt.Where(u => u.Id == subjectId).FirstOrDefault();
+            var user = CaisDbContext.GUsersExts.Where(u => u.Id == subjectId).FirstOrDefault();
             context.IsActive = user != null;
         }
     }
