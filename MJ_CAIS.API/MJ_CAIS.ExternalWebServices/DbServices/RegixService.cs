@@ -713,7 +713,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             }
                         }
                     }
-                        
+
                     //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
                     if (application.Egn != null &&
                         (application.BirthCityId == null || application.MotherFirstname == null || application.FatherFirstname == null)
@@ -721,17 +721,23 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         var graoData = await GetCityMotherFatherFromGraoByEGN(application.Egn);
                         birtCityId = graoData.Item1;
+                        //тук идеятя е, ако не са попълнени място на раждане, майка, баща от regix(application), само тогава да ги слагаме от GRAO_PERSON
                         if (string.IsNullOrEmpty(application.BirthCityId) && !string.IsNullOrEmpty(birtCityId))
                         {
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
+                            if (string.IsNullOrEmpty(application.BirthCountryId))
+                            {
+                                application.BirthCountryId = GlobalConstants.BGCountryId;
+                                application.ModifiedProperties.Add(nameof(application.BirthCountryId));
+                            }
                         }
-                        if (string.IsNullOrEmpty(application.MotherFullname) && !string.IsNullOrEmpty(graoData.Item2))
+                        if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        if (string.IsNullOrEmpty(application.FatherFullname) && !string.IsNullOrEmpty(graoData.Item3))
+                        if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));
@@ -777,8 +783,16 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     application.FamilynameLat = SetValue(cache.FamilynameLat?.ToUpper(), application, nameof(application.FamilynameLat), application.FamilynameLat);
                     application.Egn = SetValue(cache.Egn?.ToUpper(), application, nameof(application.Egn), application.Egn);
                     application.Lnch = SetValue(cache.Lnch?.ToUpper(), application, nameof(application.Lnch), application.Lnch);
-                    
-                    if (application.WAppPersAliases == null)
+
+                    application.MotherFirstname = SetValue(cache.MotherFirstname?.ToUpper(), application, nameof(application.MotherFirstname), application.MotherFirstname);
+                    application.MotherSurname = SetValue(cache.MotherSurname?.ToUpper(), application, nameof(application.MotherSurname), application.MotherSurname);
+                    application.MotherFamilyname = SetValue(cache.MotherFamilyname?.ToUpper(), application, nameof(application.MotherFamilyname), application.MotherFamilyname);
+                    application.FatherFirstname = SetValue(cache.FatherFirstname?.ToUpper(), application, nameof(application.FatherFirstname), application.FatherFirstname);
+                    application.FatherSurname = SetValue(cache.FatherSurname?.ToUpper(), application, nameof(application.FatherSurname), application.FatherSurname);
+                    application.FatherFamilyname = SetValue(cache.FatherFamilyname?.ToUpper(), application, nameof(application.FatherFamilyname), application.FatherFamilyname);
+
+
+                    if (application.WAppPersAliases?.Count == 0)
                     {
                         if (!string.IsNullOrEmpty(cache.ForeignFirstname)
                         || !string.IsNullOrEmpty(cache.ForeignSurname)
@@ -875,7 +889,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             }
                         }
                     }
-                    if (application.WAppCitizenships == null)
+                    if (application.WAppCitizenships?.Count == 0)
                     {
                         if (!string.IsNullOrEmpty(cache.NationalityCode1))
                         {
@@ -911,7 +925,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             }
                         }
                     }
+
                     //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
+                    //тук идеятя е, ако не са попълнени място на раждане, майка, баща от regix(application) -
+                    //от RegiX имената на майка и баща са по 3 броя, съответно проверяваме за първо име, само тогава да ги слагаме от GRAO_PERSON
                     if (application.Egn != null &&
                         (application.BirthCityId == null || application.MotherFirstname == null || application.FatherFirstname == null)
                         )
@@ -923,17 +940,28 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         {
                             application.BirthCityId = birtCityId;
                             application.ModifiedProperties.Add(nameof(application.BirthCityId));
+                            if (string.IsNullOrEmpty(application.BirthCountryId))
+                            {
+                                application.BirthCountryId = GlobalConstants.BGCountryId;
+                                application.ModifiedProperties.Add(nameof(application.BirthCountryId));
+                            }
                         }
-                        if (string.IsNullOrEmpty(application.MotherFullname) && !string.IsNullOrEmpty(graoData.Item2))
+                        if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
                         {
                             application.MotherFullname = graoData.Item2;
                             application.ModifiedProperties.Add(nameof(application.MotherFullname));
                         }
-                        if (string.IsNullOrEmpty(application.FatherFullname) && !string.IsNullOrEmpty(graoData.Item3))
+                        if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
                         {
                             application.FatherFullname = graoData.Item3;
                             application.ModifiedProperties.Add(nameof(application.FatherFullname));
                         }
+                    }
+
+                    if (application.BirthCityId != null && application.BirthCountryId == null)
+                    {
+                        application.BirthCountryId = GlobalConstants.BGCountryId;
+                        application.ModifiedProperties.Add(nameof(application.BirthCountryId));
                     }
 
                     application.EntityState = Common.Enums.EntityStateEnum.Modified;
