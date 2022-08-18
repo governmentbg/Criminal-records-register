@@ -17,21 +17,20 @@ namespace MJ_CAIS.AutoMapperContainer.Resolvers
         public static DateType GetDateType(DateTime? date, string datePrecision)
         {
             if (date == null) return null;
-            if (string.IsNullOrEmpty(datePrecision))
-            {
-                datePrecision = DatePrecisionType.YMD;
-            }
-
             var dateValue = date.Value;
 
             var result = new DateType();
             result.Date = dateValue;
-            if(!string.IsNullOrEmpty(datePrecision))
+            if (!string.IsNullOrEmpty(datePrecision))
             {
                 result.DatePrecision = Enum.Parse<DatePrecisionEnum>(datePrecision.ToUpper());
+                result.DatePrecisionSpecified = true;
             }
-            result.DatePrecisionSpecified = string.IsNullOrEmpty(datePrecision);
-                        
+            else
+            {
+                result.DatePrecisionSpecified = false;
+            }
+
             return result;
         }
 
@@ -46,16 +45,16 @@ namespace MJ_CAIS.AutoMapperContainer.Resolvers
 
         public static int? GetDurationPart(string? duration, string pattern)
         {
-            if(string.IsNullOrEmpty(duration)) return null;
+            if (string.IsNullOrEmpty(duration)) return null;
 
             var match = new Regex(pattern).Match(duration);
-            if (!match.Success || match.Groups.Count == 0) return null; 
-         
-            var isParsedPart = int.TryParse(match.Groups[0].Value, out int part);
+            if (!match.Success || match.Groups.Count < 2) return null;
+
+            var isParsedPart = int.TryParse(match.Groups[1].Value, out int part);
 
             return isParsedPart ? part : null;
         }
-      
+
         public static PersonIdentityNumberType GetPersonPids(IEnumerable<PPersonId> pids)
         {
             var result = new PersonIdentityNumberType();
