@@ -101,6 +101,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<GDecidingAuthoritiesTmp> GDecidingAuthoritiesTmps { get; set; } = null!;
         public virtual DbSet<GDecidingAuthority> GDecidingAuthorities { get; set; } = null!;
         public virtual DbSet<GExtAdministration> GExtAdministrations { get; set; } = null!;
+        public virtual DbSet<GExtAdministrationUic> GExtAdministrationUics { get; set; } = null!;
         public virtual DbSet<GNomenclature> GNomenclatures { get; set; } = null!;
         public virtual DbSet<GRole> GRoles { get; set; } = null!;
         public virtual DbSet<GSystemParameter> GSystemParameters { get; set; } = null!;
@@ -6918,6 +6919,66 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+            });
+
+
+            modelBuilder.Entity<GExtAdministrationUic>(entity =>
+            {
+                entity.ToTable("G_EXT_ADMINISTRATION_UICS");
+
+                entity.HasIndex(e => new { e.AdministrationId, e.Value }, "UK_EXT_ADM_UIC_EXT_ADM")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.AdministrationId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("EXT_ADM_ID");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("VALUE");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.Administration)
+                    .WithMany(p => p.GExtAdministrationUics)
+                    .HasForeignKey(d => d.AdministrationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_G_EXT_ADM_UICS_G_EXT_ADM");
             });
 
             modelBuilder.Entity<GNomenclature>(entity =>
