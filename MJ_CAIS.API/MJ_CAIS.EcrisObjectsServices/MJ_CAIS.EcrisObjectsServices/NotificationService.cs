@@ -321,7 +321,9 @@ namespace MJ_CAIS.EcrisObjectsServices
         {
            
 
-            var content = await _dbContext.DDocuments.AsNoTracking().Where(dd => dd.DocContent.MimeType == "application/xml" && dd.EcrisMsgId == notificationEcrisMsgID && dd.DocType.Code==EcrisMessageType.NOT.ToString()).Select(d => d.DocContent.Content).FirstOrDefaultAsync();
+            var content = await _dbContext.DDocuments.AsNoTracking().Where(dd => dd.DocContent.MimeType == "application/xml"
+            && dd.EcrisMsgId == notificationEcrisMsgID
+            && dd.DocType.Code==EcrisMessageType.NOT.ToString()).Select(d => d.DocContent.Content).FirstOrDefaultAsync();
 
             if (content == null)
             {

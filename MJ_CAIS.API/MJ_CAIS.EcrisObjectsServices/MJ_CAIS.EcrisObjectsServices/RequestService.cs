@@ -17,7 +17,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 {
     public class RequestService : IRequestService
     {
-       
+
         const string ECRIS_REQUEST_CODE = "EcrisReq";
         const string ECRIS_MESSAGE_STATUS_IDENTIFIED_PERSON = "Identified";
         const string ECRIS_MESSAGE_STATUS_UNIDENTIFIED_PERSON = "Unidentified";
@@ -31,7 +31,7 @@ namespace MJ_CAIS.EcrisObjectsServices
         public async Task RecreateResponseToRequest(string responseId)
         {
             var emsg = await _dbContext.EEcrisMessages.AsNoTracking()
-                .Include(m=>m.EEcrisReferences).AsNoTracking().FirstOrDefaultAsync(x => x.Id == responseId);
+                .Include(m => m.EEcrisReferences).AsNoTracking().FirstOrDefaultAsync(x => x.Id == responseId);
             if (emsg == null)
             {
                 throw new Exception($"Съобщение {responseId} не съществува.");
@@ -46,11 +46,11 @@ namespace MJ_CAIS.EcrisObjectsServices
 
             var content = await _dbContext.DDocContents.AsNoTracking().Where(cont => cont.DDocuments
                               .Where(dd => dd.EcrisMsgId == emsg.RequestMsgId).Any()
-                              && cont.Content != null 
+                              && cont.Content != null
                               && cont.MimeType == "application/xml")
                 .Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
                               .FirstOrDefaultAsync();
-            if(content== null)
+            if (content == null)
             {
                 throw new Exception("Няма съдържание на запитване.");
             }
@@ -58,16 +58,17 @@ namespace MJ_CAIS.EcrisObjectsServices
             var request = XmlUtils.DeserializeXml<AbstractMessageType>(
                 Encoding.UTF8.GetString(content.Content)
                 ) as RequestMessageType;
-                           
 
-            var reqResp = await GenerateResponseToRequest(request);                   
+
+            var reqResp = await GenerateResponseToRequest(request);
 
             var contentXML = XmlUtils.SerializeToXml(reqResp);
-            
+
             var doc = await _dbContext.DDocContents.AsNoTracking().Where(c => c.MimeType == "application/xml" &&
-            c.DDocuments.Any(x => x.EcrisMsgId ==responseId)).ToListAsync();
-           
-            doc.ForEach(x => {
+            c.DDocuments.Any(x => x.EcrisMsgId == responseId)).ToListAsync();
+
+            doc.ForEach(x =>
+            {
                 x.MimeType = "application/xml";
                 x.Content = Encoding.UTF8.GetBytes(contentXML);
                 x.Bytes = x.Content.Length;
@@ -77,12 +78,12 @@ namespace MJ_CAIS.EcrisObjectsServices
             if (emsg.EEcrisReferences.Count > 0)
             {
                 _dbContext.RemoveRange(emsg.EEcrisReferences);
-                
+
             }
             emsg.EEcrisReferences = new List<EEcrisReference>();
             foreach (var conv in reqResp.RequestResponseMessageConviction)
             {
-                
+
                 if (!string.IsNullOrEmpty(conv.BuletinId) || !string.IsNullOrEmpty(conv.FbbcId))
                 {
                     EEcrisReference eref = new EEcrisReference();
@@ -99,23 +100,28 @@ namespace MJ_CAIS.EcrisObjectsServices
                 _dbContext.EEcrisReferences.AddRange(emsg.EEcrisReferences);
             }
             _dbContext.Update(emsg);
-            
+
             _dbContext.UpdateRange(doc);
 
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task GenerateUnsuccessfulResponce(string requestId, string reasonCode, string joinSeparator=" ")
+        public async Task GenerateUnsuccessfulResponce(string requestId, string reasonCode, string joinSeparator = " ")
         {
             var reqMsg = await _dbContext.EEcrisMessages.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == requestId);
 
-            var content = await _dbContext.DDocContents.AsNoTracking().Where(cont => cont.DDocuments
-                              .Where(dd => dd.EcrisMsgId == requestId).Any()
-                              && cont.Content != null
-                              && cont.MimeType == "application/xml")
-                .Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
-                              .FirstOrDefaultAsync();
+            var content = await _dbContext.DDocuments.AsNoTracking().Where(dd => dd.DocContent.MimeType == "application/xml"
+                                     && dd.EcrisMsgId == requestId
+                                     && dd.DocType.Code == EcrisMessageType.REQ.ToString())
+                .Select(d => new { d.DocContent.Content, d.EcrisMsgId, d.DocContent.CreatedOn }).FirstOrDefaultAsync();
+
+            //var content = await _dbContext.DDocContents.AsNoTracking().Where(cont => cont.DDocuments
+            //                  .Where(dd => dd.EcrisMsgId == requestId).Any()
+            //                  && cont.Content != null
+            //                  && cont.MimeType == "application/xml")
+            //    .Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn })
+            //                  .FirstOrDefaultAsync();
             if (content == null)
             {
                 throw new Exception("Няма съдържание на запитване.");
@@ -132,7 +138,7 @@ namespace MJ_CAIS.EcrisObjectsServices
 
                 //var reqMsg = _dbContext.EEcrisMessages.First(mes => mes.Id == request.EcrisMsgId);
                 reqMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ReplyCreated;
-                
+
                 await ServiceHelper.AddMessageToDBContextAsync(reqResp, "", "", joinSeparator, _dbContext, requestId);
 
                 _dbContext.EEcrisMessages.Update(reqMsg);
@@ -206,7 +212,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             {
                 convictions.Add(conv);
             }
-          
+
 
             reqResp.RequestResponseMessageConviction = convictions.ToArray();
 
