@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="msgExrisInboxMsgNotExist" xml:space="preserve">
+  <data name="msgEcrisInboxMsgNotExist" xml:space="preserve">
     <value>Входящо съобщение с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgEcrisMsgNotExist" xml:space="preserve">
+    <value>Съобщение с идентификатор {0} не съществува.</value>
   </data>
   <data name="statusError" xml:space="preserve">
     <value>Грешка</value>

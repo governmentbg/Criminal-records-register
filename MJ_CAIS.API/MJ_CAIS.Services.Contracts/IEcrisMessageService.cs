@@ -24,5 +24,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<EcrisResponseDTO> GetEcrisResponseByIdAsync(string ecrisMessageId);
         Task<EcrisNotificationDTO> GetEcrisNotificationByIdAsync(string ecrisMessageId);
         Task IdentifyAsync(string aInDto, string egn);
+
+        Task RecreateMessageAsync(string aId);
     }
 }

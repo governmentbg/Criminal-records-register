@@ -10,6 +10,23 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <div class="inner-card-body">
+      <div class="inner-card-header">
+        <div class="float-left">Основна информация</div>
+        <div class="float-rigth">
+          <button
+            *ngIf="model.ecrisMsgId"
+            nbButton
+            class="ml-1"
+            size="small"
+            [routerLink]="[
+              '/pages/ecris/identification/preview',
+              model.ecrisMsgId
+            ]"
+          >
+            Съобщение
+          </button>
+        </div>
+      </div>
       <div class="row mb-3">
         <div class="col-md-3">
           <div class="row col-md-12 cais-display-form-group">

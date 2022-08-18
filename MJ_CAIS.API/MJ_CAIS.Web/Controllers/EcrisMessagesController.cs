@@ -166,5 +166,12 @@ namespace MJ_CAIS.Web.Controllers
             await this._requestService.GenerateUnsuccessfulResponce(aId, reasonId);
             return Ok();
         }
+
+        [HttpPut("{aId}/recreate-message")]
+        public async Task<IActionResult> RecreateMessage(string aId)
+        {
+            await this._ecrisMessageService.RecreateMessageAsync(aId);
+            return Ok();
+        }
     }
 }

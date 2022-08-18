@@ -56,6 +56,27 @@
               <button nbButton size="small" (click)="getDocument()">
                 Виж документа
               </button>
+              <button
+                *ngIf="showBtnRecreate"
+                nbButton
+                class="ml-1"
+                size="small"
+                (click)="onRecreateMsg()"
+              >
+                Прегенериране
+              </button>
+              <!-- <button
+                *ngIf="this.fullForm.requestMsgId.value"
+                nbButton
+                class="ml-1"
+                size="small"
+                [routerLink]="[
+                  '/pages/ecris/identification/preview',
+                  this.fullForm.requestMsgId.value
+                ]"
+              >
+                Виж входящо съобщение
+              </button> -->
             </div>
           </ng-container>
         </div>
