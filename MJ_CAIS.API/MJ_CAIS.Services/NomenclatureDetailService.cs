@@ -97,12 +97,25 @@ namespace MJ_CAIS.Services
             return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
         }
 
-        public IQueryable<BaseNomenclatureDTO> GetEcrisRequestTypes()
+        public async Task<List<BaseNomenclatureDTO>> GetEcrisRequestTypesAsync(string ecrisMsgId)
         {
-            var query = _nomenclatureDetailRepository
-                .GetEcrisRequestTypes();
+            var msgTypeId = (await _nomenclatureDetailRepository.SingleOrDefaultAsync<EEcrisMessage>(x=>x.Id == ecrisMsgId)).MsgTypeId;
+            var isNotificaiton = msgTypeId == "EcrisNot";
 
-            return query.ProjectTo<BaseNomenclatureDTO>(mapperConfiguration);
+             var query = _nomenclatureDetailRepository
+                .GetEcrisRequestTypes(isNotificaiton)
+                .Where(x => x.Code != "RRT-0" && x.Code != "NRT-0")
+                .Select(x => new BaseNomenclatureDTO
+                {
+                    Id = x.EcrisTechId,
+                    Code = x.EcrisTechId,
+                    Name = x.NameBg,
+                    NameEn = x.NameEn
+                });
+
+            var result = await query.ToListAsync();
+
+            return result;
         }
 
         public async Task<IQueryable<BaseNomenclatureDTO>> GetGUsersAsync()

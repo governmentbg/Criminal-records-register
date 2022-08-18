@@ -38,6 +38,6 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<IQueryable<GUser>> GetGUsersAsync();
         IQueryable<IBaseNomenclature> GetDbSet(string propertyName);
 
-        IQueryable<EEcrisNomenclature> GetEcrisRequestTypes();
+        IQueryable<EEcrisNomenclature> GetEcrisRequestTypes(bool isNotification);
     }
 }
