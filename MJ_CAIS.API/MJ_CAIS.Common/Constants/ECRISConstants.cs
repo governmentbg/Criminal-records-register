@@ -75,6 +75,12 @@ namespace MJ_CAIS.Common.Constants
             public const string REQUEST_NIST_NOT_MATCH = "RRT-00-04";
             public const string REQUEST_MULTIPLE_PEOPLE_FOUND = "RRT-00-05";
         }
+
+        public static class EcrisNomenclatureCode
+        {
+            public const string NotificationResponses = "NotificationResponses";
+            public const string RequestResponses = "RequestResponses";
+        }
     }
 }
 

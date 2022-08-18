@@ -44,6 +44,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<IQueryable<BaseNomenclatureDTO>> GetGUsersAsync();
 
-        IQueryable<BaseNomenclatureDTO> GetEcrisRequestTypes();
+        Task<List<BaseNomenclatureDTO>> GetEcrisRequestTypesAsync(string ecrisMsgId);
     }
 }

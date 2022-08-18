@@ -36,7 +36,7 @@ export class EcrisIdentificationResolver implements Resolve<any> {
       ecrisMsgNames: this.service.getEcrisMsgNames(id),
       graoPeople: this.service.getGraoPeople(id),
       cancelIdentificationTypes:
-        this.nomenclatureService.getEcrisRequestTypes(),
+        this.nomenclatureService.getEcrisRequestTypes(id),
     };
     return forkJoin(result);
   }

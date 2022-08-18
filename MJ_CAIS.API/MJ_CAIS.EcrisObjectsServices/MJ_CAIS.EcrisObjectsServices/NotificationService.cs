@@ -316,6 +316,10 @@ namespace MJ_CAIS.EcrisObjectsServices
         {
             var notificationResponce = await CreateNotificationResponse(notification, notResponseType);
             await ServiceHelper.AddMessageToDBContextAsync(notificationResponce, "", "", ",", _dbContext, msgId);
+
+            var ecrisMsg = await _dbContext.EEcrisMessages.FirstAsync(x=>x.Id == msgId);
+            ecrisMsg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.ReplyCreated;
+            _dbContext.Update(ecrisMsg);
         }
         public async Task CreateNotificationResponseInContext(string notificationEcrisMsgID, string notResponseType)
         {
@@ -332,7 +336,8 @@ namespace MJ_CAIS.EcrisObjectsServices
             NotificationMessageType notification = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(content)) as NotificationMessageType;
 
             await CreateNotificationResponseInContext(notification, notResponseType, notificationEcrisMsgID);
-      
+
+            await _dbContext.SaveChangesAsync();  
         }
 
     }
