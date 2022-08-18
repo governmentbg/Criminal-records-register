@@ -2,9 +2,7 @@ import { GraoPersonModel } from "./_models/grao-person.model";
 import {
   Component,
   EventEmitter,
-  Injector,
   Input,
-  OnInit,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -14,33 +12,20 @@ import {
   IgxGridComponent,
 } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../../@core/services/common/date-format.service";
-import { RemoteGridWithStatePersistance } from "../../../../../../@core/directives/remote-grid-with-state-persistance.directive";
-import { GraoPersonGridService } from "./_data/grao-person-grid.service";
 import { SearchPersonForm } from "./_models/search-person.form";
-import { BaseNomenclatureModel } from "../../../../../../@core/models/nomenclature/base-nomenclature.model";
-import { NomenclatureService } from "../../../../../../@core/services/rest/nomenclature.service";
 import { ResultFromSearchOverviewComponent } from "../result-from-search-overview/result-from-search-overview.component";
+import { FormUtils } from "../../../../../../@core/utils/form.utils";
 
 @Component({
   selector: "cais-grao-person-overview",
   templateUrl: "./grao-person-overview.component.html",
   styleUrls: ["./grao-person-overview.component.scss"],
 })
- export class GraoPersonOverviewComponent //extends RemoteGridWithStatePersistance<
-//   GraoPersonModel,
-//   GraoPersonGridService
-// > 
-{
-  constructor(
-    public service: GraoPersonGridService,
-    public injector: Injector,
-    public dateFormatService: DateFormatService
-  ) {
-    //super("grao-people-search", service, injector);
-  }
+export class GraoPersonOverviewComponent {
+  constructor(public dateFormatService: DateFormatService) {}
 
   @Input() people: any;
-  @Input() dbData: any;
+  @Input() genderTypes: any;
   @Input() isForPreview: boolean;
 
   @ViewChild("dialogAdd", { read: IgxDialogComponent })
@@ -61,20 +46,19 @@ import { ResultFromSearchOverviewComponent } from "../result-from-search-overvie
 
   public selectedItem: any;
   public selectedRows = [];
-  private toAdd: any;
 
   @Output() selectRow = new EventEmitter<string>();
 
   public searchPersonForm = new SearchPersonForm();
 
   ngOnInit(): void {
-    if (this.isForPreview) {
-      this.selectionMode = GridSelectionMode.none;
-    }
-    //super.ngOnInit();
+    this.selectionMode = this.isForPreview
+      ? GridSelectionMode.none
+      : GridSelectionMode.single;
   }
 
   handleRowSelection(event) {
+    debugger;
     this.selectRow.emit(event.newSelection[0]);
   }
 
@@ -84,12 +68,27 @@ import { ResultFromSearchOverviewComponent } from "../result-from-search-overvie
   }
 
   handleSelectedRow(event) {
-    this.toAdd = event;
-  }
+    debugger;
+    if (event) {
+      var items = this.resultFromSearchPersonGridForm.searchPersonGridResult;
+      var result = items.filter((item) => {
+        return item["identifier"] == event;
+      });
 
-  addInGrid() {
-    this.peopleGrid.addRow(this.toAdd);
-    this.onCloseDialog();
+      if (result.length) {
+        this.selectedItem = result[0];
+      } else {
+        this.selectedItem = null;
+      }
+
+      if(this.selectedItem){
+        this.peopleGrid.addRow(this.selectedItem);
+        //this.peopleGrid.selectRows(this.selectedItem.id);
+        this.onCloseDialog();
+      }
+    } else {
+      this.selectedItem = null;
+    }
   }
 
   onSearch = () => {

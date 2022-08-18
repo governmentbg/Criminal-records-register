@@ -65,7 +65,7 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
   }
 
   // used only for flat object !!!
-  constructQueryParamsByFilters(formObj, filterQuery = ''): string {
+  constructQueryParamsByFilters(formObj, filterQuery = '', includeFirstAndParam:boolean = true): string {
     for (let key in formObj) {
       if (key && formObj[key]) {
         let value = formObj[key];
@@ -76,6 +76,31 @@ export abstract class CaisCrudService<T, ID> extends CrudService<T, ID> {
         }
 
         filterQuery += `&${key}=${value}`;
+      }
+    }
+
+    return filterQuery;
+  }
+
+   // used only for flat object !!!
+   constructQueryParamsByFiltersForLocalGrid(formObj, filterQuery = ''): string {
+    let count = 0;
+
+    for (let key in formObj) {
+      count++;
+      if (key && formObj[key]) {
+        let value = formObj[key];
+
+        if (typeof formObj[key] == "object") {
+          let date = new Date(formObj[key] );
+          value = date.toISOString();
+        }
+
+        if(count == 1){
+          filterQuery += `?${key}=${value}`;
+        }else{
+          filterQuery += `&${key}=${value}`;
+        }
       }
     }
 

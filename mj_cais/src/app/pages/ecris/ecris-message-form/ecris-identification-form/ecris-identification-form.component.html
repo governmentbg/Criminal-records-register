@@ -89,6 +89,33 @@
         </div>
         <div class="inner-card-header">
           <div class="float-left">Данни за лицето</div>
+          <div class="float-rigth">
+            <ng-container *ngIf="this.fullForm.bulletinId.value">
+              <button
+                nbButton
+                size="small"
+                [routerLink]="[
+                  '/pages/bulletins/preview',
+                  this.fullForm.bulletinId.value
+                ]"
+              >
+                Бюлетин
+              </button>
+            </ng-container>
+            <ng-container *ngIf="this.fullForm.fbbcId.value">
+              <button
+                nbButton
+                size="small"
+                class="ml-1"
+                [routerLink]="[
+                  '/pages/fbbcs/preview',
+                  this.fullForm.fbbcId.value
+                ]"
+              >
+                Осъждане в чужбина
+              </button>
+            </ng-container>
+          </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-4">
@@ -104,13 +131,32 @@
         <div class="">Псевдоними</div>
 
         <div class="mt-2 mb-4">
-          <cais-ecris-msg-names-overview
-            #ecrisMsgNames
-            [ecrisMsgForm]="fullForm"
-            [names]="dbData.ecrisMsgNames"
-            [dbData]="dbData"
+          <igx-grid
+            #namesGrid
+            [height]="null"
+            [data]="dbData.ecrisMsgNames"
+            [primaryKey]="'id'"
+            [displayDensity]="'compact'"
           >
-          </cais-ecris-msg-names-overview>
+            <igx-column
+              field="firstname"
+              header="Име"
+              [sortable]="true"
+              [dataType]="'string'"
+            ></igx-column>
+            <igx-column
+              field="surname"
+              header="Презиме"
+              [sortable]="true"
+              [dataType]="'string'"
+            ></igx-column>
+            <igx-column
+              field="familyname"
+              header="Фамилия"
+              [sortable]="true"
+              [dataType]="'string'"
+            ></igx-column>
+          </igx-grid>
         </div>
 
         <div class="row mb-3">
@@ -166,7 +212,7 @@
             #graoPeople
             (selectRow)="handleSelectedRow($event)"
             [people]="dbData.graoPeople"
-            [dbData]="dbData"
+            [genderTypes]="dbData.genderTypes"
             [isForPreview]="this.isForPreview"
           >
           </cais-grao-person-overview>
@@ -186,7 +232,9 @@
             <div class="form-group col-md-12">
               <cais-autocomplete
                 [label]="'Причина'"
-                [inputFormControl]="cancelIdentificationFormGroup.controls.reasonId"
+                [inputFormControl]="
+                  cancelIdentificationFormGroup.controls.reasonId
+                "
                 [parentGroup]="cancelIdentificationFormGroup"
                 [inputName]="'reasonId'"
                 [items]="dbData.cancelIdentificationTypes"

@@ -13,6 +13,7 @@ export class EcrisMessageModel extends BaseModel {
   public birthCountry: string = null;
   public birthCity: string = null;
   public fbbcId: string = null;
+  public bulletinId: string = null;
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
@@ -35,6 +36,7 @@ export class EcrisMessageModel extends BaseModel {
       this.birthCountry = init.birthCountry ?? null;
       this.birthCity = init.birthCity ?? null;
       this.fbbcId = init.fbbcId ?? null;
+      this.bulletinId = init.bulletinId ?? null;
       this.firstname = init.firstname ?? null;
       this.surname = init.surname ?? null;
       this.familyname = init.familyname ?? null;

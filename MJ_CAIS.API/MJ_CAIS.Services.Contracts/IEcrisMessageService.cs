@@ -17,12 +17,12 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<FbbcGridDTO>> GetEcrisFbbcsByIdAsync(string ecrisMessageId);
         Task<IQueryable<EcrisMsgNationalityDTO>> GetNationalitiesAsync(string aId);
         Task<IQueryable<EcrisMsgNameDTO>> GetNamesAsync(string aId);
-        Task<IQueryable<GraoPersonGridDTO>> GetGraoPeopleAsync(string aId);
+        IQueryable<GraoPersonGridDTO> GetEcrisIdentifiedPeople(string aId);
         Task ChangeStatusAsync(string aInDto, string statusId);
         Task<EcrisRequestDTO> GetEcrisRequestByIdAsync(string ecrisMessageId);
 
         Task<EcrisResponseDTO> GetEcrisResponseByIdAsync(string ecrisMessageId);
         Task<EcrisNotificationDTO> GetEcrisNotificationByIdAsync(string ecrisMessageId);
-        Task IdentifyAsync(string aInDto, string statusId);
+        Task IdentifyAsync(string aInDto, string egn);
     }
 }

@@ -2,11 +2,10 @@ namespace MJ_CAIS.DTO.EcrisMessage
 {
     public class GraoPersonGridDTO : BaseGridDTO
     {
-        public string Id { get; set; }
-        public string? Egn { get; set; }
-        public string? Firstname { get; set; }
-        public string? Surname { get; set; }
-        public string? Familyname { get; set; }
+        public string? Identifier { get; set; }
+        public string? FirstName { get; set; }
+        public string? SurName { get; set; }
+        public string? FamilyName { get; set; }
         public DateTime? BirthDate { get; set; }
         public decimal? Sex { get; set; }
     }

@@ -6,6 +6,7 @@ import { GenderConstants } from "../../../../@core/constants/gender.constants";
 import { CrudForm } from "../../../../@core/directives/crud-form.directive";
 import { LoaderService } from "../../../../@core/services/common/loader.service";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { EcrisMessageStatusConstants } from "../../ecris-message-overivew/_models/ecris-message-status.constants";
 import { EcrisNotPreviewComponent } from "../ecris-not-preview/ecris-not-preview.component";
 import { EcrisReqPreviewComponent } from "../ecris-req-preview/ecris-req-preview.component";
 import { EcrisResponsePreviewComponent } from "../ecris-response-preview/ecris-response-preview.component";
@@ -61,7 +62,7 @@ export class EcrisIdentificationFormComponent
     this.fullForm.group.patchValue(this.dbData.element);
 
     let id = this.activatedRoute.snapshot.params["ID"];
-
+    this.isForPreview = this.isForPreview || this.fullForm.ecrisMsgStatus.value != EcrisMessageStatusConstants.ForIdentification;
     this.service.get(id).subscribe((response) => {
       this.model = response;
 

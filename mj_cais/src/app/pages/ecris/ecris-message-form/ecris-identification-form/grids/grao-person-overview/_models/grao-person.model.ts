@@ -1,20 +1,14 @@
-import { BaseModel } from "../../../../../../../@core/models/common/base.model";
-
 export class GraoPersonModel {
-  public id: number = null;
-  public egn: string = null;
+  public identifier: string = null;
   public firstName: string = null;
-  public surname: string = null;
+  public surName: string = null;
   public familyName: string = null;
   public birthDate: Date = null;
-  public createdOn: Date = null;
 
   constructor(init?: Partial<GraoPersonModel>) {
-    this.id = init.id ?? null;
-    this.egn = init.egn ?? null;
+    this.identifier = init.identifier ?? null;
     this.firstName = init.firstName ?? null;
-    this.surname = init.surname ?? null;
+    this.surName = init.surName ?? null;
     this.familyName = init.familyName ?? null;
-    this.birthDate = init.birthDate ?? null;
   }
 }

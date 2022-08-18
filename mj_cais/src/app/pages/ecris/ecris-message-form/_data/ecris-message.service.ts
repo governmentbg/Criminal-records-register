@@ -47,13 +47,13 @@ export class EcrisMessageService extends CaisCrudService<
     return this.http.get<GraoPersonModel[]>(`${this.url}/${id}/grao-people`);
   }
 
-  public identify(aId: string, graoPersonId: string): Observable<any> {
-    let url = `${this.url}/${aId}/identify/${graoPersonId}`;
+  public identify(aId: string, egn: string): Observable<any> {
+    let url = `${this.url}/${aId}/identify/${egn}`;
     return this.http.put(url, {});
   }
 
-  public cancelIdentification(aId: string, reasonId: string): Observable<any> {
-    let url = `${this.url}/${aId}/cancel-identification/${reasonId}`;
+  public cancelIdentification(aId: string, egn: string): Observable<any> {
+    let url = `${this.url}/${aId}/cancel-identification/${egn}`;
     return this.http.put(url, {});
   }
 }
