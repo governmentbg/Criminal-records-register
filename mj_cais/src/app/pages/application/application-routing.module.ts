@@ -31,7 +31,6 @@ const routes: Routes = [
   {
     path: "request",
     component: ApplicationRequestComponent,
-    resolve: { dbData: ApplicationResolver },
   },
   {
     path: "create",
