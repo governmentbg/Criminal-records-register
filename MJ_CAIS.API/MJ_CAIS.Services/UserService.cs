@@ -51,6 +51,10 @@ namespace MJ_CAIS.Services
             this.ValidateData(aInDto);
 
             GUser entity = mapper.MapToEntity<UserDTO, GUser>(aInDto, isAdded: false);
+            if (!_userContext.IsGlobalAdmin && aInDto.Roles.SelectedPrimaryKeys.Contains("GlobalAdmin"))
+            {
+                throw new Exception("Only global administrators could assign role GlobalAdmin or change other global admin's data!");
+            }
             if (!_userContext.IsGlobalAdmin && entity.CsAuthorityId != _userContext.CsAuthorityId)
             {
                 throw new Exception("Updating user part of another authority is not allowed!");
