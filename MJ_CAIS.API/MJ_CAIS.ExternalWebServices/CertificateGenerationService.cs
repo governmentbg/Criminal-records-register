@@ -117,6 +117,12 @@ namespace MJ_CAIS.ExternalWebServices
             //{
             //    throw new Exception("Полето 'Цел' е празно");
             //}
+            var docTypeID = (await _certificateRepository.SingleOrDefaultAsync<DDocType>(x => x.Code == DocumentTypesConstants.DocumentTypesCodes.ConvictionCertificate))?.Id;
+            if (string.IsNullOrEmpty(docTypeID))
+            {
+                throw new Exception($"Не съществува тип документ с код {DocumentTypesConstants.DocumentTypesCodes.ConvictionCertificate}");
+            }
+            
             byte[] contentCertificate;
             string checkUrl = await GetURLForAccessAsync(certificate.AccessCode1, webportalUrl);
             bool containsBulletins = certificate.AAppBulletins.Where(aa => aa.Approved == true).Count() != 0;
@@ -160,7 +166,7 @@ namespace MJ_CAIS.ExternalWebServices
                 doc.Id = BaseEntity.GenerateNewId();
                 doc.Name = "Свидетелство за съдимост";
             }
-
+            doc.DocTypeId = docTypeID;
             DDocContent content;
             if (!isExistingDoc || doc.DocContentId == null)
             {
@@ -221,6 +227,7 @@ namespace MJ_CAIS.ExternalWebServices
                     doc.ModifiedProperties = new List<string>();
                 }
                 doc.ModifiedProperties.Add(nameof(doc.DocContentId));
+                doc.ModifiedProperties.Add(nameof(doc.DocTypeId));
                 // dbContext.DDocuments.Update(doc);
             }
             else
@@ -258,7 +265,7 @@ namespace MJ_CAIS.ExternalWebServices
                 else
                 {
                     await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
-                    await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "За принтиране");
+                    await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Доставено");
                 }
             }
             if (!certificate.ModifiedProperties.Contains(nameof(certificate.StatusCode)))
