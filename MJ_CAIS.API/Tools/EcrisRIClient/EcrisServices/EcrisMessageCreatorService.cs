@@ -40,13 +40,13 @@ namespace EcrisIntegrationServices
             _logger.LogInformation($"Creation of responces started. PageSize: {pageSize}; joinSeparator: {joinSeparator}.");
             try
             {
-                //var pageNumber = 0;
+                var pageNumber = 0;
                 var numberOfMessages = 0;
-                //do
-                //{
-                    //_logger.LogTrace($"Page {pageNumber}.");
-                    var messages = await GetRequestForReplyingIdentifiedPeople();
-                   // pageNumber++;
+                do
+                {
+                    _logger.LogTrace($"Page {pageNumber}.");
+                    var messages = await GetRequestForReplyingIdentifiedPeople(pageNumber, pageSize);
+                   pageNumber++;
                    numberOfMessages = messages.Count();
                    _logger.LogTrace($"{numberOfMessages} messages selected.");
                     if (numberOfMessages != 0)
@@ -73,8 +73,8 @@ namespace EcrisIntegrationServices
 
                         
                     }
-                //}
-                //while (numberOfMessages > 0);
+                }
+                while (numberOfMessages > 0);
 
 
             }
@@ -90,7 +90,7 @@ namespace EcrisIntegrationServices
         }
 
     
-        private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople()
+        private async Task<List<RequestMessageType?>> GetRequestForReplyingIdentifiedPeople(int pageNumber, int pageSize)
         {
             //todo: кога сменяме статуса и дали не трябва винаги да връщаме първа страница?!
             var contents = await _dbContext.DDocContents.AsNoTracking().Where(cont => cont.DDocuments
@@ -99,9 +99,9 @@ namespace EcrisIntegrationServices
                                  && dd.EcrisMsg.MsgTypeId == ECRIS_REQUEST_CODE
                                  //todo: дали да гледаме само тези с EEcrisInboxes.Count > 0 ?
                                  ).Any() && cont.Content != null).Select(cc => new { cc.Content, cc.DDocuments.First().EcrisMsgId, cc.CreatedOn})
-                                 //.OrderBy(c => c.CreatedOn)
-                                 //.Skip(pageNumber * pageSize)
-                                 //.Take(pageSize)
+                                 .OrderBy(c => c.CreatedOn)
+                                 .Skip(pageNumber * pageSize)
+                                 .Take(pageSize)
                                  .ToListAsync();
 
             var result = contents?.Select(c => new { message = XmlUtils.DeserializeXml<AbstractMessageType>(Encoding.UTF8.GetString(c.Content)) as RequestMessageType, c.EcrisMsgId })
