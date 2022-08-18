@@ -2,13 +2,9 @@
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ExternalServicesHost;
+using MJ_CAIS.Tests.Factories;
 using MJ_CAIS.Tests.Helpers;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MJ_CAIS.Tests.MappingTests
 {
@@ -22,17 +18,21 @@ namespace MJ_CAIS.Tests.MappingTests
         public void Setup()
         {
             _mapper = InitObjectHelper.GetMapper<CriminalRecordsReportProfile>();
-
-            
+            this.bulletinXsd = BulletinFactory.GetFilledInBulletinXSD();
         }
 
         [Test]
-        public async Task BulletinFromDbIsEqualToBulletinXsd_AfterMap()
+        public void BulletinFromXsdIsEqualToBulletinFromDB_AfterMap()
         {
-            //var src = PersonFactory.GetFilledInPersonDto();
-            //var dest = await _peopleService.CreatePersonAsync(src);          
-            //Assert.AreEqual(src.Firstname, dest.Firstname);
-        }
+            BBulletin bulletinFromXsd = _mapper.Map<BBulletin>(bulletinXsd);
+            BulletinType mappedBulletinFromDd = _mapper.Map<BulletinType>(bulletinFromXsd);
 
+            var comparator = new ObjectCompare<BulletinType>(bulletinXsd, mappedBulletinFromDd);
+            var isEquals = comparator.IsEquals();
+            var pathToDiff = comparator.GetPathOfDifference;
+
+            Assert.AreEqual(isEquals, true);
+            Assert.AreEqual(pathToDiff, null);
+        }
     }
 }
