@@ -26,7 +26,7 @@ namespace MJ_CAIS.Repositories.Impl
                 .OrderByDescending(x => x.ValidFrom)
                 .Select(x => new ApplicationSearchGridDTO
                 {
-                    Id = x.Id,
+                    Id = x.ApplicationId,
                     CertificateRegistrationNumber = x.RegistrationNumber,
                     StatusCode = x.StatusCode,
                     StatusCodeDisplayValue = x.StatusCodeNavigation.Name,
