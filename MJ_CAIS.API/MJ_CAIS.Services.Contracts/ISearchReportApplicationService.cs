@@ -11,9 +11,8 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.Services.Contracts
 {
-    public interface ISearchInquiryService : IBaseAsyncService<BaseDTO, BaseDTO, BaseGridDTO, AReport, string>
+    public interface ISearchReportApplicationService : IBaseAsyncService<BaseDTO, BaseDTO, BaseGridDTO, AReport, string>
     {
-        Task<IgPageResult<SearchInquiryGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<SearchInquiryGridDTO> aQueryOptions);
-        Task<SearchInquiryDTO> SelectByIdAsync(string aId);
+        Task<IgPageResult<SearchReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<SearchReportApplicationGridDTO> aQueryOptions);
     }
 }

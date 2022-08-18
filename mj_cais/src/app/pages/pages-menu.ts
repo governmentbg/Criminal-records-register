@@ -132,6 +132,10 @@ export class PagesMenu {
             title: "Обработени справки",
             link: "/pages/report-applications/all-generated-reports",
           },
+          {
+            title: "Търсене на справки",
+            link: "/pages/report-applications/search",
+          },
         ],
       },
       {
@@ -282,10 +286,6 @@ export class PagesMenu {
           {
             title: "Xарактеристики на лице",
             link: "/pages/inquiry/search-people",
-          },
-          {
-            title: "Търсене на справки",
-            link: "/pages/inquiry/search-inquiry",
           },
         ],
       },
