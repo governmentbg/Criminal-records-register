@@ -136,10 +136,10 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("ecris_request_types")]
-        public IActionResult GetEcrisRequestTypes()
+        [HttpGet("ecris_request_types/{ecrisMsgId}")]
+        public async Task<IActionResult> GetEcrisRequestTypes(string ecrisMsgId)
         {
-            var result = _nomenclatureDetailService.GetEcrisRequestTypes();
+            var result = await _nomenclatureDetailService.GetEcrisRequestTypesAsync(ecrisMsgId);
             return Ok(result);
         }
     }

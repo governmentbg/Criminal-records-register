@@ -20,18 +20,18 @@ namespace MJ_CAIS.Web.Controllers
         private readonly IEcrisMessageService _ecrisMessageService;
         private readonly PersonValidatorClient _personValidatorClient;
         private readonly IRequestService _requestService;
-        private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
         public EcrisMessagesController(IEcrisMessageService ecrisMessageService,
             PersonValidatorClient personValidatorClient,
             IRequestService requestService,
-            IMapper mapper)
+            INotificationService notificationService)
             : base(ecrisMessageService)
         {
             _ecrisMessageService = ecrisMessageService;
             _personValidatorClient = personValidatorClient;
             _requestService = requestService;
-            _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         [HttpGet("")]
@@ -163,7 +163,17 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("{aId}/cancel-identification/{reasonId}")]
         public async Task<IActionResult> CancelIdentification(string aId, string reasonId)
         {
-            await this._requestService.GenerateUnsuccessfulResponce(aId, reasonId);
+            var isNotificaiton = reasonId.StartsWith("N");
+
+            if (isNotificaiton)
+            {
+                await this._notificationService.CreateNotificationResponseInContext(aId, reasonId);
+            }
+            else
+            {
+                await this._requestService.GenerateUnsuccessfulResponce(aId, reasonId);
+            }
+
             return Ok();
         }
 

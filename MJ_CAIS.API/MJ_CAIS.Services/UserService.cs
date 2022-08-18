@@ -12,12 +12,14 @@ namespace MJ_CAIS.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserContext _userContext;
+        private readonly IRoleRepository _roleRepository;
 
-        public UserService(IMapper mapper, IUserRepository userRepository, IUserContext userContext)
+        public UserService(IMapper mapper, IUserRepository userRepository, IUserContext userContext, IRoleRepository roleRepository)
             : base(mapper, userRepository)
         {
             _userRepository = userRepository;
             _userContext = userContext;
+            _roleRepository = roleRepository;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -51,6 +53,12 @@ namespace MJ_CAIS.Services
             this.ValidateData(aInDto);
 
             GUser entity = mapper.MapToEntity<UserDTO, GUser>(aInDto, isAdded: false);
+
+            var globalAdminRoleId = (await _roleRepository.FindAsync<GRole>(r => r.Code == "GlobalAdmin")).Select( r => r.Id).First();
+            if (!_userContext.IsGlobalAdmin && aInDto.Roles.SelectedForeignKeys.Contains(globalAdminRoleId))
+            {
+                throw new Exception("Only global administrators could assign role GlobalAdmin or change other global admin's data!");
+            }
             if (!_userContext.IsGlobalAdmin && entity.CsAuthorityId != _userContext.CsAuthorityId)
             {
                 throw new Exception("Updating user part of another authority is not allowed!");

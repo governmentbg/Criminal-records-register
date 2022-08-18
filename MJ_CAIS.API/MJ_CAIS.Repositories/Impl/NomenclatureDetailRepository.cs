@@ -61,15 +61,19 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
-        public IQueryable<EEcrisNomenclature> GetEcrisRequestTypes()
+        public IQueryable<EEcrisNomenclature> GetEcrisRequestTypes(bool isNotification)
         {
-            var query = _dbContext.EEcrisNomenclatures.AsNoTracking()
-                .Where(x => x.Id == EcrisRequestTypes.REQUEST_DENIAL ||
-                x.Id == EcrisRequestTypes.REQUEST_NOT_FROM_MEMBER_STATE ||
-                x.Id == EcrisRequestTypes.REQUEST_DEAD_PERSON ||
-                x.Id == EcrisRequestTypes.REQUEST_NIST_NOT_MATCH ||
-                x.Id == EcrisRequestTypes.REQUEST_MULTIPLE_PEOPLE_FOUND);
-
+            var query = _dbContext.EEcrisNomenclatures.AsNoTracking();
+            
+            if (isNotification)
+            {
+                query = query.Where(x => x.NomCode == EcrisNomenclatureCode.NotificationResponses);
+            }
+            else
+            {
+                query = query.Where(x => x.NomCode == EcrisNomenclatureCode.RequestResponses);
+            }
+        
             return query;
         }
 

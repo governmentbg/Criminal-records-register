@@ -61,7 +61,7 @@ namespace MJ_CAIS.Services
             var baseQuery = _ecrisMessageRepository.CustomGetAll();
             if (!string.IsNullOrEmpty(statusId))
             {
-                baseQuery = baseQuery.Where(x => x.EcrisMsgStatus == statusId);
+                baseQuery = baseQuery.Where(x => x.EcrisMsgStatus == statusId && !x.DocTypeId.EndsWith("Old"));
             }
 
             var resultQuery = await ApplyOData(baseQuery, aQueryOptions);

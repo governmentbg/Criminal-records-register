@@ -189,10 +189,10 @@ export class PagesMenu {
             title: "За идентификация",
             link: "/pages/ecris/identification",
           },
-          {
-            title: "Запитвания",
-            link: "/pages/ecris/req-waiting",
-          },
+          // {
+          //   title: "Запитвания",
+          //   link: "/pages/ecris/req-waiting",
+          // },
           {
             title: "Входящи съобщения",
             link: "/pages/ecris/inbox",

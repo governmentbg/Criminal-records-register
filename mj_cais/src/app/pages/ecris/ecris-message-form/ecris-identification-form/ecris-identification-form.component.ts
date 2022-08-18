@@ -141,7 +141,7 @@ export class EcrisIdentificationFormComponent
         (response: any) => {
           this.loaderService.hide();
 
-          this.router.navigate(["pages/ecris/requests/for-identification"]);
+          this.router.navigate(["pages/ecris/identification"]);
         },
         (error) => {
           this.loaderService.hide();
