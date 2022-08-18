@@ -199,7 +199,7 @@ export abstract class CrudForm<
 
   protected reloadCurrentRoute() {
     const currentUrl = this.router.url;
-    this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
+    this.router.navigateByUrl("/pages/empty", { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
   }
