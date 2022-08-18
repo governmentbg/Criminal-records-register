@@ -1597,7 +1597,13 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             }
             if (request.WApplicationId != null && request.WApplication != null && request.WApplication.UserCitizenId != null)
             {
-                callContext.ResponsiblePersonIdentifier = "systemUser";
+                var user = _dbContext.GUsersCitizens.AsNoTracking()
+                    .FirstOrDefault(x => x.Id == request.WApplication.UserCitizenId);
+                
+                callContext.EmployeeIdentifier = user?.Email;
+                callContext.EmployeeAditionalIdentifier = request.WApplication.UserCitizenId;
+                callContext.EmployeeNames = user?.Name;
+                callContext.EmployeePosition = "гражданин в лично качество";
                 callContext.AdministrationName = "Публичен портал за електронни свидетелства за съдимост за граждани";
                 callContext.Remark = "Във връзка с издаване на Електронно свидетелство за съдимост, заявено от гражданин в лично качество";
             }
