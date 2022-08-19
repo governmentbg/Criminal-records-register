@@ -194,6 +194,7 @@ namespace MJ_CAIS.Services
                 PurposeId = wapplication.PurposeId,
                 Sex = wapplication.Sex,
                 SrvcResRcptMethId = wapplication.SrvcResRcptMethId,
+                Purpose = wapplication.Purpose,
                 // StatusCode = ApplicationConstants.ApplicationStatuses.ApprovedApplication,
                 Surname = wapplication.Surname,
                 SurnameLat = wapplication.SurnameLat,
