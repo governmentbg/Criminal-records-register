@@ -2,6 +2,7 @@ using MJ_CAIS.DTO.WApplicaiton;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.Services.Contracts.Utils;
 using Microsoft.AspNet.OData.Query;
+using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.Services.Contracts
 {
@@ -15,6 +16,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<PPerson> ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus);
         Task ProcessWApplicationCheckPayment(AApplicationStatus statusApprovedApplication, WApplicationStatus statusWebApprovedApplication, WApplicationStatus statusWebCancel, DateTime startDateWeb, WApplication wapplication);
-
+        Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId);
     }
 }
