@@ -20,13 +20,13 @@
 
         public string? PaymentMethodCode { get; set; }
 
-        public bool? IsPaid { get; set; }
+        public string? PaymentStatus { get; set; }
 
         public string? Status { get; set; }
 
         public string? StatusCode { get; set; }
 
-        public string CertificateStatusCode { get; set; }
+        public string? CertificateStatusCode { get; set; }
 
         public string? InvoiceNumber { get; set; }
 

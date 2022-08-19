@@ -92,7 +92,7 @@ namespace MJ_CAIS.Repositories.Impl
                                     RegistrationNumber = app.RegistrationNumber,
                                     Status = status.Name,
                                     StatusCode = status.Code,
-                                    IsPaid = ePayments.PaymentStatus == "Payed",
+                                    PaymentStatus = ePayments.PaymentStatus,
                                     CertificateStatusCode = cert.StatusCode,
                                     PaymentMethodCode = paymentMethods.Code,
                                     InvoiceNumber = ePayments.InvoiceNumber,
