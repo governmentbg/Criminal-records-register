@@ -24,14 +24,28 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<bool> ValidatePdf(byte[] pdfBytes, string validationString, string certificateID)
         {
+            return true;
+
             using Stream pdfStream = new MemoryStream(pdfBytes);
 
             var metadata = ExternalServicesHelper.GetDictionaryMetadata(certificateID, validationString);
 
+         
+
             //bool result = validator.ValidateClientSignature(fileStream, personIdentifier);
             //result &= validator.ValidateServerSignature(pdfStream, signatureName, out List<Error> errors, metadata);
-            return _pdfSignatureValidator.ValidateServerSignature(pdfStream, await GetSigningCertificateName(),
-                out List<Error> errors, metadata);
+            List<Error> errors = new List<Error>();
+            var result  =  _pdfSignatureValidator.ValidateServerSignature(pdfStream, await GetSigningCertificateName(true),
+             out errors, metadata);
+
+            if (errors.Count == 0)
+            {
+                return result;
+            }
+            else
+            {
+                throw new Exception($"Брой валидационни грешки: {errors.Count()}");
+            }
         }
 
         public async Task<byte[]> GetPdfForDownload(string certificateID)
@@ -42,6 +56,7 @@ namespace MJ_CAIS.ExternalWebServices
 
         public async Task<bool> ValidatePdf(byte[] pdfBytes, string certificateID)
         {
+            
             var contentFromDb = await GetCertificateContent(certificateID);
             var validationString = ExternalServicesHelper.GetValidationString(contentFromDb);
 
@@ -65,21 +80,30 @@ namespace MJ_CAIS.ExternalWebServices
             var metadata = ExternalServicesHelper.GetDictionaryMetadata(certificateID,
                 ExternalServicesHelper.GetValidationString(pdfBytes));
 
-            return _pdfSignerService.SignPdf(pdfBytes, await GetSigningCertificateName(), metadata);
+            return _pdfSignerService.SignPdf(pdfBytes, await GetSigningCertificateName(true), metadata);
         }
 
-        private async Task<string> GetSigningCertificateName()
+        private async Task<string> GetSigningCertificateName(bool forDownload = false)
         {
+            string systemNameOfCertificate = "";
+            if (forDownload)
+            {
+                systemNameOfCertificate = SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME_FOR_DOWNLOAD;
+            }
+            else
+            {
+                systemNameOfCertificate= SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME;
+            }
             //todo: дали да е този сертификат?!
             var signingCertificateName = (await _dbContext.GSystemParameters
                     .FirstOrDefaultAsync(x =>
-                        x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))
+                        x.Code == systemNameOfCertificate))
                 ?.ValueString;
             if (string.IsNullOrEmpty(signingCertificateName))
             {
                 //todo: EH & resources
                 throw new Exception(
-                    $"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
+                    $"Системният параметър {systemNameOfCertificate} не е настроен.");
             }
 
             return signingCertificateName;
