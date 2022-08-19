@@ -636,9 +636,9 @@ namespace MJ_CAIS.Services
             if (certificate == null)
                 throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
 
-            UpdateCertificateStatus(certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
+            //UpdateCertificateStatus(certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
 
-            CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
+            //CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
             var currentAppl = certificate.Application;
             if (currentAppl == null)

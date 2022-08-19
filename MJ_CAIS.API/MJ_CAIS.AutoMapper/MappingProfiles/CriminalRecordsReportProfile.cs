@@ -68,7 +68,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForPath(d => d.Conviction.ServingPrevSuspendedSentenceActNumber, opt => opt.MapFrom(src => src.PrevSuspSentDescr))
                .ForPath(d => d.Conviction.ConvictionDecisions, opt => opt.MapFrom(src => src.BDecisions))
                .ForPath(d => d.Conviction.EcrisConvictionId, opt => opt.MapFrom(src => src.EcrisConvictionId))
-               .ForPath(d => d.IssuerData.BulletinCreateDate, opt => opt.MapFrom(src => src.CreatedOn))
+               .ForPath(d => d.IssuerData.BulletinCreateDate, opt => opt.MapFrom(src => src.BulletinCreateDate))
                .ForPath(d => d.IssuerData.BulletinCreatorPerson.Names.FullName, opt => opt.MapFrom(src => src.CreatedByNames))
                .ForPath(d => d.IssuerData.BulletinCreatorPerson.Position, opt => opt.MapFrom(src => src.CreatedByPosition))
                .ForPath(d => d.IssuerData.BulletinApproverPerson.Names.FullName, opt => opt.MapFrom(src => src.ApprovedByNames))
@@ -158,8 +158,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               })
               .ForMember(d => d.PrevSuspSentDescr, opt => opt.MapFrom(src => src.Conviction.ServingPrevSuspendedSentenceActNumber))
               .ForMember(d => d.EcrisConvictionId, opt => opt.MapFrom(src => src.Conviction.EcrisConvictionId))
-              //.ForPath(d => d.BulletinAuthorityId, opt => opt.MapFrom(src => src. IssuerData.BulletinCreatorAuthority.DecidingAuthorityCodeEISPP))?? id
-              .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.IssuerData.BulletinCreateDate))
+              //.ForPath(d => d.BulletinAuthorityId, opt => opt.MapFrom(src => src. IssuerData.BulletinCreatorAuthority.DecidingAuthorityCodeEISPP))?? id            
+              .ForMember(d => d.BulletinCreateDate, opt => opt.MapFrom(src => src.IssuerData.BulletinCreateDate))
               .ForMember(d => d.CreatedByNames, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorPerson.Names.FullName))
               .ForMember(d => d.CreatedByPosition, opt => opt.MapFrom(src => src.IssuerData.BulletinCreatorPerson.Position))
               .ForMember(d => d.ApprovedByNames, opt => opt.MapFrom(src => src.IssuerData.BulletinApproverPerson.Names.FullName))
@@ -175,7 +175,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<GCountry, CountryType>()
                 .ForMember(d => d.CountryISONumber, opt => opt.MapFrom(src => src.Iso31662Number))
-                .ForMember(d => d.CountryISOAlpha3, opt => opt.MapFrom(src => src.Iso3166Alpha2))
+                .ForMember(d => d.CountryISOAlpha3, opt => opt.MapFrom(src => src.Iso31662Code))
                 .ForMember(d => d.CountryName, opt => opt.MapFrom(src => src.Name));
 
             CreateMap<GCity, CityType>()
@@ -183,7 +183,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForMember(d => d.CityName, opt => opt.MapFrom(src => src.Name));
 
             CreateMap<BPersNationality, CountryType>()
-                .ForMember(d => d.CountryISOAlpha3, opt => opt.MapFrom(src => src.Country.Iso3166Alpha2))
+                .ForMember(d => d.CountryISOAlpha3, opt => opt.MapFrom(src => src.Country.Iso31662Code))
                 .ForMember(d => d.CountryName, opt => opt.MapFrom(src => src.Country.Name))
                 .ForMember(d => d.CountryISONumber, opt => opt.MapFrom(src => src.Country.Iso31662Number));
 
@@ -229,6 +229,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                    opt.MapFrom(src => src.OffenceEndDate.DatePrecision.ToString());
                })
                .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffencePlace.City.EKATTECode))
+               //.ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffencePlace.Country.CountryISONumber))// todo:
                .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffencePlace.Descr))
                 .ForMember(dest => dest.FormOfGuiltId, opt =>
                 {
@@ -293,7 +294,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<SanctionTypeProbation, BProbation>()
                 .ForMember(d => d.SanctProbCategId, opt => opt.MapFrom(src => src.ProbationCategoryCode))
                 .ForMember(d => d.SanctProbValue, opt => opt.MapFrom(src => src.ProbationValue))
-                .ForMember(d => d.SanctProbCategId, opt => opt.MapFrom(src => src.ProbationMeasureCode))
+                .ForMember(d => d.SanctProbMeasureId, opt => opt.MapFrom(src => src.ProbationMeasureCode))
                 .ForMember(d => d.DecisionDurationYears, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationYearPattern)))
                 .ForMember(d => d.DecisionDurationMonths, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationMonthPattern)))
                 .ForMember(d => d.DecisionDurationDays, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDurationPart(src.SanctionSentencedPeriod, CriminalRecordsReportResolver.DurationDayPattern)))
