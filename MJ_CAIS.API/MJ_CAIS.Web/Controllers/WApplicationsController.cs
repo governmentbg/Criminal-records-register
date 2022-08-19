@@ -14,16 +14,38 @@ namespace MJ_CAIS.Web.Controllers
     public class WApplicationsController : BaseApiCrudController<WApplicaitonDTO, WApplicaitonDTO, WApplicaitonGridDTO, WApplication, string>
     {
         private readonly IWApplicationService _wApplicaitonService;
-        public WApplicationsController(IWApplicationService wApplicaitonService) 
+        private readonly IDocumentService _documentService;
+        public WApplicationsController(IWApplicationService wApplicaitonService, IDocumentService documentService)
             : base(wApplicaitonService)
         {
             _wApplicaitonService = wApplicaitonService;
+            _documentService = documentService;
         }
 
         [HttpGet("")]
         public virtual async Task<IActionResult> GetAll(ODataQueryOptions<WApplicaitonGridDTO> aQueryOptions, string? statusId)
         {
             var result = await this._wApplicaitonService.SelectAllWithPaginationAsync(aQueryOptions, statusId);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}")]
+        public virtual async Task<IActionResult> Get(string aId)
+        {
+            return await base.Get(aId);
+        }
+
+        [HttpGet("{aId}/person-alias")]
+        public async Task<IActionResult> GetPersonAlias(string aId)
+        {
+            var result = await this._wApplicaitonService.SelectApplicationPersAliasByApplicationIdAsync(aId);
+            return Ok(result);
+        }
+
+        [HttpGet("{aId}/documents")]
+        public async Task<IActionResult> GetDocuments(string aId)
+        {
+            var result = await this._documentService.GetDocumentsByApplicationIdAsync(aId);
             return Ok(result);
         }
 

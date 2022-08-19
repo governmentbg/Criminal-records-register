@@ -9,6 +9,7 @@ using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Person;
+using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.DTO.WApplicaiton;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -93,7 +94,7 @@ namespace MJ_CAIS.Services
                 //    await dbContext.WApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.WebApprovedApplication);
                 var statusApprovedApplication = await _wApplicationRepository.SingleOrDefaultAsync<AApplicationStatus>(a => a.Code == ApplicationStatuses.ApprovedApplication);
                 //await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a => a.Code == ApplicationStatuses.ApprovedApplication);
-                await ProcessWebApplicationToApplicationAsync(wApp, statusWebApprovedApplication, statusApprovedApplication);              
+                await ProcessWebApplicationToApplicationAsync(wApp, statusWebApprovedApplication, statusApprovedApplication);
                 await _wApplicationRepository.SaveChangesAsync();
                 return;
             }
@@ -105,7 +106,7 @@ namespace MJ_CAIS.Services
                 wApp.ModifiedProperties = new List<string>();
             }
             wApp.ModifiedProperties.Add(nameof(wApp.StatusCode));
-      
+
             //dbContext.WApplications.Update(wApp);
 
             var ePayment = new EPayment()
@@ -131,14 +132,14 @@ namespace MJ_CAIS.Services
             _wApplicationRepository.ApplyChanges(wApp, new List<IBaseIdEntity>());
             _wApplicationRepository.ApplyChanges(aPayment, new List<IBaseIdEntity>());
             _wApplicationRepository.ApplyChanges(ePayment, new List<IBaseIdEntity>());
-            await _wApplicationRepository.SaveChangesAsync();      
+            await _wApplicationRepository.SaveChangesAsync();
         }
 
         public async Task<PPerson> ProcessWebApplicationToApplicationAsync(WApplication wapplication, WApplicationStatus wapplicationStatus, AApplicationStatus applicationStatus)
         {
-  
+
             _webApplicationService.SetWApplicationStatus(wapplication, wapplicationStatus, ApplicationResources.descAprovedApp);
-     
+
             //string regNumber = "";
 
             //if (wapplication.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
@@ -200,14 +201,14 @@ namespace MJ_CAIS.Services
                 UserCitizenId = wapplication.UserCitizenId,
                 UserExtId = wapplication.UserExtId,
                 UserId = wapplication.UserId,
-                WApplicationId = wapplication.Id,                
+                WApplicationId = wapplication.Id,
                 RegistrationNumber = wapplication.RegistrationNumber,
                 //ApplicationType = wapplication.ApplicationType,
                 ApplicationTypeId = wapplication.ApplicationTypeId,
                 EntityState = EntityStateEnum.Added,
-                
-            
-                
+
+
+
             };
 
             appl.AAppPersAliases = wapplication.WAppPersAliases.Select(w => new AAppPersAlias
@@ -218,20 +219,20 @@ namespace MJ_CAIS.Services
                 Firstname = w.Firstname,
                 Fullname = w.Fullname,
                 Id = BaseEntity.GenerateNewId(),
-                 Surname=w.Surname
-                 
+                Surname = w.Surname
+
             }).ToList();
             appl.AAppCitizenships = wapplication.WAppCitizenships.Select(w => new AAppCitizenship
             {
                 EntityState = EntityStateEnum.Added,
-                ApplicationId = appl.Id,               
+                ApplicationId = appl.Id,
                 Id = BaseEntity.GenerateNewId(),
-               CountryId = w.CountryId,
-               
+                CountryId = w.CountryId,
+
             }).ToList();
             _applicationService.SetApplicationStatus(appl, applicationStatus, ApplicationResources.descApplicationFromWeb);
 
-           
+
             PersonDTO personDto = new PersonDTO();
 
             personDto.Egn = wapplication.Egn;
@@ -256,7 +257,7 @@ namespace MJ_CAIS.Services
 
             appl.EgnId = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Id;
             var documents = await baseAsyncRepository.FindAsync<WDocument>(d => d.WApplId == wapplication.Id);
-            foreach(var document in documents)
+            foreach (var document in documents)
             {
                 DDocContent dDocContent = new DDocContent();
                 dDocContent.EntityState = EntityStateEnum.Added;
@@ -266,20 +267,20 @@ namespace MJ_CAIS.Services
                 dDocContent.MimeType = document.MimeType;
                 dDocContent.Md5Hash = document.Md5Hash;
                 dDocContent.Sha1Hash = document.Sha1Hash;
-                
-                DDocument d= new DDocument();
+
+                DDocument d = new DDocument();
                 d.EntityState = EntityStateEnum.Added;
                 d.Id = BaseEntity.GenerateNewId();
                 d.ApplicationId = appl.Id;
                 d.DocContentId = dDocContent.Id;
                 d.DocContent = dDocContent; ;
-                d.Name= document.Name;
+                d.Name = document.Name;
                 d.Descr = document.Descr;
                 _wApplicationRepository.ApplyChanges(d, new List<IBaseIdEntity>());
             }
 
-            _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);      
-           
+            _wApplicationRepository.ApplyChanges(appl, new List<IBaseIdEntity>(), true);
+
 
             _wApplicationRepository.ApplyChanges(wapplication, new List<IBaseIdEntity>(), true);
 
@@ -296,7 +297,7 @@ namespace MJ_CAIS.Services
                 //await  AutomaticStepsHelper.ProcessWebApplicationToApplicationAsync(wapplication, _dbContext, _registerTypeService, _applicationService,_applicationWebService, _personService, statusWebApprovedApplication,  statusApprovedApplication );
                 //todo: must add some FK for payment?!
                 var person = await ProcessWebApplicationToApplicationAsync(wapplication, wapplicationStatus: statusWebApprovedApplication, applicationStatus: statusApprovedApplication);
-               
+
             }
             else
             {
@@ -316,11 +317,17 @@ namespace MJ_CAIS.Services
             {
                 return false;
             }
-            if (wapplication.APayments.Select(x=>x.EPayment).Count() == 0)
+            if (wapplication.APayments.Select(x => x.EPayment).Count() == 0)
             {
                 return false;
             }
             return wapplication.APayments.All(x => x.EPayment.PaymentStatus == PaymentConstants.PaymentStatuses.Payed);
+        }
+
+        public async Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId)
+        {
+            var result = await _wApplicationRepository.FindAsync<AAppPersAlias>(x => x.ApplicationId == aId);
+            return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
         }
     }
 }
