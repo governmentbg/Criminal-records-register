@@ -126,6 +126,19 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                              select a.Id).FirstOrDefault();
 
                 }
+                else
+                {
+                    return new UserRegistrationResult()
+                    {
+                        Succeeded = false,
+                        Errors = new UserRegistrationError[] {
+                                new UserRegistrationError() {
+                                    Code = "CERT_NOT_PRESENT",
+                                    Description = "Не е включен сертификат в информацията за регистрация!"
+                                }
+                            }
+                    };
+                }
                 CaisDbContext.GUsersExts.Add(new Entities.GUsersExt()
                 {
                     Id = Guid.NewGuid().ToString(),
