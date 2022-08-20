@@ -8,8 +8,8 @@ namespace MJ_CAIS.Web.Utils
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var date = DateTime.Parse(reader.GetString());
-            var localDate = date.ToLocalTime();
-            return localDate;
+            //var localDate = date.ToLocalTime();
+            return date;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

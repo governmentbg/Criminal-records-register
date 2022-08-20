@@ -15,7 +15,6 @@ import { NbSecurityModule, NbRoleProvider } from "@nebular/security";
 import { map, Observable, of as observableOf, of, switchMap } from "rxjs";
 import { throwIfAlreadyLoaded } from "./module-import-guard";
 import { HttpClient } from "@angular/common/http";
-
 @Injectable()
 export class NbSimpleRoleProvider extends NbRoleProvider {
   constructor(
@@ -72,10 +71,7 @@ export const NB_CORE_PROVIDERS = [
 @NgModule({
   imports: [CommonModule],
   exports: [NbAuthModule],
-  declarations: [],
-  // providers: [
-  //   { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
-  // ],
+  declarations: []
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

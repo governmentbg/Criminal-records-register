@@ -56,7 +56,7 @@ export class InputComponent implements OnInit {
       this.inputFormControl.value
     ) {
       let localDate = new Date(this.inputFormControl.value);
-      this.inputFormControl.patchValue(localDate);
+      this.inputFormControl.setValue(localDate);
     }
   }
 
