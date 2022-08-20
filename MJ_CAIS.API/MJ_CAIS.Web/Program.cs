@@ -26,10 +26,21 @@ namespace MJ_CAIS.Web
                         options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
                     });
             }
+            else
+            {
+                builder.Services
+                    .AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
+                        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                    });
+            }
 
             // TODO: at some point in time move back to WebSetupConfig
             // For now, different authentication for web projects
             var configuration = builder.Configuration;
+
             builder.Services.AddAuthorization();
             builder.Services
                 .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)

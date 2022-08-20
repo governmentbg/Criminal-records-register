@@ -6,7 +6,6 @@ import {
   Output
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import * as moment from "moment";
 import { InputTypeConstants } from "../../../../constants/input-type.constants";
 import { FormUtils } from "../../../../utils/form.utils";
 
@@ -57,9 +56,8 @@ export class InputComponent implements OnInit {
       this.inputFormControl.value
     ) {
       debugger;
-      let myMoment: moment.Moment = moment(this.inputFormControl.value);
-      let localDate = myMoment.toDate();
-      this.inputFormControl.patchValue(localDate);
+      let localDate = new Date(this.inputFormControl.value);
+      this.inputFormControl.setValue(localDate);
     }
   }
 
