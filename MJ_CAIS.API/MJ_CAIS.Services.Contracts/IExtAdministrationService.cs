@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.Services.Contracts
 {
-    public interface IExtAdministrationService : IBaseAsyncService<ExtAdministrationDTO, ExtAdministrationDTO, ExtAdministrationGridDTO, GExtAdministration, string>
+    public interface IExtAdministrationService : IBaseAsyncService<ExtAdministrationInDTO, ExtAdministrationDTO, ExtAdministrationGridDTO, GExtAdministration, string>
     {
         public Task<List<ExtAdministrationGridDTO>> SelectAllAsync();
     }
