@@ -9,7 +9,7 @@ namespace MJ_CAIS.Web.Utils
         {
             var date = DateTime.Parse(reader.GetString());
             var localDate = date.ToLocalTime();
-            return localDate;
+            return date;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

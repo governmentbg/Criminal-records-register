@@ -55,7 +55,15 @@ export class InputComponent implements OnInit {
       (this.type === "date" || this.type === "datetime") &&
       this.inputFormControl.value
     ) {
+      debugger;
       let localDate = new Date(this.inputFormControl.value);
+      let utcDate =  new Date(localDate.getUTCFullYear(),
+      localDate.getUTCMonth(),
+      localDate.getUTCDate(),
+      localDate.getUTCHours(),
+      localDate.getUTCMinutes(),
+      localDate.getUTCSeconds()
+      );
       this.inputFormControl.patchValue(localDate);
     }
   }
