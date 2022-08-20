@@ -9,5 +9,6 @@
         public string? AdministrationName { get; set; }
         public bool? Active { get; set; }
         public string? Position { get; set; }
+        public bool HasRegRegCertSubject { get; set; }
     }
 }

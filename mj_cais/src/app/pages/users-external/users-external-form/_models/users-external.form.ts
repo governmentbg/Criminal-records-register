@@ -14,6 +14,9 @@ export class UsersExternalForm extends BaseForm {
   public egn: FormControl;
   public position: FormControl;
   public administrationId: FormControl;
+  public regCertSubject: FormControl;
+  public ou: FormControl;
+  public uic: FormControl;
 
   constructor() {
     super();
@@ -24,6 +27,9 @@ export class UsersExternalForm extends BaseForm {
     this.egn = new FormControl(null, [Validators.required, createEgnValidator()]);
     this.position = new FormControl(null);
     this.administrationId = new FormControl(null, [Validators.required]);
+    this.regCertSubject =new FormControl(null);
+    this.ou =new FormControl(null);
+    this.uic =new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -35,6 +41,9 @@ export class UsersExternalForm extends BaseForm {
       egn: this.egn,
       position: this.position,
       administrationId: this.administrationId,
+      regCertSubject: this.regCertSubject,
+      ou: this.ou,
+      uic: this.uic
     });
   }
 }

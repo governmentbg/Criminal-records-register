@@ -12,7 +12,7 @@ namespace MJ_CAIS.Web.Controllers
     [Route("users-external")]
     [Authorize(Roles = RoleConstants.GlobalAdmin)]
 
-    public class UsersExternalController : BaseApiCrudController<UserExternalDTO, UserExternalDTO, UserExternalGridDTO, GUsersExt, string>
+    public class UsersExternalController : BaseApiCrudController<UserExternalInDTO, UserExternalDTO, UserExternalGridDTO, GUsersExt, string>
     {
         public UsersExternalController(IUserExternalService baseService) : base(baseService)
         {
@@ -37,14 +37,14 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Post([FromBody] UserExternalDTO aInDto)
+        public async Task<IActionResult> Post([FromBody] UserExternalInDTO aInDto)
         {
             var id = await this.baseService.InsertAsync(aInDto);
             return Ok(new { id });
         }
 
         [HttpPut("{aId}")]
-        public async Task<IActionResult> Put(string aId, [FromBody] UserExternalDTO aInDto)
+        public async Task<IActionResult> Put(string aId, [FromBody] UserExternalInDTO aInDto)
         {
             await this.baseService.UpdateAsync(aId, aInDto);
             return Ok();

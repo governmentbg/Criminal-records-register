@@ -20,7 +20,6 @@
 <igx-grid-toolbar>
   <igx-grid-toolbar-title>Външни потребители</igx-grid-toolbar-title>
   <igx-grid-toolbar-actions>
-    <div class="ml-auto">
       <a
         nbButton
         matRipple
@@ -30,7 +29,6 @@
       <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
         Добавяне 
       </a>
-    </div>
   </igx-grid-toolbar-actions>
 </igx-grid-toolbar>
 
@@ -85,6 +83,7 @@
   <igx-column
     field="egn"
     header="ЕГН"
+    width="100px"
     [sortable]="true"
     [dataType]="'string'"
     [hidden]="false"
@@ -109,8 +108,8 @@
   <igx-column
     field="active"
     header="Активен"
-    width="80px"
-    [sortable]="true"
+    width="70px"
+    [sortable]="false"
     [dataType]="'boolean'"
     [hidden]="false"
   >
@@ -122,8 +121,21 @@
   <igx-column
     field="isAdmin"
     header="Администратор"
-    width="80px"
-    [sortable]="true"
+    width="90px"
+    [sortable]="false"
+    [dataType]="'boolean'"
+    [hidden]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>   
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="hasRegRegCertSubject"
+    header="За регистрация"
+    width="90px"
+    [sortable]="false"
     [dataType]="'boolean'"
     [hidden]="false"
   >

@@ -17,6 +17,33 @@ namespace MJ_CAIS.Repositories.Impl
         {
         }
 
+        public async Task AddUicAsync(string? administrationId, string uic, string? ou)
+        {
+            var existingAdministrationId = await _dbContext.GExtAdministrationUics.Where(exUic => exUic.Value == uic).Select(exUic => exUic.AdministrationId).AsNoTracking().FirstOrDefaultAsync();
+            if (!string.IsNullOrEmpty(existingAdministrationId)) {
+                if (existingAdministrationId != administrationId)
+                {
+                    throw new ApplicationException("UIC already added to another administration");
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                var gExtAdminUic = new GExtAdministrationUic()
+                {
+                    AdministrationId = administrationId,
+                    Name = ou,
+                    Value = uic
+                };
+                gExtAdminUic.Id = BaseEntity.GenerateNewId();
+                gExtAdminUic.EntityState = EntityStateEnum.Added;
+                _dbContext.ApplyChanges(gExtAdminUic);
+            }
+        }
+
         public async Task<List<GExtAdministrationUic>> GetDeletedUICsAsync(List<string> deletedUICs)
         {
 

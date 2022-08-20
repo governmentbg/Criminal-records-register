@@ -7308,6 +7308,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
 
+                entity.Property(e => e.RegCertSubject)
+                    .HasMaxLength(200)
+                    .HasColumnName("REG_CERT_SUBJECT");
+
                 entity.HasOne(d => d.Administration)
                     .WithMany(p => p.GUsersExts)
                     .HasForeignKey(d => d.AdministrationId)
