@@ -55,7 +55,6 @@ export class InputComponent implements OnInit {
       (this.type === "date" || this.type === "datetime") &&
       this.inputFormControl.value
     ) {
-      debugger;
       let localDate = new Date(this.inputFormControl.value);
       this.inputFormControl.setValue(localDate);
     }
