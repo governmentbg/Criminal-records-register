@@ -79,11 +79,12 @@
                 </table>
             </div>
             @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
-        new PagedListRenderOptions()
-        {
-        LiElementClasses = new string[] { "page-item" },
-        PageClasses = new string[] { "page-link" }
-        })
+                new PagedListRenderOptions()
+                {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+                }
+            )
         }
         else
         {

@@ -50,8 +50,8 @@
                             </td>
                             <td>
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a asp-action="Preview" asp-controller="Application" asp-route-id="@item.WAppId">Заявление</a>
-                                    <a asp-action="ViewByCode" asp-controller="Conviction" asp-route-id="@item.AccessCode1" target="_blank"><i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate</a>
+                                    <a class="btn btn-link" asp-action="Preview" asp-controller="Application" asp-route-id="@item.WAppId">Заявление</a>
+                                    <a class="btn btn-primary" asp-action="ViewByCode" asp-controller="Conviction" asp-route-id="@item.AccessCode1" target="_blank"><i class="fa fa-download me-2"></i>@ApplicationResources.titleDownloadCertificate</a>
                                 </div>
                             </td>
                         </tr>

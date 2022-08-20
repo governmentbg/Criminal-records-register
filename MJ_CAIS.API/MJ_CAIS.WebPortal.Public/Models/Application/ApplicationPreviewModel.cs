@@ -31,7 +31,7 @@ namespace MJ_CAIS.WebPortal.Public.Models.Application
         public string? PaymentMethodCode { get; set; }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblIsPaid))]
-        public bool? IsPaid { get; set; }
+        public string? PaymentStatus { get; set; }
 
         [Display(ResourceType = typeof(ApplicationResources), Name = nameof(ApplicationResources.lblStatus))]
         public string? Status { get; set; }
