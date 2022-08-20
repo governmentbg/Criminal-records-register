@@ -115,7 +115,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                             Errors = new UserRegistrationError[] {
                                 new UserRegistrationError() {
                                     Code = "NTRBG_NOT_PRESENT",
-                                    Description = "The certificate should contain information for the administration"
+                                    Description = "Сертификатът трябва да съдържа информация за администрация!"
                                 }
                             }
                         };
@@ -147,7 +147,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     Errors = new UserRegistrationError[] {
                         new UserRegistrationError() {
                             Code = "EGN_ONLY",
-                            Description = "Only users with EGN allowed"
+                            Description = "Поддържат се само сертификати съдържащи ЕГН!"
                         }
                     }
                 };
