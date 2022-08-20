@@ -60,9 +60,10 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         public async Task<ActionResult> Inactive(InactiveViewModel viewModel)
         {
             var userData = await _externalUsers.SelectAsync(CurrentUserID);
-            var itemToUpdate = _mapper.Map<UserExternalDTO>(viewModel);
+            var itemToUpdate = _mapper.Map<UserExternalInDTO>(viewModel);
             itemToUpdate.Id = CurrentUserID;
             itemToUpdate.Egn = userData.Egn;
+            itemToUpdate.IsAdmin = userData.IsAdmin;
             try
             {
                 await _externalUsers.UpdateAsync(CurrentUserID, itemToUpdate);
