@@ -1,0 +1,72 @@
+<app-grid-with-transactions [gridTransactions]="transactions">
+  <igx-grid #uicsGrid [height]="null" [data]="uics.extAdministrationUics" [primaryKey]="'id'">
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>Структурни единици</igx-grid-toolbar-title>
+      <igx-grid-toolbar-actions>
+        <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
+          <igx-icon>add</igx-icon> Добави
+        </button>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
+
+    <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
+    </igx-column>
+
+    <igx-column field="name" header="Име" dataType="string" [sortable]="true">
+    </igx-column>
+    <igx-column field="value" header="ЕИК/БУЛСТАТ" [sortable]="true" [dataType]="'string'"></igx-column>
+
+    <igx-column field="version" header="Версия" [dataType]="'number'" [hidden]="true"></igx-column>
+
+    <igx-action-strip #actionstrip>
+      <button *ngIf="!isForPreview" title="Редактирай" igxButton="icon" igxRipple
+        (click)="onOpenEditBulletinDecision(actionstrip.context)">
+        <igx-icon>edit</igx-icon>
+      </button>
+      <button *ngIf="!isForPreview" title="Изтрии" igxButton="icon" igxRipple
+        (click)="onDeleteBulletinDecision(actionstrip.context)">
+        <igx-icon>delete</igx-icon>
+      </button>
+    </igx-action-strip>
+  </igx-grid>
+</app-grid-with-transactions>
+
+<igx-dialog #dialogAdd>
+  <div class="dialogNewRecord" style="min-width: 1000px">
+    <nb-card>
+      <nb-card-header>
+        <div class="d-flex" style="justify-content: space-between">
+          <div class="d-flex align-items-center">
+            <h5 style="font-weight: bold">Структурна единица</h5>
+          </div>
+          <div class="d-flex">
+            <div>
+              <button nbButton matRipple [status]="'success'" (click)="onAddOrUpdateUicRow()" type="button"
+                class="ml-2">
+                Потвърди
+              </button>
+            </div>
+            <div>
+              <button nbButton matRipple (click)="onCloseBulletinDecisionDilog()" type="button" class="ml-2">
+                Откажи
+              </button>
+            </div>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-2">
+          <div class="form-group col-md-6">
+            <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="uicForm.name" [parentGroup]="uicForm.group"
+              [inputName]="'name'">
+            </cais-input>
+          </div>
+          <div class="form-group col-md-6">
+            <cais-input [type]="'text'" [label]="'ЕИК/БУЛСТАТ'" [inputFormControl]="uicForm.value"
+              [parentGroup]="uicForm.group" [inputName]="'value'"></cais-input>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>

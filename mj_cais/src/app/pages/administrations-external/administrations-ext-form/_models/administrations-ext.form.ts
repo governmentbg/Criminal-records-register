@@ -7,19 +7,22 @@ export class AdministrationsExtForm extends BaseForm {
   public name: FormControl;
   public descr: FormControl;
   public role: FormControl;
+  public extAdministrationUics : FormControl;
 
   constructor() {
     super();
     this.name = new FormControl(null, [Validators.required]);
     this.descr = new FormControl(null);
     this.role = new FormControl(null);
+    this.extAdministrationUics  = new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
       name: this.name,
       descr: this.descr,
-      role: this.role
+      role: this.role,
+      extAdministrationUics: this.extAdministrationUics 
     });
   }
 }
