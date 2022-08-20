@@ -11,7 +11,7 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
     <PackageReference Include="TechnoLogica.Authentication.EAuthV2" Version="2.6.6" />
-    <PackageReference Include="TechnoLogica.Authentication.Mock" Version="1.6.2" />
+    <PackageReference Include="TechnoLogica.Authentication.Mock" Version="1.6.3" />
     <PackageReference Include="TechnoLogica.IdentityServer" Version="1.6.4" />
   </ItemGroup>
   
