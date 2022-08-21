@@ -8,6 +8,7 @@ export class UserExternalGridModel extends BaseGridModel {
   public egn: string = null;
   public position: string = null;
   public administrationName: string = null;
+  public hasRegRegCertSubject: boolean = null;
 
   constructor(init?: Partial<UserExternalGridModel>) {
     super(init);
@@ -18,5 +19,6 @@ export class UserExternalGridModel extends BaseGridModel {
     this.egn = init?.egn ?? null;
     this.position = init?.position ?? null;
     this.administrationName = init?.administrationName ?? null;
+    this.hasRegRegCertSubject = init?.hasRegRegCertSubject ?? null;
   }
 }

@@ -36,5 +36,12 @@
           </div>
         </div>
       </form>
+      <cais-administrations-ext-form-uic
+      #bulletineDecisions
+      [transactions]="fullForm.extAdministrationUics"
+      [administrationUics]="fullForm.extAdministrationUics"
+      [uics]="dbData.element"
+      [isForPreview]="isForPreview">
+      </cais-administrations-ext-form-uic>
     </nb-card-body>
   </nb-card>

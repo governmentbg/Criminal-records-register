@@ -14,9 +14,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public UserExternalProfile()
         {
             CreateMap<GUsersExt, UserExternalDTO>();
-            CreateMap<UserExternalDTO, GUsersExt>();
+            CreateMap<UserExternalInDTO, GUsersExt>();
             CreateMap<GUsersExt, UserExternalGridDTO>()
-                .ForMember(d => d.AdministrationName, opt => opt.MapFrom(src => src.Administration.Name));
+                .ForMember(d => d.AdministrationName, opt => opt.MapFrom(src => src.Administration.Name))
+                .ForMember(d => d.HasRegRegCertSubject, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.RegCertSubject)));
         }
     }
 }

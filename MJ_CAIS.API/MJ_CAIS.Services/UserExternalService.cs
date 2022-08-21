@@ -9,15 +9,39 @@ using MJ_CAIS.Services.Contracts;
 
 namespace MJ_CAIS.Services
 {
-    internal class UserExternalService : BaseAsyncService<UserExternalDTO, UserExternalDTO, UserExternalGridDTO, GUsersExt, string, CaisDbContext>, IUserExternalService
+    internal class UserExternalService : BaseAsyncService<UserExternalInDTO, UserExternalDTO, UserExternalGridDTO, GUsersExt, string, CaisDbContext>, IUserExternalService
     {
         private readonly IUserExternalRepository _userExternalRepository;
+        private readonly IExtAdministrationRepository _extAdministrationRepository;
 
-        public UserExternalService(IMapper mapper, IUserExternalRepository userExternalRepository)
+        public UserExternalService(IMapper mapper, IUserExternalRepository userExternalRepository, IExtAdministrationRepository extAdministrationRepository)
             : base(mapper, userExternalRepository)
         {
             _userExternalRepository = userExternalRepository;
+            _extAdministrationRepository = extAdministrationRepository;
         }
+
+        public async override Task UpdateAsync(string aId, UserExternalInDTO aInDto)
+        {
+            // TODO: should not select from db, but it must check if the saveChanges has returned true (or 1)
+            GUsersExt repoObj = await this.baseAsyncRepository.SelectAsync(aId);
+            if (repoObj == null)
+            {
+                throw new Exception("Object with id [" + aId + "] was not found!");
+            }
+
+            this.ValidateData(aInDto);
+
+            GUsersExt entity = mapper.MapToEntity<UserExternalInDTO, GUsersExt>(aInDto, isAdded: false);
+            if (!string.IsNullOrEmpty(aInDto.Uic))
+            {
+                await _extAdministrationRepository.AddUicAsync(aInDto.AdministrationId, aInDto.Uic, aInDto.Ou);
+                entity.RegCertSubject = null;
+                entity.ModifiedProperties.Add(nameof(entity.RegCertSubject));
+            }
+            await this.SaveEntityAsync(entity);
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
 
         public async Task<string?> GetUserAdministrationNameAsync(string userId)
@@ -49,7 +73,7 @@ namespace MJ_CAIS.Services
                 entity = mapper.MapToEntity<UserExternalDTO, GUsersExt>(userDTO, true);
                 entity.Id = BaseEntity.GenerateNewId();
                 entity.EntityState = Common.Enums.EntityStateEnum.Added;
-                await _userExternalRepository.SaveEntityAsync(entity,false);
+                await _userExternalRepository.SaveEntityAsync(entity, false);
             }
 
             return entity;

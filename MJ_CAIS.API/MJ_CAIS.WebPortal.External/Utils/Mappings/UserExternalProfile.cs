@@ -13,10 +13,10 @@ namespace MJ_CAIS.WebPortal.External.Utils.Mappings
             CreateMap<UserExternalEditModel, UserExternalDTO>()
                 .ReverseMap();
 
-            CreateMap<UserExternalDTO, GUsersExt>()
+            CreateMap<UserExternalInDTO, GUsersExt>()
                 .ReverseMap();
 
-            CreateMap<InactiveViewModel, UserExternalDTO>()
+            CreateMap<InactiveViewModel, UserExternalInDTO>()
                 .ReverseMap();
         }
     }

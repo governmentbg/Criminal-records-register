@@ -115,7 +115,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                             Errors = new UserRegistrationError[] {
                                 new UserRegistrationError() {
                                     Code = "NTRBG_NOT_PRESENT",
-                                    Description = "The certificate should contain information for the administration"
+                                    Description = "Сертификатът трябва да съдържа информация за администрация!"
                                 }
                             }
                         };
@@ -125,6 +125,19 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                              join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
                              select a.Id).FirstOrDefault();
 
+                }
+                else
+                {
+                    return new UserRegistrationResult()
+                    {
+                        Succeeded = false,
+                        Errors = new UserRegistrationError[] {
+                                new UserRegistrationError() {
+                                    Code = "CERT_NOT_PRESENT",
+                                    Description = "Не е включен сертификат в информацията за регистрация!"
+                                }
+                            }
+                    };
                 }
                 CaisDbContext.GUsersExts.Add(new Entities.GUsersExt()
                 {
@@ -147,7 +160,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     Errors = new UserRegistrationError[] {
                         new UserRegistrationError() {
                             Code = "EGN_ONLY",
-                            Description = "Only users with EGN allowed"
+                            Description = "Поддържат се само сертификати съдържащи ЕГН!"
                         }
                     }
                 };
@@ -157,6 +170,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var userID = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            var idpClaim = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "idp").Value;
             var user =
                 CaisDbContext.GUsersExts
                 .AsNoTracking()
@@ -181,12 +195,21 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
-                if (!string.IsNullOrEmpty(user.Role))
+                //if (!string.IsNullOrEmpty(user.Role))
+                //{
+                //    foreach (var role in user.Role.Split(","))
+                //    {
+                //        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
+                //    }
+                //}
+                if (idpClaim == "EAuthV2" ||
+                    idpClaim == "MockHandler")
                 {
-                    foreach (var role in user.Role.Split(","))
-                    {
-                        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
-                    }
+                    context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "ECertificates"));
+                }
+                if (idpClaim == "idsrv")
+                {
+                    context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "EReports"));
                 }
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {

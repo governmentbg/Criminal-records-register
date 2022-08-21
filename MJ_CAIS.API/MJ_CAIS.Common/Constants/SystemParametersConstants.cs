@@ -14,6 +14,8 @@ namespace MJ_CAIS.Common.Constants
             public const string WEB_PORTAL_URL = "WEB_PORTAL_URL";
             //име на сертификата, с който ще се подписва от сървъра
             public const string SYSTEM_SIGNING_CERTIFICATE_NAME = "SYSTEM_SIGNING_CERTIFICATE_NAME";
+            //име на сертификата, с който ще се подписва от сървъра
+            public const string SYSTEM_SIGNING_CERTIFICATE_NAME_FOR_DOWNLOAD = "DOWNLOAD_SIGNING_CERTIFICATE_NAME";
             //колко месеца да е валидно свидетелството за съдимост
             public const string CERTIFICATE_VALIDITY_PERIOD_MONTHS = "CERTIFICATE_VALIDITY_PERIOD_MONTHS";
             //колко дни се очаква плащане за заявления подадени през уеб портала

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.DataAccess;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -38,6 +41,9 @@ namespace MJ_CAIS.Tests.Helpers
 
         private void CompareChildren(PropertyInfo currentProperty, object firstObj, object seconObj, string pathToRoot)
         {
+            if (currentProperty.Name == nameof(IBaseIdEntity.Id) || 
+                currentProperty.Name == nameof(EntityState)) return;
+
             var firsObjVal = currentProperty.GetValue(firstObj);
             var secondObjVal = currentProperty.GetValue(seconObj);
 
@@ -66,11 +72,12 @@ namespace MJ_CAIS.Tests.Helpers
 
             if (typeof(IEnumerable).IsAssignableFrom(objType))
             {
-                var firstCollection = (IList)firsObjVal;
-                var secondCollection = (IList)secondObjVal;
+                var firstCollection = (IEnumerable)firsObjVal;
+                var secondCollection = (IEnumerable)secondObjVal;
 
-                var firstCollectionCount = firstCollection.Count;
-                var secondCollectionCount = secondCollection.Count;
+                var firstCollectionCount = GetEnumerableCount(firstCollection);
+                var secondCollectionCount = GetEnumerableCount(secondCollection);
+
                 if (firstCollectionCount != secondCollectionCount)
                 {
                     _isEquals = false;
@@ -78,21 +85,32 @@ namespace MJ_CAIS.Tests.Helpers
                     return;
                 }
 
-                var i = 0;
-                foreach (var listItem in firstCollection)
+                var firstI = 0;
+                foreach (var firstItem in firstCollection)
                 {
-                    var childPathToRoot = $"{pathToRoot}[{i}]";
-
-                    var itemType = listItem.GetType();
-                    var itemProperties = itemType.GetProperties().ToList();
-
-                    foreach (var itemProperty in itemProperties)
+                    var secondI = 0;
+                    foreach (var secondItem in secondCollection)
                     {
-                        CompareChildren(itemProperty, listItem, secondCollection[i], childPathToRoot + "." + itemProperty.Name);
-                        if (!_isEquals) return;
+                        if (firstI == secondI)
+                        {
+                            var childPathToRoot = $"{pathToRoot}[{secondI}]";
+
+                            var itemType = firstItem.GetType();
+                            var itemProperties = itemType.GetProperties().ToList();
+
+                            foreach (var itemProperty in itemProperties)
+                            {
+                                CompareChildren(itemProperty, firstItem, secondItem, childPathToRoot + "." + itemProperty.Name);
+                                if (!_isEquals) return;
+                            }
+                        }
+                        secondI++;
                     }
-                    i++;
+
+                    firstI++;
                 }
+
+                return;
             }
 
             var properties = objType.GetProperties();
@@ -112,6 +130,17 @@ namespace MJ_CAIS.Tests.Helpers
 
             var result = isPrimitive || simpleTypes.Contains(type) || typeof(string) == type;
             return result;
+        }
+
+        private static int GetEnumerableCount(IEnumerable collection)
+        {
+            var count = 0;
+            foreach (var item in collection)
+            {
+                count++;
+            }
+
+            return count;
         }
     }
 }

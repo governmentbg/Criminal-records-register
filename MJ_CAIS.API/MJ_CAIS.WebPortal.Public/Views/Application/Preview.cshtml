@@ -1,5 +1,6 @@
 ﻿@model ApplicationPreviewModel
 @using Infragistics.Web.Mvc
+@using MJ_CAIS.Common.Constants
 @using MJ_CAIS.WebPortal.Public.Controllers
 @using MJ_CAIS.WebPortal.Public.Models.Application
 @using MJ_CAIS.WebSetup.Utils.CustomHtmlHelpers
@@ -62,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (!Model.IsPaid.HasValue || !Model.IsPaid.Value)
+                            @if (!string.IsNullOrEmpty(Model.PaymentStatus) && Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending)
                             {
                                 <div class="col-12">
                                     <div class="alert alert-primary d-flex align-items-center my-0" role="alert">
@@ -88,7 +89,8 @@
                             break;
                         }
                 }
-                @if ((!Model.IsPaid.HasValue || !Model.IsPaid.Value) && Model.PaymentMethodCode == "Bank")
+                @if ((string.IsNullOrEmpty(Model.PaymentStatus) || Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending) 
+                     && Model.PaymentMethodCode == "Bank")
                 {
                     <div class="col-12">
                         <div class="alert alert-primary d-flex align-items-center my-0" role="alert">
@@ -132,7 +134,7 @@
                         </div>
                     </div>
                 }
-                @if ((!Model.IsPaid.HasValue || !Model.IsPaid.Value) && Model.PaymentMethodCode == "PayEgovBgCode")
+                @if ((!string.IsNullOrEmpty(Model.PaymentStatus) && Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending) && Model.PaymentMethodCode == "PayEgovBgCode")
                 {
                     <div class="col-12">
                         <div class="card text-dark bg-light">
@@ -184,13 +186,39 @@
                 <input asp-for="PaymentMethodName" class="form-control" disabled="disabled" />
             </div>
             <div class="form-group col-md-4">
-                <label asp-for="IsPaid" class="control-label fw-bold"></label>
+                <label asp-for="PaymentStatus" class="control-label fw-bold"></label>
                 @{
-                    var isPaid = (Model.IsPaid.HasValue && Model.IsPaid.Value);
-                    string paidText = isPaid ? "Платено" : "Неплатено";
-                    string paidClass = isPaid ? "bg-success" : "bg-danger";
+                    string paidText = "";
+                    string paidClass = "";
+                    switch (Model.PaymentStatus)
+                    {
+                        case PaymentConstants.PaymentStatuses.Payed:
+                        {
+                            paidText = "Платено";
+                            paidClass = "bg-success";
+                            break;
+                        }
+                        case PaymentConstants.PaymentStatuses.Canceled:
+                        {
+                            paidText = "Отказано";
+                            paidClass = "bg-warning";
+                            break;
+                        }
+                        case PaymentConstants.PaymentStatuses.Pending:
+                        default:
+                        {
+                            paidText = "Неплатено";
+                            paidClass = "bg-danger";
+                            break;
+                        }
+                        //{
+                        //    paidText = "Неизвестно";
+                        //    paidClass = "bg-warning";
+                        //    break;
+                        //}
+                    }
                 }
-                <input asp-for="IsPaid" class="form-control @paidClass text-white" value="@paidText" disabled="disabled" />
+                <input asp-for="PaymentStatus" class="form-control @paidClass text-white" value="@paidText" disabled="disabled" />
             </div>
             @if (Model.HasGeneratedCertificate)
             {

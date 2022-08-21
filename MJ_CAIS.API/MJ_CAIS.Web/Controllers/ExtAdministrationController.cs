@@ -11,7 +11,7 @@ namespace MJ_CAIS.Web.Controllers
 {
     [Route("ext-administrations")]
     [Authorize(Roles = RoleConstants.GlobalAdmin)]
-    public class ExtAdministrationController : BaseApiCrudController<ExtAdministrationDTO, ExtAdministrationDTO, ExtAdministrationGridDTO, GExtAdministration, string>
+    public class ExtAdministrationController : BaseApiCrudController<ExtAdministrationInDTO, ExtAdministrationDTO, ExtAdministrationGridDTO, GExtAdministration, string>
     {
         private readonly IExtAdministrationService _extAdministrationService;
 
@@ -45,14 +45,14 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Post([FromBody] ExtAdministrationDTO aInDto)
+        public async Task<IActionResult> Post([FromBody] ExtAdministrationInDTO aInDto)
         {
             var id = await this._extAdministrationService.InsertAsync(aInDto);
             return Ok(new { id });
         }
 
         [HttpPut("{aId}")]
-        public async Task<IActionResult> Put(string aId, [FromBody] ExtAdministrationDTO aInDto)
+        public async Task<IActionResult> Put(string aId, [FromBody] ExtAdministrationInDTO aInDto)
         {
             await this._extAdministrationService.UpdateAsync(aId, aInDto);
             return Ok();

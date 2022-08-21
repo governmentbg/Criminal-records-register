@@ -16,8 +16,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<GExtAdministration, ExtAdministrationDTO>()
                 .ForPath(d => d.ExtAdministrationUics, opt => opt.MapFrom(src => src.GExtAdministrationUics));
             CreateMap<ExtAdministrationDTO, GExtAdministration>();
+            CreateMap<ExtAdministrationInDTO, GExtAdministration>();
             CreateMap<GExtAdministration, ExtAdministrationGridDTO>();
             CreateMap<GExtAdministrationUic, ExtAdministrationUicDTO>();
+            CreateMap<ExtAdministrationUicDTO, GExtAdministrationUic>();
         }
     }
 }

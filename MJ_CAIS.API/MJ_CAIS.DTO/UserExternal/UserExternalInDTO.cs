@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MJ_CAIS.DTO.UserExternal
 {
-    public class UserExternalDTO : BaseDTO
+    public class UserExternalInDTO : BaseDTO
     {
         public string? Egn { get; set; }
         public string? Email { get; set; }
@@ -15,6 +15,7 @@ namespace MJ_CAIS.DTO.UserExternal
         public string? AdministrationId { get; set; }
         public bool? Active { get; set; }
         public string? Position { get; set; }
-        public string? RegCertSubject { get; set; }
+        public string? Uic { get; set; }
+        public string? Ou { get; set; }
     }
 }

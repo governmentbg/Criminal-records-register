@@ -1,70 +1,52 @@
 <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
-    <nb-card-header class="card-header-shadow">
-      <cais-card-header
-        [label]="displayTitle"
-        [onSaveFunction]="submitFunction"
-        [onCancelFunction]="globalCancelFunction"
-      ></cais-card-header>
-    </nb-card-header>
-    <nb-card-body class="overflow-scroll">
-      <form autocomplete="off">
-        <div class="row">        
-          <div  class="form-group col-md-8">
-            <cais-autocomplete
-              [label]="'Администрация'"
-              [inputFormControl]="fullForm.administrationId"
-              [parentGroup]="fullForm.group"
-              [inputName]="'administrationId'"
-              [items]="dbData.administrations"
-            ></cais-autocomplete>
-          </div>
-          <div class="form-group col-md-4">
-            <cais-input
-              [type]="'text'"
-              [label]="'Позиция'"
-              [inputFormControl]="fullForm.position"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
-            </div>
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header [label]="displayTitle" [onSaveFunction]="submitFunction"
+      [onCancelFunction]="globalCancelFunction"></cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="row">
+        <div class="form-group col-md-8">
+          <cais-autocomplete [label]="'Администрация'" [inputFormControl]="fullForm.administrationId"
+            [parentGroup]="fullForm.group" [inputName]="'administrationId'" [items]="dbData.administrations">
+          </cais-autocomplete>
         </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Имена'"
-              [inputFormControl]="fullForm.name"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
-          </div>    
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'ЕГН'"
-              [inputFormControl]="fullForm.egn"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Електронна поща'"
-              [inputFormControl]="fullForm.email"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
-          </div>
+        <div class="form-group col-md-4">
+          <cais-input [type]="'text'" [label]="'Позиция'" [inputFormControl]="fullForm.position"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
-        <div class="row">        
-          <div class="form-group col-md-12">
-            <nb-checkbox [formControl]="fullForm.active"
-            >Активен</nb-checkbox
-          >
-          </div>
-          <div class="form-group col-md-12">
-            <nb-checkbox [formControl]="fullForm.isAdmin"
-            >Администратор</nb-checkbox
-          >
-          </div>
+        <div class="form-group col-md-6">
+          <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="fullForm.name"
+            [parentGroup]="fullForm.group">
+          </cais-input>
         </div>
-      </form>
-    </nb-card-body>
-  </nb-card>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'ЕГН'" [inputFormControl]="fullForm.egn" [parentGroup]="fullForm.group">
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Електронна поща'" [inputFormControl]="fullForm.email"
+            [parentGroup]="fullForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-12">
+          <nb-checkbox [formControl]="fullForm.active">Активен</nb-checkbox>
+        </div>
+        <div class="form-group col-md-12">
+          <nb-checkbox [formControl]="fullForm.isAdmin">Администратор</nb-checkbox>
+        </div>
+        <div class="form-group col-md-12" [hidden]="!fullForm.group.value.regCertSubject">
+          <cais-input [type]="'text'" [label]="'Информация за регистрация'" [inputFormControl]="fullForm.regCertSubject"
+            [parentGroup]="fullForm.group" ></cais-input>
+        </div>
+        <div class="form-group col-md-6" [hidden]="!fullForm.group.value.regCertSubject">
+          <cais-input [type]="'text'" [label]="'Структурна единициа'" [inputFormControl]="fullForm.ou"
+            [parentGroup]="fullForm.group" ></cais-input>
+        </div>
+        <div class="form-group col-md-6" [hidden]="!fullForm.group.value.regCertSubject">
+          <cais-input [type]="'text'" [label]="'ЕИК/БУЛСТАТ'" [inputFormControl]="fullForm.uic" [parentGroup]="fullForm.group">
+          </cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

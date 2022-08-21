@@ -18,7 +18,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public decimal? Version { get; set; }
-        public string RegCertSubject { get; set; }
+        public string? RegCertSubject { get; set; }
 
         public virtual GExtAdministration Administration { get; set; }
     }

@@ -10,5 +10,7 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IExtAdministrationRepository : IBaseAsyncRepository<GExtAdministration, string, CaisDbContext>
     {
+        Task<List<GExtAdministrationUic>> GetDeletedUICsAsync(List<string> deletedUICs);
+        Task AddUicAsync(string? administrationId, string uic, string? ou);
     }
 }
