@@ -18,13 +18,23 @@
             <div class="d-none d-md-inline">@controller?.CurrentUserName</div>
         </a>
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
-            <form asp-controller="Account" asp-action="Logoff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
+            @if (controller?.CurrentRoleName == "EReports")
+            {
+                <li>
+                    <form asp-controller="Account" asp-action="ChangePassword" method="post" autocomplete="off" id="changePasswordForm" class="navbar-right">
+                        <a class="dropdown-item" href="javascript:document.getElementById('changePasswordForm').submit()" title="@CommonResources.lblLogout">
+                            <i class="fas fa-key me-2"></i>Промяна на парола
+                        </a>
+                    </form>
+                </li>
+            }
             <li>
-                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout">
-                    <i class="fas fa-sign-out-alt me-2"></i>@CommonResources.lblLogout
-                </a>
+                <form asp-controller="Account" asp-action="Logoff" method="post" autocomplete="off" id="logoutForm" class="navbar-right">
+                    <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()" title="@CommonResources.lblLogout">
+                        <i class="fas fa-sign-out-alt me-2"></i>@CommonResources.lblLogout
+                    </a>
+                </form>
             </li>
-            </form>
         </ul>
     </div>
 }

@@ -39,6 +39,8 @@ namespace MJ_CAIS.Repositories.Impl
                      Position = x.Position,
                      Version = x.Version,
                      CreatedOn = x.CreatedOn,
+                     UserName = x.UserName,
+                     HasUserName = !string.IsNullOrEmpty(x.UserName)
                  });
 
             return query;

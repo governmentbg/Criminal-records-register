@@ -12,6 +12,7 @@ using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.External.Models.Account;
 using System.Linq;
+using System.Web;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
@@ -21,15 +22,21 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         private readonly IMapper _mapper;
         private readonly IUserExternalService _externalUsers;
         private readonly IExtAdministrationService _extAdministrationService;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountController(
             IMapper mapper,
             IExtAdministrationService extAdministrationService,
-            IUserExternalService externalUsers)
+            IUserExternalService externalUsers,
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _extAdministrationService = extAdministrationService;
             _externalUsers = externalUsers;
+            _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -69,12 +76,12 @@ namespace MJ_CAIS.WebPortal.External.Controllers
                 await _externalUsers.UpdateAsync(CurrentUserID, itemToUpdate);
                 return RedirectToAction("InactiveNotification", new { success = true });
             }
-            catch(DbUpdateConcurrencyException ce)
+            catch (DbUpdateConcurrencyException ce)
             {
                 return RedirectToAction("InactiveNotification", new { success = false });
             }
         }
-        
+
         [HttpGet]
         public async Task<ActionResult> InactiveNotification(bool success)
         {
@@ -85,6 +92,20 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         public IActionResult ErrorAuthentication()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword()
+        {
+            var issuer = _configuration.GetValue<string>("Authentication:TokenIssuer");
+            return Redirect($"{issuer}/Password/Change?returnUrl={HttpUtility.UrlEncode(GetBaseUrl())}");
+        }
+        public string GetBaseUrl()
+        {
+            var request = _httpContextAccessor.HttpContext.Request;
+            var host = request.Host.ToUriComponent();
+            var pathBase = request.PathBase.ToUriComponent();
+            return $"{request.Scheme}://{host}{pathBase}";
         }
     }
 }

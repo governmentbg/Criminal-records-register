@@ -126,6 +126,9 @@
   <data name="lblAdministration" xml:space="preserve">
     <value>Администрация</value>
   </data>
+  <data name="lblConfirmPassword" xml:space="preserve">
+    <value>Потвърждение на парола</value>
+  </data>
   <data name="lblEgn" xml:space="preserve">
     <value>ЕГН</value>
   </data>
@@ -141,8 +144,38 @@
   <data name="lblName" xml:space="preserve">
     <value>Имена</value>
   </data>
+  <data name="lblPassword" xml:space="preserve">
+    <value>Парола</value>
+  </data>
   <data name="lblPosition" xml:space="preserve">
     <value>Позиция</value>
+  </data>
+  <data name="lblUserName" xml:space="preserve">
+    <value>Потребителско име</value>
+  </data>
+  <data name="msgPasswordChangeSuccess" xml:space="preserve">
+    <value>Успешна промяна на парола!</value>
+  </data>
+  <data name="msgPasswordChangeUnsuccess" xml:space="preserve">
+    <value>Неуспешна промяна на парола!</value>
+  </data>
+  <data name="msgPasswordRequiresDigit" xml:space="preserve">
+    <value>Паролата изисква цифра</value>
+  </data>
+  <data name="msgPasswordRequiresLower" xml:space="preserve">
+    <value>Паролата изисква малка буква</value>
+  </data>
+  <data name="msgPasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Паролата изисква специален символ</value>
+  </data>
+  <data name="msgPasswordRequiresUpper" xml:space="preserve">
+    <value>Паролата изисква главна буква</value>
+  </data>
+  <data name="msgPasswordsMustMatch" xml:space="preserve">
+    <value>Паролите трябва да съвпадат</value>
+  </data>
+  <data name="msgPasswordTooShort" xml:space="preserve">
+    <value>Паролата е прекалено къса</value>
   </data>
   <data name="titleAddUser" xml:space="preserve">
     <value>Добавяне на потребител</value>

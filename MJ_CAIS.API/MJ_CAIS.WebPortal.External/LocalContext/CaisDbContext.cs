@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities;
 
-namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
+namespace MJ_CAIS.WebPortal.External.LocalContext
 {
-    public partial class CaisDbContext : DbContext
+    public partial class ExtUserDbContext : DbContext
     {
-        public CaisDbContext()
+        public ExtUserDbContext()
         {
         }
 
-        public CaisDbContext(DbContextOptions<CaisDbContext> options)
+        public ExtUserDbContext(DbContextOptions<ExtUserDbContext> options)
             : base(options)
         {
         }
-
-        public virtual DbSet<GExtAdministration> GExtAdministrations { get; set; }
-        public virtual DbSet<GExtAdministrationUic> GExtAdministrationUics { get; set; }
-        public virtual DbSet<GUsersExt> GUsersExts { get; set; }
+        public virtual DbSet<LocalGUsersExt> GUsersExts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,101 +23,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GExtAdministration>(entity =>
-            {
-                entity.ToTable("G_EXT_ADMINISTRATIONS");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(200)
-                    .HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.Descr).HasColumnName("DESCR");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(200)
-                    .HasColumnName("NAME");
-
-                entity.Property(e => e.Role)
-                    .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("ROLE");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(200)
-                    .HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER(38)")
-                    .HasColumnName("VERSION");
-            });
-
-            modelBuilder.Entity<GExtAdministrationUic>(entity =>
-            {
-                entity.ToTable("G_EXT_ADMINISTRATION_UICS");
-
-                entity.HasIndex(e => new { e.ExtAdmId, e.Value }, "UK_EXT_ADM_UIC_EXT_ADM")
-                    .IsUnique();
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("CREATED_BY");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("CREATED_ON");
-
-                entity.Property(e => e.ExtAdmId)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("EXT_ADM_ID");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("UPDATED_BY");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("DATE")
-                    .HasColumnName("UPDATED_ON");
-
-                entity.Property(e => e.Value)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("VALUE");
-
-                entity.Property(e => e.Version)
-                    .HasColumnType("NUMBER")
-                    .HasColumnName("VERSION");
-
-                entity.HasOne(d => d.ExtAdm)
-                    .WithMany(p => p.GExtAdministrationUics)
-                    .HasForeignKey(d => d.ExtAdmId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_G_EXT_ADM_UICS_G_EXT_ADM");
-            });
-
-            modelBuilder.Entity<GUsersExt>(entity =>
+            modelBuilder.Entity<LocalGUsersExt>(entity =>
             {
                 entity.ToTable("G_USERS_EXT");
 
@@ -134,23 +36,28 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
                 entity.Property(e => e.Active)
                     .HasPrecision(1)
+                    .IsRequired(false)
                     .HasColumnName("ACTIVE");
 
                 entity.Property(e => e.AdministrationId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
+                    .IsRequired(false)
                     .HasColumnName("ADMINISTRATION_ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("CREATED_BY");
 
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("DATE")
+                    .IsRequired(false)
                     .HasColumnName("CREATED_ON");
 
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
+                    .IsRequired(false)
                     .HasColumnName("EGN");
 
                 entity.Property(e => e.Email)
@@ -159,45 +66,57 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
                 entity.Property(e => e.IsAdmin)
                     .HasPrecision(1)
+                    .IsRequired(false)
                     .HasColumnName("IS_ADMIN");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("NAME");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("USER_NAME");
 
                 entity.Property(e => e.NormalizedUserName)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("NORMALIZED_USER_NAME");
 
                 entity.Property(e => e.NormalizedEmail)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("NORMALIZED_EMAIL");
 
-                entity.Property(e => e.Position).HasColumnName("POSITION");
+                entity.Property(e => e.Position)
+                    .IsRequired(false)
+                    .HasColumnName("POSITION");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("UPDATED_BY");
 
                 entity.Property(e => e.UpdatedOn)
                     .HasColumnType("DATE")
+                    .IsRequired(false)
                     .HasColumnName("UPDATED_ON");
 
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
+                    .IsRequired(false)
                     .HasColumnName("VERSION");
 
                 entity.Property(e => e.ConcurrencyStamp)
                     .IsConcurrencyToken()
                     .HasMaxLength(256)
+                    .IsRequired(false)
                     .HasColumnName("CONCURRENCY_STAMP");
 
                 entity.Property(e => e.RegCertSubject)
                     .HasMaxLength(200)
+                    .IsRequired(false)
                     .HasColumnName("REG_CERT_SUBJECT");
 
                 entity.Property(e => e.EmailConfirmed)
@@ -206,10 +125,12 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
                 entity.Property(e => e.PasswordHash)
                     .HasMaxLength(256)
+                    .IsRequired(false)
                     .HasColumnName("PASSWORD_HASH");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(256)
+                    .IsRequired(false)
                     .HasColumnName("PHONE_NUMBER");
 
                 entity.Property(e => e.PhoneNumberConfirmed)
@@ -221,6 +142,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     .HasColumnName("TWO_FACTOR_ENABLED");
 
                 entity.Property(e => e.LockoutEnd)
+                    .IsRequired(false)
                     .HasColumnName("LOCKOUT_END_DATE_UTC");
 
                 entity.Property(e => e.LockoutEnabled)
@@ -233,16 +155,9 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
                 entity.Property(e => e.SecurityStamp)
                     .HasMaxLength(256)
+                    .IsRequired(false)
                     .HasColumnName("SECURITY_STAMP");
-
-
-                entity.HasOne(d => d.Administration)
-                    .WithMany(p => p.GUsersExts)
-                    .HasForeignKey(d => d.AdministrationId)
-                    .HasConstraintName("FK_G_USERS_EXT_G_EXT_ADMINISTR");
             });
-
-            modelBuilder.HasSequence("DOC_REG_COMMON_SEQ");
 
             OnModelCreatingPartial(modelBuilder);
         }

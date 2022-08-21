@@ -13,11 +13,12 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public UserExternalProfile()
         {
-            CreateMap<GUsersExt, UserExternalDTO>();
+            CreateMap<GUsersExt, UserExternalDTO>().ReverseMap();
             CreateMap<UserExternalInDTO, GUsersExt>();
             CreateMap<GUsersExt, UserExternalGridDTO>()
                 .ForMember(d => d.AdministrationName, opt => opt.MapFrom(src => src.Administration.Name))
-                .ForMember(d => d.HasRegRegCertSubject, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.RegCertSubject)));
+                .ForMember(d => d.HasRegRegCertSubject, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.RegCertSubject)))
+                .ForMember(d => d.HasUserName, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.UserName)));
         }
     }
 }

@@ -11,8 +11,10 @@
     <!--<PackageReference Include="Infragistics.Web.AspNetCore" Version="6.21.1.7" />
     <PackageReference Include="Infragistics.Web.Documents.Excel" Version="21.1.74" />-->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+	  <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,10 @@
     <None Update="cais.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\fonts\" />
   </ItemGroup>
 
 </Project>

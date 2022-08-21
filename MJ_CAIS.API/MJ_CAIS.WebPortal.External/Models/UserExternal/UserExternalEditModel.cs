@@ -36,5 +36,9 @@ namespace MJ_CAIS.WebPortal.External.Models.UserExternal
         public bool IsAdded { get; set; }
 
         public string? Version { get; set; }
+
+        public string? RegCertSubject { get; set; }
+
+        public string? UserName { get; set; }
     }
 }

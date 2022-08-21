@@ -11,6 +11,8 @@ using IdentityModel;
 using TechnoLogica.Authentication.EAuthV2;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Identity;
+using MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities;
 
 namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 {
@@ -19,26 +21,69 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
         public virtual string ClientId => "cais-external";
 
         protected CaisDbContext CaisDbContext { get; set; }
+        private readonly SignInManager<GUsersExt> _signInManager;
+        private readonly UserManager<GUsersExt> _userManager;
 
         public ExternalProfileService(
+            SignInManager<GUsersExt> signInManager,
+            UserManager<GUsersExt> userManager,
             CaisDbContext caisDbContext)
         {
             CaisDbContext = caisDbContext;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task SignOutAsync()
         {
-            // No implementation needed.
+            //No implementation needed
         }
 
-        public Task<bool> ValidateCredentials(string scheme, string username, string password)
+        public async Task<bool> ValidateCredentials(string scheme, string username, string password)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(username);
+            if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user))
+            {
+                return false;
+            }
+            else
+            {
+                if (await this._userManager.CheckPasswordAsync(user, password))
+                {
+                    await _userManager.ResetAccessFailedCountAsync(user);
+                    return true;
+                }
+                else
+                {
+                    if (_userManager.SupportsUserLockout && await _userManager.GetLockoutEnabledAsync(user))
+                    {
+                        await _userManager.AccessFailedAsync(user);
+                    }
+                    return false;
+                }
+            }
         }
 
-        public Task<bool> ChangePassword(string scheme, string username, string password, string newPassword)
+        public async Task<bool> ChangePassword(string scheme, string username, string password, string newPassword)
         {
-            throw new NotImplementedException();
+            var isValid = await ValidateCredentials(scheme, username, password);
+            if (isValid)
+            {
+                var user = await _userManager.FindByNameAsync(username);
+                var result = await _userManager.ChangePasswordAsync(user, password, newPassword);
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new ApplicationException(string.Join(Environment.NewLine, result.Errors.Select(er => er.Description).ToList()));
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public Task<bool> SendPasswordResetTokenAsync(string scheme, string baseAddress, string email)
@@ -56,35 +101,68 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             UserInfo res = null;
             if (!string.IsNullOrEmpty(username))
             {
-                var certificateClaim = externalClaims.Where(c => c.Type == EAuthClaims.Certificate).FirstOrDefault();
-                if (certificateClaim == null)
+                if (scheme == "EAuthV2" ||
+                    scheme == "MockHandler")
                 {
-                    return res;
+                    res = await FindUserByCertificate(username, externalClaims);
                 }
-                var egn = username.Replace("PNOBG-", "");
-                var x509Cert = new X509Certificate2(Convert.FromBase64String(certificateClaim.Value));
-                string uicValue = ExtractdUIC(x509Cert);
-                var subject = x509Cert.Subject;
-
-                if (uicValue == null)
+                else if (scheme == "idsrv")
                 {
-                    return res;
+                    res = await FindUserByUsername(username);
                 }
-                res =
-                (from u in CaisDbContext.GUsersExts
-                 join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id
-                 join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
-                 where u.Egn == egn
-                    && (uic.Value == uicValue || u.RegCertSubject == subject)
-                 select new UserInfo()
-                 {
-                     Name = u.Name,
-                     SubjectId = u.Id,
-                     Active = true, // Allways returns active. Specific roles for inactive users is returned in the profile data
-                     Username = u.Egn
-                 }).FirstOrDefault();
             }
             return res;
+        }
+
+        private async Task<UserInfo> FindUserByCertificate(string username, List<Claim> externalClaims)
+        {
+            var certificateClaim = externalClaims.Where(c => c.Type == EAuthClaims.Certificate).FirstOrDefault();
+            if (certificateClaim == null)
+            {
+                return null;
+            }
+            var egn = username.Replace("PNOBG-", "");
+            var x509Cert = new X509Certificate2(Convert.FromBase64String(certificateClaim.Value));
+            string uicValue = ExtractdUIC(x509Cert);
+            var subject = x509Cert.Subject;
+
+            if (uicValue == null)
+            {
+                return null;
+            }
+            var res = await
+            (from u in CaisDbContext.GUsersExts
+             join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id
+             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
+             where u.Egn == egn
+                && (uic.Value == uicValue || u.RegCertSubject == subject)
+             select new UserInfo()
+             {
+                 Name = u.Name,
+                 SubjectId = u.Id,
+                 Active = true, // Allways returns active. Specific roles for inactive users is returned in the profile data
+                 Username = u.Egn
+             }).FirstOrDefaultAsync();
+            return res;
+        }
+
+        private async Task<UserInfo> FindUserByUsername(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user != null)
+            {
+                return new UserInfo()
+                {
+                    Username = user.UserName,
+                    Name = user.Name,
+                    Active = user.Active,
+                    SubjectId = user.Id.ToString()
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private static string ExtractdUIC(X509Certificate2 x509Cert)
@@ -97,34 +175,63 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
         public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            if (!string.IsNullOrEmpty(userName) && userName.StartsWith("PNOBG-"))
+            if (scheme == "EAuthV2" ||
+                scheme == "MockHandler")
             {
-                var egn = userName.Replace("PNOBG-", "");
-                additionalAttributes.TryGetValue(EAuthClaims.Certificate, out string certificate);
-                string? certSubject = null;
-                string? adminId = null;
-                if (!string.IsNullOrEmpty(certificate))
+                if (!string.IsNullOrEmpty(userName) && userName.StartsWith("PNOBG-"))
                 {
-                    var cert = new X509Certificate2(Convert.FromBase64String(certificate));
-                    string uicValue = ExtractdUIC(cert);
-                    if (uicValue == null)
+                    var egn = userName.Replace("PNOBG-", "");
+                    additionalAttributes.TryGetValue(EAuthClaims.Certificate, out string certificate);
+                    string? certSubject = null;
+                    string? adminId = null;
+                    if (!string.IsNullOrEmpty(certificate))
+                    {
+                        var cert = new X509Certificate2(Convert.FromBase64String(certificate));
+                        string uicValue = ExtractdUIC(cert);
+                        if (uicValue == null)
+                        {
+                            return new UserRegistrationResult()
+                            {
+                                Succeeded = false,
+                                Errors = new UserRegistrationError[] {
+                                new UserRegistrationError() {
+                                    Code = "NTRBG_NOT_PRESENT",
+                                    Description = "Сертификатът трябва да съдържа информация за администрация!"
+                                }
+                            }
+                            };
+                        }
+                        certSubject = cert.Subject;
+                        adminId = (from a in CaisDbContext.GExtAdministrations
+                                   join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
+                                   select a.Id).FirstOrDefault();
+
+                    }
+                    else
                     {
                         return new UserRegistrationResult()
                         {
                             Succeeded = false,
                             Errors = new UserRegistrationError[] {
                                 new UserRegistrationError() {
-                                    Code = "NTRBG_NOT_PRESENT",
-                                    Description = "Сертификатът трябва да съдържа информация за администрация!"
+                                    Code = "CERT_NOT_PRESENT",
+                                    Description = "Не е включен сертификат в информацията за регистрация!"
                                 }
                             }
                         };
                     }
-                    certSubject = cert.Subject;
-                    adminId = (from a in CaisDbContext.GExtAdministrations
-                             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
-                             select a.Id).FirstOrDefault();
-
+                    CaisDbContext.GUsersExts.Add(new Entities.GUsersExt()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Egn = egn,
+                        Name = name,
+                        Email = email,
+                        Active = false,
+                        AdministrationId = adminId,
+                        RegCertSubject = (adminId == null) ? certSubject : null
+                    });
+                    await CaisDbContext.SaveChangesAsync();
+                    return new UserRegistrationResult() { Succeeded = true };
                 }
                 else
                 {
@@ -132,25 +239,30 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     {
                         Succeeded = false,
                         Errors = new UserRegistrationError[] {
-                                new UserRegistrationError() {
-                                    Code = "CERT_NOT_PRESENT",
-                                    Description = "Не е включен сертификат в информацията за регистрация!"
-                                }
-                            }
+                        new UserRegistrationError() {
+                            Code = "EGN_ONLY",
+                            Description = "Поддържат се само сертификати съдържащи ЕГН!"
+                        }
+                    }
                     };
                 }
-                CaisDbContext.GUsersExts.Add(new Entities.GUsersExt()
+            }
+            else if (scheme == "local")
+            {
+                var user = new GUsersExt()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Egn = egn,
                     Name = name,
+                    UserName = userName,
                     Email = email,
-                    Active = false,
-                    AdministrationId = adminId,
-                    RegCertSubject = (adminId == null) ? certSubject : null
-                });
-                await CaisDbContext.SaveChangesAsync();
-                return new UserRegistrationResult() { Succeeded = true };
+                    Active = false
+                };
+                var result = await _userManager.CreateAsync(user, password);
+                return
+                    new UserRegistrationResult()
+                    {
+                        Succeeded = result.Succeeded
+                    };
             }
             else
             {
@@ -159,8 +271,8 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     Succeeded = false,
                     Errors = new UserRegistrationError[] {
                         new UserRegistrationError() {
-                            Code = "EGN_ONLY",
-                            Description = "Поддържат се само сертификати съдържащи ЕГН!"
+                    Code = "NOT_SUPPORTED _SCHEME",
+                    Description = "Схемата за автентикация не се поддържа!"
                         }
                     }
                 };
@@ -192,22 +304,24 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             if (user != null)
             {
                 context.IssuedClaims.Add(new Claim(JwtClaimTypes.Name, user.Name));
-                context.IssuedClaims.Add(new Claim("Position", user.Position));
-                context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
-                context.IssuedClaims.Add(new Claim("Email", user.Email));
-                //if (!string.IsNullOrEmpty(user.Role))
-                //{
-                //    foreach (var role in user.Role.Split(","))
-                //    {
-                //        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
-                //    }
-                //}
+                if (!string.IsNullOrEmpty(user.Position))
+                {
+                    context.IssuedClaims.Add(new Claim("Position", user.Position));
+                }
+                if (!string.IsNullOrEmpty(user.AdministrationName))
+                {
+                    context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
+                }
+                if (!string.IsNullOrEmpty(user.Email))
+                {
+                    context.IssuedClaims.Add(new Claim("Email", user.Email));
+                }
                 if (idpClaim == "EAuthV2" ||
                     idpClaim == "MockHandler")
                 {
                     context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "ECertificates"));
                 }
-                if (idpClaim == "idsrv")
+                if (idpClaim == "local")
                 {
                     context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "EReports"));
                 }
@@ -228,7 +342,6 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     context.IssuedClaims.Add(new Claim("NotActive", "true"));
                 }
             }
-            throw new NotImplementedException();
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
