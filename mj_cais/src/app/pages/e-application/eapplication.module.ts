@@ -5,12 +5,14 @@ import { EApplicationCheckPaymentOverviewComponent } from './e-application-overv
 import { EApplicationCheckTaxFreeOverviewComponent } from './e-application-overview/eapplication-check-tax-free-overview/eapplication-check-tax-free-overview.component';
 import { CoreComponentModule } from '../../@core/components/core-component.module';
 import { EapplicationCheckPaymentFormComponent } from './e-application-form/eapplication-check-payment-form/eapplication-check-payment-form.component';
+import { EApplicationCertificateResultComponent } from './e-application-form/eapplication-check-payment-form/tabs/e-application-certificate-result/e-application-certificate-result.component';
 
 @NgModule({
   declarations: [
     EApplicationCheckPaymentOverviewComponent,
     EApplicationCheckTaxFreeOverviewComponent,
-    EapplicationCheckPaymentFormComponent
+    EapplicationCheckPaymentFormComponent,
+    EApplicationCertificateResultComponent
   ],
   imports: [
     CoreComponentModule,

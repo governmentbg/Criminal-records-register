@@ -34,8 +34,8 @@ export class EApplicationModel extends BaseModel {
   public userExtId: string = null;
   public csAuthorityBirthId: string = null;
   public statusCode: string = null;
-//   public birthAddress: AddressModel = new AddressModel();
-//   public person: PersonModel;
+   public birthAddress: AddressModel = new AddressModel();
+   public person: PersonModel;
 
   constructor(init?: Partial<EApplicationModel>) {
     super(init);
@@ -71,8 +71,8 @@ export class EApplicationModel extends BaseModel {
       this.userExtId = init.userExtId ?? null;
       this.csAuthorityBirthId = init.csAuthorityBirthId ?? null;
       this.statusCode = init.statusCode ?? null;
-    //   this.birthAddress = init.birthAddress ?? new AddressModel();
-    //   this.person = init.person ?? null;
+       this.birthAddress = init.birthAddress ?? new AddressModel();
+      this.person = init.person ?? null;
     }
   }
 }

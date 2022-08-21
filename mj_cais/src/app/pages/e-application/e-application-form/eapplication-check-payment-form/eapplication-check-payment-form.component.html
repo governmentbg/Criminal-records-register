@@ -4,79 +4,7 @@
       [label]="displayTitle"
       [onCancelFunction]="globalCancelFunction"
     >
-      <!-- <div>
-        <button
-          *ngIf="
-            !isForPreview &&
-            isEdit() &&
-            (applicationStatus == 'NewId' ||
-              applicationStatus == 'FillApplication')
-          "
-          nbButton
-          matRipple
-          [status]="'danger'"
-          (click)="cancelApplication()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Анулирай
-        </button>
-        <button
-          *ngIf="
-            (!isForPreview &&
-              isEdit() &&
-              (applicationStatus == 'NewId' ||
-                applicationStatus == 'FillApplication')) ||
-            (isForPreview && applicationStatus == 'CheckPayment')
-          "
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="finalEdit()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Окончателна редакция
-        </button>
-        <button
-          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="finalEdit()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Потвърждаване
-        </button>
-        <button
-          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="changeStatusToCheckPayment()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Отхвърляне
-        </button>
-        <button
-          *ngIf="!isForPreview && !isCreate"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="printApplication()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Печат
-        </button>
-      </div> -->
+      
     </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
@@ -263,15 +191,14 @@
           >
           </cais-application-document-form> -->
         </nb-tab>
-
-        <!-- <nb-tab tabTitle="Свидетелство">
-          <cais-application-certificate-result
-            [model]="dbData.certificate"
-            [users]="dbData.users"
-            [applicationCode]="this.fullForm.applicationCode.value"
+        <nb-tab tabTitle="Свидетелство">
+          <cais-e-application-certificate-result
+            [eAppCert]="dbData.certificate"
           >
-          </cais-application-certificate-result>
+          </cais-e-application-certificate-result>
         </nb-tab>
+
+        <!-- 
 
         <nb-tab tabTitle="История на статусите">
           <cais-application-status-history

@@ -9,6 +9,7 @@ import { BaseResolverData } from "../../../../@core/models/common/base-resolver.
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
 import { ApplicationDocumentModel } from "../../../application/application-form/_models/application-document.model";
+import { WCertificateService } from "../eapplication-check-payment-form/tabs/e-application-certificate-result/_data/w-certificate.service";
 import { EApplicationModel } from "../_models/eapplication.model";
 import { EApplicationService } from "./eapplication.service";
 
@@ -16,7 +17,8 @@ import { EApplicationService } from "./eapplication.service";
 export class EApplicationResolver implements Resolve<any> {
   constructor(
     private nomenclatureService: NomenclatureService,
-    private service: EApplicationService
+    private service: EApplicationService,
+    private wCertificateService: WCertificateService
   ) {}
 
   resolve(
@@ -37,6 +39,7 @@ export class EApplicationResolver implements Resolve<any> {
       srvcResRcptMethIds: this.nomenclatureService.getSrvcResRcptMethods(),
       documents: this.service.getDocuments(eapplicationId),
       personAlias: this.service.getPersonAlias(eapplicationId),
+      certificate: this.wCertificateService.getWCertificateByAppId(eapplicationId),
     };
     return forkJoin(result);
   }

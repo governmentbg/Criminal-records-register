@@ -1,0 +1,48 @@
+<ng-container
+  class="card-single-page-height"
+  *ngIf="formGroup"
+  [formGroup]="formGroup"
+>
+  <form
+    autocomplete="off"
+    *ngIf=" this.formGroup.controls['registrationNumber'].value != null"
+  >
+    <cais-input
+      [type]="'text'"
+      [label]="'Регистрационен номер'"
+      [inputFormControl]="this.formGroup.controls.registrationNumber"
+      [parentGroup]="formGroup"
+    ></cais-input>
+    <cais-input
+      [type]="'text'"
+      [label]="'Код за достъп 1'"
+      [inputFormControl]="this.formGroup.controls.accessCode1"
+      [parentGroup]="formGroup"
+    ></cais-input>
+    <cais-input
+      [type]="'date'"
+      [label]="' Валидно от'"
+      [inputFormControl]="this.formGroup.controls.validFrom"
+      [parentGroup]="formGroup"
+    ></cais-input>
+    <cais-input
+      [type]="'date'"
+      [label]="' Валидно до'"
+      [inputFormControl]="this.formGroup.controls.validTo"
+      [parentGroup]="formGroup"
+    ></cais-input>
+    <div style="padding-right: 10px">
+      <button
+        nbButton
+        matRipple
+        [status]="'success'"
+        (click)="downloadContent()"
+        type="button"
+        class="mt-2"
+        style="min-width: 100px; float: right"
+      >
+        Изтегли сертификат
+      </button>
+    </div>
+  </form>
+</ng-container>
