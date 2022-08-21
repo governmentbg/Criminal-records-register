@@ -170,6 +170,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var userID = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            var idpClaim = (context.Subject.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == "idp").Value;
             var user =
                 CaisDbContext.GUsersExts
                 .AsNoTracking()
@@ -201,12 +202,12 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 //        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
                 //    }
                 //}
-                if (context.Subject.Identity.AuthenticationType == "EAuthV2" ||
-                    context.Subject.Identity.AuthenticationType == "MockHandler")
+                if (idpClaim == "EAuthV2" ||
+                    idpClaim == "MockHandler")
                 {
                     context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "ECertificates"));
                 }
-                if (context.Subject.Identity.AuthenticationType == "idsrv")
+                if (idpClaim == "idsrv")
                 {
                     context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "EReports"));
                 }
