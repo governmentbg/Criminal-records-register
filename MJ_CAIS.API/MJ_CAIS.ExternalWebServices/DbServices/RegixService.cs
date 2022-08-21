@@ -438,7 +438,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
                     //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
                     if (application.Egn != null &&
-                        (application.BirthCityId == null || application.MotherFirstname == null || application.FatherFirstname == null)
+                        (application.BirthCityId == null //|| application.MotherFirstname == null || application.FatherFirstname == null
+                        )
                         )
                     {
                         var graoData = await GetCityMotherFatherFromGraoByEGN(application.Egn);
@@ -454,16 +455,16 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                                 application.ModifiedProperties.Add(nameof(application.BirthCountryId));
                             }
                         }
-                        if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
-                        {
-                            application.MotherFullname = graoData.Item2;
-                            application.ModifiedProperties.Add(nameof(application.MotherFullname));
-                        }
-                        if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
-                        {
-                            application.FatherFullname = graoData.Item3;
-                            application.ModifiedProperties.Add(nameof(application.FatherFullname));
-                        }
+                        //if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
+                        //{
+                        //    application.MotherFullname = graoData.Item2;
+                        //    application.ModifiedProperties.Add(nameof(application.MotherFullname));
+                        //}
+                        //if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
+                        //{
+                        //    application.FatherFullname = graoData.Item3;
+                        //    application.ModifiedProperties.Add(nameof(application.FatherFullname));
+                        //}
                     }
 
                     if (application.BirthCityId != null && application.BirthCountryId == null)
@@ -716,7 +717,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
                     //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
                     if (application.Egn != null &&
-                        (application.BirthCityId == null || application.MotherFirstname == null || application.FatherFirstname == null)
+                        (application.BirthCityId == null //|| application.MotherFirstname == null || application.FatherFirstname == null
+                        )
                         )
                     {
                         var graoData = await GetCityMotherFatherFromGraoByEGN(application.Egn);
@@ -732,16 +734,16 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                                 application.ModifiedProperties.Add(nameof(application.BirthCountryId));
                             }
                         }
-                        if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
-                        {
-                            application.MotherFullname = graoData.Item2;
-                            application.ModifiedProperties.Add(nameof(application.MotherFullname));
-                        }
-                        if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
-                        {
-                            application.FatherFullname = graoData.Item3;
-                            application.ModifiedProperties.Add(nameof(application.FatherFullname));
-                        }
+                        //if (string.IsNullOrEmpty(application.MotherFirstname) && !string.IsNullOrEmpty(graoData.Item2))
+                        //{
+                        //    application.MotherFullname = graoData.Item2;
+                        //    application.ModifiedProperties.Add(nameof(application.MotherFullname));
+                        //}
+                        //if (string.IsNullOrEmpty(application.FatherFirstname) && !string.IsNullOrEmpty(graoData.Item3))
+                        //{
+                        //    application.FatherFullname = graoData.Item3;
+                        //    application.ModifiedProperties.Add(nameof(application.FatherFullname));
+                        //}
                     }
 
                     if (application.BirthCityId != null && application.BirthCountryId == null)
