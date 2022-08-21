@@ -194,12 +194,21 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 context.IssuedClaims.Add(new Claim("Position", user.Position));
                 context.IssuedClaims.Add(new Claim("AdministrationName", user.AdministrationName));
                 context.IssuedClaims.Add(new Claim("Email", user.Email));
-                if (!string.IsNullOrEmpty(user.Role))
+                //if (!string.IsNullOrEmpty(user.Role))
+                //{
+                //    foreach (var role in user.Role.Split(","))
+                //    {
+                //        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
+                //    }
+                //}
+                if (context.Subject.Identity.AuthenticationType == "EAuthV2" ||
+                    context.Subject.Identity.AuthenticationType == "MockHandler")
                 {
-                    foreach (var role in user.Role.Split(","))
-                    {
-                        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, role));
-                    }
+                    context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "ECertificates"));
+                }
+                if (context.Subject.Identity.AuthenticationType == "idsrv")
+                {
+                    context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "EReports"));
                 }
                 if (!string.IsNullOrEmpty(user.AdministrationId))
                 {
