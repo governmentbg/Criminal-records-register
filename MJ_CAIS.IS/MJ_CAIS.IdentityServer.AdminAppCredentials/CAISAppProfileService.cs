@@ -74,7 +74,7 @@ namespace TechnoLogica.RegiX.IdentityServer.AdminAppCredentials
 
         public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            return new UserRegistrationResult() { Succeeded = false, Errors =  new List<UserRegistrationError>() { new UserRegistrationError() { Description = "User registration not allowed", Code="UserRegistrationNotAllowed" } } };
+            return new UserRegistrationResult() { Succeeded = false, Errors =  new List<UserRegistrationError>() { new UserRegistrationError() { Description = "Автоматична регистрация на потребители не е позволена. Обърнете се към администратор!", Code="UserRegistrationNotAllowed" } } };
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)

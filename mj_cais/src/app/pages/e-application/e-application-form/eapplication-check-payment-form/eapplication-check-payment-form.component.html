@@ -4,7 +4,6 @@
       [label]="displayTitle"
       [onCancelFunction]="globalCancelFunction"
     >
-      
     </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
@@ -78,8 +77,8 @@
                 [inputFormControl]="fullForm.purpose"
                 [parentGroup]="fullForm.group"
               ></cais-input>
-            </div> 
-          </div> 
+            </div>
+          </div>
           <div class="font-weight-bold m-2">
             Информация, събрана по служебен път
           </div>
@@ -198,19 +197,17 @@
           </cais-e-application-certificate-result>
         </nb-tab>
 
-        <!-- 
-
         <nb-tab tabTitle="История на статусите">
-          <cais-application-status-history
+          <cais-e-application-status-history
             [historyData]="dbData.applicationStatusHistoryData"
           >
-          </cais-application-status-history>
+          </cais-e-application-status-history>
         </nb-tab>
 
         <nb-tab tabTitle="Проверка в регистри">
-          <cais-application-e-web-requests [historyData]="dbData.eWebRequest">
-          </cais-application-e-web-requests> 
-        </nb-tab>-->
+          <cais-e-application-e-web-requests [historyData]="dbData.eWebRequest">
+          </cais-e-application-e-web-requests>
+        </nb-tab>
       </nb-tabset>
     </form>
   </nb-card-body>
