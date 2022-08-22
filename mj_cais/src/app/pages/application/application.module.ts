@@ -46,5 +46,6 @@ import { ApplicationSearchFormComponent } from './application-form/application-s
     ApplicationSearchFormComponent
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
+  exports:[ApplicationEWebRequestsComponent]
 })
 export class ApplicationModule {}

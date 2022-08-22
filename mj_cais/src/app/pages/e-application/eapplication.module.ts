@@ -7,6 +7,7 @@ import { CoreComponentModule } from '../../@core/components/core-component.modul
 import { EapplicationCheckPaymentFormComponent } from './e-application-form/eapplication-check-payment-form/eapplication-check-payment-form.component';
 import { EApplicationCertificateResultComponent } from './e-application-form/eapplication-check-payment-form/tabs/e-application-certificate-result/e-application-certificate-result.component';
 import { EApplicationStatusHistoryComponent } from './e-application-form/eapplication-check-payment-form/tabs/e-application-status-history/e-application-status-history.component';
+import { ApplicationModule } from '../application/application.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { EApplicationStatusHistoryComponent } from './e-application-form/eapplic
   ],
   imports: [
     CoreComponentModule,
-    EApplicationRoutingModule
+    EApplicationRoutingModule,
+    ApplicationModule
   ]
 })
 export class EApplicationModule { }
