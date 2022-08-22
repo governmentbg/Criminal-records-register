@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Nomenclature;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -40,6 +41,22 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var bulletin = await _dbContext.BBulletins.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             return bulletin;
+        }
+
+        public IQueryable<BaseNomenclatureDTO> GetBulletinStatusesByHistory(string aId)
+        {
+            var result = _dbContext.BBulletinStatusHes.AsNoTracking()
+                .Where(x => x.BulletinId == aId)
+                .Include(x => x.NewStatusCodeNavigation)
+                .Select(x => new BaseNomenclatureDTO
+                {
+                    Id = x.NewStatusCode,
+                    Code = x.NewStatusCode,
+                    Name = x.NewStatusCodeNavigation.Name
+                })
+                .Distinct();
+
+            return result;
         }
     }
 }

@@ -546,6 +546,8 @@ namespace MJ_CAIS.Services
         /// <param name="bulletinId">ID</param>
         public bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus)
         {
+           // var statusAreEqueals = oldStatus == newStatus;
+            //var bulletinBeforeActive = oldStatus == Status.NewOffice || oldStatus == Status.NewEISS;
             if (oldStatus == newStatus) return false;
 
             var statusHistory = new BBulletinStatusH

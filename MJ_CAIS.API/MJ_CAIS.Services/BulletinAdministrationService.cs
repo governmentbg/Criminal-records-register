@@ -3,6 +3,7 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.BulletinAdministration;
+using MJ_CAIS.DTO.Nomenclature;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 
@@ -17,10 +18,11 @@ namespace MJ_CAIS.Services
         {
             _bulletinAdministrationRepository = bulletinAdministrationRepository;
         }
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
-        }
+
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
+        public IQueryable<BaseNomenclatureDTO> GetBulletinStatusesByHistory(string aId)
+            => _bulletinAdministrationRepository.GetBulletinStatusesByHistory(aId);
 
         public async Task UnlockBulletinAsync(UnlockBulletinModelDTO aInDto)
         {
