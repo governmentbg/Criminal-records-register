@@ -553,15 +553,10 @@ namespace MJ_CAIS.Services
                 Locked = newStatus != Status.NewOffice
             };
 
-            // todo: if bulletin is unlock by admin
-            // save data in tables
-            if (newStatus != Status.NewOffice)
-            {
-                var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
-                var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
-                statusHistory.Content = xml;
-                statusHistory.Version = 1;
-            }
+            var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
+            var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
+            statusHistory.Content = xml;
+            statusHistory.Version = 1;
 
             _bulletinRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
             return true;
