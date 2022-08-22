@@ -36,7 +36,7 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId);
 
-        void AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus);
+        bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus);
 
         void UpdateDeleteDateData(BBulletin entity);
     }
