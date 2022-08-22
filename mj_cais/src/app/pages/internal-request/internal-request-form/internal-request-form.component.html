@@ -90,14 +90,28 @@
             [items]="dbData.requestTypes"
           ></cais-autocomplete>
         </div>
-        <div class="form-group col-md-4">
-          <cais-lookup
-            [label]="'Лице'"
-            [inputControl]="fullForm.pPersIdId"
-            [parentGroup]="fullForm.pPersIdId.group"
-            [openFunction]="openPidDialog"
-          ></cais-lookup>
-        </div>
+
+        <ng-container *ngIf="isEdit()">
+          <div class="form-group col-md-4">
+            <cais-input
+              [type]="'text'"
+              [label]="'Идентификатор на лице'"
+              [inputFormControl]="fullForm.pPersIdIdDisplay"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!isEdit()">
+          <div class="form-group col-md-4">
+            <cais-autocomplete
+              [label]="'Идентификатор на лице'"
+              [inputFormControl]="fullForm.pPersIdId"
+              [parentGroup]="fullForm.group"
+              [inputName]="'pPersIdId'"
+              [items]="personIds"
+            ></cais-autocomplete>
+          </div>
+        </ng-container>
       </div>
 
       <label class="label">Бюлетини на лице</label>
@@ -193,7 +207,10 @@
             </div>
           </ng-template>
           <igx-action-strip #actionstrip *ngIf="canEditGrid">
-            <igx-grid-editing-actions [addRow]="false" [contentEditable]="canEditGrid">
+            <igx-grid-editing-actions
+              [addRow]="false"
+              [contentEditable]="canEditGrid"
+            >
             </igx-grid-editing-actions>
           </igx-action-strip>
         </igx-grid>

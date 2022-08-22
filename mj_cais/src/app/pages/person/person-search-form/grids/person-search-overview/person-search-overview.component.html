@@ -116,6 +116,13 @@
           >
             <span class="ml-1">Напомнителен бюлетин</span>
           </button>
+          <button
+          mat-menu-item
+          [queryParams]="{ personId: cell.rowData.id }"
+          [routerLink]="['/pages/internal-requests/create']"
+        >
+          <span class="ml-1">Заявка</span>
+        </button>
         </mat-menu>
       </ng-container>
       <ng-container *ngIf="isRemindPersonForm">

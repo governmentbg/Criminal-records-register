@@ -11,7 +11,8 @@ export class InternalRequestForm extends BaseForm {
   public reqStatusCode: FormControl;
   public responseDescr: FormControl;
   public requestDate: FormControl;
-  public pPersIdId: LookupForm;
+  public pPersIdId: FormControl;
+  public pPersIdIdDisplay: FormControl;
   public reqStatusName: FormControl;
   public fromAuthorityId: FormControl;
   public toAuthorityId: FormControl;
@@ -27,11 +28,13 @@ export class InternalRequestForm extends BaseForm {
     this.reqStatusCode = new FormControl(null);
     this.responseDescr = new FormControl(null);
     this.requestDate = new FormControl(new Date());
-    this.pPersIdId = new LookupForm(true);
+    this.pPersIdId = new FormControl(null, Validators.required);
+    this.pPersIdIdDisplay = new FormControl(null);
+    this.pPersIdIdDisplay.disable();
     this.reqStatusName = new FormControl(null);
     this.fromAuthorityId = new FormControl(null);
     this.toAuthorityId = new FormControl(null, Validators.required);
-    this.nIntReqTypeId =  new FormControl(null,Validators.required);
+    this.nIntReqTypeId = new FormControl(null, Validators.required);
     this.selectedBulletinsTransactions = new FormControl(null);
 
     this.group = new FormGroup({
@@ -43,12 +46,13 @@ export class InternalRequestForm extends BaseForm {
       reqStatusCode: this.reqStatusCode,
       responseDescr: this.responseDescr,
       requestDate: this.requestDate,
-      pPersIdId: this.pPersIdId.group,
+      pPersIdId: this.pPersIdId,
+      pPersIdIdDisplay: this.pPersIdIdDisplay,
       reqStatusName: this.reqStatusName,
       fromAuthorityId: this.fromAuthorityId,
       toAuthorityId: this.toAuthorityId,
       nIntReqTypeId: this.nIntReqTypeId,
-      selectedBulletinsTransactions: this.selectedBulletinsTransactions
+      selectedBulletinsTransactions: this.selectedBulletinsTransactions,
     });
   }
 }

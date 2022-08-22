@@ -10,7 +10,7 @@ export class PersonBulletinsGridModel extends BaseModel {
   public bulletinId: string = null;
   public pidId: string = null;
   public pid: string = null;
-
+  
   constructor(init?: Partial<PersonBulletinsGridModel>) {
     super(init);
     this.registrationNumber = init?.registrationNumber ?? null;

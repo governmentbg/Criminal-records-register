@@ -44,8 +44,11 @@ namespace MJ_CAIS.Services
         public IQueryable<SelectedPersonBulletinGridDTO> GetSelectedBulletins(string aId)
             => _internalRequestRepository.GetSelectedBulletins(aId);
 
-        public async Task <SelectedPersonBulletinGridDTO> GetBulletinWithPidDataAsync(string aId)
-            => await _internalRequestRepository.GetBulletinWithPidDataAsync(aId);
+        public async Task <SelectedPersonBulletinGridDTOExtended> GetBulletinWithPidDataByBulletinIdAsync(string aId)
+            => await _internalRequestRepository.GetBulletinWithPidDataByBulletinIdAsync(aId);
+
+        public async Task<SelectedPersonBulletinGridDTOExtended> GetBulletinWithPidDataByPersonIdAsync(string aId)
+            =>  await _internalRequestRepository.GetBulletinWithPidDataByPersonIdAsync(aId);
 
         public virtual async Task<IgPageResult<InternalRequestGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<InternalRequestGridDTO> aQueryOptions, string statuses, bool fromAuth)
         {

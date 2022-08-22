@@ -36,7 +36,7 @@ namespace MJ_CAIS.Repositories.Impl
                             ApiServiceCallId = x.ApiServiceCallId
                         })
                         .Union(_dbContext.Set<EWebRequest>()
-                            .Where(x => _dbContext.Set<AApplication>().Where(a => a.Id == aId).Select(a => a.WApplicationId).Contains(x.WApplicationId))
+                            .Where(x => _dbContext.Set<AApplication>().Where(a => a.Id == aId && a.WApplicationId != null).Select(a => a.WApplicationId).Contains(x.WApplicationId))
                             .Select(x => new EWebRequest
                             {
                                 Id = x.Id,
