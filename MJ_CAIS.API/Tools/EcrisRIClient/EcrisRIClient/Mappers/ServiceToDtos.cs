@@ -250,9 +250,15 @@ namespace EcrisRIClient.Mappers
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(src => AbstractTypeResolverFromDto(src.Item)));
             CreateMap<EcrisRIClient.EcrisService.StructuredConvictionReferenceTypeExternalConviction, MJ_CAIS.DTO.EcrisService.StructuredConvictionReferenceTypeExternalConviction>()
           .ReverseMap();
-            
 
+            CreateMap<EcrisRIClient.EcrisService.NotificationResponseMessageType, MJ_CAIS.DTO.EcrisService.NotificationResponseMessageType>()
+                .ForMember(dest =>dest.NotificationResponseMessageNotificationResponseTypeReference, opt=>opt.MapFrom(src=>src.NotificationResponseMessageNotificationResponseTypeReference))
+           .ReverseMap()
+              .ForMember(dest => dest.NotificationResponseMessageNotificationResponseTypeReference, opt => opt.MapFrom(src => src.NotificationResponseMessageNotificationResponseTypeReference));
 
+         
+            CreateMap<EcrisRIClient.EcrisService.NotificationResponseTypeExternalReferenceType, MJ_CAIS.DTO.EcrisService.NotificationResponseTypeExternalReferenceType>()
+              .ReverseMap();
         }
 
       

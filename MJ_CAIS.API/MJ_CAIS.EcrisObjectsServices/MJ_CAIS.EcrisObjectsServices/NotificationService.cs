@@ -300,9 +300,9 @@ namespace MJ_CAIS.EcrisObjectsServices
                 MessageIdentifier = notification.MessageIdentifier
             };
 
-            response.RequestResponseMessageOtherMemberState = new MemberStateCodeType[1] {
-                    notification.MessageSendingMemberState
-                };
+            //response.RequestResponseMessageOtherMemberState = new MemberStateCodeType[1] {
+            //        notification.MessageSendingMemberState
+            //    };
             response.NotificationResponseMessageNotificationResponseTypeReference = new NotificationResponseTypeExternalReferenceType()
             {
                 Value = notResponseType// for successful - "NRT-00-00"
