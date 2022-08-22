@@ -4,6 +4,7 @@ using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.InternalRequest;
+using MJ_CAIS.DTO.Nomenclature;
 using MJ_CAIS.Repositories.Contracts;
 using static MJ_CAIS.Common.Constants.InternalRequestConstants;
 
@@ -218,7 +219,7 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public async Task<SelectedPersonBulletinGridDTO> GetBulletinWithPidDataAsync(string aId)
+        public async Task<SelectedPersonBulletinGridDTOExtended> GetBulletinWithPidDataByBulletinIdAsync(string aId)
         {
             var bulletin = await (from bulletins in _dbContext.BBulletins.AsNoTracking()
                                   join status in _dbContext.BBulletinStatuses.AsNoTracking() on bulletins.StatusId equals status.Code
@@ -251,49 +252,204 @@ namespace MJ_CAIS.Repositories.Impl
                                       Suid = bulletins.Suid,
                                   }).FirstOrDefaultAsync(x => x.BulletinId == aId);
 
-            var result = new SelectedPersonBulletinGridDTO
+            var result = new SelectedPersonBulletinGridDTOExtended
             {
-                BulletinId = bulletin.BulletinId,
-                BulletinType = bulletin.BulletinType,
-                RegistrationNumber = bulletin.RegistrationNumber,
-                StatusId = bulletin.StatusId,
-                CreatedOn = bulletin.CreatedOn,
-                BulletinAuthorityId = bulletin.BulletinAuthorityId,
-                Version = bulletin.Version,
-                BulletinAuthorityName = bulletin.BulletinAuthorityName,
-                StatusName = bulletin.StatusName,
+                Pids = new List<BaseNomenclatureDTO>(),
+                Bulletins = new List<SelectedPersonBulletinGridDTO> {new SelectedPersonBulletinGridDTO
+                {
+                    BulletinId = bulletin.BulletinId,
+                    BulletinType = bulletin.BulletinType,
+                    RegistrationNumber = bulletin.RegistrationNumber,
+                    StatusId = bulletin.StatusId,
+                    CreatedOn = bulletin.CreatedOn,
+                    BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                    Version = bulletin.Version,
+                    BulletinAuthorityName = bulletin.BulletinAuthorityName,
+                    StatusName = bulletin.StatusName,
+                } }
             };
 
-            var pidId = string.Empty;
-            var pid = string.Empty;
             if (!string.IsNullOrEmpty(bulletin.EgnId))
             {
-                pidId = bulletin.EgnId;
-                pid = bulletin.Egn;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.LnchId))
-            {
-                pidId = bulletin.LnchId;
-                pid = bulletin.Lnch;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.LnId))
-            {
-                pidId = bulletin.LnId;
-                pid = bulletin.Ln;
-            }
-            else if (!string.IsNullOrEmpty(bulletin.IdDocNumberId))
-            {
-                pidId = bulletin.IdDocNumberId;
-                pid = bulletin.IdDocNumber;
-            }
-            else
-            {
-                pidId = bulletin.SuidId;
-                pid = bulletin.Suid;
+                result.Pids.Add(new BaseNomenclatureDTO
+                {
+                    Id = bulletin.EgnId,
+                    Code = PersonConstants.PidType.Egn,
+                    Name = bulletin.Egn,
+                });
             }
 
-            result.PidId = pidId;
-            result.Pid = pid;
+            if (!string.IsNullOrEmpty(bulletin.LnchId))
+            {
+                result.Pids.Add(new BaseNomenclatureDTO
+                {
+                    Id = bulletin.LnchId,
+                    Code = PersonConstants.PidType.Lnch,
+                    Name = bulletin.Lnch,
+                });
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.LnId))
+            {
+                result.Pids.Add(new BaseNomenclatureDTO
+                {
+                    Id = bulletin.LnId,
+                    Code = PersonConstants.PidType.Ln,
+                    Name = bulletin.Ln,
+                });
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.IdDocNumberId))
+            {
+                result.Pids.Add(new BaseNomenclatureDTO
+                {
+                    Id = bulletin.IdDocNumberId,
+                    Code = PersonConstants.PidType.DocumentId,
+                    Name = bulletin.IdDocNumber,
+                });
+            }
+
+            if (!string.IsNullOrEmpty(bulletin.SuidId))
+            {
+                result.Pids.Add(new BaseNomenclatureDTO
+                {
+                    Id = bulletin.SuidId,
+                    Code = PersonConstants.PidType.Suid,
+                    Name = bulletin.Suid,
+                });
+            }
+
+            return result;
+        }
+
+        public async Task<SelectedPersonBulletinGridDTOExtended> GetBulletinWithPidDataByPersonIdAsync(string personId)
+        {
+            var result = new SelectedPersonBulletinGridDTOExtended();
+
+            result.Pids = await _dbContext.PPersonIds.AsNoTracking()
+                    .Where(x => x.PersonId == personId)
+                    .Select(x => new BaseNomenclatureDTO
+                    {
+                        Id = x.Id,
+                        Code = x.PidTypeId,
+                        Name = x.Pid,
+                    })
+                    .ToListAsync();
+
+            var bulletinsByEgn = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                 join egn in _dbContext.PPersonIds.AsNoTracking() on bulletin.EgnId equals egn.Id
+                                 where egn.PersonId == personId
+                                 select new
+                                 {
+                                     BulletinId = bulletin.Id,
+                                     BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                           bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                           BulletinResources.Unspecified,
+                                     RegistrationNumber = bulletin.RegistrationNumber,
+                                     StatusId = bulletin.StatusId,
+                                     CreatedOn = bulletin.CreatedOn,
+                                     BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                                     Version = bulletin.Version,
+                                 };
+
+
+            var bulletinsByLnch = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                  join lnch in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnchId equals lnch.Id
+                                  where lnch.PersonId == personId
+                                  select new
+                                  {
+                                      BulletinId = bulletin.Id,
+                                      BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                          bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                          BulletinResources.Unspecified,
+                                      RegistrationNumber = bulletin.RegistrationNumber,
+                                      StatusId = bulletin.StatusId,
+                                      CreatedOn = bulletin.CreatedOn,
+                                      BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                                      Version = bulletin.Version,
+                                  };
+
+
+            var bulletinsByLn = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                join ln in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnId equals ln.Id
+                                where ln.PersonId == personId
+                                select new
+                                {
+                                    BulletinId = bulletin.Id,
+                                    BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                          bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                          BulletinResources.Unspecified,
+                                    RegistrationNumber = bulletin.RegistrationNumber,
+                                    StatusId = bulletin.StatusId,
+                                    CreatedOn = bulletin.CreatedOn,
+                                    BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                                    Version = bulletin.Version,
+                                };
+
+
+
+            var bulletinsByIdDoc = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                   join idDoc in _dbContext.PPersonIds.AsNoTracking() on bulletin.IdDocNumberId equals idDoc.Id
+                                   where idDoc.PersonId == personId
+                                   select new
+                                   {
+                                       BulletinId = bulletin.Id,
+                                       BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                           bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                           BulletinResources.Unspecified,
+                                       RegistrationNumber = bulletin.RegistrationNumber,
+                                       StatusId = bulletin.StatusId,
+                                       CreatedOn = bulletin.CreatedOn,
+                                       BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                                       Version = bulletin.Version,
+                                   };
+
+
+            var bulletinsBySuid = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                  join suid in _dbContext.PPersonIds.AsNoTracking() on bulletin.SuidId equals suid.Id
+                                  where suid.PersonId == personId
+                                  select new
+                                  {
+                                      BulletinId = bulletin.Id,
+                                      BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                           bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                           BulletinResources.Unspecified,
+                                      RegistrationNumber = bulletin.RegistrationNumber,
+                                      StatusId = bulletin.StatusId,
+                                      CreatedOn = bulletin.CreatedOn,
+                                      BulletinAuthorityId = bulletin.BulletinAuthorityId,
+                                      Version = bulletin.Version,
+                                  };
+
+
+            var bulletinsByPids = bulletinsByEgn
+                                .Union(bulletinsByLnch)
+                                .Union(bulletinsByLn)
+                                .Union(bulletinsByIdDoc)
+                                .Union(bulletinsBySuid);
+
+            result.Bulletins = await (from bulletinsPid in bulletinsByPids
+                                      join bulletins in _dbContext.BBulletins.AsNoTracking() on bulletinsPid.BulletinId equals bulletins.Id
+                                      join status in _dbContext.BBulletinStatuses.AsNoTracking() on bulletins.StatusId equals status.Code
+
+                                      join auth in _dbContext.GDecidingAuthorities.AsNoTracking() on bulletins.BulletinAuthorityId equals auth.Id
+                                      into authLeft
+                                      from auth in authLeft.DefaultIfEmpty()
+                                      select new SelectedPersonBulletinGridDTO
+                                      {
+                                          BulletinId = bulletins.Id,
+                                          BulletinType = bulletins.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                         bulletins.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                         BulletinResources.Unspecified,
+                                          RegistrationNumber = bulletins.RegistrationNumber,
+                                          StatusId = bulletins.StatusId,
+                                          CreatedOn = bulletins.CreatedOn,
+                                          BulletinAuthorityId = bulletins.BulletinAuthorityId,
+                                          Version = bulletins.Version,
+                                          BulletinAuthorityName = auth.Name,
+                                          StatusName = status.Name,
+                                      }).ToListAsync();
+
             return result;
         }
     }

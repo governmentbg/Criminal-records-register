@@ -1,7 +1,9 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, of } from "rxjs";
+import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CaisCrudService } from "../../../../@core/services/rest/cais-crud.service";
 import { InternalRequestModel } from "../_models/internal-request.model";
+import { PersonBulletinsGridExtendedModel } from "../_models/person-bulletin-grid-extended-model";
 import { PersonBulletinsGridModel } from "../_models/person-bulletin-grid-model";
 
 @Injectable({
@@ -39,8 +41,8 @@ export class InternalRequestService extends CaisCrudService<
     );
   }
 
-  public getSelectedBulltins(id: string){
-    if(id){
+  public getSelectedBulltins(id: string) {
+    if (id) {
       return this.http.get<PersonBulletinsGridModel[]>(
         `${this.url}/selected-bulletins/${id}/`
       );
@@ -49,10 +51,19 @@ export class InternalRequestService extends CaisCrudService<
     return of([]);
   }
 
-  public getBulletinWithPidData(bulletinId){
-    if(bulletinId){
-      return this.http.get<PersonBulletinsGridModel>(
-        `${this.url}/bulletin-with-pid/${bulletinId}/`
+  public getBulletinWithPidData(bulletinId: string) {
+    if (bulletinId) {
+      return this.http.get<PersonBulletinsGridExtendedModel>(
+        `${this.url}/bulletin-with-pid-by-bulletin/${bulletinId}/`
+      );
+    }
+    return of(null);
+  }
+
+  public getBulletinWithPidDataByPersonId(personId: string) {
+    if (personId) {
+      return this.http.get<PersonBulletinsGridExtendedModel>(
+        `${this.url}/bulletin-with-pid-by-person/${personId}/`
       );
     }
 

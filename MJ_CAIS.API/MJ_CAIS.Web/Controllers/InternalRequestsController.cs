@@ -109,11 +109,18 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("bulletin-with-pid/{bulletinId}")]
-        public async Task<IActionResult> GetBulletinWithPid(string bulletinId)
+        [HttpGet("bulletin-with-pid-by-bulletin/{bulletinId}")]
+        public async Task<IActionResult> GetBulletinWithPidByBulletinId(string bulletinId)
         {
-            var result = await this._internalRequestService.GetBulletinWithPidDataAsync(bulletinId);
+            var result = await this._internalRequestService.GetBulletinWithPidDataByBulletinIdAsync(bulletinId);
             return Ok(result);
         }
+
+        [HttpGet("bulletin-with-pid-by-person/{personId}")]
+        public async Task<IActionResult> GetBulletinWithPidByPersonId(string personId)
+        {
+            var result = await this._internalRequestService.GetBulletinWithPidDataByPersonIdAsync(personId);
+            return Ok(result);
+        }      
     }
 }

@@ -10,7 +10,8 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string? ReqStatusCode { get; set; }
         public string? ResponseDescr { get; set; }
         public DateTime? RequestDate { get; set; }
-        public LookupDTO? PPersIdId { get; set; }
+        public string? PPersIdId { get; set; }
+        public string? PPersIdIdDisplay { get; set; }
         public string? FromAuthorityId { get; set; }
         public string? ToAuthorityId { get; set; }
         public string NIntReqTypeId { get; set; }

@@ -20,6 +20,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<NInternalRequest> SelectAllForJudge();
 
-        Task<SelectedPersonBulletinGridDTO> GetBulletinWithPidDataAsync(string aId);
+        Task<SelectedPersonBulletinGridDTOExtended> GetBulletinWithPidDataByBulletinIdAsync(string aId);
+
+        Task<SelectedPersonBulletinGridDTOExtended> GetBulletinWithPidDataByPersonIdAsync(string personId);
     }
 }

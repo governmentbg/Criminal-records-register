@@ -11,7 +11,8 @@ export class InternalRequestModel extends BaseModel {
   public fromAuthorityId: number = null;
   public toAuthorityId: string = null;
   public nIntReqTypeId: string = null;
-  public pPersIdId: LookupModel;
+  public pPersIdId: string;
+  public pPersIdIdDisplay: string;
 
   constructor(init?: Partial<InternalRequestModel>) {
     super(init);
@@ -22,6 +23,7 @@ export class InternalRequestModel extends BaseModel {
     this.responseDescr = init?.responseDescr ?? null;
     this.requestDate = init?.requestDate ?? null;
     this.pPersIdId = init?.pPersIdId ?? null;
+    this.pPersIdIdDisplay = init?.pPersIdIdDisplay ?? null;
     this.fromAuthorityId = init?.fromAuthorityId ?? null;
     this.toAuthorityId = init?.toAuthorityId ?? null;
     this.nIntReqTypeId = init?.nIntReqTypeId ?? null;

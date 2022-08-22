@@ -14,6 +14,7 @@ import { IgxGridComponent } from "@infragistics/igniteui-angular";
 import { PersonBulletinsGridModel } from "./_models/person-bulletin-grid-model";
 import { Guid } from "guid-typescript";
 import { InternalRequestTypeCodeConstants } from "./_models/internal-request-type-code.constants";
+import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
 
 @Component({
   selector: "cais-internal-request-form",
@@ -53,6 +54,7 @@ export class InternalRequestFormComponent
   public personBulletinsGrid: IgxGridComponent;
   public dbData: any;
   public isSend: boolean = false;
+  public personIds: BaseNomenclatureModel[] = [];
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
@@ -61,12 +63,17 @@ export class InternalRequestFormComponent
     this.requestStatusCode = this.fullForm.reqStatusCode.value;
     this.personBulletins = this.dbData.personBulletins;
 
+    debugger;
     // when has create from bulletin
     if (this.dbData.bulletinInfo) {
       this.fullForm.nIntReqTypeId.patchValue(
         InternalRequestTypeCodeConstants.Rehabilitation
       );
-      this.setPidData();
+      this.setPidData(this.dbData.bulletinInfo.pids);
+    }
+    // create from person
+    if (this.dbData.bulletinsInfoByPerson) {
+      this.setPidData(this.dbData.bulletinsInfoByPerson.pids);
     }
 
     // this is replay
@@ -148,12 +155,14 @@ export class InternalRequestFormComponent
 
   public send() {
     this.isSend = true;
-    this.fullForm.reqStatusCode.patchValue(InternalRequestStatusCodeConstants.Sent);
+    this.fullForm.reqStatusCode.patchValue(
+      InternalRequestStatusCodeConstants.Sent
+    );
     this.submitFunction();
   }
 
   protected onSubmitSuccess(data: any) {
-    if(this.isSend){
+    if (this.isSend) {
       this.router.navigateByUrl("pages/internal-requests?activeTab=draft");
       return;
     }
@@ -185,30 +194,30 @@ export class InternalRequestFormComponent
     this.router.navigateByUrl(url);
   };
 
-  public openPidDialog = () => {
-    this.dialogService
-      .open(SelectPidDialogComponent, CommonConstants.defaultDialogConfig)
-      .onClose.subscribe(this.onSelectPid);
-  };
+  // public openPidDialog = () => {
+  //   this.dialogService
+  //     .open(SelectPidDialogComponent, CommonConstants.defaultDialogConfig)
+  //     .onClose.subscribe(this.onSelectPid);
+  // };
 
-  public onSelectPid = (item) => {
-    if (item) {
-      this.loaderService.show();
-      let oldSelectedPid = this.fullForm.pPersIdId.id.value;
-      this.fullForm.pPersIdId.setValue(item.id, item.pid);
-      // call service for bulletins
-      this.service.getBulletinForPerson(item.id).subscribe((response) => {
-        // if select new person, delete old bulletins
-        if (oldSelectedPid != item.id) {
-          this.deleteOldBulletins();
-        }
+  // public onSelectPid = (item) => {
+  //   if (item) {
+  //     this.loaderService.show();
+  //     let oldSelectedPid = this.fullForm.pPersIdId.id.value;
+  //     this.fullForm.pPersIdId.setValue(item.id, item.pid);
+  //     // call service for bulletins
+  //     this.service.getBulletinForPerson(item.id).subscribe((response) => {
+  //       // if select new person, delete old bulletins
+  //       if (oldSelectedPid != item.id) {
+  //         this.deleteOldBulletins();
+  //       }
 
-        // add or update person bulletins
-        this.addOrUpdateBulletins(response);
-        this.loaderService.hide();
-      });
-    }
-  };
+  //       // add or update person bulletins
+  //       this.addOrUpdateBulletins(response);
+  //       this.loaderService.hide();
+  //     });
+  //   }
+  // };
 
   private initDataForSend() {
     this.fullForm.group.disable();
@@ -238,52 +247,92 @@ export class InternalRequestFormComponent
   }
 
   public onBulletinGridRendered() {
+    let bulletins = [];
     if (this.dbData.bulletinInfo) {
+      bulletins = this.dbData.bulletinInfo.bulletins;
+    } else if (this.dbData.bulletinsInfoByPerson) {
+      bulletins = this.dbData.bulletinsInfoByPerson.bulletins;
+    }
+
+    bulletins.forEach((element) => {
       var guid = Guid.create().toString();
-      let newBulletin = this.dbData.bulletinInfo;
+      let newBulletin = element;
       newBulletin.id = guid;
       this.personBulletinsGrid.addRow(newBulletin);
+    });
+  }
+
+  private setPidData(pids) {
+    if (pids && pids.length > 0) {
+      this.personIds = pids;
+      this.setDeffPid();
     }
   }
 
-  private setPidData() {
-    this.fullForm.pPersIdId.setValue(
-      this.dbData.bulletinInfo.pidId,
-      this.dbData.bulletinInfo.pid
-    );
+  private setDeffPid() {
+    let egn = this.personIds.filter((x) => x.code == "EGN")[0]?.id;
+
+    if (egn) {
+      this.fullForm.pPersIdId.patchValue(egn);
+      return;
+    }
+
+    let lnch = this.personIds.filter((x) => x.code == "LNCH")[0]?.id;
+    if (lnch) {
+      this.fullForm.pPersIdId.patchValue(lnch);
+      return;
+    }
+
+    let ln = this.personIds.filter((x) => x.code == "LN")[0]?.id;
+    if (lnch) {
+      this.fullForm.pPersIdId.patchValue(ln);
+      return;
+    }
+
+    let docId = this.personIds.filter((x) => x.code == "DOC_ID")[0]?.id;
+    if (docId) {
+      this.fullForm.pPersIdId.patchValue(docId);
+      return;
+    }
+
+    let suidId = this.personIds.filter((x) => x.code == "SYS")[0]?.id;
+    if (suidId) {
+      this.fullForm.pPersIdId.patchValue(suidId);
+      return;
+    }
   }
 
-  private deleteRow(pk) {
-    this.personBulletinsGrid.deleteRow(pk);
-    this.personBulletinsGrid.data = this.personBulletinsGrid.data.filter(
-      (d) => d.id != pk
-    );
-  }
+  // private deleteRow(pk) {
+  //   this.personBulletinsGrid.deleteRow(pk);
+  //   this.personBulletinsGrid.data = this.personBulletinsGrid.data.filter(
+  //     (d) => d.id != pk
+  //   );
+  // }
 
-  private deleteOldBulletins() {
-    this.personBulletinsGrid.groupingFlatResult.forEach((currentBulletins) => {
-      let currentRow = this.personBulletinsGrid.getRowByKey(
-        currentBulletins.id
-      );
+  // private deleteOldBulletins() {
+  //   this.personBulletinsGrid.groupingFlatResult.forEach((currentBulletins) => {
+  //     let currentRow = this.personBulletinsGrid.getRowByKey(
+  //       currentBulletins.id
+  //     );
 
-      if (currentRow) {
-        let pk = currentBulletins.id;
-        this.deleteRow(pk);
-      }
-    });
-  }
+  //     if (currentRow) {
+  //       let pk = currentBulletins.id;
+  //       this.deleteRow(pk);
+  //     }
+  //   });
+  // }
 
-  private addOrUpdateBulletins(response) {
-    response.forEach((bulletin) => {
-      let currentRow = this.personBulletinsGrid.getRowByKey(bulletin.id);
+  // private addOrUpdateBulletins(response) {
+  //   response.forEach((bulletin) => {
+  //     let currentRow = this.personBulletinsGrid.getRowByKey(bulletin.id);
 
-      if (currentRow) {
-        currentRow.update(bulletin);
-      } else {
-        var guid = Guid.create().toString();
-        bulletin.id = guid;
-        this.personBulletinsGrid.addRow(bulletin);
-      }
-    });
-  }
+  //     if (currentRow) {
+  //       currentRow.update(bulletin);
+  //     } else {
+  //       var guid = Guid.create().toString();
+  //       bulletin.id = guid;
+  //       this.personBulletinsGrid.addRow(bulletin);
+  //     }
+  //   });
+  // }
 }

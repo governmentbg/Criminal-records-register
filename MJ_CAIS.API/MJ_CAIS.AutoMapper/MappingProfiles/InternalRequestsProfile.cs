@@ -23,11 +23,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.FromAuthorityName, opt => opt.MapFrom(src => src.FromAuthority.Name));  
             
             CreateMap<InternalRequestDTO, NInternalRequest>()
-                .ForMember(d => d.PPersIdId, opt => opt.MapFrom(src => src.PPersIdId.Id));
+                .ForMember(d => d.PPersIdId, opt => opt.MapFrom(src => src.PPersIdId));
 
             CreateMap<NInternalRequest, InternalRequestDTO>()
-             .ForPath(d => d.PPersIdId.Id, opt => opt.MapFrom(src => src.PPersIdId))
-             .ForPath(d => d.PPersIdId.DisplayName, opt => opt.MapFrom(src => src.PPersId.Pid));
+             .ForPath(d => d.PPersIdId, opt => opt.MapFrom(src => src.PPersIdId))
+             .ForPath(d => d.PPersIdIdDisplay, opt => opt.MapFrom(src => src.PPersId.Pid));
 
             CreateMap<BBulletin, BulletinPersonInfoModelDTO>()
                 .ForMember(d => d.BulletinId, opt => opt.MapFrom(src => src.Id))
