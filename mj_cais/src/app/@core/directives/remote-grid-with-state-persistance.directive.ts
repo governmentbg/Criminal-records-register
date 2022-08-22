@@ -153,6 +153,11 @@ export class RemoteGridWithStatePersistance<
   }
 
   protected errorHandler = (errorResponse) => {
+    if (errorResponse.status == "401") {
+      this.router.navigateByUrl("pages");
+      return;
+    }
+    
     let toastr = this.injector.get<CustomToastrService>(CustomToastrService);
 
     let title = this.dangerMessage;

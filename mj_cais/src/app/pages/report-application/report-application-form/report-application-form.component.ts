@@ -161,7 +161,7 @@ export class ReportApplicationFormComponent
       error: (errorResponse) => {
         this.loaderService.hide();
         this.finalEditDialog.close();
-        this.onServiceError(errorResponse);
+        this.errorHandler(errorResponse);
         setTimeout(() => {
           this.onSubmitSuccess(null);
         }, this.navigateTimeout);
@@ -181,7 +181,7 @@ export class ReportApplicationFormComponent
               this.router.navigate(["pages/report-applications"]);
             },
             error: (errorResponse) => {
-              this.onServiceError(errorResponse);
+              this.errorHandler(errorResponse);
             },
           });
         }

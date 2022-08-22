@@ -141,7 +141,7 @@ export abstract class CrudForm<
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
-        this.onServiceError(errorResponse);
+        this.errorHandler(errorResponse);
       },
     });
   }
@@ -264,7 +264,7 @@ export abstract class CrudForm<
     }
   }
 
-  protected onServiceError(errorResponse): void {
+  protected errorHandler(errorResponse): void {
     if (errorResponse.status == "401") {
       this.router.navigateByUrl("pages");
       return;

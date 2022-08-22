@@ -292,7 +292,7 @@ export class BulletinFormComponent
       },
       (error) => {
         this.loaderService.hide();
-        this.onServiceError(error);
+        this.errorHandler(error);
       }
     );
   }

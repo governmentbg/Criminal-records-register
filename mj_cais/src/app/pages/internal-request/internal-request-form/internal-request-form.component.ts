@@ -148,7 +148,7 @@ export class InternalRequestFormComponent
         });
       },
       (error) => {
-        this.onServiceError(error);
+        this.errorHandler(error);
       }
     );
   }
