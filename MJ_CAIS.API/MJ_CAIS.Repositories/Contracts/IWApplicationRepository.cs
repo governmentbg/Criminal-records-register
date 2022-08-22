@@ -1,5 +1,6 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.WApplicaiton;
 
 namespace MJ_CAIS.Repositories.Contracts
@@ -9,5 +10,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<WApplicaitonGridDTO> SelectAllForCheckPayment();
 
         IQueryable<EPayment> GetPendingPaymentsByWAppId(string aId);
+
+        Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId);
     }
 }

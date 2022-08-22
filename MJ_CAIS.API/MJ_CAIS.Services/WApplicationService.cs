@@ -2,12 +2,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.DTO.WApplicaiton;
@@ -329,6 +329,12 @@ namespace MJ_CAIS.Services
         {
             var result = await _wApplicationRepository.FindAsync<AAppPersAlias>(x => x.ApplicationId == aId);
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
+        }
+
+        public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
+        {
+            var result = await _wApplicationRepository.SelectApplicationPersStatusHAsync(aId);
+            return result;
         }
     }
 }

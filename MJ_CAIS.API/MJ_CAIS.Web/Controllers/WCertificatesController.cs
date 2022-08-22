@@ -26,7 +26,7 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("content-by-application/{appId}")]
         public async Task<IActionResult> GetContentByApp(string appId)
         {
-            var result = await this._wCertificateService.GetContentByApplicationIdAsync(appId);// get signed pdf
+            var result = await this._wCertificateService.GetContentByApplicationIdAsync(appId);
             var content = result;
             var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
@@ -35,7 +35,6 @@ namespace MJ_CAIS.Web.Controllers
             Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
 
             return File(content, mimeType, fileName);
-
         }
     }
 }

@@ -1,11 +1,11 @@
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.WApplicaiton;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.WApplicaiton;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
-using Microsoft.AspNetCore.Authorization;
-using MJ_CAIS.Common.Constants;
-using Microsoft.AspNet.OData.Query;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -61,6 +61,14 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._wApplicaitonService.ProcessTaxFreeAsync(aId, approve);
             return Ok();
+        }
+
+        [HttpGet("{aId}/e-application-history")]
+        //[Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        public async Task<IActionResult> GetApplicationHistory(string aId)
+        {
+            var result = await this._wApplicaitonService.SelectApplicationPersStatusHAsync(aId);
+            return Ok(result);
         }
     }
 }

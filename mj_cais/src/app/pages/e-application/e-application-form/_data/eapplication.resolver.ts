@@ -40,6 +40,8 @@ export class EApplicationResolver implements Resolve<any> {
       documents: this.service.getDocuments(eapplicationId),
       personAlias: this.service.getPersonAlias(eapplicationId),
       certificate: this.wCertificateService.getWCertificateByAppId(eapplicationId),
+      applicationStatusHistoryData:
+        this.wCertificateService.getEApplicationStatusHistoryData(eapplicationId),
     };
     return forkJoin(result);
   }
