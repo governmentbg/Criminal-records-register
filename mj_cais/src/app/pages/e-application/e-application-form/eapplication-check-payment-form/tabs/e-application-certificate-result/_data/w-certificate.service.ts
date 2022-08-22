@@ -28,11 +28,8 @@ export class WCertificateService extends CaisCrudService<
     );
   }
 
-  public getWCertificateContentByAppId(
-    appId: string
-  ): Observable<ApplicationCertificateResultModel> {
-    return this.http.get<ApplicationCertificateResultModel>(
-      `${this.url}/content-by-application/${appId}`
-    );
+  public getWCertificateContentByAppId(appId: string) {
+    let url = `${this.url}/content-by-application/${appId}`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 }

@@ -2,6 +2,7 @@ import { BaseModel } from "../../../../../../../@core/models/common/base.model";
 
 export class EApplicationCertificateResultModel extends BaseModel {
   public accessCode1: string = null;
+  public wApplId: string = null;
   // public docName: string = null;
   // public docType: string = null;
   public registrationNumber: string = null;
@@ -15,6 +16,7 @@ export class EApplicationCertificateResultModel extends BaseModel {
     // this.docName = init?.docName ?? null;
     // debugger;
     // this.docType = init?.docType?.split('/')[1] ?? null;
+    this.wApplId = init?.wApplId ?? null;
     this.registrationNumber = init?.registrationNumber ?? null;
     this.accessCode1 = init?.accessCode1 ?? null;
     this.validFrom = init?.validFrom ?? null;
