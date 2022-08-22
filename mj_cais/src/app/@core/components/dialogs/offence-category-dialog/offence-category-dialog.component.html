@@ -40,6 +40,7 @@
       [hideRowSelectors]="false"
       [pinning]="pinningConfig"
       (onRowSelectionChange)="handleRowSelection($event)"
+      [emptyGridTemplate]="emptyTemplate"
     >
       <igx-column
         field="id"
@@ -85,5 +86,6 @@
         </div>
       </ng-template>
     </igx-grid>
+    <ng-template #emptyTemplate> </ng-template>
   </nb-card-body>
 </nb-card>
