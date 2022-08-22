@@ -81,7 +81,7 @@ export class ApplicationCertificateResultComponent
           )
           .subscribe((response) => {
             this.bulletinsCheckData = response;
-            this.bulletinsCheckGrid.selectAllRows();
+            this.bulletinsCheckGrid.selectRows(response.map((x) => x.id));
           });
       }
       if (this.model.firstSignerId == null) {
@@ -250,20 +250,22 @@ export class ApplicationCertificateResultComponent
         newRequestId,
         selectedItems
       )
-      .subscribe((response: any) => {
-        this.loaderService.hide();
+      .subscribe(
+        (response: any) => {
+          this.loaderService.hide();
 
-        this.model.statusCode =
-          CertificateStatuTypeEnum.BulletinsRehabilitation;
+          this.model.statusCode =
+            CertificateStatuTypeEnum.BulletinsRehabilitation;
 
-        this.router.navigate(["pages/internal-requests/edit", newRequestId]);
-      },
-      (error) => {
-        this.loaderService.hide();
+          this.router.navigate(["pages/internal-requests/edit", newRequestId]);
+        },
+        (error) => {
+          this.loaderService.hide();
 
-        var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
-      });
+          var errorText = error.status + " " + error.statusText;
+          this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
+        }
+      );
   }
 
   generateCertificateByJudge() {
@@ -293,18 +295,22 @@ export class ApplicationCertificateResultComponent
       };
   }
 
-  deliver(){
-    this.service.setStatusToDelivered(this.model.applicationId).subscribe(x =>{
-      debugger;
-      this.redirectLocationBack();
-    })
+  deliver() {
+    this.service
+      .setStatusToDelivered(this.model.applicationId)
+      .subscribe((x) => {
+        debugger;
+        this.redirectLocationBack();
+      });
   }
 
-  cancelCertificate(){
-    this.service.setStatusToCanceled(this.model.applicationId).subscribe(x =>{
-      debugger;
-      this.reloadCurrentRoute();
-    })
+  cancelCertificate() {
+    this.service
+      .setStatusToCanceled(this.model.applicationId)
+      .subscribe((x) => {
+        debugger;
+        this.reloadCurrentRoute();
+      });
   }
 
   downloadSertificate(id) {
@@ -325,43 +331,50 @@ export class ApplicationCertificateResultComponent
       }
 
       fileSaver.saveAs(blob, fileName);
-      this.service.getCertificateByAppId(this.model.applicationId).subscribe(x => {
-        debugger;
-        this.model = x;
-        this.fullForm.group.patchValue(new ApplicationCertificateResultModel(this.model));
-        if (this.model) {
-          if (
-            this.model.statusCode ==
-              CertificateStatuTypeEnum.CertificatePaperPrint ||
-            this.model.statusCode == CertificateStatuTypeEnum.Delivered
-          ) {
+      this.service
+        .getCertificateByAppId(this.model.applicationId)
+        .subscribe((x) => {
+          debugger;
+          this.model = x;
+          this.fullForm.group.patchValue(
+            new ApplicationCertificateResultModel(this.model)
+          );
+          if (this.model) {
+            if (
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.CertificatePaperPrint ||
+              this.model.statusCode == CertificateStatuTypeEnum.Delivered
+            ) {
+              this.fullForm.group.disable();
+            }
+
+            if (
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.BulletinsCheck ||
+              this.model.statusCode ==
+                CertificateStatuTypeEnum.BulletinsSelection
+            ) {
+              this.service
+                .getBulletinsCheck(
+                  this.fullForm.id.value,
+                  this.model.statusCode ==
+                    CertificateStatuTypeEnum.BulletinsSelection
+                )
+                .subscribe((response) => {
+                  this.bulletinsCheckData = response;
+                  this.bulletinsCheckGrid.selectRows(response.map((x) => x.id));
+                });
+            }
+            if (this.model.firstSignerId == null) {
+              this.model.firstSignerId = this.userInfoService.userId;
+              this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
+            }
+          }
+
+          if (this.isForPreview) {
             this.fullForm.group.disable();
           }
-    
-          if (
-            this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck ||
-            this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
-          ) {
-            this.service
-              .getBulletinsCheck(
-                this.fullForm.id.value,
-                this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection
-              )
-              .subscribe((response) => {
-                this.bulletinsCheckData = response;
-                this.bulletinsCheckGrid.selectAllRows();
-              });
-          }
-          if (this.model.firstSignerId == null) {
-            this.model.firstSignerId = this.userInfoService.userId;
-            this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
-          }
-        }
-    
-        if (this.isForPreview) {
-          this.fullForm.group.disable();
-        }
-      })
+        });
     }),
       (error) => {
         var errorText = error.status + " " + error.statusText;
