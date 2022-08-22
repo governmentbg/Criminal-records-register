@@ -2,12 +2,13 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.EWebRequest;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.DTO.WApplicaiton;
@@ -25,13 +26,15 @@ namespace MJ_CAIS.Services
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IApplicationService _applicationService;
         private readonly IManagePersonService _managePersonService;
+        private readonly IEWebRequestsRepository _eWebRequestsRepository;
 
         public WApplicationService(IMapper mapper,
             IWApplicationRepository wApplicationRepository,
             IApplicationWebService webApplicationService,
             IRegisterTypeService registerTypeService,
             IApplicationService applicationService,
-            IManagePersonService managePersonService)
+            IManagePersonService managePersonService,
+            IEWebRequestsRepository eWebRequestsRepository)
             : base(mapper, wApplicationRepository)
         {
             _wApplicationRepository = wApplicationRepository;
@@ -39,6 +42,7 @@ namespace MJ_CAIS.Services
             _registerTypeService = registerTypeService;
             _applicationService = applicationService;
             _managePersonService = managePersonService;
+            _eWebRequestsRepository = eWebRequestsRepository;
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
@@ -329,6 +333,18 @@ namespace MJ_CAIS.Services
         {
             var result = await _wApplicationRepository.FindAsync<AAppPersAlias>(x => x.ApplicationId == aId);
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
+        }
+
+        public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
+        {
+            var result = await _wApplicationRepository.SelectApplicationPersStatusHAsync(aId);
+            return result;
+        }
+
+        public async Task<IQueryable<EWebRequestGridDTO>> SelectAllEWebRequestsByApplicationIdAsync(string aId)
+        {
+            var result = await _eWebRequestsRepository.SelectAllByWApplicationId(aId);
+            return result.ProjectTo<EWebRequestGridDTO>(mapper.ConfigurationProvider);
         }
     }
 }

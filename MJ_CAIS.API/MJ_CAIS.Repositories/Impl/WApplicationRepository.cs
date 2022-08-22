@@ -1,10 +1,11 @@
-using MJ_CAIS.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.DTO.AStatusH;
 using MJ_CAIS.DTO.WApplicaiton;
+using MJ_CAIS.Repositories.Contracts;
 using static MJ_CAIS.Common.Constants.ApplicationConstants;
-using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -70,6 +71,30 @@ namespace MJ_CAIS.Repositories.Impl
                 .Select(x => x.EPayment);
 
             return query;
+        }
+
+        public async Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId)
+        {
+            var query = from aStatusH in _dbContext.WStatusHes.AsNoTracking()
+                        join aApplication in _dbContext.WApplications.AsNoTracking() on aStatusH.ApplicationId equals aApplication.Id
+                        join status in _dbContext.WApplicationStatuses.AsNoTracking() on aStatusH.StatusCode equals status.Code
+                        join users in _dbContext.GUsers.AsNoTracking() on aStatusH.CreatedBy equals users.Id
+                            into astatusHLeft
+                        from user in astatusHLeft.DefaultIfEmpty()
+                        where (string.IsNullOrEmpty(aId) || aStatusH.ApplicationId == aId)
+                        select new AStatusHGridDTO()
+                        {
+                            Id = aStatusH.Id,
+                            Descr = aStatusH.Descr,
+                            UpdatedBy = user.Firstname + " " + user.Familyname,
+                            CreatedOn = aStatusH.CreatedOn,
+                            StatusCode = status.Name,
+                            Version = aStatusH.Version,
+                            ApplicationRegistrationNumber = aApplication.RegistrationNumber,
+                        };
+
+            return await Task.FromResult(query);
+
         }
     }
 }

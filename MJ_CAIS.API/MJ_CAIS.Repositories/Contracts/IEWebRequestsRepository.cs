@@ -7,5 +7,7 @@ namespace MJ_CAIS.Repositories.Contracts
     {
 
         Task<IQueryable<EWebRequest>> SelectAllByApplicationId(string aId);
+
+        Task<IQueryable<EWebRequest>> SelectAllByWApplicationId(string aId);
     }
 }

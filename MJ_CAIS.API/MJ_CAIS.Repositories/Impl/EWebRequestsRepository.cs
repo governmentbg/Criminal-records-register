@@ -50,5 +50,12 @@ namespace MJ_CAIS.Repositories.Impl
                         .AsNoTracking()
                 );
         }
+
+        public async Task<IQueryable<EWebRequest>> SelectAllByWApplicationId(string aId)
+        {
+            var result = _dbContext.Set<EWebRequest>().Include(x => x.WebService).AsNoTracking()
+                .Where(x => x.WApplicationId == aId);
+            return await Task.FromResult(result);
+        }
     }
 }

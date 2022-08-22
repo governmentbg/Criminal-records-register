@@ -8,6 +8,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { BaseResolverData } from "../../../../@core/models/common/base-resolver.data";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { NomenclatureService } from "../../../../@core/services/rest/nomenclature.service";
+import { ApplicationService } from "../../../application/application-form/_data/application.service";
 import { ApplicationDocumentModel } from "../../../application/application-form/_models/application-document.model";
 import { WCertificateService } from "../eapplication-check-payment-form/tabs/e-application-certificate-result/_data/w-certificate.service";
 import { EApplicationModel } from "../_models/eapplication.model";
@@ -18,7 +19,7 @@ export class EApplicationResolver implements Resolve<any> {
   constructor(
     private nomenclatureService: NomenclatureService,
     private service: EApplicationService,
-    private wCertificateService: WCertificateService
+    private wCertificateService: WCertificateService,
   ) {}
 
   resolve(
@@ -39,15 +40,20 @@ export class EApplicationResolver implements Resolve<any> {
       srvcResRcptMethIds: this.nomenclatureService.getSrvcResRcptMethods(),
       documents: this.service.getDocuments(eapplicationId),
       personAlias: this.service.getPersonAlias(eapplicationId),
-      certificate: this.wCertificateService.getWCertificateByAppId(eapplicationId),
+      certificate:
+        this.wCertificateService.getWCertificateByAppId(eapplicationId),
+      applicationStatusHistoryData:
+        this.service.getEApplicationStatusHistoryData(eapplicationId),
+      eWebRequest:
+        this.service.getEApplicationEWebRequestsData(eapplicationId),
     };
     return forkJoin(result);
   }
 }
 
 export class EApplicationResolverData extends BaseResolverData<EApplicationModel> {
-    public purposeIds: Observable<BaseNomenclatureModel[]>;
-    public paymentMethodIds: Observable<BaseNomenclatureModel[]>;
-    public srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
-    public documents: Observable<ApplicationDocumentModel[]>;
+  public purposeIds: Observable<BaseNomenclatureModel[]>;
+  public paymentMethodIds: Observable<BaseNomenclatureModel[]>;
+  public srvcResRcptMethIds: Observable<BaseNomenclatureModel[]>;
+  public documents: Observable<ApplicationDocumentModel[]>;
 }
