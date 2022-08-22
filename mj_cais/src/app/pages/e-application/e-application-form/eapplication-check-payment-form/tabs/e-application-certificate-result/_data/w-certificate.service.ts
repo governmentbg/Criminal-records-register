@@ -34,11 +34,5 @@ export class WCertificateService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
-  public getEApplicationStatusHistoryData(
-    id: string
-  ): Observable<EApplicationStatusHistoryModel[]> {
-    return this.http.get<EApplicationStatusHistoryModel[]>(
-      `${this.url}/${id}/e-application-history`
-    );
-  }
+  
 }
