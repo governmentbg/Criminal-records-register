@@ -111,4 +111,9 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
         })
       );
   }
+
+  public print(id: string) {
+    let url = `${this.url}/${id}/print`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
 }

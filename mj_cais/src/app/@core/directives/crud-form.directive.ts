@@ -20,14 +20,14 @@ import {
   FormComponent,
 } from "@tl/tl-common";
 import { IgxResourceStringsBG } from "igniteui-angular-i18n";
-import { filter, Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
 import { BaseResolverData } from "../models/common/base-resolver.data";
 import { InputTypeConstants } from "../constants/input-type.constants";
 import { NbTabComponent, NbTabsetComponent } from "@nebular/theme";
-import { NavigationEnd, Router } from "@angular/router";
 import { RouterExtService } from "../services/common/router-ext.service";
+import * as fileSaver from "file-saver";
 
 @Directive()
 export abstract class CrudForm<
@@ -141,7 +141,7 @@ export abstract class CrudForm<
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
-       this.onServiceError(errorResponse);
+        this.onServiceError(errorResponse);
       },
     });
   }
@@ -199,9 +199,11 @@ export abstract class CrudForm<
 
   protected reloadCurrentRoute() {
     const currentUrl = this.router.url;
-    this.router.navigateByUrl("/pages/empty", { skipLocationChange: true }).then(() => {
-      this.router.navigate([currentUrl]);
-    });
+    this.router
+      .navigateByUrl("/pages/empty", { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate([currentUrl]);
+      });
   }
 
   protected redirectLocationBack() {
@@ -263,11 +265,11 @@ export abstract class CrudForm<
   }
 
   protected onServiceError(errorResponse): void {
-    if(errorResponse.status == "401"){
+    if (errorResponse.status == "401") {
       this.router.navigateByUrl("pages");
       return;
     }
-    
+
     let title = this.dangerMessage;
     let errorText = errorResponse.status + " " + errorResponse.statusText;
 
@@ -293,6 +295,23 @@ export abstract class CrudForm<
     }
 
     this.scrollToValidationError();
+  }
+
+  protected downloadFile(response) {
+    let blob = new Blob([response.body]);
+    window.URL.createObjectURL(blob);
+
+    let header = response.headers.get("Content-Disposition");
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
+    let fileName = "download";
+
+    var matches = filenameRegex.exec(header);
+    if (matches != null && matches[1]) {
+      fileName = matches[1].replace(/['"]/g, "");
+    }
+
+    fileSaver.saveAs(blob, fileName);
   }
 
   private setRouteParameters(): void {
