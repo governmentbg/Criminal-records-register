@@ -34,6 +34,7 @@ export class ApplicationFormComponent
   public ApplicationTypeStatusConstants = ApplicationTypeStatusConstants;
   private isFinalEdit: boolean;
   public isCreate: boolean;
+  isAppAproved: boolean = false;
 
   constructor(
     service: ApplicationService,
@@ -49,6 +50,12 @@ export class ApplicationFormComponent
   ngOnInit(): void {
     this.fullForm = new ApplicationForm();
     this.fullForm.group.patchValue(this.dbData.element);
+
+    if (
+      this.fullForm.statusCode.value ==
+      ApplicationTypeStatusConstants.ApprovedApplication){
+        this.isAppAproved = true;
+      }
 
     let selectedForeignKeys =
       this.fullForm.person.nationalities.selectedForeignKeys.value;

@@ -53,7 +53,7 @@ namespace AutomaticStepsExecutor
 
 
                 var pageSize = config.GetValue<int>("AutomaticStepsExecutor:PageSize");
-
+                var repeatTillEnd = config.GetValue<bool?>("AutomaticStepsExecutor:RepeatTillEnd");
 
                 using (host)
                 {
@@ -75,28 +75,33 @@ namespace AutomaticStepsExecutor
 
                     if (service != null)
                     {
-
-                        logger.Trace("PreSelect started.");
-                        await service.PreSelectAsync(config);
-                        logger.Trace("PreSelect ended.");
-                        logger.Trace("Select started.");
-                        var entities = await service.SelectEntitiesAsync(pageSize, config);
-                        logger.Trace($"Select ended. {entities.Count} selected.");
-                        logger.Trace("PostSelect started.");
-                        await service.PostSelectAsync(config);
-                        logger.Trace("PostSelect ended.");
-                        logger.Trace("PreProcess started.");
-                        await service.PreProcessAsync(config);
-                        logger.Trace("PreProcess ended.");
-                        if (entities.Count > 0)
+                        var numberOfEntities = 0;
+                        do
                         {
-                            logger.Trace("ProcessEntitiesAsync started.");
-                            var result = await service.ProcessEntitiesAsync(entities, config);
-                            logger.Trace($"ProcessEntitiesAsync ended. {result.GetLogInfo()}");
+                            logger.Trace("PreSelect started.");
+                            await service.PreSelectAsync(config);
+                            logger.Trace("PreSelect ended.");
+                            logger.Trace("Select started.");
+                            var entities = await service.SelectEntitiesAsync(pageSize, config);
+                            numberOfEntities = entities.Count;
+                            logger.Trace($"Select ended. {numberOfEntities} selected.");
+                            logger.Trace("PostSelect started.");
+                            await service.PostSelectAsync(config);
+                            logger.Trace("PostSelect ended.");
+                            logger.Trace("PreProcess started.");
+                            await service.PreProcessAsync(config);
+                            logger.Trace("PreProcess ended.");
+                            if (numberOfEntities > 0)
+                            {
+                                logger.Trace("ProcessEntitiesAsync started.");
+                                var result = await service.ProcessEntitiesAsync(entities, config);
+                                logger.Trace($"ProcessEntitiesAsync ended. {result.GetLogInfo()}");
+                            }
+                            logger.Trace("PostProcess started.");
+                            await service.PostProcessAsync(config);
+                            logger.Trace("PostProcess ended.");
                         }
-                        logger.Trace("PostProcess started.");
-                        await service.PostProcessAsync(config);
-                        logger.Trace("PostProcess ended.");
+                        while (repeatTillEnd.HasValue && repeatTillEnd == true && numberOfEntities > 0);
                     }
                     else
                     {

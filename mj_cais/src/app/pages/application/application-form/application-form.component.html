@@ -289,7 +289,7 @@
           </cais-application-document-form>
         </nb-tab>
 
-        <nb-tab tabTitle="Свидетелство">
+        <nb-tab tabTitle="Свидетелство" active="{{isAppAproved}}">
           <cais-application-certificate-result
             [model]="dbData.certificate"
             [users]="dbData.users"
