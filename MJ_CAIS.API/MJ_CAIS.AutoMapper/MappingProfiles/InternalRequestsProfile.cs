@@ -19,8 +19,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<NInternalRequest, InternalRequestForJudgeGridDTO>()
               .ForMember(d => d.ReqStatusName, opt => opt.MapFrom(src => src.ReqStatusCodeNavigation.Name))
-              .ForMember(d => d.FromAuthorityName, opt => opt.MapFrom(src => src.FromAuthority.Name));           
-
+              .ForMember(d => d.ReqestType, opt => opt.MapFrom(src => src.NIntReqType.Name))
+              .ForMember(d => d.FromAuthorityName, opt => opt.MapFrom(src => src.FromAuthority.Name));  
+            
             CreateMap<InternalRequestDTO, NInternalRequest>()
                 .ForMember(d => d.PPersIdId, opt => opt.MapFrom(src => src.PPersIdId.Id));
 

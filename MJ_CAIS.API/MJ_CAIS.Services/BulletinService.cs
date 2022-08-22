@@ -206,7 +206,7 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
             var oldBulletinStatus = bulletin.StatusId;
-            AddBulletinStatusH(bulletin, oldBulletinStatus, statusId, bulletinId);
+            AddBulletinStatusH(bulletin, oldBulletinStatus, statusId);
 
             var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
                 statusId == Status.Active;
@@ -412,6 +412,25 @@ namespace MJ_CAIS.Services
                 entity.StatusId = Status.ReplacedAct425;
             }
 
+            UpdateDeleteDateData(entity);
+
+            // if no sanction is selected
+            // change bulletin status
+            if (entity.NoSanction == true)
+            {
+                entity.StatusId = Status.NoSanction;
+            }
+
+            // save old status
+            var isAddedHistory = AddBulletinStatusH(entity, oldStatus, entity.StatusId);
+            if (isAddedHistory)
+            {
+                UpdateModifiedProperties(entity, nameof(entity.StatusId));
+            }
+        }
+
+        public void UpdateDeleteDateData(BBulletin entity)
+        {
             /// Destruction
             /// For criminal records - 100 years from the date of birth of the convicted person
             /// For bulletins for administrative sanctions under Art. 78a - 
@@ -431,20 +450,6 @@ namespace MJ_CAIS.Services
             if (entity.DeleteDate.HasValue && entity.DeleteDate <= DateTime.Now)
             {
                 entity.StatusId = Status.ForDestruction;
-                UpdateModifiedProperties(entity, nameof(entity.StatusId));
-            }
-
-            // if no sanction is selected
-            // change bulletin status
-            if (entity.NoSanction == true)
-            {
-                entity.StatusId = Status.NoSanction;
-            }
-
-            // save old status
-            var isAddedHistory = AddBulletinStatusH(entity, oldStatus, entity.StatusId, entity.Id);
-            if (isAddedHistory)
-            {
                 UpdateModifiedProperties(entity, nameof(entity.StatusId));
             }
         }
@@ -539,29 +544,24 @@ namespace MJ_CAIS.Services
         /// <param name="oldStatus">Previous status</param>
         /// <param name="newStatus">New status</param>
         /// <param name="bulletinId">ID</param>
-        private bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus, string bulletinId)
+        public bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus)
         {
             if (oldStatus == newStatus) return false;
 
             var statusHistory = new BBulletinStatusH
             {
                 Id = Guid.NewGuid().ToString(),
-                BulletinId = bulletinId,
+                BulletinId = itemToBeUpdated.Id,
                 OldStatusCode = oldStatus,
                 NewStatusCode = newStatus,
                 EntityState = EntityStateEnum.Added,
                 Locked = newStatus != Status.NewOffice
             };
 
-            // todo: if bulletin is unlock by admin
-            // save data in tables
-            if (newStatus != Status.NewOffice)
-            {
-                var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
-                var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
-                statusHistory.Content = xml;
-                statusHistory.Version = 1;
-            }
+            var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
+            var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
+            statusHistory.Content = xml;
+            statusHistory.Version = 1;
 
             _bulletinRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
             return true;
@@ -603,7 +603,7 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties ??= new List<string>();
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
-        private void SetEcrisConvID(BBulletin bulletin)
+        public void SetEcrisConvID(BBulletin bulletin)
         {
             int caseNum;
             try

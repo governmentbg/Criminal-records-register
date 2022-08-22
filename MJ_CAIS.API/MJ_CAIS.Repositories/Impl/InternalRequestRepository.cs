@@ -36,6 +36,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var query = this._dbContext.NInternalRequests.AsNoTracking()
                  .Include(x => x.ReqStatusCodeNavigation)
+                 .Include(x => x.NIntReqType)
                  .Include(x => x.FromAuthority);
 
             return query;

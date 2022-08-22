@@ -186,15 +186,8 @@ export class BulletinFormComponent
   //override submit function
   //todo
   onSubmitSuccess(data: any) {
-    debugger;
     this.loaderService.hide();
-
-    if (data?.id) {
-      const url = `pages/bulletins/preview/${data.id}`;
-      this.router.navigateByUrl(url);
-    } else {
-      super.reloadCurrentRoute();
-    }
+    super.onSubmitSuccess(data);  
   }
 
   //override
