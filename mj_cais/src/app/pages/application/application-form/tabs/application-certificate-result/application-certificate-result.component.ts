@@ -81,6 +81,7 @@ export class ApplicationCertificateResultComponent
           )
           .subscribe((response) => {
             this.bulletinsCheckData = response;
+            this.bulletinsCheckGrid.selectAllRows();
           });
       }
       if (this.model.firstSignerId == null) {
@@ -348,6 +349,7 @@ export class ApplicationCertificateResultComponent
               )
               .subscribe((response) => {
                 this.bulletinsCheckData = response;
+                this.bulletinsCheckGrid.selectAllRows();
               });
           }
           if (this.model.firstSignerId == null) {
