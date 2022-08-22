@@ -7312,6 +7312,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("REG_CERT_SUBJECT");
 
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(100)
+                    .HasColumnName("USER_NAME");
+
                 entity.HasOne(d => d.Administration)
                     .WithMany(p => p.GUsersExts)
                     .HasForeignKey(d => d.AdministrationId)

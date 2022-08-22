@@ -12,65 +12,61 @@
 
     var pkName = nameof(UserExternalDTO.Id);
     var buttonEdit = ButtonTemplates.EditButton(Url.Action(nameof(UserExternalController.Edit), "UserExternal") + $"/${{{pkName}}}");
+    var buttonChangePassword = ButtonTemplates.ChangePasswordButton(Url.Action(nameof(UserExternalController.Password), "UserExternal") + $"/${{{pkName}}}");
     //var buttonPreview = ButtonTemplates.PreviewButton(Url.Action(nameof(UserExternalController.Preview), "UserExternal") + $"/${{{pkName}}}");
 }
 
-<div class="container">
-    <div class="row">
-        <div class="mb-3 d-flex justify-content-end align-items-start">
-            <a class="btn btn-primary" asp-controller="UserExternal" asp-action="New">
-               @UsersResources.btnCreateNewUser  
-            </a>
-        </div>
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header h5 bg-primary text-white">@ViewData["Title"]</div>
-                <div class="card-body">
-                    <partial name="_InfragisticsLoader" />
-                    <div class="page-content scrollable-page">
-                        <div class="box-content">
-        @(Html.Infragistics()
-        .Grid(Model.Users)
-        .ID("users_grid")
-        .Language(ViewData["Culture"].ToString())
-        .Width("100%")
-        .PrimaryKey(nameof(UserExternalGridDTO.Id))
-        .AutoGenerateColumns(false)
-        .AutoGenerateLayouts(false)
-        .Columns(column =>
-        {
-            column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
-            column.For(x => x.Position).HeaderText(UsersResources.lblPosition).Width("20%");
-            column.For(x => x.Name).HeaderText(UsersResources.lblName).Width("20%");
-            column.For(x => x.Egn).HeaderText(UsersResources.lblEgn).Width("20%");
-            column.For(x => x.Email).HeaderText(UsersResources.lblEmail).Width("25%");
-            column.For(x => x.Active).HeaderText(UsersResources.lblActive).Width("25%")
+<div class="card">
+    <div class="h5 card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        @ViewData["Title"]
+        <a class="btn btn-light btn-sm" asp-controller="UserExternal" asp-action="New">
+            @UsersResources.btnCreateNewUser
+        </a>
+    </div>
+    <div class="card-body">
+        <partial name="_InfragisticsLoader" />
+        <div class="page-content scrollable-page">
+            <div class="box-content">
+                @(Html.Infragistics()
+                .Grid(Model.Users)
+                .ID("users_grid")
+                .Language(ViewData["Culture"].ToString())
+                .Width("100%")
+                .PrimaryKey(nameof(UserExternalGridDTO.Id))
+                .AutoGenerateColumns(false)
+                .AutoGenerateLayouts(false)
+                .Columns(column =>
+                {
+                column.For(x => x.Id).HeaderText("Id").Hidden(true).Width("20%");
+                column.For(x => x.Name).HeaderText(UsersResources.lblName).Width("20%");
+                column.For(x => x.Egn).HeaderText(UsersResources.lblEgn).Width("15%");
+                column.For(x => x.UserName).HeaderText(UsersResources.lblUserName).Width("20%");
+                column.For(x => x.Email).HeaderText(UsersResources.lblEmail).Width("25%");
+                column.For(x => x.Position).HeaderText(UsersResources.lblPosition).Width("20%");
+                column.For(x => x.Active).HeaderText(UsersResources.lblActive).Width("25%")
                 .Template(ButtonTemplates.GridBoolTemplate.Replace(ButtonTemplates.GridBoolTemplateElement, nameof(UserExternalGridDTO.Active)));
-            column.For(x => x.IsAdmin).HeaderText(UsersResources.lblIsAdmin).Width("15%")
+                column.For(x => x.IsAdmin).HeaderText(UsersResources.lblIsAdmin).Width("15%")
                 .Template(ButtonTemplates.GridBoolTemplate.Replace(ButtonTemplates.GridBoolTemplateElement, nameof(UserExternalGridDTO.IsAdmin)));
-            column.Unbound("buttons").HeaderText("").Template(buttonEdit).Width("8%");
-        })
-        .Features(feature =>
-        {
-            feature
+                column.Unbound("buttons").HeaderText("").Template(buttonEdit + buttonChangePassword).Width("15%");
+                })
+                .Features(feature =>
+                {
+                feature
                 .Sorting()
                 .Type(OpType.Remote);
-            feature
+                feature
                 .Paging()
                 .Type(OpType.Remote)
                 .PageSize(10)
                 .PageSizeDropDownLocation("inpager");
-            feature
+                feature
                 .Filtering()
                 .Mode(FilterMode.Simple)
                 .Type(OpType.Remote);
-            feature.Tooltips().Visibility(TooltipsVisibility.Overflow).Style(TooltipsStyle.Popover);
-        })
-        .DataSourceUrl(Url.Action(nameof(UserExternalController.GetUsers), "UserExternal"))
-        .Render())
-                        </div>
-                    </div>
-                </div>
+                feature.Tooltips().Visibility(TooltipsVisibility.Overflow).Style(TooltipsStyle.Popover);
+                })
+                .DataSourceUrl(Url.Action(nameof(UserExternalController.GetUsers), "UserExternal"))
+                .Render())
             </div>
         </div>
     </div>

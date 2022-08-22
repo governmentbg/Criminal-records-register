@@ -1,7 +1,12 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MJ_CAIS.DataAccess;
+using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.WebPortal.External.LocalContext;
 using MJ_CAIS.WebPortal.External.Utils.Mappings;
 using MJ_CAIS.WebSetup;
 using System.Security.Claims;
@@ -17,6 +22,19 @@ namespace MJ_CAIS.WebPortal.External
             builder.Services.AddControllersWithViews();
 
             var configuration = builder.Configuration;
+            var connectionString = configuration.GetConnectionString("CaisConnectionString");
+            var oracleCompatibility = configuration.GetValue<string>("OracleSQLCompatibility");
+
+            builder
+                .Services
+                .AddDbContext<ExtUserDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
+
+            builder
+                .Services
+                .AddIdentityCore<LocalGUsersExt>()
+                .AddSignInManager()
+                .AddEntityFrameworkStores<ExtUserDbContext>()
+                .AddTokenProvider<DataProtectorTokenProvider<LocalGUsersExt>>(TokenOptions.DefaultProvider); ;
 
             builder.Services.AddAuthentication(options =>
                 {
@@ -45,7 +63,7 @@ namespace MJ_CAIS.WebPortal.External
                     // keeps id_token smaller
                     options.GetClaimsFromUserInfoEndpoint = false;
                     options.SaveTokens = true;
-
+                    
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = JwtClaimTypes.Name,

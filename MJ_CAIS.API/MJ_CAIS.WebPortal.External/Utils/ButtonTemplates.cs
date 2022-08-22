@@ -22,6 +22,11 @@ namespace MJ_CAIS.WebPortal.External.Utils
         {
             return EditButton(url, CommonResources.btnEdit, "grid-button button-margin", "fa fa-edit");
         }
+        public static string ChangePasswordButton(string url)
+        {
+            return "{{if ${HasUserName} }}<a href=\"" + url+"\" title=\"Промяна на парола\" class=\"grid-button button-margin\"><i class=\"fa fa-key\"></i></a>{{/if}}";
+        }
+
 
         public static string EditButton(string url, string title, string classAttr, string iconClass, string target = "")
         {

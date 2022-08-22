@@ -10,5 +10,7 @@
         public bool? Active { get; set; }
         public string? Position { get; set; }
         public bool HasRegRegCertSubject { get; set; }
+        public string? UserName { get; set; }
+        public bool HasUserName { get; set; }
     }
 }

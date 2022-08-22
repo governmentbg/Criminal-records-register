@@ -10,35 +10,45 @@ namespace MJ_CAIS.Common.Constants
     {
         public static class  RegisterCodes
         {
+            //select ' //'||code||' - '||name
+            //from D_REGISTER_TYPES t
+            //order by code
 
-            //            101	Заявление на гише
-            public const string ApplicationOnDesk = "101";
-            //102	Заявление за ЕС
-            public const string ApplicationWeb = "102";
-            //103	Заявление за ЕСС
-            public const string ApplicationWebExternal = "103";
-            //201	Свидетелство на гише
-            public const string CertificateOnDesk = "201";
-            //202	Свидетелство Електронно
-            public const string CertificateWeb = "202";
-            //203	Електронно служебно свидетелство
-            public const string CertificateWebExternal = "203";
-            //301	Бюлетин за съдимост
-            public const string Bulletin = "301";
-            //302	Бюлетин за 78а
-            public const string Bulletin78a = "302";
-            //303	Бюлетин-неопределен
-            public const string BulletinUndefined = "303";
-            //402	Сведение - по пощата
-            public const string DecisionByPost = "401";
-            //405	Сведение - от ЕКРИС
-            public const string DecisionByEcris = "402";
-            //501	ECRIS
-            public const string Ecris = "501";
-            //601	Справка за съдимост
-            public const string ConvictionRequest = "601";
-            //701	Вътрешни заявки
-            public const string InternalRequest = "701";
+            //001 - Заявление на гише
+            //002 - Заявление за ЕС
+            //003 - Заявление за ЕСС
+            //004 - Искане за справка
+            //005 - Заявление за Е-Справка
+            //011 - Свидетелство на гише
+            //012 - Свидетелство Електронно
+            //013 - Електронно служебно свидетелство
+            //014 - Справка за съдимост
+            //015 - Електронна справка за съдимост
+            //020 - Бюлетин за съдимост
+            //021 - Бюлетин за 78а
+            //022 - Бюлетин-неопределен
+            //030 - Сведение - по пощата
+            //031 - Сведение - от ЕКРИС
+            //040 - ECRIS
+            //050 - Заявка за БС
+
+            public const string ApplicationOnDesk = "001";
+            public const string ApplicationWeb = "002";
+            public const string ApplicationWebExternal = "003";
+            public const string CertificateOnDesk = "011";
+            public const string CertificateWeb = "012";
+            public const string CertificateWebExternal = "013";
+            public const string Bulletin = "020";
+            public const string Bulletin78a = "021";
+            public const string BulletinUndefined = "022";
+            public const string DecisionByPost = "030";
+            public const string DecisionByEcris = "031";
+            public const string Ecris = "040";
+            public const string ConvictionRequest = "005"; //todo да се провери точно къде се ползва!!!
+            public const string ConvictionResult = "015"; //todo -не се ползва 
+            public const string ReportApplication = "004";//тодо - не се ползва
+            public const string Report = "014"; //тодо - не се ползва
+            public const string InternalRequest = "050";
 
         }
     }

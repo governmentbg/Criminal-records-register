@@ -88,6 +88,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Потвърждение на парола.
+        /// </summary>
+        public static string lblConfirmPassword {
+            get {
+                return ResourceManager.GetString("lblConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ЕГН.
         /// </summary>
         public static string lblEgn {
@@ -133,11 +142,101 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Парола.
+        /// </summary>
+        public static string lblPassword {
+            get {
+                return ResourceManager.GetString("lblPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Позиция.
         /// </summary>
         public static string lblPosition {
             get {
                 return ResourceManager.GetString("lblPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Потребителско име.
+        /// </summary>
+        public static string lblUserName {
+            get {
+                return ResourceManager.GetString("lblUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Успешна промяна на парола!.
+        /// </summary>
+        public static string msgPasswordChangeSuccess {
+            get {
+                return ResourceManager.GetString("msgPasswordChangeSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неуспешна промяна на парола!.
+        /// </summary>
+        public static string msgPasswordChangeUnsuccess {
+            get {
+                return ResourceManager.GetString("msgPasswordChangeUnsuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паролата изисква цифра.
+        /// </summary>
+        public static string msgPasswordRequiresDigit {
+            get {
+                return ResourceManager.GetString("msgPasswordRequiresDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паролата изисква малка буква.
+        /// </summary>
+        public static string msgPasswordRequiresLower {
+            get {
+                return ResourceManager.GetString("msgPasswordRequiresLower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паролата изисква специален символ.
+        /// </summary>
+        public static string msgPasswordRequiresNonAlphanumeric {
+            get {
+                return ResourceManager.GetString("msgPasswordRequiresNonAlphanumeric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паролата изисква главна буква.
+        /// </summary>
+        public static string msgPasswordRequiresUpper {
+            get {
+                return ResourceManager.GetString("msgPasswordRequiresUpper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паролите трябва да съвпадат.
+        /// </summary>
+        public static string msgPasswordsMustMatch {
+            get {
+                return ResourceManager.GetString("msgPasswordsMustMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Паролата е прекалено къса.
+        /// </summary>
+        public static string msgPasswordTooShort {
+            get {
+                return ResourceManager.GetString("msgPasswordTooShort", resourceCulture);
             }
         }
         
