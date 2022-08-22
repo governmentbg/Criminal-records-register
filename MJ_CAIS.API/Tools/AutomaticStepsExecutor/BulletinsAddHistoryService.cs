@@ -49,7 +49,8 @@ namespace AutomaticStepsExecutor
           
             var result = await Task.FromResult(
                                   _dbContext.BBulletins.AsNoTracking()
-                                  .Include(b=>b.CaseType).AsNoTracking()                                         
+                                  .Include(b=>b.CaseType).AsNoTracking()  
+                                  .Include(b=>b.BBulletinStatusHes). AsNoTracking()
                                  .Where(b => b.MigrationBulletinId != null)
                                  .OrderByDescending(a => a.CreatedOn)
                                  .Skip(pageSize*currentPageNumber)
@@ -91,9 +92,13 @@ namespace AutomaticStepsExecutor
 
                         if (_writeHistory)
                         {
-                            _bulletinService.AddBulletinStatusH(bulletin, null, BulletinConstants.Status.Active);
-                            await _dbContext.SaveChangesAsync();
-                            _dbContext.ChangeTracker.Clear();
+                            if (bulletin.BBulletinStatusHes == null || bulletin.BBulletinStatusHes.Count == 0)
+                            {
+                                _bulletinService.AddBulletinStatusH(bulletin, null, BulletinConstants.Status.Active);
+                                await _dbContext.SaveChangesAsync();
+                                _dbContext.ChangeTracker.Clear();
+                            }
+                            
                         }
                         if (_addDateofDestruction)
                         {
