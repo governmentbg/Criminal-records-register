@@ -70,5 +70,13 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._wApplicaitonService.SelectApplicationPersStatusHAsync(aId);
             return Ok(result);
         }
+
+        [HttpGet("{aId}/eWeb-requests")]
+        //[Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        public async Task<IActionResult> GetEWebRequestsByApplicationId(string aId)
+        {
+            var result = await this._wApplicaitonService.SelectAllEWebRequestsByApplicationIdAsync(aId);
+            return Ok(result);
+        }
     }
 }

@@ -9,6 +9,7 @@ import {
 } from "../../../../@core/constants/person-alias-type.constants";
 import { ApplicationDocumentModel } from "../../../application/application-form/_models/application-document.model";
 import { EApplicationStatusHistoryModel } from "../eapplication-check-payment-form/tabs/e-application-status-history/_models/e-application-status-history.model";
+import { ApplicationStatusHistoryModel } from "../../../application/application-form/tabs/application-status-history/_models/application-status-history.model";
 
 @Injectable({ providedIn: "root" })
 export class EApplicationService extends CaisCrudService<
@@ -57,6 +58,14 @@ export class EApplicationService extends CaisCrudService<
   ): Observable<EApplicationStatusHistoryModel[]> {
     return this.http.get<EApplicationStatusHistoryModel[]>(
       `${this.url}/${id}/e-application-history`
+    );
+  }
+
+  public getEApplicationEWebRequestsData(
+    id: string
+  ): Observable<ApplicationStatusHistoryModel[]> {
+    return this.http.get<ApplicationStatusHistoryModel[]>(
+      `${this.url}/${id}/eWeb-requests`
     );
   }
 }

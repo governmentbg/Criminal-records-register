@@ -1,6 +1,7 @@
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.AStatusH;
+using MJ_CAIS.DTO.EWebRequest;
 using MJ_CAIS.DTO.Shared;
 using MJ_CAIS.DTO.WApplicaiton;
 using MJ_CAIS.Services.Contracts.Utils;
@@ -20,5 +21,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IQueryable<PersonAliasDTO>> SelectApplicationPersAliasByApplicationIdAsync(string aId);
 
         Task<IQueryable<AStatusHGridDTO>> SelectApplicationPersStatusHAsync(string aId);
+
+        Task<IQueryable<EWebRequestGridDTO>> SelectAllEWebRequestsByApplicationIdAsync(string aId);
     }
 }

@@ -20,7 +20,6 @@ export class EApplicationResolver implements Resolve<any> {
     private nomenclatureService: NomenclatureService,
     private service: EApplicationService,
     private wCertificateService: WCertificateService,
-    private appService: ApplicationService
   ) {}
 
   resolve(
@@ -46,7 +45,7 @@ export class EApplicationResolver implements Resolve<any> {
       applicationStatusHistoryData:
         this.service.getEApplicationStatusHistoryData(eapplicationId),
       eWebRequest:
-        this.appService.getApplicationEWebRequestsData(eapplicationId),
+        this.service.getEApplicationEWebRequestsData(eapplicationId),
     };
     return forkJoin(result);
   }
