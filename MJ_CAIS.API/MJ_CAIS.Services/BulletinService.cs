@@ -603,7 +603,7 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties ??= new List<string>();
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
-        private void SetEcrisConvID(BBulletin bulletin)
+        public void SetEcrisConvID(BBulletin bulletin)
         {
             int caseNum;
             try
