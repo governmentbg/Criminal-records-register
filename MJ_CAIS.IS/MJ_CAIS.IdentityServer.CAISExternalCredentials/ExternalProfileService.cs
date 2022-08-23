@@ -202,10 +202,9 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                             };
                         }
                         certSubject = cert.Subject;
-                        adminId = (from a in CaisDbContext.GExtAdministrations
-                                   join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
-                                   select a.Id).FirstOrDefault();
-
+                        adminId = (from uic in CaisDbContext.GExtAdministrationUics
+                                   where uic.Value == uicValue
+                                   select uic.ExtAdmId).FirstOrDefault();
                     }
                     else
                     {

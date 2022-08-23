@@ -70,23 +70,54 @@ namespace EcrisRIClient
             var resp = await client.getFoldersAsync(request);
             var foldersList = ((GetFoldersWSOutputDataType)resp.GetFoldersWSOutput.WSData).FolderList;
             List<string> result = new List<string>();
+            var names = searchFolderName.Split('/');
+            FolderType searchedFolder = FindFolder(foldersList, names);
+        
+
+            if (includeSubfolders)
+            {
+                result = GetFolderIdsFromParentFolder(searchedFolder);
+            }
+            else
+            {
+                result.Add(searchedFolder.FolderIdentifier);
+            }
+           
+
+            return result;
+        }
+
+        private FolderType FindFolder(FolderType[] foldersList, string[] names)
+        {
+           
+            if (names.Length == 0)
+            {
+                throw new Exception("Folder is not found.");
+            }
+
+
             for (int i = 0; i < foldersList.Length; i++)
             {
-                if (foldersList[i].FolderName == searchFolderName)
+                if (foldersList[i].FolderName == names[0])
                 {
-                    if (includeSubfolders)
+                    if (names.Length == 1)
                     {
-                        result = GetFolderIdsFromParentFolder(foldersList[i]);
+                        return foldersList[i];
+
                     }
                     else
                     {
-                        result.Add(foldersList[i].FolderIdentifier);
+                        List<string> newNames = new List<string>();
+                        for (int j = 1; j < names.Length; j++)
+                        {
+                            newNames.Add(names[j]);
+                        }
+                        return FindFolder(foldersList[i].FolderContainedFolders, newNames.ToArray());
                     }
-                    break;
                 }
             }
 
-            return result;
+            throw new Exception($"Папката{string.Join('/',names)} не е намерена.");
         }
 
         private List<string> GetFolderIdsFromParentFolder(FolderType f)
