@@ -198,54 +198,55 @@ namespace MJ_CAIS.EcrisObjectsServices
             msg.MessagePerson.PersonFatherForename = ServiceHelper.GetNameTextType(new List<string?>() { bulletin.FatherFirstname }, new List<string>())?.ToArray();          
             msg.MessagePerson.PersonFatherSecondSurname = ServiceHelper.GetNameTextType(new List<string?>() { bulletin.FatherFamilyname }, new List<string>())?.ToArray();      
             msg.MessagePerson.PersonFatherSurname = ServiceHelper.GetNameTextType(new List<string?>() { bulletin.FatherSurname }, new List<string>())?.ToArray();
-         
-            
-
-            msg.MessagePerson.PersonIdentificationDocument = new IdentificationDocumentType[1];
-            msg.MessagePerson.PersonIdentificationDocument[0] = new IdentificationDocumentType();
-            msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentNumber = bulletin.IdDocNumber;
-            if (bulletin.IdDocIssuingDate.HasValue)
-            {
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingDate = ServiceHelper.GetDateTypeFromDateAndPrecission(bulletin.IdDocIssuingDate.Value, bulletin.IdDocIssuingDatePrec);
-            }
 
 
-            if (bulletin.IdDocValidDate.HasValue)
+            if (!string.IsNullOrEmpty(bulletin.IdDocNumber))
             {
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentValidUntil = ServiceHelper.GetDateTypeFromDateAndPrecission(bulletin.IdDocValidDate.Value, bulletin.IdDocValidDatePrec);
-            }
-  
-            if (!string.IsNullOrEmpty(bulletin.IdDocTypeDescr))
-            {
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocTypeDescr;
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(bulletin.IdDocCategory?.EcrisTechnId))
+                msg.MessagePerson.PersonIdentificationDocument = new IdentificationDocumentType[1];
+                msg.MessagePerson.PersonIdentificationDocument[0] = new IdentificationDocumentType();
+                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentNumber = bulletin.IdDocNumber;
+                if (bulletin.IdDocIssuingDate.HasValue)
+                {
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingDate = ServiceHelper.GetDateTypeFromDateAndPrecission(bulletin.IdDocIssuingDate.Value, bulletin.IdDocIssuingDatePrec);
+                }
+
+
+                if (bulletin.IdDocValidDate.HasValue)
+                {
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentValidUntil = ServiceHelper.GetDateTypeFromDateAndPrecission(bulletin.IdDocValidDate.Value, bulletin.IdDocValidDatePrec);
+                }
+
+                if (!string.IsNullOrEmpty(bulletin.IdDocTypeDescr))
                 {
                     msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
                     msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
-                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocCategory?.EcrisTechnId;
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocTypeDescr;
                     msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
                 }
-            }
-            if (!string.IsNullOrEmpty(bulletin.IdDocCategory?.EcrisTechnId))
-            {
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference = new IdentificationDocumentCategoryExternalReferenceType();
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference.Value = bulletin.IdDocCategory.EcrisTechnId;
-     
-            }
-            if (!string.IsNullOrEmpty(bulletin.IdDocIssuingAuthority))
-            {
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].Value = bulletin.IdDocIssuingAuthority;
-                msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].languageCode = ECRISConstants.LanguageCodes.Bg;
-            }
+                else
+                {
+                    if (!string.IsNullOrEmpty(bulletin.IdDocCategory?.EcrisTechnId))
+                    {
+                        msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1 = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation[1];
+                        msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0] = new MultilingualTextType50CharsMultilingualTextLinguisticRepresentation();
+                        msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].Value = bulletin.IdDocCategory?.EcrisTechnId;
+                        msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentType1[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+                    }
+                }
+                if (!string.IsNullOrEmpty(bulletin.IdDocCategory?.EcrisTechnId))
+                {
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference = new IdentificationDocumentCategoryExternalReferenceType();
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentCategoryReference.Value = bulletin.IdDocCategory.EcrisTechnId;
 
+                }
+                if (!string.IsNullOrEmpty(bulletin.IdDocIssuingAuthority))
+                {
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].Value = bulletin.IdDocIssuingAuthority;
+                    msg.MessagePerson.PersonIdentificationDocument[0].IdentificationDocumentIssuingAuthority[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+                }
+            }
 
             //egn, lnch или лн?!
             msg.MessagePerson.PersonIdentityNumber = new RestrictedStringType50Chars();
