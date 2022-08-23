@@ -3,6 +3,7 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -19,7 +20,9 @@ namespace MJ_CAIS.Repositories.Impl
         public override IQueryable<BBulletin> SelectAll()
         {
             var query = _dbContext.BBulletins.AsNoTracking()
-                .Where(x => x.Locked == true && _userContext.CsAuthorityId == x.CsAuthorityId);
+                .Where(x => x.Locked == true &&
+                    _userContext.CsAuthorityId == x.CsAuthorityId &&
+                    x.StatusId != BulletinConstants.Status.Deleted);
 
             return query;
         }

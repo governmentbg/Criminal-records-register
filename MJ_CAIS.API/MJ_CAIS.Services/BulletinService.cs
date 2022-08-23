@@ -495,6 +495,8 @@ namespace MJ_CAIS.Services
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.SuidId));
                     bulletin.SuidId = personIdObj.Id;
+                    bulletin.Suid = personIdObj.Pid;
+                    UpdateModifiedProperties(bulletin, nameof(bulletin.Suid));
                 }
 
                 _bulletinRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
