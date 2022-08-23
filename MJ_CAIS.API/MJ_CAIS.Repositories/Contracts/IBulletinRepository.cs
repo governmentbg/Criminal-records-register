@@ -43,10 +43,15 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<List<StatisticsCountDTO>> GetStatisticsForBulletinsAsync(StatisticsSearchDTO searchParams);
 
         Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams);
+
         Task<BBulletin> GetBulletinData(string bulletinId);
 
         Task<string> GetDataForSendFinesDataAsync(string egn, string? decisionTypeId, DateTime? decisionDate, string decisionNumber, string? decidingAuthId, string caseNumber, bool caseYearParsed, decimal caseYear, string? caseTypeId, string? caseAuthId);
+      
         Task<List<BSanction>> GetDeletedSanctionsAsync(List<string> deletedSanctionIds);
+       
         Task<bool> IsEuCitizen(IEnumerable<string> personNationalities);
+
+        Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdAsync(List<string> pidsId);
     }
 }

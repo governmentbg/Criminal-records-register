@@ -2,6 +2,7 @@ using MJ_CAIS.DTO.BulletinEvent;
 using MJ_CAIS.DataAccess.Entities;
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.Services.Contracts.Utils;
+using MJ_CAIS.DTO.Bulletin;
 
 namespace MJ_CAIS.Services.Contracts
 {
@@ -11,8 +12,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task ChangeStatusAsync(string aInDto, string statusId);
 
-        Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId);
-
-        Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin, string personId);
+        Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, List<BulletinForRehabilitationAndEventDTO> allPersonBulletins);
     }
 }

@@ -202,7 +202,7 @@ namespace MJ_CAIS.Repositories.Impl
                      .ThenInclude(x => x.BirthCity)
                 .Include(x => x.Person)
                      .ThenInclude(x => x.PPersonIds)
-                     .ThenInclude( x=> x.PidType)
+                     .ThenInclude(x => x.PidType)
                 .Include(x => x.Person)
                      .ThenInclude(x => x.BirthCountry)
                 .Where(p => p.Pid == pid && p.PidType.Code == pidType)
@@ -411,9 +411,58 @@ namespace MJ_CAIS.Repositories.Impl
             return deletedSanctionAndItsProbations;
         }
 
-        public  async Task<bool> IsEuCitizen(IEnumerable<string> personNationalities)
+        public async Task<bool> IsEuCitizen(IEnumerable<string> personNationalities)
         {
-            return await _dbContext.EEcrisAuthorities.AsNoTracking().AnyAsync(x => personNationalities.Contains(x.CountryId));
+            return await _dbContext.EEcrisAuthorities.AsNoTracking()
+                .AnyAsync(x => personNationalities.Contains(x.CountryId));
+        }
+
+        public async Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdAsync(List<string> pidsId)
+        {
+            var result = await _dbContext.BBulletins
+                .Where(x => pidsId.Any(p => p == x.EgnId) ||
+                            pidsId.Any(p => p == x.LnchId) ||
+                            pidsId.Any(p => p == x.LnId) ||
+                            pidsId.Any(p => p == x.IdDocNumberId) ||
+                            pidsId.Any(p => p == x.SuidId))
+                .Select(bulletin => new BulletinForRehabilitationAndEventDTO
+                {
+                    Id = bulletin.Id,
+                    DecisionDate = bulletin.DecisionDate,
+                    DecisionFinalDate = bulletin.DecisionFinalDate,
+                    Status = bulletin.StatusId,
+                    RehabilitationDate = bulletin.RehabilitationDate,
+                    Version = bulletin.Version,
+                    CaseType = bulletin.CaseTypeId,
+                    BirthDate = bulletin.BirthDate,
+                    BulletinType = bulletin.BulletinType,
+                    StatusId = bulletin.StatusId,
+                    Sanctions = bulletin.BSanctions.Select(x => new SanctionForRehabilitationDTO
+                    {
+                        SuspensionDuration = new DurationDTO
+                        {
+                            Years = x.SuspentionDurationYears,
+                            Months = x.SuspentionDurationMonths,
+                            Days = x.SuspentionDurationDays,
+                        },
+                        Type = x.SanctCategoryId,
+                        ProbationDurations = x.BProbations.Select(p => new DurationDTO
+                        {
+                            Years = p.DecisionDurationYears,
+                            Months = p.DecisionDurationMonths,
+                            Days = p.DecisionDurationDays,
+                            Hours = p.DecisionDurationHours,
+                        })
+                    }),
+                    Decisions = bulletin.BDecisions.Select(x => new DecisionForRehabilitationDTO
+                    {
+                        Type = x.DecisionChTypeId,
+                        ChangeDate = x.ChangeDate,
+                    }),
+                    OffencesEndDates = bulletin.BOffences.Select(o => o.OffEndDate)
+                }).ToListAsync();
+
+            return result;
         }
     }
 }

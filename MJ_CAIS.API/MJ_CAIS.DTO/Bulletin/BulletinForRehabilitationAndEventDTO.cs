@@ -1,8 +1,12 @@
-﻿namespace MJ_CAIS.DTO.Rehabilitation
+﻿namespace MJ_CAIS.DTO.Bulletin
 {
-    public class BulletinForRehabilitationDTO
+    public class BulletinForRehabilitationAndEventDTO
     {
         public string? Id { get; set; }
+
+        public string? StatusId { get; set; }
+
+        public string? BulletinType { get; set; }
 
         /// <summary>
         /// Дата на издаване на акта (осъждане)
@@ -35,14 +39,14 @@
     {
         public string? Type { get; set; }
 
-        public Duration SuspentionDuration { get; set; } = new Duration();
+        public DurationDTO SuspensionDuration { get; set; } = new DurationDTO();
 
         public IEnumerable<SanctionForRehabilitationDTO> Sanctions { get; set; }
 
-        public IEnumerable<Duration> PropbationDurations { get; set; } = new List<Duration>();    
+        public IEnumerable<DurationDTO> ProbationDurations { get; set; } = new List<DurationDTO>();
     }
 
-    public class Duration
+    public class DurationDTO
     {
         public byte? Years { get; set; }
         public byte? Months { get; set; }

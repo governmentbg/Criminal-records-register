@@ -119,12 +119,6 @@ namespace MJ_CAIS.Services
             await UpdateBulletinAsync(aInDto, bulletin);
             await _bulletinRepository.SaveChangesAsync();
 
-            if (bulletin.StatusId is Status.NoSanction)
-            {
-                await _bulletinEventService.GenerateEventWhenUpdateBullAsync(bulletin, aInDto.Person.Id);
-                await _bulletinRepository.SaveChangesAsync();
-            }
-
             return bulletin.Id;
         }
 
@@ -169,17 +163,14 @@ namespace MJ_CAIS.Services
             // save entities before check for events and rehabilitation
             await _bulletinRepository.SaveChangesAsync();
 
-            switch (bulletinToUpdate.StatusId)
+            // person must be created
+            var oldStatusIsNewBull = oldBulletinStatus == null || oldBulletinStatus == Status.NewEISS || oldBulletinStatus == Status.NewOffice;
+            var newStatusForUpdatePerson = bulletinToUpdate.StatusId != Status.NewEISS || bulletinToUpdate.StatusId != Status.NewOffice;
+            if (oldStatusIsNewBull && newStatusForUpdatePerson)
             {
-                case Status.NoSanction:
-                    await _bulletinEventService.GenerateEventWhenUpdateBullAsync(bulletinToUpdate, aInDto.Person.Id);
-                    break;
-                case Status.Active or Status.ForRehabilitation:
-                    await _rehabilitationService.ApplyRehabilitationOnUpdateAsync(bulletinToUpdate);
-                    break;
+                var person = await CreatePersonFromBulletinAsync(bulletinToUpdate);
+                await UpdateRehabilitationAndEventDataAsync(bulletinToUpdate, person);
             }
-
-            await _bulletinRepository.SaveChangesAsync();
 
             try
             {
@@ -196,7 +187,7 @@ namespace MJ_CAIS.Services
         /// Change of the status of a bulletin by a employee
         /// </summary>
         /// <param name="aInDto">Bulletin ID</param>
-        /// <param name="statusId">Status</param>
+        /// <param name="statusId">Active or Delete</param>
         /// <exception cref="ArgumentException"></exception>
         public async Task ChangeStatusAsync(string bulletinId, string statusId)
         {
@@ -205,50 +196,41 @@ namespace MJ_CAIS.Services
             if (bulletin == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, bulletinId));
 
+            // employee can change status only to active or deleted
+            if (statusId != Status.Active && statusId != Status.Deleted)
+                throw new BusinessLogicException(string.Format(BulletinResources.msgChangeStatusIsNotAllowed, statusId));
+
+            // delete only bulletin in status for delete
+            if (statusId == Status.Deleted && bulletin.StatusId != Status.ForDestruction)
+                throw new BusinessLogicException(string.Format(BulletinResources.msgChangeStatusIsNotAllowed, statusId));
+
             var oldBulletinStatus = bulletin.StatusId;
             AddBulletinStatusH(bulletin, oldBulletinStatus, statusId);
-
-            var mustUpdatePersonAndSendData = (oldBulletinStatus == Status.NewOffice || oldBulletinStatus == Status.NewEISS) &&
-                statusId == Status.Active;
-
-            // All active bulletins are locked for editing
-            // only decisions can be added
-            var isActiveBulletin = statusId == Status.Active;
-            if (isActiveBulletin)
-            {
-                await SetDataForNationalitiesAsync(bulletin);
-                bulletin.Locked = true;
-            }
-
             bulletin.StatusId = statusId;
             bulletin.EntityState = EntityStateEnum.Modified;
+            bulletin.Locked = true;
             bulletin.ModifiedProperties = new List<string>
             {
-                nameof(bulletin.Locked),
                 nameof(bulletin.StatusId),
-                nameof(bulletin.Version)
+                nameof(bulletin.Version),
+                nameof(bulletin.Locked),
             };
 
-            if (!mustUpdatePersonAndSendData)
+            if (statusId == Status.Deleted)
             {
                 await _bulletinRepository.SaveChangesAsync();
                 return;
             }
 
-            var personId = await CreatePersonFromBulletinAsync(bulletin);
+            // All active bulletins are locked for editing
+            // only decisions can be added
 
-            // Attempt to save changes to the database
+            await SetDataForNationalitiesAsync(bulletin);
             await _bulletinRepository.SaveChangesAsync();
 
-            if (isActiveBulletin)
-            {
-                // todo: call in one method and take only ones bulletins of a person
-                // only apply changes to the context
-                await _bulletinEventService.GenerateEventWhenChangeStatusOfBullAsync(bulletin, personId);
-                await _rehabilitationService.ApplyRehabilitationOnChangeStatusAsync(bulletin, personId);
-                // save data in db
-                await _bulletinRepository.SaveChangesAsync();
-            }
+            // create person
+            var person = await CreatePersonFromBulletinAsync(bulletin);
+            await UpdateRehabilitationAndEventDataAsync(bulletin, person);
 
             try
             {
@@ -363,6 +345,31 @@ namespace MJ_CAIS.Services
             return result.ProjectTo<PersonAliasDTO>(mapper.ConfigurationProvider);
         }
 
+        public void UpdateDeleteDateData(BBulletin entity)
+        {
+            /// Destruction
+            /// For criminal records - 100 years from the date of birth of the convicted person
+            /// For bulletins for administrative sanctions under Art. 78a - 
+            ///     15 years from the date of entry into force of the judicial act
+            switch (entity.BulletinType)
+            {
+                case BulletinConstants.Type.ConvictionBulletin when entity.BirthDate.HasValue:
+                    entity.DeleteDate = entity.BirthDate.Value.AddYears(100);
+                    UpdateModifiedProperties(entity, nameof(entity.DeleteDate));
+                    break;
+                case BulletinConstants.Type.Bulletin78A when entity.DecisionFinalDate.HasValue:
+                    entity.DeleteDate = entity.DecisionFinalDate.Value.AddYears(15);
+                    UpdateModifiedProperties(entity, nameof(entity.DeleteDate));
+                    break;
+            }
+
+            if (entity.DeleteDate.HasValue && entity.DeleteDate <= DateTime.Now)
+            {
+                entity.StatusId = Status.ForDestruction;
+                UpdateModifiedProperties(entity, nameof(entity.StatusId));
+            }
+        }
+
         #region Helpers
 
         /// <summary>
@@ -376,15 +383,7 @@ namespace MJ_CAIS.Services
         {
             await UpdateTransactionsAsync(aInDto, entity);
 
-            CheckForBulletinStatus(entity, oldStatus);
-
-            // if status is Rehabilitated, person is created 
-            if (entity.StatusId is Status.NoSanction or Status.ForDestruction or Status.ReplacedAct425)
-            {
-                // if new person is created 
-                // set new person id
-                aInDto.Person.Id = await CreatePersonFromBulletinAsync(entity);
-            }
+            CheckForBulletinStatusChange(entity, oldStatus);
 
             // it is locked each time
             // unless the statue is NewOffice or NewEISS
@@ -394,11 +393,13 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(entity, nameof(entity.Locked));
             }
 
+            await SetDataForNationalitiesAsync(entity);
+
             var passedNavigationProperties = new List<IBaseIdEntity>();
             _bulletinRepository.ApplyChanges(entity, passedNavigationProperties, true);
         }
 
-        private void CheckForBulletinStatus(BBulletin entity, string oldStatus)
+        private void CheckForBulletinStatusChange(BBulletin entity, string oldStatus)
         {
             // Change the status of the bulletin depending on the added decision information
             // (ReplacedAct425, Rehabilitated)
@@ -429,35 +430,23 @@ namespace MJ_CAIS.Services
             }
         }
 
-        public void UpdateDeleteDateData(BBulletin entity)
+        private async Task UpdateRehabilitationAndEventDataAsync(BBulletin bulletin, PPerson person)
         {
-            /// Destruction
-            /// For criminal records - 100 years from the date of birth of the convicted person
-            /// For bulletins for administrative sanctions under Art. 78a - 
-            ///     15 years from the date of entry into force of the judicial act
-            switch (entity.BulletinType)
-            {
-                case BulletinConstants.Type.ConvictionBulletin when entity.BirthDate.HasValue:
-                    entity.DeleteDate = entity.BirthDate.Value.AddYears(100);
-                    UpdateModifiedProperties(entity, nameof(entity.DeleteDate));
-                    break;
-                case BulletinConstants.Type.Bulletin78A when entity.DecisionFinalDate.HasValue:
-                    entity.DeleteDate = entity.DecisionFinalDate.Value.AddYears(15);
-                    UpdateModifiedProperties(entity, nameof(entity.DeleteDate));
-                    break;
-            }
+            var pidsIds = person.PPersonIds.Select(x => x.Id).ToList();
+            var allPersonBulletins = await _bulletinRepository.GetBulletinsByPidsIdAsync(pidsIds);
 
-            if (entity.DeleteDate.HasValue && entity.DeleteDate <= DateTime.Now)
-            {
-                entity.StatusId = Status.ForDestruction;
-                UpdateModifiedProperties(entity, nameof(entity.StatusId));
-            }
+            // todo: call in one method and take only ones bulletins of a person
+            // only apply changes to the context
+            await _bulletinEventService.GenerateEventWhenChangeStatusOfBullAsync(bulletin, allPersonBulletins);
+            _rehabilitationService.ApplyRehabilitationData(bulletin, allPersonBulletins);
+            // save data in db
+            await _bulletinRepository.SaveChangesAsync();
         }
 
         /// <summary>
         /// Creates a person from a bulletin and a link between them
         /// </summary>
-        private async Task<string> CreatePersonFromBulletinAsync(BBulletin bulletin)
+        private async Task<PPerson> CreatePersonFromBulletinAsync(BBulletin bulletin)
         {
             // when status is set to Active or NoSanction
             // save data for person and its identifiers
@@ -511,7 +500,7 @@ namespace MJ_CAIS.Services
 
             _bulletinRepository.ApplyChanges(bulletin, new List<IBaseIdEntity>());
 
-            return person.Id;
+            return person;
         }
 
         private static void SetModifiedPropertiesByStatus(BBulletin bulletinDb, BBulletin bulletin)
@@ -546,9 +535,9 @@ namespace MJ_CAIS.Services
         /// <param name="bulletinId">ID</param>
         public bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus)
         {
-           // var statusAreEqueals = oldStatus == newStatus;
-            //var bulletinBeforeActive = oldStatus == Status.NewOffice || oldStatus == Status.NewEISS;
-            if (oldStatus == newStatus) return false;
+            var statusAreEqueals = oldStatus == newStatus;
+            var bulletinBeforeActive = oldStatus == Status.NewOffice || oldStatus == Status.NewEISS;
+            if (statusAreEqueals && bulletinBeforeActive) return false;
 
             var statusHistory = new BBulletinStatusH
             {
@@ -605,7 +594,8 @@ namespace MJ_CAIS.Services
             entityToSave.ModifiedProperties ??= new List<string>();
             entityToSave.ModifiedProperties.Add(nameOfProp);
         }
-        public void SetEcrisConvID(BBulletin bulletin)
+
+        private void SetEcrisConvId(BBulletin bulletin)
         {
             int caseNum;
             try
@@ -676,9 +666,11 @@ namespace MJ_CAIS.Services
                     throw new Exception("Некоректен идентификатор на вид дело.");
             }
             bulletin.EcrisConvictionId = "BG-C-" + bulletin.CsAuthorityId + caseTypeID
-      + "1" + Math.Truncate(bulletin.CaseYear.Value) + caseNum.ToString("D5");
+             + "1" + Math.Truncate(bulletin.CaseYear.Value) + caseNum.ToString("D5");
 
+            UpdateModifiedProperties(bulletin, nameof(bulletin.EcrisConvictionId));
         }
+
         /// <summary>
         /// Set data for nationalities.
         /// If person is EU Citizen message to ecris must be sent
@@ -690,6 +682,7 @@ namespace MJ_CAIS.Services
         private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
         {
             bulletin.BgCitizen = bulletin.BPersNationalities.Any(x => x.CountryId == BG);
+            UpdateModifiedProperties(bulletin, nameof(bulletin.BgCitizen));
 
             // if person is bulgarian citizen
             var skipEcris = bulletin.BPersNationalities is { Count: 1 } && bulletin.BPersNationalities.First().CountryId == BG;
@@ -702,16 +695,19 @@ namespace MJ_CAIS.Services
             if (isEuCitizen)
             {
                 bulletin.EuCitizen = true;
-                SetEcrisConvID(bulletin);
+                UpdateModifiedProperties(bulletin, nameof(bulletin.EuCitizen));
+                SetEcrisConvId(bulletin);
             }
 
             var createEcrisTcn = personNationalities.Except(
                (await _bulletinRepository.FindAsync<EEcrisAuthority>(x => 1 == 1))
                 //dbContext.EEcrisAuthorities.AsNoTracking()
                 .Select(x => x.CountryId)).Any();
+
             if (createEcrisTcn)
             {
                 bulletin.TcnCitizen = true;
+                UpdateModifiedProperties(bulletin, nameof(bulletin.TcnCitizen));
             }
         }
 
