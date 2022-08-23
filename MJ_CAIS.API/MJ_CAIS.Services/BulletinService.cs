@@ -185,8 +185,7 @@ namespace MJ_CAIS.Services
             }
             catch (Exception ex)
             {
-                // todo
-                throw;
+                // todo: log
             }
         }
 
@@ -245,8 +244,7 @@ namespace MJ_CAIS.Services
             }
             catch (Exception ex)
             {
-                // todo
-                throw;
+                // todo log
             }
         }
 
