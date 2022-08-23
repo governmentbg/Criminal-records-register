@@ -205,6 +205,11 @@ export class BulletinFormComponent
     }
   }
 
+  protected errorHandler(errorResponse): void {
+    this.loaderService.hide();
+    super.errorHandler(errorResponse);  
+  }
+
   public onNoSanctionChange(event: any) {
     this.isNoSanctionCheck = event.target.checked;
   }

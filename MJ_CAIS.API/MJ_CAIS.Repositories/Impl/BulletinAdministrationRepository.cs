@@ -21,8 +21,8 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var query = _dbContext.BBulletins.AsNoTracking()
                 .Where(x => x.Locked == true &&
-                    _userContext.CsAuthorityId == x.CsAuthorityId &&
-                    x.StatusId != BulletinConstants.Status.Deleted);
+                    _userContext.CsAuthorityId == x.CsAuthorityId);
+                    //&& x.StatusId != BulletinConstants.Status.Deleted);
 
             return query;
         }
