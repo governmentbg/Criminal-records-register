@@ -2,6 +2,7 @@
 using EO.Pdf;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.ExternalServicesHost;
@@ -89,10 +90,15 @@ namespace MJ_CAIS.Services
 
         public async Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDFAsync(CriminalRecordsExtendedRequestType value)
         {
+            var signingName = (await _reportSearchPersonsRepository.SingleOrDefaultAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+            if (string.IsNullOrEmpty(signingName))
+            {
+                throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
+            }
             var response = await GetCriminalRecordsReportAsync(value);
             var xslt = GetTransformation();
-            var html = ApplyTransformation(XmlSerialize(response), xslt);
-            var pdf = ConvertToPDFAndSign(html, "cais.mjs.bg");
+            var html = ApplyTransformation(XmlSerialize(response), xslt);          
+            var pdf = ConvertToPDFAndSign(html, signingName);
             return new CriminalRecordsPDFResult()
             {
                 HasError = false,
