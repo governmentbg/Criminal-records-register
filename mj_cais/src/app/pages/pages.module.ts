@@ -6,6 +6,7 @@ import { PagesMenu } from "./pages-menu";
 import { HomeComponent } from "./home/home.component";
 import { PostLoginComponent } from "./auth/post-login";
 import { SharedModule } from "../shared.module";
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { SharedModule } from "../shared.module";
   declarations: [
     PagesComponent, 
     HomeComponent,
-    PostLoginComponent, 
+    PostLoginComponent,
+    HelpComponent, 
   ],
   providers: [PagesMenu],
 })

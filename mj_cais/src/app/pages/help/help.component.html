@@ -1,0 +1,38 @@
+<nb-card accent="info">
+  <nb-card-header>Ръководство на потребителя</nb-card-header>
+  <nb-card-body>
+    <nb-list>
+      <nb-list-item>
+        <a
+          [title]="'Свали'"
+          class="mr-4"
+          style="color: #3366ff; text-decoration: underline"
+          (click)="getFileForCbs()"
+        >
+          Роля ЦБС
+        </a>
+      </nb-list-item>
+      <nb-list-item>
+        <a
+          [title]="'Свали'"
+          class="mr-4"
+          style="color: #3366ff; text-decoration: underline"
+          (click)="getFileForEmployee()"
+        >
+          Роля: Служител, Съдия/Юрист
+        </a>
+      </nb-list-item>
+
+      <nb-list-item>
+        <a
+          [title]="'Свали'"
+          class="mr-4"
+          style="color: #3366ff; text-decoration: underline"
+          (click)="getFileForAdministration()"
+        >
+          Роля: Администратор, Глобален администратор
+        </a>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>

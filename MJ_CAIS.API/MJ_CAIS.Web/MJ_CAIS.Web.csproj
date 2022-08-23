@@ -43,4 +43,8 @@
     <ProjectReference Include="..\MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HelpFiles\" />
+  </ItemGroup>
+
 </Project>
