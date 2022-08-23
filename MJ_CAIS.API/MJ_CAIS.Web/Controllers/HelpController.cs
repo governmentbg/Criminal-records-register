@@ -32,7 +32,8 @@ namespace MJ_CAIS.Web.Controllers
 
         private async Task<IActionResult> ReturnFileAsync(string fileName)
         {
-            var filePath = Path.Combine("HelpFiles", fileName);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HelpFiles", fileName);
+
             var byteArr = await System.IO.File.ReadAllBytesAsync(filePath);
             var mimeType = GetContentType(fileName);
 

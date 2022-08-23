@@ -287,7 +287,9 @@ namespace MJ_CAIS.Services
             if (historyObj.Content == null)
                 throw new BusinessLogicException(string.Format(BulletinResources.msgHistoryObjContentDoesNotExist, aId));
 
-            var xsltContent = File.ReadAllText("../MJ_CAIS.DTO/ExternalServicesHost/Bulletin.xslt");
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalServicesHost", "Bulletin.xslt");
+
+            var xsltContent = File.ReadAllText(filePath);
 
             var html = XmlUtils.XmlTransform(xsltContent, historyObj.Content);
             var result = Encoding.UTF8.GetBytes(html);
