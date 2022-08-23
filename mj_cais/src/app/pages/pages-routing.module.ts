@@ -6,6 +6,9 @@ import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "../@core/services/common/guard.service";
 import { HomeResolver } from "./home/_data/home.resolver";
 import { EmptyComponent } from "../@core/components/empty/empty.component";
+import { HelpComponent } from "./help/help.component";
+import { NgxPermissionsGuard } from "ngx-permissions";
+import { RoleNameEnum } from "../@core/constants/role-name.enum";
 
 const routes: Routes = [
   {
@@ -21,7 +24,7 @@ const routes: Routes = [
       },
       {
         path: "empty",
-        component: EmptyComponent
+        component: EmptyComponent,
       },
       {
         path: "applications",
@@ -139,6 +142,22 @@ const routes: Routes = [
           import("./statistics/statistics.module").then(
             (m) => m.StatisticsModule
           ),
+      },
+      {
+        path: "help",
+        component: HelpComponent,
+        canActivate: [NgxPermissionsGuard],
+        data: {
+          permissions: {
+            only: [
+              RoleNameEnum.Normal,
+              RoleNameEnum.Judge,
+              RoleNameEnum.CentralAuth,
+              RoleNameEnum.Admin,
+              RoleNameEnum.GlobalAdmin,
+            ],
+          },
+        },
       },
       {
         path: "",

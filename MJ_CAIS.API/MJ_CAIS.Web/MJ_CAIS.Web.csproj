@@ -43,4 +43,20 @@
     <ProjectReference Include="..\MJ_CAIS.WebSetup\MJ_CAIS.WebSetup.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HelpFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="HelpFiles\MJ_CAIS_SUM_CBS.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="HelpFiles\MJ_CAIS_SUM_Employee.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="HelpFiles\MJ_CAIS_SАM_Administration.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

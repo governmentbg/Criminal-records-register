@@ -64,11 +64,13 @@ export class BulletinAdministrationOverviewComponent extends RemoteGridWithState
       return;
     }
 
+    this.loader.show();
     let bulletinId = this.ulockBulletinForm.bulletinId.value;
     let model = this.ulockBulletinForm.group.value;
 
     this.service.unlockBulletin(bulletinId, model).subscribe({
       next: (data) => {
+        this.loader.hide();
         this.toastr.showToast("success", this.successMessage);
         this.onCloseDilog();
         setTimeout(() => {
@@ -76,6 +78,7 @@ export class BulletinAdministrationOverviewComponent extends RemoteGridWithState
         }, 500);
       },
       error: (errorResponse) => {
+        this.loader.hide();
         let title = this.dangerMessage;
         let errorText = errorResponse.status + " " + errorResponse.statusText;
 

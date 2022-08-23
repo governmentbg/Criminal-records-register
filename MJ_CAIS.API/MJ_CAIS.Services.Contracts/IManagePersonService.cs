@@ -14,5 +14,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<PPersonId> RemovePidAsync(RemovePidDTO aInDto);
 
         Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
+
+        Task<string> GenerateSuidAsync(PersonDTO person);
     }
 }

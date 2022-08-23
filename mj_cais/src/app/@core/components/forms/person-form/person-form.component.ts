@@ -44,10 +44,10 @@ export class PersonFormComponent implements OnInit {
     }
 
     if (
-      ((this.isApplicationContext || this.isReportApplicationContext) &&
-        this.personForm.lnch.value !== null) ||
-      this.personForm.ln.value !== null ||
-      this.personForm.egn.value !== null
+      (this.isApplicationContext || this.isReportApplicationContext) &&
+      (this.personForm.lnch.value !== null ||
+        this.personForm.ln.value !== null ||
+        this.personForm.egn.value !== null)
     ) {
       this.showInvalidEgnOrLnchMessage = false;
       this.personForm.egn.disable();

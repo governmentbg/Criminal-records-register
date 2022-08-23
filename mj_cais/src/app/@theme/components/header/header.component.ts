@@ -14,6 +14,7 @@ import { of, Subject } from "rxjs";
 import { NbAuthOAuth2Token, NbAuthResult, NbAuthService, NbTokenService } from "@nebular/auth";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { NGXLogger } from "ngx-logger";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "ngx-header",
@@ -52,6 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private tokenService: NbTokenService,
     private logger: NGXLogger,
     private httpClient: HttpClient,
+    public router: Router,
     @Inject(NB_WINDOW) protected window: any
   ) {}
 
@@ -124,6 +126,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   navigateHome() {
     this.menuService.navigateHome();
+    return false;
+  }
+
+  navigateToHelp(){
+    debugger;
+    this.router.navigateByUrl("pages/help");
     return false;
   }
 }

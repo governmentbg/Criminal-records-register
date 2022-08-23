@@ -13,6 +13,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="ExternalServicesHost\Bulletin.xslt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="ExternalServicesHost\ESCSC.xslt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

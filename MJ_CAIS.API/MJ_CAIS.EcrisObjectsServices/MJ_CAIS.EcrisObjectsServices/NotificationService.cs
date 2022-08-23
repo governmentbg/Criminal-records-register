@@ -26,7 +26,7 @@ namespace MJ_CAIS.EcrisObjectsServices
         }
         public async Task CreateNotificationFromBulletin(BBulletin bulletin, string joinSeparator = " ", bool recreate = false, List<string> ecrisMsgIds = null)
         {
-            if (recreate && ecrisMsgIds == null || ecrisMsgIds.Count == 0 || ecrisMsgIds.Where(x=>!string.IsNullOrEmpty(x)).Count() == 0)
+            if (recreate && (ecrisMsgIds == null || ecrisMsgIds?.Count == 0 || ecrisMsgIds?.Where(x=>!string.IsNullOrEmpty(x))?.Count() == 0))
             {
                 return;
             }

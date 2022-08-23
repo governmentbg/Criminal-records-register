@@ -166,6 +166,59 @@ namespace MJ_CAIS.Services
             return person;
         }
 
+        public async Task<string> GenerateSuidAsync(PersonDTO person)
+        {
+            string? birthCountryIsoNumber = null;
+            string? birthDateText = null;
+
+            if (person.BirthPlace?.Country?.Id != null)
+            {
+
+                birthCountryIsoNumber = await _personRepository.GetIsoNumberByCountryIdAsync(person.BirthPlace.Country.Id);
+            }
+
+            if (person.BirthDate.HasValue)
+            {
+                birthDateText = ((DateTime)person.BirthDate).ToString("yyyyMMdd");
+            }
+
+            var nullText = "NULL";
+            var personString = "{\"Firstname\"=\"" + (person.Firstname ?? nullText) +
+            "\",\"Surname\"=\"" + (person.Surname ?? nullText) +
+            "\",\"Familyname\"=\"" + (person.Familyname ?? nullText) +
+            "\",\"Fullname\"=\"" + (person.Fullname ?? nullText) +
+            "\",\"Sex\"=\"" + (person.Sex.HasValue ? person.Sex.Value : nullText) +
+            "\",\"BirthDate\"=\"" + (birthDateText ?? nullText) +
+            "\",\"BirthCountry\"=\"" + (birthCountryIsoNumber ?? nullText) +
+            "\",\"BirthCity\"=\"" + (person.BirthPlace?.CityId ?? nullText) +
+            "\",\"BirthPlaceOther\"=\"" + (person.BirthPlace?.ForeignCountryAddress ?? nullText) +
+            "\",\"MotherFirstname\"=\"" + (person.MotherFirstname ?? nullText) +
+            "\",\"MotherSurname\"=\"" + (person.MotherSurname ?? nullText) +
+            "\",\"MotherFamilyname\"=\"" + (person.MotherFamilyname ?? nullText) +
+            "\",\"MotherFullname\"=\"" + (person.MotherFullname ?? nullText) +
+            "\",\"FatherFirstname\"=\"" + (person.FatherFirstname ?? nullText) +
+            "\",\"FatherSurname\"=\"" + (person.FatherSurname ?? nullText) +
+            "\",\"FatherFamilyname\"=\"" + (person.FatherFamilyname ?? nullText) +
+            "\",\"FatherFullname\"=\"" + (person.FatherFullname ?? nullText) +
+            "\",\"FirstnameLat\"=\"" + (person.FirstnameLat ?? nullText) +
+            "\",\"SurnameLat\"=\"" + (person.SurnameLat ?? nullText) +
+            "\",\"FamilynameLat\"=\"" + (person.FamilynameLat ?? nullText) +
+            "\",\"FullnameLat\"=\"" + (person.FullnameLat ?? nullText) +
+            "\"}";
+
+            SHA1 mySHA1 = SHA1.Create();
+            var result = mySHA1.ComputeHash(Encoding.UTF8.GetBytes(personString));
+            var hash = new StringBuilder();
+            foreach (byte a in result)
+            {
+                var h = a.ToString("X2");
+                hash.Append(h);
+            }
+
+            var suid = birthDateText + birthCountryIsoNumber + hash.ToString().Substring(0, 10) + person.Sex;
+            return suid;
+        }
+
         #region Create person helpers
 
         /// <summary>
@@ -357,59 +410,6 @@ namespace MJ_CAIS.Services
             }
 
             return lastPerson;
-        }
-
-        private async Task<string> GenerateSuidAsync(PersonDTO person)
-        {
-            string? birthCountryIsoNumber = null;
-            string? birthDateText = null;
-
-            if (person.BirthPlace?.Country?.Id != null)
-            {
-
-                birthCountryIsoNumber = await _personRepository.GetIsoNumberByCountryIdAsync(person.BirthPlace.Country.Id);
-            }
-
-            if (person.BirthDate.HasValue)
-            {
-                birthDateText = ((DateTime)person.BirthDate).ToString("yyyyMMdd");
-            }
-
-            var nullText = "NULL";
-            var personString = "{\"Firstname\"=\"" + (person.Firstname ?? nullText) +
-            "\",\"Surname\"=\"" + (person.Surname ?? nullText) +
-            "\",\"Familyname\"=\"" + (person.Familyname ?? nullText) +
-            "\",\"Fullname\"=\"" + (person.Fullname ?? nullText) +
-            "\",\"Sex\"=\"" + (person.Sex.HasValue ? person.Sex.Value : nullText) +
-            "\",\"BirthDate\"=\"" + (birthDateText ?? nullText) +
-            "\",\"BirthCountry\"=\"" + (birthCountryIsoNumber ?? nullText) +
-            "\",\"BirthCity\"=\"" + (person.BirthPlace?.CityId ?? nullText) +
-            "\",\"BirthPlaceOther\"=\"" + (person.BirthPlace?.ForeignCountryAddress ?? nullText) +
-            "\",\"MotherFirstname\"=\"" + (person.MotherFirstname ?? nullText) +
-            "\",\"MotherSurname\"=\"" + (person.MotherSurname ?? nullText) +
-            "\",\"MotherFamilyname\"=\"" + (person.MotherFamilyname ?? nullText) +
-            "\",\"MotherFullname\"=\"" + (person.MotherFullname ?? nullText) +
-            "\",\"FatherFirstname\"=\"" + (person.FatherFirstname ?? nullText) +
-            "\",\"FatherSurname\"=\"" + (person.FatherSurname ?? nullText) +
-            "\",\"FatherFamilyname\"=\"" + (person.FatherFamilyname ?? nullText) +
-            "\",\"FatherFullname\"=\"" + (person.FatherFullname ?? nullText) +
-            "\",\"FirstnameLat\"=\"" + (person.FirstnameLat ?? nullText) +
-            "\",\"SurnameLat\"=\"" + (person.SurnameLat ?? nullText) +
-            "\",\"FamilynameLat\"=\"" + (person.FamilynameLat ?? nullText) +
-            "\",\"FullnameLat\"=\"" + (person.FullnameLat ?? nullText) +
-            "\"}";
-
-            SHA1 mySHA1 = SHA1.Create();
-            var result = mySHA1.ComputeHash(Encoding.UTF8.GetBytes(personString));
-            var hash = new StringBuilder();
-            foreach (byte a in result)
-            {
-                var h = a.ToString("X2");
-                hash.Append(h);
-            }
-
-            var suid = birthDateText + birthCountryIsoNumber + hash.ToString().Substring(0, 10) + person.Sex;
-            return suid;
         }
 
         #endregion

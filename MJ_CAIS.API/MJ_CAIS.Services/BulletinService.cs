@@ -163,10 +163,17 @@ namespace MJ_CAIS.Services
             // save entities before check for events and rehabilitation
             await _bulletinRepository.SaveChangesAsync();
 
-            // person must be created
+            // person must be created (normal flow)
             var oldStatusIsNewBull = oldBulletinStatus == null || oldBulletinStatus == Status.NewEISS || oldBulletinStatus == Status.NewOffice;
-            var newStatusForUpdatePerson = bulletinToUpdate.StatusId != Status.NewEISS || bulletinToUpdate.StatusId != Status.NewOffice;
-            if (oldStatusIsNewBull && newStatusForUpdatePerson)
+            var newStatusForUpdatePerson = bulletinToUpdate.StatusId != Status.NewEISS && bulletinToUpdate.StatusId != Status.NewOffice;
+            var normalFlowForCreatePerson = oldStatusIsNewBull && newStatusForUpdatePerson;
+
+            // when bulletin is unlocked and person data is changed
+            var changesOnPersonData = bulletinDb.Locked == false &&
+                newStatusForUpdatePerson &&
+                await IsBulletinUlockedAndPersonDataChangedAsync(bulletinDb, aInDto.Person);
+
+            if (normalFlowForCreatePerson || changesOnPersonData)
             {
                 var person = await CreatePersonFromBulletinAsync(bulletinToUpdate);
                 await UpdateRehabilitationAndEventDataAsync(bulletinToUpdate, person);
@@ -178,8 +185,7 @@ namespace MJ_CAIS.Services
             }
             catch (Exception ex)
             {
-                // todo
-                throw;
+                // todo: log
             }
         }
 
@@ -238,8 +244,7 @@ namespace MJ_CAIS.Services
             }
             catch (Exception ex)
             {
-                // todo
-                throw;
+                // todo log
             }
         }
 
@@ -287,7 +292,9 @@ namespace MJ_CAIS.Services
             if (historyObj.Content == null)
                 throw new BusinessLogicException(string.Format(BulletinResources.msgHistoryObjContentDoesNotExist, aId));
 
-            var xsltContent = File.ReadAllText("../MJ_CAIS.DTO/ExternalServicesHost/Bulletin.xslt");
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalServicesHost", "Bulletin.xslt");
+
+            var xsltContent = File.ReadAllText(filePath);
 
             var html = XmlUtils.XmlTransform(xsltContent, historyObj.Content);
             var result = Encoding.UTF8.GetBytes(html);
@@ -393,7 +400,10 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(entity, nameof(entity.Locked));
             }
 
-            await SetDataForNationalitiesAsync(entity);
+            if (entity.StatusId != Status.NewOffice && entity.StatusId != Status.NewEISS)
+            {
+                await SetDataForNationalitiesAsync(entity);
+            }
 
             var passedNavigationProperties = new List<IBaseIdEntity>();
             _bulletinRepository.ApplyChanges(entity, passedNavigationProperties, true);
@@ -493,6 +503,8 @@ namespace MJ_CAIS.Services
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.SuidId));
                     bulletin.SuidId = personIdObj.Id;
+                    bulletin.Suid = personIdObj.Pid;
+                    UpdateModifiedProperties(bulletin, nameof(bulletin.Suid));
                 }
 
                 _bulletinRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
@@ -681,15 +693,16 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         private async Task SetDataForNationalitiesAsync(BBulletin bulletin)
         {
-            bulletin.BgCitizen = bulletin.BPersNationalities.Any(x => x.CountryId == BG);
+            var personNat = bulletin.BPersNationalities.Where(x => x.EntityState != EntityStateEnum.Deleted);
+            bulletin.BgCitizen = personNat.Any(x => x.CountryId == BG);
             UpdateModifiedProperties(bulletin, nameof(bulletin.BgCitizen));
 
             // if person is bulgarian citizen
-            var skipEcris = bulletin.BPersNationalities is { Count: 1 } && bulletin.BPersNationalities.First().CountryId == BG;
+            var skipEcris = personNat.Count() == 1 && personNat.First().CountryId == BG;
 
             if (skipEcris) return;
 
-            var personNationalities = bulletin.BPersNationalities.Select(x => x.Country?.Id).Where(x => x != BG);
+            var personNationalities = personNat.Select(x => x.CountryId).Where(x => x != BG);
             bool isEuCitizen = await _bulletinRepository.IsEuCitizen(personNationalities);
 
             if (isEuCitizen)
@@ -710,7 +723,6 @@ namespace MJ_CAIS.Services
                 UpdateModifiedProperties(bulletin, nameof(bulletin.TcnCitizen));
             }
         }
-
 
         private async Task SendMessageToEcrisAsync(bool? isEuCitizen, bool? isTcnCitizen, string bulletinId, string bOldStatus, string bNewStatus)
         {
@@ -741,6 +753,16 @@ namespace MJ_CAIS.Services
             }
         }
 
+        private async Task<bool> IsBulletinUlockedAndPersonDataChangedAsync(BBulletin bulletinFromDb, PersonDTO personFromForm)
+        {
+            if (bulletinFromDb.Egn != personFromForm.Egn) return true;
+            if (bulletinFromDb.Lnch != personFromForm.Lnch) return true;
+            if (bulletinFromDb.Ln != personFromForm.Ln) return true;
+            if (bulletinFromDb.IdDocNumber != personFromForm.IdDocNumber) return true;
+
+            var newPid = await _managePersonService.GenerateSuidAsync(personFromForm);
+            return bulletinFromDb.Suid != newPid;
+        }
 
         #endregion
     }
