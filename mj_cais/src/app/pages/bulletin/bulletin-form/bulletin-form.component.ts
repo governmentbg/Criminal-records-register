@@ -127,11 +127,9 @@ export class BulletinFormComponent
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
         CommonConstants.bgCountryId,
       ]);
-      this.fullForm.person.nationalities.isChanged.patchValue(true);
-    } else if (!this.isEdit()) {
-      this.fullForm.person.nationalities.isChanged.patchValue(true);
-    }
+    } 
 
+    this.fullForm.person.nationalities.isChanged.patchValue(true);
     this.isNoSanctionCheck = this.fullForm.noSanction.value;
     this.initAllowedButtons(bulletinStatusId, locked);
 
