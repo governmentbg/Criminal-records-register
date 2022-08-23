@@ -127,7 +127,7 @@ namespace EcrisServices
                                     if (notificationTypeId.Contains(msgTypeID))
                                     {
                                         var not = (NotificationMessageType)msg;
-                                        ecrisOutbox.Operation = ECRISConstants.EcrisOutboxOperations.StoreResponce;
+                                        ecrisOutbox.Operation = ECRISConstants.EcrisOutboxOperations.StoreNotification;
                                         if (isNew)
                                         {
 

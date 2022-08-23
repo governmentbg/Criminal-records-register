@@ -209,6 +209,7 @@ namespace MJ_CAIS.EcrisObjectsServices
             var decisionChTypes = await dbContext.BDecisionChTypes.AsNoTracking().Where(cat => decisionChType.Contains(cat.Id)).ToListAsync();
             var desidingAuthoritiesIDs = buletin.BDecisions.Select(s => s.DecisionAuthId).ToList();
             desidingAuthoritiesIDs.Add(buletin.DecidingAuthId);
+            desidingAuthoritiesIDs.Add(buletin.CaseAuthId);
             var desidingAuthorities = await dbContext.GDecidingAuthorities.AsNoTracking().Where(cat => desidingAuthoritiesIDs.Contains(cat.Id)).ToListAsync();
             var offenceCategoriesIDs = buletin.BOffences.Select(s => s.EcrisOffCatId).ToList();
             var ecrisOffenceCategories = await dbContext.BEcrisOffCategories.AsNoTracking().Where(cat => offenceCategoriesIDs.Contains(cat.Id)).ToListAsync();
@@ -244,16 +245,16 @@ namespace MJ_CAIS.EcrisObjectsServices
 
 
             }
-            if (!string.IsNullOrEmpty(buletin.DecidingAuthId))
+            if (!string.IsNullOrEmpty(buletin.CaseAuthId))
             {
-                var dAuth = desidingAuthorities.FirstOrDefault(d => d.Id == buletin.DecidingAuthId);
+                var dAuth = desidingAuthorities.FirstOrDefault(d => d.Id == buletin.CaseAuthId);
                 if (dAuth != null)
                 {
                     conv.ConvictionDecidingAuthority = new DecidingAuthorityType();
 
                     conv.ConvictionDecidingAuthority.DecidingAuthorityCode = new RestrictedStringType50Chars();
                     //todo: кой идентификатор да се пише тук
-                   // conv.ConvictionDecidingAuthority.DecidingAuthorityCode.Value = dAuth.Code; // todo
+                    conv.ConvictionDecidingAuthority.DecidingAuthorityCode.Value = dAuth.Code.ToString(); // todo
 
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation[1];
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0] = new MultilingualTextType400CharsMultilingualTextLinguisticRepresentation();
@@ -261,6 +262,10 @@ namespace MJ_CAIS.EcrisObjectsServices
                     conv.ConvictionDecidingAuthority.DecidingAuthorityName[0].Value = dAuth.Name;
 
                 }
+            }
+            else
+            {
+                throw new Exception("buletin.CaseAuthId is null");
             }
 
             //todo: винаги ли е бг?
