@@ -7,6 +7,7 @@ using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.DTO.BulletinEvent;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -38,8 +39,8 @@ namespace MJ_CAIS.Services
         public async Task ChangeStatusAsync(string aInDto, string statusId)
         {
             var bulletinEvent = await _bulletinEventRepository.SelectAsync(aInDto);
-               // await dbContext.BBulEvents
-               //.FirstOrDefaultAsync(x => x.Id == aInDto);
+            // await dbContext.BBulEvents
+            //.FirstOrDefaultAsync(x => x.Id == aInDto);
 
             if (bulletinEvent == null)
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto));
@@ -62,41 +63,8 @@ namespace MJ_CAIS.Services
         /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
         /// <param name="personId">Person identifier</param>
         /// <returns></returns>
-        public async Task GenerateEventWhenUpdateBullAsync(BBulletin currentAttachedBulletin, string personId)
+        public async Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, List<BulletinForRehabilitationAndEventDTO> allPersonBulletins)
         {
-            bool existingEvents = _bulletinEventRepository.GetExistingEvents(currentAttachedBulletin);
-            if (existingEvents) return;
-
-            var bulletinsQuery = _bulletinEventRepository.GetBulletinsByPersonId(personId);
-            var bulletins = await bulletinsQuery.ToListAsync();
-
-            // if person has one bulletin 
-            // the event is not applicable
-            if (bulletins.Count == 1) return;
-
-            currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
-            CheckForArticle2212(bulletins, currentAttachedBulletin);
-        }
-
-        /// <summary>
-        /// Check for events
-        /// http://tfstl:8080/tfs/DefaultCollection/MJ-CAIS/_workitems/edit/45537
-        /// </summary>
-        /// <param name="currentAttachedBulletin">Updated bulletin attached to the context</param>
-        /// <param name="personId">Person identifier</param>
-        /// <returns></returns>
-        public async Task GenerateEventWhenChangeStatusOfBullAsync(BBulletin currentAttachedBulletin, string personId)
-        {
-            //var existingEvents = dbContext.BBulEvents
-            //                    .AsNoTracking()
-            //                    .Where(x => x.BulletinId == currentAttachedBulletin.Id)
-            //                    .GroupBy(x => x.EventType)
-            //                    .Select(x => new
-            //                    {
-            //                        Type = x.Key,
-            //                        Any = x.Any()
-            //                    });
-
             var existingEvents = _bulletinEventRepository.GetExistingEventsByType(currentAttachedBulletin);
 
             currentAttachedBulletin.BBulEvents = new List<BBulEvent>();
@@ -107,21 +75,20 @@ namespace MJ_CAIS.Services
             var checkForEvent = article2211 == null || !article2211.Any || article3000 == null || !article3000.Any;
             if (!checkForEvent) return;
 
-            var bulletinsQuery = _bulletinEventRepository.GetBulletinsByPersonId(personId);
-            var bulletins = await bulletinsQuery.ToListAsync();
-
             // if person has one bulletin 
             // the event is not applicable
-            if (bulletins.Count == 1) return;
+            if (allPersonBulletins.Count == 1) return;
+
+            await CheckForArticle2212Async(currentAttachedBulletin, allPersonBulletins);
 
             if (article2211 == null || !article2211.Any)
             {
-                CheckForArticle2211(bulletins, currentAttachedBulletin);
+                CheckForArticle2211(currentAttachedBulletin, allPersonBulletins);
             }
 
             if (article3000 == null || !article3000.Any)
             {
-                CheckForArticle3000(bulletins, currentAttachedBulletin);
+                CheckForArticle3000(currentAttachedBulletin, allPersonBulletins);
             }
         }
 
@@ -131,7 +98,7 @@ namespace MJ_CAIS.Services
         /// </summary>
         /// <param name="bulletins">All bulletins of the person</param>
         /// <param name="currentBulletin">Updated bulletin attached to the context</param>
-        private async void CheckForArticle2211(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        private async void CheckForArticle2211(BBulletin currentBulletin, List<BulletinForRehabilitationAndEventDTO> allPersonBulletins)
         {
             // PrevSuspSent must be false
             if (currentBulletin.PrevSuspSent == true) return;
@@ -139,9 +106,9 @@ namespace MJ_CAIS.Services
             var currentBullOffencesEndDates = await _bulletinEventRepository.GetOffencesEndDatesByBulletinId(currentBulletin.Id).ToListAsync();
             if (currentBullOffencesEndDates == null || !currentBullOffencesEndDates.Any()) return;
 
-            var anotherBulletins = bulletins.Where(x => x.Id != currentBulletin.Id);
+            var anotherBulletins = allPersonBulletins.Where(x => x.Id != currentBulletin.Id);
 
-            var allSanctionByBulletins = _bulletinEventRepository.GetSanctionsSuspentionByBulletinId(bulletins.Select(x => x.Id).ToList());
+            var allSanctionByBulletins = _bulletinEventRepository.GetSanctionsSuspentionByBulletinId(allPersonBulletins.Select(x => x.Id).ToList());
             // has sanction of type
             var bulletinWithSanctionOfTypeLos = allSanctionByBulletins
                 .Where(x => x.Type == SanctionType.Imprisonment)
@@ -154,7 +121,7 @@ namespace MJ_CAIS.Services
             foreach (var bullWithSanc in bulletinWithSanctionOfTypeLos)
             {
                 // we cannot calculate the period
-                var periodStart = bulletins.FirstOrDefault(x => x.Id == bullWithSanc.BulletinId)?.DecisionDate;
+                var periodStart = allPersonBulletins.FirstOrDefault(x => x.Id == bullWithSanc.BulletinId)?.DecisionDate;
                 if (!periodStart.HasValue) continue;
 
                 var periodStartVal = periodStart.Value;
@@ -180,20 +147,23 @@ namespace MJ_CAIS.Services
         /// <summary>
         /// Is a "No Sanction" bulletin introduced for the second time
         /// </summary>
-        private static void CheckForArticle2212(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        private async Task CheckForArticle2212Async(BBulletin currentBulletin, List<BulletinForRehabilitationAndEventDTO> allPersonBulletins)
         {
+            bool existingEvents = await _bulletinEventRepository.GetExistingEventsAsync(currentBulletin.Id);
+            if (existingEvents) return;
+
             var mustAddEvent = currentBulletin.StatusId == Status.NoSanction &&
-                bulletins.Any(x => x.Id != currentBulletin.Id && x.StatusId == Status.NoSanction);
+                allPersonBulletins.Any(x => x.Id != currentBulletin.Id && x.StatusId == Status.NoSanction);
 
             if (!mustAddEvent) return;
 
             AddEventToBulletin(currentBulletin, BulletinEventConstants.Type.Article2212);
         }
 
-        private static void CheckForArticle3000(List<BulletinSancttionsEventDTO> bulletins, BBulletin currentBulletin)
+        private static void CheckForArticle3000(BBulletin currentBulletin, List<BulletinForRehabilitationAndEventDTO> allPersonBulletins)
         {
             var mustAddEvent = currentBulletin.BulletinType == BulletinConstants.Type.Bulletin78A &&
-                bulletins.Any(x => x.Id != currentBulletin.Id &&
+                allPersonBulletins.Any(x => x.Id != currentBulletin.Id &&
                 (x.BulletinType == BulletinConstants.Type.Bulletin78A || x.CaseType == CaseType.NOXD));
 
             if (!mustAddEvent) return;
@@ -203,7 +173,6 @@ namespace MJ_CAIS.Services
 
         private static void AddEventToBulletin(BBulletin currentBulletin, string eventType)
         {
-            //todo: дали да не е в репо - сменя EntityState?!
             currentBulletin.BBulEvents.Add(new BBulEvent
             {
                 BulletinId = currentBulletin.Id,

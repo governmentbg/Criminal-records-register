@@ -187,7 +187,7 @@ export class BulletinFormComponent
   //todo
   onSubmitSuccess(data: any) {
     this.loaderService.hide();
-    super.onSubmitSuccess(data);  
+    super.onSubmitSuccess(data);
   }
 
   //override
@@ -252,7 +252,7 @@ export class BulletinFormComponent
     if (!this.showOffencesTab) {
       this.showOffencesTab = tabTitle == this.offencesTabTitle;
     }
-    
+
     if (!this.showSanctionsTab) {
       this.showSanctionsTab = tabTitle == this.sanctionsTabTitle;
     }
@@ -281,5 +281,19 @@ export class BulletinFormComponent
   onChangeEventsTab(event) {
     this.showDocEventTab =
       !this.showDocEventTab && event.tabTitle == this.docEventTabTitle;
+  }
+
+  print() {
+    this.loaderService.show();
+    this.service.print(this.objectId).subscribe(
+      (response) => {
+        this.loaderService.hide();
+        this.downloadFile(response);
+      },
+      (error) => {
+        this.loaderService.hide();
+        this.errorHandler(error);
+      }
+    );
   }
 }

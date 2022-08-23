@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
 
@@ -16,11 +17,16 @@ namespace MJ_CAIS.Web.Controllers
     {
         private readonly IBulletinService _bulletinService;
         private readonly IDocumentService _documentService;
-        public BulletinsController(IBulletinService bulletinService, IDocumentService documentService)
+        public readonly IPrintDocumentService _printDocumentService;
+
+        public BulletinsController(IBulletinService bulletinService,
+            IDocumentService documentService,
+            IPrintDocumentService printDocumentService)
             : base(bulletinService)
         {
             _bulletinService = bulletinService;
             _documentService = documentService;
+            _printDocumentService = printDocumentService;
         }
 
         [HttpGet("")]
@@ -163,6 +169,22 @@ namespace MJ_CAIS.Web.Controllers
         {
             var result = await this._bulletinService.GetPersonAliasByBulletinIdAsync(aId);
             return Ok(result);
+        }
+
+        [HttpGet("{aId}/print")]
+        public async Task<IActionResult> Print(string aId)
+        {
+            var result = await this._printDocumentService.PrintBulletin(aId);
+            if (result == null) return NotFound();
+
+            var content = result;
+            var fileName = "bulletin.pdf";
+            var mimeType = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(content, mimeType, fileName);
         }
 
         private string GetContentType(string fileName)

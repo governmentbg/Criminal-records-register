@@ -97,6 +97,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Нямате права да промените статуса на бюлетин на {0}..
+        /// </summary>
+        public static string msgChangeStatusIsNotAllowed {
+            get {
+                return ResourceManager.GetString("msgChangeStatusIsNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to История на статус с идентификатор {0} не съдържа документ за визуализация на предишна версия на бюлетин..
         /// </summary>
         public static string msgHistoryObjContentDoesNotExist {

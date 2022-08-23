@@ -39,6 +39,5 @@ namespace MJ_CAIS.Services.Contracts
         bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus);
 
         void UpdateDeleteDateData(BBulletin entity);
-        void SetEcrisConvID(BBulletin bulletin);
     }
 }

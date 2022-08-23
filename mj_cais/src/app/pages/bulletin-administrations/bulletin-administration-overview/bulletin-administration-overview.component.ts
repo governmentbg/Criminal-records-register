@@ -3,6 +3,7 @@ import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
+import { LoaderService } from "../../../@core/services/common/loader.service";
 import { NomenclatureService } from "../../../@core/services/rest/nomenclature.service";
 import { BulletinAdministrationGridService } from "./_data/bulletin-administration-grid.service";
 import { BulletinAdministrationGridModel } from "./_models/bulletin-administration-grid.model";
@@ -20,13 +21,14 @@ export class BulletinAdministrationOverviewComponent extends RemoteGridWithState
   @ViewChild("dialogAdd", { read: IgxDialogComponent })
   public dialog: IgxDialogComponent;
   public ulockBulletinForm: UnlockBulletinForm;
-  public statuses: BaseNomenclatureModel[];
+  public statuses: BaseNomenclatureModel[] = [];
 
   constructor(
     service: BulletinAdministrationGridService,
     injector: Injector,
     public dateFormatService: DateFormatService,
-    public nomenclatureService: NomenclatureService
+    public nomenclatureService: NomenclatureService,
+    public loader: LoaderService
   ) {
     super("bulletins-administration-search", service, injector);
   }
@@ -35,17 +37,25 @@ export class BulletinAdministrationOverviewComponent extends RemoteGridWithState
 
   ngOnInit() {
     this.ulockBulletinForm = new UnlockBulletinForm();
-    this.nomenclatureService.getBulletinStatuses().subscribe((response) => {
-      this.statuses = response;
-    });
     super.ngOnInit();
   }
 
   onOpenDialog(bulletinId: string, currentStatus: string, version: number) {
-    this.ulockBulletinForm.status.patchValue(currentStatus);
-    this.ulockBulletinForm.version.patchValue(version);
-    this.ulockBulletinForm.bulletinId.patchValue(bulletinId);
-    this.dialog.open();
+    this.loader.show();
+    this.service.getBulletinStatusHistory(bulletinId).subscribe(
+      (response) => {
+        this.statuses = response;
+        this.ulockBulletinForm.status.patchValue(currentStatus);
+        this.ulockBulletinForm.version.patchValue(version);
+        this.ulockBulletinForm.bulletinId.patchValue(bulletinId);
+        this.loader.hide();
+        this.dialog.open();
+      },
+      (error) => {
+        this.loader.hide();
+        this.errorHandler(error);
+      }
+    );
   }
 
   onUnlockBulletin() {

@@ -1,25 +1,21 @@
-using MJ_CAIS.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.BulletinEvent;
-using MJ_CAIS.Common.Constants;
-using MJ_CAIS.DTO.Home;
+using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
 {
     public class BulletinEventRepository : BaseAsyncRepository<BBulEvent, CaisDbContext>, IBulletinEventRepository
     {
         private readonly IUserContext _userContext;
-        private readonly IPersonHelperRepository _personHelperRepository;
 
         public BulletinEventRepository(CaisDbContext dbContext,
-            IUserContext userContext,
-            IPersonHelperRepository personHelperRepository)
+            IUserContext userContext)
             : base(dbContext)
         {
             _userContext = userContext;
-            _personHelperRepository = personHelperRepository;
         }
 
         public async Task<IQueryable<BulletinEventGridDTO>> SelectAllByTypeAsync(string groupCode, string? statusId, string? bulletinId)
@@ -57,45 +53,6 @@ namespace MJ_CAIS.Repositories.Impl
             return await Task.FromResult(query);
         }
 
-        public IQueryable<BulletinSancttionsEventDTO> GetBulletinsByPersonId(string personId)
-        {
-            var query = _personHelperRepository.GetAllBulletinsForEventsByPersonId(personId)
-               .Where(bulletin => bulletin.StatusId == BulletinConstants.Status.Active ||
-                                      bulletin.StatusId == BulletinConstants.Status.ForRehabilitation ||
-                                      bulletin.StatusId == BulletinConstants.Status.NoSanction)
-                 .Select(bulletin => new BulletinSancttionsEventDTO
-                 {
-                     Id = bulletin.Id,
-                     DecisionDate = bulletin.DecisionDate,
-                     PrevSuspSent = bulletin.PrevSuspSent,
-                     StatusId = bulletin.StatusId,
-                     Version = bulletin.Version,
-                     BulletinType = bulletin.BulletinType,
-                     CaseType = bulletin.CaseTypeId,
-                 });
-
-            return query;
-        }
-
-        public IQueryable<ObjectStatusCountDTO> GetStatusCountByCurrentAuthority()
-        {
-            var query = _dbContext.BBulEvents.AsNoTracking()
-                .Include(x => x.Bulletin)
-                .Where(x => x.Bulletin.CsAuthorityId == _userContext.CsAuthorityId && (x.StatusCode == BulletinEventConstants.Status.New &&
-                          (x.EventType == BulletinEventConstants.Type.Article2211 ||
-                           x.EventType == BulletinEventConstants.Type.Article2212 ||
-                           x.EventType == BulletinEventConstants.Type.Article3000 ||
-                           x.EventType == BulletinEventConstants.Type.NewDocument)))
-                .GroupBy(x => x.EventType)
-                .Select(x => new ObjectStatusCountDTO
-                {
-                    Status = x.Key,
-                    Count = x.Count()
-                });
-
-            return query;
-        }
-
         public IQueryable<DateTime?> GetOffencesEndDatesByBulletinId(string bulletinId)
         {
             var query = _dbContext.BOffences.AsNoTracking()
@@ -123,11 +80,11 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public bool GetExistingEvents(BBulletin currentAttachedBulletin)
+        public async Task<bool> GetExistingEventsAsync(string bulletinId)
         {
-            return _dbContext.BBulEvents
+            return await _dbContext.BBulEvents
                                 .AsNoTracking()
-                                .Any(x => x.BulletinId == currentAttachedBulletin.Id && x.EventType == BulletinEventConstants.Type.Article2212);
+                                .AnyAsync(x => x.BulletinId == bulletinId && x.EventType == BulletinEventConstants.Type.Article2212);
 
         }
 

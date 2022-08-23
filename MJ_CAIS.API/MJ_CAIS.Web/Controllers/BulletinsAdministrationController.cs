@@ -39,5 +39,12 @@ namespace MJ_CAIS.Web.Controllers
             await this._bulletinAdministrationService.UnlockBulletinAsync(aInDto);
             return Ok();
         }
+
+        [HttpGet("{aId}/bulletin-statuses-history")]
+        public IActionResult GetBulletinStatusByHistory(string aId)
+        {
+            var result = _bulletinAdministrationService.GetBulletinStatusesByHistory(aId);
+            return Ok(result);
+        }
     }
 }

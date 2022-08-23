@@ -8,6 +8,20 @@
     >
       <div>
         <button
+          *ngIf="isEdit()"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="print()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px"
+        >
+          Печат
+        </button>
+      </div>
+      <div>
+        <button
           *ngIf="showForUpdate && isEdit()"
           nbButton
           matRipple
