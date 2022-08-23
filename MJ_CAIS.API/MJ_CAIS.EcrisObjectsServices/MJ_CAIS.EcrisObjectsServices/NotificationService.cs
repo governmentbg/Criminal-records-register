@@ -18,7 +18,7 @@ namespace MJ_CAIS.EcrisObjectsServices
     {
         private CaisDbContext _dbContext;
         private readonly ILogger<NotificationService> _logger;
-
+        private const string NOT_DEFINED = "NOT DEFINED";
         public NotificationService(CaisDbContext dbContext, ILogger<NotificationService> logger)
         {
             _dbContext = dbContext;
@@ -171,6 +171,14 @@ namespace MJ_CAIS.EcrisObjectsServices
                     msg.MessagePerson.PersonBirthPlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
                     msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].Value = bulletin.BirthPlaceOther;
                     msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+                }
+                else
+                {
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation[1];
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0] = new MultilingualTextType200CharsMultilingualTextLinguisticRepresentation();
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].Value = NOT_DEFINED;
+                    msg.MessagePerson.PersonBirthPlace.PlaceTownName[0].languageCode = ECRISConstants.LanguageCodes.Bg;
+
                 }
             }
             if (!string.IsNullOrEmpty(bulletin.BirthCountry?.EcrisTechnId))
