@@ -101,7 +101,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             UserInfo res = null;
             if (!string.IsNullOrEmpty(username))
             {
-                if (scheme == "EAuthV2" ||
+                if (scheme == "EAuthHandlerV2" ||
                     scheme == "MockHandler")
                 {
                     res = await FindUserByCertificate(username, externalClaims);
@@ -175,7 +175,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
         public async Task<UserRegistrationResult> RegisterUser(string scheme, string name, string userName, string email, string password, Dictionary<string, string> additionalAttributes)
         {
-            if (scheme == "EAuthV2" ||
+            if (scheme == "EAuthHandlerV2" ||
                 scheme == "MockHandler")
             {
                 if (!string.IsNullOrEmpty(userName) && userName.StartsWith("PNOBG-"))
@@ -316,7 +316,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                 {
                     context.IssuedClaims.Add(new Claim("Email", user.Email));
                 }
-                if (idpClaim == "EAuthV2" ||
+                if (idpClaim == "EAuthHandlerV2" ||
                     idpClaim == "MockHandler")
                 {
                     context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, "ECertificates"));
