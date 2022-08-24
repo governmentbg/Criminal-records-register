@@ -360,6 +360,7 @@ namespace MJ_CAIS.Services
             // so that when the object returns to a registry
             // it can add connection to the those pids
             personToUpdate.PPersonIds = existingPerson.PPersonIds;
+            _personRepository.ApplyChanges(personToUpdate, applyToAllLevels: true);
 
             // check person data
             var isPersonEquals = personToUpdate.Equals(existingPerson);
