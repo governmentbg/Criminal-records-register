@@ -351,6 +351,7 @@ namespace MJ_CAIS.Repositories.Impl
             var people = _dbContext.PPeople
                               .AsNoTracking()
                               .Include(x => x.PPersonIds)
+                              .Include(x => x.PPersonCitizenships)
                               .Where(x => x.Id == firstPersonId || x.Id == secondPersonId);
 
             return people;

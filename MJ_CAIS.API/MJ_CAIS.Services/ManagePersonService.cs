@@ -109,7 +109,7 @@ namespace MJ_CAIS.Services
             personH.PPersonIdsHes = _mapper.MapToEntityList<PPersonId, PPersonIdsH>(person.PPersonIds.ToList(), true, true);
             personH.PPersonHCitizenships = _mapper.MapToEntityList<PPersonCitizenship, PPersonHCitizenship>(person.PPersonCitizenships.ToList(), true, true);
 
-            _personRepository.ApplyChanges(personH, new List<IBaseIdEntity>(), true);
+            _personRepository.ApplyChanges(personH, applyToAllLevels: true);
             return personH;
         }
 
@@ -361,19 +361,21 @@ namespace MJ_CAIS.Services
         /// <param name="pids"></param>
         /// <param name="existingPersons"></param>
         /// <returns></returns>
-        private PPerson MergePeople(List<PPersonId> pids, List<PPerson> existingPersons)
+        private PPerson MergePeople(List<PPersonId> pids, List<PPerson> existingPeople)
         {
             // get last added or modified person object
-            var lastPerson = existingPersons.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
-            var lastPersonId = lastPerson?.Id;
+            var lastPerson = existingPeople.OrderByDescending(x => x.UpdatedOn).ThenByDescending(x => x.CreatedOn).FirstOrDefault();
+            if (lastPerson == null) throw new ArgumentNullException(nameof(existingPeople));
+            lastPerson.PPersonCitizenships ??= new List<PPersonCitizenship>();
 
-            // locally added pids
+            // locally added pids and nationalities
             var pidsToBeAdded = pids.Where(x => x.EntityState == EntityStateEnum.Added).ToList();
+            var nationalitiesToBeAdd = new List<PPersonCitizenship>();
             // move connections to this person
-            foreach (var person in existingPersons)
+            foreach (var person in existingPeople)
             {
                 //just add unchanged entity for history object
-                if (person.Id == lastPersonId)
+                if (person.Id == lastPerson?.Id)
                 {
                     pidsToBeAdded.AddRange(person.PPersonIds);
                     continue;
@@ -381,7 +383,7 @@ namespace MJ_CAIS.Services
 
                 foreach (var personPidId in person.PPersonIds)
                 {
-                    personPidId.PersonId = lastPersonId;
+                    personPidId.PersonId = lastPerson?.Id;
                     personPidId.EntityState = EntityStateEnum.Modified;
                     personPidId.ModifiedProperties = new List<string>
                     {
@@ -390,26 +392,48 @@ namespace MJ_CAIS.Services
                     };
                 }
 
+                SetNationalities(lastPerson, nationalitiesToBeAdd, person);
+
                 // pids from other person
                 pidsToBeAdded.AddRange(person.PPersonIds);
 
                 // remove other people 
                 person.EntityState = EntityStateEnum.Deleted;
-                _personRepository.ApplyChanges(person, new List<IBaseIdEntity>());
+                _personRepository.ApplyChanges(person, applyToAllLevels: true);
             }
 
             lastPerson.PPersonIds = pidsToBeAdded;
+            lastPerson.PPersonCitizenships = nationalitiesToBeAdd;
             lastPerson.EntityState = EntityStateEnum.Modified;
-            if (lastPerson.ModifiedProperties != null)
-            {
-                lastPerson.ModifiedProperties.Add(nameof(lastPerson.Version));
-            }
-            else
-            {
-                lastPerson.ModifiedProperties = new List<string> { nameof(lastPerson.Version) };
-            }
 
+            lastPerson.ModifiedProperties ??= new List<string>();
+            lastPerson.ModifiedProperties.Add(nameof(lastPerson.Version));
+            _personRepository.ApplyChanges(lastPerson, applyToAllLevels: true);
             return lastPerson;
+        }
+
+        private void SetNationalities(PPerson? lastPerson, List<PPersonCitizenship> nationalitiesToBeAdd, PPerson person)
+        {
+            foreach (var citizenship in person.PPersonCitizenships)
+            {
+                if (!lastPerson.PPersonCitizenships.Any(x => x.CountryId == citizenship.CountryId))
+                {
+                    var naionality = citizenship;
+                    naionality.PersonId = lastPerson.Id;
+                    naionality.EntityState = EntityStateEnum.Modified;
+                    naionality.ModifiedProperties = new List<string>
+                        {
+                            nameof(naionality.PersonId),
+                            nameof(naionality.Version)
+                        };
+
+                    nationalitiesToBeAdd.Add(naionality);
+                }
+                else
+                {
+                    citizenship.EntityState = EntityStateEnum.Deleted;
+                }
+            }
         }
 
         #endregion
