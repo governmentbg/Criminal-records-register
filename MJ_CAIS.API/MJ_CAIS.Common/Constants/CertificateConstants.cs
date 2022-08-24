@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MJ_CAIS.Common.Constants
+﻿namespace MJ_CAIS.Common.Constants
 {
     public class CertificateConstants
     {
+
+
+        public static class CertificateStatues
+        {
+            //todo:fill data
+            // public static string VIEW_CERTIFICATE_URL = "cartificates";
+            public static string CertificateUserSign = "CertificateUserSign";
+        }
         public static class UrlsInPublicSites
         {
             //todo:fill data
-           // public static string VIEW_CERTIFICATE_URL = "cartificates";
+            // public static string VIEW_CERTIFICATE_URL = "cartificates";
             public static string GET_CERTIFICATE_URL = "Conviction/ViewByCode";
         }
         public static class UrlsInJasper

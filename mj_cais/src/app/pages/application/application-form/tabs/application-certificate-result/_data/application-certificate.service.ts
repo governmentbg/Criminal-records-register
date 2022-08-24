@@ -41,8 +41,12 @@ export class ApplicationCertificateService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
-  public downloadSertificateContent(id: string, applicationCode: string) {
-    let url = `${this.url}/${id}/certificate-content-only/${applicationCode}`;
+  public downloadSertificateContent(
+    id: string,
+    applicationCode: string,
+    statusCode: string    //certificate status
+  ) {
+    let url = `${this.url}/${id}/certificate-content-only/${applicationCode}/${statusCode}`;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
@@ -68,18 +72,16 @@ export class ApplicationCertificateService extends CaisCrudService<
     );
   }
 
-  public setStatusToDelivered(appId: string) : Observable<any> {
-    return this.http.get<any>(
-      `${this.url}/set-status-to-delivered/${appId}`
-    );
+  public setStatusToDelivered(appId: string): Observable<any> {
+    return this.http.get<any>(`${this.url}/set-status-to-delivered/${appId}`);
   }
-   public setStatusToCanceled(appId: string) : Observable<any> {
-    return this.http.get<any>(
-      `${this.url}/set-status-to-canceled/${appId}`
-    );
+  public setStatusToCanceled(appId: string): Observable<any> {
+    return this.http.get<any>(`${this.url}/set-status-to-canceled/${appId}`);
   }
 
-  public getCanceledCertificateByAppId(appId: string) : Observable<ApplicationCertificateCanceldModel> {
+  public getCanceledCertificateByAppId(
+    appId: string
+  ): Observable<ApplicationCertificateCanceldModel> {
     return this.http.get<ApplicationCertificateCanceldModel>(
       `${this.url}/by-application-canceled/${appId}`
     );
