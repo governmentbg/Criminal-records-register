@@ -163,6 +163,13 @@ namespace MJ_CAIS.Services
             person.Lnch = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Lnch)?.Pid;
             person.Ln = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Ln)?.Pid;
             person.AfisNumber = personIds.FirstOrDefault(x => x.PidTypeId == PidType.AfisNumber)?.Pid;
+
+            if (string.IsNullOrEmpty(person.Egn) && string.IsNullOrEmpty(person.Lnch) &&
+                string.IsNullOrEmpty(person.Ln) && string.IsNullOrEmpty(person.AfisNumber))
+            {
+                person.Suid = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Suid)?.Pid;
+            }
+
             return person;
         }
 
@@ -251,6 +258,18 @@ namespace MJ_CAIS.Services
             if (!string.IsNullOrEmpty(aInDto?.AfisNumber))
             {
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber.ToUpper(), PidType.AfisNumber, IssuerType.MVR));
+            }
+
+            // get suid of an existing persion
+            // when create application or another object via person form
+            var getPidsFromExistingPerson =
+                string.IsNullOrEmpty(aInDto.Egn) && string.IsNullOrEmpty(aInDto.Lnch) &&
+                string.IsNullOrEmpty(aInDto.Ln) && string.IsNullOrEmpty(aInDto.AfisNumber) &&
+                !string.IsNullOrEmpty(aInDto.Suid);
+
+            if (getPidsFromExistingPerson)
+            {
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Suid.ToUpper(), PidType.Suid, IssuerType.CRR));
             }
 
             var suid = await GenerateSuidAsync(aInDto);
