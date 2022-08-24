@@ -13,29 +13,19 @@ namespace MJ_CAIS.Web
         {
             // Most configurations are in Web.Setup project
             var builder = WebSetupConfig.CustomConfigureBuilder(args);
-            if (!builder.Environment.IsEnvironment("tl"))
-            {
-                builder.Services
-                    .AddControllers(opt =>
+            builder.Services
+                .AddControllers(opt =>
+                {
+                    if (builder.Environment.IsEnvironment("Development"))
                     {
                         opt.UseCentralRoutePrefix(new RouteAttribute("api"));
-                    })
-                    .AddJsonOptions(options =>
-                    {
-                        options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
-                        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-                    });
-            }
-            else
-            {
-                builder.Services
-                    .AddControllers()
-                    .AddJsonOptions(options =>
-                    {
-                        options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
-                        options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
-                    });
-            }
+                    }
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
+                    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                });
 
             // TODO: at some point in time move back to WebSetupConfig
             // For now, different authentication for web projects
