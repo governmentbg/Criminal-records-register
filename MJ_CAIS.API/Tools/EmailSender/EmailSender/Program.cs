@@ -125,7 +125,7 @@ namespace EmailSender
                     entity.HasError = true;
                     entity.Error = ex.GetType().FullName + ": " + ex.Message;
                     entity.StackTrace = ex.StackTrace;
-                    entity.Attempts = (byte)(entity.Attempts==0 ? 1 : entity.Attempts + 1);
+                    entity.Attempts = (byte)(entity.Attempts.HasValue ? entity.Attempts + 1 : 1);
                     entity.SentDate = DateTime.Now;
                     entity.EmailStatus = EmailStatusConstants.Rejected;
                     //dbContext.Update(entity);
@@ -134,7 +134,7 @@ namespace EmailSender
 
                 if (success)
                 {
-                    entity.Attempts = (byte)(entity.Attempts == 0 ? 1 : entity.Attempts + 1);
+                    entity.Attempts = (byte)(entity.Attempts.HasValue ? entity.Attempts + 1 : 1);
                     entity.SentDate = DateTime.Now;
                     entity.EmailStatus = EmailStatusConstants.Accepted;
                     //dbContext.Update(entity);
