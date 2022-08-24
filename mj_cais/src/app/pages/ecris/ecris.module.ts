@@ -16,6 +16,7 @@ import { EcrisInboxOverviewComponent } from './ecris-inbox-overview/ecris-inbox-
 import { EcrisInboxFormComponent } from './ecris-inbox-form/ecris-inbox-form.component';
 import { EcrisOutboxOverviewComponent } from './ecris-outbox-overview/ecris-outbox-overview.component';
 import { EcrisOutboxFormComponent } from './ecris-outbox-form/ecris-outbox-form.component';
+import { EcrisNotResponsePreviewComponent } from './ecris-message-form/ecris-not-response-preview/ecris-not-response-preview.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { EcrisOutboxFormComponent } from './ecris-outbox-form/ecris-outbox-form.
     EcrisInboxFormComponent,
     EcrisOutboxOverviewComponent,
     EcrisOutboxFormComponent,
+    EcrisNotResponsePreviewComponent,
   ],
   imports: [CoreComponentModule, EcrisRoutingModule],
 })

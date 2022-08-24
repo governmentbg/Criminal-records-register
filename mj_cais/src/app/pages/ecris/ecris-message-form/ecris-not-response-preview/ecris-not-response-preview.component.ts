@@ -1,23 +1,22 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { NbDialogRef } from "@nebular/theme";
-import { EcrisNotPreviewComponent } from "../ecris-not-preview/ecris-not-preview.component";
 import { EcrisRequestPreviewService } from "../ecris-req-preview/_data/ecris-request-preview.service";
 
 @Component({
-  selector: "cais-ecris-response-preview",
-  templateUrl: "./ecris-response-preview.component.html",
-  styleUrls: ["./ecris-response-preview.component.scss"],
+  selector: "cais-ecris-not-response-preview",
+  templateUrl: "./ecris-not-response-preview.component.html",
+  styleUrls: ["./ecris-not-response-preview.component.scss"],
 })
-export class EcrisResponsePreviewComponent implements OnInit {
-  displayTitle: string = 'Отговор';
+export class EcrisNotResponsePreviewComponent implements OnInit {
+  displayTitle: string = "Отговор";
   ecrisId: string;
   ecrisType: string;
   formGroup: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private ecrisRequestPreviewService: EcrisRequestPreviewService,
-    protected ref: NbDialogRef<EcrisResponsePreviewComponent>
+    protected ref: NbDialogRef<EcrisNotResponsePreviewComponent>
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +32,6 @@ export class EcrisResponsePreviewComponent implements OnInit {
   buildFormImpl(): FormGroup {
     return this.formBuilder.group({
       id: [{ value: "", disabled: true }],
-      ecrisId: [{ value: "", disabled: true }],
 
       firstName: [{ value: "", disabled: true }],
       middleName: [{ value: "", disabled: true }],

@@ -18,6 +18,7 @@ import { EcrisMessageService } from "../../ecris/ecris-message-form/_data/ecris-
 import { EcrisReqPreviewComponent } from "../../ecris/ecris-message-form/ecris-req-preview/ecris-req-preview.component";
 import { EcrisNotPreviewComponent } from "../../ecris/ecris-message-form/ecris-not-preview/ecris-not-preview.component";
 import { EcrisResponsePreviewComponent } from "../../ecris/ecris-message-form/ecris-response-preview/ecris-response-preview.component";
+import { EcrisNotResponsePreviewComponent } from "../../ecris/ecris-message-form/ecris-not-response-preview/ecris-not-response-preview.component";
 
 @Component({
   selector: "cais-fbbc-form",
@@ -123,6 +124,7 @@ export class FbbcFormComponent
   getDocument(ecrisMsg: any) {
     //ecrisMsg.msgType = "EcrisReqResp";
     //ecrisMsg.msgType = "EcrisNot";
+    //ecrisMsg.msgType = "NotificationResponse";
     //ecrisMsg.msgType = "EcrisRequest";
     if (ecrisMsg.msgType == "EcrisNot") {
       this.dialogService
@@ -149,6 +151,17 @@ export class FbbcFormComponent
     if (ecrisMsg.msgType == "EcrisReqResp") {
       this.dialogService
         .open(EcrisResponsePreviewComponent, {
+          context: {
+            ecrisId: ecrisMsg.id,
+            ecrisType: ecrisMsg.msgType,
+          },
+          closeOnBackdropClick: false,
+        })
+        .onClose.subscribe((x) => {});
+    }
+    if (ecrisMsg.msgType == "NotificationResponse") {
+      this.dialogService
+        .open(EcrisNotResponsePreviewComponent, {
           context: {
             ecrisId: ecrisMsg.id,
             ecrisType: ecrisMsg.msgType,

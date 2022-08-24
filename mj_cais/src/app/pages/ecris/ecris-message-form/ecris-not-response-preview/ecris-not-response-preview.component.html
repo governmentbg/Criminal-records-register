@@ -1,0 +1,116 @@
+<nb-card
+  class="card-single-page-height"
+  *ngIf="formGroup"
+  [formGroup]="formGroup"
+>
+  <nb-card-header class="card-header-shadow">
+    <cais-card-header
+      [label]="displayTitle"
+      [onCancelFunction]="dialogSimpleCancelFunction"
+      [setForPreview]="true"
+    >
+    </cais-card-header>
+  </nb-card-header>
+  <nb-card-body class="overflow-scroll">
+    <form autocomplete="off">
+      <div class="font-weight-bold">Основни данни за лицето</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Име'"
+            [inputFormControl]="this.formGroup.controls.firstName"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Фамилия'"
+            [inputFormControl]="this.formGroup.controls.lastName"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Пълно име'"
+            [inputFormControl]="this.formGroup.controls.fullName"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Втора фамилия'"
+            [inputFormControl]="this.formGroup.controls.lastNameSecond"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Националност'"
+            [inputFormControl]="this.formGroup.controls.nationality"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Държава'"
+            [inputFormControl]="this.formGroup.controls.countryPerson"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Област'"
+            [inputFormControl]="this.formGroup.controls.municipalityPerson"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Населено място'"
+            [inputFormControl]="this.formGroup.controls.cityPerson"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-input
+            [type]="'text'"
+            [label]="'Държава'"
+            [inputFormControl]="this.formGroup.controls.personId"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'text'"
+            [label]="'Пол'"
+            [inputFormControl]="this.formGroup.controls.sex"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-6">
+          <cais-input
+            [type]="'text'"
+            [label]="'Дата на раждане'"
+            [inputFormControl]="this.formGroup.controls.birthday"
+            [parentGroup]="formGroup"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>
