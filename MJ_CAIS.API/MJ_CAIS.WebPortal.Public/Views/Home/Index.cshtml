@@ -6,39 +6,33 @@
     ViewData["Title"] = "Начална страница";
 }
 
-<div class="row pt-5 gy-4">
-    <div class="col-lg-6">
+<div class="row pt-5 justify-content-center gy-4">
+    <div class="col-lg-8">
         <div class="card h-100">
-            <div class="card-header h5 bg-primary text-white">Заявления и справки</div>
+            <div class="card-header h5 bg-primary text-white">Заявления и свидетелства</div>
             <div class="card-body">
                 <p>
-                    За да подадете заявление за издаване на електронно свидетелство съдимост или да достъпите Вашите заявления и свидетелства, Ви е необходим валиден начин за автентикация в <a href="https://eauth.egov.bg/eauth/ssologin" target="_blank">еАвт</a>.
+                    За да подадете заявление за издаване на електронно свидетелство за съдимост или да достъпите Вашите заявления и свидетелства, Ви е необходим валиден начин за автентикация в <a href="https://eauth.egov.bg/eauth/ssologin" target="_blank">еАвт</a>. <br />
+                    <ul>
+                        <li>
+                            Списък с подадени от Вас заявления може да намерите
+                            <a asp-controller="Application" asp-action="Index">
+                                тук
+                            </a>.
+
+                        </li>
+                        <li>
+                            Списък с издадени вече свидетелства може намерите
+                            <a asp-controller="Certificates" asp-action="Index">
+                                тук
+                            </a>.
+                        </li>
+                    </ul>
                 </p>
                 <div class="d-flex justify-content-center mb-3 gap-2">
-                    <a class="btn btn-primary btn-lg" asp-controller="Application" asp-action="Index">
-                        Заявления
-                    </a>
                     <a class="btn btn-primary btn-lg" asp-controller="Application" asp-action="New">
                         Ново заявление
                     </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="card h-100">
-            <div class="card-header h5 bg-primary text-white">Проверка на електронно свидетелство</div>
-            <div class="card-body d-flex h-100 align-items-center justify-content-center">
-                <div>
-                    <form asp-controller="Conviction" asp-action="ViewByCode" method="get" target="_blank" autocomplete="off">
-                        <label for="Id" class="form-label fw-bold">Код за достъп</label>
-                        <div class="input-group">
-                            <input asp-for="Id" required class="form-control form-control-lg">
-                            <button class="btn btn-primary" type="submit">Проверка</button>
-                        </div>
-                        <span asp-validation-for="Id" class="text-danger"></span>
-                    </form>
                 </div>
             </div>
         </div>
