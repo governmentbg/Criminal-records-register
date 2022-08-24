@@ -31,7 +31,7 @@ export class PersonDetailsFormComponent
   public tabs: any[];
 
   public bulletinsTabTitle = "Бюлетини";
-  public applicationsTabTitle = "Документи на гише";
+  public applicationsTabTitle = "Свидетелства";
   public eApplicationsTabTitle = "Е-Свидетелства";
   public reportsTabTitle = "Справки";
   public fbbcsTabTitle = "Сведения за осъждане в чужбина";
