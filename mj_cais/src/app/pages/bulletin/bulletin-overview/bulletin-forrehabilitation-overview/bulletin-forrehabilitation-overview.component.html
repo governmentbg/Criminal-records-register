@@ -79,39 +79,34 @@
     </ng-template>
   </igx-column>
 
+ 
   <igx-column
-    field="firstName"
-    header="Име"
+    field="identifier"
+    header="ЕГН/ЛНЧ"
     [sortable]="true"
     [dataType]="'string'"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
 
   <igx-column
-    field="surName"
-    header="Презиме"
+    field="fullName"
+    header="Имена"
     [sortable]="true"
     [dataType]="'string'"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
-
   <igx-column
-    field="familyName"
-    header="Фамилия"
+    field="birthDate"
+    header="Дата на раждане"
     [sortable]="true"
-    [dataType]="'string'"
+    [dataType]="'date'"
   >
     <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
     </ng-template>
   </igx-column>
-
   <igx-column
     width="150px"
     header=""

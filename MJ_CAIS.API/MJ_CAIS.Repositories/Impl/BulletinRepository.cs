@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
@@ -32,6 +33,44 @@ namespace MJ_CAIS.Repositories.Impl
                                 .Include(x => x.BulletinAuthority)
                                 .Where(x => x.CsAuthorityId == _userContext.CsAuthorityId)
                                 .AsNoTracking();
+            return query;
+        }
+
+        public IQueryable<BulletinGridDTO> SearchBulletins(BulletinSearchParamDTO searchParams)
+        {
+            var bulletinsQuery = from bulletin in _dbContext.BBulletins.AsNoTracking()
+                                 where bulletin.CsAuthorityId == _userContext.CsAuthorityId
+                                 select bulletin;
+
+            var filteredBlletins = ApplyFormFilter(bulletinsQuery, searchParams);
+
+            var query = from bulletin in filteredBlletins
+                        join auth in _dbContext.GDecidingAuthorities.AsNoTracking() on bulletin.BulletinAuthorityId equals auth.Id
+                            into authLeft
+                        from auth in authLeft.DefaultIfEmpty()
+
+                        join status in _dbContext.BBulletinStatuses.AsNoTracking() on bulletin.StatusId equals status.Code
+                           into statusLeft
+                        from status in statusLeft.DefaultIfEmpty()
+
+                        select new BulletinGridDTO
+                        {
+                            Id = bulletin.Id,
+                            BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                                                        bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                                                             BulletinResources.Unspecified,
+                            RegistrationNumber = bulletin.RegistrationNumber,
+                            BulletinAuthorityName = auth.Name,
+                            Identifier = bulletin.Egn + "/" + bulletin.Lnch,
+                            FullName = !string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Fullname :
+                             bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname,
+                            BirthDate = bulletin.BirthDate,
+                            CreatedOn = bulletin.CreatedOn,
+                            StatusId = bulletin.StatusId,
+                            StatusName = status.Name,
+                            CaseData = bulletin.CaseNumber + "/" + bulletin.CaseYear
+                        };
+
             return query;
         }
 
@@ -463,6 +502,49 @@ namespace MJ_CAIS.Repositories.Impl
                 }).ToListAsync();
 
             return result;
+        }
+
+        private static IQueryable<BBulletin> ApplyFormFilter(IQueryable<BBulletin> query, BulletinSearchParamDTO searchParams)
+        {
+            if (searchParams == null) return query;
+
+            if (!string.IsNullOrEmpty(searchParams.RegistrationNumber))
+                query = query.Where(x => x.RegistrationNumber == searchParams.RegistrationNumber);
+
+            if (!string.IsNullOrEmpty(searchParams.BulletinType))
+                query = query.Where(x => x.BulletinType == searchParams.BulletinType);
+
+            if (!string.IsNullOrEmpty(searchParams.StatusId))
+                query = query.Where(x => x.StatusId == searchParams.StatusId);
+
+            if (!string.IsNullOrEmpty(searchParams.CaseNumber))
+                query = query.Where(x => x.CaseNumber == searchParams.CaseNumber);
+
+            if (!string.IsNullOrEmpty(searchParams.Firstname))
+                query = query.Where(x => x.Firstname == searchParams.Firstname);
+
+            if (!string.IsNullOrEmpty(searchParams.Surname))
+                query = query.Where(x => x.Surname == searchParams.Surname);
+
+            if (!string.IsNullOrEmpty(searchParams.Familyname))
+                query = query.Where(x => x.Familyname == searchParams.Familyname);
+
+            if (!string.IsNullOrEmpty(searchParams.Egn))
+                query = query.Where(x => x.Egn == searchParams.Egn);
+
+            if (!string.IsNullOrEmpty(searchParams.Lnch))
+                query = query.Where(x => x.Lnch == searchParams.Lnch);
+
+            if (searchParams.BirthDate.HasValue)
+                query = query.Where(x => x.BirthDate == searchParams.BirthDate.Value.Date);
+
+            if (searchParams.FromDate.HasValue)
+                query = query.Where(x => x.CreatedOn >= searchParams.FromDate.Value.Date);
+
+            if (searchParams.ToDate.HasValue)
+                query = query.Where(x => x.CreatedOn <= searchParams.ToDate.Value.Date);
+
+            return query;
         }
     }
 }

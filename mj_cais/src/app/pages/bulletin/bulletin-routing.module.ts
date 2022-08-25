@@ -6,16 +6,18 @@ import { BulletinEventsOverviewComponent } from "../bulletin-events/bulletin-eve
 import { NotFoundComponent } from "../miscellaneous/not-found/not-found.component";
 import { BulletinFormComponent } from "./bulletin-form/bulletin-form.component";
 import { BulletinResolver } from "./bulletin-form/_data/bulletin.resolver";
-import { BulletinActiveOverviewComponent } from "./bulletin-overview/bulletin-active-overview/bulletin-active-overview.component";
 import { BulletinForDestructionOverviewComponent } from "./bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component";
 import { BulletinForRehabilitationOverviewComponent } from "./bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component";
 import { BulletinNewEissOverviewComponent } from "./bulletin-overview/bulletin-neweiss-overview/bulletin-neweiss-overview.component";
 import { BulletinNewOfficeOverviewComponent } from "./bulletin-overview/bulletin-newoffice-overview/bulletin-newoffice-overview.component";
+import { BulletinSearchFormComponent } from "./bulletin-search-form/bulletin-search-form.component";
+import { BulletinSearchResolver } from "./bulletin-search-form/_data/bulletin-search.resolver";
 
 const routes: Routes = [
   {
     path: "active",
-    component: BulletinActiveOverviewComponent,
+    component: BulletinSearchFormComponent,
+    resolve: { dbData: BulletinSearchResolver },
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {

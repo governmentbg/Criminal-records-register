@@ -37,11 +37,19 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getAll")]
-        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")] // todo: remove ??
-        public async Task<IActionResult> GetAllNoWrap(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
+        [HttpGet("search")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        public async Task<IActionResult> Search(ODataQueryOptions<BulletinGridDTO> aQueryOptions, [FromQuery] BulletinSearchParamDTO searchParams)
         {
-            var result = await this._bulletinService.SelectAllNoWrapAsync(aQueryOptions, statusId);
+            var result = await this._bulletinService.SearchBulletinAsync(aQueryOptions, searchParams);
+            return Ok(result);
+        }
+
+        [HttpGet("export")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        public async Task<IActionResult> ExportAllAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, [FromQuery] BulletinSearchParamDTO searchParams)
+        {
+            var result = await this._bulletinService.ExportAllAsync(aQueryOptions, searchParams);
             return Ok(result);
         }
 

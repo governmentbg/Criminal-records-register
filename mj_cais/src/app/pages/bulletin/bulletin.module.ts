@@ -6,7 +6,6 @@ import { BulletinDocumentFormComponent } from './bulletin-form/tabs/bulletin-doc
 import { BulletinOffencesFormComponent } from './bulletin-form/tabs/bulletin-offences-form/bulletin-offences-form.component';
 import { BulletinSanctionsFormComponent } from './bulletin-form/tabs/bulletin-sanctions-form/bulletin-sanctions-form.component';
 import { BulletinStatusHistoryOverviewComponent } from './bulletin-form/tabs/bulletin-status-history-overview/bulletin-status-history-overview.component';
-import { BulletinActiveOverviewComponent } from './bulletin-overview/bulletin-active-overview/bulletin-active-overview.component';
 import { BulletinForDestructionOverviewComponent } from './bulletin-overview/bulletin-fordestruction-overview/bulletin-fordestruction-overview.component';
 import { BulletinForRehabilitationOverviewComponent } from './bulletin-overview/bulletin-forrehabilitation-overview/bulletin-forrehabilitation-overview.component';
 import { BulletinNewEissOverviewComponent } from './bulletin-overview/bulletin-neweiss-overview/bulletin-neweiss-overview.component';
@@ -17,6 +16,8 @@ import { BulletinEventsOverviewComponent } from '../bulletin-events/bulletin-eve
 import { BulletinEventsArticleOverviewComponent } from '../bulletin-events/bulletin-events-overview/tabs/bulletin-events-article-overview/bulletin-events-article-overview.component';
 import { BulletinEventsDocumentOverviewComponent } from '../bulletin-events/bulletin-events-overview/tabs/bulletin-events-document-overview/bulletin-events-document-overview.component';
 import { BulletinIsinFormComponent } from './bulletin-form/tabs/bulletin-isin-form/bulletin-isin-form.component';
+import { BulletinSearchFormComponent } from './bulletin-search-form/bulletin-search-form.component';
+import { BulletinSearchOverviewComponent } from './bulletin-search-form/bulletin-search-overview/bulletin-search-overview.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,6 @@ import { BulletinIsinFormComponent } from './bulletin-form/tabs/bulletin-isin-fo
     BulletinDecisionFormComponent,
     BulletinDocumentFormComponent,
     BulletinNewEissOverviewComponent,
-    BulletinActiveOverviewComponent,
     BulletinForDestructionOverviewComponent,
     BulletinForRehabilitationOverviewComponent,
     BulletinNewOfficeOverviewComponent,
@@ -35,7 +35,9 @@ import { BulletinIsinFormComponent } from './bulletin-form/tabs/bulletin-isin-fo
     BulletinEventsOverviewComponent,
     BulletinEventsDocumentOverviewComponent,
     BulletinEventsArticleOverviewComponent,
-    BulletinIsinFormComponent
+    BulletinIsinFormComponent,
+    BulletinSearchFormComponent,
+    BulletinSearchOverviewComponent
   ],
   imports: [
     CoreComponentModule,

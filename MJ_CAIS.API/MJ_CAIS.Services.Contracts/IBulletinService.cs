@@ -10,6 +10,10 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId);
 
+        Task<IgPageResult<BulletinGridDTO>> SearchBulletinAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, BulletinSearchParamDTO searchParams);
+
+        Task<List<BulletinGridDTO>> ExportAllAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, BulletinSearchParamDTO searchParams);
+
         Task ChangeStatusAsync(string aInDto, string statusId);
 
         Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId);
@@ -34,7 +38,6 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId);
 
-        Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId);
 
         bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus);
 

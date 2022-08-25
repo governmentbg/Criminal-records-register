@@ -10,6 +10,8 @@ namespace MJ_CAIS.Repositories.Contracts
     {
         Task<DDocument> SelectDocumentAsync(string documentId);
 
+        IQueryable<BulletinGridDTO> SearchBulletins(BulletinSearchParamDTO searchParams);
+
         Task<IQueryable<DDocument>> SelectAllDocumentsAsync();
 
         Task<IQueryable<BBullPersAlias>> SelectBullPersAliasByBulletinIdAsync(string aId);

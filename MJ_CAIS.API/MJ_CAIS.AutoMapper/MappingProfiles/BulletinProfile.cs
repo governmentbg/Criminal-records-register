@@ -12,8 +12,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
     {
         public BulletinProfile()
         {
-            CreateMap<BBulletin, BulletinGridDTO>()               
+            CreateMap<BBulletin, BulletinGridDTO>()
                 .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.BulletinAuthority.Name))
+                .ForMember(d => d.Identifier, opt => opt.MapFrom(src => src.Egn + "/" + src.Lnch))
+                .ForMember(d => d.FullName, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Fullname) ? src.Fullname :
+                             src.Firstname + " " + src.Surname + " " + src.Familyname))
                 .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.Status.Name))
                 .ForMember(d => d.BulletinType, opt => opt.MapFrom(src =>
                            src.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
@@ -134,7 +137,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.EcrisOffCatId, opt => opt.MapFrom(src => src.EcrisOffCatId))
                 .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffPlace.ForeignCountryAddress))
                 .ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffPlace.Country.Id))
-                .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))                
+                .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))
                 .ForMember(d => d.OffPlaceCountry, opt => opt.Ignore());
 
             CreateMap<BOffence, OffenceDTO>()

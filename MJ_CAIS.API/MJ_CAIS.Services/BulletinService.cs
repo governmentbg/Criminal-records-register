@@ -1,7 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
-using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
@@ -19,8 +18,6 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
-using System.Transactions;
-using System.Xml.Xsl;
 using static MJ_CAIS.Common.Constants.BulletinConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
@@ -70,17 +67,20 @@ namespace MJ_CAIS.Services
             return pageResult;
         }
 
-        public virtual async Task<List<BulletinGridDTO>> SelectAllNoWrapAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
+        public async Task<IgPageResult<BulletinGridDTO>> SearchBulletinAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, BulletinSearchParamDTO searchParams)
         {
-            var entityQuery = this.GetSelectAllQueryable();
-            if (!string.IsNullOrEmpty(statusId))
-            {
-                entityQuery = entityQuery.Where(x => x.StatusId == statusId);
-            }
+            var baseQuery = _bulletinRepository.SearchBulletins(searchParams);
 
-            var baseQuery = entityQuery.ProjectTo<BulletinGridDTO>(mapperConfiguration);
-            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions, MAX_EXCEL_SIZE);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var pageResult = new IgPageResult<BulletinGridDTO>();
+            this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
+            return pageResult;
+        }
 
+        public async Task<List<BulletinGridDTO>> ExportAllAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, BulletinSearchParamDTO searchParams)
+        {
+            var baseQuery = _bulletinRepository.SearchBulletins(searchParams);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var result = resultQuery.ToList();
             return result;
         }

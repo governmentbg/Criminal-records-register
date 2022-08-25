@@ -115,6 +115,12 @@ namespace MJ_CAIS.Repositories.Impl
             if (!string.IsNullOrEmpty(searchParams.Familyname))
                 query = query.Where(x => x.Familyname == searchParams.Familyname);
 
+            if (!string.IsNullOrEmpty(searchParams.Egn))
+                query = query.Where(x => x.Egn == searchParams.Egn);
+
+            if (!string.IsNullOrEmpty(searchParams.Lnch))
+                query = query.Where(x => x.Lnch == searchParams.Lnch);
+
             if (searchParams.BirthDate.HasValue)
                 query = query.Where(x => x.BirthDate == searchParams.BirthDate.Value.Date);
 

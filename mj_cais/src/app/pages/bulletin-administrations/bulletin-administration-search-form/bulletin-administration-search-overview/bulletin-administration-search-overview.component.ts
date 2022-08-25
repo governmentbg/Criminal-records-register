@@ -1,10 +1,9 @@
-import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Injector, Input, ViewChild } from "@angular/core";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../@core/services/common/loader.service";
-import { BulletinAdministrationSearchService } from "../_data/bulletin-administration-search.service";
 import { BulletinAdministrationSearchForm } from "../_models/bulletin-administration-search.form";
 import { BulletinAdministrationSearchGridService } from "./_data/bulletin-administration-search-grid.service";
 import { BulletinAdministrationGridModel } from "./_models/bulletin-administration-grid.model";
@@ -23,7 +22,6 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
     service: BulletinAdministrationSearchGridService,
     injector: Injector,
     public dateFormatService: DateFormatService,
-    public sharedService: BulletinAdministrationSearchService,
     public loaderService: LoaderService
   ) {
     super("bulletins-administration-search", service, injector);
