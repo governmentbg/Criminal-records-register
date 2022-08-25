@@ -93,7 +93,7 @@
             [routerLink]="['/pages/bulletins/create']"
             [queryParams]="{ personId: cell.rowData.id }"
           >
-            <span class="ml-1">Бюлетин</span>
+            <span class="ml-1">Нов бюлетин</span>
           </button>
 
           <button
@@ -101,27 +101,27 @@
             [routerLink]="['/pages/applications/create']"
             [queryParams]="{ personId: cell.rowData.id }"
           >
-            <span class="ml-1">Свидетелство</span>
+            <span class="ml-1">Ново свидетелство</span>
           </button>
           <button
             mat-menu-item
             [routerLink]="['/pages/report-applications/create']"
             [queryParams]="{ personId: cell.rowData.id }"
           >
-            <span class="ml-1">Справка за съдимост</span>
+            <span class="ml-1">Нова справка за съдимост</span>
           </button>
           <button
             mat-menu-item
             [routerLink]="['/pages/people/remind', cell.rowData.id]"
           >
-            <span class="ml-1">Напомнителен бюлетин</span>
+            <span class="ml-1">Нов напомнителен бюлетин</span>
           </button>
           <button
           mat-menu-item
           [queryParams]="{ personId: cell.rowData.id }"
           [routerLink]="['/pages/internal-requests/create']"
         >
-          <span class="ml-1">Заявка</span>
+          <span class="ml-1">Нова заявка</span>
         </button>
         </mat-menu>
       </ng-container>
