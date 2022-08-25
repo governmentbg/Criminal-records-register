@@ -115,7 +115,7 @@ namespace AutomaticStepsExecutor
                         {
                             if(_replaceValues || (_replaceValues && string.IsNullOrEmpty(bulletin.EcrisConvictionId)))
                             {
-                                _bulletinService.SetEcrisConvID(bulletin);
+                                _bulletinService.SetEcrisConvId(bulletin);
                                 bulletin.EntityState = MJ_CAIS.Common.Enums.EntityStateEnum.Modified;
                                 bulletin.ModifiedProperties = new List<string> { nameof(bulletin.EcrisConvictionId) };
                                 _dbContext.ApplyChanges(bulletin);
