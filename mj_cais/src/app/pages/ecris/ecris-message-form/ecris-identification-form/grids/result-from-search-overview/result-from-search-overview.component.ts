@@ -50,7 +50,7 @@ export class ResultFromSearchOverviewComponent {
 
     this.loader.show();
     let formObj = this.searchPersonForm.group.getRawValue();
-    let filterQuery = this.service.constructQueryParamsByFiltersForLocalGrid(
+    let filterQuery = this.service.constructQueryParamsByFiltersWhenNoParams(
       formObj,
       ""
     );

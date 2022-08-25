@@ -1,11 +1,11 @@
 using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MJ_CAIS.DTO.BulletinAdministration;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.BulletinAdministration;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
-using Microsoft.AspNetCore.Authorization;
-using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Web.Controllers
 {
@@ -21,9 +21,9 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public new async Task<IActionResult> GetAll(ODataQueryOptions<BulletinAdministrationGridDTO> aQueryOptions)
+        public async Task<IActionResult> SearchBulletins(ODataQueryOptions<BulletinAdministrationGridDTO> aQueryOptions, [FromQuery]BulletinAdministrationSearchParamDTO searchParams)
         {
-            var result = await this._bulletinAdministrationService.SelectAllWithPaginationAsync(aQueryOptions);
+            var result = await this._bulletinAdministrationService.SelectAllWithPaginationAsync(aQueryOptions, searchParams);
             return Ok(result);
         }
 

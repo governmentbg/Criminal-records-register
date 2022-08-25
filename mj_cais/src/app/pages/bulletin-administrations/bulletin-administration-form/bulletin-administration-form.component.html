@@ -12,7 +12,7 @@
             <button
               nbButton
               matRipple
-              (click)="globalCancelFunction()"
+              (click)="onBackIsClicked()"
               type="button"
               class="ml-2"
               style="min-width: 100px"
@@ -89,7 +89,7 @@
         <div class="row mb-3">
           <div class="col-md-6">
             <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Съд изготвил бюлетината: </span>
+              <span class="label">Съд изготвил бюлетина: </span>
               <span> {{ model.bulletinAuthorityName }} </span>
             </div>
           </div>

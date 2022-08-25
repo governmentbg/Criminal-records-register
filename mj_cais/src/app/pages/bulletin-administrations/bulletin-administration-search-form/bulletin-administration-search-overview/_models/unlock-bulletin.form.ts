@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { BaseForm } from "../../../../@core/models/common/base.form";
+import { BaseForm } from "../../../../../@core/models/common/base.form";
 
 export class UnlockBulletinForm extends BaseForm {
   public group: FormGroup;
