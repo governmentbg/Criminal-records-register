@@ -27,6 +27,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.Egn, opt => opt.MapFrom(src => src.Person.Egn))
                 .ForMember(d => d.Lnch, opt => opt.MapFrom(src => src.Person.Lnch))
                 .ForMember(d => d.Ln, opt => opt.MapFrom(src => src.Person.Ln))
+                .ForMember(d => d.Suid, opt => opt.MapFrom(src => src.Person.Suid))
                 .ForMember(d => d.MotherFirstname, opt => opt.MapFrom(src => src.Person.MotherFirstname))
                 .ForMember(d => d.MotherSurname, opt => opt.MapFrom(src => src.Person.MotherSurname))
                 .ForMember(d => d.MotherFamilyname, opt => opt.MapFrom(src => src.Person.MotherFamilyname))

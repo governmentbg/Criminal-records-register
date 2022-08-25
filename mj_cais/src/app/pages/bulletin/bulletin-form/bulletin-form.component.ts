@@ -199,8 +199,7 @@ export class BulletinFormComponent
       this.scrollToValidationError();
     } else {
       this.loaderService.show();
-      this.formObject = form.group.value;
-
+      this.formObject = form.group.getRawValue();
       this.saveAndNavigate();
     }
   }

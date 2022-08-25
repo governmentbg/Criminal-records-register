@@ -5,7 +5,7 @@ export function createCyrillicValidator(): ValidatorFn {
     const value = control.value;
     if (!value) return null;
 
-    const isValid = /^[а-яА-Я\s]+$/.test(value);
+    const isValid = /^[а-яА-Я\s-]+$/.test(value);
 
     return !isValid ? { cyrillicValidation: true } : null;
   };

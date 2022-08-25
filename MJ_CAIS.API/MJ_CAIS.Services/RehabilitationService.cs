@@ -178,11 +178,11 @@ namespace MJ_CAIS.Services
 
             foreach (var bull in anotherBulls)
             {
-                var hasOffencInPeriod = currentBullOffEndDates
+                var hasOffencInPeriod = currentBullOffEndDates?
                  .Any(offEndDate => offEndDate >= bull.DecisionFinalDate &&
                                     offEndDate <= bull.RehabilitationDate);
 
-                if (hasSanctionOfType && hasOffencInPeriod && bull.RehabilitationDate.HasValue)
+                if (hasSanctionOfType && hasOffencInPeriod == true && bull.RehabilitationDate.HasValue)
                 {
                     _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
                     appliedChanges = true;
