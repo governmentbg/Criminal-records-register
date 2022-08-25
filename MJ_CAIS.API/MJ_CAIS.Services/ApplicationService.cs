@@ -553,8 +553,8 @@ namespace MJ_CAIS.Services
                 application.CsAuthorityId, application.ApplicationType.Code);
             var orderNumber = 0;
             cert.AAppBulletins = bulletins
-                .OrderByDescending(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                .ThenByDescending(b => b.DecisionDate).Select(b =>
+                .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
+                .ThenBy(b => b.DecisionDate).Select(b =>
                 {
                     orderNumber++;
                     return new AAppBulletin

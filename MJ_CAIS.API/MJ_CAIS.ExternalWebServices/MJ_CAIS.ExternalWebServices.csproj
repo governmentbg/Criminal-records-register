@@ -23,7 +23,7 @@
     <PackageReference Include="System.ServiceModel.Security" Version="4.9.0" />
     <PackageReference Include="TL.EDelivery" Version="22.59.37750" />
     <PackageReference Include="TL.JasperReports.Integration" Version="22.138.40192" />
-    <PackageReference Include="TL.Signer" Version="22.223.42516" />
+    <PackageReference Include="TL.Signer" Version="22.237.43030" />
   </ItemGroup>
 
   <ItemGroup>
