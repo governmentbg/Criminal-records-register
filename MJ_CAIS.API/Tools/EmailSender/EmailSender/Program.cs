@@ -48,22 +48,23 @@ namespace EmailSender
                     .UseNLog()
                 .Build();
 
-            using (host)
-            {
-                FillConfigValues(config);
-
-                var dbContext = host.Services.GetService<CaisDbContext>();
-
-                try
+                using (host)
                 {
-                    SendAllMails(dbContext);
-                }
-                catch (Exception ex)
-                {
-                    // TODO:
-                    //_logger.Error(ex);
-                    throw;
-                }
+                    FillConfigValues(config, logger);
+
+                    var dbContext = host.Services.GetService<CaisDbContext>();
+
+                    //try
+                    //{
+                    SendAllMails(dbContext, logger);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    // TODO:
+                    //    //_logger.Error(ex);
+                    //    throw;
+                    //}
+                    //}
                 }
             }
             catch (Exception ex)
@@ -81,7 +82,7 @@ namespace EmailSender
 
         }
 
-        static void FillConfigValues(IConfiguration config)
+        private static void FillConfigValues(IConfiguration config, Logger logger)
         {
             var section = config.GetSection("EmailSettings");
             HostUrl = section.GetValue<string>("HostUrl");
@@ -93,10 +94,10 @@ namespace EmailSender
             NetworkPassword = section.GetValue<string>("NetworkPassword");
         }
 
-        static void SendAllMails(CaisDbContext dbContext)
+        private static void SendAllMails(CaisDbContext dbContext, Logger logger)
         {
-            var numberOfAttempts =  dbContext.GSystemParameters.AsNoTracking().FirstOrDefault(x => x.Code == "EMAIL_NUMBER_OF_ATTEMPTS")?.ValueNumber;
-            if(numberOfAttempts == null)
+            var numberOfAttempts = dbContext.GSystemParameters.AsNoTracking().FirstOrDefault(x => x.Code == "EMAIL_NUMBER_OF_ATTEMPTS")?.ValueNumber;
+            if (numberOfAttempts == null)
             {
                 throw new Exception("Parameter EMAIL_NUMBER_OF_ATTEMPTS is not set.");
             }
@@ -106,21 +107,25 @@ namespace EmailSender
                 //.Where(x => x.EmailAddress.EndsWith("technologica.com")) // TODO: remove later
                 .ToList();
 
-            // _logger.Info("Брой мейли за изпращане: " + emailsToSend.Count);
+            logger.Info("Брой мейли за изпращане: " + emailsToSend.Count);
 
             foreach (var entity in emailsToSend)
             {
                 bool success = false;
                 try
                 {
+                    //Правим го, защото ако гръмне catch или записването на успеха няма да отбележим, че сме изпратили мейла и може да го пратим повторно
+                    entity.EmailStatus = EmailStatusConstants.InProgress;
+                    dbContext.SaveChanges();
+
                     SendEmailMessage(entity.EmailAddress, entity.Subject, entity.Body);
                     success = true;
 
-                    // _logger.Info("Успешно изпратен мейл до \"" + entity.Email + "\"");
+                    logger.Info("Успешно изпратен мейл до \"" + entity.EmailAddress + "\"");
                 }
                 catch (Exception ex)
                 {
-                    // _logger.Error(ex, "Грешка при изпращане на мейл до \"" + entity.Email + "\"");
+                    logger.Error(ex, "Грешка при изпращане на мейл до \"" + entity.EmailAddress + "\"");
 
                     entity.HasError = true;
                     entity.Error = ex.GetType().FullName + ": " + ex.Message;
@@ -128,7 +133,7 @@ namespace EmailSender
                     entity.Attempts = (byte)(entity.Attempts.HasValue ? entity.Attempts + 1 : 1);
                     entity.SentDate = DateTime.Now;
                     entity.EmailStatus = EmailStatusConstants.Rejected;
-                    //dbContext.Update(entity);
+
                     dbContext.SaveChanges();
                 }
 
@@ -137,7 +142,7 @@ namespace EmailSender
                     entity.Attempts = (byte)(entity.Attempts.HasValue ? entity.Attempts + 1 : 1);
                     entity.SentDate = DateTime.Now;
                     entity.EmailStatus = EmailStatusConstants.Accepted;
-                    //dbContext.Update(entity);
+
                     dbContext.SaveChanges();
                 }
             }

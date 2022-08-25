@@ -84,7 +84,12 @@ export class ApplicationCertificateResultComponent
             this.bulletinsCheckGrid.selectRows(response.map((x) => x.id));
           });
       }
-      if (this.model.firstSignerId == null) {
+      if (
+        this.model.firstSignerId == null &&
+        this.model.statusCode !=
+          CertificateStatuTypeEnum.CertificatePaperPrint &&
+        this.model.statusCode != CertificateStatuTypeEnum.Delivered
+      ) {
         this.model.firstSignerId = this.userInfoService.userId;
         this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
       }
@@ -191,7 +196,11 @@ export class ApplicationCertificateResultComponent
   printCertificate() {
     debugger;
     this.service
-      .downloadSertificateContent(this.model.id, this.applicationCode,this.model.statusCode)
+      .downloadSertificateContent(
+        this.model.id,
+        this.applicationCode,
+        this.model.statusCode
+      )
       .subscribe((response: any) => {
         this.fullForm.group.disable();
         let blob = new Blob([response.body]);
@@ -366,7 +375,12 @@ export class ApplicationCertificateResultComponent
                   this.bulletinsCheckGrid.selectRows(response.map((x) => x.id));
                 });
             }
-            if (this.model.firstSignerId == null) {
+            if (
+              this.model.firstSignerId == null &&
+              this.model.statusCode !=
+                CertificateStatuTypeEnum.CertificatePaperPrint &&
+              this.model.statusCode != CertificateStatuTypeEnum.Delivered
+            ) {
               this.model.firstSignerId = this.userInfoService.userId;
               this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
             }
