@@ -79,7 +79,7 @@ export class NomenclatureService extends CaisCrudService<
       `${this.url}/internal-request-types`
     );
   }
-  
+
   public getCaseTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/b_case_types`);
   }
@@ -91,7 +91,6 @@ export class NomenclatureService extends CaisCrudService<
   public getNationalityTypes(): Observable<BaseNomenclatureModel[]> {
     return of(NationalityTypeConstants.allData);
   }
-
 
   public getNationalities(): Observable<BaseNomenclatureModel[]> {
     return of([]);
@@ -183,12 +182,14 @@ export class NomenclatureService extends CaisCrudService<
     );
   }
 
-  public getEcrisRequestTypes(ecrisMsgId: boolean): Observable<BaseNomenclatureModel[]> {
+  public getEcrisRequestTypes(
+    ecrisMsgId: boolean
+  ): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(
       `${this.url}/ecris_request_types/${ecrisMsgId}`
     );
   }
-  
+
   public getDocumentTypes(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/d_doc_types`);
   }
@@ -212,7 +213,18 @@ export class NomenclatureService extends CaisCrudService<
   }
 
   public getPurposes(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/a-purposes`);
+    return this.http
+      .get<BaseNomenclatureModel[]>(`${this.url}/a-purposes`)
+      .pipe(
+        map((items: any[]) => {
+          let test = items
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((item) => {
+              return item;
+            });
+          return test;
+        })
+      );
   }
 
   public getPaymentMethods(): Observable<BaseNomenclatureModel[]> {
@@ -233,6 +245,16 @@ export class NomenclatureService extends CaisCrudService<
 
   // todo: !!! remove this, use grid with pagination
   public getUsers(): Observable<BaseNomenclatureModel[]> {
-    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g-users`);
+    return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g-users`).pipe(
+      map((items: any[]) => {
+        debugger;
+        let test = items
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((item) => {
+            return item;
+          });
+        return test;
+      })
+    );
   }
 }
