@@ -232,7 +232,7 @@ namespace EcrisIntegrationServices
 
             query.QueryParameters.MessageDateQueryParameter = new MJ_CAIS.DTO.EcrisService.MessageDateQueryParameterType()
             {
-                DateType = MJ_CAIS.DTO.EcrisService.MessageDateTypeEnumeration.SentReceived,
+                DateType = MJ_CAIS.DTO.EcrisService.MessageDateTypeEnumeration.SentReceived,                 
                 DateValue = new MJ_CAIS.DTO.EcrisService.DateStrictRangeQueryParameter()
                 {
                     DateRangeParameter = period,
