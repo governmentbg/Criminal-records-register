@@ -8,7 +8,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("inquiry")]
-    [AllowAnonymous]
+    [Authorize]
     public class InquiryController : BaseApiController
     {
         private readonly IInquiryService _service;

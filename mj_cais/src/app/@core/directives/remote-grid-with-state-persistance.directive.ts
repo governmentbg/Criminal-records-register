@@ -36,7 +36,7 @@ export class RemoteGridWithStatePersistance<
 
   protected successMessage = "Успешно запазени данни!";
   protected deletedSuccessfullyMessage = "Успешно изтрит запис!";
-  protected dangerMessage = "Грешка при запазване на данните: ";
+  protected dangerMessage = "Възникна грешка: ";
   protected validationMessage = "Грешка при валидациите!";
 
   public pinningConfig: IPinningConfig = { columns: ColumnPinningPosition.End };

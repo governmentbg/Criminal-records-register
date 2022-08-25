@@ -40,4 +40,8 @@ export class BulletinAdministrationFormComponent
   createInputObject(object: BulletinAdministrationModel) {
     return null;
   }
+
+  onBackIsClicked() {
+    this.router.navigateByUrl('pages/bulletin-administrations');
+  }
 }
