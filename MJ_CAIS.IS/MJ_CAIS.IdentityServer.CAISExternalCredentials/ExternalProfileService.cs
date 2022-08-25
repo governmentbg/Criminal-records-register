@@ -227,7 +227,9 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                         Email = email,
                         Active = false,
                         AdministrationId = adminId,
-                        RegCertSubject = (adminId == null) ? certSubject : null
+                        RegCertSubject = (adminId == null) ? certSubject : null,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = "IdentityServer"
                     });
                     await CaisDbContext.SaveChangesAsync();
                     return new UserRegistrationResult() { Succeeded = true };
@@ -254,7 +256,9 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     Name = name,
                     UserName = userName,
                     Email = email,
-                    Active = false
+                    Active = false,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = "IdentityServer"
                 };
                 var result = await _userManager.CreateAsync(user, password);
                 return

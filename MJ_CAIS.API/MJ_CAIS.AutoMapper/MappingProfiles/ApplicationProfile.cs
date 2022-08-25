@@ -26,6 +26,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.FullnameLat, opt => opt.MapFrom(src => src.Person.FullnameLat))
                 .ForMember(d => d.Sex, opt => opt.MapFrom(src => src.Person.Sex))
                 .ForMember(d => d.BirthDate, opt => opt.MapFrom(src => src.Person.BirthDate))
+                .ForMember(d => d.Suid, opt => opt.MapFrom(src => src.Person.Suid)) // !! заради чужденци без др идентификатори
                 .ForMember(d => d.Egn, opt => opt.MapFrom(src => src.Person.Egn))
                 .ForMember(d => d.Lnch, opt => opt.MapFrom(src => src.Person.Lnch))
                 .ForMember(d => d.Ln, opt => opt.MapFrom(src => src.Person.Ln))

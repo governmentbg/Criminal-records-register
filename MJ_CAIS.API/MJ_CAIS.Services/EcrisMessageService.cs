@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -18,7 +19,6 @@ using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
 using System.Xml;
-using MJ_CAIS.Common.Resources;
 
 namespace MJ_CAIS.Services
 {
@@ -116,6 +116,36 @@ namespace MJ_CAIS.Services
             result = mapper.Map<EcrisRequestDTO>((RequestMessageType)msg);
             result.SendingMemberState = memberState.Name; //can't be done in mapper
             result.ReceivingMemberState = receivingMemberState.Name; //can't be done in mapper
+
+            return result;
+        }
+
+        public async Task<EcrisNotificationResponseDTO> GetEcrisNotificationResponseByIdAsync(string ecrisMessageId)
+        {
+            //var ecrisMsg = "0cfd5df5-a14c-436e-afa3-3bdce104bbd9"; // for test
+            //var ecrisMessage = await _dDocumentRepository.SelectByEcrisIdAsync(ecrisMsg);
+            //if (ecrisMessage == null)
+            //{
+            //    throw new BusinessLogicException($"�� � ������� �������� � ID: {ecrisMessage}");
+            //}
+
+            //var doc = new XmlDocument();
+            //var xml = Encoding.UTF8.GetString(ecrisMessage.DocContent.Content);
+            var msg = XmlUtils.DeserializeXml<AbstractMessageType>("<AbstractMessageType xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:q1=\"http://ec.europa.eu/ECRIS-RI/domain-v1.0\" xsi:type=\"q1:NotificationResponseMessageType\"><q1:MessageResponseTo><q1:MessageIdentifier>RI-NOT-000000000002811</q1:MessageIdentifier><q1:MessageEcrisIdentifier>IT-BG-NOT-000000000003380</q1:MessageEcrisIdentifier></q1:MessageResponseTo><q1:MessageSendingMemberState>BG</q1:MessageSendingMemberState><q1:MessageReceivingMemberState>IT</q1:MessageReceivingMemberState><q1:MessageType>NRS</q1:MessageType><q1:MessagePerson><q1:PersonName><q1:Forename languageCode=\"it\">MILCHO</q1:Forename><q1:Surname languageCode=\"it\">ANGELOV</q1:Surname></q1:PersonName><q1:PersonSex>1</q1:PersonSex><q1:PersonBirthDate><DateYear xmlns=\"http://ec.europa.eu/ECRIS-RI/commons-v1.0\">1972</DateYear><DateMonthDay xmlns=\"http://ec.europa.eu/ECRIS-RI/commons-v1.0\"><DateMonth>--02</DateMonth><DateDay>---03</DateDay></DateMonthDay></q1:PersonBirthDate><q1:PersonBirthPlace xsi:type=\"q1:PlaceType\"><q1:PlaceCountryReference>CO-00-100-BGR</q1:PlaceCountryReference><q1:PlaceTownName><MultilingualTextLinguisticRepresentation languageCode=\"it\" translated=\"false\" xmlns=\"http://ec.europa.eu/ECRIS-RI/commons-v1.0\">Unknown</MultilingualTextLinguisticRepresentation></q1:PlaceTownName></q1:PersonBirthPlace><q1:PersonNationalityReference>CO-00-100-BGR</q1:PersonNationalityReference></q1:MessagePerson><q1:NotificationResponseMessageNotificationResponseTypeReference>NRT-00-02</q1:NotificationResponseMessageNotificationResponseTypeReference></AbstractMessageType>");
+            var result = new EcrisNotificationResponseDTO();
+
+            var requestMessage = (NotificationResponseMessageType)msg;
+
+            //await getRequestingAuthorityByCode(requestMessage);
+            //await getPersonCountryByCode(requestMessage);
+            //await getRequestPurposeCategoryByCode(requestMessage);
+            //var memberState = await getSendingMemberStateName(requestMessage);
+            //var receivingMemberState = await getReceivingMemberStateName(requestMessage);
+
+
+            result = mapper.Map<EcrisNotificationResponseDTO>((NotificationResponseMessageType)msg);
+            //result.SendingMemberState = memberState.Name; //can't be done in mapper
+            //result.ReceivingMemberState = receivingMemberState.Name; //can't be done in mapper
 
             return result;
         }
@@ -242,7 +272,7 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(string.Format(EcrisResources.msgEcrisMsgNotExist, aId));
 
             msg.EcrisMsgStatus = ECRISConstants.EcrisMessageStatuses.Identified;
-            msg.EntityState =  EntityStateEnum.Modified;
+            msg.EntityState = EntityStateEnum.Modified;
             msg.ModifiedProperties = new List<string> { nameof(msg.EcrisMsgStatus), nameof(msg.Version) };
 
             await _ecrisMessageRepository.SaveEntityAsync(msg, false);

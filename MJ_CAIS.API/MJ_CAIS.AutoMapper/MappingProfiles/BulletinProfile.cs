@@ -35,6 +35,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.Lnch, opt => opt.MapFrom(src => src.Person.Lnch))
                 .ForMember(d => d.Ln, opt => opt.MapFrom(src => src.Person.Ln))
                 .ForMember(d => d.AfisNumber, opt => opt.MapFrom(src => src.Person.AfisNumber))
+                .ForMember(d => d.Suid, opt => opt.MapFrom(src => src.Person.Suid))
                 .ForMember(d => d.IdDocNumber, opt => opt.MapFrom(src => src.Person.IdDocNumber))
                 .ForMember(d => d.IdDocCategoryId, opt => opt.MapFrom(src => src.Person.IdDocCategoryId))
                 .ForMember(d => d.IdDocTypeDescr, opt => opt.MapFrom(src => src.Person.IdDocTypeDescr))

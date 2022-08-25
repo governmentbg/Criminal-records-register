@@ -2,7 +2,6 @@
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.Fbbc;
-using MJ_CAIS.DTO.Person;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -20,6 +19,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.Familyname, opt => opt.MapFrom(src => src.Person.Familyname))
                 .ForMember(d => d.BirthDate, opt => opt.MapFrom(src => src.Person.BirthDate))
                 .ForMember(d => d.Egn, opt => opt.MapFrom(src => src.Person.Egn))
+                .ForMember(d => d.Suid, opt => opt.MapFrom(src => src.Person.Suid))
                 .ForMember(d => d.MotherFirstname, opt => opt.MapFrom(src => src.Person.MotherFirstname))
                 .ForMember(d => d.MotherSurname, opt => opt.MapFrom(src => src.Person.MotherSurname))
                 .ForMember(d => d.MotherFamilyname, opt => opt.MapFrom(src => src.Person.MotherFamilyname))
@@ -30,7 +30,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Person.BirthPlace.Country.Id))
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId))
                 .ForMember(d => d.Person, opt => opt.Ignore()); //this is PersonId property
-         
+
             CreateMap<Fbbc, FbbcDTO>()
                  .ForPath(d => d.CountryLookup, opt => opt.MapFrom(src => new LookupDTO
                  {

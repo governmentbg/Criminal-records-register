@@ -57,8 +57,8 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
-        [HttpGet("{aId}/certificate-content-only/{applicationType}")]
-        public async Task<IActionResult> GetContentOnly(string aId, string applicationType)
+        [HttpGet("{aId}/certificate-content-only/{applicationType}/{statusCode}")]
+        public async Task<IActionResult> GetContentOnly(string aId, string applicationType, string statusCode)
         {
 
             if (applicationType == ApplicationConstants.ApplicationTypes.ApplicationRequestOld ||
@@ -73,8 +73,17 @@ namespace MJ_CAIS.Web.Controllers
 
                 return File(resultXML, mimeTypeXML, fileNameXML);
             }
-            ;
-            var result = await this._certificateValidatorService.GetPdfForDownload(aId);// get signed pdf
+
+            byte[] result;
+            if (CertificateConstants.CertificateStatues.CertificateUserSign != statusCode)
+            {
+                result = await this._certificateValidatorService.GetUnsignedPdfForDownload(aId);
+            }
+            else
+            {
+                result = await this._certificateValidatorService.GetPdfForDownload(aId);
+            }
+
             var content = result;
             var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";

@@ -189,8 +189,9 @@ export class ApplicationCertificateResultComponent
   }
 
   printCertificate() {
+    debugger;
     this.service
-      .downloadSertificateContent(this.model.id, this.applicationCode)
+      .downloadSertificateContent(this.model.id, this.applicationCode,this.model.statusCode)
       .subscribe((response: any) => {
         this.fullForm.group.disable();
         let blob = new Blob([response.body]);

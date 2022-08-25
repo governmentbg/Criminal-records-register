@@ -19,6 +19,7 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
+using System.Transactions;
 using System.Xml.Xsl;
 using static MJ_CAIS.Common.Constants.BulletinConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
@@ -143,6 +144,7 @@ namespace MJ_CAIS.Services
 
             var oldBulletinStatus = bulletinDb.StatusId;
             var bulletinToUpdate = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
+            bulletinToUpdate.CsAuthorityId = bulletinDb.CsAuthorityId;
 
             // if the bulletin is locked for editing,
             // we add property according to the status
@@ -160,18 +162,24 @@ namespace MJ_CAIS.Services
                 bulletinToUpdate.ModifiedProperties.Add(nameof(bulletinToUpdate.RegistrationNumber));
             }
 
+            // todo: TransactionScope
+            //using TransactionScope scope = new(TransactionScopeAsyncFlowOption.Enabled);
             // save entities before check for events and rehabilitation
-            await _bulletinRepository.SaveChangesAsync();
+            await _bulletinRepository.SaveChangesAsync(clearTracker: true);
 
             // person must be created (normal flow)
             var oldStatusIsNewBull = oldBulletinStatus == null || oldBulletinStatus == Status.NewEISS || oldBulletinStatus == Status.NewOffice;
             var newStatusForUpdatePerson = bulletinToUpdate.StatusId != Status.NewEISS && bulletinToUpdate.StatusId != Status.NewOffice;
             var normalFlowForCreatePerson = oldStatusIsNewBull && newStatusForUpdatePerson;
 
+            var newSuid = await _managePersonService.GenerateSuidAsync(aInDto.Person);
+            bulletinToUpdate.Suid = newSuid;
+
             // when bulletin is unlocked and person data is changed
             var changesOnPersonData = bulletinDb.Locked == false &&
                 newStatusForUpdatePerson &&
-                await IsBulletinUlockedAndPersonDataChangedAsync(bulletinDb, aInDto.Person);
+                (IsBulletinUlockedAndPersonDataChanged(bulletinDb, aInDto.Person) ||
+                bulletinDb.Suid != bulletinToUpdate.Suid);
 
             if (normalFlowForCreatePerson || changesOnPersonData)
             {
@@ -179,14 +187,8 @@ namespace MJ_CAIS.Services
                 await UpdateRehabilitationAndEventDataAsync(bulletinToUpdate, person);
             }
 
-            try
-            {
-                await SendMessageToEcrisAsync(bulletinToUpdate.EuCitizen, bulletinToUpdate.TcnCitizen, bulletinToUpdate.Id, oldBulletinStatus, bulletinToUpdate.StatusId);
-            }
-            catch (Exception ex)
-            {
-                // todo: log
-            }
+            //scope.Complete();
+            await SendMessageToEcrisAsync(bulletinToUpdate.EuCitizen, bulletinToUpdate.TcnCitizen, bulletinToUpdate.Id, oldBulletinStatus, bulletinToUpdate.StatusId);
         }
 
         /// <summary>
@@ -470,47 +472,42 @@ namespace MJ_CAIS.Services
 
             foreach (var personIdObj in person.PPersonIds)
             {
-                if (personIdObj.PidTypeId == PidType.Egn)
+                if (personIdObj.PidTypeId == PidType.Egn && bulletin.Egn == personIdObj.Pid)
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.EgnId));
                     bulletin.EgnId = personIdObj.Id;
                 }
-                else if (personIdObj.PidTypeId == PidType.Lnch)
+                else if (personIdObj.PidTypeId == PidType.Lnch && bulletin.Lnch == personIdObj.Pid)
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.LnchId));
                     bulletin.LnchId = personIdObj.Id;
 
                 }
-                else if (personIdObj.PidTypeId == PidType.Ln)
+                else if (personIdObj.PidTypeId == PidType.Ln && bulletin.Ln == personIdObj.Pid)
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.LnId));
                     bulletin.LnId = personIdObj.Id;
 
                 }
-                else if (personIdObj.PidTypeId == PidType.DocumentId)
+                else if (personIdObj.PidTypeId == PidType.DocumentId && bulletin.IdDocNumber == personIdObj.Pid)
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.IdDocNumberId));
                     bulletin.IdDocNumberId = personIdObj.Id;
 
                 }
-                else if (personIdObj.PidTypeId == PidType.DocumentId)
-                {
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.IdDocNumber));
-                    bulletin.IdDocNumberId = personIdObj.Id;
-
-                }
-                else if (personIdObj.PidTypeId == PidType.Suid)
+                else if (personIdObj.PidTypeId == PidType.Suid && (bulletin.Suid == personIdObj.Pid || string.IsNullOrEmpty(bulletin.Suid)))
                 {
                     bulletin.ModifiedProperties.Add(nameof(bulletin.SuidId));
+                    bulletin.ModifiedProperties.Add(nameof(bulletin.Suid));
                     bulletin.SuidId = personIdObj.Id;
                     bulletin.Suid = personIdObj.Pid;
-                    UpdateModifiedProperties(bulletin, nameof(bulletin.Suid));
                 }
 
-                _bulletinRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+                _bulletinRepository.ApplyChanges(personIdObj);
             }
 
-            _bulletinRepository.ApplyChanges(bulletin, new List<IBaseIdEntity>());
+            bulletin.EntityState = EntityStateEnum.Modified;
+            _bulletinRepository.ApplyChanges(bulletin);
 
             return person;
         }
@@ -619,39 +616,39 @@ namespace MJ_CAIS.Services
                 caseNum = Int32.Parse(bulletin.CaseNumber);
                 if (caseNum > 99999)
                 {
-                    //слагаме му водещи нули
+                    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                     throw new Exception();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Номерът на осъждане е в грешен формат.");
+                throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
             }
             if (string.IsNullOrEmpty(bulletin.CsAuthorityId) || bulletin.CsAuthorityId.Length != 3)
             {
-                throw new Exception("Некоректен идентификатор на бюро съдимост.");
+                throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
             }
             if (!bulletin.CaseYear.HasValue || bulletin.CaseYear > 9999 || bulletin.CaseYear < 1000)
             {
-                throw new Exception("Некоректена година.");
+                throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
             }
 
             if (string.IsNullOrEmpty(bulletin.CaseTypeId))
             {
 
-                throw new Exception("Некоректен идентификатор на вид дело.");
+                throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.");
             }
 
             //< select id = "case_id" > 
-            // < option value = "01" > НОХД </ option >  
-            //  < option value = "02" > НАХД </ option >   
-            //   < option value = "03" > ЧНД </ option >    
-            //    < option value = "04" > НЧХД </ option >     
-            //     < option value = "05" > ВНОХД </ option >      
-            //      < option value = "06" > ВНАХД </ option >       
-            //       < option value = "07" > ВЧНД </ option >        
-            //        < option value = "08" > ВНЧХД </ option >         
-            //         < option value = "09" > КНАХД </ option >          
+            // < option value = "01" > пїЅпїЅпїЅпїЅ </ option >  
+            //  < option value = "02" > пїЅпїЅпїЅпїЅ </ option >   
+            //   < option value = "03" > пїЅпїЅпїЅ </ option >    
+            //    < option value = "04" > пїЅпїЅпїЅпїЅ </ option >     
+            //     < option value = "05" > пїЅпїЅпїЅпїЅпїЅ </ option >      
+            //      < option value = "06" > пїЅпїЅпїЅпїЅпїЅ </ option >       
+            //       < option value = "07" > пїЅпїЅпїЅпїЅ </ option >        
+            //        < option value = "08" > пїЅпїЅпїЅпїЅпїЅ </ option >         
+            //         < option value = "09" > пїЅпїЅпїЅпїЅпїЅ </ option >          
             //          </ select >
             //            sign_naxd
             //sign_noxd
@@ -660,7 +657,7 @@ namespace MJ_CAIS.Services
             string caseTypeID;
             switch (bulletin.CaseTypeId)
             {
-                //todo: да се допълни номенклатурата
+                //todo: пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 case "sign_noxd":
                     caseTypeID = "01";
                     break;
@@ -675,7 +672,7 @@ namespace MJ_CAIS.Services
                     caseTypeID = "04";
                     break;
                 default:
-                    throw new Exception("Некоректен идентификатор на вид дело.");
+                    throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.");
             }
             bulletin.EcrisConvictionId = "BG-C-" + bulletin.CsAuthorityId + caseTypeID
              + "1" + Math.Truncate(bulletin.CaseYear.Value) + caseNum.ToString("D5");
@@ -749,19 +746,17 @@ namespace MJ_CAIS.Services
                 }
 
                 _bulletinRepository.CreateEcrisTcn(bulletinId, tcnAction);
-                await _bulletinRepository.SaveChangesAsync();
             }
         }
 
-        private async Task<bool> IsBulletinUlockedAndPersonDataChangedAsync(BBulletin bulletinFromDb, PersonDTO personFromForm)
+        private bool IsBulletinUlockedAndPersonDataChanged(BBulletin bulletinFromDb, PersonDTO personFromForm)
         {
             if (bulletinFromDb.Egn != personFromForm.Egn) return true;
             if (bulletinFromDb.Lnch != personFromForm.Lnch) return true;
             if (bulletinFromDb.Ln != personFromForm.Ln) return true;
             if (bulletinFromDb.IdDocNumber != personFromForm.IdDocNumber) return true;
 
-            var newPid = await _managePersonService.GenerateSuidAsync(personFromForm);
-            return bulletinFromDb.Suid != newPid;
+            return false;
         }
 
         #endregion

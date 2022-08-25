@@ -1,6 +1,7 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { createCyrillicValidator } from "../../../../validators/cyrillic-validation-function";
 import { createEgnValidator } from "../../../../validators/egn-validation-function";
+import { personNamesValidator } from "../../../../validators/person-name-validaiton.function";
 import { AddressForm } from "../../address-form/_model/address.form";
 import { MultipleChooseForm } from "../../inputs/multiple-choose/models/multiple-choose.form";
 import { PersonContextEnum } from "./person-context-enum";
@@ -50,7 +51,7 @@ export class PersonForm {
   constructor(context: string, isDisabled: boolean = true) {
     this.id = new FormControl(null);
     this.suid = new FormControl(null);
-    
+
     this.version = new FormControl(null);
     this.contextType = new FormControl(context);
     this.firstname = new FormControl(null);
@@ -66,11 +67,11 @@ export class PersonForm {
     this.sex = new FormControl(null);
     this.birthDate = new FormControl(null);
     this.egn = new FormControl(null);
-    
+
     this.lnch = new FormControl(null);
-    
+
     this.ln = new FormControl(null);
-  
+
     this.nationalities = new MultipleChooseForm();
     this.afisNumber = new FormControl(null);
     this.idDocNumber = new FormControl(null);
@@ -109,19 +110,19 @@ export class PersonForm {
         ]);
       } else {
         this.firstname.setValidators([
-          Validators.required,
+          //Validators.required,
           Validators.maxLength(200),
           createCyrillicValidator(),
         ]);
 
         this.surname.setValidators([
-          Validators.required,
+          //Validators.required,
           Validators.maxLength(200),
           createCyrillicValidator(),
         ]);
 
         this.familyname.setValidators([
-          Validators.required,
+          //Validators.required,
           Validators.maxLength(200),
           createCyrillicValidator(),
         ]);
@@ -169,43 +170,48 @@ export class PersonForm {
       this.fatherFamilyname.setValidators(Validators.maxLength(200));
     }
 
-    this.group = new FormGroup({
-      id: this.id,
-      suid: this.suid,
-      version: this.version,
-      contextType: this.contextType,
-      firstname: this.firstname,
-      surname: this.surname,
-      familyname: this.familyname,
-      fullname: this.fullname,
-      firstnameLat: this.firstnameLat,
-      surnameLat: this.surnameLat,
-      familynameLat: this.familynameLat,
-      fullnameLat: this.fullnameLat,
-      personAliasTransactions: this.personAliasTransactions,
-      personAlias: this.personAlias,
-      sex: this.sex,
-      birthDate: this.birthDate,
-      birthPlace: this.birthPlace.group,
-      egn: this.egn,
-      lnch: this.lnch,
-      ln: this.ln,
-      nationalities: this.nationalities.group,
-      afisNumber: this.afisNumber,
-      idDocNumber: this.idDocNumber,
-      idDocCategoryId: this.idDocCategoryId,
-      idDocTypeDescr: this.idDocTypeDescr,
-      idDocIssuingAuthority: this.idDocIssuingAuthority,
-      idDocIssuingDate: this.idDocIssuingDate,
-      idDocValidDate: this.idDocValidDate,
-      motherFirstname: this.motherFirstname,
-      motherSurname: this.motherSurname,
-      motherFamilyname: this.motherFamilyname,
-      motherFullname: this.motherFullname,
-      fatherFirstname: this.fatherFirstname,
-      fatherSurname: this.fatherSurname,
-      fatherFamilyname: this.fatherFamilyname,
-      fatherFullname: this.fatherFullname,
-    });
+    this.group = new FormGroup(
+      {
+        id: this.id,
+        suid: this.suid,
+        version: this.version,
+        contextType: this.contextType,
+        firstname: this.firstname,
+        surname: this.surname,
+        familyname: this.familyname,
+        fullname: this.fullname,
+        firstnameLat: this.firstnameLat,
+        surnameLat: this.surnameLat,
+        familynameLat: this.familynameLat,
+        fullnameLat: this.fullnameLat,
+        personAliasTransactions: this.personAliasTransactions,
+        personAlias: this.personAlias,
+        sex: this.sex,
+        birthDate: this.birthDate,
+        birthPlace: this.birthPlace.group,
+        egn: this.egn,
+        lnch: this.lnch,
+        ln: this.ln,
+        nationalities: this.nationalities.group,
+        afisNumber: this.afisNumber,
+        idDocNumber: this.idDocNumber,
+        idDocCategoryId: this.idDocCategoryId,
+        idDocTypeDescr: this.idDocTypeDescr,
+        idDocIssuingAuthority: this.idDocIssuingAuthority,
+        idDocIssuingDate: this.idDocIssuingDate,
+        idDocValidDate: this.idDocValidDate,
+        motherFirstname: this.motherFirstname,
+        motherSurname: this.motherSurname,
+        motherFamilyname: this.motherFamilyname,
+        motherFullname: this.motherFullname,
+        fatherFirstname: this.fatherFirstname,
+        fatherSurname: this.fatherSurname,
+        fatherFamilyname: this.fatherFamilyname,
+        fatherFullname: this.fatherFullname,
+      },
+      {
+        validators: personNamesValidator("firstname", "familyname", "fullname"),
+      }
+    );
   }
 }

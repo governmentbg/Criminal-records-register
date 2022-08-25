@@ -30,12 +30,12 @@ namespace MJ_CAIS.ExternalWebServices
 
             var metadata = ExternalServicesHelper.GetDictionaryMetadata(certificateID, validationString);
 
-         
+
 
             //bool result = validator.ValidateClientSignature(fileStream, personIdentifier);
             //result &= validator.ValidateServerSignature(pdfStream, signatureName, out List<Error> errors, metadata);
             List<Error> errors = new List<Error>();
-            var result  =  _pdfSignatureValidator.ValidateServerSignature(pdfStream, await GetSigningCertificateName(true),
+            var result = _pdfSignatureValidator.ValidateServerSignature(pdfStream, await GetSigningCertificateName(true),
              out errors, metadata);
 
             if (errors.Count == 0)
@@ -54,9 +54,15 @@ namespace MJ_CAIS.ExternalWebServices
             return await SignPdfForDownload(contentFromDb, certificateID);
         }
 
+        public async Task<byte[]> GetUnsignedPdfForDownload(string certificateID)
+        {
+            var contentFromDb = await GetCertificateContent(certificateID);
+            return contentFromDb;
+        }
+
         public async Task<bool> ValidatePdf(byte[] pdfBytes, string certificateID)
         {
-            
+
             var contentFromDb = await GetCertificateContent(certificateID);
             var validationString = ExternalServicesHelper.GetValidationString(contentFromDb);
 
@@ -92,7 +98,7 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                systemNameOfCertificate= SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME;
+                systemNameOfCertificate = SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME;
             }
             //todo: дали да е този сертификат?!
             var signingCertificateName = (await _dbContext.GSystemParameters

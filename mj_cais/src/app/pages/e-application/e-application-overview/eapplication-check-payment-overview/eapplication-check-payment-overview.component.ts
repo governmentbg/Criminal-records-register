@@ -19,7 +19,7 @@ export class EApplicationCheckPaymentOverviewComponent extends RemoteGridWithSta
   EApplicationGridService
 > {
 
-  public hideStatus: boolean = false;
+  public hideStatus: boolean = true;
 
   constructor(
     private dialogService: NbDialogService,

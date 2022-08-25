@@ -115,6 +115,24 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.Sex, opt => opt.MapFrom(src => src.MessagePerson.PersonSex));
 
 
+            CreateMap<NotificationResponseMessageType, EcrisNotificationResponseDTO>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.MessageIdentifier))
+                //Основни данни за лицето
+                .ForMember(d => d.LastName, opt => opt.MapFrom(src => src.MessagePerson.PersonName.Surname[0].Value))
+                .ForMember(d => d.FirstName, opt => opt.MapFrom(src => src.MessagePerson.PersonName.Forename[0].Value))
+                .ForMember(d => d.FullName, opt => opt.MapFrom(src => src.MessagePerson.PersonName.FullName[0].Value))
+                .ForMember(d => d.LastNameSecond, opt => opt.MapFrom(src => src.MessagePerson.PersonName.SecondSurname[0].Value))
+                .ForMember(d => d.Nationality, opt => opt.MapFrom(src => src.MessagePerson.PersonNationalityReference[0].Value))
+                .ForMember(d => d.Birthday, opt => opt.MapFrom(src => AbstractMessageTypeResolver.GetDateType(src.MessagePerson.PersonBirthDate)))
+                .ForMember(d => d.CountryPerson, opt => opt.MapFrom(src => src.MessagePerson.PersonBirthPlace.PlaceCountryReference.Value))
+                .ForMember(d => d.MunicipalityPerson, opt => opt.MapFrom(src => src.MessagePerson.PersonBirthPlace.PlaceCountrySubdivisionReference.Value))
+                .ForMember(d => d.CityPerson, opt => opt.MapFrom(src => src.MessagePerson.PersonBirthPlace.PlaceTownName[0].Value))
+                .ForMember(d => d.PersonId, opt => opt.MapFrom(src => src.MessagePerson.PersonIdentityNumber.Value))
+                .ForMember(d => d.Sex, opt => opt.MapFrom(src => src.MessagePerson.PersonSex));
+
+
+
+
         }
     }
 }

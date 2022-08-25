@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -111,6 +110,11 @@ namespace MJ_CAIS.Web.Controllers
                 return Ok(ecrisNot);
             }
             else if (type == "EcrisRequest")
+            {
+                var ecrisRequest = await this._ecrisMessageService.GetEcrisRequestByIdAsync(aId);
+                return Ok(ecrisRequest);
+            }
+            else if (type == "NotificationResponse")
             {
                 var ecrisRequest = await this._ecrisMessageService.GetEcrisRequestByIdAsync(aId);
                 return Ok(ecrisRequest);

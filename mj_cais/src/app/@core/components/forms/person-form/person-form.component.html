@@ -10,6 +10,15 @@
       [parentGroup]="personForm.group"
     >
     </cais-input>
+    <span
+      class="caption status-danger ng-star-inserted"
+      *ngIf="
+        personForm.firstname?.errors?.invalidPersonNames &&
+        (personForm.firstname.touched || personForm.firstname.dirty)
+      "
+    >
+      Моля, въведете Име и Фамилия или Пълно име
+    </span>
   </div>
   <div class="form-group col-md-3">
     <cais-input
@@ -28,6 +37,15 @@
       [parentGroup]="personForm.group"
     >
     </cais-input>
+    <span
+      class="caption status-danger ng-star-inserted"
+      *ngIf="
+        personForm.familyname?.errors?.invalidPersonNames &&
+        (personForm.familyname.touched || personForm.familyname.dirty)
+      "
+    >
+      Моля, въведете Име и Фамилия или Пълно име
+    </span>
   </div>
   <ng-container *ngIf="!isFbbcContext">
     <div class="form-group col-md-3">
@@ -38,6 +56,15 @@
         [parentGroup]="personForm.group"
       >
       </cais-input>
+      <span
+        class="caption status-danger ng-star-inserted"
+        *ngIf="
+          personForm.fullname?.errors?.invalidPersonNames &&
+          (personForm.fullname.touched || personForm.fullname.dirty)
+        "
+      >
+        Моля, въведете Име и Фамилия или Пълно име
+      </span>
     </div>
   </ng-container>
 </div>
