@@ -536,13 +536,13 @@ namespace MJ_CAIS.Repositories.Impl
                 query = query.Where(x => x.Lnch == searchParams.Lnch);
 
             if (searchParams.BirthDate.HasValue)
-                query = query.Where(x => x.BirthDate == searchParams.BirthDate.Value.Date);
+                query = query.Where(x => x.BirthDate == searchParams.BirthDate.Value);
 
             if (searchParams.FromDate.HasValue)
-                query = query.Where(x => x.CreatedOn >= searchParams.FromDate.Value.Date);
+                query = query.Where(x => x.CreatedOn >= searchParams.FromDate.Value.AddDays(-1).Date);
 
             if (searchParams.ToDate.HasValue)
-                query = query.Where(x => x.CreatedOn <= searchParams.ToDate.Value.Date);
+                query = query.Where(x => x.CreatedOn <= searchParams.ToDate.Value);
 
             return query;
         }
