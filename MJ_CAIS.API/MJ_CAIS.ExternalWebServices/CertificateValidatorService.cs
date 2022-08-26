@@ -12,34 +12,50 @@ namespace MJ_CAIS.ExternalWebServices
         private readonly IPdfSignatureValidator _pdfSignatureValidator;
         private readonly IPdfSigner _pdfSignerService;
         private readonly CaisDbContext _dbContext;
+        private readonly IUserContext _userContext;
 
 
         public CertificateValidatorService(IPdfSignatureValidator pdfSignatureValidator,
-            CaisDbContext dbContext, IPdfSigner pdfSigner)
+            CaisDbContext dbContext, IPdfSigner pdfSigner,    IUserContext userContext)
         {
             _pdfSignatureValidator = pdfSignatureValidator;
             _pdfSignerService = pdfSigner;
             _dbContext = dbContext;
-        }
+            _userContext =userContext;
+    }
 
         public async Task<bool> ValidatePdf(byte[] pdfBytes, string validationString, string certificateID)
         {
-            return true;
+            // return true;
+            var curentUser = await _dbContext.GUsers.FirstOrDefaultAsync(u=>u.Id== _userContext.UserId);
+            if (curentUser == null || string.IsNullOrEmpty(curentUser.Egn))
+            {
+                throw new BusinessLogicException("Текущия потребител няма записано ЕГН.");
+            }
 
+            var egn = curentUser.Egn;
+
+            var certNumber = _pdfSignatureValidator.GetSignaturesCount(pdfBytes);
+            if (certNumber < 2)
+            {
+                return false;
+            }
             using Stream pdfStream = new MemoryStream(pdfBytes);
 
             var metadata = ExternalServicesHelper.GetDictionaryMetadata(certificateID, validationString);
 
-
+         
 
             //bool result = validator.ValidateClientSignature(fileStream, personIdentifier);
             //result &= validator.ValidateServerSignature(pdfStream, signatureName, out List<Error> errors, metadata);
             List<Error> errors = new List<Error>();
             var result = _pdfSignatureValidator.ValidateServerSignature(pdfStream, await GetSigningCertificateName(true),
-             out errors, metadata);
+             out errors, metadata, certNumber-2);
 
             if (errors.Count == 0)
             {
+                
+                result = result && _pdfSignatureValidator.ValidateClientSignature(pdfStream, egn, 0);
                 return result;
             }
             else
