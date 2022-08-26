@@ -256,7 +256,10 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                if (containsBulletins || (certificate.Application.PurposeNavigation != null && certificate.Application.PurposeNavigation.ForSecondSignature == true))
+                var citizenships = await _certificateRepository.FindAsync<AAppCitizenship>(cit => cit.ApplicationId == certificate.ApplicationId
+                && cit.CountryId==GlobalConstants.BGCountryId);
+                if (containsBulletins || (certificate.Application.PurposeNavigation != null && certificate.Application.PurposeNavigation.ForSecondSignature == true)
+                    || (citizenships==null || citizenships.Count() == 0))
                 {
                     //ако е електронно и е за чужбина или има присъди, трябва съдия да го подпише електронно
                     await _certificateService.SetCertificateStatus(certificate, statusCertificateUserSign, "За подпис от юрист");
