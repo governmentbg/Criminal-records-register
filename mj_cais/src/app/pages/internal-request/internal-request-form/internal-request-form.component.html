@@ -186,6 +186,30 @@
             </ng-template>
           </igx-column>
           <igx-column
+            width="120px"
+            header="Операции върху бюлетин"
+            [sortable]="false"
+            [filterable]="false"
+            [editable]="false"
+            [pinned]="true"
+          >
+            <ng-template igxCell let-cell="cell">
+              <a
+                [title]="'Преглед'"
+                [routerLink]="['/pages/bulletins/preview', cell.rowData.bulletinId]"
+              >
+                <nb-icon pack="fa" icon="eye"></nb-icon>
+              </a>
+              <a
+                *ngIf="cell.rowData.canEditBulletin == true"
+                [title]="'Редактиране'"
+                [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]"
+              >
+                <nb-icon pack="fa" icon="pen"></nb-icon>
+              </a>
+            </ng-template>
+          </igx-column>
+          <igx-column
             [width]="'30%'"
             field="remarks"
             header="Описание"
