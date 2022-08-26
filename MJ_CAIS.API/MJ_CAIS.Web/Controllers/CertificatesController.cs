@@ -97,8 +97,12 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPost("{certId}/uploadSignedCertificate")]
         public async Task<IActionResult> UploadSignedCertificate(string certId, [FromBody] CertificateDocumentDTO aInDto)
         {
-            await _certificateValidatorService.ValidatePdf(aInDto.DocumentContent, certId);
-            await this._certificateService.UploadSignedDocumet(certId, aInDto);
+            var isValid = await _certificateValidatorService.ValidatePdf(aInDto.DocumentContent, certId);
+            if (isValid)
+            {
+                await this._certificateService.UploadSignedDocumet(certId, aInDto);
+              
+            }
             return Ok();
         }
 

@@ -27,7 +27,7 @@ namespace MJ_CAIS.ExternalWebServices
         public async Task<bool> ValidatePdf(byte[] pdfBytes, string validationString, string certificateID)
         {
             // return true;
-            var curentUser = await _dbContext.GUsers.FirstOrDefaultAsync(u=>u.Id== _userContext.UserId);
+            var curentUser = await _dbContext.GUsers.AsNoTracking().FirstOrDefaultAsync(u=>u.Id== _userContext.UserId);
             if (curentUser == null || string.IsNullOrEmpty(curentUser.Egn))
             {
                 throw new BusinessLogicException("Текущия потребител няма записано ЕГН.");
@@ -60,7 +60,7 @@ namespace MJ_CAIS.ExternalWebServices
             }
             else
             {
-                throw new Exception($"Брой валидационни грешки: {errors.Count()}");
+                throw new BusinessLogicException($"Брой валидационни грешки: {errors.Count()}; {string.Join(';',errors.Select(x=>x.ErrorMessage))}");
             }
         }
 
@@ -83,13 +83,11 @@ namespace MJ_CAIS.ExternalWebServices
             var validationString = ExternalServicesHelper.GetValidationString(contentFromDb);
 
             bool result;
-            try
-            {
+          
                 result = await ValidatePdf(pdfBytes, validationString, certificateID);
-            }
-            catch (Exception e)
+            if (!result)
             {
-                throw new BusinessLogicException("Файлът не е подписан!");
+                throw new BusinessLogicException("Грешка при валидация на сертификатите.");
             }
 
             return result;
@@ -133,7 +131,7 @@ namespace MJ_CAIS.ExternalWebServices
 
         private async Task<byte[]> GetCertificateContent(string certificateID)
         {
-            var content = await _dbContext.ACertificates.Where(x => x.Id == certificateID && x.Doc != null)
+            var content = await _dbContext.ACertificates.AsNoTracking().Where(x => x.Id == certificateID && x.Doc != null)
                 .Select(x => x.Doc.DocContent).FirstOrDefaultAsync();
             if (content == null || content.Content == null || content.Content.Length == 0)
             {
