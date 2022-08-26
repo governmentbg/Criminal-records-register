@@ -236,6 +236,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         WApplication application = await PopulateWApplication(request, cache);
                         request.WApplication = application;
                         _logger.LogTrace($"{request.Id}: PopulateWApplication ended.");
+                        if (request.WApplication?.WAppCitizenships != null)
+                        {
+                            _dbContext.ApplyChanges(request.WApplication?.WAppCitizenships);
+                        }
+                        if (request.WApplication?.WAppPersAliases != null)
+                        {
+                            _dbContext.ApplyChanges(request.WApplication?.WAppPersAliases);
+                        }
                         // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                     if (request.ApplicationId != null)
@@ -244,6 +252,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         AApplication application = await PopulateAApplication(request, cache);
                         request.Application = application;
                         _logger.LogTrace($"{request.Id}: PopulateAApplication ended.");
+                        if (request.Application?.AAppCitizenships != null)
+                        {
+                            _dbContext.ApplyChanges(request.Application?.AAppCitizenships);
+                        }
+                        if (request.Application?.AAppPersAliases != null)
+                        {
+                            _dbContext.ApplyChanges(request.Application?.AAppPersAliases);
+                        }
                         // _dbContext.ApplyChanges(application, new List<IBaseIdEntity>());
                     }
                   if(request.ARepApplId != null)
@@ -251,11 +267,17 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         _logger.LogTrace($"{request.Id}: PopulateAReportApplication started.");
                         AReportApplication application = await PopulateAReportApplication(request, cache);
                         request.ARepAppl = application;
+                        if (request.ARepAppl?.ARepCitizenships != null)
+                        {
+                            _dbContext.ApplyChanges(request.ARepAppl?.ARepCitizenships);
+                        }
+                     
                         _logger.LogTrace($"{request.Id}: PopulateAReportApplication ended.");
                     }
                    
                 }
                 _logger.LogTrace($"{request.Id}: Before ApplyChanges");
+             
                 _dbContext.ApplyChanges(request, new List<IBaseIdEntity>(), true);
                 _logger.LogTrace($"{request.Id}: Before SaveChangesAsync");
                 await _dbContext.SaveChangesAsync();
