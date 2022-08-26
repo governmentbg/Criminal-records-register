@@ -213,7 +213,8 @@ namespace MJ_CAIS.Repositories.Impl
                             Version = bInternalRequest.Version,
                             BulletinAuthorityName = auth.Name,
                             Remarks = bInternalRequest.Remarks,
-                            StatusName = status.Name
+                            StatusName = status.Name,
+                            CanEditBulletin = bulletin.CsAuthorityId == _userContext.CsAuthorityId
                         };
 
             return query;
@@ -250,6 +251,7 @@ namespace MJ_CAIS.Repositories.Impl
                                       IdDocNumber = bulletins.IdDocNumber,
                                       SuidId = bulletins.SuidId,
                                       Suid = bulletins.Suid,
+                                      CsAuthorityId = bulletins.CsAuthorityId
                                   }).FirstOrDefaultAsync(x => x.BulletinId == aId);
 
             var result = new SelectedPersonBulletinGridDTOExtended
@@ -266,6 +268,7 @@ namespace MJ_CAIS.Repositories.Impl
                     Version = bulletin.Version,
                     BulletinAuthorityName = bulletin.BulletinAuthorityName,
                     StatusName = bulletin.StatusName,
+                    CanEditBulletin = bulletin.CsAuthorityId == _userContext.CsAuthorityId
                 } }
             };
 
@@ -350,6 +353,7 @@ namespace MJ_CAIS.Repositories.Impl
                                      CreatedOn = bulletin.CreatedOn,
                                      BulletinAuthorityId = bulletin.BulletinAuthorityId,
                                      Version = bulletin.Version,
+                                     CsAuthorotyId = bulletin.CsAuthorityId
                                  };
 
 
@@ -367,6 +371,7 @@ namespace MJ_CAIS.Repositories.Impl
                                       CreatedOn = bulletin.CreatedOn,
                                       BulletinAuthorityId = bulletin.BulletinAuthorityId,
                                       Version = bulletin.Version,
+                                      CsAuthorotyId = bulletin.CsAuthorityId
                                   };
 
 
@@ -384,6 +389,7 @@ namespace MJ_CAIS.Repositories.Impl
                                     CreatedOn = bulletin.CreatedOn,
                                     BulletinAuthorityId = bulletin.BulletinAuthorityId,
                                     Version = bulletin.Version,
+                                    CsAuthorotyId = bulletin.CsAuthorityId
                                 };
 
 
@@ -402,6 +408,7 @@ namespace MJ_CAIS.Repositories.Impl
                                        CreatedOn = bulletin.CreatedOn,
                                        BulletinAuthorityId = bulletin.BulletinAuthorityId,
                                        Version = bulletin.Version,
+                                       CsAuthorotyId = bulletin.CsAuthorityId
                                    };
 
 
@@ -419,6 +426,7 @@ namespace MJ_CAIS.Repositories.Impl
                                       CreatedOn = bulletin.CreatedOn,
                                       BulletinAuthorityId = bulletin.BulletinAuthorityId,
                                       Version = bulletin.Version,
+                                      CsAuthorotyId = bulletin.CsAuthorityId
                                   };
 
 
@@ -448,6 +456,7 @@ namespace MJ_CAIS.Repositories.Impl
                                           Version = bulletins.Version,
                                           BulletinAuthorityName = auth.Name,
                                           StatusName = status.Name,
+                                          CanEditBulletin = bulletins.CsAuthorityId == _userContext.CsAuthorityId
                                       }).ToListAsync();
 
             return result;
