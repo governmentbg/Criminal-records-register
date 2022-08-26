@@ -11,6 +11,7 @@ export class GeneratedReportModel extends BaseModel {
   public docId: string = null;
   public statusCode: string = null;
   public statusName: string = null;
+  public bulletinsCount: number = null;
 
   constructor(init?: Partial<GeneratedReportModel>) {
     super(init);
@@ -24,5 +25,6 @@ export class GeneratedReportModel extends BaseModel {
     this.docId = init?.docId ?? null;
     this.statusCode = init?.statusCode ?? null;
     this.statusName = init?.statusName ?? null;
+    this.bulletinsCount = init?.bulletinsCount ?? null;
   }
 }

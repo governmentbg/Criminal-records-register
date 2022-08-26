@@ -32,8 +32,6 @@ export class ReportApplicationFormComponent
   @ViewChild("finalEditDialog", { read: IgxDialogComponent })
   public finalEditDialog: IgxDialogComponent;
 
-  public signersformGroup: FormGroup;
-
   public reportApplicationStatus: string;
   public ReportApplicationStatusConstants = ReportApplicationStatusConstants;
   public PersonContextEnum = PersonContextEnum;
@@ -76,17 +74,13 @@ export class ReportApplicationFormComponent
     }
 
     this.isForPreview =
+      this.isForPreview  ||
       this.reportApplicationStatus ==
         ReportApplicationStatusConstants.Approved ||
       this.reportApplicationStatus ==
         ReportApplicationStatusConstants.Canceled ||
       this.reportApplicationStatus ==
         ReportApplicationStatusConstants.Delivered;
-
-    this.signersformGroup = this.formBuilder.group({
-      firstSignerId: [{ value: "", disabled: false }],
-      secondSignerId: [{ value: "", disabled: false }],
-    });
 
     this.formFinishedLoading.emit();
   }
@@ -105,25 +99,10 @@ export class ReportApplicationFormComponent
   };
 
   public finalEdit() {
-    if (!this.signersformGroup.valid) {
-      this.signersformGroup.markAllAsTouched();
-      return;
-    }
-
     this.isFinalEdit = true;
-    this.fullForm.firstSignerId.patchValue(
-      this.signersformGroup.value.firstSignerId
-    );
-    this.fullForm.secondSignerId.patchValue(
-      this.signersformGroup.value.secondSignerId
-    );
-
     this.validateAndSave(this.fullForm);
   }
 
-  public onFinalEditDialogOpen() {
-    this.finalEditDialog.open();
-  }
   protected validateAndSave(form: any) {
     console.log(form.group);
     if (!form.group.valid) {

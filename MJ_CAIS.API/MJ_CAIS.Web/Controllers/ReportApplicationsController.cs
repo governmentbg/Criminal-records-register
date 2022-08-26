@@ -117,8 +117,6 @@ namespace MJ_CAIS.Web.Controllers
         {
             var reportId = await this._reportApplicationService.FinalUpdateAsync(aInDto);
             if (string.IsNullOrEmpty(reportId)) return NotFound();
-
-            await _reportGenerationService.CreateReport(reportId);
             return Ok();
         }
 
@@ -126,9 +124,12 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> PrintReportById(string aId)
             => ReturnPdf(await this._reportApplicationService.GetReportAppContentByIdAsync(aId));
 
-        [HttpGet("generate-report/{aId}")]
-        public async Task<IActionResult> GenerateReportById(string aId)
-            => ReturnPdf(await _reportGenerationService.CreateReport(aId));
+        [HttpPut("generate-report")]
+        public async Task<IActionResult> GenerateReportById([FromBody] GenerateReportParamDTO aInDto)
+        {
+            await _reportGenerationService.CreateReport(aInDto.ReportId, aInDto.FirstSignerId, aInDto.SecondSignerId);
+            return Ok();
+        }
 
         [HttpPut("cancel/{aId}")]
         public virtual async Task<IActionResult> Cancel(string aId, [FromBody] CancelDTO aInDto)

@@ -16,18 +16,20 @@ export class ReportApplicationService extends CaisCrudService<
     super(ReportApplicationModel, injector, "a-report-applications");
   }
 
-  public getWithPersonData(personId: string): Observable<ReportApplicationModel> {
+  public getWithPersonData(
+    personId: string
+  ): Observable<ReportApplicationModel> {
     return this.http.get<ReportApplicationModel>(
       `${this.url}/create?personId=${personId}`
     );
   }
 
   public cancel(id: string, description: any): Observable<any[]> {
-    return this.http.put<any>(`${this.url}/cancel/${id}`, description );
+    return this.http.put<any>(`${this.url}/cancel/${id}`, description);
   }
 
   public cancelReport(model: any): Observable<any[]> {
-    return this.http.put<any>(`${this.url}/cancel-report/`, model );
+    return this.http.put<any>(`${this.url}/cancel-report/`, model);
   }
 
   public updateFinal(
@@ -58,9 +60,8 @@ export class ReportApplicationService extends CaisCrudService<
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
 
-  public generateReport(reportId: string) {
-    let url = `${this.url}/generate-report/` + reportId;
-    return this.http.get(url, { responseType: "blob", observe: "response" });
+  public generateReport(model: any): Observable<any[]> {
+    return this.http.put<any>(`${this.url}/generate-report/`, model);
   }
 
   public deliver(id: string): Observable<any> {

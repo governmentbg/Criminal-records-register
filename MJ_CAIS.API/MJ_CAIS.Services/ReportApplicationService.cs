@@ -127,7 +127,7 @@ namespace MJ_CAIS.Services
                 throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.fieldIsRequired, ReportApplicationResources.lblCancelDesc));
 
             if (reportApp.StatusCode == Status.Canceled)
-                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgÀppReportIsCanceled, aId));
+                throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.msgï¿½ppReportIsCanceled, aId));
 
             reportApp.EntityState = EntityStateEnum.Modified;
             reportApp.ModifiedProperties = new List<string> { nameof(reportApp.StatusCode), nameof(reportApp.Version) };

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.DataAccess;
@@ -8,33 +7,22 @@ using MJ_CAIS.DTO.Report;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TL.Signer;
 
 namespace MJ_CAIS.ExternalWebServices
 {
-    public class ReportGenerationService: BaseAsyncService<ReportDTO, ReportDTO, ReportGridDTO, AReport, string, CaisDbContext>, IReportGenerationService
+    public class ReportGenerationService : BaseAsyncService<ReportDTO, ReportDTO, ReportGridDTO, AReport, string, CaisDbContext>, IReportGenerationService
     {
-
-        private readonly IPdfSigner _pdfSignerService;
         private readonly IPrintDocumentService _printerService;
         private readonly IReportRepository _reportRepository;
-    
 
-        public ReportGenerationService(IMapper mapper, 
-            IPdfSigner pdfSignerService, IPrintDocumentService printerService, IReportRepository reportRepository)
+        public ReportGenerationService(IMapper mapper,
+              IPrintDocumentService printerService, 
+              IReportRepository reportRepository)
             : base(mapper, reportRepository)
-        {       
-
-            _pdfSignerService = pdfSignerService;
+        {
             _printerService = printerService;
             _reportRepository = reportRepository;
-
-
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
@@ -42,16 +30,16 @@ namespace MJ_CAIS.ExternalWebServices
             throw new NotImplementedException();
         }
 
-        public async Task<byte[]> CreateReport(string reportID)
+        public async Task<byte[]> CreateReport(string reportID, string firstSignerId = null, string secondSignerId = null)
         {
             var report = await _reportRepository.GetReport(reportID);//.SingleOrDefaultAsync<AReport>(x => x.Id == reportID); 
-           
+
             if (report == null)
             {
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {reportID} does not exist.");
             }
-            var signingCertificateName = (await _reportRepository.SingleOrDefaultAsync<GSystemParameter>(x => 
+            var signingCertificateName = (await _reportRepository.SingleOrDefaultAsync<GSystemParameter>(x =>
             x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
 
             //(await dbContext.GSystemParameters
@@ -61,22 +49,21 @@ namespace MJ_CAIS.ExternalWebServices
                 throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
             }
 
-            var result = await CreateReport(report, signingCertificateName);
+            var result = await CreateReport(report, signingCertificateName, firstSignerId, secondSignerId);
 
 
 
             await _reportRepository.SaveChangesAsync();
-          
-            
+
+
             return result;
         }
 
-
-        private async Task<byte[]> CreateReport(AReport report, string signingCertificateName)
+        private async Task<byte[]> CreateReport(AReport report, string signingCertificateName, string firstSignerId = null, string secondSignerId = null)
         {
 
             byte[] contentReport;
-            contentReport = await CreatePdf(report.Id,   signingCertificateName);
+            contentReport = await CreatePdf(report.Id, signingCertificateName);
             bool isExistingDoc = false;
             bool isExistingContent = false;
             DDocument doc;
@@ -138,9 +125,9 @@ namespace MJ_CAIS.ExternalWebServices
 
             report.DocId = doc.Id;
             report.Doc = doc;
-         
 
-    
+
+
             if (isExistingContent)
             {
                 content.EntityState = EntityStateEnum.Modified;
@@ -185,28 +172,40 @@ namespace MJ_CAIS.ExternalWebServices
             report.ModifiedProperties.Add(nameof(report.DocId));
             report.ModifiedProperties.Add(nameof(report.StatusCode));
 
+            if (!string.IsNullOrEmpty(firstSignerId))
+            {
+                report.FirstSignerId = firstSignerId;
+                report.ModifiedProperties.Add(nameof(report.FirstSignerId));
+            }
+
+            if (!string.IsNullOrEmpty(secondSignerId))
+            {
+                report.SecondSignerId = secondSignerId;
+                report.ModifiedProperties.Add(nameof(report.SecondSignerId));
+            }
+
             report.StatusCode = ReportApplicationConstants.Status.ReadyReport;
 
-            if(report.AReportStatusHes == null)
+            if (report.AReportStatusHes == null)
             {
                 report.AReportStatusHes = new List<AReportStatusH>();
             }
 
             report.AReportStatusHes.Add(new AReportStatusH
             {
-                Id= BaseEntity.GenerateNewId(),
+                Id = BaseEntity.GenerateNewId(),
                 EntityState = EntityStateEnum.Added,
                 AReportId = report.Id,
                 AReportApplId = report.ARepApplId,
                 StatusCode = ReportApplicationConstants.Status.ReadyReport,
                 Descr = "Създаден PDF документ",
-                ReportOrder = report.AReportStatusHes.Count(x=>x.StatusCode== ReportApplicationConstants.Status.ReadyReport) + 1
+                ReportOrder = report.AReportStatusHes.Count(x => x.StatusCode == ReportApplicationConstants.Status.ReadyReport) + 1
             });
 
 
             //_reportRepository.ApplyChanges(content, new List<IBaseIdEntity>());
             //_reportRepository.ApplyChanges(doc, new List<IBaseIdEntity>());
-            _reportRepository.ApplyChanges(report, new List<IBaseIdEntity>(),true);
+            _reportRepository.ApplyChanges(report, new List<IBaseIdEntity>(), true);
 
             //await _reportRepository.SaveChangesAsync();
             return contentReport;

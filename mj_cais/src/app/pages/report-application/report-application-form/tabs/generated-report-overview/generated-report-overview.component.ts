@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
@@ -9,7 +9,6 @@ import { CustomToastrService } from "../../../../../@core/services/common/custom
 import { ReportApplicationStatusConstants } from "../../../report-application-overview/_models/report-applicarion-status.constants";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
-import { NomenclatureService } from "../../../../../@core/services/rest/nomenclature.service";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 
 @Component({
@@ -22,10 +21,15 @@ export class GeneratedReportOverviewComponent implements OnInit {
   public reports: GeneratedReportModel[];
   public ReportApplicationStatusConstants = ReportApplicationStatusConstants;
   public cancelReportFormGroup: FormGroup;
-  public users: BaseNomenclatureModel[];
+  public signersformGroup: FormGroup;
 
   @ViewChild("cancelReportDialog", { read: IgxDialogComponent })
   public cancelReportDialog: IgxDialogComponent;
+
+  @ViewChild("generateReportDialog", { read: IgxDialogComponent })
+  public generateReportDialog: IgxDialogComponent;
+
+  @Input() users: BaseNomenclatureModel[];
 
   constructor(
     public dateFormatService: DateFormatService,
@@ -34,8 +38,7 @@ export class GeneratedReportOverviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastr: CustomToastrService,
     private loader: NgxSpinnerService,
-    private formBuilder: FormBuilder,
-    private nomenclatureService: NomenclatureService
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +60,12 @@ export class GeneratedReportOverviewComponent implements OnInit {
       secondSignerId: [{ value: "", disabled: false }],
       reportId: [{ value: "", disabled: false }, Validators.required],
     });
+
+    this.signersformGroup = this.formBuilder.group({
+      reportId: [{ value: "", disabled: false }, Validators.required],
+      firstSignerId: [{ value: "", disabled: false }],
+      secondSignerId: [{ value: "", disabled: false }],
+    });
   }
 
   printReport(id: string) {
@@ -66,12 +75,37 @@ export class GeneratedReportOverviewComponent implements OnInit {
       (error) => this.errorHandler(error, "Грешка при изтегляне на файла:");
   }
 
-  generateReport(id: string) {
-    this.service.generateReport(id).subscribe((response: any) => {
-      this.getPdfContent(response);
-      this.reload();
-    }),
-      (error) => this.errorHandler(error, "Грешка при генериране на файла:");
+  onGenerateReportDialogOpen(
+    id: string,
+    firstSignerId: string,
+    secondSignerId: string
+  ) {
+    this.signersformGroup.controls.reportId.patchValue(id);
+    this.signersformGroup.controls.firstSignerId.patchValue(firstSignerId);
+    this.signersformGroup.controls.secondSignerId.patchValue(secondSignerId);
+
+    this.generateReportDialog.open();
+  }
+
+  generateReport() {
+    if (!this.signersformGroup.valid) {
+      this.signersformGroup.markAllAsTouched();
+      return;
+    }
+
+    this.loader.show();
+    let reportFormValue = this.signersformGroup.getRawValue();
+    this.service.generateReport(reportFormValue).subscribe({
+      next: (data) => {
+        this.reload();
+        this.generateReportDialog.close();
+        this.loader.hide();
+      },
+      error: (errorResponse) => {
+        this.loader.hide();
+        this.errorHandler(errorResponse, "Грешка при генериране на файла:");
+      },
+    });
   }
 
   deliver(id: string) {
@@ -91,15 +125,7 @@ export class GeneratedReportOverviewComponent implements OnInit {
     firstSignerId: string,
     secondSignerId: string
   ) {
-    if (this.users) {
-      this.cancelReportDialog.open();
-    } else {
-      this.nomenclatureService.getUsers().subscribe((resp) => {
-        this.users = resp;
-        this.cancelReportDialog.open();
-      });
-    }
-
+    this.cancelReportDialog.open();
     this.cancelReportFormGroup.controls.reportId.patchValue(id);
     this.cancelReportFormGroup.controls.firstSignerId.patchValue(firstSignerId);
     this.cancelReportFormGroup.controls.secondSignerId.patchValue(
@@ -157,7 +183,7 @@ export class GeneratedReportOverviewComponent implements OnInit {
     fileSaver.saveAs(blob, fileName);
   }
 
-  private reload (){
+  private reload() {
     this.reports = null;
     this.ngOnInit();
   }

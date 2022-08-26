@@ -105,7 +105,7 @@ namespace MJ_CAIS.Repositories.Impl
                             StatusName = status.Name,
                             ValidFrom = reports.ValidFrom,
                             ValidTo = reports.ValidTo,
-
+                            BulletinsCount = reports.ARepBulletins.Count
                         };
 
             return query;

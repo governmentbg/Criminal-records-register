@@ -15,6 +15,13 @@
   >
   </igx-column>
   <igx-column
+    field="bulletinsCount"
+    header="Брой бюлетини"
+    [sortable]="false"
+    [dataType]="'number'"
+  >
+  </igx-column>
+  <igx-column
     field="registrationNumber"
     header="Рег. номер"
     dataType="string"
@@ -87,17 +94,25 @@
           <nb-icon pack="fa" icon="download"></nb-icon>
         </button>
       </ng-container>
-      <ng-container *ngIf="
-      !isForPreview &&
-      cell.rowData.statusCode ==
-        ReportApplicationStatusConstants.DraftReport
-    ">
+      <ng-container
+        *ngIf="
+          !isForPreview &&
+          cell.rowData.statusCode ==
+            ReportApplicationStatusConstants.DraftReport
+        "
+      >
         <button
           igxButton="icon"
           [title]="'Генерирай'"
-          (click)="generateReport(cell.rowData.id)"
+          (click)="
+            onGenerateReportDialogOpen(
+              cell.rowData.id,
+              cell.rowData.firstSignerId,
+              cell.rowData.secondSignerId
+            )
+          "
         >
-          <nb-icon pack="fa" icon="sync"></nb-icon>
+          <nb-icon pack="fa" icon="cogs"></nb-icon>
         </button>
       </ng-container>
       <ng-container
@@ -211,6 +226,67 @@
                 matRipple
                 fullWidth
                 (click)="cancelReportDialog.close()"
+              >
+                Отказ
+              </button>
+            </div>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+  </form>
+</igx-dialog>
+
+<igx-dialog #generateReportDialog>
+  <form autocomplete="off">
+    <div class="dialogNewRecord" style="min-width: 500px">
+      <nb-card>
+        <nb-card-header>Генерирай справка</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-autocomplete
+                [label]="'Подписващ 1'"
+                [inputFormControl]="signersformGroup.controls.firstSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'firstSignerId'"
+                [items]="users"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-autocomplete
+                [label]="'Подписващ 2'"
+                [inputFormControl]="signersformGroup.controls.secondSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'secondSignerId'"
+                [items]="users"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row">
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                status="danger"
+                (click)="generateReport()"
+              >
+                Запис
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                (click)="generateReportDialog.close()"
               >
                 Отказ
               </button>
