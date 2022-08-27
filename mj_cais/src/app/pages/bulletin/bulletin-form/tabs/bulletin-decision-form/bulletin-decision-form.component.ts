@@ -32,7 +32,8 @@ export class BulletinDecisionFormComponent {
 
   public bulletinDecisionForm = new BulletinDecisionForm();
   public decisions: BulletinDecisionModel[];
-  
+  public isDecisionPreview: boolean = false;
+
   constructor(
     public dateFormatService: DateFormatService,
     private bulletinService: BulletinService,
@@ -48,7 +49,7 @@ export class BulletinDecisionFormComponent {
       this.decisions = [];
       return;
     }
-    
+
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
     this.loaderService.show();
     this.bulletinService.getDecisions(bulletinId).subscribe((res) => {
@@ -58,6 +59,8 @@ export class BulletinDecisionFormComponent {
   }
 
   public onOpenEditBulletinDecision(event: IgxGridRowComponent) {
+    this.isDecisionPreview = false;
+
     this.dateFormatService.parseDatesFromGridRow(event, [
       "decisionDate",
       "decisionFinalDate",
@@ -120,5 +123,18 @@ export class BulletinDecisionFormComponent {
   onCloseBulletinDecisionDilog() {
     this.bulletinDecisionForm = new BulletinDecisionForm();
     this.dialog.close();
+  }
+
+  public onOpenPreviewDecision(event: IgxGridRowComponent) {
+    this.bulletinDecisionForm.group.disable();
+    this.isDecisionPreview = true;
+    this.dateFormatService.parseDatesFromGridRow(event, [
+      "decisionDate",
+      "decisionFinalDate",
+      "changeDate",
+    ]);
+
+    this.bulletinDecisionForm.group.patchValue(event.rowData);
+    this.dialog.open();
   }
 }

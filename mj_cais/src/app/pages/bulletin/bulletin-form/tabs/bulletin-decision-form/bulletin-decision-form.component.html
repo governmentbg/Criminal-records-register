@@ -6,11 +6,7 @@
     [primaryKey]="'id'"
   >
     <igx-grid-toolbar>
-      <button
-        igxButton="flat"
-        (click)="dialogAdd.open()"
-        *ngIf="!isForPreview"
-      >
+      <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
         <igx-icon>add</igx-icon> Добави
       </button>
     </igx-grid-toolbar>
@@ -130,6 +126,14 @@
 
     <igx-action-strip #actionstrip>
       <button
+        title="Преглед"
+        igxButton="icon"
+        igxRipple
+        (click)="onOpenPreviewDecision(actionstrip.context)"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </button>
+      <button
         *ngIf="!isForPreview"
         title="Редактирай"
         igxButton="icon"
@@ -162,6 +166,7 @@
           <div class="d-flex">
             <div>
               <button
+                *ngIf="!isDecisionPreview"
                 nbButton
                 matRipple
                 [status]="'success'"
