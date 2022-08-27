@@ -17,7 +17,7 @@ export function personNamesValidator(
     const familyNameValue = form.get(familyNameFiled).value;
     const fullNameNameValue = form.get(fullNameFiled).value;
 
-    debugger;
+    
     let firstNameIsSet =
       firstNameValue != undefined &&
       firstNameValue != null &&

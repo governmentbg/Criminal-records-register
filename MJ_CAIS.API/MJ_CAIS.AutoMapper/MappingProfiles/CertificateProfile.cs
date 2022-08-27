@@ -25,6 +25,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<CertificateDTO, ACertificate>()
                 .ForMember(d => d.StatusCodeNavigation, opt => opt.Ignore())
                 .ForMember(d => d.Doc, opt => opt.Ignore())
+                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore())
                 .ForMember(d => d.AccessCode1, opt => opt.Ignore())
                 .ForMember(d => d.AccessCode2, opt => opt.Ignore());
 
