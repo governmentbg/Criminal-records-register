@@ -25,6 +25,13 @@
     </igx-column>
 
     <igx-column
+      field="descr"
+      header="Описание"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
+    <igx-column
       field="decisionChTypeId"
       header="Идентификатор на категория допълнителни сведения"
       dataType="number"
@@ -116,14 +123,6 @@
     <igx-column
       field="decisionEcli"
       header="ECLI номер"
-      dataType="string"
-      [sortable]="true"
-    >
-    </igx-column>
-
-    <igx-column
-      field="descr"
-      header="Описание"
       dataType="string"
       [sortable]="true"
     >
