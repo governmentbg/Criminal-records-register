@@ -11,6 +11,6 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId);
         Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id);
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
-
+        Task<bool> HasDublicates(string egn, string purposeId, string applicationTypeId, string applicantId);
     }
 }

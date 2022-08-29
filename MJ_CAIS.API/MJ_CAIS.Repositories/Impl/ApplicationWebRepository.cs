@@ -4,6 +4,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application.External;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.Application.Public;
+using static MJ_CAIS.Common.Constants.ApplicationConstants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -169,6 +170,27 @@ namespace MJ_CAIS.Repositories.Impl
                  }).OrderByDescending(x => x.CreatedOn);
 
             return result;
+        }
+
+        public async Task<bool> HasDublicates(string egn, string purposeId, string applicationTypeId, string applicantId)
+        {
+            if(applicationTypeId != ApplicationTypes.WebCertificate && applicationTypeId != ApplicationTypes.WebExternalCertificate)
+            {
+                throw new Exception("Необработен тип.");
+            }
+            if (applicationTypeId == ApplicationTypes.WebCertificate)
+            {
+                return await _dbContext.WApplications.AnyAsync(w => w.Egn == egn && w.PurposeId == purposeId
+                && w.UserCitizenId == applicantId
+                && w.ApplicationTypeId == applicationTypeId
+                && w.StatusCode != ApplicationWebStatuses.WebCanceled && !w.WCertificates.Any());
+            }
+            else
+            {
+                return await _dbContext.WApplications.AnyAsync(w => w.Egn == egn && w.PurposeId == purposeId && w.UserExtId == applicantId
+             && w.ApplicationTypeId == applicationTypeId
+             && w.StatusCode != ApplicationWebStatuses.WebCanceled && !w.WCertificates.Any());
+            }
         }
     }
 }

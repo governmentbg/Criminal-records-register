@@ -56,16 +56,24 @@ namespace MJ_CAIS.Services
 
         public async Task<string> InsertPublicAsync(PublicApplicationDTO aInDto)
         {
-            var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
-            await  this.TransformDataOnInsertAsync(entity);
-            entity.ApplicationTypeId = await GetWebApplicationTypeId();
+            var userId = _applicationWebRepository.GetCurrentUserId();
+            if (!await _applicationWebRepository.HasDublicates(aInDto.Egn,aInDto.PurposeId, ApplicationConstants.ApplicationTypes.WebCertificate, userId))
+            {
+                var entity = mapper.MapToEntity<PublicApplicationDTO, WApplication>(aInDto, isAdded: true);
+                await this.TransformDataOnInsertAsync(entity);
+                entity.ApplicationTypeId = await GetWebApplicationTypeId();
 
-            entity.UserCitizenId = _applicationWebRepository.GetCurrentUserId(); //dbContext.CurrentUserId;
-            entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
+                entity.UserCitizenId = userId;//_applicationWebRepository.GetCurrentUserId(); //dbContext.CurrentUserId;
+                entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWeb(entity.CsAuthorityId);
 
-            _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
-           // await this.SaveEntityAsync(entity, true);
-            return entity.Id;
+                _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
+                // await this.SaveEntityAsync(entity, true);
+                return entity.Id;
+            }
+            else
+            {
+                throw new BusinessLogicException("Дублирано заявление.");
+            }
         }
 
         public async Task<decimal?> GetPriceByApplicationType(string applicationTypeID)
@@ -82,16 +90,25 @@ namespace MJ_CAIS.Services
 
         public async Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto)
         {
-            var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
-            await this.TransformDataOnInsertAsync(entity);
-            entity.ApplicationTypeId = await GetExternalWebApplicationTypeId();
+            var userId = _applicationWebRepository.GetCurrentUserId();
+            if (!await _applicationWebRepository.HasDublicates(aInDto.Egn, aInDto.PurposeId, ApplicationConstants.ApplicationTypes.WebExternalCertificate,userId ))
+            {
+                var entity = mapper.MapToEntity<ExternalApplicationDTO, WApplication>(aInDto, isAdded: true);
+                await this.TransformDataOnInsertAsync(entity);
+                entity.ApplicationTypeId = await GetExternalWebApplicationTypeId();
 
-            entity.UserExtId = _applicationWebRepository.GetCurrentUserId();//dbContext.CurrentUserId;
-            entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
+                entity.UserExtId = userId;// _applicationWebRepository.GetCurrentUserId();//dbContext.CurrentUserId;
+                entity.RegistrationNumber = await _registerTypeService.GetRegisterNumberForApplicationWebExternal(entity.CsAuthorityId);
 
-            _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
-            //await this.SaveEntityAsync(entity, true);
-            return entity.Id;
+                _applicationWebRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
+                //await this.SaveEntityAsync(entity, true);
+                return entity.Id;
+            }
+            else
+            {
+                throw new BusinessLogicException("Дублирано заявление.");
+            }
+
         }
 
         protected  async Task TransformDataOnInsertAsync(WApplication entity)
