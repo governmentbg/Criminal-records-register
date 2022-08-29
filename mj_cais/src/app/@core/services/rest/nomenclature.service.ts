@@ -252,7 +252,6 @@ export class NomenclatureService extends CaisCrudService<
   public getUsers(): Observable<BaseNomenclatureModel[]> {
     return this.http.get<BaseNomenclatureModel[]>(`${this.url}/g-users`).pipe(
       map((items: any[]) => {
-        debugger;
         let test = items
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((item) => {

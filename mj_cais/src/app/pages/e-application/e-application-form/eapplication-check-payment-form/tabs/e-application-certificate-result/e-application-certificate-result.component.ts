@@ -23,7 +23,6 @@ export class EApplicationCertificateResultComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    debugger;
     this.formGroup = this.buildFormImpl();
     this.formGroup.patchValue(this.eAppCert);
   }
@@ -43,7 +42,7 @@ export class EApplicationCertificateResultComponent implements OnInit {
       .getWCertificateContentByAppId(this.eAppCert.wApplId)
       .subscribe((response: any) => {
         //this.fullForm.group.disable();
-        debugger
+        
         let blob = new Blob([response.body]);
         window.URL.createObjectURL(blob);
 

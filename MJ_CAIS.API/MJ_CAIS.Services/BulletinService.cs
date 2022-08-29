@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
@@ -32,6 +33,7 @@ namespace MJ_CAIS.Services
         private readonly IRehabilitationService _rehabilitationService;
         private readonly IRegisterTypeService _registerTypeService;
         private readonly IUserContext _userContext;
+        private readonly ICertificateRepository _certificateRepository;
 
         public BulletinService(IMapper mapper,
             IBulletinRepository bulletinRepository,
@@ -39,6 +41,7 @@ namespace MJ_CAIS.Services
             IBulletinEventService bulletinEventService,
             IRehabilitationService rehabilitationService,
             IUserContext userContext,
+            ICertificateRepository _certificateRepository,
             IRegisterTypeService registerTypeService,
             IManagePersonService managePersonService)
             : base(mapper, bulletinRepository)
@@ -48,6 +51,7 @@ namespace MJ_CAIS.Services
             _bulletinEventService = bulletinEventService;
             _rehabilitationService = rehabilitationService;
             _userContext = userContext;
+            this._certificateRepository = _certificateRepository;
             _registerTypeService = registerTypeService;
             _managePersonService = managePersonService;
         }
@@ -65,6 +69,16 @@ namespace MJ_CAIS.Services
             var pageResult = new IgPageResult<BulletinGridDTO>();
             this.PopulatePageResultAsync(pageResult, aQueryOptions, baseQuery, resultQuery);
             return pageResult;
+        }
+
+        [HttpGet("{aId}")]
+        public async Task<IQueryable<BulletinConvictionDTO>> GetConvictionOnlyAsync(string aId)
+        {
+            var query = await _certificateRepository.GetBulletinsCheckByIdAsync(aId, false);
+            var bulletins = query.Select(x => x.Bulletin);
+            var result = mapper.ProjectTo<BulletinConvictionDTO>(bulletins, mapperConfiguration);
+
+            return result;
         }
 
         public async Task<IgPageResult<BulletinGridDTO>> SearchBulletinAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, BulletinSearchParamDTO searchParams)

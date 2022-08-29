@@ -17,6 +17,7 @@ import { ApplicationCertificateDocumentResultComponent } from "../application-ce
 import { ApplicationCertificateDocumentModel } from "./_models/application-certificate-document.model";
 import { Guid } from "guid-typescript";
 import { NgxSpinnerService } from "ngx-spinner";
+import { BulletionsPreviewComponent } from "./tabs/bulletions-preview/bulletions-preview.component";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -35,6 +36,7 @@ export class ApplicationCertificateResultComponent
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
   @Input() applicationCode: string;
+  @Input() decisionTypes: BaseNomenclatureModel[];
 
   @ViewChild("bulletinsCheckGrid", {
     read: IgxGridComponent,
@@ -120,6 +122,17 @@ export class ApplicationCertificateResultComponent
       };
   }
 
+  previewBulletions() {
+    this.dialogService
+      .open(BulletionsPreviewComponent, {
+        context: {
+          certId: this.model.id,
+        },
+        closeOnBackdropClick: true,
+      })
+      .onClose.subscribe((x) => {});
+  }
+
   upload() {
     this.dialogService
       .open(
@@ -194,7 +207,6 @@ export class ApplicationCertificateResultComponent
   }
 
   printCertificate() {
-    debugger;
     this.service
       .downloadSertificateContent(
         this.model.id,
@@ -309,7 +321,6 @@ export class ApplicationCertificateResultComponent
     this.service
       .setStatusToDelivered(this.model.applicationId)
       .subscribe((x) => {
-        debugger;
         this.redirectLocationBack();
       });
   }
@@ -318,7 +329,6 @@ export class ApplicationCertificateResultComponent
     this.service
       .setStatusToCanceled(this.model.applicationId)
       .subscribe((x) => {
-        debugger;
         this.reloadCurrentRoute();
       });
   }
@@ -344,7 +354,6 @@ export class ApplicationCertificateResultComponent
       this.service
         .getCertificateByAppId(this.model.applicationId)
         .subscribe((x) => {
-          debugger;
           this.model = x;
           this.fullForm.group.patchValue(
             new ApplicationCertificateResultModel(this.model)

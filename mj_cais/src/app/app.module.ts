@@ -51,6 +51,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { NgxPermissionsModule } from "ngx-permissions";
 import { CoreModule } from "./@core/core.module";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 function customReadConfiguration(): Observable<[any, any]> {
   this.serviceUrl = environment.serviceUrl;
@@ -76,6 +77,7 @@ registerLocaleData(localeBg);
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    NgSelectModule,
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,

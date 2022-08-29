@@ -163,7 +163,7 @@
     *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck"
   >
     <div class="row">
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
         <button
           *ngIf="!this.isForPreview"
           nbButton
@@ -177,7 +177,20 @@
           Създай заявка за реабилитация
         </button>
       </div>
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
+        <button
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="previewBulletions()"
+          type="button"
+          class="ml-4"
+          style="min-width: 100px; float: center"
+        >
+          Преглед бюлетини
+        </button>
+      </div>
+      <div class="form-group col-md-4">
         <button
           *ngIf="!this.isForPreview"
           nbButton
@@ -292,6 +305,22 @@
   <ng-container
     *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection"
   >
+    <div class="row">
+      <div class="form-group col-md-12">
+        <button
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="previewBulletions()"
+          type="button"
+          class="ml-4"
+          style="min-width: 100px; float: right"
+        >
+          Преглед бюлетини
+        </button>
+      </div>
+    </div>
+
     <igx-grid
       #bulletinsCheckGrid
       [height]="null"
