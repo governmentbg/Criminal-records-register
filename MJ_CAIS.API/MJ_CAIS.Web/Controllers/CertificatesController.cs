@@ -18,13 +18,15 @@ namespace MJ_CAIS.Web.Controllers
         private readonly ICertificateService _certificateService;
         private readonly ICertificateGenerationService _certificateGenerationService;
         private readonly ICertificateValidatorService _certificateValidatorService;
+        private readonly ICriminalRecordsReportService _criminalRecordsReportService;
 
-        public CertificatesController(ICertificateService certificateService, ICertificateGenerationService certificateGenerationService, ICertificateValidatorService certificateValidatorService)
+        public CertificatesController(ICertificateService certificateService, ICertificateGenerationService certificateGenerationService, ICertificateValidatorService certificateValidatorService, ICriminalRecordsReportService criminalRecordsReportService)
             : base(certificateService)
         {
             _certificateService = certificateService;
             _certificateGenerationService = certificateGenerationService;
             _certificateValidatorService = certificateValidatorService;
+            _criminalRecordsReportService = criminalRecordsReportService;
         }
 
         [HttpPut("{aId}/save-signer-data")]
@@ -160,6 +162,22 @@ namespace MJ_CAIS.Web.Controllers
         {
             await this._certificateService.SetBulletinsForRehabilitationAsync(aId, newRequestId, ids);
             return Ok();
+        }
+
+        [HttpGet("html-report/{idType}/{id}")]
+        public async Task<IActionResult> GetHtmlReport(string idType, string id)
+        {
+            var result = await _criminalRecordsReportService.GetCriminalRecordsReportHTMLAsync(
+                new DTO.ExternalServicesHost.CriminalRecordsExtendedRequestType()
+                {
+                    CriminalRecordsRequest = new DTO.ExternalServicesHost.CriminalRecordsRequestType()
+                    {
+                        IdentifierTypeSpecified = true,
+                        IdentifierType = Enum.Parse<DTO.ExternalServicesHost.IdentifierType>(idType),
+                        PID = id
+                    }
+                });
+            return Content(result, "text/html");
         }
     }
 }

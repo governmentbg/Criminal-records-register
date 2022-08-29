@@ -1,9 +1,11 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
+  ColumnPinningPosition,
   IgxDialogComponent,
   IgxGridComponent,
   IgxGridRowComponent,
+  IPinningConfig,
 } from "@infragistics/igniteui-angular";
 import { EActions } from "@tl/tl-common";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -32,7 +34,9 @@ export class BulletinDecisionFormComponent {
 
   public bulletinDecisionForm = new BulletinDecisionForm();
   public decisions: BulletinDecisionModel[];
-  
+  public isDecisionPreview: boolean = false;
+  public pinningConfig: IPinningConfig = { columns: ColumnPinningPosition.End };
+
   constructor(
     public dateFormatService: DateFormatService,
     private bulletinService: BulletinService,
@@ -48,7 +52,7 @@ export class BulletinDecisionFormComponent {
       this.decisions = [];
       return;
     }
-    
+
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
     this.loaderService.show();
     this.bulletinService.getDecisions(bulletinId).subscribe((res) => {
@@ -58,6 +62,8 @@ export class BulletinDecisionFormComponent {
   }
 
   public onOpenEditBulletinDecision(event: IgxGridRowComponent) {
+    this.isDecisionPreview = false;
+
     this.dateFormatService.parseDatesFromGridRow(event, [
       "decisionDate",
       "decisionFinalDate",
@@ -120,5 +126,18 @@ export class BulletinDecisionFormComponent {
   onCloseBulletinDecisionDilog() {
     this.bulletinDecisionForm = new BulletinDecisionForm();
     this.dialog.close();
+  }
+
+  public onOpenPreviewDecision(event: IgxGridRowComponent) {
+    this.bulletinDecisionForm.group.disable();
+    this.isDecisionPreview = true;
+    this.dateFormatService.parseDatesFromGridRow(event, [
+      "decisionDate",
+      "decisionFinalDate",
+      "changeDate",
+    ]);
+
+    this.bulletinDecisionForm.group.patchValue(event.rowData);
+    this.dialog.open();
   }
 }

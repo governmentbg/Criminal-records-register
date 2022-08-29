@@ -40,7 +40,7 @@ namespace MJ_CAIS.Services
             _wApplicationReportRepository = wApplicationReportRepository;
         }
 
-        public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value)
+        public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value, bool addLog = true)
         {
             var pidTypeCode = value.CriminalRecordsRequest.IdentifierType == IdentifierType.SUID ?
                         "SYS" :
@@ -81,11 +81,21 @@ namespace MJ_CAIS.Services
             //RESULT_ID
             //REGISTRATION_NUMBER
             //RESULT_TYPE - set to PDF by default
-            var report = 
-                _mapper.MapToEntity<CriminalRecordsExtendedRequestType, WReport>(value, true);
-            await _wApplicationReportRepository.InsertAsync(report);
+            if (addLog)
+            {
+                var report =
+                    _mapper.MapToEntity<CriminalRecordsExtendedRequestType, WReport>(value, true);
+                await _wApplicationReportRepository.InsertAsync(report);
+            }
 
             return result;
+        }
+        public async Task<string> GetCriminalRecordsReportHTMLAsync(CriminalRecordsExtendedRequestType value)
+        {
+            var response = await GetCriminalRecordsReportAsync(value, false);
+            var xslt = GetTransformation();
+            var html = ApplyTransformation(XmlSerialize(response), xslt);
+            return html;
         }
 
         public async Task<CriminalRecordsPDFResult> GetCriminalRecordsReportPDFAsync(CriminalRecordsExtendedRequestType value)
@@ -97,7 +107,7 @@ namespace MJ_CAIS.Services
             }
             var response = await GetCriminalRecordsReportAsync(value);
             var xslt = GetTransformation();
-            var html = ApplyTransformation(XmlSerialize(response), xslt);          
+            var html = ApplyTransformation(XmlSerialize(response), xslt);
             var pdf = ConvertToPDFAndSign(html, signingName);
             return new CriminalRecordsPDFResult()
             {
