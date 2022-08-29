@@ -55,6 +55,10 @@ export class ApplicationResolver implements Resolve<any> {
       users: this.nomenclatureService.getUsers(),
       certificate: this.certificateService.getCertificateByAppId(applicationId),
       applicationCertificateCanceled: this.certificateService.getCanceledCertificateByAppId(applicationId),
+       decisionTypes: this.nomenclatureService.getDecisionTypes(), //
+      decidingAuthorities:
+        this.nomenclatureService.getDecidingAuthoritiesForBulletins(), //
+      caseTypes: this.nomenclatureService.getCaseTypes(), //
     };
     return forkJoin(result);
   }
@@ -67,4 +71,8 @@ export class ApplicationResolverData extends BaseResolverData<ApplicationModel> 
     public documents: Observable<ApplicationDocumentModel[]>;
     public users: Observable<BaseNomenclatureModel[]>;
     public certificate: Observable<ApplicationCertificateResultModel>;
+    public decisionTypes: Observable<BaseNomenclatureModel[]>;
+    public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
+    public caseTypes: Observable<BaseNomenclatureModel[]>;
+  
 }

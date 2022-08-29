@@ -8,7 +8,7 @@ import * as fileSaver from "file-saver";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CertificateStatuTypeEnum } from "./_models/certificate-status-type.enum";
 import { BulletinCheckGridModel } from "./_models/bulletin-check-grid.model";
-import { IgxGridComponent } from "@infragistics/igniteui-angular";
+import { IgxDialogComponent, IgxGridComponent } from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { UserInfoService } from "../../../../../@core/services/common/user-info.service";
 import { NbDialogService } from "@nebular/theme";
@@ -17,6 +17,7 @@ import { ApplicationCertificateDocumentResultComponent } from "../application-ce
 import { ApplicationCertificateDocumentModel } from "./_models/application-certificate-document.model";
 import { Guid } from "guid-typescript";
 import { NgxSpinnerService } from "ngx-spinner";
+import { BulletionsPreviewComponent } from "./tabs/bulletions-preview/bulletions-preview.component";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -34,16 +35,21 @@ export class ApplicationCertificateResultComponent
 {
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
+  @Input() personId: string;
   @Input() applicationCode: string;
+  @Input() decisionTypes: BaseNomenclatureModel[];
 
   @ViewChild("bulletinsCheckGrid", {
     read: IgxGridComponent,
   })
   public bulletinsCheckGrid: IgxGridComponent;
+  @ViewChild("reportDialog", { read: IgxDialogComponent })
+  public reportDialog: IgxDialogComponent;
 
   public CertificateStatuTypeEnum = CertificateStatuTypeEnum;
   public bulletinsCheckData: BulletinCheckGridModel[] = [];
   public certificateStatus: string;
+  public report: string;
 
   constructor(
     service: ApplicationCertificateService,
@@ -120,6 +126,17 @@ export class ApplicationCertificateResultComponent
       };
   }
 
+  previewBulletions() {
+    this.dialogService
+      .open(BulletionsPreviewComponent, {
+        context: {
+          certId: this.model.id,
+        },
+        closeOnBackdropClick: true,
+      })
+      .onClose.subscribe((x) => {});
+  }
+
   upload() {
     this.dialogService
       .open(
@@ -194,7 +211,6 @@ export class ApplicationCertificateResultComponent
   }
 
   printCertificate() {
-    debugger;
     this.service
       .downloadSertificateContent(
         this.model.id,
@@ -309,7 +325,6 @@ export class ApplicationCertificateResultComponent
     this.service
       .setStatusToDelivered(this.model.applicationId)
       .subscribe((x) => {
-        debugger;
         this.redirectLocationBack();
       });
   }
@@ -318,7 +333,6 @@ export class ApplicationCertificateResultComponent
     this.service
       .setStatusToCanceled(this.model.applicationId)
       .subscribe((x) => {
-        debugger;
         this.reloadCurrentRoute();
       });
   }
@@ -344,7 +358,6 @@ export class ApplicationCertificateResultComponent
       this.service
         .getCertificateByAppId(this.model.applicationId)
         .subscribe((x) => {
-          debugger;
           this.model = x;
           this.fullForm.group.patchValue(
             new ApplicationCertificateResultModel(this.model)
@@ -399,5 +412,12 @@ export class ApplicationCertificateResultComponent
           errorText
         );
       };
+  }
+
+  showReport(){
+    this.service.htmlReport('SUID', this.personId).subscribe( res => { 
+      this.report = res;
+      this.reportDialog.open();
+     });
   }
 }

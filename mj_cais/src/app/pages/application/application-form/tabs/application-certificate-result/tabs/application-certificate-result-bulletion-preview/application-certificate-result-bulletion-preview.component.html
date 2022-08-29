@@ -1,0 +1,117 @@
+<nb-card [formGroup]="fullForm.group">
+  <nb-card-body>
+    <form autocomplete="off">
+      <div class="font-weight-bold">Данни за акта</div>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Вид'"
+            [inputFormControl]="fullForm.decisionTypeId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'decisionTypeId'"
+            [items]="decisionTypes"
+          >
+          </cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Номер'"
+            [inputFormControl]="fullForm.decisionNumber"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата на издаване'"
+            [inputFormControl]="fullForm.decisionDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата на влизане в сила'"
+            [inputFormControl]="fullForm.decisionFinalDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-6">
+          <cais-autocomplete
+            [label]="'Съдебен орган издал акта'"
+            [inputFormControl]="fullForm.decidingAuthId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'decidingAuthId'"
+            [items]="decidingAuthorities"
+          >
+          </cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'ECLI номер'"
+            [inputFormControl]="fullForm.decisionEcli"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+
+      <div class="font-weight-bold">Данни за делото</div>
+      <hr />
+
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'Вид'"
+            [inputFormControl]="fullForm.caseTypeId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'caseTypeId'"
+            [items]="caseTypes"
+          >
+          </cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Номер'"
+            [inputFormControl]="fullForm.caseNumber"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-2">
+          <cais-input
+            [type]="'number'"
+            [label]="'Година'"
+            [inputFormControl]="fullForm.caseYear"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <!-- <cais-autocomplete
+            [label]="'Съд на делото'"
+            [inputFormControl]="fullForm.caseAuthId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'caseAuthId'"
+            [items]="decidingAuthorities"
+          >
+          </cais-autocomplete> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-9">
+          <cais-input
+            [type]="'text'"
+            [label]="'Извлечение от акта на съда'"
+            [inputFormControl]="fullForm.convRemarks"
+            [parentGroup]="fullForm.group"
+            [inputType]="InputTypeConstants.TextArea"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

@@ -21,6 +21,8 @@ import { CancelDialogComponent } from './application-form/cancel-dialog/cancel-d
 import { ApplicationCertificateCanceledComponent } from './application-form/tabs/application-certificate-canceled/application-certificate-canceled.component';
 import { ApplicationSearchOverviewComponent } from './application-overview/application-search-overview/application-search-overview.component';
 import { ApplicationSearchFormComponent } from './application-form/application-search-form/application-search-form.component';
+import { ApplicationCertificateResultBulletionPreviewComponent } from './application-form/tabs/application-certificate-result/tabs/application-certificate-result-bulletion-preview/application-certificate-result-bulletion-preview.component';
+import { BulletionsPreviewComponent } from './application-form/tabs/application-certificate-result/tabs/bulletions-preview/bulletions-preview.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { ApplicationSearchFormComponent } from './application-form/application-s
     CancelDialogComponent,
     ApplicationCertificateCanceledComponent,
     ApplicationSearchOverviewComponent,
-    ApplicationSearchFormComponent
+    ApplicationSearchFormComponent,
+    ApplicationCertificateResultBulletionPreviewComponent,
+    BulletionsPreviewComponent
   ],
   imports: [CoreComponentModule, ApplicationRoutingModule],
 })

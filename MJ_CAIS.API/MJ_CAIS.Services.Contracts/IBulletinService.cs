@@ -43,5 +43,7 @@ namespace MJ_CAIS.Services.Contracts
 
         void UpdateDeleteDateData(BBulletin entity);
         void SetEcrisConvId(BBulletin bulletin);
+
+        Task<IQueryable<BulletinConvictionDTO>> GetConvictionOnlyAsync(string aId);
     }
 }
