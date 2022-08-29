@@ -253,6 +253,20 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId)
         {
+            //намира лицето по идентификатора
+            var personId = await this._dbContext.PPersonIds.AsNoTracking().Where(x => x.Id == pidId).Select(x => x.PersonId).FirstOrDefaultAsync();
+
+            //намира всички бюлетеини на това лице
+            var bulletinsList =  this._dbContext.BBulletins.Where(b =>
+                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId })
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId }))
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId }))
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })).AsNoTracking();
+            
+            //взима всички подробности на бюлетините на това лице
             var result = _dbContext.BBulletins.AsNoTracking()
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCountry)
@@ -276,11 +290,8 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.CsAuthority)
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
-                    .Where(x => x.EgnId == pidId ||
-                          x.LnchId == pidId ||
-                          x.LnId == pidId ||
-                          x.IdDocNumberId == pidId ||
-                          x.SuidId == pidId);
+                    .Where(x => bulletinsList.Where(b => b.StatusId != BulletinConstants.Status.Deleted).Select(b => b.Id).Contains(x.Id))
+                    .OrderBy(x => x.CreatedOn);
 
             return await Task.FromResult(result);
         }
