@@ -1,4 +1,6 @@
 import { Component, Injector, Input, OnInit } from "@angular/core";
+import { NbMenuService } from "@nebular/theme";
+import { filter, map } from "rxjs";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
@@ -12,14 +14,14 @@ import { PersonSearchGridModel } from "./_models/person-search.grid";
   styleUrls: ["./person-search-overview.component.scss"],
 })
 export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistance<
-  PersonSearchGridModel,
-  PersonSearchGridService
+PersonSearchGridModel,
+PersonSearchGridService
 > {
   constructor(
     service: PersonSearchGridService,
     injector: Injector,
     public dateFormatService: DateFormatService,
-    private loader: LoaderService
+    private loader: LoaderService,
   ) {
     super("people-search", service, injector);
   }
@@ -27,6 +29,7 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
   @Input() searchForm: PersonSearchForm;
   @Input() isRemindPersonForm: boolean;
   @Input() existingPersonId: string;
+
 
   ngOnInit() {
     this.service.updateUrl(`people?isPageInit=true`);
@@ -46,10 +49,10 @@ export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistanc
       if (date) {
         formObj["birthDatePrec"] = this.searchForm.birthDate.precision.value;
         formObj["birthDate"] = date.toISOString();
-      }else{
+      } else {
         formObj["birthDate"] = null;
       }
-    }else{
+    } else {
       formObj["birthDate"] = null;
     }
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");

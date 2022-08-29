@@ -134,12 +134,7 @@
       inputFormControl?.errors?.emailValidation && inputHasBeenInteracted()
     "
   ></cais-validation-message>
-  <mat-error *ngIf="inputFormControl?.errors?.serverErrors">
-    <div
-      class="caption status-danger"
-      *ngFor="let serverError of inputFormControl?.errors?.serverErrors"
-    >
-      {{ serverError }}
-    </div>
-  </mat-error>
+  <p class="caption status-danger"  *ngFor="let serverError of inputFormControl?.errors?.serverErrors">
+    {{ serverError }}</p> 
+
 </div>

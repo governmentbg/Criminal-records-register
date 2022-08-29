@@ -1,80 +1,37 @@
-<div
-  igxLayout
-  igxLayoutDir="column"
-  igxLayoutItemAlign="center"
-  class="cais-pager-container"
->
+<div igxLayout igxLayoutDir="column" igxLayoutItemAlign="center" class="cais-pager-container">
   <div igxLayout igxLayoutDir="row" class="pager" igxFlex>
     <div igxLayout igxLayoutDir="row">
       <div class="row">
         <div class="col-md-3">
-          <tl-reference-button
-            *ngIf="excelReference"
-            [routeReference]="excelReference"
-            [buttonType]="''"
-          >
+          <tl-reference-button *ngIf="excelReference" [routeReference]="excelReference" [buttonType]="''">
           </tl-reference-button>
         </div>
 
-        <div
-          class="d-flex justify-content-center align-items-center 
-          {{ excelReference ? 'col-md-9' : 'col-md-12' }}"
-        >
+        <div class="d-flex justify-content-center align-items-center 
+          {{ excelReference ? 'col-md-9' : 'col-md-12' }}">
           <div class="d-flex justify-content-center align-items-center">
-            <nb-select
-              [(ngModel)]="this.perPage"
-              (selectedChange)="selectChange($event)"
-              status="primary"
-            >
-              <nb-option
-                [value]="val"
-                *ngFor="let val of [5, 10, 15, 20, 25] | paginatorOptions"
-              >
+            <nb-select [(ngModel)]="this.perPage" (selectedChange)="selectChange($event)" status="primary">
+              <nb-option [value]="val" *ngFor="let val of [5, 10, 15, 20, 25] | paginatorOptions">
                 {{ val }} записа на страница
               </nb-option>
             </nb-select>
           </div>
 
           <div class="d-flex justify-content-center align-items-center ml-1">
-            <button
-              [disabled]="firstPage"
-              (click)="paginate(0)"
-              igxButton="icon"
-              igxRipple
-              igxRippleCentered="true"
-            >
+            <button [disabled]="firstPage" (click)="paginate(0)" igxButton="icon" igxRipple igxRippleCentered="true">
               <igx-icon fontSet="material">first_page</igx-icon>
             </button>
-            <button
-              class="mr-1"
-              [disabled]="firstPage"
-              (click)="previousPage()"
-              igxButton="icon"
-              igxRipple
-              igxRippleCentered="true"
-            >
+            <button class="mr-1" [disabled]="firstPage" (click)="previousPage()" igxButton="icon" igxRipple
+              igxRippleCentered="true">
               <igx-icon fontSet="material">chevron_left</igx-icon>
             </button>
-            <span class="pages-display"
-              >{{ page + 1 }} от {{ totalPages }}</span
-            >
-            <button
-              class="ml-1"
-              [disabled]="lastPage"
-              (click)="nextPage()"
-              igxRipple
-              igxRippleCentered="true"
-              igxButton="icon"
-            >
+            <span class="pages-display">{{ page + 1 }} от {{ totalPages }}</span>
+            <button class="ml-1" [disabled]="lastPage" (click)="nextPage()" igxRipple igxRippleCentered="true"
+              igxButton="icon">
               <igx-icon fontSet="material">chevron_right</igx-icon>
             </button>
-            <button
-              [disabled]="lastPage"
-              (click)="paginate(totalPages - 1)"
-              igxButton="icon"
-              igxRipple
-              igxRippleCentered="true"
-            >
+            <button [disabled]="lastPage" (click)="paginate(totalPages - 1)" igxButton="icon" igxRipple
+              igxRippleCentered="true">
               <igx-icon fontSet="material">last_page</igx-icon>
             </button>
           </div>

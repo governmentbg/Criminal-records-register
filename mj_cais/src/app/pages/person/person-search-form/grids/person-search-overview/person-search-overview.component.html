@@ -1,27 +1,10 @@
-<igx-grid
-  #grid
-  igxGridState
-  [data]="items$ | async"
-  [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [paging]="true"
-  [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'"
-  [paginationTemplate]="pager"
-  [allowFiltering]="false"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
-  [cellSelection]="'none'"
->
+<igx-grid #grid igxGridState [data]="items$ | async" [height]="null" [filterStrategy]="noopFilterStrategy"
+  [paging]="true" [clipboardOptions]="{ copyHeaders: false }" [displayDensity]="'cosy'" [paginationTemplate]="pager"
+  [allowFiltering]="false" [primaryKey]="'id'" [pinning]="pinningConfig" [cellSelection]="'none'">
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>Лица</igx-grid-toolbar-title>
   </igx-grid-toolbar>
-  <igx-column
-    field="id"
-    header="Идентификатор"
-    [dataType]="'string'"
-    [hidden]="true"
-  >
+  <igx-column field="id" header="Идентификатор" [dataType]="'string'" [hidden]="true">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
@@ -32,11 +15,7 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column
-    field="pidTypeName"
-    header="Тип идентификатор"
-    [dataType]="'string'"
-  >
+  <igx-column field="pidTypeName" header="Тип идентификатор" [dataType]="'string'">
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
@@ -61,12 +40,8 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column
-    field="birthDate"
-    header="Дата на раждане"
-    dataType="date"
-    [formatter]="this.dateFormatService.formatDate"
-  >
+  <igx-column field="birthDate" header="Дата на раждане" dataType="date"
+    [formatter]="this.dateFormatService.formatDate">
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">
         {{ this.dateFormatService.displayDate(cell.value) }}
@@ -77,67 +52,41 @@
   <igx-column width="150px" header="" [filterable]="false" [pinned]="true">
     <ng-template igxCell let-cell="cell">
       <ng-container *ngIf="!isRemindPersonForm">
-        <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
-          <nb-icon pack="fa" icon="bars"></nb-icon>
-        </a>
-        <mat-menu #menu="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/people/preview', cell.rowData.id]"
-          >
-            <span class="ml-1">Детайли</span>
+        <div class="cell-center">
+          <button igxButton="icon" [igxToggleAction]="dropdown" [igxDropDownItemNavigation]="dropdown">
+            <igx-icon fontSet="material">more_vert</igx-icon>
           </button>
+          <igx-drop-down #dropdown>
+            <igx-drop-down-item [routerLink]="['/pages/people/preview', cell.rowData.id]">
+              Детайли
+            </igx-drop-down-item>
+            <igx-drop-down-item [routerLink]="['/pages/bulletins/create']"
+              [queryParams]="{ personId: cell.rowData.id }">
+              Нов бюлетин
+            </igx-drop-down-item>
+            <igx-drop-down-item [routerLink]="['/pages/applications/create']"
+              [queryParams]="{ personId: cell.rowData.id }">
+              Ново свидетелство
+            </igx-drop-down-item>
+            <igx-drop-down-item [routerLink]="['/pages/report-applications/create']" title="Нова справка за съдимост"
+              [queryParams]="{ personId: cell.rowData.id }">
+              Нова справка за съдимост
+            </igx-drop-down-item>
+            <igx-drop-down-item [queryParams]="{ personId: cell.rowData.id }"
+              [routerLink]="['/pages/internal-requests/create']">
+              Нова заявка
+            </igx-drop-down-item>
+          </igx-drop-down>
+        </div>
 
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/bulletins/create']"
-            [queryParams]="{ personId: cell.rowData.id }"
-          >
-            <span class="ml-1">Нов бюлетин</span>
-          </button>
-
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/applications/create']"
-            [queryParams]="{ personId: cell.rowData.id }"
-          >
-            <span class="ml-1">Ново свидетелство</span>
-          </button>
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/report-applications/create']"
-            [queryParams]="{ personId: cell.rowData.id }"
-          >
-            <span class="ml-1">Нова справка за съдимост</span>
-          </button>
-          <button
-            mat-menu-item
-            [routerLink]="['/pages/people/remind', cell.rowData.id]"
-          >
-            <span class="ml-1">Нов напомнителен бюлетин</span>
-          </button>
-          <button
-          mat-menu-item
-          [queryParams]="{ personId: cell.rowData.id }"
-          [routerLink]="['/pages/internal-requests/create']"
-        >
-          <span class="ml-1">Нова заявка</span>
-        </button>
-        </mat-menu>
       </ng-container>
       <ng-container *ngIf="isRemindPersonForm">
-        <a
-          [title]="'Преглед на лицето'"
-          [routerLink]="['/pages/people/preview', cell.rowData.id]"
-        >
+        <a [title]="'Преглед на лицето'" [routerLink]="['/pages/people/preview', cell.rowData.id]">
           <nb-icon pack="fa" icon="eye"></nb-icon>
         </a>
 
-        <button
-          igxButton="icon"
-          [title]="'Свържи с това лице'"
-          (click)="connectPeople(existingPersonId, cell.rowData.id)"
-        >
+        <button igxButton="icon" [title]="'Свържи с това лице'"
+          (click)="connectPeople(existingPersonId, cell.rowData.id)">
           <i class="fas fa-link"></i>
         </button>
       </ng-container>
@@ -146,12 +95,8 @@
 
   <ng-template #pager let-grid>
     <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
+      <cais-grid-pager [page]="remoteService.pagerParams.page" [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount" (pagerChange)="pagerChange($event)"></cais-grid-pager>
     </div>
   </ng-template>
 </igx-grid>

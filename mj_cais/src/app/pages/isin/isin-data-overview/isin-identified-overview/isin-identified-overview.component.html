@@ -177,23 +177,20 @@
     [width]="'5%'"
   >
     <ng-template igxCell let-cell="cell">
-      <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="Действия">
-        <nb-icon pack="fa" icon="bars"></nb-icon>
-      </a>
-      <mat-menu #menu="matMenu">
-        <button
-          mat-menu-item
-          [routerLink]="['/pages/isin/preview', cell.rowData.id]"
-        >
-          <span class="ml-1">Преглед на съобщение</span>
-        </button>
-        <button
-          mat-menu-item
-          [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]"
-        >
-          <span class="ml-1">Редакция на бюлетин</span>
-        </button>
-      </mat-menu>
+      <div class="cell-center">
+      <button igxButton="icon" [igxToggleAction]="dropdown" [igxDropDownItemNavigation]="dropdown">
+        <igx-icon fontSet="material">more_vert</igx-icon>
+      </button>
+      <igx-drop-down #dropdown>
+        <igx-drop-down-item routerLink]="['/pages/isin/preview', cell.rowData.id]">
+          Преглед на съобщение
+        </igx-drop-down-item>
+        <igx-drop-down-item [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]">
+          Редакция на бюлетин
+        </igx-drop-down-item>
+      </igx-drop-down>
+    </div>
+  
     </ng-template>
   </igx-column>
 
