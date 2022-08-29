@@ -13,6 +13,7 @@ export class InternalRequestModel extends BaseModel {
   public nIntReqTypeId: string = null;
   public pPersIdId: string;
   public pPersIdIdDisplay: string;
+  public pPidTypeCode: string;
 
   constructor(init?: Partial<InternalRequestModel>) {
     super(init);
@@ -27,5 +28,6 @@ export class InternalRequestModel extends BaseModel {
     this.fromAuthorityId = init?.fromAuthorityId ?? null;
     this.toAuthorityId = init?.toAuthorityId ?? null;
     this.nIntReqTypeId = init?.nIntReqTypeId ?? null;
+    this.pPidTypeCode = init?.pPidTypeCode ?? null;
   }
 }

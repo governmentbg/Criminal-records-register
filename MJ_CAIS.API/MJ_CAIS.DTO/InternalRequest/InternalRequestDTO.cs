@@ -11,6 +11,7 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string? ResponseDescr { get; set; }
         public DateTime? RequestDate { get; set; }
         public string? PPersIdId { get; set; }
+        public string? PPidTypeCode { get; set; }
         public string? PPersIdIdDisplay { get; set; }
         public string? FromAuthorityId { get; set; }
         public string? ToAuthorityId { get; set; }

@@ -27,6 +27,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 
             CreateMap<NInternalRequest, InternalRequestDTO>()
              .ForPath(d => d.PPersIdId, opt => opt.MapFrom(src => src.PPersIdId))
+             .ForPath(d => d.PPidTypeCode, opt => opt.MapFrom(src => src.PPersId.PidType.Code))
              .ForPath(d => d.PPersIdIdDisplay, opt => opt.MapFrom(src => src.PPersId.Pid));
 
             CreateMap<BBulletin, BulletinPersonInfoModelDTO>()

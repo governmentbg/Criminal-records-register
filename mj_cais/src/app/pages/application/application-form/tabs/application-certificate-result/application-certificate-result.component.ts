@@ -420,4 +420,22 @@ export class ApplicationCertificateResultComponent
       this.reportDialog.open();
      });
   }
+
+  onPrint() {
+    const popupWin = window.open('', '_blank');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+            <div>${this.report}</div>
+        </body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
 }
