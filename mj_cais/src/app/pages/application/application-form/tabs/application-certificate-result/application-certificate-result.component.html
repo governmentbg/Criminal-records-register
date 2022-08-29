@@ -184,7 +184,7 @@
           class="ml-2"
           style="min-width: 100px; float: right"
         >
-        Справка
+        Е-Справка
       </button>
       <button
       nbButton
@@ -515,6 +515,16 @@
         <div class="d-flex" style="justify-content: space-between">
           <h5 style="font-weight: bold">Справка</h5>
           <div>
+            <button
+              nbButton
+              matRipple
+              [status]="'success'"
+              (click)="onPrint()"
+              type="button"
+              class="ml-2"
+            >
+            Принтирай
+          </button>
             <button
               nbButton
               matRipple

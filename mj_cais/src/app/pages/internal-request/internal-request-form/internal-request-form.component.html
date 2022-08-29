@@ -24,6 +24,17 @@
         </button>
       </div>
       <ng-container *ngIf="showReplayBtn">
+        <button
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="showReport()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
+        >
+        Е-Справка
+      </button>
         <div>
           <button
             nbButton
@@ -271,3 +282,40 @@
     </form>
   </nb-card-body>
 </nb-card>
+
+<igx-dialog #reportDialog>
+  <div style="min-width: 1000px">
+    <nb-card>
+      <nb-card-header>
+        <div class="d-flex" style="justify-content: space-between">
+          <h5 style="font-weight: bold">Справка</h5>
+          <div>
+            <button
+              nbButton
+              matRipple
+              [status]="'success'"
+              (click)="onPrint()"
+              type="button"
+              class="ml-2"
+            >
+            Принтирай
+          </button>
+            <button
+              nbButton
+              matRipple
+              (click)="reportDialog.close()"
+              type="button"
+              class="ml-2"
+            >
+              Затвори
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <cais-encapsulated-html [Html]="this.report">
+        </cais-encapsulated-html>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>

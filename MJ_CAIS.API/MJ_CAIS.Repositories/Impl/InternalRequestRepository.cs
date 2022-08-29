@@ -49,6 +49,7 @@ namespace MJ_CAIS.Repositories.Impl
                         .Include(x => x.FromAuthority)
                         .Include(x => x.ToAuthority)
                         .Include(x => x.PPersId)
+                            .ThenInclude( p => p.PidType)
                         .FirstOrDefaultAsync(x => x.Id == id);
         }
 

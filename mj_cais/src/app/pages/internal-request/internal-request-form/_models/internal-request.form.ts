@@ -13,6 +13,7 @@ export class InternalRequestForm extends BaseForm {
   public requestDate: FormControl;
   public pPersIdId: FormControl;
   public pPersIdIdDisplay: FormControl;
+  public pPidTypeCode: FormControl;
   public reqStatusName: FormControl;
   public fromAuthorityId: FormControl;
   public toAuthorityId: FormControl;
@@ -30,6 +31,7 @@ export class InternalRequestForm extends BaseForm {
     this.requestDate = new FormControl(new Date());
     this.pPersIdId = new FormControl(null, Validators.required);
     this.pPersIdIdDisplay = new FormControl(null);
+    this.pPidTypeCode = new FormControl(null);
     this.pPersIdIdDisplay.disable();
     this.reqStatusName = new FormControl(null);
     this.fromAuthorityId = new FormControl(null);
@@ -47,6 +49,7 @@ export class InternalRequestForm extends BaseForm {
       responseDescr: this.responseDescr,
       requestDate: this.requestDate,
       pPersIdId: this.pPersIdId,
+      pPidTypeCode: this.pPidTypeCode,
       pPersIdIdDisplay: this.pPersIdIdDisplay,
       reqStatusName: this.reqStatusName,
       fromAuthorityId: this.fromAuthorityId,

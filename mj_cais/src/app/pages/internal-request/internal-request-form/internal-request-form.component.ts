@@ -10,11 +10,12 @@ import { InternalRequestService } from "./_data/internal-request.service";
 import { InternalRequestStatusCodeConstants } from "./_models/internal-request-status-code.constants";
 import { InternalRequestForm } from "./_models/internal-request.form";
 import { InternalRequestModel } from "./_models/internal-request.model";
-import { IgxGridComponent } from "@infragistics/igniteui-angular";
+import { IgxDialogComponent, IgxGridComponent } from "@infragistics/igniteui-angular";
 import { PersonBulletinsGridModel } from "./_models/person-bulletin-grid-model";
 import { Guid } from "guid-typescript";
 import { InternalRequestTypeCodeConstants } from "./_models/internal-request-type-code.constants";
 import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
+import { ApplicationCertificateService } from "../../application/application-form/tabs/application-certificate-result/_data/application-certificate.service";
 
 @Component({
   selector: "cais-internal-request-form",
@@ -29,12 +30,13 @@ export class InternalRequestFormComponent
     InternalRequestService
   >
   implements OnInit
-{
+{  
   constructor(
     service: InternalRequestService,
     public injector: Injector,
     private dialogService: NbDialogService,
-    private loaderService: NgxSpinnerService
+    private loaderService: NgxSpinnerService,
+    private appCertificateService: ApplicationCertificateService
   ) {
     super(service, injector);
   }
@@ -55,6 +57,9 @@ export class InternalRequestFormComponent
   public dbData: any;
   public isSend: boolean = false;
   public personIds: BaseNomenclatureModel[] = [];
+  @ViewChild("reportDialog", { read: IgxDialogComponent })
+  public reportDialog: IgxDialogComponent;
+  public report: string;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
@@ -63,7 +68,6 @@ export class InternalRequestFormComponent
     this.requestStatusCode = this.fullForm.reqStatusCode.value;
     this.personBulletins = this.dbData.personBulletins;
 
-    debugger;
     // when has create from bulletin
     if (this.dbData.bulletinInfo) {
       this.fullForm.nIntReqTypeId.patchValue(
@@ -300,6 +304,32 @@ export class InternalRequestFormComponent
       this.fullForm.pPersIdId.patchValue(suidId);
       return;
     }
+  }
+
+  showReport(){
+    debugger;
+    this.appCertificateService.htmlReport(this.fullForm.pPidTypeCode.value, this.fullForm.pPersIdIdDisplay.value).subscribe( res => { 
+      this.report = res;
+      this.reportDialog.open();
+     });
+  }
+
+  onPrint() {
+    const popupWin = window.open('', '_blank');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+            <div>${this.report}</div>
+        </body>
+      </html>`
+    );
+    popupWin.document.close();
   }
 
   // private deleteRow(pk) {
