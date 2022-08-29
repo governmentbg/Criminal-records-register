@@ -30,7 +30,6 @@ import { TlCommonModule } from "@tl/tl-common";
 import { FileUploadModule } from "ng2-file-upload";
 import { HammerModule } from "@angular/platform-browser";
 import { ThemeModule } from "./@theme/theme.module";
-import { MatMenuModule } from "@angular/material/menu";
 import { NgxPermissionsModule } from "ngx-permissions";
 
 @NgModule({
@@ -60,7 +59,6 @@ import { NgxPermissionsModule } from "ngx-permissions";
     NbMenuModule,
     NbTabsetModule,
     NbListModule,
-    MatMenuModule,
     NbToggleModule,
     NgxPermissionsModule.forChild(),
     IgxDatePickerModule,
@@ -91,7 +89,6 @@ import { NgxPermissionsModule } from "ngx-permissions";
     NbMenuModule,
     NbTabsetModule,
     NbListModule,
-    MatMenuModule,
     NbToggleModule,
     NgxPermissionsModule,
     IgxDatePickerModule,
