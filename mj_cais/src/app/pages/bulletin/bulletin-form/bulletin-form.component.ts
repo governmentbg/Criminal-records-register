@@ -190,7 +190,6 @@ export class BulletinFormComponent
 
   //override
   protected validateAndSave(form: any) {
-    debugger;
     console.log(form.group);
     if (!form.group.valid) {
       form.group.markAllAsTouched();

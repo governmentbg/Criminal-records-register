@@ -175,17 +175,28 @@
     <igx-grid-toolbar>
       <igx-grid-toolbar-actions>
         <button
-        *ngIf="!this.isForPreview"
-        nbButton
-        matRipple
-        [status]="'success'"
-        (click)="showReport()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px; float: right"
-      >
+          *ngIf="!this.isForPreview"
+          nbButton
+          matRipple
+          [status]="'success'"
+          (click)="showReport()"
+          type="button"
+          class="ml-2"
+          style="min-width: 100px; float: right"
+        >
         Справка
       </button>
+      <button
+      nbButton
+      matRipple
+      [status]="'success'"
+      (click)="previewBulletions()"
+      type="button"
+      class="ml-2"
+      style="min-width: 100px; float: center"
+    >
+      Преглед бюлетини
+    </button>
       <button
         *ngIf="!this.isForPreview"
         nbButton

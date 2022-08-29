@@ -92,6 +92,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId))
                 .ForMember(d => d.RegistrationNumber, opt => opt.Ignore());
 
+            CreateMap<BBulletin, BulletinConvictionDTO>();
+
             CreateMap<BBulletin, BulletinBaseDTO>()
                 .ForMember(d => d.RegistrationNumberDisplay, opt => opt.MapFrom(src => src.RegistrationNumber))
                 .ForPath(d => d.Person.Suid, opt => opt.MapFrom(src => src.Suid))

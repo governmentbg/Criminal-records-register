@@ -60,6 +60,14 @@ namespace MJ_CAIS.Web.Controllers
             return await base.Get(aId);
         }
 
+        [HttpGet("getConvitionsOnly/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge},{RoleConstants.CentralAuth}")]
+        public async Task<IActionResult> GetConvitionOnly(string aId)
+        {
+            var result = await this._bulletinService.GetConvictionOnlyAsync(aId);
+            return Ok(result);
+        }
+
         [HttpGet("create")]
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> GetWithPersonData([FromQuery] string personId)

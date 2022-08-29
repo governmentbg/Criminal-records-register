@@ -15,7 +15,6 @@ export class EcrisNotDescisionComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    debugger;
     this.formGroup = this.buildFormImpl();
     this.formGroup.patchValue(this.decisions);
   }
