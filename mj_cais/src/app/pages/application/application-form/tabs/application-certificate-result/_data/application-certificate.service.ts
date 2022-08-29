@@ -113,4 +113,11 @@ export class ApplicationCertificateService extends CaisCrudService<
       ids
     );
   }
+
+  public htmlReport(
+    idType: string,
+    id: string
+  ): Observable<string> {
+    return this.http.get(`${this.url}/html-report/${idType}/${id}`, {responseType: "text"});
+  }
 }

@@ -24,6 +24,7 @@ import { ConfirmTemplateDialogComponent } from "./dialogs/confirm-template-dialo
 import { BulletinPersonInfoComponent } from "./shared/bulletin-person-info/bulletin-person-info.component";
 import { CancelDialogComponent } from './dialogs/cancel-dialog/cancel-dialog.component';
 import { EmptyComponent } from './empty/empty.component';
+import { EncapsulatedHtmlComponent } from './encapsulated-html/encapsulated-html.component';
 
 const COMPONENTS = [
   CardHeaderComponent,
@@ -46,6 +47,7 @@ const COMPONENTS = [
   BulletinPersonInfoComponent,
   CancelDialogComponent,
   EmptyComponent,
+  EncapsulatedHtmlComponent
 ];
 
 @NgModule({

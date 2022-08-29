@@ -38,6 +38,7 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -68,6 +69,7 @@ const PIPES = [
   RoundPipe,
   TimingPipe,
   NumberWithCommasPipe,
+  SafeHtmlPipe,
 ];
 
 @NgModule({
