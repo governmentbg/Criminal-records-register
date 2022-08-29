@@ -1,9 +1,11 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
+  ColumnPinningPosition,
   IgxDialogComponent,
   IgxGridComponent,
   IgxGridRowComponent,
+  IPinningConfig,
 } from "@infragistics/igniteui-angular";
 import { EActions } from "@tl/tl-common";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -33,6 +35,7 @@ export class BulletinDecisionFormComponent {
   public bulletinDecisionForm = new BulletinDecisionForm();
   public decisions: BulletinDecisionModel[];
   public isDecisionPreview: boolean = false;
+  public pinningConfig: IPinningConfig = { columns: ColumnPinningPosition.End };
 
   constructor(
     public dateFormatService: DateFormatService,
