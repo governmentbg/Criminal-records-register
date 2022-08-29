@@ -57,7 +57,6 @@ const COMPONENTS = [
     CommonModule,
     SharedModule,
     NgSelectModule,
-    MatInputModule,
     NbCardModule,
   ],
 })
