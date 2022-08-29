@@ -17,7 +17,6 @@ import { CaisGridPagerComponent } from "./grid/cais-grid-pager/cais-grid-pager.c
 import { GridWithTransactionsComponent } from "./grid/grid-with-transactions.component";
 import { ValidationMessageComponent } from "./validation-message/validation-message.component";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { MatInputModule } from "@angular/material/input";
 import { NbCardModule } from "@nebular/theme";
 import { SharedModule } from "../../shared.module";
 import { ConfirmTemplateDialogComponent } from "./dialogs/confirm-template-dialog/confirm-template-dialog.component";
