@@ -127,7 +127,8 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("generate-report")]
         public async Task<IActionResult> GenerateReportById([FromBody] GenerateReportParamDTO aInDto)
         {
-            await _reportGenerationService.CreateReport(aInDto.ReportId, aInDto.FirstSignerId, aInDto.SecondSignerId);
+            await _reportApplicationService.SaveSignersAsync(aInDto.ReportId, aInDto.FirstSignerId, aInDto.SecondSignerId);
+            await _reportGenerationService.CreateReport(aInDto.ReportId);
             return Ok();
         }
 

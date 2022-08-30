@@ -7,6 +7,8 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IReportApplicationService : IBaseAsyncService<ReportApplicationDTO, ReportApplicationDTO, ReportApplicationGridDTO, AReportApplication, string>
     {
+        Task SaveSignersAsync(string reportId, string firstSignerId, string secondSignerId);
+
         Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode);
 
         Task<IgPageResult<GeneratedReportGridDTO>> SelectAllGeneratedReportsWithPaginationAsync(ODataQueryOptions<GeneratedReportGridDTO> aQueryOptions);

@@ -65,7 +65,16 @@
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
       <div class="row mt-2">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
+          <cais-autocomplete
+            [label]="'От Бюро съдимост'"
+            [inputFormControl]="fullForm.fromAuthorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'fromAuthorityId'"
+            [items]="dbData.csAuthorities"
+          ></cais-autocomplete>
+        </div>
+        <div class="form-group col-md-3">
           <cais-autocomplete
             [label]="'До Бюро съдимост'"
             [inputFormControl]="fullForm.toAuthorityId"
@@ -74,7 +83,7 @@
             [items]="dbData.csAuthorities"
           ></cais-autocomplete>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <cais-input
             [type]="'date'"
             [label]="'Датата на създаване'"
@@ -82,7 +91,7 @@
             [parentGroup]="fullForm.group"
           ></cais-input>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <cais-input
             [type]="'text'"
             [label]="'Регистрационен номер'"
