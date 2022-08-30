@@ -14,6 +14,7 @@
 @import "~@nebular/theme/styles/globals";
 @import "~@nebular/auth/styles/globals";
 
+
 @import "~bootstrap/scss/bootstrap";
 
 
@@ -181,4 +182,75 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   justify-content: center;
   height: 100%;
   width: 100%;
+
+}
+
+.cell-center a {
+  color: #0000009E;
+}
+
+
+.ng-select {
+  .ng-select-container {
+    background-color: #f7f9fc !important;
+    border-color: #e4e9f2;
+  }
+}
+
+.nb-theme-default nb-card-body {
+  overflow: unset;
+}
+
+
+.cais-date-time-picker {
+  input.igx-input-group__input {
+    border-radius: 0.25rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    padding: 0.4375rem 1rem;
+    background-color: #f7f9fc;
+    border-color: #e4e9f2;
+    color: #222b45;
+    width: 100%;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Open Sans, sans-serif;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2.25rem;
+  }
+  .igx-input-group__bundle,
+  .igx-input-group__bundle ng-star-inserted {
+    padding-top: 0px;
+    box-shadow: none;
+    border-radius: 0.25rem;
+  }
+  .igx-icon {
+    font-size: 20px;
+    align-items: center;
+    justify-content: space-around;
+    border-color: transparent;
+    color: rgb(143, 155, 179);
+  }
+  .igx-icon:hover,
+  .igx-input-group igx-prefix:hover {
+    background-color: #edf1f7;
+  }
+  .igx-input-group igx-prefix {
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+    padding: 0.2rem;
+    border-radius: 0px;
+  }
+  .igx-input-group igx-suffix {
+    position: absolute;
+    right: 30px;
+  }
+  .igx-input-group igx-suffix:hover {
+    background-color: #edf1f7;
+  }
 }
