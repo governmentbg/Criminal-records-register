@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -113,14 +114,14 @@ namespace MJ_CAIS.ExternalWebServices
             string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateUserSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
         {
             //целта може да е null -> тогава важи за всички; при null изпраща се директно, а не за подпис от съдия
-            //if(certificate.Application.PurposeNavigation == null)
-            //{
-            //    throw new Exception("Полето 'Цел' е празно");
-            //}
+            if (certificate.Application.PurposeNavigation == null)
+            {
+                throw new BusinessLogicException("Полето 'Цел' е празно");
+            }
             var docTypeID = (await _certificateRepository.SingleOrDefaultAsync<DDocType>(x => x.Code == DocumentTypesConstants.DocumentTypesCodes.ConvictionCertificate))?.Id;
             if (string.IsNullOrEmpty(docTypeID))
             {
-                throw new Exception($"Не съществува тип документ с код {DocumentTypesConstants.DocumentTypesCodes.ConvictionCertificate}");
+                throw new BusinessLogicException($"Не съществува тип документ с код {DocumentTypesConstants.DocumentTypesCodes.ConvictionCertificate}");
             }
             
             byte[] contentCertificate;
