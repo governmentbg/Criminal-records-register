@@ -44,6 +44,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { title: "Изход", data: { id: 'logout' } }
   ];
 
+  public origin = location.origin;
+
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
