@@ -19,6 +19,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var result = this._dbContext
                 .Set<AApplication>()
+                .Include(x => x.StatusCodeNavigation)
                 .Include(x => x.CsAuthorityBirth)
                 .Include(x => x.ACertificates)
                 .AsNoTracking();

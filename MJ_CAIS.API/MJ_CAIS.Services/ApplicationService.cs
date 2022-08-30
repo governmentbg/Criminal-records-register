@@ -67,8 +67,6 @@ namespace MJ_CAIS.Services
             if (!string.IsNullOrEmpty(statusId))
             {
                 var statues = statusId.Split(',');
-                //entityQuery = entityQuery.Where(x =>
-                //    statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
                 entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode)).Select(e => e)
                     .Union(entityQuery.Where(x => x.ACertificates.Any(c => statues.Contains(c.StatusCode)))).Select(e => e);
             }
