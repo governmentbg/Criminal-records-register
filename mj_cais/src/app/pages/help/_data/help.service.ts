@@ -23,4 +23,9 @@ export class HelpService extends CaisCrudService<any, string> {
     let url = `${this.url}/administration`;
     return this.http.get(url, { responseType: "blob", observe: "response" });
   }
+
+  public downloadContentJudge() {
+    let url = `${this.url}/judge`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
 }

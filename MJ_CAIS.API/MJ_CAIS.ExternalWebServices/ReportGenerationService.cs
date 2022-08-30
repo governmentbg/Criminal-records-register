@@ -30,7 +30,7 @@ namespace MJ_CAIS.ExternalWebServices
             throw new NotImplementedException();
         }
 
-        public async Task<byte[]> CreateReport(string reportID, string firstSignerId = null, string secondSignerId = null)
+        public async Task<byte[]> CreateReport(string reportID)
         {
             var report = await _reportRepository.GetReport(reportID);//.SingleOrDefaultAsync<AReport>(x => x.Id == reportID); 
 
@@ -49,7 +49,7 @@ namespace MJ_CAIS.ExternalWebServices
                 throw new Exception($"Системният параметър {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} не е настроен.");
             }
 
-            var result = await CreateReport(report, signingCertificateName, firstSignerId, secondSignerId);
+            var result = await CreateReport(report, signingCertificateName);
 
 
 
@@ -59,7 +59,7 @@ namespace MJ_CAIS.ExternalWebServices
             return result;
         }
 
-        private async Task<byte[]> CreateReport(AReport report, string signingCertificateName, string firstSignerId = null, string secondSignerId = null)
+        private async Task<byte[]> CreateReport(AReport report, string signingCertificateName)
         {
 
             byte[] contentReport;
@@ -172,17 +172,6 @@ namespace MJ_CAIS.ExternalWebServices
             report.ModifiedProperties.Add(nameof(report.DocId));
             report.ModifiedProperties.Add(nameof(report.StatusCode));
 
-            if (!string.IsNullOrEmpty(firstSignerId))
-            {
-                report.FirstSignerId = firstSignerId;
-                report.ModifiedProperties.Add(nameof(report.FirstSignerId));
-            }
-
-            if (!string.IsNullOrEmpty(secondSignerId))
-            {
-                report.SecondSignerId = secondSignerId;
-                report.ModifiedProperties.Add(nameof(report.SecondSignerId));
-            }
 
             report.StatusCode = ReportApplicationConstants.Status.ReadyReport;
 

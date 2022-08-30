@@ -27,6 +27,17 @@ namespace MJ_CAIS.Repositories.Impl
             return result;
         }
 
+        public async Task SaveSignersAsync(string reportId, string firstSignerId, string secondSignerId)
+        {
+            var report = await _dbContext.AReports.AsNoTracking().FirstAsync(x => x.Id == reportId);
+            report.FirstSignerId = firstSignerId;
+            report.SecondSignerId = secondSignerId;
+            report.EntityState = Common.Enums.EntityStateEnum.Modified;
+            report.ModifiedProperties = new List<string> { nameof(report.FirstSignerId), nameof(report.SecondSignerId), nameof(report.Version) };
+            _dbContext.ApplyChanges(report);
+            await SaveChangesAsync(true);
+        }
+
         public IQueryable<ReportAppStatusHistoryDTO> SelectAllStatusHistoryData()
         {
             var query = from reportAppHis in _dbContext.AReportStatusHes.AsNoTracking()

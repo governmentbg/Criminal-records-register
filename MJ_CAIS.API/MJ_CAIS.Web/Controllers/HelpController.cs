@@ -30,6 +30,13 @@ namespace MJ_CAIS.Web.Controllers
             return await ReturnFileAsync(fileName);
         }
 
+        [HttpGet("judge")]
+        public async Task<IActionResult> GetContentsJudge()
+        {
+            var fileName = "MJ_CAIS_SUM_Sadii.docx";
+            return await ReturnFileAsync(fileName);
+        }
+     
         private async Task<IActionResult> ReturnFileAsync(string fileName)
         {
             var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "HelpFiles", fileName);

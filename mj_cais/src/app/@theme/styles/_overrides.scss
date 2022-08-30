@@ -100,27 +100,6 @@
       border-radius: 0.25rem;
     }
 
-    input.igx-input-group__input:focus {
-      background-color: #ffffff;
-      border-color: #3366ff;
-    }
-
-    input.igx-input-group__input:hover {
-      background-color: #edf1f7;
-      border-color: #e4e9f2;
-    }
-
-    input.igx-input-group__input:disabled {
-      background-color: #f7f9fc;
-      border-color: #e4e9f2;
-      color: rgba(143, 155, 179, 0.48);
-      cursor: default;
-    }
-
-    .igx-input-group__bundle:hover {
-      box-shadow: none;
-    }
-
     .igx-icon {
       font-size: 20px;
       align-items: center;
@@ -313,10 +292,10 @@
       height: 2.25rem;
     }
 
-    input.igx-input-group__input:focus {
-      background-color: #222b45;
-      border-color: #3366ff;
-    }
+    // input.igx-input-group__input:focus {
+    //   background-color: #222b45;
+    //   border-color: #3366ff;
+    // }
 
     input.igx-input-group__input:hover {
       background-color: #151a30 !important;
@@ -380,12 +359,6 @@
 .nb-theme-dark app-grid-with-transactions .igx-grid-toolbar,
 app-grid-with-transactions .igx-grid-toolbar {
   justify-content: end;
-}
-
-.igx-grid__tbody {
-  display: block !important;
-  overflow-y: auto !important;
-  max-height: 410px;
 }
 
 igx-grid-cell,
@@ -526,35 +499,6 @@ igx-grid-toolbar-title {
   font-weight: bold;
 }
 
-// Grid button column
-igx-grid,
-igx-tree-grid {
-  igx-grid-cell.igx-grid__td--pinned {
-    a {
-      color: var(--igx-button-icon-color);
-      text-decoration: none;
-      height: 2.25rem;
-      width: 2.25rem;
-      font-size: 1rem;
-      padding: 0;
-      border-radius: var(--igx-button-icon-border-radius);
-
-      display: inline-flex;
-      position: relative;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
-
-    a:hover {
-      transition: color 1ms ease-in-out, background-color 1ms ease-in-out,
-        border-color 1ms ease-in-out, box-shadow 1ms ease-in-out;
-      color: var(--igx-button-icon-hover-color);
-      background: var(--igx-button-icon-hover-background);
-    }
-  }
-}
-
 // File styles
 .file-drop-zone {
   border: dotted 3px lightgray;
@@ -618,21 +562,6 @@ ng-select.disable-arrow .ng-arrow-wrapper .ng-arrow {
   color: rgba(143, 155, 179, 0.48);
 }
 
-.cais-pager-container tl-reference-button button {
-  border: 1px solid #3366ff;
-  line-height: 1.2rem;
-}
-
-.nb-theme-dark .cais-pager-container tl-reference-button button {
-  border: 1px solid #3366ff;
-  border-radius: 4px;
-  color: white;
-}
-
-.nb-theme-default .cais-pager-container tl-reference-button button {
-  background-color: #f7f9fc;
-  color: #222b45;
-}
 
 hr {
   margin: 6px 0;

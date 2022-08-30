@@ -6,6 +6,7 @@ import {
 } from "@infragistics/igniteui-angular";
 import { NbAuthService } from "@nebular/auth";
 import { TranslateService } from "@ngx-translate/core";
+import { IgxResourceStringsBG } from "igniteui-angular-i18n";
 import { NgxPermissionsService } from "ngx-permissions";
 import { map, of, switchMap, tap } from "rxjs";
 import { UserAuthorityService } from "./@core/services/common/user-authority.service";
@@ -24,7 +25,7 @@ import { UserInfoService } from "./@core/services/common/user-info.service";
 })
 export class AppComponent implements OnInit {
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private permissionsService: NgxPermissionsService,
     private authService: NbAuthService,
     private userAuthorityService: UserAuthorityService,
@@ -38,17 +39,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http
-      .get("assets/ignite-ui.localization.json")
-      .subscribe((data: any) => {
-        const currentRS = getCurrentResourceStrings();
 
-        for (const key of Object.keys(data)) {
-          currentRS[key] = data[key];
-        }
-        changei18n(currentRS);
-      });
-      
+    changei18n(IgxResourceStringsBG);
+
     this.authService.onTokenChange().pipe(
       switchMap((tkn) => {
         return tkn.isValid()
@@ -63,14 +56,14 @@ export class AppComponent implements OnInit {
         } else {
           this.permissionsService.loadPermissions([]);
         }
-        if (data?.CsAuthorityId){
+        if (data?.CsAuthorityId) {
           this.userAuthorityService.csAuthorityId = data?.CsAuthorityId;
           this.userInfoService.csAuthorityId = data?.CsAuthorityId;
         }
-        if (data?.sub){
+        if (data?.sub) {
           this.userInfoService.userId = data?.sub;
         }
       })
-    ).subscribe();    
+    ).subscribe();
   }
 }

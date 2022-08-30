@@ -51,6 +51,11 @@ namespace MJ_CAIS.Services
         public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
             => await _reportApplicationRepository.GetReportAppContentByIdAsync(aId);
 
+        public async Task SaveSignersAsync(string reportId, string firstSignerId, string secondSignerId)
+        {
+            await _reportApplicationRepository.SaveSignersAsync(reportId, firstSignerId, secondSignerId);
+        }
+
         public virtual async Task<IgPageResult<ReportApplicationGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<ReportApplicationGridDTO> aQueryOptions, string? statusCode)
         {
             var entityQuery = GetSelectAllQueryable().Where(x => x.CsAuthorityId == _userContext.CsAuthorityId);
@@ -69,8 +74,8 @@ namespace MJ_CAIS.Services
         public async Task<IgPageResult<GeneratedReportGridDTO>> SelectAllGeneratedReportsWithPaginationAsync(ODataQueryOptions<GeneratedReportGridDTO> aQueryOptions)
         {
             var entityQuery = _reportApplicationRepository.SelectAllGeneratedReports()
-                .Where(x => x.StatusCode == Status.ReadyReport ||
-                            x.StatusCode == Status.DeliveredReport &&
+                .Where(x => (x.StatusCode == Status.ReadyReport ||
+                            x.StatusCode == Status.DeliveredReport) &&
                             x.CsAuthorityId == _userContext.CsAuthorityId);
 
             var resultQuery = await ApplyOData(entityQuery, aQueryOptions);
