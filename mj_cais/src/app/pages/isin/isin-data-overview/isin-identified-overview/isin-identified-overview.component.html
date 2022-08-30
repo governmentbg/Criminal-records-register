@@ -182,7 +182,7 @@
         <igx-icon fontSet="material">more_vert</igx-icon>
       </button>
       <igx-drop-down #dropdown>
-        <igx-drop-down-item routerLink]="['/pages/isin/preview', cell.rowData.id]">
+        <igx-drop-down-item [routerLink]="['/pages/isin/preview', cell.rowData.id]">
           Преглед на съобщение
         </igx-drop-down-item>
         <igx-drop-down-item [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]">
