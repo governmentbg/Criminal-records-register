@@ -21,12 +21,6 @@
 
 
 
-// loading progress bar theme
-@import "./pace.theme";
-
-@import "./layout";
-@import "./overrides";
-
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
 @include igx-core();
 
@@ -35,12 +29,6 @@
   // framework global styles
   @include nb-theme-global();
   @include nb-auth-global();
-
-  @include ngx-layout();
-  // loading progress bar
-  @include ngx-pace-theme();
-
-  @include nb-overrides();
 }
 
 
