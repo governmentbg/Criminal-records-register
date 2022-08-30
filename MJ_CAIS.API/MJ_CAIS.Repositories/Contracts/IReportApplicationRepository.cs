@@ -6,6 +6,8 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IReportApplicationRepository : IBaseAsyncRepository<AReportApplication, string, CaisDbContext>
     {
+        Task SaveSignersAsync(string reportId, string firstSignerId, string secondSignerId);
+
         IQueryable<ReportAppStatusHistoryDTO> SelectAllStatusHistoryData();
 
         IQueryable<GeneratedReportGridDTO> SelectAllGeneratedReports();
