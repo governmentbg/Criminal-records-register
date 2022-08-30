@@ -14,18 +14,10 @@
 @import "~@nebular/theme/styles/globals";
 @import "~@nebular/auth/styles/globals";
 
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/bootstrap";
 
 
 
-// loading progress bar theme
-@import "./pace.theme";
-
-@import "./layout";
-@import "./overrides";
 
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
 @include igx-core();
@@ -35,12 +27,6 @@
   // framework global styles
   @include nb-theme-global();
   @include nb-auth-global();
-
-  @include ngx-layout();
-  // loading progress bar
-  @include ngx-pace-theme();
-
-  @include nb-overrides();
 }
 
 
