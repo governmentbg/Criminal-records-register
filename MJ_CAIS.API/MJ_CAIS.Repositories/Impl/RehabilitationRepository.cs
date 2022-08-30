@@ -20,7 +20,7 @@ namespace MJ_CAIS.Repositories.Impl
         /// if a crime was committed during the probation period</param>
         /// <param name="status">The status may be missing if you do not need to change the status of bulletin</param>
         /// <returns></returns>
-        public void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate, string? status)
+        public void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate)
         {
             var bulletin = new BBulletin
             {
@@ -35,12 +35,6 @@ namespace MJ_CAIS.Repositories.Impl
                 nameof(bulletin.RehabilitationDate),
                 nameof(bulletin.Version),
             };
-
-            if (!string.IsNullOrEmpty(status))
-            {
-                bulletin.StatusId = status;
-                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
-            }
 
             _dbContext.ApplyChanges(bulletin, new List<IBaseIdEntity>());
         }

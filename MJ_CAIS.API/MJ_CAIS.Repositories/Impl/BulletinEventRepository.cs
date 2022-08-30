@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.BulletinEvent;
@@ -78,14 +77,6 @@ namespace MJ_CAIS.Repositories.Impl
                 });
 
             return query;
-        }
-
-        public async Task<bool> GetExistingEventsAsync(string bulletinId)
-        {
-            return await _dbContext.BBulEvents
-                                .AsNoTracking()
-                                .AnyAsync(x => x.BulletinId == bulletinId && x.EventType == BulletinEventConstants.Type.Article2212);
-
         }
 
         public IQueryable<BuletinEventTypeDTO> GetExistingEventsByType(BBulletin currentAttachedBulletin)

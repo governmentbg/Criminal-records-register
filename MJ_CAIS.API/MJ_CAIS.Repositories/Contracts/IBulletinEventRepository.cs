@@ -12,8 +12,6 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<SanctionEventDTO> GetSanctionsSuspentionByBulletinId(List<string> bulletinId);
 
-        Task<bool> GetExistingEventsAsync(string bulletinId);
-
         IQueryable<BuletinEventTypeDTO> GetExistingEventsByType(BBulletin currentAttachedBulletin);
     }
 }

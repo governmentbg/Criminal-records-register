@@ -9,5 +9,6 @@
         public string? Descr { get; set; }
         public bool? Locked { get; set; }
         public string BulletinId { get; set; }
+        public bool? HasContent { get; set; }
     }
 }

@@ -21,6 +21,10 @@ export class BulletinService extends CaisCrudService<BulletinModel, string> {
     super(BulletinModel, injector, "bulletins");
   }
 
+  public updateFinal(id: string, model: BulletinModel): Observable<BulletinModel> {
+    return this.http.put<BulletinModel>(this.url + `/final-edit/${id}`, model, {});
+  }
+
   public getWithPersonData(personId: string): Observable<BulletinModel> {
     return this.http.get<BulletinModel>(
       `${this.url}/create?personId=${personId}`

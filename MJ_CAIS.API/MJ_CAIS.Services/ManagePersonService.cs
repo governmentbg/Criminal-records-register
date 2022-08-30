@@ -317,6 +317,7 @@ namespace MJ_CAIS.Services
 
             foreach (var nationality in nationalities)
             {
+                if (nationality == null) continue;
                 person.PPersonCitizenships.Add(new PPersonCitizenship
                 {
                     Id = BaseEntity.GenerateNewId(),
