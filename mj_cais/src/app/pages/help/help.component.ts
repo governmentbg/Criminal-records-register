@@ -20,36 +20,34 @@ export class HelpComponent implements OnInit {
   ngOnInit(): void {}
 
   getFileForCbs() {
-    this.service.downloadContentCbs().subscribe(
-      (response: any) => {
-        this.getFileContent(response);
-      },
-      (error) => {
-        this.onError(error);
-      }
-    );
+    let action = this.service.downloadContentCbs();
+    this.subcribeAction(action);
   }
 
   getFileForEmployee() {
-    this.service.downloadContentEmployee().subscribe(
-      (response: any) => {
-        this.getFileContent(response);
-      },
-      (error) => {
-        this.onError(error);
-      }
-    );
+    let action = this.service.downloadContentEmployee();
+    this.subcribeAction(action);
   }
 
   getFileForAdministration() {
-    this.service.downloadContentAdministration().subscribe(
-      (response: any) => {
+    let action = this.service.downloadContentAdministration();
+    this.subcribeAction(action);
+  }
+
+  getFileForJudge() {
+    let action = this.service.downloadContentJudge();
+    this.subcribeAction(action);
+  }
+
+  private subcribeAction(action) {
+    action.subscribe({
+      next: (response) => {
         this.getFileContent(response);
       },
-      (error) => {
-        this.onError(error);
-      }
-    );
+      error: (errorResponse) => {
+        this.onError(errorResponse);
+      },
+    });
   }
 
   private getFileContent(response) {
