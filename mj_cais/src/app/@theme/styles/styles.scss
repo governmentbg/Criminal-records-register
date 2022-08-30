@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
@@ -18,6 +19,8 @@
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/grid";
 
+
+
 // loading progress bar theme
 @import "./pace.theme";
 
@@ -26,7 +29,6 @@
 
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
 @include igx-core();
-@include igx-typography();
 
 // install the framework and custom global styles
 @include nb-install() {
@@ -41,10 +43,11 @@
   @include nb-overrides();
 }
 
+
 .nb-theme-dark {
   $custom-palette: igx-palette(
     $primary: #f0f2ff,
-    $secondary: #3f51b5,
+    $secondary: yellow,
     $surface: #222b45,
     $error: #cf1a2b,
     $success: #689f38,
@@ -58,10 +61,7 @@
     $roundness: null,
     $elevation: null
   );
-  @include igx-typography(
-    $font-family: "Nunito Sans",
-    $type-scale: $indigo-type-scale
-  );
+
 }
 
 // File styles
@@ -188,16 +188,6 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   position: relative;
   justify-content: space-between;
 }
-
-.flex-gap {
-  display: inline-flex;
-  flex-wrap: wrap;
-}
-
-.flex-gap > div {
-  margin: 6px;
-}
-
 
 .cell-center {
   display: flex;
