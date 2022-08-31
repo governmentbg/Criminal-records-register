@@ -8,6 +8,10 @@ export class BulletinCheckGridModel extends BaseGridModel {
   public bulletinAuthorityId: string = null;
   public bulletinAuthorityName: Date = null;
 
+  public bulletinDecisionDate: Date = null;
+  public bulletinDecisionNumber: string = null;
+  public bulletinTypeName: string = null;
+
   constructor(init?: Partial<BulletinCheckGridModel>) {
     super(init);
     this.registrationNumber = init?.registrationNumber ?? null;
@@ -16,5 +20,9 @@ export class BulletinCheckGridModel extends BaseGridModel {
     this.statusName = init?.statusName ?? null;
     this.bulletinAuthorityId = init?.bulletinAuthorityId ?? null;
     this.bulletinAuthorityName = init?.bulletinAuthorityName ?? null;
+
+    this.bulletinDecisionDate = init?.bulletinDecisionDate ?? null;
+    this.bulletinDecisionNumber = init?.bulletinDecisionNumber ?? null;
+    this.bulletinTypeName = init?.bulletinTypeName ?? null;
   }
 }

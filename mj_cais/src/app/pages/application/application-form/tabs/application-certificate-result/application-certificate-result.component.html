@@ -272,6 +272,24 @@
         [dataType]="'string'"
       ></igx-column>
       <igx-column
+        field="bulletinDecisionNumber"
+        header="Номер решение"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="bulletinTypeName"
+        header="Тип на бюлетина"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="bulletinDecisionDate"
+        header="Дата решение"
+        [sortable]="true"
+        [dataType]="'date'"
+      ></igx-column>
+      <igx-column
         field="bulletinAuthorityName"
         header="Съд, изготвил бюлетина"
         [sortable]="true"
@@ -321,22 +339,22 @@
       [rowSelection]="isForPreview ? 'none' : 'multiple'"
       [hideRowSelectors]="false"
     >
-    <igx-grid-toolbar>
-      <igx-grid-toolbar-actions>
-        <button
-          *ngIf="!this.isForPreview"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="showReport()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px; float: right"
-        >
-          Е-Справка
-        </button>
-      </igx-grid-toolbar-actions>
-    </igx-grid-toolbar>
+      <igx-grid-toolbar>
+        <igx-grid-toolbar-actions>
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="showReport()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px; float: right"
+          >
+            Е-Справка
+          </button>
+        </igx-grid-toolbar-actions>
+      </igx-grid-toolbar>
       <igx-column
         field="id"
         header="Идентификатор"
@@ -391,6 +409,24 @@
         header="Съд, изготвил бюлетина"
         [sortable]="true"
         [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="bulletinDecisionNumber"
+        header="Номер решение"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="bulletinTypeName"
+        header="Тип на бюлетина"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="bulletinDecisionDate"
+        header="Дата решение"
+        [sortable]="true"
+        [dataType]="'date'"
       ></igx-column>
       <igx-column
         width="100px"
