@@ -214,7 +214,7 @@ namespace MJ_CAIS.Repositories.Impl
                     cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.Familyname?.Trim(), ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, searchObj.Fullname?.Trim(), ParameterDirection.Input));
 
-                    var birthDate = searchObj.BirthDate.HasValue ? searchObj.BirthDate.Value : (DateTime?)null;
+                    var birthDate = searchObj.BirthDate.HasValue ? searchObj.BirthDate.Value.Date : (DateTime?)null;
                     cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, birthDate, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, searchObj.BirthDatePrec?.Trim(), ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_page_size", OracleDbType.Int32, pageSize, ParameterDirection.Input));
