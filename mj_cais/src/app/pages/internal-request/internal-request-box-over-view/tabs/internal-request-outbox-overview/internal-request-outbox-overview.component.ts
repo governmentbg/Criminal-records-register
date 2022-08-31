@@ -18,6 +18,8 @@ export class InternalRequestOutboxOverviewComponent extends RemoteGridWithStateP
   InternalRequestMailBoxGridModel,
   InternalRequestMailBoxGridService
 >   {
+
+
   constructor(
     service: InternalRequestMailBoxGridService,
     injector: Injector,
@@ -33,6 +35,8 @@ export class InternalRequestOutboxOverviewComponent extends RemoteGridWithStateP
   public grid: IgxGridComponent;
   public hideStatus: boolean = true;
   public selectedRows: string[];
+
+  @Input() caisTitle: string;
 
   @Output() onReadClicked: EventEmitter<number> = new EventEmitter<number>()
   ngOnInit() {
