@@ -138,10 +138,10 @@ namespace MJ_CAIS.Repositories
                 bulletinsQuery = bulletinsQuery.Where(x => x.IdDocValidDate == searchParams.IdDocValidDate);
 
             if (searchParams.FromDate.HasValue)
-                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn >= searchParams.FromDate);
+                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn >= searchParams.FromDate.Value.Date);
 
             if (searchParams.ToDate.HasValue)
-                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate);
+                bulletinsQuery = bulletinsQuery.Where(x => x.CreatedOn <= searchParams.ToDate.Value.Date);
 
             if (searchParams.Foreigner == true)
             {

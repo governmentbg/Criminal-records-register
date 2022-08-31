@@ -141,7 +141,7 @@ namespace MJ_CAIS.Services
                 // тодо:трябва ли да се изчислява реабилитация и настъпили обстоятелства
                 // когато добавяме бюлетин в той преминава в някои друг статус не нов
                 // трябва ли да се вика и екрис и в кой от статусите трябва да се генерира събщение
-                //await UpdateRehabilitationAndEventDataAsync(bulletin, person);
+                await UpdateRehabilitationAndEventDataAsync(bulletin, person);
             }
 
             await _bulletinRepository.SaveChangesAsync();
@@ -206,7 +206,7 @@ namespace MJ_CAIS.Services
 
             if (normalFlowForCreatePerson || changesOnPersonData)
             {
-                var person = await CreatePersonFromBulletinAsync(bulletinToUpdate);
+                var person = await CreatePersonFromBulletinAsync(bulletinToUpdate);         
                 await UpdateRehabilitationAndEventDataAsync(bulletinToUpdate, person);
             }
 
