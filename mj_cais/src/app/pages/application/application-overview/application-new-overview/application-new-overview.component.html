@@ -1,12 +1,9 @@
-<!-- <tl-linear-progress
-  [visible]="this.remoteService.isLoading"
-></tl-linear-progress> -->
-
 <igx-grid #grid igxGridState [data]="items$ | async" [filterStrategy]="noopFilterStrategy" [height]="null"
   [sortStrategy]="noopSortStrategy" [paging]="true" [clipboardOptions]="{ copyHeaders: false }"
   [displayDensity]="'cosy'" (onSortingDone)="sortingDone($event)" (onFilteringDone)="filteringDone($event)"
   (onSelection)="cellSelection($event)" [paginationTemplate]="pager" [allowFiltering]="true" [primaryKey]="'id'"
   [pinning]="pinningConfig" [cellSelection]="'none'">
+  
 
   <igx-column field="id" header="Идентификатор" [sortable]="true" [dataType]="'number'" [hidden]="true">
     <ng-template igxCell let-cell="cell">
