@@ -90,7 +90,16 @@ namespace MJ_CAIS.Web.Controllers
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public async Task<IActionResult> Put(string aId, [FromBody] BulletinEditDTO aInDto)
         {
-            await this._bulletinService.UpdateAsync(aInDto);
+            await this._bulletinService.UpdateAsync(aInDto, false);
+            return Ok();
+        }
+
+
+        [HttpPut("final-edit/{aId}")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        public virtual async Task<IActionResult> FinalEdit(string aId, [FromBody] BulletinEditDTO aInDto)
+        {
+            await this._bulletinService.UpdateAsync(aInDto, true);
             return Ok();
         }
 

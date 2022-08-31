@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.XmlData;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
-using static MJ_CAIS.Common.Constants.BulletinConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -45,28 +46,26 @@ namespace MJ_CAIS.Services
 
         private bool ApplyFirstPoint(BBulletin currentAttachedBull, List<BulletinForRehabilitationAndEventDTO> allPersonBulletins)
         {
+            // we cannot  apply first point
+            if (!currentAttachedBull.DecisionFinalDate.HasValue) return false;
             var appliedChanges = false;
-
-            var currentBulletin = allPersonBulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
-            if (currentBulletin == null || !currentBulletin.DecisionFinalDate.HasValue) return appliedChanges;
-
 
             // the person's first bulletin with an estimated date
             // on which the person would potentially receive rehabilitation for that bulletin
             // this is the first condition from the first point
-            if (allPersonBulletins.Count == 1)
+            if (allPersonBulletins.Count == 0) // person has only one bulletin
             {
-                var startDate = currentBulletin.DecisionFinalDate.Value;
+                var startDate = currentAttachedBull.DecisionFinalDate.Value;
 
                 // get sanctions of the bulletin 
                 // if the bulletin does not contain sanctions of this type,
                 // point 1 may not apply
-                var sanction = allPersonBulletins.First().Sanctions.FirstOrDefault(x => x.Type == SanctionType.Imprisonment);
+                var sanction = currentAttachedBull.BSanctions.FirstOrDefault(x => x.SanctCategoryId == BulletinConstants.SanctionType.Imprisonment);
                 if (sanction == null) return appliedChanges;
 
-                var endDate = startDate.AddYears(sanction.SuspensionDuration.Years ?? 0);
-                endDate = endDate.AddMonths(sanction.SuspensionDuration.Months ?? 0);
-                endDate = endDate.AddDays(sanction.SuspensionDuration.Days ?? 0);
+                var endDate = startDate.AddYears(sanction.SuspentionDurationYears ?? 0);
+                endDate = endDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
+                endDate = endDate.AddDays(sanction.SuspentionDurationDays ?? 0);
 
                 SetRehabilitationData(currentAttachedBull, endDate);
 
@@ -74,22 +73,22 @@ namespace MJ_CAIS.Services
                 return appliedChanges;
             }
 
-            var currentBullOffEndDates = currentBulletin.OffencesEndDates;
+            var currentBullOffEndDates = currentAttachedBull.BOffences.Select(x => x.OffEndDate);
 
             var bulletinWithRehabilitationDate = allPersonBulletins
-                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .Where(x => x.RehabilitationDate.HasValue)
                 .ToList();
 
             foreach (var currentBull in bulletinWithRehabilitationDate)
             {
-                var currentBullStartDate = currentBulletin.DecisionFinalDate.Value;
+                var currentBullStartDate = currentAttachedBull.DecisionFinalDate.Value;
 
-                var sanction = allPersonBulletins.First().Sanctions.FirstOrDefault(x => x.Type == SanctionType.Imprisonment);
+                var sanction = currentAttachedBull.BSanctions.FirstOrDefault(x => x.SanctCategoryId == BulletinConstants.SanctionType.Imprisonment);
                 if (sanction == null) continue;
 
-                var currentBullEndDate = currentBullStartDate.AddYears(sanction.SuspensionDuration.Years ?? 0);
-                currentBullEndDate = currentBullEndDate.AddMonths(sanction.SuspensionDuration.Months ?? 0);
-                currentBullEndDate = currentBullEndDate.AddDays(sanction.SuspensionDuration.Days ?? 0);
+                var currentBullEndDate = currentBullStartDate.AddYears(sanction.SuspentionDurationYears ?? 0);
+                currentBullEndDate = currentBullEndDate.AddMonths(sanction.SuspentionDurationMonths ?? 0);
+                currentBullEndDate = currentBullEndDate.AddDays(sanction.SuspentionDurationDays ?? 0);
 
                 var removeRehabilitation = currentBullOffEndDates
                     .Any(offEndDate => offEndDate >= currentBullStartDate &&
@@ -101,7 +100,7 @@ namespace MJ_CAIS.Services
                     // the date of rehabilitation for this bulletin is deleted
                     // todo:?? should the status of the bulletin be changed if it has already been proposed for rehabilitation
                     // this is another bulletin not attached to context
-                    _rehabilitationRepository.UpdateRehabilitationData(currentBull.Id, currentBull.Version, null, null);
+                    _rehabilitationRepository.UpdateRehabilitationData(currentBull.Id, currentBull.Version, null);
                     appliedChanges = true;
                 }
             }
@@ -121,32 +120,42 @@ namespace MJ_CAIS.Services
 
             // if this is the first bulletin
             // we can calculate data on rehabilitation
-            if (allPersonBulletins.Count == 1)
+            if (allPersonBulletins.Count == 0)
             {
-                var bulletinDTO = allPersonBulletins.First();
-
-                if (!bulletinDTO.Decisions.Any(x => x.Type == DecisionType.EndOfPenalty)) return appliedChanges;
+                if (!currentAttachedBull.BDecisions.Any(x => x.DecisionChTypeId == BulletinConstants.DecisionType.EndOfPenalty)) return appliedChanges;
 
                 // todo: 
-                var sanctionLos = bulletinDTO.Sanctions
-                    .FirstOrDefault(x => x.Type == SanctionType.Imprisonment);
+                var sanctionLos = currentAttachedBull.BSanctions
+                    .FirstOrDefault(x => x.SanctCategoryId == BulletinConstants.SanctionType.Imprisonment);
 
-                var losIdInPeriod = sanctionLos != null && IsInDurationInYears(sanctionLos.SuspensionDuration, 3);
+                var losIdInPeriod = sanctionLos != null && IsInDurationInYears(new DurationDTO
+                {
+                    Years = sanctionLos.SuspentionDurationYears,
+                    Months = sanctionLos.SuspentionDurationMonths,
+                    Days = sanctionLos.SuspentionDurationDays,
+                }, 3);
 
-                var sanctionProb = bulletinDTO.Sanctions.FirstOrDefault(x => x.Type == SanctionType.Probation);
+                var sanctionProb = currentAttachedBull.BSanctions.FirstOrDefault(x => x.SanctCategoryId == BulletinConstants.SanctionType.Probation);
 
-                var propbIsInPeriod = sanctionProb != null && sanctionProb.ProbationDurations
-                    .All(x => IsInDurationInYears(x, 3));
+                var sanctionProbDuration = sanctionProb != null ? sanctionProb.BProbations.Select(p => new DurationDTO
+                {
+                    Years = p.DecisionDurationYears,
+                    Months = p.DecisionDurationMonths,
+                    Days = p.DecisionDurationDays,
+                    Hours = p.DecisionDurationHours,
+                }) : new List<DurationDTO>();
+
+                var propbIsInPeriod = sanctionProbDuration.All(x => IsInDurationInYears(x, 3));
 
                 // first bulletin for the person in which probation OR imprisonment is introduced up to three years
                 var isSuccess = (losIdInPeriod && sanctionProb == null) ||
                                 (propbIsInPeriod && sanctionLos == null);
                 if (isSuccess)
                 {
-                    var endDate = bulletinDTO
-                        .Decisions
-                        .Where(x => x.Type == DecisionType.EndOfPenalty ||
-                                    x.Type == DecisionType.Pardon)
+                    var endDate = currentAttachedBull
+                        .BDecisions
+                        .Where(x => x.DecisionChTypeId == BulletinConstants.DecisionType.EndOfPenalty ||
+                                    x.DecisionChTypeId == BulletinConstants.DecisionType.Pardon)
                         .OrderBy(x => x.ChangeDate)
                         .FirstOrDefault()?.ChangeDate;
 
@@ -163,28 +172,26 @@ namespace MJ_CAIS.Services
             }
 
             var bulletinWithRehabilitationDate = allPersonBulletins
-                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .Where(x => x.RehabilitationDate.HasValue)
                 .ToList();
 
-            var anotherBulls = allPersonBulletins.Where(x => x.Id != currentAttachedBull.Id);
-
-            var hasSanctionOfType = anotherBulls.SelectMany(x => x.Sanctions)
-                   .Any(s => s.Type == SanctionType.LifeImprisonment ||
-                             s.Type == SanctionType.LifeImprisonmentWithoutParole ||
-                             s.Type == SanctionType.Imprisonment);
+            var hasSanctionOfType = allPersonBulletins.SelectMany(x => x.Sanctions)
+                   .Any(s => s.Type == BulletinConstants.SanctionType.LifeImprisonment ||
+                             s.Type == BulletinConstants.SanctionType.LifeImprisonmentWithoutParole ||
+                             s.Type == BulletinConstants.SanctionType.Imprisonment);
 
             // offences end date
-            var currentBullOffEndDates = allPersonBulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id)?.OffencesEndDates;
+            var currentBullOffEndDates = currentAttachedBull.BOffences.Select(x => x.OffEndDate);
 
-            foreach (var bull in anotherBulls)
+            foreach (var bull in allPersonBulletins)
             {
-                var hasOffencInPeriod = currentBullOffEndDates?
+                var hasOffencInPeriod = currentBullOffEndDates
                  .Any(offEndDate => offEndDate >= bull.DecisionFinalDate &&
                                     offEndDate <= bull.RehabilitationDate);
 
-                if (hasSanctionOfType && hasOffencInPeriod == true && bull.RehabilitationDate.HasValue)
+                if (hasSanctionOfType && hasOffencInPeriod && bull.RehabilitationDate.HasValue)
                 {
-                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
+                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null);
                     appliedChanges = true;
                 }
             }
@@ -204,25 +211,24 @@ namespace MJ_CAIS.Services
 
             // if this is the first bulletin
             // we can calculate data on rehabilitation
-            if (allPersonBulletins.Count == 1)
+            if (allPersonBulletins.Count == 0)
             {
-                var bulletinDTO = allPersonBulletins.First();
 
-                if (!bulletinDTO.Decisions.Any(x => x.Type == DecisionType.EndOfPenalty)) return appliedChanges;
+                if (!currentAttachedBull.BDecisions.Any(x => x.DecisionChTypeId == BulletinConstants.DecisionType.EndOfPenalty)) return appliedChanges;
 
-                var sanctionOfType = bulletinDTO.Sanctions
-                    .FirstOrDefault(x => x.Type == SanctionType.Fine ||
-                                         x.Type == SanctionType.PublicDisfavor ||
-                                         x.Type == SanctionType.DisqualificationPosition ||
-                                         x.Type == SanctionType.DisqualificationProfession ||
-                                         x.Type == SanctionType.DisqualificationPlace ||
-                                         x.Type == SanctionType.DisqualificationMedal);
+                var sanctionOfType = currentAttachedBull.BSanctions
+                    .FirstOrDefault(x => x.SanctCategoryId == BulletinConstants.SanctionType.Fine ||
+                                         x.SanctCategoryId == BulletinConstants.SanctionType.PublicDisfavor ||
+                                         x.SanctCategoryId == BulletinConstants.SanctionType.DisqualificationPosition ||
+                                         x.SanctCategoryId == BulletinConstants.SanctionType.DisqualificationProfession ||
+                                         x.SanctCategoryId == BulletinConstants.SanctionType.DisqualificationPlace ||
+                                         x.SanctCategoryId == BulletinConstants.SanctionType.DisqualificationMedal);
 
                 if (sanctionOfType == null) return appliedChanges;
 
-                var endDate = bulletinDTO
-                    .Decisions
-                    .Where(x => x.Type == DecisionType.EndOfPenalty).MinBy(x => x.ChangeDate)?.ChangeDate;
+                var endDate = currentAttachedBull
+                    .BDecisions
+                    .Where(x => x.DecisionChTypeId == BulletinConstants.DecisionType.EndOfPenalty).MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (endDate != null)
                 {
@@ -235,13 +241,10 @@ namespace MJ_CAIS.Services
                 return appliedChanges;
             }
 
-            var currentBulletinDto = allPersonBulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
-            if (currentBulletinDto == null) return appliedChanges;
-
-            if (currentBulletinDto.CaseType != CaseType.NOXD || !currentBulletinDto.OffencesEndDates.Any()) return appliedChanges;
+            if (currentAttachedBull.CaseTypeId != BulletinConstants.CaseType.NOXD || !currentAttachedBull.BOffences.Any(x => x.OffEndDate.HasValue)) return appliedChanges;
 
             var bulletinWithRehabilitationDate = allPersonBulletins
-                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .Where(x => x.RehabilitationDate.HasValue)
                 .ToList();
 
             foreach (var bull in bulletinWithRehabilitationDate)
@@ -249,18 +252,18 @@ namespace MJ_CAIS.Services
                 // this is start date
                 var decisionEndDate = bull
                     .Decisions
-                    .Where(x => x.Type == DecisionType.EndOfPenalty).MinBy(x => x.ChangeDate)?.ChangeDate;
+                    .Where(x => x.Type == BulletinConstants.DecisionType.EndOfPenalty).MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (!decisionEndDate.HasValue) continue;
 
                 var endDate = decisionEndDate.Value.AddYears(1);
 
-                var hasOffenceInPeriod = currentBulletinDto.OffencesEndDates
+                var hasOffenceInPeriod = currentAttachedBull.BOffences.Select(x => x.OffEndDate)
                  .Any(d => d >= decisionEndDate && d <= endDate);
 
                 if (hasOffenceInPeriod)
                 {
-                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
+                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null);
                     appliedChanges = true;
                 }
             }
@@ -280,23 +283,22 @@ namespace MJ_CAIS.Services
 
             // if this is the first bulletin
             // we can calculate data on rehabilitation
-            if (allPersonBulletins.Count == 1)
+            if (allPersonBulletins.Count == 0)
             {
-                var bulletinDTO = allPersonBulletins.First();
-                if (!bulletinDTO.Decisions.Any(x => x.Type == DecisionType.EndOfPenalty)) return appliedChanges;
+                if (!currentAttachedBull.BDecisions.Any(x => x.DecisionChTypeId == BulletinConstants.DecisionType.EndOfPenalty)) return appliedChanges;
 
                 // todo?? more then one 
-                var offenceEndDate = bulletinDTO.OffencesEndDates.FirstOrDefault();
+                var offenceEndDate = currentAttachedBull.BOffences.FirstOrDefault()?.OffEndDate;
 
-                if (!offenceEndDate.HasValue || !bulletinDTO.BirthDate.HasValue) return appliedChanges;
+                if (!offenceEndDate.HasValue || !currentAttachedBull.BirthDate.HasValue) return appliedChanges;
 
-                int age = new DateTime((offenceEndDate.Value - bulletinDTO.BirthDate.Value).Ticks).Year;
+                int age = new DateTime((offenceEndDate.Value - currentAttachedBull.BirthDate.Value).Ticks).Year;
 
                 if (age > 18) return appliedChanges;
 
-                var endDate = bulletinDTO
-                    .Decisions
-                    .Where(x => x.Type == DecisionType.EndOfPenalty && x.ChangeDate.HasValue)
+                var endDate = currentAttachedBull
+                    .BDecisions
+                    .Where(x => x.DecisionChTypeId == BulletinConstants.DecisionType.EndOfPenalty && x.ChangeDate.HasValue)
                     .MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (!endDate.HasValue) return appliedChanges;
@@ -309,17 +311,14 @@ namespace MJ_CAIS.Services
                 return appliedChanges;
             }
 
-            var currentBulletinDto = allPersonBulletins.FirstOrDefault(x => x.Id == currentAttachedBull.Id);
-            if (currentBulletinDto == null) return appliedChanges;
-
-            var check = currentBulletinDto.CaseType != CaseType.NOXD ||
-                !currentBulletinDto.OffencesEndDates.Any() ||
-                !currentBulletinDto.Sanctions.Any(x => x.Type == SanctionType.Imprisonment);
+            var check = currentAttachedBull.CaseTypeId != BulletinConstants.CaseType.NOXD ||
+                !currentAttachedBull.BOffences.Any(x => x.OffEndDate.HasValue) ||
+                !currentAttachedBull.BSanctions.Any(x => x.SanctCategoryId == BulletinConstants.SanctionType.Imprisonment);
 
             if (!check) return appliedChanges;
 
             var bulletinWithRehabilitationDate = allPersonBulletins
-                .Where(x => x.Id != currentAttachedBull.Id && x.RehabilitationDate.HasValue)
+                .Where(x => x.RehabilitationDate.HasValue)
                 .ToList();
 
             foreach (var bull in bulletinWithRehabilitationDate)
@@ -327,19 +326,19 @@ namespace MJ_CAIS.Services
                 // this is start date
                 var decisionEndDate = bull
                     .Decisions
-                    .Where(x => x.Type == DecisionType.EndOfPenalty)
+                    .Where(x => x.Type == BulletinConstants.DecisionType.EndOfPenalty)
                     .MinBy(x => x.ChangeDate)?.ChangeDate;
 
                 if (!decisionEndDate.HasValue) continue;
 
                 var endDate = decisionEndDate.Value.AddYears(1);
 
-                var hasOffenceInPeriod = currentBulletinDto.OffencesEndDates
+                var hasOffenceInPeriod = currentAttachedBull.BOffences.Select(x => x.OffEndDate)
                  .Any(d => d >= decisionEndDate && d <= endDate);
 
                 if (hasOffenceInPeriod)
                 {
-                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null, null);
+                    _rehabilitationRepository.UpdateRehabilitationData(bull.Id, bull.Version, null);
                     appliedChanges = true;
                 }
             }
@@ -351,7 +350,7 @@ namespace MJ_CAIS.Services
 
         private void SetRehabilitationData(BBulletin bulletin, DateTime? rehabilitationDate)
         {
-            var status = rehabilitationDate <= DateTime.Now ? Status.ForRehabilitation : null;// todo: ?
+            var status = rehabilitationDate <= DateTime.Now ? BulletinConstants.Status.ForRehabilitation : null;// todo: ?
 
             // this entity is attached to context
             bulletin.RehabilitationDate = rehabilitationDate;
@@ -367,7 +366,13 @@ namespace MJ_CAIS.Services
                 Locked = bulletin.Locked
             };
 
-            _rehabilitationRepository.ApplyChanges(statusHistory, new List<IBaseIdEntity>());
+            var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(bulletin);
+            var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
+            statusHistory.Content = xml;
+            statusHistory.Version = 1;
+            //statusHistory.HasContent = true;
+
+            _rehabilitationRepository.ApplyChanges(statusHistory);
             bulletin.StatusId = status;
         }
 

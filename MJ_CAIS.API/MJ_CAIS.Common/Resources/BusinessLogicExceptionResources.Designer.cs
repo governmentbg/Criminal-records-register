@@ -70,6 +70,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Уведомление с идентификатор {0} вече е доставена и не може да бъде анулирана..
+        /// </summary>
+        public static string bulletinEventDoesNotExist {
+            get {
+                return ResourceManager.GetString("bulletinEventDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Свидетелството не е намерено.
         /// </summary>
         public static string certificateDoesNotExist {
@@ -156,6 +165,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string msgAppReportDoesNotExist {
             get {
                 return ResourceManager.GetString("msgAppReportDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Невалиден статус {0}.
+        /// </summary>
+        public static string msgInvalidStatus {
+            get {
+                return ResourceManager.GetString("msgInvalidStatus", resourceCulture);
             }
         }
         

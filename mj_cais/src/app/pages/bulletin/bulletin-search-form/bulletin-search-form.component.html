@@ -6,132 +6,82 @@
       </div>
       <div class="d-flex">
         <div>
-          <button
-            (click)="onSearch()"
-            nbButton
-            matRipple
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
+          <button (click)="onSearch()" nbButton matRipple type="button" class="ml-2" style="min-width: 100px">
             Търсене
           </button>
         </div>
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body class="overflow-scroll">
+  <nb-card-body>
     <form autocomplete="off">
       <div class="font-weight-bold">Основна информация</div>
       <hr />
       <div class="row">
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'Номер на бюлетин'"
-            [inputFormControl]="fullForm.registrationNumber"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Номер на бюлетин'" [inputFormControl]="fullForm.registrationNumber"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-autocomplete
-            [label]="'Тип на бюлетин'"
-            [inputFormControl]="fullForm.bulletinType"
-            [parentGroup]="fullForm.group"
-            [inputName]="'bulletinType'"
-            [items]="dbData.bulletinTypes"
-          ></cais-autocomplete>
+          <cais-autocomplete [label]="'Тип на бюлетин'" [inputFormControl]="fullForm.bulletinType"
+            [parentGroup]="fullForm.group" [inputName]="'bulletinType'" [items]="dbData.bulletinTypes">
+          </cais-autocomplete>
         </div>
         <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Статус'"
-            [inputFormControl]="fullForm.statusId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'statusId'"
-            [items]="dbData.statuses"
-          ></cais-autocomplete>
+          <cais-autocomplete [label]="'Статус'" [inputFormControl]="fullForm.statusId" [parentGroup]="fullForm.group"
+            [inputName]="'statusId'" [items]="dbData.statuses"></cais-autocomplete>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'Дело номер'"
-            [inputFormControl]="fullForm.caseNumber"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Дело номер'" [inputFormControl]="fullForm.caseNumber"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'date'"
-            [label]="'От дата'"
-            [inputFormControl]="fullForm.fromDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'date'" [label]="'От дата'" [inputFormControl]="fullForm.fromDate"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'date'"
-            [label]="'До дата'"
-            [inputFormControl]="fullForm.toDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'date'" [label]="'До дата'" [inputFormControl]="fullForm.toDate"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
       </div>
       <div class="font-weight-bold">Данни на лице</div>
       <hr />
       <div class="row">
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="fullForm.firstname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="fullForm.firstname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'Презиме'"
-            [inputFormControl]="fullForm.surname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Презиме'" [inputFormControl]="fullForm.surname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'Фамилия'"
-            [inputFormControl]="fullForm.familyname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Фамилия'" [inputFormControl]="fullForm.familyname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'ЕГН'"
-            [inputFormControl]="fullForm.egn"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'ЕГН'" [inputFormControl]="fullForm.egn" [parentGroup]="fullForm.group">
+          </cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'text'"
-            [label]="'ЛНЧ'"
-            [inputFormControl]="fullForm.lnch"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'ЛНЧ'" [inputFormControl]="fullForm.lnch" [parentGroup]="fullForm.group">
+          </cais-input>
         </div>
         <div class="form-group col-md-2">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на раждане'"
-            [inputFormControl]="fullForm.birthDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'date'" [label]="'Дата на раждане'" [inputFormControl]="fullForm.birthDate"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
       </div>
     </form>
+
+  </nb-card-body>
+</nb-card>
+
+<nb-card class="card-single-page-height">
+
     <cais-bulletin-search-overview #searchBulletinGrid [searchForm]="fullForm">
     </cais-bulletin-search-overview>
-  </nb-card-body>
+
 </nb-card>

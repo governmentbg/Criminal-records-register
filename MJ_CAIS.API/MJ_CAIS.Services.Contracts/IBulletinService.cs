@@ -30,7 +30,7 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<string> InsertAsync(BulletinAddDTO aInDto);
 
-        Task UpdateAsync(BulletinEditDTO aInDto);
+        Task UpdateAsync(BulletinEditDTO aInDto, bool isFinalEdit);
 
         IQueryable<BulletinStatusHistoryDTO> GetStatusHistoryByBulletinId(string aId);
 

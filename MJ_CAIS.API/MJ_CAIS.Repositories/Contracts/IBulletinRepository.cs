@@ -54,6 +54,6 @@ namespace MJ_CAIS.Repositories.Contracts
        
         Task<bool> IsEuCitizen(IEnumerable<string> personNationalities);
 
-        Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdAsync(List<string> pidsId);
+        Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdExcludeCurrentAsync(List<string> pidsId, string currentBullId);
     }
 }

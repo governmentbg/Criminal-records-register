@@ -14,7 +14,10 @@ import { EActions } from "@tl/tl-common";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { NgxSpinnerService } from "ngx-spinner";
-import { BulletinHelperService } from "../_data/bulletin-helper.service";
+import { NbDialogService } from "@nebular/theme";
+import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { TranslateService } from "@ngx-translate/core";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -30,6 +33,7 @@ export class BulletinFormComponent
   >
   implements OnInit
 {
+  private isFinalEdit: boolean = false;
   //#region Престъпления
 
   @ViewChild("bulletineOffences", {
@@ -103,7 +107,8 @@ export class BulletinFormComponent
     service: BulletinService,
     public injector: Injector,
     private loaderService: NgxSpinnerService,
-    private helperService: BulletinHelperService
+    private dialogService: NbDialogService,
+    private translate: TranslateService
   ) {
     super(service, injector);
     this.setDisplayTitle("бюлетин");
@@ -127,7 +132,7 @@ export class BulletinFormComponent
       this.fullForm.person.nationalities.selectedForeignKeys.patchValue([
         CommonConstants.bgCountryId,
       ]);
-    } 
+    }
 
     this.fullForm.person.nationalities.isChanged.patchValue(true);
     this.isNoSanctionCheck = this.fullForm.noSanction.value;
@@ -145,51 +150,29 @@ export class BulletinFormComponent
   }
 
   submitFunction = () => {
-    if (this.bulletineOffencesForm?.offencesGrid) {
-      let offancesTransactions =
-        this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
-          true
-        );
-
-      this.fullForm.offancesTransactions.setValue(offancesTransactions);
-    } else {
-      this.fullForm.offancesTransactions.setValue([]);
-    }
-
-    if (this.bulletineSanctionsForm?.sanctionGrid) {
-      let sanctionsTransactions =
-        this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
-          true
-        );
-
-      this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
-    } else {
-      this.fullForm.sanctionsTransactions.setValue([]);
-    }
-
-    if (this.bulletineDescitionForm?.decisionsGrid) {
-      let decisionsTransactions =
-        this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
-          true
-        );
-
-      this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
-    } else {
-      this.fullForm.decisionsTransactions.setValue([]);
-    }
-
+    this.isFinalEdit = false;
+    this.applyTransactions();
     this.validateAndSave(this.fullForm);
   };
 
   //override submit function
   //todo
-  onSubmitSuccess(data: any) {
+ onSubmitSuccess(data: any) {
     this.loaderService.hide();
+    if (this.isFinalEdit) {
+      this.toastr.showToast(
+        "success",
+        this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
+      );
+      this.router.navigate(["pages/bulletins/active"]);
+      return;
+    }
     super.onSubmitSuccess(data);
   }
 
   //override
   protected validateAndSave(form: any) {
+    debugger;
     console.log(form.group);
     if (!form.group.valid) {
       form.group.markAllAsTouched();
@@ -202,10 +185,34 @@ export class BulletinFormComponent
       this.saveAndNavigate();
     }
   }
-
   protected errorHandler(errorResponse): void {
     this.loaderService.hide();
-    super.errorHandler(errorResponse);  
+    super.errorHandler(errorResponse);
+  }
+
+  protected saveAndNavigate() {
+    let model = this.formObject;
+    let submitAction: Observable<BulletinModel>;
+    if (this.isFinalEdit) {
+      submitAction = this.service.updateFinal(this.formObject.id, model);
+    } else if (this.isEdit()) {
+      submitAction = this.service.update(this.formObject.id, model);
+    } else {
+      submitAction = this.service.save(model);
+    }
+
+    submitAction.subscribe({
+      next: (data) => {
+        this.toastr.showToast("success", this.successMessage);
+
+        setTimeout(() => {
+          this.onSubmitSuccess(data);
+        }, this.navigateTimeout);
+      },
+      error: (errorResponse) => {
+        this.errorHandler(errorResponse);
+      },
+    });
   }
 
   public onNoSanctionChange(event: any) {
@@ -213,7 +220,75 @@ export class BulletinFormComponent
   }
 
   public openUpdateConfirmationDialog() {
-    this.helperService.openUpdateConfirmationDialog(this.fullForm.id.value);
+    let dialogRef = this.dialogService.open(
+      ConfirmDialogComponent,
+      CommonConstants.defaultDialogConfig
+    );
+
+    dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
+      "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
+    );
+    dialogRef.componentRef.instance.showHeder = false;
+
+    dialogRef.onClose.subscribe((result) => {
+      if (result) {
+        this.loaderService.show();
+        this.isFinalEdit = true;
+        this.applyTransactions();
+        this.validateAndSave(this.fullForm);
+      }
+    });
+  }
+
+  public onChangeEventsTab(event) {
+    this.showDocEventTab =
+      !this.showDocEventTab && event.tabTitle == this.docEventTabTitle;
+  }
+
+  public print() {
+    this.loaderService.show();
+    this.service.print(this.objectId).subscribe(
+      (response) => {
+        this.loaderService.hide();
+        this.downloadFile(response);
+      },
+      (error) => {
+        this.loaderService.hide();
+        this.errorHandler(error);
+      }
+    );
+  }
+
+  public onChangeTab(event) {
+    let tabTitle = event.tabTitle;
+
+    if (!this.showOffencesTab) {
+      this.showOffencesTab = tabTitle == this.offencesTabTitle;
+    }
+
+    if (!this.showSanctionsTab) {
+      this.showSanctionsTab = tabTitle == this.sanctionsTabTitle;
+    }
+
+    if (!this.showDecisionTab) {
+      this.showDecisionTab = tabTitle == this.decisionTabTitle;
+    }
+
+    if (!this.showEventsTab) {
+      this.showEventsTab = tabTitle == this.eventsTabTitle;
+    }
+
+    if (!this.showDocumentsTab) {
+      this.showDocumentsTab = tabTitle == this.documentsTabTitle;
+    }
+
+    if (!this.showIsinTab) {
+      this.showIsinTab = tabTitle == this.isinTabTitle;
+    }
+
+    if (!this.showHistoryTab) {
+      this.showHistoryTab = tabTitle == this.historyTabTitle;
+    }
   }
 
   private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
@@ -247,54 +322,38 @@ export class BulletinFormComponent
       this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
   }
 
-  onChangeTab(event) {
-    let tabTitle = event.tabTitle;
+  private applyTransactions() {
+    if (this.bulletineOffencesForm?.offencesGrid) {
+      let offancesTransactions =
+        this.bulletineOffencesForm.offencesGrid.transactions.getAggregatedChanges(
+          true
+        );
 
-    if (!this.showOffencesTab) {
-      this.showOffencesTab = tabTitle == this.offencesTabTitle;
+      this.fullForm.offancesTransactions.setValue(offancesTransactions);
+    } else {
+      this.fullForm.offancesTransactions.setValue([]);
     }
 
-    if (!this.showSanctionsTab) {
-      this.showSanctionsTab = tabTitle == this.sanctionsTabTitle;
+    if (this.bulletineSanctionsForm?.sanctionGrid) {
+      let sanctionsTransactions =
+        this.bulletineSanctionsForm.sanctionGrid.transactions.getAggregatedChanges(
+          true
+        );
+
+      this.fullForm.sanctionsTransactions.setValue(sanctionsTransactions);
+    } else {
+      this.fullForm.sanctionsTransactions.setValue([]);
     }
 
-    if (!this.showDecisionTab) {
-      this.showDecisionTab = tabTitle == this.decisionTabTitle;
+    if (this.bulletineDescitionForm?.decisionsGrid) {
+      let decisionsTransactions =
+        this.bulletineDescitionForm.decisionsGrid.transactions.getAggregatedChanges(
+          true
+        );
+
+      this.fullForm.decisionsTransactions.setValue(decisionsTransactions);
+    } else {
+      this.fullForm.decisionsTransactions.setValue([]);
     }
-
-    if (!this.showEventsTab) {
-      this.showEventsTab = tabTitle == this.eventsTabTitle;
-    }
-
-    if (!this.showDocumentsTab) {
-      this.showDocumentsTab = tabTitle == this.documentsTabTitle;
-    }
-
-    if (!this.showIsinTab) {
-      this.showIsinTab = tabTitle == this.isinTabTitle;
-    }
-
-    if (!this.showHistoryTab) {
-      this.showHistoryTab = tabTitle == this.historyTabTitle;
-    }
-  }
-
-  onChangeEventsTab(event) {
-    this.showDocEventTab =
-      !this.showDocEventTab && event.tabTitle == this.docEventTabTitle;
-  }
-
-  print() {
-    this.loaderService.show();
-    this.service.print(this.objectId).subscribe(
-      (response) => {
-        this.loaderService.hide();
-        this.downloadFile(response);
-      },
-      (error) => {
-        this.loaderService.hide();
-        this.errorHandler(error);
-      }
-    );
   }
 }
