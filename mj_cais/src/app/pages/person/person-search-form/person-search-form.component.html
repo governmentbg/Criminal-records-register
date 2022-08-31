@@ -1,16 +1,10 @@
 <nb-card class="search-card" accent="primary" [formGroup]="fullForm.group">
-  <nb-card-header class="">
-    <div class="d-flex" style="justify-content: space-between">
-      <div class="d-flex align-items-center">
-        <div style="font-weight: bold; font-size: 22px">{{ title }}</div>
-      </div>
-      <div class="d-flex">
-        <div>
-          <button nbButton status="primary" (click)="onSearch()" type="button" class="ml-2">
-            Търсене
-          </button>
-        </div>
-      </div>
+  <nb-card-header>
+    <div class="d-flex justify-content-between">
+      <h2 class="h4">{{ title }}</h2>
+      <button nbButton status="primary" (click)="onSearch()" type="button" [disabled]="fullForm.group.pristine">
+        Търсене
+      </button>
     </div>
   </nb-card-header>
   <nb-card-body>
@@ -58,7 +52,7 @@
     </form>
   </nb-card-body>
 </nb-card>
-<nb-card class="card-single-page-height">
+<nb-card>
   <cais-person-search-overview #personGridForm [searchForm]="fullForm" [isRemindPersonForm]="isRemindPersonForm"
     [existingPersonId]="existingPersonId">
   </cais-person-search-overview>

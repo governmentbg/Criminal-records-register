@@ -1,4 +1,5 @@
 import { Component, Injector, Input, OnInit } from "@angular/core";
+import { ConnectedPositioningStrategy, HorizontalAlignment, NoOpScrollStrategy, VerticalAlignment } from "@infragistics/igniteui-angular";
 import { NbMenuService } from "@nebular/theme";
 import { filter, map } from "rxjs";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
@@ -30,6 +31,16 @@ PersonSearchGridService
   @Input() isRemindPersonForm: boolean;
   @Input() existingPersonId: string;
 
+  dataIsChanged: boolean = false;
+
+  public overlaySettings = {
+    positionStrategy: new ConnectedPositioningStrategy({
+        horizontalDirection: HorizontalAlignment.Right,
+        horizontalStartPoint: HorizontalAlignment.Left,
+        verticalStartPoint: VerticalAlignment.Bottom
+    }),
+    scrollStrategy: new NoOpScrollStrategy()
+};
 
   ngOnInit() {
     this.service.updateUrl(`people?isPageInit=true`);
@@ -76,4 +87,5 @@ PersonSearchGridService
       }
     );
   }
+
 }
