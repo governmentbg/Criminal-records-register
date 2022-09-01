@@ -33,7 +33,7 @@ namespace AutomaticStepsExecutor
         
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize,  Microsoft.Extensions.Configuration.IConfiguration config, int numberOfPage = 0)
         {
             List<string> processedTypes = new List<string>() { ApplicationConstants.ApplicationTypes.WebCertificate, ApplicationConstants.ApplicationTypes.WebExternalCertificate };
 
@@ -44,6 +44,7 @@ namespace AutomaticStepsExecutor
                               && processedTypes.Contains(aa.Application.ApplicationType.Code)                             
                               )
                               .OrderBy(a=>a.CreatedOn)
+                              .Skip(numberOfPage*pageSize)
                               .Take(pageSize)
                               .ToList<IBaseIdEntity>());
             return result;
@@ -68,7 +69,7 @@ namespace AutomaticStepsExecutor
             int numberOfFailedEntities = 0;
             if (entities.Count > 0)
             {
-                var statuses = await Task.FromResult(_dbContext.AApplicationStatuses.Where(a => a.Code == ApplicationConstants.ApplicationStatuses.Delivered ).ToList());
+                var statuses = await Task.FromResult(_dbContext.AApplicationStatuses.AsNoTracking().Where(a => a.Code == ApplicationConstants.ApplicationStatuses.Delivered ).ToList());
                 if (statuses.Count != 1)
                 {
                     throw new Exception($"Application statuses do not exist. Statuses: {ApplicationConstants.ApplicationStatuses.Delivered}");

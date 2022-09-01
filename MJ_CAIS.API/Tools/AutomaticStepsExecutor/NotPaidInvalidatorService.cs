@@ -81,7 +81,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config, int numberOfPage = 0)
         {
             var systemParametrs = await _dbContext.GSystemParameters.AsNoTracking().Where(x => x.Code == SystemParametersConstants.SystemParametersNames.TERM_FOR_PAYMENT_DESK_DAYS).ToListAsync();
 
@@ -98,6 +98,7 @@ namespace AutomaticStepsExecutor
                                                            && aa.CreatedOn < startDateOnDesk)//((aa.CreatedOn < startDateOnDesk && aa.WApplicationId == null)
                                                                                              //|| (aa.CreatedOn < startDateWeb && aa.WApplicationId != null))
                                                              .OrderBy(a => a.CreatedOn)
+                                                             .Skip(numberOfPage*pageSize)
                               .Take(pageSize).ToList<IBaseIdEntity>());
             return result;
         }

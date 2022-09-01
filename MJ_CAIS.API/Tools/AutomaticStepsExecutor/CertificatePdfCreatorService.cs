@@ -108,7 +108,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config, int numberOfPage = 0)
         {
             var result = await Task.FromResult(_dbContext.ACertificates
                                     .Include(c => c.AAppBulletins)
@@ -119,6 +119,7 @@ namespace AutomaticStepsExecutor
                                     .Include(c => c.Application.ApplicationType)
                               .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.CertificateContentReady)
                               .OrderBy(a => a.CreatedOn)
+                              .Skip(numberOfPage*pageSize)
                               .Take(pageSize)
                               .ToList<IBaseIdEntity>());
             return result;

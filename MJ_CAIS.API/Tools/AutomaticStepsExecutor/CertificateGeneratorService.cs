@@ -164,7 +164,7 @@ namespace AutomaticStepsExecutor
         }
 
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config, int numberOfPage = 0)
         {
             List<string> processedTypes = new List<string>() { ApplicationConstants.ApplicationTypes.WebCertificate, ApplicationConstants.ApplicationTypes.WebExternalCertificate };
             var result = await Task.FromResult(
@@ -182,6 +182,7 @@ namespace AutomaticStepsExecutor
                                  //това е краен статус, затова търсим само такива, за които няма генерирани репорти или сертификати
                                  && !aa.ACertificates.Any())
                                  .OrderByDescending(a => a.CreatedOn)
+                                 .Skip(numberOfPage*pageSize)
                                  .Take(pageSize)
 
                                  .ToList()
