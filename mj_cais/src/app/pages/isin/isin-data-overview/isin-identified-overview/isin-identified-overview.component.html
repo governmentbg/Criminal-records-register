@@ -91,14 +91,15 @@
     <ng-template igxCell let-cell="cell">
       <div class="cell-center">
         <div class="d-flex gap-3">
-          <button igxButton="icon" [igxToggleAction]="dropdown" [igxDropDownItemNavigation]="dropdown">
+          <button igxButton="icon" [overlaySettings]="overlaySettings"   [igxToggleAction]="dropdown"
+          [igxDropDownItemNavigation]="dropdown">
             <igx-icon fontSet="material">more_vert</igx-icon>
           </button>
           <igx-drop-down #dropdown>
-            <igx-drop-down-item [routerLink]="['/pages/isin/preview', cell.rowData.id]">
+            <igx-drop-down-item [routerLink]="['/pages/isin/preview', cell.rowData.id]" title="Преглед на съобщение">
               Преглед на съобщение
             </igx-drop-down-item>
-            <igx-drop-down-item [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]">
+            <igx-drop-down-item [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]" title="Редакция на бюлетин">
               Редакция на бюлетин
             </igx-drop-down-item>
           </igx-drop-down>

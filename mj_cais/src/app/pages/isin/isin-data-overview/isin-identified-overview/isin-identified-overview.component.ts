@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit } from "@angular/core";
+import { ConnectedPositioningStrategy, HorizontalAlignment, NoOpScrollStrategy, VerticalAlignment } from "@infragistics/igniteui-angular";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { IsinDataGridService } from "../_data/isin-data-grid.service";
@@ -14,6 +15,17 @@ export class IsinIdentifiedOverviewComponent extends RemoteGridWithStatePersista
   IsinDataGridModel,
   IsinDataGridService
 > {
+
+  public overlaySettings = {
+    positionStrategy: new ConnectedPositioningStrategy({
+        horizontalDirection: HorizontalAlignment.Left,
+        horizontalStartPoint: HorizontalAlignment.Right,
+        verticalStartPoint: VerticalAlignment.Bottom
+    }),
+    scrollStrategy: new NoOpScrollStrategy()
+};
+
+
   constructor(
     service: IsinDataGridService,
     injector: Injector,

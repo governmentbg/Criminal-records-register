@@ -39,6 +39,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 .Where(x => x.IsAsync == true || x.IsAsync == null)
                 .Where(x => x.Status == WebRequestStatusConstants.Pending ||
                             x.Status == WebRequestStatusConstants.Rejected)
+                .Where(x=>x.WApplicationId != null)
                 .Where(x => x.Attempts < attempts)
                 .ToList();
 

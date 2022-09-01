@@ -67,9 +67,15 @@ namespace ExecuteWebRequests
                             }
                             if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
                             {
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } started.");
-                                regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } ended.");
+                               // logger.Trace("алабала");
+                                //var i = webRequest.Id;
+                                //var j = WebServiceEnumConstants.REGIX_ForeignIdentityV2;
+                                var s = $"RequstID: {webRequest.Id} - Execute {WebServiceEnumConstants.REGIX_ForeignIdentityV2} started.";
+                                // logger.Trace($"RequstID: {webRequest.Id} - Execute {WebServiceEnumConstants.REGIX_ForeignIdentityV2} started.");
+                                logger.Trace(s);
+                                
+                                regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication?.RegistrationNumber);
+                                logger.Trace($"RequstID: {webRequest.Id} - Execute {WebServiceEnumConstants.REGIX_ForeignIdentityV2 } ended.");
                             }
                         }
                         else

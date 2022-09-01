@@ -76,13 +76,15 @@ namespace AutomaticStepsExecutor
                     if (service != null)
                     {
                         var numberOfEntities = 0;
+                        int numberOfPage = 0;
                         do
                         {
                             logger.Trace("PreSelect started.");
                             await service.PreSelectAsync(config);
                             logger.Trace("PreSelect ended.");
                             logger.Trace("Select started.");
-                            var entities = await service.SelectEntitiesAsync(pageSize, config);
+                            var entities = await service.SelectEntitiesAsync(pageSize, config, numberOfPage);
+                            numberOfPage++;
                             numberOfEntities = entities.Count;
                             logger.Trace($"Select ended. {numberOfEntities} selected.");
                             logger.Trace("PostSelect started.");
