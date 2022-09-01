@@ -1,154 +1,161 @@
-<igx-grid
-  #grid
-  igxGridState
-  [data]="items$ | async"
-  [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
-  [paging]="true"
-  [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
-  [paginationTemplate]="pager"
-  [allowFiltering]="true"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
-  [cellSelection]="'none'"
->
-  <igx-grid-toolbar>
-    <igx-grid-toolbar-title>
-      <span class="fw-bold"
-        >Подлежащи на заличаване</span
-      ></igx-grid-toolbar-title
+<nb-card
+  ><igx-grid
+    #grid
+    igxGridState
+    [data]="items$ | async"
+    [height]="null"
+    [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy"
+    [paging]="true"
+    [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'"
+    (onSortingDone)="sortingDone($event)"
+    (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)"
+    [paginationTemplate]="pager"
+    [allowFiltering]="true"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
+    [cellSelection]="'none'"
+  >
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold"
+          >Подлежащи на заличаване</span
+        ></igx-grid-toolbar-title
+      >
+      <igx-grid-toolbar-actions>
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="true"
+      [dataType]="'number'"
+      [hidden]="true"
     >
-    <igx-grid-toolbar-actions>
-      <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
-    </igx-grid-toolbar-actions>
-  </igx-grid-toolbar>
-  <igx-column
-    field="id"
-    header="Идентификатор"
-    [sortable]="true"
-    [dataType]="'number'"
-    [hidden]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="receiveDate"
-    header="Дата на получаване"
-    [sortable]="true"
-    [dataType]="'date'"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="receiveDate"
+      header="Дата на получаване"
+      [sortable]="true"
+      [dataType]="'date'"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="egn"
+      header="ЕГН"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="birthDate"
-    header="Дата на раждане"
-    [sortable]="true"
-    [dataType]="'date'"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="birthDate"
+      header="Дата на раждане"
+      [sortable]="true"
+      [dataType]="'date'"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="firstname"
-    header="Име"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="firstname"
+      header="Име"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="surname"
-    header="Презиме"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="surname"
+      header="Презиме"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="familyname"
-    header="Фамилия"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="familyname"
+      header="Фамилия"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    width="140px"
-    header="Действия"
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-    [disableHiding]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <div class="cell-center">
-        <div class="d-flex gap-3">
-          <button
-            igxButton="icon"
-            [title]="'Заличи'"
-            (click)="openDestructionConfirmationDialog(cell.rowData.id)"
-          >
-            <nb-icon pack="fa" icon="trash"></nb-icon>
-          </button>
-          <a
-            [title]="'Преглед'"
-            [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
-          >
-            <nb-icon pack="fa" icon="eye"></nb-icon>
-          </a>
-          <a
-            [title]="'Редактиране'"
-            [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
-          >
-            <nb-icon pack="fa" icon="pen"></nb-icon>
-          </a>
+    <igx-column
+      width="140px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <button
+              igxButton="icon"
+              [title]="'Заличи'"
+              (click)="openDestructionConfirmationDialog(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="trash"></nb-icon>
+            </button>
+            <a
+              [title]="'Преглед'"
+              [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+            <a
+              [title]="'Редактиране'"
+              [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="pen"></nb-icon>
+            </a>
+          </div>
         </div>
+      </ng-template>
+    </igx-column>
+
+    <ng-template #pager let-grid>
+      <div class="tl-paginator">
+        <cais-grid-pager
+          [page]="remoteService.pagerParams.page"
+          [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount"
+          (pagerChange)="pagerChange($event)"
+        ></cais-grid-pager>
       </div>
     </ng-template>
-  </igx-column>
-
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
-    </div>
-  </ng-template>
-</igx-grid>
+  </igx-grid>
+</nb-card>
