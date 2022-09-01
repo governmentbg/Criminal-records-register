@@ -18,15 +18,20 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Изходящи съобщения</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold">Изходящи съобщения</span></igx-grid-toolbar-title
+    >
     <igx-grid-toolbar-actions>
-      <div class="ml-2">
-        <nb-toggle
-          (checkedChange)="onShowAllMessageChange($event)"
-          status="info"
-          labelPosition="left"
-          >Всички съобщения</nb-toggle
-        >
+      <div class="d-flex gap-2">
+        <div class="ml-2">
+          <nb-toggle
+            (checkedChange)="onShowAllMessageChange($event)"
+            status="info"
+            labelPosition="left"
+            >Всички съобщения</nb-toggle
+          >
+        </div>
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
       </div>
     </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
@@ -98,34 +103,39 @@
   ></igx-column>
 
   <igx-column
-    width="150px"
-    header=""
+    width="140px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/ecris/outbox/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <a
+            [title]="'Преглед'"
+            [routerLink]="['/pages/ecris/outbox/preview', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
 
-      <button
-        igxButton="icon"
-        [title]="'Изтегляне на xml'"
-        (click)="downloadXml(cell.rowData.id)"
-      >
-        <nb-icon pack="fa" icon="file-download"></nb-icon>
-      </button>
-      <button
-        igxButton="icon"
-        [title]="'Повторно изпращане'"
-        (click)="resend(cell.rowData.ecrisMsgId)"
-      >
-        <nb-icon pack="fa" icon="redo"></nb-icon>
-      </button>
+          <button
+            igxButton="icon"
+            [title]="'Изтегляне на xml'"
+            (click)="downloadXml(cell.rowData.id)"
+          >
+            <nb-icon pack="fa" icon="file-download"></nb-icon>
+          </button>
+          <button
+            igxButton="icon"
+            [title]="'Повторно изпращане'"
+            (click)="resend(cell.rowData.ecrisMsgId)"
+          >
+            <nb-icon pack="fa" icon="redo"></nb-icon>
+          </button>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
 
