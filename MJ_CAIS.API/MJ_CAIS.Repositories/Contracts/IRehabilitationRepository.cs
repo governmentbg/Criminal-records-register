@@ -5,6 +5,6 @@ namespace MJ_CAIS.Repositories.Contracts
 {
     public interface IRehabilitationRepository : IBaseAsyncRepository<BBulletin, string, CaisDbContext>
     {
-        void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate, string? status);
+        void UpdateRehabilitationData(string bulletinId, decimal? bulletinVersion, DateTime? rehabilitationDate);
     }
 }

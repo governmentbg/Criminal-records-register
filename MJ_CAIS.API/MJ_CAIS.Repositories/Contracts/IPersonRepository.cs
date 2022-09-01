@@ -1,5 +1,6 @@
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Person;
 
@@ -39,8 +40,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<List<PPerson>> GetPersonByID(IQueryable<string> personIds);
 
-        IQueryable<string> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear);
+        Task<IQueryable<string>> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear);
 
-
+        Task<List<CriminalRecordsPersonDataType>> GetPersonsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname);
     }
 }

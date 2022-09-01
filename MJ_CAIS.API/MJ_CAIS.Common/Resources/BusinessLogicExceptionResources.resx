@@ -120,6 +120,9 @@
   <data name="bulletinDoesNotExist" xml:space="preserve">
     <value>Бюлетин с идентификатор {0} не съществува.</value>
   </data>
+  <data name="bulletinEventDoesNotExist" xml:space="preserve">
+    <value>Уведомление с идентификатор {0} вече е доставена и не може да бъде анулирана.</value>
+  </data>
   <data name="certificateDoesNotExist" xml:space="preserve">
     <value>Свидетелството не е намерено</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="msgAppReportDoesNotExist" xml:space="preserve">
     <value>Искане за справка с идентификатор {0} не съществува.</value>
+  </data>
+  <data name="msgInvalidStatus" xml:space="preserve">
+    <value>Невалиден статус {0}</value>
   </data>
   <data name="msgMoreThenAllowedMsgIsReaded" xml:space="preserve">
     <value>Маркирани са повече от позволените {0} на брой заявки.</value>

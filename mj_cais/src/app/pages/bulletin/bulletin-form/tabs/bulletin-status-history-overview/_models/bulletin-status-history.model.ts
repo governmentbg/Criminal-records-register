@@ -7,6 +7,7 @@ export class BulletinStatusHistoryModel extends BaseModel {
   public createdBy: string = null;
   public locked: string = null;
   public descr: string = null;
+  public hasContent: boolean = null;
 
   constructor(init?: Partial<BulletinStatusHistoryModel>) {
     super(init);
@@ -16,5 +17,6 @@ export class BulletinStatusHistoryModel extends BaseModel {
     this.createdBy = init?.createdBy ?? null;
     this.locked = init?.locked ?? null;
     this.descr = init?.descr ?? null;
+    this.hasContent = init?.hasContent ?? null;
   }
 }

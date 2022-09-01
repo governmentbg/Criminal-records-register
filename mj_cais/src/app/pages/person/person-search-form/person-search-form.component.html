@@ -1,107 +1,59 @@
-<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
-  <nb-card-header class="card-header-shadow">
-    <div class="d-flex" style="justify-content: space-between">
-      <div class="d-flex align-items-center">
-        <div style="font-weight: bold; font-size: 22px">{{ title }}</div>
-      </div>
-      <div class="d-flex">
-        <div>
-          <button
-            nbButton
-            matRipple
-            (click)="onSearch()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
-            Търсене
-          </button>
-        </div>     
-      </div>
+<nb-card class="search-card" accent="primary" [formGroup]="fullForm.group">
+  <nb-card-header>
+    <div class="d-flex justify-content-between">
+      <h2 class="h4">{{ title }}</h2>
+      <button nbButton status="primary" (click)="onSearch()" type="button" [disabled]="fullForm.group.pristine">
+        Търсене
+      </button>
     </div>
   </nb-card-header>
-  <nb-card-body class="overflow-scroll">
-    <form autocomplete="off"  (keydown.enter)="onSearch()">
+  <nb-card-body>
+    <form autocomplete="off" (keydown.enter)="onSearch()">
       <div class="row">
         <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="fullForm.firstname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="fullForm.firstname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Презиме'"
-            [inputFormControl]="fullForm.surname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Презиме'" [inputFormControl]="fullForm.surname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Фамилия'"
-            [inputFormControl]="fullForm.familyname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Фамилия'" [inputFormControl]="fullForm.familyname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пълно име'"
-            [inputFormControl]="fullForm.fullname"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Пълно име'" [inputFormControl]="fullForm.fullname"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Идентификатор'"
-            [inputFormControl]="fullForm.pid"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
+          <cais-input [type]="'text'" [label]="'Идентификатор'" [inputFormControl]="fullForm.pid"
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
-        <div class="form-group col-md-2">
-          <cais-autocomplete
-            [label]="'Тип идентификатор'"
-            [inputFormControl]="fullForm.pidType"
-            [parentGroup]="fullForm.group"
-            [inputName]="'pidType'"
-            [items]="dbData.pidTypes"
-          ></cais-autocomplete>
+        <div class="form-group col-md-3">
+          <cais-autocomplete [label]="'Тип идентификатор'" [inputFormControl]="fullForm.pidType"
+            [parentGroup]="fullForm.group" [inputName]="'pidType'" [items]="dbData.pidTypes"></cais-autocomplete>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Пол'"
-            [inputFormControl]="fullForm.sex"
-            [parentGroup]="fullForm.group"
-            [inputName]="'sex'"
-            [items]="dbData.genderTypes"
-          ></cais-autocomplete>
+          <cais-autocomplete [label]="'Пол'" [inputFormControl]="fullForm.sex" [parentGroup]="fullForm.group"
+            [inputName]="'sex'" [items]="dbData.genderTypes"></cais-autocomplete>
         </div>
         <div class="form-group col-md-6">
-          <cais-date-precision
-            [formModel]="fullForm.birthDate"
-            [label]="'Дата на раждане'"
-          >
+          <cais-date-precision [formModel]="fullForm.birthDate" [label]="'Дата на раждане'">
           </cais-date-precision>
         </div>
       </div>
     </form>
-    <cais-person-search-overview
-      #personGridForm
-      [searchForm]="fullForm"
-      [isRemindPersonForm]="isRemindPersonForm"
-      [existingPersonId]="existingPersonId"
-    >
-    </cais-person-search-overview>
   </nb-card-body>
+</nb-card>
+<nb-card>
+  <cais-person-search-overview #personGridForm [searchForm]="fullForm" [isRemindPersonForm]="isRemindPersonForm"
+    [existingPersonId]="existingPersonId">
+  </cais-person-search-overview>
 </nb-card>

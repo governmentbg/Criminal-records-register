@@ -1,13 +1,17 @@
 ﻿@using MJ_CAIS.Common
 @using MJ_CAIS.Common.Resources
+@using MJ_CAIS.WebPortal.External.Controllers
 @using MJ_CAIS.WebPortal.External.Models.Application
 @using MJ_CAIS.WebPortal.External.Models.Reports
+@using Infragistics.Web.Mvc
+@using MJ_CAIS.WebPortal.External.Utils
 
 @model PersonSearchModel
 
 @{
     var title = "Търсене на лица";
     ViewData["Title"] = title;
+    var dataSource = Url.Action("AjaxPersonSearch", "Reports");
 }
 
 <div class="container">
@@ -17,7 +21,7 @@
                 <div class="card-header h5 bg-primary text-white">@title</div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <form method="post" autocomplete="off">
+                        <form id="form" method="post" autocomplete="off">
                             <div class="row g-3">
                                 <div class="col-md-3">
                                     <label asp-for="Firstame" class="form-label fw-bold"></label>
@@ -72,178 +76,58 @@
                                     <span asp-validation-for="Remark" class="text-danger"></span>
                                 </div>
                                 <div class="col-12 d-flex justify-content-end gap-2">
-                                    <button class="btn btn-primary btn-lg" type="submit">Търсене</button>
+                                    <button id="search2" class="btn btn-primary btn-lg" type="button">Търсене</button>
                                 </div>
                             </div>
                         </form>
-                        @if (Model.CriminalRecordsPerson.Count != 0)
+                        <partial name="_InfragisticsLoader" />
+                        @(Html.Infragistics()
+                        .Grid(Model.CriminalRecordsPerson.AsQueryable())
+                        .ID("PersonsGridModel")
+                        .Width("100%")
+                        .AutoGenerateColumns(false)
+                        .AutoGenerateLayouts(false)
+                        .Columns(column =>
                         {
-                            <div class="col-12 table-responsive">
-                                <table class="table table-striped table-hover table-bordered">
-                                    <tr>
-                                        <th class="d-none d-sm-table-cell">
-                                            @ReportResources.lblIdentifiers
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            @ReportResources.lblFirstName
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            @ReportResources.lblSurname
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            @ReportResources.lblFamilyname
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            FirstNameEn
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            SurNameEn
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            FamilyNameEn
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            @ReportResources.lblBirthCountry
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            @ReportResources.lblBirthPlace
-                                        </th>
-                                        <th class="d-none d-sm-table-cell">
-                                            Birthday Description
-                                        </th>
-                                    </tr>
-                                    @foreach (var item in Model.CriminalRecordsPerson)
-                                    {
-                                        <tr>
-                                            <td class="d-none d-sm-table-cell">
-                                                @{
-                                                    if (!string.IsNullOrEmpty(item.IdentityNumber.EGN))
-                                                    {
-                                                        var crrEGNModel =
-                                                        new CriminalRecordsReportRequestView()
+                        column.For(x => x.FirstNameBg).Hidden(true);
+                        column.For(x => x.SurNameBg).Hidden(true);
+                        column.For(x => x.FamilyNameBg).Hidden(true);
+                        column.For(x => x.FullNameBg).Hidden(true);
+                        column.For(x => x.FirstNameEn).Hidden(true);
+                        column.For(x => x.SurNameEn).Hidden(true);
+                        column.For(x => x.FamilyNameEn).Hidden(true);
+                        column.For(x => x.FullNameEn).Hidden(true);
+                        column.For(x => x.MotherNames).Hidden(true);
+                        column.For(x => x.FatherNames).Hidden(true);
+                        column.For(x => x.BirthPlaceDescr).Hidden(true);
+                        column.For(x => x.CityName).Hidden(true);
+                        column.For(x => x.CountryName).Hidden(true);
+                        column.Unbound("Names").HeaderText("Имена").Template("<span title=\"${FirstNameBg} ${SurNameBg} ${FamilyNameBg} ${FullNameBg} ${FirstNameEn} ${SurNameEn} ${FamilyNameEn} ${FullNameEn}\">${FirstNameBg} ${SurNameBg} ${FamilyNameBg} ${FullNameBg}</br>${FirstNameEn} ${SurNameEn} ${FamilyNameEn} ${FullNameEn}</span>").Width("25%");
+                        column.Unbound("Parents").HeaderText("Родители").Template("<span title=\"${MotherNames} ${FatherNames}\">${MotherNames}</br>${FatherNames}</span>").Width("25%");
+                        column.Unbound("Birthplace").HeaderText("Място на раждане").Template("<span title=\"${CountryName} ${CityName} ${BirthPlaceDescr}\">${CountryName} ${CityName} ${BirthPlaceDescr}</span>").Width("15%");
+                       @* column.For(x => x.FirstNameBg).HeaderText("SurName").Width("16%");
+                        column.For(x => x.SurNameBg).HeaderText("SurName").Width("16%");
+                        column.For(x => x.FamilyNameBg).HeaderText("FamilyName").Width("14%");*@
+                       @* column.For(x => x.FirstNameEn).HeaderText("FirstNameЕn").Width("10%");
+                        column.For(x => x.SurNameEn).HeaderText("SurNameEn").Width("12%");
+                        column.For(x => x.FamilyNameEn).HeaderText("FamilyNameEn").Width("9%");*@
+                   @*     column.For(x => x.CountryName).HeaderText("CountryName").Width("18%");
+                        column.For(x => x.CityName).HeaderText("CityName").Width("18%");
+                        column.For(x => x.BirthPlaceDescr).HeaderText("BirthplaceDescr").Width("18%");*@
+                        column.For(x => x.BirthDate).HeaderText("Дата на раждане").Width("15%");
+                        column.For(x => x.EGN).Hidden(true);
+                        column.For(x => x.SUID).Hidden(true);
+                        column.For(x => x.LNCh).Hidden(true);
+                        column.For(x => x.LN).Hidden(true);
+                        column.For(x => x.LawReason).Hidden(true);
+                        column.For(x => x.Remark).Hidden(true);
+                        column.For(x => x.ActionTemplate).HeaderText("").Width("20%");
+                        })
+                        .Features(features =>
                         {
-                            IdentifierType = "EGN",
-                            PID = item.IdentityNumber.EGN,
-                            LawReason = Model.LawReason,
-                            Remark = Model.Remark,
-                            ServiceType = Model.ServiceType,
-                            ServiceURI = Model.ServiceURI,
-                            Title = item.IdentityNumber.EGN
-                        };
-                                                        await Html.RenderPartialAsync("_CriminalRecordPDF", crrEGNModel);
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.IdentityNumber.LN))
-                                                    {
-                                                        var crrLNodel =
-                                                        new CriminalRecordsReportRequestView()
-                        {
-                            IdentifierType = "LN",
-                            PID = item.IdentityNumber.LN,
-                            LawReason = Model.LawReason,
-                            Remark = Model.Remark,
-                            ServiceType = Model.ServiceType,
-                            ServiceURI = Model.ServiceURI,
-                            Title = item.IdentityNumber.LN
-                        };
-                                                        await Html.RenderPartialAsync("_CriminalRecordPDF", crrLNodel);
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.IdentityNumber.LNCh))
-                                                    {
-                                                        var crrLNChModel =
-                                                        new CriminalRecordsReportRequestView()
-                        {
-                            IdentifierType = "EGN",
-                            PID = item.IdentityNumber.LNCh,
-                            LawReason = Model.LawReason,
-                            Remark = Model.Remark,
-                            ServiceType = Model.ServiceType,
-                            ServiceURI = Model.ServiceURI,
-                            Title = item.IdentityNumber.LNCh
-                        };
-                                                        await Html.RenderPartialAsync("_CriminalRecordPDF", crrLNChModel);
-                                                    }
-                                                    if (!string.IsNullOrEmpty(item.IdentityNumber.SUID))
-                                                    {
-                                                        var crrSUIDModel =
-                                                        new CriminalRecordsReportRequestView()
-                        {
-                            IdentifierType = "SUID",
-                            PID = item.IdentityNumber.SUID,
-                            LawReason = Model.LawReason,
-                            Remark = Model.Remark,
-                            ServiceType = Model.ServiceType,
-                            ServiceURI = Model.ServiceURI,
-                            Title = item.IdentityNumber.SUID
-                        };
-                                                        await Html.RenderPartialAsync("_CriminalRecordPDF", crrSUIDModel);
-                                                    }
-                                                }
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.NamesBg.FirstName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.NamesBg.SurName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.NamesBg.FamilyName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.NamesEn.FirstName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.NamesEn.SurName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.NamesEn.FamilyName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.BirthPlace.Country.CountryName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.BirthPlace.City.CityName)
-                                            </td>
-                                            <td class="d-none d-sm-table-cell">
-                                                @Html.DisplayFor(modelItem => item.BirthPlace.Descr)
-                                            </td>
-                                            @*  <td class="d-none d-sm-table-cell">
-                                    @{
-                                    var crrPDFModel2 =
-                                    new CriminalRecordsReportRequestView()
-                                    {
-                                    IdentifierType = "SUID",
-                                    PID = item.IdentityNumber.SUID,
-                                    LawReason = Model.LawReason,
-                                    Remark = Model.Remark,
-                                    ServiceType = Model.ServiceType,
-                                    ServiceURI = Model.ServiceURI,
-                                    Title = "PDF"
-                                    };
-                                    await Html.RenderPartialAsync("_CriminalRecordPDF", crrPDFModel2);
-                                    }
-                                    </td>*@
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        }
-                        else if (!Model.Initial)
-                        {
-                            <div class="col-12">
-                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                    <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-                                    </symbol>
-                                </svg>
-
-                                <div class="alert alert-primary d-flex align-items-center mb-0" role="alert">
-                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
-                                    <div>
-                                        Не са намерени лица - @Model.CriminalRecordsPerson.Count
-                                    </div>
-                                </div>
-                            </div>
-                        }
+                        })
+                        .DataSourceUrl(dataSource + "?isInitialSearch=true")
+                        .Render())
                     </div>
                 </div>
             </div>
@@ -251,3 +135,21 @@
     </div>
 </div>
 
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#search2").click(function() {
+                var form = $("#form");
+                $.validator.unobtrusive.parse(form);
+                form.validate();
+                if (form.valid()) {
+                    let queryString = new URLSearchParams(new FormData(document.querySelector("#form"))).toString();
+                    $('#PersonsGridModel').igGrid('option', 'dataSource', '@dataSource' + '?' + queryString);
+
+                }
+            });
+        });
+    </script>
+
+}

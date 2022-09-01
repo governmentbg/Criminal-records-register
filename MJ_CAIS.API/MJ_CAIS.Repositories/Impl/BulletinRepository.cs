@@ -174,7 +174,8 @@ namespace MJ_CAIS.Repositories.Impl
                             NewStatus = newStatus.Name,
                             OldStatus = oldStatus.Name,
                             Version = bulletinHis.Version,
-                            BulletinId = bulletinHis.BulletinId
+                            BulletinId = bulletinHis.BulletinId,
+                            HasContent = true, // todo get from db
                         };
 
             return query;
@@ -253,10 +254,10 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId)
         {
-            //íàìèðà ëèöåòî ïî èäåíòèôèêàòîðà
+            //Ð½Ð°Ð¼Ð¸Ñ€Ð° Ð»Ð¸Ñ†ÐµÑ‚Ð¾ Ð¿Ð¾ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€Ð°
             var personId = await this._dbContext.PPersonIds.AsNoTracking().Where(x => x.Id == pidId).Select(x => x.PersonId).FirstOrDefaultAsync();
 
-            //íàìèðà âñè÷êè áþëåòåèíè íà òîâà ëèöå
+            //Ð½Ð°Ð¼Ð¸Ñ€Ð° Ð²ÑÐ¸Ñ‡ÐºÐ¸ Ð±ÑŽÐ»ÐµÑ‚ÐµÐ¸Ð½Ð¸ Ð½Ð° Ñ‚Ð¾Ð²Ð° Ð»Ð¸Ñ†Ðµ
             var bulletinsList =  this._dbContext.BBulletins.Where(b =>
                         b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId })
                         .Union(this._dbContext.BBulletins.Where(b =>
@@ -265,8 +266,8 @@ namespace MJ_CAIS.Repositories.Impl
                         b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId }))
                         .Union(this._dbContext.BBulletins.Where(b =>
                          b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })).AsNoTracking();
-            
-            //âçèìà âñè÷êè ïîäðîáíîñòè íà áþëåòèíèòå íà òîâà ëèöå
+
+            //Ð²Ð·Ð¸Ð¼Ð° Ð²ÑÐ¸Ñ‡ÐºÐ¸ Ð¿Ð¾Ð´Ñ€Ð¾Ð±Ð½Ð¾ÑÑ‚Ð¸ Ð½Ð° Ð±ÑŽÐ»ÐµÑ‚Ð¸Ð½Ð¸Ñ‚Ðµ Ð½Ð° Ñ‚Ð¾Ð²Ð° Ð»Ð¸Ñ†Ðµ
             var result = _dbContext.BBulletins.AsNoTracking()
                     .Include(x => x.BirthCity)
                     .Include(x => x.BirthCountry)
@@ -467,14 +468,27 @@ namespace MJ_CAIS.Repositories.Impl
                 .AnyAsync(x => personNationalities.Contains(x.CountryId));
         }
 
-        public async Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdAsync(List<string> pidsId)
+        public async Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdExcludeCurrentAsync(List<string> pidsId, string currentBullId)
         {
-            var result = await _dbContext.BBulletins
-                .Where(x => pidsId.Any(p => p == x.EgnId) ||
-                            pidsId.Any(p => p == x.LnchId) ||
-                            pidsId.Any(p => p == x.LnId) ||
-                            pidsId.Any(p => p == x.IdDocNumberId) ||
-                            pidsId.Any(p => p == x.SuidId))
+            //Ð½Ð°Ð¼Ð¸Ñ€Ð° Ð»Ð¸Ñ†ÐµÑ‚Ð¾ Ð¿Ð¾ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€Ð°
+            var personId = await this._dbContext.PPersonIds.AsNoTracking()
+                .Where(x => pidsId.Contains(x.Id))
+                .Select(x => x.PersonId)
+                .FirstOrDefaultAsync();
+
+            //Ð½Ð°Ð¼Ð¸Ñ€Ð° Ð²ÑÐ¸Ñ‡ÐºÐ¸ Ð±ÑŽÐ»ÐµÑ‚ÐµÐ¸Ð½Ð¸ Ð½Ð° Ñ‚Ð¾Ð²Ð° Ð»Ð¸Ñ†Ðµ
+            var bulletinsList = this._dbContext.BBulletins.Where(b =>
+                       b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId }))
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId }))
+                        .Union(this._dbContext.BBulletins.Where(b =>
+                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })).AsNoTracking();
+
+
+            var result = await _dbContext.BBulletins             
+                .Where(x => x.Id != currentBullId && bulletinsList.Select(b => b.Id).Contains(x.Id))
                 .Select(bulletin => new BulletinForRehabilitationAndEventDTO
                 {
                     Id = bulletin.Id,
@@ -547,13 +561,13 @@ namespace MJ_CAIS.Repositories.Impl
                 query = query.Where(x => x.Lnch == searchParams.Lnch);
 
             if (searchParams.BirthDate.HasValue)
-                query = query.Where(x => x.BirthDate == searchParams.BirthDate.Value);
+                query = query.Where(x => x.BirthDate == searchParams.BirthDate.Value.Date);
 
             if (searchParams.FromDate.HasValue)
-                query = query.Where(x => x.CreatedOn >= searchParams.FromDate.Value.AddDays(-1).Date);
+                query = query.Where(x => x.CreatedOn >= searchParams.FromDate.Value.Date.AddDays(-1).Date);
 
             if (searchParams.ToDate.HasValue)
-                query = query.Where(x => x.CreatedOn <= searchParams.ToDate.Value);
+                query = query.Where(x => x.CreatedOn <= searchParams.ToDate.Value.Date);
 
             return query;
         }

@@ -1,4 +1,5 @@
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, Input } from "@angular/core";
+
 import { NgxSpinnerService } from "ngx-spinner";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
@@ -17,6 +18,10 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
   InternalRequestMailBoxGridModel,
   InternalRequestMailBoxGridService
 > {
+
+  @Input() caisTitle: string;
+ 
+  
   constructor(
     service: InternalRequestMailBoxGridService,
     public internalRequestFormService: InternalRequestService,
@@ -29,6 +34,8 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
   }
 
   public hideStatus: boolean = true;
+
+
 
   ngOnInit() {
     super.ngOnInit();
