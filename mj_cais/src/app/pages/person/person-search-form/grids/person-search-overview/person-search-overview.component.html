@@ -56,7 +56,8 @@
     <ng-template igxCell let-cell="cell">
       <ng-container *ngIf="!isRemindPersonForm">
         <div class="cell-center">
-          <button igxButton="icon" [igxToggleAction]="dropdown" [igxDropDownItemNavigation]="dropdown" [overlaySettings]="overlaySettings">
+          <button igxButton="icon" [overlaySettings]="overlaySettings"   [igxToggleAction]="dropdown"
+          [igxDropDownItemNavigation]="dropdown">
             <igx-icon fontSet="material">more_vert</igx-icon>
           </button>
           <igx-drop-down #dropdown 
