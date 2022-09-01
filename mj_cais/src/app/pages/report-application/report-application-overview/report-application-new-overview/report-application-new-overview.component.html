@@ -18,15 +18,18 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Нови искания</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold">Нови искания</span></igx-grid-toolbar-title
+    >
     <igx-grid-toolbar-actions>
-      <div class="ml-1">
+      <div class="ml-1 d-flex gap-3">
         <nb-toggle
           (checkedChange)="onShowAllReportApplicationsChange($event)"
           status="info"
           labelPosition="left"
           >Всички искания</nb-toggle
         >
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
         <a
           class="ml-2"
           nbButton
@@ -64,15 +67,15 @@
     </ng-template>
   </igx-column>
   <igx-column
-  field="statusName"
-  header="Статус"
-  [sortable]="true"
-  [dataType]="'string'"
->
-  <ng-template igxCell let-cell="cell">
-    <span [title]="cell.value">{{ cell.value }}</span>
-  </ng-template>
-</igx-column>
+    field="statusName"
+    header="Статус"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
   <igx-column
     field="purpose"
     header="Цел"
@@ -131,26 +134,34 @@
   </igx-column>
 
   <igx-column
-    width="80px"
-    header=""
+    width="120px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/report-applications/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        *ngIf="hideStatus"
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/report-applications/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <a
+            [title]="'Преглед'"
+            [routerLink]="[
+              '/pages/report-applications/preview',
+              cell.rowData.id
+            ]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+          <a
+            *ngIf="hideStatus"
+            [title]="'Редактиране'"
+            [routerLink]="['/pages/report-applications/edit', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="pen"></nb-icon>
+          </a>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
 
