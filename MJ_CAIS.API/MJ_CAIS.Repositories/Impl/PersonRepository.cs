@@ -4,6 +4,7 @@ using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.DTO.Home;
 using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
@@ -404,7 +405,7 @@ namespace MJ_CAIS.Repositories.Impl
                  select p).ToListAsync();
         }
 
-        public IQueryable<string> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear)
+        public async Task<IQueryable<string>> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear)
         {
             return (
                 from ph in _dbContext.PPersonHs.Include(p => p.BirthCountry).Include(p => p.BirthCity)
@@ -424,6 +425,141 @@ namespace MJ_CAIS.Repositories.Impl
 
                 select pids.PersonId
                 ).Distinct().Take(100);
+        }
+        public async Task<List<CriminalRecordsPersonDataType>> GetPersonsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname)
+        {
+            var crs = new List<CriminalRecordsPersonDataType>();
+            DataSet ds = new DataSet();
+            var MAX_RECORDS = 500;
+            try
+            {
+                using (OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString()))
+                {
+                    // Create command
+                    OracleCommand cmd = new OracleCommand("search_persons_for_reports", oracleConnection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Set parameters
+
+                    cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, firstname?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, surname?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, familyname?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_fullname", OracleDbType.Varchar2, fullname?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, birthdate, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, birthDatePrec.Trim().ToUpper(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_birth_country", OracleDbType.Varchar2, birthCountry?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_birth_place", OracleDbType.Varchar2, birthplace?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_max_records", OracleDbType.Int32, MAX_RECORDS, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
+
+                    OracleDataAdapter resultDataSet = new OracleDataAdapter(cmd);
+                    try
+                    {
+                        await oracleConnection.OpenAsync();
+                        resultDataSet.Fill(ds);
+                        foreach (DataRow row in ds.Tables[0].Rows)
+                        {
+                            var cr = new CriminalRecordsPersonDataType();
+
+                            var isParsedDate = DateTime.TryParse(row["birth_date"]?.ToString(), out DateTime birthDate);
+                            var hasPrecision = Enum.TryParse(row["birth_date_prec"]?.ToString(), true, out DatePrecisionEnum datePrecision);
+                            cr.BirthDate = new DateType()
+                            {
+                                Date = birthdate,
+                                DatePrecision = datePrecision,
+                                DatePrecisionSpecified = hasPrecision
+                            };
+                            cr.IdentityNumber = new PersonIdentityNumberType();
+                            switch (row["pid_type_code"]?.ToString()){
+                                case "SYS":
+                                    {
+                                        cr.IdentityNumber.SUID = row["pid"]?.ToString();
+                                        break;
+                                    }
+                                case "EGN":
+                                    {
+                                        cr.IdentityNumber.EGN = row["pid"]?.ToString();
+                                        break;
+                                    }
+                                case "LNCH":
+                                    {
+                                        cr.IdentityNumber.LNCh = row["pid"]?.ToString();
+                                        break;
+                                    }
+                                case "LN":
+                                    {
+                                        cr.IdentityNumber.LN = row["pid"]?.ToString();
+                                        break;
+                                    }
+                            }
+                            cr.NamesBg = new PersonNameType()
+                            {
+                                FirstName = row["firstname"]?.ToString(),
+                                SurName = row["surname"]?.ToString(),
+                                FamilyName = row["familyname"]?.ToString(),
+                                FullName = row["fullname"]?.ToString(),
+                            };
+                            cr.NamesEn = new PersonNameType()
+                            {
+                                FirstName = row["firstname_lat"]?.ToString(),
+                                SurName = row["surname_lat"]?.ToString(),
+                                FamilyName = row["familyname_lat"]?.ToString(),
+                                FullName = row["fullname_lat"]?.ToString(),
+                            };
+                            cr.Sex = (row["sex"] != DBNull.Value) ? Int32.Parse(row["sex"].ToString()) : 0;
+                            cr.MotherNames = new PersonNameType()
+                            {
+                                FirstName = row["mother_firstname"]?.ToString(),
+                                SurName = row["mother_surname"]?.ToString(),
+                                FamilyName = row["mother_familyname"]?.ToString(),
+                                FullName = row["mother_fullname"]?.ToString(),
+                            };
+                            cr.FatherNames = new PersonNameType()
+                            {
+                                FirstName = row["father_firstname"]?.ToString(),
+                                SurName = row["father_surname"]?.ToString(),
+                                FamilyName = row["father_familyname"]?.ToString(),
+                                FullName = row["father_fullname"]?.ToString(),
+                            };
+                            cr.BirthPlace = (!string.IsNullOrEmpty(row["birthcounry"]?.ToString()) || !string.IsNullOrEmpty(row["birthcity"]?.ToString()) || !string.IsNullOrEmpty(row["birth_place_other"]?.ToString())) ? new PlaceType()
+                            {
+                                City = (!string.IsNullOrEmpty(row["birthcity"]?.ToString())) ? new CityType()
+                                {
+                                    CityName = row["birthcity"]?.ToString(),
+                                    EKATTECode = row["birthcity_ekatte"]?.ToString(),
+                                } : null,
+                                Country = (!string.IsNullOrEmpty(row["birthcounry"]?.ToString())) ? new CountryType()
+                                {
+                                    CountryName = row["birthcounry"]?.ToString(),
+                                    CountryISOAlpha3 = row["birthcounry_code"]?.ToString(),
+                                    CountryISONumber = row["birthcounry_number"]?.ToString()
+                                } : null,
+                                Descr = row["birth_place_other"]?.ToString()
+                            } : null;
+                            crs.Add(cr);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        // todo: log
+                        throw;
+                    }
+                    finally
+                    {
+                        oracleConnection.Close();
+                        oracleConnection.Dispose();
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                // todo: log error
+                // add message
+                throw;
+            }
+
+            return crs;
         }
     }
 }

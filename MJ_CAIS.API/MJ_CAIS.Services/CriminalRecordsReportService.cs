@@ -137,23 +137,58 @@ namespace MJ_CAIS.Services
             var birthdateTo = birthdateFrom.AddMonths(1).AddDays(-1);
             var birthdateYear = birthdate.Year;
 
-            IQueryable<string> personIds = _personRepository.GetPersonIDsByPersonData(firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname, birthdateFrom, birthdateTo, birthdateYear);
+            var persons = await _personRepository.GetPersonsByPersonData(firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname);
 
-            List<PPerson> res = await _personRepository.GetPersonByID(personIds);
+            //IQueryable<string> personIds = await _personRepository.GetPersonIDsByPersonData(firstname, surname, familyname, birthCountry, birthdate, birthDatePrec, birthplace, fullname, birthdateFrom, birthdateTo, birthdateYear);
+
+            //List<PPerson> res = await _personRepository.GetPersonByID(personIds);
 
             var reportSearchPer = _mapper.MapToEntity<PersonIdentifierSearchExtendedRequestType, WReportSearchPer>(value, true);
             var foundIds =
-                res.Aggregate(
+                persons.Aggregate(
                     reportSearchPer.ARepPers,
                     (list, v) =>
                     {
-                        foreach (var pPersonId in v.PPersonIds)
+                        if (!string.IsNullOrEmpty(v.IdentityNumber.LN))
                         {
                             list.Add(new ARepPer()
                             {
                                 Id = BaseEntity.GenerateNewId(),
-                                Pid = pPersonId.Pid,
-                                PidType = pPersonId.PidTypeId,
+                                Pid = v.IdentityNumber.LN,
+                                PidType = "LN",
+                                ReportId = reportSearchPer.Id,
+                                EntityState = Common.Enums.EntityStateEnum.Added
+                            });
+                        }
+                        if (!string.IsNullOrEmpty(v.IdentityNumber.EGN))
+                        {
+                            list.Add(new ARepPer()
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                Pid = v.IdentityNumber.LN,
+                                PidType = "EGN",
+                                ReportId = reportSearchPer.Id,
+                                EntityState = Common.Enums.EntityStateEnum.Added
+                            });
+                        }
+                        if (!string.IsNullOrEmpty(v.IdentityNumber.LNCh))
+                        {
+                            list.Add(new ARepPer()
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                Pid = v.IdentityNumber.LN,
+                                PidType = "LNCH",
+                                ReportId = reportSearchPer.Id,
+                                EntityState = Common.Enums.EntityStateEnum.Added
+                            });
+                        }
+                        if (!string.IsNullOrEmpty(v.IdentityNumber.SUID))
+                        {
+                            list.Add(new ARepPer()
+                            {
+                                Id = BaseEntity.GenerateNewId(),
+                                Pid = v.IdentityNumber.LN,
+                                PidType = "SYS",
                                 ReportId = reportSearchPer.Id,
                                 EntityState = Common.Enums.EntityStateEnum.Added
                             });
@@ -164,10 +199,12 @@ namespace MJ_CAIS.Services
             _reportSearchPersonsRepository.ApplyChanges(reportSearchPer, applyToAllLevels: true);
             await _reportSearchPersonsRepository.InsertAsync(reportSearchPer);
 
-            var result = _mapper.Map<List<PPerson>, PersonIdentifierSearchResponseType>(res);
-
-            result.ReportCriteria = value.PersonIdentifierSearchRequest;
-            result.ReportDate = DateTime.Now;
+            var result = new PersonIdentifierSearchResponseType()
+            {
+                ReportCriteria = value.PersonIdentifierSearchRequest,
+                ReportDate = DateTime.Now,
+                ReportResult = persons.ToArray()
+            };
             return result;
         }
 
