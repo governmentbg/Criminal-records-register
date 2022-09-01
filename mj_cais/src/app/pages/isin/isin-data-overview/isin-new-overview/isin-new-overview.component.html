@@ -1,201 +1,211 @@
-<igx-grid
-  #grid
-  igxGridState
-  [data]="items$ | async"
-  [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
-  [paging]="true"
-  [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
-  [paginationTemplate]="pager"
-  [allowFiltering]="true"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
-  [cellSelection]="'none'"
->
-  <igx-grid-toolbar>
-    <igx-grid-toolbar-title
-      >Данни за изтърпени наказания</igx-grid-toolbar-title
-    >
-  </igx-grid-toolbar>
-
-  <igx-column
-    field="id"
-    header="Идентификатор"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="true"
+<nb-card>
+  <igx-grid
+    #grid
+    igxGridState
+    [data]="items$ | async"
+    [height]="null"
+    [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy"
+    [paging]="true"
+    [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'"
+    (onSortingDone)="sortingDone($event)"
+    (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)"
+    [paginationTemplate]="pager"
+    [allowFiltering]="true"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
+    [cellSelection]="'none'"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="msgDateTime"
-    [sortable]="true"
-    header="Получено на"
-    dataType="Date"
-    [formatter]="this.dateFormatService.formatDate"
-    [width]="'8%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="sourceType"
-    header="Вид източник"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'8%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="sanctionType"
-    header="Вид наказание"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'8%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="identifier"
-    header="ЕГН/ЛНЧ"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'8%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="birthDate"
-    [sortable]="true"
-    header="Дата на раждане"
-    dataType="date"
-    [formatter]="this.dateFormatService.formatDate"
-    [width]="'8%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="birthCountryName"
-    header="Месторождение (държава)"
-    [sortable]="true"
-    [dataType]="'string'"
-    width="10%"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="personName"
-    header="Имена"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="nationalities"
-    header="Гражданство 1,2"
-    [sortable]="true"
-    [dataType]="'string'"
-    width="10%"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="decisionInfo"
-    header="Акт"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'15%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="caseInfo"
-    header="Дело"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'15%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="sanctionEndDate"
-    [sortable]="true"
-    header="Крайна дата"
-    dataType="Date"
-    [formatter]="this.dateFormatService.formatDate"
-    [width]="'8%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    width="150px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-    [width]="'5%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/isin/select-bulletin', cell.rowData.id]"
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold"
+          >Данни за изтърпени наказания</span
+        ></igx-grid-toolbar-title
       >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-    </ng-template>
-  </igx-column>
+      <igx-grid-toolbar-actions>
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
 
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
-    </div>
-  </ng-template>
-</igx-grid>
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="msgDateTime"
+      [sortable]="true"
+      header="Получено на"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+      [width]="'8%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="sourceType"
+      header="Вид източник"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'8%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="sanctionType"
+      header="Вид наказание"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'8%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="identifier"
+      header="ЕГН/ЛНЧ"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'8%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="birthDate"
+      [sortable]="true"
+      header="Дата на раждане"
+      dataType="date"
+      [formatter]="this.dateFormatService.formatDate"
+      [width]="'8%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="birthCountryName"
+      header="Месторождение (държава)"
+      [sortable]="true"
+      [dataType]="'string'"
+      width="10%"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="personName"
+      header="Имена"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="nationalities"
+      header="Гражданство 1,2"
+      [sortable]="true"
+      [dataType]="'string'"
+      width="10%"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="decisionInfo"
+      header="Акт"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'15%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="caseInfo"
+      header="Дело"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'15%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="sanctionEndDate"
+      [sortable]="true"
+      header="Крайна дата"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+      [width]="'8%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      width="100px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [width]="'5%'"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <a
+            [title]="'Преглед'"
+            [routerLink]="['/pages/isin/select-bulletin', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+        </div>
+      </ng-template>
+    </igx-column>
+
+    <ng-template #pager let-grid>
+      <div class="tl-paginator">
+        <cais-grid-pager
+          [page]="remoteService.pagerParams.page"
+          [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount"
+          (pagerChange)="pagerChange($event)"
+        ></cais-grid-pager>
+      </div>
+    </ng-template>
+  </igx-grid>
+</nb-card>

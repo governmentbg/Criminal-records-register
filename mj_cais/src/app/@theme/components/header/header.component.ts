@@ -116,8 +116,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  changeTheme(themeName: string) {
-    this.themeService.changeTheme(themeName);
+  changeTheme() {
+    const currentTheme = this.themeService.currentTheme;
+    console.log('currentTheme', currentTheme);
+    if(currentTheme == 'default') {
+      this.themeService.changeTheme('dark');
+    } else {
+      this.themeService.changeTheme('default');
+    }
+  
+    
   }
 
   toggleSidebar(): boolean {
@@ -132,7 +140,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToHelp(){
-    debugger;
     this.router.navigateByUrl("pages/help");
     return false;
   }
