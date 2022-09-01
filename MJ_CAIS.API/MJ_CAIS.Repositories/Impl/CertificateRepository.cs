@@ -98,10 +98,10 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<ACertificate> GetCertificateWithDocumentContent(string certificateID)
         {
-            return await _dbContext.ACertificates
+            return await _dbContext.ACertificates.AsNoTracking()
                 .Include(c => c.Doc)
-                .ThenInclude(d => d.DocContent)
-                .Include(c => c.Application)
+                .ThenInclude(d => d.DocContent).AsNoTracking()
+                .Include(c => c.Application).AsNoTracking()
                 .Where(x => x.Id == certificateID)
                 .FirstOrDefaultAsync();
         }

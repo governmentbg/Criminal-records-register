@@ -292,7 +292,7 @@ namespace MJ_CAIS.ExternalWebServices
                 msg.Id = BaseEntity.GenerateNewId();
                 msg.EmailAddress = certificate.Application.Email;
                 msg.CertificateId = certificate.Id;
-                msg.Certificate = certificate;
+               // msg.Certificate = certificate;
                 msg.Status = EdeliveryConstants.EdeliveryStatuses.Pending;
                 msg.EntityState = EntityStateEnum.Added;
                 _certificateRepository.ApplyChanges(msg, new List<IBaseIdEntity>());

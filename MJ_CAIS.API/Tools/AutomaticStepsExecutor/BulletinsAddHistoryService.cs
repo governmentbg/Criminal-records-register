@@ -44,7 +44,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, IConfiguration config, int numberOfPage = 0)
         {
           
             var result = await Task.FromResult(

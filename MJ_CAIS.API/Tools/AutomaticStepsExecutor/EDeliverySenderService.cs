@@ -80,7 +80,7 @@ namespace AutomaticStepsExecutor
 
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, IConfiguration config, int numberOfPage = 0)
         {
             var sysParam = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.EDELIVERY_NUMBER_OF_ATTEMPTS).FirstOrDefaultAsync();
             if(sysParam==null || sysParam.ValueNumber == null)
@@ -93,6 +93,7 @@ namespace AutomaticStepsExecutor
                                  .Where(msg=>msg.Status== EdeliveryConstants.EdeliveryStatuses.Pending ||
                                  (msg.Status==EdeliveryConstants.EdeliveryStatuses.Failed && msg.Attempts<sysParam.ValueNumber))
                                  .OrderBy(a => a.CreatedOn)
+                                 .Skip(numberOfPage*pageSize)
                                  .Take(pageSize)
                                  .ToList()
 
