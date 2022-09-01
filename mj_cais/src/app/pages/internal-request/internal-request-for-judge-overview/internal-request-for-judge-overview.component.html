@@ -17,19 +17,27 @@
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
-  <igx-grid-toolbar style="padding-left: 0.8rem">
-    <igx-grid-toolbar-title>Заявки за съдия</igx-grid-toolbar-title>
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold"
+        >Заявки за реабилитация</span
+      ></igx-grid-toolbar-title
+    >
     <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <nb-toggle
-          (checkedChange)="onShowAllChange($event)"
-          status="info"
-          labelPosition="left"
-          >Всички</nb-toggle
-        >
+      <div class="d-flex gap-3">
+        <div class="ml-auto">
+          <nb-toggle
+            (checkedChange)="onShowAllChange($event)"
+            status="info"
+            labelPosition="left"
+            >Всички</nb-toggle
+          >
+        </div>
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
       </div>
     </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
+
   <igx-column
     field="id"
     header="Идентификатор"
@@ -85,28 +93,33 @@
   </igx-column>
 
   <igx-column
-    width="100px"
-    header=""
+    width="120px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [queryParams]="{ activeTab: 'for-judge' }"
-        [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        *ngIf="hideStatus"
-        [title]="'Обработка'"
-        [queryParams]="{ activeTab: 'for-judge' }"
-        [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="far" icon="paper-plane"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <a
+            [title]="'Преглед'"
+            [queryParams]="{ activeTab: 'for-judge' }"
+            [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+          <a
+            *ngIf="hideStatus"
+            [title]="'Обработка'"
+            [queryParams]="{ activeTab: 'for-judge' }"
+            [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
+          >
+            <nb-icon pack="far" icon="paper-plane"></nb-icon>
+          </a>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
 
