@@ -18,7 +18,14 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Подлежащи на заличаване</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold"
+        >Подлежащи на заличаване</span
+      ></igx-grid-toolbar-title
+    >
+    <igx-grid-toolbar-actions>
+      <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
   <igx-column
     field="id"
@@ -100,32 +107,37 @@
   </igx-column>
 
   <igx-column
-    width="150px"
-    header=""
+    width="140px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <button
-        igxButton="icon"
-        [title]="'Заличи'"
-        (click)="openDestructionConfirmationDialog(cell.rowData.id)"
-      >
-        <nb-icon pack="fa" icon="trash"></nb-icon>
-      </button>
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <button
+            igxButton="icon"
+            [title]="'Заличи'"
+            (click)="openDestructionConfirmationDialog(cell.rowData.id)"
+          >
+            <nb-icon pack="fa" icon="trash"></nb-icon>
+          </button>
+          <a
+            [title]="'Преглед'"
+            [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+          <a
+            [title]="'Редактиране'"
+            [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="pen"></nb-icon>
+          </a>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
 

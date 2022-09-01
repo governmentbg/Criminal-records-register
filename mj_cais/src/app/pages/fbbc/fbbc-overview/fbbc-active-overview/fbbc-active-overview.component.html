@@ -18,19 +18,31 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Актуални сведения</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold">Актуални сведения</span>
+    </igx-grid-toolbar-title>
     <igx-grid-toolbar-actions>
-      <div class="ml-auto">
-        <a
-          nbButton
-          matRipple
-          [status]="'success'"
-          [routerLink]="['/pages/fbbcs/create']"
-        >
-          <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Добавяне
-        </a>
+      <div class="d-flex gap-3">
+        <div class="ml-auto">
+          <a
+            nbButton
+            matRipple
+            [status]="'success'"
+            [routerLink]="['/pages/fbbcs/create']"
+          >
+            <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Добавяне
+          </a>
+        </div>
+        <div class="mt-1">
+          <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+        </div>
       </div>
     </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title></igx-grid-toolbar-title>
+    <igx-grid-toolbar-actions> </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
   <igx-column
@@ -124,25 +136,30 @@
   </igx-column>
 
   <igx-column
-    width="150px"
-    header=""
+    width="120px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <a
+            [title]="'Преглед'"
+            [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+          <a
+            [title]="'Редактиране'"
+            [routerLink]="['/pages/fbbcs/edit', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="pen"></nb-icon>
+          </a>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
   <ng-template #pager let-grid>

@@ -21,7 +21,12 @@
   [cellSelection]="'none'"
 >
   <igx-grid-toolbar>
-    <igx-grid-toolbar-title>Заличени</igx-grid-toolbar-title>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold">Заличени</span></igx-grid-toolbar-title
+    >
+    <igx-grid-toolbar-actions>
+      <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+    </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
   <igx-column
     field="id"
@@ -102,19 +107,24 @@
   </igx-column>
 
   <igx-column
-    width="150px"
-    header=""
+    width="100px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <a
+            [title]="'Преглед'"
+            [routerLink]="['/pages/fbbcs/preview', cell.rowData.id]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
 
