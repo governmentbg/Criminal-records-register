@@ -1,4 +1,5 @@
-import { Component, Injector, OnInit } from "@angular/core";
+import { Component, Injector, Input } from "@angular/core";
+
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
@@ -12,8 +13,8 @@ import { InternalRequestStatusType } from "../_models/internal-request-status.ty
   styleUrls: ["./internal-request-inbox-overview.component.scss"],
 })
 export class InternalRequestInboxOverviewComponent extends RemoteGridWithStatePersistance<
-  InternalRequestMailBoxGridModel,
-  InternalRequestMailBoxGridService
+InternalRequestMailBoxGridModel,
+InternalRequestMailBoxGridService
 > {
   constructor(
     service: InternalRequestMailBoxGridService,
@@ -24,7 +25,8 @@ export class InternalRequestInboxOverviewComponent extends RemoteGridWithStatePe
     super("bulletins-search", service, injector);
     this.service.updateUrlStatus(InternalRequestStatusType.Inbox, false);
   }
-
+  @Input()
+  caisTitle: string;
   public hideStatus: boolean = true;
 
   ngOnInit() {
