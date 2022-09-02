@@ -5,6 +5,13 @@ import { RoleNameEnum } from "../@core/constants/role-name.enum";
 @Injectable()
 export class PagesMenu {
   constructor(iconsLibrary: NbIconLibraries) {
+
+    iconsLibrary.registerFontPack("material-icons", {
+      packClass: "material-icons",
+      ligature: true
+    });
+    iconsLibrary.setDefaultPack("material-icons");
+
     iconsLibrary.registerFontPack("fa", {
       packClass: "fa",
       iconClassPrefix: "fa",
@@ -17,6 +24,16 @@ export class PagesMenu {
       packClass: "fas",
       iconClassPrefix: "fa",
     });
+    iconsLibrary.registerFontPack("fas", {
+      packClass: "fas",
+      iconClassPrefix: "fa",
+    });
+
+
+    iconsLibrary.registerFontPack('material-icons', {
+      packClass: "material-icons",
+      ligature: true,
+    });
   }
 
   hasNoRole(roles: string[], role: string): boolean {
@@ -26,10 +43,10 @@ export class PagesMenu {
   getMenuItems(roles: string[]): NbMenuItem[] {
     const dashboardMenu: NbMenuItem[] = [
       {
-        title: "",
+        title: "Табло",
         link: "/pages/home",
         home: true,
-        hidden: true,
+        icon: { icon: "home", pack: "fa" }
       },
       {
         title: "Лица",
@@ -41,7 +58,7 @@ export class PagesMenu {
       },
       {
         title: "Свидетелства",
-        icon: { icon: "file-alt", pack: "fa" },
+        icon: { icon: "file-text-outline", pack: "eva" },
         hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
         children: [
           {
@@ -68,7 +85,7 @@ export class PagesMenu {
       },
       {
         title: "E-Свидетелства",
-        icon: { icon: "file-alt", pack: "fa" },
+        icon: { icon: "file-add-outline", pack: "eva" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -118,7 +135,7 @@ export class PagesMenu {
       },
       {
         title: "Бюлетини",
-        icon: { icon: "file-alt", pack: "fa" },
+        icon: "pie_chart",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
           this.hasNoRole(roles, RoleNameEnum.Judge),
@@ -153,11 +170,11 @@ export class PagesMenu {
           },
         ],
       },
-     
-    
+
+
       {
         title: "За решение от съдия/юрист",
-        icon: "message-circle-outline",
+        icon: { icon: "balance-scale", pack: "fa" },
         hidden: this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
@@ -180,7 +197,7 @@ export class PagesMenu {
       },
       {
         title: "Осъдени в чужбина",
-        icon: { icon: "file-alt", pack: "fa" },
+        icon: { icon: "globe-2-outline", pack: "eva" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -199,7 +216,7 @@ export class PagesMenu {
       },
       {
         title: "ECRIS",
-        icon: "layout-outline",
+        icon: "bookmark",
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -230,9 +247,9 @@ export class PagesMenu {
         link: "/pages/isin/new",
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
       },
-     
-     
-   
+
+
+
       {
         title: "Справки",
         icon: { icon: "tasks", pack: "fas" },
