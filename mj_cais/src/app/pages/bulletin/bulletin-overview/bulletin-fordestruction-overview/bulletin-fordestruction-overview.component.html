@@ -125,13 +125,14 @@
         <div class="cell-center">
           <div class="d-flex gap-3">
             <a
+              class="mt-1"
               [title]="'Преглед'"
               [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
             >
               <nb-icon pack="fa" icon="eye"></nb-icon>
             </a>
             <button
-              igxButton="icon"
+              class="btn btn-link"
               [title]="'Унищожаване'"
               (click)="openDestructionConfirmationDialog(cell.rowData.id)"
             >

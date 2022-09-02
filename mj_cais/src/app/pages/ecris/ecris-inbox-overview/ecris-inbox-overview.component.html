@@ -1,128 +1,59 @@
 <nb-card>
-  <igx-grid
-    #grid
-    igxGridState
-    [data]="items$ | async"
-    [height]="null"
-    [filterStrategy]="noopFilterStrategy"
-    [sortStrategy]="noopSortStrategy"
-    [paging]="true"
-    [clipboardOptions]="{ copyHeaders: false }"
-    [displayDensity]="'cosy'"
-    (onSortingDone)="sortingDone($event)"
-    (onFilteringDone)="filteringDone($event)"
-    (onSelection)="cellSelection($event)"
-    [paginationTemplate]="pager"
-    [allowFiltering]="true"
-    [primaryKey]="'id'"
-    [pinning]="pinningConfig"
-    [cellSelection]="'none'"
-  >
+  <igx-grid #grid igxGridState [data]="items$ | async" [height]="null" [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy" [paging]="true" [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'" (onSortingDone)="sortingDone($event)" (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)" [paginationTemplate]="pager" [allowFiltering]="true" [primaryKey]="'id'"
+    [pinning]="pinningConfig" [cellSelection]="'none'">
     <igx-grid-toolbar>
       <igx-grid-toolbar-title>
-        <span class="fw-bold">Входящи съобщения</span></igx-grid-toolbar-title
-      >
+        <span class="fw-bold">Входящи съобщения</span></igx-grid-toolbar-title>
       <igx-grid-toolbar-actions>
         <div class="d-flex gap-2">
           <div class="ml-2">
-            <nb-toggle
-              (checkedChange)="onShowAllMessageChange($event)"
-              status="info"
-              labelPosition="left"
-              >Всички съобщения</nb-toggle
-            >
+            <nb-toggle (checkedChange)="onShowAllMessageChange($event)" status="info" labelPosition="left">Всички
+              съобщения</nb-toggle>
           </div>
           <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
         </div>
       </igx-grid-toolbar-actions>
     </igx-grid-toolbar>
 
-    <igx-column
-      field="id"
-      header="id"
-      [sortable]="true"
-      [dataType]="'string'"
-      [hidden]="true"
-    >
+    <igx-column field="id" header="id" [sortable]="true" [dataType]="'string'" [hidden]="true">
     </igx-column>
-    <igx-column
-      field="importedOn"
-      header="Дата на получаване"
-      [sortable]="true"
-      [dataType]="'date'"
-      [formatter]="this.dateFormatService.formatDate"
-    >
+    <igx-column field="importedOn" header="Дата на получаване" [sortable]="true" [dataType]="'date'"
+      [formatter]="this.dateFormatService.formatDate">
       <ng-template igxCell let-cell="cell">
         <span [title]="this.dateFormatService.displayDateTime(cell.value)">
           {{ this.dateFormatService.displayDateTime(cell.value) }}
         </span>
       </ng-template>
     </igx-column>
-    <igx-column
-      field="statusName"
-      header="Статус"
-      [sortable]="true"
-      [dataType]="'string'"
-      [hidden]="hideStatus"
-    >
+    <igx-column field="statusName" header="Статус" [sortable]="true" [dataType]="'string'" [hidden]="hideStatus">
     </igx-column>
 
-    <igx-column
-      field="error"
-      header="Описание на грешката"
-      [sortable]="true"
-      [dataType]="'string'"
-    >
+    <igx-column field="error" header="Описание на грешката" [sortable]="true" [dataType]="'string'">
     </igx-column>
-    <igx-column
-      field="ecrisMsgId"
-      header="ECRIS Message ID"
-      [sortable]="true"
-      [dataType]="'string'"
-      [hidden]="hideStatus"
-    >
+    <igx-column field="ecrisMsgId" header="ECRIS Message ID" [sortable]="true" [dataType]="'string'"
+      [hidden]="hideStatus">
     </igx-column>
 
-    <igx-column
-      field="hasError"
-      header="Възникнала грешка"
-      [sortable]="true"
-      [dataType]="'boolean'"
-      [hidden]="hideStatus"
-    ></igx-column>
+    <igx-column field="hasError" header="Възникнала грешка" [sortable]="true" [dataType]="'boolean'"
+      [hidden]="hideStatus"></igx-column>
 
-    <igx-column
-      width="140px"
-      header="Действия"
-      [sortable]="false"
-      [filterable]="false"
-      [pinned]="true"
-      [disableHiding]="true"
-    >
+    <igx-column width="140px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="true"
+      [disableHiding]="true">
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <div class="d-flex gap-3">
-            <a
-              class="mt-2"
-              [title]="'Преглед'"
-              [routerLink]="['/pages/ecris/inbox/preview', cell.rowData.id]"
-            >
+            <a [title]="'Преглед'" [routerLink]="['/pages/ecris/inbox/preview', cell.rowData.id]">
               <nb-icon pack="fa" icon="eye"></nb-icon>
             </a>
 
-            <button
-              igxButton="icon"
-              [title]="'Изтегляне на xml'"
-              (click)="downloadXml(cell.rowData.id)"
-            >
+            <button class="btn btn-link" [title]="'Изтегляне на xml'" (click)="downloadXml(cell.rowData.id)">
               <nb-icon pack="fa" icon="download"></nb-icon>
             </button>
 
-            <button
-              igxButton="icon"
-              [title]="'Изтегляне на xml'"
-              (click)="downloadXmlTraits(cell.rowData.id)"
-            >
+            <button class="btn btn-link" [title]="'Изтегляне на xml'" (click)="downloadXmlTraits(cell.rowData.id)">
               <nb-icon pack="fa" icon="file-download"></nb-icon>
             </button>
           </div>
@@ -132,12 +63,8 @@
 
     <ng-template #pager let-grid>
       <div class="tl-paginator">
-        <cais-grid-pager
-          [page]="remoteService.pagerParams.page"
-          [perPage]="remoteService.pagerParams.perPage"
-          [totalCount]="remoteService.pagerParams.totalCount"
-          (pagerChange)="pagerChange($event)"
-        ></cais-grid-pager>
+        <cais-grid-pager [page]="remoteService.pagerParams.page" [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount" (pagerChange)="pagerChange($event)"></cais-grid-pager>
       </div>
     </ng-template>
   </igx-grid>

@@ -172,12 +172,14 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   justify-content: center;
   height: 100%;
   width: 100%;
-
 }
 
-.cell-center a {
+.cell-center a , .btn-link {
   color: #0000009E;
 }
+.cell-center .btn-link {
+ padding:0px;
+} 
 
 
 .ng-select {
