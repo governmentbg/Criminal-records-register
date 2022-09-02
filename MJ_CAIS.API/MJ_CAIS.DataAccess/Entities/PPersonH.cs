@@ -38,6 +38,9 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? SurnameLat { get; set; }
         public string? FamilynameLat { get; set; }
         public string? FullnameLat { get; set; }
+        public string? Tablename { get; set; }
+        public string? TableId { get; set; }
+        public string? Descr { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

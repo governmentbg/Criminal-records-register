@@ -33,7 +33,12 @@ export class BulletinForDestructionOverviewComponent extends RemoteGridWithState
 
   public openDestructionConfirmationDialog(bulletinId: string) {
     this.dialogService
-      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "danger",
+        },
+        closeOnBackdropClick: false,
+      })
       .onClose.subscribe((result) => {
         if (result) {
           this.service

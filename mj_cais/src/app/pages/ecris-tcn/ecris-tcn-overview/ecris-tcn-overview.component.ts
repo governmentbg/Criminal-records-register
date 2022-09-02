@@ -45,7 +45,12 @@ export class EcrisTcnOverviewComponent extends RemoteGridWithStatePersistance<
 
   changeToApproved = (id: string) => {
     this.dialogService
-      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "success",
+        },
+        closeOnBackdropClick: false,
+      })
       .onClose.subscribe((result) => {
         if (result) {
           this.service
@@ -60,7 +65,12 @@ export class EcrisTcnOverviewComponent extends RemoteGridWithStatePersistance<
 
   changeToCancelled = (id: string) => {
     this.dialogService
-      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "danger",
+        },
+        closeOnBackdropClick: false,
+      })
       .onClose.subscribe((result) => {
         if (result) {
           this.service

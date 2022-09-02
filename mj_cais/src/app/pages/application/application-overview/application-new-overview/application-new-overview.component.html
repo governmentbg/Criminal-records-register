@@ -44,6 +44,7 @@
       header="ЕГН;ЛНЧ"
       [sortable]="true"
       [dataType]="'string'"
+      [filters]="containsOnlyFilteringOperand"
     >
       <ng-template igxCell let-cell="cell">
         <span [title]="cell.value">{{ cell.value }}</span>

@@ -40,6 +40,15 @@ export class PagesMenu {
     return roles.indexOf(role) === -1;
   }
 
+  hasRole(roles: string[], reqiredRoles: string[]): boolean {
+    reqiredRoles.forEach(role => {
+      if(roles.indexOf(role) !== 1){
+        return false;
+      }
+    })
+    return true ;
+  }
+
   getMenuItems(roles: string[]): NbMenuItem[] {
     const dashboardMenu: NbMenuItem[] = [
       {
@@ -186,8 +195,9 @@ export class PagesMenu {
             link: "/pages/applications/tax-free",
           },
           {
-            title: "За подпис от съдия/юрист",
+            title: "За подпис от юрист",
             link: "/pages/applications/for-signing-by-judge",
+            hidden: !this.hasRole(roles, [RoleNameEnum.Judge, RoleNameEnum.CentralAuth]),
           },
           {
             title: "За избор на бюлетини",

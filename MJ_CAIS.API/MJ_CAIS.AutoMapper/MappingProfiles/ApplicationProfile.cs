@@ -10,6 +10,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         public ApplicationProfile()
         {
             CreateMap<AApplication, ApplicationGridDTO>()
+                .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.StatusCodeNavigation.Name))
                 .ForMember(d => d.Identificatiors, opt => opt.MapFrom(src => src.Egn + ";" + src.Lnch))
                 .ForMember(d => d.CsAuthorityBirth, opt => opt.MapFrom(src => src.CsAuthorityBirth.Name));
 

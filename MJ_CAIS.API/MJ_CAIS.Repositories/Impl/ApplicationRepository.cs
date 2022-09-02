@@ -19,6 +19,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var result = this._dbContext
                 .Set<AApplication>()
+                .Include(x => x.StatusCodeNavigation)
                 .Include(x => x.CsAuthorityBirth)
                 .Include(x => x.ACertificates)
                 .AsNoTracking();
@@ -30,10 +31,11 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<ACertificate>> SelectAllCertificateAsync()
         {
-            var result = this._dbContext.ACertificates
+            var result = this._dbContext.Set<ACertificate>()
                 .Include(x => x.StatusCodeNavigation)
                 .Include(x => x.Application)
                     .ThenInclude(x => x.CsAuthorityBirth)
+                .Where(x => x.Application.CsAuthorityId == _userContext.CsAuthorityId)
                 .AsNoTracking();
 
             return await Task.FromResult(result);

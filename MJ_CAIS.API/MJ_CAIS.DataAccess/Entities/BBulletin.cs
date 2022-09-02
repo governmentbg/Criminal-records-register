@@ -110,6 +110,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public bool? BgCitizen { get; set; }
         public DateTime? ReviewDate { get; set; }
         public bool? IsAutoRehabilitation { get; set; }
+        public string? MigrationPersonDescr { get; set; }
 
         public virtual GCity? BirthCity { get; set; }
         public virtual GCountry? BirthCountry { get; set; }

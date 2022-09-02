@@ -7,8 +7,8 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public GExtAdministration()
         {
-            GUsersExts = new HashSet<GUsersExt>();
             GExtAdministrationUics = new HashSet<GExtAdministrationUic>();
+            GUsersExts = new HashSet<GUsersExt>();
         }
 
         public string Id { get; set; } = null!;
@@ -20,7 +20,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public DateTime? UpdatedOn { get; set; }
         public string? Role { get; set; }
 
-        public virtual ICollection<GUsersExt> GUsersExts { get; set; }
         public virtual ICollection<GExtAdministrationUic> GExtAdministrationUics { get; set; }
+        public virtual ICollection<GUsersExt> GUsersExts { get; set; }
     }
 }
