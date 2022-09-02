@@ -178,7 +178,7 @@ export class PagesMenu {
             link: "/pages/applications/tax-free",
           },
           {
-            title: "За подпис от съдия/юрист",
+            title: "За подпис от юрист",
             link: "/pages/applications/for-signing-by-judge",
             hidden: !this.hasRole(roles, [RoleNameEnum.Judge, RoleNameEnum.CentralAuth]),
           },
