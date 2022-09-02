@@ -159,7 +159,7 @@
             *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
             [title]="'Потвърди'"
             (click)="
-              changeStatus(
+              approveStatus(
                 cell.rowData.id,
                 BulletinEventsStatusTypeEnum.Approved
               )
@@ -171,7 +171,7 @@
             *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
             [title]="'Отхвърли'"
             (click)="
-              changeStatus(
+              rejectStatus(
                 cell.rowData.id,
                 BulletinEventsStatusTypeEnum.Rejected
               )

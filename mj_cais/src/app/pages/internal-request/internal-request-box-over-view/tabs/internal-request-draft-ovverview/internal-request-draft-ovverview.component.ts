@@ -8,6 +8,8 @@ import { InternalRequestStatusCodeConstants } from "../../../internal-request-fo
 import { InternalRequestMailBoxGridService } from "../_data/internal-request-mail-box-grid.service";
 import { InternalRequestMailBoxGridModel } from "../_models/internal-request-mail-box-grid.model";
 import { InternalRequestStatusType } from "../_models/internal-request-status.type";
+import { NbDialogService } from "@nebular/theme";
+import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 
 @Component({
   selector: "cais-internal-request-draft-ovverview",
@@ -18,15 +20,14 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
   InternalRequestMailBoxGridModel,
   InternalRequestMailBoxGridService
 > {
-
   @Input() caisTitle: string;
- 
-  
+
   constructor(
     service: InternalRequestMailBoxGridService,
     public internalRequestFormService: InternalRequestService,
     injector: Injector,
     public dateFormatService: DateFormatService,
+    private dialogService: NbDialogService,
     private loaderService: NgxSpinnerService
   ) {
     super("bulletins-search", service, injector);
@@ -35,35 +36,55 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
 
   public hideStatus: boolean = true;
 
-
-
   ngOnInit() {
     super.ngOnInit();
   }
 
   public onSend(id) {
-    this.loaderService.show();
-    this.changeStatus(id, InternalRequestStatusCodeConstants.Sent);
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "success",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.loaderService.show();
+          this.changeStatus(id, InternalRequestStatusCodeConstants.Sent);
+        }
+      });
   }
 
   public onDelete(id) {
-    this.loaderService.show();
-    this.internalRequestFormService.delete(id).subscribe(
-      (res) => {
-        this.loaderService.hide();
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "danger",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.loaderService.show();
+          this.internalRequestFormService.delete(id).subscribe(
+            (res) => {
+              this.loaderService.hide();
 
-        this.toastr.showToast("success", "Успешно изтрита заявка");
-        this.ngOnInit();
-      },
-      (error) => {
-        var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast(
-          "danger",
-          "Грешка при изпращане на заявка:",
-          errorText
-        );
-      }
-    );
+              this.toastr.showToast("success", "Успешно изтрита заявка");
+              this.ngOnInit();
+            },
+            (error) => {
+              var errorText = error.status + " " + error.statusText;
+              this.toastr.showBodyToast(
+                "danger",
+                "Грешка при изпращане на заявка:",
+                errorText
+              );
+            }
+          );
+        }
+      });
   }
 
   private changeStatus(id: string, status: string) {

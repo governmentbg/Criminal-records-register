@@ -33,7 +33,12 @@ export class FbbcForDestructionOverviewComponent extends RemoteGridWithStatePers
 
   public openDestructionConfirmationDialog(fbbcId: string) {
     this.dialogService
-      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "danger",
+        },
+        closeOnBackdropClick: false,
+      })
       .onClose.subscribe((result) => {
         if (result) {
           this.service

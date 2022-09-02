@@ -159,24 +159,14 @@
           <a
             *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
             [title]="'Потвърди'"
-            (click)="
-              changeStatus(
-                cell.rowData.id,
-                BulletinEventsStatusTypeEnum.Approved
-              )
-            "
+            (click)="approveStatus(cell.rowData.id)"
           >
             <nb-icon pack="fa" icon="check"></nb-icon>
           </a>
           <a
             *ngIf="cell.rowData.statusCode == BulletinEventsStatusTypeEnum.New"
             [title]="'Отхвърли'"
-            (click)="
-              changeStatus(
-                cell.rowData.id,
-                BulletinEventsStatusTypeEnum.Rejected
-              )
-            "
+            (click)="rejectStatus(cell.rowData.id)"
           >
             <i class="fas fa-times"></i>
           </a>
