@@ -55,11 +55,11 @@ export class PagesMenu {
         title: "Табло",
         link: "/pages/home",
         home: true,
-        icon: { icon: "home", pack: "fa" }
+        icon: { icon: "dashboard"}
       },
       {
         title: "Лица",
-        icon: "people-outline",
+        icon: {icon: "group"},
         link: "/pages/people",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
@@ -109,7 +109,7 @@ export class PagesMenu {
       },
       {
         title: "Заявки",
-        icon: { icon: "mail-bulk", pack: "fa" },
+        icon: { icon: "outgoing_mail" },
         link: "/pages/internal-requests",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
@@ -117,7 +117,7 @@ export class PagesMenu {
       },
       {
         title: "Справка за съдимост",
-        icon: { icon: "id-card", pack: "fas" },
+        icon: { icon: "folder_shared" },
         hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
         children: [
           {
@@ -144,7 +144,7 @@ export class PagesMenu {
       },
       {
         title: "Бюлетини",
-        icon: "pie_chart",
+        icon: { icon: "inventory_2" },
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
           this.hasNoRole(roles, RoleNameEnum.Judge),
@@ -183,7 +183,7 @@ export class PagesMenu {
 
       {
         title: "За решение от съдия/юрист",
-        icon: { icon: "balance-scale", pack: "fa" },
+        icon: { icon: "balance" },
         hidden: this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
@@ -207,7 +207,7 @@ export class PagesMenu {
       },
       {
         title: "Осъдени в чужбина",
-        icon: { icon: "globe-2-outline", pack: "eva" },
+        icon: { icon: "public" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -226,7 +226,7 @@ export class PagesMenu {
       },
       {
         title: "ECRIS",
-        icon: "bookmark",
+        icon: "web",
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -253,7 +253,7 @@ export class PagesMenu {
       },
       {
         title: "Изтърпени наказания",
-        icon: "shuffle-2-outline",
+        icon: "fact_check",
         link: "/pages/isin/new",
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
       },
@@ -290,7 +290,7 @@ export class PagesMenu {
       },
       {
         title: "Журнал на Е-справки",
-        icon: { icon: "file-alt", pack: "fa" },
+        icon: { icon: "rule" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
