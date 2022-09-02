@@ -67,7 +67,7 @@ export class EcrisTcnOverviewComponent extends RemoteGridWithStatePersistance<
     this.dialogService
       .open(ConfirmDialogComponent, {
         context: {
-          color: "success",
+          color: "danger",
         },
         closeOnBackdropClick: false,
       })
