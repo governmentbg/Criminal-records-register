@@ -38,10 +38,12 @@ export class BulletinNewOfficeOverviewComponent extends RemoteGridWithStatePersi
   }
 
   public openUpdateConfirmationDialog(bulletinId: string) {
-    let dialogRef = this.dialogService.open(
-      ConfirmDialogComponent,
-      CommonConstants.defaultDialogConfig
-    );
+    let dialogRef = this.dialogService.open(ConfirmDialogComponent, {
+      context: {
+        color: "success",
+      },
+      closeOnBackdropClick: false,
+    });
 
     dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
       "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
