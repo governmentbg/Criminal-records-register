@@ -115,6 +115,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<NIntternalReqType> NIntternalReqTypes { get; set; } = null!;
         public virtual DbSet<NReqStatus> NReqStatuses { get; set; } = null!;
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
+        public virtual DbSet<PPersonAlias> PPersonAliases { get; set; } = null!;
         public virtual DbSet<PPersonCitizenship> PPersonCitizenships { get; set; } = null!;
         public virtual DbSet<PPersonH> PPersonHs { get; set; } = null!;
         public virtual DbSet<PPersonHCitizenship> PPersonHCitizenships { get; set; } = null!;
@@ -144,8 +145,11 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ZLog> ZLogs { get; set; } = null!;
         public virtual DbSet<ZPerson> ZPersons { get; set; } = null!;
         public virtual DbSet<ZPersonNationality> ZPersonNationalities { get; set; } = null!;
+        public virtual DbSet<ZRole> ZRoles { get; set; } = null!;
         public virtual DbSet<ZService> ZServices { get; set; } = null!;
         public virtual DbSet<ZSourcesDone> ZSourcesDones { get; set; } = null!;
+        public virtual DbSet<ZUser> ZUsers { get; set; } = null!;
+        public virtual DbSet<ZUserRole> ZUserRoles { get; set; } = null!;
         public virtual DbSet<ZZService> ZZServices { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -482,6 +486,10 @@ namespace MJ_CAIS.DataAccess
                 entity.HasIndex(e => e.LnId, "XIF_LN_APPLICATIONS");
 
                 entity.HasIndex(e => e.SuidId, "XIF_SUID_APPLICATIONS");
+
+                entity.HasIndex(e => e.WApplicationId, "XIF_W_APPLICATION_ID");
+
+                entity.HasIndex(e => new { e.CsAuthorityId, e.StatusCode }, "XI_STATIS_AUTH_A_APPLICATIONS");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -2398,6 +2406,8 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("MIGRATION_BULLETIN_ID");
+
+                entity.Property(e => e.MigrationPersonDescr).HasColumnName("MIGRATION_PERSON_DESCR");
 
                 entity.Property(e => e.MotherFamilyname)
                     .HasMaxLength(200)
@@ -4456,6 +4466,9 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("E_ECRIS_IDENTIFICATION");
 
+                entity.HasIndex(e => new { e.EcrisMsgId, e.GraoPersonId }, "UK_ECR_IDENT")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.EcrisMsgId, "XIF1E_ECRIS_IDENTIFICATION");
 
                 entity.HasIndex(e => e.GraoPersonId, "XIF3E_ECRIS_IDENTIFICATION");
@@ -5428,6 +5441,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
+                entity.Property(e => e.AccessCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ACCESS_CODE");
+
                 entity.Property(e => e.Amount)
                     .HasColumnType("NUMBER(18,2)")
                     .HasColumnName("AMOUNT");
@@ -5461,11 +5479,6 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("PAYMENT_STATUS");
-
-                entity.Property(e => e.AccessCode)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ACCESS_CODE");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
@@ -6921,12 +6934,11 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("VERSION");
             });
 
-
             modelBuilder.Entity<GExtAdministrationUic>(entity =>
             {
                 entity.ToTable("G_EXT_ADMINISTRATION_UICS");
 
-                entity.HasIndex(e => new { e.AdministrationId, e.Value }, "UK_EXT_ADM_UIC_EXT_ADM")
+                entity.HasIndex(e => new { e.ExtAdmId, e.Value }, "UK_EXT_ADM_UIC_EXT_ADM")
                     .IsUnique();
 
                 entity.Property(e => e.Id)
@@ -6943,11 +6955,15 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
-                entity.Property(e => e.AdministrationId)
-                    .IsRequired()
+                entity.Property(e => e.ExtAdmId)
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("EXT_ADM_ID");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("NAME");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
@@ -6959,24 +6975,17 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("UPDATED_ON");
 
                 entity.Property(e => e.Value)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("VALUE");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("NAME");
 
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER")
                     .HasColumnName("VERSION");
 
-                entity.HasOne(d => d.Administration)
+                entity.HasOne(d => d.ExtAdm)
                     .WithMany(p => p.GExtAdministrationUics)
-                    .HasForeignKey(d => d.AdministrationId)
+                    .HasForeignKey(d => d.ExtAdmId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_G_EXT_ADM_UICS_G_EXT_ADM");
             });
@@ -7261,6 +7270,10 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("ID");
 
+                entity.Property(e => e.AccessFailedCount)
+                    .HasPrecision(10)
+                    .HasColumnName("ACCESS_FAILED_COUNT");
+
                 entity.Property(e => e.Active)
                     .HasPrecision(1)
                     .HasColumnName("ACTIVE");
@@ -7269,6 +7282,11 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ADMINISTRATION_ID");
+
+                entity.Property(e => e.ConcurrencyStamp)
+                    .HasMaxLength(256)
+                    .IsUnicode(false)
+                    .HasColumnName("CONCURRENCY_STAMP");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(200)
@@ -7286,15 +7304,64 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("EMAIL");
 
+                entity.Property(e => e.EmailConfirmed)
+                    .HasPrecision(1)
+                    .HasColumnName("EMAIL_CONFIRMED");
+
                 entity.Property(e => e.IsAdmin)
                     .HasPrecision(1)
                     .HasColumnName("IS_ADMIN");
+
+                entity.Property(e => e.LockoutEnabled)
+                    .HasPrecision(1)
+                    .HasColumnName("LOCKOUT_ENABLED");
+
+                entity.Property(e => e.LockoutEndDateUtc)
+                    .HasPrecision(6)
+                    .HasColumnName("LOCKOUT_END_DATE_UTC");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.NormalizedEmail)
+                    .HasMaxLength(200)
+                    .IsUnicode(false)
+                    .HasColumnName("NORMALIZED_EMAIL");
+
+                entity.Property(e => e.NormalizedUserName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("NORMALIZED_USER_NAME");
+
+                entity.Property(e => e.PasswordHash)
+                    .HasMaxLength(256)
+                    .IsUnicode(false)
+                    .HasColumnName("PASSWORD_HASH");
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(256)
+                    .IsUnicode(false)
+                    .HasColumnName("PHONE_NUMBER");
+
+                entity.Property(e => e.PhoneNumberConfirmed)
+                    .HasPrecision(1)
+                    .HasColumnName("PHONE_NUMBER_CONFIRMED");
+
                 entity.Property(e => e.Position).HasColumnName("POSITION");
+
+                entity.Property(e => e.RegCertSubject)
+                    .IsUnicode(false)
+                    .HasColumnName("REG_CERT_SUBJECT");
+
+                entity.Property(e => e.SecurityStamp)
+                    .HasMaxLength(256)
+                    .IsUnicode(false)
+                    .HasColumnName("SECURITY_STAMP");
+
+                entity.Property(e => e.TwoFactorEnabled)
+                    .HasPrecision(1)
+                    .HasColumnName("TWO_FACTOR_ENABLED");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(200)
@@ -7304,17 +7371,14 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("UPDATED_ON");
 
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("USER_NAME");
+
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
-
-                entity.Property(e => e.RegCertSubject)
-                    .HasMaxLength(200)
-                    .HasColumnName("REG_CERT_SUBJECT");
-
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(100)
-                    .HasColumnName("USER_NAME");
 
                 entity.HasOne(d => d.Administration)
                     .WithMany(p => p.GUsersExts)
@@ -7755,6 +7819,220 @@ namespace MJ_CAIS.DataAccess
                     .HasConstraintName("FK_P_PERSON_G_COUNTRIES");
             });
 
+            modelBuilder.Entity<PPersonAlias>(entity =>
+            {
+                entity.ToTable("P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.BirthCountryId, "XIF2P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.BirthCityId, "XIF3P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.CountryId1, "XIF41P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.CountryId2, "XIF42P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.CountryId3, "XIF43P_PERSON_ALIASES");
+
+                entity.HasIndex(e => e.CountryId4, "XIF44P_PERSON_ALIASES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.BirthCityId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BIRTH_CITY_ID");
+
+                entity.Property(e => e.BirthCountryId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BIRTH_COUNTRY_ID");
+
+                entity.Property(e => e.BirthDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("BIRTH_DATE");
+
+                entity.Property(e => e.BirthDatePrec)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("BIRTH_DATE_PREC");
+
+                entity.Property(e => e.BirthPlaceOther).HasColumnName("BIRTH_PLACE_OTHER");
+
+                entity.Property(e => e.CountryId1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("COUNTRY_ID1");
+
+                entity.Property(e => e.CountryId2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("COUNTRY_ID2");
+
+                entity.Property(e => e.CountryId3)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("COUNTRY_ID3");
+
+                entity.Property(e => e.CountryId4)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("COUNTRY_ID4");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
+
+                entity.Property(e => e.Egn)
+                    .HasMaxLength(100)
+                    .HasColumnName("EGN");
+
+                entity.Property(e => e.EgnId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("EGN_ID");
+
+                entity.Property(e => e.Familyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FAMILYNAME");
+
+                entity.Property(e => e.FatherFamilyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_FAMILYNAME");
+
+                entity.Property(e => e.FatherFirstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_FIRSTNAME");
+
+                entity.Property(e => e.FatherFullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_FULLNAME");
+
+                entity.Property(e => e.FatherSurname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FATHER_SURNAME");
+
+                entity.Property(e => e.Firstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FIRSTNAME");
+
+                entity.Property(e => e.Fullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("FULLNAME");
+
+                entity.Property(e => e.Ln)
+                    .HasMaxLength(100)
+                    .HasColumnName("LN");
+
+                entity.Property(e => e.LnId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("LN_ID");
+
+                entity.Property(e => e.Lnch)
+                    .HasMaxLength(100)
+                    .HasColumnName("LNCH");
+
+                entity.Property(e => e.LnchId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("LNCH_ID");
+
+                entity.Property(e => e.MotherFamilyname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_FAMILYNAME");
+
+                entity.Property(e => e.MotherFirstname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_FIRSTNAME");
+
+                entity.Property(e => e.MotherFullname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_FULLNAME");
+
+                entity.Property(e => e.MotherSurname)
+                    .HasMaxLength(200)
+                    .HasColumnName("MOTHER_SURNAME");
+
+                entity.Property(e => e.PersonIdCsc)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERSON_ID_CSC");
+
+                entity.Property(e => e.PersonIdCscId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERSON_ID_CSC_ID");
+
+                entity.Property(e => e.PersonMigrationId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PERSON_MIGRATION_ID");
+
+                entity.Property(e => e.Sex)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("SEX");
+
+                entity.Property(e => e.Suid)
+                    .HasMaxLength(100)
+                    .HasColumnName("SUID");
+
+                entity.Property(e => e.SuidId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SUID_ID");
+
+                entity.Property(e => e.Surname)
+                    .HasMaxLength(200)
+                    .HasColumnName("SURNAME");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.HasOne(d => d.BirthCity)
+                    .WithMany(p => p.PPersonAliases)
+                    .HasForeignKey(d => d.BirthCityId)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_CITIES");
+
+                entity.HasOne(d => d.BirthCountry)
+                    .WithMany(p => p.PPersonAliasBirthCountries)
+                    .HasForeignKey(d => d.BirthCountryId)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_COUNTRIE");
+
+                entity.HasOne(d => d.CountryId1Navigation)
+                    .WithMany(p => p.PPersonAliasCountryId1Navigations)
+                    .HasForeignKey(d => d.CountryId1)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_COUN1");
+
+                entity.HasOne(d => d.CountryId2Navigation)
+                    .WithMany(p => p.PPersonAliasCountryId2Navigations)
+                    .HasForeignKey(d => d.CountryId2)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_COUN2");
+
+                entity.HasOne(d => d.CountryId3Navigation)
+                    .WithMany(p => p.PPersonAliasCountryId3Navigations)
+                    .HasForeignKey(d => d.CountryId3)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_COUN3");
+
+                entity.HasOne(d => d.CountryId4Navigation)
+                    .WithMany(p => p.PPersonAliasCountryId4Navigations)
+                    .HasForeignKey(d => d.CountryId4)
+                    .HasConstraintName("FK_P_PERSON_ALIASES_G_COUN4");
+            });
+
             modelBuilder.Entity<PPersonCitizenship>(entity =>
             {
                 entity.ToTable("P_PERSON_CITIZENSHIP");
@@ -7800,11 +8078,13 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.PPersonCitizenships)
                     .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_P_PERSON_CITIZENSHIP_G_COUN");
 
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.PPersonCitizenships)
                     .HasForeignKey(d => d.PersonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_P_PERSON_CITIZENSHIP_P_PERS");
             });
 
@@ -7812,9 +8092,21 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("P_PERSON_H");
 
+                entity.HasIndex(e => e.BirthDate, "XIBIRTH_D_PERSON_H");
+
                 entity.HasIndex(e => e.BirthCountryId, "XIF2P_PERSON_H");
 
                 entity.HasIndex(e => e.BirthCityId, "XIF3P_PERSON_H");
+
+                entity.HasIndex(e => e.Familyname, "XIFAMN_PERSON_H");
+
+                entity.HasIndex(e => e.Firstname, "XIFN_PERSON_H");
+
+                entity.HasIndex(e => e.Fullname, "XIFULLN_PERSON_H");
+
+                entity.HasIndex(e => e.Sex, "XISEX_D_PERSON_H");
+
+                entity.HasIndex(e => e.Surname, "XISN_PERSON_H");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -7847,6 +8139,8 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Descr).HasColumnName("DESCR");
 
                 entity.Property(e => e.Familyname)
                     .HasMaxLength(200)
@@ -7915,6 +8209,16 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.SurnameLat)
                     .HasMaxLength(200)
                     .HasColumnName("SURNAME_LAT");
+
+                entity.Property(e => e.TableId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("TABLE_ID");
+
+                entity.Property(e => e.Tablename)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("TABLENAME");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
@@ -8103,6 +8407,10 @@ namespace MJ_CAIS.DataAccess
                 entity.ToTable("P_PERSON_IDS_H");
 
                 entity.HasIndex(e => e.PersonHId, "XIF1P_PERSION_IDS_H");
+
+                entity.HasIndex(e => e.Pid, "XIPID_P_PERSON_IDS_H");
+
+                entity.HasIndex(e => new { e.Pid, e.PidTypeId }, "XIPID_T_P_PERSON_IDS_H");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
@@ -10979,6 +11287,53 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("SITE_ID");
             });
 
+            modelBuilder.Entity<ZRole>(entity =>
+            {
+                entity.HasKey(e => e.RoleId)
+                    .HasName("CSC_ROLES_PK");
+
+                entity.ToTable("Z_ROLES");
+
+                entity.HasIndex(e => e.RolesPk, "SYS_C0023692")
+                    .IsUnique();
+
+                entity.Property(e => e.RoleId)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ROLE_ID");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(150)
+                    .HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.Role)
+                    .HasMaxLength(32)
+                    .HasColumnName("ROLE");
+
+                entity.Property(e => e.RolesPk)
+                    .HasMaxLength(20)
+                    .HasColumnName("ROLES_PK");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+            });
+
             modelBuilder.Entity<ZService>(entity =>
             {
                 entity.HasNoKey();
@@ -11126,6 +11481,141 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("SOURCE_COURT");
+            });
+
+            modelBuilder.Entity<ZUser>(entity =>
+            {
+                entity.HasKey(e => e.UserId)
+                    .HasName("CSC_USERS_PK");
+
+                entity.ToTable("Z_USERS");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(20)
+                    .HasColumnName("USER_ID");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(150)
+                    .HasColumnName("ADDRESS");
+
+                entity.Property(e => e.CityCode)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("CITY_CODE");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.EmailUser)
+                    .HasMaxLength(32)
+                    .HasColumnName("EMAIL_USER");
+
+                entity.Property(e => e.Employment)
+                    .HasMaxLength(38)
+                    .HasColumnName("EMPLOYMENT");
+
+                entity.Property(e => e.ExpiryDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("EXPIRY_DATE");
+
+                entity.Property(e => e.FaxUser)
+                    .HasMaxLength(32)
+                    .HasColumnName("FAX_USER");
+
+                entity.Property(e => e.LockDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("LOCK_DATE");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.NamesUser)
+                    .HasMaxLength(255)
+                    .HasColumnName("NAMES_USER");
+
+                entity.Property(e => e.PassWord)
+                    .HasMaxLength(64)
+                    .HasColumnName("PASS_WORD");
+
+                entity.Property(e => e.PhonesUser)
+                    .HasMaxLength(32)
+                    .HasColumnName("PHONES_USER");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+
+                entity.Property(e => e.Status)
+                    .HasPrecision(2)
+                    .HasColumnName("STATUS");
+
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(32)
+                    .HasColumnName("USER_NAME");
+            });
+
+            modelBuilder.Entity<ZUserRole>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.RoleId })
+                    .HasName("CSC_USER_ROLES_PK");
+
+                entity.ToTable("Z_USER_ROLES");
+
+                entity.HasIndex(e => e.UserRolesPk, "SYS_C0023712")
+                    .IsUnique();
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(20)
+                    .HasColumnName("USER_ID");
+
+                entity.Property(e => e.RoleId)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("ROLE_ID");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATE_DATE");
+
+                entity.Property(e => e.CreatorId)
+                    .HasMaxLength(20)
+                    .HasColumnName("CREATOR_ID");
+
+                entity.Property(e => e.ModifierId)
+                    .HasMaxLength(20)
+                    .HasColumnName("MODIFIER_ID");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("MODIFY_DATE");
+
+                entity.Property(e => e.SiteId)
+                    .HasMaxLength(8)
+                    .HasColumnName("SITE_ID");
+
+                entity.Property(e => e.UserRolesPk)
+                    .HasMaxLength(20)
+                    .HasColumnName("USER_ROLES_PK");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.ZUserRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("CSC_USR_RLS_ROLES_FK");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ZUserRoles)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("CSC_USR_RLS_USERS_FK");
             });
 
             modelBuilder.Entity<ZZService>(entity =>
@@ -11341,6 +11831,40 @@ namespace MJ_CAIS.DataAccess
             });
 
             modelBuilder.HasSequence("DOC_REG_COMMON_SEQ");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_001");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_002");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_003");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_004");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_005");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_011");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_012");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_013");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_014");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_015");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_020");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_021");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_022");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_030");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_031");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_040");
+
+            modelBuilder.HasSequence("DOC_REG_SEQ_050");
 
             OnModelCreatingPartial(modelBuilder);
         }

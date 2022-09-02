@@ -21,6 +21,11 @@ namespace MJ_CAIS.DataAccess.Entities
             FbbcCountries = new HashSet<Fbbc>();
             GCities = new HashSet<GCity>();
             PPeople = new HashSet<PPerson>();
+            PPersonAliasBirthCountries = new HashSet<PPersonAlias>();
+            PPersonAliasCountryId1Navigations = new HashSet<PPersonAlias>();
+            PPersonAliasCountryId2Navigations = new HashSet<PPersonAlias>();
+            PPersonAliasCountryId3Navigations = new HashSet<PPersonAlias>();
+            PPersonAliasCountryId4Navigations = new HashSet<PPersonAlias>();
             PPersonCitizenships = new HashSet<PPersonCitizenship>();
             PPersonHCitizenships = new HashSet<PPersonHCitizenship>();
             PPersonHs = new HashSet<PPersonH>();
@@ -59,6 +64,11 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<Fbbc> FbbcCountries { get; set; }
         public virtual ICollection<GCity> GCities { get; set; }
         public virtual ICollection<PPerson> PPeople { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliasBirthCountries { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliasCountryId1Navigations { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliasCountryId2Navigations { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliasCountryId3Navigations { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliasCountryId4Navigations { get; set; }
         public virtual ICollection<PPersonCitizenship> PPersonCitizenships { get; set; }
         public virtual ICollection<PPersonHCitizenship> PPersonHCitizenships { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }

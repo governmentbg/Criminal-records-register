@@ -19,7 +19,8 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task AddUicAsync(string? administrationId, string uic, string? ou)
         {
-            var existingAdministrationId = await _dbContext.GExtAdministrationUics.Where(exUic => exUic.Value == uic).Select(exUic => exUic.AdministrationId).AsNoTracking().FirstOrDefaultAsync();
+            //var existingAdministrationId = await _dbContext.GExtAdministrationUics.Where(exUic => exUic.Value == uic).Select(exUic => exUic.AdministrationId).AsNoTracking().FirstOrDefaultAsync();
+            var existingAdministrationId = string.Empty;
             if (!string.IsNullOrEmpty(existingAdministrationId)) {
                 if (existingAdministrationId != administrationId)
                 {
@@ -34,7 +35,7 @@ namespace MJ_CAIS.Repositories.Impl
             {
                 var gExtAdminUic = new GExtAdministrationUic()
                 {
-                    AdministrationId = administrationId,
+                    //AdministrationId = administrationId,
                     Name = ou,
                     Value = uic
                 };
