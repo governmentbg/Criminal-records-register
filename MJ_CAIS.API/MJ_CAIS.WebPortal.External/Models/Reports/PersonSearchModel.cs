@@ -9,12 +9,14 @@ namespace MJ_CAIS.WebPortal.External.Models.Reports
 {
     public class PersonSearchModel
     {
-        public List<CriminalRecordsPersonDataType> CriminalRecordsPerson { get; set; }
+        public List<CriminalRecordsPersonModel> CriminalRecordsPerson { get; set; }
+
+        public bool IsInitialSearch { get; set; }
 
         public PersonSearchModel()
         {
             BirthDatePrecList = new List<SelectListItem>();
-            CriminalRecordsPerson = new List<CriminalRecordsPersonDataType>();
+            CriminalRecordsPerson = new List<CriminalRecordsPersonModel>();
             BirthDatePrecList.Add(new SelectListItem() { Text = "Точна", Value = DatePrecisionType.YMD });
             BirthDatePrecList.Add(new SelectListItem() { Text = "Година и месец", Value = DatePrecisionType.YM });
             BirthDatePrecList.Add(new SelectListItem() { Text = "Година", Value = DatePrecisionType.Y });

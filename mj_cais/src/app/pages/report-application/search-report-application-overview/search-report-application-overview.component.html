@@ -1,181 +1,192 @@
-<igx-grid
-  #grid
-  igxGridState
-  [data]="items$ | async"
-  [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
-  [paging]="true"
-  [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
-  [paginationTemplate]="pager"
-  [allowFiltering]="true"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
-  [cellSelection]="'none'"
-  ><igx-grid-toolbar>
-    <igx-grid-toolbar-title>Търсене</igx-grid-toolbar-title>
-  </igx-grid-toolbar>
-
-  <igx-column
-    field="registrationNumber"
-    header="Регистрационен номер"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'18%'"
+<nb-card>
+  <igx-grid
+    #grid
+    igxGridState
+    [data]="items$ | async"
+    [height]="null"
+    [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy"
+    [paging]="true"
+    [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'"
+    (onSortingDone)="sortingDone($event)"
+    (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)"
+    [paginationTemplate]="pager"
+    [allowFiltering]="true"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
+    [cellSelection]="'none'"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="statusCodeDisplayValue"
-    header="Статус"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'16%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="validFrom"
-    header="Валиден от"
-    [sortable]="true"
-    [dataType]="'date'"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="validTo"
-    header="Валиден до"
-    [sortable]="true"
-    [dataType]="'date'"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="reportApplicationRegistrationNumber"
-    header="Регистрационен номер на искане"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'22%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="applicantData"
-    header="Данни на заявителя"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'18%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="personIdentificators"
-    header="ЕГН/ЛНЧ"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'18%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="names"
-    header="Имена"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'22%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="purpose"
-    header="Цел"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'18%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    field="firstSigner"
-    header="Имена на първи подписващ"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'20%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="secondSigner"
-    header="Имена на втори подписващ"
-    [sortable]="true"
-    [dataType]="'string'"
-    [width]="'20%'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column
-    width="150px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="[
-          '/pages/report-applications/preview',
-          cell.rowData.id
-        ]"
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold">Търсене на справки</span></igx-grid-toolbar-title
       >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-    </ng-template>
-  </igx-column>
+      <igx-grid-toolbar-actions>
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
 
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
-    </div>
-  </ng-template>
-</igx-grid>
+    <igx-column
+      field="registrationNumber"
+      header="Регистрационен номер"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'18%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="statusCodeDisplayValue"
+      header="Статус"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'16%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="validFrom"
+      header="Валиден от"
+      [sortable]="true"
+      [dataType]="'date'"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="validTo"
+      header="Валиден до"
+      [sortable]="true"
+      [dataType]="'date'"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="reportApplicationRegistrationNumber"
+      header="Регистрационен номер на искане"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'22%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="applicantData"
+      header="Данни на заявителя"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'18%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="personIdentificators"
+      header="ЕГН/ЛНЧ"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'18%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="names"
+      header="Имена"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'22%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="purpose"
+      header="Цел"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'18%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="firstSigner"
+      header="Имена на първи подписващ"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'20%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="secondSigner"
+      header="Имена на втори подписващ"
+      [sortable]="true"
+      [dataType]="'string'"
+      [width]="'20%'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      width="100px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <a
+            [title]="'Преглед'"
+            [routerLink]="[
+              '/pages/report-applications/preview',
+              cell.rowData.id
+            ]"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+        </div>
+      </ng-template>
+    </igx-column>
+
+    <ng-template #pager let-grid>
+      <div class="tl-paginator">
+        <cais-grid-pager
+          [page]="remoteService.pagerParams.page"
+          [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount"
+          (pagerChange)="pagerChange($event)"
+        ></cais-grid-pager>
+      </div>
+    </ng-template>
+  </igx-grid>
+</nb-card>

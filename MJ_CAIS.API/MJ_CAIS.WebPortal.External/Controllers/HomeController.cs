@@ -7,13 +7,17 @@ namespace MJ_CAIS.WebPortal.External.Controllers
     [Authorize]
     public class HomeController : BaseController
     {
-        public HomeController()
+        public bool IsEReportsInstallation { get; set; }
+
+        public HomeController(IConfiguration configuration)
         {
+            IsEReportsInstallation = configuration.GetValue<bool>("IsEReportsInstallation", false);
         }
 
         [AllowAnonymous]
         public IActionResult Index()
         {
+            ViewBag.IsEReportsInstallation = IsEReportsInstallation;
             return View();
         }
 

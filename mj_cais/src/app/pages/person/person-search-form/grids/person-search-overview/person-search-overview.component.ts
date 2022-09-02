@@ -31,6 +31,15 @@ PersonSearchGridService
   @Input() isRemindPersonForm: boolean;
   @Input() existingPersonId: string;
 
+  public overlaySettings = {
+    positionStrategy: new ConnectedPositioningStrategy({
+        horizontalDirection: HorizontalAlignment.Left,
+        horizontalStartPoint: HorizontalAlignment.Right,
+        verticalStartPoint: VerticalAlignment.Bottom
+    }),
+    scrollStrategy: new NoOpScrollStrategy()
+};
+
   ngOnInit() {
     this.service.updateUrl(`people?isPageInit=true`);
   }

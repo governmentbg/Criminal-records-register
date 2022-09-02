@@ -46,7 +46,7 @@ namespace AutomaticStepsExecutor
        
         }
 
-        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config)
+        public async Task<List<IBaseIdEntity>> SelectEntitiesAsync(int pageSize, Microsoft.Extensions.Configuration.IConfiguration config, int numberOfPage = 0)
         {
             var result = await Task.FromResult(_dbContext.WApplications.AsNoTracking()
                                             .Include(a => a.APayments)
@@ -56,6 +56,7 @@ namespace AutomaticStepsExecutor
                                             .Include(a=>a.WAppPersAliases).AsNoTracking()
                                .Where(aa => aa.StatusCode == ApplicationConstants.ApplicationStatuses.WebCheckPayment)
                                  .OrderBy(a => a.CreatedOn)
+                                 .Skip(numberOfPage*pageSize)
                               .Take(pageSize)
                                .ToList<IBaseIdEntity>());
             return result;

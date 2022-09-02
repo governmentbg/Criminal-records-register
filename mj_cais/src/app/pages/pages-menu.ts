@@ -40,12 +40,81 @@ export class PagesMenu {
           this.hasNoRole(roles, RoleNameEnum.Judge),
       },
       {
+        title: "Свидетелства",
+        icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
+        children: [
+          {
+            title: "Нови заявления",
+            link: "/pages/applications",
+          },
+          {
+            title: "Потвърждение за плащане",
+            link: "/pages/applications/waiting-payment",
+          },
+          {
+            title: "За обработка",
+            link: "/pages/applications/for-check",
+          },
+          {
+            title: "За подпис",
+            link: "/pages/applications/for-signing",
+          },
+          {
+            title: "Търсене на свидетелства",
+            link: "/pages/applications/search",
+          },
+        ],
+      },
+      {
+        title: "E-Свидетелства",
+        icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
+        children: [
+          {
+            title: "Потвърждение за плащане",
+            link: "/pages/e-applicaiton/check-payment",
+          },
+          {
+            title: "Oсвободени от плащане",
+            link: "/pages/e-applicaiton/check-tax-free",
+          },
+        ],
+      },
+      {
         title: "Заявки",
         icon: { icon: "mail-bulk", pack: "fa" },
         link: "/pages/internal-requests",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
           this.hasNoRole(roles, RoleNameEnum.Judge),
+      },
+      {
+        title: "Справка за съдимост",
+        icon: { icon: "id-card", pack: "fas" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
+        children: [
+          {
+            title: "Нови искания",
+            link: "/pages/report-applications",
+          },
+          {
+            title: "В процес на обработка",
+            link: "/pages/report-applications/approved",
+          },
+          {
+            title: "Обработени искания",
+            link: "/pages/report-applications/delivered",
+          },
+          {
+            title: "Обработени справки",
+            link: "/pages/report-applications/all-generated-reports",
+          },
+          {
+            title: "Търсене на справки",
+            link: "/pages/report-applications/search",
+          },
+        ],
       },
       {
         title: "Бюлетини",
@@ -84,60 +153,8 @@ export class PagesMenu {
           },
         ],
       },
-      {
-        title: "Свидетелства",
-        icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
-        children: [
-          {
-            title: "Нови заявления",
-            link: "/pages/applications",
-          },
-          {
-            title: "Потвърждение за плащане",
-            link: "/pages/applications/waiting-payment",
-          },
-          {
-            title: "За обработка",
-            link: "/pages/applications/for-check",
-          },
-          {
-            title: "За подпис",
-            link: "/pages/applications/for-signing",
-          },
-          {
-            title: "Търсене на свидетелства",
-            link: "/pages/applications/search",
-          },
-        ],
-      },
-      {
-        title: "Справка за съдимост",
-        icon: { icon: "id-card", pack: "fas" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
-        children: [
-          {
-            title: "Нови искания",
-            link: "/pages/report-applications",
-          },
-          {
-            title: "В процес на обработка",
-            link: "/pages/report-applications/approved",
-          },
-          {
-            title: "Обработени искания",
-            link: "/pages/report-applications/delivered",
-          },
-          {
-            title: "Обработени справки",
-            link: "/pages/report-applications/all-generated-reports",
-          },
-          {
-            title: "Търсене на справки",
-            link: "/pages/report-applications/search",
-          },
-        ],
-      },
+     
+    
       {
         title: "За решение от съдия/юрист",
         icon: "message-circle-outline",
@@ -213,6 +230,52 @@ export class PagesMenu {
         link: "/pages/isin/new",
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
       },
+     
+     
+   
+      {
+        title: "Справки",
+        icon: { icon: "tasks", pack: "fas" },
+        children: [
+          {
+            title: "Xарактеристики на бюлетини",
+            link: "/pages/inquiry/search-bulletins",
+          },
+          {
+            title: "Xарактеристики на лице",
+            link: "/pages/inquiry/search-people",
+          },
+        ],
+      },
+      {
+        title: "Статистика",
+        icon: { icon: "chart-bar", pack: "fas" },
+        children: [
+          {
+            title: "Бюлетини",
+            link: "/pages/statistics/bulletins",
+          },
+          {
+            title: "Свидетелства",
+            link: "/pages/statistics/applications",
+          },
+        ],
+      },
+      {
+        title: "Журнал на Е-справки",
+        icon: { icon: "file-alt", pack: "fa" },
+        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
+        children: [
+          {
+            title: "Справка за съдимост",
+            link: "/pages/e-applicaiton-report/reports/overview",
+          },
+          {
+            title: "Справка за идентификатори",
+            link: "/pages/e-applicaiton-report/search-pers/overview",
+          },
+        ],
+      },
       {
         title: "Администрация",
         icon: { icon: "cog", pack: "fa" },
@@ -242,64 +305,6 @@ export class PagesMenu {
           {
             title: "Управление на бюлетини",
             link: "/pages/bulletin-administrations",
-          },
-        ],
-      },
-      {
-        title: "E-Свидетелства",
-        icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
-        children: [
-          {
-            title: "Потвърждение за плащане",
-            link: "/pages/e-applicaiton/check-payment",
-          },
-          {
-            title: "Oсвободени от плащане",
-            link: "/pages/e-applicaiton/check-tax-free",
-          },
-        ],
-      },
-      {
-        title: "Журнал на Е-справки",
-        icon: { icon: "file-alt", pack: "fa" },
-        hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
-        children: [
-          {
-            title: "Справка за съдимост",
-            link: "/pages/e-applicaiton-report/reports/overview",
-          },
-          {
-            title: "Справка за идентификатори",
-            link: "/pages/e-applicaiton-report/search-pers/overview",
-          },
-        ],
-      },
-      {
-        title: "Справки",
-        icon: { icon: "tasks", pack: "fas" },
-        children: [
-          {
-            title: "Xарактеристики на бюлетини",
-            link: "/pages/inquiry/search-bulletins",
-          },
-          {
-            title: "Xарактеристики на лице",
-            link: "/pages/inquiry/search-people",
-          },
-        ],
-      },
-      {
-        title: "Статистика",
-        icon: { icon: "chart-bar", pack: "fas" },
-        children: [
-          {
-            title: "Бюлетини",
-            link: "/pages/statistics/bulletins",
-          },
-          {
-            title: "Свидетелства",
-            link: "/pages/statistics/applications",
           },
         ],
       },
