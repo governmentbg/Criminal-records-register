@@ -32,7 +32,7 @@
       </ng-template>
     </igx-column>
 
-    <igx-column field="registrationNumber" header="№ бюлетин" [sortable]="true" [dataType]="'string'">
+    <igx-column field="registrationNumber" header="№ бюлетин" [sortable]="true" [dataType]="'string'" [width]="'200px'">
       <ng-template igxCell let-cell="cell">
         <span [title]="cell.value">{{ cell.value }}</span>
       </ng-template>
