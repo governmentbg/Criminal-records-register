@@ -66,9 +66,9 @@
             <a [title]="'Редактиране'" [routerLink]="['/pages/bulletins/edit', cell.rowData.id]">
               <nb-icon pack="fa" icon="pen"></nb-icon>
             </a>
-            <a [title]="'Актуализирай'" (click)="openUpdateConfirmationDialog(cell.rowData.id)">
-              <i class="fas fa-check"></i>
-            </a>
+            <button class="btn btn-link" [title]="'Актуализирай'" (click)="openUpdateConfirmationDialog(cell.rowData.id)">
+              <nb-icon pack="fas" icon="check"></nb-icon>
+            </button>
           </div>
         </div>
       </ng-template>
