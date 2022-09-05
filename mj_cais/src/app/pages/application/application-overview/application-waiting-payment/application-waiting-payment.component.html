@@ -21,7 +21,10 @@
   [cellSelection]="'none'"
 >
 <igx-grid-toolbar>
-  <igx-grid-toolbar-title>Потвърждение за плащане</igx-grid-toolbar-title>
+  <igx-grid-toolbar-title><span class="fw-bold">Потвърждение за плащане</span></igx-grid-toolbar-title>
+  <igx-grid-toolbar-actions>
+    <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+  </igx-grid-toolbar-actions>
 </igx-grid-toolbar>
   <igx-column
     field="id"
@@ -113,23 +116,26 @@
   </igx-column>
 
   <igx-column
-    width="150px"
-    header=""
+    width="120px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/applications/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
+      <div class="cell-center">
+        <a
+          [title]="'Преглед'"
+          [routerLink]="['/pages/applications/preview', cell.rowData.id]"
+        >
+          <nb-icon pack="fa" icon="eye"></nb-icon>
+        </a>
     
-      <!-- <a [title]="'Потвърди плащане'" (click)="confirmPayment(cell.rowData.id)">
-        <nb-icon pack="fa" icon="check"></nb-icon>
-      </a> -->
+        <!-- <a [title]="'Потвърди плащане'" (click)="confirmPayment(cell.rowData.id)">
+          <nb-icon pack="fa" icon="check"></nb-icon>
+        </a> -->
+      </div>
     </ng-template>
   </igx-column>
 

@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using MJ_CAIS.Common.Exceptions;
 using static MJ_CAIS.Common.Constants.PersonConstants;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Services
 {
@@ -43,7 +44,7 @@ namespace MJ_CAIS.Services
             if (pidsDoNotExistExist)
             {
                 var newPerson = CreateNewPerson(aInDto, pids, personId);
-                CreatePersonHistory(newPerson);
+                CreatePersonHistory(newPerson, aInDto.TableName, aInDto.TableId, aInDto.TableDesc);
                 return newPerson;
             }
 
@@ -99,12 +100,15 @@ namespace MJ_CAIS.Services
         /// <summary>
         /// Create person and person identifiers history from newly created person  
         /// </summary>
-        public PPersonH CreatePersonHistory(PPerson person)
+        public PPersonH CreatePersonHistory(PPerson person, string tableName, string tableId, string deac = null)
         {
             if (person is null) throw new ArgumentNullException(nameof(person));
 
             // add person history object with pids
             var personH = _mapper.MapToEntity<PPerson, PPersonH>(person, true);
+            personH.Tablename = tableName;
+            personH.TableId = tableId;
+            personH.Descr = deac;
             personH.Id = BaseEntity.GenerateNewId();
             personH.PPersonIdsHes = _mapper.MapToEntityList<PPersonId, PPersonIdsH>(person.PPersonIds.ToList(), true, true);
             personH.PPersonHCitizenships = _mapper.MapToEntityList<PPersonCitizenship, PPersonHCitizenship>(person.PPersonCitizenships.ToList(), true, true);
@@ -119,13 +123,13 @@ namespace MJ_CAIS.Services
         /// <param name="aId"></param>
         /// <param name="personToBeConnected"></param>
         /// <returns></returns>
-        public async Task ConnectPeopleAsync(string aId, string personToBeConnected)
+        public async Task ConnectPeopleAsync(string aId, string personToBeConnected, string desc)
         {
             var people = await _personRepository.GetPeopleToBeConectedWithPidData(aId, personToBeConnected).ToListAsync();
             var personToUpdate = MergePeople(new List<PPersonId>(), people);
 
-            CreatePersonHistory(personToUpdate);
-            // call logic for only one person
+            CreatePersonHistory(personToUpdate, ContextTable.Manual, null, desc);
+
             await _personRepository.SaveChangesAsync();
         }
 
@@ -148,7 +152,8 @@ namespace MJ_CAIS.Services
             GeneratePersonCitizenship(newPersonData, aInDto.Nationalities.SelectedForeignKeys);
             _personRepository.ApplyChanges(newPersonData, new List<IBaseIdEntity>(), true);
 
-            CreatePersonHistory(newPersonData);
+            CreatePersonHistory(newPersonData, ContextTable.Manual, null, aInDto.Desc);
+
             await _personRepository.SaveChangesAsync();
             return pidToBeRemoved;
         }
@@ -349,6 +354,7 @@ namespace MJ_CAIS.Services
             personToUpdate.PPersonCitizenships = existingPerson.PPersonCitizenships ?? new List<PPersonCitizenship>();
             foreach (var nationality in newNationalitiesToBeAdded)
             {
+                if (string.IsNullOrEmpty(nationality)) continue;
                 personToUpdate.PPersonCitizenships.Add(new PPersonCitizenship
                 {
                     Id = BaseEntity.GenerateNewId(),
@@ -370,7 +376,7 @@ namespace MJ_CAIS.Services
             var allNationalitiesExists = personToUpdate.PPersonCitizenships.All(x => x.EntityState == EntityStateEnum.Unchanged);
             if (allPidsExists && allNationalitiesExists && isPersonEquals) return personToUpdate;
 
-            CreatePersonHistory(personToUpdate);
+            CreatePersonHistory(personToUpdate, aInDto.TableName, aInDto.TableId, aInDto.TableDesc);
 
             return personToUpdate;
         }

@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MultipleChooseForm } from "../../../../../../@core/components/forms/inputs/multiple-choose/models/multiple-choose.form";
 
 export class RemovePidDialogFrom {
@@ -25,6 +25,7 @@ export class RemovePidDialogFrom {
   public fatherSurname: FormControl;
   public fatherFamilyname: FormControl;
   public fatherFullname: FormControl;
+  public desc: FormControl;
 
   constructor() {
     this.existinPersonId = new FormControl(null);
@@ -48,6 +49,7 @@ export class RemovePidDialogFrom {
     this.fatherSurname = new FormControl(null);
     this.fatherFamilyname = new FormControl(null);
     this.fatherFullname = new FormControl(null);
+    this.desc = new FormControl(null, Validators.required);
 
     this.group = new FormGroup({
       existinPersonId: this.existinPersonId,
@@ -71,6 +73,7 @@ export class RemovePidDialogFrom {
       fatherSurname: this.fatherSurname,
       fatherFamilyname: this.fatherFamilyname,
       fatherFullname: this.fatherFullname,
+      desc: this.desc,
     });
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
+import { Observable } from "rxjs";
 import { CaisCrudService } from "../../../../../../@core/services/rest/cais-crud.service";
 import { PersonSearchGridModel } from "../_models/person-search.grid";
 
@@ -13,10 +14,7 @@ export class PersonSearchGridService extends CaisCrudService<
     super(PersonSearchGridModel, injector, "people");
   }
 
-  public connectPeople(aId: string, personToBeConnected: string) {
-    return this.http.post<any>(
-      `${this.baseUrl}/api/people/${aId}/connect/${personToBeConnected}`,
-      []
-    );
+  public connectPeople(model: any): Observable<any[]> {
+    return this.http.post<any>(`${this.baseUrl}/api/people/connect`, model);
   }
 }

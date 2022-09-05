@@ -91,13 +91,13 @@ export class ApplicationCertificateResultComponent
           });
       }
       if (
-        this.model.firstSignerId == null &&
+        this.model.secondSignerId == null &&
         this.model.statusCode !=
           CertificateStatuTypeEnum.CertificatePaperPrint &&
         this.model.statusCode != CertificateStatuTypeEnum.Delivered
       ) {
-        this.model.firstSignerId = this.userInfoService.userId;
-        this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
+        this.model.secondSignerId = this.userInfoService.userId;
+        this.fullForm.secondSignerId.setValue(this.userInfoService.userId);
       }
     }
 
@@ -389,13 +389,13 @@ export class ApplicationCertificateResultComponent
                 });
             }
             if (
-              this.model.firstSignerId == null &&
+              this.model.secondSignerId == null &&
               this.model.statusCode !=
                 CertificateStatuTypeEnum.CertificatePaperPrint &&
               this.model.statusCode != CertificateStatuTypeEnum.Delivered
             ) {
-              this.model.firstSignerId = this.userInfoService.userId;
-              this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
+              this.model.secondSignerId = this.userInfoService.userId;
+              this.fullForm.secondSignerId.setValue(this.userInfoService.userId);
             }
           }
 

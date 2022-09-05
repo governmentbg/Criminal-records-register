@@ -32,13 +32,13 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
         [Test]
         public void ThrowArgumentNullEx_WhenPersonIsNull()
-          => Assert.Throws<ArgumentNullException>(() => _peopleService.CreatePersonHistory(null));
+          => Assert.Throws<ArgumentNullException>(() => _peopleService.CreatePersonHistory(null, null, null, null));
 
         [Test]
         public void PersonHIsEqual_WhenPersonDataIsFilledIn()
         {
             var src = PersonFactory.GetFilledInPerson();
-            var dest = _peopleService.CreatePersonHistory(src);
+            var dest = _peopleService.CreatePersonHistory(src, null, null, null);
 
             Assert.AreEqual(src.Firstname, dest.Firstname);
             Assert.AreEqual(src.Surname, dest.Surname);
@@ -71,7 +71,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         public void PersonHPidsAreEqual_WhenPersonPidsAreFilledIn()
         {
             var person = PersonFactory.GetFilledInPerson();
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             Assert.AreEqual(person.PPersonIds.Count, personH.PPersonIdsHes.Count);
             Assert.AreEqual(person.PPersonIds.First().Pid, personH.PPersonIdsHes.First().Pid);
@@ -83,7 +83,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         public void PersonHWithEntityStateAdded_WhenAllDataIsFilledIn()
         {
             var person = PersonFactory.GetFilledInPerson();
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             Assert.AreEqual(personH.EntityState, EntityStateEnum.Added);
         }
@@ -92,7 +92,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
         public void PersonPidsHWithEntityStateAdded_WhenAllDataIsFilledIn()
         {
             var person = PersonFactory.GetFilledInPerson();
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             Assert.That(personH.PPersonIdsHes.Count(p => p.EntityState == EntityStateEnum.Added), Is.EqualTo(personH.PPersonIdsHes.Count));
         }

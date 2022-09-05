@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.WebPortal.External.LocalContext;
+using MJ_CAIS.DataAccess.ExtUsers;
+using MJ_CAIS.Services;
 using MJ_CAIS.WebPortal.External.Utils.Mappings;
 using MJ_CAIS.WebSetup;
 using System.Security.Claims;
@@ -28,6 +29,10 @@ namespace MJ_CAIS.WebPortal.External
             builder
                 .Services
                 .AddDbContext<ExtUserDbContext>(x => x.UseOracle(connectionString, opt => opt.UseOracleSQLCompatibility(oracleCompatibility)));
+
+            builder
+                .Services
+                .AddTransient(typeof(IPasswordHasher<GUsersExt>), typeof(CompatibilityPasswordHasher));
 
             builder
                 .Services

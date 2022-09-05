@@ -7,7 +7,7 @@
 @model UserExternalEditModel
 
 @{
-    var title = Model.IsAdded ? UsersResources.titleAddUser : UsersResources.titleEditUser;
+    var title = UsersResources.titleEditUser;
     ViewData["Title"] = title;
 }
 
@@ -23,7 +23,6 @@
             <div class="row g-3">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input asp-for="Id" class="form-control" hidden />
-                <input asp-for="IsAdded" class="form-control" hidden />
                 <input asp-for="Version" class="form-control" hidden />
 
                 <div class="">
@@ -40,7 +39,6 @@
                     <input asp-for="Egn" class="form-control" />
                     <span asp-validation-for="Egn" class="text-danger"></span>
                 </div>
-
                 <div class="col-md-4">
                     <label asp-for="Email" class="control-label fw-bold "></label>
                     <input asp-for="Email" class="form-control" />

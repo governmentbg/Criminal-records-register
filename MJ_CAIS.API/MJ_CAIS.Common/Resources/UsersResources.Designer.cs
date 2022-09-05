@@ -70,6 +70,24 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to С КЕП.
+        /// </summary>
+        public static string btnCreateNewUserWithEGN {
+            get {
+                return ResourceManager.GetString("btnCreateNewUserWithEGN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to С име и парола.
+        /// </summary>
+        public static string btnCreateNewUserWithPassword {
+            get {
+                return ResourceManager.GetString("btnCreateNewUserWithPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Активен.
         /// </summary>
         public static string lblActive {
@@ -151,6 +169,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Телефон.
+        /// </summary>
+        public static string lblPhone {
+            get {
+                return ResourceManager.GetString("lblPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Позиция.
         /// </summary>
         public static string lblPosition {
@@ -165,6 +192,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string lblUserName {
             get {
                 return ResourceManager.GetString("lblUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Невалидно потребителско име.
+        /// </summary>
+        public static string msgInvalidUserName {
+            get {
+                return ResourceManager.GetString("msgInvalidUserName", resourceCulture);
             }
         }
         
@@ -237,6 +273,24 @@ namespace MJ_CAIS.Common.Resources {
         public static string msgPasswordTooShort {
             get {
                 return ResourceManager.GetString("msgPasswordTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неуспешно създаване на потребител.
+        /// </summary>
+        public static string msgUserCreationFailed {
+            get {
+                return ResourceManager.GetString("msgUserCreationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Потребителското име е заето.
+        /// </summary>
+        public static string msgUsernameAlreadyExists {
+            get {
+                return ResourceManager.GetString("msgUsernameAlreadyExists", resourceCulture);
             }
         }
         

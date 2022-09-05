@@ -1,46 +1,66 @@
-<igx-grid
-  #decisionsGrid
-  [height]="null"
-  [data]="applicationCertificateCanceled"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
->
-  <igx-column
-    field="statusCode"
-    header="Статус"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
-
-  <igx-column
-    field="registrationNumber"
-    header="Номер"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
-  <igx-column
-    field="firstSigner"
-    header="Подписващ1"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
-  <igx-column
-    field="secondSigner"
-    header="Подписващ2"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
-  <igx-column
-    width="50px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
+<nb-card>
+  <igx-grid
+    #decisionsGrid
+    [height]="null"
+    [data]="applicationCertificateCanceled"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
   >
-    <ng-template igxCell let-cell="cell">
-      <a [title]="'Преглед'">
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-    </ng-template>
-  </igx-column>
-</igx-grid>
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold"
+          >История на свидетелствата</span
+        ></igx-grid-toolbar-title
+      >
+      <igx-grid-toolbar-actions>
+        <div class="d-flex gap-2">
+          <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+        </div>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
+
+    <igx-column
+      field="statusCode"
+      header="Статус"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+
+    <igx-column
+      field="registrationNumber"
+      header="Номер"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="firstSigner"
+      header="Подписващ1"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="secondSigner"
+      header="Подписващ2"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      width="120px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <a [title]="'Преглед'">
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </igx-column>
+  </igx-grid>
+</nb-card>

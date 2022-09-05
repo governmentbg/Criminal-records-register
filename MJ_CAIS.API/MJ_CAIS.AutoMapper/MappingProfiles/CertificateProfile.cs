@@ -37,6 +37,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BulletinReceivedDate, opt => opt.MapFrom(src => src.Bulletin.BulletinReceivedDate))
                 .ForMember(d => d.StatusId, opt => opt.MapFrom(src => src.Bulletin.StatusId))
                 .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.Bulletin.Status.Name))
+                .ForMember(d => d.BulletinTypeName, opt => opt.MapFrom(src => src.Bulletin.BulletinType))
+                .ForMember(d => d.BulletinDecisionDate, opt => opt.MapFrom(src => src.Bulletin.DecisionDate))
+                .ForMember(d => d.BulletinDecisionNumber, opt => opt.MapFrom(src => src.Bulletin.DecisionNumber))
                 .ForMember(d => d.BulletinAuthorityId, opt => opt.MapFrom(src => src.Bulletin.CsAuthorityId))
                 .ForMember(d => d.BulletinAuthorityName, opt => opt.MapFrom(src => src.Bulletin.CsAuthority.Name));
 

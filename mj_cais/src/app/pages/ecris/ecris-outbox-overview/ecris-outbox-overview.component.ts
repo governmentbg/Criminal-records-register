@@ -1,5 +1,7 @@
 import { Component, Injector } from "@angular/core";
+import { NbDialogService } from "@nebular/theme";
 import * as fileSaver from "file-saver";
+import { ConfirmTemplateDialogComponent } from "../../../@core/components/dialogs/confirm-template-dialog/confirm-template-dialog.component";
 import { RemoteGridWithStatePersistance } from "../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../@core/services/common/loader.service";
@@ -22,6 +24,7 @@ export class EcrisOutboxOverviewComponent extends RemoteGridWithStatePersistance
     public dateFormatService: DateFormatService,
     service: EcrisOutboxGridService,
     injector: Injector,
+    private dialogService: NbDialogService,
     public loaderService: LoaderService
   ) {
     super("ecris-inbox-search", service, injector);
@@ -77,19 +80,35 @@ export class EcrisOutboxOverviewComponent extends RemoteGridWithStatePersistance
   }
 
   resend(ecrisMsgId: string) {
-    this.service.resend(ecrisMsgId).subscribe(
-      (res) => {
-        this.toastr.showToast(
-          "success",
-          "Успешно повторно изпращане на съобщение"
-        );
-        this.ngOnInit();
-      },
-      (error) => {
-        let errorText = error.status + " " + error.statusText;
+    this.dialogService
+      .open(ConfirmTemplateDialogComponent, {
+        context: {
+          color: "success",
+          title: "Повторно изпращане на съобщение?",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.service.resend(ecrisMsgId).subscribe(
+            (res) => {
+              this.toastr.showToast(
+                "success",
+                "Успешно повторно изпращане на съобщение"
+              );
+              this.ngOnInit();
+            },
+            (error) => {
+              let errorText = error.status + " " + error.statusText;
 
-        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
-      }
-    );
+              this.toastr.showBodyToast(
+                "danger",
+                "Възникна грешка:",
+                errorText
+              );
+            }
+          );
+        }
+      });
   }
 }

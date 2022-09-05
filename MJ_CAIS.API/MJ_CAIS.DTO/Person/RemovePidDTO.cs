@@ -25,5 +25,6 @@ namespace MJ_CAIS.DTO.Person
         public string? FatherSurname { get; set; }
         public string? FatherFamilyname { get; set; }
         public string? FatherFullname { get; set; }
+        public string? Desc { get; set; }
     }
 }

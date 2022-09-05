@@ -9,5 +9,10 @@
         public string? StatusName { get; set; }
         public string? BulletinAuthorityId { get; set; }
         public string? BulletinAuthorityName { get; set; }
+        public string? BulletinTypeName { get; set; }
+        public string? BulletinDecisionNumber { get; set; }
+        public DateTime? BulletinDecisionDate { get; set; }
+
+
     }
 }

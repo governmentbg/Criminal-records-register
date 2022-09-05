@@ -312,10 +312,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.Decision.ECLI, opt => opt.MapFrom(src => src.DecisionEcli))
                 .ForPath(d => d.Decision.DecisionType, opt => opt.MapFrom(src => CriminalRecordsReportResolver.StringToEnum<DecisionTypeCategories>(src.DecisionTypeId)))
                 .ForMember(d => d.DecisionRemarks, opt => opt.MapFrom(src => src.Descr))
-                .ForMember(d => d.ValidFrom, opt => opt.MapFrom(src => src.DecisionDate))
-                .ForMember(d => d.ValidFromSpecified, opt => opt.MapFrom(src => src.DecisionDate.HasValue))
-                .ForMember(d => d.ReceiveDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
-                .ForMember(d => d.ReceiveDateSpecified, opt => opt.MapFrom(src => src.DecisionFinalDate.HasValue));
+                .ForMember(d => d.ValidFrom, opt => opt.MapFrom(src => src.DecisionFinalDate))
+                .ForMember(d => d.ValidFromSpecified, opt => opt.MapFrom(src => src.DecisionFinalDate.HasValue))
+                .ForMember(d => d.ReceiveDate, opt => opt.MapFrom(src => src.DecisionDate))
+                .ForMember(d => d.ReceiveDateSpecified, opt => opt.MapFrom(src => src.DecisionDate.HasValue));
 
             CreateMap<DecisionChangeType, BDecision>()
             .ForMember(dest => dest.DecisionChTypeId, opt =>

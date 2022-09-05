@@ -35,7 +35,8 @@ export class EApplicationCheckTaxFreeOverviewComponent extends RemoteGridWithSta
     this.dialogService
       .open(ConfirmTemplateDialogComponent, {
         context: {
-          title: "Потвърди освобождаване от плащане",
+          color: "success",
+          title: "Потвърди освобождаване от плащане?",
         },
         closeOnBackdropClick: false,
       })
@@ -45,7 +46,7 @@ export class EApplicationCheckTaxFreeOverviewComponent extends RemoteGridWithSta
             (res) => {
               this.deleteRowHandler(
                 rowId,
-                "Потвърдено освободждаване от плащане"
+                "Потвърдено освободждаване от плащане."
               );
             },
             (error) => this.errorHandler(error)
@@ -59,7 +60,8 @@ export class EApplicationCheckTaxFreeOverviewComponent extends RemoteGridWithSta
     this.dialogService
       .open(ConfirmTemplateDialogComponent, {
         context: {
-          title: "Отхвърли освобождаване от плащане",
+          color: "danger",
+          title: "Отхвърли освобождаване от плащане?",
         },
         closeOnBackdropClick: false,
       })
@@ -69,7 +71,7 @@ export class EApplicationCheckTaxFreeOverviewComponent extends RemoteGridWithSta
             (res) => {
               this.deleteRowHandler(
                 rowId,
-                "Отхвърлено освободждаване от плащане"
+                "Отхвърлено освободждаване от плащане."
               );
             },
             (error) => this.errorHandler(error)

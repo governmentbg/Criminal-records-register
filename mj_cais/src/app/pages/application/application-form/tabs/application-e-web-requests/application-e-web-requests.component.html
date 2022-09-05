@@ -1,63 +1,78 @@
-<igx-grid
-  #decisionsGrid
-  [pinning]="pinningConfig"
-  [height]="null"
-  [data]="historyData"
-  [primaryKey]="'id'"
->
-
-  
-  <igx-column
-    field="createdOn"
-    [sortable]="true"
-    header="Дата"
-    dataType="Date"
-    [formatter]="this.dateFormatService.formatDate"
+<nb-card>
+  <igx-grid
+    #decisionsGrid
+    [pinning]="pinningConfig"
+    [height]="null"
+    [data]="historyData"
+    [primaryKey]="'id'"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold">Проверка в регистри</span></igx-grid-toolbar-title
+      >
+      <igx-grid-toolbar-actions>
+        <div class="d-flex gap-2">
+          <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+        </div>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
+    <igx-column
+      field="createdOn"
+      [sortable]="true"
+      header="Дата"
+      dataType="Date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="webServiceName"
-    header="Име на справката"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
+    <igx-column
+      field="webServiceName"
+      header="Име на справката"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
 
-  <igx-column
-    field="hasError"
-    header="Грешка"
-    [sortable]="true"
-    [dataType]="'boolean'"
-  ></igx-column>
+    <igx-column
+      field="hasError"
+      header="Грешка"
+      [sortable]="true"
+      [dataType]="'boolean'"
+    ></igx-column>
 
-  <igx-column
-    field="error"
-    header="Вид грешка"
-    [sortable]="true"
-    [dataType]="'string'"
-  ></igx-column>
-  <igx-column
-  field="apiServiceCallId"
-  header="Regix_ID"
-  [sortable]="true"
-  [dataType]="'string'"
-></igx-column>
-  <igx-column
-    width="150px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <a [title]="'Редактиране'" (click)="downloadHtml(cell.rowData.id)">
-        <i class="fas fa-download"></i>
-      </a>
-    </ng-template>
-  </igx-column>
-</igx-grid>
+    <igx-column
+      field="error"
+      header="Вид грешка"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      field="apiServiceCallId"
+      header="Regix_ID"
+      [sortable]="true"
+      [dataType]="'string'"
+    ></igx-column>
+    <igx-column
+      width="110px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <a [title]="'Редактиране'" (click)="downloadHtml(cell.rowData.id)">
+              <i class="fas fa-download"></i>
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </igx-column>
+  </igx-grid>
+</nb-card>

@@ -18,11 +18,13 @@ export class BulletinNewEissOverviewComponent extends RemoteGridWithStatePersist
   BulletinGridModel,
   BulletinGridService
 > {
-  constructor(service: BulletinGridService,
-     injector: Injector,
-     public dateFormatService: DateFormatService,
-     private dialogService: NbDialogService,
-     private translate: TranslateService) {
+  constructor(
+    service: BulletinGridService,
+    injector: Injector,
+    public dateFormatService: DateFormatService,
+    private dialogService: NbDialogService,
+    private translate: TranslateService
+  ) {
     super("bulletins-search", service, injector);
     this.service.updateUrlStatus(BulletinStatusTypeEnum.NewEISS);
   }
@@ -32,10 +34,12 @@ export class BulletinNewEissOverviewComponent extends RemoteGridWithStatePersist
   }
 
   public openUpdateConfirmationDialog(bulletinId: string) {
-    let dialogRef = this.dialogService.open(
-      ConfirmDialogComponent,
-      CommonConstants.defaultDialogConfig
-    );
+    let dialogRef = this.dialogService.open(ConfirmDialogComponent, {
+      context: {
+        color: "success",
+      },
+      closeOnBackdropClick: false,
+    });
 
     dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
       "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"

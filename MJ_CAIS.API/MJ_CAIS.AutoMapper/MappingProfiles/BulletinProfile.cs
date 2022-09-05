@@ -56,7 +56,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Person.BirthPlace.ForeignCountryAddress))
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Person.BirthPlace.Country.Id))
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId))
-                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore());
+                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore())
+                .ForMember(d => d.CsAuthorityId, opt => opt.Ignore());
 
             CreateMap<BulletinEditDTO, BBulletin>()
                 .ForMember(d => d.Firstname, opt => opt.MapFrom(src => src.Person.Firstname))
@@ -90,7 +91,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.BirthPlaceOther, opt => opt.MapFrom(src => src.Person.BirthPlace.ForeignCountryAddress))
                 .ForMember(d => d.BirthCountryId, opt => opt.MapFrom(src => src.Person.BirthPlace.Country.Id))
                 .ForMember(d => d.BirthCityId, opt => opt.MapFrom(src => src.Person.BirthPlace.CityId))
-                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore());
+                .ForMember(d => d.RegistrationNumber, opt => opt.Ignore())
+                .ForMember(d => d.CsAuthorityId, opt => opt.Ignore());
 
             CreateMap<BBulletin, BulletinConvictionDTO>();
 

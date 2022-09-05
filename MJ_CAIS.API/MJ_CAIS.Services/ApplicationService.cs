@@ -67,8 +67,6 @@ namespace MJ_CAIS.Services
             if (!string.IsNullOrEmpty(statusId))
             {
                 var statues = statusId.Split(',');
-                //entityQuery = entityQuery.Where(x =>
-                //    statues.Contains(x.StatusCode) || statues.Contains(x.ACertificates.FirstOrDefault().StatusCode));
                 entityQuery = entityQuery.Where(x => statues.Contains(x.StatusCode)).Select(e => e)
                     .Union(entityQuery.Where(x => x.ACertificates.Any(c => statues.Contains(c.StatusCode)))).Select(e => e);
             }
@@ -421,7 +419,9 @@ namespace MJ_CAIS.Services
 
         private async Task UpdatePersonDataAsync(ApplicationInDTO aInDto, AApplication entity)
         {
-            // тодо: да се прегледат дали се сетват правилно идентификраторите
+            aInDto.Person.TableName = ContextTable.Application;
+            aInDto.Person.TableId = aInDto.Id;
+
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {
@@ -452,14 +452,11 @@ namespace MJ_CAIS.Services
                     entity.SuidId = personIdObj.Id;
                     entity.SuidNavigation = personIdObj;
                 }
-                _applicationRepository.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
-                // dbContext.ApplyChanges(personIdObj, new List<IBaseIdEntity>());
+                _applicationRepository.ApplyChanges(personIdObj);
             }
 
-            _applicationRepository.ApplyChanges(entity, new List<IBaseIdEntity>());
+            _applicationRepository.ApplyChanges(entity);
             await _applicationRepository.SaveChangesAsync(clearTracker: true); //добавено от Надя, че обърква контекста.
-            //dbContext.ApplyChanges(entity, new List<IBaseIdEntity>());
-            //await dbContext.SaveChangesAsync();
         }
 
 

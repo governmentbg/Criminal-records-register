@@ -15,6 +15,7 @@ namespace MJ_CAIS.DataAccess.Entities
             BOffences = new HashSet<BOffence>();
             Fbbcs = new HashSet<Fbbc>();
             PPeople = new HashSet<PPerson>();
+            PPersonAliases = new HashSet<PPersonAlias>();
             PPersonHs = new HashSet<PPersonH>();
             WApplications = new HashSet<WApplication>();
         }
@@ -47,6 +48,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<BOffence> BOffences { get; set; }
         public virtual ICollection<Fbbc> Fbbcs { get; set; }
         public virtual ICollection<PPerson> PPeople { get; set; }
+        public virtual ICollection<PPersonAlias> PPersonAliases { get; set; }
         public virtual ICollection<PPersonH> PPersonHs { get; set; }
         public virtual ICollection<WApplication> WApplications { get; set; }
     }

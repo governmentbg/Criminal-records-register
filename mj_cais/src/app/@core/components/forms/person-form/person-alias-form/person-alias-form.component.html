@@ -1,194 +1,204 @@
-
-<div class="font-weight-bold mb-3">Псевдоним или други използвани имена</div>
-<app-grid-with-transactions
-  [gridTransactions]="transactions"
->
-  <igx-grid
-    #personAliasGrid
-    [height]="null"
-    [data]="gridData"
-    [primaryKey]="'id'"
-    class="mb-3"
-  >
-    <igx-grid-toolbar>
-      <button
-        igxButton="flat"
-        (click)="personAliasDialog.open()"
-        *ngIf="isGridEditable"
-      >
-        <igx-icon>add</igx-icon> Добави
-      </button>
-    </igx-grid-toolbar>
-
-    <igx-column
-      field="id"
-      header="Идентификатор"
-      [sortable]="false"
-      [dataType]="'string'"
-      [hidden]="true"
+<div class="mb-3"></div>
+<nb-card>
+  <app-grid-with-transactions [gridTransactions]="transactions">
+    <igx-grid
+      #personAliasGrid
+      [height]="null"
+      [data]="gridData"
+      [primaryKey]="'id'"
+      class="mb-3"
     >
-    </igx-column>
+      <igx-grid-toolbar>
+        <igx-grid-toolbar-title>
+          <span class="fw-bold"
+            >Псевдоним или други използвани имена</span
+          ></igx-grid-toolbar-title
+        >
+        <igx-grid-toolbar-actions>
+          <div class="d-flex gap-2">
+            <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+            <button
+              nbButton
+              [status]="'primary'"
+              (click)="personAliasDialog.open()"
+              *ngIf="isGridEditable"
+            >
+              <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добави
+            </button>
+          </div>
+        </igx-grid-toolbar-actions>
+      </igx-grid-toolbar>
 
-    <igx-column
-      field="typeName"
-      header="Тип"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="firstname"
-      header="Име"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="surname"
-      header="Презиме"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="familyname"
-      header="Фамилия"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="fullname"
-      header="Имена"
-      dataType="string"
-      [sortable]="true"
-    >
-    </igx-column>
-
-    <igx-action-strip #actionstrip>
-      <button
-        *ngIf="isGridEditable"
-        title="Редактирай"
-        igxButton="icon"
-        igxRipple
-        (click)="onOpenEditPersonAlias(actionstrip.context)"
+      <igx-column
+        field="id"
+        header="Идентификатор"
+        [sortable]="false"
+        [dataType]="'string'"
+        [hidden]="true"
       >
-        <igx-icon>edit</igx-icon>
-      </button>
-      <button
-        *ngIf="isGridEditable"
-        title="Изтрии"
-        igxButton="icon"
-        igxRipple
-        (click)="onDeletePersonAlias(actionstrip.context)"
+      </igx-column>
+
+      <igx-column
+        field="typeName"
+        header="Тип"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="firstname"
+        header="Име"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="surname"
+        header="Презиме"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="familyname"
+        header="Фамилия"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="fullname"
+        header="Имена"
+        dataType="string"
+        [sortable]="true"
       >
-        <igx-icon>delete</igx-icon>
-      </button>
-    </igx-action-strip>
-  </igx-grid>
-</app-grid-with-transactions>
+      </igx-column>
 
-<igx-dialog #personAliasDialog>
-  <div class="dialogNewRecord" style="min-width: 1000px">
-    <nb-card>
-      <nb-card-header>
-        <div class="d-flex" style="justify-content: space-between">
-          <div class="d-flex align-items-center">
-            <h5 style="font-weight: bold">Псевдоним</h5>
-          </div>
-          <div class="d-flex">
-            <div>
-              <button
-                nbButton
-                matRipple
-                [status]="'success'"
-                (click)="onAddOrUpdatePersonAliasRow()"
-                type="button"
-                class="ml-2"
-              >
-                Потвърди
-              </button>
+      <igx-action-strip #actionstrip>
+        <button
+          *ngIf="isGridEditable"
+          title="Редактирай"
+          igxButton="icon"
+          igxRipple
+          (click)="onOpenEditPersonAlias(actionstrip.context)"
+        >
+          <igx-icon>edit</igx-icon>
+        </button>
+        <button
+          *ngIf="isGridEditable"
+          title="Изтрии"
+          igxButton="icon"
+          igxRipple
+          (click)="onDeletePersonAlias(actionstrip.context)"
+        >
+          <igx-icon>delete</igx-icon>
+        </button>
+      </igx-action-strip>
+    </igx-grid>
+  </app-grid-with-transactions>
+
+  <igx-dialog #personAliasDialog>
+    <div class="dialogNewRecord" style="min-width: 1000px">
+      <nb-card>
+        <nb-card-header>
+          <div class="d-flex" style="justify-content: space-between">
+            <div class="d-flex align-items-center">
+              <h5 style="font-weight: bold">Псевдоним</h5>
             </div>
-            <div>
-              <button
-                nbButton
-                matRipple
-                (click)="onClosePersonAliasDilog()"
-                type="button"
-                class="ml-2"
-              >
-                Откажи
-              </button>
+            <div class="d-flex">
+              <div>
+                <button
+                  nbButton
+                  matRipple
+                  [status]="'success'"
+                  (click)="onAddOrUpdatePersonAliasRow()"
+                  type="button"
+                  class="ml-2"
+                >
+                  Потвърди
+                </button>
+              </div>
+              <div>
+                <button
+                  nbButton
+                  matRipple
+                  (click)="onClosePersonAliasDilog()"
+                  type="button"
+                  class="ml-2"
+                >
+                  Откажи
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </nb-card-header>
-      <nb-card-body>
-        <div class="row mt-2">
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Тип'"
-              [inputFormControl]="personAliasForm.typeId"
-              [parentGroup]="personAliasForm.group"
-              [items]="personAliasTypes"
-              [inputName]="'typeId'"
-            >
-            </cais-autocomplete>
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row mt-2">
+            <div class="form-group col-md-4">
+              <cais-autocomplete
+                [label]="'Тип'"
+                [inputFormControl]="personAliasForm.typeId"
+                [parentGroup]="personAliasForm.group"
+                [items]="personAliasTypes"
+                [inputName]="'typeId'"
+              >
+              </cais-autocomplete>
+            </div>
           </div>
-        </div>
 
-        <div class="row mt-2">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Име'"
-              [inputFormControl]="personAliasForm.firstname"
-              [parentGroup]="personAliasForm.group"
-              [inputName]="'firstname'"
-            >
-            </cais-input>
+          <div class="row mt-2">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име'"
+                [inputFormControl]="personAliasForm.firstname"
+                [parentGroup]="personAliasForm.group"
+                [inputName]="'firstname'"
+              >
+              </cais-input>
+            </div>
           </div>
-        </div>
 
-        <div class="row mt-2">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Презиме'"
-              [inputFormControl]="personAliasForm.surname"
-              [parentGroup]="personAliasForm.group"
-              [inputName]="'surname'"
-            >
-            </cais-input>
+          <div class="row mt-2">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Презиме'"
+                [inputFormControl]="personAliasForm.surname"
+                [parentGroup]="personAliasForm.group"
+                [inputName]="'surname'"
+              >
+              </cais-input>
+            </div>
           </div>
-        </div>
 
-        <div class="row mt-2">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Фамилия'"
-              [inputFormControl]="personAliasForm.familyname"
-              [parentGroup]="personAliasForm.group"
-              [inputName]="'familyname'"
-            >
-            </cais-input>
+          <div class="row mt-2">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Фамилия'"
+                [inputFormControl]="personAliasForm.familyname"
+                [parentGroup]="personAliasForm.group"
+                [inputName]="'familyname'"
+              >
+              </cais-input>
+            </div>
           </div>
-        </div>
 
-        <div class="row mt-2">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Имена'"
-              [inputFormControl]="personAliasForm.fullname"
-              [parentGroup]="personAliasForm.group"
-              [inputName]="'fullname'"
-            >
-            </cais-input>
+          <div class="row mt-2">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Имена'"
+                [inputFormControl]="personAliasForm.fullname"
+                [parentGroup]="personAliasForm.group"
+                [inputName]="'fullname'"
+              >
+              </cais-input>
+            </div>
           </div>
-        </div>
-      </nb-card-body>
-    </nb-card>
-  </div>
-</igx-dialog>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </igx-dialog>
+</nb-card>

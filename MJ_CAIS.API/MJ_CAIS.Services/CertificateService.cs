@@ -612,9 +612,9 @@ namespace MJ_CAIS.Services
             //дали да не се ползва Select метода от репозиторито
             var certificate = await _certificateRepository.SingleOrDefaultAsync<ACertificate>(a => a.Id == aId);
 
+
             if (certificate == null)
                 throw new BusinessLogicException(string.Format(CertificateResources.msgCertificateDoesNotExist, aId));
-
             UpdateCertificateStatus(certificate, ApplicationConstants.ApplicationStatuses.BulletinsSelection);
             CreateAStatusH(certificate.ApplicationId, certificate.Id, certificate.StatusCode, CertificateResources.msgStatusForRehabilitation);
 
@@ -694,11 +694,14 @@ namespace MJ_CAIS.Services
             await _certificateRepository.SaveChangesAsync();
         }
 
+
+
         private void UpdateCertificateStatus(ACertificate? certificate, string statusCode)
         {
+            certificate.FirstSignerId = certificate.FirstSignerId ?? _userContext.UserId;
             certificate.StatusCode = statusCode;
             certificate.EntityState = Common.Enums.EntityStateEnum.Modified;
-            certificate.ModifiedProperties = new List<string> { nameof(certificate.StatusCode), nameof(certificate.Version) };
+            certificate.ModifiedProperties = new List<string> { nameof(certificate.StatusCode), nameof(certificate.Version), nameof(certificate.FirstSignerId) };
             _certificateRepository.ApplyChanges(certificate, new List<IBaseIdEntity>());
         }
 

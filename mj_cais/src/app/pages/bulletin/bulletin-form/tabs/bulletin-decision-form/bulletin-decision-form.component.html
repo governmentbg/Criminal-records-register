@@ -1,167 +1,188 @@
 <app-grid-with-transactions [gridTransactions]="bulletinDecisionsTransactions">
-  <igx-grid
-    #decisionsGrid
-    [height]="null"
-    [data]="decisions"
-    [primaryKey]="'id'"
-    [pinning]="pinningConfig"
-  >
-    <igx-grid-toolbar>
-      <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
-        <igx-icon>add</igx-icon> Добави
-      </button>
-    </igx-grid-toolbar>
-
-    <igx-column
-      field="id"
-      header="Идентификатор"
-      [sortable]="false"
-      [dataType]="'string'"
-      [hidden]="true"
+  <nb-card>
+    <igx-grid
+      #decisionsGrid
+      [height]="null"
+      [data]="decisions"
+      [primaryKey]="'id'"
+      [pinning]="pinningConfig"
     >
-    </igx-column>
-
-    <igx-column
-      field="descr"
-      header="Описание"
-      dataType="string"
-      [sortable]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="decisionChTypeId"
-      header="Идентификатор на категория допълнителни сведения"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="decisionChTypeName"
-      header="Категория допълнителни сведения"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-    <igx-column
-      field="changeDate"
-      [sortable]="true"
-      header="Дата на промяна"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDate(cell.value)">
-          {{ this.dateFormatService.displayDate(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-    <igx-column
-      field="decisionTypeId"
-      header="Идентификатор на вид съдебен акт"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="decisionTypeName"
-      header="Вид съдебен акт"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="decisionNumber"
-      header="Номер на акта"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="decisionDate"
-      [sortable]="true"
-      header="Дата на акта"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDate(cell.value)">
-          {{ this.dateFormatService.displayDate(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
-      field="decisionFinalDate"
-      [sortable]="true"
-      header="Дата на влизане в сила на акта"
-      dataType="Date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDate(cell.value)">
-          {{ this.dateFormatService.displayDate(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
-      field="decisionAuthId"
-      header="Идентификатор на съд, издал акта"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="decisionAuthName"
-      header="Съд, издал акта"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-
-    <igx-column
-      field="decisionEcli"
-      header="ECLI номер"
-      dataType="string"
-      [sortable]="true"
-    >
-    </igx-column>
-
-    <igx-column
-      width="150px"
-      header=""
-      [sortable]="false"
-      [filterable]="false"
-      [pinned]="true"
-    >
-      <ng-template igxCell let-cell="cell">
-        <button
-          title="Преглед"
-          igxButton="icon"
-          igxRipple
-          (click)="onOpenPreviewDecision(cell)"
+      <igx-grid-toolbar>
+        <igx-grid-toolbar-title>
+          <span class="fw-bold"
+            >Допълнителни сведения</span
+          ></igx-grid-toolbar-title
         >
-          <nb-icon pack="fa" icon="eye"></nb-icon>
-        </button>
-        <button
-          *ngIf="!isForPreview"
-          title="Редактирай"
-          igxButton="icon"
-          igxRipple
-          (click)="onOpenEditBulletinDecision(cell)"
-        >
-          <igx-icon>edit</igx-icon>
-        </button>
-        <button
-          *ngIf="!isForPreview"
-          title="Изтрии"
-          igxButton="icon"
-          igxRipple
-          (click)="onDeleteBulletinDecision(cell)"
-        >
-          <igx-icon>delete</igx-icon>
-        </button>
-      </ng-template>
-    </igx-column>
-  </igx-grid>
+        <igx-grid-toolbar-actions>
+          <div class="d-flex gap-2">
+            <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+            <button
+              igxButton="flat"
+              (click)="dialogAdd.open()"
+              *ngIf="!isForPreview"
+            >
+              <igx-icon>add</igx-icon> Добави
+            </button>
+          </div>
+        </igx-grid-toolbar-actions>
+      </igx-grid-toolbar>
+
+      <igx-column
+        field="id"
+        header="Идентификатор"
+        [sortable]="false"
+        [dataType]="'string'"
+        [hidden]="true"
+      >
+      </igx-column>
+
+      <igx-column
+        field="descr"
+        header="Описание"
+        dataType="string"
+        [sortable]="true"
+      >
+      </igx-column>
+      <igx-column
+        field="decisionChTypeId"
+        header="Идентификатор на категория допълнителни сведения"
+        dataType="number"
+        [hidden]="true"
+      >
+      </igx-column>
+      <igx-column
+        field="decisionChTypeName"
+        header="Категория допълнителни сведения"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="changeDate"
+        [sortable]="true"
+        header="Дата на промяна"
+        dataType="Date"
+        [formatter]="this.dateFormatService.formatDate"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="this.dateFormatService.displayDate(cell.value)">
+            {{ this.dateFormatService.displayDate(cell.value) }}
+          </span>
+        </ng-template>
+      </igx-column>
+      <igx-column
+        field="decisionTypeId"
+        header="Идентификатор на вид съдебен акт"
+        dataType="number"
+        [hidden]="true"
+      >
+      </igx-column>
+      <igx-column
+        field="decisionTypeName"
+        header="Вид съдебен акт"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="decisionNumber"
+        header="Номер на акта"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="decisionDate"
+        [sortable]="true"
+        header="Дата на акта"
+        dataType="Date"
+        [formatter]="this.dateFormatService.formatDate"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="this.dateFormatService.displayDate(cell.value)">
+            {{ this.dateFormatService.displayDate(cell.value) }}
+          </span>
+        </ng-template>
+      </igx-column>
+
+      <igx-column
+        field="decisionFinalDate"
+        [sortable]="true"
+        header="Дата на влизане в сила на акта"
+        dataType="Date"
+        [formatter]="this.dateFormatService.formatDate"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="this.dateFormatService.displayDate(cell.value)">
+            {{ this.dateFormatService.displayDate(cell.value) }}
+          </span>
+        </ng-template>
+      </igx-column>
+
+      <igx-column
+        field="decisionAuthId"
+        header="Идентификатор на съд, издал акта"
+        dataType="number"
+        [hidden]="true"
+      >
+      </igx-column>
+      <igx-column
+        field="decisionAuthName"
+        header="Съд, издал акта"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+
+      <igx-column
+        field="decisionEcli"
+        header="ECLI номер"
+        dataType="string"
+        [sortable]="true"
+      >
+      </igx-column>
+
+      <igx-column
+        width="140px"
+        header="Действия"
+        [sortable]="false"
+        [filterable]="false"
+        [pinned]="true"
+        [disableHiding]="true"
+      >
+        <ng-template igxCell let-cell="cell">
+          <div class="cell-center">
+            <div class="d-flex gap-3">
+              <button
+                title="Преглед"
+                igxButton="icon"
+                igxRipple
+                (click)="onOpenPreviewDecision(cell)"
+              >
+                <nb-icon pack="fa" icon="eye"></nb-icon>
+              </button>
+              <button
+                *ngIf="!isForPreview"
+                title="Редактирай"
+                igxButton="icon"
+                igxRipple
+                (click)="onOpenEditBulletinDecision(cell)"
+              >
+                <igx-icon>edit</igx-icon>
+              </button>
+              <button
+                *ngIf="!isForPreview"
+                title="Изтрии"
+                igxButton="icon"
+                igxRipple
+                (click)="onDeleteBulletinDecision(cell)"
+              >
+                <igx-icon>delete</igx-icon>
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </igx-column>
+    </igx-grid>
+  </nb-card>
 </app-grid-with-transactions>
 
 <igx-dialog #dialogAdd>

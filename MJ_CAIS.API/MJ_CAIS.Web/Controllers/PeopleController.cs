@@ -89,10 +89,10 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{aId}/connect/{personToBeConnected}")]
-        public async Task<IActionResult> ConnectPeople(string aId, string personToBeConnected)
+        [HttpPost("connect")]
+        public async Task<IActionResult> ConnectPeople([FromBody] ConnectPeopleDTO aInDto)
         {
-            await this._managePersonService.ConnectPeopleAsync(aId, personToBeConnected);
+            await this._managePersonService.ConnectPeopleAsync(aInDto.Id, aInDto.PersonToBeConnected, aInDto.Desc);
             return Ok();
         }
 
@@ -102,7 +102,7 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._managePersonService.RemovePidAsync(aInDto);
             if (result == null) return NotFound();
 
-            return Ok(result.PersonId);
+            return Ok();
         }
     }
 }

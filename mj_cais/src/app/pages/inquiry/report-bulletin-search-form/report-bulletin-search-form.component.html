@@ -1,19 +1,16 @@
-<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+<nb-card
+  class="card-single-page-height"
+  accent="primary"
+  [formGroup]="fullForm.group"
+>
   <nb-card-header class="card-header-shadow">
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex align-items-center">
-        <div style="font-weight: bold; font-size: 22px">{{ title }}</div>
+        <h2 class="h4">{{ title }}</h2>
       </div>
       <div class="d-flex">
         <div>
-          <button
-            (click)="onSearch()"
-            nbButton
-            matRipple
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
+          <button (click)="onSearch()" nbButton status="primary" type="button">
             Търсене
           </button>
         </div>
@@ -202,10 +199,13 @@
         </div>
       </div>
     </form>
-    <cais-report-bulletin-search-overview
-      #bulletinReportOverview
-      [searchForm]="fullForm"
-    >
-    </cais-report-bulletin-search-overview>
   </nb-card-body>
 </nb-card>
+
+<nb-card>
+  <cais-report-bulletin-search-overview
+    #bulletinReportOverview
+    [searchForm]="fullForm"
+  >
+  </cais-report-bulletin-search-overview
+></nb-card>

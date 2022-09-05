@@ -58,6 +58,8 @@ namespace MJ_CAIS.Services
             _managePersonService = managePersonService;
         }
 
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
             var entityQuery = this.GetSelectAllQueryable();
@@ -98,11 +100,6 @@ namespace MJ_CAIS.Services
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var result = resultQuery.ToList();
             return result;
-        }
-
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
         }
 
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)
@@ -497,10 +494,12 @@ namespace MJ_CAIS.Services
             // get person data from bulletin
             var personDto = mapper.Map<BBulletin, PersonDTO>(bulletin);
             // create person object, apply changes
+            personDto.TableName = ContextTable.Bulletins;
+            personDto.TableId = bulletin.Id;
+
             var person = await _managePersonService.CreatePersonAsync(personDto);
 
             // create PBulletinId for all pids (locally added and saved in db)
-
             foreach (var personIdObj in person.PPersonIds)
             {
                 if (personIdObj.PidTypeId == PidType.Egn && bulletin.Egn == personIdObj.Pid)

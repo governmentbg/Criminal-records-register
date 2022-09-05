@@ -1,7 +1,7 @@
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import 'material-icons/iconfont/material-icons.css';
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
@@ -30,6 +30,17 @@
   @include nb-auth-global();
 }
 
+
+$custom-palette: igx-palette(
+  $primary: #222b45,
+  $secondary: #3366ff,
+);
+@include igx-theme(
+  $palette: $custom-palette,
+  $schema: $light-material-schema,
+  $roundness: null,
+  $elevation: null
+);
 
 .nb-theme-dark {
   $custom-palette: igx-palette(
@@ -172,12 +183,14 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   justify-content: center;
   height: 100%;
   width: 100%;
-
 }
 
-.cell-center a {
+.cell-center a , .btn-link {
   color: #0000009E;
 }
+.cell-center .btn-link {
+ padding:0px;
+} 
 
 
 .ng-select {

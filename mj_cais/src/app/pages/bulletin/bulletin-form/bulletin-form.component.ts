@@ -18,6 +18,7 @@ import { NbDialogService } from "@nebular/theme";
 import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { TranslateService } from "@ngx-translate/core";
 import { Observable } from "rxjs";
+import { UserAuthorityService } from "../../../@core/services/common/user-authority.service";
 
 @Component({
   selector: "cais-bulletin-form",
@@ -108,7 +109,8 @@ export class BulletinFormComponent
     public injector: Injector,
     private loaderService: NgxSpinnerService,
     private dialogService: NbDialogService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private userAuthorityService: UserAuthorityService
   ) {
     super(service, injector);
     this.setDisplayTitle("бюлетин");
@@ -137,7 +139,13 @@ export class BulletinFormComponent
     this.fullForm.person.nationalities.isChanged.patchValue(true);
     this.isNoSanctionCheck = this.fullForm.noSanction.value;
     this.initAllowedButtons(bulletinStatusId, locked);
-
+    if (
+      this.isEdit() &&
+      this.userAuthorityService.csAuthorityId !=
+        (this.dbData.element as any).csAuthorityId
+    ) {
+      this.isForPreview = true;
+    }
     this.formFinishedLoading.emit();
   }
 
@@ -157,7 +165,7 @@ export class BulletinFormComponent
 
   //override submit function
   //todo
- onSubmitSuccess(data: any) {
+  onSubmitSuccess(data: any) {
     this.loaderService.hide();
     if (this.isFinalEdit) {
       this.toastr.showToast(
@@ -292,11 +300,19 @@ export class BulletinFormComponent
   }
 
   private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
+    let userHasDiffAuth =
+      this.userAuthorityService.csAuthorityId !=
+      (this.dbData.element as any).csAuthorityId;
+    if (!this.isEdit()) {
+      userHasDiffAuth = false;
+    }
+    
     let isGridsEditable =
-      (!this.isForPreview &&
-        (bulletinStatusId == BulletinStatusTypeEnum.NewOffice ||
-          isLocked == false)) ||
-      this.currentAction == EActions.CREATE;
+      !userHasDiffAuth &&
+      !this.isForPreview &&
+      (bulletinStatusId == BulletinStatusTypeEnum.NewOffice ||
+        isLocked == false ||
+        this.currentAction == EActions.CREATE);
 
     this.isBulletinPersonAliasEditable = isGridsEditable;
     this.isOffancesEditable = isGridsEditable;
@@ -305,21 +321,26 @@ export class BulletinFormComponent
     this.isDocumentsEditable = this.isEdit();
 
     this.isDecisionEditable =
-      (!this.isForPreview &&
-        (bulletinStatusId == BulletinStatusTypeEnum.Active ||
-          isLocked == false)) ||
-      bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation;
+      !userHasDiffAuth &&
+      !this.isForPreview &&
+      (bulletinStatusId == BulletinStatusTypeEnum.Active ||
+        isLocked == false ||
+        bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation);
 
     let hideUpdateButton =
       bulletinStatusId == BulletinStatusTypeEnum.Rehabilitated ||
       bulletinStatusId == BulletinStatusTypeEnum.Deleted ||
       bulletinStatusId == BulletinStatusTypeEnum.ForDestruction ||
       bulletinStatusId == BulletinStatusTypeEnum.ReplacedAct425;
-    this.setEditToBeForPreview = hideUpdateButton;
+
+    this.setEditToBeForPreview =
+      hideUpdateButton || this.isForPreview || userHasDiffAuth;
 
     this.showForUpdate =
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
-      this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewOffice;
+      (this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
+        this.fullForm.statusIdDisplay.value ==
+          BulletinStatusTypeEnum.NewOffice) &&
+      userHasDiffAuth == false;
   }
 
   private applyTransactions() {

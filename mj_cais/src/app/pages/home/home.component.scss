@@ -1,0 +1,21 @@
+@import "../../@theme/styles/themes";
+
+@include nb-install-component() {
+  nb-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  nb-list {
+    overflow-x: hidden;
+  }
+
+  nb-list-item {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    //margin: 0 -0.20rem;
+  }
+  
+}

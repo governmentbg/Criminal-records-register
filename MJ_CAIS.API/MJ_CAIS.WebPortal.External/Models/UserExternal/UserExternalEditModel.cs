@@ -33,12 +33,21 @@ namespace MJ_CAIS.WebPortal.External.Models.UserExternal
         [Display(ResourceType = typeof(UsersResources), Name = nameof(UsersResources.lblPosition))]
         public string? Position { get; set; }
 
-        public bool IsAdded { get; set; }
+        [Display(ResourceType = typeof(UsersResources), Name = nameof(UsersResources.lblUserName))]
+        public string? UserName { get; set; }
+
+        [Display(ResourceType = typeof(UsersResources), Name = nameof(UsersResources.lblPassword))]
+        public string? Password { get; set; }
+
+        [Display(ResourceType = typeof(UsersResources), Name = nameof(UsersResources.lblConfirmPassword))]
+        [Compare("Password", ErrorMessageResourceType = typeof(UsersResources), ErrorMessageResourceName = nameof(UsersResources.msgPasswordsMustMatch))]
+        public string? ConfirmPassword { get; set; }
+
+        [Display(ResourceType = typeof(UsersResources), Name = nameof(UsersResources.lblPhone))]
+        public string? Phone { get; set; }
 
         public string? Version { get; set; }
 
         public string? RegCertSubject { get; set; }
-
-        public string? UserName { get; set; }
     }
 }

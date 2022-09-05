@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 import { NbDialogRef } from "@nebular/theme";
 
 @Component({
-  selector: 'cais-confirm-dialog-component',
-  templateUrl: './confirm-dialog-component.component.html',
-  styleUrls: ['./confirm-dialog-component.component.scss']
+  selector: "cais-confirm-dialog-component",
+  templateUrl: "./confirm-dialog-component.component.html",
+  styleUrls: ["./confirm-dialog-component.component.scss"],
 })
 export class ConfirmDialogComponent implements OnInit {
   constructor(protected ref: NbDialogRef<ConfirmDialogComponent>) {}
 
-  public confirmMessage:string;
+  @Input()
+  color: "danger" | "success";
+  public confirmMessage: string;
   public showHeder: boolean = true;
 
   ngOnInit(): void {}

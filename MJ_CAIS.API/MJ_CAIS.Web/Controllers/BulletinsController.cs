@@ -94,7 +94,6 @@ namespace MJ_CAIS.Web.Controllers
             return Ok();
         }
 
-
         [HttpPut("final-edit/{aId}")]
         [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
         public virtual async Task<IActionResult> FinalEdit(string aId, [FromBody] BulletinEditDTO aInDto)

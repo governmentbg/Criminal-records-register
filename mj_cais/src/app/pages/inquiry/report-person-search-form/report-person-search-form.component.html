@@ -1,19 +1,16 @@
-<nb-card class="card-single-page-height" [formGroup]="fullForm.group">
+<nb-card
+  class="card-single-page-height"
+  accent="primary"
+  [formGroup]="fullForm.group"
+>
   <nb-card-header class="card-header-shadow">
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex align-items-center">
-        <div style="font-weight: bold; font-size: 22px">{{ title }}</div>
+        <h2 class="h4">{{ title }}</h2>
       </div>
       <div class="d-flex">
         <div>
-          <button
-            (click)="onSearch()"
-            nbButton
-            matRipple
-            type="button"
-            class="ml-2"
-            style="min-width: 100px"
-          >
+          <button (click)="onSearch()" nbButton status="primary" type="button">
             Търсене
           </button>
         </div>
@@ -73,9 +70,9 @@
             [inputName]="'sex'"
             [items]="dbData.genderTypes"
           ></cais-autocomplete>
-        </div>       
+        </div>
       </div>
-      <div class="row">     
+      <div class="row">
         <div class="form-group col-md-2">
           <cais-input
             [type]="'date'"
@@ -144,11 +141,11 @@
             [hideDesc]="true"
           ></cais-address-form>
         </div>
-          <div class="form-group col-md-2">
-            <nb-checkbox [formControl]="fullForm.foreigner"
+        <div class="form-group col-md-2">
+          <nb-checkbox [formControl]="fullForm.foreigner"
             >Лица родени извън България</nb-checkbox
           >
-          </div>
+        </div>
       </div>
       <hr />
       <div class="row">
@@ -179,10 +176,13 @@
         </div>
       </div>
     </form>
-    <cais-report-person-search-overview
-      #bulletinByPersonReportOverview
-      [searchForm]="fullForm"
-    >
-    </cais-report-person-search-overview>
   </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <cais-report-person-search-overview
+    #bulletinByPersonReportOverview
+    [searchForm]="fullForm"
+  >
+  </cais-report-person-search-overview>
 </nb-card>

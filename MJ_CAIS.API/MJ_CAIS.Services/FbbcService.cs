@@ -135,8 +135,9 @@ namespace MJ_CAIS.Services
 
         private async Task UpdatePersonAsync(FbbcDTO aInDto, Fbbc entity)
         {
-
             var personDto = aInDto.Person;
+            personDto.TableName = ContextTable.Fbbc;
+            personDto.TableId = entity.Id;
             // create person object, apply changes
             var person = await _managePersonService.CreatePersonAsync(personDto);
 

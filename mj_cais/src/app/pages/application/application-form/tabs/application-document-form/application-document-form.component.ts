@@ -1,22 +1,25 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { IgxDialogComponent, IgxGridComponent } from '@infragistics/igniteui-angular';
-import { NbDialogService } from '@nebular/theme';
-import { FileItem } from 'ng2-file-upload';
-import { Observable, ReplaySubject } from 'rxjs';
-import { ConfirmDialogComponent } from '../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component';
-import { CommonConstants } from '../../../../../@core/constants/common.constants';
-import { CustomToastrService } from '../../../../../@core/services/common/custom-toastr.service';
-import { DateFormatService } from '../../../../../@core/services/common/date-format.service';
-import { CustomFileUploader } from '../../../../../@core/utils/custom-file-uploader';
-import { ApplicationService } from '../../_data/application.service';
-import { ApplicationDocumentForm } from '../../_models/application-document.form';
-import { ApplicationForm } from '../../_models/application.form';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  IgxDialogComponent,
+  IgxGridComponent,
+} from "@infragistics/igniteui-angular";
+import { NbDialogService } from "@nebular/theme";
+import { FileItem } from "ng2-file-upload";
+import { Observable, ReplaySubject } from "rxjs";
+import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
+import { CommonConstants } from "../../../../../@core/constants/common.constants";
+import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
+import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
+import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
+import { ApplicationService } from "../../_data/application.service";
+import { ApplicationDocumentForm } from "../../_models/application-document.form";
+import { ApplicationForm } from "../../_models/application.form";
 import * as fileSaver from "file-saver";
 
 @Component({
-  selector: 'cais-application-document-form',
-  templateUrl: './application-document-form.component.html',
-  styleUrls: ['./application-document-form.component.scss']
+  selector: "cais-application-document-form",
+  templateUrl: "./application-document-form.component.html",
+  styleUrls: ["./application-document-form.component.scss"],
 })
 export class ApplicationDocumentFormComponent implements OnInit {
   @Input() appForm: ApplicationForm;
@@ -104,7 +107,12 @@ export class ApplicationDocumentFormComponent implements OnInit {
 
   openDeleteConfirmationDialog(documentId: string) {
     this.dialogService
-      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "danger",
+        },
+        closeOnBackdropClick: false,
+      })
       .onClose.subscribe((result) => {
         if (result) {
           this.appService

@@ -1,41 +1,43 @@
-<div class="header-container">
-  <div class="logo-container">
-    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
-      <nb-icon icon="menu-2-outline"></nb-icon>
-    </a>
-    <a class="logo" href="#" (click)="navigateHome()"
-      ><h1 style="font-size: 20px; font-weight: 600">
-        <img src="assets/images/logo.png" id="cais-logo" />
-        <span style="padding-left: 5px; margin-left: 5px"
-          >ЦАИС Съдебен статус</span
-        >
-        <span *ngIf="origin !== 'https://crr-internal.mjs.bg'" style="padding-left: 5px; margin-left: 5px" class="text-white bg-danger"
-        >Непродукционна среда</span
-      >
-      </h1>
-    </a>
-  </div>
-  <nb-select
-    [selected]="currentTheme"
-    (selectedChange)="changeTheme($event)"
-  >
-    <nb-option *ngFor="let theme of themes" [value]="theme.value">
-      {{ theme.name }}</nb-option
-    >
-  </nb-select>
+<div class="d-flex align-items-center gap-3">
+  <a (click)="toggleSidebar()" href="#">
+    <nb-icon icon="menu" class="text-gray" style="width: 2rem;height:2rem"></nb-icon>
+  </a>
+  <a class="logo" href="#" (click)="navigateHome()">
+    <h1>
+      <img src="assets/images/logo.png" id="cais-logo" class="mr-5" />
+    </h1>
+  </a>
+  <h1 class="h4">ЦАИС Съдебен статус</h1>
 </div>
 
-<div class="header-container">
-  <a style="cursor: pointer;" [title]="'Информация'" (click)="navigateToHelp()">
-    <i class="fas fa-question-circle"></i>
-  </a>
-  <nb-actions size="small">
+<div *ngIf="origin !== 'https://crr-internal.mjs.bg'" class="alert alert-danger d-flex align-items-center mb-0"
+  role="alert">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path
+        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </symbol>
+  </svg>
+  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+    <use xlink:href="#exclamation-triangle-fill" /></svg>
+  <div class="fw-bold text-uppercase">
+    Непродукционна среда!
+  </div>
+</div>
+<div class="d-flex align-items-center">
+  <div class="d-flex">
+    <button class="btn btn-link" (click)="navigateToHelp()">
+      <nb-icon icon="help" class="text-gray" [title]="'Ръководство на потребителя'"></nb-icon>
+    </button>
+    <button class="btn btn-link" (click)="changeTheme()">
+      <nb-icon icon="palette" class="text-gray" [title]="'Смени тема'"></nb-icon>
+    </button>
+  </div>
+
+
+<nb-actions size="small">
     <nb-action class="user-action">
-      <nb-user
-        [nbContextMenu]="userMenu"
-        [onlyPicture]="userPictureOnly"
-        [name]="user?.name"
-      >
+      <nb-user [nbContextMenu]="userMenu" [onlyPicture]="userPictureOnly" [name]="user?.name">
       </nb-user>
     </nb-action>
   </nb-actions>

@@ -3,6 +3,7 @@ using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Common;
 using MJ_CAIS.DTO.ExternalServicesHost;
 using MJ_CAIS.DTO.Person;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
 {
@@ -41,6 +42,8 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForPath(d => d.BirthPlace.ForeignCountryAddress, opt => opt.MapFrom(src => src.BirthPlaceOther))
                 .ForPath(d => d.BirthPlace.Country.Id, opt => opt.MapFrom(src => src.BirthCountryId))
                 .ForPath(d => d.BirthPlace.CityId, opt => opt.MapFrom(src => src.BirthCityId))
+                .ForPath(d => d.TableId, opt => opt.MapFrom(src => src.Id))
+                .ForPath(d => d.TableName, opt => opt.MapFrom(src => ContextTable.Bulletins))
                 .ForPath(d => d.Nationalities, opt => opt.MapFrom(src => new MultipleChooseDTO
                 {
                     SelectedForeignKeys = src.BPersNationalities.Select(x => x.CountryId)

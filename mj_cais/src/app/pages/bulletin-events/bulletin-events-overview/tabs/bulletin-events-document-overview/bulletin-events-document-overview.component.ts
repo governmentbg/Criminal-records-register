@@ -1,4 +1,6 @@
 import { Component, Injector, Input } from "@angular/core";
+import { NbDialogService } from "@nebular/theme";
+import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
@@ -18,6 +20,7 @@ export class BulletinEventsDocumentOverviewComponent extends RemoteGridWithState
   constructor(
     service: BulletinEventsDocumentGridService,
     injector: Injector,
+    private dialogService: NbDialogService,
     public dateFormatService: DateFormatService,
     public loaderService: LoaderService
   ) {
@@ -30,7 +33,10 @@ export class BulletinEventsDocumentOverviewComponent extends RemoteGridWithState
   public hideStatus: boolean = true;
 
   ngOnInit() {
-    this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New, this.bulletinId);
+    this.service.updateEventStatusUrl(
+      BulletinEventsStatusTypeEnum.New,
+      this.bulletinId
+    );
     this.loaderService.showSpinner(this.service);
     super.ngOnInit();
   }
@@ -39,13 +45,47 @@ export class BulletinEventsDocumentOverviewComponent extends RemoteGridWithState
     if (isChacked) {
       this.service.updateEventStatusUrl(null, this.bulletinId);
     } else {
-      this.service.updateEventStatusUrl(BulletinEventsStatusTypeEnum.New, this.bulletinId);
+      this.service.updateEventStatusUrl(
+        BulletinEventsStatusTypeEnum.New,
+        this.bulletinId
+      );
     }
 
     this.hideStatus = !isChacked;
     super.ngOnInit();
   }
 
+  public approveStatus(id: string) {
+    buletinStatus: BulletinEventsStatusTypeEnum;
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "success",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.changeStatus(id, BulletinEventsStatusTypeEnum.Approved);
+        }
+      });
+  }
+
+  public rejectStatus(id: string) {
+    status: BulletinEventsStatusTypeEnum.Approved;
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "danger",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.changeStatus(id, BulletinEventsStatusTypeEnum.Rejected);
+        }
+      });
+  }
   public changeStatus(id: string, status: BulletinEventsStatusTypeEnum) {
     this.service.changeStatus(id, status).subscribe(
       (res) => {

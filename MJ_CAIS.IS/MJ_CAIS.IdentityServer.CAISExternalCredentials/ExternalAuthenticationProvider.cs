@@ -20,10 +20,13 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
     {
         public void AddAuthentication(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient(typeof(IPasswordHasher<GUsersExt>), typeof(CompatibilityPasswordHasher));
+
             services.AddIdentityCore<GUsersExt>()
                 .AddSignInManager()
                 .AddEntityFrameworkStores<CaisDbContext>()
                 .AddDefaultTokenProviders();
+
         }
 
         public void BuildLogin(IConfiguration configuration, Controller controller, string returnURL, List<ExternalProvider> providers, ref bool externalOnly)

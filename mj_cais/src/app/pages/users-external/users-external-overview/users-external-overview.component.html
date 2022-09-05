@@ -1,180 +1,203 @@
-<igx-grid
-  #grid
-  igxGridState
-  [data]="items$ | async"
-  [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
-  [paging]="true"
-  [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
-  [paginationTemplate]="pager"
-  [allowFiltering]="true"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
-  [cellSelection]="'none'"
->
-<igx-grid-toolbar>
-  <igx-grid-toolbar-title>Външни потребители</igx-grid-toolbar-title>
-  <igx-grid-toolbar-actions>
-      <a
-        nbButton
-        matRipple
-        [status]="'success'"
-        [routerLink]="['/pages/users-external/create']"
+<nb-card>
+  <igx-grid
+    #grid
+    igxGridState
+    [data]="items$ | async"
+    [height]="null"
+    [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy"
+    [paging]="true"
+    [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'"
+    (onSortingDone)="sortingDone($event)"
+    (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)"
+    [paginationTemplate]="pager"
+    [allowFiltering]="true"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
+    [cellSelection]="'none'"
+  >
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold">Външни потребители</span></igx-grid-toolbar-title
       >
-      <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
-        Добавяне 
-      </a>
-  </igx-grid-toolbar-actions>
-</igx-grid-toolbar>
+      <igx-grid-toolbar-actions>
+        <div class="d-flex gap-2">
+          <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+          <a
+            nbButton
+            matRipple
+            [status]="'primary'"
+            [routerLink]="['/pages/users-external/create']"
+          >
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добавяне
+          </a>
+        </div>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
 
-  <igx-column
-    field="id"
-    header="id"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="id"
+      header="id"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="administrationName"
-    header="Администрация"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="administrationName"
+      header="Администрация"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="position"
-    header="Позиция"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="name"
+      header="Имeна"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="name"
-    header="Имeна"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="egn"
+      header="ЕГН"
+      width="100px"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="egn"
-    header="ЕГН"
-    width="100px"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  
-  <igx-column
-    field="email"
-    header="EMail"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  
-  <igx-column
-    field="active"
-    header="Активен"
-    width="70px"
-    [sortable]="false"
-    [dataType]="'boolean'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>   
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="email"
+      header="Eл. поща"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="isAdmin"
-    header="Администратор"
-    width="90px"
-    [sortable]="false"
-    [dataType]="'boolean'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>   
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="userName"
+      header="Потребителско име"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="hasRegRegCertSubject"
-    header="За регистрация"
-    width="90px"
-    [sortable]="false"
-    [dataType]="'boolean'"
-    [hidden]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>   
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="position"
+      header="Позиция"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    width="100px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/users-external/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-      <a
-        [title]="'Редактиране'"
-        [routerLink]="['/pages/users-external/edit', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="pen"></nb-icon>
-      </a>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="active"
+      header="Активен"
+      width="70px"
+      [sortable]="false"
+      [dataType]="'boolean'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>
+      </ng-template>
+    </igx-column>
 
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
-    </div>
-  </ng-template>
-</igx-grid>
+    <igx-column
+      field="isAdmin"
+      header="Администратор"
+      width="90px"
+      [sortable]="false"
+      [dataType]="'boolean'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="hasRegRegCertSubject"
+      header="За регистрация"
+      width="90px"
+      [sortable]="false"
+      [dataType]="'boolean'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      width="120px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <a
+              [title]="'Преглед'"
+              [routerLink]="['/pages/users-external/preview', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+            <a
+              [title]="'Редактиране'"
+              [routerLink]="['/pages/users-external/edit', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="pen"></nb-icon>
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </igx-column>
+
+    <ng-template #pager let-grid>
+      <div class="tl-paginator">
+        <cais-grid-pager
+          [page]="remoteService.pagerParams.page"
+          [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount"
+          (pagerChange)="pagerChange($event)"
+        ></cais-grid-pager>
+      </div>
+    </ng-template>
+  </igx-grid>
+</nb-card>

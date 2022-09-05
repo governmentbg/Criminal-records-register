@@ -59,5 +59,15 @@
             /// </summary>
             public const string CRR = "CRR";
         }
+
+        public static class ContextTable
+        {
+            public const string Bulletins = "B_BULLETINS";
+            public const string Application = "A_APPLICATIONS";
+            public const string WApplication = "W_APPLICATIONS";
+            public const string Report = "A_REPORTS";
+            public const string Fbbc = "FBBC";
+            public const string Manual = "MANUAL";
+        }
     }
 }
