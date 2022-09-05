@@ -203,7 +203,7 @@ namespace MJ_CAIS.Services
 
             if (normalFlowForCreatePerson || changesOnPersonData)
             {
-                var person = await CreatePersonFromBulletinAsync(bulletinToUpdate);         
+                var person = await CreatePersonFromBulletinAsync(bulletinToUpdate);
                 await UpdateRehabilitationAndEventDataAsync(bulletinToUpdate, person);
             }
 
@@ -606,6 +606,21 @@ namespace MJ_CAIS.Services
         private async Task UpdateTransactionsAsync(BulletinBaseDTO aInDto, BBulletin entity)
         {
             entity.BOffences = mapper.MapTransactions<OffenceDTO, BOffence>(aInDto.OffancesTransactions);
+            entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
+            entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.Person.PersonAliasTransactions);
+            entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Person.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
+
+            if (aInDto.NoSanction == true)
+            {
+                var bulletinSanctions = await _bulletinRepository.GetBulletinSanctionsAsync(entity.Id);
+                foreach (var item in bulletinSanctions)
+                {
+                    item.EntityState = EntityStateEnum.Deleted;
+                }
+                entity.BSanctions = bulletinSanctions;
+
+                return;
+            }
 
             var deletedSanctionIds = aInDto.SanctionsTransactions
                     .Where(x => x.Type == TransactionTypesEnum.DELETE)
@@ -629,9 +644,6 @@ namespace MJ_CAIS.Services
             }
 
             entity.BSanctions = sanctions;
-            entity.BDecisions = mapper.MapTransactions<DecisionDTO, BDecision>(aInDto.DecisionsTransactions);
-            entity.BBullPersAliases = mapper.MapTransactions<PersonAliasDTO, BBullPersAlias>(aInDto.Person.PersonAliasTransactions);
-            entity.BPersNationalities = CaisMapper.MapMultipleChooseToEntityList<BPersNationality, string, string>(aInDto.Person.Nationalities, nameof(BPersNationality.Id), nameof(BPersNationality.CountryId));
         }
 
         private void UpdateModifiedProperties(BaseEntity entityToSave, string nameOfProp)

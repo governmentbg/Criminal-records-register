@@ -48,12 +48,19 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                .ForPath(d => d.Person.FatherNames.FullName, opt => opt.MapFrom(src => src.FatherFullname))
                .ForPath(d => d.Person.AFISNumber, opt => opt.MapFrom(src => src.AfisNumber))
                .ForPath(d => d.Person.PreviousNames, opt => opt.MapFrom(src => src.BBullPersAliases))
-               .ForPath(d => d.Conviction.Decision.FileNumber, opt => opt.MapFrom(src => src.DecisionNumber))
-               .ForPath(d => d.Conviction.Decision.DecisionDate, opt => opt.MapFrom(src => src.DecisionDate))
-               .ForPath(d => d.Conviction.Decision.DecisionFinalDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
-               .ForPath(d => d.Conviction.Decision.DecidingAuthority, opt => opt.MapFrom(src => src.DecidingAuth))
-               .ForPath(d => d.Conviction.Decision.ECLI, opt => opt.MapFrom(src => src.DecisionEcli))
-               .ForPath(d => d.Conviction.Decision.DecisionType, opt => opt.MapFrom(src => src.DecisionTypeId))
+               .ForPath(d => d.Conviction.Decision, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDecisionType(
+                    src.DecisionNumber,
+                    src.DecisionFinalDate,
+                    src.DecisionDate,
+                    src.DecidingAuth,
+                    src.DecisionEcli,
+                    src.DecisionTypeId)))
+               //.ForPath(d => d.Conviction.Decision.FileNumber, opt => opt.MapFrom(src => src.DecisionNumber))
+               //.ForPath(d => d.Conviction.Decision.DecisionDate, opt => opt.MapFrom(src => src.DecisionDate))
+               //.ForPath(d => d.Conviction.Decision.DecisionFinalDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
+               //.ForPath(d => d.Conviction.Decision.DecidingAuthority, opt => opt.MapFrom(src => src.DecidingAuth))
+               //.ForPath(d => d.Conviction.Decision.ECLI, opt => opt.MapFrom(src => src.DecisionEcli))
+               //.ForPath(d => d.Conviction.Decision.DecisionType, opt => opt.MapFrom(src => src.DecisionTypeId))
                .ForPath(d => d.Conviction.CriminalCase.CaseType, opt => opt.MapFrom(src => src.CaseTypeId))
                .ForPath(d => d.Conviction.CriminalCase.CaseNumber, opt => opt.MapFrom(src => src.CaseNumber))
                .ForPath(d => d.Conviction.CriminalCase.CaseYear, opt => opt.MapFrom(src => src.CaseYear))
@@ -305,17 +312,24 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
             CreateMap<BDecision, DecisionChangeType>()
                 .ForMember(d => d.DecisionChangeTypeReference, opt => opt.MapFrom(src => CriminalRecordsReportResolver.StringToEnum<DecisionChangeTypeType>(src.DecisionChTypeId)))
                 .ForMember(d => d.DecisionChangeTypeReferenceSpecified, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.DecisionChTypeId)))
-                .ForPath(d => d.Decision.FileNumber, opt => opt.MapFrom(src => src.DecisionNumber))
-                .ForPath(d => d.Decision.DecisionFinalDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
-                .ForPath(d => d.Decision.DecisionDate, opt => opt.MapFrom(src => src.DecisionDate))
-                .ForPath(d => d.Decision.DecidingAuthority, opt => opt.MapFrom(src => src.DecisionAuth))
-                .ForPath(d => d.Decision.ECLI, opt => opt.MapFrom(src => src.DecisionEcli))
-                .ForPath(d => d.Decision.DecisionType, opt => opt.MapFrom(src => CriminalRecordsReportResolver.StringToEnum<DecisionTypeCategories>(src.DecisionTypeId)))
+                .ForPath(d => d.Decision, opt => opt.MapFrom(src => CriminalRecordsReportResolver.GetDecisionType(
+                    src.DecisionNumber,
+                    src.DecisionFinalDate,
+                    src.DecisionDate,
+                    src.DecisionAuth,
+                    src.DecisionEcli,
+                    src.DecisionTypeId)))
+                //.ForPath(d => d.Decision.FileNumber, opt => opt.MapFrom(src => src.DecisionNumber))
+                //.ForPath(d => d.Decision.DecisionFinalDate, opt => opt.MapFrom(src => src.DecisionFinalDate))
+                //.ForPath(d => d.Decision.DecisionDate, opt => opt.MapFrom(src => src.DecisionDate))
+                //.ForPath(d => d.Decision.DecidingAuthority, opt => opt.MapFrom(src => src.DecisionAuth))
+                //.ForPath(d => d.Decision.ECLI, opt => opt.MapFrom(src => src.DecisionEcli))
+                //.ForPath(d => d.Decision.DecisionType, opt => opt.MapFrom(src => CriminalRecordsReportResolver.StringToEnum<DecisionTypeCategories>(src.DecisionTypeId)))
                 .ForMember(d => d.DecisionRemarks, opt => opt.MapFrom(src => src.Descr))
-                .ForMember(d => d.ValidFrom, opt => opt.MapFrom(src => src.DecisionFinalDate))
-                .ForMember(d => d.ValidFromSpecified, opt => opt.MapFrom(src => src.DecisionFinalDate.HasValue))
-                .ForMember(d => d.ReceiveDate, opt => opt.MapFrom(src => src.DecisionDate))
-                .ForMember(d => d.ReceiveDateSpecified, opt => opt.MapFrom(src => src.DecisionDate.HasValue));
+                .ForMember(d => d.ValidFrom, opt => opt.MapFrom(src => src.ChangeDate))
+                .ForMember(d => d.ValidFromSpecified, opt => opt.MapFrom(src => src.ChangeDate.HasValue))
+                .ForMember(d => d.ReceiveDate, opt => opt.MapFrom(src => src.CreatedOn))
+                .ForMember(d => d.ReceiveDateSpecified, opt => opt.MapFrom(src => src.CreatedOn.HasValue));
 
             CreateMap<DecisionChangeType, BDecision>()
             .ForMember(dest => dest.DecisionChTypeId, opt =>

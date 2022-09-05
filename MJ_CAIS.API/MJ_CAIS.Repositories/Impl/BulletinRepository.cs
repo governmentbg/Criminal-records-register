@@ -462,6 +462,17 @@ namespace MJ_CAIS.Repositories.Impl
             return deletedSanctionAndItsProbations;
         }
 
+        public async Task<List<BSanction>> GetBulletinSanctionsAsync(string bulletinId)
+        {
+            if (string.IsNullOrEmpty(bulletinId)) return new List<BSanction>();
+
+            var sanctions = await _dbContext.BSanctions.AsNoTracking()
+                        .Where(x => x.BulletinId == bulletinId)
+                        .ToListAsync();
+
+            return sanctions;
+        }
+
         public async Task<bool> IsEuCitizen(IEnumerable<string> personNationalities)
         {
             return await _dbContext.EEcrisAuthorities.AsNoTracking()

@@ -51,7 +51,9 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<string> GetDataForSendFinesDataAsync(string egn, string? decisionTypeId, DateTime? decisionDate, string decisionNumber, string? decidingAuthId, string caseNumber, bool caseYearParsed, decimal caseYear, string? caseTypeId, string? caseAuthId);
       
         Task<List<BSanction>> GetDeletedSanctionsAsync(List<string> deletedSanctionIds);
-       
+
+        Task<List<BSanction>> GetBulletinSanctionsAsync(string bulletinId);
+
         Task<bool> IsEuCitizen(IEnumerable<string> personNationalities);
 
         Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdExcludeCurrentAsync(List<string> pidsId, string currentBullId);

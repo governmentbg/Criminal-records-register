@@ -111,6 +111,56 @@ namespace MJ_CAIS.AutoMapperContainer.Resolvers
             return !string.IsNullOrEmpty(textFromAttr) ? textFromAttr : enumAsString;
         }
 
+        public static DecisionActType GetDecisionType(string decisionNumber,
+            DateTime? decisionFinalDate,
+            DateTime? decisionDate,
+            GDecidingAuthority decisionAuth,
+            string decisionEcli,
+            string decisionType)
+        {
+            var createObj = !string.IsNullOrEmpty(decisionNumber) ||
+                decisionFinalDate.HasValue ||
+                decisionDate.HasValue ||
+                (decisionAuth != null && decisionAuth.Code.HasValue) ||
+                !string.IsNullOrEmpty(decisionEcli) ||
+                !string.IsNullOrEmpty(decisionType);
+
+            if (createObj)
+            {
+                var result = new DecisionActType
+                {
+                    DecisionType = StringToEnum<DecisionTypeCategories>(decisionType),
+                    ECLI = decisionEcli,
+                    FileNumber = decisionNumber,
+                };
+
+                if (decisionDate.HasValue)
+                {
+                    result.DecisionDate = decisionDate.Value;
+                }
+
+                if (decisionFinalDate.HasValue)
+                {
+                    result.DecisionFinalDate = decisionFinalDate.Value;
+                }
+
+                if (decisionAuth != null)
+                {
+                    result.DecidingAuthority = new DecidingAuthorityType
+                    {
+                        DecidingAuthorityCodeEIK = decisionAuth.Code.ToString(),
+                        DecidingAuthorityCodeEISPP = decisionAuth.EisppCode,
+                        DecidingAuthorityName = decisionAuth.Name
+                    };
+                }
+
+                return result;
+            }
+
+            return null;
+        }
+
+
         private static string GetXmlEnumName(this Enum value)
         {
             var attribute = value.GetAttribute<XmlEnumAttribute>();

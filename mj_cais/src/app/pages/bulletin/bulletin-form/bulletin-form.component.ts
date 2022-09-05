@@ -180,9 +180,9 @@ export class BulletinFormComponent
 
   //override
   protected validateAndSave(form: any) {
-    debugger;
-    console.log(form.group);
-    if (!form.group.valid) {
+    let isValid = this.validateSanctionAndOffences(form);
+
+    if (!form.group.valid || !isValid) {
       form.group.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");
 
@@ -193,6 +193,7 @@ export class BulletinFormComponent
       this.saveAndNavigate();
     }
   }
+
   protected errorHandler(errorResponse): void {
     this.loaderService.hide();
     super.errorHandler(errorResponse);
@@ -299,14 +300,97 @@ export class BulletinFormComponent
     }
   }
 
-  private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
-    let userHasDiffAuth =
-      this.userAuthorityService.csAuthorityId !=
-      (this.dbData.element as any).csAuthorityId;
-    if (!this.isEdit()) {
-      userHasDiffAuth = false;
+  private validateSanctionAndOffences(form): boolean {
+    let isValid = true;
+    let bulletinStatusId = form.statusId.value;
+    let validateForSancAndOff = bulletinStatusId == null ||
+      bulletinStatusId == BulletinStatusTypeEnum.NewEISS ||
+      bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
+    if (validateForSancAndOff) {
+      // when add new bulletin
+
+      let showInvalidSanctionMsg = false;
+      let showInvalidOffenceMsg = false;
+      if (!this.isEdit()) {
+        if (this.fullForm.offancesTransactions.value.length == 0) {
+          showInvalidOffenceMsg = true;
+          isValid = false;
+        }
+
+        if (
+          (this.fullForm.noSanction.value == null ||
+            this.fullForm.noSanction.value == false) &&
+          this.fullForm.sanctionsTransactions.value.length == 0
+        ) {
+          showInvalidSanctionMsg = true;
+          isValid = false;
+        }
+      } else {
+        // edit bulletin
+        debugger;
+        if (
+          (this.fullForm.noSanction.value == null ||
+            this.fullForm.noSanction.value == false) &&
+          this.bulletineSanctionsForm
+        ) {
+          let sanctionCount =
+            this.bulletineSanctionsForm.sanctionGrid.data.length;
+          let notDeletedSanctions =
+            this.fullForm.sanctionsTransactions.value.filter(
+              (x) => x.type != "delete"
+            ).length;
+
+          if (notDeletedSanctions == 0 && sanctionCount == 0) {
+            showInvalidSanctionMsg = true;
+            isValid = false;
+          }
+        }
+
+        if (this.bulletineOffencesForm) {
+          let offenceCount =
+            this.bulletineOffencesForm.offencesGrid.data.length;
+          let notDeletedOffences =
+            this.fullForm.offancesTransactions.value.filter(
+              (x) => x.type != "delete"
+            ).length;
+
+          if (offenceCount == 0 && notDeletedOffences == 0) {
+            showInvalidOffenceMsg = true;
+            isValid = false;
+          }
+        }
+      }
+
+      if (showInvalidSanctionMsg) {
+        this.toastr.showToast(
+          "danger",
+          "Задължително е да въведете поне едно наказание!"
+        );
+      }
+
+      if (showInvalidOffenceMsg) {
+        this.toastr.showToast(
+          "danger",
+          "Задължително е да въведете поне едно престъпление!"
+        );
+      }
     }
-    
+
+    return isValid;
+  }
+  private initAllowedButtons(bulletinStatusId: string, isLocked: boolean) {
+    let userHasDiffAuth = false;
+    // create via button
+    if (this.dbData.element) {
+      this.userAuthorityService.csAuthorityId !=
+        (this.dbData.element as any).csAuthorityId;
+      // create via person form
+      if (!this.isEdit()) {
+        userHasDiffAuth = false;
+      }
+    }
+
+    debugger;
     let isGridsEditable =
       !userHasDiffAuth &&
       !this.isForPreview &&
