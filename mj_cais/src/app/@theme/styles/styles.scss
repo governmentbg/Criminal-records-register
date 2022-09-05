@@ -31,6 +31,17 @@
 }
 
 
+$custom-palette: igx-palette(
+  $primary: #222b45,
+  $secondary: #3366ff,
+);
+@include igx-theme(
+  $palette: $custom-palette,
+  $schema: $light-material-schema,
+  $roundness: null,
+  $elevation: null
+);
+
 .nb-theme-dark {
   $custom-palette: igx-palette(
     $primary: #f0f2ff,
