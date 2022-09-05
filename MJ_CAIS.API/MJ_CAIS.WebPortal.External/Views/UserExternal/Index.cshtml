@@ -19,9 +19,23 @@
 <div class="card">
     <div class="h5 card-header bg-primary text-white d-flex justify-content-between align-items-center">
         @ViewData["Title"]
-        <a class="btn btn-light btn-sm" asp-controller="UserExternal" asp-action="New">
-            @UsersResources.btnCreateNewUser
-        </a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                @UsersResources.btnCreateNewUser
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="btn btn-light btn-sm" asp-controller="UserExternal" asp-action="NewWithPassword" >
+                        @UsersResources.btnCreateNewUserWithPassword
+                    </a>
+                </li>
+                <li>
+                    <a class="btn btn-light btn-sm" asp-controller="UserExternal" asp-action="New">
+                        @UsersResources.btnCreateNewUserWithEGN
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="card-body">
         <partial name="_InfragisticsLoader" />

@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNet.OData.Query;
+﻿using AutoMapper;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DataAccess.ExtUsers;
 using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Web.Controllers.Common;
@@ -14,8 +18,13 @@ namespace MJ_CAIS.Web.Controllers
 
     public class UsersExternalController : BaseApiCrudController<UserExternalInDTO, UserExternalDTO, UserExternalGridDTO, GUsersExt, string>
     {
-        public UsersExternalController(IUserExternalService baseService) : base(baseService)
+        private readonly IMapper _mapper;
+        private readonly UserManager<LocalGUsersExt> _userManager;
+
+        public UsersExternalController(IUserExternalService baseService, UserManager<LocalGUsersExt> userManager, IMapper mapper) : base(baseService)
         {
+            _userManager = userManager;
+            _mapper = mapper;
         }
 
         [HttpGet("")]
@@ -39,8 +48,26 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] UserExternalInDTO aInDto)
         {
-            var id = await this.baseService.InsertAsync(aInDto);
-            return Ok(new { id });
+            if (string.IsNullOrEmpty(aInDto.UserName))
+            {
+                var id = await this.baseService.InsertAsync(aInDto);
+                return Ok(new { id });
+            }
+            else
+            {
+                var entity = _mapper.Map<UserExternalInDTO, LocalGUsersExt>(aInDto);
+                entity.Id = BaseEntity.GenerateNewId();
+                entity.Version = 1;
+                var result = await _userManager.CreateAsync(entity, aInDto.Password);
+                if (result.Succeeded)
+                {
+                    return Ok(new { entity.Id });
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
         }
 
         [HttpPut("{aId}")]

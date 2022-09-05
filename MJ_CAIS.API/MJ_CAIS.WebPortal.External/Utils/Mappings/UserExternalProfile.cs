@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DataAccess.ExtUsers;
 using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.WebPortal.External.Models.Account;
 using MJ_CAIS.WebPortal.External.Models.UserExternal;

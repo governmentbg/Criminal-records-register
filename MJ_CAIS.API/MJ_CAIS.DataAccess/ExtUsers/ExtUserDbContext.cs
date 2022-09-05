@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace MJ_CAIS.WebPortal.External.LocalContext
+namespace MJ_CAIS.DataAccess.ExtUsers
 {
     public partial class ExtUserDbContext : DbContext
     {

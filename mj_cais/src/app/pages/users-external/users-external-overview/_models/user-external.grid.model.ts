@@ -5,6 +5,7 @@ export class UserExternalGridModel extends BaseGridModel {
   public active: boolean = null;
   public isAdmin: boolean = null;
   public email: string = null;
+  public userName: string = null;
   public egn: string = null;
   public position: string = null;
   public administrationName: string = null;
@@ -20,5 +21,6 @@ export class UserExternalGridModel extends BaseGridModel {
     this.position = init?.position ?? null;
     this.administrationName = init?.administrationName ?? null;
     this.hasRegRegCertSubject = init?.hasRegRegCertSubject ?? null;
+    this.userName = init?.userName ?? null;
   }
 }

@@ -6,27 +6,56 @@
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
       <div class="row">
-        <div class="form-group col-md-8">
+        <div class="form-group col-md-7">
           <cais-autocomplete [label]="'Администрация'" [inputFormControl]="fullForm.administrationId"
             [parentGroup]="fullForm.group" [inputName]="'administrationId'" [items]="dbData.administrations">
           </cais-autocomplete>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-5">
           <cais-input [type]="'text'" [label]="'Позиция'" [inputFormControl]="fullForm.position"
             [parentGroup]="fullForm.group"></cais-input>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
           <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="fullForm.name"
             [parentGroup]="fullForm.group">
           </cais-input>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <cais-input [type]="'text'" [label]="'ЕГН'" [inputFormControl]="fullForm.egn" [parentGroup]="fullForm.group">
           </cais-input>
+          <span class="caption status-danger ng-star-inserted" *ngIf="
+          fullForm.egn?.errors?.userNameOrEGN &&
+            (fullForm.egn.touched || fullForm.egn.dirty)
+          ">
+            Потребителите трябва да имат ЕГН и/или потребителско име!
+          </span>
+        </div>
+        <div class="form-group col-md-2">
+          <cais-input [type]="'text'" [label]="'Потребителско име'" [inputFormControl]="fullForm.userName"
+            [parentGroup]="fullForm.group">
+          </cais-input>
+          <span class="caption status-danger ng-star-inserted" *ngIf="
+          fullForm.userName?.errors?.userNameOrEGN &&
+            (fullForm.userName.touched || fullForm.userName.dirty)
+          ">
+            Потребителите трябва да имат ЕГН и/или потребителско име!
+          </span>
         </div>
         <div class="form-group col-md-3">
           <cais-input [type]="'text'" [label]="'Електронна поща'" [inputFormControl]="fullForm.email"
             [parentGroup]="fullForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-2">
+          <cais-input [type]="'text'" [label]="'Телефон'" [inputFormControl]="fullForm.phone"
+            [parentGroup]="fullForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-3" [hidden]="fullForm.group.value.version">
+          <cais-input [type]="'password'" [label]="'Парола'" [inputFormControl]="fullForm.password"
+            [parentGroup]="fullForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-4" [hidden]="fullForm.group.value.version">
+          <cais-input [type]="'password'" [label]="'Потвърждаване на парола'"
+            [inputFormControl]="fullForm.confirmPassword" [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-12">
           <nb-checkbox [formControl]="fullForm.active">Активен</nb-checkbox>
@@ -36,14 +65,15 @@
         </div>
         <div class="form-group col-md-12" [hidden]="!fullForm.group.value.regCertSubject">
           <cais-input [type]="'text'" [label]="'Информация за регистрация'" [inputFormControl]="fullForm.regCertSubject"
-            [parentGroup]="fullForm.group" ></cais-input>
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-6" [hidden]="!fullForm.group.value.regCertSubject">
           <cais-input [type]="'text'" [label]="'Структурна единициа'" [inputFormControl]="fullForm.ou"
-            [parentGroup]="fullForm.group" ></cais-input>
+            [parentGroup]="fullForm.group"></cais-input>
         </div>
         <div class="form-group col-md-6" [hidden]="!fullForm.group.value.regCertSubject">
-          <cais-input [type]="'text'" [label]="'ЕИК/БУЛСТАТ'" [inputFormControl]="fullForm.uic" [parentGroup]="fullForm.group">
+          <cais-input [type]="'text'" [label]="'ЕИК/БУЛСТАТ'" [inputFormControl]="fullForm.uic"
+            [parentGroup]="fullForm.group">
           </cais-input>
         </div>
       </div>

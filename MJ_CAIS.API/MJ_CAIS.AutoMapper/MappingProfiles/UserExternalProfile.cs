@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DataAccess.ExtUsers;
 using MJ_CAIS.DTO.UserExternal;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
         {
             CreateMap<GUsersExt, UserExternalDTO>().ReverseMap();
             CreateMap<UserExternalInDTO, GUsersExt>();
+            CreateMap<UserExternalInDTO, LocalGUsersExt>()
+                .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.Phone))
+                .ReverseMap();
             CreateMap<GUsersExt, UserExternalGridDTO>()
                 .ForMember(d => d.AdministrationName, opt => opt.MapFrom(src => src.Administration.Name))
                 .ForMember(d => d.HasRegRegCertSubject, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.RegCertSubject)))

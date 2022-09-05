@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.DataAccess.ExtUsers;
 using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace MJ_CAIS.Services
 {
@@ -13,8 +17,11 @@ namespace MJ_CAIS.Services
     {
         private readonly IUserExternalRepository _userExternalRepository;
         private readonly IExtAdministrationRepository _extAdministrationRepository;
-
-        public UserExternalService(IMapper mapper, IUserExternalRepository userExternalRepository, IExtAdministrationRepository extAdministrationRepository)
+        
+        public UserExternalService(
+            IMapper mapper,
+            IUserExternalRepository userExternalRepository, 
+            IExtAdministrationRepository extAdministrationRepository)
             : base(mapper, userExternalRepository)
         {
             _userExternalRepository = userExternalRepository;
@@ -90,6 +97,43 @@ namespace MJ_CAIS.Services
         {
             var entity = await _userExternalRepository.SelectAsync(userId);
             return mapper.Map<UserExternalDTO>(entity);
+        }
+    }
+
+
+    //TODO: Duplicated in MJ_CAIS.IdentityServer.CAISExternalCredentials
+    public class CompatibilityPasswordHasher : PasswordHasher<GUsersExt>
+    {
+        public override PasswordVerificationResult VerifyHashedPassword(GUsersExt user, string hashedPassword, string providedPassword)
+        {
+            var compatibilityPassword = Hash(providedPassword);
+            return base.VerifyHashedPassword(user, hashedPassword, compatibilityPassword);
+        }
+
+        public override string HashPassword(GUsersExt user, string password)
+        {
+            var compatibilityPassword = Hash(password);
+            return base.HashPassword(user, compatibilityPassword);
+        }
+
+        /// <summary>
+        /// Compute hash for backward compatiblity
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        static string Hash(string input)
+        {
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes("CSCS" + input));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    sb.Append(b.ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }
