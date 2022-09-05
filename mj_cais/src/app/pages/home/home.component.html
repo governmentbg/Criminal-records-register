@@ -1,108 +1,141 @@
 <div class="row home-panel-container">
   <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Normal, RoleNameEnum.Judge]">
-    
     <div class="col-md-6">
       <nb-card accent="info" class="col-md-12">
-        <nb-card-header
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          "
-        >
-          <div>Бюлетини</div>
+        <nb-card-header>
+          <h6>Бюлетини</h6>
           <a
             nbButton
             matRipple
             [status]="'success'"
             [routerLink]="['/pages/bulletins/create']"
             type="button"
-            style="min-width: 100px"
           >
             Нов бюлетин
           </a>
         </nb-card-header>
-        <nb-card-body>
-          <nb-list>
-            <nb-list-item>
+
+        <nb-list>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/new-eiss']">
-                Нови бюлетини от ЕИСС ({{ bulletins.newEISS }})
+                Нови бюлетини от ЕИСС
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.newEISS
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/isin/identified']">
-                Данни за изтърпени наказания ({{ bulletins.isinIdentified }})
+                Данни за изтърпени наказания
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.isinIdentified
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/for-destruction']">
-                За унищожаване ({{ bulletins.forDestruction }})
+                За унищожаване
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.forDestruction
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/for-rehabilitation']">
-                За реабилитация ({{ bulletins.forRehabilitation }})
+                За реабилитация
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.forRehabilitation
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/events']">
-                Настъпили обстоятелства по по чл.22, чл. 1, изр. 1 ({{
-                  bulletins.article2211
-                }})
+                Настъпили обстоятелства по по чл.22, чл. 1, изр. 1
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.article2211
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/events']">
-                Настъпили обстоятелства по по чл.22, чл. 1, изр. 2 ({{
-                  bulletins.article2212
-                }})
+                Настъпили обстоятелства по по чл.22, чл. 1, изр. 2
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.article2212
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/events']">
-                Настъпили обстоятелства по чл.30 ({{
-                  bulletins.article3000
-                }})
+                Настъпили обстоятелства по чл.30
               </a>
-            </nb-list-item>
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.article3000
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/bulletins/events']">
-                Уведомяване за променен съдебен статус на осъдено лице ({{
-                  bulletins.newDocument
-                }})
+                Уведомяване за променен съдебен статус на осъдено лице
               </a>
-            </nb-list-item>
-          </nb-list>
-        </nb-card-body>
+              <span class="badge rounded-pill bg-primary">{{
+                bulletins.newDocument
+              }}</span>
+            </div>
+          </nb-list-item>
+        </nb-list>
       </nb-card>
       <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
-          <nb-card accent="info" class="col-md-12">
-            <nb-card-header>За решение от съдия/юрист</nb-card-header>
-            <nb-card-body>
-              <nb-list>
-                <nb-list-item>
-                  <a [routerLink]="['/pages/internal-requests']">
-                    Нови заявки за реабилитация ({{ applications.internalRequests }})
-                  </a>
-                </nb-list-item>
-                <nb-list-item>
-                  <a [routerLink]="['/pages/applications/tax-free']">
-                    Oсвободени от плащане ({{ applications.taxFree }})
-                  </a>
-                </nb-list-item>
-                <nb-list-item>
-                  <!-- <a [routerLink]="['/pages/applications/for-signing-by-judge']">
-                    За подпис от съдия/юрист ({{ applications.forSigningByJudge }})
-                  </a> -->
-                </nb-list-item>
-                <nb-list-item>
-                  <a [routerLink]="['/pages/applications/bulletin-selection']">
-                    За избор на бюлетини ({{ applications.bulletinSelection }})
-                  </a>
-                </nb-list-item>
-              </nb-list>
-            </nb-card-body>
-          </nb-card>
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>
+            <h6>За решение от съдия/юрист</h6>
+          </nb-card-header>
+          <nb-list>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/internal-requests']">
+                  Нови заявки за реабилитация
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  applications.internalRequests
+                }}</span>
+              </div>
+            </nb-list-item>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/applications/tax-free']">
+                  Oсвободени от плащане
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  applications.taxFree
+                }}</span>
+              </div>
+            </nb-list-item>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/applications/bulletin-selection']">
+                  За избор на бюлетини
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  applications.bulletinSelection
+                }}</span>
+              </div>
+            </nb-list-item>
+          </nb-list>
+        </nb-card>
       </ng-template>
     </div>
     <div class="col-md-6">
@@ -114,7 +147,7 @@
             justify-content: space-between;
           "
         >
-          <div>Свидетелства</div>
+          <h6>Свидетелства</h6>
           <a
             nbButton
             matRipple
@@ -126,81 +159,101 @@
             Ново заявление
           </a>
         </nb-card-header>
-        <nb-card-body>
-          <nb-list>
-            <nb-list-item>
-              <a [routerLink]="['/pages/applications']">
-                Нови заявления ({{ applications.newId }})
-              </a>
-            </nb-list-item>
+        <nb-list>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
+              <a [routerLink]="['/pages/applications']"> Нови заявления </a>
+              <span class="badge rounded-pill bg-primary">{{
+                applications.newId
+              }}</span>
+            </div>
+          </nb-list-item>
 
-            <nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/applications/waiting-payment']">
-                Потвърждение за плащане ({{ applications.checkPayment }})
+                Потвърждение за плащане
               </a>
-            </nb-list-item>            
-            <nb-list-item>
+              <span class="badge rounded-pill bg-primary">{{
+                applications.checkPayment
+              }}</span>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/applications/for-check']">
-                За обработка ({{ applications.bulletinsCheck }})
+                За обработка
               </a>
-            </nb-list-item>                
-          </nb-list>
-        </nb-card-body>
+              <span class="badge rounded-pill bg-primary">{{
+                applications.bulletinsCheck
+              }}</span>
+            </div>
+          </nb-list-item>
+        </nb-list>
       </nb-card>
       <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
-          <nb-card accent="info" class="col-md-12">
-            <nb-card-header>Осъдени в чужбина</nb-card-header>
-            <nb-card-body>
-              <nb-list>
-                <nb-list-item>
-                  <a [routerLink]="['/pages/fbbcs/for-destruction']">
-                    Подлежащи на заличаване ({{ centralAuth.forDestruction }})
-                  </a>
-                </nb-list-item>
-              </nb-list>
-            </nb-card-body>
-          </nb-card>
-          <nb-card accent="info" class="col-md-12">
-            <nb-card-header>Е-свидетелства</nb-card-header>
-            <nb-card-body>
-              <nb-list-item>
-                <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
-                   Oсвободени от плащане  ({{ centralAuth.webCheckTaxFree }})
-                </a>
-              </nb-list-item>
-            </nb-card-body>
-          </nb-card>
-          <!-- <nb-card accent="info" class="col-md-12">
-            <nb-card-header>Изтърпени наказания</nb-card-header>
-            <nb-card-body>
-              <nb-list>
-                <nb-list-item>
-                  <a [routerLink]="['/pages/isin/new']">
-                    Новопостъпили данни за изтърпени наказания ({{ bulletins.isinNew }})
-                  </a>
-                </nb-list-item>
-              </nb-list>
-            </nb-card-body>
-          </nb-card> -->
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>
+            <h6>Осъдени в чужбина</h6>
+          </nb-card-header>
 
-          <nb-card accent="info" class="col-md-12">
-            <nb-card-header>ECRIS</nb-card-header>
-            <nb-card-body>
-              <nb-list>
-                <nb-list-item>
-                  <a [routerLink]="['/pages/ecris/identification']">
-                    За идентификация ({{ centralAuth.forIdentification }})
-                  </a>
-                </nb-list-item>           
-                <nb-list-item>
-                  <a [routerLink]="['/pages/ecris-tcn']">
-                    ECRIS-TCN ({{ centralAuth.tcn }})
-                  </a>
-                </nb-list-item>
-              </nb-list>
-            </nb-card-body>
-          </nb-card>
-    </ng-template>
+          <nb-list>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/fbbcs/for-destruction']">
+                  Подлежащи на заличаване
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  centralAuth.forDestruction
+                }}</span>
+              </div>
+            </nb-list-item>
+          </nb-list>
+        </nb-card>
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>
+            <h6>Е-свидетелства</h6>
+          </nb-card-header>
+
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
+              <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
+                Oсвободени от плащане
+              </a>
+              <span class="badge rounded-pill bg-primary">
+                {{ centralAuth.webCheckTaxFree }}</span
+              >
+            </div>
+          </nb-list-item>
+        </nb-card>
+
+        <nb-card accent="info" class="col-md-12">
+          <nb-card-header>
+            <h6>ECRIS</h6>
+          </nb-card-header>
+
+          <nb-list>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/ecris/identification']">
+                  За идентификация
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  centralAuth.forIdentification
+                }}</span>
+              </div>
+            </nb-list-item>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/ecris-tcn']"> ECRIS-TCN </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  centralAuth.tcn
+                }}</span>
+              </div>
+            </nb-list-item>
+          </nb-list>
+        </nb-card>
+      </ng-template>
     </div>
   </ng-template>
 </div>
