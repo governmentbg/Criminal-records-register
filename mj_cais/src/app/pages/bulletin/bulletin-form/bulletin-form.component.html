@@ -6,33 +6,35 @@
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="setEditToBeForPreview"
     >
-      <div>
-        <button
-          *ngIf="isEdit()"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="print()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Печат
-        </button>
-      </div>
-      <div>
-        <button
-          *ngIf="showForUpdate && isEdit()"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="openUpdateConfirmationDialog()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Актуализирай
-        </button>
+      <div class="d-flex gap-2">
+        <div>
+          <button
+            *ngIf="isEdit()"
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="print()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px"
+          >
+            Печат
+          </button>
+        </div>
+        <div>
+          <button
+            *ngIf="showForUpdate && isEdit()"
+            nbButton
+            matRipple
+            [status]="'success'"
+            (click)="openUpdateConfirmationDialog()"
+            type="button"
+            class="ml-2"
+            style="min-width: 100px"
+          >
+            Актуализирай
+          </button>
+        </div>
       </div>
     </cais-card-header>
   </nb-card-header>
@@ -40,7 +42,7 @@
     <form autocomplete="off">
       <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
         <nb-tab tabTitle="Основна информация">
-          <div class="font-weight-bold">Данни за бюлетин</div>
+          <div class="fw-bold">Данни за бюлетин</div>
           <hr />
           <div class="row">
             <ng-container *ngIf="isEdit()">
@@ -196,7 +198,7 @@
         </nb-tab>
 
         <nb-tab tabTitle="Осъждане">
-          <div class="font-weight-bold">Данни за акта</div>
+          <div class="fw-bold">Данни за акта</div>
           <hr />
 
           <div class="row">
@@ -355,7 +357,7 @@
             </div>
           </div>
         </nb-tab>
-<!-- end -->
+        <!-- end -->
         <nb-tab [tabTitle]="offencesTabTitle">
           <ng-container *ngIf="showOffencesTab">
             <cais-bulletin-offences-form
