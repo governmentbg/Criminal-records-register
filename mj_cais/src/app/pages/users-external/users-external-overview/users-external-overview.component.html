@@ -62,18 +62,6 @@
     </igx-column>
 
     <igx-column
-      field="position"
-      header="Позиция"
-      [sortable]="true"
-      [dataType]="'string'"
-      [hidden]="false"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="cell.value">{{ cell.value }}</span>
-      </ng-template>
-    </igx-column>
-
-    <igx-column
       field="name"
       header="Имeна"
       [sortable]="true"
@@ -100,7 +88,31 @@
 
     <igx-column
       field="email"
-      header="EMail"
+      header="Eл. поща"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="userName"
+      header="Потребителско име"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="position"
+      header="Позиция"
       [sortable]="true"
       [dataType]="'string'"
       [hidden]="false"

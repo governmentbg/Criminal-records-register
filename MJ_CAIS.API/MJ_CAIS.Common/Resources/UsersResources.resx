@@ -120,6 +120,12 @@
   <data name="btnCreateNewUser" xml:space="preserve">
     <value>Нов потребител</value>
   </data>
+  <data name="btnCreateNewUserWithEGN" xml:space="preserve">
+    <value>С КЕП</value>
+  </data>
+  <data name="btnCreateNewUserWithPassword" xml:space="preserve">
+    <value>С име и парола</value>
+  </data>
   <data name="lblActive" xml:space="preserve">
     <value>Активен</value>
   </data>
@@ -147,11 +153,17 @@
   <data name="lblPassword" xml:space="preserve">
     <value>Парола</value>
   </data>
+  <data name="lblPhone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
   <data name="lblPosition" xml:space="preserve">
     <value>Позиция</value>
   </data>
   <data name="lblUserName" xml:space="preserve">
     <value>Потребителско име</value>
+  </data>
+  <data name="msgInvalidUserName" xml:space="preserve">
+    <value>Невалидно потребителско име</value>
   </data>
   <data name="msgPasswordChangeSuccess" xml:space="preserve">
     <value>Успешна промяна на парола!</value>
@@ -176,6 +188,12 @@
   </data>
   <data name="msgPasswordTooShort" xml:space="preserve">
     <value>Паролата е прекалено къса</value>
+  </data>
+  <data name="msgUserCreationFailed" xml:space="preserve">
+    <value>Неуспешно създаване на потребител</value>
+  </data>
+  <data name="msgUsernameAlreadyExists" xml:space="preserve">
+    <value>Потребителското име е заето</value>
   </data>
   <data name="titleAddUser" xml:space="preserve">
     <value>Добавяне на потребител</value>

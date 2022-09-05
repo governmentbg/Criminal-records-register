@@ -7,16 +7,13 @@
 @model UserExternalEditModel
 
 @{
-    var title = UsersResources.titleEditUser;
+    var title = UsersResources.titleAddUser;
     ViewData["Title"] = title;
 }
 
 <div class="card">
     <div class="h5 card-header bg-primary text-white d-flex justify-content-between align-items-center">
         @title
-        <a class="btn btn-light btn-sm" asp-controller="UserExternal" asp-action="Index">
-            Потребители
-        </a>
     </div>
     <div class="card-body">
         <form asp-action="Edit" method="post" autocomplete="off">

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MJ_CAIS.WebPortal.External.LocalContext
+namespace MJ_CAIS.DataAccess.ExtUsers
 {
     public partial class LocalGUsersExt : IdentityUser<string>
     {
