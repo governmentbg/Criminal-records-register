@@ -7,9 +7,9 @@ namespace MJ_CAIS.Services.Contracts
     {
         Task<PPerson> CreatePersonAsync(PersonDTO aInDto, bool autoMergePeople = false);
 
-        PPersonH CreatePersonHistory(PPerson person);
+        PPersonH CreatePersonHistory(PPerson person, string tableName, string tableId, string tableDesc);
 
-        Task ConnectPeopleAsync(string aId, string personToBeConnected);
+        Task ConnectPeopleAsync(string aId, string personToBeConnected, string desc);
 
         Task<PPersonId> RemovePidAsync(RemovePidDTO aInDto);
 

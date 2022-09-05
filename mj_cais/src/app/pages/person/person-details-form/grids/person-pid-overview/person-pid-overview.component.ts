@@ -74,20 +74,19 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
 
     this.loaderService.showSpinner(this.service);
     let formObject = this.personForm.group.value;
-
-    this.service.removePid(formObject).subscribe(
-      (resp) => {
-        this.loaderService.hideSpinner(this.service);
+    debugger;
+    this.service.removePid(formObject).subscribe({
+      next: (response) => {
+        this.loaderService.hide();
+        this.dialog.close();
         this.toastr.showToast("success", "Успешно премахване на идентификатор");
-        this.router.navigate([this.router.url]);
+        this.ngOnInit();
       },
-      (error) => {
-        this.loaderService.hideSpinner(this.service);
-
-        var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast("danger", "Възникна грешка:", errorText);
-      }
-    );
+      error: (errorResponse) => {
+        this.loaderService.hide();
+        this.errorHandler(errorResponse);
+      },
+    });
   }
 
   onCloseDilog() {

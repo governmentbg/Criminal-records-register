@@ -4,7 +4,7 @@ using MJ_CAIS.DTO.Shared;
 namespace MJ_CAIS.DTO.Person
 {
     public class PersonDTO : BaseDTO
-    { 
+    {
         public string? ContextType { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }
@@ -42,5 +42,8 @@ namespace MJ_CAIS.DTO.Person
         public int Bulletin78ACount { get; set; }
         public int ConvictionBulletinCount { get; set; }
         public int BulletinUnspecifiedCount { get; set; }
+        public string? TableName { get; set; }
+        public string? TableId { get; set; }
+        public string? TableDesc { get; set; }
     }
 }

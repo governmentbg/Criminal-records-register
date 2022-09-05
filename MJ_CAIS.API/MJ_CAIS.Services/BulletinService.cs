@@ -497,10 +497,12 @@ namespace MJ_CAIS.Services
             // get person data from bulletin
             var personDto = mapper.Map<BBulletin, PersonDTO>(bulletin);
             // create person object, apply changes
+            personDto.TableName = ContextTable.Bulletins;
+            personDto.TableId = bulletin.Id;
+
             var person = await _managePersonService.CreatePersonAsync(personDto);
 
             // create PBulletinId for all pids (locally added and saved in db)
-
             foreach (var personIdObj in person.PPersonIds)
             {
                 if (personIdObj.PidTypeId == PidType.Egn && bulletin.Egn == personIdObj.Pid)

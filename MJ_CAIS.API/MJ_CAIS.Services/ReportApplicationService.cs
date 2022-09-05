@@ -299,8 +299,10 @@ namespace MJ_CAIS.Services
 
         private async Task<PPerson> UpdatePersonDataAsync(ReportApplicationDTO aInDto, AReportApplication entity)
         {
-            var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
+            aInDto.Person.TableName = ContextTable.Report;
+            aInDto.Person.TableId = entity.Id;
 
+            var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {
                 if (personIdObj.PidTypeId == PidType.Egn)

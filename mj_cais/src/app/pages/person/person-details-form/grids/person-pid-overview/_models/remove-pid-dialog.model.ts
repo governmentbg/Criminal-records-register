@@ -20,6 +20,7 @@ export class RemovePidDialogFrom {
   public fatherSurname: string = null;
   public fatherFamilyname: string = null;
   public fatherFullname: string = null;
+  public desc: string = null;
 
   constructor(init?: Partial<RemovePidDialogFrom>) {
     this.existinPersonId = init?.existinPersonId ?? null;
@@ -43,5 +44,6 @@ export class RemovePidDialogFrom {
     this.fatherSurname = init?.fatherSurname ?? null;
     this.fatherFamilyname = init?.fatherFamilyname ?? null;
     this.fatherFullname = init?.fatherFullname ?? null;
+    this.desc = init?.desc ?? null;
   }
 }

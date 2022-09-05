@@ -1,5 +1,12 @@
-import { Component, Injector, Input, OnInit } from "@angular/core";
-import { ConnectedPositioningStrategy, HorizontalAlignment, NoOpScrollStrategy, VerticalAlignment } from "@infragistics/igniteui-angular";
+import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  ConnectedPositioningStrategy,
+  HorizontalAlignment,
+  IgxDialogComponent,
+  NoOpScrollStrategy,
+  VerticalAlignment,
+} from "@infragistics/igniteui-angular";
 import { NbMenuService } from "@nebular/theme";
 import { filter, map } from "rxjs";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
@@ -15,33 +22,44 @@ import { PersonSearchGridModel } from "./_models/person-search.grid";
   styleUrls: ["./person-search-overview.component.scss"],
 })
 export class PersonSearchOverviewComponent extends RemoteGridWithStatePersistance<
-PersonSearchGridModel,
-PersonSearchGridService
+  PersonSearchGridModel,
+  PersonSearchGridService
 > {
   constructor(
     service: PersonSearchGridService,
     injector: Injector,
     public dateFormatService: DateFormatService,
     private loader: LoaderService,
+    private formBuilder: FormBuilder
   ) {
     super("people-search", service, injector);
   }
+
+  @ViewChild("connectPersonDialog", { read: IgxDialogComponent })
+  public connectPersonDialog: IgxDialogComponent;
 
   @Input() searchForm: PersonSearchForm;
   @Input() isRemindPersonForm: boolean;
   @Input() existingPersonId: string;
 
+  public connectPersonFormGroup: FormGroup;
+
   public overlaySettings = {
     positionStrategy: new ConnectedPositioningStrategy({
-        horizontalDirection: HorizontalAlignment.Left,
-        horizontalStartPoint: HorizontalAlignment.Right,
-        verticalStartPoint: VerticalAlignment.Bottom
+      horizontalDirection: HorizontalAlignment.Left,
+      horizontalStartPoint: HorizontalAlignment.Right,
+      verticalStartPoint: VerticalAlignment.Bottom,
     }),
-    scrollStrategy: new NoOpScrollStrategy()
-};
+    scrollStrategy: new NoOpScrollStrategy(),
+  };
 
   ngOnInit() {
     this.service.updateUrl(`people?isPageInit=true`);
+    this.connectPersonFormGroup = this.formBuilder.group({
+      desc: [{ value: "", disabled: false }, Validators.required],
+      id: [{ value: "", disabled: false }],
+      personToBeConnected: [{ value: "", disabled: false }],
+    });
   }
 
   public onSearch = () => {
@@ -71,19 +89,32 @@ PersonSearchGridService
     this.loader.hideSpinner(this.service);
   };
 
-  public connectPeople(existingPersonId, personToBeConnected) {
-    this.service.connectPeople(existingPersonId, personToBeConnected).subscribe(
-      (res) => {
-        this.router.navigateByUrl("people/preview/" + existingPersonId);
-      },
+  public connectPeople() {
+    if (!this.connectPersonFormGroup.valid) {
+      this.connectPersonFormGroup.markAllAsTouched();
+      return;
+    }
 
-      (error) => {
-        var errorText = error.status + " " + error.statusText;
-        this.toastService.showMessage(
-          "Възникна грешка при сливането на данни за лицата:" + errorText
-        );
-      }
-    );
+    this.loader.show();
+    let formValue = this.connectPersonFormGroup.getRawValue();
+    this.service.connectPeople(formValue).subscribe({
+      next: (response) => {
+        this.connectPersonDialog.close();
+        this.loader.hide();
+        this.router.navigateByUrl("people/preview/" + formValue.id);
+      },
+      error: (errorResponse) => {
+        this.loader.hide();
+        this.errorHandler(errorResponse);
+      },
+    });
   }
 
+  public openConnectPeopleDialog(existingPersonId, personToBeConnected) {
+    this.connectPersonFormGroup.controls.id.patchValue(existingPersonId);
+    this.connectPersonFormGroup.controls.personToBeConnected.patchValue(
+      personToBeConnected
+    );
+    this.connectPersonDialog.open();
+  }
 }

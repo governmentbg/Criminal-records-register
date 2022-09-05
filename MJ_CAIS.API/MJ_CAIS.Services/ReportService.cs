@@ -61,6 +61,9 @@ namespace MJ_CAIS.Services
 
         private async Task UpdatePersonDataAsync(ApplicationInDTO aInDto, AApplication entity)
         {
+            aInDto.Person.TableName = ContextTable.Report;
+            aInDto.Person.TableId = entity.Id;
+
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             foreach (var personIdObj in person.PPersonIds)
             {

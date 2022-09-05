@@ -16,6 +16,7 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using static MJ_CAIS.Common.Constants.ApplicationConstants;
+using static MJ_CAIS.Common.Constants.PersonConstants;
 
 namespace MJ_CAIS.Services
 {
@@ -258,6 +259,8 @@ namespace MJ_CAIS.Services
             personDto.MotherFullname = wapplication.MotherFullname;
             personDto.Sex = wapplication.Sex;
 
+            personDto.TableName = ContextTable.WApplication;
+            personDto.TableId = wapplication.Id;
             var person = await _managePersonService.CreatePersonAsync(personDto);
 
             appl.EgnId = person.PPersonIds.First(x => x.PidTypeId == PersonConstants.PidType.Egn).Id;

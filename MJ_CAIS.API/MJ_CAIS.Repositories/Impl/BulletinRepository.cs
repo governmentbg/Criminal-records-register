@@ -476,19 +476,36 @@ namespace MJ_CAIS.Repositories.Impl
                 .Select(x => x.PersonId)
                 .FirstOrDefaultAsync();
 
-            //намира всички бюлетеини на това лице
-            var bulletinsList = this._dbContext.BBulletins.Where(b =>
-                       b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })
-                        .Union(this._dbContext.BBulletins.Where(b =>
-                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId }))
-                        .Union(this._dbContext.BBulletins.Where(b =>
-                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId }))
-                        .Union(this._dbContext.BBulletins.Where(b =>
-                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })).AsNoTracking();
+            // this is new person, not saved in db
+            if (personId is null) return new List<BulletinForRehabilitationAndEventDTO>();
 
+            //намира всички бюлетеини на това лице
+
+            var egnBullId = this._dbContext.BBulletins
+                .Where(b => b.EgnNavigation.PersonId == personId).Select(b => b.Id);
+
+            var lnchBullId = this._dbContext.BBulletins
+                .Where(b => b.LnchNavigation.PersonId == personId).Select(b => b.Id);
+
+            var lnBullId = this._dbContext.BBulletins
+                .Where(b => b.LnNavigation.PersonId == personId).Select(b => b.Id);
+
+            var suidBullId = this._dbContext.BBulletins
+                .Where(b => b.SuidNavigation.PersonId == personId).Select(b => b.Id);
+
+            var docNumBullId = this._dbContext.BBulletins
+                .Where(b => b.IdDocNumberNavigation.PersonId == personId).Select(b => b.Id);
+
+            var bulletinsList = await egnBullId
+                .Union(lnchBullId)
+                .Union(lnBullId)
+                .Union(suidBullId)
+                .Union(docNumBullId)
+                .Where(x=> x != currentBullId)
+                .ToListAsync();
 
             var result = await _dbContext.BBulletins             
-                .Where(x => x.Id != currentBullId && bulletinsList.Select(b => b.Id).Contains(x.Id))
+                .Where(x => bulletinsList.Contains(x.Id))
                 .Select(bulletin => new BulletinForRehabilitationAndEventDTO
                 {
                     Id = bulletin.Id,

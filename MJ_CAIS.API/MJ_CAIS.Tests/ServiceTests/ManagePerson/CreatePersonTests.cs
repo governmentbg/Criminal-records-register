@@ -296,7 +296,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
             // act
             var person = await _peopleService.CreatePersonAsync(personDTO);
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person,null,null,null);
 
             // assert
             Assert.AreEqual(personH.PPersonHCitizenships.Count, 1);
@@ -311,7 +311,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
             // act
             var person = await _peopleService.CreatePersonAsync(personDTO);
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             // assert
             Assert.AreEqual(person.PPersonCitizenships.First().CountryId, personH.PPersonHCitizenships.First().CountryId);
@@ -325,7 +325,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
 
             // act
             var person = await _peopleService.CreatePersonAsync(personDTO);
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             // assert
             Assert.AreEqual(person.PPersonCitizenships.First().EntityState, EntityStateEnum.Added);
@@ -340,7 +340,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
             personDTO.Nationalities = new MultipleChooseDTO();
             // act
             var person = await _peopleService.CreatePersonAsync(personDTO);
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             // assert
             Assert.AreEqual(person.PPersonCitizenships.Count, 0);
@@ -355,7 +355,7 @@ namespace MJ_CAIS.Tests.ServiceTests.ManagePerson
             personDTO.Nationalities = null;
             // act
             var person = await _peopleService.CreatePersonAsync(personDTO);
-            var personH = _peopleService.CreatePersonHistory(person);
+            var personH = _peopleService.CreatePersonHistory(person, null, null, null);
 
             // assert
             Assert.AreEqual(person.PPersonCitizenships.Count, 0);
