@@ -196,65 +196,62 @@
           <nb-card-header>
             <h6>Осъдени в чужбина</h6>
           </nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <div class="d-flex flex-fill justify-content-between">
-                  <a [routerLink]="['/pages/fbbcs/for-destruction']">
-                    Подлежащи на заличаване
-                  </a>
-                  <span class="badge rounded-pill bg-primary">{{
-                    centralAuth.forDestruction
-                  }}</span>
-                </div>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
+
+          <nb-list>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/fbbcs/for-destruction']">
+                  Подлежащи на заличаване
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  centralAuth.forDestruction
+                }}</span>
+              </div>
+            </nb-list-item>
+          </nb-list>
         </nb-card>
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>
             <h6>Е-свидетелства</h6>
           </nb-card-header>
-          <nb-card-body>
-            <nb-list-item>
-              <div class="d-flex flex-fill justify-content-between">
-                <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
-                  Oсвободени от плащане
-                </a>
-                <span class="badge rounded-pill bg-primary">
-                  {{ centralAuth.webCheckTaxFree }}</span
-                >
-              </div>
-            </nb-list-item>
-          </nb-card-body>
+
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
+              <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
+                Oсвободени от плащане
+              </a>
+              <span class="badge rounded-pill bg-primary">
+                {{ centralAuth.webCheckTaxFree }}</span
+              >
+            </div>
+          </nb-list-item>
         </nb-card>
 
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>
             <h6>ECRIS</h6>
           </nb-card-header>
-          <nb-card-body>
-            <nb-list>
-              <nb-list-item>
-                <div class="d-flex flex-fill justify-content-between">
-                  <a [routerLink]="['/pages/ecris/identification']">
-                    За идентификация
-                  </a>
-                  <span class="badge rounded-pill bg-primary">{{
-                    centralAuth.forIdentification
-                  }}</span>
-                </div>
-              </nb-list-item>
-              <nb-list-item>
-                <div class="d-flex flex-fill justify-content-between">
-                  <a [routerLink]="['/pages/ecris-tcn']"> ECRIS-TCN </a>
-                  <span class="badge rounded-pill bg-primary">{{
-                    centralAuth.tcn
-                  }}</span>
-                </div>
-              </nb-list-item>
-            </nb-list>
-          </nb-card-body>
+
+          <nb-list>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/ecris/identification']">
+                  За идентификация
+                </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  centralAuth.forIdentification
+                }}</span>
+              </div>
+            </nb-list-item>
+            <nb-list-item>
+              <div class="d-flex flex-fill justify-content-between">
+                <a [routerLink]="['/pages/ecris-tcn']"> ECRIS-TCN </a>
+                <span class="badge rounded-pill bg-primary">{{
+                  centralAuth.tcn
+                }}</span>
+              </div>
+            </nb-list-item>
+          </nb-list>
         </nb-card>
       </ng-template>
     </div>
