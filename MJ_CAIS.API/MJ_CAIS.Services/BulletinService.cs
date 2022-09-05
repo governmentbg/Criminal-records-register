@@ -58,6 +58,8 @@ namespace MJ_CAIS.Services
             _managePersonService = managePersonService;
         }
 
+        protected override bool IsChildRecord(string aId, List<string> aParentsList) => false;
+
         public virtual async Task<IgPageResult<BulletinGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, string? statusId)
         {
             var entityQuery = this.GetSelectAllQueryable();
@@ -98,11 +100,6 @@ namespace MJ_CAIS.Services
             var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
             var result = resultQuery.ToList();
             return result;
-        }
-
-        protected override bool IsChildRecord(string aId, List<string> aParentsList)
-        {
-            return false;
         }
 
         public async Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId)

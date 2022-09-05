@@ -4,6 +4,7 @@ import { BaseModel } from "../../../../@core/models/common/base.model";
 export class BulletinModel extends BaseModel {
   public registrationNumberDisplay: string = null;
   public csAuthorityName: string = null;
+  public csAuthorityId: string = null;
   public statusId: string = null;
   public statusIdDisplay: string = null;
   public alphabeticalIndex: string = null;
@@ -39,6 +40,7 @@ export class BulletinModel extends BaseModel {
     super(init);
     this.registrationNumberDisplay = init?.registrationNumberDisplay ?? null;
     this.csAuthorityName = init?.csAuthorityName ?? null;
+    this.csAuthorityId = init?.csAuthorityId ?? null;
     this.statusId = init?.statusId ?? null;
     this.statusIdDisplay = init?.statusId ?? null;
     this.alphabeticalIndex = init?.alphabeticalIndex ?? null;

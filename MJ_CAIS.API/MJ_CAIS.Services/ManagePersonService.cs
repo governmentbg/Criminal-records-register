@@ -354,6 +354,7 @@ namespace MJ_CAIS.Services
             personToUpdate.PPersonCitizenships = existingPerson.PPersonCitizenships ?? new List<PPersonCitizenship>();
             foreach (var nationality in newNationalitiesToBeAdded)
             {
+                if (string.IsNullOrEmpty(nationality)) continue;
                 personToUpdate.PPersonCitizenships.Add(new PPersonCitizenship
                 {
                     Id = BaseEntity.GenerateNewId(),
