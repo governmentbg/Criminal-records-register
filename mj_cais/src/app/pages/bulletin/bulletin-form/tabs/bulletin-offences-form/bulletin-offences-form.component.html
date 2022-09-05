@@ -1,254 +1,269 @@
-<app-grid-with-transactions [gridTransactions]="bulletinOffenceTransactions">
-  <igx-grid
-    #offencesGrid
-    #deliveryPropertiesGrid
-    [height]="null"
-    [data]="offences"
-    [primaryKey]="'id'"
-  >
-    <igx-grid-toolbar>
-      <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
-        <igx-icon>add</igx-icon> Добави
-      </button>
-    </igx-grid-toolbar>
+<nb-card>
+  <app-grid-with-transactions [gridTransactions]="bulletinOffenceTransactions">
+    <igx-grid
+      #offencesGrid
+      #deliveryPropertiesGrid
+      [height]="null"
+      [data]="offences"
+      [primaryKey]="'id'"
+    >
+      <igx-grid-toolbar>
+        <igx-grid-toolbar-title>
+          <span class="fw-bold">Престъпления</span></igx-grid-toolbar-title
+        >
+        <igx-grid-toolbar-actions>
+          <div class="d-flex gap-2">
+            <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+            <button
+              nbButton
+              [status]="'success'"
+              (click)="dialogAdd.open()"
+              *ngIf="!isForPreview"
+            >
+              <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добави
+            </button>
+          </div>
+        </igx-grid-toolbar-actions>
+      </igx-grid-toolbar>
 
-    <igx-column
-      field="id"
-      header="Идентификатор"
-      [sortable]="false"
-      [dataType]="'string'"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="offenceCategory.id"
-      header="Идентификатор на код-национално ниво"
-      dataType="number"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="offenceCategory.displayName"
-      header="Код-националното право"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-    <igx-column
-      field="formOfGuiltId"
-      header="Идентификатор на Форма на вината"
-      [sortable]="false"
-      [dataType]="'string'"
-      [hidden]="true"
-    >
-    </igx-column>
-    <igx-column
-      field="formOfGuiltName"
-      header="Форма на вината"
-      [sortable]="true"
-      [dataType]="'string'"
-    >
-    </igx-column>
-    <igx-column
-      field="remarks"
-      header="Описание на деянието"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-    <igx-column
-      field="ecrisOffCatName"
-      header="Обща категория"
-      [sortable]="true"
-      [dataType]="'string'"
-    >
-    </igx-column>
-    <igx-column
-      field="legalProvisions"
-      header="Правна квалификация"
-      [sortable]="true"
-      [dataType]="'string'"
-    >
-    </igx-column>
-
-    <igx-column
-      field="offStartDate"
-      [sortable]="true"
-      header="Начална дата на извършване на деянието"
-      dataType="'date'"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column> 
-    <igx-column
-      field="offEndDate"
-      [sortable]="true"
-      header="Крайна дата на извършване на деянието"
-      dataType="date"
-      [formatter]="this.dateFormatService.formatDate"
-    >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
-        </span>
-      </ng-template>
-    </igx-column>
-
-    <igx-action-strip #actionstrip>
-      <button
-        *ngIf="!isForPreview"
-        title="Редактирай"
-        igxButton="icon"
-        igxRipple
-        (click)="onOpenEditBulletinOffence(actionstrip.context)"
+      <igx-column
+        field="id"
+        header="Идентификатор"
+        [sortable]="false"
+        [dataType]="'string'"
+        [hidden]="true"
       >
-        <igx-icon>edit</igx-icon>
-      </button>
-      <button
-        *ngIf="!isForPreview"
-        title="Изтрии"
-        igxButton="icon"
-        igxRipple
-        (click)="onDeleteBulletinOffence(actionstrip.context)"
+      </igx-column>
+      <igx-column
+        field="offenceCategory.id"
+        header="Идентификатор на код-национално ниво"
+        dataType="number"
+        [hidden]="true"
       >
-        <igx-icon>delete</igx-icon>
-      </button>
-    </igx-action-strip>
-  </igx-grid>
-</app-grid-with-transactions>
-<igx-dialog #dialogAdd>
-  <div class="dialogNewRecord" style="min-width: 1000px">
-    <nb-card>
-      <nb-card-header>
-        <div class="d-flex" style="justify-content: space-between">
-          <div class="d-flex align-items-center">
-            <h5 style="font-weight: bold">Престъпление</h5>
-          </div>
-          <div class="d-flex">
-            <div>
-              <button
-                nbButton
-                matRipple
-                [status]="'success'"
-                (click)="onAddOrUpdateBulletineOffenceRow()"
-                type="button"
-                class="ml-2"
-              >
-                Потвърди
-              </button>
-            </div>
-            <div>
-              <button
-                nbButton
-                matRipple
-                (click)="onCloseBulletinOffenceDilog()"
-                type="button"
-                class="ml-2"
-              >
-                Откажи
-              </button>
-            </div>
-          </div>
-        </div>
-      </nb-card-header>
-      <nb-card-body>
-        <div class="row mt-2">
-          <div class="form-group col-md-8">
-            <cais-lookup
-              [label]="'Код-националното право'"
-              [inputControl]="bulletinOffenceForm.offenceCategory"
-              [parentGroup]="bulletinOffenceForm.offenceCategory.group"
-              [openFunction]="openOffenceCategoryDialog"
-            ></cais-lookup>
-          </div>
-          <div class="form-group col-md-4">
-            <cais-autocomplete
-              [label]="'Форма на вината'"
-              [inputFormControl]="bulletinOffenceForm.formOfGuiltId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'formOfGuiltId'"
-              [items]="dbData.formOfGuilts"
-            ></cais-autocomplete>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-12">
-            <cais-input
-              [type]="'text'"
-              [label]="'Описание на деянието'"
-              [inputFormControl]="bulletinOffenceForm.remarks"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'remarks'"
-              [rows]="'3'"
-              [inputType]="'TextArea'"
-            >
-            </cais-input>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-8">
-            <cais-autocomplete
-              [label]="'Обща категория'"
-              [inputFormControl]="bulletinOffenceForm.ecrisOffCatId"
-              [parentGroup]="bulletinOffenceForm.group"
-              [items]="dbData.ecrisOffCategories"
-              [inputName]="'ecrisOffCatId'"
-            >
-            </cais-autocomplete>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-12">
-            <cais-input
-              [type]="'text'"
-              [rows]="'3'"
-              [label]="'Правна квалификация'"
-              [inputFormControl]="bulletinOffenceForm.legalProvisions"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'legalProvisions'"
-              [inputType]="'TextArea'"
-            >
-            </cais-input>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'datetime'"
-              [label]="'Начална дата на извършване на деянието'"
-              [inputFormControl]="bulletinOffenceForm.offStartDate"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'offStartDate'"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-6">
-            <cais-input
-              [type]="'datetime'"
-              [label]="'Крайна дата на извършване на деянието'"
-              [inputFormControl]="bulletinOffenceForm.offEndDate"
-              [parentGroup]="bulletinOffenceForm.group"
-              [inputName]="'offEndDate'"
-            ></cais-input>
-          </div>
-        </div>
+      </igx-column>
+      <igx-column
+        field="offenceCategory.displayName"
+        header="Код-националното право"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="formOfGuiltId"
+        header="Идентификатор на Форма на вината"
+        [sortable]="false"
+        [dataType]="'string'"
+        [hidden]="true"
+      >
+      </igx-column>
+      <igx-column
+        field="formOfGuiltName"
+        header="Форма на вината"
+        [sortable]="true"
+        [dataType]="'string'"
+      >
+      </igx-column>
+      <igx-column
+        field="remarks"
+        header="Описание на деянието"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
+      <igx-column
+        field="ecrisOffCatName"
+        header="Обща категория"
+        [sortable]="true"
+        [dataType]="'string'"
+      >
+      </igx-column>
+      <igx-column
+        field="legalProvisions"
+        header="Правна квалификация"
+        [sortable]="true"
+        [dataType]="'string'"
+      >
+      </igx-column>
 
-        <div class="font-weight-bold">
-          Място на извършване на престъплението
-        </div>
-        <hr />
+      <igx-column
+        field="offStartDate"
+        [sortable]="true"
+        header="Начална дата на извършване на деянието"
+        dataType="'date'"
+        [formatter]="this.dateFormatService.formatDate"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+            {{ this.dateFormatService.displayDateTime(cell.value) }}
+          </span>
+        </ng-template>
+      </igx-column>
+      <igx-column
+        field="offEndDate"
+        [sortable]="true"
+        header="Крайна дата на извършване на деянието"
+        dataType="date"
+        [formatter]="this.dateFormatService.formatDate"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+            {{ this.dateFormatService.displayDateTime(cell.value) }}
+          </span>
+        </ng-template>
+      </igx-column>
 
-        <div class="row ml-2">
-          <div class="form-group col-md-12">
-            <cais-address-form
-              #offPlace
-              [parentForm]="bulletinOffenceForm.offPlace"
-              [showDescWhenIsNativeAddress]="true"
-            ></cais-address-form>
+      <igx-action-strip #actionstrip>
+        <button
+          *ngIf="!isForPreview"
+          title="Редактирай"
+          igxButton="icon"
+          igxRipple
+          (click)="onOpenEditBulletinOffence(actionstrip.context)"
+        >
+          <igx-icon>edit</igx-icon>
+        </button>
+        <button
+          *ngIf="!isForPreview"
+          title="Изтрии"
+          igxButton="icon"
+          igxRipple
+          (click)="onDeleteBulletinOffence(actionstrip.context)"
+        >
+          <igx-icon>delete</igx-icon>
+        </button>
+      </igx-action-strip>
+    </igx-grid>
+  </app-grid-with-transactions>
+  <igx-dialog #dialogAdd>
+    <div class="dialogNewRecord" style="min-width: 1000px">
+      <nb-card>
+        <nb-card-header>
+          <div class="d-flex" style="justify-content: space-between">
+            <div class="d-flex align-items-center">
+              <h5 style="font-weight: bold">Престъпление</h5>
+            </div>
+            <div class="d-flex">
+              <div>
+                <button
+                  nbButton
+                  matRipple
+                  [status]="'success'"
+                  (click)="onAddOrUpdateBulletineOffenceRow()"
+                  type="button"
+                  class="ml-2"
+                >
+                  Потвърди
+                </button>
+              </div>
+              <div>
+                <button
+                  nbButton
+                  matRipple
+                  (click)="onCloseBulletinOffenceDilog()"
+                  type="button"
+                  class="ml-2"
+                >
+                  Откажи
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </nb-card-body>
-    </nb-card>
-  </div>
-</igx-dialog>
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row mt-2">
+            <div class="form-group col-md-8">
+              <cais-lookup
+                [label]="'Код-националното право'"
+                [inputControl]="bulletinOffenceForm.offenceCategory"
+                [parentGroup]="bulletinOffenceForm.offenceCategory.group"
+                [openFunction]="openOffenceCategoryDialog"
+              ></cais-lookup>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-autocomplete
+                [label]="'Форма на вината'"
+                [inputFormControl]="bulletinOffenceForm.formOfGuiltId"
+                [parentGroup]="bulletinOffenceForm.group"
+                [inputName]="'formOfGuiltId'"
+                [items]="dbData.formOfGuilts"
+              ></cais-autocomplete>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-input
+                [type]="'text'"
+                [label]="'Описание на деянието'"
+                [inputFormControl]="bulletinOffenceForm.remarks"
+                [parentGroup]="bulletinOffenceForm.group"
+                [inputName]="'remarks'"
+                [rows]="'3'"
+                [inputType]="'TextArea'"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-8">
+              <cais-autocomplete
+                [label]="'Обща категория'"
+                [inputFormControl]="bulletinOffenceForm.ecrisOffCatId"
+                [parentGroup]="bulletinOffenceForm.group"
+                [items]="dbData.ecrisOffCategories"
+                [inputName]="'ecrisOffCatId'"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-input
+                [type]="'text'"
+                [rows]="'3'"
+                [label]="'Правна квалификация'"
+                [inputFormControl]="bulletinOffenceForm.legalProvisions"
+                [parentGroup]="bulletinOffenceForm.group"
+                [inputName]="'legalProvisions'"
+                [inputType]="'TextArea'"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'datetime'"
+                [label]="'Начална дата на извършване на деянието'"
+                [inputFormControl]="bulletinOffenceForm.offStartDate"
+                [parentGroup]="bulletinOffenceForm.group"
+                [inputName]="'offStartDate'"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'datetime'"
+                [label]="'Крайна дата на извършване на деянието'"
+                [inputFormControl]="bulletinOffenceForm.offEndDate"
+                [parentGroup]="bulletinOffenceForm.group"
+                [inputName]="'offEndDate'"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="font-weight-bold">
+            Място на извършване на престъплението
+          </div>
+          <hr />
+
+          <div class="row ml-2">
+            <div class="form-group col-md-12">
+              <cais-address-form
+                #offPlace
+                [parentForm]="bulletinOffenceForm.offPlace"
+                [showDescWhenIsNativeAddress]="true"
+              ></cais-address-form>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </igx-dialog>
+</nb-card>
