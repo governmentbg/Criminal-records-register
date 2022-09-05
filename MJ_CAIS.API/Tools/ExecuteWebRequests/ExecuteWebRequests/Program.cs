@@ -47,36 +47,41 @@ namespace ExecuteWebRequests
 
                     var regixService = host.Services.GetService<IRegixService>();
                     var webRequests = regixService.GetRequestsForAsyncExecution();
-                   
+
                     logger.Info($"Number of requests for execution: {webRequests.Count}");
                     foreach (var webRequest in webRequests)
                     {
                         if (webRequest.WebService != null)
                         {
-                            if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_PersonDataSearch)
+                            logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } started.");
+                            switch (webRequest.WebService.TypeCode)
                             {
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } started.");
-                                regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } ended.");
+                                case WebServiceEnumConstants.REGIX_PersonDataSearch:
+
+                                    if (webRequest.WApplication != null)
+                                    {
+                                        regixService.ExecutePersonDataSearch(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
+
+                                    }
+                                    break;
+                                case WebServiceEnumConstants.REGIX_RelationsSearch:
+                                    if (webRequest.WApplication != null)
+                                    {
+                                        regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
+                                    }
+                                    break;
+                                case WebServiceEnumConstants.REGIX_ForeignIdentityV2:
+                                    if (webRequest.WApplication != null)
+                                    {
+                                        regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication?.RegistrationNumber);
+                                    }
+                                    break;
+                                default:
+                                    logger.Warn($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } : type is not expected.");
+                                    break;
+
                             }
-                            if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_RelationsSearch)
-                            {
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } started.");
-                                regixService.ExecuteRelationsSearch(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication.RegistrationNumber);
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } ended.");
-                            }
-                            if (webRequest.WebService.TypeCode == WebServiceEnumConstants.REGIX_ForeignIdentityV2)
-                            {
-                               // logger.Trace("алабала");
-                                //var i = webRequest.Id;
-                                //var j = WebServiceEnumConstants.REGIX_ForeignIdentityV2;
-                                var s = $"RequstID: {webRequest.Id} - Execute {WebServiceEnumConstants.REGIX_ForeignIdentityV2} started.";
-                                // logger.Trace($"RequstID: {webRequest.Id} - Execute {WebServiceEnumConstants.REGIX_ForeignIdentityV2} started.");
-                                logger.Trace(s);
-                                
-                                regixService.ExecuteForeignIdentitySearchV2(webRequest, webRequest.WebService.WebServiceName, registrationNumber: webRequest.WApplication?.RegistrationNumber);
-                                logger.Trace($"RequstID: {webRequest.Id} - Execute {WebServiceEnumConstants.REGIX_ForeignIdentityV2 } ended.");
-                            }
+                            logger.Trace($"RequstID: {webRequest.Id} - Execute {webRequest.WebService.TypeCode } ended.");
                         }
                         else
                         {

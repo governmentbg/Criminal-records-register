@@ -8,79 +8,67 @@
         applicationStatus == ApplicationTypeStatusConstants.ApprovedApplication
       "
     >
-      <div>
-        <button
-          *ngIf="
-            !isForPreview &&
+      <button
+        *ngIf="
+          !isForPreview &&
+          isEdit() &&
+          (applicationStatus == 'NewId' ||
+            applicationStatus == 'FillApplication')
+        "
+        nbButton
+        matRipple
+        [status]="'danger'"
+        (click)="cancelApplication()"
+        type="button"
+      >
+        Анулирай
+      </button>
+      <button
+        *ngIf="
+          (!isForPreview &&
             isEdit() &&
             (applicationStatus == 'NewId' ||
-              applicationStatus == 'FillApplication')
-          "
-          nbButton
-          matRipple
-          [status]="'danger'"
-          (click)="cancelApplication()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Анулирай
-        </button>
-        <button
-          *ngIf="
-            (!isForPreview &&
-              isEdit() &&
-              (applicationStatus == 'NewId' ||
-                applicationStatus == 'FillApplication')) ||
-            (isForPreview && applicationStatus == 'CheckPayment')
-          "
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="finalEdit()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Окончателна редакция
-        </button>
-        <button
-          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="finalEdit()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Потвърждаване
-        </button>
-        <button
-          *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="changeStatusToCheckPayment()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Отхвърляне
-        </button>
-        <button
-          *ngIf="!isCreate"
-          nbButton
-          matRipple
-          [status]="'success'"
-          (click)="printApplication()"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-        >
-          Печат
-        </button>
-      </div>
+              applicationStatus == 'FillApplication')) ||
+          (isForPreview && applicationStatus == 'CheckPayment')
+        "
+        nbButton
+        matRipple
+        [status]="'primary'"
+        (click)="finalEdit()"
+        type="button"
+      >
+        Окончателна редакция
+      </button>
+      <button
+        *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
+        nbButton
+        matRipple
+        [status]="'primary'"
+        (click)="finalEdit()"
+        type="button"
+      >
+        Потвърждаване
+      </button>
+      <button
+        *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
+        nbButton
+        matRipple
+        [status]="'danger'"
+        (click)="changeStatusToCheckPayment()"
+        type="button"
+      >
+        Отхвърляне
+      </button>
+      <button
+        *ngIf="!isCreate"
+        nbButton
+        matRipple
+        [status]="'primary'"
+        (click)="printApplication()"
+        type="button"
+      >
+        Печат
+      </button>
     </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
@@ -289,7 +277,7 @@
           </cais-application-document-form>
         </nb-tab>
 
-        <nb-tab tabTitle="Свидетелство" active="{{isAppAproved}}">
+        <nb-tab tabTitle="Свидетелство" active="{{ isAppAproved }}">
           <cais-application-certificate-result
             [model]="dbData.certificate"
             [users]="dbData.users"

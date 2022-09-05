@@ -2,47 +2,33 @@
   <div class="d-flex align-items-center">
     <div style="font-weight: bold; font-size: 22px">{{ label }}</div>
   </div>
-  <div class="d-flex">
+  <div class="d-flex gap-2">
     <ng-content></ng-content>
-    <div>
-      <button
-        *ngIf="!isForPreview"
-        nbButton
-        matRipple
-        [status]="'success'"
-        (click)="onSaveFunction()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px"
-      >
-        Запази
-      </button>
-    </div>
-    <div>
-      <button
-        nbButton
-        matRipple
-        (click)="onCancelFunction()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px"
-      >
-        {{ isForPreview ? "Назад" : "Отказ" }}
-      </button>
-    </div>
-    <div>
-      <button
-        *ngIf="isForEdit && isForDelete && !isForPreview"
-        nbButton
-        matRipple
-        [status]="'danger'"
-        (click)="onDeleteFunction()"
-        type="button"
-        class="ml-2"
-        style="min-width: 100px"
-      >
-        Изтрий
-      </button>
-    </div>
+
+    <button
+      *ngIf="!isForPreview"
+      nbButton
+      matRipple
+      [status]="'success'"
+      (click)="onSaveFunction()"
+      type="button"
+    >
+      Запази
+    </button>
+
+    <button nbButton matRipple (click)="onCancelFunction()" type="button">
+      {{ isForPreview ? "Назад" : "Отказ" }}
+    </button>
+
+    <button
+      *ngIf="isForEdit && isForDelete && !isForPreview"
+      nbButton
+      matRipple
+      [status]="'danger'"
+      (click)="onDeleteFunction()"
+      type="button"
+    >
+      Изтрий
+    </button>
   </div>
 </div>

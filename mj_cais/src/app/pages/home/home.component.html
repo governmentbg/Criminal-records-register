@@ -3,14 +3,10 @@
     <div class="col-md-6">
       <nb-card accent="info" class="col-md-12">
         <nb-card-header>
-          <h6>Бюлетини</h6>
-          <a
-            nbButton
-            matRipple
-            [status]="'success'"
-            [routerLink]="['/pages/bulletins/create']"
-            type="button"
-          >
+          <h6 class="d-flex align-items-center gap-2">
+            <nb-icon icon="inventory_2"></nb-icon> Бюлетини
+          </h6>
+          <a nbButton matRipple [status]="'success'" [routerLink]="['/pages/bulletins/create']" type="button">
             Нов бюлетин
           </a>
         </nb-card-header>
@@ -101,7 +97,9 @@
       <ng-template [ngxPermissionsOnly]="[RoleNameEnum.Judge]">
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>
-            <h6>За решение от съдия/юрист</h6>
+            <h6 class="d-flex align-items-center gap-2">
+              <nb-icon icon="balance"></nb-icon> За решение от съдия/юрист
+            </h6>
           </nb-card-header>
           <nb-list>
             <nb-list-item>
@@ -140,22 +138,12 @@
     </div>
     <div class="col-md-6">
       <nb-card accent="info" class="col-md-12">
-        <nb-card-header
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          "
-        >
-          <h6>Свидетелства</h6>
-          <a
-            nbButton
-            matRipple
-            [status]="'success'"
-            [routerLink]="['/pages/applications/request']"
-            type="button"
-            style="min-width: 100px"
-          >
+        <nb-card-header>
+          <h6 class="d-flex align-items-center gap-2">
+            <nb-icon icon="file-text-outline" pack="eva"></nb-icon> Свидетелства
+          </h6>
+
+          <a nbButton [status]="'success'" [routerLink]="['/pages/applications/request']" type="button">
             Ново заявление
           </a>
         </nb-card-header>
@@ -194,7 +182,9 @@
       <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>
-            <h6>Осъдени в чужбина</h6>
+            <h6 class="d-flex align-items-center gap-2">
+              <nb-icon icon="public"></nb-icon> Осъдени в чужбина
+            </h6>
           </nb-card-header>
 
           <nb-list>
@@ -212,7 +202,9 @@
         </nb-card>
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>
-            <h6>Е-свидетелства</h6>
+            <h6 class="d-flex align-items-center gap-2">
+              <nb-icon icon="file-add-outline" pack="eva"></nb-icon> Е-свидетелства
+            </h6>
           </nb-card-header>
 
           <nb-list-item>
@@ -221,17 +213,17 @@
                 Oсвободени от плащане
               </a>
               <span class="badge rounded-pill bg-primary">
-                {{ centralAuth.webCheckTaxFree }}</span
-              >
+                {{ centralAuth.webCheckTaxFree }}</span>
             </div>
           </nb-list-item>
         </nb-card>
 
         <nb-card accent="info" class="col-md-12">
           <nb-card-header>
-            <h6>ECRIS</h6>
+            <h6 class="d-flex align-items-center gap-2">
+              <nb-icon icon="web"></nb-icon> ECRIS
+            </h6>
           </nb-card-header>
-
           <nb-list>
             <nb-list-item>
               <div class="d-flex flex-fill justify-content-between">
