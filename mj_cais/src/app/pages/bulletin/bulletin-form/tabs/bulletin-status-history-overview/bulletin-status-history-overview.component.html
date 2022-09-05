@@ -1,84 +1,96 @@
-<div class="font-weight-bold">История на промяна на статусите на бюлетин</div>
-<hr />
-<igx-grid
-  #statusHistoryGrid
-  [height]="null"
-  [data]="historyData"
-  [primaryKey]="'id'"
->
-  <igx-column
-    field="id"
-    header="Идентификатор"
-    [sortable]="false"
-    [dataType]="'string'"
-    [hidden]="true"
+<nb-card>
+  <igx-grid
+    #statusHistoryGrid
+    [height]="null"
+    [data]="historyData"
+    [primaryKey]="'id'"
   >
-  </igx-column>
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold">История на промяна на статусите на бюлетини</span>
+      </igx-grid-toolbar-title>
+      <igx-grid-toolbar-actions>
+        <div class="d-flex gap-2">
+          <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+        </div>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
 
-  <igx-column
-    field="newStatus"
-    header="Нов статус"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
-  <igx-column
-    field="oldStatus"
-    header="Стар статус"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="false"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+    </igx-column>
 
-  <igx-column
-    field="createdOn"
-    [sortable]="true"
-    header="Дата на създаване"
-    dataType="date"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-        {{ this.dateFormatService.displayDateTime(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="newStatus"
+      header="Нов статус"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
+    <igx-column
+      field="oldStatus"
+      header="Стар статус"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
 
-  <igx-column
-    field="createdBy"
-    header="Създаден от"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
+    <igx-column
+      field="createdOn"
+      [sortable]="true"
+      header="Дата на създаване"
+      dataType="date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+          {{ this.dateFormatService.displayDateTime(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="locked"
-    header="Заключен за редакция"
-    [sortable]="true"
-    [dataType]="'boolean'"
-  ></igx-column>
-  <igx-column
-    field="descr"
-    header="Описание"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
-  <igx-column
-    width="80px"
-    header="Действия"
-    [sortable]="false"
-    [filterable]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <button
-        igxButton="icon"
-        [title]="'Изтегляне'"
-        (click)="download(cell.rowData.id)"
-      >
-        <nb-icon pack="fa" icon="download"></nb-icon>
-      </button>
-    </ng-template>
-  </igx-column>
-</igx-grid>
+    <igx-column
+      field="createdBy"
+      header="Създаден от"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
+
+    <igx-column
+      field="locked"
+      header="Заключен за редакция"
+      [sortable]="true"
+      [dataType]="'boolean'"
+    ></igx-column>
+    <igx-column
+      field="descr"
+      header="Описание"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
+    <igx-column
+      width="100px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <button
+          igxButton="icon"
+          [title]="'Изтегляне'"
+          (click)="download(cell.rowData.id)"
+        >
+          <nb-icon pack="fa" icon="download"></nb-icon>
+        </button>
+      </ng-template>
+    </igx-column>
+  </igx-grid>
+</nb-card>
