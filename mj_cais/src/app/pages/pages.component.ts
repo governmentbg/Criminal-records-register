@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NbAuthService, NbTokenService } from '@nebular/auth';
 import { NbMenuItem } from '@nebular/theme';
 import { NgxPermissionsService } from 'ngx-permissions';
-import { of, switchMap, takeWhile, tap } from 'rxjs';
+import { of, switchMap, take, takeWhile, tap } from 'rxjs';
 import { PagesMenu } from './pages-menu';
 
 @Component({
@@ -22,20 +22,13 @@ export class PagesComponent {
 
   constructor(
     private pagesMenu: PagesMenu,
-    private tokenService: NbTokenService,
     private permissionsService: NgxPermissionsService
   ) {
-
-    this.tokenService
-      .tokenChange()
-      .pipe(takeWhile(() => this.loggedIn))
-      .subscribe((tkn) => {
-        this.initMenu();
-      });
+    this.initMenu();
   }
 
   initMenu() {   
-    this.permissionsService.permissions$.subscribe( perm => { 
+    this.permissionsService.permissions$.pipe(take(1)).subscribe( perm => { 
       this.menu = this.pagesMenu.getMenuItems(Object.keys(perm)); 
     });   
   }
