@@ -7,7 +7,11 @@
   >
     <igx-grid-toolbar>
       <igx-grid-toolbar-title>
-        <span class="fw-bold">История на промяна на статусите на бюлетини</span>
+        <span
+          class="fw-bold"
+          title="История на промяна на статусите на бюлетини"
+          >История на промяна на статусите на бюлетини</span
+        >
       </igx-grid-toolbar-title>
       <igx-grid-toolbar-actions>
         <div class="d-flex gap-2">
@@ -76,20 +80,22 @@
     >
     </igx-column>
     <igx-column
-      width="100px"
+      width="110px"
       header="Действия"
       [sortable]="false"
       [filterable]="false"
       [disableHiding]="true"
     >
       <ng-template igxCell let-cell="cell">
-        <button
-          igxButton="icon"
-          [title]="'Изтегляне'"
-          (click)="download(cell.rowData.id)"
-        >
-          <nb-icon pack="fa" icon="download"></nb-icon>
-        </button>
+        <div class="cell-center">
+          <button
+            class="btn btn-link"
+            [title]="'Изтегляне'"
+            (click)="download(cell.rowData.id)"
+          >
+            <nb-icon pack="fa" icon="download"></nb-icon>
+          </button>
+        </div>
       </ng-template>
     </igx-column>
   </igx-grid>
