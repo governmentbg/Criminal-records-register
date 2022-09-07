@@ -1,73 +1,36 @@
 <nb-card class="card-single-page-height">
   <nb-card-header class="card-header-shadow">
-    <cais-card-header
-      [label]="displayTitle"
-      [onSaveFunction]="submitFunction"
-      [onCancelFunction]="globalCancelFunction"
+    <cais-card-header [label]="displayTitle" [onSaveFunction]="submitFunction" [onCancelFunction]="globalCancelFunction"
       [setForPreview]="
         applicationStatus == ApplicationTypeStatusConstants.ApprovedApplication
-      "
-    >
-      <button
-        *ngIf="
+      ">
+      <button *ngIf="
           !isForPreview &&
           isEdit() &&
           (applicationStatus == 'NewId' ||
             applicationStatus == 'FillApplication')
-        "
-        nbButton
-        matRipple
-        [status]="'danger'"
-        (click)="cancelApplication()"
-        type="button"
-      >
+        " nbButton matRipple [status]="'danger'" (click)="cancelApplication()" type="button">
         Анулирай
       </button>
-      <button
-        *ngIf="
+      <button *ngIf="
           (!isForPreview &&
             isEdit() &&
             (applicationStatus == 'NewId' ||
               applicationStatus == 'FillApplication')) ||
           (isForPreview && applicationStatus == 'CheckPayment')
-        "
-        nbButton
-        matRipple
-        [status]="'primary'"
-        (click)="finalEdit()"
-        type="button"
-      >
+        " nbButton matRipple [status]="'primary'" (click)="finalEdit()" type="button">
         Окончателна редакция
       </button>
-      <button
-        *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
-        nbButton
-        matRipple
-        [status]="'primary'"
-        (click)="finalEdit()"
-        type="button"
-      >
+      <button *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'" nbButton matRipple [status]="'primary'"
+        (click)="finalEdit()" type="button">
         Потвърждаване
       </button>
-      <button
-        *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'"
-        nbButton
-        matRipple
-        [status]="'danger'"
-        (click)="changeStatusToCheckPayment()"
-        type="button"
-      >
+      <button *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'" nbButton matRipple [status]="'danger'"
+        (click)="changeStatusToCheckPayment()" type="button">
         Отхвърляне
       </button>
-      <button
-        *ngIf="!isCreate"
-        nbButton
-        matRipple
-        [status]="'primary'"
-        (click)="printApplication()"
-        type="button"
-      >
-        Печат
+      <button *ngIf="!isCreate" nbButton matRipple [status]="'primary'" (click)="printApplication()" type="button">
+        <nb-icon class="pt-1" pack="fa" icon="print"></nb-icon> Печат
       </button>
     </cais-card-header>
   </nb-card-header>
@@ -79,110 +42,71 @@
           <hr />
           <div class="row">
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Номер на заявление'"
-                [inputFormControl]="fullForm.registrationNumber"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Номер на заявление'"
+                [inputFormControl]="fullForm.registrationNumber" [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Статус'"
-                [inputFormControl]="fullForm.currentApplicationStatus"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Статус'" [inputFormControl]="fullForm.currentApplicationStatus"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
           <div class="font-weight-bold">Заявител</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Пълно име на заявителя'"
-                [inputFormControl]="fullForm.applicantName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Пълно име на заявителя'" [inputFormControl]="fullForm.applicantName"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
 
-            <div
-              class="nb-form-control-container"
-              style="
+            <div class="nb-form-control-container" style="
                 height: 40px;
                 max-width: 100%;
                 display: flex;
                 align-items: center;
                 margin: 25px;
-              "
-            >
-              <nb-checkbox [formControl]="fullForm.fromCosul"
-                >От консулство</nb-checkbox
-              >
+              ">
+              <nb-checkbox [formControl]="fullForm.fromCosul">От консулство</nb-checkbox>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Адрес за кореспонденция'"
-                [inputFormControl]="fullForm.address"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Адрес за кореспонденция'" [inputFormControl]="fullForm.address"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
           <div class="font-weight-bold">Цел</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-autocomplete
-                [inputFormControl]="fullForm.purposeId"
-                [parentGroup]="fullForm.group"
-                [items]="dbData.purposeIds"
-                [inputName]="'purposeId'"
-              >
+              <cais-autocomplete [inputFormControl]="fullForm.purposeId" [parentGroup]="fullForm.group"
+                [items]="dbData.purposeIds" [inputName]="'purposeId'">
               </cais-autocomplete>
             </div>
             <div class="form-group col-md-6" style="margin-top: 20px">
-              <cais-input
-                [type]="'text'"
-                [inputFormControl]="fullForm.purpose"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [inputFormControl]="fullForm.purpose" [parentGroup]="fullForm.group">
+              </cais-input>
             </div>
           </div>
           <div class="font-weight-bold m-2">
             Информация, събрана по служебен път
           </div>
-          <cais-person-form
-            [personForm]="fullForm.person"
-            [personAliasTypes]="dbData.personAliasTypes"
-            [genderTypes]="dbData.genderTypes"
-            [countries]="dbData.countries"
-            [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
-            [personAliasGridData]="dbData.personAlias"
-            [contextType]="PersonContextEnum.Application"
-            [isEditable]="
+          <cais-person-form [personForm]="fullForm.person" [personAliasTypes]="dbData.personAliasTypes"
+            [genderTypes]="dbData.genderTypes" [countries]="dbData.countries"
+            [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes" [personAliasGridData]="dbData.personAlias"
+            [contextType]="PersonContextEnum.Application" [isEditable]="
               fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
               fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.Canceled &&
               !this.isForPreview
-            "
-          >
+            ">
           </cais-person-form>
           <div class="font-weight-bold">Плащане</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-autocomplete
-                [label]="'Начин на плащане'"
-                [inputFormControl]="fullForm.paymentMethodId"
-                [parentGroup]="fullForm.group"
-                [items]="dbData.paymentMethodIds"
-                [inputName]="'paymentMethodId'"
-              >
+              <cais-autocomplete [label]="'Начин на плащане'" [inputFormControl]="fullForm.paymentMethodId"
+                [parentGroup]="fullForm.group" [items]="dbData.paymentMethodIds" [inputName]="'paymentMethodId'">
               </cais-autocomplete>
             </div>
           </div>
@@ -190,108 +114,64 @@
           <hr />
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-autocomplete
-                [label]="'Начин на получаване на резултата'"
-                [inputFormControl]="fullForm.srvcResRcptMethId"
-                [parentGroup]="fullForm.group"
-                [items]="dbData.srvcResRcptMethIds"
-                [inputName]="'srvcResRcptMethId'"
-              >
+              <cais-autocomplete [label]="'Начин на получаване на резултата'"
+                [inputFormControl]="fullForm.srvcResRcptMethId" [parentGroup]="fullForm.group"
+                [items]="dbData.srvcResRcptMethIds" [inputName]="'srvcResRcptMethId'">
               </cais-autocomplete>
             </div>
           </div>
           <div class="font-weight-bold">Адрес на получател</div>
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Държава'"
-                [inputFormControl]="fullForm.addrState"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Държава'" [inputFormControl]="fullForm.addrState"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Област'"
-                [inputFormControl]="fullForm.addrDistrict"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Област'" [inputFormControl]="fullForm.addrDistrict"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Град'"
-                [inputFormControl]="fullForm.addrTown"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Град'" [inputFormControl]="fullForm.addrTown"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'ул. №'"
-                [inputFormControl]="fullForm.addrStr"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'ул. №'" [inputFormControl]="fullForm.addrStr"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Име'"
-                [inputFormControl]="fullForm.addrName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="fullForm.addrName"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Мобилен телефон'"
-                [inputFormControl]="fullForm.addrPhone"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Мобилен телефон'" [inputFormControl]="fullForm.addrPhone"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Ел. поща'"
-                [inputFormControl]="fullForm.addrEmail"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Ел. поща'" [inputFormControl]="fullForm.addrEmail"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
           <div class="mb-3"></div>
-          <cais-application-document-form
-            #applicationDocuments
-            [appForm]="fullForm"
-            [showAddDeleteButton]="
+          <cais-application-document-form #applicationDocuments [appForm]="fullForm" [showAddDeleteButton]="
               (fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
                 isEdit() &&
                 !isForPreview) ||
               (!isEdit() && isForPreview)
-            "
-            [documents]="dbData.documents"
-            [dbData]="dbData"
-          >
+            " [documents]="dbData.documents" [dbData]="dbData">
           </cais-application-document-form>
         </nb-tab>
 
         <nb-tab tabTitle="Свидетелство" active="{{ isAppAproved }}">
-          <cais-application-certificate-result
-            [model]="dbData.certificate"
-            [users]="dbData.users"
-            [personId]="this.fullForm.person.suid.value"
-            [applicationCode]="this.fullForm.applicationCode.value"
-          >
+          <cais-application-certificate-result [model]="dbData.certificate" [users]="dbData.users"
+            [personId]="this.fullForm.person.suid.value" [applicationCode]="this.fullForm.applicationCode.value">
           </cais-application-certificate-result>
         </nb-tab>
 
         <nb-tab tabTitle="История на статусите">
-          <cais-application-status-history
-            [historyData]="dbData.applicationStatusHistoryData"
-          >
+          <cais-application-status-history [historyData]="dbData.applicationStatusHistoryData">
           </cais-application-status-history>
         </nb-tab>
 
@@ -301,11 +181,9 @@
         </nb-tab>
 
         <nb-tab tabTitle="История на свидетелствата">
-          <cais-application-certificate-canceled
-            [applicationCertificateCanceled]="
+          <cais-application-certificate-canceled [applicationCertificateCanceled]="
               dbData.applicationCertificateCanceled
-            "
-          >
+            ">
           </cais-application-certificate-canceled>
         </nb-tab>
       </nb-tabset>
