@@ -1,0 +1,105 @@
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [sortStrategy]="noopSortStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  (onSortingDone)="sortingDone($event)"
+  (onFilteringDone)="filteringDone($event)"
+  (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
+  [allowFiltering]="true"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+  </igx-column>
+
+  <igx-column
+    field="type"
+    header="Тип"
+    [sortable]="true"
+    [dataType]="'string'"
+    [hidden]="true"
+  >
+  </igx-column>
+
+  <igx-column
+    field="csAuthority"
+    header="Бюро съдимост по заявяване"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+
+  <igx-column
+    field="applicantName"
+    header="Заявено от"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+
+  <igx-column field="egn" header="ЕГН" [sortable]="true" [dataType]="'string'">
+  </igx-column>
+  <igx-column field="lnch" header="ЛНЧ" [sortable]="true" [dataType]="'string'">
+  </igx-column>
+  <igx-column
+    field="fullName"
+    header="Имена"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="bithDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    width="60px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <!-- <ng-template igxCell let-cell="cell">
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/applications/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>
+    </ng-template> -->
+  </igx-column>
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>

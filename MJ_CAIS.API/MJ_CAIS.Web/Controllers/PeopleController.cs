@@ -61,6 +61,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("archive")]
+        public async Task<IActionResult> GetAllArchive(ODataQueryOptions<PersonArchiveGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonArchiveAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
         [HttpGet("e-applications")]
         public async Task<IActionResult> GetAllEApplications(ODataQueryOptions<PersonEApplicationGridDTO> aQueryOptions, string personId)
         {

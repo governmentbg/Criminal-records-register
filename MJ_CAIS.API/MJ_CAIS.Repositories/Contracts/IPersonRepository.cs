@@ -18,6 +18,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<PersonApplicationGridDTO> GetApplicationsByPersonId(string personId);
 
+        Task<IQueryable<PersonArchiveGridDTO>> GetArchiveByPersonIdAsync(string personId);
+
         IQueryable<PersonEApplicationGridDTO> GetEApplicationsByPersonId(string personId);
 
         IQueryable<PersonGeneratedReportGridDTO> GetAllReportApplByPersonId(string personId);
