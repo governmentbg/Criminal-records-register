@@ -31,9 +31,8 @@
             Връчи
           </button>
           <button *ngIf="this.model.statusCode != CertificateStatuTypeEnum.Delivered" nbButton matRipple
-            [status]="'danger'" (click)="cancelCertificate()" type="button" class="ml-2"
-            style="min-width: 100px; float: right">
-            Анулирай
+            [status]="'danger'" (click)="cancelCertificate()" type="button">
+            <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Анулирай
           </button>
           <button *ngIf="
               this.model.statusCode ==

@@ -1,41 +1,17 @@
 <nb-card>
   <nb-card-header>Ново искане за справка за съдимост</nb-card-header>
   <nb-card-body class="example-items-rows">
-    <button
-      nbButton
-      fullWidth
-      matRipple
-      [status]="'basic'"
-      (click)="searchByEGN()"
-      type="button"
-      class="mb-2"
-      style="min-width: 100px"
-    >
+    <button nbButton fullWidth matRipple [status]="'basic'" (click)="searchByEGN()" type="button" class="mb-2"
+      style="min-width: 100px">
       Ново искане по ЕГН
     </button>
-    <button
-      nbButton
-      fullWidth
-      matRipple
-      [status]="'basic'"
-      (click)="searchByLNCH()"
-      type="button"
-      class="mb-2"
-      style="min-width: 100px"
-    >
+    <button nbButton fullWidth matRipple [status]="'basic'" (click)="searchByLNCH()" type="button" class="mb-2"
+      style="min-width: 100px">
       Ново искане по ЛНЧ
     </button>
 
-    <button
-      nbButton
-      fullWidth
-      matRipple
-      [status]="'basic'"
-      (click)="searchForForeigner()"
-      type="button"
-      class="mb-2"
-      style="min-width: 100px"
-    >
+    <button nbButton fullWidth matRipple [status]="'basic'" (click)="searchForForeigner()" type="button" class="mb-2"
+      style="min-width: 100px">
       Ново искане за чужденец
     </button>
   </nb-card-body>
@@ -48,13 +24,7 @@
         <ng-container>
           <h2 class="mt-0">{{ titelSearchBy }}</h2>
           <form (submit)="onSubmit()">
-            <input
-              type="text"
-              name="searchValue"
-              nbInput
-              fullWidth
-              [(ngModel)]="searchValue"
-            />
+            <input type="text" name="searchValue" nbInput fullWidth [(ngModel)]="searchValue" />
           </form>
         </ng-container>
       </nb-card-body>
@@ -66,18 +36,11 @@
             </button>
           </div>
           <div class="col-6">
-            <button
-              nbButton
-              matRipple
-              fullWidth
-              status="primary"
-              (click)="onSubmit()"
-              [disabled]="
+            <button nbButton matRipple fullWidth status="primary" (click)="onSubmit()" [disabled]="
                 searchValue === null ||
                 searchValue === undefined ||
                 searchValue === ''
-              "
-            >
+              ">
               Търси
             </button>
           </div>
@@ -93,32 +56,18 @@
       <nb-card-body>
         <ng-container>
           <h2 class="mt-0">{{ errorTitle }}</h2>
-          <div
-            style="
+          <div style="
               display: flex;
               align-items: center;
               justify-content: space-between;
-            "
-          >
-            <button
-              nbButton
-              matRipple
-              [status]="'success'"
-              type="button"
-              [title]="'Ръчно въвеждане'"
-              (click)="navigateToReportApplicationCreate()"
-            >
+            ">
+            <button nbButton matRipple [status]="'success'" type="button" [title]="'Ръчно въвеждане'"
+              (click)="navigateToReportApplicationCreate()">
               Ръчно въвеждане
             </button>
-            <button
-              nbButton
-              matRipple
-              [status]="'danger'"
-              type="button"
-              [title]="'Анулирай'"
-              (click)="changeStatusToCanceled()"
-            >
-              Анулирай
+            <button nbButton matRipple [status]="'danger'" type="button" [title]="'Анулирай'"
+              (click)="changeStatusToCanceled()">
+              <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Анулирай
             </button>
           </div>
         </ng-container>
@@ -135,30 +84,17 @@
       <nb-card-body>
         <form (submit)="onSubmitCancelReportApplication()">
           <label for="description">Основание</label>
-          <input
-            type="text"
-            name="description"
-            nbInput
-            fullWidth
-            [(ngModel)]="description"
-          />
+          <input type="text" name="description" nbInput fullWidth [(ngModel)]="description" />
         </form>
       </nb-card-body>
       <nb-card-footer>
         <div class="row">
           <div class="col-6">
-            <button
-              nbButton
-              matRipple
-              fullWidth
-              status="danger"
-              [disabled]="
+            <button nbButton matRipple fullWidth status="danger" [disabled]="
                 description === null ||
                 description === undefined ||
                 description === ''
-              "
-              (click)="onSubmitCancelReportApplication()"
-            >
+              " (click)="onSubmitCancelReportApplication()">
               Продължи
             </button>
           </div>

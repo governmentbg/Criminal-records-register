@@ -1,90 +1,39 @@
 <nb-card>
-  <igx-grid
-    #documentsGrid
-    [height]="null"
-    [data]="documents"
-    [primaryKey]="'id'"
-  >
+  <igx-grid #documentsGrid [height]="null" [data]="documents" [primaryKey]="'id'">
     <igx-grid-toolbar>
       <igx-grid-toolbar-title>
-        <span class="fw-bold">Документи</span></igx-grid-toolbar-title
-      >
+        <span class="fw-bold">Документи</span></igx-grid-toolbar-title>
       <igx-grid-toolbar-actions>
         <div class="d-flex gap-2">
-          <button
-            *ngIf="showAddDeleteButton"
-            nbButton
-            matRipple
-            [status]="'primary'"
-            (click)="onOpenDialog(); dialogAdd.open()"
-          >
-            Добави &nbsp;
-            <i class="fa fa-plus" aria-hidden="true"></i>
-          </button>
           <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+          <button *ngIf="showAddDeleteButton" nbButton matRipple [status]="'primary'"
+            (click)="onOpenDialog(); dialogAdd.open()">
+            <nb-icon class="pt-1" [icon]="'plus'" pack="fa"></nb-icon>
+            Добави
+          </button>
         </div>
       </igx-grid-toolbar-actions>
     </igx-grid-toolbar>
 
-    <igx-column
-      field="id"
-      header="Идентификатор"
-      [sortable]="false"
-      [dataType]="'string'"
-      [hidden]="true"
-    >
+    <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
     </igx-column>
-    <igx-column
-      field="name"
-      header="Наименование"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
-    <igx-column
-      field="descr"
-      header="Описание"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
+    <igx-column field="name" header="Наименование" [sortable]="true" [dataType]="'string'"></igx-column>
+    <igx-column field="descr" header="Описание" [sortable]="true" [dataType]="'string'"></igx-column>
 
-    <igx-column
-      field="docTypeId"
-      header="Идентификатор на вид документ"
-      dataType="number"
-      [hidden]="true"
-    >
+    <igx-column field="docTypeId" header="Идентификатор на вид документ" dataType="number" [hidden]="true">
     </igx-column>
-    <igx-column
-      field="docTypeName"
-      header="Вид документ"
-      [sortable]="true"
-      [dataType]="'string'"
-    ></igx-column>
+    <igx-column field="docTypeName" header="Вид документ" [sortable]="true" [dataType]="'string'"></igx-column>
 
-    <igx-column
-      width="120px"
-      header="Действия"
-      [sortable]="false"
-      [filterable]="false"
-      [disableHiding]="true"
-    >
+    <igx-column width="120px" header="Действия" [sortable]="false" [filterable]="false" [disableHiding]="true">
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <div class="d-flex gap-3">
-            <button
-              igxButton="icon"
-              [title]="'Изтегляне'"
-              (click)="download(cell.rowData.id)"
-            >
+            <button igxButton="icon" [title]="'Изтегляне'" (click)="download(cell.rowData.id)">
               <nb-icon pack="fa" icon="download"></nb-icon>
             </button>
 
-            <button
-              *ngIf="showAddDeleteButton"
-              igxButton="icon"
-              [title]="'Изтриване'"
-              (click)="openDeleteConfirmationDialog(cell.rowData.id)"
-            >
+            <button *ngIf="showAddDeleteButton" igxButton="icon" [title]="'Изтриване'"
+              (click)="openDeleteConfirmationDialog(cell.rowData.id)">
               <nb-icon pack="fa" icon="trash"></nb-icon>
             </button>
           </div>
@@ -104,20 +53,10 @@
 
             <div class="d-flex">
               <div>
-                <button
-                  nbButton
-                  matRipple
-                  status="success"
-                  (click)="onSubmitAppDocument()"
-                >
+                <button nbButton matRipple status="success" (click)="onSubmitAppDocument()">
                   Потвърди
                 </button>
-                <button
-                  nbButton
-                  matRipple
-                  (click)="onCloseAppDocumentDilog()"
-                  class="ml-3"
-                >
+                <button nbButton matRipple (click)="onCloseAppDocumentDilog()" class="ml-3">
                   Откажи
                 </button>
               </div>
@@ -127,52 +66,25 @@
         <nb-card-body>
           <div class="row mt-2">
             <div class="form-group col-md-12">
-              <div
-                *ngIf="uploader.queue && uploader.queue.length == 0"
-                class="bg-light p-2 rounded"
-              >
+              <div *ngIf="uploader.queue && uploader.queue.length == 0" class="bg-light p-2 rounded">
                 <strong class="mr-1">Избор на файл</strong>
-                <span class="file-select-hidden"
-                  ><input
-                    type="file"
-                    ng2FileSelect
-                    [uploader]="uploader"
-                    #fileInput
-                /></span>
+                <span class="file-select-hidden"><input type="file" ng2FileSelect [uploader]="uploader"
+                    #fileInput /></span>
 
-                <div
-                  ng2FileDrop
-                  [ngClass]="{ 'file-over-class': hasDropZoneOver }"
-                  (fileOver)="fileOverAnother($event)"
-                  [uploader]="uploader"
-                  class="well file-drop-zone"
-                >
-                  <button
-                    nbButton
-                    [status]="'success'"
-                    (click)="fileInput.click()"
-                    class="mr-2"
-                  >
+                <div ng2FileDrop [ngClass]="{ 'file-over-class': hasDropZoneOver }" (fileOver)="fileOverAnother($event)"
+                  [uploader]="uploader" class="well file-drop-zone">
+                  <button nbButton [status]="'success'" (click)="fileInput.click()" class="mr-2">
                     Изберете
                   </button>
                   или преместете с мишката файл за да го качите
                 </div>
               </div>
 
-              <div
-                *ngFor="let item of uploader.queue"
-                class="bg-light p-2 rounded"
-              >
+              <div *ngFor="let item of uploader.queue" class="bg-light p-2 rounded">
                 <strong>Избран файл: </strong>
                 <span class="mr-1">{{ item?.file?.name }}</span>
 
-                <button
-                  #removeDocBtn
-                  nbButton
-                  matRipple
-                  [status]="'danger'"
-                  (click)="onRmoveDocument(item)"
-                >
+                <button #removeDocBtn nbButton matRipple [status]="'danger'" (click)="onRmoveDocument(item)">
                   Премахване &nbsp;
                   <i class="fa fa-trash" aria-hidden="true"></i>
                 </button>
@@ -182,28 +94,16 @@
 
           <div class="row mt-2">
             <div class="form-group col-md-8">
-              <cais-autocomplete
-                [label]="'Вид документ'"
-                [inputFormControl]="appDocumentForm.docTypeId"
-                [parentGroup]="appDocumentForm.group"
-                [items]="dbData.documentTypes"
-                [inputName]="'docTypeId'"
-              >
+              <cais-autocomplete [label]="'Вид документ'" [inputFormControl]="appDocumentForm.docTypeId"
+                [parentGroup]="appDocumentForm.group" [items]="dbData.documentTypes" [inputName]="'docTypeId'">
               </cais-autocomplete>
             </div>
           </div>
 
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-input
-                [type]="'text'"
-                [label]="'Описание'"
-                [inputFormControl]="appDocumentForm.descr"
-                [parentGroup]="appDocumentForm.group"
-                [inputName]="'descr'"
-                [rows]="'3'"
-                [inputType]="'TextArea'"
-              >
+              <cais-input [type]="'text'" [label]="'Описание'" [inputFormControl]="appDocumentForm.descr"
+                [parentGroup]="appDocumentForm.group" [inputName]="'descr'" [rows]="'3'" [inputType]="'TextArea'">
               </cais-input>
             </div>
           </div>
