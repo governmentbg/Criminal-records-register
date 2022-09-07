@@ -74,7 +74,6 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
 
     this.loaderService.showSpinner(this.service);
     let formObject = this.personForm.group.value;
-    debugger;
     this.service.removePid(formObject).subscribe({
       next: (response) => {
         this.loaderService.hide();

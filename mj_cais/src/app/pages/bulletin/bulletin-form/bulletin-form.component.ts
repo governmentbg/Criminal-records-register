@@ -329,7 +329,6 @@ export class BulletinFormComponent
         }
       } else {
         // edit bulletin
-        debugger;
         if (
           (this.fullForm.noSanction.value == null ||
             this.fullForm.noSanction.value == false) &&
@@ -393,7 +392,6 @@ export class BulletinFormComponent
       }
     }
 
-    debugger;
     let isGridsEditable =
       !userHasDiffAuth &&
       !this.isForPreview &&

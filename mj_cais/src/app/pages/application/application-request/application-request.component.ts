@@ -32,7 +32,6 @@ export class ApplicationRequestComponent implements OnInit {
         closeOnBackdropClick: true,
       })
       .onClose.subscribe((result) => {
-        debugger;
         if (result) {
           var isValidEgn = EgnUtils.isValid(result);
           if(!isValidEgn){
