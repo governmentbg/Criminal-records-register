@@ -423,42 +423,11 @@ namespace MJ_CAIS.Services
             aInDto.Person.TableId = aInDto.Id;
 
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
-            foreach (var personIdObj in person.PPersonIds)
-            {
-                if (entity.ModifiedProperties == null)
-                {
-                    entity.ModifiedProperties = new List<string>();
-                }
-                if (personIdObj.PidTypeId == PidType.Egn)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.Egn));
-                    entity.EgnNavigation = personIdObj;
-                }
-                else if (personIdObj.PidTypeId == PidType.Lnch)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.Lnch));
-                    entity.LnchNavigation = personIdObj;
-                }
-                else if (personIdObj.PidTypeId == PidType.Ln)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.Ln));
-                    entity.LnNavigation = personIdObj;
-                }
-                else if (personIdObj.PidTypeId == PidType.Suid)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.SuidId));
-                    entity.ModifiedProperties.Add(nameof(entity.Suid));
-                    entity.Suid = personIdObj.Pid;
-                    entity.SuidId = personIdObj.Id;
-                    entity.SuidNavigation = personIdObj;
-                }
-                _applicationRepository.ApplyChanges(personIdObj);
-            }
-
+            _managePersonService.UpdatePidDataData(person.PPersonIds, entity);
+            
             _applicationRepository.ApplyChanges(entity);
             await _applicationRepository.SaveChangesAsync(clearTracker: true); //добавено от Надя, че обърква контекста.
         }
-
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {

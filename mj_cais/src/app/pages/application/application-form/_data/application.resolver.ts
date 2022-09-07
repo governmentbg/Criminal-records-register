@@ -59,6 +59,7 @@ export class ApplicationResolver implements Resolve<any> {
       decidingAuthorities:
         this.nomenclatureService.getDecidingAuthoritiesForBulletins(), //
       caseTypes: this.nomenclatureService.getCaseTypes(), //
+      idDocumentCategoryTypes : this.nomenclatureService.getIdDocumentCategoryTypes()
     };
     return forkJoin(result);
   }
@@ -74,5 +75,6 @@ export class ApplicationResolverData extends BaseResolverData<ApplicationModel> 
     public decisionTypes: Observable<BaseNomenclatureModel[]>;
     public decidingAuthorities: Observable<BaseNomenclatureModel[]>;
     public caseTypes: Observable<BaseNomenclatureModel[]>;
+    public idDocumentCategoryTypes: Observable<BaseNomenclatureModel[]>;
   
 }

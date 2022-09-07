@@ -50,7 +50,7 @@
             public const string GRAO = "GRAO";
 
             /// <summary>
-            /// В случай на  ЛНЧ
+            /// В случай на  ЛНЧ или АФИС
             /// </summary>
             public const string MVR = "MVR";
 

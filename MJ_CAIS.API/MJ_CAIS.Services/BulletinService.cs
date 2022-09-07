@@ -499,45 +499,8 @@ namespace MJ_CAIS.Services
 
             var person = await _managePersonService.CreatePersonAsync(personDto);
 
-            // create PBulletinId for all pids (locally added and saved in db)
-            foreach (var personIdObj in person.PPersonIds)
-            {
-                if (personIdObj.PidTypeId == PidType.Egn && bulletin.Egn == personIdObj.Pid)
-                {
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.EgnId));
-                    bulletin.EgnId = personIdObj.Id;
-                }
-                else if (personIdObj.PidTypeId == PidType.Lnch && bulletin.Lnch == personIdObj.Pid)
-                {
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.LnchId));
-                    bulletin.LnchId = personIdObj.Id;
-
-                }
-                else if (personIdObj.PidTypeId == PidType.Ln && bulletin.Ln == personIdObj.Pid)
-                {
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.LnId));
-                    bulletin.LnId = personIdObj.Id;
-
-                }
-                else if (personIdObj.PidTypeId == PidType.DocumentId && bulletin.IdDocNumber == personIdObj.Pid)
-                {
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.IdDocNumberId));
-                    bulletin.IdDocNumberId = personIdObj.Id;
-
-                }
-                else if (personIdObj.PidTypeId == PidType.Suid && (bulletin.Suid == personIdObj.Pid || string.IsNullOrEmpty(bulletin.Suid)))
-                {
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.SuidId));
-                    bulletin.ModifiedProperties.Add(nameof(bulletin.Suid));
-                    bulletin.SuidId = personIdObj.Id;
-                    bulletin.Suid = personIdObj.Pid;
-                }
-
-                _bulletinRepository.ApplyChanges(personIdObj);
-            }
-
+            _managePersonService.UpdatePidDataData(person.PPersonIds, bulletin);
             _bulletinRepository.ApplyChanges(bulletin);
-
             return person;
         }
 

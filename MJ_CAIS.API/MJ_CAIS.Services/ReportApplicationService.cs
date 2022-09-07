@@ -303,35 +303,7 @@ namespace MJ_CAIS.Services
             aInDto.Person.TableId = entity.Id;
 
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
-            foreach (var personIdObj in person.PPersonIds)
-            {
-                if (personIdObj.PidTypeId == PidType.Egn)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.EgnId));
-                    entity.EgnId = personIdObj.Id;
-                }
-                else if (personIdObj.PidTypeId == PidType.Lnch)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.LnchId));
-                    entity.LnchId = personIdObj.Id;
-
-                }
-                else if (personIdObj.PidTypeId == PidType.Ln)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.LnId));
-                    entity.LnId = personIdObj.Id;
-
-                }
-                else if (personIdObj.PidTypeId == PidType.Suid)
-                {
-                    entity.ModifiedProperties.Add(nameof(entity.SuidId));
-                    entity.ModifiedProperties.Add(nameof(entity.Suid));
-                    entity.SuidId = personIdObj.Id;
-                    entity.Suid = personIdObj.Pid;
-                }
-
-                _reportApplicationRepository.ApplyChanges(personIdObj);
-            }
+            _managePersonService.UpdatePidDataData(person.PPersonIds, entity);
 
             return person;
         }

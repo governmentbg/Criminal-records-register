@@ -97,6 +97,78 @@ namespace MJ_CAIS.Services
             return UpdatePersonDataWhenHasOnePerson(aInDto, personToUpdate);
         }
 
+        public void UpdatePidDataData(ICollection<PPersonId> pids, IPidsWithDocumentEntity entity)
+        {
+            foreach (var personIdObj in pids)
+            {
+                if (personIdObj.PidTypeId == PidType.Egn && entity.Egn == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.EgnId));
+                    entity.EgnId = personIdObj.Id;
+                }
+                else if (personIdObj.PidTypeId == PidType.Lnch && entity.Lnch == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.LnchId));
+                    entity.LnchId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.Ln && entity.Ln == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.LnId));
+                    entity.LnId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.DocumentId && entity.IdDocNumber == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.IdDocNumberId));
+                    entity.IdDocNumberId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.Suid && (entity.Suid == personIdObj.Pid || string.IsNullOrEmpty(entity.Suid)))
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.SuidId));
+                    entity.ModifiedProperties.Add(nameof(entity.Suid));
+                    entity.SuidId = personIdObj.Id;
+                    entity.Suid = personIdObj.Pid;
+                }
+
+                _personRepository.ApplyChanges(personIdObj);
+            }
+        }
+
+        public void UpdatePidDataData(ICollection<PPersonId> pids, IPidsEntity entity)
+        {
+            foreach (var personIdObj in pids)
+            {
+                if (personIdObj.PidTypeId == PidType.Egn && entity.Egn == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.EgnId));
+                    entity.EgnId = personIdObj.Id;
+                }
+                else if (personIdObj.PidTypeId == PidType.Lnch && entity.Lnch == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.LnchId));
+                    entity.LnchId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.Ln && entity.Ln == personIdObj.Pid)
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.LnId));
+                    entity.LnId = personIdObj.Id;
+
+                }
+                else if (personIdObj.PidTypeId == PidType.Suid && (entity.Suid == personIdObj.Pid || string.IsNullOrEmpty(entity.Suid)))
+                {
+                    entity.ModifiedProperties.Add(nameof(entity.SuidId));
+                    entity.ModifiedProperties.Add(nameof(entity.Suid));
+                    entity.SuidId = personIdObj.Id;
+                    entity.Suid = personIdObj.Pid;
+                }
+
+                _personRepository.ApplyChanges(personIdObj);
+            }
+        }
+
         /// <summary>
         /// Create person and person identifiers history from newly created person  
         /// </summary>
@@ -265,11 +337,17 @@ namespace MJ_CAIS.Services
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.AfisNumber.ToUpper(), PidType.AfisNumber, IssuerType.MVR));
             }
 
+            if (!string.IsNullOrEmpty(aInDto?.IdDocNumber))
+            {
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.IdDocNumber.ToUpper(), PidType.DocumentId, IssuerType.MVR));
+            }
+
             // get suid of an existing persion
             // when create application or another object via person form
             var getPidsFromExistingPerson =
                 string.IsNullOrEmpty(aInDto.Egn) && string.IsNullOrEmpty(aInDto.Lnch) &&
                 string.IsNullOrEmpty(aInDto.Ln) && string.IsNullOrEmpty(aInDto.AfisNumber) &&
+                string.IsNullOrEmpty(aInDto.IdDocNumber) &&
                 !string.IsNullOrEmpty(aInDto.Suid);
 
             if (getPidsFromExistingPerson)
