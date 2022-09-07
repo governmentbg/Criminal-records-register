@@ -4,16 +4,16 @@
       <nb-card-header>Заявки</nb-card-header>
       <nb-card-body>
         <nb-tabset class="custom-tabset" #nbtabset (changeTab)="onChangeTab($event)">
-          <nb-tab #draftTab [tabTitle]="draftTabTitle" tabIcon="file"> </nb-tab>
+          <nb-tab #draftTab [tabTitle]="draftTabTitle" tabIcon="description"> </nb-tab>
           <nb-tab *ngIf="inboxCount > 0" #inboxTab [tabTitle]="inboxTabTitle" tabIcon="inbox"
             badgeText="{{ inboxCount }}" badgePosition="top right" badgeStatus="success">
           </nb-tab>
-          <nb-tab *ngIf="inboxCount <= 0" #inboxTab [tabTitle]="inboxTabTitle" tabIcon="inbox">
+          <nb-tab *ngIf="inboxCount <= 0" #inboxTab [tabTitle]="inboxTabTitle" tabIcon="inbox-outline">
           </nb-tab>
           <nb-tab *ngIf="outboxCount > 0" #outboxTab [tabTitle]="outboxTabTitle" badgeText="{{ outboxCount }}"
-            tabIcon="email-outline" badgePosition="top  right" badgeStatus="warning">
+            tabIcon="outbox" badgePosition="top  right" badgeStatus="warning">
           </nb-tab>
-          <nb-tab *ngIf="outboxCount <= 0" #outboxTab [tabTitle]="outboxTabTitle" tabIcon="email-outline">
+          <nb-tab *ngIf="outboxCount <= 0" #outboxTab [tabTitle]="outboxTabTitle" tabIcon="outbox">
           </nb-tab>
         </nb-tabset>
       </nb-card-body>
