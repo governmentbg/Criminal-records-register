@@ -4,6 +4,10 @@
       [setForPreview]="
         applicationStatus == ApplicationTypeStatusConstants.ApprovedApplication
       ">
+
+      <button *ngIf="!isCreate" nbButton matRipple [status]="'primary'" (click)="printApplication()" type="button">
+        <nb-icon class="pt-1" pack="fa" icon="print"></nb-icon> Печат
+      </button>
       <button *ngIf="
           !isForPreview &&
           isEdit() &&
@@ -31,9 +35,7 @@
         <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon>
         Отхвърляне
       </button>
-      <button *ngIf="!isCreate" nbButton matRipple [status]="'primary'" (click)="printApplication()" type="button">
-        <nb-icon class="pt-1" pack="fa" icon="print"></nb-icon> Печат
-      </button>
+
     </cais-card-header>
   </nb-card-header>
   <nb-card-body class="overflow-scroll">

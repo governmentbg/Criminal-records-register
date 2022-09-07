@@ -57,7 +57,6 @@ export class EapplicationCheckPaymentFormComponent
 
       this.scrollToValidationError();
     } else {
-      debugger;
       this.formObject = form.group.getRawValue();
       this.saveAndNavigate();
     }

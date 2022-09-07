@@ -24,7 +24,6 @@ export class EcrisNotPreviewComponent implements OnInit {
     this.ecrisRequestPreviewService
       .getEcrisRequest(this.ecrisId,this.ecrisType)
       .subscribe((result) => {
-        debugger;
         this.formGroup = this.buildFormImpl();
         this.formGroup.patchValue(result);
       });

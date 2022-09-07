@@ -14,7 +14,6 @@ export class EApplicationCertificateResultModel extends BaseModel {
     super(init);
 
     // this.docName = init?.docName ?? null;
-    // debugger;
     // this.docType = init?.docType?.split('/')[1] ?? null;
     this.wApplId = init?.wApplId ?? null;
     this.registrationNumber = init?.registrationNumber ?? null;
