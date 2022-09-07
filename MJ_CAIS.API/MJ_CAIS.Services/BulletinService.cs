@@ -131,17 +131,24 @@ namespace MJ_CAIS.Services
 
             await UpdateBulletinAsync(aInDto, bulletin);
 
-            // if insert bulletin for delete or some other status
+            // when status is changed
             if (bulletin.StatusId != Status.NewOffice)
             {
                 var person = await CreatePersonFromBulletinAsync(bulletin);
-                // тодо:трябва ли да се изчислява реабилитация и настъпили обстоятелства
-                // когато добавяме бюлетин в той преминава в някои друг статус не нов
-                // трябва ли да се вика и екрис и в кой от статусите трябва да се генерира събщение
                 await UpdateRehabilitationAndEventDataAsync(bulletin, person);
+
+                if (bulletin.TcnCitizen == true)
+                {
+                    UpdateEcrisTCN(bulletin.Id, null, bulletin.StatusId);
+                }
             }
 
             await _bulletinRepository.SaveChangesAsync();
+            if (bulletin.EuCitizen == true && bulletin.StatusId != Status.NoSanction && bulletin.StatusId != Status.NewOffice)
+            {
+                await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
+            }
+
             return bulletin.Id;
         }
 
@@ -214,7 +221,7 @@ namespace MJ_CAIS.Services
 
             // todo: use transaction 
             await _bulletinRepository.SaveChangesAsync();
-            if (bulletinToUpdate.EuCitizen == true)
+            if (bulletinToUpdate.EuCitizen == true && bulletinToUpdate.StatusId != Status.NoSanction)
             {
                 await this._notificationService.CreateNotificationFromBulletin(bulletinToUpdate.Id);
             }
