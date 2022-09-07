@@ -2,6 +2,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.BulletinAdministration;
@@ -41,17 +43,8 @@ namespace MJ_CAIS.Services
         {
             var bulletin = await _bulletinAdministrationRepository.GetBulletinByIdAsync(aInDto.BulletinId);
 
-            if (bulletin == null) throw new ArgumentNullException($"Bulletin with id {aInDto.BulletinId} does not exist");
-
-            bulletin.EntityState = EntityStateEnum.Modified;
-            bulletin.ModifiedProperties = new List<string> { nameof(bulletin.Locked), nameof(bulletin.Version) };
-            bulletin.Locked = false;
-
-            if (bulletin.StatusId != aInDto.Status)
-            {
-                bulletin.StatusId = aInDto.Status;
-                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
-            }
+            if (bulletin == null) throw new BusinessLogicException(
+                string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, aInDto.BulletinId));
 
             var statusHis = new BBulletinStatusH()
             {
@@ -63,6 +56,16 @@ namespace MJ_CAIS.Services
                 OldStatusCode = bulletin.StatusId,
                 Locked = false,
             };
+
+            bulletin.EntityState = EntityStateEnum.Modified;
+            bulletin.ModifiedProperties = new List<string> { nameof(bulletin.Locked), nameof(bulletin.Version) };
+            bulletin.Locked = false;
+
+            if (bulletin.StatusId != aInDto.Status)
+            {
+                bulletin.StatusId = aInDto.Status;
+                bulletin.ModifiedProperties.Add(nameof(bulletin.StatusId));
+            }
 
             _bulletinAdministrationRepository.ApplyChanges(statusHis, new List<IBaseIdEntity>());
             _bulletinAdministrationRepository.ApplyChanges(bulletin, new List<IBaseIdEntity>());
