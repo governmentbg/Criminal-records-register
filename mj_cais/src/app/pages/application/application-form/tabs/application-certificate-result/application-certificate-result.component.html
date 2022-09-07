@@ -30,12 +30,10 @@
                 CertificateStatuTypeEnum.CertificateContentReady
             "
             nbButton
-            matRipple
-            [status]="'success'"
+            [status]="'primary'"
             (click)="generateCertificate()"
             type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
+            style="float: right"
           >
             Генерирай свидетелство
           </button>
@@ -46,12 +44,10 @@
               CertificateStatuTypeEnum.CertificatePaperPrint
             "
             nbButton
-            matRipple
-            [status]="'success'"
+            [status]="'primary'"
             (click)="deliver()"
             type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
+            style="float: right"
           >
             Връчи
           </button>
@@ -59,7 +55,7 @@
             *ngIf="this.model.statusCode != CertificateStatuTypeEnum.Delivered"
             nbButton
             matRipple
-            [status]="'success'"
+            [status]="'danger'"
             (click)="cancelCertificate()"
             type="button"
             class="ml-2"
@@ -296,31 +292,41 @@
         [dataType]="'string'"
       ></igx-column>
       <igx-column
-        width="100px"
-        header=""
+        width="120px"
+        header="Действия"
         [sortable]="false"
         [filterable]="false"
         [pinned]="false"
+        [disableHiding]="true"
       >
         <ng-template igxCell let-cell="cell">
-          <a
-            style="color: black; margin-right: 30px"
-            [title]="'Преглед'"
-            [routerLink]="[
-              '/pages/bulletins/preview/',
-              cell.rowData.bulletinId
-            ]"
-          >
-            <nb-icon pack="fa" icon="eye"></nb-icon>
-          </a>
-          <a
-            *ngIf="model.currentUserAuthId == cell.rowData.bulletinAuthorityId"
-            style="color: black"
-            [title]="'Редактиране'"
-            [routerLink]="['/pages/bulletins/edit/', cell.rowData.bulletinId]"
-          >
-            <nb-icon pack="fa" icon="pen"></nb-icon>
-          </a>
+          <div class="cell-center">
+            <div class="d-flex gap-3">
+              <a
+                style="color: black; margin-right: 30px"
+                [title]="'Преглед'"
+                [routerLink]="[
+                  '/pages/bulletins/preview/',
+                  cell.rowData.bulletinId
+                ]"
+              >
+                <nb-icon pack="fa" icon="eye"></nb-icon>
+              </a>
+              <a
+                *ngIf="
+                  model.currentUserAuthId == cell.rowData.bulletinAuthorityId
+                "
+                style="color: black"
+                [title]="'Редактиране'"
+                [routerLink]="[
+                  '/pages/bulletins/edit/',
+                  cell.rowData.bulletinId
+                ]"
+              >
+                <nb-icon pack="fa" icon="pen"></nb-icon>
+              </a>
+            </div>
+          </div>
         </ng-template>
       </igx-column>
     </igx-grid>
@@ -340,21 +346,25 @@
       [hideRowSelectors]="false"
     >
       <igx-grid-toolbar>
+        <igx-grid-toolbar-title>
+          <span class="fw-bold">Свидетелство</span></igx-grid-toolbar-title
+        >
         <igx-grid-toolbar-actions>
           <button
             *ngIf="!this.isForPreview"
             nbButton
-            matRipple
-            [status]="'success'"
+            [status]="'primary'"
             (click)="showReport()"
             type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
           >
             Е-Справка
           </button>
+          <div class="d-flex gap-2">
+            <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+          </div>
         </igx-grid-toolbar-actions>
       </igx-grid-toolbar>
+
       <igx-column
         field="id"
         header="Идентификатор"
@@ -429,31 +439,41 @@
         [dataType]="'date'"
       ></igx-column>
       <igx-column
-        width="100px"
-        header=""
+        width="120px"
+        header="Действия"
         [sortable]="false"
         [filterable]="false"
         [pinned]="false"
+        [disableHiding]="true"
       >
         <ng-template igxCell let-cell="cell">
-          <a
-            style="color: black; margin-right: 30px"
-            [title]="'Преглед'"
-            [routerLink]="[
-              '/pages/bulletins/preview/',
-              cell.rowData.bulletinId
-            ]"
-          >
-            <nb-icon pack="fa" icon="eye"></nb-icon>
-          </a>
-          <a
-            *ngIf="model.currentUserAuthId == cell.rowData.bulletinAuthorityId"
-            style="color: black"
-            [title]="'Редактиране'"
-            [routerLink]="['/pages/bulletins/edit/', cell.rowData.bulletinId]"
-          >
-            <nb-icon pack="fa" icon="pen"></nb-icon>
-          </a>
+          <div class="cell-center">
+            <div class="d-flex gap-3">
+              <a
+                style="color: black"
+                [title]="'Преглед'"
+                [routerLink]="[
+                  '/pages/bulletins/preview/',
+                  cell.rowData.bulletinId
+                ]"
+              >
+                <nb-icon pack="fa" icon="eye"></nb-icon>
+              </a>
+              <a
+                *ngIf="
+                  model.currentUserAuthId == cell.rowData.bulletinAuthorityId
+                "
+                style="color: black"
+                [title]="'Редактиране'"
+                [routerLink]="[
+                  '/pages/bulletins/edit/',
+                  cell.rowData.bulletinId
+                ]"
+              >
+                <nb-icon pack="fa" icon="pen"></nb-icon>
+              </a>
+            </div>
+          </div>
         </ng-template>
       </igx-column>
     </igx-grid>
@@ -474,11 +494,9 @@
           <button
             *ngIf="!this.isForPreview"
             nbButton
-            matRipple
-            [status]="'success'"
+            [status]="'primary'"
             (click)="generateCertificateByJudge()"
             type="button"
-            class="ml-2"
             style="min-width: 100px; float: right"
           >
             Генерирай свидетелство
@@ -489,11 +507,9 @@
               CertificateStatuTypeEnum.CertificateUserSign
             "
             nbButton
-            matRipple
             [status]="'success'"
             (click)="updateStatus()"
             type="button"
-            class="ml-2"
             style="min-width: 100px; float: right"
           >
             Готово за връчване
