@@ -1,27 +1,54 @@
 <nb-card class="card-single-page-height" [formGroup]="fullForm.group">
   <nb-card-header class="card-header-shadow">
-    <cais-card-header [label]="this.title" [onSaveFunction]="submitFunction" [onCancelFunction]="onCancelFunction"
-      [setForPreview]="isForPreview">
-
-      <button *ngIf="
-            !this.isForPreview &&
-            requestStatusCode == InternalRequestStatusCodeConstants.Draft
-          " nbButton matRipple [status]="'primary'" (click)="send()" type="button">
+    <cais-card-header
+      [label]="this.title"
+      [onSaveFunction]="submitFunction"
+      [onCancelFunction]="onCancelFunction"
+      [setForPreview]="isForPreview"
+    >
+      <button
+        *ngIf="
+          !this.isForPreview &&
+          requestStatusCode == InternalRequestStatusCodeConstants.Draft
+        "
+        nbButton
+        matRipple
+        [status]="'primary'"
+        (click)="send()"
+        type="button"
+      >
         <nb-icon class="pt-1" pack="fa" icon="paper-plane"></nb-icon> Изпрати
       </button>
 
       <ng-container *ngIf="showReplayBtn">
-        <button nbButton matRipple [status]="'success'" (click)="showReport()" type="button">
+        <button
+          nbButton
+          matRipple
+          [status]="'primary'"
+          (click)="showReport()"
+          type="button"
+        >
           Е-Справка
         </button>
 
-        <button nbButton matRipple [status]="'primary'" (click)="replay(true)" type="button">
+        <button
+          nbButton
+          matRipple
+          [status]="'primary'"
+          (click)="replay(true)"
+          type="button"
+        >
           Обработена заявка
         </button>
-        <button nbButton matRipple [status]="'danger'" (click)="replay(false)" type="button">
+        <button
+          nbButton
+          matRipple
+          [status]="'danger'"
+          (click)="replay(false)"
+          type="button"
+        >
           Отказана заявка
         </button>
-
       </ng-container>
     </cais-card-header>
   </nb-card-header>
@@ -29,126 +56,251 @@
     <form autocomplete="off">
       <div class="row mt-2">
         <div class="form-group col-md-3">
-          <cais-autocomplete [label]="'От Бюро съдимост'" [inputFormControl]="fullForm.fromAuthorityId"
-            [parentGroup]="fullForm.group" [inputName]="'fromAuthorityId'" [items]="dbData.csAuthorities">
+          <cais-autocomplete
+            [label]="'От Бюро съдимост'"
+            [inputFormControl]="fullForm.fromAuthorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'fromAuthorityId'"
+            [items]="dbData.csAuthorities"
+          >
           </cais-autocomplete>
         </div>
         <div class="form-group col-md-3">
-          <cais-autocomplete [label]="'До Бюро съдимост'" [inputFormControl]="fullForm.toAuthorityId"
-            [parentGroup]="fullForm.group" [inputName]="'toAuthorityId'" [items]="dbData.csAuthorities">
+          <cais-autocomplete
+            [label]="'До Бюро съдимост'"
+            [inputFormControl]="fullForm.toAuthorityId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'toAuthorityId'"
+            [items]="dbData.csAuthorities"
+          >
           </cais-autocomplete>
         </div>
         <div class="form-group col-md-3">
-          <cais-input [type]="'date'" [label]="'Датата на създаване'" [inputFormControl]="fullForm.requestDate"
-            [parentGroup]="fullForm.group"></cais-input>
+          <cais-input
+            [type]="'date'"
+            [label]="'Датата на създаване'"
+            [inputFormControl]="fullForm.requestDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
         </div>
         <div class="form-group col-md-3">
-          <cais-input [type]="'text'" [label]="'Регистрационен номер'" [inputFormControl]="fullForm.regNumberDisplay"
-            [parentGroup]="fullForm.group"></cais-input>
+          <cais-input
+            [type]="'text'"
+            [label]="'Регистрационен номер'"
+            [inputFormControl]="fullForm.regNumberDisplay"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-4">
-          <cais-autocomplete [label]="'Тип на заявка'" [inputFormControl]="fullForm.nIntReqTypeId"
-            [parentGroup]="fullForm.group" [inputName]="'nIntReqTypeId'" [items]="dbData.requestTypes">
+          <cais-autocomplete
+            [label]="'Тип на заявка'"
+            [inputFormControl]="fullForm.nIntReqTypeId"
+            [parentGroup]="fullForm.group"
+            [inputName]="'nIntReqTypeId'"
+            [items]="dbData.requestTypes"
+          >
           </cais-autocomplete>
         </div>
 
         <ng-container *ngIf="isEdit()">
           <div class="form-group col-md-4">
-            <cais-input [type]="'text'" [label]="'Идентификатор на лице'" [inputFormControl]="fullForm.pPersIdIdDisplay"
-              [parentGroup]="fullForm.group"></cais-input>
+            <cais-input
+              [type]="'text'"
+              [label]="'Идентификатор на лице'"
+              [inputFormControl]="fullForm.pPersIdIdDisplay"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
           </div>
         </ng-container>
         <ng-container *ngIf="!isEdit()">
           <div class="form-group col-md-4">
-            <cais-autocomplete [label]="'Идентификатор на лице'" [inputFormControl]="fullForm.pPersIdId"
-              [parentGroup]="fullForm.group" [inputName]="'pPersIdId'" [items]="personIds"></cais-autocomplete>
+            <cais-autocomplete
+              [label]="'Идентификатор на лице'"
+              [inputFormControl]="fullForm.pPersIdId"
+              [parentGroup]="fullForm.group"
+              [inputName]="'pPersIdId'"
+              [items]="personIds"
+            ></cais-autocomplete>
           </div>
         </ng-container>
       </div>
+      <div class="mt-3">
+        <ng-template #emptyTemplate> </ng-template>
+        <app-grid-with-transactions
+          [gridTransactions]="personBulletinsGridTransactions"
+        >
+          <igx-grid
+            #personBulletinsGrid
+            [height]="null"
+            [data]="this.personBulletins"
+            [primaryKey]="'id'"
+            [rowEditable]="true"
+            [addRowEmptyTemplate]="emptyTemplate"
+            displayDensity="compact"
+            (onRowDeleted)="onBulletinDeleted($event)"
+            (rendered)="onBulletinGridRendered()"
+          >
+            <igx-grid-toolbar>
+              <igx-grid-toolbar-title>
+                <span class="fw-bold"
+                  >Бюлетини на лице</span
+                ></igx-grid-toolbar-title
+              >
+              <igx-grid-toolbar-actions>
+                <div class="d-flex gap-2">
+                  <igx-grid-toolbar-hiding
+                    class="mt-1"
+                  ></igx-grid-toolbar-hiding>
+                </div>
+              </igx-grid-toolbar-actions>
+            </igx-grid-toolbar>
+            <igx-column
+              field="id"
+              header="Идентификатор"
+              [editable]="false"
+              [dataType]="'string'"
+              [hidden]="true"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              [width]="'15%'"
+              field="bulletinType"
+              header="Тип"
+              [editable]="false"
+              [dataType]="'string'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              [width]="'15%'"
+              field="statusName"
+              header="Статус"
+              [editable]="false"
+              [dataType]="'string'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
 
-      <label class="label">Бюлетини на лице</label>
-      <hr />
-      <ng-template #emptyTemplate> </ng-template>
-      <app-grid-with-transactions [gridTransactions]="personBulletinsGridTransactions">
-        <igx-grid #personBulletinsGrid [height]="null" [data]="this.personBulletins" [primaryKey]="'id'"
-          [rowEditable]="true" [addRowEmptyTemplate]="emptyTemplate" displayDensity="compact"
-          (onRowDeleted)="onBulletinDeleted($event)" (rendered)="onBulletinGridRendered()">
-          <igx-column field="id" header="Идентификатор" [editable]="false" [dataType]="'string'" [hidden]="true">
-            <ng-template igxCell let-cell="cell">
-              <span [title]="cell.value">{{ cell.value }}</span>
+            <igx-column
+              field="registrationNumber"
+              header="Номер на бюлетин"
+              [editable]="false"
+              [dataType]="'string'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              field="bulletinAuthorityName"
+              header="Съд изготвил бюлетина"
+              [editable]="false"
+              [dataType]="'string'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              width="120px"
+              header="Операции върху бюлетин"
+              [sortable]="false"
+              [filterable]="false"
+              [editable]="false"
+              [pinned]="true"
+            >
+              <ng-template igxCell let-cell="cell">
+                <div class="cell-center">
+                  <div class="d-flex gap-3">
+                    <a
+                      [title]="'Преглед'"
+                      [routerLink]="[
+                        '/pages/bulletins/preview',
+                        cell.rowData.bulletinId
+                      ]"
+                    >
+                      <nb-icon pack="fa" icon="eye"></nb-icon>
+                    </a>
+                    <a
+                      *ngIf="cell.rowData.canEditBulletin == true"
+                      [title]="'Редактиране'"
+                      [routerLink]="[
+                        '/pages/bulletins/edit',
+                        cell.rowData.bulletinId
+                      ]"
+                    >
+                      <nb-icon pack="fa" icon="pen"></nb-icon>
+                    </a>
+                  </div>
+                </div>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              [width]="'30%'"
+              field="remarks"
+              header="Описание"
+              [dataType]="'string'"
+              [editable]="canEditGrid"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <ng-template igxRowEditActions let-endRowEdit>
+              <div class="custom-buttons">
+                <button igxButton igxRowEditTabStop (click)="endRowEdit(false)">
+                  <igx-icon>clear</igx-icon> Отказ
+                </button>
+                <button igxButton igxRowEditTabStop (click)="endRowEdit(true)">
+                  <igx-icon>add</igx-icon> Запис
+                </button>
+              </div>
             </ng-template>
-          </igx-column>
-          <igx-column [width]="'15%'" field="bulletinType" header="Тип" [editable]="false" [dataType]="'string'">
-            <ng-template igxCell let-cell="cell">
-              <span [title]="cell.value">{{ cell.value }}</span>
-            </ng-template>
-          </igx-column>
-          <igx-column [width]="'15%'" field="statusName" header="Статус" [editable]="false" [dataType]="'string'">
-            <ng-template igxCell let-cell="cell">
-              <span [title]="cell.value">{{ cell.value }}</span>
-            </ng-template>
-          </igx-column>
-
-          <igx-column field="registrationNumber" header="Номер на бюлетин" [editable]="false" [dataType]="'string'">
-            <ng-template igxCell let-cell="cell">
-              <span [title]="cell.value">{{ cell.value }}</span>
-            </ng-template>
-          </igx-column>
-          <igx-column field="bulletinAuthorityName" header="Съд изготвил бюлетина" [editable]="false"
-            [dataType]="'string'">
-            <ng-template igxCell let-cell="cell">
-              <span [title]="cell.value">{{ cell.value }}</span>
-            </ng-template>
-          </igx-column>
-          <igx-column width="120px" header="Операции върху бюлетин" [sortable]="false" [filterable]="false"
-            [editable]="false" [pinned]="true">
-            <ng-template igxCell let-cell="cell">
-              <a [title]="'Преглед'" [routerLink]="['/pages/bulletins/preview', cell.rowData.bulletinId]">
-                <nb-icon pack="fa" icon="eye"></nb-icon>
-              </a>
-              <a *ngIf="cell.rowData.canEditBulletin == true" [title]="'Редактиране'"
-                [routerLink]="['/pages/bulletins/edit', cell.rowData.bulletinId]">
-                <nb-icon pack="fa" icon="pen"></nb-icon>
-              </a>
-            </ng-template>
-          </igx-column>
-          <igx-column [width]="'30%'" field="remarks" header="Описание" [dataType]="'string'" [editable]="canEditGrid">
-            <ng-template igxCell let-cell="cell">
-              <span [title]="cell.value">{{ cell.value }}</span>
-            </ng-template>
-          </igx-column>
-          <ng-template igxRowEditActions let-endRowEdit>
-            <div class="custom-buttons">
-              <button igxButton igxRowEditTabStop (click)="endRowEdit(false)">
-                <igx-icon>clear</igx-icon> Отказ
-              </button>
-              <button igxButton igxRowEditTabStop (click)="endRowEdit(true)">
-                <igx-icon>add</igx-icon> Запис
-              </button>
-            </div>
-          </ng-template>
-          <igx-action-strip #actionstrip *ngIf="canEditGrid">
-            <igx-grid-editing-actions [addRow]="false" [contentEditable]="canEditGrid">
-            </igx-grid-editing-actions>
-          </igx-action-strip>
-        </igx-grid>
-      </app-grid-with-transactions>
+            <igx-action-strip #actionstrip *ngIf="canEditGrid">
+              <igx-grid-editing-actions
+                [addRow]="false"
+                [contentEditable]="canEditGrid"
+              >
+              </igx-grid-editing-actions>
+            </igx-action-strip>
+          </igx-grid>
+        </app-grid-with-transactions>
+      </div>
       <div class="row mt-2">
         <div class="form-group col-md-6">
-          <cais-input [type]="'text'" [label]="'Описание'" [inputFormControl]="fullForm.description"
-            [parentGroup]="fullForm.group" [inputType]="InputTypeConstants.TextArea"></cais-input>
+          <cais-input
+            [type]="'text'"
+            [label]="'Описание'"
+            [inputFormControl]="fullForm.description"
+            [parentGroup]="fullForm.group"
+            [inputType]="InputTypeConstants.TextArea"
+          ></cais-input>
         </div>
       </div>
-      <ng-container *ngIf="
+      <ng-container
+        *ngIf="
           isEdit() &&
           requestStatusCode != InternalRequestStatusCodeConstants.Draft
-        ">
+        "
+      >
         <div class="row">
           <div class="form-group col-md-6">
-            <cais-input [type]="'text'" [label]="'Отговор'" [inputFormControl]="fullForm.responseDescr"
-              [parentGroup]="fullForm.group" [inputType]="InputTypeConstants.TextArea"></cais-input>
+            <cais-input
+              [type]="'text'"
+              [label]="'Отговор'"
+              [inputFormControl]="fullForm.responseDescr"
+              [parentGroup]="fullForm.group"
+              [inputType]="InputTypeConstants.TextArea"
+            ></cais-input>
           </div>
         </div>
       </ng-container>
@@ -163,18 +315,30 @@
         <div class="d-flex" style="justify-content: space-between">
           <h5 style="font-weight: bold">Справка</h5>
           <div>
-            <button nbButton matRipple [status]="'success'" (click)="onPrint()" type="button" class="ml-2">
+            <button
+              nbButton
+              matRipple
+              [status]="'success'"
+              (click)="onPrint()"
+              type="button"
+              class="ml-2"
+            >
               Принтирай
             </button>
-            <button nbButton matRipple (click)="reportDialog.close()" type="button" class="ml-2">
+            <button
+              nbButton
+              matRipple
+              (click)="reportDialog.close()"
+              type="button"
+              class="ml-2"
+            >
               Затвори
             </button>
           </div>
         </div>
       </nb-card-header>
       <nb-card-body>
-        <cais-encapsulated-html [Html]="this.report">
-        </cais-encapsulated-html>
+        <cais-encapsulated-html [Html]="this.report"> </cais-encapsulated-html>
       </nb-card-body>
     </nb-card>
   </div>
