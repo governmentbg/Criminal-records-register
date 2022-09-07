@@ -156,7 +156,6 @@ export class EcrisIdentificationFormComponent
     //ecrisMsg.msgType = "EcrisReqResp";
     //ecrisMsg.msgType = "EcrisNot";
     //ecrisMsg.msgType = "EcrisRequest";
-    debugger;
     if (this.model.msgTypeId == "EcrisNot") {
       this.dialogService
         .open(EcrisNotPreviewComponent, {

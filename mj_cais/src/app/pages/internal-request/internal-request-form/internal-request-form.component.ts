@@ -307,7 +307,6 @@ export class InternalRequestFormComponent
   }
 
   showReport(){
-    debugger;
     this.appCertificateService.htmlReport(this.fullForm.pPidTypeCode.value, this.fullForm.pPersIdIdDisplay.value).subscribe( res => { 
       this.report = res;
       this.reportDialog.open();

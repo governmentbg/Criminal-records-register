@@ -58,7 +58,6 @@ export class GraoPersonOverviewComponent {
   }
 
   handleRowSelection(event) {
-    debugger;
     this.selectRow.emit(event.newSelection[0]);
   }
 
@@ -68,7 +67,6 @@ export class GraoPersonOverviewComponent {
   }
 
   handleSelectedRow(event) {
-    debugger;
     if (event) {
       var items = this.resultFromSearchPersonGridForm.searchPersonGridResult;
       var result = items.filter((item) => {
