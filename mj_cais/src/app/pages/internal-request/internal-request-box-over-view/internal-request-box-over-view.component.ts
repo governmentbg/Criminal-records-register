@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NbTabComponent, NbTabsetComponent } from "@nebular/theme";
+import { NbIconConfig, NbTabComponent, NbTabsetComponent } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
 import { CustomToastrService } from "../../../@core/services/common/custom-toastr.service";
 import { InternalRequestService } from "../internal-request-form/_data/internal-request.service";
@@ -27,6 +27,12 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
   public title = this.titleDraft;
   private isInitComponent: boolean = true;
 
+  inboxIcon: NbIconConfig = { icon: 'inbox', pack: 'material-icons' };
+
+  outboxIcon: NbIconConfig = { icon: 'outbox', pack: 'material-icons' };
+
+  draftIcon: NbIconConfig = { icon: 'description', pack: 'material-icons' };
+
   @ViewChild("nbtabset") tabset: NbTabsetComponent;
 
   constructor(
@@ -34,7 +40,7 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
     private loaderService: NgxSpinnerService,
     public toastr: CustomToastrService,
     public router: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loaderService.show();
@@ -57,7 +63,7 @@ export class InternalRequestBoxOverViewComponent implements OnInit {
   public onOutBoxReadMessageClicked(valueEmitted: number) {
     this.outboxCount -= valueEmitted;
   }
-  
+
   onChangeTab(event) {
     // reset
     this.showDraftTab = false;
