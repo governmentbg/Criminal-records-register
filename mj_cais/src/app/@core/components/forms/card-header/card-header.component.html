@@ -1,11 +1,18 @@
 <div class="d-flex" style="justify-content: space-between">
   <div class="d-flex align-items-center">
-    <div style="font-weight: bold; font-size: 22px">{{ label }}</div>
+    <h2 class="h5">{{ label }}</h2>
   </div>
   <div class="d-flex gap-2">
     <ng-content></ng-content>
 
-    <button *ngIf="!isForPreview" nbButton matRipple [status]="'success'" (click)="onSaveFunction()" type="button">
+    <button
+      *ngIf="!isForPreview"
+      nbButton
+      matRipple
+      [status]="'success'"
+      (click)="onSaveFunction()"
+      type="button"
+    >
       <nb-icon class="pt-1" pack="fa" icon="save"></nb-icon> Запази
     </button>
 
@@ -18,8 +25,14 @@
       </ng-container>
     </button>
 
-    <button *ngIf="isForEdit && isForDelete && !isForPreview" nbButton matRipple [status]="'danger'"
-      (click)="onDeleteFunction()" type="button">
+    <button
+      *ngIf="isForEdit && isForDelete && !isForPreview"
+      nbButton
+      matRipple
+      [status]="'danger'"
+      (click)="onDeleteFunction()"
+      type="button"
+    >
       <nb-icon class="pt-1" [icon]="'trash'" pack="fa"></nb-icon> Изтрий
     </button>
   </div>
