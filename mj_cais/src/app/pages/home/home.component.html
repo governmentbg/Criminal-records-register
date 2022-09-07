@@ -7,7 +7,7 @@
             <nb-icon pack="material-icons" icon="inventory_2"></nb-icon> Бюлетини
           </h6>
           <a nbButton matRipple [status]="'success'" [routerLink]="['/pages/bulletins/create']" type="button">
-            Нов бюлетин
+            <nb-icon class="pt-1" pack="fa" icon="plus"></nb-icon> Нов бюлетин
           </a>
         </nb-card-header>
 
@@ -144,13 +144,13 @@
           </h6>
 
           <a nbButton [status]="'success'" [routerLink]="['/pages/applications/request']" type="button">
-            Ново заявление
+            <nb-icon class="pt-1" pack="fa" icon="plus"></nb-icon>Ново заявление
           </a>
         </nb-card-header>
         <nb-list>
           <nb-list-item>
             <div class="d-flex flex-fill justify-content-between">
-              <a [routerLink]="['/pages/applications']"> Нови заявления </a>
+              <a [routerLink]="['/pages/applications']">Нови заявления </a>
               <span class="badge rounded-pill bg-primary">{{
                 applications.newId
               }}</span>
