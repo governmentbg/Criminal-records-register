@@ -3,6 +3,7 @@
     <div class="d-flex justify-content-between">
       <h2 class="h4">Търсене на бюлетин</h2>
       <button nbButton status="primary" (click)="onSearch()" type="button" [disabled]="fullForm.group.pristine">
+        <nb-icon class="pt-1" [icon]="'search'" pack="fa" title="Търсене"></nb-icon>
         Търсене
       </button>
     </div>
