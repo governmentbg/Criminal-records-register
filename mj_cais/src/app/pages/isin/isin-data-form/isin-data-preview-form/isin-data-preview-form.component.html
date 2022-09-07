@@ -3,20 +3,29 @@
     <nb-card-header class="card-header-shadow">
       <div class="d-flex" style="justify-content: space-between">
         <div class="d-flex align-items-center">
-          <div style="font-weight: bold; font-size: 22px">
-            Съобщение за изтърпяно наказание
-          </div>
+          <h2 class="h5">Съобщение за изтърпяно наказание</h2>
         </div>
         <div class="d-flex">
-
-          <button nbButton matRipple [status]="'success'" type="button" style="min-width: 100px"
-            [title]="'Маркирай като обработено'" (click)="onMarkAsClosed()">
+          <button
+            nbButton
+            matRipple
+            [status]="'success'"
+            type="button"
+            style="min-width: 100px"
+            [title]="'Маркирай като обработено'"
+            (click)="onMarkAsClosed()"
+          >
             Маркирай като обработено
           </button>
-          <button nbButton matRipple (click)="globalCancelFunction()" type="button">
-            <nb-icon class="pt-1" [icon]="'rotate-left'" pack="fa"></nb-icon> Назад
+          <button
+            nbButton
+            matRipple
+            (click)="globalCancelFunction()"
+            type="button"
+          >
+            <nb-icon class="pt-1" [icon]="'rotate-left'" pack="fa"></nb-icon>
+            Назад
           </button>
-
         </div>
       </div>
     </nb-card-header>
