@@ -34,24 +34,25 @@
     </ng-template>
   </igx-column>
 
-  <igx-column width="160px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="true" [disableHiding]="true">
+  <igx-column width="160px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="true"
+    [disableHiding]="true">
     <ng-template igxCell let-cell="cell">
       <div class="cell-center">
         <div class="d-flex gap-3">
           <a [title]="'Преглед'" [queryParams]="{ activeTab: 'draft' }"
-          [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]">
-          <nb-icon pack="fa" icon="eye"></nb-icon>
-        </a>
-        <a [title]="'Редактиране'" [queryParams]="{ activeTab: 'draft' }"
-          [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]">
-          <nb-icon pack="fa" icon="pen"></nb-icon>
-        </a>
-        <a [title]="'Изтриване'" (click)="onDelete(cell.rowData.id)">
-          <nb-icon pack="fa" icon="trash"></nb-icon>
-        </a>
-        <a [title]="'Изпращане'" (click)="onSend(cell.rowData.id)">
-          <nb-icon pack="fa" icon="paper-plane"></nb-icon>
-        </a>
+            [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]">
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </a>
+          <button class="btn btn-link" [title]="'Изпращане'" (click)="onSend(cell.rowData.id)">
+            <nb-icon pack="fa" icon="paper-plane"></nb-icon>
+          </button>
+          <a [title]="'Редактиране'" [queryParams]="{ activeTab: 'draft' }"
+            [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]">
+            <nb-icon pack="fa" icon="pen"></nb-icon>
+          </a>
+          <button class="btn btn-link" [title]="'Изтриване'" (click)="onDelete(cell.rowData.id)">
+            <nb-icon pack="fa" icon="trash"></nb-icon>
+          </button>
         </div>
       </div>
     </ng-template>

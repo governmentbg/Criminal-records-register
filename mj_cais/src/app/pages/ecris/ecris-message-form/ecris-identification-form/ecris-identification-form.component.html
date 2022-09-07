@@ -7,43 +7,28 @@
             Съобщение от екрис
           </div>
         </div>
-        <div class="d-flex">
-          <div>
-            <button
-              *ngIf="!this.isForPreview"
-              nbButton
-              matRipple
-              [status]="'success'"
-              (click)="identifyFunction()"
-              type="button"
-              class="ml-2"
-              style="min-width: 100px"
-            >
-              Идентифицирай
-            </button>
-            <button
-              *ngIf="!this.isForPreview"
-              nbButton
-              matRipple
-              [status]="'info'"
-              (click)="onOpenCancelIdentificationDialog()"
-              type="button"
-              class="ml-2"
-              style="min-width: 100px"
-            >
-              Отказ от обработка
-            </button>
-            <button
-              nbButton
-              matRipple
-              (click)="globalCancelFunction()"
-              type="button"
-              class="ml-2"
-              style="min-width: 100px"
-            >
-              Назад
-            </button>
-          </div>
+        <div class="d-flex gap-2">
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            [status]="'primary'"
+            (click)="identifyFunction()"
+            type="button"
+          >
+            Идентифицирай
+          </button>
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            [status]="'danger'"
+            (click)="onOpenCancelIdentificationDialog()"
+            type="button"
+          >
+            Отказ от обработка
+          </button>
+          <button nbButton (click)="globalCancelFunction()" type="button">
+            Назад
+          </button>
         </div>
       </div>
     </nb-card-header>
@@ -53,7 +38,12 @@
           <div class="float-left">Основна информация</div>
           <ng-container>
             <div class="float-rigth">
-              <button nbButton size="small" (click)="getDocument()">
+              <button
+                nbButton
+                size="small"
+                [status]="'primary'"
+                (click)="getDocument()"
+              >
                 Виж документа
               </button>
               <button
@@ -149,8 +139,6 @@
           </div>
         </div>
 
-        <div class="">Псевдоними</div>
-
         <div class="mt-2 mb-4">
           <igx-grid
             #namesGrid
@@ -159,6 +147,18 @@
             [primaryKey]="'id'"
             [displayDensity]="'compact'"
           >
+            <igx-grid-toolbar>
+              <igx-grid-toolbar-title>
+                <span class="fw-bold">Псевдоними</span></igx-grid-toolbar-title
+              >
+              <igx-grid-toolbar-actions>
+                <div class="d-flex gap-2">
+                  <igx-grid-toolbar-hiding
+                    class="mt-1"
+                  ></igx-grid-toolbar-hiding>
+                </div>
+              </igx-grid-toolbar-actions>
+            </igx-grid-toolbar>
             <igx-column
               field="firstname"
               header="Име"

@@ -1,7 +1,6 @@
-
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web");
-@import 'material-icons/iconfont/material-icons.css';
+@import "material-icons/iconfont/material-icons.css";
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
@@ -14,11 +13,7 @@
 @import "~@nebular/theme/styles/globals";
 @import "~@nebular/auth/styles/globals";
 
-
 @import "~bootstrap/scss/bootstrap";
-
-
-
 
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
 @include igx-core();
@@ -29,7 +24,6 @@
   @include nb-theme-global();
   @include nb-auth-global();
 }
-
 
 $custom-palette: igx-palette(
   $primary: #222b45,
@@ -59,7 +53,6 @@ $custom-palette: igx-palette(
     $roundness: null,
     $elevation: null
   );
-
 }
 
 // File styles
@@ -156,14 +149,10 @@ $custom-palette: igx-palette(
   height: 50px;
 }
 
-
-
-
 nb-layout .layout .layout-container .content nb-layout-footer nav {
   padding-top: 1rem !important;
   padding-bottom: 1rem !important;
 }
-
 
 ////////////
 .cell__inner {
@@ -185,13 +174,18 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   width: 100%;
 }
 
-.cell-center a , .btn-link {
-  color: #0000009E;
+.cell-center a,
+.btn-link {
+  color: #0000009e;
 }
-.cell-center .btn-link {
- padding:0px;
-} 
 
+.cell-center a:hover {
+  color:  var(--text-primary-hover-color);
+}
+
+.cell-center .btn-link {
+  padding: 0px;
+}
 
 .ng-select {
   .ng-select-container {
@@ -203,7 +197,6 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 .nb-theme-default nb-card-body {
   overflow: unset;
 }
-
 
 .cais-date-time-picker {
   input.igx-input-group__input {
