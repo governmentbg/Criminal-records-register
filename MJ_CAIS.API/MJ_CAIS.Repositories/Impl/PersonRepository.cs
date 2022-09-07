@@ -110,6 +110,75 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public async Task<IQueryable<PersonArchiveGridDTO>> GetArchiveByPersonIdAsync(string personId)
+        {
+            if (string.IsNullOrEmpty(personId)) return new List<PersonArchiveGridDTO>().AsQueryable();
+
+            var personPids = await _dbContext.PPersonIds.AsNoTracking()
+                .Where(x => x.PersonId == personId &&
+                (x.PidTypeId == PidType.Egn || x.PidTypeId == PidType.Lnch || x.PidTypeId == PidType.Suid))
+                .Select(x => new { Pid = x.Pid, PidType = x.PidTypeId })
+                .ToListAsync();
+
+            var egns = personPids.Where(x => x.PidType == PidType.Egn).Select(x => x.Pid);
+            var lnchs = personPids.Where(x => x.PidType == PidType.Lnch).Select(x => x.Pid);
+            var suids = personPids.Where(x => x.PidType == PidType.Suid).Select(x => x.Pid);
+
+            var archiveByEgn = _dbContext.AArchives.AsNoTracking()
+                                  .Where(x => egns.Contains(x.Egn))
+                                  .Select(x => new PersonArchiveGridDTO
+                                  {
+                                      Id = x.Id,
+                                      Lnch = x.Lnch,
+                                      ApplicantName = x.ApplicantName,
+                                      BithDate = x.BirthDate,
+                                      Egn = x.Egn,
+                                      FullName = x.Fullname,
+                                      Type = x.ApplicationTypeName,
+                                      CertifivateValidDate = x.ValidTo,
+                                      CsAuthority = x.CsAuthorityName,
+                                      CreatedOn = x.CreatedOn,
+                                  });
+
+            var archiveByLnch = _dbContext.AArchives.AsNoTracking()
+                             .Where(x => lnchs.Contains(x.Lnch))
+                             .Select(x => new PersonArchiveGridDTO
+                             {
+                                 Id = x.Id,
+                                 Lnch = x.Lnch,
+                                 ApplicantName = x.ApplicantName,
+                                 BithDate = x.BirthDate,
+                                 Egn = x.Egn,
+                                 FullName = x.Fullname,
+                                 Type = x.ApplicationTypeName,
+                                 CertifivateValidDate = x.ValidTo,
+                                 CsAuthority = x.CsAuthorityName,
+                                 CreatedOn = x.CreatedOn,
+                             });
+
+            var archiveBySuids = _dbContext.AArchives.AsNoTracking()
+                             .Where(x => suids.Contains(x.Suid))
+                             .Select(x => new PersonArchiveGridDTO
+                             {
+                                 Id = x.Id,
+                                 Lnch = x.Lnch,
+                                 ApplicantName = x.ApplicantName,
+                                 BithDate = x.BirthDate,
+                                 Egn = x.Egn,
+                                 FullName = x.Fullname,
+                                 Type = x.ApplicationTypeName,
+                                 CertifivateValidDate = x.ValidTo,
+                                 CsAuthority = x.CsAuthorityName,
+                                 CreatedOn = x.CreatedOn,
+                             });
+
+            var query = archiveByEgn
+                .Union(archiveByLnch)
+                .Union(archiveBySuids);
+
+            return query;
+        }
+
         public IQueryable<PersonEApplicationGridDTO> GetEApplicationsByPersonId(string personId)
         {
             var allApplications = _personHelperRepository.GetAllAplicationsByPersonId(personId);
@@ -145,7 +214,7 @@ namespace MJ_CAIS.Repositories.Impl
         public IQueryable<PersonGeneratedReportGridDTO> GetAllReportApplByPersonId(string personId)
         {
             var reportAppl = _personHelperRepository.GetAllReportApplByPersonId(personId);
-     
+
             return reportAppl;
         }
 
@@ -470,7 +539,8 @@ namespace MJ_CAIS.Repositories.Impl
                                 DatePrecisionSpecified = hasPrecision
                             };
                             cr.IdentityNumber = new PersonIdentityNumberType();
-                            switch (row["pid_type_code"]?.ToString()){
+                            switch (row["pid_type_code"]?.ToString())
+                            {
                                 case "SYS":
                                     {
                                         cr.IdentityNumber.SUID = row["pid"]?.ToString();

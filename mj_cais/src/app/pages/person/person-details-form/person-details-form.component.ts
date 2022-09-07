@@ -34,6 +34,7 @@ export class PersonDetailsFormComponent
   public applicationsTabTitle = "Свидетелства";
   public eApplicationsTabTitle = "Е-Свидетелства";
   public reportsTabTitle = "Справки";
+  public archiveTabTitle = "Архив Свидетелства/Справки";
   public fbbcsTabTitle = "Сведения за осъждане в чужбина";
   public pidsTabTitle = "Идентификатори на лице";
   public showApplicationsTab: boolean = false;
@@ -41,6 +42,7 @@ export class PersonDetailsFormComponent
   public showEApplicationsTab: boolean = false;
   public showPidsTab: boolean = false;
   public showReportsTab: boolean = false;
+  public showArchiveTab: boolean = false;
 
   constructor(
     service: PersonDetailsService,
@@ -85,6 +87,10 @@ export class PersonDetailsFormComponent
 
     if (!this.showPidsTab) {
       this.showPidsTab = tabTitle == this.pidsTabTitle;
+    }
+
+    if (!this.showArchiveTab) {
+      this.showArchiveTab = tabTitle == this.archiveTabTitle;
     }
   }
 }

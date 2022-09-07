@@ -219,6 +219,11 @@
           <cais-person-generated-report-overview></cais-person-generated-report-overview>
         </ng-container>
       </nb-tab>
+      <nb-tab [tabTitle]="archiveTabTitle">
+        <ng-container *ngIf="showArchiveTab">
+          <cais-person-archiv-overview></cais-person-archiv-overview>
+        </ng-container>
+      </nb-tab>
       <nb-tab [tabTitle]="fbbcsTabTitle">
         <ng-container *ngIf="showFbbcsTab">
           <cais-person-fbbc-overview></cais-person-fbbc-overview>
