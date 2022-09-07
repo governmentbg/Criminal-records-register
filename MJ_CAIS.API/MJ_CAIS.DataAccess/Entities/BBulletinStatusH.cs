@@ -17,6 +17,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? OldStatusCode { get; set; }
         public string? Content { get; set; }
         public string? ContentVersion { get; set; }
+        public bool? HasContent { get; set; }
 
         public virtual BBulletin? Bulletin { get; set; }
         public virtual BBulletinStatus? NewStatusCodeNavigation { get; set; }

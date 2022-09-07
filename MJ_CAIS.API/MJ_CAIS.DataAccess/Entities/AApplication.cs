@@ -79,6 +79,15 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? ServiceMigrationId { get; set; }
         public string? PersonIdCsc { get; set; }
         public string? PersonIdCscId { get; set; }
+        public string? IdDocNumber { get; set; }
+        public string? IdDocCategoryId { get; set; }
+        public string? IdDocTypeDescr { get; set; }
+        public string? IdDocIssuingAuthority { get; set; }
+        public DateTime? IdDocIssuingDate { get; set; }
+        public string? IdDocIssuingDatePrec { get; set; }
+        public DateTime? IdDocValidDate { get; set; }
+        public string? IdDocValidDatePrec { get; set; }
+        public string? IdDocNumberId { get; set; }
 
         public virtual AApplicationType ApplicationType { get; set; } = null!;
         public virtual GCity? BirthCity { get; set; }
@@ -86,6 +95,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GCsAuthority CsAuthority { get; set; } = null!;
         public virtual GCsAuthority? CsAuthorityBirth { get; set; }
         public virtual PPersonId? EgnNavigation { get; set; }
+        public virtual BIdDocCategory? IdDocCategory { get; set; }
+        public virtual PPersonId? IdDocNumberNavigation { get; set; }
         public virtual PPersonId? LnNavigation { get; set; }
         public virtual PPersonId? LnchNavigation { get; set; }
         public virtual APaymentMethod? PaymentMethod { get; set; }

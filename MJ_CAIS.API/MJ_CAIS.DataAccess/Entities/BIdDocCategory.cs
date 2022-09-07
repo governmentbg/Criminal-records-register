@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public BIdDocCategory()
         {
+            AApplications = new HashSet<AApplication>();
             BBulletins = new HashSet<BBulletin>();
         }
 
@@ -21,6 +22,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
 
+        public virtual ICollection<AApplication> AApplications { get; set; }
         public virtual ICollection<BBulletin> BBulletins { get; set; }
     }
 }

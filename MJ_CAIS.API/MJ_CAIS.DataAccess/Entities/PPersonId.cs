@@ -8,6 +8,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public PPersonId()
         {
             AApplicationEgnNavigations = new HashSet<AApplication>();
+            AApplicationIdDocNumberNavigations = new HashSet<AApplication>();
             AApplicationLnNavigations = new HashSet<AApplication>();
             AApplicationLnchNavigations = new HashSet<AApplication>();
             AApplicationSuidNavigations = new HashSet<AApplication>();
@@ -41,6 +42,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual PPerson? Person { get; set; }
         public virtual PPersonIdType? PidType { get; set; }
         public virtual ICollection<AApplication> AApplicationEgnNavigations { get; set; }
+        public virtual ICollection<AApplication> AApplicationIdDocNumberNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationLnNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationLnchNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationSuidNavigations { get; set; }
