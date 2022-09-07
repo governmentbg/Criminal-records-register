@@ -339,7 +339,7 @@ namespace MJ_CAIS.Services
 
             if (!string.IsNullOrEmpty(aInDto?.IdDocNumber))
             {
-                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.IdDocNumber.ToUpper(), PidType.DocumentId, IssuerType.MVR));
+                pidsFromForm.Add(new PersonIdTypeDTO(aInDto.IdDocNumber.ToUpper(), PidType.DocumentId, aInDto.IdDocIssuingAuthority));
             }
 
             // get suid of an existing persion
