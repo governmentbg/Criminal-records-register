@@ -82,14 +82,17 @@
     [filterable]="false"
     [pinned]="true"
   >
-    <!-- <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/applications/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-    </ng-template> -->
+    <ng-template igxCell let-cell="cell">
+      <div class="cell-center">
+        <button
+          class="btn btn-link"
+          [title]="'Изтегляне'"
+          (click)="download(cell.rowData.id)"
+        >
+          <nb-icon pack="fa" icon="download"></nb-icon>
+        </button>
+      </div>
+    </ng-template>
   </igx-column>
 
   <ng-template #pager let-grid>

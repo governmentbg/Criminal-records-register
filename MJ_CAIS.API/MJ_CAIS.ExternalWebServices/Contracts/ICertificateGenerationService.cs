@@ -13,5 +13,6 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
         //todo: да се измести някъде на по-общо място
         Task<string?> GetWebPortalAddress();
         Task DeliverCertificateAsync(ACertificate certificate, string mailBodyPattern, string mailSubjectPattern, string webportalUrl);
+        Task<byte[]> GetArchiveDocumentContentAsync(string id);
     }
 }

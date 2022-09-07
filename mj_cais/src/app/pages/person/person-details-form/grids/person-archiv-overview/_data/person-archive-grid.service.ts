@@ -18,4 +18,9 @@ export class PersonArchiveGridService extends CaisCrudService<
   public setPersonId(personId: string) {
     this.updateUrl(`${currentEndpoint}?personId=${personId}`);
   }
+
+  public downloadContent(id: string) {
+    let url = `${this.baseUrl}/api/certificates/archive-content/${id}`;
+    return this.http.get(url, { responseType: "blob", observe: "response" });
+  }
 }

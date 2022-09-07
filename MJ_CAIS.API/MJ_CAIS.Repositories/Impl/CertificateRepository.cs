@@ -128,6 +128,20 @@ namespace MJ_CAIS.Repositories.Impl
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<ArchivedDocumentContentDTO> GetArchiveDocumentContentAsync(string aId)
+        {
+            var result = await (from doc in _dbContext.AArchiveDocuments
+                                join docType in _dbContext.DDocTypes on doc.DocTypeId equals docType.Id
+                                where doc.AArchiveId == aId
+                                select new ArchivedDocumentContentDTO
+                                {
+                                    Content = doc.Content,
+                                    Xslt = docType.Xslt
+                                }).FirstOrDefaultAsync();
+
+            return result;
+        }
+
         public async Task<IQueryable<CertificateExternalDTO>> SelectExternalCertificates(string userId)
         {
             return (from c in _dbContext.WCertificates

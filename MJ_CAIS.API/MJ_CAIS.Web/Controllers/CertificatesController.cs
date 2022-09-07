@@ -96,6 +96,21 @@ namespace MJ_CAIS.Web.Controllers
             return File(content, mimeType, fileName);
         }
 
+        [HttpGet("archive-content/{aId}")]
+        public async Task<IActionResult> GetArchivedDocumentContentOnly(string aId)
+        {
+            var result = await this._certificateGenerationService.GetArchiveDocumentContentAsync(aId);
+            if (result is null) return NotFound();
+
+            var fileNameXML = "archived-document.html";
+            var mimeTypeXML = "application/octet-stream";
+
+            Response.Headers.Add("File-Name", fileNameXML);
+            Response.Headers.Add("Access-Control-Expose-Headers", "File-Name");
+
+            return File(result, mimeTypeXML, fileNameXML);
+        }
+
         [HttpPost("{certId}/uploadSignedCertificate")]
         public async Task<IActionResult> UploadSignedCertificate(string certId, [FromBody] CertificateDocumentDTO aInDto)
         {

@@ -108,7 +108,18 @@ namespace MJ_CAIS.ExternalWebServices
             return await Task.FromResult(result);
         }
 
+        public async Task<byte[]> GetArchiveDocumentContentAsync(string id)
+        {
+            var document = await _certificateRepository.GetArchiveDocumentContentAsync(id);
+            if (document == null || document.Content == null) return null;
+            if (document.Xslt == null) return document.Content;
 
+            var xml = Encoding.UTF8.GetString(document.Content);
+            var html = XmlUtils.XmlTransform(document.Xslt, xml);
+            var result = Encoding.UTF8.GetBytes(html);
+
+            return result;
+        }
 
         public async Task<byte[]> CreateCertificate(ACertificate certificate, string mailSubjectPattern,
             string mailBodyPattern, string signingCertificateName, AApplicationStatus statusCertificateUserSign, AApplicationStatus statusCertificateForDelivery, AApplicationStatus statusCertificateDelivered, AApplicationStatus statusCertificatePaperPrint, string? webportalUrl = null)
