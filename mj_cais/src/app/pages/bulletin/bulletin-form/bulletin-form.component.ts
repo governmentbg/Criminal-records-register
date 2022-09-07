@@ -408,12 +408,12 @@ export class BulletinFormComponent
     this.isDecisionEditable =
       !userHasDiffAuth &&
       !this.isForPreview &&
-      (bulletinStatusId == BulletinStatusTypeEnum.Active ||
-        isLocked == false ||
-        bulletinStatusId == BulletinStatusTypeEnum.ForRehabilitation);
+      bulletinStatusId !=  undefined &&
+      bulletinStatusId !== BulletinStatusTypeEnum.NewEISS &&
+      bulletinStatusId !== BulletinStatusTypeEnum.NewOffice;
 
     let hideUpdateButton =
-      bulletinStatusId == BulletinStatusTypeEnum.Rehabilitated ||
+      //bulletinStatusId == BulletinStatusTypeEnum.Rehabilitated ||
       bulletinStatusId == BulletinStatusTypeEnum.Deleted ||
       bulletinStatusId == BulletinStatusTypeEnum.ForDestruction ||
       bulletinStatusId == BulletinStatusTypeEnum.ReplacedAct425;

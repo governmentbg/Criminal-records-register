@@ -46,10 +46,10 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             RuleFor(x => x.EcrisConvictionId).HasMaxLength(50);
             RuleFor(x => x.StatusId).HasMaxLength(50);
 
-            RuleFor(x => x.DecisionsTransactions)
-                .MustBeEmptyWhenIsInStatus("Допълнителни сведения",
-                                    BulletinConstants.Status.Active,
-                                    BulletinConstants.Status.ForRehabilitation);
+            //RuleFor(x => x.DecisionsTransactions)
+            //    .MustBeEmptyWhenIsInStatus("Допълнителни сведения",
+            //                        BulletinConstants.Status.Active,
+            //                        BulletinConstants.Status.ForRehabilitation);
 
             RuleFor(x => x.OffancesTransactions)
                 .MustBeEmptyWhenIsInStatus("Престъпления", BulletinConstants.Status.NewOffice);
