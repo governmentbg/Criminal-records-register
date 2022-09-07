@@ -16,7 +16,16 @@
       >
       <nb-icon class="pt-1" pack="fa" icon="print"></nb-icon> Печат
       </button>
-
+      <button
+        *ngIf="showEditBtn == true"
+        nbButton
+        matRipple
+        [status]="'primary'"
+        [routerLink]="['/pages/bulletins/edit', fullForm.id.value]"
+        type="button"
+      >
+        Редактирай
+      </button>
       <button
         *ngIf="showForUpdate && isEdit()"
         nbButton

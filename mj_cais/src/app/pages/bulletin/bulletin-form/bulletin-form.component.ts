@@ -102,6 +102,7 @@ export class BulletinFormComponent
   public isBulletinPersonAliasEditable = false;
   public showForUpdate: boolean = false;
   public setEditToBeForPreview: boolean = false;
+  public showEditBtn: boolean = false;
   public PersonContextEnum = PersonContextEnum;
 
   constructor(
@@ -303,7 +304,8 @@ export class BulletinFormComponent
   private validateSanctionAndOffences(form): boolean {
     let isValid = true;
     let bulletinStatusId = form.statusId.value;
-    let validateForSancAndOff = bulletinStatusId == null ||
+    let validateForSancAndOff =
+      bulletinStatusId == null ||
       bulletinStatusId == BulletinStatusTypeEnum.NewEISS ||
       bulletinStatusId == BulletinStatusTypeEnum.NewOffice;
     if (validateForSancAndOff) {
@@ -382,7 +384,8 @@ export class BulletinFormComponent
     let userHasDiffAuth = false;
     // create via button
     if (this.dbData.element) {
-      this.userAuthorityService.csAuthorityId !=
+      userHasDiffAuth =
+        this.userAuthorityService.csAuthorityId !=
         (this.dbData.element as any).csAuthorityId;
       // create via person form
       if (!this.isEdit()) {
@@ -425,6 +428,10 @@ export class BulletinFormComponent
         this.fullForm.statusIdDisplay.value ==
           BulletinStatusTypeEnum.NewOffice) &&
       userHasDiffAuth == false;
+
+    // redirect to edit
+    this.showEditBtn =
+      this.activatedRoute.snapshot.data["preview"] && !userHasDiffAuth;
   }
 
   private applyTransactions() {
