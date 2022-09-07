@@ -6,11 +6,6 @@ import { RoleNameEnum } from "../@core/constants/role-name.enum";
 export class PagesMenu {
   constructor(iconsLibrary: NbIconLibraries) {
 
-    iconsLibrary.registerFontPack("material-icons", {
-      packClass: "material-icons",
-      ligature: true
-    });
-    iconsLibrary.setDefaultPack("material-icons");
 
     iconsLibrary.registerFontPack("fa", {
       packClass: "fa",
@@ -29,7 +24,6 @@ export class PagesMenu {
       iconClassPrefix: "fa",
     });
 
-
     iconsLibrary.registerFontPack('material-icons', {
       packClass: "material-icons",
       ligature: true,
@@ -42,11 +36,11 @@ export class PagesMenu {
 
   hasRole(roles: string[], reqiredRoles: string[]): boolean {
     reqiredRoles.forEach(role => {
-      if(roles.indexOf(role) !== 1){
+      if (roles.indexOf(role) !== 1) {
         return false;
       }
     })
-    return true ;
+    return true;
   }
 
   getMenuItems(roles: string[]): NbMenuItem[] {
@@ -55,11 +49,11 @@ export class PagesMenu {
         title: "Табло",
         link: "/pages/home",
         home: true,
-        icon: { icon: "dashboard"}
+        icon: { icon: "dashboard", pack: "material-icons" }
       },
       {
         title: "Лица",
-        icon: {icon: "group"},
+        icon: { icon: "group", pack: "material-icons" },
         link: "/pages/people",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
@@ -109,7 +103,7 @@ export class PagesMenu {
       },
       {
         title: "Заявки",
-        icon: { icon: "outgoing_mail" },
+        icon: { icon: "outgoing_mail", pack: "material-icons" },
         link: "/pages/internal-requests",
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
@@ -117,7 +111,7 @@ export class PagesMenu {
       },
       {
         title: "Справка за съдимост",
-        icon: { icon: "folder_shared" },
+        icon: { icon: "folder_shared", pack: "material-icons" },
         hidden: this.hasNoRole(roles, RoleNameEnum.Normal),
         children: [
           {
@@ -144,7 +138,7 @@ export class PagesMenu {
       },
       {
         title: "Бюлетини",
-        icon: { icon: "inventory_2" },
+        icon: { icon: "inventory_2", pack: "material-icons" },
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Normal) &&
           this.hasNoRole(roles, RoleNameEnum.Judge),
@@ -183,7 +177,7 @@ export class PagesMenu {
 
       {
         title: "За решение от съдия/юрист",
-        icon: { icon: "balance" },
+        icon: { icon: "balance", pack: "material-icons" },
         hidden: this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
@@ -207,7 +201,7 @@ export class PagesMenu {
       },
       {
         title: "Осъдени в чужбина",
-        icon: { icon: "public" },
+        icon: { icon: "public", pack: "material-icons" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -226,7 +220,7 @@ export class PagesMenu {
       },
       {
         title: "ECRIS",
-        icon: "web",
+        icon: { icon: "web", pack: "material-icons" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
@@ -253,7 +247,7 @@ export class PagesMenu {
       },
       {
         title: "Изтърпени наказания",
-        icon: "fact_check",
+        icon: { icon: "fact_check", pack: "material-icons" },
         link: "/pages/isin/new",
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
       },
@@ -290,7 +284,7 @@ export class PagesMenu {
       },
       {
         title: "Журнал на Е-справки",
-        icon: { icon: "rule" },
+        icon: { icon: "rule", pack: "material-icons" },
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
         children: [
           {
