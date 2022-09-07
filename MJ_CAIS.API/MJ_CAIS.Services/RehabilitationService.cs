@@ -370,7 +370,7 @@ namespace MJ_CAIS.Services
             var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
             statusHistory.Content = xml;
             statusHistory.Version = 1;
-            //statusHistory.HasContent = true;
+            statusHistory.HasContent = true;
 
             _rehabilitationRepository.ApplyChanges(statusHistory);
             bulletin.StatusId = status;

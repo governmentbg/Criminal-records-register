@@ -175,7 +175,7 @@ namespace MJ_CAIS.Repositories.Impl
                             OldStatus = oldStatus.Name,
                             Version = bulletinHis.Version,
                             BulletinId = bulletinHis.BulletinId,
-                            HasContent = true, // todo get from db
+                            HasContent = bulletinHis.HasContent
                         };
 
             return query;

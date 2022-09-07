@@ -89,6 +89,7 @@
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <button
+            *ngIf="cell.rowData.hasContent == true"
             class="btn btn-link"
             [title]="'Изтегляне'"
             (click)="download(cell.rowData.id)"

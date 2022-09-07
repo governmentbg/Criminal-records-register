@@ -557,7 +557,7 @@ namespace MJ_CAIS.Services
                 var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
                 var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
                 statusHistory.Content = xml;
-                //statusHistory.HasContent = true;
+                statusHistory.HasContent = true;
             }
 
             itemToBeUpdated.BBulletinStatusHes ??= new List<BBulletinStatusH>();
