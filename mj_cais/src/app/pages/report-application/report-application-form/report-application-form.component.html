@@ -1,42 +1,22 @@
 <nb-card class="card-single-page-height">
   <nb-card-header class="card-header-shadow">
-    <cais-card-header
-      [label]="displayTitle"
-      [onSaveFunction]="submitFunction"
-      [onCancelFunction]="globalCancelFunction"
-      [setForPreview]="this.isForPreview"
-    >
+    <cais-card-header [label]="displayTitle" [onSaveFunction]="submitFunction" [onCancelFunction]="globalCancelFunction"
+      [setForPreview]="this.isForPreview">
       <div>
-        <button
-          *ngIf="
+        <button *ngIf="
             !isForPreview &&
             isEdit() &&
             reportApplicationStatus == ReportApplicationStatusConstants.New
-          "
-          nbButton
-          matRipple
-          [status]="'danger'"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-          (click)="onOpenDialogForCancelApplication()"
-        >
-          Анулирай
+          " nbButton matRipple [status]="'danger'" type="button" class="ml-2" style="min-width: 100px"
+          (click)="onOpenDialogForCancelApplication()">
+          <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Анулирай
         </button>
-        <button
-          *ngIf="
+        <button *ngIf="
             !isForPreview &&
             isEdit() &&
             reportApplicationStatus == ReportApplicationStatusConstants.New
-          "
-          nbButton
-          matRipple
-          [status]="'success'"
-          type="button"
-          class="ml-2"
-          style="min-width: 100px"
-          (click)="finalEdit()"
-        >
+          " nbButton matRipple [status]="'success'" type="button" class="ml-2" style="min-width: 100px"
+          (click)="finalEdit()">
           Окончателна редакция
         </button>
       </div>
@@ -51,29 +31,17 @@
             <hr />
             <div class="row">
               <div class="form-group col-md-4">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Статус'"
-                  [inputFormControl]="fullForm.statusName"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
+                <cais-input [type]="'text'" [label]="'Статус'" [inputFormControl]="fullForm.statusName"
+                  [parentGroup]="fullForm.group"></cais-input>
               </div>
               <div class="form-group col-md-6">
-                <cais-input
-                  [type]="'text'"
-                  [label]="'Номер на искане'"
-                  [inputFormControl]="fullForm.registrationNumberDisplay"
-                  [parentGroup]="fullForm.group"
-                ></cais-input>
+                <cais-input [type]="'text'" [label]="'Номер на искане'"
+                  [inputFormControl]="fullForm.registrationNumberDisplay" [parentGroup]="fullForm.group"></cais-input>
               </div>
               <ng-container *ngIf="fullForm.csAuthorityName.value">
                 <div class="form-group col-md-6">
-                  <cais-input
-                    [type]="'text'"
-                    [label]="'Бюро съдимост'"
-                    [inputFormControl]="fullForm.csAuthorityName"
-                    [parentGroup]="fullForm.group"
-                  ></cais-input>
+                  <cais-input [type]="'text'" [label]="'Бюро съдимост'" [inputFormControl]="fullForm.csAuthorityName"
+                    [parentGroup]="fullForm.group"></cais-input>
                 </div>
               </ng-container>
             </div>
@@ -82,133 +50,80 @@
           <hr />
           <div class="row">
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="'Пълно име на заявителя'"
-                [inputFormControl]="fullForm.applicantName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Пълно име на заявителя'" [inputFormControl]="fullForm.applicantName"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-6">
-              <cais-input
-                [type]="'text'"
-                [label]="
+              <cais-input [type]="'text'" [label]="
                   'Допълнителна информация, свързана с получателя на справката'
-                "
-                [inputFormControl]="fullForm.applicantDescr"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+                " [inputFormControl]="fullForm.applicantDescr" [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
           <div class="font-weight-bold">Цел</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-autocomplete
-                [inputFormControl]="fullForm.purposeId"
-                [parentGroup]="fullForm.group"
-                [items]="dbData.purposeIds"
-                [inputName]="'purposeId'"
-              >
+              <cais-autocomplete [inputFormControl]="fullForm.purposeId" [parentGroup]="fullForm.group"
+                [items]="dbData.purposeIds" [inputName]="'purposeId'">
               </cais-autocomplete>
             </div>
             <div class="form-group col-md-6" style="margin-top: 20px">
-              <cais-input
-                [type]="'text'"
-                [inputFormControl]="fullForm.purpose"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [inputFormControl]="fullForm.purpose" [parentGroup]="fullForm.group">
+              </cais-input>
             </div>
           </div>
           <div class="font-weight-bold mt-2">
             Информация, събрана по служебен път
           </div>
-          <cais-person-form
-            [personForm]="fullForm.person"
-            [genderTypes]="dbData.genderTypes"
-            [countries]="dbData.countries"
-            [contextType]="PersonContextEnum.ReportApplication"
-            [isEditable]="
+          <cais-person-form [personForm]="fullForm.person" [genderTypes]="dbData.genderTypes"
+            [countries]="dbData.countries" [contextType]="PersonContextEnum.ReportApplication" [isEditable]="
               fullForm.statusCode.value !=
                 ReportApplicationStatusConstants.Approved && !this.isForPreview
-            "
-          >
+            ">
           </cais-person-form>
 
           <div class="font-weight-bold">Адрес на получател</div>
           <hr />
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Име'"
-                [inputFormControl]="fullForm.addrName"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="fullForm.addrName"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-autocomplete
-                [label]="'Държава'"
-                [inputFormControl]="fullForm.addrState"
-                [parentGroup]="fullForm.group"
-                [items]="dbData.countries"
-                [inputName]="'addrState'"
-              >
+              <cais-autocomplete [label]="'Държава'" [inputFormControl]="fullForm.addrState"
+                [parentGroup]="fullForm.group" [items]="dbData.countries" [inputName]="'addrState'">
               </cais-autocomplete>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Област'"
-                [inputFormControl]="fullForm.addrDistrict"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Област'" [inputFormControl]="fullForm.addrDistrict"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
 
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Град'"
-                [inputFormControl]="fullForm.addrTown"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Град'" [inputFormControl]="fullForm.addrTown"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'ул. №'"
-                [inputFormControl]="fullForm.addrStr"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'ул. №'" [inputFormControl]="fullForm.addrStr"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Мобилен телефон'"
-                [inputFormControl]="fullForm.addrPhone"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Мобилен телефон'" [inputFormControl]="fullForm.addrPhone"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
             <div class="form-group col-md-3">
-              <cais-input
-                [type]="'text'"
-                [label]="'Ел. поща'"
-                [inputFormControl]="fullForm.addrEmail"
-                [parentGroup]="fullForm.group"
-              ></cais-input>
+              <cais-input [type]="'text'" [label]="'Ел. поща'" [inputFormControl]="fullForm.addrEmail"
+                [parentGroup]="fullForm.group"></cais-input>
             </div>
           </div>
         </nb-tab>
 
-        <nb-tab
-          [tabTitle]="reportsTabTitle"
-          *ngIf="
+        <nb-tab [tabTitle]="reportsTabTitle" *ngIf="
             isEdit() &&
             reportApplicationStatus != ReportApplicationStatusConstants.New
-          "
-        >
+          ">
           <ng-container *ngIf="showReportsTab">
             <cais-generated-report-overview [users]="dbData.users">
             </cais-generated-report-overview>

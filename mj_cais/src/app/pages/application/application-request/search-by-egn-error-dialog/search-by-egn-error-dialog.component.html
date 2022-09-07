@@ -3,25 +3,13 @@
     <ng-container>
       <h2 class="mt-0">{{ title }}</h2>
       <div style="display: flex; align-items: center; justify-content: space-between;">
-        <button
-          nbButton
-          matRipple
-          [status]="'success'"
-          type="button"
-          [title]="'Ръчно въвеждане'"
-          (click)="navigateToApplicationCreate()"
-        >
+        <button nbButton matRipple [status]="'success'" type="button" [title]="'Ръчно въвеждане'"
+          (click)="navigateToApplicationCreate()">
           Ръчно въвеждане
         </button>
-        <button
-          nbButton
-          matRipple
-          [status]="'danger'"
-          type="button"
-          [title]="'Анулирай'"
-          (click)="changeStatusToCanceled()"
-        >
-          Анулирай
+        <button nbButton matRipple [status]="'danger'" type="button" [title]="'Анулирай'"
+          (click)="changeStatusToCanceled()">
+          <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Анулирай
         </button>
       </div>
     </ng-container>

@@ -8,18 +8,11 @@
           </div>
         </div>
         <div class="d-flex">
-          <div>
-            <button
-              nbButton
-              matRipple
-              (click)="onBackIsClicked()"
-              type="button"
-              class="ml-2"
-              style="min-width: 100px"
-            >
-              Назад
-            </button>
-          </div>
+
+          <button nbButton matRipple (click)="onBackIsClicked()" type="button">
+            <nb-icon class="pt-1" [icon]="'rotate-left'" pack="fa"></nb-icon> Назад
+          </button>
+
         </div>
       </div>
     </nb-card-header>
@@ -71,8 +64,7 @@
         <div class="row mb-3">
           <div class="col-md-6">
             <div class="row col-md-12 cais-display-form-group">
-              <span class="label"
-                >Датата на постъпване на хартиения бюлетин:
+              <span class="label">Датата на постъпване на хартиения бюлетин:
               </span>
               <span>
                 {{ model.bulletinReceivedDate | date }}

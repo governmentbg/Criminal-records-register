@@ -10,7 +10,7 @@
           (applicationStatus == 'NewId' ||
             applicationStatus == 'FillApplication')
         " nbButton matRipple [status]="'danger'" (click)="cancelApplication()" type="button">
-        Анулирай
+        <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Анулирай
       </button>
       <button *ngIf="
           (!isForPreview &&
@@ -19,14 +19,16 @@
               applicationStatus == 'FillApplication')) ||
           (isForPreview && applicationStatus == 'CheckPayment')
         " nbButton matRipple [status]="'primary'" (click)="finalEdit()" type="button">
+        <nb-icon class="pt-1" [icon]="'pen-to-square'" pack="fa"></nb-icon>
         Окончателна редакция
       </button>
       <button *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'" nbButton matRipple [status]="'primary'"
         (click)="finalEdit()" type="button">
-        Потвърждаване
+        <nb-icon class="pt-1" [icon]="'circle-check'" pack="fa"></nb-icon> Потвърждаване
       </button>
       <button *ngIf="isForPreview && applicationStatus == 'CheckTaxFree'" nbButton matRipple [status]="'danger'"
         (click)="changeStatusToCheckPayment()" type="button">
+        <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon>
         Отхвърляне
       </button>
       <button *ngIf="!isCreate" nbButton matRipple [status]="'primary'" (click)="printApplication()" type="button">

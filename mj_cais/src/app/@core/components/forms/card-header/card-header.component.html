@@ -5,30 +5,22 @@
   <div class="d-flex gap-2">
     <ng-content></ng-content>
 
-    <button
-      *ngIf="!isForPreview"
-      nbButton
-      matRipple
-      [status]="'success'"
-      (click)="onSaveFunction()"
-      type="button"
-    >
-    <nb-icon class="pt-1" pack="fa" icon="save"></nb-icon> Запази
+    <button *ngIf="!isForPreview" nbButton matRipple [status]="'success'" (click)="onSaveFunction()" type="button">
+      <nb-icon class="pt-1" pack="fa" icon="save"></nb-icon> Запази
     </button>
 
     <button nbButton matRipple (click)="onCancelFunction()" type="button">
-      {{ isForPreview ? "Назад" : "Отказ" }}
+      <ng-container *ngIf="isForPreview">
+        <nb-icon class="pt-1" [icon]="'rotate-left'" pack="fa"></nb-icon> Назад
+      </ng-container>
+      <ng-container *ngIf="!isForPreview">
+        <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Отказ
+      </ng-container>
     </button>
 
-    <button
-      *ngIf="isForEdit && isForDelete && !isForPreview"
-      nbButton
-      matRipple
-      [status]="'danger'"
-      (click)="onDeleteFunction()"
-      type="button"
-    >
-      Изтрий
+    <button *ngIf="isForEdit && isForDelete && !isForPreview" nbButton matRipple [status]="'danger'"
+      (click)="onDeleteFunction()" type="button">
+      <nb-icon class="pt-1" [icon]="'trash'" pack="fa"></nb-icon> Изтрий
     </button>
   </div>
 </div>
