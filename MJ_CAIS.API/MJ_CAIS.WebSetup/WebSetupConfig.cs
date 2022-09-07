@@ -55,7 +55,7 @@ namespace MJ_CAIS.WebSetup
             return builder;
         }
 
-        public static void CustomConfigureApp(WebApplication app)
+        public static void CustomConfigureApp(WebApplication app, bool useMiddlewareForException = false)
         {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -74,8 +74,14 @@ namespace MJ_CAIS.WebSetup
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
             });
 
-            //app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseExceptionHandler("/Error");
+            if (useMiddlewareForException)
+            {
+                app.UseMiddleware<ErrorHandlingMiddleware>();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();

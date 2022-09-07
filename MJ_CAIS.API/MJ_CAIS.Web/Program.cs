@@ -67,7 +67,7 @@ namespace MJ_CAIS.Web
 
             var app = builder.Build();
 
-            WebSetupConfig.CustomConfigureApp(app);
+            WebSetupConfig.CustomConfigureApp(app, true);
 
             app.Run();
         }
