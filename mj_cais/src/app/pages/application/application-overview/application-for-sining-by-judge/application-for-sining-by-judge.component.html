@@ -2,6 +2,9 @@
   [visible]="this.remoteService.isLoading"
 ></tl-linear-progress> -->
 <nb-card>
+  <tl-linear-progress
+    [visible]="this.remoteService.isLoading"
+  ></tl-linear-progress>
   <igx-grid
     #grid
     igxGridState
@@ -99,6 +102,7 @@
     </igx-column>
 
     <igx-column
+      width="190px"
       field="birthDate"
       header="Дата на раждане"
       [sortable]="true"

@@ -17,7 +17,7 @@
               <a [routerLink]="['/pages/bulletins/new-eiss']">
                 Нови бюлетини от ЕИСС
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.newEISS > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.newEISS
               }}</span>
             </div>
@@ -27,7 +27,7 @@
               <a [routerLink]="['/pages/isin/identified']">
                 Данни за изтърпени наказания
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.isinIdentified > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.isinIdentified
               }}</span>
             </div>
@@ -37,7 +37,7 @@
               <a [routerLink]="['/pages/bulletins/for-destruction']">
                 За унищожаване
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.forDestruction > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.forDestruction
               }}</span>
             </div>
@@ -47,7 +47,7 @@
               <a [routerLink]="['/pages/bulletins/for-rehabilitation']">
                 За реабилитация
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.forRehabilitation > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.forRehabilitation
               }}</span>
             </div>
@@ -57,7 +57,7 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 1
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.article2211 > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.article2211
               }}</span>
             </div>
@@ -67,7 +67,7 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 2
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.article2212 > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.article2212
               }}</span>
             </div>
@@ -77,7 +77,7 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по чл.30
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.article3000 > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.article3000
               }}</span>
             </div>
@@ -87,7 +87,7 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Уведомяване за променен съдебен статус на осъдено лице
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="bulletins?.newDocument > 0" class="badge rounded-pill bg-primary">{{
                 bulletins.newDocument
               }}</span>
             </div>
@@ -107,7 +107,7 @@
                 <a [routerLink]="['/pages/internal-requests']">
                   Нови заявки за реабилитация
                 </a>
-                <span class="badge rounded-pill bg-primary">{{
+                <span *ngIf="applications?.internalRequests > 0" class="badge rounded-pill bg-primary">{{
                   applications.internalRequests
                 }}</span>
               </div>
@@ -117,7 +117,7 @@
                 <a [routerLink]="['/pages/applications/tax-free']">
                   Oсвободени от плащане
                 </a>
-                <span class="badge rounded-pill bg-primary">{{
+                <span *ngIf="applications?.taxFree > 0" class="badge rounded-pill bg-primary">{{
                   applications.taxFree
                 }}</span>
               </div>
@@ -127,7 +127,7 @@
                 <a [routerLink]="['/pages/applications/bulletin-selection']">
                   За избор на бюлетини
                 </a>
-                <span class="badge rounded-pill bg-primary">{{
+                <span *ngIf="applications?.bulletinSelection > 0" class="badge rounded-pill bg-primary">{{
                   applications.bulletinSelection
                 }}</span>
               </div>
@@ -151,7 +151,7 @@
           <nb-list-item>
             <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/applications']">Нови заявления </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="applications?.newId > 0" class="badge rounded-pill bg-primary">{{
                 applications.newId
               }}</span>
             </div>
@@ -162,7 +162,7 @@
               <a [routerLink]="['/pages/applications/waiting-payment']">
                 Потвърждение за плащане
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="applications?.checkPayment > 0" class="badge rounded-pill bg-primary">{{
                 applications.checkPayment
               }}</span>
             </div>
@@ -172,7 +172,7 @@
               <a [routerLink]="['/pages/applications/for-check']">
                 За обработка
               </a>
-              <span class="badge rounded-pill bg-primary">{{
+              <span *ngIf="applications?.bulletinsCheck > 0" class="badge rounded-pill bg-primary">{{
                 applications.bulletinsCheck
               }}</span>
             </div>
@@ -193,7 +193,7 @@
                 <a [routerLink]="['/pages/fbbcs/for-destruction']">
                   Подлежащи на заличаване
                 </a>
-                <span class="badge rounded-pill bg-primary">{{
+                <span *ngIf="centralAuth?.forDestruction > 0" class="badge rounded-pill bg-primary">{{
                   centralAuth.forDestruction
                 }}</span>
               </div>
@@ -212,7 +212,7 @@
               <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
                 Oсвободени от плащане
               </a>
-              <span class="badge rounded-pill bg-primary">
+              <span *ngIf="centralAuth?.webCheckTaxFree > 0" class="badge rounded-pill bg-primary">
                 {{ centralAuth.webCheckTaxFree }}</span>
             </div>
           </nb-list-item>
@@ -230,7 +230,7 @@
                 <a [routerLink]="['/pages/ecris/identification']">
                   За идентификация
                 </a>
-                <span class="badge rounded-pill bg-primary">{{
+                <span *ngIf="centralAuth?.forIdentification > 0" class="badge rounded-pill bg-primary">{{
                   centralAuth.forIdentification
                 }}</span>
               </div>
@@ -238,7 +238,7 @@
             <nb-list-item>
               <div class="d-flex flex-fill justify-content-between">
                 <a [routerLink]="['/pages/ecris-tcn']"> ECRIS-TCN </a>
-                <span class="badge rounded-pill bg-primary">{{
+                <span *ngIf="centralAuth?.tcn > 0" class="badge rounded-pill bg-primary">{{
                   centralAuth.tcn
                 }}</span>
               </div>
