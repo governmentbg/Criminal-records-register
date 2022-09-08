@@ -191,6 +191,7 @@
             </igx-column>
 
             <igx-column
+              width="200px"
               field="registrationNumber"
               header="Номер на бюлетин"
               [editable]="false"
@@ -211,17 +212,18 @@
               </ng-template>
             </igx-column>
             <igx-column
-              width="120px"
               header="Операции върху бюлетин"
               [sortable]="false"
               [filterable]="false"
               [editable]="false"
               [pinned]="true"
+              [disableHiding]="true"
             >
               <ng-template igxCell let-cell="cell">
                 <div class="cell-center">
                   <div class="d-flex gap-3">
-                    <a
+                    <button
+                      class="btn btn-link"
                       [title]="'Преглед'"
                       [routerLink]="[
                         '/pages/bulletins/preview',
@@ -229,15 +231,15 @@
                       ]"
                     >
                       <nb-icon pack="fa" icon="eye"></nb-icon>
-                    </a>
-
-                    <a
+                    </button>
+                    <button
                       [title]="'Редактиране'"
-                      [routerLink]="
-                        cell.rowData.canEditBulletin == true
-                          ? ['/pages/bulletins/edit', cell.rowData.bulletinId]
-                          : null
-                      "
+                      class="btn btn-link"
+                      [disabled]="cell.rowData.canEditBulletin == false"
+                      [routerLink]="[
+                        '/pages/bulletins/edit',
+                        cell.rowData.bulletinId
+                      ]"
                     >
                       <nb-icon
                         pack="fa"
@@ -246,7 +248,7 @@
                           cell.rowData.canEditBulletin == true ? '' : 'basic'
                         "
                       ></nb-icon>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </ng-template>
