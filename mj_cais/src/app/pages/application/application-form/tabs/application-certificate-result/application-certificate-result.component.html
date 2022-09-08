@@ -166,56 +166,51 @@
       [hideRowSelectors]="false"
     >
       <igx-grid-toolbar>
+        <igx-grid-toolbar-title>
+          <span class="fw-bold">Свидетелство</span></igx-grid-toolbar-title
+        >
         <igx-grid-toolbar-actions>
-          <button
-            *ngIf="!this.isForPreview"
+          <div class="d-flex gap-2">
+            <button
+              *ngIf="!this.isForPreview"
+              nbButton
+              [status]="'primary'"
+              (click)="showReport()"
+              type="button"
+            >
+              Е-Справка
+            </button>
+            <!-- <button
             nbButton
-            matRipple
-            [status]="'success'"
-            (click)="showReport()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
-          >
-            Е-Справка
-          </button>
-          <!-- <button
-            nbButton
-            matRipple
-            [status]="'success'"
+            [status]="'primary'"
             (click)="previewBulletions()"
             type="button"
-            class="ml-2"
-            style="min-width: 100px; float: center"
           >
             Преглед бюлетини
           </button> -->
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="sendBulltinsForRehabilitation()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px; float: left"
-          >
-            Създай заявка за реабилитация
-          </button>
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            matRipple
-            [status]="'success'"
-            (click)="sendBulltinsForSelection()"
-            type="button"
-            class="ml-2"
-            style="min-width: 100px; float: right"
-          >
-            Изпрати за избор на бюл. от съдия/юрист
-          </button>
+            <button
+              *ngIf="!this.isForPreview"
+              nbButton
+              [status]="'primary'"
+              (click)="sendBulltinsForRehabilitation()"
+              type="button"
+            >
+              Създай заявка за реабилитация
+            </button>
+            <button
+              *ngIf="!this.isForPreview"
+              nbButton
+              [status]="'primary'"
+              (click)="sendBulltinsForSelection()"
+              type="button"
+            >
+              Изпрати за избор на бюл. от съдия/юрист
+            </button>
+            <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+          </div>
         </igx-grid-toolbar-actions>
       </igx-grid-toolbar>
+
       <igx-column
         field="id"
         header="Идентификатор"
@@ -305,7 +300,7 @@
           <div class="cell-center">
             <div class="d-flex gap-3">
               <a
-                style="color: black; margin-right: 30px"
+                style="color: black"
                 [title]="'Преглед'"
                 [routerLink]="[
                   '/pages/bulletins/preview/',
