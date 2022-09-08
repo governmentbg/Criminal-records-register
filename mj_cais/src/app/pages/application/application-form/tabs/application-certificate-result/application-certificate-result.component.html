@@ -155,9 +155,6 @@
   <ng-container
     *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck"
   >
-    <tl-linear-progress
-      [visible]="this.remoteService.isLoading"
-    ></tl-linear-progress>
     <igx-grid
       #bulletinsCheckGrid
       [height]="null"
@@ -340,9 +337,6 @@
   <ng-container
     *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection"
   >
-    <tl-linear-progress
-      [visible]="this.remoteService.isLoading"
-    ></tl-linear-progress>
     <igx-grid
       #bulletinsCheckGrid
       [height]="null"
