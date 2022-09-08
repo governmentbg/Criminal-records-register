@@ -258,12 +258,12 @@ namespace MJ_CAIS.Repositories.Impl
             var personId = await this._dbContext.PPersonIds.AsNoTracking().Where(x => x.Id == pidId).Select(x => x.PersonId).FirstOrDefaultAsync();
 
             //намира всички бюлетеини на това лице
-            var bulletinsList =  this._dbContext.BBulletins.Where(b =>
-                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId })
+            var bulletinsList = this._dbContext.BBulletins.Where(b =>
+                       b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })
                         .Union(this._dbContext.BBulletins.Where(b =>
-                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId }))
+                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId }))
                         .Union(this._dbContext.BBulletins.Where(b =>
-                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id,  StatusId = b.StatusId }))
+                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId }))
                         .Union(this._dbContext.BBulletins.Where(b =>
                          b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })).AsNoTracking();
 
@@ -512,10 +512,10 @@ namespace MJ_CAIS.Repositories.Impl
                 .Union(lnBullId)
                 .Union(suidBullId)
                 .Union(docNumBullId)
-                .Where(x=> x != currentBullId)
+                .Where(x => x != currentBullId)
                 .ToListAsync();
 
-            var result = await _dbContext.BBulletins             
+            var result = await _dbContext.BBulletins
                 .Where(x => bulletinsList.Contains(x.Id))
                 .Select(bulletin => new BulletinForRehabilitationAndEventDTO
                 {
@@ -555,6 +555,18 @@ namespace MJ_CAIS.Repositories.Impl
                 }).ToListAsync();
 
             return result;
+        }
+
+        public async Task<BBulletin> GetBulletinsCollectionsDataAsync(string bulletinId)
+        {
+            return await _dbContext.BBulletins.AsNoTracking()
+                .Where(x => x.Id == bulletinId)
+                .Include(x => x.BSanctions)
+                .Include(x => x.BOffences)
+                .Include(x => x.BDecisions)
+                .Include(x => x.BBullPersAliases)
+                .Include(x => x.BPersNationalities)
+                .FirstOrDefaultAsync();
         }
 
         private static IQueryable<BBulletin> ApplyFormFilter(IQueryable<BBulletin> query, BulletinSearchParamDTO searchParams)
