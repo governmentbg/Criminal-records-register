@@ -1,172 +1,179 @@
 <hr />
-<igx-grid
-  #statusHistoryGrid
-  [height]="null"
-  [data]="reports"
-  [primaryKey]="'id'"
->
-  <igx-grid-toolbar>
-    <igx-grid-toolbar-title>
-      <span class="fw-bold">Справки</span></igx-grid-toolbar-title
+<nb-card>
+  <igx-grid
+    #statusHistoryGrid
+    [height]="null"
+    [data]="reports"
+    [primaryKey]="'id'"
+  >
+    <igx-grid-toolbar>
+      <igx-grid-toolbar-title>
+        <span class="fw-bold">Справки</span></igx-grid-toolbar-title
+      >
+      <igx-grid-toolbar-actions>
+        <div class="d-flex gap-2">
+          <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+        </div>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
+
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="false"
+      [dataType]="'string'"
+      [hidden]="true"
     >
-    <igx-grid-toolbar-actions>
-      <div class="d-flex gap-2">
-        <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
-      </div>
-    </igx-grid-toolbar-actions>
-  </igx-grid-toolbar>
+    </igx-column>
+    <igx-column
+      field="bulletinsCount"
+      header="Брой бюлетини"
+      [sortable]="false"
+      [dataType]="'number'"
+    >
+    </igx-column>
+    <igx-column
+      field="registrationNumber"
+      header="Рег. номер"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
+    <igx-column
+      field="firstSigner"
+      header="Подписващ 1"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
 
-  <igx-column
-    field="id"
-    header="Идентификатор"
-    [sortable]="false"
-    [dataType]="'string'"
-    [hidden]="true"
-  >
-  </igx-column>
-  <igx-column
-    field="bulletinsCount"
-    header="Брой бюлетини"
-    [sortable]="false"
-    [dataType]="'number'"
-  >
-  </igx-column>
-  <igx-column
-    field="registrationNumber"
-    header="Рег. номер"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
-  <igx-column
-    field="firstSigner"
-    header="Подписващ 1"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
+    <igx-column
+      field="secondSigner"
+      header="Подписващ 2"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
 
-  <igx-column
-    field="secondSigner"
-    header="Подписващ 2"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
+    <igx-column
+      field="validFrom"
+      [sortable]="true"
+      header="Валидна от"
+      dataType="date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="validTo"
+      [sortable]="true"
+      header="Валидна до"
+      dataType="date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="validFrom"
-    [sortable]="true"
-    header="Валидна от"
-    dataType="date"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="validTo"
-    [sortable]="true"
-    header="Валидна до"
-    dataType="date"
-    [formatter]="this.dateFormatService.formatDate"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="this.dateFormatService.displayDate(cell.value)">
-        {{ this.dateFormatService.displayDate(cell.value) }}
-      </span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="statusName"
+      header="Статус"
+      dataType="string"
+      [sortable]="true"
+    >
+    </igx-column>
+    <igx-column
+      width="140px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <ng-container *ngIf="cell.rowData.docId">
+              <button
+                igxButton="icon"
+                [title]="'Изтегляне'"
+                (click)="printReport(cell.rowData.docId)"
+              >
+                <nb-icon pack="fa" icon="download"></nb-icon>
+              </button>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                !isForPreview &&
+                cell.rowData.statusCode ==
+                  ReportApplicationStatusConstants.DraftReport
+              "
+            >
+              <button
+                igxButton="icon"
+                [title]="'Генерирай'"
+                (click)="
+                  onGenerateReportDialogOpen(
+                    cell.rowData.id,
+                    cell.rowData.firstSignerId,
+                    cell.rowData.secondSignerId
+                  )
+                "
+              >
+                <nb-icon pack="fa" icon="cogs"></nb-icon>
+              </button>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                !isForPreview &&
+                cell.rowData.statusCode ==
+                  ReportApplicationStatusConstants.ReadyReport
+              "
+            >
+              <button
+                igxButton="icon"
+                [title]="'Маркирай като доставено'"
+                (click)="deliver(cell.rowData.id)"
+              >
+                <i class="fas fa-check"></i>
+              </button>
+            </ng-container>
 
-  <igx-column
-    field="statusName"
-    header="Статус"
-    dataType="string"
-    [sortable]="true"
-  >
-  </igx-column>
-  <igx-column
-    width="100px"
-    header="Действия"
-    [sortable]="false"
-    [filterable]="false"
-  >
-    <ng-template igxCell let-cell="cell">
-      <ng-container *ngIf="cell.rowData.docId">
-        <button
-          igxButton="icon"
-          [title]="'Изтегляне'"
-          (click)="printReport(cell.rowData.docId)"
-        >
-          <nb-icon pack="fa" icon="download"></nb-icon>
-        </button>
-      </ng-container>
-      <ng-container
-        *ngIf="
-          !isForPreview &&
-          cell.rowData.statusCode ==
-            ReportApplicationStatusConstants.DraftReport
-        "
-      >
-        <button
-          igxButton="icon"
-          [title]="'Генерирай'"
-          (click)="
-            onGenerateReportDialogOpen(
-              cell.rowData.id,
-              cell.rowData.firstSignerId,
-              cell.rowData.secondSignerId
-            )
-          "
-        >
-          <nb-icon pack="fa" icon="cogs"></nb-icon>
-        </button>
-      </ng-container>
-      <ng-container
-        *ngIf="
-          !isForPreview &&
-          cell.rowData.statusCode ==
-            ReportApplicationStatusConstants.ReadyReport
-        "
-      >
-        <button
-          igxButton="icon"
-          [title]="'Маркирай като доставено'"
-          (click)="deliver(cell.rowData.id)"
-        >
-          <i class="fas fa-check"></i>
-        </button>
-      </ng-container>
-
-      <ng-container
-        *ngIf="
-          !isForPreview &&
-          cell.rowData.statusCode !=
-            ReportApplicationStatusConstants.CanceledReport &&
-          cell.rowData.statusCode !=
-            ReportApplicationStatusConstants.DeliveredReport
-        "
-      >
-        <button
-          igxButton="icon"
-          [title]="'Анулиране'"
-          (click)="
-            onOpenCancelReportDialog(
-              cell.rowData.id,
-              cell.rowData.firstSignerId,
-              cell.rowData.secondSignerId
-            )
-          "
-        >
-          <nb-icon pack="fa" icon="times"></nb-icon>
-        </button>
-      </ng-container>
-    </ng-template>
-  </igx-column>
-</igx-grid>
+            <ng-container
+              *ngIf="
+                !isForPreview &&
+                cell.rowData.statusCode !=
+                  ReportApplicationStatusConstants.CanceledReport &&
+                cell.rowData.statusCode !=
+                  ReportApplicationStatusConstants.DeliveredReport
+              "
+            >
+              <button
+                igxButton="icon"
+                [title]="'Анулиране'"
+                (click)="
+                  onOpenCancelReportDialog(
+                    cell.rowData.id,
+                    cell.rowData.firstSignerId,
+                    cell.rowData.secondSignerId
+                  )
+                "
+              >
+                <nb-icon pack="fa" icon="times"></nb-icon>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </igx-column>
+  </igx-grid>
+</nb-card>
 
 <igx-dialog #cancelReportDialog>
   <form autocomplete="off">
