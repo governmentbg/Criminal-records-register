@@ -1,4 +1,7 @@
 <nb-card>
+  <tl-linear-progress
+    [visible]="this.remoteService.isLoading"
+  ></tl-linear-progress>
   <igx-grid
     #grid
     igxGridState
@@ -52,6 +55,7 @@
     </igx-column>
 
     <igx-column
+      width="200px"
       field="registrationNumber"
       header="№ на заявление"
       [sortable]="true"

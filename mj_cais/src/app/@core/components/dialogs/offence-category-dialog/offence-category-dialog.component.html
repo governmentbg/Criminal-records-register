@@ -18,6 +18,9 @@
     </div>
   </nb-card-header>
   <nb-card-body>
+    <tl-linear-progress
+      [visible]="this.remoteService.isLoading"
+    ></tl-linear-progress>
     <igx-grid
       #grid
       igxGridState

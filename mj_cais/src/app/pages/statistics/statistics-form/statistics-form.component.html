@@ -1,15 +1,23 @@
-<nb-card class="card-single-page-height" accent="primary" [formGroup]="form.group">
+<nb-card
+  class="card-single-page-height"
+  accent="primary"
+  [formGroup]="form.group"
+>
   <nb-card-header class="card-header-shadow">
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex align-items-center">
         <h2 class="h4">{{ title }}</h2>
       </div>
       <div class="d-flex">
-
         <button (click)="onSearch()" nbButton status="primary" type="button">
-          <nb-icon class="pt-1" [icon]="'search'" pack="fa" title="Търсене"></nb-icon> Търсене
+          <nb-icon
+            class="pt-1"
+            [icon]="'search'"
+            pack="fa"
+            title="Търсене"
+          ></nb-icon>
+          Търсене
         </button>
-
       </div>
     </div>
   </nb-card-header>
@@ -17,15 +25,30 @@
     <form autocomplete="off">
       <div class="row">
         <div class="form-group col-md-3">
-          <cais-autocomplete [label]="'Бюро съдимост'" [inputFormControl]="form.authority" [parentGroup]="form.group"
-            [inputName]="'authority'" [items]="authorities"></cais-autocomplete>
+          <cais-autocomplete
+            [label]="'Бюро съдимост'"
+            [inputFormControl]="form.authority"
+            [parentGroup]="form.group"
+            [inputName]="'authority'"
+            [items]="authorities"
+          ></cais-autocomplete>
         </div>
         <div class="form-group col-md-3">
-          <cais-input [type]="'date'" [label]="'От'" [inputFormControl]="form.fromDate" [parentGroup]="form.group">
+          <cais-input
+            [type]="'date'"
+            [label]="'От'"
+            [inputFormControl]="form.fromDate"
+            [parentGroup]="form.group"
+          >
           </cais-input>
         </div>
         <div class="form-group col-md-3">
-          <cais-input [type]="'date'" [label]="'До'" [inputFormControl]="form.toDate" [parentGroup]="form.group">
+          <cais-input
+            [type]="'date'"
+            [label]="'До'"
+            [inputFormControl]="form.toDate"
+            [parentGroup]="form.group"
+          >
           </cais-input>
         </div>
       </div>
@@ -55,8 +78,15 @@
       </ng-container> -->
       <ng-container *ngIf="showGrid">
         <div class="grid">
+          <tl-linear-progress
+            [visible]="this.remoteService.isLoading"
+          ></tl-linear-progress>
           <igx-grid [height]="null" #dataGrid [data]="data">
-            <igx-column field="objectType" header="Тип" [cellClasses]="condClasses"></igx-column>
+            <igx-column
+              field="objectType"
+              header="Тип"
+              [cellClasses]="condClasses"
+            ></igx-column>
             <igx-column field="count" header="Брой" [cellClasses]="condClasses">
             </igx-column>
           </igx-grid>
