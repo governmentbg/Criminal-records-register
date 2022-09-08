@@ -139,6 +139,9 @@
         </div>
 
         <div class="mt-2 mb-4">
+          <tl-linear-progress
+            [visible]="this.remoteService?.isLoading"
+          ></tl-linear-progress>
           <igx-grid
             #namesGrid
             [height]="null"

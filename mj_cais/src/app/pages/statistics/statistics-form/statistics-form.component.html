@@ -79,7 +79,7 @@
       <ng-container *ngIf="showGrid">
         <div class="grid">
           <tl-linear-progress
-            [visible]="this.remoteService.isLoading"
+            [visible]="this.remoteService?.isLoading"
           ></tl-linear-progress>
           <igx-grid [height]="null" #dataGrid [data]="data">
             <igx-column
