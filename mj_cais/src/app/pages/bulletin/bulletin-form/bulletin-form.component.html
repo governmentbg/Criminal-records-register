@@ -20,198 +20,233 @@
     <form autocomplete="off">
       <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
         <nb-tab tabTitle="Основна информация">
-          <div class="fw-bold">Данни за бюлетин</div>
-          <hr />
-          <div class="row">
-            <ng-container *ngIf="isEdit()">
-              <div class="form-group col-md-6">
-                <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="fullForm.registrationNumberDisplay"
-                  [parentGroup]="fullForm.group"></cais-input>
+          <nb-card status="primary" class="mt-3">
+            <nb-card-header>Данни за бюлетин</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <ng-container *ngIf="isEdit()">
+                  <div class="form-group col-md-6">
+                    <cais-input [type]="'text'" [label]="'Номер'"
+                      [inputFormControl]="fullForm.registrationNumberDisplay" [parentGroup]="fullForm.group">
+                    </cais-input>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="isEdit() || fullForm.csAuthorityName.value">
+                  <div class="form-group col-md-6">
+                    <cais-input [type]="'text'" [label]="'Бюро съдимост, в което се съхранява'"
+                      [inputFormControl]="fullForm.csAuthorityName" [parentGroup]="fullForm.group"></cais-input>
+                  </div>
+                </ng-container>
               </div>
-            </ng-container>
-            <ng-container *ngIf="isEdit() || fullForm.csAuthorityName.value">
-              <div class="form-group col-md-6">
-                <cais-input [type]="'text'" [label]="'Бюро съдимост, в което се съхранява'"
-                  [inputFormControl]="fullForm.csAuthorityName" [parentGroup]="fullForm.group"></cais-input>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <cais-autocomplete [label]="'Статус'" [inputFormControl]="fullForm.statusIdDisplay"
+                    [parentGroup]="fullForm.group" [inputName]="'statusIdDisplay'" [items]="dbData.bulletinStatuses">
+                  </cais-autocomplete>
+                </div>
+                <div class="form-group col-md-6">
+                  <cais-input [type]="'text'" [label]="'Входящ номер към азбучния указател'"
+                    [inputFormControl]="fullForm.alphabeticalIndex" [parentGroup]="fullForm.group"></cais-input>
+                </div>
               </div>
-            </ng-container>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-autocomplete [label]="'Статус'" [inputFormControl]="fullForm.statusIdDisplay"
-                [parentGroup]="fullForm.group" [inputName]="'statusIdDisplay'" [items]="dbData.bulletinStatuses">
-              </cais-autocomplete>
-            </div>
-            <div class="form-group col-md-6">
-              <cais-input [type]="'text'" [label]="'Входящ номер към азбучния указател'"
-                [inputFormControl]="fullForm.alphabeticalIndex" [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-input [type]="'text'" [label]="'ID на осъждане в ECRIS'"
-                [inputFormControl]="fullForm.ecrisConvictionId" [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-6">
-              <cais-input [type]="'date'" [label]="'Датата на постъпване на хартиения бюлетин'"
-                [inputFormControl]="fullForm.bulletinReceivedDate" [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-autocomplete [label]="'Тип'" [inputFormControl]="fullForm.bulletinType"
-                [parentGroup]="fullForm.group" [inputName]="'bulletinType'" [items]="dbData.bulletinTypes">
-              </cais-autocomplete>
-            </div>
-          </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <cais-input [type]="'text'" [label]="'ID на осъждане в ECRIS'"
+                    [inputFormControl]="fullForm.ecrisConvictionId" [parentGroup]="fullForm.group"></cais-input>
+                </div>
+                <div class="form-group col-md-6">
+                  <cais-input [type]="'date'" [label]="'Датата на постъпване на хартиения бюлетин'"
+                    [inputFormControl]="fullForm.bulletinReceivedDate" [parentGroup]="fullForm.group"></cais-input>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <cais-autocomplete [label]="'Тип'" [inputFormControl]="fullForm.bulletinType"
+                    [parentGroup]="fullForm.group" [inputName]="'bulletinType'" [items]="dbData.bulletinTypes">
+                  </cais-autocomplete>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
 
-          <div class="font-weight-bold">
-            Данни за изготвяне, съставяне и проверка на бюлетин
-          </div>
-          <hr />
+          <nb-card status="primary">
+            <nb-card-header> Данни за изготвяне, съставяне и проверка на бюлетин</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <cais-autocomplete [label]="'Съд изготвил бюлетина'" [inputFormControl]="fullForm.bulletinAuthorityId"
+                    [parentGroup]="fullForm.group" [inputName]="'bulletinAuthorityId'"
+                    [items]="dbData.decidingAuthorities">
+                  </cais-autocomplete>
+                </div>
+                <div class="form-group col-md-6">
+                  <cais-input [type]="'date'" [label]="'Дата на съставяне на бюлетина'"
+                    [inputFormControl]="fullForm.bulletinCreateDate" [parentGroup]="fullForm.group"></cais-input>
+                </div>
+              </div>
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-autocomplete [label]="'Съд изготвил бюлетина'" [inputFormControl]="fullForm.bulletinAuthorityId"
-                [parentGroup]="fullForm.group" [inputName]="'bulletinAuthorityId'" [items]="dbData.decidingAuthorities">
-              </cais-autocomplete>
-            </div>
-            <div class="form-group col-md-6">
-              <cais-input [type]="'date'" [label]="'Дата на съставяне на бюлетина'"
-                [inputFormControl]="fullForm.bulletinCreateDate" [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
 
-          <div class="sub-header">Съставил</div>
-          <hr />
+              <div class="card bg-transparent mt-3">
+                <div class="card-body">
+                  <h6 class="card-title">Съставил</h6>
 
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="fullForm.createdByNames"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-6">
-              <cais-input [type]="'text'" [label]="'Длъжност'" [inputFormControl]="fullForm.createdByPosition"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
-          <div class="sub-header">Проверил</div>
-          <hr />
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="fullForm.approvedByNames"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-6">
-              <cais-input [type]="'text'" [label]="'Длъжност'" [inputFormControl]="fullForm.approvedByPosition"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
-          <div>Данни за лицето илия</div>
-          <cais-person-form [personForm]="fullForm.person" [isEditable]="isBulletinPersonAliasEditable"
-            [personAliasTypes]="dbData.personAliasTypes" [genderTypes]="dbData.genderTypes"
-            [countries]="dbData.countries" [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
-            [personAliasGridData]="dbData.personAlias" [contextType]="PersonContextEnum.Bulletin">
-          </cais-person-form>
-          <div>Осъждане илия</div>
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="fullForm.createdByNames"
+                        [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <cais-input [type]="'text'" [label]="'Длъжност'" [inputFormControl]="fullForm.createdByPosition"
+                        [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-          <div class="fw-bold">Данни за акта</div>
-          <hr />
+              <div class="card bg-transparent mt-2">
+                <div class="card-body">
+                  <h6 class="card-title">Проверил</h6>
 
-          <div class="row">
-            <div class="form-group col-md-3">
-              <cais-autocomplete [label]="'Вид'" [inputFormControl]="fullForm.decisionTypeId"
-                [parentGroup]="fullForm.group" [inputName]="'decisionTypeId'" [items]="dbData.decisionTypes">
-              </cais-autocomplete>
-            </div>
-            <div class="form-group col-md-3">
-              <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="fullForm.decisionNumber"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-3">
-              <cais-input [type]="'date'" [label]="'Дата на издаване'" [inputFormControl]="fullForm.decisionDate"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-3">
-              <cais-input [type]="'date'" [label]="'Дата на влизане в сила'"
-                [inputFormControl]="fullForm.decisionFinalDate" [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-6">
-              <cais-autocomplete [label]="'Съдебен орган издал акта'" [inputFormControl]="fullForm.decidingAuthId"
-                [parentGroup]="fullForm.group" [inputName]="'decidingAuthId'" [items]="dbData.decidingAuthorities">
-              </cais-autocomplete>
-            </div>
-            <div class="form-group col-md-3">
-              <cais-input [type]="'text'" [label]="'ECLI номер'" [inputFormControl]="fullForm.decisionEcli"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
 
-          <div class="font-weight-bold">Данни за делото</div>
-          <hr />
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="fullForm.approvedByNames"
+                        [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <cais-input [type]="'text'" [label]="'Длъжност'" [inputFormControl]="fullForm.approvedByPosition"
+                        [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+          <nb-card status="primary">
+            <nb-card-header>Данни за лицето</nb-card-header>
+            <nb-card-body>
+              <cais-person-form [personForm]="fullForm.person" [isEditable]="isBulletinPersonAliasEditable"
+                [personAliasTypes]="dbData.personAliasTypes" [genderTypes]="dbData.genderTypes"
+                [countries]="dbData.countries" [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
+                [personAliasGridData]="dbData.personAlias" [contextType]="PersonContextEnum.Bulletin">
+              </cais-person-form>
+            </nb-card-body>
+          </nb-card>
 
-          <div class="row">
-            <div class="form-group col-md-3">
-              <cais-autocomplete [label]="'Вид'" [inputFormControl]="fullForm.caseTypeId" [parentGroup]="fullForm.group"
-                [inputName]="'caseTypeId'" [items]="dbData.caseTypes">
-              </cais-autocomplete>
-            </div>
-            <div class="form-group col-md-3">
-              <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="fullForm.caseNumber"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-            <div class="form-group col-md-2">
-              <cais-input [type]="'number'" [label]="'Година'" [inputFormControl]="fullForm.caseYear"
-                [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-6">
-              <cais-autocomplete [label]="'Съд на делото'" [inputFormControl]="fullForm.caseAuthId"
-                [parentGroup]="fullForm.group" [inputName]="'caseAuthId'" [items]="dbData.decidingAuthorities">
-              </cais-autocomplete>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-9">
-              <cais-input [type]="'text'" [label]="'Извлечение от акта на съда'"
-                [inputFormControl]="fullForm.convRemarks" [parentGroup]="fullForm.group"
-                [inputType]="InputTypeConstants.TextArea"></cais-input>
-            </div>
-          </div>
+          <nb-card status="primary">
+            <nb-card-header>Осъждане</nb-card-header>
+            <nb-card-body>
 
-          <div class="row mb-2">
-            <div class="col-md-5">
-              <div class="nb-form-control-container" style="
+
+              <cais-person-form [personForm]="fullForm.person" [isEditable]="isBulletinPersonAliasEditable"
+                [personAliasTypes]="dbData.personAliasTypes" [genderTypes]="dbData.genderTypes"
+                [countries]="dbData.countries" [idDocumentCategoryTypes]="dbData.idDocumentCategoryTypes"
+                [personAliasGridData]="dbData.personAlias" [contextType]="PersonContextEnum.Bulletin">
+              </cais-person-form>
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <cais-autocomplete [label]="'Вид'" [inputFormControl]="fullForm.decisionTypeId"
+                    [parentGroup]="fullForm.group" [inputName]="'decisionTypeId'" [items]="dbData.decisionTypes">
+                  </cais-autocomplete>
+                </div>
+                <div class="form-group col-md-3">
+                  <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="fullForm.decisionNumber"
+                    [parentGroup]="fullForm.group"></cais-input>
+                </div>
+                <div class="form-group col-md-3">
+                  <cais-input [type]="'date'" [label]="'Дата на издаване'" [inputFormControl]="fullForm.decisionDate"
+                    [parentGroup]="fullForm.group"></cais-input>
+                </div>
+                <div class="form-group col-md-3">
+                  <cais-input [type]="'date'" [label]="'Дата на влизане в сила'"
+                    [inputFormControl]="fullForm.decisionFinalDate" [parentGroup]="fullForm.group"></cais-input>
+                </div>
+                <div class="form-group col-md-6">
+                  <cais-autocomplete [label]="'Съдебен орган издал акта'" [inputFormControl]="fullForm.decidingAuthId"
+                    [parentGroup]="fullForm.group" [inputName]="'decidingAuthId'" [items]="dbData.decidingAuthorities">
+                  </cais-autocomplete>
+                </div>
+                <div class="form-group col-md-3">
+                  <cais-input [type]="'text'" [label]="'ECLI номер'" [inputFormControl]="fullForm.decisionEcli"
+                    [parentGroup]="fullForm.group"></cais-input>
+                </div>
+              </div>
+
+
+
+
+              <div class="card bg-transparent mt-2">
+                <div class="card-body">
+                  <h6 class="card-title">Данни за делото</h6>
+
+
+                  <div class="row">
+                    <div class="form-group col-md-3">
+                      <cais-autocomplete [label]="'Вид'" [inputFormControl]="fullForm.caseTypeId"
+                        [parentGroup]="fullForm.group" [inputName]="'caseTypeId'" [items]="dbData.caseTypes">
+                      </cais-autocomplete>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="fullForm.caseNumber"
+                        [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <cais-input [type]="'number'" [label]="'Година'" [inputFormControl]="fullForm.caseYear"
+                        [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <cais-autocomplete [label]="'Съд на делото'" [inputFormControl]="fullForm.caseAuthId"
+                        [parentGroup]="fullForm.group" [inputName]="'caseAuthId'" [items]="dbData.decidingAuthorities">
+                      </cais-autocomplete>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-9">
+                      <cais-input [type]="'text'" [label]="'Извлечение от акта на съда'"
+                        [inputFormControl]="fullForm.convRemarks" [parentGroup]="fullForm.group"
+                        [inputType]="InputTypeConstants.TextArea"></cais-input>
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-md-5">
+                      <div class="nb-form-control-container" style="
                   height: 40px;
                   max-width: 100%;
                   display: flex;
                   align-items: center;
                 ">
-                <nb-checkbox [formControl]="fullForm.prevSuspSent">Постановено изтърпяване на предходна условна
-                  присъда</nb-checkbox>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="nb-form-control-container" style="
+                        <nb-checkbox [formControl]="fullForm.prevSuspSent">Постановено изтърпяване на предходна условна
+                          присъда</nb-checkbox>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="nb-form-control-container" style="
                   height: 40px;
                   max-width: 100%;
                   display: flex;
                   align-items: center;
                 ">
-                <nb-checkbox (change)="onNoSanctionChange($event)" [formControl]="fullForm.noSanction">Деецът не е
-                  наказан съгласно НК
-                </nb-checkbox>
+                        <nb-checkbox (change)="onNoSanctionChange($event)" [formControl]="fullForm.noSanction">Деецът не
+                          е
+                          наказан съгласно НК
+                        </nb-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <cais-input [type]="'text'" [label]="'Номер на предходна присъда'"
+                        [inputFormControl]="fullForm.prevSuspSentDescr" [parentGroup]="fullForm.group"></cais-input>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-4">
-              <cais-input [type]="'text'" [label]="'Номер на предходна присъда'"
-                [inputFormControl]="fullForm.prevSuspSentDescr" [parentGroup]="fullForm.group"></cais-input>
-            </div>
-          </div>
+            </nb-card-body>
+          </nb-card>
 
         </nb-tab>
 

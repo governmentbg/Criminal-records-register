@@ -1,384 +1,249 @@
-<div class="fw-bold">Имена</div>
-<hr />
+<div class="card bg-transparent mt-2">
+  <div class="card-body">
+    <h6 class="card-title">Имена</h6>
 
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Име на кирилица'"
-      [inputFormControl]="personForm.firstname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-    <span
-      class="caption status-danger ng-star-inserted"
-      *ngIf="
+    <div class="row">
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Име на кирилица'" [inputFormControl]="personForm.firstname"
+          [parentGroup]="personForm.group">
+        </cais-input>
+        <span class="caption status-danger ng-star-inserted" *ngIf="
         personForm.firstname?.errors?.invalidPersonNames &&
         (personForm.firstname.touched || personForm.firstname.dirty)
-      "
-    >
-      Моля, въведете Име и Фамилия или Пълно име
-    </span>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Презиме на кирилица'"
-      [inputFormControl]="personForm.surname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Фамилия на кирилица'"
-      [inputFormControl]="personForm.familyname"
-      [parentGroup]="personForm.group"
-    >
-    </cais-input>
-    <span
-      class="caption status-danger ng-star-inserted"
-      *ngIf="
+      ">
+          Моля, въведете Име и Фамилия или Пълно име
+        </span>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Презиме на кирилица'" [inputFormControl]="personForm.surname"
+          [parentGroup]="personForm.group">
+        </cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Фамилия на кирилица'" [inputFormControl]="personForm.familyname"
+          [parentGroup]="personForm.group">
+        </cais-input>
+        <span class="caption status-danger ng-star-inserted" *ngIf="
         personForm.familyname?.errors?.invalidPersonNames &&
         (personForm.familyname.touched || personForm.familyname.dirty)
-      "
-    >
-      Моля, въведете Име и Фамилия или Пълно име
-    </span>
-  </div>
-  <ng-container *ngIf="!isFbbcContext">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Имена на кирилица'"
-        [inputFormControl]="personForm.fullname"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-      <span
-        class="caption status-danger ng-star-inserted"
-        *ngIf="
+      ">
+          Моля, въведете Име и Фамилия или Пълно име
+        </span>
+      </div>
+      <ng-container *ngIf="!isFbbcContext">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Имена на кирилица'" [inputFormControl]="personForm.fullname"
+            [parentGroup]="personForm.group">
+          </cais-input>
+          <span class="caption status-danger ng-star-inserted" *ngIf="
           personForm.fullname?.errors?.invalidPersonNames &&
           (personForm.fullname.touched || personForm.fullname.dirty)
-        "
-      >
-        Моля, въведете Име и Фамилия или Пълно име
-      </span>
-    </div>
-  </ng-container>
-</div>
-<ng-container *ngIf="!isFbbcContext">
-  <div class="row">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Име на латиница'"
-        [inputFormControl]="personForm.firstnameLat"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Презиме на латиница'"
-        [inputFormControl]="personForm.surnameLat"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Фамилия на латиница'"
-        [inputFormControl]="personForm.familynameLat"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div>
-
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Имена на латиница'"
-        [inputFormControl]="personForm.fullnameLat"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div>
-  </div>
-</ng-container>
-<ng-container *ngIf="isBulletinContext || isApplicationContext">
-  <cais-person-alias-form
-    [transactions]="personForm.personAliasTransactions"
-    [gridData]="personAliasGridData"
-    [isGridEditable]="isEditable"
-    [personAliasTypes]="personAliasTypes"
-  >
-  </cais-person-alias-form>
-</ng-container>
-
-<div class="row">
-  <ng-container *ngIf="!isFbbcContext">
-    <div class="form-group col-md-3">
-      <cais-autocomplete
-        [label]="'Пол'"
-        [inputFormControl]="personForm.sex"
-        [parentGroup]="personForm.group"
-        [inputName]="'sex'"
-        [items]="genderTypes"
-      ></cais-autocomplete>
-    </div>
-  </ng-container>
-
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'date'"
-      [label]="'Дата на раждане'"
-      [inputFormControl]="personForm.birthDate"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <ng-container *ngIf="isFbbcContext">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЕГН/ЛНЧ'"
-        [inputFormControl]="personForm.egn"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-      <ng-container *ngIf="showInvalidEgnOrLnchMessage">
-        <span class="text-warning">
-          Въведената стойност за ЕГН/ЛНЧ е невалидна</span
-        >
+        ">
+            Моля, въведете Име и Фамилия или Пълно име
+          </span>
+        </div>
       </ng-container>
     </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Вътрешен системен идентификатор'"
-        [inputFormControl]="personForm.suid"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div>
-  </ng-container>
-</div>
-<ng-container *ngIf="!isFbbcContext">
-  <div class="row">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЕГН'"
-        [inputFormControl]="personForm.egn"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-      <ng-container *ngIf="showInvalidEgnMessage">
-        <span class="text-warning">
-          Въведената стойност за ЕГН е невалидна</span
-        >
-      </ng-container>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЛНЧ'"
-        [inputFormControl]="personForm.lnch"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-      <ng-container *ngIf="showInvalidLnchMessage">
-        <span class="text-warning">
-          Въведената стойност за ЛНЧ е невалидна
-        </span>
-      </ng-container>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'ЛН'"
-        [inputFormControl]="personForm.ln"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Вътрешен системен идентификатор'"
-        [inputFormControl]="personForm.suid"
-        [parentGroup]="personForm.group"
-      >
-      </cais-input>
-    </div></div
-></ng-container>
-<div class="font-weight-bold">Място на раждане</div>
-<hr />
-<cais-address-form
-  [parentForm]="personForm.birthPlace"
-  [showDescWhenIsNativeAddress]="true"
-></cais-address-form>
+    <ng-container *ngIf="!isFbbcContext">
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Име на латиница'" [inputFormControl]="personForm.firstnameLat"
+            [parentGroup]="personForm.group">
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Презиме на латиница'" [inputFormControl]="personForm.surnameLat"
+            [parentGroup]="personForm.group">
+          </cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Фамилия на латиница'" [inputFormControl]="personForm.familynameLat"
+            [parentGroup]="personForm.group">
+          </cais-input>
+        </div>
 
-<div class="row">
-  <ng-container
-    *ngIf="
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Имена на латиница'" [inputFormControl]="personForm.fullnameLat"
+            [parentGroup]="personForm.group">
+          </cais-input>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isBulletinContext || isApplicationContext">
+      <cais-person-alias-form [transactions]="personForm.personAliasTransactions" [gridData]="personAliasGridData"
+        [isGridEditable]="isEditable" [personAliasTypes]="personAliasTypes">
+      </cais-person-alias-form>
+    </ng-container>
+
+    <div class="row">
+      <ng-container *ngIf="!isFbbcContext">
+        <div class="form-group col-md-3">
+          <cais-autocomplete [label]="'Пол'" [inputFormControl]="personForm.sex" [parentGroup]="personForm.group"
+            [inputName]="'sex'" [items]="genderTypes"></cais-autocomplete>
+        </div>
+      </ng-container>
+
+      <div class="form-group col-md-3">
+        <cais-input [type]="'date'" [label]="'Дата на раждане'" [inputFormControl]="personForm.birthDate"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <ng-container *ngIf="isFbbcContext">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'ЕГН/ЛНЧ'" [inputFormControl]="personForm.egn"
+            [parentGroup]="personForm.group"></cais-input>
+          <ng-container *ngIf="showInvalidEgnOrLnchMessage">
+            <span class="text-warning">
+              Въведената стойност за ЕГН/ЛНЧ е невалидна</span>
+          </ng-container>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Вътрешен системен идентификатор'" [inputFormControl]="personForm.suid"
+            [parentGroup]="personForm.group">
+          </cais-input>
+        </div>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="!isFbbcContext">
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'ЕГН'" [inputFormControl]="personForm.egn"
+            [parentGroup]="personForm.group"></cais-input>
+          <ng-container *ngIf="showInvalidEgnMessage">
+            <span class="text-warning">
+              Въведената стойност за ЕГН е невалидна</span>
+          </ng-container>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'ЛНЧ'" [inputFormControl]="personForm.lnch"
+            [parentGroup]="personForm.group"></cais-input>
+          <ng-container *ngIf="showInvalidLnchMessage">
+            <span class="text-warning">
+              Въведената стойност за ЛНЧ е невалидна
+            </span>
+          </ng-container>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'ЛН'" [inputFormControl]="personForm.ln"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Вътрешен системен идентификатор'" [inputFormControl]="personForm.suid"
+            [parentGroup]="personForm.group">
+          </cais-input>
+        </div>
+      </div>
+    </ng-container>
+    <div class="card bg-transparent mt-3">
+      <div class="card-body">
+        <h6 class="card-title">Място на раждане</h6>
+
+        <cais-address-form [parentForm]="personForm.birthPlace" [showDescWhenIsNativeAddress]="true">
+        </cais-address-form>
+
+        <div class="row">
+          <ng-container *ngIf="
       isBulletinContext || isApplicationContext || isReportApplicationContext
-    "
-  >
-    <div class="form-group col-md-6">
-      <cais-multiple-choose
-        [label]="'Гражданство'"
-        [inputFormControl]="personForm.nationalities"
-        [parentGroup]="personForm.group"
-        [items]="countries"
-      >
-      </cais-multiple-choose>
+    ">
+            <div class="form-group col-md-6">
+              <cais-multiple-choose [label]="'Гражданство'" [inputFormControl]="personForm.nationalities"
+                [parentGroup]="personForm.group" [items]="countries">
+              </cais-multiple-choose>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isBulletinContext || isPersonContext">
+            <div class="form-group col-md-3">
+              <cais-input [type]="'text'" [label]="'АФИС номер'" [inputFormControl]="personForm.afisNumber"
+                [parentGroup]="personForm.group"></cais-input>
+            </div>
+          </ng-container>
+        </div>
+      </div>
     </div>
-  </ng-container>
-  <ng-container *ngIf="isBulletinContext || isPersonContext">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'АФИС номер'"
-        [inputFormControl]="personForm.afisNumber"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-  </ng-container>
+  </div>
 </div>
 
 <ng-container *ngIf="isBulletinContext || isPersonContext || isApplicationContext">
-  <div class="font-weight-bold">Документ за самоличност</div>
-  <hr />
+  <div class="card bg-transparent mt-2">
+    <div class="card-body">
+      <h6 class="card-title">Документ за самоличност</h6>
 
-  <div class="row">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Номер на документ'"
-        [inputFormControl]="personForm.idDocNumber"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-autocomplete
-        [label]="'Категория'"
-        [inputFormControl]="personForm.idDocCategoryId"
-        [parentGroup]="personForm.group"
-        [inputName]="'idDocCategoryId'"
-        [items]="idDocumentCategoryTypes"
-      >
-      </cais-autocomplete>
-    </div>
-    <div class="form-group col-md-6">
-      <cais-input
-        [type]="'text'"
-        [label]="'Друга категория в случай че липсва в списъка'"
-        [inputFormControl]="personForm.idDocTypeDescr"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-  </div>
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Номер на документ'" [inputFormControl]="personForm.idDocNumber"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-autocomplete [label]="'Категория'" [inputFormControl]="personForm.idDocCategoryId"
+            [parentGroup]="personForm.group" [inputName]="'idDocCategoryId'" [items]="idDocumentCategoryTypes">
+          </cais-autocomplete>
+        </div>
+        <div class="form-group col-md-6">
+          <cais-input [type]="'text'" [label]="'Друга категория в случай че липсва в списъка'"
+            [inputFormControl]="personForm.idDocTypeDescr" [parentGroup]="personForm.group"></cais-input>
+        </div>
+      </div>
 
-  <div class="row">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Издаващ орган'"
-        [inputFormControl]="personForm.idDocIssuingAuthority"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'date'"
-        [label]="'Дата на издаване'"
-        [inputFormControl]="personForm.idDocIssuingDate"
-        [parentGroup]="personForm.group"
-      ></cais-input>
-    </div>
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'date'"
-        [label]="'Дата на валидност'"
-        [inputFormControl]="personForm.idDocValidDate"
-        [parentGroup]="personForm.group"
-      ></cais-input>
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Издаващ орган'" [inputFormControl]="personForm.idDocIssuingAuthority"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'date'" [label]="'Дата на издаване'" [inputFormControl]="personForm.idDocIssuingDate"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input [type]="'date'" [label]="'Дата на валидност'" [inputFormControl]="personForm.idDocValidDate"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>
-<div class="font-weight-bold">Родители</div>
-<hr />
 
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Майка - име'"
-      [inputFormControl]="personForm.motherFirstname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Майка - презиме'"
-      [inputFormControl]="personForm.motherSurname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Майка - фамилия'"
-      [inputFormControl]="personForm.motherFamilyname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <ng-container *ngIf="!isFbbcContext">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Майка - имена'"
-        [inputFormControl]="personForm.motherFullname"
-        [parentGroup]="personForm.group"
-      ></cais-input>
+<div class="card bg-transparent mt-2">
+  <div class="card-body">
+    <h6 class="card-title">Документ за самоличност</h6>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Майка - име'" [inputFormControl]="personForm.motherFirstname"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Майка - презиме'" [inputFormControl]="personForm.motherSurname"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Майка - фамилия'" [inputFormControl]="personForm.motherFamilyname"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <ng-container *ngIf="!isFbbcContext">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Майка - имена'" [inputFormControl]="personForm.motherFullname"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+      </ng-container>
     </div>
-  </ng-container>
-</div>
 
-<div class="row">
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Баща - име'"
-      [inputFormControl]="personForm.fatherFirstname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Баща - презиме'"
-      [inputFormControl]="personForm.fatherSurname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <div class="form-group col-md-3">
-    <cais-input
-      [type]="'text'"
-      [label]="'Баща - фамилия'"
-      [inputFormControl]="personForm.fatherFamilyname"
-      [parentGroup]="personForm.group"
-    ></cais-input>
-  </div>
-  <ng-container *ngIf="!isFbbcContext">
-    <div class="form-group col-md-3">
-      <cais-input
-        [type]="'text'"
-        [label]="'Баща - имена'"
-        [inputFormControl]="personForm.fatherFullname"
-        [parentGroup]="personForm.group"
-      ></cais-input>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Баща - име'" [inputFormControl]="personForm.fatherFirstname"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Баща - презиме'" [inputFormControl]="personForm.fatherSurname"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <div class="form-group col-md-3">
+        <cais-input [type]="'text'" [label]="'Баща - фамилия'" [inputFormControl]="personForm.fatherFamilyname"
+          [parentGroup]="personForm.group"></cais-input>
+      </div>
+      <ng-container *ngIf="!isFbbcContext">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'Баща - имена'" [inputFormControl]="personForm.fatherFullname"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+      </ng-container>
     </div>
-  </ng-container>
+  </div>
 </div>
