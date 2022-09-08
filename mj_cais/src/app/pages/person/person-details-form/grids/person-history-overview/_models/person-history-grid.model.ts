@@ -11,7 +11,10 @@ export class PersonHistoryGridModel extends BaseGridModel {
   public birthCity: string;
   public birthCountry: string;
   public pids: string[];
-  public citizenShips: string [];
+  public citizenShips: string[];
+  public tablename: string;
+  public tableId: string;
+  public descr: string;
 
   constructor(init?: Partial<PersonHistoryGridModel>) {
     super(init);
@@ -28,6 +31,9 @@ export class PersonHistoryGridModel extends BaseGridModel {
       this.birthCountry = init.birthCountry ?? null;
       this.pids = init.pids ?? null;
       this.citizenShips = init.citizenShips ?? null;
+      this.tablename = init.tablename ?? null;
+      this.tableId = init.tableId ?? null;
+      this.descr = init.descr ?? null;
     }
   }
 }

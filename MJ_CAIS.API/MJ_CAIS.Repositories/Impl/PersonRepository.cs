@@ -267,8 +267,8 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var personHIds = (from pids in _dbContext.PPersonIds.AsNoTracking()
                               join pidsH in _dbContext.PPersonIdsHes.AsNoTracking()
-                                on new { pid = pids.Pid, type = pids.PidTypeId, issuer = pids.Issuer }
-                                equals new { pid = pidsH.Pid, type = pidsH.PidTypeId, issuer = pidsH.Issuer }
+                          on new { pid = pids.Pid, type = pids.PidTypeId, issuer = pids.Issuer, country = pids.CountryId }
+                      equals new { pid = pidsH.Pid, type = pidsH.PidTypeId, issuer = pidsH.Issuer, country = pidsH.CountryId }
                               where pids.PersonId == personId
                               select pidsH.PersonHId).Distinct();
 
@@ -296,9 +296,17 @@ namespace MJ_CAIS.Repositories.Impl
                            x.FatherFirstname + " " + x.FatherSurname + " " + x.FatherFamilyname,
                     MotherName = !string.IsNullOrEmpty(x.MotherFullname) ? x.MotherFullname :
                            x.MotherFirstname + " " + x.MotherSurname + " " + x.MotherFamilyname,
-                    Sex = !x.Sex.HasValue ? BulletinResources.unknown : (x.Sex == SexType.Male ? BulletinResources.male : BulletinResources.female),
+                    Sex = !x.Sex.HasValue ? PersonResources.unknown : (x.Sex == SexType.Male ? PersonResources.male : PersonResources.female),
                     Pids = x.PPersonIdsHes.Select(x => x.Pid),
-                    CitizenShips = x.PPersonHCitizenships.Select(x => x.Country.Name)
+                    CitizenShips = x.PPersonHCitizenships.Select(x => x.Country.Name),
+                    TableId = x.TableId,
+                    Tablename = x.Tablename == ContextTable.Bulletins ? PersonResources.tableBulletins :
+                      x.Tablename == ContextTable.Application ? PersonResources.tableApplication :
+                      x.Tablename == ContextTable.WApplication ? PersonResources.tableWApplication :
+                      x.Tablename == ContextTable.Report ? PersonResources.tableReport :
+                      x.Tablename == ContextTable.Fbbc ? PersonResources.tableFbbc :
+                      x.Tablename == ContextTable.Manual ? PersonResources.tableManual : string.Empty,
+                    Descr = x.Descr
                 });
 
             return result;

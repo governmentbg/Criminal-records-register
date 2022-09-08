@@ -28,7 +28,27 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-
+  <igx-column
+    field="tablename"
+    header="Източник"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="tableId"
+    header="Идентификатор на източник"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="descr"
+    header="Описание"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
   <igx-column
     field="name"
     header="Имена на кирилица"
