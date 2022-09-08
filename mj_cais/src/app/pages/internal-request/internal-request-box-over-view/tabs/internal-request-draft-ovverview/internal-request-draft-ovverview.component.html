@@ -1,67 +1,135 @@
-<igx-grid #grid igxGridState [data]="items$ | async" [height]="null" [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy" [paging]="true" [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'" (onSortingDone)="sortingDone($event)" (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)" [paginationTemplate]="pager" [allowFiltering]="true" [primaryKey]="'id'"
-  [pinning]="pinningConfig" [cellSelection]="'none'">
+<nb-card>
+  <tl-linear-progress
+    [visible]="this.remoteService.isLoading"
+  ></tl-linear-progress>
+  <igx-grid
+    #grid
+    igxGridState
+    [data]="items$ | async"
+    [height]="null"
+    [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy"
+    [paging]="true"
+    [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'"
+    (onSortingDone)="sortingDone($event)"
+    (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)"
+    [paginationTemplate]="pager"
+    [allowFiltering]="true"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
+    [cellSelection]="'none'"
+  >
+    <igx-grid-toolbar *ngIf="caisTitle">
+      <igx-grid-toolbar-title
+        ><span class="fw-bold">{{ caisTitle }}</span></igx-grid-toolbar-title
+      >
+      <igx-grid-toolbar-actions>
+        <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+      </igx-grid-toolbar-actions>
+    </igx-grid-toolbar>
 
-  <igx-grid-toolbar *ngIf="caisTitle">
-    <igx-grid-toolbar-title><span class="fw-bold">{{caisTitle}}</span></igx-grid-toolbar-title>
-    <igx-grid-toolbar-actions>
-      <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
-    </igx-grid-toolbar-actions>
-  </igx-grid-toolbar>
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="true"
+      [dataType]="'number'"
+      [hidden]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column field="id" header="Идентификатор" [sortable]="true" [dataType]="'number'" [hidden]="true">
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="requestDate"
+      header="Дата на създаване"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value | date }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column field="requestDate" header="Дата на създаване" [sortable]="true" [dataType]="'string'">
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value | date }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="reqestType"
+      header="Тип на заявката"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="toAuthorityName"
+      header="До бюро съдимост"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column field="reqestType" header="Тип на заявката" [sortable]="true" [dataType]="'string'">
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column field="toAuthorityName" header="До бюро съдимост" [sortable]="true" [dataType]="'string'">
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-
-  <igx-column width="160px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="true"
-    [disableHiding]="true">
-    <ng-template igxCell let-cell="cell">
-      <div class="cell-center">
-        <div class="d-flex gap-3">
-          <a [title]="'Преглед'" [queryParams]="{ activeTab: 'draft' }"
-            [routerLink]="['/pages/internal-requests/preview', cell.rowData.id]">
-            <nb-icon pack="fa" icon="eye"></nb-icon>
-          </a>
-          <button class="btn btn-link" [title]="'Изпращане'" (click)="onSend(cell.rowData.id)">
-            <nb-icon pack="fa" icon="paper-plane"></nb-icon>
-          </button>
-          <a [title]="'Редактиране'" [queryParams]="{ activeTab: 'draft' }"
-            [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]">
-            <nb-icon pack="fa" icon="pen"></nb-icon>
-          </a>
-          <button class="btn btn-link" [title]="'Изтриване'" (click)="onDelete(cell.rowData.id)">
-            <nb-icon pack="fa" icon="trash"></nb-icon>
-          </button>
+    <igx-column
+      width="160px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+      [disableHiding]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <a
+              [title]="'Преглед'"
+              [queryParams]="{ activeTab: 'draft' }"
+              [routerLink]="[
+                '/pages/internal-requests/preview',
+                cell.rowData.id
+              ]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+            <button
+              class="btn btn-link"
+              [title]="'Изпращане'"
+              (click)="onSend(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="paper-plane"></nb-icon>
+            </button>
+            <a
+              [title]="'Редактиране'"
+              [queryParams]="{ activeTab: 'draft' }"
+              [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="pen"></nb-icon>
+            </a>
+            <button
+              class="btn btn-link"
+              [title]="'Изтриване'"
+              (click)="onDelete(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="trash"></nb-icon>
+            </button>
+          </div>
         </div>
+      </ng-template>
+    </igx-column>
+
+    <ng-template #pager let-grid>
+      <div class="tl-paginator">
+        <cais-grid-pager
+          [page]="remoteService.pagerParams.page"
+          [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount"
+          (pagerChange)="pagerChange($event)"
+        ></cais-grid-pager>
       </div>
     </ng-template>
-  </igx-column>
-
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager [page]="remoteService.pagerParams.page" [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount" (pagerChange)="pagerChange($event)"></cais-grid-pager>
-    </div>
-  </ng-template>
-</igx-grid>
+  </igx-grid>
+</nb-card>
