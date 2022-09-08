@@ -36,6 +36,7 @@ export class ApplicationWaitingPaymentComponent extends RemoteGridWithStatePersi
       this.dialogService
       .open(ConfirmTemplateDialogComponent, { context: {
         title: 'Потвърждаване на плащенето',
+        color: "success",
        
       },closeOnBackdropClick: false })
       .onClose.subscribe((result) => {

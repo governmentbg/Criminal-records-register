@@ -96,19 +96,18 @@ export class BulletinDocumentFormComponent {
 
     this.bulletinService
       .saveDocument(this.bulletinForm.id.value, model)
-      .subscribe(
-        (res) => {
+      .subscribe({
+        next: (response) => {
           this.toastr.showToast("success", "Успешно добавен документ");
           this.onAddDocumentRow();
         },
-
-        (error) => {
+        error: (errorResponse) => {
           this.showErrorMessage(
-            error,
+            errorResponse,
             "Възникна грешка при запис на данните: "
           );
-        }
-      );
+        },
+      });
   }
 
   onAddDocumentRow() {

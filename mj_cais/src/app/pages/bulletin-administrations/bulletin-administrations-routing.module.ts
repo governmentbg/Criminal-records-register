@@ -15,7 +15,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Admin, RoleNameEnum.GlobalAdmin],
+        only: [RoleNameEnum.Supervisor],
       },
     },
   },
@@ -25,7 +25,7 @@ const routes: Routes = [
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {
-        only: [RoleNameEnum.Admin, RoleNameEnum.GlobalAdmin],
+        only: [RoleNameEnum.Supervisor],
       },
     },
   },

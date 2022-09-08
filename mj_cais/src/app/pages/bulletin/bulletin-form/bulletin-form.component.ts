@@ -257,16 +257,16 @@ export class BulletinFormComponent
 
   public print() {
     this.loaderService.show();
-    this.service.print(this.objectId).subscribe(
-      (response) => {
+    this.service.print(this.objectId).subscribe({
+      next: (response) => {
         this.loaderService.hide();
         this.downloadFile(response);
       },
-      (error) => {
+      error: (errorResponse) => {
         this.loaderService.hide();
-        this.errorHandler(error);
-      }
-    );
+        this.errorHandler(errorResponse);
+      },
+    });
   }
 
   public onChangeTab(event) {
@@ -408,7 +408,7 @@ export class BulletinFormComponent
     this.isDecisionEditable =
       !userHasDiffAuth &&
       !this.isForPreview &&
-      bulletinStatusId !=  undefined &&
+      bulletinStatusId != undefined &&
       bulletinStatusId !== BulletinStatusTypeEnum.NewEISS &&
       bulletinStatusId !== BulletinStatusTypeEnum.NewOffice;
 

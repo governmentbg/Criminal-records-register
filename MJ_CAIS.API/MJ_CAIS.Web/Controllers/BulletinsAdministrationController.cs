@@ -10,7 +10,7 @@ using MJ_CAIS.Web.Controllers.Common;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("bulletins-administration")]
-    [Authorize(Roles = $"{RoleConstants.Admin},{RoleConstants.GlobalAdmin}")]
+    [Authorize(Roles = $"{RoleConstants.Supervisor}")]
     public class BulletinsAdministrationController : BaseApiCrudController<BulletinAdministrationDTO, BulletinAdministrationDTO, BulletinAdministrationGridDTO, BBulletin, string>
     {
         private readonly IBulletinAdministrationService _bulletinAdministrationService;

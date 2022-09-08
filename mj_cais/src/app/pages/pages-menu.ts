@@ -144,7 +144,7 @@ export class PagesMenu {
           this.hasNoRole(roles, RoleNameEnum.Judge),
         children: [
           {
-            title: "Актуални бюлетини",
+            title: "Търсене на бюлетин",
             link: "/pages/bulletins/active",
           },
           {
@@ -326,6 +326,7 @@ export class PagesMenu {
           {
             title: "Управление на бюлетини",
             link: "/pages/bulletin-administrations",
+            hidden: this.hasNoRole(roles, RoleNameEnum.Supervisor),
           },
         ],
       },

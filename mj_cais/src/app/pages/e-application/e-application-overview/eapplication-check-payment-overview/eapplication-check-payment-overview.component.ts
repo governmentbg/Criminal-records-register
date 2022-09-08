@@ -52,6 +52,7 @@ export class EApplicationCheckPaymentOverviewComponent extends RemoteGridWithSta
       .open(ConfirmTemplateDialogComponent, {
         context: {
           title: "Потвърждаване на плащенето",
+          color: "success",
         },
         closeOnBackdropClick: false,
       })
