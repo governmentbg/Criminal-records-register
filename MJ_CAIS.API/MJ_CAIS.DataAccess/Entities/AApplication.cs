@@ -12,6 +12,7 @@ namespace MJ_CAIS.DataAccess.Entities
             ACertificates = new HashSet<ACertificate>();
             APayments = new HashSet<APayment>();
             AStatusHes = new HashSet<AStatusH>();
+            EFieldsRequests = new HashSet<EFieldsRequest>();
             EWebRequests = new HashSet<EWebRequest>();
         }
 
@@ -109,6 +110,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<ACertificate> ACertificates { get; set; }
         public virtual ICollection<APayment> APayments { get; set; }
         public virtual ICollection<AStatusH> AStatusHes { get; set; }
+        public virtual ICollection<EFieldsRequest> EFieldsRequests { get; set; }
         public virtual ICollection<EWebRequest> EWebRequests { get; set; }
     }
 }

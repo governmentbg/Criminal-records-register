@@ -84,6 +84,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<EEcrisTcn> EEcrisTcns { get; set; } = null!;
         public virtual DbSet<EEdeliveryMsg> EEdeliveryMsgs { get; set; } = null!;
         public virtual DbSet<EEmailEvent> EEmailEvents { get; set; } = null!;
+        public virtual DbSet<EFieldsRequest> EFieldsRequests { get; set; } = null!;
         public virtual DbSet<EIsinDatum> EIsinData { get; set; } = null!;
         public virtual DbSet<EPayment> EPayments { get; set; } = null!;
         public virtual DbSet<EPaymentNotification> EPaymentNotifications { get; set; } = null!;
@@ -5782,6 +5783,76 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
+            });
+
+            modelBuilder.Entity<EFieldsRequest>(entity =>
+            {
+                entity.ToTable("E_FIELDS_REQUESTS");
+
+                entity.HasIndex(e => e.ARepApplId, "XIF10E_FIELDS_REQUESTS");
+
+                entity.HasIndex(e => e.AApplId, "XIF1E_FIELDS_REQUESTS");
+
+                entity.HasIndex(e => e.EWebReqId, "XIF2E_FIELDS_REQUESTS");
+
+                entity.HasIndex(e => e.WApplId, "XIF3E_FIELDS_REQUESTS");
+
+                entity.HasIndex(e => new { e.AApplId, e.EWebReqId, e.WApplId, e.ARepApplId }, "XUKE_FIELDS_REQ")
+                    .IsUnique();
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.AApplId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("A_APPL_ID");
+
+                entity.Property(e => e.ARepApplId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("A_REP_APPL_ID");
+
+                entity.Property(e => e.EWebReqId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("E_WEB_REQ_ID");
+
+                entity.Property(e => e.FieldsDescription)
+                    .HasColumnType("CLOB")
+                    .HasColumnName("FIELDS_DESCRIPTION");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
+
+                entity.Property(e => e.WApplId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("W_APPL_ID");
+
+                entity.HasOne(d => d.AAppl)
+                    .WithMany(p => p.EFieldsRequests)
+                    .HasForeignKey(d => d.AApplId)
+                    .HasConstraintName("FK_E_FIELDS_REQUESTS_A_APPLICA");
+
+                entity.HasOne(d => d.ARepAppl)
+                    .WithMany(p => p.EFieldsRequests)
+                    .HasForeignKey(d => d.ARepApplId)
+                    .HasConstraintName("FK_E_FIELDS_REQUESTS_A_REP_APP");
+
+                entity.HasOne(d => d.EWebReq)
+                    .WithMany(p => p.EFieldsRequests)
+                    .HasForeignKey(d => d.EWebReqId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_E_FIELDS_REQUESTS_E_WEB_REQ");
+
+                entity.HasOne(d => d.WAppl)
+                    .WithMany(p => p.EFieldsRequests)
+                    .HasForeignKey(d => d.WApplId)
+                    .HasConstraintName("FK_E_FIELDS_REQUESTS_W_APPLICA");
             });
 
             modelBuilder.Entity<EIsinDatum>(entity =>

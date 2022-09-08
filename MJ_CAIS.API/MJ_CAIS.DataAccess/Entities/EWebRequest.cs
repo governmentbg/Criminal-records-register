@@ -7,6 +7,7 @@ namespace MJ_CAIS.DataAccess.Entities
     {
         public EWebRequest()
         {
+            EFieldsRequests = new HashSet<EFieldsRequest>();
             EIsinData = new HashSet<EIsinDatum>();
         }
 
@@ -41,6 +42,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual EEcrisMessage? EcrisMsg { get; set; }
         public virtual WApplication? WApplication { get; set; }
         public virtual EWebService? WebService { get; set; }
+        public virtual ICollection<EFieldsRequest> EFieldsRequests { get; set; }
         public virtual ICollection<EIsinDatum> EIsinData { get; set; }
     }
 }
