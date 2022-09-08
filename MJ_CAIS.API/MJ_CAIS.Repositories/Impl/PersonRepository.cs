@@ -271,12 +271,14 @@ namespace MJ_CAIS.Repositories.Impl
                                 equals new { pid = pidsH.Pid, type = pidsH.PidTypeId, issuer = pidsH.Issuer }
                               where pids.PersonId == personId
                               select pidsH.PersonHId).Distinct();
-                          
-            
+
+
             var result = _dbContext.PPersonHs.AsNoTracking()
                 .Include(x => x.BirthCity)
                 .Include(x => x.BirthCountry)
                 .Include(x => x.PPersonIdsHes)
+                .Include(x => x.PPersonHCitizenships)
+                    .ThenInclude(x => x.Country)
                 .Where(x => personHIds.Contains(x.Id))
                 .Select(x => new PersonHistoryDataGridDTO
                 {
@@ -294,7 +296,9 @@ namespace MJ_CAIS.Repositories.Impl
                            x.FatherFirstname + " " + x.FatherSurname + " " + x.FatherFamilyname,
                     MotherName = !string.IsNullOrEmpty(x.MotherFullname) ? x.MotherFullname :
                            x.MotherFirstname + " " + x.MotherSurname + " " + x.MotherFamilyname,
-                    Sex = !x.Sex.HasValue ? BulletinResources.unknown: (x.Sex == SexType.Male ? BulletinResources.male : BulletinResources.female),
+                    Sex = !x.Sex.HasValue ? BulletinResources.unknown : (x.Sex == SexType.Male ? BulletinResources.male : BulletinResources.female),
+                    Pids = x.PPersonIdsHes.Select(x => x.Pid),
+                    CitizenShips = x.PPersonHCitizenships.Select(x => x.Country.Name)
                 });
 
             return result;

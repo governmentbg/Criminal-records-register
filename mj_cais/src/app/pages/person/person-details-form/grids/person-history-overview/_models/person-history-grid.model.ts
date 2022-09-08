@@ -10,6 +10,8 @@ export class PersonHistoryGridModel extends BaseGridModel {
   public fatherName: Date;
   public birthCity: string;
   public birthCountry: string;
+  public pids: string[];
+  public citizenShips: string [];
 
   constructor(init?: Partial<PersonHistoryGridModel>) {
     super(init);
@@ -24,6 +26,8 @@ export class PersonHistoryGridModel extends BaseGridModel {
       this.fatherName = init.fatherName ?? null;
       this.birthCity = init.birthCity ?? null;
       this.birthCountry = init.birthCountry ?? null;
+      this.pids = init.pids ?? null;
+      this.citizenShips = init.citizenShips ?? null;
     }
   }
 }

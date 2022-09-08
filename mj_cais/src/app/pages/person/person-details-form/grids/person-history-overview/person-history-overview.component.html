@@ -43,7 +43,29 @@
     [dataType]="'string'"
   >
   </igx-column>
-  <igx-column field="sex" header="Пол" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="sex"
+    [width]="'8%'"
+    header="Пол"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="pids"
+    header="Идентификтори"
+    [sortable]="true"
+    [dataType]="'string'"
+    [filterable]="false"
+  >
+  </igx-column>
+  <igx-column
+    field="citizenShips"
+    header="Гражданство"
+    [sortable]="true"
+    [dataType]="'string'"
+    [filterable]="false"
+  >
   </igx-column>
   <igx-column
     field="birthDate"
@@ -94,24 +116,6 @@
     [dataType]="'string'"
   >
   </igx-column>
-
-  <!-- <igx-column
-    width="150px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <a
-        [title]="'Преглед'"
-        [routerLink]="['/pages/report-applications/preview', cell.rowData.id]"
-      >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-    </ng-template>
-  </igx-column> -->
-
   <ng-template #pager let-grid>
     <div class="tl-paginator">
       <cais-grid-pager

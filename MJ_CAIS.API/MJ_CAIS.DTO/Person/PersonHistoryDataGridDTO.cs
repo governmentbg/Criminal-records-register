@@ -11,5 +11,7 @@
         public string? FatherName { get; set; }  
         public string? BirthCity { get; set; }
         public string? BirthCountry { get; set; }
+        public IEnumerable<string> Pids { get; set; }
+        public IEnumerable<string> CitizenShips { get; set; }
     }
 }
