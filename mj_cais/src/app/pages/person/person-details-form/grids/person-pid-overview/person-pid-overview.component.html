@@ -1,329 +1,339 @@
-<igx-grid
-  #grid
-  igxGridState
-  [data]="items$ | async"
-  [height]="null"
-  [filterStrategy]="noopFilterStrategy"
-  [sortStrategy]="noopSortStrategy"
-  [paging]="true"
-  [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'"
-  (onSortingDone)="sortingDone($event)"
-  (onFilteringDone)="filteringDone($event)"
-  (onSelection)="cellSelection($event)"
-  [paginationTemplate]="pager"
-  [allowFiltering]="true"
-  [primaryKey]="'id'"
-  [pinning]="pinningConfig"
-  [cellSelection]="'none'"
->
-  <igx-column
-    field="id"
-    header="Идентификатор"
-    [sortable]="true"
-    [dataType]="'string'"
-    [hidden]="true"
+<nb-card>
+  <tl-linear-progress
+    [visible]="this.remoteService.isLoading"
+  ></tl-linear-progress>
+  <igx-grid
+    #grid
+    igxGridState
+    [data]="items$ | async"
+    [height]="null"
+    [filterStrategy]="noopFilterStrategy"
+    [sortStrategy]="noopSortStrategy"
+    [paging]="true"
+    [clipboardOptions]="{ copyHeaders: false }"
+    [displayDensity]="'cosy'"
+    (onSortingDone)="sortingDone($event)"
+    (onFilteringDone)="filteringDone($event)"
+    (onSelection)="cellSelection($event)"
+    [paginationTemplate]="pager"
+    [allowFiltering]="true"
+    [primaryKey]="'id'"
+    [pinning]="pinningConfig"
+    [cellSelection]="'none'"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column field="type" header="Тип" [sortable]="true" [dataType]="'string'">
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
-  <igx-column
-    field="pid"
-    header="Идентификатор"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="type"
+      header="Тип"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+    <igx-column
+      field="pid"
+      header="Идентификатор"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    field="issuer"
-    header="Регистър"
-    [sortable]="true"
-    [dataType]="'string'"
-  >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      field="issuer"
+      header="Регистър"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
 
-  <igx-column
-    width="60px"
-    header=""
-    [sortable]="false"
-    [filterable]="false"
-    [pinned]="true"
-  >
-    <ng-template igxCell let-cell="cell">
-      <button
-        igxButton="icon"
-        [title]="'Премахване на идентификатор'"
-        (click)="onOpenDialogForRemovePid(existingPersonId, cell.rowData.id)"
-      >
-        <i class="fas fa-unlink"></i>
-      </button>
-    </ng-template>
-  </igx-column>
+    <igx-column
+      width="60px"
+      header=""
+      [sortable]="false"
+      [filterable]="false"
+      [pinned]="true"
+    >
+      <ng-template igxCell let-cell="cell">
+        <button
+          igxButton="icon"
+          [title]="'Премахване на идентификатор'"
+          (click)="onOpenDialogForRemovePid(existingPersonId, cell.rowData.id)"
+        >
+          <i class="fas fa-unlink"></i>
+        </button>
+      </ng-template>
+    </igx-column>
 
-  <ng-template #pager let-grid>
-    <div class="tl-paginator">
-      <cais-grid-pager
-        [page]="remoteService.pagerParams.page"
-        [perPage]="remoteService.pagerParams.perPage"
-        [totalCount]="remoteService.pagerParams.totalCount"
-        (pagerChange)="pagerChange($event)"
-      ></cais-grid-pager>
+    <ng-template #pager let-grid>
+      <div class="tl-paginator">
+        <cais-grid-pager
+          [page]="remoteService.pagerParams.page"
+          [perPage]="remoteService.pagerParams.perPage"
+          [totalCount]="remoteService.pagerParams.totalCount"
+          (pagerChange)="pagerChange($event)"
+        ></cais-grid-pager>
+      </div>
+    </ng-template>
+  </igx-grid>
+
+  <igx-dialog #removePidDialog>
+    <div class="dialogNewRecord" style="max-width: 1000px">
+      <nb-card>
+        <nb-card-header>
+          <div class="d-flex" style="justify-content: space-between">
+            <div class="d-flex align-items-center">
+              <h5 style="font-weight: bold">Данни за лице</h5>
+            </div>
+            <div class="d-flex">
+              <div>
+                <button
+                  nbButton
+                  matRipple
+                  [status]="'success'"
+                  (click)="onRemovePid()"
+                  type="button"
+                  class="ml-2"
+                >
+                  Потвърди
+                </button>
+              </div>
+              <div>
+                <button
+                  nbButton
+                  matRipple
+                  (click)="onCloseDilog()"
+                  type="button"
+                  class="ml-2"
+                >
+                  Откажи
+                </button>
+              </div>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          <div class="font-weight-bold">Имена</div>
+          <hr />
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име на кирилица'"
+                [inputFormControl]="personForm.firstname"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Презиме на кирилица'"
+                [inputFormControl]="personForm.surname"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Фамилия на кирилица'"
+                [inputFormControl]="personForm.familyname"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Имена на кирилица'"
+                [inputFormControl]="personForm.fullname"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име на латиница'"
+                [inputFormControl]="personForm.firstnameLat"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Презиме на латиница'"
+                [inputFormControl]="personForm.surnameLat"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Фамилия на латиница'"
+                [inputFormControl]="personForm.familynameLat"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Имена на латиница'"
+                [inputFormControl]="personForm.fullnameLat"
+                [parentGroup]="personForm.group"
+              >
+              </cais-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [label]="'Пол'"
+                [inputFormControl]="personForm.sex"
+                [parentGroup]="personForm.group"
+                [inputName]="'sex'"
+                [items]="genderTypes"
+              ></cais-autocomplete>
+            </div>
+
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Дата на раждане'"
+                [inputFormControl]="personForm.birthDate"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="font-weight-bold">Място на раждане</div>
+          <hr />
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-multiple-choose
+                [label]="'Гражданство'"
+                [inputFormControl]="personForm.nationalities"
+                [parentGroup]="personForm.group"
+                [items]="countries"
+              >
+              </cais-multiple-choose>
+            </div>
+          </div>
+
+          <div class="font-weight-bold">Родители</div>
+          <hr />
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Майка - име'"
+                [inputFormControl]="personForm.motherFirstname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Майка - презиме'"
+                [inputFormControl]="personForm.motherSurname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Майка - фамилия'"
+                [inputFormControl]="personForm.motherFamilyname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Майка - имена'"
+                [inputFormControl]="personForm.motherFullname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Баща - име'"
+                [inputFormControl]="personForm.fatherFirstname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Баща - презиме'"
+                [inputFormControl]="personForm.fatherSurname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Баща - фамилия'"
+                [inputFormControl]="personForm.fatherFamilyname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Баща - имена'"
+                [inputFormControl]="personForm.fatherFullname"
+                [parentGroup]="personForm.group"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-input
+                [type]="'text'"
+                [label]="'Основание'"
+                [inputFormControl]="personForm.desc"
+                [parentGroup]="personForm"
+                [inputName]="'desc'"
+                [rows]="'3'"
+                [inputType]="'TextArea'"
+              >
+              </cais-input>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
     </div>
-  </ng-template>
-</igx-grid>
-
-<igx-dialog #removePidDialog>
-  <div class="dialogNewRecord" style="max-width: 1000px">
-    <nb-card>
-      <nb-card-header>
-        <div class="d-flex" style="justify-content: space-between">
-          <div class="d-flex align-items-center">
-            <h5 style="font-weight: bold">Данни за лице</h5>
-          </div>
-          <div class="d-flex">
-            <div>
-              <button
-                nbButton
-                matRipple
-                [status]="'success'"
-                (click)="onRemovePid()"
-                type="button"
-                class="ml-2"
-              >
-                Потвърди
-              </button>
-            </div>
-            <div>
-              <button
-                nbButton
-                matRipple
-                (click)="onCloseDilog()"
-                type="button"
-                class="ml-2"
-              >
-                Откажи
-              </button>
-            </div>
-          </div>
-        </div>
-      </nb-card-header>
-      <nb-card-body>
-        <div class="font-weight-bold">Имена</div>
-        <hr />
-
-        <div class="row">
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Име на кирилица'"
-              [inputFormControl]="personForm.firstname"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Презиме на кирилица'"
-              [inputFormControl]="personForm.surname"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Фамилия на кирилица'"
-              [inputFormControl]="personForm.familyname"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Имена на кирилица'"
-              [inputFormControl]="personForm.fullname"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Име на латиница'"
-              [inputFormControl]="personForm.firstnameLat"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Презиме на латиница'"
-              [inputFormControl]="personForm.surnameLat"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Фамилия на латиница'"
-              [inputFormControl]="personForm.familynameLat"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Имена на латиница'"
-              [inputFormControl]="personForm.fullnameLat"
-              [parentGroup]="personForm.group"
-            >
-            </cais-input>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group col-md-3">
-            <cais-autocomplete
-              [label]="'Пол'"
-              [inputFormControl]="personForm.sex"
-              [parentGroup]="personForm.group"
-              [inputName]="'sex'"
-              [items]="genderTypes"
-            ></cais-autocomplete>
-          </div>
-
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'date'"
-              [label]="'Дата на раждане'"
-              [inputFormControl]="personForm.birthDate"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-        </div>
-        <div class="font-weight-bold">Място на раждане</div>
-        <hr />
-
-        <div class="row">
-          <div class="form-group col-md-6">
-            <cais-multiple-choose
-              [label]="'Гражданство'"
-              [inputFormControl]="personForm.nationalities"
-              [parentGroup]="personForm.group"
-              [items]="countries"
-            >
-            </cais-multiple-choose>
-          </div>
-        </div>
-
-        <div class="font-weight-bold">Родители</div>
-        <hr />
-
-        <div class="row">
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Майка - име'"
-              [inputFormControl]="personForm.motherFirstname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Майка - презиме'"
-              [inputFormControl]="personForm.motherSurname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Майка - фамилия'"
-              [inputFormControl]="personForm.motherFamilyname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Майка - имена'"
-              [inputFormControl]="personForm.motherFullname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Баща - име'"
-              [inputFormControl]="personForm.fatherFirstname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Баща - презиме'"
-              [inputFormControl]="personForm.fatherSurname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Баща - фамилия'"
-              [inputFormControl]="personForm.fatherFamilyname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-          <div class="form-group col-md-3">
-            <cais-input
-              [type]="'text'"
-              [label]="'Баща - имена'"
-              [inputFormControl]="personForm.fatherFullname"
-              [parentGroup]="personForm.group"
-            ></cais-input>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-12">
-            <cais-input
-              [type]="'text'"
-              [label]="'Основание'"
-              [inputFormControl]="personForm.desc"
-              [parentGroup]="personForm"
-              [inputName]="'desc'"
-              [rows]="'3'"
-              [inputType]="'TextArea'"
-            >
-            </cais-input>
-          </div>
-        </div>
-      </nb-card-body>
-    </nb-card>
-  </div>
-</igx-dialog>
+  </igx-dialog>
+</nb-card>

@@ -1,7 +1,7 @@
-<!-- <tl-linear-progress
-  [visible]="this.remoteService.isLoading"
-></tl-linear-progress> -->
 <nb-card>
+  <tl-linear-progress
+    [visible]="this.remoteService.isLoading"
+  ></tl-linear-progress>
   <igx-grid
     #grid
     igxGridState
@@ -52,7 +52,7 @@
       </ng-template>
     </igx-column>
 
-  <!-- <igx-column
+    <!-- <igx-column
     field="purpose"
     header="Цел"
     [sortable]="true"
@@ -62,7 +62,7 @@
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column> -->
-  <!-- <igx-column
+    <!-- <igx-column
     field="statusName"
     header="Статус"
     [sortable]="true"

@@ -9,6 +9,9 @@
     <app-grid-with-transactions
       [gridTransactions]="bulletinSanctionsTransactions"
     >
+      <tl-linear-progress
+        [visible]="this.remoteService.isLoading"
+      ></tl-linear-progress>
       <igx-grid
         #sanctionsGrid
         [height]="null"
@@ -201,6 +204,9 @@
                       bulletinSanctionForm.probationsTransactions
                     "
                   >
+                    <tl-linear-progress
+                      [visible]="this.remoteService.isLoading"
+                    ></tl-linear-progress>
                     <igx-grid
                       class="custom-grid"
                       #gridBulletinProbation
