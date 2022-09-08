@@ -230,15 +230,22 @@
                     >
                       <nb-icon pack="fa" icon="eye"></nb-icon>
                     </a>
+
                     <a
-                      *ngIf="cell.rowData.canEditBulletin == true"
                       [title]="'Редактиране'"
-                      [routerLink]="[
-                        '/pages/bulletins/edit',
-                        cell.rowData.bulletinId
-                      ]"
+                      [routerLink]="
+                        cell.rowData.canEditBulletin == true
+                          ? ['/pages/bulletins/edit', cell.rowData.bulletinId]
+                          : null
+                      "
                     >
-                      <nb-icon pack="fa" icon="pen"></nb-icon>
+                      <nb-icon
+                        pack="fa"
+                        icon="pen"
+                        [status]="
+                          cell.rowData.canEditBulletin == true ? '' : 'basic'
+                        "
+                      ></nb-icon>
                     </a>
                   </div>
                 </div>
