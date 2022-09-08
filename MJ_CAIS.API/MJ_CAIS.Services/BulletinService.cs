@@ -143,7 +143,9 @@ namespace MJ_CAIS.Services
                 }
             }
 
-            await _bulletinRepository.SaveChangesAsync();
+            await _bulletinRepository.SaveChangesAsync(clearTracker: true);
+            await SaveXmlInBulletinStatusHAsync(bulletin, null);
+
             if (bulletin.EuCitizen == true && bulletin.StatusId != Status.NoSanction && bulletin.StatusId != Status.NewOffice)
             {
                 await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
@@ -220,7 +222,10 @@ namespace MJ_CAIS.Services
             }
 
             // todo: use transaction 
-            await _bulletinRepository.SaveChangesAsync();
+            await _bulletinRepository.SaveChangesAsync(clearTracker: true);
+
+            await SaveXmlInBulletinStatusHAsync(bulletinToUpdate, oldBulletinStatus);
+
             if (bulletinToUpdate.EuCitizen == true && bulletinToUpdate.StatusId != Status.NoSanction)
             {
                 await this._notificationService.CreateNotificationFromBulletin(bulletinToUpdate.Id);
@@ -282,7 +287,9 @@ namespace MJ_CAIS.Services
             }
 
             // todo: use transaction
-            await _bulletinRepository.SaveChangesAsync();
+            await _bulletinRepository.SaveChangesAsync(clearTracker: true);
+            await SaveXmlInBulletinStatusHAsync(bulletin, oldBulletinStatus);
+
             if (bulletin.EuCitizen == true)
             {
                 await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
@@ -419,6 +426,30 @@ namespace MJ_CAIS.Services
         }
 
         #region Helpers
+
+        private async Task SaveXmlInBulletinStatusHAsync(BBulletin bulletinToUpdate, string? oldBulletinStatus)
+        {
+            var statusAreEqueals = oldBulletinStatus == bulletinToUpdate.StatusId;
+            var bulletinBeforeActiveOrDeleted = oldBulletinStatus == Status.NewOffice ||
+                oldBulletinStatus == Status.NewEISS ||
+                 bulletinToUpdate.StatusId != Status.Deleted;
+
+            if (!statusAreEqueals || !bulletinBeforeActiveOrDeleted)
+            {
+                var bulletinsWithCollections = await _bulletinRepository.GetBulletinsCollectionsDataAsync(bulletinToUpdate.Id);
+                var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(bulletinsWithCollections);
+                var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
+                var statusH = bulletinToUpdate.BBulletinStatusHes.FirstOrDefault();
+                if (statusH != null)
+                {
+                    statusH.Content = xml;
+                    statusH.HasContent = true;
+                    statusH.EntityState = EntityStateEnum.Modified;
+                    statusH.ModifiedProperties = new List<string> { nameof(statusH.Content), nameof(statusH.HasContent), nameof(statusH.Version) };
+                    await _bulletinRepository.SaveEntityAsync(statusH, false);
+                }
+            }
+        }
 
         /// <summary>
         /// Only apply changes
@@ -558,14 +589,15 @@ namespace MJ_CAIS.Services
                 Version = 1
             };
 
-            // do not save xml for deleted bulletin
-            if (newStatus != Status.Deleted)
-            {
-                var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
-                var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
-                statusHistory.Content = xml;
-                statusHistory.HasContent = true;
-            }
+            // todo: remove
+            //// do not save xml for deleted bulletin
+            //if (newStatus != Status.Deleted)
+            //{
+            //    var bulletinXmlModel = mapper.Map<BBulletin, BulletinType>(itemToBeUpdated);
+            //    var xml = XmlUtils.SerializeToXml(bulletinXmlModel);
+            //    statusHistory.Content = xml;
+            //    statusHistory.HasContent = true;
+            //}
 
             itemToBeUpdated.BBulletinStatusHes ??= new List<BBulletinStatusH>();
             itemToBeUpdated.BBulletinStatusHes.Add(statusHistory);
