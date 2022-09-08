@@ -1,0 +1,125 @@
+<igx-grid
+  #grid
+  igxGridState
+  [data]="items$ | async"
+  [height]="null"
+  [filterStrategy]="noopFilterStrategy"
+  [sortStrategy]="noopSortStrategy"
+  [paging]="true"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  (onSortingDone)="sortingDone($event)"
+  (onFilteringDone)="filteringDone($event)"
+  (onSelection)="cellSelection($event)"
+  [paginationTemplate]="pager"
+  [allowFiltering]="true"
+  [primaryKey]="'id'"
+  [pinning]="pinningConfig"
+  [cellSelection]="'none'"
+>
+  <igx-column
+    field="id"
+    header="Идентификатор"
+    [sortable]="true"
+    [dataType]="'number'"
+    [hidden]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="cell.value">{{ cell.value }}</span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="name"
+    header="Имена на кирилица"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="nameLat"
+    header="Имена на латиница"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column field="sex" header="Пол" [sortable]="true" [dataType]="'string'">
+  </igx-column>
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDate(cell.value)">
+        {{ this.dateFormatService.displayDate(cell.value) }}
+      </span>
+    </ng-template>
+  </igx-column>
+
+  <igx-column
+    field="birthCountry"
+    header="Държава"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="birthCity"
+    header="Град"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="birthPlaceOther"
+    header="Място на раждане (описание)"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+
+  <igx-column
+    field="motherName"
+    header="Имена на майка"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+  <igx-column
+    field="fatherName"
+    header="Имена на баща"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  </igx-column>
+
+  <!-- <igx-column
+    width="150px"
+    header=""
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a
+        [title]="'Преглед'"
+        [routerLink]="['/pages/report-applications/preview', cell.rowData.id]"
+      >
+        <nb-icon pack="fa" icon="eye"></nb-icon>
+      </a>
+    </ng-template>
+  </igx-column> -->
+
+  <ng-template #pager let-grid>
+    <div class="tl-paginator">
+      <cais-grid-pager
+        [page]="remoteService.pagerParams.page"
+        [perPage]="remoteService.pagerParams.perPage"
+        [totalCount]="remoteService.pagerParams.totalCount"
+        (pagerChange)="pagerChange($event)"
+      ></cais-grid-pager>
+    </div>
+  </ng-template>
+</igx-grid>

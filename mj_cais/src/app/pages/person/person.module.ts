@@ -12,6 +12,7 @@ import { PersonEApplicationOverviewComponent } from './person-details-form/grids
 import { PersonPidOverviewComponent } from './person-details-form/grids/person-pid-overview/person-pid-overview.component';
 import { PersonGeneratedReportOverviewComponent } from './person-details-form/grids/person-generated-report-overview/person-generated-report-overview.component';
 import { PersonArchivOverviewComponent } from './person-details-form/grids/person-archiv-overview/person-archiv-overview.component';
+import { PersonHistoryOverviewComponent } from './person-details-form/grids/person-history-overview/person-history-overview.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { PersonArchivOverviewComponent } from './person-details-form/grids/perso
     PersonPidOverviewComponent,
     PersonGeneratedReportOverviewComponent,
     PersonArchivOverviewComponent,
+    PersonHistoryOverviewComponent,
   ],
   imports: [
     CoreComponentModule, 

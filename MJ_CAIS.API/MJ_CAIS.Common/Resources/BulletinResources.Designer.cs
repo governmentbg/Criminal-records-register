@@ -97,6 +97,24 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Жена.
+        /// </summary>
+        public static string female {
+            get {
+                return ResourceManager.GetString("female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Мъж.
+        /// </summary>
+        public static string male {
+            get {
+                return ResourceManager.GetString("male", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Нямате права да промените статуса на бюлетин на {0}..
         /// </summary>
         public static string msgChangeStatusIsNotAllowed {
@@ -138,6 +156,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string titleInternalRequestsForStatistics {
             get {
                 return ResourceManager.GetString("titleInternalRequestsForStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Неизвестен.
+        /// </summary>
+        public static string unknown {
+            get {
+                return ResourceManager.GetString("unknown", resourceCulture);
             }
         }
         

@@ -129,6 +129,12 @@
   <data name="ConvictionBulletinForStatistics" xml:space="preserve">
     <value>Въведени бюлетини за съдимост</value>
   </data>
+  <data name="female" xml:space="preserve">
+    <value>Жена</value>
+  </data>
+  <data name="male" xml:space="preserve">
+    <value>Мъж</value>
+  </data>
   <data name="msgChangeStatusIsNotAllowed" xml:space="preserve">
     <value>Нямате права да промените статуса на бюлетин на {0}.</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="titleInternalRequestsForStatistics" xml:space="preserve">
     <value>Заявки за реабилитация</value>
+  </data>
+  <data name="unknown" xml:space="preserve">
+    <value>Неизвестен</value>
   </data>
   <data name="Unspecified" xml:space="preserve">
     <value>неопределен</value>

@@ -25,5 +25,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<IgPageResult<PersonPidGridDTO>> SelectPersonPidAllWithPaginationAsync(ODataQueryOptions<PersonPidGridDTO> aQueryOptions, string personId);
 
         IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
+
+        Task<IgPageResult<PersonHistoryDataGridDTO>> SelectPersonHistoryDataAllWithPaginationAsync(ODataQueryOptions<PersonHistoryDataGridDTO> aQueryOptions, string personId);
     }
 }

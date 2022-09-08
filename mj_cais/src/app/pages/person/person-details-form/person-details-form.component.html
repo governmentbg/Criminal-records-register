@@ -236,6 +236,13 @@
           ></cais-person-pid-overview>
         </ng-container>
       </nb-tab>
+      <nb-tab [tabTitle]="historyTabTitle">
+        <ng-container *ngIf="showHistoryTab">
+          <cais-person-history-overview
+            [personModel]="this.dbData.element"
+          ></cais-person-history-overview>
+        </ng-container>
+      </nb-tab>
     </nb-tabset>
   </nb-card-body>
 </nb-card>

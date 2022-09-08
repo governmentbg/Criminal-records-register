@@ -69,5 +69,11 @@
             public const string Fbbc = "FBBC";
             public const string Manual = "MANUAL";
         }
+
+        public static class SexType
+        {
+            public const decimal Male = 1;
+            public const decimal Female = 2;         
+        }
     }
 }

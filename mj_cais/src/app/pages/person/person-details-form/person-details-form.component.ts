@@ -37,12 +37,14 @@ export class PersonDetailsFormComponent
   public archiveTabTitle = "Архив Свидетелства/Справки";
   public fbbcsTabTitle = "Сведения за осъждане в чужбина";
   public pidsTabTitle = "Идентификатори на лице";
+  public historyTabTitle = "Исторя на промяна на лице";
   public showApplicationsTab: boolean = false;
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;
   public showPidsTab: boolean = false;
   public showReportsTab: boolean = false;
   public showArchiveTab: boolean = false;
+  public showHistoryTab: boolean = false;
 
   constructor(
     service: PersonDetailsService,
@@ -91,6 +93,10 @@ export class PersonDetailsFormComponent
 
     if (!this.showArchiveTab) {
       this.showArchiveTab = tabTitle == this.archiveTabTitle;
+    }
+
+    if (!this.showHistoryTab) {
+      this.showHistoryTab = tabTitle == this.historyTabTitle;
     }
   }
 }

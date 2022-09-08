@@ -263,6 +263,43 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
+        public IQueryable<PersonHistoryDataGridDTO> GetPersonHistoryDataByPersonId(string personId)
+        {
+            var personHIds = (from pids in _dbContext.PPersonIds.AsNoTracking()
+                              join pidsH in _dbContext.PPersonIdsHes.AsNoTracking()
+                                on new { pid = pids.Pid, type = pids.PidTypeId, issuer = pids.Issuer }
+                                equals new { pid = pidsH.Pid, type = pidsH.PidTypeId, issuer = pidsH.Issuer }
+                              where pids.PersonId == personId
+                              select pidsH.PersonHId).Distinct();
+                          
+            
+            var result = _dbContext.PPersonHs.AsNoTracking()
+                .Include(x => x.BirthCity)
+                .Include(x => x.BirthCountry)
+                .Include(x => x.PPersonIdsHes)
+                .Where(x => personHIds.Contains(x.Id))
+                .Select(x => new PersonHistoryDataGridDTO
+                {
+                    Id = x.Id,
+                    BirthCity = x.BirthCity.Name,
+                    BirthCountry = x.BirthCountry.Name,
+                    Name = !string.IsNullOrEmpty(x.Fullname) ? x.Fullname :
+                           x.Firstname + " " + x.Surname + " " + x.Familyname,
+                    NameLat = !string.IsNullOrEmpty(x.FullnameLat) ? x.FullnameLat :
+                           x.FirstnameLat + " " + x.SurnameLat + " " + x.FamilynameLat,
+                    BirthDate = x.BirthDate,
+                    BirthPlaceOther = x.BirthPlaceOther,
+                    CreatedOn = x.CreatedOn,
+                    FatherName = !string.IsNullOrEmpty(x.FatherFullname) ? x.FatherFullname :
+                           x.FatherFirstname + " " + x.FatherSurname + " " + x.FatherFamilyname,
+                    MotherName = !string.IsNullOrEmpty(x.MotherFullname) ? x.MotherFullname :
+                           x.MotherFirstname + " " + x.MotherSurname + " " + x.MotherFamilyname,
+                    Sex = !x.Sex.HasValue ? BulletinResources.unknown: (x.Sex == SexType.Male ? BulletinResources.male : BulletinResources.female),
+                });
+
+            return result;
+        }
+
         public async Task<List<PersonGridDTO>> SelectInPageAsync(PersonSearchParamsDTO searchObj, int pageSize, int pageNumber)
         {
             DataSet ds = new DataSet();

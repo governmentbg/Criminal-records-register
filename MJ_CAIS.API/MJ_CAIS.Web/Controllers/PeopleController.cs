@@ -96,6 +96,13 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet("person-history")]
+        public async Task<IActionResult> GetAllPersonHistoryData(ODataQueryOptions<PersonHistoryDataGridDTO> aQueryOptions, string personId)
+        {
+            var result = await this._personService.SelectPersonHistoryDataAllWithPaginationAsync(aQueryOptions, personId);
+            return Ok(result);
+        }
+
         [HttpPost("connect")]
         public async Task<IActionResult> ConnectPeople([FromBody] ConnectPeopleDTO aInDto)
         {
