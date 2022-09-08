@@ -7,5 +7,6 @@
         public const string Admin = "Admin";
         public const string GlobalAdmin = "GlobalAdmin";
         public const string CentralAuth = "CentralAuth";
+        public const string Supervisor = "Supervisor";     
     }
 }

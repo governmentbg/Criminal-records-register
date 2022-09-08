@@ -326,6 +326,7 @@ export class PagesMenu {
           {
             title: "Управление на бюлетини",
             link: "/pages/bulletin-administrations",
+            hidden: this.hasNoRole(roles, RoleNameEnum.Supervisor),
           },
         ],
       },

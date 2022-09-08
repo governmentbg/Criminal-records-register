@@ -4,5 +4,6 @@ export enum RoleNameEnum {
     Admin = "Admin",
     GlobalAdmin = "GlobalAdmin",
     CentralAuth = "CentralAuth",
+    Supervisor = "Supervisor"
   }
   
