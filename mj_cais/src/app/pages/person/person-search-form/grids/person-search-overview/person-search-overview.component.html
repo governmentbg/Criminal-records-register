@@ -36,7 +36,12 @@
       </ng-template>
     </igx-column>
 
-    <igx-column field="pid" header="Идентификатор" [dataType]="'string'">
+    <igx-column
+      width="190px"
+      field="pid"
+      header="Идентификатор"
+      [dataType]="'string'"
+    >
       <ng-template igxCell let-cell="cell">
         <span [title]="cell.value">{{ cell.value }}</span>
       </ng-template>
