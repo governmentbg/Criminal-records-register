@@ -1,4 +1,3 @@
-<div class="font-weight-bold">Справки</div>
 <hr />
 <igx-grid
   #statusHistoryGrid
@@ -6,6 +5,17 @@
   [data]="reports"
   [primaryKey]="'id'"
 >
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold">Справки</span></igx-grid-toolbar-title
+    >
+    <igx-grid-toolbar-actions>
+      <div class="d-flex gap-2">
+        <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+      </div>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
+
   <igx-column
     field="id"
     header="Идентификатор"
