@@ -13,5 +13,8 @@
         public string? BirthCountry { get; set; }
         public IEnumerable<string> Pids { get; set; }
         public IEnumerable<string> CitizenShips { get; set; }
+        public string? Tablename { get; set; }
+        public string? TableId { get; set; }
+        public string? Descr { get; set; }
     }
 }
