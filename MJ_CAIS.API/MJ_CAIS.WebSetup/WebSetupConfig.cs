@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MJ_CAIS.AutoMapperContainer.MappingProfiles;
 using MJ_CAIS.FluentValidators.Bulletin;
 using MJ_CAIS.WebSetup.Setup;
 using MJ_CAIS.WebSetup.Utils.CustomModelBinders;
+using Serilog;
 
 namespace MJ_CAIS.WebSetup
 {
@@ -17,6 +19,13 @@ namespace MJ_CAIS.WebSetup
         {
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
+
+            var logger = new LoggerConfiguration()
+              .ReadFrom.Configuration(builder.Configuration)
+              .Enrich.FromLogContext()
+            .CreateLogger();
+            builder.Logging.ClearProviders();
+            builder.Logging.AddSerilog(logger);
 
             builder.Services.AddRazorPages();
 
@@ -28,6 +37,7 @@ namespace MJ_CAIS.WebSetup
             builder.Services.ConfigureUserContext();
             builder.Services.AddMvc(opt =>
             {
+                opt.Filters.Add<LoggerActionFilter>();
                 opt.ModelBinderProviders.Insert(0, new CustomDateTimeModelBinderProvider());
                 opt.EnableEndpointRouting = false;
             }
