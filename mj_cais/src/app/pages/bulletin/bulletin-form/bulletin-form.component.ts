@@ -32,8 +32,7 @@ export class BulletinFormComponent
     BulletinResolverData,
     BulletinService
   >
-  implements OnInit
-{
+  implements OnInit {
   private isFinalEdit: boolean = false;
   //#region Престъпления
 
@@ -79,7 +78,7 @@ export class BulletinFormComponent
 
   public offencesTabTitle = "Престъпления";
   public sanctionsTabTitle = "Наказания";
-  public decisionTabTitle = "Доп. сведения";
+  public decisionTabTitle = "Осъждане";
   public eventsTabTitle = "Уведомления";
   public documentsTabTitle = "Документи";
   public isinTabTitle = "Изтърпени наказания";
@@ -143,11 +142,13 @@ export class BulletinFormComponent
     if (
       this.isEdit() &&
       this.userAuthorityService.csAuthorityId !=
-        (this.dbData.element as any).csAuthorityId
+      (this.dbData.element as any).csAuthorityId
     ) {
       this.isForPreview = true;
     }
     this.formFinishedLoading.emit();
+
+
   }
 
   buildFormImpl(): FormGroup {
@@ -424,7 +425,7 @@ export class BulletinFormComponent
     this.showForUpdate =
       (this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
         this.fullForm.statusIdDisplay.value ==
-          BulletinStatusTypeEnum.NewOffice) &&
+        BulletinStatusTypeEnum.NewOffice) &&
       userHasDiffAuth == false;
 
     // redirect to edit
