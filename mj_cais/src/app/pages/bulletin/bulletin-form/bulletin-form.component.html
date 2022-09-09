@@ -37,13 +37,6 @@
                     [parentGroup]="fullForm.group" [inputName]="'statusIdDisplay'" [items]="dbData.bulletinStatuses">
                   </cais-autocomplete>
                 </div>
-
-                <!-- <ng-container *ngIf="isEdit() || fullForm.csAuthorityName.value">
-                  <div class="form-group col-md-4">
-                    <cais-input [type]="'text'" [label]="'Бюро съдимост, в което се съхранява'"
-                      [inputFormControl]="fullForm.csAuthorityName" [parentGroup]="fullForm.group"></cais-input>
-                  </div>
-                </ng-container> -->
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
@@ -51,12 +44,6 @@
                     [parentGroup]="fullForm.group" [inputName]="'bulletinType'" [items]="dbData.bulletinTypes">
                   </cais-autocomplete>
                 </div>
-                <!-- <div class="form-group col-md-4">
-                  <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="fullForm.registrationNumberDisplay"
-                    [parentGroup]="fullForm.group">
-                  </cais-input>
-                </div> -->
-
                 <div class="form-group col-md-6">
                   <cais-input [type]="'date'" [label]="'Датата на постъпване на хартиения бюлетин'"
                     [inputFormControl]="fullForm.bulletinReceivedDate" [parentGroup]="fullForm.group"></cais-input>
@@ -131,15 +118,15 @@
               </div>
             </nb-card-body>
           </nb-card>
-          <nb-card status="primary" class="mt-3">
+          <nb-card status="primary" class="mt-1">
             <nb-card-header>Системна информация</nb-card-header>
             <nb-card-body>
               <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                   <cais-input [type]="'text'" [label]="'Входящ номер към азбучния указател'"
                     [inputFormControl]="fullForm.alphabeticalIndex" [parentGroup]="fullForm.group"></cais-input>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                   <cais-input [type]="'text'" [label]="'ID на осъждане в ECRIS'"
                     [inputFormControl]="fullForm.ecrisConvictionId" [parentGroup]="fullForm.group"></cais-input>
                 </div>
