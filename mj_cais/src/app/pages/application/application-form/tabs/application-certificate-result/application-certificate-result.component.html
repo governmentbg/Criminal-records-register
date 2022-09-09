@@ -317,12 +317,12 @@
 </ng-container>
 
 <igx-dialog #reportDialog>
-  <div style="min-width: 1000px">
+  <div style="min-width: 900px;max-width: 900px;">
     <nb-card>
       <nb-card-header>
         <div class="d-flex" style="justify-content: space-between">
           <h5 style="font-weight: bold">Справка</h5>
-          <div>
+          <div class="d-flex gap-3">
             <button nbButton matRipple [status]="'success'" (click)="onPrint()" type="button" class="ml-2">
               <nb-icon pack="fa" icon="print"></nb-icon> Принтирай
             </button>
@@ -332,7 +332,8 @@
           </div>
         </div>
       </nb-card-header>
-      <nb-card-body>
+ 
+      <nb-card-body style="max-height: 600px;overflow-y: auto;">
         <cais-encapsulated-html [Html]="this.report"> </cais-encapsulated-html>
       </nb-card-body>
     </nb-card>
