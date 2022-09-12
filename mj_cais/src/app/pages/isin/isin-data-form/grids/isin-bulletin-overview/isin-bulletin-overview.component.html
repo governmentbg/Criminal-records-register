@@ -22,7 +22,14 @@
     [cellSelection]="'none'"
   >
     <igx-grid-toolbar>
-      <igx-grid-toolbar-title>Бюлетини</igx-grid-toolbar-title>
+      <igx-grid-toolbar-title
+        ><span class="fw-bold">Бюлетини</span></igx-grid-toolbar-title
+      >
+      <igx-grid-toolbar-actions>
+        <div class="d-flex gap-2">
+          <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+        </div>
+      </igx-grid-toolbar-actions>
     </igx-grid-toolbar>
 
     <igx-column
@@ -49,6 +56,7 @@
     </igx-column>
 
     <igx-column
+      width="180px"
       field="registrationNumber"
       header="Номер на бюлетин"
       [sortable]="true"
@@ -168,26 +176,32 @@
       </ng-template>
     </igx-column>
     <igx-column
-      header=""
+      width="120px"
+      header="Действия"
       [sortable]="false"
       [filterable]="false"
       [pinned]="true"
-      width="10%"
+      [disableHiding]="true"
     >
       <ng-template igxCell let-cell="cell">
-        <button
-          igxButton="icon"
-          [title]="'Избери'"
-          (click)="onSelectBulletin(cell.rowData.id)"
-        >
-          <nb-icon pack="fa" icon="check"></nb-icon>
-        </button>
-        <a
-          [title]="'Преглед'"
-          [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
-        >
-          <nb-icon pack="fa" icon="eye"></nb-icon>
-        </a>
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <button
+              igxButton="icon"
+              [title]="'Избери'"
+              (click)="onSelectBulletin(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="check"></nb-icon>
+            </button>
+            <a
+              class="btn btn-link mt-2"
+              [title]="'Преглед'"
+              [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+          </div>
+        </div>
       </ng-template>
     </igx-column>
 
