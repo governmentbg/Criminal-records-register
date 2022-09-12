@@ -226,7 +226,7 @@
                     е
                     наказан съгласно НК
                   </nb-checkbox>
-                  <nb-checkbox [formControl]="fullForm.prevSuspSent">Постановено изтърпяване на предходна условна
+                  <nb-checkbox (change)="prevSuspSentChange($event)"  [formControl]="fullForm.prevSuspSent">Постановено изтърпяване на предходна условна
                     присъда</nb-checkbox>
                   <div class="row">
                     <div class="col-4">
