@@ -230,6 +230,15 @@ export class BulletinFormComponent
     this.isNoSanctionCheck = event.target.checked;
   }
 
+  public prevSuspSentChange(event: any) {
+    const isPrevSuspSentCheck = event.target.checked;
+
+    if (!isPrevSuspSentCheck) {
+      this.fullForm?.prevSuspSentDescr.setValue(null);
+    }
+
+  }
+
   public openUpdateConfirmationDialog() {
     let dialogRef = this.dialogService.open(
       ConfirmDialogComponent,

@@ -221,38 +221,24 @@
                   </div>
                 </div>
 
-                <div class="row mb-2">
-                  <div class="col-md-5">
-                    <div class="nb-form-control-container" style="
-                  height: 40px;
-                  max-width: 100%;
-                  display: flex;
-                  align-items: center;
-                ">
-                      <nb-checkbox [formControl]="fullForm.prevSuspSent">Постановено изтърпяване на предходна условна
-                        присъда</nb-checkbox>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="nb-form-control-container" style="
-                  height: 40px;
-                  max-width: 100%;
-                  display: flex;
-                  align-items: center;
-                ">
-                      <nb-checkbox (change)="onNoSanctionChange($event)" [formControl]="fullForm.noSanction">Деецът не
-                        е
-                        наказан съгласно НК
-                      </nb-checkbox>
+                <div class="d-flex flex-column gap-2 mt-3">
+                  <nb-checkbox (change)="onNoSanctionChange($event)" [formControl]="fullForm.noSanction">Деецът не
+                    е
+                    наказан съгласно НК
+                  </nb-checkbox>
+                  <nb-checkbox (change)="prevSuspSentChange($event)"  [formControl]="fullForm.prevSuspSent">Постановено изтърпяване на предходна условна
+                    присъда</nb-checkbox>
+                  <div class="row">
+                    <div class="col-4">
+                      <div class="mt-1">
+                        <cais-input *ngIf="fullForm.prevSuspSent.value == true" [type]="'text'"
+                          [label]="'Номер на предходна присъда'" [inputFormControl]="fullForm.prevSuspSentDescr"
+                          [parentGroup]="fullForm.group"></cais-input>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group col-md-4">
-                    <cais-input [type]="'text'" [label]="'Номер на предходна присъда'"
-                      [inputFormControl]="fullForm.prevSuspSentDescr" [parentGroup]="fullForm.group"></cais-input>
-                  </div>
-                </div>
+
               </div>
             </div>
             <div class="my-3">
