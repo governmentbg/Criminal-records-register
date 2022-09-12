@@ -83,6 +83,13 @@
         <cais-input [type]="'date'" [label]="'Дата на раждане'" [inputFormControl]="personForm.birthDate"
           [parentGroup]="personForm.group"></cais-input>
       </div>
+
+      <ng-container *ngIf="isBulletinContext || isPersonContext">
+        <div class="form-group col-md-3">
+          <cais-input [type]="'text'" [label]="'АФИС номер'" [inputFormControl]="personForm.afisNumber"
+            [parentGroup]="personForm.group"></cais-input>
+        </div>
+      </ng-container>
       <ng-container *ngIf="isFbbcContext">
         <div class="form-group col-md-3">
           <cais-input [type]="'text'" [label]="'ЕГН/ЛНЧ'" [inputFormControl]="personForm.egn"
@@ -140,18 +147,13 @@
           <ng-container *ngIf="
       isBulletinContext || isApplicationContext || isReportApplicationContext
     ">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
               <cais-multiple-choose [label]="'Гражданство'" [inputFormControl]="personForm.nationalities"
                 [parentGroup]="personForm.group" [items]="countries">
               </cais-multiple-choose>
             </div>
           </ng-container>
-          <ng-container *ngIf="isBulletinContext || isPersonContext">
-            <div class="form-group col-md-3">
-              <cais-input [type]="'text'" [label]="'АФИС номер'" [inputFormControl]="personForm.afisNumber"
-                [parentGroup]="personForm.group"></cais-input>
-            </div>
-          </ng-container>
+     
         </div>
       </div>
     </div>
@@ -218,14 +220,11 @@
                 [parentGroup]="personForm.group" [inputName]="'idDocCategoryId'" [items]="idDocumentCategoryTypes">
               </cais-autocomplete>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
               <cais-input [type]="'text'" [label]="'Друга категория в случай че липсва в списъка'"
                 [inputFormControl]="personForm.idDocTypeDescr" [parentGroup]="personForm.group"></cais-input>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
               <cais-input [type]="'text'" [label]="'Издаващ орган'"
                 [inputFormControl]="personForm.idDocIssuingAuthority" [parentGroup]="personForm.group"></cais-input>
             </div>
@@ -238,6 +237,7 @@
                 [parentGroup]="personForm.group"></cais-input>
             </div>
           </div>
+
         </div>
       </div>
     </ng-container>

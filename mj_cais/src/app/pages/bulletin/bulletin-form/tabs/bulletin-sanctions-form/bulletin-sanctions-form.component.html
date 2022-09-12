@@ -1,10 +1,10 @@
 <nb-card>
-  <ng-container *ngIf="isNoSanction">
+  <div class="p-3" *ngIf="isNoSanction">
     <h6>Деецът не е наказан съгласно НК.</h6>
-    <div class="row col-md-12" *ngIf="!isForPreview">
+    <div *ngIf="!isForPreview">
       Веведените наказания няма да бъдат отразени!
     </div>
-  </ng-container>
+  </div>
   <ng-container *ngIf="!isNoSanction">
     <app-grid-with-transactions [gridTransactions]="bulletinSanctionsTransactions">
       <tl-linear-progress [visible]="this.remoteService?.isLoading"></tl-linear-progress>
