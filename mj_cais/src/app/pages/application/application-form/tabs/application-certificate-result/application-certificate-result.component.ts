@@ -8,7 +8,10 @@ import * as fileSaver from "file-saver";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { CertificateStatuTypeEnum } from "./_models/certificate-status-type.enum";
 import { BulletinCheckGridModel } from "./_models/bulletin-check-grid.model";
-import { IgxDialogComponent, IgxGridComponent } from "@infragistics/igniteui-angular";
+import {
+  IgxDialogComponent,
+  IgxGridComponent,
+} from "@infragistics/igniteui-angular";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { UserInfoService } from "../../../../../@core/services/common/user-info.service";
 import { NbDialogService } from "@nebular/theme";
@@ -18,6 +21,8 @@ import { ApplicationCertificateDocumentModel } from "./_models/application-certi
 import { Guid } from "guid-typescript";
 import { NgxSpinnerService } from "ngx-spinner";
 import { BulletionsPreviewComponent } from "./tabs/bulletions-preview/bulletions-preview.component";
+import { PersonForm } from "../../../../../@core/components/forms/person-form/_models/person.form";
+import { PidTypeEnum } from "../../../../../@core/components/forms/person-form/_models/pid-type-enum";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -35,7 +40,7 @@ export class ApplicationCertificateResultComponent
 {
   @Input() model: ApplicationCertificateResultModel;
   @Input() users: BaseNomenclatureModel[];
-  @Input() personId: string;
+  @Input() person: PersonForm;
   @Input() applicationCode: string;
   @Input() decisionTypes: BaseNomenclatureModel[];
 
@@ -395,7 +400,9 @@ export class ApplicationCertificateResultComponent
               this.model.statusCode != CertificateStatuTypeEnum.Delivered
             ) {
               this.model.secondSignerId = this.userInfoService.userId;
-              this.fullForm.secondSignerId.setValue(this.userInfoService.userId);
+              this.fullForm.secondSignerId.setValue(
+                this.userInfoService.userId
+              );
             }
           }
 
@@ -414,15 +421,38 @@ export class ApplicationCertificateResultComponent
       };
   }
 
-  showReport(){
-    this.service.htmlReport('SUID', this.personId).subscribe( res => { 
+  showReport() {
+    let pid = "";
+    let pidType = "";
+
+    if (this.person.egn.value) {
+      pid = this.person.egn.value;
+      pidType = PidTypeEnum.Egn;
+    } else if (this.person.lnch.value) {
+      pid = this.person.lnch.value;
+      pidType = PidTypeEnum.Lnch;
+    } else if (this.person.ln.value) {
+      pid = this.person.ln.value;
+      pidType = PidTypeEnum.Ln;
+    } else if (this.person.idDocNumber.value) {
+      pid = this.person.idDocNumber.value;
+      pidType = PidTypeEnum.DocumentId;
+    } else if (this.person.afisNumber.value) {
+      pid = this.person.afisNumber.value;
+      pidType = PidTypeEnum.AfisNumber;
+    } else if (this.person.suid.value) {
+      pid = this.person.suid.value;
+      pidType = "SUID";
+    }
+
+    this.service.htmlReport(pidType, pid).subscribe((res) => {
       this.report = res;
       this.reportDialog.open();
-     });
+    });
   }
 
   onPrint() {
-    const popupWin = window.open('', '_blank');
+    const popupWin = window.open("", "_blank");
     popupWin.document.open();
     popupWin.document.write(`
       <html>
@@ -434,8 +464,7 @@ export class ApplicationCertificateResultComponent
         <body onload="window.print();window.close()">
             <div>${this.report}</div>
         </body>
-      </html>`
-    );
+      </html>`);
     popupWin.document.close();
   }
 }

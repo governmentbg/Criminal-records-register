@@ -342,22 +342,25 @@ namespace MJ_CAIS.Services
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.IdDocNumber.ToUpper(), PidType.DocumentId, aInDto.IdDocIssuingAuthority));
             }
 
-            // get suid of an existing persion
-            // when create application or another object via person form
-            var getPidsFromExistingPerson =
+            var allPidsAreEmpty = 
                 string.IsNullOrEmpty(aInDto.Egn) && string.IsNullOrEmpty(aInDto.Lnch) &&
                 string.IsNullOrEmpty(aInDto.Ln) && string.IsNullOrEmpty(aInDto.AfisNumber) &&
-                string.IsNullOrEmpty(aInDto.IdDocNumber) &&
-                !string.IsNullOrEmpty(aInDto.Suid);
+                string.IsNullOrEmpty(aInDto.IdDocNumber);
 
+            // get suid of an existing persion
+            // when create application or another object via person form
+            var getPidsFromExistingPerson = allPidsAreEmpty  &&  !string.IsNullOrEmpty(aInDto.Suid);
             if (getPidsFromExistingPerson)
             {
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Suid.ToUpper(), PidType.Suid, IssuerType.CRR));
             }
 
-            var suid = await GenerateSuidAsync(aInDto);
-            pidsFromForm.Add(new PersonIdTypeDTO(suid.ToUpper(), PidType.Suid, IssuerType.CRR));
-
+            if (allPidsAreEmpty)
+            {
+                var suid = await GenerateSuidAsync(aInDto);
+                pidsFromForm.Add(new PersonIdTypeDTO(suid.ToUpper(), PidType.Suid, IssuerType.CRR));
+            }
+ 
             return pidsFromForm;
         }
 
