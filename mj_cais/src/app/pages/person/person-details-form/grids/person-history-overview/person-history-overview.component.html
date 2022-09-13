@@ -24,15 +24,13 @@
     [dataType]="'number'"
     [hidden]="true"
   >
-    <ng-template igxCell let-cell="cell">
-      <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template>
   </igx-column>
   <igx-column
     field="tablename"
     header="Източник"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -40,6 +38,7 @@
     header="Идентификатор на източник"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -47,6 +46,7 @@
     header="Описание"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -54,6 +54,8 @@
     header="Имена на кирилица"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -61,6 +63,8 @@
     header="Имена на латиница"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -69,6 +73,7 @@
     header="Пол"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -92,6 +97,7 @@
     header="Дата на раждане"
     [sortable]="true"
     [dataType]="'date'"
+    [resizable]="true"
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">
@@ -105,6 +111,7 @@
     header="Държава"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -112,6 +119,7 @@
     header="Град"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -119,6 +127,7 @@
     header="Място на раждане (описание)"
     [sortable]="true"
     [dataType]="'string'"
+    [resizable]="true"
   >
   </igx-column>
 
@@ -127,6 +136,8 @@
     header="Имена на майка"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
+    [resizable]="true"
   >
   </igx-column>
   <igx-column
@@ -134,6 +145,8 @@
     header="Имена на баща"
     [sortable]="true"
     [dataType]="'string'"
+    [width]="'20%'"
+    [resizable]="true"
   >
   </igx-column>
   <ng-template #pager let-grid>
