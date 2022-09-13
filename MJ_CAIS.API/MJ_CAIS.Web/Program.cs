@@ -44,7 +44,7 @@ namespace MJ_CAIS.Web
 
             builder
                 .Services
-                .AddTransient(typeof(IPasswordHasher<GUsersExt>), typeof(CompatibilityPasswordHasher));
+                .AddTransient(typeof(IPasswordHasher<LocalGUsersExt>), typeof(CompatibilityPasswordHasher));
 
             builder
                 .Services

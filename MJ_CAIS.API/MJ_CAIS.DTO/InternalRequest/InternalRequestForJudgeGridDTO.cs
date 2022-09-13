@@ -9,5 +9,6 @@
         public string? CreatedBy { get; set; }
         public string? FromAuthorityName { get; set; }
         public string? ReqestType { get; set; }
+        public string? Pid { get; set; }
     }
 }

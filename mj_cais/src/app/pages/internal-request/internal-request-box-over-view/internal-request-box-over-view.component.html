@@ -3,17 +3,46 @@
     <nb-card accent="primary">
       <nb-card-header>Заявки</nb-card-header>
       <nb-card-body>
-        <nb-tabset class="custom-tabset" #nbtabset (changeTab)="onChangeTab($event)">
-          <nb-tab #draftTab [tabTitle]="draftTabTitle" [tabIcon]="draftIcon"> </nb-tab>
-          <nb-tab *ngIf="inboxCount > 0" #inboxTab [tabTitle]="inboxTabTitle" tabIcon="inbox"
-            badgeText="{{ inboxCount }}" badgePosition="top right" badgeStatus="success">
+        <nb-tabset
+          class="custom-tabset"
+          #nbtabset
+          (changeTab)="onChangeTab($event)"
+        >
+          <nb-tab #draftTab [tabTitle]="draftTabTitle" [tabIcon]="draftIcon">
           </nb-tab>
-          <nb-tab *ngIf="inboxCount <= 0" #inboxTab [tabTitle]="inboxTabTitle" [tabIcon]="inboxIcon">
+          <nb-tab
+            *ngIf="inboxCount > 0"
+            #inboxTab
+            [tabTitle]="inboxTabTitle"
+            tabIcon="inbox"
+            badgeText="{{ inboxCount }}"
+            badgePosition="top right"
+            badgeStatus="success"
+          >
           </nb-tab>
-          <nb-tab *ngIf="outboxCount > 0" #outboxTab [tabTitle]="outboxTabTitle" badgeText="{{ outboxCount }}"
-            [tabIcon]="outboxIcon" badgePosition="top  right" badgeStatus="warning">
+          <nb-tab
+            *ngIf="inboxCount <= 0"
+            #inboxTab
+            [tabTitle]="inboxTabTitle"
+            [tabIcon]="inboxIcon"
+          >
           </nb-tab>
-          <nb-tab *ngIf="outboxCount <= 0" #outboxTab [tabTitle]="outboxTabTitle" [tabIcon]="outboxIcon">
+          <nb-tab
+            *ngIf="outboxCount > 0"
+            #outboxTab
+            [tabTitle]="outboxTabTitle"
+            badgeText="{{ outboxCount }}"
+            [tabIcon]="outboxIcon"
+            badgePosition="top  right"
+            badgeStatus="warning"
+          >
+          </nb-tab>
+          <nb-tab
+            *ngIf="outboxCount <= 0"
+            #outboxTab
+            [tabTitle]="outboxTabTitle"
+            [tabIcon]="outboxIcon"
+          >
           </nb-tab>
         </nb-tabset>
       </nb-card-body>
@@ -22,13 +51,20 @@
   <div class="col-md-10">
     <nb-card>
       <ng-container *ngIf="showDraftTab">
-        <cais-internal-request-draft-ovverview [caisTitle]="title"></cais-internal-request-draft-ovverview>
+        <cais-internal-request-draft-ovverview
+          [caisTitle]="title"
+        ></cais-internal-request-draft-ovverview>
       </ng-container>
       <ng-container *ngIf="showInboxTab">
-        <cais-internal-request-inbox-overview [caisTitle]="title"></cais-internal-request-inbox-overview>
+        <cais-internal-request-inbox-overview
+          [caisTitle]="title"
+        ></cais-internal-request-inbox-overview>
       </ng-container>
       <ng-container *ngIf="showOutboxTab">
-        <cais-internal-request-outbox-overview (onReadClicked)="onOutBoxReadMessageClicked($event)" [caisTitle]="title">
+        <cais-internal-request-outbox-overview
+          (onReadClicked)="onOutBoxReadMessageClicked($event)"
+          [caisTitle]="title"
+        >
         </cais-internal-request-outbox-overview>
       </ng-container>
     </nb-card>

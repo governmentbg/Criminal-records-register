@@ -8,6 +8,7 @@ export class InternalRequestForJudgeGridModel extends BaseGridModel {
   public createdBy: string = null;
   public fromAuthorityName: string = null;
   public reqestType: string = null;
+  public pid: string = null;
 
   constructor(init?: Partial<InternalRequestForJudgeGridModel>) {
     super(init);
@@ -18,5 +19,6 @@ export class InternalRequestForJudgeGridModel extends BaseGridModel {
     this.createdBy = init?.createdBy ?? null;
     this.fromAuthorityName = init?.fromAuthorityName ?? null;
     this.reqestType = init?.reqestType ?? null;
+    this.pid = init?.pid ?? null;
   }
 }

@@ -10,5 +10,6 @@ namespace MJ_CAIS.DTO.InternalRequest
         public string? ReqestType { get; set; }
         public string? FromAuthorityName { get; set; }
         public string? ToAuthorityName { get; set; }
+        public string? Pid { get; set; }
     }
 }

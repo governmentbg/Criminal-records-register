@@ -73,7 +73,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
       this.sanctions = [];
       return;
     }
-    
+
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
     this.loaderService.show();
     this.bulletinService.getSanctions(bulletinId).subscribe((res) => {
@@ -171,6 +171,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   }
 
   public onCloseSanctionDilog() {
+    this.clearProbationData();
     this.bulletinSanctionForm = new BulletinSanctionForm();
     this.dialog.close();
   }
@@ -448,9 +449,13 @@ export class BulletinSanctionsFormComponent implements OnInit {
     return selectedType;
   }
 
-  public onGridOptionChange(id: number, cell: IgxGridCellComponent) {
-    cell.value = id;
-    cell.editValue = id;
+  // public onGridOptionChange(id: number, cell: IgxGridCellComponent) {
+  //   cell.value = id;
+  //   cell.editValue = id;
+  // }
+
+  public handleClosing(event, cell: IgxGridCellComponent) {
+    cell.editValue = cell.value;
   }
 
   private getNameById(data: any, id: string) {
