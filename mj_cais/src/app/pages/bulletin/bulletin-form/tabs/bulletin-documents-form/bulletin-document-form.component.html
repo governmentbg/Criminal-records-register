@@ -100,21 +100,22 @@
     <div class="dialogNewRecord" style="min-width: 1000px">
       <nb-card>
         <nb-card-header>
-          <div class="d-flex align-items-center gap-3">
+          <div class="d-flex justify-content-between">
             <h5 class="fw-bold">Документ</h5>
-
-            <button
-              nbButton
-              status="success"
-              (click)="onSubmitBulletineDocument()"
-            >
-              <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
-              Потвърди
-            </button>
-            <button nbButton (click)="onCloseBulletinDocumentDilog()">
-              <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
-              Откажи
-            </button>
+            <div class="d-flex align-items-center gap-3">
+              <button
+                nbButton
+                status="success"
+                (click)="onSubmitBulletineDocument()"
+              >
+                <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
+                Потвърди
+              </button>
+              <button nbButton (click)="onCloseBulletinDocumentDilog()">
+                <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
+                Откажи
+              </button>
+            </div>
           </div>
         </nb-card-header>
         <nb-card-body>
@@ -174,7 +175,7 @@
           </div>
 
           <div class="row mt-2">
-            <div class="form-group col-md-8">
+            <div class="form-group col-md-12">
               <cais-autocomplete
                 [label]="'Вид документ'"
                 [inputFormControl]="bulletinDocumentForm.docTypeId"
