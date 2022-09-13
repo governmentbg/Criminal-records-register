@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MJ_CAIS.DataAccess.ExtUsers
 {
@@ -23,6 +24,10 @@ namespace MJ_CAIS.DataAccess.ExtUsers
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var dateTimeOffsetConverter = new ValueConverter<DateTimeOffset?, DateTime?>(
+                dateTimeOffset => dateTimeOffset.HasValue ? dateTimeOffset.Value.Date : null,
+                date => date.HasValue ? date.Value : null);
+
             modelBuilder.Entity<LocalGUsersExt>(entity =>
             {
                 entity.ToTable("G_USERS_EXT");
@@ -142,7 +147,9 @@ namespace MJ_CAIS.DataAccess.ExtUsers
                     .HasColumnName("TWO_FACTOR_ENABLED");
 
                 entity.Property(e => e.LockoutEnd)
+                    .HasConversion(dateTimeOffsetConverter)
                     .IsRequired(false)
+                    .HasColumnType("DATE")
                     .HasColumnName("LOCKOUT_END_DATE_UTC");
 
                 entity.Property(e => e.LockoutEnabled)

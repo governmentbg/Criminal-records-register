@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MJ_CAIS.IdentityServer.CAISExternalCredentials.Entities;
 
 namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
@@ -27,6 +28,10 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var dateTimeOffsetConverter = new ValueConverter<DateTimeOffset?, DateTime?>(
+                dateTimeOffset => dateTimeOffset.HasValue ? dateTimeOffset.Value.Date : null,
+                date => date.HasValue ? date.Value : null);
+
             modelBuilder.Entity<GExtAdministration>(entity =>
             {
                 entity.ToTable("G_EXT_ADMINISTRATIONS");
@@ -221,6 +226,9 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     .HasColumnName("TWO_FACTOR_ENABLED");
 
                 entity.Property(e => e.LockoutEnd)
+                    .HasConversion(dateTimeOffsetConverter)
+                    .IsRequired(false)
+                    .HasColumnType("DATE")
                     .HasColumnName("LOCKOUT_END_DATE_UTC");
 
                 entity.Property(e => e.LockoutEnabled)
