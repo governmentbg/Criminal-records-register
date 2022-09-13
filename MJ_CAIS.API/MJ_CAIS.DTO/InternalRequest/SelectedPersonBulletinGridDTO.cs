@@ -11,5 +11,7 @@
         public string? BulletinType { get; set; }
         public string? Remarks { get; set; }
         public bool? CanEditBulletin { get; set; }
+        public string? PersonNames { get; set; }
+        public string? CaseData { get; set; }
     }
 }

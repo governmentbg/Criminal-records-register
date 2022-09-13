@@ -9,6 +9,7 @@ export class InternalRequestMailBoxGridModel extends BaseGridModel {
   public reqestType: Date = null;
   public fromAuthorityName: string = null;
   public toAuthorityName: string = null;
+  public pid: string = null;
 
   constructor(init?: Partial<InternalRequestMailBoxGridModel>) {
     super(init);
@@ -20,5 +21,6 @@ export class InternalRequestMailBoxGridModel extends BaseGridModel {
     this.reqestType = init?.reqestType ?? null;
     this.fromAuthorityName = init?.fromAuthorityName ?? null;
     this.toAuthorityName = init?.toAuthorityName ?? null;
+    this.pid = init?.pid ?? null;
   }
 }
