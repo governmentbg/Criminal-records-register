@@ -493,94 +493,101 @@
 
     <form autocomplete="off" class="mt-2">
       <div class="row" style="align-items: center">
-        <div class="form-group col-md-6">
-          <cais-autocomplete
-            [label]="'Подписващ1'"
-            [inputFormControl]="fullForm.firstSignerId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'firstSignerId'"
-            [items]="users"
-          >
-          </cais-autocomplete>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-autocomplete
+              [label]="'Подписващ1'"
+              [inputFormControl]="fullForm.firstSignerId"
+              [parentGroup]="fullForm.group"
+              [inputName]="'firstSignerId'"
+              [items]="users"
+            >
+            </cais-autocomplete>
+          </div>
+          <div class="form-group col-md-6">
+            <cais-autocomplete
+              [label]="'Подписващ2'"
+              [inputFormControl]="fullForm.secondSignerId"
+              [parentGroup]="fullForm.group"
+              [inputName]="'secondSignerId'"
+              [items]="users"
+            >
+            </cais-autocomplete>
+          </div>
         </div>
-        <div class="form-group col-md-6" style="padding-right: 50px">
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            [status]="'primary'"
-            (click)="generateCertificateByJudge()"
-            type="button"
-            style="min-width: 100px; float: right"
-          >
-            Генерирай свидетелство
-          </button>
-          <button
-            *ngIf="
-              this.model.statusCode ==
-              CertificateStatuTypeEnum.CertificateUserSign
-            "
-            nbButton
-            [status]="'success'"
-            (click)="updateStatus()"
-            type="button"
-            style="min-width: 100px; float: right"
-          >
-            Готово за връчване
-          </button>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Номер на свидетелство'"
+              [inputFormControl]="fullForm.registrationNumber"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Статус'"
+              [inputFormControl]="fullForm.statusName"
+              [parentGroup]="fullForm.group"
+            ></cais-input>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-6">
-          <cais-autocomplete
-            [label]="'Подписващ2'"
-            [inputFormControl]="fullForm.secondSignerId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'secondSignerId'"
-            [items]="users"
-          >
-          </cais-autocomplete>
-          <cais-input
-            [type]="'text'"
-            [label]="'Номер на свидетелство'"
-            [inputFormControl]="fullForm.registrationNumber"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-          <cais-input
-            [type]="'text'"
-            [label]="'Статус'"
-            [inputFormControl]="fullForm.statusName"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-
-          <br />
-          <a
-            *ngIf="
-              (this.model.statusCode ==
-                CertificateStatuTypeEnum.CertificatePaperPrint ||
+        <div class="row mt-3">
+          <div class="d-flex justify-content-end gap-3">
+            <button
+              *ngIf="!this.isForPreview"
+              nbButton
+              [status]="'primary'"
+              (click)="generateCertificateByJudge()"
+              type="button"
+              style="min-width: 100px; float: right"
+            >
+              Генерирай свидетелство
+            </button>
+            <button
+              *ngIf="
                 this.model.statusCode ==
-                  CertificateStatuTypeEnum.CertificateUserSign ||
-                this.model.statusCode == CertificateStatuTypeEnum.Delivered ||
-                this.model.statusCode ==
-                  CertificateStatuTypeEnum.CertificateContentReady) &&
-              this.fullForm.docName.value !== null
-            "
-            [title]="'Свали'"
-            class="mr-4"
-            (click)="printCertificate()"
-          >
-            {{ fullForm.docName.value }}.{{ fullForm.docType.value }}
-          </a>
+                CertificateStatuTypeEnum.CertificateUserSign
+              "
+              nbButton
+              [status]="'success'"
+              (click)="updateStatus()"
+              type="button"
+              style="min-width: 100px; float: right"
+            >
+              Готово за връчване
+            </button>
+            <a
+              *ngIf="
+                (this.model.statusCode ==
+                  CertificateStatuTypeEnum.CertificatePaperPrint ||
+                  this.model.statusCode ==
+                    CertificateStatuTypeEnum.CertificateUserSign ||
+                  this.model.statusCode == CertificateStatuTypeEnum.Delivered ||
+                  this.model.statusCode ==
+                    CertificateStatuTypeEnum.CertificateContentReady) &&
+                this.fullForm.docName.value !== null
+              "
+              [title]="'Свали'"
+              class="mr-4"
+              (click)="printCertificate()"
+            >
+              {{ fullForm.docName.value }}.{{ fullForm.docType.value }}
+            </a>
 
-          <a
-            *ngIf="
-              this.model.statusCode ==
-              CertificateStatuTypeEnum.CertificateUserSign
-            "
-            [title]="'Качи'"
-            (click)="upload()"
-          >
-            <i class="fas fa-upload"></i>
-          </a>
+            <a
+              *ngIf="
+                this.model.statusCode ==
+                CertificateStatuTypeEnum.CertificateUserSign
+              "
+              [title]="'Качи'"
+              (click)="upload()"
+            >
+              <i class="fas fa-upload"></i>
+            </a>
+          </div>
         </div>
       </div>
     </form>
