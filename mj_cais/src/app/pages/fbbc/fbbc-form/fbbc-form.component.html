@@ -10,158 +10,180 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <div class="font-weight-bold">Данни за сведението</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-autocomplete
-            [label]="'Източник'"
-            [inputFormControl]="fullForm.docTypeId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'docTypeId'"
-            [items]="dbData.docTypeId"
-            *ngIf="isForPreview || isForEdit"
-          >
-          </cais-autocomplete>
-        </div>
-      </div>
+      <nb-card status="primary" class="mt-3">
+        <nb-card-header>Данни за сведението</nb-card-header>
 
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-lookup
-            [label]="'Държава'"
-            [inputControl]="fullForm.countryLookup"
-            [parentGroup]="fullForm.countryLookup.group"
-            [openFunction]="openCountryDialog"
-          >
-          </cais-lookup>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на получаване'"
-            [inputFormControl]="fullForm.receiveDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на издаване'"
-            [inputFormControl]="fullForm.issueDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-
-      <div class="font-weight-bold">Данни за лицето</div>
-      <hr />
-      <cais-person-form
-        [personForm]="fullForm.person"
-        [genderTypes]="dbData.genderTypes"
-        [countries]="dbData.countries"
-        [contextType]="PersonContextEnum.Fbbc"
-      >
-      </cais-person-form>
-
-      <div class="font-weight-bold">Наказание</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-autocomplete
-            [label]="'Вид'"
-            [inputFormControl]="fullForm.sanctionTypeId"
-            [parentGroup]="fullForm.group"
-            [inputName]="'sanctionTypeId'"
-            [items]="dbData.sanctTypes"
-          >
-          </cais-autocomplete>
-        </div>
-      </div>
-      <div class="font-weight-bold">Присъда</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на присъда'"
-            [inputFormControl]="fullForm.convDecisionDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата на крайната присъда'"
-            [inputFormControl]="fullForm.convDecFinalDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="font-weight-bold">Престъпление</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Начална дата на престъплението'"
-            [inputFormControl]="fullForm.offenceStartDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Крайна дата на престъплението'"
-            [inputFormControl]="fullForm.offenceEndDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-
-      <div class="row mt-2">
-        <div class="col-md-8">
-          <div
-            class="nb-form-control-container"
-            style="
-              height: 40px;
-              max-width: 100%;
-              display: flex;
-              align-items: center;
-            "
-          >
-            <nb-checkbox [formControl]="fullForm.isAdministrative"
-              >лицето е освободено от наказателна отговорност и е наложено
-              административно наказание по чл.78а от НК</nb-checkbox
-            >
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-autocomplete
+                [label]="'Източник'"
+                [inputFormControl]="fullForm.docTypeId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'docTypeId'"
+                [items]="dbData.docTypeId"
+                *ngIf="isForPreview || isForEdit"
+              >
+              </cais-autocomplete>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="form-group col-md-9">
-          <cais-input
-            [type]="'text'"
-            [label]="'Анотация'"
-            [inputFormControl]="fullForm.annotation"
-            [parentGroup]="fullForm.group"
-            [inputType]="InputTypeConstants.TextArea"
-            [rows]="3"
-          ></cais-input>
-        </div>
-      </div>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-lookup
+                [label]="'Държава'"
+                [inputControl]="fullForm.countryLookup"
+                [parentGroup]="fullForm.countryLookup.group"
+                [openFunction]="openCountryDialog"
+              >
+              </cais-lookup>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Дата на получаване'"
+                [inputFormControl]="fullForm.receiveDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Дата на издаване'"
+                [inputFormControl]="fullForm.issueDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
 
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'ID на присъда от ECRIS'"
-            [inputFormControl]="fullForm.ecrisConvId"
-            [parentGroup]="fullForm.group"
-            [hidden]="fullForm.docTypeId.value !== docType"
-          ></cais-input>
-        </div>
-      </div>
+      <nb-card status="primary" class="mt-3">
+        <nb-card-header>Данни за лицето</nb-card-header>
+
+        <nb-card-body>
+          <cais-person-form
+            [personForm]="fullForm.person"
+            [genderTypes]="dbData.genderTypes"
+            [countries]="dbData.countries"
+            [contextType]="PersonContextEnum.Fbbc"
+          >
+          </cais-person-form>
+        </nb-card-body>
+      </nb-card>
+
+      <nb-card status="primary" class="mt-3">
+        <nb-card-header>Наказание</nb-card-header>
+
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-autocomplete
+                [label]="'Вид'"
+                [inputFormControl]="fullForm.sanctionTypeId"
+                [parentGroup]="fullForm.group"
+                [inputName]="'sanctionTypeId'"
+                [items]="dbData.sanctTypes"
+              >
+              </cais-autocomplete>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+
+      <nb-card status="primary" class="mt-3">
+        <nb-card-header>Присъда </nb-card-header>
+
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Дата на присъда'"
+                [inputFormControl]="fullForm.convDecisionDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Дата на крайната присъда'"
+                [inputFormControl]="fullForm.convDecFinalDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+
+      <nb-card status="primary" class="mt-3">
+        <nb-card-header>Престъпление </nb-card-header>
+
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Начална дата на престъплението'"
+                [inputFormControl]="fullForm.offenceStartDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'date'"
+                [label]="'Крайна дата на престъплението'"
+                [inputFormControl]="fullForm.offenceEndDate"
+                [parentGroup]="fullForm.group"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-md-8">
+              <div
+                class="nb-form-control-container"
+                style="
+                  height: 40px;
+                  max-width: 100%;
+                  display: flex;
+                  align-items: center;
+                "
+              >
+                <nb-checkbox [formControl]="fullForm.isAdministrative"
+                  >лицето е освободено от наказателна отговорност и е наложено
+                  административно наказание по чл.78а от НК</nb-checkbox
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-9">
+              <cais-input
+                [type]="'text'"
+                [label]="'Анотация'"
+                [inputFormControl]="fullForm.annotation"
+                [parentGroup]="fullForm.group"
+                [inputType]="InputTypeConstants.TextArea"
+                [rows]="3"
+              ></cais-input>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'ID на присъда от ECRIS'"
+                [inputFormControl]="fullForm.ecrisConvId"
+                [parentGroup]="fullForm.group"
+                [hidden]="fullForm.docTypeId.value !== docType"
+              ></cais-input>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
 
       <cais-fbbc-document-form
         #fbbcDocuments
@@ -288,10 +310,7 @@
             [pinned]="true"
           >
             <ng-template igxCell let-cell="cell">
-              <a
-                [title]="'Преглед'"
-                (click)="getDocument(cell.rowData)"
-              >
+              <a [title]="'Преглед'" (click)="getDocument(cell.rowData)">
                 <nb-icon pack="fa" icon="eye"></nb-icon>
               </a>
             </ng-template>

@@ -27,6 +27,7 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var query = this._dbContext.NInternalRequests.AsNoTracking()
                 .Include(x => x.ReqStatusCodeNavigation)
+                .Include(x => x.PPersId)
                 .Include(x => x.FromAuthority)
                 .Include(x => x.ToAuthority);
 
@@ -38,6 +39,7 @@ namespace MJ_CAIS.Repositories.Impl
             var query = this._dbContext.NInternalRequests.AsNoTracking()
                  .Include(x => x.ReqStatusCodeNavigation)
                  .Include(x => x.NIntReqType)
+                 .Include(x => x.PPersId)
                  .Include(x => x.FromAuthority);
 
             return query;
@@ -49,7 +51,7 @@ namespace MJ_CAIS.Repositories.Impl
                         .Include(x => x.FromAuthority)
                         .Include(x => x.ToAuthority)
                         .Include(x => x.PPersId)
-                            .ThenInclude( p => p.PidType)
+                            .ThenInclude(p => p.PidType)
                         .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -215,7 +217,9 @@ namespace MJ_CAIS.Repositories.Impl
                             BulletinAuthorityName = auth.Name,
                             Remarks = bInternalRequest.Remarks,
                             StatusName = status.Name,
-                            CanEditBulletin = bulletin.CsAuthorityId == _userContext.CsAuthorityId
+                            CanEditBulletin = bulletin.CsAuthorityId == _userContext.CsAuthorityId,
+                            PersonNames = string.IsNullOrEmpty(bulletin.Fullname) ? bulletin.Firstname + " " + bulletin.Surname + " " + bulletin.Familyname : bulletin.Fullname,
+                            CaseData = bulletin.CaseNumber + "/" + bulletin.CaseYear
                         };
 
             return query;
@@ -252,7 +256,10 @@ namespace MJ_CAIS.Repositories.Impl
                                       IdDocNumber = bulletins.IdDocNumber,
                                       SuidId = bulletins.SuidId,
                                       Suid = bulletins.Suid,
-                                      CsAuthorityId = bulletins.CsAuthorityId
+                                      CsAuthorityId = bulletins.CsAuthorityId,
+                                      PersonNames = string.IsNullOrEmpty(bulletins.Fullname) ? bulletins.Firstname + " " + bulletins.Surname + " " + bulletins.Familyname : bulletins.Fullname,
+                                      CaseData = bulletins.CaseNumber + "/" + bulletins.CaseYear
+
                                   }).FirstOrDefaultAsync(x => x.BulletinId == aId);
 
             var result = new SelectedPersonBulletinGridDTOExtended
@@ -269,7 +276,9 @@ namespace MJ_CAIS.Repositories.Impl
                     Version = bulletin.Version,
                     BulletinAuthorityName = bulletin.BulletinAuthorityName,
                     StatusName = bulletin.StatusName,
-                    CanEditBulletin = bulletin.CsAuthorityId == _userContext.CsAuthorityId
+                    CanEditBulletin = bulletin.CsAuthorityId == _userContext.CsAuthorityId,
+                    PersonNames = bulletin.PersonNames,
+                    CaseData = bulletin.CaseData,
                 } }
             };
 
@@ -343,93 +352,27 @@ namespace MJ_CAIS.Repositories.Impl
             var bulletinsByEgn = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                  join egn in _dbContext.PPersonIds.AsNoTracking() on bulletin.EgnId equals egn.Id
                                  where egn.PersonId == personId
-                                 select new
-                                 {
-                                     BulletinId = bulletin.Id,
-                                     BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
-                                                           bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
-                                                           BulletinResources.Unspecified,
-                                     RegistrationNumber = bulletin.RegistrationNumber,
-                                     StatusId = bulletin.StatusId,
-                                     CreatedOn = bulletin.CreatedOn,
-                                     BulletinAuthorityId = bulletin.BulletinAuthorityId,
-                                     Version = bulletin.Version,
-                                     CsAuthorotyId = bulletin.CsAuthorityId
-                                 };
-
+                                 select new { BulletinId = bulletin.Id };
 
             var bulletinsByLnch = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                   join lnch in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnchId equals lnch.Id
                                   where lnch.PersonId == personId
-                                  select new
-                                  {
-                                      BulletinId = bulletin.Id,
-                                      BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
-                                                          bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
-                                                          BulletinResources.Unspecified,
-                                      RegistrationNumber = bulletin.RegistrationNumber,
-                                      StatusId = bulletin.StatusId,
-                                      CreatedOn = bulletin.CreatedOn,
-                                      BulletinAuthorityId = bulletin.BulletinAuthorityId,
-                                      Version = bulletin.Version,
-                                      CsAuthorotyId = bulletin.CsAuthorityId
-                                  };
-
+                                  select new { BulletinId = bulletin.Id };
 
             var bulletinsByLn = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                 join ln in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnId equals ln.Id
                                 where ln.PersonId == personId
-                                select new
-                                {
-                                    BulletinId = bulletin.Id,
-                                    BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
-                                                          bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
-                                                          BulletinResources.Unspecified,
-                                    RegistrationNumber = bulletin.RegistrationNumber,
-                                    StatusId = bulletin.StatusId,
-                                    CreatedOn = bulletin.CreatedOn,
-                                    BulletinAuthorityId = bulletin.BulletinAuthorityId,
-                                    Version = bulletin.Version,
-                                    CsAuthorotyId = bulletin.CsAuthorityId
-                                };
-
-
+                                select new { BulletinId = bulletin.Id };
 
             var bulletinsByIdDoc = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                    join idDoc in _dbContext.PPersonIds.AsNoTracking() on bulletin.IdDocNumberId equals idDoc.Id
                                    where idDoc.PersonId == personId
-                                   select new
-                                   {
-                                       BulletinId = bulletin.Id,
-                                       BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
-                                                           bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
-                                                           BulletinResources.Unspecified,
-                                       RegistrationNumber = bulletin.RegistrationNumber,
-                                       StatusId = bulletin.StatusId,
-                                       CreatedOn = bulletin.CreatedOn,
-                                       BulletinAuthorityId = bulletin.BulletinAuthorityId,
-                                       Version = bulletin.Version,
-                                       CsAuthorotyId = bulletin.CsAuthorityId
-                                   };
-
+                                   select new { BulletinId = bulletin.Id };
 
             var bulletinsBySuid = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                   join suid in _dbContext.PPersonIds.AsNoTracking() on bulletin.SuidId equals suid.Id
                                   where suid.PersonId == personId
-                                  select new
-                                  {
-                                      BulletinId = bulletin.Id,
-                                      BulletinType = bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
-                                                           bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
-                                                           BulletinResources.Unspecified,
-                                      RegistrationNumber = bulletin.RegistrationNumber,
-                                      StatusId = bulletin.StatusId,
-                                      CreatedOn = bulletin.CreatedOn,
-                                      BulletinAuthorityId = bulletin.BulletinAuthorityId,
-                                      Version = bulletin.Version,
-                                      CsAuthorotyId = bulletin.CsAuthorityId
-                                  };
-
+                                  select new { BulletinId = bulletin.Id };
 
             var bulletinsByPids = bulletinsByEgn
                                 .Union(bulletinsByLnch)
@@ -457,7 +400,10 @@ namespace MJ_CAIS.Repositories.Impl
                                           Version = bulletins.Version,
                                           BulletinAuthorityName = auth.Name,
                                           StatusName = status.Name,
-                                          CanEditBulletin = bulletins.CsAuthorityId == _userContext.CsAuthorityId
+                                          CanEditBulletin = bulletins.CsAuthorityId == _userContext.CsAuthorityId,
+                                          PersonNames = string.IsNullOrEmpty(bulletins.Fullname) ? bulletins.Firstname + " " + bulletins.Surname + " " + bulletins.Familyname : bulletins.Fullname,
+                                          CaseData = bulletins.CaseNumber + "/" + bulletins.CaseYear
+
                                       }).ToListAsync();
 
             return result;
