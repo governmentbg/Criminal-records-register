@@ -67,9 +67,13 @@
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <div class="d-flex gap-3">
-            <a [title]="'Редактиране'" (click)="downloadHtml(cell.rowData.id)">
-              <i class="fas fa-download"></i>
-            </a>
+            <button
+              igxButton="icon"
+              [title]="'Редактиране'"
+              (click)="downloadHtml(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="download"></nb-icon>
+            </button>
           </div>
         </div>
       </ng-template>
