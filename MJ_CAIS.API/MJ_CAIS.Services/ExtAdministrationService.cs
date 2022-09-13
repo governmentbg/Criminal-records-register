@@ -43,7 +43,7 @@ namespace MJ_CAIS.Services
             List<GExtAdministrationUic> uicEntities = await _extAdministrationRepository.GetDeletedUICsAsync(deletedUICs);
 
             // added or updated entities
-            foreach (var currentTransaction in aInDto.ExtAdministrationUics.Where(x => x.Type != TransactionTypesEnum.DELETE))
+            foreach (var currentTransaction in aInDto.ExtAdministrationUics.Where(x => x.Type != TransactionTypesEnum.DELETE && x.Type != null))
             {
                 var sanction = mapper.MapTransaction<ExtAdministrationUicDTO, GExtAdministrationUic>(currentTransaction);
 
