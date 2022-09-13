@@ -212,6 +212,28 @@
               </ng-template>
             </igx-column>
             <igx-column
+              field="caseData"
+              header="Номер/Година на дело"
+              [editable]="false"
+              [dataType]="'string'"
+              [width]="'15%'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              field="personNames"
+              header="Име"
+              [editable]="false"
+              [dataType]="'string'"
+              [width]="'20%'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
               header="Операции върху бюлетин"
               [sortable]="false"
               [filterable]="false"
@@ -318,7 +340,7 @@
 </nb-card>
 
 <igx-dialog #reportDialog>
-  <div style="min-width: 1000px; max-height: 800px;">
+  <div style="min-width: 1000px; max-height: 800px">
     <nb-card>
       <nb-card-header>
         <div class="d-flex" style="justify-content: space-between">
