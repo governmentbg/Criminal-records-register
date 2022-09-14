@@ -12,7 +12,7 @@
     <ng-container *ngIf="!isClearedContry">
       <div
         class="form-group col-md-3"
-        [hidden]="!parentForm.isSetForNativeAddress"
+       
       >
         <cais-autocomplete
           #districtAutocomplete
@@ -22,12 +22,13 @@
           [inputName]="'districtId'"
           [(items)]="districts"
           (selectionChanged)="onDistrictChanged($event)"
+          [disabled]="!parentForm.isSetForNativeAddress"
         ></cais-autocomplete>
       </div>
 
       <div
         class="form-group col-md-3"
-        [hidden]="!parentForm.isSetForNativeAddress"
+       
       >
         <cais-autocomplete
           #municipalityAutocomplete
@@ -37,12 +38,13 @@
           [inputName]="'municipalityId'"
           [(items)]="municipalities"
           (selectionChanged)="onMunicipalityChanged($event)"
+          [disabled]="!parentForm.isSetForNativeAddress"
         ></cais-autocomplete>
       </div>
 
       <div
         class="form-group col-md-3"
-        [hidden]="!parentForm.isSetForNativeAddress"
+        
       >
         <cais-autocomplete
           #cityAutocomplete
@@ -51,15 +53,12 @@
           [parentGroup]="parentForm.group"
           [inputName]="'cityId'"
           [(items)]="cities"
+          [disabled]="!parentForm.isSetForNativeAddress"
         ></cais-autocomplete>
       </div>
       <div
         class="form-group col-md-12"
-        [hidden]="
-          parentForm.isSetForNativeAddress &&
-          !showDescWhenIsNativeAddress &&
-          hideDesc
-        "
+      
       >
         <cais-input
           [type]="'text'"
@@ -69,6 +68,11 @@
           [inputName]="'foreignCountryAddress'"
           [rows]="'1'"
           [inputType]="'TextArea'"
+          [disabled]="
+          parentForm.isSetForNativeAddress &&
+          !showDescWhenIsNativeAddress &&
+          hideDesc
+        "
         ></cais-input>
       </div>
     </ng-container>
