@@ -1052,7 +1052,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             foreach (var fieldName in fieldsForPopulation.Fields.Where(x => x.IsNavigation == false).Select(x => x.FieldName).Distinct())
             {
 
-                var field = fieldsForPopulation.Fields.Where(x => x.FieldName == fieldName && x.IsValueSet).OrderBy(x => x.Priority).First();
+                var field = fieldsForPopulation.Fields.Where(x => x.FieldName == fieldName && x.IsValueSet).OrderBy(x => x.Priority).FirstOrDefault();
                 if (field != null)
                 {
                     if (entity.GetType().GetProperty(fieldName) != null)
@@ -1106,7 +1106,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             }
 
-            foreach (var field in fieldsForPopulation.Fields.Where(x => x.IsNavigation))
+            foreach (var field in fieldsForPopulation.Fields.Where(x => x.IsNavigation && x.IsValueSet))
             {
                 //todo: за сега само се добавят; трябва ли да се update/delete?!
                 try
