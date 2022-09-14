@@ -147,6 +147,9 @@
   <data name="lblIsAdmin" xml:space="preserve">
     <value>Администратор</value>
   </data>
+  <data name="lblLockoutEndDateUtc" xml:space="preserve">
+    <value>Заключен до</value>
+  </data>
   <data name="lblName" xml:space="preserve">
     <value>Имена</value>
   </data>

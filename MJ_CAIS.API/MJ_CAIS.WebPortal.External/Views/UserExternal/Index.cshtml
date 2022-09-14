@@ -57,10 +57,12 @@
                 column.For(x => x.UserName).HeaderText(UsersResources.lblUserName).Width("20%");
                 column.For(x => x.Email).HeaderText(UsersResources.lblEmail).Width("25%");
                 column.For(x => x.Position).HeaderText(UsersResources.lblPosition).Width("20%");
+                column.For(x => x.HasUserName).Hidden(true);
                 column.For(x => x.Active).HeaderText(UsersResources.lblActive).Width("25%")
                 .Template(ButtonTemplates.GridBoolTemplate.Replace(ButtonTemplates.GridBoolTemplateElement, nameof(UserExternalGridDTO.Active)));
                 column.For(x => x.IsAdmin).HeaderText(UsersResources.lblIsAdmin).Width("15%")
                 .Template(ButtonTemplates.GridBoolTemplate.Replace(ButtonTemplates.GridBoolTemplateElement, nameof(UserExternalGridDTO.IsAdmin)));
+                column.For(x => x.LockoutEndDateUtc).HeaderText(UsersResources.lblLockoutEndDateUtc).Width("20%");
                 column.Unbound("buttons").HeaderText("").Template(buttonEdit + buttonChangePassword).Width("15%");
                 })
                 .Features(feature =>
