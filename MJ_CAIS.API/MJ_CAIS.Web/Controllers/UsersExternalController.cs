@@ -70,7 +70,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("unlock/{aId}")]
-        public async Task<IActionResult> unlock(string aId)
+        public async Task<IActionResult> Unlock(string aId)
         {
             var user = await _userManager.FindByIdAsync(aId);
             await _userManager.ResetAccessFailedCountAsync(user);

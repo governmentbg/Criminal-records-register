@@ -33,6 +33,7 @@ namespace MJ_CAIS.WebPortal.External.Models.UserExternal
         public string? Phone { get; set; }
 
         public bool IsAdded { get; set; }
+        public bool HasUnlock{ get; set; }
 
         public string? Version { get; set; }
 

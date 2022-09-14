@@ -40,6 +40,7 @@ namespace MJ_CAIS.Repositories.Impl
                      Version = x.Version,
                      CreatedOn = x.CreatedOn,
                      UserName = x.UserName,
+                     LockoutEndDateUtc = x.LockoutEndDateUtc,
                      HasUserName = !string.IsNullOrEmpty(x.UserName)
                  });
 
