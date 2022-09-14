@@ -165,7 +165,7 @@
     </igx-column>
 
     <igx-column
-      width="120px"
+      width="150px"
       header="Действия"
       [sortable]="false"
       [filterable]="false"
@@ -196,6 +196,14 @@
               [routerLink]="['/pages/users-external/change-password', cell.rowData.id]"
             >
               <nb-icon pack="fa" icon="key"></nb-icon>
+            </button>
+            <button
+              class="btn btn-link"
+              [title]="'Отключи'"
+              [disabled]="!cell.rowData.isLockedOut"
+              (click)="unlock(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="unlock"></nb-icon>
             </button>
           </div>
         </div>

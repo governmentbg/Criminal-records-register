@@ -69,6 +69,15 @@ namespace MJ_CAIS.Web.Controllers
             }
         }
 
+        [HttpGet("unlock/{aId}")]
+        public async Task<IActionResult> unlock(string aId)
+        {
+            var user = await _userManager.FindByIdAsync(aId);
+            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddDays(-1));
+            return Ok();
+        }
+
         [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] UserExternalInDTO aInDto)
         {
