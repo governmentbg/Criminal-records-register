@@ -4,12 +4,7 @@
       Данни за лице
       <ng-container *ngIf="model.personId">
         <div class="justify-content-end">
-          <button
-            nbButton
-            [status]="'primary'"
-            size="small"
-            (click)="previewPerson(model.personId)"
-          >
+          <button nbButton size="small" (click)="previewPerson(model.personId)">
             Преглед
           </button>
         </div>
@@ -187,12 +182,7 @@
       Данни за бюлетин
       <ng-container *ngIf="model.bulletinId">
         <div class="justify-content-end">
-          <a
-            nbButton
-            [status]="'primary'"
-            size="small"
-            (click)="editBulletin(model.bulletinId)"
-          >
+          <a nbButton size="small" (click)="editBulletin(model.bulletinId)">
             Редакция
           </a>
         </div>
