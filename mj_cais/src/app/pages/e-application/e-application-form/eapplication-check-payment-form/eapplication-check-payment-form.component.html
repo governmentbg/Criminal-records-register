@@ -109,7 +109,7 @@
 
             <nb-card-body>
               <div class="row">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-12">
                   <cais-autocomplete
                     [label]="'Начин на плащане'"
                     [inputFormControl]="fullForm.paymentMethodId"
@@ -128,7 +128,7 @@
 
             <nb-card-body>
               <div class="row">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-12">
                   <cais-autocomplete
                     [label]="'Начин на получаване на резултата'"
                     [inputFormControl]="fullForm.srvcResRcptMethId"
@@ -139,13 +139,6 @@
                   </cais-autocomplete>
                 </div>
               </div>
-            </nb-card-body>
-          </nb-card>
-
-          <nb-card status="primary" class="mt-3">
-            <nb-card-header>Адрес на получател </nb-card-header>
-
-            <nb-card-body>
               <div class="row">
                 <div class="form-group col-md-3">
                   <cais-input
