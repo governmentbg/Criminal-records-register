@@ -25,12 +25,15 @@ namespace MJ_CAIS.Repositories.Impl
 
         public override Task<WApplication> SelectAsync(string id)
         {
-            return _dbContext.WApplications.AsNoTracking()
+            var result = _dbContext.WApplications.AsNoTracking()
+                .Include(x => x.BirthCity).AsNoTracking()
+                .Include(x => x.BirthCity.Municipality).AsNoTracking()
                 .Include(x => x.StatusCodeNavigation).AsNoTracking()
                 .Include(x => x.ApplicationType).AsNoTracking()
                 .Include(x => x.WAppCitizenships).AsNoTracking()
                 .Include(x => x.WAppPersAliases).AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
+            return result;
         }
 
         public IQueryable<WApplicaitonGridDTO> SelectAllForCheckPayment()
