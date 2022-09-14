@@ -1,5 +1,5 @@
 <div [formGroup]="parentGroup">
-  <label for="{{ inputName }}" class="label"
+  <label *ngIf="label" for="{{ inputName }}" class="label"
     >{{ label }}
     <ng-container
       *ngIf="
@@ -10,7 +10,6 @@
   >
 
   <ng-select
-    appendTo="body"
     *ngIf="!allowCustomValues"
     #autoControl
     formControlName="{{ inputName }}"
@@ -25,7 +24,6 @@
   </ng-select>
 
   <ng-select
-    appendTo="body"
     *ngIf="allowCustomValues"
     #autoControl
     formControlName="{{ inputName }}"
