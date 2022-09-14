@@ -76,7 +76,7 @@
                   <nb-checkbox [formControl]="fullForm.fromCosul">От консулство</nb-checkbox>
                 </div>
               </div>
-         
+
             </nb-card-body>
           </nb-card>
 
@@ -117,7 +117,7 @@
             </nb-card-body>
           </nb-card>
 
-   
+
 
           <nb-card status="primary" class="mt-3">
             <nb-card-header>Получаване </nb-card-header>
@@ -180,15 +180,16 @@
             </nb-card-body>
           </nb-card>
 
-
-          <cais-application-document-form #applicationDocuments [appForm]="fullForm" [showAddDeleteButton]="
+          <div class="mt-3">
+            <cais-application-document-form #applicationDocuments [appForm]="fullForm" [showAddDeleteButton]="
               (fullForm.statusCode.value !=
                 ApplicationTypeStatusConstants.ApprovedApplication &&
                 isEdit() &&
                 !isForPreview) ||
               (!isEdit() && isForPreview)
             " [documents]="dbData.documents" [dbData]="dbData">
-          </cais-application-document-form>
+            </cais-application-document-form>
+          </div>
         </nb-tab>
 
         <nb-tab tabTitle="Свидетелство" active="{{ isAppAproved }}">
