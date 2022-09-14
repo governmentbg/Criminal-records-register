@@ -12,4 +12,8 @@ import { UserExternalGridModel } from "../_models/user-external.grid.model";
   constructor(injector: Injector) {
     super(UserExternalGridModel, injector, 'users-external');
   }
+
+  unlock(id: string){
+    return this.http.get(`${this.url}/unlock/${id}`);
+  }
 }

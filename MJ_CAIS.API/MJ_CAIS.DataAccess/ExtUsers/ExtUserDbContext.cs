@@ -25,7 +25,7 @@ namespace MJ_CAIS.DataAccess.ExtUsers
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var dateTimeOffsetConverter = new ValueConverter<DateTimeOffset?, DateTime?>(
-                dateTimeOffset => dateTimeOffset.HasValue ? dateTimeOffset.Value.Date : null,
+                dateTimeOffset => dateTimeOffset.HasValue ? dateTimeOffset.Value.DateTime : null,
                 date => date.HasValue ? date.Value : null);
 
             modelBuilder.Entity<LocalGUsersExt>(entity =>
