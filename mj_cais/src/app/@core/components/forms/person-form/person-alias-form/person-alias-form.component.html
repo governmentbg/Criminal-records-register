@@ -1,5 +1,4 @@
-<div class="mb-3"></div>
-<nb-card>
+<div class="my-3">
   <app-grid-with-transactions [gridTransactions]="transactions">
     <igx-grid #personAliasGrid [height]="null" [data]="gridData" [primaryKey]="'id'">
       <igx-grid-toolbar>
@@ -42,64 +41,63 @@
       </igx-action-strip>
     </igx-grid>
   </app-grid-with-transactions>
+</div>
+<igx-dialog #personAliasDialog>
+  <div class="dialogNewRecord">
+    <nb-card>
+      <nb-card-header>
+        <div class="d-flex gap-3 align-items-center">
+          <h5 class="fw-bold">Псевдоним</h5>
+          <button nbButton matRipple [status]="'primary'" (click)="onAddOrUpdatePersonAliasRow()" type="button"
+            class="ml-2">
+            <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon> Потвърди
+          </button>
+          <button nbButton matRipple (click)="onClosePersonAliasDilog()" type="button">
+            <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon> Откажи
+          </button>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-2">
+          <div class="form-group col-md-12">
+            <cais-autocomplete [label]="'Тип'" [inputFormControl]="personAliasForm.typeId"
+              [parentGroup]="personAliasForm.group" [items]="personAliasTypes" [inputName]="'typeId'">
+            </cais-autocomplete>
+          </div>
+        </div>
 
-  <igx-dialog #personAliasDialog>
-    <div class="dialogNewRecord">
-      <nb-card>
-        <nb-card-header>
-          <div class="d-flex gap-3 align-items-center">
-            <h5 class="fw-bold">Псевдоним</h5>
-            <button nbButton matRipple [status]="'primary'" (click)="onAddOrUpdatePersonAliasRow()" type="button"
-              class="ml-2">
-              <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon> Потвърди
-            </button>
-            <button nbButton matRipple (click)="onClosePersonAliasDilog()" type="button">
-              <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon> Откажи
-            </button>
+        <div class="row mt-2">
+          <div class="form-group col-md-12">
+            <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="personAliasForm.firstname"
+              [parentGroup]="personAliasForm.group" [inputName]="'firstname'">
+            </cais-input>
           </div>
-        </nb-card-header>
-        <nb-card-body>
-          <div class="row mt-2">
-            <div class="form-group col-md-12">
-              <cais-autocomplete [label]="'Тип'" [inputFormControl]="personAliasForm.typeId"
-                [parentGroup]="personAliasForm.group" [items]="personAliasTypes" [inputName]="'typeId'">
-              </cais-autocomplete>
-            </div>
-          </div>
+        </div>
 
-          <div class="row mt-2">
-            <div class="form-group col-md-12">
-              <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="personAliasForm.firstname"
-                [parentGroup]="personAliasForm.group" [inputName]="'firstname'">
-              </cais-input>
-            </div>
+        <div class="row mt-2">
+          <div class="form-group col-md-12">
+            <cais-input [type]="'text'" [label]="'Презиме'" [inputFormControl]="personAliasForm.surname"
+              [parentGroup]="personAliasForm.group" [inputName]="'surname'">
+            </cais-input>
           </div>
+        </div>
 
-          <div class="row mt-2">
-            <div class="form-group col-md-12">
-              <cais-input [type]="'text'" [label]="'Презиме'" [inputFormControl]="personAliasForm.surname"
-                [parentGroup]="personAliasForm.group" [inputName]="'surname'">
-              </cais-input>
-            </div>
+        <div class="row mt-2">
+          <div class="form-group col-md-12">
+            <cais-input [type]="'text'" [label]="'Фамилия'" [inputFormControl]="personAliasForm.familyname"
+              [parentGroup]="personAliasForm.group" [inputName]="'familyname'">
+            </cais-input>
           </div>
+        </div>
 
-          <div class="row mt-2">
-            <div class="form-group col-md-12">
-              <cais-input [type]="'text'" [label]="'Фамилия'" [inputFormControl]="personAliasForm.familyname"
-                [parentGroup]="personAliasForm.group" [inputName]="'familyname'">
-              </cais-input>
-            </div>
+        <div class="row mt-2">
+          <div class="form-group col-md-12">
+            <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="personAliasForm.fullname"
+              [parentGroup]="personAliasForm.group" [inputName]="'fullname'">
+            </cais-input>
           </div>
-
-          <div class="row mt-2">
-            <div class="form-group col-md-12">
-              <cais-input [type]="'text'" [label]="'Имена'" [inputFormControl]="personAliasForm.fullname"
-                [parentGroup]="personAliasForm.group" [inputName]="'fullname'">
-              </cais-input>
-            </div>
-          </div>
-        </nb-card-body>
-      </nb-card>
-    </div>
-  </igx-dialog>
-</nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>
