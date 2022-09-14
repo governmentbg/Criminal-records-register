@@ -18,6 +18,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         Task<PersonDataResponseType>  ExecutePersonDataSearch(EWebRequest request, string webServiceName, string? egn = null, string? registrationNumber = null);
         Task<RelationsResponseType> ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null, string? registrationNumber = null);
         Task<ForeignIdentityInfoResponseType> ExecuteForeignIdentitySearchV2(EWebRequest request, string webServiceName, string? egn = null, string? registrationNumber = null);
+        Task PopulateDataFromRequest(EWebRequest request);
 
     }
 }

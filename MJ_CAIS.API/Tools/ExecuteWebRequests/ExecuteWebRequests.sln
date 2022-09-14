@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExecuteWebRequests", "ExecuteWebRequests\ExecuteWebRequests.csproj", "{DB764EE4-EAF7-46B1-909E-12DC13562EA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExecuteWebRequests", "ExecuteWebRequests\ExecuteWebRequests.csproj", "{DB764EE4-EAF7-46B1-909E-12DC13562EA8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.ExternalWebServices", "..\..\MJ_CAIS.ExternalWebServices\MJ_CAIS.ExternalWebServices.csproj", "{2A2EE30E-0583-477B-95DE-19D9E3E081C2}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DIContainer", "..\..\MJ_CAIS.DIContainer\MJ_CAIS.DIContainer.csproj", "{676464AD-E934-41D6-A908-1EE6EF7A1D2B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.Common", "..\..\MJ_CAIS.Common\MJ_CAIS.Common.csproj", "{59149973-991B-480C-A97F-FFB4A58E01E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.AutoMapperContainer", "..\..\MJ_CAIS.AutoMapper\MJ_CAIS.AutoMapperContainer.csproj", "{D177C861-E12C-4E19-A519-1AC8A9F9B1E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MJ_CAIS.DTO", "..\..\MJ_CAIS.DTO\MJ_CAIS.DTO.csproj", "{7DB83130-86F0-4612-88FC-A2B2D04CC2F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{59149973-991B-480C-A97F-FFB4A58E01E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59149973-991B-480C-A97F-FFB4A58E01E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59149973-991B-480C-A97F-FFB4A58E01E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D177C861-E12C-4E19-A519-1AC8A9F9B1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D177C861-E12C-4E19-A519-1AC8A9F9B1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D177C861-E12C-4E19-A519-1AC8A9F9B1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D177C861-E12C-4E19-A519-1AC8A9F9B1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DB83130-86F0-4612-88FC-A2B2D04CC2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DB83130-86F0-4612-88FC-A2B2D04CC2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DB83130-86F0-4612-88FC-A2B2D04CC2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DB83130-86F0-4612-88FC-A2B2D04CC2F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
