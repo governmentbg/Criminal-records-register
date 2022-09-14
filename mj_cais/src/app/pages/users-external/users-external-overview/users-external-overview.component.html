@@ -165,7 +165,7 @@
     </igx-column>
 
     <igx-column
-      width="120px"
+      width="150px"
       header="Действия"
       [sortable]="false"
       [filterable]="false"
@@ -175,18 +175,36 @@
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <div class="d-flex gap-3">
-            <a
+            <button
+              class="btn btn-link"
               [title]="'Преглед'"
               [routerLink]="['/pages/users-external/preview', cell.rowData.id]"
             >
               <nb-icon pack="fa" icon="eye"></nb-icon>
-            </a>
-            <a
+            </button>
+            <button
+              class="btn btn-link"
               [title]="'Редактиране'"
               [routerLink]="['/pages/users-external/edit', cell.rowData.id]"
             >
               <nb-icon pack="fa" icon="pen"></nb-icon>
-            </a>
+            </button>
+            <button
+              class="btn btn-link"
+              [title]="'Промяна на парола'"
+              [disabled]="!cell.rowData.userName"
+              [routerLink]="['/pages/users-external/change-password', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="key"></nb-icon>
+            </button>
+            <button
+              class="btn btn-link"
+              [title]="'Отключи'"
+              [disabled]="!cell.rowData.isLockedOut"
+              (click)="unlock(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="unlock"></nb-icon>
+            </button>
           </div>
         </div>
       </ng-template>

@@ -1,237 +1,241 @@
-<div class="inner-card-header">
-  <div class="float-left">Данни за лице</div>
-  <ng-container *ngIf="model.personId">
-    <div class="float-rigth">
-      <button
-        nbButton
-        size="small"
-        (click)="previewPerson(model.personId)"
-      >
-        Преглед
-      </button>
+<nb-card status="primary" class="mt-3">
+  <nb-card-header>
+    <div class="d-flex justify-content-between">
+      <div class="d-flex align-items-center">Данни за лице</div>
+      <ng-container *ngIf="model.personId">
+        <div>
+          <button nbButton size="small" (click)="previewPerson(model.personId)">
+            Преглед
+          </button>
+        </div>
+      </ng-container>
     </div>
-  </ng-container>
-</div>
-<div class="inner-card-body">
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Имена на кирилица: </span>
-        <span>
-          {{ model.firstname }} {{ model.surname }} {{ model.familyname }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Имена на латиница: </span>
-        <span>
-          {{ model.firstnameLat }} {{ model.surnameLat }}
-          {{ model.familynameLat }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Псевдоним: </span>
-      </div>
-      <div class="row col-md-12" *ngFor="let item of model.personAliases">
-        {{ item.firstname }} {{ item.surname }} {{ item.familyname }}
-        {{ item.fullname }}
-      </div>
-    </div>
-  </div>
+  </nb-card-header>
 
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Пол: </span>
-        <span>
-          {{ model.sex }}
-        </span>
+  <nb-card-body>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Имена на кирилица: </span>
+          <span>
+            {{ model.firstname }} {{ model.surname }} {{ model.familyname }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Имена на латиница: </span>
+          <span>
+            {{ model.firstnameLat }} {{ model.surnameLat }}
+            {{ model.familynameLat }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Псевдоним: </span>
+        </div>
+        <div class="row col-md-12" *ngFor="let item of model.personAliases">
+          {{ item.firstname }} {{ item.surname }} {{ item.familyname }}
+          {{ item.fullname }}
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Дата на раждане: </span>
-        <span>
-          {{ model.birthDate | date }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Националност: </span>
-      </div>
-      <div class="row col-md-12" *ngFor="let item of model.nationalities">
-        {{ item }}
-      </div>
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">ЕГН: </span>
-        <span>
-          {{ model.egn }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">ЛНЧ: </span>
-        <span>
-          {{ model.lnch }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">ЛН: </span>
-        <span>
-          {{ model.ln }}
-        </span>
-      </div>
-    </div>
-  </div>
-  <div class="cais-display-form-group">
-    <div class="label">Място на раждане</div>
-  </div>
-  <hr />
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Държава: </span>
-        <span>
-          {{ model.country }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Област: </span>
-        <span>
-          {{ model.districtname }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Община: </span>
-        <span>
-          {{ model.municipalityName }}
-        </span>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Населено място: </span>
-        <span>
-          {{ model.city }}
-        </span>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Пол: </span>
+          <span>
+            {{ model.sex }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Дата на раждане: </span>
+          <span>
+            {{ model.birthDate | date }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Националност: </span>
+        </div>
+        <div class="row col-md-12" *ngFor="let item of model.nationalities">
+          {{ item }}
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Oписание в случай на друг адрес: </span>
-        <span>
-          {{ model.foreignCountryAddress }}
-        </span>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЕГН: </span>
+          <span>
+            {{ model.egn }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЛНЧ: </span>
+          <span>
+            {{ model.lnch }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">ЛН: </span>
+          <span>
+            {{ model.ln }}
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="cais-display-form-group">
-    <div class="label">Родители</div>
-  </div>
-  <hr />
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Майка: </span>
-        <span>
-          {{ model.motherFirstname }} {{ model.motherSurname }}
-          {{ model.motherFamilyname }} {{ model.motherFullname }}
-        </span>
+    <div class="cais-display-form-group">
+      <div class="label">Място на раждане</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Държава: </span>
+          <span>
+            {{ model.country }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Област: </span>
+          <span>
+            {{ model.districtname }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Община: </span>
+          <span>
+            {{ model.municipalityName }}
+          </span>
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Баща: </span>
-        <span>
-          {{ model.fatherFirstname }} {{ model.fatherSurname }}
-          {{ model.fatherFamilyname }} {{ model.fatherFullname }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">БС по местоположение: </span>
-        <span> {{ model.csAuthorityName }} </span>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="inner-card-header">
-  <div class="float-left">Данни за бюлетин</div>
-  <ng-container *ngIf="model.bulletinId">
-    <div class="float-rigth">
-      <a
-        nbButton
-        size="small"
-        (click)="editBulletin(model.bulletinId)"     
-      >
-        Редакция
-      </a>
-    </div>
-  </ng-container>
-</div>
-<div class="inner-card-body">
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Дата на регистрация: </span>
-        <span>{{ model.bulletinReceivedDate | date }}</span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Номер: </span>
-        <span>
-          {{ model.registrationNumber }}
-        </span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Вид: </span>
-        <span> {{ model.bulletinType }} </span>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Съд издал акта: </span>
-        <span> {{ model.decidingAuthName }} </span>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Населено място: </span>
+          <span>
+            {{ model.city }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Oписание в случай на друг адрес: </span>
+          <span>
+            {{ model.foreignCountryAddress }}
+          </span>
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Акт(№/дата): </span>
-        <span>
-          {{ model.decisionNumber }} / {{ model.decisionDate | date }}
-        </span>
+    <div class="cais-display-form-group">
+      <div class="label">Родители</div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Майка: </span>
+          <span>
+            {{ model.motherFirstname }} {{ model.motherSurname }}
+            {{ model.motherFamilyname }} {{ model.motherFullname }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Баща: </span>
+          <span>
+            {{ model.fatherFirstname }} {{ model.fatherSurname }}
+            {{ model.fatherFamilyname }} {{ model.fatherFullname }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">БС по местоположение: </span>
+          <span> {{ model.csAuthorityName }} </span>
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="row col-md-12 cais-display-form-group">
-        <span class="label">Дело(№/дата): </span>
-        <span> {{ model.caseNumber }} / {{ model.caseYear | date }} </span>
+  </nb-card-body>
+</nb-card>
+
+<nb-card status="primary" class="mt-3">
+  <nb-card-header
+    ><div class="d-flex justify-content-between">
+      <div class="d-flex align-items-center">Данни за бюлетин</div>
+
+      <ng-container *ngIf="model.bulletinId">
+        <div>
+          <a nbButton size="small" (click)="editBulletin(model.bulletinId)">
+            Редакция
+          </a>
+        </div>
+      </ng-container>
+    </div>
+  </nb-card-header>
+
+  <nb-card-body>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Дата на регистрация: </span>
+          <span>{{ model.bulletinReceivedDate | date }}</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Номер: </span>
+          <span>
+            {{ model.registrationNumber }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Вид: </span>
+          <span> {{ model.bulletinType }} </span>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Съд издал акта: </span>
+          <span> {{ model.decidingAuthName }} </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Акт(№/дата): </span>
+          <span>
+            {{ model.decisionNumber }} / {{ model.decisionDate | date }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row col-md-12 cais-display-form-group">
+          <span class="label">Дело(№/дата): </span>
+          <span> {{ model.caseNumber }} / {{ model.caseYear | date }} </span>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

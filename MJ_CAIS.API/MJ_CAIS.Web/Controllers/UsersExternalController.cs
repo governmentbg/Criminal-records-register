@@ -45,6 +45,39 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] UserExternalChangePasswordDTO aInDto)
+        {
+            if (!string.IsNullOrEmpty(aInDto.UserName) && 
+                !string.IsNullOrEmpty(aInDto.Password))
+            {
+                var user = await _userManager.FindByNameAsync(aInDto.UserName);
+                string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, resetToken, aInDto.Password);
+                if (result.Succeeded)
+                {
+                    return Ok(new { });
+                }
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
+            else
+            {
+                return BadRequest("UserName or password not provided!");
+            }
+        }
+
+        [HttpGet("unlock/{aId}")]
+        public async Task<IActionResult> Unlock(string aId)
+        {
+            var user = await _userManager.FindByIdAsync(aId);
+            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddDays(-1));
+            return Ok();
+        }
+
         [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] UserExternalInDTO aInDto)
         {

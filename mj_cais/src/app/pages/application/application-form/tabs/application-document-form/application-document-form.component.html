@@ -97,23 +97,29 @@
     <div class="dialogNewRecord" style="min-width: 1000px">
       <nb-card>
         <nb-card-header>
-          <div class="d-flex align-items-center gap-3">
+          <div class="d-flex justify-content-between">
             <h5 style="font-weight: bold">Документ</h5>
 
-            <button
-              nbButton
-              status="success"
-              (click)="onSubmitAppDocument()"
-              type="button"
-            >
-              <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
-              Потвърди
-            </button>
+            <div class="d-flex align-items-center gap-3">
+              <button
+                nbButton
+                status="success"
+                (click)="onSubmitAppDocument()"
+                type="button"
+              >
+                <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
+                Потвърди
+              </button>
 
-            <button nbButton (click)="onCloseAppDocumentDilog()" type="button">
-              <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
-              Откажи
-            </button>
+              <button
+                nbButton
+                (click)="onCloseAppDocumentDilog()"
+                type="button"
+              >
+                <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
+                Откажи
+              </button>
+            </div>
           </div>
         </nb-card-header>
         <nb-card-body>

@@ -121,13 +121,12 @@ export class ApplicationForm extends BaseForm {
     this.userExtId = new FormControl(null);
     this.birthAddress = new AddressForm();
     this.person = new PersonForm(PersonContextEnum.Application, false);
-    
+
     //Validators
     this.registrationNumber.disable();
     this.currentApplicationStatus.disable();
-   
-    
-    
+    this.purposeId.setValidators([Validators.required]);
+
     this.group = new FormGroup({
       id: this.id,
       version: this.version,
@@ -185,7 +184,7 @@ export class ApplicationForm extends BaseForm {
       userId: this.userId,
       userExtId: this.userExtId,
       birthAddress: this.birthAddress.group,
-      person: this.person.group
+      person: this.person.group,
     });
   }
 }

@@ -5,8 +5,6 @@
   [data]="historyData"
   [primaryKey]="'id'"
 >
-
-  
   <igx-column
     field="createdOn"
     [sortable]="true"
@@ -42,22 +40,31 @@
     [dataType]="'string'"
   ></igx-column>
   <igx-column
-  field="apiServiceCallId"
-  header="Regix_ID"
-  [sortable]="true"
-  [dataType]="'string'"
-></igx-column>
+    field="apiServiceCallId"
+    header="Regix_ID"
+    [sortable]="true"
+    [dataType]="'string'"
+  ></igx-column>
   <igx-column
-    width="150px"
-    header=""
+    width="110px"
+    header="Действия"
     [sortable]="false"
     [filterable]="false"
     [pinned]="true"
+    [disableHiding]="true"
   >
     <ng-template igxCell let-cell="cell">
-      <a [title]="'Редактиране'" (click)="downloadHtml(cell.rowData.id)">
-        <i class="fas fa-download"></i>
-      </a>
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <button
+            class="btn btn-link"
+            [title]="'Свали'"
+            (click)="downloadHtml(cell.rowData.id)"
+          >
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
+      </div>
     </ng-template>
   </igx-column>
 </igx-grid>

@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <cais-autocomplete
             [label]="'Тип на заявка'"
             [inputFormControl]="fullForm.nIntReqTypeId"
@@ -105,7 +105,7 @@
         </div>
 
         <ng-container *ngIf="isEdit()">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <cais-input
               [type]="'text'"
               [label]="'Идентификатор на лице'"
@@ -115,7 +115,7 @@
           </div>
         </ng-container>
         <ng-container *ngIf="!isEdit()">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <cais-autocomplete
               [label]="'Идентификатор на лице'"
               [inputFormControl]="fullForm.pPersIdId"
@@ -212,6 +212,28 @@
               </ng-template>
             </igx-column>
             <igx-column
+              field="caseData"
+              header="Номер/Година на дело"
+              [editable]="false"
+              [dataType]="'string'"
+              [width]="'15%'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
+              field="personNames"
+              header="Име"
+              [editable]="false"
+              [dataType]="'string'"
+              [width]="'20%'"
+            >
+              <ng-template igxCell let-cell="cell">
+                <span [title]="cell.value">{{ cell.value }}</span>
+              </ng-template>
+            </igx-column>
+            <igx-column
               header="Операции върху бюлетин"
               [sortable]="false"
               [filterable]="false"
@@ -285,7 +307,7 @@
         </app-grid-with-transactions>
       </div>
       <div class="row mt-2">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
           <cais-input
             [type]="'text'"
             [label]="'Описание'"
@@ -302,7 +324,7 @@
         "
       >
         <div class="row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-12">
             <cais-input
               [type]="'text'"
               [label]="'Отговор'"
@@ -318,7 +340,7 @@
 </nb-card>
 
 <igx-dialog #reportDialog>
-  <div style="min-width: 1000px; max-height: 800px;">
+  <div style="min-width: 1000px; max-height: 800px">
     <nb-card>
       <nb-card-header>
         <div class="d-flex" style="justify-content: space-between">

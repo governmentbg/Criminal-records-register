@@ -7,8 +7,10 @@
         <igx-grid-toolbar-actions>
           <div class="d-flex gap-2">
             <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
-            <button nbButton [status]="'primary'" (click)="dialogAdd.open()" *ngIf="!isForPreview">
-              <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добави
+            <button *ngIf="!isForPreview" nbButton matRipple [status]="'primary'" (click)="dialogAdd.open()"
+            >
+              <nb-icon class="pt-1" [icon]="'plus'" pack="fa"></nb-icon>
+              Добави
             </button>
           </div>
         </igx-grid-toolbar-actions>
@@ -131,13 +133,9 @@
             </div>
           </div>
 
-          <div class="font-weight-bold">
-            Място на извършване на престъплението
-          </div>
-          <hr />
-
-          <div class="row ml-2">
-            <div class="form-group col-md-12">
+          <div class="card bg-transparent mt-3">
+            <div class="card-body">
+              <h6 class="card-title"> Място на извършване на престъплението</h6>
               <cais-address-form #offPlace [parentForm]="bulletinOffenceForm.offPlace"
                 [showDescWhenIsNativeAddress]="true"></cais-address-form>
             </div>

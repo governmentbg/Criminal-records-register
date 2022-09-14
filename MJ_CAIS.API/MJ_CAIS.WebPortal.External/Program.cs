@@ -32,7 +32,7 @@ namespace MJ_CAIS.WebPortal.External
 
             builder
                 .Services
-                .AddTransient(typeof(IPasswordHasher<GUsersExt>), typeof(CompatibilityPasswordHasher));
+                .AddTransient(typeof(IPasswordHasher<LocalGUsersExt>), typeof(CompatibilityPasswordHasher));
 
             builder
                 .Services

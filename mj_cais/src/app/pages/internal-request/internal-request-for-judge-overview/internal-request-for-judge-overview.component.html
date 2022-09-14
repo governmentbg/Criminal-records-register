@@ -49,11 +49,14 @@
       [dataType]="'number'"
       [hidden]="true"
     >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="cell.value">{{ cell.value }}</span>
-      </ng-template>
     </igx-column>
-
+    <igx-column
+      field="pid"
+      header="Идентификатор на лицето"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+    </igx-column>
     <igx-column
       field="requestDate"
       header="Дата на създаване"
@@ -71,9 +74,6 @@
       [dataType]="'string'"
       [hidden]="hideStatus"
     >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="cell.value">{{ cell.value }}</span>
-      </ng-template>
     </igx-column>
     <igx-column
       field="reqestType"
@@ -81,9 +81,6 @@
       [sortable]="true"
       [dataType]="'string'"
     >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="cell.value">{{ cell.value }}</span>
-      </ng-template>
     </igx-column>
     <igx-column
       field="fromAuthorityName"
@@ -91,9 +88,6 @@
       [sortable]="true"
       [dataType]="'string'"
     >
-      <ng-template igxCell let-cell="cell">
-        <span [title]="cell.value">{{ cell.value }}</span>
-      </ng-template>
     </igx-column>
 
     <igx-column

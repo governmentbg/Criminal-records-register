@@ -10,6 +10,8 @@ export class UserExternalGridModel extends BaseGridModel {
   public position: string = null;
   public administrationName: string = null;
   public hasRegRegCertSubject: boolean = null;
+  public lockoutEndDateUtc: Date = null;
+  public isLockedOut: boolean = false;
 
   constructor(init?: Partial<UserExternalGridModel>) {
     super(init);
@@ -22,5 +24,7 @@ export class UserExternalGridModel extends BaseGridModel {
     this.administrationName = init?.administrationName ?? null;
     this.hasRegRegCertSubject = init?.hasRegRegCertSubject ?? null;
     this.userName = init?.userName ?? null;
+    this.lockoutEndDateUtc = init?.lockoutEndDateUtc ?? null
+    this.isLockedOut = init?.lockoutEndDateUtc && new Date(init?.lockoutEndDateUtc) > new Date();
   }
 }

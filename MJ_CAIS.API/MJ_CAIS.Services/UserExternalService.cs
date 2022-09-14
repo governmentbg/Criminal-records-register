@@ -102,15 +102,15 @@ namespace MJ_CAIS.Services
 
 
     //TODO: Duplicated in MJ_CAIS.IdentityServer.CAISExternalCredentials
-    public class CompatibilityPasswordHasher : PasswordHasher<GUsersExt>
+    public class CompatibilityPasswordHasher : PasswordHasher<LocalGUsersExt>
     {
-        public override PasswordVerificationResult VerifyHashedPassword(GUsersExt user, string hashedPassword, string providedPassword)
+        public override PasswordVerificationResult VerifyHashedPassword(LocalGUsersExt user, string hashedPassword, string providedPassword)
         {
             var compatibilityPassword = Hash(providedPassword);
             return base.VerifyHashedPassword(user, hashedPassword, compatibilityPassword);
         }
 
-        public override string HashPassword(GUsersExt user, string password)
+        public override string HashPassword(LocalGUsersExt user, string password)
         {
             var compatibilityPassword = Hash(password);
             return base.HashPassword(user, compatibilityPassword);

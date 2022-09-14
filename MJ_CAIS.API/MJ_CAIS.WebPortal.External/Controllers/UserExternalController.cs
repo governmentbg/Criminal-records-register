@@ -117,7 +117,8 @@ namespace MJ_CAIS.WebPortal.External.Controllers
                     Active = userWithPass.Active.HasValue && userWithPass.Active.Value,
                     Name = userWithPass.Name,
                     Position = userWithPass.Position,
-                    Version = userWithPass.Version.ToString()
+                    Version = userWithPass.Version.ToString(),
+                    HasUnlock = userWithPass.LockoutEnd.HasValue && userWithPass.LockoutEnd > DateTime.UtcNow
                 };
                 await FillDataForPasswordEditModel(viewModel);
                 return View("EditWithPassword", viewModel);
@@ -136,6 +137,16 @@ namespace MJ_CAIS.WebPortal.External.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             return View(new ResetPasswordViewModel() { Id = id, UserName = user.UserName });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Unlock(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddDays(-1));
+            var viewModel = new UserExternalViewModel();
+            return View("Index", viewModel);
         }
 
         [HttpPost]

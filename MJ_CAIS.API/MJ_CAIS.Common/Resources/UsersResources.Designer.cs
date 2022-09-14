@@ -151,6 +151,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Заключен до.
+        /// </summary>
+        public static string lblLockoutEndDateUtc {
+            get {
+                return ResourceManager.GetString("lblLockoutEndDateUtc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Имена.
         /// </summary>
         public static string lblName {
