@@ -30,5 +30,11 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult Accessibility()
+        {
+            return View();
+        }
     }
 }
