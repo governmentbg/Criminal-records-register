@@ -23,10 +23,9 @@
   </nb-card-header>
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <nb-card status="primary" class="mt-3">
-        <nb-card-header>Основна информация </nb-card-header>
-
-        <nb-card-body>
+      <div class="card bg-transparent mt-2">
+        <div class="card-body">
+          <h6 class="card-title">Основна информация</h6>
           <div class="row">
             <div class="form-group col-md-3">
               <cais-input
@@ -113,13 +112,12 @@
               ></cais-lookup>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </div>
+      </div>
 
-      <nb-card status="primary" class="mt-3">
-        <nb-card-header>Документ за самоличност</nb-card-header>
-
-        <nb-card-body>
+      <div class="card bg-transparent mt-2">
+        <div class="card-body">
+          <h6 class="card-title">Документ за самоличност</h6>
           <div class="row">
             <div class="form-group col-md-3">
               <cais-input
@@ -146,13 +144,12 @@
               ></cais-input>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </div>
+      </div>
 
-      <nb-card status="primary" class="mt-3">
-        <nb-card-header>Месторождение </nb-card-header>
-
-        <nb-card-body>
+      <div class="card bg-transparent mt-2">
+        <div class="card-body">
+          <h6 class="card-title">Месторождение</h6>
           <div class="row">
             <div class="form-group col-md-12">
               <cais-address-form
@@ -195,13 +192,13 @@
               ></cais-input>
             </div>
           </div>
-        </nb-card-body>
-      </nb-card>
+        </div>
+      </div>
     </form>
   </nb-card-body>
 </nb-card>
 
-<nb-card>
+<nb-card class="mt-3">
   <cais-report-person-search-overview
     #bulletinByPersonReportOverview
     [searchForm]="fullForm"
