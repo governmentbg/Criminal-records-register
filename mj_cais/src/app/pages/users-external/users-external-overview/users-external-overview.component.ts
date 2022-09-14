@@ -12,7 +12,7 @@ export class UsersExternalOverviewComponent  extends RemoteGridWithStatePersista
 UserExternalGridModel,
 UserExternalGridService
 > {
-  
+  public now = new Date();
 constructor(
   service: UserExternalGridService,
   injector: Injector
@@ -24,4 +24,16 @@ constructor(
     super.ngOnInit();
   }
 
+  unlock(id: string){
+    this.service.unlock(id).subscribe({
+      next: 
+        data => {
+          this.toastr.showToast("success", "Успешно отключен потребител");
+          this.sortingDone({});
+        },
+      error: 
+        error => 
+          this.toastr.showBodyToast("danger", "Error", error)
+    });
+  }
 }
