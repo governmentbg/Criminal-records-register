@@ -1,40 +1,81 @@
-<igx-grid #peopleGrid igxGridState [data]="people" [height]="null" [clipboardOptions]="{ copyHeaders: false }"
-  [displayDensity]="'cosy'" [allowFiltering]="true" [primaryKey]="'identifier'" [cellSelection]="'none'"
-  [rowSelection]="selectionMode" [selectedRows]="selectedRows" (onRowSelectionChange)="handleRowSelection($event)">
+<igx-grid
+  #peopleGrid
+  igxGridState
+  [data]="people"
+  [height]="null"
+  [clipboardOptions]="{ copyHeaders: false }"
+  [displayDensity]="'cosy'"
+  [allowFiltering]="true"
+  [primaryKey]="'identifier'"
+  [cellSelection]="'none'"
+  [rowSelection]="selectionMode"
+  [selectedRows]="selectedRows"
+  (onRowSelectionChange)="handleRowSelection($event)"
+>
   <igx-grid-toolbar>
     <igx-grid-toolbar-title>
-      <span class="fw-bold">Идентифицирани лица</span></igx-grid-toolbar-title>
+      <span class="fw-bold">Идентифицирани лица</span></igx-grid-toolbar-title
+    >
     <igx-grid-toolbar-actions>
       <div class="d-flex gap-2">
         <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
-        <button *ngIf="!isForPreview" igxButton="flat" (click)="dialogAdd.open()">
+        <button
+          *ngIf="!isForPreview"
+          igxButton="flat"
+          (click)="dialogAdd.open()"
+        >
           <igx-icon>search</igx-icon> Търсене
         </button>
       </div>
     </igx-grid-toolbar-actions>
   </igx-grid-toolbar>
 
-  <igx-column field="identifier" header="ЕГН" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="identifier"
+    header="ЕГН"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column field="firstName" header="Име" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="firstName"
+    header="Име"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column field="surName" header="Презиме" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="surName"
+    header="Презиме"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column field="familyName" header="Фамилия" [sortable]="true" [dataType]="'string'">
+  <igx-column
+    field="familyName"
+    header="Фамилия"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
     </ng-template>
   </igx-column>
-  <igx-column field="birthDate" header="Дата на раждане" [sortable]="true" [dataType]="'date'">
+  <igx-column
+    field="birthDate"
+    header="Дата на раждане"
+    [sortable]="true"
+    [dataType]="'date'"
+  >
     <ng-template igxCell let-cell="cell">
       <span [title]="this.dateFormatService.displayDate(cell.value)">
         {{ this.dateFormatService.displayDate(cell.value) }}
@@ -47,18 +88,35 @@
   <div class="dialogNewRecord" style="min-width: 1000px">
     <nb-card>
       <nb-card-header>
-        <div class="d-flex" style="justify-content: space-between">
+        <div class="d-flex justify-content-between">
           <div class="d-flex align-items-center">
             <h5 style="font-weight: bold">Търсене</h5>
           </div>
           <div class="d-flex gap-2">
             <div>
-              <button nbButton matRipple [status]="'primary'" (click)="onSearch()" type="button">
-                <nb-icon class="pt-1" [icon]="'search'" pack="fa" title="Търсене"></nb-icon>Търси
+              <button
+                nbButton
+                matRipple
+                [status]="'primary'"
+                (click)="onSearch()"
+                type="button"
+              >
+                <nb-icon
+                  class="pt-1"
+                  [icon]="'search'"
+                  pack="fa"
+                  title="Търсене"
+                ></nb-icon
+                >Търси
               </button>
             </div>
             <div>
-              <button nbButton matRipple (click)="onCloseDialog()" type="button">
+              <button
+                nbButton
+                matRipple
+                (click)="onCloseDialog()"
+                type="button"
+              >
                 Откажи
               </button>
             </div>
@@ -68,34 +126,62 @@
       <nb-card-body>
         <div class="row mt-2">
           <div class="form-group col-md-4">
-            <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="searchPersonForm.firstname"
-              [parentGroup]="searchPersonForm.group" [inputName]="'firstname'"></cais-input>
+            <cais-input
+              [type]="'text'"
+              [label]="'Име'"
+              [inputFormControl]="searchPersonForm.firstname"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'firstname'"
+            ></cais-input>
           </div>
           <div class="form-group col-md-4">
-            <cais-input [type]="'text'" [label]="'Презиме'" [inputFormControl]="searchPersonForm.surname"
-              [parentGroup]="searchPersonForm.group" [inputName]="'surname'">
+            <cais-input
+              [type]="'text'"
+              [label]="'Презиме'"
+              [inputFormControl]="searchPersonForm.surname"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'surname'"
+            >
             </cais-input>
           </div>
           <div class="form-group col-md-4">
-            <cais-input [type]="'text'" [label]="'Фамилия'" [inputFormControl]="searchPersonForm.familyname"
-              [parentGroup]="searchPersonForm.group" [inputName]="'familyname'">
+            <cais-input
+              [type]="'text'"
+              [label]="'Фамилия'"
+              [inputFormControl]="searchPersonForm.familyname"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'familyname'"
+            >
             </cais-input>
           </div>
         </div>
         <div class="row mt-2">
           <div class="form-group col-md-3">
-            <cais-autocomplete [label]="'Пол'" [inputFormControl]="searchPersonForm.sex"
-              [parentGroup]="searchPersonForm.group" [items]="genderTypes.slice(0, 2)" [inputName]="'sex'">
+            <cais-autocomplete
+              [label]="'Пол'"
+              [inputFormControl]="searchPersonForm.sex"
+              [parentGroup]="searchPersonForm.group"
+              [items]="genderTypes.slice(0, 2)"
+              [inputName]="'sex'"
+            >
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-3">
-            <cais-input [type]="'date'" [label]="'Дата на раждане'" [inputFormControl]="searchPersonForm.birthDate"
-              [parentGroup]="searchPersonForm.group" [inputName]="'birthDate'"></cais-input>
+            <cais-input
+              [type]="'date'"
+              [label]="'Дата на раждане'"
+              [inputFormControl]="searchPersonForm.birthDate"
+              [parentGroup]="searchPersonForm.group"
+              [inputName]="'birthDate'"
+            ></cais-input>
           </div>
         </div>
         <hr />
-        <cais-result-from-search-overview #resultGrid [searchPersonForm]="searchPersonForm"
-          (selectRow)="handleSelectedRow($event)"></cais-result-from-search-overview>
+        <cais-result-from-search-overview
+          #resultGrid
+          [searchPersonForm]="searchPersonForm"
+          (selectRow)="handleSelectedRow($event)"
+        ></cais-result-from-search-overview>
       </nb-card-body>
     </nb-card>
   </div>
