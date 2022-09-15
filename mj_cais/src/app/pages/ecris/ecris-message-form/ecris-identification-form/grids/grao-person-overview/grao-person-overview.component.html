@@ -38,8 +38,8 @@
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template></igx-column
-  >
+    </ng-template>
+  </igx-column>
   <igx-column
     field="firstName"
     header="Име"
@@ -48,8 +48,8 @@
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template></igx-column
-  >
+    </ng-template>
+  </igx-column>
   <igx-column
     field="surName"
     header="Презиме"
@@ -58,8 +58,8 @@
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template></igx-column
-  >
+    </ng-template>
+  </igx-column>
   <igx-column
     field="familyName"
     header="Фамилия"
@@ -68,8 +68,8 @@
   >
     <ng-template igxCell let-cell="cell">
       <span [title]="cell.value">{{ cell.value }}</span>
-    </ng-template></igx-column
-  >
+    </ng-template>
+  </igx-column>
   <igx-column
     field="birthDate"
     header="Дата на раждане"
@@ -80,15 +80,15 @@
       <span [title]="this.dateFormatService.displayDate(cell.value)">
         {{ this.dateFormatService.displayDate(cell.value) }}
       </span>
-    </ng-template></igx-column
-  >
+    </ng-template>
+  </igx-column>
 </igx-grid>
 
 <igx-dialog #dialogAdd>
   <div class="dialogNewRecord" style="min-width: 1000px">
     <nb-card>
       <nb-card-header>
-        <div class="d-flex" style="justify-content: space-between">
+        <div class="d-flex justify-content-between">
           <div class="d-flex align-items-center">
             <h5 style="font-weight: bold">Търсене</h5>
           </div>
@@ -101,21 +101,15 @@
                 (click)="onSearch()"
                 type="button"
               >
-                Търси
+                <nb-icon
+                  class="pt-1"
+                  [icon]="'search'"
+                  pack="fa"
+                  title="Търсене"
+                ></nb-icon
+                >Търси
               </button>
             </div>
-            <!-- <div>
-              <button
-                nbButton
-                matRipple
-                [status]="'success'"
-                (click)="addInGrid()"
-                type="button"
-                class="ml-2"
-              >
-                Добави в таблица
-              </button>
-            </div> -->
             <div>
               <button
                 nbButton
