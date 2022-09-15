@@ -1,19 +1,20 @@
 <nb-card>
   <nb-card-header>Ново искане за справка за съдимост</nb-card-header>
-  <nb-card-body class="example-items-rows">
-    <button nbButton fullWidth matRipple [status]="'basic'" (click)="searchByEGN()" type="button" class="mb-2"
-      style="min-width: 100px">
-      Ново искане по ЕГН
-    </button>
-    <button nbButton fullWidth matRipple [status]="'basic'" (click)="searchByLNCH()" type="button" class="mb-2"
-      style="min-width: 100px">
-      Ново искане по ЛНЧ
-    </button>
+  <nb-card-body>
+    <div class="d-flex justify-content-center">
+      <div class="d-grid gap-2 col-3">
+        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchByEGN()" type="button">
+          Ново искане по ЕГН
+        </button>
+        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchByLNCH()" type="button">
+          Ново искане по ЛНЧ
+        </button>
 
-    <button nbButton fullWidth matRipple [status]="'basic'" (click)="searchForForeigner()" type="button" class="mb-2"
-      style="min-width: 100px">
-      Ново искане за чужденец
-    </button>
+        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchForForeigner()" type="button">
+          Ново искане за чужденец
+        </button>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
 
@@ -41,7 +42,7 @@
                 searchValue === undefined ||
                 searchValue === ''
               ">
-              Търси
+              <nb-icon class="pt-1" [icon]="'search'" pack="fa" title="Търсене"></nb-icon>Търси
             </button>
           </div>
         </div>
