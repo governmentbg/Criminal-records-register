@@ -1,33 +1,76 @@
 <div class="mt-3">
   <app-grid-with-transactions [gridTransactions]="transactions">
-    <igx-grid #uicsGrid [height]="null" [data]="uics.extAdministrationUics" [primaryKey]="'id'">
+    <igx-grid
+      #uicsGrid
+      [height]="null"
+      [data]="uics.extAdministrationUics"
+      [primaryKey]="'id'"
+    >
       <igx-grid-toolbar>
-        <igx-grid-toolbar-title>Структурни единици</igx-grid-toolbar-title>
+        <igx-grid-toolbar-title>
+          <span class="fw-bold"
+            >Структурни единици</span
+          ></igx-grid-toolbar-title
+        >
         <igx-grid-toolbar-actions>
-          <button *ngIf="!isForPreview" nbButton matRipple [status]="'primary'" (click)="dialogAdd.open()" >
-            <nb-icon class="pt-1" [icon]="'plus'" pack="fa"></nb-icon>
-            Добави
-          </button>
-   
+          <div class="d-flex gap-2">
+            <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
+            <button
+              *ngIf="!isForPreview"
+              nbButton
+              matRipple
+              [status]="'primary'"
+              (click)="dialogAdd.open()"
+            >
+              <nb-icon class="pt-1" [icon]="'plus'" pack="fa"></nb-icon>
+              Добави
+            </button>
+          </div>
         </igx-grid-toolbar-actions>
       </igx-grid-toolbar>
 
-      <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
+      <igx-column
+        field="id"
+        header="Идентификатор"
+        [sortable]="false"
+        [dataType]="'string'"
+        [hidden]="true"
+      >
       </igx-column>
 
       <igx-column field="name" header="Име" dataType="string" [sortable]="true">
       </igx-column>
-      <igx-column field="value" header="ЕИК/БУЛСТАТ" [sortable]="true" [dataType]="'string'"></igx-column>
+      <igx-column
+        field="value"
+        header="ЕИК/БУЛСТАТ"
+        [sortable]="true"
+        [dataType]="'string'"
+      ></igx-column>
 
-      <igx-column field="version" header="Версия" [dataType]="'number'" [hidden]="true"></igx-column>
+      <igx-column
+        field="version"
+        header="Версия"
+        [dataType]="'number'"
+        [hidden]="true"
+      ></igx-column>
 
       <igx-action-strip #actionstrip>
-        <button *ngIf="!isForPreview" title="Редактирай" igxButton="icon" igxRipple
-          (click)="onOpenEditBulletinDecision(actionstrip.context)">
+        <button
+          *ngIf="!isForPreview"
+          title="Редактирай"
+          igxButton="icon"
+          igxRipple
+          (click)="onOpenEditBulletinDecision(actionstrip.context)"
+        >
           <igx-icon>edit</igx-icon>
         </button>
-        <button *ngIf="!isForPreview" title="Изтрии" igxButton="icon" igxRipple
-          (click)="onDeleteBulletinDecision(actionstrip.context)">
+        <button
+          *ngIf="!isForPreview"
+          title="Изтрии"
+          igxButton="icon"
+          igxRipple
+          (click)="onDeleteBulletinDecision(actionstrip.context)"
+        >
           <igx-icon>delete</igx-icon>
         </button>
       </igx-action-strip>
@@ -40,31 +83,52 @@
     <nb-card>
       <nb-card-header>
         <div class="d-flex justify-content-between">
-
           <h5 class="fw-bold">Структурна единица</h5>
 
           <div class="d-flex align-items-center gap-3">
-            <button nbButton matRipple [status]="'success'" (click)="onAddOrUpdateUicRow()" type="button">
-              <nb-icon class="pt-1" pack="fa" icon="circle-check"></nb-icon> Потвърди
+            <button
+              nbButton
+              matRipple
+              [status]="'success'"
+              (click)="onAddOrUpdateUicRow()"
+              type="button"
+            >
+              <nb-icon class="pt-1" pack="fa" icon="circle-check"></nb-icon>
+              Потвърди
             </button>
 
-            <button nbButton matRipple (click)="onCloseBulletinDecisionDilog()" type="button">
-              <nb-icon class="pt-1" pack="fa" icon="circle-xmark"></nb-icon> Откажи
+            <button
+              nbButton
+              matRipple
+              (click)="onCloseBulletinDecisionDilog()"
+              type="button"
+            >
+              <nb-icon class="pt-1" pack="fa" icon="circle-xmark"></nb-icon>
+              Откажи
             </button>
           </div>
-
         </div>
       </nb-card-header>
       <nb-card-body>
         <div class="row mt-2">
           <div class="form-group col-md-6">
-            <cais-input [type]="'text'" [label]="'Име'" [inputFormControl]="uicForm.name" [parentGroup]="uicForm.group"
-              [inputName]="'name'">
+            <cais-input
+              [type]="'text'"
+              [label]="'Име'"
+              [inputFormControl]="uicForm.name"
+              [parentGroup]="uicForm.group"
+              [inputName]="'name'"
+            >
             </cais-input>
           </div>
           <div class="form-group col-md-6">
-            <cais-input [type]="'text'" [label]="'ЕИК/БУЛСТАТ'" [inputFormControl]="uicForm.value"
-              [parentGroup]="uicForm.group" [inputName]="'value'"></cais-input>
+            <cais-input
+              [type]="'text'"
+              [label]="'ЕИК/БУЛСТАТ'"
+              [inputFormControl]="uicForm.value"
+              [parentGroup]="uicForm.group"
+              [inputName]="'value'"
+            ></cais-input>
           </div>
         </div>
       </nb-card-body>

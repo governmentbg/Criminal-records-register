@@ -3,13 +3,7 @@
     <ng-container>
       <h2 class="mt-0">{{ title }}</h2>
       <form (submit)="onSubmit()">
-        <input
-          type="text"
-          name="searchValue"
-          nbInput
-          fullWidth
-          [(ngModel)]="searchValue"
-        />
+        <input type="text" name="searchValue" nbInput fullWidth [(ngModel)]="searchValue" />
       </form>
     </ng-container>
   </nb-card-body>
@@ -19,15 +13,9 @@
         <button nbButton matRipple fullWidth (click)="onCancel()">Отказ</button>
       </div>
       <div class="col-6">
-        <button
-          nbButton
-          matRipple
-          fullWidth
-          status="primary"
-          (click)="onSubmit()"
-          [disabled]="searchValue === null ||searchValue === undefined || searchValue === ''"
-        >
-          Търси
+        <button nbButton matRipple fullWidth status="primary" (click)="onSubmit()"
+          [disabled]="searchValue === null ||searchValue === undefined || searchValue === ''">
+          <nb-icon class="pt-1" [icon]="'search'" pack="fa"></nb-icon> Търси
         </button>
       </div>
     </div>
