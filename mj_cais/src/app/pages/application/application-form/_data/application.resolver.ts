@@ -50,6 +50,7 @@ export class ApplicationResolver implements Resolve<any> {
       eWebRequest: this.service.getApplicationEWebRequestsData(applicationId),
       countries: this.nomenclatureService.getCountries(),
       genderTypes: this.nomenclatureService.getGenderTypes(),
+      documentTypes: this.nomenclatureService.getDocumentTypes(),
       applicationStatusHistoryData:
         this.service.getApplicationStatusHistoryData(applicationId),
       users: this.nomenclatureService.getUsers(),
