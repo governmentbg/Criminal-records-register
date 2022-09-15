@@ -6,7 +6,7 @@
       [onCancelFunction]="globalCancelFunction"
     ></cais-card-header>
   </nb-card-header>
-  <nb-card-body class="overflow-scroll">
+  <nb-card-body>
     <form autocomplete="off">
       <ng-template [ngxPermissionsOnly]="['GlobalAdmin']">
         <div class="row">
@@ -84,7 +84,7 @@
           </cais-multiple-choose>
         </div>
       </div>
-      <div class="row">
+      <div class="row mt-2">
         <div class="form-group col-md-2">
           <nb-checkbox [formControl]="fullForm.active">Активен</nb-checkbox>
         </div>

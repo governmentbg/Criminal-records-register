@@ -3,7 +3,7 @@
     <cais-card-header [label]="displayTitle" [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"></cais-card-header>
   </nb-card-header>
-  <nb-card-body class="overflow-scroll">
+  <nb-card-body>
     <form autocomplete="off">
       <div class="row">
         <div class="form-group col-md-7">
@@ -57,10 +57,10 @@
           <cais-input [type]="'password'" [label]="'Потвърждаване на парола'"
             [inputFormControl]="fullForm.confirmPassword" [parentGroup]="fullForm.group"></cais-input>
         </div>
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-12 mt-2">
           <nb-checkbox [formControl]="fullForm.active">Активен</nb-checkbox>
         </div>
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-12 mt-2">
           <nb-checkbox [formControl]="fullForm.isAdmin">Администратор</nb-checkbox>
         </div>
         <div class="form-group col-md-12" [hidden]="!fullForm.group.value.regCertSubject">
