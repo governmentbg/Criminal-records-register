@@ -23,5 +23,20 @@ UserCitizenGridService
   ngOnInit(): void {
     super.ngOnInit();
   }
-
+  navigateToPerson(egn: string){
+    this.service.findByEgn(egn).subscribe(
+      {
+        next: res =>{
+          this.router.navigateByUrl(`/pages/people/preview/${res}`);
+        },
+        error: error => {
+          if (error.status == "404"){
+            this.toastr.showBodyToast("danger", "Грешка", "Не е намерено лице!")
+          } else if(error.status == "400") {
+            this.toastr.showBodyToast("danger", "Грешка", "Намерено е повече от едно лице!")
+          }
+        }
+      }
+    );
+  }
 }
