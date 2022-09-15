@@ -22,7 +22,7 @@
 
         <nb-tab tabTitle="Основна информация">
 
-          <nb-card status="primary" class="mt-3">
+          <nb-card status="primary" class="mt-2">
             <nb-card-header>Данни за бюлетин <ng-containter *ngIf="fullForm?.csAuthorityName.value"><span> на
                   {{ fullForm?.csAuthorityName.value }}</span></ng-containter>
               <ng-container *ngIf="fullForm?.registrationNumberDisplay?.value"> №
@@ -54,7 +54,7 @@
           </nb-card>
 
 
-          <nb-card status="primary">
+          <nb-card status="primary" class="mt-2">
             <nb-card-header>Данни за лицето</nb-card-header>
             <nb-card-body>
               <cais-person-form [personForm]="fullForm.person" [isEditable]="isBulletinPersonAliasEditable"
@@ -64,7 +64,7 @@
               </cais-person-form>
             </nb-card-body>
           </nb-card>
-          <nb-card status="primary">
+          <nb-card status="primary" class="mt-2">
             <nb-card-header> Данни за изготвяне, съставяне и проверка на бюлетин</nb-card-header>
             <nb-card-body>
               <div class="row">
@@ -82,7 +82,7 @@
 
               <div class="row">
                 <div class="col-6">
-                  <div class="card bg-transparent mt-3">
+                  <div class="card bg-transparent mt-2">
                     <div class="card-body">
                       <h6 class="card-title">Съставил</h6>
 
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-6">
 
-                  <div class="card bg-transparent mt-3">
+                  <div class="card bg-transparent mt-2">
                     <div class="card-body">
                       <h6 class="card-title">Проверил</h6>
 
@@ -126,7 +126,7 @@
 
             </nb-card-body>
           </nb-card>
-          <nb-card status="primary" class="mt-1">
+          <nb-card status="primary" class="mt-2">
             <nb-card-header>Системна информация</nb-card-header>
             <nb-card-body>
               <div class="row">
@@ -221,7 +221,7 @@
                   </div>
                 </div>
 
-                <div class="d-flex flex-column gap-2 mt-3">
+                <div class="d-flex flex-column gap-2 mt-2">
                   <nb-checkbox (change)="onNoSanctionChange($event)" [formControl]="fullForm.noSanction">Деецът не
                     е
                     наказан съгласно НК
@@ -253,7 +253,7 @@
               [isNoSanction]="isNoSanctionCheck">
             </cais-bulletin-sanctions-form>
 
-            <div class="mt-3">
+            <div class="mt-2">
               <cais-bulletin-decision-form #bulletineDecisions
                 [bulletinDecisionsTransactions]="fullForm.decisionsTransactions" [dbData]="dbData"
                 [isForPreview]="!isDecisionEditable">
