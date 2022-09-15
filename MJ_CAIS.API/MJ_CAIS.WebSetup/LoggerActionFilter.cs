@@ -28,7 +28,8 @@ namespace MJ_CAIS.WebSetup
                 var identityName = context?.HttpContext?.User?.Identity?.Name;
                 var path = context?.HttpContext?.Request?.Path;
                 var queryString = context?.HttpContext?.Request?.QueryString.Value;
-                var method = context.HttpContext.Request.Method;
+                var method = context?.HttpContext?.Request?.Method;
+                var remoteIP = context?.HttpContext?.Connection?.RemoteIpAddress;
                 _logger.LogInformation(
                     "{method} {controllerName} {actionName} {identityName} {path} {queryString}", 
                     method,
@@ -36,7 +37,8 @@ namespace MJ_CAIS.WebSetup
                     actionName,
                     identityName,
                     path,
-                    queryString);
+                    queryString,
+                    remoteIP);
             }
             await next();
         }
