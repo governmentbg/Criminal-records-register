@@ -86,14 +86,15 @@
       [pinned]="true"
       [disableHiding]="true"
     >
-      <!-- <ng-template igxCell let-cell="cell">
-      <a
+      <ng-template igxCell let-cell="cell">
+        <button
+          class="btn btn-link"
         [title]="'Преглед'"
-        [routerLink]="['/pages/users-citizen/preview', cell.rowData.id]"
+        (click)="navigateToPerson(cell.rowData.egn)"
       >
-        <nb-icon pack="fa" icon="eye"></nb-icon>
-      </a>
-    </ng-template> -->
+        <nb-icon pack="fa" icon="user"></nb-icon>
+      </button>
+    </ng-template>
     </igx-column>
 
     <ng-template #pager let-grid>

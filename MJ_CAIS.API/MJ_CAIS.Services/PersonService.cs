@@ -38,6 +38,13 @@ namespace MJ_CAIS.Services
         {
             var pageSize = base.CalculateTop(aQueryOptions);
             var currentPage = base.CalculateCurrentPage(aQueryOptions);
+            IgPageResult<PersonGridDTO> pageResult = await SelectAllWithPaginationAsync(searchParams, pageSize, currentPage);
+
+            return await Task.FromResult(pageResult);
+        }
+
+        public async Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(PersonSearchParamsDTO searchParams, int pageSize, int currentPage)
+        {
             var pageResult = new IgPageResult<PersonGridDTO>();
             pageResult.CurrentPage = currentPage;
             pageResult.PerPage = pageSize;
@@ -45,11 +52,9 @@ namespace MJ_CAIS.Services
             var resultInPage = await _personRepository.SelectInPageAsync(searchParams, pageSize, currentPage);
             pageResult.Data = resultInPage;
             pageResult.Total = resultInPage.FirstOrDefault()?.TotalCount ?? 0;
-
-            return await Task.FromResult(pageResult);
+            return pageResult;
         }
 
- 
         public IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId)
             => _personRepository.GetBulletinsCountByPersonId(personId);
 
