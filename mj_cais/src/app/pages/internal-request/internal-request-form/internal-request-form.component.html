@@ -55,7 +55,7 @@
   <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
       <div class="row mt-2">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-6">
           <cais-autocomplete
             [label]="'От Бюро съдимост'"
             [inputFormControl]="fullForm.fromAuthorityId"
@@ -65,7 +65,7 @@
           >
           </cais-autocomplete>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-6">
           <cais-autocomplete
             [label]="'До Бюро съдимост'"
             [inputFormControl]="fullForm.toAuthorityId"
@@ -76,24 +76,6 @@
           </cais-autocomplete>
         </div>
         <div class="form-group col-md-3">
-          <cais-input
-            [type]="'date'"
-            [label]="'Датата на създаване'"
-            [inputFormControl]="fullForm.requestDate"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Регистрационен номер'"
-            [inputFormControl]="fullForm.regNumberDisplay"
-            [parentGroup]="fullForm.group"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-3">
           <cais-autocomplete
             [label]="'Тип на заявка'"
             [inputFormControl]="fullForm.nIntReqTypeId"
@@ -103,7 +85,29 @@
           >
           </cais-autocomplete>
         </div>
+ 
+      
+    
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Датата на създаване'"
+            [inputFormControl]="fullForm.requestDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+       
 
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Регистрационен номер'"
+            [inputFormControl]="fullForm.regNumberDisplay"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+    
+       
         <ng-container *ngIf="isEdit()">
           <div class="form-group col-md-3">
             <cais-input
