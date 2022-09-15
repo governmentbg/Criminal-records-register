@@ -10,7 +10,7 @@ using MJ_CAIS.Common.Constants;
 namespace MJ_CAIS.Web.Controllers
 {
     [Route("internal-requests")]
-    [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.CentralAuth}")]
+    [Authorize(Roles = $"{RoleConstants.Judge},{RoleConstants.CentralAuth},{RoleConstants.Normal}")]
     public class InternalRequestsController : BaseApiCrudController<InternalRequestDTO, InternalRequestDTO, InternalRequestGridDTO, NInternalRequest, string>
     {
         private readonly IInternalRequestService _internalRequestService;
