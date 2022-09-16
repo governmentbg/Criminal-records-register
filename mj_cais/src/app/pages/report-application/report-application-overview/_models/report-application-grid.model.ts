@@ -2,6 +2,7 @@ import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
 export class ReportApplicationGridModel extends BaseGridModel {
   public registrationNumber: string;
+  public egn: string;
   public purpose: string;
   public firstname: string;
   public surname: string;
@@ -14,6 +15,7 @@ export class ReportApplicationGridModel extends BaseGridModel {
     super(init);
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;
+      this.egn = init.egn ?? null;
       this.purpose = init.purpose ?? null;
       this.firstname = init.firstname ?? null;
       this.surname = init.surname ?? null;

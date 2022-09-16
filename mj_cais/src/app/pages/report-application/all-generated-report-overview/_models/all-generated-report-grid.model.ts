@@ -3,6 +3,7 @@ import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 export class AllGeneratedReportGridModel extends BaseGridModel {
   public registrationNumber: string;
   public reportApplRegNumber: string;
+  public egn: string;
   public reportApplId: string;
   public purpose: string;
   public firstname: string;
@@ -17,6 +18,7 @@ export class AllGeneratedReportGridModel extends BaseGridModel {
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;
       this.reportApplRegNumber = init.reportApplRegNumber ?? null;
+      this.egn = init.egn ?? null;
       this.reportApplId = init.reportApplId ?? null;
       this.purpose = init.purpose ?? null;
       this.firstname = init.firstname ?? null;

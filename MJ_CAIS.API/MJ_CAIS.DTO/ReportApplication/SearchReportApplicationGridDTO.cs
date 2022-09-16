@@ -3,6 +3,7 @@
     public class SearchReportApplicationGridDTO : BaseGridDTO
     {
         public string? RegistrationNumber { get; set; }
+        public string? Egn { get; set; }
         public string? StatusCodeDisplayValue { get; set; }
         public DateTime? ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }

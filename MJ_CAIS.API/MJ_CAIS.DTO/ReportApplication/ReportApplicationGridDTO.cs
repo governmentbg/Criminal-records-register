@@ -3,6 +3,7 @@ namespace MJ_CAIS.DTO.ReportApplication
     public class ReportApplicationGridDTO : BaseGridDTO
     {
         public string? RegistrationNumber { get; set; }
+        public string? Egn { get; set; }
         public string? Purpose { get; set; }
         public string? Firstname { get; set; }
         public string? Surname { get; set; }

@@ -28,6 +28,7 @@ namespace MJ_CAIS.Repositories.Impl
                 {
                     Id = x.ARepApplId,
                     RegistrationNumber = x.RegistrationNumber,
+                    Egn = x.ARepAppl.Egn,
                     StatusCodeDisplayValue = x.StatusCodeNavigation.Name,
                     ValidFrom = x.ValidFrom,
                     ValidTo = x.ValidTo,

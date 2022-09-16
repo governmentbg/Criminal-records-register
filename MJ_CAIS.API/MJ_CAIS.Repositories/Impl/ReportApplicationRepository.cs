@@ -76,6 +76,7 @@ namespace MJ_CAIS.Repositories.Impl
                             CreatedOn = reports.CreatedOn,
                             Familyname = reportAppl.Familyname,
                             Firstname = reportAppl.Firstname,
+                            Egn = reportAppl.Egn,
                             Purpose = reportAppl.Purpose,
                             RegistrationNumber = reports.RegistrationNumber,
                             ReportApplId = reportAppl.Id,

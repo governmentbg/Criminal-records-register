@@ -2,6 +2,7 @@ import { BaseGridModel } from "../../../../@core/models/common/base-grid.model";
 
 export class SearchReportApplicationGridModel extends BaseGridModel {
   public registrationNumber: string;
+  public egn: string;
   public statusCodeDisplayValue: string;
   public validFrom: Date;
   public validTo: Date;
@@ -17,6 +18,7 @@ export class SearchReportApplicationGridModel extends BaseGridModel {
     super(init);
     if (init) {
       this.registrationNumber = init.registrationNumber ?? null;
+      this.egn = init.egn ?? null;
       this.statusCodeDisplayValue = init.statusCodeDisplayValue ?? null;
       this.validFrom = init.validFrom ?? null;
       this.validTo = init.validTo ?? null;

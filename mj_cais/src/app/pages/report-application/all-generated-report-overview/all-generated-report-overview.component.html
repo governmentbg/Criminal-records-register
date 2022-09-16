@@ -63,9 +63,23 @@
         <span [title]="cell.value">{{ cell.value }}</span>
       </ng-template>
     </igx-column>
+
+    
+
     <igx-column
       field="purpose"
       header="Цел"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="egn"
+      header="ЕГН"
       [sortable]="true"
       [dataType]="'string'"
     >

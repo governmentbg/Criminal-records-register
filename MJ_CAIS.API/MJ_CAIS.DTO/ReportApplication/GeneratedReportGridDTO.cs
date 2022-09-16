@@ -4,6 +4,7 @@
     {
         public string? StatusCode { get; set; }
         public string? RegistrationNumber { get; set; }
+        public string? Egn { get; set; }
         public string? ReportApplRegNumber { get; set; }
         public string? ReportApplId { get; set; }
         public string? Purpose { get; set; }
