@@ -56,7 +56,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     IgxComboModule,
     IgxDialogModule,
     FileUploadModule,
-    HammerModule, 
+    HammerModule,
     IgxCalendarModule,
     ThemeModule,
     NbMenuModule,
@@ -66,7 +66,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     NgxPermissionsModule.forChild(),
     IgxDatePickerModule,
     IgxTimePickerModule,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   exports: [
     TlCommonModule,
@@ -87,7 +87,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     IgxComboModule,
     IgxDialogModule,
     FileUploadModule,
-    HammerModule, 
+    HammerModule,
     IgxCalendarModule,
     ThemeModule,
     NbMenuModule,
@@ -96,7 +96,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     NbToggleModule,
     NgxPermissionsModule,
     IgxDatePickerModule,
-    IgxTimePickerModule
+    IgxTimePickerModule,
   ],
 })
 export class SharedModule {}
