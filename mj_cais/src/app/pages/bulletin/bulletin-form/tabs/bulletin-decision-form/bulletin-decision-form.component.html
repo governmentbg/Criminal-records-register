@@ -1,102 +1,46 @@
 <app-grid-with-transactions [gridTransactions]="bulletinDecisionsTransactions">
   <nb-card>
-    <igx-grid
-      #decisionsGrid
-      [height]="null"
-      [data]="decisions"
-      [primaryKey]="'id'"
-      [pinning]="pinningConfig"
-    >
+    <igx-grid #decisionsGrid [height]="null" [data]="decisions" [primaryKey]="'id'" [pinning]="pinningConfig">
       <igx-grid-toolbar>
         <igx-grid-toolbar-title>
-          <span class="fw-bold"
-            >Допълнителни сведения</span
-          ></igx-grid-toolbar-title
-        >
+          <span class="fw-bold">Допълнителни сведения</span></igx-grid-toolbar-title>
         <igx-grid-toolbar-actions>
           <div class="d-flex gap-2">
             <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
-            <button
-              igxButton="flat"
-              (click)="dialogAdd.open()"
-              *ngIf="!isForPreview"
-            >
+            <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
               <igx-icon>add</igx-icon> Добави
             </button>
           </div>
         </igx-grid-toolbar-actions>
       </igx-grid-toolbar>
 
-      <igx-column
-        field="id"
-        header="Идентификатор"
-        [sortable]="false"
-        [dataType]="'string'"
-        [hidden]="true"
-      >
+      <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
       </igx-column>
 
-      <igx-column
-        field="descr"
-        header="Описание"
-        dataType="string"
-        [sortable]="true"
-      >
+      <igx-column field="descr" header="Описание" dataType="string" [sortable]="true">
       </igx-column>
-      <igx-column
-        field="decisionChTypeId"
-        header="Идентификатор на категория допълнителни сведения"
-        dataType="number"
-        [hidden]="true"
-      >
+      <igx-column field="decisionChTypeId" header="Идентификатор на категория допълнителни сведения" dataType="number"
+        [hidden]="true">
       </igx-column>
-      <igx-column
-        field="decisionChTypeName"
-        header="Категория допълнителни сведения"
-        [sortable]="true"
-        [dataType]="'string'"
-      ></igx-column>
-      <igx-column
-        field="changeDate"
-        [sortable]="true"
-        header="Дата на промяна"
-        dataType="Date"
-        [formatter]="this.dateFormatService.formatDate"
-      >
+      <igx-column field="decisionChTypeName" header="Категория допълнителни сведения" [sortable]="true"
+        [dataType]="'string'"></igx-column>
+      <igx-column field="changeDate" [sortable]="true" header="Дата на промяна" dataType="Date"
+        [formatter]="this.dateFormatService.formatDate">
         <ng-template igxCell let-cell="cell">
           <span [title]="this.dateFormatService.displayDate(cell.value)">
             {{ this.dateFormatService.displayDate(cell.value) }}
           </span>
         </ng-template>
       </igx-column>
-      <igx-column
-        field="decisionTypeId"
-        header="Идентификатор на вид съдебен акт"
-        dataType="number"
-        [hidden]="true"
-      >
+      <igx-column field="decisionTypeId" header="Идентификатор на вид съдебен акт" dataType="number" [hidden]="true">
       </igx-column>
-      <igx-column
-        field="decisionTypeName"
-        header="Вид съдебен акт"
-        [sortable]="true"
-        [dataType]="'string'"
-      ></igx-column>
+      <igx-column field="decisionTypeName" header="Вид съдебен акт" [sortable]="true" [dataType]="'string'">
+      </igx-column>
 
-      <igx-column
-        field="decisionNumber"
-        header="Номер на акта"
-        [sortable]="true"
-        [dataType]="'string'"
-      ></igx-column>
+      <igx-column field="decisionNumber" header="Номер на акта" [sortable]="true" [dataType]="'string'"></igx-column>
 
-      <igx-column
-        field="decisionDate"
-        [sortable]="true"
-        header="Дата на акта"
-        dataType="Date"
-        [formatter]="this.dateFormatService.formatDate"
-      >
+      <igx-column field="decisionDate" [sortable]="true" header="Дата на акта" dataType="Date"
+        [formatter]="this.dateFormatService.formatDate">
         <ng-template igxCell let-cell="cell">
           <span [title]="this.dateFormatService.displayDate(cell.value)">
             {{ this.dateFormatService.displayDate(cell.value) }}
@@ -104,13 +48,8 @@
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="decisionFinalDate"
-        [sortable]="true"
-        header="Дата на влизане в сила на акта"
-        dataType="Date"
-        [formatter]="this.dateFormatService.formatDate"
-      >
+      <igx-column field="decisionFinalDate" [sortable]="true" header="Дата на влизане в сила на акта" dataType="Date"
+        [formatter]="this.dateFormatService.formatDate">
         <ng-template igxCell let-cell="cell">
           <span [title]="this.dateFormatService.displayDate(cell.value)">
             {{ this.dateFormatService.displayDate(cell.value) }}
@@ -118,63 +57,28 @@
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="decisionAuthId"
-        header="Идентификатор на съд, издал акта"
-        dataType="number"
-        [hidden]="true"
-      >
+      <igx-column field="decisionAuthId" header="Идентификатор на съд, издал акта" dataType="number" [hidden]="true">
       </igx-column>
-      <igx-column
-        field="decisionAuthName"
-        header="Съд, издал акта"
-        [sortable]="true"
-        [dataType]="'string'"
-      ></igx-column>
-
-      <igx-column
-        field="decisionEcli"
-        header="ECLI номер"
-        dataType="string"
-        [sortable]="true"
-      >
+      <igx-column field="decisionAuthName" header="Съд, издал акта" [sortable]="true" [dataType]="'string'">
       </igx-column>
 
-      <igx-column
-        width="140px"
-        header="Действия"
-        [sortable]="false"
-        [filterable]="false"
-        [pinned]="true"
-        [disableHiding]="true"
-      >
+      <igx-column field="decisionEcli" header="ECLI номер" dataType="string" [sortable]="true">
+      </igx-column>
+
+      <igx-column width="140px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="true"
+        [disableHiding]="true">
         <ng-template igxCell let-cell="cell">
           <div class="cell-center">
             <div class="d-flex gap-3">
-              <button
-                title="Преглед"
-                igxButton="icon"
-                igxRipple
-                (click)="onOpenPreviewDecision(cell)"
-              >
+              <button title="Преглед" igxButton="icon" igxRipple (click)="onOpenPreviewDecision(cell)">
                 <nb-icon pack="fa" icon="eye"></nb-icon>
               </button>
-              <button
-                *ngIf="!isForPreview"
-                title="Редактирай"
-                igxButton="icon"
-                igxRipple
-                (click)="onOpenEditBulletinDecision(cell)"
-              >
+              <button *ngIf="!isForPreview" title="Редактирай" igxButton="icon" igxRipple
+                (click)="onOpenEditBulletinDecision(cell)">
                 <igx-icon>edit</igx-icon>
               </button>
-              <button
-                *ngIf="!isForPreview"
-                title="Изтрии"
-                igxButton="icon"
-                igxRipple
-                (click)="onDeleteBulletinDecision(cell)"
-              >
+              <button *ngIf="!isForPreview" title="Изтрии" igxButton="icon" igxRipple
+                (click)="onDeleteBulletinDecision(cell)">
                 <igx-icon>delete</igx-icon>
               </button>
             </div>
@@ -186,53 +90,36 @@
 </app-grid-with-transactions>
 
 <igx-dialog #dialogAdd>
-  <div class="dialogNewRecord" style="min-width: 1000px">
+  <div class="dialogNewRecord">
     <nb-card>
       <nb-card-header>
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex  justify-content-between align-items-center gap-3">
           <h5 class="fw-bold">Допълнително сведение</h5>
+          <div class="d-flex gap-3">
+            <button *ngIf="!isDecisionPreview" nbButton [status]="'primary'"
+              (click)="onAddOrUpdateBulletinDecisionRow()" type="button">
+              <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
+              Потвърди
+            </button>
 
-          <button
-            *ngIf="!isDecisionPreview"
-            nbButton
-            [status]="'primary'"
-            (click)="onAddOrUpdateBulletinDecisionRow()"
-            type="button"
-          >
-            <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
-            Потвърди
-          </button>
-
-          <button
-            nbButton
-            (click)="onCloseBulletinDecisionDilog()"
-            type="button"
-          >
-            <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
-            Откажи
-          </button>
+            <button nbButton (click)="onCloseBulletinDecisionDilog()" type="button">
+              <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
+              Откажи
+            </button>
+          </div>
         </div>
       </nb-card-header>
       <nb-card-body>
         <div class="row mt-2">
           <div class="form-group col-md-8">
-            <cais-autocomplete
-              [label]="'Категория'"
-              [inputFormControl]="bulletinDecisionForm.decisionChTypeId"
-              [parentGroup]="bulletinDecisionForm.group"
-              [items]="dbData.decisionChTypes"
-              [inputName]="'decisionChTypeId'"
-            >
+            <cais-autocomplete [label]="'Категория'" [inputFormControl]="bulletinDecisionForm.decisionChTypeId"
+              [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decisionChTypes"
+              [inputName]="'decisionChTypeId'">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-4">
-            <cais-input
-              [type]="'date'"
-              [label]="'Дата на промяна'"
-              [inputFormControl]="bulletinDecisionForm.changeDate"
-              [parentGroup]="bulletinDecisionForm.group"
-              [inputName]="'changeDate'"
-            ></cais-input>
+            <cais-input [type]="'date'" [label]="'Дата на промяна'" [inputFormControl]="bulletinDecisionForm.changeDate"
+              [parentGroup]="bulletinDecisionForm.group" [inputName]="'changeDate'"></cais-input>
           </div>
         </div>
         <div class="font-weight-bold">Съдебен акт</div>
@@ -240,81 +127,47 @@
 
         <div class="row mt-2">
           <div class="form-group col-md-8">
-            <cais-autocomplete
-              [label]="'Вид'"
-              [inputFormControl]="bulletinDecisionForm.decisionTypeId"
-              [parentGroup]="bulletinDecisionForm.group"
-              [items]="dbData.decisionTypes"
-              [inputName]="'decisionTypeId'"
-            >
+            <cais-autocomplete [label]="'Вид'" [inputFormControl]="bulletinDecisionForm.decisionTypeId"
+              [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decisionTypes" [inputName]="'decisionTypeId'">
             </cais-autocomplete>
           </div>
         </div>
 
         <div class="row mt-2">
           <div class="form-group col-md-4">
-            <cais-input
-              [type]="'text'"
-              [label]="'Номер'"
-              [inputFormControl]="bulletinDecisionForm.decisionNumber"
-              [parentGroup]="bulletinDecisionForm.group"
-              [inputName]="'decisionNumber'"
-            >
+            <cais-input [type]="'text'" [label]="'Номер'" [inputFormControl]="bulletinDecisionForm.decisionNumber"
+              [parentGroup]="bulletinDecisionForm.group" [inputName]="'decisionNumber'">
             </cais-input>
           </div>
           <div class="form-group col-md-4">
-            <cais-input
-              [type]="'date'"
-              [label]="'Дата на издаване'"
-              [inputFormControl]="bulletinDecisionForm.decisionDate"
-              [parentGroup]="bulletinDecisionForm.group"
-              [inputName]="'decisionDate'"
-            ></cais-input>
+            <cais-input [type]="'date'" [label]="'Дата на издаване'"
+              [inputFormControl]="bulletinDecisionForm.decisionDate" [parentGroup]="bulletinDecisionForm.group"
+              [inputName]="'decisionDate'"></cais-input>
           </div>
           <div class="form-group col-md-4">
-            <cais-input
-              [type]="'date'"
-              [label]="'Дата на влизане в сила'"
-              [inputFormControl]="bulletinDecisionForm.decisionFinalDate"
-              [parentGroup]="bulletinDecisionForm.group"
-              [inputName]="'decisionFinalDate'"
-            ></cais-input>
+            <cais-input [type]="'date'" [label]="'Дата на влизане в сила'"
+              [inputFormControl]="bulletinDecisionForm.decisionFinalDate" [parentGroup]="bulletinDecisionForm.group"
+              [inputName]="'decisionFinalDate'"></cais-input>
           </div>
         </div>
 
         <div class="row mt-2">
           <div class="form-group col-md-6">
-            <cais-autocomplete
-              [label]="'Съд, издал акта'"
-              [inputFormControl]="bulletinDecisionForm.decisionAuthId"
-              [parentGroup]="bulletinDecisionForm.group"
-              [items]="dbData.decidingAuthorities"
-              [inputName]="'decisionAuthId'"
-            >
+            <cais-autocomplete [label]="'Съд, издал акта'" [inputFormControl]="bulletinDecisionForm.decisionAuthId"
+              [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decidingAuthorities"
+              [inputName]="'decisionAuthId'">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'ECLI номер'"
-              [inputFormControl]="bulletinDecisionForm.decisionEcli"
-              [parentGroup]="bulletinDecisionForm.group"
-              [inputName]="'decisionEcli'"
-            ></cais-input>
+            <cais-input [type]="'text'" [label]="'ECLI номер'" [inputFormControl]="bulletinDecisionForm.decisionEcli"
+              [parentGroup]="bulletinDecisionForm.group" [inputName]="'decisionEcli'"></cais-input>
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-md-12">
-            <cais-input
-              [type]="'text'"
-              [label]="'Описание'"
-              [inputFormControl]="bulletinDecisionForm.descr"
-              [parentGroup]="bulletinDecisionForm.group"
-              [inputName]="'descr'"
-              [rows]="'3'"
-              [inputType]="'TextArea'"
-            >
+            <cais-input [type]="'text'" [label]="'Описание'" [inputFormControl]="bulletinDecisionForm.descr"
+              [parentGroup]="bulletinDecisionForm.group" [inputName]="'descr'" [rows]="'3'" [inputType]="'TextArea'">
             </cais-input>
           </div>
         </div>
