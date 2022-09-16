@@ -1,6 +1,5 @@
 <ng-container *ngIf="this.model">
-  <ng-container
-    *ngIf="
+  <ng-container *ngIf="
       this.model.statusCode ==
         CertificateStatuTypeEnum.CertificateContentReady ||
       this.model.statusCode == CertificateStatuTypeEnum.CertificatePaperPrint ||
@@ -8,56 +7,34 @@
       this.model.statusCode ==
         CertificateStatuTypeEnum.CertificateForDelivery ||
       this.model.statusCode == CertificateStatuTypeEnum.Delivered
-    "
-  >
+    ">
     <form autocomplete="off">
       <div class="row" style="align-items: center">
         <div class="row">
           <div class="form-group col-md-6">
-            <cais-autocomplete
-              [label]="'Подписващ 1'"
-              [inputFormControl]="fullForm.firstSignerId"
-              [parentGroup]="fullForm.group"
-              [inputName]="'firstSignerId'"
-              [items]="users"
-            >
+            <cais-autocomplete [label]="'Подписващ 1'" [inputFormControl]="fullForm.firstSignerId"
+              [parentGroup]="fullForm.group" [inputName]="'firstSignerId'" [items]="users">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-6">
-            <cais-autocomplete
-              [label]="'Подписващ 2'"
-              [inputFormControl]="fullForm.secondSignerId"
-              [parentGroup]="fullForm.group"
-              [inputName]="'secondSignerId'"
-              [items]="users"
-            >
+            <cais-autocomplete [label]="'Подписващ 2'" [inputFormControl]="fullForm.secondSignerId"
+              [parentGroup]="fullForm.group" [inputName]="'secondSignerId'" [items]="users">
             </cais-autocomplete>
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Номер на свидетелство'"
-              [inputFormControl]="fullForm.registrationNumber"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
+            <cais-input [type]="'text'" [label]="'Номер на свидетелство'"
+              [inputFormControl]="fullForm.registrationNumber" [parentGroup]="fullForm.group"></cais-input>
           </div>
           <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Статус'"
-              [inputFormControl]="fullForm.statusName"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
+            <cais-input [type]="'text'" [label]="'Статус'" [inputFormControl]="fullForm.statusName"
+              [parentGroup]="fullForm.group"></cais-input>
           </div>
 
           <div class="d-flex gap-3 mt-3">
-            <button
-              nbButton
-              [status]="'primary'"
-              *ngIf="
+            <button nbButton [status]="'primary'" *ngIf="
                 (this.model.statusCode ==
                   CertificateStatuTypeEnum.CertificatePaperPrint ||
                   this.model.statusCode ==
@@ -66,22 +43,15 @@
                   this.model.statusCode ==
                     CertificateStatuTypeEnum.CertificateContentReady) &&
                 this.fullForm.docName.value !== null
-              "
-              [title]="'Свали'"
-              (click)="printCertificate()"
-            >
+              " [title]="'Свали'" (click)="printCertificate()">
               <i class="fa fa-download"></i>
               <span class="ms-2">{{ fullForm.docName.value }}</span>
             </button>
 
-            <a
-              *ngIf="
+            <a *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificateUserSign
-              "
-              [title]="'Качи'"
-              (click)="upload()"
-            >
+              " [title]="'Качи'" (click)="upload()">
               <i class="fas fa-upload"></i>
             </a>
           </div>
@@ -89,60 +59,31 @@
 
         <div class="row mt-2" style="align-items: center">
           <div class="d-flex justify-content-end gap-3">
-            <button
-              *ngIf="
+            <button *ngIf="
                 !this.isForPreview &&
                 this.model.statusCode ==
                   CertificateStatuTypeEnum.CertificateContentReady
-              "
-              nbButton
-              [status]="'primary'"
-              (click)="generateCertificate()"
-              type="button"
-              style="float: right"
-            >
+              " nbButton [status]="'primary'" (click)="generateCertificate()" type="button" style="float: right">
               Генерирай свидетелство
             </button>
 
-            <button
-              *ngIf="
+            <button *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificatePaperPrint
-              "
-              nbButton
-              [status]="'primary'"
-              (click)="deliver()"
-              type="button"
-              style="float: right"
-            >
+              " nbButton [status]="'primary'" (click)="deliver()" type="button" style="float: right">
               Връчи
             </button>
-            <button
-              *ngIf="
+            <button *ngIf="
                 this.model.statusCode != CertificateStatuTypeEnum.Delivered
-              "
-              nbButton
-              matRipple
-              [status]="'danger'"
-              (click)="cancelCertificate()"
-              type="button"
-            >
+              " nbButton matRipple [status]="'danger'" (click)="cancelCertificate()" type="button">
               <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon>
               Анулирай
             </button>
-            <button
-              *ngIf="
+            <button *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificateUserSign
-              "
-              nbButton
-              matRipple
-              [status]="'success'"
-              (click)="updateStatus()"
-              type="button"
-              class="ml-2"
-              style="min-width: 100px; float: right"
-            >
+              " nbButton matRipple [status]="'success'" (click)="updateStatus()" type="button" class="ml-2"
+              style="min-width: 100px; float: right">
               Готово за връчване
             </button>
           </div>
@@ -151,53 +92,25 @@
     </form>
   </ng-container>
 
-  <ng-container
-    *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck"
-  >
-    <tl-linear-progress
-      [visible]="this.remoteService?.isLoading"
-    ></tl-linear-progress>
-    <igx-grid
-      #bulletinsCheckGrid
-      [height]="null"
-      [data]="bulletinsCheckData"
-      [primaryKey]="'id'"
-      [allowFiltering]="true"
-      [rowSelectable]="true"
-      [rowSelection]="isForPreview ? 'none' : 'multiple'"
-      [hideRowSelectors]="false"
-    >
+  <ng-container *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsCheck">
+    <tl-linear-progress [visible]="this.remoteService?.isLoading"></tl-linear-progress>
+    <igx-grid #bulletinsCheckGrid [height]="null" [data]="bulletinsCheckData" [primaryKey]="'id'"
+      [allowFiltering]="true" [rowSelectable]="true" [rowSelection]="isForPreview ? 'none' : 'multiple'"
+      [hideRowSelectors]="false">
       <igx-grid-toolbar>
         <igx-grid-toolbar-title>
-          <span class="fw-bold">Свидетелство</span></igx-grid-toolbar-title
-        >
+          <span class="fw-bold">Свидетелство</span></igx-grid-toolbar-title>
         <igx-grid-toolbar-actions>
           <div class="d-flex gap-2">
-            <button
-              *ngIf="!this.isForPreview"
-              nbButton
-              [status]="'primary'"
-              (click)="showReport()"
-              type="button"
-            >
+            <button *ngIf="!this.isForPreview" nbButton [status]="'primary'" (click)="showReport()" type="button">
               Е-Справка
             </button>
-            <button
-              *ngIf="!this.isForPreview"
-              nbButton
-              [status]="'primary'"
-              (click)="sendBulltinsForRehabilitation()"
-              type="button"
-            >
+            <button *ngIf="!this.isForPreview" nbButton [status]="'primary'" (click)="sendBulltinsForRehabilitation()"
+              type="button">
               Създай заявка за реабилитация
             </button>
-            <button
-              *ngIf="!this.isForPreview"
-              nbButton
-              [status]="'primary'"
-              (click)="sendBulltinsForSelection()"
-              type="button"
-            >
+            <button *ngIf="!this.isForPreview" nbButton [status]="'primary'" (click)="sendBulltinsForSelection()"
+              type="button">
               Изпрати за избор на бюл. от съдия/юрист
             </button>
             <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
@@ -205,21 +118,10 @@
         </igx-grid-toolbar-actions>
       </igx-grid-toolbar>
 
-      <igx-column
-        field="id"
-        header="Идентификатор"
-        [sortable]="false"
-        [dataType]="'string'"
-        [hidden]="true"
-      >
+      <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
       </igx-column>
 
-      <igx-column
-        field="registrationNumber"
-        header="Номер"
-        [dataType]="'string'"
-        [sortable]="true"
-      >
+      <igx-column field="registrationNumber" header="Номер" [dataType]="'string'" [sortable]="true">
       </igx-column>
 
       <!-- <igx-column
@@ -235,83 +137,35 @@
           </span>
         </ng-template>
       </igx-column> -->
-      <igx-column
-        field="statusId"
-        header="Идентификатор на статус"
-        [hidden]="true"
-        [dataType]="'string'"
-      ></igx-column>
-      <igx-column
-        field="statusName"
-        header="Статус"
-        [sortable]="true"
-        [dataType]="'string'"
-      ></igx-column>
+      <igx-column field="statusId" header="Идентификатор на статус" [hidden]="true" [dataType]="'string'"></igx-column>
+      <igx-column field="statusName" header="Статус" [sortable]="true" [dataType]="'string'"></igx-column>
 
-      <igx-column
-        field="bulletinAuthorityId"
-        header="Идентификатор на съда"
-        [hidden]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinAuthorityId" header="Идентификатор на съда" [hidden]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinDecisionNumber"
-        header="Номер решение"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinDecisionNumber" header="Номер решение" [sortable]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinTypeName"
-        header="Тип на бюлетина"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinTypeName" header="Тип на бюлетина" [sortable]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinDecisionDate"
-        header="Дата решение"
-        [sortable]="true"
-        [dataType]="'date'"
-      ></igx-column>
-      <igx-column
-        field="bulletinAuthorityName"
-        header="Съд, изготвил бюлетина"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinDecisionDate" header="Дата решение" [sortable]="true" [dataType]="'date'"></igx-column>
+      <igx-column field="bulletinAuthorityName" header="Съд, изготвил бюлетина" [sortable]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        width="120px"
-        header="Действия"
-        [sortable]="false"
-        [filterable]="false"
-        [pinned]="false"
-        [disableHiding]="true"
-      >
+      <igx-column width="120px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="false"
+        [disableHiding]="true">
         <ng-template igxCell let-cell="cell">
           <div class="cell-center">
             <div class="d-flex gap-3">
-              <a
-                [title]="'Преглед'"
-                [routerLink]="[
+              <a [title]="'Преглед'" [routerLink]="[
                   '/pages/bulletins/preview/',
                   cell.rowData.bulletinId
-                ]"
-              >
+                ]">
                 <nb-icon pack="fa" icon="eye"></nb-icon>
               </a>
-              <a
-                *ngIf="
+              <a *ngIf="
                   model.currentUserAuthId == cell.rowData.bulletinAuthorityId
-                "
-                [title]="'Редактиране'"
-                [routerLink]="[
+                " [title]="'Редактиране'" [routerLink]="[
                   '/pages/bulletins/edit/',
                   cell.rowData.bulletinId
-                ]"
-              >
+                ]">
                 <nb-icon pack="fa" icon="pen"></nb-icon>
               </a>
             </div>
@@ -321,31 +175,15 @@
     </igx-grid>
   </ng-container>
 
-  <ng-container
-    *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection"
-  >
-    <igx-grid
-      #bulletinsCheckGrid
-      [height]="null"
-      [data]="bulletinsCheckData"
-      [primaryKey]="'id'"
-      [allowFiltering]="true"
-      [rowSelectable]="true"
-      [rowSelection]="isForPreview ? 'none' : 'multiple'"
-      [hideRowSelectors]="false"
-    >
+  <ng-container *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection">
+    <igx-grid #bulletinsCheckGrid [height]="null" [data]="bulletinsCheckData" [primaryKey]="'id'"
+      [allowFiltering]="true" [rowSelectable]="true" [rowSelection]="isForPreview ? 'none' : 'multiple'"
+      [hideRowSelectors]="false">
       <igx-grid-toolbar>
         <igx-grid-toolbar-title>
-          <span class="fw-bold">Свидетелство</span></igx-grid-toolbar-title
-        >
+          <span class="fw-bold">Свидетелство</span></igx-grid-toolbar-title>
         <igx-grid-toolbar-actions>
-          <button
-            *ngIf="!this.isForPreview"
-            nbButton
-            [status]="'primary'"
-            (click)="showReport()"
-            type="button"
-          >
+          <button *ngIf="!this.isForPreview" nbButton [status]="'primary'" (click)="showReport()" type="button">
             Е-Справка
           </button>
           <div class="d-flex gap-2">
@@ -354,21 +192,10 @@
         </igx-grid-toolbar-actions>
       </igx-grid-toolbar>
 
-      <igx-column
-        field="id"
-        header="Идентификатор"
-        [sortable]="false"
-        [dataType]="'string'"
-        [hidden]="true"
-      >
+      <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
       </igx-column>
 
-      <igx-column
-        field="registrationNumber"
-        header="Номер"
-        [dataType]="'string'"
-        [sortable]="true"
-      >
+      <igx-column field="registrationNumber" header="Номер" [dataType]="'string'" [sortable]="true">
       </igx-column>
 
       <!-- <igx-column
@@ -384,83 +211,35 @@
           </span>
         </ng-template>
       </igx-column> -->
-      <igx-column
-        field="statusId"
-        header="Идентификатор на статус"
-        [hidden]="true"
-        [dataType]="'string'"
-      ></igx-column>
-      <igx-column
-        field="statusName"
-        header="Статус"
-        [sortable]="true"
-        [dataType]="'string'"
-      ></igx-column>
+      <igx-column field="statusId" header="Идентификатор на статус" [hidden]="true" [dataType]="'string'"></igx-column>
+      <igx-column field="statusName" header="Статус" [sortable]="true" [dataType]="'string'"></igx-column>
 
-      <igx-column
-        field="bulletinAuthorityId"
-        header="Идентификатор на съда"
-        [hidden]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinAuthorityId" header="Идентификатор на съда" [hidden]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinAuthorityName"
-        header="Съд, изготвил бюлетина"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinAuthorityName" header="Съд, изготвил бюлетина" [sortable]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinDecisionNumber"
-        header="Номер решение"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinDecisionNumber" header="Номер решение" [sortable]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinTypeName"
-        header="Тип на бюлетина"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="bulletinTypeName" header="Тип на бюлетина" [sortable]="true" [dataType]="'string'">
       </igx-column>
-      <igx-column
-        field="bulletinDecisionDate"
-        header="Дата решение"
-        [sortable]="true"
-        [dataType]="'date'"
-      ></igx-column>
-      <igx-column
-        width="120px"
-        header="Действия"
-        [sortable]="false"
-        [filterable]="false"
-        [pinned]="false"
-        [disableHiding]="true"
-      >
+      <igx-column field="bulletinDecisionDate" header="Дата решение" [sortable]="true" [dataType]="'date'"></igx-column>
+      <igx-column width="120px" header="Действия" [sortable]="false" [filterable]="false" [pinned]="false"
+        [disableHiding]="true">
         <ng-template igxCell let-cell="cell">
           <div class="cell-center">
             <div class="d-flex gap-3">
-              <a
-                [title]="'Преглед'"
-                [routerLink]="[
+              <a [title]="'Преглед'" [routerLink]="[
                   '/pages/bulletins/preview/',
                   cell.rowData.bulletinId
-                ]"
-              >
+                ]">
                 <nb-icon pack="fa" icon="eye"></nb-icon>
               </a>
-              <a
-                *ngIf="
+              <a *ngIf="
                   model.currentUserAuthId == cell.rowData.bulletinAuthorityId
-                "
-                [title]="'Редактиране'"
-                [routerLink]="[
+                " [title]="'Редактиране'" [routerLink]="[
                   '/pages/bulletins/edit/',
                   cell.rowData.bulletinId
-                ]"
-              >
+                ]">
                 <nb-icon pack="fa" icon="pen"></nb-icon>
               </a>
             </div>
@@ -473,72 +252,41 @@
       <div class="row" style="align-items: center">
         <div class="row">
           <div class="form-group col-md-6">
-            <cais-autocomplete
-              [label]="'Подписващ1'"
-              [inputFormControl]="fullForm.firstSignerId"
-              [parentGroup]="fullForm.group"
-              [inputName]="'firstSignerId'"
-              [items]="users"
-            >
+            <cais-autocomplete [label]="'Подписващ1'" [inputFormControl]="fullForm.firstSignerId"
+              [parentGroup]="fullForm.group" [inputName]="'firstSignerId'" [items]="users">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-6">
-            <cais-autocomplete
-              [label]="'Подписващ2'"
-              [inputFormControl]="fullForm.secondSignerId"
-              [parentGroup]="fullForm.group"
-              [inputName]="'secondSignerId'"
-              [items]="users"
-            >
+            <cais-autocomplete [label]="'Подписващ2'" [inputFormControl]="fullForm.secondSignerId"
+              [parentGroup]="fullForm.group" [inputName]="'secondSignerId'" [items]="users">
             </cais-autocomplete>
           </div>
         </div>
 
         <div class="row">
           <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Номер на свидетелство'"
-              [inputFormControl]="fullForm.registrationNumber"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
+            <cais-input [type]="'text'" [label]="'Номер на свидетелство'"
+              [inputFormControl]="fullForm.registrationNumber" [parentGroup]="fullForm.group"></cais-input>
           </div>
           <div class="form-group col-md-6">
-            <cais-input
-              [type]="'text'"
-              [label]="'Статус'"
-              [inputFormControl]="fullForm.statusName"
-              [parentGroup]="fullForm.group"
-            ></cais-input>
+            <cais-input [type]="'text'" [label]="'Статус'" [inputFormControl]="fullForm.statusName"
+              [parentGroup]="fullForm.group"></cais-input>
           </div>
         </div>
         <div class="row mt-3">
           <div class="d-flex justify-content-end gap-3">
-            <button
-              *ngIf="!this.isForPreview"
-              nbButton
-              [status]="'primary'"
-              (click)="generateCertificateByJudge()"
-              type="button"
-              style="min-width: 100px; float: right"
-            >
+            <button *ngIf="!this.isForPreview" nbButton [status]="'primary'" (click)="generateCertificateByJudge()"
+              type="button" style="min-width: 100px; float: right">
               Генерирай свидетелство
             </button>
-            <button
-              *ngIf="
+            <button *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificateUserSign
-              "
-              nbButton
-              [status]="'success'"
-              (click)="updateStatus()"
-              type="button"
-              style="min-width: 100px; float: right"
-            >
+              " nbButton [status]="'success'" (click)="updateStatus()" type="button"
+              style="min-width: 100px; float: right">
               Готово за връчване
             </button>
-            <a
-              *ngIf="
+            <a *ngIf="
                 (this.model.statusCode ==
                   CertificateStatuTypeEnum.CertificatePaperPrint ||
                   this.model.statusCode ==
@@ -547,22 +295,14 @@
                   this.model.statusCode ==
                     CertificateStatuTypeEnum.CertificateContentReady) &&
                 this.fullForm.docName.value !== null
-              "
-              [title]="'Свали'"
-              class="mr-4"
-              (click)="printCertificate()"
-            >
+              " [title]="'Свали'" class="mr-4" (click)="printCertificate()">
               {{ fullForm.docName.value }}.{{ fullForm.docType.value }}
             </a>
 
-            <a
-              *ngIf="
+            <a *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificateUserSign
-              "
-              [title]="'Качи'"
-              (click)="upload()"
-            >
+              " [title]="'Качи'" (click)="upload()">
               <i class="fas fa-upload"></i>
             </a>
           </div>
@@ -573,38 +313,26 @@
 </ng-container>
 
 <igx-dialog #reportDialog>
-  <div style="min-width: 900px; max-width: 900px">
-    <nb-card>
+  <div  style="max-width:40rem">
+    <nb-card size="large">
       <nb-card-header>
         <div class="d-flex justify-content-between">
           <h5 style="font-weight: bold">Справка</h5>
           <div class="d-flex gap-3">
-            <button
-              nbButton
-              matRipple
-              [status]="'primary'"
-              (click)="onPrint()"
-              type="button"
-              class="ml-2"
-            >
+            <button nbButton matRipple [status]="'primary'" (click)="onPrint()" type="button" class="ml-2">
               <nb-icon pack="fa" icon="print"></nb-icon> Принтирай
             </button>
-            <button
-              nbButton
-              matRipple
-              (click)="reportDialog.close()"
-              type="button"
-              class="ml-2"
-            >
+            <button nbButton matRipple (click)="reportDialog.close()" type="button" class="ml-2">
               Затвори
             </button>
           </div>
         </div>
       </nb-card-header>
 
-      <nb-card-body style="max-height: 600px; overflow-y: auto">
+      <nb-card-body class="overflow-scroll">
         <cais-encapsulated-html [Html]="this.report"> </cais-encapsulated-html>
       </nb-card-body>
     </nb-card>
   </div>
+
 </igx-dialog>
