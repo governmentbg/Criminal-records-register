@@ -11,5 +11,9 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<UserExternalGridDTO> GetUsersByAdministration(string administrationId);
 
         Task<string?> GetUserAdministrationNameAsync(string userId);
+
+        Task<string?> GetUser(string egn, string administrationId);
+        
+        Task<string?> GetUser(string id, string egn, string administrationId);
     }
 }

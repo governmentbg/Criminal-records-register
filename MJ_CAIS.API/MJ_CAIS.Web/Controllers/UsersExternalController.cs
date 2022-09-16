@@ -83,8 +83,15 @@ namespace MJ_CAIS.Web.Controllers
         {
             if (string.IsNullOrEmpty(aInDto.UserName))
             {
-                var id = await this.baseService.InsertAsync(aInDto);
-                return Ok(new { id });
+                try
+                {
+                    var id = await this.baseService.InsertAsync(aInDto);
+                    return Ok(new { id });
+                }
+                catch (ApplicationException)
+                {
+                    return BadRequest(new { code = "UserAlreadyExists" });
+                }
             }
             else
             {
@@ -106,8 +113,15 @@ namespace MJ_CAIS.Web.Controllers
         [HttpPut("{aId}")]
         public async Task<IActionResult> Put(string aId, [FromBody] UserExternalInDTO aInDto)
         {
-            await this.baseService.UpdateAsync(aId, aInDto);
-            return Ok();
+            try
+            {
+                await this.baseService.UpdateAsync(aId, aInDto);
+                return Ok();
+            }
+            catch (ApplicationException)
+            {
+                return BadRequest(new { code = "UserAlreadyExists" });
+            }
         }
     }
 }

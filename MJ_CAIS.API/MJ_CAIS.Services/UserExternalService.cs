@@ -37,6 +37,17 @@ namespace MJ_CAIS.Services
                 throw new Exception("Object with id [" + aId + "] was not found!");
             }
 
+            if (!string.IsNullOrEmpty(aId) &&
+                !string.IsNullOrEmpty(aInDto.Egn) &&
+                !string.IsNullOrEmpty(aInDto.AdministrationId))
+            {
+                var res = await _userExternalRepository.GetUser(aId, aInDto.Egn, aInDto.AdministrationId);
+                if (!string.IsNullOrEmpty(res))
+                {
+                    throw new ApplicationException("User already exists");
+                }
+            }
+
             this.ValidateData(aInDto);
 
             GUsersExt entity = mapper.MapToEntity<UserExternalInDTO, GUsersExt>(aInDto, isAdded: false);
@@ -53,6 +64,20 @@ namespace MJ_CAIS.Services
 
         public async Task<string?> GetUserAdministrationNameAsync(string userId)
             => await _userExternalRepository.GetUserAdministrationNameAsync(userId);
+
+        public async override Task<string> InsertAsync(UserExternalInDTO aInDto)
+        {
+            if (!string.IsNullOrEmpty(aInDto.Egn) &&
+                !string.IsNullOrEmpty(aInDto.AdministrationId))
+            {
+                var res = await _userExternalRepository.GetUser(aInDto.Egn, aInDto.AdministrationId);
+                if (!string.IsNullOrEmpty(res))
+                {
+                    throw new ApplicationException("User already exists");
+                }
+            }
+            return await base.InsertAsync(aInDto);
+        }
 
         public async Task<string?> GetUserAdministrationIdAsync(string userId)
            => await _userExternalRepository.GetUserAdministrationIdAsync(userId);
