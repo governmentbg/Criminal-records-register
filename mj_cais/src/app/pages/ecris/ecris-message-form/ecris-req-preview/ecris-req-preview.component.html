@@ -1,8 +1,4 @@
-<nb-card size="giant"
-  
-  *ngIf="formGroup"
-  [formGroup]="formGroup"
->
+<nb-card size="giant" *ngIf="formGroup" [formGroup]="formGroup">
   <nb-card-header class="card-header-shadow">
     <cais-card-header
       [label]="displayTitle"
@@ -11,315 +7,359 @@
     >
     </cais-card-header>
   </nb-card-header>
-  <nb-card-body  class="overflow-scroll">
+  <nb-card-body class="overflow-scroll">
     <form autocomplete="off">
-      <div class="font-weight-bold">ИД</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'ЕКРИС ИД'"
-            [inputFormControl]="this.formGroup.controls.ecrisId"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'ИД'"
-            [inputFormControl]="this.formGroup.controls.id"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="font-weight-bold">Запитващ орган</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="this.formGroup.controls.requestAuthorityName"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Тип'"
-            [inputFormControl]="this.formGroup.controls.requestAuthorityType"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Код'"
-            [inputFormControl]="this.formGroup.controls.requestAuthorityCode"
-            [parentGroup]="formGroup"
-          ></cais-input>
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">ИД</h6>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'ЕКРИС ИД'"
+                [inputFormControl]="this.formGroup.controls.ecrisId"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'ИД'"
+                [inputFormControl]="this.formGroup.controls.id"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="font-weight-bold">Основни данни за лицето</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="this.formGroup.controls.firstName"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Фамилия'"
-            [inputFormControl]="this.formGroup.controls.lastName"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пълно име'"
-            [inputFormControl]="this.formGroup.controls.fullName"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Втора фамилия'"
-            [inputFormControl]="this.formGroup.controls.lastNameSecond"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Националност'"
-            [inputFormControl]="this.formGroup.controls.nationality"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Държава'"
-            [inputFormControl]="this.formGroup.controls.countryPerson"
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">Запитващ орган</h6>
+
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име'"
+                [inputFormControl]="
+                  this.formGroup.controls.requestAuthorityName
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Тип'"
+                [inputFormControl]="
+                  this.formGroup.controls.requestAuthorityType
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Код'"
+                [inputFormControl]="
+                  this.formGroup.controls.requestAuthorityCode
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Област'"
-            [inputFormControl]="this.formGroup.controls.municipalityPerson"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Населено място'"
-            [inputFormControl]="this.formGroup.controls.cityPerson"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Държава'"
-            [inputFormControl]="this.formGroup.controls.personId"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-  
-      </div>
-      <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пол'"
-            [inputFormControl]="this.formGroup.controls.sex"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Дата на раждане'"
-            [inputFormControl]="this.formGroup.controls.birthday"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="font-weight-bold">Информация за предишни имена</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Име'"
-            [inputFormControl]="this.formGroup.controls.firstNameFormer"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Фамилия'"
-            [inputFormControl]="this.formGroup.controls.middleNameFormer"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пълно име'"
-            [inputFormControl]="this.formGroup.controls.lastNameFormer"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="font-weight-bold">Информация за адреса</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Държава'"
-            [inputFormControl]="this.formGroup.controls.country"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Област'"
-            [inputFormControl]="this.formGroup.controls.municipality"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Населено място'"
-            [inputFormControl]="this.formGroup.controls.city"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Улица'"
-            [inputFormControl]="this.formGroup.controls.street"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пощенски код'"
-            [inputFormControl]="this.formGroup.controls.postCode"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-4">
-          <cais-input
-            [type]="'text'"
-            [label]="'Номер'"
-            [inputFormControl]="this.formGroup.controls.adressNumber"
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">Основни данни за лицето</h6>
+
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име'"
+                [inputFormControl]="this.formGroup.controls.firstName"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Фамилия'"
+                [inputFormControl]="this.formGroup.controls.lastName"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пълно име'"
+                [inputFormControl]="this.formGroup.controls.fullName"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Втора фамилия'"
+                [inputFormControl]="this.formGroup.controls.lastNameSecond"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Националност'"
+                [inputFormControl]="this.formGroup.controls.nationality"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Държава'"
+                [inputFormControl]="this.formGroup.controls.countryPerson"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Област'"
+                [inputFormControl]="this.formGroup.controls.municipalityPerson"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Населено място'"
+                [inputFormControl]="this.formGroup.controls.cityPerson"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Държава'"
+                [inputFormControl]="this.formGroup.controls.personId"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пол'"
+                [inputFormControl]="this.formGroup.controls.sex"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Дата на раждане'"
+                [inputFormControl]="this.formGroup.controls.birthday"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group col-md-12">
-          <cais-input
-            [type]="'text'"
-            [label]="'Пълен адрес'"
-            [inputFormControl]="this.formGroup.controls.fullAdress"
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">Информация за предишни имена</h6>
+
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Име'"
+                [inputFormControl]="this.formGroup.controls.firstNameFormer"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Фамилия'"
+                [inputFormControl]="this.formGroup.controls.middleNameFormer"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пълно име'"
+                [inputFormControl]="this.formGroup.controls.lastNameFormer"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="font-weight-bold">Цел</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Категория'"
-            [inputFormControl]="this.formGroup.controls.requestPurposeCategory"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Цел'"
-            [inputFormControl]="this.formGroup.controls.requestPurpose"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Съгласие'"
-            [inputFormControl]="this.formGroup.controls.concernedPersonConsent"
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-3">
-          <cais-input
-            [type]="'text'"
-            [label]="'Спешен случай'"
-            [inputFormControl]="this.formGroup.controls.messageUrgency"
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">Информация за адреса</h6>
+
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Държава'"
+                [inputFormControl]="this.formGroup.controls.country"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Област'"
+                [inputFormControl]="this.formGroup.controls.municipality"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Населено място'"
+                [inputFormControl]="this.formGroup.controls.city"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Улица'"
+                [inputFormControl]="this.formGroup.controls.street"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пощенски код'"
+                [inputFormControl]="this.formGroup.controls.postCode"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-4">
+              <cais-input
+                [type]="'text'"
+                [label]="'Номер'"
+                [inputFormControl]="this.formGroup.controls.adressNumber"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-input
+                [type]="'text'"
+                [label]="'Пълен адрес'"
+                [inputFormControl]="this.formGroup.controls.fullAdress"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="font-weight-bold">Обвинение</div>
-      <hr />
-      <div class="row">
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Категория на наказуемото деяние'"
-            [inputFormControl]="
-              this.formGroup.controls.accusationOffenceCategory
-            "
-            [parentGroup]="formGroup"
-          ></cais-input>
-        </div>
-        <div class="form-group col-md-6">
-          <cais-input
-            [type]="'text'"
-            [label]="'Запитване във връзка с'"
-            [inputFormControl]="this.formGroup.controls.caseRefereranceNumber"
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">Цел</h6>
+
+          <div class="row">
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Категория'"
+                [inputFormControl]="
+                  this.formGroup.controls.requestPurposeCategory
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Цел'"
+                [inputFormControl]="this.formGroup.controls.requestPurpose"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Съгласие'"
+                [inputFormControl]="
+                  this.formGroup.controls.concernedPersonConsent
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-3">
+              <cais-input
+                [type]="'text'"
+                [label]="'Спешен случай'"
+                [inputFormControl]="this.formGroup.controls.messageUrgency"
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="form-group col-md-12">
-          <cais-input
-            [type]="'text'"
-            [label]="'Обвинение'"
-            [inputFormControl]="
-              this.formGroup.controls.accusationOffenceCategory
-            "
-            [parentGroup]="formGroup"
-          ></cais-input>
+
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <h6 class="card-title">Обвинение</h6>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Категория на наказуемото деяние'"
+                [inputFormControl]="
+                  this.formGroup.controls.accusationOffenceCategory
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+            <div class="form-group col-md-6">
+              <cais-input
+                [type]="'text'"
+                [label]="'Запитване във връзка с'"
+                [inputFormControl]="
+                  this.formGroup.controls.caseRefereranceNumber
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <cais-input
+                [type]="'text'"
+                [label]="'Обвинение'"
+                [inputFormControl]="
+                  this.formGroup.controls.accusationOffenceCategory
+                "
+                [parentGroup]="formGroup"
+              ></cais-input>
+            </div>
+          </div>
         </div>
       </div>
     </form>

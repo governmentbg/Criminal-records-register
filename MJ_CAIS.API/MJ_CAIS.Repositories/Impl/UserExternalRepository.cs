@@ -46,5 +46,26 @@ namespace MJ_CAIS.Repositories.Impl
 
             return query;
         }
+        public Task<string?> GetUser(string egn, string administrationId)
+        {
+            var id = _dbContext.GUsersExts.AsNoTracking()
+                 .Where(x => x.AdministrationId == administrationId &&  x.Egn == egn)
+                 .Select(x => x.Id)
+                 .FirstOrDefaultAsync();
+
+            return id;
+        }
+
+        public Task<string?> GetUser(string id, string egn, string administrationId)
+        {
+            var resId = _dbContext.GUsersExts.AsNoTracking()
+                 .Where(x => x.Id != id && 
+                             x.AdministrationId == administrationId && 
+                             x.Egn == egn)
+                 .Select(x => x.Id)
+                 .FirstOrDefaultAsync();
+
+            return resId;
+        }
     }
 }
