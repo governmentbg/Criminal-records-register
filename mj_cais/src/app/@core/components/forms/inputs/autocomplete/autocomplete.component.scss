@@ -1,0 +1,6 @@
+@use '../../../../../@theme/styles/themes.scss' as *;
+
+.status-danger{
+    border:1px solid nb-theme(color-danger-500);
+    border-radius: 3px;
+}

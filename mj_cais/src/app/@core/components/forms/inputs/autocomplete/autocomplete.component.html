@@ -5,7 +5,7 @@
       *ngIf="
         formUtils.hasRequiredField(inputFormControl) && inputFormControl.enabled
       "
-      ><span style="color: red">*</span></ng-container
+      ><span  class="text-danger">*</span></ng-container
     ></label
   >
 
@@ -13,6 +13,7 @@
     *ngIf="!allowCustomValues"
     #autoControl
     formControlName="{{ inputName }}"
+    [ngClass]="validationCss()"
     (change)="onSelectionChange($event)"
     (clear)="onSelectionChange(undefined)"
     [class.disable-arrow]="inputFormControl.disabled"
@@ -27,6 +28,7 @@
     *ngIf="allowCustomValues"
     #autoControl
     formControlName="{{ inputName }}"
+    [ngClass]="validationCss()"
     (change)="onSelectionChange($event)"
     (clear)="onSelectionChange(undefined)"
     [class.disable-arrow]="inputFormControl.disabled"

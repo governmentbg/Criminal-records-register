@@ -13,6 +13,13 @@
 @import "~@nebular/theme/styles/globals";
 @import "~@nebular/auth/styles/globals";
 
+$theme-colors: (
+  "primary": #014F86,
+  "info": #0187B7,
+  "warning": #C47A03,
+  "danger": #B71919,
+  "success": #278C17
+);
 @import "~bootstrap/scss/bootstrap";
 
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
@@ -25,10 +32,13 @@
   @include nb-auth-global();
 }
 
+
+
 $custom-palette: igx-palette(
-  $primary: #222b45,
-  $secondary: #3366ff,
+  $primary: #014F86,
+  $secondary: #014F86,
 );
+
 @include igx-theme(
   $palette: $custom-palette,
   $schema: $light-material-schema,
@@ -260,4 +270,16 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 .cais-small-dialog {
  
   max-height: 90vh;
+}
+
+.pace .pace-progress {
+  background: nb-theme(color-primary-500); 
+}
+
+.pace .pace-progress-inner {
+  box-shadow: 0 0 10px nb-theme(color-primary-500), 0 0 5px nb-theme(color-primary-500);
+}
+
+.pace .pace-activity {
+  display: none;
 }

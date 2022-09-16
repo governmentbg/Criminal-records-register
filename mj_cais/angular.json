@@ -36,6 +36,7 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css",
+              "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss"
             ],
             "scripts": [
@@ -133,6 +134,7 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/@infragistics/igniteui-angular/styles/igniteui-angular.css",
+              "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss"
             ],
             "assets": [

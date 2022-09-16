@@ -8,6 +8,7 @@ import { BaseNomenclatureModel } from "../../../../models/nomenclature/base-nome
 @Component({
   selector: "cais-autocomplete",
   templateUrl: "./autocomplete.component.html",
+  styleUrls: ["./autocomplete.component.scss"],
 })
 export class AutocompleteComponent {
   constructor(public formUtils: FormUtils) {}
@@ -52,5 +53,12 @@ export class AutocompleteComponent {
     } else {
       return newValue;
     }
+  }
+  
+  public validationCss(): string {
+    return this.inputFormControl.invalid &&
+      (this.inputFormControl.touched || this.inputFormControl.dirty)
+      ? "status-danger"
+      : "";
   }
 }

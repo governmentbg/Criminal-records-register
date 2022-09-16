@@ -7,6 +7,58 @@
 
 
 $nb-themes: nb-register-theme((
+
+  color-primary-100: #C7EFF8,
+  color-primary-200: #92DBF2,
+  color-primary-300: #58B3DA,
+  color-primary-400: #2E86B6,
+  color-primary-500: #014F86,
+  color-primary-600: #003D73,
+  color-primary-700: #002D60,
+  color-primary-800: #00204D,
+  color-primary-900: #001740,
+  
+  color-info-100: #C9FBFA,
+  color-info-200: #95F2F7,
+  color-info-300: #5ED8E9,
+  color-info-400: #2E86B6,
+  color-info-500: #0187B7,
+  color-info-600: #00699D,
+  color-info-700: #004E83,
+  color-info-800: #00386A,
+  color-info-900: #002857,
+
+  color-danger-100: #FBDFCF,
+  color-danger-200: #F7B8A2,
+  color-danger-300: #E98570,
+  color-danger-400: #D3564A,
+  color-danger-500: #B71919,
+  color-danger-600: #9D121E,
+  color-danger-700: #830C21,
+  color-danger-800: #6A0721,
+  color-danger-900: #570421,
+
+  color-success-100: #E2F9CF,
+  color-success-200: #C0F3A2,
+  color-success-300: #8EDC6D,
+  color-success-400: #5EBA45,
+  color-success-500: #278C17,
+  color-success-600: #167810,
+  color-success-700: #0B640D,
+  color-success-800: #07510E,
+  color-success-900: #04430F,
+
+  color-warning-100: #FCF0CA,
+  color-warning-200: #F9DE96,
+  color-warning-300: #EDC261,
+  color-warning-400: #DBA339,
+  color-warning-500: #C47A03,
+  color-warning-600: #A86202,
+  color-warning-700: #8D4C01,
+  color-warning-800: #713900,
+  color-warning-900: #5E2B00,
+
+
   layout-padding-top: 0.25rem,
 
   menu-item-icon-margin: 0 0.5rem 0 0,
