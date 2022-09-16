@@ -1,5 +1,5 @@
 <nb-card  [formGroup]="fullForm.group">
-  <nb-card-header class="card-header-shadow">
+  <nb-card-header class="">
     <cais-card-header [label]="displayTitle" [onSaveFunction]="submitFunction" [onCancelFunction]="globalCancelFunction"
       [setForPreview]="setEditToBeForPreview">
       <button *ngIf="isEdit()" nbButton matRipple [status]="'primary'" (click)="print()" type="button">
