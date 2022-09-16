@@ -26,7 +26,7 @@ export class UserForm extends BaseForm {
     this.email = new FormControl(null, [createEmailValidator()]);
     this.egn = new FormControl(null, [Validators.required, createEgnValidator()]);
     this.position = new FormControl(null);
-    this.csAuthorityId = new FormControl(null);
+    this.csAuthorityId = new FormControl(null, [Validators.required]);
     this.roles = new MultipleChooseForm();
 
     this.group = new FormGroup({
