@@ -1,5 +1,5 @@
 <ng-container *ngIf="model">
-  <nb-card >
+  <nb-card>
     <nb-card-header class="card-header-shadow">
       <div class="d-flex justify-content-between">
         <div class="d-flex align-items-center">
@@ -31,30 +31,31 @@
         </div>
       </div>
     </nb-card-header>
-    <nb-card-body >
-      <div class="inner-card-body">
-        <div class="inner-card-header">
-          <div class="float-left">Основна информация</div>
-          <ng-container>
-            <div class="float-rigth">
-              <button
-                nbButton
-                size="small"
-                [status]="'primary'"
-                (click)="getDocument()"
-              >
-                Виж документа
-              </button>
-              <button
-                *ngIf="showBtnRecreate"
-                nbButton
-                class="ml-1"
-                size="small"
-                (click)="onRecreateMsg()"
-              >
-                Прегенериране
-              </button>
-              <!-- <button
+    <nb-card-body>
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <h6 class="card-title">Основна информация</h6>
+            <div class="d-flex justify-content-end gap-3">
+              <ng-container>
+                <button
+                  nbButton
+                  size="small"
+                  [status]="'primary'"
+                  (click)="getDocument()"
+                >
+                  Виж документа
+                </button>
+                <button
+                  *ngIf="showBtnRecreate"
+                  nbButton
+                  class="ml-1"
+                  size="small"
+                  (click)="onRecreateMsg()"
+                >
+                  Прегенериране
+                </button>
+                <!-- <button
                 *ngIf="this.fullForm.requestMsgId.value"
                 nbButton
                 class="ml-1"
@@ -66,180 +67,186 @@
               >
                 Виж входящо съобщение
               </button> -->
-            </div>
-          </ng-container>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-5">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">ECRIS Идентификатор: </span>
-              <span>
-                {{ model.ecrisIdentifier }}
-              </span>
+              </ng-container>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Идентификатор: </span>
-              <span>
-                {{ model.identifier }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-5">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Дата на запитване: </span>
-              <span>
-                {{ model.msgTimestamp | date }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="inner-card-header">
-          <div class="float-left">Данни за лицето</div>
-          <div class="float-rigth">
-            <ng-container *ngIf="this.fullForm.bulletinId.value">
-              <button
-                nbButton
-                size="small"
-                [routerLink]="[
-                  '/pages/bulletins/preview',
-                  this.fullForm.bulletinId.value
-                ]"
-              >
-                Бюлетин
-              </button>
-            </ng-container>
-            <ng-container *ngIf="this.fullForm.fbbcId.value">
-              <button
-                nbButton
-                size="small"
-                class="ml-1"
-                [routerLink]="[
-                  '/pages/fbbcs/preview',
-                  this.fullForm.fbbcId.value
-                ]"
-              >
-                Осъждане в чужбина
-              </button>
-            </ng-container>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Имена: </span>
-              <span>
-                {{ model.firstname }} {{ model.surname }} {{ model.familyname }}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        <div class="mt-2 mb-4">
-          <tl-linear-progress
-            [visible]="this.remoteService?.isLoading"
-          ></tl-linear-progress>
-          <igx-grid
-            #namesGrid
-            [height]="null"
-            [data]="dbData.ecrisMsgNames"
-            [primaryKey]="'id'"
-            [displayDensity]="'compact'"
-          >
-            <igx-grid-toolbar>
-              <igx-grid-toolbar-title>
-                <span class="fw-bold">Псевдоними</span></igx-grid-toolbar-title
-              >
-              <igx-grid-toolbar-actions>
-                <div class="d-flex gap-2">
-                  <igx-grid-toolbar-hiding
-                    class="mt-1"
-                  ></igx-grid-toolbar-hiding>
-                </div>
-              </igx-grid-toolbar-actions>
-            </igx-grid-toolbar>
-            <igx-column
-              field="firstname"
-              header="Име"
-              [sortable]="true"
-              [dataType]="'string'"
-            ></igx-column>
-            <igx-column
-              field="surname"
-              header="Презиме"
-              [sortable]="true"
-              [dataType]="'string'"
-            ></igx-column>
-            <igx-column
-              field="familyname"
-              header="Фамилия"
-              [sortable]="true"
-              [dataType]="'string'"
-            ></igx-column>
-          </igx-grid>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">ECRIS Идентификатор: </span>
+                <span>
+                  {{ model.ecrisIdentifier }}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Идентификатор: </span>
+                <span>
+                  {{ model.identifier }}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Дата на запитване: </span>
+                <span>
+                  {{ model.msgTimestamp | date }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="row mb-3">
-          <div class="col-md-5">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Пол: </span>
-              <span>
-                {{ model.sex }}
-              </span>
+      <div class="card bg-transparent mt-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <h6 class="card-title">Данни за лицето</h6>
+
+            <div class="d-flex justify-content-end gap-3">
+              <ng-container *ngIf="this.fullForm.bulletinId.value">
+                <button
+                  nbButton
+                  size="small"
+                  [routerLink]="[
+                    '/pages/bulletins/preview',
+                    this.fullForm.bulletinId.value
+                  ]"
+                >
+                  Бюлетин
+                </button>
+              </ng-container>
+              <ng-container *ngIf="this.fullForm.fbbcId.value">
+                <button
+                  nbButton
+                  size="small"
+                  class="ml-1"
+                  [routerLink]="[
+                    '/pages/fbbcs/preview',
+                    this.fullForm.fbbcId.value
+                  ]"
+                >
+                  Осъждане в чужбина
+                </button>
+              </ng-container>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Имена: </span>
+                <span>
+                  {{ model.firstname }} {{ model.surname }}
+                  {{ model.familyname }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-2 mb-4">
+            <tl-linear-progress
+              [visible]="this.remoteService?.isLoading"
+            ></tl-linear-progress>
+            <igx-grid
+              #namesGrid
+              [height]="null"
+              [data]="dbData.ecrisMsgNames"
+              [primaryKey]="'id'"
+              [displayDensity]="'compact'"
+            >
+              <igx-grid-toolbar>
+                <igx-grid-toolbar-title>
+                  <span class="fw-bold"
+                    >Псевдоними</span
+                  ></igx-grid-toolbar-title
+                >
+                <igx-grid-toolbar-actions>
+                  <div class="d-flex gap-2">
+                    <igx-grid-toolbar-hiding
+                      class="mt-1"
+                    ></igx-grid-toolbar-hiding>
+                  </div>
+                </igx-grid-toolbar-actions>
+              </igx-grid-toolbar>
+              <igx-column
+                field="firstname"
+                header="Име"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
+              <igx-column
+                field="surname"
+                header="Презиме"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
+              <igx-column
+                field="familyname"
+                header="Фамилия"
+                [sortable]="true"
+                [dataType]="'string'"
+              ></igx-column>
+            </igx-grid>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-2">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Пол: </span>
+                <span>
+                  {{ model.sex }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Месторождение - държава: </span>
+                <span>
+                  {{ model.birthCountry }}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Месторождение - град: </span>
+                <span>
+                  {{ model.birthCity }}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Гражданство: </span>
+                <span>
+                  {{ model.nationalities }}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="row col-md-12 cais-display-form-group">
+                <span class="label">Дата на раждане: </span>
+                <span>
+                  {{ model.birthDate | date }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-md-5">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Месторождение - държава: </span>
-              <span>
-                {{ model.birthCountry }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Месторождение - град: </span>
-              <span>
-                {{ model.birthCity }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-5">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Гражданство: </span>
-              <span>
-                {{ model.nationalities }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-md-5">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Дата на раждане: </span>
-              <span>
-                {{ model.birthDate | date }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="mt-4 mb-4">
-          <cais-grao-person-overview
-            #graoPeople
-            (selectRow)="handleSelectedRow($event)"
-            [people]="dbData.graoPeople"
-            [genderTypes]="dbData.genderTypes"
-            [isForPreview]="this.isForPreview"
-          >
-          </cais-grao-person-overview>
-        </div>
+      </div>
+
+      <div class="mt-4 mb-4">
+        <cais-grao-person-overview
+          #graoPeople
+          (selectRow)="handleSelectedRow($event)"
+          [people]="dbData.graoPeople"
+          [genderTypes]="dbData.genderTypes"
+          [isForPreview]="this.isForPreview"
+        >
+        </cais-grao-person-overview>
       </div>
     </nb-card-body>
   </nb-card>
