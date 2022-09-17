@@ -54,7 +54,7 @@
 									<td align="right" height="20">
 										<xsl:for-each select="n1:ReportCriteria">
 											<span>
-												<xsl:text>Идентификатор за лице: </xsl:text>
+												<xsl:text>За лице с </xsl:text>
 											</span>
 											<xsl:for-each select="bul:IdentifierType">
 												<xsl:choose>
@@ -483,6 +483,9 @@
 																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseYear">
+																				<span>
+																					<xsl:text>/</xsl:text>
+																				</span>
 																				<span style="font-weight:bold; ">
 																					<xsl:apply-templates/>
 																				</span>
@@ -1107,142 +1110,73 @@
 																				</span>
 																			</div>
 																		</xsl:if>
-																		<ul>
-																			<li>
-																				<xsl:for-each select="bul:ConvictionDecisions">
-																					<xsl:for-each select="bul:DecisionChangeTypeReference">
-																						<xsl:choose>
-																							<xsl:when test=". =&apos;DCH-00-R&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Реабилитация</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-N&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Край на изтърпяването на наказанието</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-E&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Замяна на наказание/мярка</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-I&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Последващо определяне на едно общо наказание</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-Q&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Допуснато условно предсрочно освобождаване</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-S&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Отмяна на условно предсрочно освобождаване</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-Y&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Постановен съдебен акт по чл. 425 НПК</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-88-B&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Отменена кумулация</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-88-A&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Погасено по давност по наказание – изтича срока чл. 82 от НК</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-P&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Амнистия</xsl:text>
-																								</span>
-																							</xsl:when>
-																							<xsl:when test=". =&apos;DCH-00-O&apos;">
-																								<span style="font-weight:bold; ">
-																									<xsl:text>Помилване</xsl:text>
-																								</span>
-																							</xsl:when>
-																						</xsl:choose>
-																					</xsl:for-each>
-																					<xsl:for-each select="bul:ValidFrom">
-																						<xsl:if test=". !=&apos;0001-01-01&apos;">
-																							<span>
-																								<xsl:text>, валидно от </xsl:text>
-																							</span>
-																							<span style="font-weight:bold; ">
-																								<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
-																								<xsl:text>.</xsl:text>
-																								<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
-																								<xsl:text>.</xsl:text>
-																								<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
-																							</span>
-																							<span>
-																								<xsl:text> г.</xsl:text>
-																							</span>
-																						</xsl:if>
-																					</xsl:for-each>
-																					<xsl:for-each select="bul:ReceiveDate">
-																						<xsl:if test=". !=&apos;0001-01-01&apos;">
-																							<span>
-																								<xsl:text>, дата на получаване на сведението: </xsl:text>
-																							</span>
-																							<span style="font-weight:bold; ">
-																								<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
-																								<xsl:text>.</xsl:text>
-																								<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
-																								<xsl:text>.</xsl:text>
-																								<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
-																							</span>
-																							<span>
-																								<xsl:text> г.</xsl:text>
-																							</span>
-																						</xsl:if>
-																					</xsl:for-each>
-																					<xsl:for-each select="bul:Decision">
-																						<xsl:for-each select="bul:DecisionType">
-																							<span>
-																								<xsl:text>с </xsl:text>
-																							</span>
+																		<xsl:if test="count(bul:ConvictionDecisions )&gt;0">
+																			<ul>
+																				<li>
+																					<xsl:for-each select="bul:ConvictionDecisions">
+																						<xsl:for-each select="bul:DecisionChangeTypeReference">
 																							<xsl:choose>
-																								<xsl:when test=".=&apos;dkp_sporazumenie&apos;">
+																								<xsl:when test=". =&apos;DCH-00-R&apos;">
 																									<span style="font-weight:bold; ">
-																										<xsl:text>споразумение</xsl:text>
+																										<xsl:text>Реабилитация</xsl:text>
 																									</span>
 																								</xsl:when>
-																								<xsl:when test=". =&apos;dkp_opredelenie&apos;">
+																								<xsl:when test=". =&apos;DCH-00-N&apos;">
 																									<span style="font-weight:bold; ">
-																										<xsl:text>определение</xsl:text>
+																										<xsl:text>Край на изтърпяването на наказанието</xsl:text>
 																									</span>
 																								</xsl:when>
-																								<xsl:when test=".=&apos;dkp_prisada&apos;">
+																								<xsl:when test=". =&apos;DCH-00-E&apos;">
 																									<span style="font-weight:bold; ">
-																										<xsl:text>присъда</xsl:text>
+																										<xsl:text>Замяна на наказание/мярка</xsl:text>
 																									</span>
 																								</xsl:when>
-																								<xsl:when test=".=&apos;dkp_reshenie&apos;">
+																								<xsl:when test=". =&apos;DCH-00-I&apos;">
 																									<span style="font-weight:bold; ">
-																										<xsl:text>решение</xsl:text>
+																										<xsl:text>Последващо определяне на едно общо наказание</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-00-Q&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Допуснато условно предсрочно освобождаване</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-00-S&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Отмяна на условно предсрочно освобождаване</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-00-Y&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Постановен съдебен акт по чл. 425 НПК</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-88-B&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Отменена кумулация</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-88-A&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Погасено по давност по наказание – изтича срока чл. 82 от НК</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-00-P&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Амнистия</xsl:text>
+																									</span>
+																								</xsl:when>
+																								<xsl:when test=". =&apos;DCH-00-O&apos;">
+																									<span style="font-weight:bold; ">
+																										<xsl:text>Помилване</xsl:text>
 																									</span>
 																								</xsl:when>
 																							</xsl:choose>
 																						</xsl:for-each>
-																						<xsl:for-each select="bul:FileNumber">
-																							<span>
-																								<xsl:text>&#160;</xsl:text>
-																							</span>
-																							<span style="font-weight:bold; ">
-																								<xsl:apply-templates/>
-																							</span>
-																						</xsl:for-each>
-																						<xsl:for-each select="bul:DecisionDate">
+																						<xsl:for-each select="bul:ValidFrom">
 																							<xsl:if test=". !=&apos;0001-01-01&apos;">
 																								<span>
-																									<xsl:text> / </xsl:text>
+																									<xsl:text>, валидно от </xsl:text>
 																								</span>
 																								<span style="font-weight:bold; ">
 																									<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
@@ -1255,46 +1189,117 @@
 																									<xsl:text> г.</xsl:text>
 																								</span>
 																							</xsl:if>
-																							<span>
-																								<xsl:text>&#160;</xsl:text>
-																							</span>
 																						</xsl:for-each>
-																						<xsl:for-each select="bul:DecidingAuthority">
-																							<xsl:for-each select="bul:DecidingAuthorityName">
+																						<xsl:for-each select="bul:ReceiveDate">
+																							<xsl:if test=". !=&apos;0001-01-01&apos;">
 																								<span>
-																									<xsl:text> на </xsl:text>
+																									<xsl:text>, дата на получаване на сведението: </xsl:text>
+																								</span>
+																								<span style="font-weight:bold; ">
+																									<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
+																									<xsl:text>.</xsl:text>
+																									<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
+																									<xsl:text>.</xsl:text>
+																									<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+																								</span>
+																								<span>
+																									<xsl:text> г.</xsl:text>
+																								</span>
+																							</xsl:if>
+																						</xsl:for-each>
+																						<xsl:for-each select="bul:Decision">
+																							<xsl:for-each select="bul:DecisionType">
+																								<span>
+																									<xsl:text>с </xsl:text>
+																								</span>
+																								<xsl:choose>
+																									<xsl:when test=".=&apos;dkp_sporazumenie&apos;">
+																										<span style="font-weight:bold; ">
+																											<xsl:text>споразумение</xsl:text>
+																										</span>
+																									</xsl:when>
+																									<xsl:when test=". =&apos;dkp_opredelenie&apos;">
+																										<span style="font-weight:bold; ">
+																											<xsl:text>определение</xsl:text>
+																										</span>
+																									</xsl:when>
+																									<xsl:when test=".=&apos;dkp_prisada&apos;">
+																										<span style="font-weight:bold; ">
+																											<xsl:text>присъда</xsl:text>
+																										</span>
+																									</xsl:when>
+																									<xsl:when test=".=&apos;dkp_reshenie&apos;">
+																										<span style="font-weight:bold; ">
+																											<xsl:text>решение</xsl:text>
+																										</span>
+																									</xsl:when>
+																								</xsl:choose>
+																							</xsl:for-each>
+																							<xsl:for-each select="bul:FileNumber">
+																								<span>
+																									<xsl:text>&#160;</xsl:text>
 																								</span>
 																								<span style="font-weight:bold; ">
 																									<xsl:apply-templates/>
 																								</span>
 																							</xsl:for-each>
-																						</xsl:for-each>
-																						<xsl:for-each select="bul:DecisionFinalDate">
-																							<xsl:if test=". !=&apos;0001-01-01&apos;">
-																								<span style="text-align:left; ">
-																									<xsl:text>, в сила от </xsl:text>
-																								</span>
-																								<span style="font-weight:bold; ">
-																									<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
-																									<xsl:text>.</xsl:text>
-																									<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
-																									<xsl:text>.</xsl:text>
-																									<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
-																								</span>
+																							<xsl:for-each select="bul:DecisionDate">
+																								<xsl:if test=". !=&apos;0001-01-01&apos;">
+																									<span>
+																										<xsl:text> / </xsl:text>
+																									</span>
+																									<span style="font-weight:bold; ">
+																										<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
+																										<xsl:text>.</xsl:text>
+																										<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
+																										<xsl:text>.</xsl:text>
+																										<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+																									</span>
+																									<span>
+																										<xsl:text> г.</xsl:text>
+																									</span>
+																								</xsl:if>
 																								<span>
-																									<xsl:text> г.</xsl:text>
+																									<xsl:text>&#160;</xsl:text>
 																								</span>
-																							</xsl:if>
+																							</xsl:for-each>
+																							<xsl:for-each select="bul:DecidingAuthority">
+																								<xsl:for-each select="bul:DecidingAuthorityName">
+																									<span>
+																										<xsl:text> на </xsl:text>
+																									</span>
+																									<span style="font-weight:bold; ">
+																										<xsl:apply-templates/>
+																									</span>
+																								</xsl:for-each>
+																							</xsl:for-each>
+																							<xsl:for-each select="bul:DecisionFinalDate">
+																								<xsl:if test=". !=&apos;0001-01-01&apos;">
+																									<span style="text-align:left; ">
+																										<xsl:text>, в сила от </xsl:text>
+																									</span>
+																									<span style="font-weight:bold; ">
+																										<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
+																										<xsl:text>.</xsl:text>
+																										<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
+																										<xsl:text>.</xsl:text>
+																										<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+																									</span>
+																									<span>
+																										<xsl:text> г.</xsl:text>
+																									</span>
+																								</xsl:if>
+																							</xsl:for-each>
+																						</xsl:for-each>
+																						<xsl:for-each select="bul:DecisionRemarks">
+																							<div>
+																								<xsl:apply-templates/>
+																							</div>
 																						</xsl:for-each>
 																					</xsl:for-each>
-																					<xsl:for-each select="bul:DecisionRemarks">
-																						<div>
-																							<xsl:apply-templates/>
-																						</div>
-																					</xsl:for-each>
-																				</xsl:for-each>
-																			</li>
-																		</ul>
+																				</li>
+																			</ul>
+																		</xsl:if>
 																	</xsl:for-each>
 																	<xsl:for-each select="bul:IssuerData">
 																		<xsl:for-each select="bul:BulletinCreatorAuthority">
