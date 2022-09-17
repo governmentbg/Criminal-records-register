@@ -478,6 +478,9 @@
 																	<xsl:for-each select="bul:Conviction">
 																		<xsl:for-each select="bul:CriminalCase">
 																			<xsl:for-each select="bul:CaseNumber">
+																				<span>
+																					<xsl:text>№ </xsl:text>
+																				</span>
 																				<span style="font-weight:bold; ">
 																					<xsl:apply-templates/>
 																				</span>
@@ -489,10 +492,13 @@
 																				<span style="font-weight:bold; ">
 																					<xsl:apply-templates/>
 																				</span>
+																				<span>
+																					<xsl:text> г.</xsl:text>
+																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:CaseType">
 																				<span>
-																					<xsl:text>&#160;</xsl:text>
+																					<xsl:text>, </xsl:text>
 																				</span>
 																				<xsl:choose>
 																					<xsl:when test=". =&apos;sign_and&apos;">
@@ -534,8 +540,6 @@
 																				</xsl:for-each>
 																			</xsl:for-each>
 																		</xsl:for-each>
-																	</xsl:for-each>
-																	<xsl:for-each select="bul:Conviction">
 																		<xsl:for-each select="bul:Decision">
 																			<xsl:for-each select="bul:DecisionType">
 																				<span>
@@ -575,7 +579,7 @@
 																			<xsl:for-each select="bul:DecisionDate">
 																				<xsl:if test=". !=&apos;0001-01-01&apos;">
 																					<span>
-																						<xsl:text> / </xsl:text>
+																						<xsl:text>/</xsl:text>
 																					</span>
 																					<span style="font-weight:bold; ">
 																						<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
@@ -1111,9 +1115,9 @@
 																			</div>
 																		</xsl:if>
 																		<xsl:if test="count(bul:ConvictionDecisions )&gt;0">
-																			<ul>
-																				<li>
-																					<xsl:for-each select="bul:ConvictionDecisions">
+																			<xsl:for-each select="bul:ConvictionDecisions">
+																				<ul type="circle">
+																					<li>
 																						<xsl:for-each select="bul:DecisionChangeTypeReference">
 																							<xsl:choose>
 																								<xsl:when test=". =&apos;DCH-00-R&apos;">
@@ -1210,7 +1214,7 @@
 																						<xsl:for-each select="bul:Decision">
 																							<xsl:for-each select="bul:DecisionType">
 																								<span>
-																									<xsl:text>с </xsl:text>
+																									<xsl:text>, </xsl:text>
 																								</span>
 																								<xsl:choose>
 																									<xsl:when test=".=&apos;dkp_sporazumenie&apos;">
@@ -1237,7 +1241,7 @@
 																							</xsl:for-each>
 																							<xsl:for-each select="bul:FileNumber">
 																								<span>
-																									<xsl:text>&#160;</xsl:text>
+																									<xsl:text> № </xsl:text>
 																								</span>
 																								<span style="font-weight:bold; ">
 																									<xsl:apply-templates/>
@@ -1246,7 +1250,7 @@
 																							<xsl:for-each select="bul:DecisionDate">
 																								<xsl:if test=". !=&apos;0001-01-01&apos;">
 																									<span>
-																										<xsl:text> / </xsl:text>
+																										<xsl:text>/</xsl:text>
 																									</span>
 																									<span style="font-weight:bold; ">
 																										<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
@@ -1296,16 +1300,21 @@
 																								<xsl:apply-templates/>
 																							</div>
 																						</xsl:for-each>
-																					</xsl:for-each>
-																				</li>
-																			</ul>
+																					</li>
+																				</ul>
+																			</xsl:for-each>
 																		</xsl:if>
 																	</xsl:for-each>
 																	<xsl:for-each select="bul:IssuerData">
+																		<xsl:if test="string-length(bul:BulletinCreateDate )&gt;0 or  string-length(bul:BulletinCreatorPerson/bul:Names )&gt;0 or  string-length( bul:BulletinApproverPerson/bul:Names )&gt;0 or string-length( bul:BulletinCreatorAuthority/bul:DecidingAuthorityName) &gt; 0">
+																			<span>
+																				<xsl:text>Бюлетин</xsl:text>
+																			</span>
+																		</xsl:if>
 																		<xsl:for-each select="bul:BulletinCreatorAuthority">
 																			<xsl:for-each select="bul:DecidingAuthorityName">
 																				<span>
-																					<xsl:text>Бюлетин издаден от </xsl:text>
+																					<xsl:text> издаден от </xsl:text>
 																				</span>
 																				<span style="font-weight:bold; ">
 																					<xsl:apply-templates/>
@@ -1315,7 +1324,7 @@
 																		<xsl:for-each select="bul:BulletinCreateDate">
 																			<xsl:if test=". !=&apos;0001-01-01&apos; and . != &apos;0001-01-01T00:00:00&apos;">
 																				<span>
-																					<xsl:text> на </xsl:text>
+																					<xsl:text>, издаден на </xsl:text>
 																				</span>
 																				<span style="font-weight:bold; ">
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
@@ -1341,8 +1350,6 @@
 																				</span>
 																			</xsl:for-each>
 																		</xsl:for-each>
-																	</xsl:for-each>
-																	<xsl:for-each select="bul:RegistrationData">
 																		<xsl:for-each select="bul:RegistrationNumber">
 																			<span>
 																				<xsl:text>, с рег. № </xsl:text>
@@ -1354,7 +1361,7 @@
 																		<xsl:for-each select="bul:BulletinReceivedDate">
 																			<xsl:if test=". !=&apos;0001-01-01&apos; or . != &apos;0001-01-01T00:00:00&apos;">
 																				<span>
-																					<xsl:text>, дата на регистрация </xsl:text>
+																					<xsl:text>, с дата на регистрация </xsl:text>
 																				</span>
 																				<span style="font-weight:bold; ">
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
@@ -1362,6 +1369,9 @@
 																					<xsl:value-of select="format-number(number(substring(string(string(.)), 6, 2)), '00', 'format1')"/>
 																					<xsl:text>.</xsl:text>
 																					<xsl:value-of select="format-number(number(substring(string(string(string(.))), 1, 4)), '0000', 'format1')"/>
+																				</span>
+																				<span>
+																					<xsl:text> г.</xsl:text>
 																				</span>
 																			</xsl:if>
 																		</xsl:for-each>
