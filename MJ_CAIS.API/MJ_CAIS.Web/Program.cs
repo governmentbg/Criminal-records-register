@@ -18,6 +18,7 @@ namespace MJ_CAIS.Web
         {
             // Most configurations are in Web.Setup project
             var builder = WebSetupConfig.CustomConfigureBuilder(args);
+            var intermediateServiceProvider = builder.Services.BuildServiceProvider();
             builder.Services
                 .AddControllers(opt =>
                 {
@@ -25,11 +26,12 @@ namespace MJ_CAIS.Web
                     {
                         opt.UseCentralRoutePrefix(new RouteAttribute("api"));
                     }
+                    opt.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider(intermediateServiceProvider.GetService<ILogger<DateTimeModelBinderProvider>>()));
                 })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
-                    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                    options.JsonSerializerOptions.Converters.Add(new DateTimeConverter(intermediateServiceProvider.GetService<ILogger<DateTimeConverter>>()));
                 });
 
             // TODO: at some point in time move back to WebSetupConfig
