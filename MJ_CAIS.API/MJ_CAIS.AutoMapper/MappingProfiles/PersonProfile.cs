@@ -49,6 +49,7 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                     SelectedForeignKeys = src.BPersNationalities.Select(x => x.CountryId)
                 }));
 
+
             CreateMap<List<PPerson>, PersonIdentifierSearchResponseType>()
                 .ConvertUsing(src =>
                     new PersonIdentifierSearchResponseType()

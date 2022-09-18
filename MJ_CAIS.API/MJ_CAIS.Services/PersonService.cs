@@ -34,13 +34,10 @@ namespace MJ_CAIS.Services
             return false;
         }
 
-        public async Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, PersonSearchParamsDTO searchParams)
+        public async Task<List<PersonGridDTO>> SearchPeopleAsync(PersonSearchParamsDTO searchParams)
         {
-            var pageSize = base.CalculateTop(aQueryOptions);
-            var currentPage = base.CalculateCurrentPage(aQueryOptions);
-            IgPageResult<PersonGridDTO> pageResult = await SelectAllWithPaginationAsync(searchParams, pageSize, currentPage);
-
-            return await Task.FromResult(pageResult);
+            var resultInPage = await _personRepository.SelectInPageAsync(searchParams, 50, 1);
+            return resultInPage;
         }
 
         public async Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(PersonSearchParamsDTO searchParams, int pageSize, int currentPage)
@@ -51,7 +48,7 @@ namespace MJ_CAIS.Services
 
             var resultInPage = await _personRepository.SelectInPageAsync(searchParams, pageSize, currentPage);
             pageResult.Data = resultInPage;
-            pageResult.Total = resultInPage.FirstOrDefault()?.TotalCount ?? 0;
+            pageResult.Total = pageSize;// resultInPage.FirstOrDefault()?.TotalCount ?? 0;
             return pageResult;
         }
 
@@ -104,6 +101,12 @@ namespace MJ_CAIS.Services
         {
             var entityQuery = _personRepository.GetPersonHistoryDataByPersonId(personId);
             return await GetPagedResultAsync(aQueryOptions, entityQuery);
+        }
+
+        public async Task<PersonSearchFormDTO> GetPersonDataByPidAsync(string pid, string pidType)
+        {
+            var person = await _personRepository.GetPersonByPidAsync(pid,pidType);
+            return person;
         }
 
         private async Task<IgPageResult<T>> GetPagedResultAsync<T>(ODataQueryOptions<T> aQueryOptions, IQueryable<T> entityQuery)

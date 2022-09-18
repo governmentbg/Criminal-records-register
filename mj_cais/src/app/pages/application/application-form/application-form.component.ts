@@ -4,6 +4,7 @@ import { NbDialogService } from "@nebular/theme";
 import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { Observable } from "rxjs";
+import { PersonSearchDialogComponent } from "../../../@core/components/dialogs/person-search-dialog/person-search-dialog.component";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
@@ -53,9 +54,10 @@ export class ApplicationFormComponent
 
     if (
       this.fullForm.statusCode.value ==
-      ApplicationTypeStatusConstants.ApprovedApplication){
-        this.isAppAproved = true;
-      }
+      ApplicationTypeStatusConstants.ApprovedApplication
+    ) {
+      this.isAppAproved = true;
+    }
 
     let selectedForeignKeys =
       this.fullForm.person.nationalities.selectedForeignKeys.value;
@@ -76,12 +78,12 @@ export class ApplicationFormComponent
     this.applicationStatus = this.fullForm.statusCode.value;
     if (
       this.fullForm.statusCode.value ==
-      ApplicationTypeStatusConstants.ApprovedApplication || this.fullForm.statusCode.value ==
-      ApplicationTypeStatusConstants.Canceled
+        ApplicationTypeStatusConstants.ApprovedApplication ||
+      this.fullForm.statusCode.value == ApplicationTypeStatusConstants.Canceled
     ) {
       this.fullForm.group.disable();
     }
-   
+
     this.formFinishedLoading.emit();
     if (
       this.fullForm.statusCode.value ==
@@ -216,4 +218,23 @@ export class ApplicationFormComponent
         }
       });
   }
+
+  // public onPersonSearchIsClicked() {
+  //   debugger;
+
+  //   this.dialogService
+  //     .open(PersonSearchDialogComponent, {
+  //       context: {
+  //         personData: this.fullForm.person.group.getRawValue(),
+  //       },
+  //       closeOnBackdropClick: false,
+  //     })
+  //     .onClose.subscribe(this.onPersonSearchIsSelected);
+  // }
+
+  // public onPersonSearchIsSelected = (item: string) => {
+  //   debugger;
+  //   let selectedPersonId = item;
+  //   this.fullForm.person.id.patchValue(selectedPersonId);
+  // };
 }

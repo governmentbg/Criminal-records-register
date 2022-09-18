@@ -8,7 +8,7 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IPersonService : IBaseAsyncService<PersonDTO, PersonDTO, PersonGridDTO, PPerson, string>
     {
-        Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(ODataQueryOptions<PersonGridDTO> aQueryOptions, PersonSearchParamsDTO searchParams);
+        Task<List<PersonGridDTO>> SearchPeopleAsync(PersonSearchParamsDTO searchParams);
 
         Task<IgPageResult<PersonGridDTO>> SelectAllWithPaginationAsync(PersonSearchParamsDTO searchParams, int pageSize, int currentPage);
 
@@ -30,5 +30,7 @@ namespace MJ_CAIS.Services.Contracts
         IQueryable<ObjectStatusCountDTO> GetBulletinsCountByPersonId(string personId);
 
         Task<IgPageResult<PersonHistoryDataGridDTO>> SelectPersonHistoryDataAllWithPaginationAsync(ODataQueryOptions<PersonHistoryDataGridDTO> aQueryOptions, string personId);
+       
+        Task<PersonSearchFormDTO> GetPersonDataByPidAsync(string pid, string pidType);
     }
 }

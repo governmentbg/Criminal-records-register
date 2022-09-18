@@ -47,5 +47,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<List<CriminalRecordsPersonDataType>> GetPersonsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname);
 
         IQueryable<PersonHistoryDataGridDTO> GetPersonHistoryDataByPersonId(string personId);
+
+        Task<PersonSearchFormDTO> GetPersonByPidAsync(string pid, string pidType);
     }
 }

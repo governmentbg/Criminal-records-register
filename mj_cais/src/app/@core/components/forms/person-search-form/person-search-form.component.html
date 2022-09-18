@@ -1,0 +1,334 @@
+<tl-linear-progress [visible]="isLoadingPersonData"></tl-linear-progress>
+
+<nb-card class="search-card" accent="primary" [formGroup]="fullForm.group">
+  <nb-card-header>
+    <div class="d-flex justify-content-between">
+      <h2 class="h4">{{ title }}</h2>
+      <button
+        nbButton
+        status="primary"
+        (click)="onSearch()"
+        type="button"
+        [disabled]="
+          (fullForm.group.pristine || isLoadingGrid) && !enableButtons
+        "
+      >
+        <nb-icon
+          class="pt-1"
+          [icon]="'search'"
+          pack="fa"
+          title="Търсене"
+        ></nb-icon>
+        Търсене
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <form autocomplete="off" (keydown.enter)="onSearch()">
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Име'"
+            [inputFormControl]="fullForm.firstname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Презиме'"
+            [inputFormControl]="fullForm.surname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Фамилия'"
+            [inputFormControl]="fullForm.familyname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'Пълно име'"
+            [inputFormControl]="fullForm.fullname"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'ЕГН'"
+            [inputFormControl]="fullForm.egn"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'text'"
+            [label]="'ЛНЧ'"
+            [inputFormControl]="fullForm.lnch"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+        <div class="form-group col-md-3 mt-3">
+          <button
+            nbButton
+            status="primary"
+            (click)="onLoadPersonData()"
+            type="button"
+            [disabled]="
+              (fullForm.group.pristine || isLoadingPersonData) && !enableButtons
+            "
+          >
+            <nb-icon
+              class="pt-1"
+              [icon]="'sync'"
+              pack="fa"
+              title="Зареди"
+            ></nb-icon>
+            Зареди критерии
+          </button>
+        </div>
+        <div class="form-group col-md-3">
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата на раждане'"
+            [inputFormControl]="this.fullForm.birthDate"
+            [parentGroup]="fullForm.group"
+          ></cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>
+<nb-card>
+  <nb-card>
+    <tl-linear-progress [visible]="isLoadingGrid"></tl-linear-progress>
+    <igx-grid
+      #grid
+      igxGridState
+      [data]="people"
+      [height]="null"
+      [clipboardOptions]="{ copyHeaders: false }"
+      [displayDensity]="'cosy'"
+      [allowFiltering]="false"
+      [primaryKey]="'id'"
+      [pinning]="pinningConfig"
+      [cellSelection]="'none'"
+      [rowSelection]="selectionMode"
+      [selectedRows]="[]"
+      [hideRowSelectors]="false"
+      [pinning]="pinningConfig"
+      (onRowSelectionChange)="handleRowSelection($event)"
+    >
+      <igx-grid-toolbar>
+        <igx-grid-toolbar-title
+          ><span class="fw-bold">Лица</span></igx-grid-toolbar-title
+        >
+        <igx-grid-toolbar-actions>
+          <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+        </igx-grid-toolbar-actions>
+      </igx-grid-toolbar>
+      <igx-column
+        field="id"
+        header="Идентификатор"
+        [dataType]="'string'"
+        [hidden]="true"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+
+      <igx-column
+        width="190px"
+        field="pids"
+        header="Идентификатори"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column
+        field="personNames"
+        header="Имена"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column field="motherNames" header="Майка" [dataType]="'string'">
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column field="fatherNames" header="Баща" [dataType]="'string'">
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column field="sex" header="Пол" [dataType]="'string'">
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column
+        field="birthDate"
+        header="Дата на раждане"
+        dataType="date"
+        [formatter]="this.dateFormatService.formatDate"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="this.dateFormatService.displayDate(cell.value)">
+            {{ this.dateFormatService.displayDate(cell.value) }}
+          </span>
+        </ng-template>
+      </igx-column>
+
+      <igx-column
+        width="110px"
+        header="Действия"
+        [filterable]="false"
+        [pinned]="true"
+        [disableHiding]="true"
+      >
+        <ng-template igxCell let-cell="cell">
+          <ng-container *ngIf="!isRemindPersonForm && !isPersonSelection">
+            <div class="cell-center">
+              <button
+                igxButton="icon"
+                [overlaySettings]="overlaySettings"
+                [igxToggleAction]="dropdown"
+                [igxDropDownItemNavigation]="dropdown"
+              >
+                <igx-icon fontSet="material">more_vert</igx-icon>
+              </button>
+              <igx-drop-down #dropdown>
+                <igx-drop-down-item
+                  [routerLink]="['/pages/people/preview', cell.rowData.id]"
+                >
+                  Детайли
+                </igx-drop-down-item>
+                <igx-drop-down-item
+                  [routerLink]="['/pages/bulletins/create']"
+                  [queryParams]="{ personId: cell.rowData.id }"
+                >
+                  Нов бюлетин
+                </igx-drop-down-item>
+                <igx-drop-down-item
+                  [routerLink]="['/pages/applications/create']"
+                  [queryParams]="{ personId: cell.rowData.id }"
+                >
+                  Ново свидетелство
+                </igx-drop-down-item>
+                <igx-drop-down-item
+                  [routerLink]="['/pages/report-applications/create']"
+                  title="Нова справка за съдимост"
+                  [queryParams]="{ personId: cell.rowData.id }"
+                >
+                  Нова справка за съдимост
+                </igx-drop-down-item>
+                <igx-drop-down-item
+                  [routerLink]="['/pages/people/remind', cell.rowData.id]"
+                >
+                  Нов напомнителен бюлетин
+                </igx-drop-down-item>
+
+                <igx-drop-down-item
+                  [queryParams]="{ personId: cell.rowData.id }"
+                  [routerLink]="['/pages/internal-requests/create']"
+                >
+                  Нова заявка
+                </igx-drop-down-item>
+              </igx-drop-down>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isRemindPersonForm && !isPersonSelection">
+            <a
+              [title]="'Преглед на лицето'"
+              [routerLink]="['/pages/people/preview', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+
+            <button
+              igxButton="icon"
+              [title]="'Свържи с това лице'"
+              (click)="
+                openConnectPeopleDialog(existingPersonId, cell.rowData.id)
+              "
+            >
+              <i class="fas fa-link"></i>
+            </button>
+          </ng-container>
+        </ng-template>
+      </igx-column>
+    </igx-grid>
+  </nb-card>
+  <div
+    class="alert alert-primary m-2 text-center"
+    role="alert"
+    *ngIf="fullForm?.group.pristine && !enableButtons"
+  >
+    Моля, попълтенете критерии за търсене и натиснете бутона
+    <span class="fw-bold">Търси</span>.
+  </div>
+  <igx-dialog #connectPersonDialog>
+    <form autocomplete="off">
+      <div class="dialogNewRecord" style="min-width: 500px">
+        <nb-card>
+          <nb-card-header>Свържи с това лице</nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <cais-input
+                  [type]="'text'"
+                  [label]="'Основание'"
+                  [inputFormControl]="connectPersonFormGroup.controls.desc"
+                  [parentGroup]="connectPersonFormGroup"
+                  [inputName]="'desc'"
+                  [rows]="'3'"
+                  [inputType]="'TextArea'"
+                >
+                </cais-input>
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer>
+            <div class="row">
+              <div class="col-6">
+                <button
+                  nbButton
+                  matRipple
+                  fullWidth
+                  status="danger"
+                  (click)="connectPeople()"
+                >
+                  Запис
+                </button>
+              </div>
+              <div class="col-6">
+                <button
+                  nbButton
+                  matRipple
+                  fullWidth
+                  (click)="connectPersonDialog.close()"
+                >
+                  Отказ
+                </button>
+              </div>
+            </div>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+    </form>
+  </igx-dialog>
+</nb-card>
