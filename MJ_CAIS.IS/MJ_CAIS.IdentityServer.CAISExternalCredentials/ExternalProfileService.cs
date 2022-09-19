@@ -132,8 +132,11 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             }
             var res = await
             (from u in CaisDbContext.GUsersExts
-             join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id
-             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
+             join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id into aLeft
+             from a in aLeft.DefaultIfEmpty()
+             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId into uicLeft
+             from uic in uicLeft.DefaultIfEmpty()
+
              where u.Egn == egn
                 && (uic.Value == uicValue || u.RegCertSubject == subject)
              select new UserInfo()
