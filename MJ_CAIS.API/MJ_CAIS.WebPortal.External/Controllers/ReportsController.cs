@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
-    [RedirectNotActive("Inactive", "Account")]
+    [RedirectNotActive("Index", "Home")]
     [Authorize(Roles = "EReports")]
     public class ReportsController : BaseController
     {

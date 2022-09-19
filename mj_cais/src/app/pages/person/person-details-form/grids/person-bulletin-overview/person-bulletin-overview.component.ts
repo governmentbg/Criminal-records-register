@@ -2,6 +2,7 @@ import { Component, Injector } from "@angular/core";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
+import { UserAuthorityService } from "../../../../../@core/services/common/user-authority.service";
 import { PersonBulletinGridService } from "./_data/person-bulletin-grid.service";
 import { PersonBulletinGridModel } from "./_models/person-bulletin-grid.model";
 
@@ -15,11 +16,14 @@ export class PersonBulletinOverviewComponent extends RemoteGridWithStatePersista
   PersonBulletinGridService
 > {
   public personId: string;
+  public userAuthorityId: string;
+
   constructor(
     public service: PersonBulletinGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
     public loaderService: LoaderService,
+    public userAuthService: UserAuthorityService
   ) {
     super("person-bulletins-search", service, injector);
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
@@ -29,6 +33,8 @@ export class PersonBulletinOverviewComponent extends RemoteGridWithStatePersista
   }
 
   ngOnInit() {
+    this.userAuthorityId = this.userAuthService.csAuthorityId;
+
     super.ngOnInit();
   }
 }

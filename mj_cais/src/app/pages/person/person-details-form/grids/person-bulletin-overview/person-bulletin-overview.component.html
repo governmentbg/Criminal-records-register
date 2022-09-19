@@ -144,19 +144,32 @@
     </igx-column>
 
     <igx-column
-      width="60px"
-      header=""
+      width="140px"
+      header="Действия"
       [sortable]="false"
       [filterable]="false"
       [pinned]="true"
+      [disableHiding]="true"
     >
       <ng-template igxCell let-cell="cell">
-        <a
-          [title]="'Преглед'"
-          [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
-        >
-          <nb-icon pack="fa" icon="eye"></nb-icon>
-        </a>
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <a
+              [title]="'Преглед'"
+              [routerLink]="['/pages/bulletins/preview', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+            <button
+              class="btn btn-link"
+              [title]="'Редактиране'"
+              [disabled]="cell.rowData.csAuthorityId !== userAuthorityId"
+              [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
+            >
+              <nb-icon pack="fa" icon="pen"></nb-icon>
+            </button>
+          </div>
+        </div>
       </ng-template>
     </igx-column>
 
