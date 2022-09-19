@@ -12,6 +12,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
     {
         public static EWebRequest CreatePersonWebRequest(string egn,
             bool isAsync,
+            string createdBy,
             string webServiceId,
            // string? bulletinId = null,
             string? applicationId = null,
@@ -22,7 +23,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             var request = new PersonDataRequestType { EGN = egn };
             var requestXml = XmlUtils.SerializeToXml(request);
 
-            var webRequestEntity = CreateWebRequest(isAsync, applicationId, wApplicationId, reportApplicationId);
+            var webRequestEntity = CreateWebRequest(isAsync: isAsync, createdBy: createdBy, applicationId: applicationId, wApplicationId: wApplicationId, reportApplicationId: reportApplicationId);
             webRequestEntity.RequestXml = requestXml;
             webRequestEntity.WebServiceId = webServiceId;
             string fieldsDescription = "";
@@ -52,6 +53,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
         public static EWebRequest CreateForeignPersonWebRequest(string lnch,
             bool isAsync,
+            string createdBy,
             string webServiceId,
             //string? bulletinId = null,
             string? applicationId = null,
@@ -63,7 +65,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             var request = new ForeignIdentityInfoRequestType { Identifier = lnch , IdentifierType =  IdentifierType.LNCh};
             var requestXml = XmlUtils.SerializeToXml(request);
 
-            var webRequestEntity = CreateWebRequest(isAsync,  applicationId, wApplicationId, reportApplicationId);
+            var webRequestEntity = CreateWebRequest(isAsync: isAsync, createdBy: createdBy, applicationId: applicationId, wApplicationId:  wApplicationId, reportApplicationId: reportApplicationId);
             webRequestEntity.RequestXml = requestXml;
             webRequestEntity.WebServiceId = webServiceId;
             string fieldsDescription = "";
@@ -94,6 +96,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
         public static EWebRequest CreatePersonRelationsWebRequest(string egn,
             bool isAsync,
+            string createdBy,
             string webServiceId,
             //string? bulletinId = null,
             string? applicationId = null,
@@ -104,7 +107,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             var request = new RelationsRequestType() { EGN = egn };
             var requestXml = XmlUtils.SerializeToXml(request);
 
-            var webRequestEntity = CreateWebRequest(isAsync, applicationId, wApplicationId, reportApplicationId);
+            var webRequestEntity = CreateWebRequest(isAsync: isAsync,createdBy: createdBy, applicationId: applicationId, wApplicationId: wApplicationId, reportApplicationId: reportApplicationId);
             webRequestEntity.RequestXml = requestXml;
             webRequestEntity.WebServiceId = webServiceId;
             string fieldsDescription = "";
@@ -127,7 +130,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
 
 
-        private static EWebRequest CreateWebRequest(bool isAsync,
+        private static EWebRequest CreateWebRequest(bool isAsync, string createdBy,
             //string? bulletinId = null,
             string? applicationId = null,
             string? wApplicationId = null,
@@ -145,6 +148,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 IsAsync = isAsync,
                 Status = WebRequestStatusConstants.Pending,
                 Attempts = 0,
+                CreatedBy = createdBy,
                 EntityState = EntityStateEnum.Added,
             };
 
