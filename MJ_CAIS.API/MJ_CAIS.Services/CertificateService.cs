@@ -157,7 +157,10 @@ namespace MJ_CAIS.Services
                 wcert.Bytes = certificateFromDb.Doc.DocContent.Bytes.Value;
             }
             wcert.Sha1 = isFromDB ? certificateFromDb.Doc.DocContent.Sha1Hash : certificate.Doc.DocContent.Sha1Hash;
-
+            if (certificate.ValidFrom.HasValue)
+            {
+                wcert.ValidFrom = certificate.ValidFrom.Value;
+            }
             wcert.ValidTo = certificate.ValidTo;
             wcert.Content = isFromDB ? certificateFromDb.Doc.DocContent.Content : certificate.Doc.DocContent.Content;
             wcert.MimeType = isFromDB ? certificateFromDb.Doc.DocContent.MimeType : certificate.Doc.DocContent.MimeType;
