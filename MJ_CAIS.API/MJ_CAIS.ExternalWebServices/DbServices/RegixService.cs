@@ -994,7 +994,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 }
                 else
                 {
-                    wApplication = await _dbContext.WApplications.FirstOrDefaultAsync(x => x.Id == request.WApplicationId);
+                    wApplication = await _dbContext.WApplications.AsNoTracking().FirstOrDefaultAsync(x => x.Id == request.WApplicationId);
                 }
                
                 if(wApplication != null && wApplication.UserCitizenId != null)
