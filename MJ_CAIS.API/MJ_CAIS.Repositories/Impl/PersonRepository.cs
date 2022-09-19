@@ -73,6 +73,7 @@ namespace MJ_CAIS.Repositories.Impl
                              bulletin.FirstName + " " + bulletin.SurName + " " + bulletin.FamilyName,
                             BirthDate = bulletin.BirthDate,
                             CreatedOn = bulletin.CreatedOn,
+                            CsAuthorityId = bulletin.CsAuthorityId
                         };
 
             return query;
