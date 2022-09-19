@@ -230,11 +230,12 @@ namespace MJ_CAIS.Services
             foreach (var item in allCertificateBulletins)
             {
                 item.Approved = aInDto.SelectedBulletinsIds.Contains(item.Id);
-                item.ModifiedProperties = new List<string>() { nameof(item.Approved) };
+                item.ModifiedProperties = new List<string>() { nameof(item.Approved), nameof(item.Version) };
                 item.EntityState = EntityStateEnum.Modified;
-                _certificateRepository.ApplyChanges(certificate);
                 _certificateRepository.ApplyChanges(item);
             }
+
+            _certificateRepository.ApplyChanges(certificate);
 
             await _certificateRepository.SaveChangesAsync();
         }
