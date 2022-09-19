@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using MJ_CAIS.Common;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
@@ -11,6 +12,7 @@ using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
+using System.Text;
 using static MJ_CAIS.Common.Constants.ApplicationConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
@@ -324,7 +326,8 @@ namespace MJ_CAIS.Repositories.Impl
                 using (OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString()))
                 {
                     // Create command
-                    OracleCommand cmd = new OracleCommand("search_persons", oracleConnection);
+                    OracleCommand cmd = new OracleCommand("psearch.search_persons", oracleConnection);
+
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     // Set parameters
@@ -490,6 +493,98 @@ namespace MJ_CAIS.Repositories.Impl
 
             return result;
         }
+
+        public async Task SavePersonAndUpdateSearchAttributesAsync(PPerson person, CancellationToken cancellationToken = default, bool clearTracker = false)
+        {
+            IDbContextTransaction dbTransaction = null;
+            try
+            {
+                dbTransaction = await this._dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+                // save all person data
+                await SaveChangesWithoutTransactionAsync(clearTracker);
+
+
+                // call precedures
+                foreach (var item in person.PPersonIds)
+                {
+                    await CallRefreshSearchAttributeProcedureAsync(item);
+                }
+
+                await dbTransaction.CommitAsync(cancellationToken);
+
+                //туй го добавям, щото става голямо объркване със State И EntityState.
+                //След SaveChanges State=Unchanged, докато EntityState остава такъв, каквъто е бил преди SaveChanges().
+                //В някои случаи това е ГОЛЯМ проблем
+                //Трябва да се види, дали няма нужда и при Exception да се прави нещо с тези EntityState-ове
+                //todo: Надя , Може би this.ChangeTracker.Clear(); след извикването на SaveChanges ще свърши работа
+                foreach (var dbEntityEntry in this._dbContext.ChangeTracker.Entries())
+                {
+                    if ((dbEntityEntry.Entity is BaseEntity) && ((BaseEntity)dbEntityEntry.Entity).EntityState != Common.Enums.EntityStateEnum.Unchanged)
+                    {
+                        ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
+                    }
+                }
+
+                if (clearTracker)
+                {
+                    this._dbContext.ChangeTracker.Clear();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await dbTransaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+            finally
+            {
+                await dbTransaction.DisposeAsync();
+            }
+        }
+
+        private async Task CallRefreshSearchAttributeProcedureAsync(PPersonId pid)
+        {
+            try
+            {
+                using OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString());
+
+                // create command
+                var cmd = new OracleCommand("psearch.refresh_search_attributes", oracleConnection);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                await oracleConnection.OpenAsync();
+
+                try
+                {
+                    // set parameters
+                    cmd.Parameters.Add(new OracleParameter("p_pid_type_id", OracleDbType.Varchar2, pid.PidTypeId, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_pid", OracleDbType.Varchar2, pid.Pid, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_pid_issuer", OracleDbType.Varchar2, pid.Issuer, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_country_id", OracleDbType.Varchar2, pid.CountryId, ParameterDirection.Input));
+
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception exception)
+                {
+                    // todo: log
+                    throw;
+                }
+                finally
+                {
+                    oracleConnection.Close();
+                    oracleConnection.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                // todo: log error
+                // add message
+                throw;
+            }
+
+        }
+
         private static List<PersonGridDTO> GetPersons(DataTable dataTable)
         {
             var result = new List<PersonGridDTO>();
@@ -524,28 +619,85 @@ namespace MJ_CAIS.Repositories.Impl
             {
                 person.Sex = PersonResources.unknown;
             }
-           
+
             person.PersonNames = dataRow["person_names"]?.ToString();
             person.MotherNames = dataRow["mother_names"]?.ToString();
             person.FatherNames = dataRow["father_names"]?.ToString();
 
             person.BgCitizen = dataRow["bg_citizen"]?.ToString();
             person.NonBGCitizen = dataRow["nonbg_citizen"]?.ToString();
-            person.IsConvicted = dataRow["is_convicted"]?.ToString();
-            person.EgnMatch = dataRow["egn_match"]?.ToString();
-            person.LnchMatch = dataRow["lnch_match"]?.ToString();
-            person.FirstnameMatch = dataRow["firstname_match"]?.ToString();
-            person.SurnameMatch = dataRow["surname_match"]?.ToString();
-            person.FamilynameMatch = dataRow["familyname_match"]?.ToString();
-            person.FullnameMatch = dataRow["fullname_match"]?.ToString();
-            person.BirthdateMatch = dataRow["birthdate_match"]?.ToString();
-            person.BirthyearMatch = dataRow["birthyear_match"]?.ToString();
-            person.InitialsMatch = dataRow["initials_match"]?.ToString();
-            person.TwoWordsOfNameMatch = dataRow["two_words_of_name_match"]?.ToString();
-            person.TwoInitialsOfNameMatch = dataRow["two_initials_of_name_match"]?.ToString();
-            person.BgCitizenMatch = dataRow["bg_citizen_match"]?.ToString();
-            person.NonBGCitizenMatch = dataRow["nonbg_citizen_match"]?.ToString();
 
+            const string isMatchParam = "1";
+            person.IsConvicted = dataRow["is_convicted"]?.ToString() == isMatchParam ? PersonResources.msgYes : PersonResources.msgNo;
+
+            var sb = new List<string>();
+
+            if (dataRow["pid_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchPid);
+            }
+
+            if (dataRow["firstname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFirstname);
+            }
+
+            if (dataRow["surname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchSurname);
+            }
+
+            if (dataRow["familyname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFamilyname);
+            }
+
+            if (dataRow["fullname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFullname);
+            }
+
+            if (dataRow["fullname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFullname);
+            }
+
+            if (dataRow["birthdate_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchBirthdate);
+            }
+
+            if (dataRow["birthyear_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchBirthyear);
+            }
+
+            if (dataRow["initials_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchInitials);
+            }
+
+            if (dataRow["two_words_of_name_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchTwoWordsOfName);
+            }
+
+            if (dataRow["two_initials_of_name_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchTwoInitialsOfName);
+            }
+
+            if (dataRow["bg_citizen_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchBgCitizen);
+            }
+
+            if (dataRow["nonbg_citizen_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchNonBGCitizen);
+            }
+
+            person.MatchText = string.Join(", ", sb);
             return person;
         }
 

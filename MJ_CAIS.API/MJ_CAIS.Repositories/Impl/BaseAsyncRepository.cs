@@ -71,6 +71,11 @@ namespace MJ_CAIS.Repositories.Impl
             }
         }
 
+        public async Task SaveChangesWithoutTransactionAsync(bool clearTracker = false)
+        {
+            await this._dbContext.SaveChangesWithoutTransactionAsync();
+        }
+
         public void ApplyChanges<T>(ICollection<T> listEntries, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false)
            where T : class, IBaseIdEntity
         {
@@ -80,7 +85,7 @@ namespace MJ_CAIS.Repositories.Impl
         public void ApplyChanges<T>(T entity, List<IBaseIdEntity> passedNavigationProperties, bool applyToAllLevels = false, bool isRoot = true)
            where T : class, IBaseIdEntity
         {
-            _dbContext.ApplyChanges(entity, passedNavigationProperties, applyToAllLevels,isRoot);
+            _dbContext.ApplyChanges(entity, passedNavigationProperties, applyToAllLevels, isRoot);
         }
 
         public async Task SaveEntityAsync<T>(T entity, bool includeRelations, bool clearTracker = false) where T : class, IBaseIdEntity
@@ -94,7 +99,7 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<IQueryable<T>> FindAsync<T>
           (Expression<Func<T, bool>> expression) where T : class
         {
-            return await Task.FromResult( _dbContext.Set<T>().AsNoTracking().Where(expression));
+            return await Task.FromResult(_dbContext.Set<T>().AsNoTracking().Where(expression));
         }
 
         public async Task<T> SingleOrDefaultAsync<T>

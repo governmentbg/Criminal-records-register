@@ -79,6 +79,132 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to български гражданин.
+        /// </summary>
+        public static string msgMatchBgCitizen {
+            get {
+                return ResourceManager.GetString("msgMatchBgCitizen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to дата на раждане.
+        /// </summary>
+        public static string msgMatchBirthdate {
+            get {
+                return ResourceManager.GetString("msgMatchBirthdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to година на раждане.
+        /// </summary>
+        public static string msgMatchBirthyear {
+            get {
+                return ResourceManager.GetString("msgMatchBirthyear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to фамилно име.
+        /// </summary>
+        public static string msgMatchFamilyname {
+            get {
+                return ResourceManager.GetString("msgMatchFamilyname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to собствено име.
+        /// </summary>
+        public static string msgMatchFirstname {
+            get {
+                return ResourceManager.GetString("msgMatchFirstname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to пълно име.
+        /// </summary>
+        public static string msgMatchFullname {
+            get {
+                return ResourceManager.GetString("msgMatchFullname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to инициали.
+        /// </summary>
+        public static string msgMatchInitials {
+            get {
+                return ResourceManager.GetString("msgMatchInitials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to чужденец.
+        /// </summary>
+        public static string msgMatchNonBGCitizen {
+            get {
+                return ResourceManager.GetString("msgMatchNonBGCitizen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ЕГН/ЛНЧ.
+        /// </summary>
+        public static string msgMatchPid {
+            get {
+                return ResourceManager.GetString("msgMatchPid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to бащино име.
+        /// </summary>
+        public static string msgMatchSurname {
+            get {
+                return ResourceManager.GetString("msgMatchSurname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to двойка инициали от две произволни думи от имената на лицето.
+        /// </summary>
+        public static string msgMatchTwoInitialsOfName {
+            get {
+                return ResourceManager.GetString("msgMatchTwoInitialsOfName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to двойка имена (две произволни думи от имената на лицето).
+        /// </summary>
+        public static string msgMatchTwoWordsOfName {
+            get {
+                return ResourceManager.GetString("msgMatchTwoWordsOfName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не.
+        /// </summary>
+        public static string msgNo {
+            get {
+                return ResourceManager.GetString("msgNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Да.
+        /// </summary>
+        public static string msgYes {
+            get {
+                return ResourceManager.GetString("msgYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Свидетелство.
         /// </summary>
         public static string tableApplication {

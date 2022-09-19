@@ -22,6 +22,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task SaveChangesAsync(bool clearTracker = false);
 
+        Task SaveChangesWithoutTransactionAsync(bool clearTracker = false);
+
         Task SaveEntityAsync<T>(T entity, bool includeRelations, bool clearTracker = false) where T : class, IBaseIdEntity;
 
         void ApplyChanges<T>(T entity, List<IBaseIdEntity> passedNavigationProperties = null, bool applyToAllLevels = false, bool isRoot = true)

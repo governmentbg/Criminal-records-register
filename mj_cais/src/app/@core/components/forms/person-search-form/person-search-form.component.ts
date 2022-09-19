@@ -194,7 +194,6 @@ export class PersonSearchFormComponent
   }
 
   public handleRowSelection(event) {
-    debugger;
     this.selectedItem = event.newSelection[0];
   }
 }

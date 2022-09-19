@@ -112,9 +112,9 @@ namespace MJ_CAIS.Services
             var entity = await ApplyDataForUpdateAsync(aInDto, true);
 
             var person = await UpdatePersonDataAsync(aInDto, entity);
-            var personId = person.EntityState == EntityStateEnum.Modified && person.PPersonIds.Count > 0 ? person.Id : null;
-
-            var report = await GenerateReportAsync(aInDto, entity, personId);
+            //var personId = person.EntityState == EntityStateEnum.Modified && person.PPersonIds.Count > 0 ? person.Id : null;
+             var personId = person?.Id;
+             var report = await GenerateReportAsync(aInDto, entity, personId);
 
             _reportApplicationRepository.ApplyChanges(entity, applyToAllLevels: true);
             _reportApplicationRepository.ApplyChanges(report, applyToAllLevels: true);
@@ -305,6 +305,8 @@ namespace MJ_CAIS.Services
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             _managePersonService.UpdatePidDataData(person.PPersonIds, entity);
 
+            // this method call save changes
+            await _managePersonService.SavePersonAndUpdateSearchAttributesAsync(person, clearTracker: true);
             return person;
         }
     }

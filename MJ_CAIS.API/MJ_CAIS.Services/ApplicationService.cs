@@ -424,9 +424,10 @@ namespace MJ_CAIS.Services
 
             var person = await _managePersonService.CreatePersonAsync(aInDto.Person);
             _managePersonService.UpdatePidDataData(person.PPersonIds, entity);
-            
             _applicationRepository.ApplyChanges(entity);
-            await _applicationRepository.SaveChangesAsync(clearTracker: true); //добавено от Надя, че обърква контекста.
+
+            // this method call save changes
+            await _managePersonService.SavePersonAndUpdateSearchAttributesAsync(person, clearTracker: true);
         }
 
         protected override bool IsChildRecord(string aId, List<string> aParentsList)

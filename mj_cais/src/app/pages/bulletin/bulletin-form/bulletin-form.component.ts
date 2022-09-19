@@ -185,6 +185,7 @@ export class BulletinFormComponent
     let isValid = this.validateSanctionAndOffences(form);
 
     if (!form.group.valid || !isValid) {
+      this.loaderService.hide();
       form.group.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");
 

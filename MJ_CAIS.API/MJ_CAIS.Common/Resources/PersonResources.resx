@@ -123,6 +123,48 @@
   <data name="male" xml:space="preserve">
     <value>Мъж</value>
   </data>
+  <data name="msgMatchBgCitizen" xml:space="preserve">
+    <value>български гражданин</value>
+  </data>
+  <data name="msgMatchBirthdate" xml:space="preserve">
+    <value>дата на раждане</value>
+  </data>
+  <data name="msgMatchBirthyear" xml:space="preserve">
+    <value>година на раждане</value>
+  </data>
+  <data name="msgMatchFamilyname" xml:space="preserve">
+    <value>фамилно име</value>
+  </data>
+  <data name="msgMatchFirstname" xml:space="preserve">
+    <value>собствено име</value>
+  </data>
+  <data name="msgMatchFullname" xml:space="preserve">
+    <value>пълно име</value>
+  </data>
+  <data name="msgMatchInitials" xml:space="preserve">
+    <value>инициали</value>
+  </data>
+  <data name="msgMatchNonBGCitizen" xml:space="preserve">
+    <value>чужденец</value>
+  </data>
+  <data name="msgMatchPid" xml:space="preserve">
+    <value>ЕГН/ЛНЧ</value>
+  </data>
+  <data name="msgMatchSurname" xml:space="preserve">
+    <value>бащино име</value>
+  </data>
+  <data name="msgMatchTwoInitialsOfName" xml:space="preserve">
+    <value>двойка инициали от две произволни думи от имената на лицето</value>
+  </data>
+  <data name="msgMatchTwoWordsOfName" xml:space="preserve">
+    <value>двойка имена (две произволни думи от имената на лицето)</value>
+  </data>
+  <data name="msgNo" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="msgYes" xml:space="preserve">
+    <value>Да</value>
+  </data>
   <data name="tableApplication" xml:space="preserve">
     <value>Свидетелство</value>
   </data>

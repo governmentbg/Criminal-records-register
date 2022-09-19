@@ -5,10 +5,10 @@ namespace MJ_CAIS.DataAccess.Entities
 {
     public partial class PPersonIdsH : BaseEntity, IBaseIdEntity
     {
-        public string? Pid { get; set; }
+        public string Pid { get; set; } = null!;
         public string PidTypeId { get; set; } = null!;
-        public string? Issuer { get; set; }
-        public string? CountryId { get; set; }
+        public string Issuer { get; set; } = null!;
+        public string CountryId { get; set; } = null!;
         public string? PersonId { get; set; }
         public string Id { get; set; } = null!;
         public string? CreatedBy { get; set; }

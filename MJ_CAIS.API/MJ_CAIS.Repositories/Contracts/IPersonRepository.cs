@@ -49,5 +49,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<PersonHistoryDataGridDTO> GetPersonHistoryDataByPersonId(string personId);
 
         Task<PersonSearchFormDTO> GetPersonByPidAsync(string pid, string pidType);
+
+        Task SavePersonAndUpdateSearchAttributesAsync(PPerson person, CancellationToken cancellationToken = default, bool clearTracker = false);
     }
 }

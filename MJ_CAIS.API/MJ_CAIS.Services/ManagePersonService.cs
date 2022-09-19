@@ -169,6 +169,9 @@ namespace MJ_CAIS.Services
             }
         }
 
+        public async Task  SavePersonAndUpdateSearchAttributesAsync(PPerson person, bool clearTracker = false)
+            => await _personRepository.SavePersonAndUpdateSearchAttributesAsync(person, clearTracker: clearTracker );
+  
         /// <summary>
         /// Create person and person identifiers history from newly created person  
         /// </summary>

@@ -539,6 +539,9 @@ namespace MJ_CAIS.Services
 
             _managePersonService.UpdatePidDataData(person.PPersonIds, bulletin);
             _bulletinRepository.ApplyChanges(bulletin);
+
+            // this method call save changes
+            await _managePersonService.SavePersonAndUpdateSearchAttributesAsync(person, clearTracker: true);
             return person;
         }
 

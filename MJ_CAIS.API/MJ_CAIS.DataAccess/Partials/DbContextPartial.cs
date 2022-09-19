@@ -17,7 +17,7 @@ namespace MJ_CAIS.DataAccess
         private readonly IUserContext _userContext;
         private string? _currentUserId = null;
 
-        public CaisDbContext(DbContextOptions<CaisDbContext> options, IHttpContextAccessor httpContextAccessor, IUserContext userContext) 
+        public CaisDbContext(DbContextOptions<CaisDbContext> options, IHttpContextAccessor httpContextAccessor, IUserContext userContext)
             : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -141,8 +141,8 @@ namespace MJ_CAIS.DataAccess
                         ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
                     }
                 }
-              
-               
+
+
                 await dbTransaction.CommitAsync(cancellationToken);
                 return result;
             }
@@ -155,6 +155,21 @@ namespace MJ_CAIS.DataAccess
             {
                 await dbTransaction.DisposeAsync();
             }
+        }
+
+        public async Task<int> SaveChangesWithoutTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            var trackedEntities = this.ChangeTracker.Entries()
+                .Where(t => t.State == EntityState.Added || t.State == EntityState.Modified)
+                .ToList();
+
+            this.SimpleAudit();
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            this.UpdateVersions(trackedEntities);
+            await base.SaveChangesAsync(cancellationToken);
+
+            return result;
         }
 
         private void SimpleAudit()
