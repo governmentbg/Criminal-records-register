@@ -64,7 +64,7 @@ namespace MJ_CAIS.Repositories.Impl
         public IQueryable<EEcrisNomenclature> GetEcrisRequestTypes(bool isNotification)
         {
             var query = _dbContext.EEcrisNomenclatures.AsNoTracking();
-            
+
             if (isNotification)
             {
                 query = query.Where(x => x.NomCode == EcrisNomenclatureCode.NotificationResponses);
@@ -73,13 +73,13 @@ namespace MJ_CAIS.Repositories.Impl
             {
                 query = query.Where(x => x.NomCode == EcrisNomenclatureCode.RequestResponses);
             }
-        
+
             return query;
         }
 
         public async Task<IQueryable<GUser>> GetGUsersAsync()
         {
-            var query = _dbContext.GUsers.AsNoTracking();
+            var query = _dbContext.GUsers.AsNoTracking().Where(x => x.Active == true);
             query = _userContext.FilterByAuthorityForAllRoles(query);
             return await Task.FromResult(query);
         }
