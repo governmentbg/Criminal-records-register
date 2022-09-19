@@ -228,6 +228,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                         Active = false,
                         AdministrationId = adminId,
                         RegCertSubject = (adminId == null) ? certSubject : null,
+                        Version = 1,
                         CreatedOn = DateTime.Now,
                         CreatedBy = "IdentityServer"
                     });
@@ -257,6 +258,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     UserName = userName,
                     Email = email,
                     Active = false,
+                    Version = 1,
                     CreatedOn = DateTime.Now,
                     CreatedBy = "IdentityServer"
                 };
