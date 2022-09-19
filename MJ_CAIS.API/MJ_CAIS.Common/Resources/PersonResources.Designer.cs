@@ -169,7 +169,7 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to двойка инициали от две произволни думи от имената на лицето.
+        ///   Looks up a localized string similar to двойка инициали.
         /// </summary>
         public static string msgMatchTwoInitialsOfName {
             get {
@@ -178,7 +178,7 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to двойка имена (две произволни думи от имената на лицето).
+        ///   Looks up a localized string similar to двойка имена.
         /// </summary>
         public static string msgMatchTwoWordsOfName {
             get {

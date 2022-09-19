@@ -154,10 +154,10 @@
     <value>бащино име</value>
   </data>
   <data name="msgMatchTwoInitialsOfName" xml:space="preserve">
-    <value>двойка инициали от две произволни думи от имената на лицето</value>
+    <value>двойка инициали</value>
   </data>
   <data name="msgMatchTwoWordsOfName" xml:space="preserve">
-    <value>двойка имена (две произволни думи от имената на лицето)</value>
+    <value>двойка имена</value>
   </data>
   <data name="msgNo" xml:space="preserve">
     <value>Не</value>
