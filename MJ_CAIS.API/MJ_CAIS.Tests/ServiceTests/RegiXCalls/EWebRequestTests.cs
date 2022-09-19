@@ -21,6 +21,7 @@ using MJ_CAIS.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
+using AutoMapper;
 
 namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
 {
@@ -28,6 +29,8 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
     {
         private IRegixService _regixService;
         private CaisDbContext _dbContext;
+        private IMapper _mapper;
+        private IUserContext _userContext;
 
         [SetUp]
         public void Setup()
@@ -40,11 +43,13 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
             IHost host = Host.CreateDefaultBuilder()
                 .ConfigureServices(services => ContainerExtension.Initialize(services, config))
                 .ConfigureServices(services => services.AddTransient<IRegixService, RegixService>())
+                .ConfigureServices(services => services.AddAutoMapper(typeof(ApplicationProfile).Assembly))
+                .ConfigureServices(services => services.AddSingleton<IUserContext>(new UserContext()))
                 .Build();
 
             //_dbContext = host.Services.GetService<CaisDbContext>();
 
-            
+
             //using (CaisDbContext db = host.Services.GetService<CaisDbContext>())
             //{
             //    db.ERegixCaches.RemoveRange(db.ERegixCaches);
@@ -57,6 +62,9 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
             //    }
             //    db.SaveChanges();
             //}
+
+            _mapper = host.Services.GetService<IMapper>();
+            _userContext = host.Services.GetService<IUserContext>();
             _dbContext = host.Services.GetService<CaisDbContext>();
             _regixService = host.Services.GetService<IRegixService>();
         }
@@ -66,7 +74,7 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestLNCHWithData()
         {
 
-            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("1001001001", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123",null).Result;
+            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("1001001001", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123", null).Result;
             if (result.Item1.LNCh == null) //TODO: shoud be ==
             {
                 Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
@@ -76,9 +84,9 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
             {
                 //throw new BusinessLogicException($"RegiX e недостъпен");
             }
-            if(result.Item1.PersonNames.FirstName != result.Item2.Application.Firstname)
+            if (result.Item1.PersonNames.FirstName != result.Item2.Application.Firstname)
             {
-                Assert.Fail(); 
+                Assert.Fail();
             }
             else
             {
@@ -89,12 +97,12 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         public void TestLNCHNoData()
         {
 
-            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("10000", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123",null).Result;
+            (ForeignIdentityInfoResponseType, EWebRequest) result = _regixService.SyncCallForeignIdentitySearchV2("10000", applicationId: "2cc9e1a6-6dfd-4954-a9b1-25e457696ab3", registrationNumber: "220728660123000000123", null).Result;
             if (result.Item2.HasError == true)
             {
                 //throw new BusinessLogicException($"RegiX e недостъпен");
             }
-            if (result.Item1 != null && result.Item1.LNCh == null ) //TODO: shoud be ==
+            if (result.Item1 != null && result.Item1.LNCh == null) //TODO: shoud be ==
             {
                 Assert.True(true);//throw new BusinessLogicException($"Няма намерени данни:");
             }
@@ -105,36 +113,36 @@ namespace MJ_CAIS.Tests.ServiceTests.RegiXCalls
         {
             //foreach(var application in _dbContext.AApplications.Where(a=> a.ServiceMigrationId == null && a.Egn != null && a.Lnch == null))
             //{
-                try
-                {
+            try
+            {
                 //var result = _regixService.SyncCallPersonDataSearch(application.Egn, applicationId: application.Id, registrationNumber: "220728660123000000123").Result;
-                var result = _regixService.SyncCallPersonDataSearch("1212124563", applicationId: "329812b4-4530-466a-8d46-2dc571cb70d3", registrationNumber: "220731660101000001024",null).Result;
+                var result = _regixService.SyncCallPersonDataSearch("1212124563", applicationId: "329812b4-4530-466a-8d46-2dc571cb70d3", registrationNumber: "220731660101000001024", null).Result;
 
                 if (result.Item1.EGN == null) //TODO: shoud be ==
-                    {
-                        Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
-                    }
-
-                    if (result.Item2.HasError == true)
-                    {
-                        Assert.Fail();//throw new BusinessLogicException($"RegiX e недостъпен");
-                    }
-                    if (result.Item1.PersonNames.FirstName.ToString().ToUpper() != result.Item2.Application.Firstname
-                            && result.Item2.Application.MotherFirstname == null
-                            && result.Item2.Application.AAppCitizenships.FirstOrDefault().CountryId != GlobalConstants.BGCountryId)
-                    {
-                        Assert.Fail();
-                    }
-                    else
-                    {
-                        // Assert.True(true);
-                    }
-                }
-                catch(Exception ex)
                 {
-                    Assert.Fail(ex.Message);
+                    Assert.Fail();//throw new BusinessLogicException($"Няма намерени данни:");
                 }
-           // }
+
+                if (result.Item2.HasError == true)
+                {
+                    Assert.Fail();//throw new BusinessLogicException($"RegiX e недостъпен");
+                }
+                if (result.Item1.PersonNames.FirstName.ToString().ToUpper() != result.Item2.Application.Firstname
+                        && result.Item2.Application.MotherFirstname == null
+                        && result.Item2.Application.AAppCitizenships.FirstOrDefault().CountryId != GlobalConstants.BGCountryId)
+                {
+                    Assert.Fail();
+                }
+                else
+                {
+                    // Assert.True(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+            // }
             Assert.True(true);
         }
         [Test]

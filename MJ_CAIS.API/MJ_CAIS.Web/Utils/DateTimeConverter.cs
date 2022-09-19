@@ -54,8 +54,17 @@ namespace MJ_CAIS.Web.Utils
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
             var ldt = new LocalDateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second);
-            var date = SOFIA.AtStrictly(ldt);
-            writer.WriteStringValue(date.ToDateTimeOffset().ToString("yyyy-MM-ddTHH:mm:ssK"));
+            try
+            {
+                var date = SOFIA.AtStrictly(ldt);
+                writer.WriteStringValue(date.ToDateTimeOffset().ToString("yyyy-MM-ddTHH:mm:ssK"));
+            }
+            catch(SkippedTimeException)
+            {
+                ldt = ldt.PlusHours(1);
+                var date = SOFIA.AtStrictly(ldt);
+                writer.WriteStringValue(date.ToDateTimeOffset().ToString("yyyy-MM-ddTHH:mm:ssK"));
+            }
         }
     }
 }

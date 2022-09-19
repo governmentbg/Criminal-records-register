@@ -98,6 +98,8 @@ namespace MJ_CAIS.Web.Controllers
                 var entity = _mapper.Map<UserExternalInDTO, LocalGUsersExt>(aInDto);
                 entity.Id = BaseEntity.GenerateNewId();
                 entity.Version = 1;
+                entity.CreatedOn = DateTime.Now;
+                entity.CreatedBy = UserId;
                 var result = await _userManager.CreateAsync(entity, aInDto.Password);
                 if (result.Succeeded)
                 {

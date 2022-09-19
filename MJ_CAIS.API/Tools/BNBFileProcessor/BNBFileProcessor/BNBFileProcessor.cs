@@ -47,6 +47,7 @@ namespace BNBFileProcessor
                 while (!payment.EndOfFile)
                 {
                     var row = payment.ReadLine();
+
                     if (row != null)
                     {
                         row.Id = BaseEntity.GenerateNewId();
@@ -59,7 +60,7 @@ namespace BNBFileProcessor
                                  .Include(w => w.APayments)
                                  .ThenInclude(p => p.EPayment).AsNoTracking()
                                  .FirstOrDefaultAsync(w => w.RegistrationNumber == paymentCode);
-                            var bnbAmount = row.Amount;
+                            var bnbAmount = row.SentAmount;
                             if (webAppl != null)
                             {
                                 if (webAppl.APayments.Count > 0)
