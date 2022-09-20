@@ -432,7 +432,7 @@ namespace MJ_CAIS.Services
             var statusAreEqueals = oldBulletinStatus == bulletinToUpdate.StatusId;
             var bulletinBeforeActiveOrDeleted = oldBulletinStatus == Status.NewOffice ||
                 oldBulletinStatus == Status.NewEISS ||
-                 bulletinToUpdate.StatusId != Status.Deleted;
+                 bulletinToUpdate.StatusId == Status.Deleted;
 
             if (!statusAreEqueals || !bulletinBeforeActiveOrDeleted)
             {
