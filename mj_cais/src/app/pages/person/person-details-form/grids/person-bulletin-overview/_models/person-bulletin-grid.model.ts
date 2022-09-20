@@ -11,6 +11,7 @@ export class PersonBulletinGridModel extends BaseGridModel {
   public egn: string = null;
   public lnch: string = null;
   public fullName: string = null;
+  public csAuthorityId: string = null;
 
   constructor(init?: Partial<PersonBulletinGridModel>) {
     super(init);
@@ -24,5 +25,6 @@ export class PersonBulletinGridModel extends BaseGridModel {
     this.lnch = init?.lnch ?? null;
     this.fullName = init?.fullName ?? null;
     this.birthDate = init?.birthDate ?? null;
+    this.csAuthorityId = init?.csAuthorityId ?? null;
   }
 }

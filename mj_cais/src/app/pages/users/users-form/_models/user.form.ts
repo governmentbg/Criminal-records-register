@@ -17,7 +17,7 @@ export class UserForm extends BaseForm {
   public csAuthorityId: FormControl;
   public roles: MultipleChooseForm;
 
-  constructor() {
+  constructor(isGlobalAdmin: boolean) {
     super();
     this.firstname = new FormControl(null, [Validators.required]);
     this.surname = new FormControl(null, [Validators.required]);
@@ -26,7 +26,11 @@ export class UserForm extends BaseForm {
     this.email = new FormControl(null, [createEmailValidator()]);
     this.egn = new FormControl(null, [Validators.required, createEgnValidator()]);
     this.position = new FormControl(null);
-    this.csAuthorityId = new FormControl(null, [Validators.required]);
+    if (isGlobalAdmin){
+      this.csAuthorityId = new FormControl(null, [Validators.required]);
+    } else {
+      this.csAuthorityId = new FormControl(null);
+    }
     this.roles = new MultipleChooseForm();
 
     this.group = new FormGroup({

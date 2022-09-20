@@ -1,0 +1,34 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-8">
+        <h5>Избор на лице</h5>
+      </div>
+
+      <div class="col-2">
+        <button
+          nbButton
+          fullWidth
+          matRipple
+          [status]="'primary'"
+          (click)="success()"
+        >
+          <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
+          Потвърди
+        </button>
+      </div>
+      <div class="col-2">
+        <button nbButton matRipple fullWidth (click)="dismiss()">
+          <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
+          Откажи
+        </button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <cais-person-search-form
+      #searchForm
+      [personContextData]="personData"
+    ></cais-person-search-form>
+  </nb-card-body>
+</nb-card>

@@ -361,6 +361,22 @@
                               </DecidingAuthority>
                               <DecisionType>dkp_prisada</DecisionType>
                            </Decision>
+                           <ValidFrom>2022-01-02</ValidFrom>
+                           <ReceiveDate>2022-01-03</ReceiveDate>
+                        </ConvictionDecisions>
+                         <ConvictionDecisions>
+                           <DecisionChangeTypeReference>DCH-00-R</DecisionChangeTypeReference>
+                           <Decision>
+                              <FileNumber>212</FileNumber>
+                              <DecisionDate>2022-01-02</DecisionDate>
+                              <DecisionFinalDate>2022-01-03</DecisionFinalDate>
+                              <DecidingAuthority>
+                                 <DecidingAuthorityCodeEIK>212</DecidingAuthorityCodeEIK>
+                                 <DecidingAuthorityCodeEISPP>СДЛ</DecidingAuthorityCodeEISPP>
+                                 <DecidingAuthorityName>Районен съд - Бургас</DecidingAuthorityName>
+                              </DecidingAuthority>
+                              <DecisionType>dkp_prisada</DecisionType>
+                           </Decision>
                            <DecisionRemarks>Описание на доп.сведение</DecisionRemarks>
                            <ValidFrom>2022-01-02</ValidFrom>
                            <ReceiveDate>2022-01-03</ReceiveDate>
@@ -392,6 +408,12 @@
                         </ConvictionStatusAuthority>
                      </RegistrationData>
                   </Bulletin>
+                  <Bulletin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://cais.mjs.bg/BulletinModel-v1.0"><Type>ConvictionBulletin</Type><Person><NamesBg><FirstName>НАСКО</FirstName><SurName>АНГЕЛОВ</SurName><FamilyName>ЯНКОВ</FamilyName></NamesBg><NamesEn /><Sex>1</Sex><IdentityNumber><EGN>8901180624</EGN></IdentityNumber><BirthDate><Date>1989-01-18</Date></BirthDate><BirthPlace /><PersonNationality /><PersonNationality /><PersonIdentificationDocument><IdentificationDocumentCategoryReference>ID-00-001</IdentificationDocumentCategoryReference></PersonIdentificationDocument><MotherNames><FullName>ЗОЯ ПЕТРОВА АТАНАСОВА</FullName></MotherNames><FatherNames><FullName>АНГЕЛ АТАНАСОВ ЯНКОВ</FullName></FatherNames></Person><Conviction><Decision><FileNumber>19</FileNumber><DecisionDate>2012-02-13</DecisionDate><DecisionFinalDate>2012-02-13</DecisionFinalDate><DecisionType>dkp_sporazumenie</DecisionType></Decision><CriminalCase><CaseType>sign_noxd</CaseType><CaseNumber>60/2012</CaseNumber></CriminalCase><ConvictionRemarks>ДЕЯНИЕТО ИЗВЪРШЕНО НА 06.02.2012Г. В С.ЖЕЛЕЗНИК, ОБЩ.КАРНОБАТ, НА ОСН. ЧЛ.195, АЛ.1, Т.4, Т.5, ВР. ЧЛ.194, АЛ.1, ВР. ЧЛ.20, АЛ.2, ВР. ЧЛ.55, АЛ.1, Т.1 ОТ НК ГО ОСЪЖДА НА СЕДЕМ МЕСЕЦА ЛОС.
+НА ОСН. ЧЛ.66, АЛ.1 ОТ НК ОТЛАГА ИЗПЪЛНЕНИЕТО НА НАКАЗАНИЕТО ЗА СРОК ОТ ТРИ ГОДИНИ И ШЕСТ МЕСЕЦА.
+ДЕЯНИЕТО ИЗВЪРШЕНО НА 06.02.2012Г. В ГР.КАРНОБАТ, ОБЛ.БУРГАС, НА ОСН. ЧЛ.343В, АЛ.2, ВР. ЧЛ.343В, АЛ.1, ВР. ЧЛ.54 ОТ НК ГО ОСЪЖДА НА ШЕСТ МЕСЕЦА ЛОС.
+НА ОСН. ЧЛ.66, АЛ.1 ОТ НК ОТЛАГА ИЗПЪЛНЕНИЕТО НА НАКАЗАНИЕТО ЗА СРОК ОТ ТРИ ГОДИНИ И ШЕСТ МЕСЕЦА.
+НА ОСН. ЧЛ.381, АЛ.8 ОТ НПК, ВР. ЧЛ.23 ОТ НК ОПРЕДЕЛЯ ЕДНО ОБЩО НАКАЗАНИЕ ОТ СЕДЕМ МЕСЕЦА ЛОС.
+НА ОСН. ЧЛ.66, АЛ.1 ОТ НК ОТЛАГА ИЗПЪЛНЕНИЕТО НА НАЛОЖЕНОТО ОБЩО НАКАЗАНИЕ ЗА СРОК ОТ ТРИ ГОДИНИ И ШЕСТ МЕСЕЦА.</ConvictionRemarks><ConvictionDecisions><Decision><DecisionDate>0001-01-01</DecisionDate><DecisionFinalDate>0001-01-01</DecisionFinalDate><DecisionType>dkp_prisada</DecisionType></Decision></ConvictionDecisions></Conviction><IssuerData><BulletinCreateDate>0001-01-01T00:00:00</BulletinCreateDate><BulletinCreatorPerson><Names /></BulletinCreatorPerson><BulletinApproverPerson><Names /></BulletinApproverPerson></IssuerData><RegistrationData><ConvictionStatusAuthority /></RegistrationData></Bulletin>
                </BulletinsList>
                <ValidFrom>0001-01-01T00:00:00</ValidFrom>
                <ValidTo>0001-01-01T00:00:00</ValidTo>

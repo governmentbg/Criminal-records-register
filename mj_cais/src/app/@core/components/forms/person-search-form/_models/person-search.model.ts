@@ -1,15 +1,13 @@
-import { AddressModel } from "../../../../@core/components/forms/address-form/_model/address.model";
-import { DatePrecisionModel } from "../../../../@core/components/forms/inputs/date-precision/_models/date-precision.model";
-import { BaseModel } from "../../../../@core/models/common/base.model";
+import { BaseModel } from "../../../../models/common/base.model";
 
 export class PersonSearchModel extends BaseModel {
   public firstname: string = null;
   public surname: string = null;
   public familyname: string = null;
   public fullname: string = null;
-  public pid: string = null;
-  public birthDate: DatePrecisionModel = null;
-  public sex: string = null;
+  public egn: string = null;
+  public lnch: string = null;
+  public birthDate: Date = null;
 
   constructor(init?: Partial<PersonSearchModel>) {
     super(init);
@@ -17,8 +15,8 @@ export class PersonSearchModel extends BaseModel {
     this.surname = init?.surname ?? null;
     this.familyname = init?.familyname ?? null;
     this.fullname = init?.fullname ?? null;
-    this.pid = init?.pid ?? null;
+    this.egn = init?.egn ?? null;
     this.birthDate = init?.birthDate ?? null;
-    this.sex = init?.sex ?? null;
+    this.lnch = init?.lnch ?? null;
   }
 }

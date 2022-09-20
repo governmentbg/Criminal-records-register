@@ -132,8 +132,11 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
             }
             var res = await
             (from u in CaisDbContext.GUsersExts
-             join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id
-             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId
+             join a in CaisDbContext.GExtAdministrations on u.AdministrationId equals a.Id into aLeft
+             from a in aLeft.DefaultIfEmpty()
+             join uic in CaisDbContext.GExtAdministrationUics on a.Id equals uic.ExtAdmId into uicLeft
+             from uic in uicLeft.DefaultIfEmpty()
+
              where u.Egn == egn
                 && (uic.Value == uicValue || u.RegCertSubject == subject)
              select new UserInfo()
@@ -228,6 +231,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                         Active = false,
                         AdministrationId = adminId,
                         RegCertSubject = (adminId == null) ? certSubject : null,
+                        Version = 1,
                         CreatedOn = DateTime.Now,
                         CreatedBy = "IdentityServer"
                     });
@@ -257,6 +261,7 @@ namespace MJ_CAIS.IdentityServer.CAISExternalCredentials
                     UserName = userName,
                     Email = email,
                     Active = false,
+                    Version = 1,
                     CreatedOn = DateTime.Now,
                     CreatedBy = "IdentityServer"
                 };

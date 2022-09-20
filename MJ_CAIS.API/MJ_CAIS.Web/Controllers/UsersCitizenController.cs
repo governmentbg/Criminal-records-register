@@ -36,8 +36,9 @@ namespace MJ_CAIS.Web.Controllers
             var result = await this._personService.SelectAllWithPaginationAsync(
                 new PersonSearchParamsDTO()
                 {
-                    Pid = egn,
-                    PidType = "EGN"
+                    Egn = egn
+                    //Pid = egn,
+                    // PidType = "EGN"
                 },
                 10,
                 1
@@ -46,7 +47,7 @@ namespace MJ_CAIS.Web.Controllers
             {
                 return Ok(result.Data.First().Id);
             }
-            else if(result.Data.Count() > 1)
+            else if (result.Data.Count() > 1)
             {
                 return BadRequest("Too many results");
             }

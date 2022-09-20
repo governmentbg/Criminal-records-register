@@ -25,10 +25,10 @@ namespace MJ_CAIS.Web.Controllers
             _managePersonService = managePersonService;
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> GetAll(ODataQueryOptions<PersonGridDTO> aQueryOptions, [FromQuery] PersonSearchParamsDTO searchParams)
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] PersonSearchParamsDTO searchParams)
         {
-            var result = await this._personService.SelectAllWithPaginationAsync(aQueryOptions, searchParams);
+            var result = await this._personService.SearchPeopleAsync(searchParams);
             return Ok(result);
         }
 
@@ -117,6 +117,15 @@ namespace MJ_CAIS.Web.Controllers
             if (result == null) return NotFound();
 
             return Ok();
+        }
+
+        [HttpGet("person-data-by-pid")]
+        public async Task<IActionResult> GerPersonDataByPid([FromQuery] GetPersonDataByPidParamDTO model)
+        {
+            var result = await this._personService.GetPersonDataByPidAsync(model.Pid, model.PidType);
+            if (result == null) return NotFound();
+
+            return Ok(result);
         }
     }
 }

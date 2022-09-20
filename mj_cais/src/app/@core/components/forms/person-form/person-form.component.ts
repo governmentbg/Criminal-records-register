@@ -5,6 +5,7 @@ import { PersonForm } from "./_models/person.form";
 import { PersonContextEnum } from "./_models/person-context-enum";
 import { EgnUtils } from "../../../utils/egn.utils";
 import { LnchUtils } from "../../../utils/lnch.utils";
+import { FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "cais-person-form[contextType]",
@@ -105,4 +106,13 @@ export class PersonFormComponent implements OnInit {
     }
   }
 
+  public onDocNumberChange() {
+    if (this.personForm.idDocNumber.value) {
+      this.personForm.idDocIssuingAuthority.setValidators(Validators.required);
+      this.personForm.idDocIssuingAuthority.updateValueAndValidity();
+    } else {
+      this.personForm.idDocIssuingAuthority.clearValidators();
+      this.personForm.idDocIssuingAuthority.updateValueAndValidity();
+    }
+  }
 }

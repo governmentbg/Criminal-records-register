@@ -157,7 +157,10 @@ namespace MJ_CAIS.Services
                 wcert.Bytes = certificateFromDb.Doc.DocContent.Bytes.Value;
             }
             wcert.Sha1 = isFromDB ? certificateFromDb.Doc.DocContent.Sha1Hash : certificate.Doc.DocContent.Sha1Hash;
-
+            if (certificate.ValidFrom.HasValue)
+            {
+                wcert.ValidFrom = certificate.ValidFrom.Value;
+            }
             wcert.ValidTo = certificate.ValidTo;
             wcert.Content = isFromDB ? certificateFromDb.Doc.DocContent.Content : certificate.Doc.DocContent.Content;
             wcert.MimeType = isFromDB ? certificateFromDb.Doc.DocContent.MimeType : certificate.Doc.DocContent.MimeType;
@@ -227,11 +230,12 @@ namespace MJ_CAIS.Services
             foreach (var item in allCertificateBulletins)
             {
                 item.Approved = aInDto.SelectedBulletinsIds.Contains(item.Id);
-                item.ModifiedProperties = new List<string>() { nameof(item.Approved) };
+                item.ModifiedProperties = new List<string>() { nameof(item.Approved), nameof(item.Version) };
                 item.EntityState = EntityStateEnum.Modified;
-                _certificateRepository.ApplyChanges(certificate);
                 _certificateRepository.ApplyChanges(item);
             }
+
+            _certificateRepository.ApplyChanges(certificate);
 
             await _certificateRepository.SaveChangesAsync();
         }

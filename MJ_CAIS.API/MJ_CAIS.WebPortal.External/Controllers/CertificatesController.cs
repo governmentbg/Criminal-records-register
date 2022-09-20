@@ -7,7 +7,7 @@ using MJ_CAIS.WebPortal.External.Models.Certificates;
 
 namespace MJ_CAIS.WebPortal.External.Controllers
 {
-    [RedirectNotActive("Inactive", "Account")]
+    [RedirectNotActive("Index", "Home")]
     [Authorize(Roles = "ECertificates")]
     public class CertificatesController : BaseController
     {

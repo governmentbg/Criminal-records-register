@@ -24,6 +24,9 @@ import { BulletinPersonInfoComponent } from "./shared/bulletin-person-info/bulle
 import { CancelDialogComponent } from './dialogs/cancel-dialog/cancel-dialog.component';
 import { EmptyComponent } from './empty/empty.component';
 import { EncapsulatedHtmlComponent } from './encapsulated-html/encapsulated-html.component';
+import { PersonSearchDialogComponent } from './dialogs/person-search-dialog/person-search-dialog.component';
+import { PersonSearchFormComponent } from './forms/person-search-form/person-search-form.component';
+import { RouterModule } from "@angular/router";
 
 const COMPONENTS = [
   CardHeaderComponent,
@@ -46,8 +49,9 @@ const COMPONENTS = [
   BulletinPersonInfoComponent,
   CancelDialogComponent,
   EmptyComponent,
-  EncapsulatedHtmlComponent
-
+  EncapsulatedHtmlComponent,
+  PersonSearchDialogComponent,
+  PersonSearchFormComponent
 ];
 
 @NgModule({
@@ -58,6 +62,7 @@ const COMPONENTS = [
     SharedModule,
     NgSelectModule,
     NbCardModule,
+    RouterModule
   ],
 })
 export class CoreComponentModule {}

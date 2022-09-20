@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using MJ_CAIS.Common;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
 using MJ_CAIS.Common.Resources;
@@ -10,6 +12,7 @@ using MJ_CAIS.DTO.Person;
 using MJ_CAIS.Repositories.Contracts;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
+using System.Text;
 using static MJ_CAIS.Common.Constants.ApplicationConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
@@ -72,6 +75,7 @@ namespace MJ_CAIS.Repositories.Impl
                              bulletin.FirstName + " " + bulletin.SurName + " " + bulletin.FamilyName,
                             BirthDate = bulletin.BirthDate,
                             CreatedOn = bulletin.CreatedOn,
+                            CsAuthorityId = bulletin.CsAuthorityId
                         };
 
             return query;
@@ -322,12 +326,14 @@ namespace MJ_CAIS.Repositories.Impl
                 using (OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString()))
                 {
                     // Create command
-                    OracleCommand cmd = new OracleCommand("search_persons", oracleConnection);
+                    OracleCommand cmd = new OracleCommand("psearch.search_persons", oracleConnection);
+
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     // Set parameters
 
-                    cmd.Parameters.Add(new OracleParameter("p_egn", OracleDbType.Varchar2, searchObj.Pid?.Trim(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_egn", OracleDbType.Varchar2, searchObj.Egn?.Trim()?.ToUpper(), ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_lnch", OracleDbType.Varchar2, searchObj.Lnch?.Trim()?.ToUpper(), ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_firstname", OracleDbType.Varchar2, searchObj.Firstname?.Trim(), ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_surname", OracleDbType.Varchar2, searchObj.Surname?.Trim(), ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_familyname", OracleDbType.Varchar2, searchObj.Familyname?.Trim(), ParameterDirection.Input));
@@ -335,11 +341,14 @@ namespace MJ_CAIS.Repositories.Impl
 
                     var birthDate = searchObj.BirthDate.HasValue ? searchObj.BirthDate.Value.Date : (DateTime?)null;
                     cmd.Parameters.Add(new OracleParameter("p_birthdate", OracleDbType.Date, birthDate, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, searchObj.BirthDatePrec?.Trim(), ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_page_size", OracleDbType.Int32, pageSize, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_page_number", OracleDbType.Int32, pageNumber, ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_id_type", OracleDbType.Varchar2, searchObj.PidType?.Trim(), ParameterDirection.Input));
-                    cmd.Parameters.Add(new OracleParameter("p_sex", OracleDbType.Int32, searchObj.Sex?.Trim(), ParameterDirection.Input));
+                    // cmd.Parameters.Add(new OracleParameter("p_precision", OracleDbType.Varchar2, null, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_bg_citizen", OracleDbType.Int32, null, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_nonbg_citizen", OracleDbType.Int32, null, ParameterDirection.Input));
+
+                    cmd.Parameters.Add(new OracleParameter("p_max_persons", OracleDbType.Int32, pageSize, ParameterDirection.Input));
+                    // cmd.Parameters.Add(new OracleParameter("p_page_number", OracleDbType.Int32, pageNumber, ParameterDirection.Input));
+                    // cmd.Parameters.Add(new OracleParameter("p_id_type", OracleDbType.Varchar2, null, ParameterDirection.Input));
+                    //cmd.Parameters.Add(new OracleParameter("p_sex", OracleDbType.Int32, null, ParameterDirection.Input));
                     cmd.Parameters.Add(new OracleParameter("p_out", OracleDbType.RefCursor, null, ParameterDirection.Output));
 
                     OracleDataAdapter resultDataSet = new OracleDataAdapter(cmd);
@@ -484,6 +493,98 @@ namespace MJ_CAIS.Repositories.Impl
 
             return result;
         }
+
+        public async Task SavePersonAndUpdateSearchAttributesAsync(PPerson person, CancellationToken cancellationToken = default, bool clearTracker = false)
+        {
+            IDbContextTransaction dbTransaction = null;
+            try
+            {
+                dbTransaction = await this._dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+                // save all person data
+                await SaveChangesWithoutTransactionAsync(clearTracker);
+
+
+                // call precedures
+                foreach (var item in person.PPersonIds)
+                {
+                    await CallRefreshSearchAttributeProcedureAsync(item);
+                }
+
+                await dbTransaction.CommitAsync(cancellationToken);
+
+                //туй го добавям, щото става голямо объркване със State И EntityState.
+                //След SaveChanges State=Unchanged, докато EntityState остава такъв, каквъто е бил преди SaveChanges().
+                //В някои случаи това е ГОЛЯМ проблем
+                //Трябва да се види, дали няма нужда и при Exception да се прави нещо с тези EntityState-ове
+                //todo: Надя , Може би this.ChangeTracker.Clear(); след извикването на SaveChanges ще свърши работа
+                foreach (var dbEntityEntry in this._dbContext.ChangeTracker.Entries())
+                {
+                    if ((dbEntityEntry.Entity is BaseEntity) && ((BaseEntity)dbEntityEntry.Entity).EntityState != Common.Enums.EntityStateEnum.Unchanged)
+                    {
+                        ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
+                    }
+                }
+
+                if (clearTracker)
+                {
+                    this._dbContext.ChangeTracker.Clear();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await dbTransaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+            finally
+            {
+                await dbTransaction.DisposeAsync();
+            }
+        }
+
+        private async Task CallRefreshSearchAttributeProcedureAsync(PPersonId pid)
+        {
+            try
+            {
+                using OracleConnection oracleConnection = new OracleConnection(_dbContext.Database.GetConnectionString());
+
+                // create command
+                var cmd = new OracleCommand("psearch.refresh_search_attributes", oracleConnection);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                await oracleConnection.OpenAsync();
+
+                try
+                {
+                    // set parameters
+                    cmd.Parameters.Add(new OracleParameter("p_pid_type_id", OracleDbType.Varchar2, pid.PidTypeId, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_pid", OracleDbType.Varchar2, pid.Pid, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_pid_issuer", OracleDbType.Varchar2, pid.Issuer, ParameterDirection.Input));
+                    cmd.Parameters.Add(new OracleParameter("p_country_id", OracleDbType.Varchar2, pid.CountryId, ParameterDirection.Input));
+
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception exception)
+                {
+                    // todo: log
+                    throw;
+                }
+                finally
+                {
+                    oracleConnection.Close();
+                    oracleConnection.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                // todo: log error
+                // add message
+                throw;
+            }
+
+        }
+
         private static List<PersonGridDTO> GetPersons(DataTable dataTable)
         {
             var result = new List<PersonGridDTO>();
@@ -501,17 +602,102 @@ namespace MJ_CAIS.Repositories.Impl
             var person = new PersonGridDTO();
 
             person.Id = dataRow["person_id"]?.ToString();
-            person.Pid = dataRow["pid"]?.ToString();
-            person.PidTypeName = dataRow["pid_type_name"]?.ToString();
-            person.FirstName = dataRow["firstname"]?.ToString();
-            var isParsedDate = DateTime.TryParse(dataRow["birth_date"]?.ToString(), out DateTime birthDate);
+            person.Pids = dataRow["person_pids"]?.ToString();
+            var isParsedDate = DateTime.TryParse(dataRow["person_birthdate"]?.ToString(), out DateTime birthDate);
             person.BirthDate = isParsedDate ? birthDate : null;
-            person.SurName = dataRow["surname"]?.ToString();
-            person.FamilyName = dataRow["familyname"]?.ToString();
-            person.FullName = dataRow["fullname"]?.ToString();
-            var isParsed = int.TryParse(dataRow["all_records"]?.ToString(), out int allRecords);
-            person.TotalCount = isParsed ? allRecords : 0;
 
+            var isParsedSex = int.TryParse(dataRow["person_sex"]?.ToString(), out int sex);
+            if (isParsedSex && sex == 1)
+            {
+                person.Sex = PersonResources.male;
+            }
+            else if (isParsedSex && sex == 2)
+            {
+                person.Sex = PersonResources.female;
+            }
+            else
+            {
+                person.Sex = PersonResources.unknown;
+            }
+
+            person.PersonNames = dataRow["person_names"]?.ToString();
+            person.MotherNames = dataRow["mother_names"]?.ToString();
+            person.FatherNames = dataRow["father_names"]?.ToString();
+
+            person.BgCitizen = dataRow["bg_citizen"]?.ToString();
+            person.NonBGCitizen = dataRow["nonbg_citizen"]?.ToString();
+
+            const string isMatchParam = "1";
+            person.IsConvicted = dataRow["is_convicted"]?.ToString() == isMatchParam ? PersonResources.msgYes : PersonResources.msgNo;
+
+            var sb = new List<string>();
+
+            if (dataRow["pid_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchPid);
+            }
+
+            if (dataRow["firstname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFirstname);
+            }
+
+            if (dataRow["surname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchSurname);
+            }
+
+            if (dataRow["familyname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFamilyname);
+            }
+
+            if (dataRow["fullname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFullname);
+            }
+
+            if (dataRow["fullname_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchFullname);
+            }
+
+            if (dataRow["birthdate_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchBirthdate);
+            }
+
+            if (dataRow["birthyear_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchBirthyear);
+            }
+
+            if (dataRow["initials_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchInitials);
+            }
+
+            if (dataRow["two_words_of_name_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchTwoWordsOfName);
+            }
+
+            if (dataRow["two_initials_of_name_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchTwoInitialsOfName);
+            }
+
+            if (dataRow["bg_citizen_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchBgCitizen);
+            }
+
+            if (dataRow["nonbg_citizen_match"]?.ToString() == isMatchParam)
+            {
+                sb.Add(PersonResources.msgMatchNonBGCitizen);
+            }
+
+            person.MatchText = string.Join(", ", sb);
             return person;
         }
 
@@ -544,6 +730,7 @@ namespace MJ_CAIS.Repositories.Impl
                 select pids.PersonId
                 ).Distinct().Take(100);
         }
+
         public async Task<List<CriminalRecordsPersonDataType>> GetPersonsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname)
         {
             var crs = new List<CriminalRecordsPersonDataType>();
@@ -679,6 +866,57 @@ namespace MJ_CAIS.Repositories.Impl
             }
 
             return crs;
+        }
+
+        public async Task<PersonSearchFormDTO> GetPersonByPidAsync(string pid, string pidType)
+        {
+            var result = ReturnEmptyModel(pid, pidType);
+            var personId = (await _dbContext.PPersonIds.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Pid == pid && x.PidTypeId == pidType))?.PersonId;
+
+            if (personId == null) return result;
+
+            var person = await _dbContext.PPeople
+                .Include(x => x.PPersonIds)
+                 //.Include(x => x.PPersonCitizenships)
+                 .FirstOrDefaultAsync(x => x.Id == personId);
+
+            if (result == null) return result;
+
+
+            result.BirthDate = person.BirthDate;
+            if (string.IsNullOrEmpty(result.Egn))
+            {
+                result.Egn = person.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Egn)?.Pid;
+            }
+
+            if (string.IsNullOrEmpty(result.Lnch))
+            {
+                result.Lnch = person.PPersonIds.FirstOrDefault(x => x.PidTypeId == PidType.Lnch)?.Pid;
+            }
+
+            result.Familyname = person.Familyname;
+            result.Firstname = person.Firstname;
+            result.Fullname = person.Fullname;
+            result.Surname = person.Surname;
+
+            return result;
+        }
+
+        private static PersonSearchFormDTO ReturnEmptyModel(string pid, string pidType)
+        {
+            var result = new PersonSearchFormDTO();
+
+            if (pidType == PidType.Egn)
+            {
+                result.Egn = pid;
+            }
+            else if (pidType == PidType.Lnch)
+            {
+                result.Lnch = pid;
+            }
+
+            return result;
         }
     }
 }

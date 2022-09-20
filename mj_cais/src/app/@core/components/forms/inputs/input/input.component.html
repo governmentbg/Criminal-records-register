@@ -103,11 +103,13 @@
             [labelVisibility]="false"
             format="dd.MM.yyyy г."
             [disabled]="isReadOnly"
+            (valueChange)="timePicker.value = datePicker.value"
           >
           </igx-date-picker>
         </div>
         <div class="form-time-picker col-md-4" style="padding-left: 0px">
           <igx-time-picker
+            #timePicker
             name="time-picker"
             locale="bg"
             class="cais-date-time-picker"
@@ -115,6 +117,7 @@
             [disabled]="datePicker.value || isReadOnly ? false : true"
             mode="dropdown"
             format="HH:mm"
+            (valueChange)="datePicker.value = timePicker.value"
           >
             <label igxLabel></label>
           </igx-time-picker>

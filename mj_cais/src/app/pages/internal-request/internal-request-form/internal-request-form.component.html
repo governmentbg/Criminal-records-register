@@ -82,6 +82,7 @@
             [parentGroup]="fullForm.group"
             [inputName]="'nIntReqTypeId'"
             [items]="dbData.requestTypes"
+            (selectionChanged)="onReqTypeIsChanged()"
           >
           </cais-autocomplete>
         </div>
