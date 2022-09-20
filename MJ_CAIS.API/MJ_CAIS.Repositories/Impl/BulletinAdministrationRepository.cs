@@ -53,6 +53,7 @@ namespace MJ_CAIS.Repositories.Impl
                             CreatedOn = bulletin.CreatedOn,
                             StatusId = bulletin.StatusId,
                             StatusName = status.Name,
+                            CaseData = bulletin.CaseNumber + "/" + bulletin.CaseYear
                         };
 
             return query;
