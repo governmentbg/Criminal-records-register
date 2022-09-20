@@ -75,4 +75,11 @@ export class InputComponent implements OnInit {
   formatDate(data) {
     return data.toLocaleDateString();
   }
+
+  onNumberChange(event: any){
+    if(this.inputFormControl.value == ""){
+      this.inputFormControl.patchValue(null);
+    }
+    this.onChange(event);
+  }
 }
