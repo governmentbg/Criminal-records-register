@@ -105,10 +105,11 @@
 
     <igx-column
       width="110px"
-      header=""
-      [sortable]="false"
+      header="Действия"
       [filterable]="false"
+      [sortable]="false"
       [pinned]="true"
+      [disableHiding]="true"
     >
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
@@ -216,3 +217,11 @@
     </nb-card>
   </div>
 </igx-dialog>
+<div
+  class="alert alert-primary m-2 text-center"
+  role="alert"
+  *ngIf="searchForm?.group.pristine"
+>
+  Моля, попълтенете критерии за търсене и натиснете бутона
+  <span class="fw-bold">Търсене</span>.
+</div>

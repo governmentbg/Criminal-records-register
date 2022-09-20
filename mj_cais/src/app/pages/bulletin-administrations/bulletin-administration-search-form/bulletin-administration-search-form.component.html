@@ -1,11 +1,18 @@
-<nb-card [formGroup]="fullForm.group">
+<nb-card accent="primary" [formGroup]="fullForm.group">
   <nb-card-header class="">
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
         <h2 class="h5">Търсене на бюлетин</h2>
       </div>
       <div class="d-flex">
-        <button (click)="onSearch()" nbButton matRipple type="button">
+        <button
+          (click)="onSearch()"
+          [disabled]="fullForm.group.pristine"
+          nbButton
+          matRipple
+          type="button"
+          status="primary"
+        >
           <nb-icon
             class="pt-1"
             [icon]="'search'"
@@ -18,9 +25,7 @@
     </div>
   </nb-card-header>
   <nb-card-body>
-    <form autocomplete="off">
-      <div class="font-weight-bold">Основна информация</div>
-      <hr />
+    <form autocomplete="off" (keydown.enter)="onSearch()">
       <div class="row">
         <div class="form-group col-md-2">
           <cais-input
@@ -66,8 +71,6 @@
           ></cais-input>
         </div>
       </div>
-      <div class="font-weight-bold">Данни на лице</div>
-      <hr />
       <div class="row">
         <div class="form-group col-md-2">
           <cais-input

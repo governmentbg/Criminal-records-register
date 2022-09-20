@@ -97,7 +97,7 @@ namespace MJ_CAIS.Services
         public async Task<List<BulletinGridDTO>> ExportAllAsync(ODataQueryOptions<BulletinGridDTO> aQueryOptions, BulletinSearchParamDTO searchParams)
         {
             var baseQuery = _bulletinRepository.SearchBulletins(searchParams);
-            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions);
+            var resultQuery = await this.ApplyOData(baseQuery, aQueryOptions, forExportToExcel: true);
             var result = resultQuery.ToList();
             return result;
         }
