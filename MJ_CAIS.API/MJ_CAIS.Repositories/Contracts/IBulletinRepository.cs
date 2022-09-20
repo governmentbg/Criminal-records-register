@@ -36,6 +36,8 @@ namespace MJ_CAIS.Repositories.Contracts
 
         Task<IQueryable<BBulletin>> GetBulletinsByPidIdAsync(string pidId);
 
+        Task<IQueryable<BBulletin>> GetBulletinsByPersonIdAsync(string personId);
+
         Task<IQueryable<BBulletin>> GetBulletinsForPeriodAsync(DateTime dateFrom, DateTime dateTo);
 
         Task SaveBulletinsAsync(List<BBulletin> bulletins);

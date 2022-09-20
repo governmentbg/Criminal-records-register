@@ -257,6 +257,10 @@ namespace MJ_CAIS.Repositories.Impl
             //намира лицето по идентификатора
             var personId = await this._dbContext.PPersonIds.AsNoTracking().Where(x => x.Id == pidId).Select(x => x.PersonId).FirstOrDefaultAsync();
 
+            return await GetBulletinsByPersonIdAsync(personId);
+        }
+        public async Task<IQueryable<BBulletin>> GetBulletinsByPersonIdAsync(string personId)
+        {
             //намира всички бюлетеини на това лице
             var bulletinsList = this._dbContext.BBulletins.Where(b =>
                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, StatusId = b.StatusId })

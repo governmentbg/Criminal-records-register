@@ -42,14 +42,15 @@ namespace MJ_CAIS.Services
 
         public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value, bool addLog = true)
         {
-            string pidId = String.Empty;
             CriminalRecordsPersonDataType person = null;
+            IQueryable<BBulletin> bulletins = null;
             if (value.CriminalRecordsRequest.IdentifierType == IdentifierType.SYSID)
             {
-                pidId = value.CriminalRecordsRequest.PID;
+                var personId = value.CriminalRecordsRequest.PID;
                 var personDb =
-                    (await _personRepository.GetPersonByID(pidId)).FirstOrDefault();
+                    (await _personRepository.GetPersonByID(personId)).FirstOrDefault();
                 person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
+                bulletins = await _bulletinRepository.GetBulletinsByPersonIdAsync(personId);
             }
             else
             {
@@ -63,9 +64,9 @@ namespace MJ_CAIS.Services
                     );
                 person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
                 var pid = value.CriminalRecordsRequest.PID;
-                pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == pid && x.PidType.Code == pidTypeCode)?.Id;
+                var pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == pid && x.PidType.Code == pidTypeCode)?.Id;
+                bulletins = await _bulletinRepository.GetBulletinsByPidIdAsync(pidId);
             }
-            var bulletins = await _bulletinRepository.GetBulletinsByPidIdAsync(pidId);
             var bulletinsList = await bulletins.ToListAsync();
 
             var bullArray = new BulletinType[bulletinsList.Count];
