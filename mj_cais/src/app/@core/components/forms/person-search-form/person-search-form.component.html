@@ -22,6 +22,9 @@
         Търсене
       </button>
     </div>
+    <div class="alert pt-0 pb-0 alert-primary m-2 text-center" role="alert">
+      Резултатът от търсенето е ограничен до 50 записа!
+    </div>
   </nb-card-header>
   <nb-card-body>
     <form autocomplete="off" (keydown.enter)="onSearch()">
@@ -147,7 +150,8 @@
       </igx-column>
 
       <igx-column
-        width="190px"
+        [resizable]="true"
+        [width]="'20%'"
         field="pids"
         header="Идентификатори"
         [dataType]="'string'"
@@ -157,6 +161,8 @@
         </ng-template>
       </igx-column>
       <igx-column
+        [width]="'10%'"
+        [resizable]="true"
         field="personNames"
         header="Имена"
         [dataType]="'string'"
@@ -165,22 +171,42 @@
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
-      <igx-column field="motherNames" header="Майка" [dataType]="'string'">
-        <ng-template igxCell let-cell="cell">
-          <span [title]="cell.value">{{ cell.value }}</span>
-        </ng-template>
-      </igx-column>
-      <igx-column field="fatherNames" header="Баща" [dataType]="'string'">
-        <ng-template igxCell let-cell="cell">
-          <span [title]="cell.value">{{ cell.value }}</span>
-        </ng-template>
-      </igx-column>
-      <igx-column field="sex" header="Пол" [dataType]="'string'">
+      <igx-column
+        [width]="'10%'"
+        [resizable]="true"
+        field="motherNames"
+        header="Майка"
+        [dataType]="'string'"
+      >
         <ng-template igxCell let-cell="cell">
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
       <igx-column
+        [width]="'10%'"
+        [resizable]="true"
+        field="fatherNames"
+        header="Баща"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column
+        [width]="'5%'"
+        [resizable]="true"
+        field="sex"
+        header="Пол"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column
+        [width]="'8%'"
+        [resizable]="true"
         field="birthDate"
         header="Дата на раждане"
         dataType="date"
@@ -192,7 +218,17 @@
           </span>
         </ng-template>
       </igx-column>
-
+      <igx-column
+        [width]="'40%'"
+        [resizable]="true"
+        field="matchText"
+        header="Идентифицирано лице по"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
       <igx-column
         width="110px"
         header="Действия"

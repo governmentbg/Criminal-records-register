@@ -80,7 +80,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         public async Task CallForeignIdentitySearch(string id, string registrationNumber, string applicationId, string reportApplicationId = null)
         {
             (ForeignIdentityInfoResponseType, EWebRequest) result = await this._regixService.SyncCallForeignIdentitySearchV2(id, applicationId: applicationId, registrationNumber: registrationNumber, reportApplicationId: reportApplicationId);
-            if (result.Item1.LNCh == null) //TODO: shoud be ==
+            if (result.Item1?.LNCh == null) //TODO: shoud be ==
             {
                 throw new BusinessLogicException($"Няма намерени данни:{applicationId ?? reportApplicationId}");
             }

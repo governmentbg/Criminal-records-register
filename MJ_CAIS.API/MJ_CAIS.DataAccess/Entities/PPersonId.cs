@@ -28,19 +28,19 @@ namespace MJ_CAIS.DataAccess.Entities
         }
 
         public string Id { get; set; } = null!;
-        public string? PidTypeId { get; set; }
-        public string? Pid { get; set; }
-        public string? Issuer { get; set; }
-        public string? CountryId { get; set; }
+        public string PidTypeId { get; set; } = null!;
+        public string Pid { get; set; } = null!;
+        public string Issuer { get; set; } = null!;
+        public string CountryId { get; set; } = null!;
         public string? PersonId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
 
-        public virtual GCountry? Country { get; set; }
+        public virtual GCountry Country { get; set; } = null!;
         public virtual PPerson? Person { get; set; }
-        public virtual PPersonIdType? PidType { get; set; }
+        public virtual PPersonIdType PidType { get; set; } = null!;
         public virtual ICollection<AApplication> AApplicationEgnNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationIdDocNumberNavigations { get; set; }
         public virtual ICollection<AApplication> AApplicationLnNavigations { get; set; }

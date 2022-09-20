@@ -21,5 +21,7 @@ namespace MJ_CAIS.Services.Contracts
         Task<PersonDTO> SelectWithBirthInfoAsync(string aId);
 
         Task<string> GenerateSuidAsync(PersonDTO person);
+
+        Task SavePersonAndUpdateSearchAttributesAsync(PPerson person, bool clearTracker = false);
     }
 }

@@ -11,5 +11,6 @@
         public string? Egn { get; set; }
         public string? Lnch { get; set; }
         public string? FullName { get; set; }
+        public string? CsAuthorityId { get; set; }
     }
 }

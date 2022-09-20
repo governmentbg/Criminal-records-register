@@ -17,5 +17,6 @@
         public string FamilyName { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public string? CsAuthorityId { get; set; }
     }
 }

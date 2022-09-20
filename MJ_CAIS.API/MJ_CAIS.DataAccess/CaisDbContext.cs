@@ -125,6 +125,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<PPersonId> PPersonIds { get; set; } = null!;
         public virtual DbSet<PPersonIdType> PPersonIdTypes { get; set; } = null!;
         public virtual DbSet<PPersonIdsH> PPersonIdsHes { get; set; } = null!;
+        public virtual DbSet<PSearchAttribute> PSearchAttributes { get; set; } = null!;
         public virtual DbSet<VBulletin> VBulletins { get; set; } = null!;
         public virtual DbSet<VBulletinsFull> VBulletinsFulls { get; set; } = null!;
         public virtual DbSet<VCntApplication> VCntApplications { get; set; } = null!;
@@ -7707,6 +7708,9 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("G_USERS");
 
+                entity.HasIndex(e => e.Egn, "UK_G_USERS_EGN")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.CsAuthorityId, "XIF1G_USERS");
 
                 entity.Property(e => e.Id)
@@ -7829,6 +7833,9 @@ namespace MJ_CAIS.DataAccess
             {
                 entity.ToTable("G_USERS_CITIZEN");
 
+                entity.HasIndex(e => e.Egn, "UK_G_USERS_CITIZEN_EGN")
+                    .IsUnique();
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -7870,6 +7877,9 @@ namespace MJ_CAIS.DataAccess
             modelBuilder.Entity<GUsersExt>(entity =>
             {
                 entity.ToTable("G_USERS_EXT");
+
+                entity.HasIndex(e => e.UserName, "UK_G_USERS_USERNAME")
+                    .IsUnique();
 
                 entity.HasIndex(e => e.AdministrationId, "XIF1G_USERS_EXT");
 
@@ -7925,7 +7935,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("LOCKOUT_ENABLED");
 
                 entity.Property(e => e.LockoutEndDateUtc)
-                    .HasPrecision(6)
+                    .HasColumnType("DATE")
                     .HasColumnName("LOCKOUT_END_DATE_UTC");
 
                 entity.Property(e => e.Name)
@@ -8962,6 +8972,7 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.PPersonIds)
                     .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_P_PERSON_IDS_G_COUNTRIES");
 
                 entity.HasOne(d => d.Person)
@@ -8972,6 +8983,7 @@ namespace MJ_CAIS.DataAccess
                 entity.HasOne(d => d.PidType)
                     .WithMany(p => p.PPersonIds)
                     .HasForeignKey(d => d.PidTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_P_PERSON_IDS_P_PERSON_ID_TY");
             });
 
@@ -9073,6 +9085,100 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.PPersonIdsHes)
                     .HasForeignKey(d => d.PersonHId)
                     .HasConstraintName("FK_P_PERSION_IDS_H_P_PERSON_H");
+            });
+
+            modelBuilder.Entity<PSearchAttribute>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("P_SEARCH_ATTRIBUTES");
+
+                entity.HasIndex(e => e.PsaBirthDate, "PSA_BIRTHDATE_IDX");
+
+                entity.HasIndex(e => e.PsaFullnameBg, "PSA_FULLNAMEBG_IDX");
+
+                entity.HasIndex(e => e.Pid, "PSA_PID_IDX");
+
+                entity.HasIndex(e => e.PsaTwoInitialsOfNameBg, "PSA_TWOINITIALSOFNAMEBG_IDX")
+                    .HasFilter("SUBSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",1,1)||DECODE(INSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",U' '),0,U'',SUBSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",INSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",U' ')+1,1))");
+
+                entity.Property(e => e.CountryId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("COUNTRY_ID");
+
+                entity.Property(e => e.Pid)
+                    .HasMaxLength(500)
+                    .HasColumnName("PID");
+
+                entity.Property(e => e.PidIssuer)
+                    .HasMaxLength(200)
+                    .HasColumnName("PID_ISSUER");
+
+                entity.Property(e => e.PidTypeId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PID_TYPE_ID");
+
+                entity.Property(e => e.PsaBgCitizen)
+                    .HasPrecision(1)
+                    .HasColumnName("PSA_BG_CITIZEN");
+
+                entity.Property(e => e.PsaBirthDate)
+                    .HasColumnType("DATE")
+                    .HasColumnName("PSA_BIRTH_DATE");
+
+                entity.Property(e => e.PsaFamilynameBg)
+                    .HasMaxLength(200)
+                    .HasColumnName("PSA_FAMILYNAME_BG");
+
+                entity.Property(e => e.PsaFirstnameBg)
+                    .HasMaxLength(200)
+                    .HasColumnName("PSA_FIRSTNAME_BG");
+
+                entity.Property(e => e.PsaFullnameBg)
+                    .HasMaxLength(200)
+                    .HasColumnName("PSA_FULLNAME_BG");
+
+                entity.Property(e => e.PsaInitialsBg)
+                    .HasColumnName("PSA_INITIALS_BG")
+                    .HasComputedColumnSql(" REGEXP_REPLACE (\"PSA_FULLNAME_BG\",U'([^ ])[^ ]* *',U'\\005C1')", false);
+
+                entity.Property(e => e.PsaNonbgCitizen)
+                    .HasPrecision(1)
+                    .HasColumnName("PSA_NONBG_CITIZEN");
+
+                entity.Property(e => e.PsaSurnameBg)
+                    .HasMaxLength(200)
+                    .HasColumnName("PSA_SURNAME_BG");
+
+                entity.Property(e => e.PsaTwoInitialsOfNameBg)
+                    .HasMaxLength(2)
+                    .HasColumnName("PSA_TWO_INITIALS_OF_NAME_BG")
+                    .HasComputedColumnSql("SUBSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",1,1)||DECODE(INSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",U' '),0,U'',SUBSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",INSTR(\"PSA_TWO_WORDS_OF_NAME_BG\",U' ')+1,1))", false);
+
+                entity.Property(e => e.PsaTwoWordsOfNameBg)
+                    .HasMaxLength(200)
+                    .HasColumnName("PSA_TWO_WORDS_OF_NAME_BG");
+
+                entity.HasOne(d => d.Country)
+                    .WithMany()
+                    .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PSA_COUNTRY");
+
+                entity.HasOne(d => d.PidType)
+                    .WithMany()
+                    .HasForeignKey(d => d.PidTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PSA_PIDTYPE");
+
+                entity.HasOne(d => d.PPersonId)
+                    .WithMany()
+                    .HasPrincipalKey(p => new { p.Pid, p.PidTypeId, p.Issuer, p.CountryId })
+                    .HasForeignKey(d => new { d.Pid, d.PidTypeId, d.PidIssuer, d.CountryId })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PSA_PID");
             });
 
             modelBuilder.Entity<VBulletin>(entity =>

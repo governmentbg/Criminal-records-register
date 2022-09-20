@@ -20,7 +20,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? Familyname { get; set; }
         public bool? Active { get; set; }
         public string? Email { get; set; }
-        public string? Egn { get; set; }
+        public string Egn { get; set; } = null!;
         public string? CsAuthorityId { get; set; }
         public string? Position { get; set; }
         public DateTime? CreatedOn { get; set; }

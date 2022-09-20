@@ -7,7 +7,7 @@
         <igx-grid-toolbar-actions>
           <div class="d-flex gap-2">
             <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
-            <button igxButton="flat" (click)="dialogAdd.open()" *ngIf="!isForPreview">
+            <button igxButton="flat" nbButton matRipple [status]="'primary'" (click)="dialogAdd.open()" *ngIf="!isForPreview">
               <igx-icon>add</igx-icon> Добави
             </button>
           </div>

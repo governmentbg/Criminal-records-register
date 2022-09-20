@@ -37,6 +37,7 @@ namespace MJ_CAIS.Repositories.Impl
                                      FamilyName = bulletin.Familyname,
                                      BirthDate = bulletin.BirthDate,
                                      CreatedOn = bulletin.CreatedOn,
+                                     CsAuthorityId = bulletin.CsAuthorityId,
                                  };
 
 
@@ -60,6 +61,7 @@ namespace MJ_CAIS.Repositories.Impl
                                       FamilyName = bulletin.Familyname,
                                       BirthDate = bulletin.BirthDate,
                                       CreatedOn = bulletin.CreatedOn,
+                                      CsAuthorityId = bulletin.CsAuthorityId,
                                   };
 
 
@@ -83,6 +85,7 @@ namespace MJ_CAIS.Repositories.Impl
                                     FamilyName = bulletin.Familyname,
                                     BirthDate = bulletin.BirthDate,
                                     CreatedOn = bulletin.CreatedOn,
+                                    CsAuthorityId = bulletin.CsAuthorityId,
                                 };
 
 
@@ -106,6 +109,7 @@ namespace MJ_CAIS.Repositories.Impl
                                        FamilyName = bulletin.Familyname,
                                        BirthDate = bulletin.BirthDate,
                                        CreatedOn = bulletin.CreatedOn,
+                                       CsAuthorityId = bulletin.CsAuthorityId,
                                    };
 
 
@@ -129,6 +133,7 @@ namespace MJ_CAIS.Repositories.Impl
                                       FamilyName = bulletin.Familyname,
                                       BirthDate = bulletin.BirthDate,
                                       CreatedOn = bulletin.CreatedOn,
+                                      CsAuthorityId = bulletin.CsAuthorityId,
                                   };
 
             var bulletins = bulletinsByEgn
