@@ -48,6 +48,13 @@
     >
     </igx-column>
     <igx-column
+      field="caseData"
+      header="Дело номер/година"
+      [sortable]="true"
+      [dataType]="'string'"
+    >
+    </igx-column>
+    <igx-column
       field="bulletinType"
       header="Тип"
       [sortable]="true"
@@ -104,27 +111,31 @@
       [pinned]="true"
     >
       <ng-template igxCell let-cell="cell">
-        <a
-          [title]="'Преглед'"
-          [routerLink]="[
-            '/pages/bulletin-administrations/preview',
-            cell.rowData.id
-          ]"
-        >
-          <nb-icon pack="fa" icon="eye"></nb-icon>
-        </a>
-        <a
-          [title]="'Отключване'"
-          (click)="
-            onOpenDialog(
-              cell.rowData.id,
-              cell.rowData.statusId,
-              cell.rowData.version
-            )
-          "
-        >
-          <i class="fas fa-unlock-alt"></i>
-        </a>
+        <div class="cell-center">
+          <div class="d-flex gap-3">
+            <a
+              [title]="'Преглед'"
+              [routerLink]="[
+                '/pages/bulletin-administrations/preview',
+                cell.rowData.id
+              ]"
+            >
+              <nb-icon pack="fa" icon="eye"></nb-icon>
+            </a>
+            <a
+              [title]="'Отключване'"
+              (click)="
+                onOpenDialog(
+                  cell.rowData.id,
+                  cell.rowData.statusId,
+                  cell.rowData.version
+                )
+              "
+            >
+              <nb-icon pack="fa" icon="unlock"></nb-icon>
+            </a>
+          </div>
+        </div>
       </ng-template>
     </igx-column>
 
@@ -143,6 +154,7 @@
 
 <igx-dialog #dialogAdd>
   <div class="dialogNewRecord" style="min-width: 1000px">
+    <tl-linear-progress [visible]="isLoadingUnlock"></tl-linear-progress>
     <nb-card>
       <nb-card-header>
         <div class="d-flex align-items-center gap-3">
@@ -155,6 +167,7 @@
             (click)="onUnlockBulletin()"
             type="button"
             class="ml-2"
+            [disabled]="ulockBulletinForm.group.pristine || isLoadingUnlock"
           >
             <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
             Потвърди
