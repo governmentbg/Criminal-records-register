@@ -10,6 +10,7 @@ using MJ_CAIS.DTO.RegixIntegration;
 using MJ_CAIS.ExternalWebServices.DTO;
 using MJ_CAIS.RegiX;
 using System.Collections;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -28,7 +29,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         private readonly IMapper _mapper;
         private Dictionary<string, (string Id, string WebServiceName)> webServiceTypes;
         private readonly IUserContext _userContext;
-        public RegixService(CaisDbContext dbContext, IConfiguration config, ILogger<RegixService> logger, IMapper mapper,     IUserContext userContext)
+        public RegixService(CaisDbContext dbContext, IConfiguration config, ILogger<RegixService> logger, IMapper mapper, IUserContext userContext)
         {
             _dbContext = dbContext;
             _config = config;
@@ -62,7 +63,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string wApplicationId)
         {
             var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, createdBy:  _userContext.UserId, isAsync: true, webServiceId: operationPDS.Id, wApplicationId: wApplicationId);
+            EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, createdBy: _userContext.UserId, isAsync: true, webServiceId: operationPDS.Id, wApplicationId: wApplicationId);
 
             var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
             EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: true, createdBy: _userContext.UserId, webServiceId: operationRS.Id, wApplicationId: wApplicationId);
@@ -81,12 +82,12 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             {
 
                 var operationPDS = GetOperationByType(WebServiceEnumConstants.REGIX_PersonDataSearch);
-                EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: false, createdBy: _userContext.UserId, webServiceId: operationPDS.Id,  applicationId: applicationId, wApplicationId: null, reportApplicationId: reportApplicationId);
+                EWebRequest eWRequestPDS = FactoryRegix.CreatePersonWebRequest(egn: egn, isAsync: false, createdBy: _userContext.UserId, webServiceId: operationPDS.Id, applicationId: applicationId, wApplicationId: null, reportApplicationId: reportApplicationId);
                 eWRequestPDS.EntityState = Common.Enums.EntityStateEnum.Added;
                 var responsePDS = await ExecutePersonDataSearch(eWRequestPDS, operationPDS.WebServiceName, egn, registrationNumber);
 
                 var operationRS = GetOperationByType(WebServiceEnumConstants.REGIX_RelationsSearch);
-                EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: false, createdBy:_userContext.UserId, webServiceId: operationRS.Id, applicationId: applicationId, wApplicationId: null, reportApplicationId: reportApplicationId);
+                EWebRequest eWRequestRS = FactoryRegix.CreatePersonRelationsWebRequest(egn: egn, isAsync: false, createdBy: _userContext.UserId, webServiceId: operationRS.Id, applicationId: applicationId, wApplicationId: null, reportApplicationId: reportApplicationId);
                 eWRequestRS.EntityState = Common.Enums.EntityStateEnum.Added;
                 var responseRS = await ExecuteRelationsSearch(eWRequestRS, operationRS.WebServiceName, egn, registrationNumber);
 
@@ -102,7 +103,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             string applicationId, string registrationNumber, string reportApplicationId)
         {
             var operationFI = GetOperationByType(WebServiceEnumConstants.REGIX_ForeignIdentityV2);
-            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: false,createdBy:_userContext.UserId, webServiceId: operationFI.Id, applicationId: applicationId, reportApplicationId: reportApplicationId);
+            EWebRequest eWRequestFI = FactoryRegix.CreateForeignPersonWebRequest(lnch: lnch, isAsync: false, createdBy: _userContext.UserId, webServiceId: operationFI.Id, applicationId: applicationId, reportApplicationId: reportApplicationId);
             eWRequestFI.EntityState = Common.Enums.EntityStateEnum.Added;
             //_dbContext.EWebRequests.Add(eWRequestFI);
             //_dbContext.SaveChanges();
@@ -134,7 +135,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         /// <param name="webServiceNameRelations"></param>
         public async Task<RelationsResponseType> ExecuteRelationsSearch(EWebRequest request, string webServiceNameRelations, string? egn = null, string? registrationNumber = null)
         {
-            
+
             return await ExecuteSearchBase<RelationsRequestType, RelationsResponseType>(AddOrUpdateCacheRelationsSearch, "EGN", request, webServiceNameRelations, egn, registrationNumber);
 
 
@@ -243,14 +244,14 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 objectToFill =
                     await _dbContext.AReportApplications.AsNoTracking()
                     .Include(x => x.ARepCitizenships).AsNoTracking()
-                
+
                     .Include(x => x.EFieldsRequests).AsNoTracking()
                     .FirstOrDefaultAsync(a => a.Id == request.ARepApplId);
                 if (objectToFill == null) { throw new Exception($"Data integrity problem: request.ARepApplId = {request.ARepApplId}"); }
                 PopulateData(objectToFill);
-              
-              //  _dbContext.ApplyChanges(((AReportApplication)objectToFill).ARepCitizenships);
-              //  _dbContext.ApplyChanges(objectToFill);
+
+                //  _dbContext.ApplyChanges(((AReportApplication)objectToFill).ARepCitizenships);
+                //  _dbContext.ApplyChanges(objectToFill);
 
 
             }
@@ -264,11 +265,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     .FirstOrDefaultAsync(a => a.Id == request.ApplicationId);
                 if (objectToFill == null) { throw new Exception($"Data integrity problem: request.ApplicationId = {request.ApplicationId}"); }
                 PopulateData(objectToFill);
-            
 
-               // _dbContext.ApplyChanges(((AApplication)objectToFill).AAppCitizenships);
-              //  _dbContext.ApplyChanges(((AApplication)objectToFill).AAppPersAliases);
-              //  _dbContext.ApplyChanges((AApplication)objectToFill);
+
+                // _dbContext.ApplyChanges(((AApplication)objectToFill).AAppCitizenships);
+                //  _dbContext.ApplyChanges(((AApplication)objectToFill).AAppPersAliases);
+                //  _dbContext.ApplyChanges((AApplication)objectToFill);
 
             }
             if (!string.IsNullOrEmpty(request.WApplicationId))
@@ -281,11 +282,11 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     .FirstOrDefaultAsync(a => a.Id == request.WApplicationId);
                 if (objectToFill == null) { throw new Exception($"Data integrity problem: request.WApplicationId = {request.WApplicationId}"); }
                 PopulateData(objectToFill);
-       
 
-               // _dbContext.ApplyChanges(((WApplication)objectToFill).WAppCitizenships);
-              //  _dbContext.ApplyChanges(((WApplication)objectToFill).WAppPersAliases);
-              //  _dbContext.ApplyChanges((WApplication)objectToFill);
+
+                // _dbContext.ApplyChanges(((WApplication)objectToFill).WAppCitizenships);
+                //  _dbContext.ApplyChanges(((WApplication)objectToFill).WAppPersAliases);
+                //  _dbContext.ApplyChanges((WApplication)objectToFill);
 
             }
             if (objectToFill == null) { throw new Exception($"There is no object linked to this request, reqiest.Id = {request.Id}"); }
@@ -313,7 +314,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
         }
 
-       
+
         private async Task PopulateDataFromGraoPerson<TApplication>(TApplication application)
         {
             string egnPropertyName = "Egn";
@@ -327,8 +328,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
             //допълваме резултатите със липсващи данни за ЕКАТТЕ от ГРАО
             if (!string.IsNullOrEmpty(egn) &&
                 string.IsNullOrEmpty((string)birthCityIdProperty.GetValue(application)))
-               
-                
+
+
             {
                 var graoData = await GetCityMotherFatherFromGraoByEGN(egn);
                 string birtCityId = graoData.Item1;
@@ -342,7 +343,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
 
                 }
-           
+
             }
 
             if (!string.IsNullOrEmpty((string)birthCityIdProperty.GetValue(application)) &&
@@ -366,7 +367,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
         {
             return await ExecuteSearchBase<ForeignIdentityInfoRequestType, ForeignIdentityInfoResponseType>(AddOrUpdateCacheForeignIdentity, "Identifier", request, webServiceName, egn, registrationNumber);
 
-          
+
         }
 
         private static string SetValue(string? newValue, object application, string propertyName, string? currentValue)
@@ -786,6 +787,18 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 regixCache.BirthDate = result;
                 regixCache.ModifiedProperties.Add(nameof(regixCache.BirthDate));
             }
+            else
+            {
+                if (DateTime.TryParseExact(responseObject.BirthDate?.Trim(),
+                       "dd/MM/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None, out result))
+                {
+                    regixCache.BirthDate = result;
+                    regixCache.ModifiedProperties.Add(nameof(regixCache.BirthDate));
+                }
+
+            }
 
             if (responseObject.BirthPlace != null)
             {
@@ -965,7 +978,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
             if ((request.ApplicationId != null || request.ARepApplId != null) && request.CreatedBy != null)
             {
-                var user =await _dbContext.GUsers.AsNoTracking().
+                var user = await _dbContext.GUsers.AsNoTracking().
                     Include(x => x.CsAuthority).AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Id == request.CreatedBy);
                 if (user != null)
@@ -986,9 +999,9 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
 
             if (request.WApplicationId != null)
-            {   
+            {
                 WApplication wApplication = null;
-                 if(request.WApplication != null)
+                if (request.WApplication != null)
                 {
                     wApplication = request.WApplication;
                 }
@@ -996,10 +1009,10 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 {
                     wApplication = await _dbContext.WApplications.AsNoTracking().FirstOrDefaultAsync(x => x.Id == request.WApplicationId);
                 }
-               
-                if(wApplication != null && wApplication.UserCitizenId != null)
+
+                if (wApplication != null && wApplication.UserCitizenId != null)
                 {
-                   
+
                     var user = await _dbContext.GUsersCitizens.AsNoTracking()
                         .FirstOrDefaultAsync(x => x.Id == wApplication.UserCitizenId);
 
@@ -1075,48 +1088,76 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                     {
                         var prop = entity.GetType().GetProperty(fieldName);
                         object val;
-                        //try
-                        //{
-                        switch (field.ValueType)
+                        bool isValueSet = false;
+                        
+                        if (field.Value != null)
                         {
-                            case "String":
-                                val = Convert.ToString(field.Value);
-                                prop.SetValue(entity, (string)val, null);
-                                break;
-                            case "DateTime":
-                                val = DateTime.Parse(Convert.ToString(field.Value), null, System.Globalization.DateTimeStyles.RoundtripKind);
-                                prop.SetValue(entity, (DateTime?)val, null);
-                                break;
-                            case "Int":
-                                val = int.Parse(Convert.ToString(field.Value));
-                                prop.SetValue(entity, (int)val, null);
-                                break;
-                            case "decimal":
-                                val = decimal.Parse(Convert.ToString(field.Value));
-                                prop.SetValue(entity, (decimal)val, null);
-                                break;
-                            default:
-                                val = Convert.ToString(field.Value);
-                                prop.SetValue(entity, (string)val, null);
-                                break;
+                            switch (field.ValueType)
+                            {
+                                case "String":
+                                    val = Convert.ToString(field.Value);
+                                    prop.SetValue(entity, (string)val, null);
+                                    isValueSet = true;
+                                    break;
+                                case "DateTime":
+                                    DateTime dt;
+                                    if (DateTime.TryParse(Convert.ToString(field.Value), null, System.Globalization.DateTimeStyles.RoundtripKind, out dt))
+                                    {
+                                        prop.SetValue(entity, dt, null);
+                                        val= dt;
+                                        isValueSet = true;
+                                    }
+                                    
+                                    break;
+                                case "Int":
+                                    int intval;
+                                    if (int.TryParse(Convert.ToString(field.Value), out intval))
+                                    {
+                                        prop.SetValue(entity, intval, null);
+                                        val = intval;
+                                        isValueSet = true;
+                                    }
+                                    break;
+                                case "decimal":
+                                    decimal d;
+                                    if (decimal.TryParse(Convert.ToString(field.Value), out d))
+                                    {
+                                        prop.SetValue(entity, d, null);
+                                        val = d;
+                                        isValueSet = true;
+                                    }
+                                    break;
+                                default:
+                                    val = Convert.ToString(field.Value);
+                                    prop.SetValue(entity, (string)val, null);
+                                    isValueSet = true;
+                                    break;
 
+                            }
+                        }
+                        else
+                        {
+                            prop.SetValue(entity, null, null);
+                            isValueSet = true;
                         }
                         //}
                         //catch(Exception ex)
                         //{
                         //    throw ex;
                         //}
-
-                        if (entity.ModifiedProperties == null)
+                        if (isValueSet)
                         {
-                            entity.ModifiedProperties = new List<string> { fieldName };
-                        }
-                        else
-                        {
-                            entity.ModifiedProperties.Add(fieldName);
-                        }
-                        entity.EntityState = Common.Enums.EntityStateEnum.Modified;
 
+                            if (entity.ModifiedProperties == null)
+                            {
+                                entity.ModifiedProperties = new List<string> { fieldName };
+                            }
+                            else
+                            {
+                                entity.ModifiedProperties.Add(fieldName);
+                            }
+                            entity.EntityState = Common.Enums.EntityStateEnum.Modified;
+                        }
                     }
                 }
 
@@ -1137,19 +1178,19 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
 
                         var val = navProp.GetValue(entity, null);
-                        
-                       
-                 
+
+
+
                         var navProValue = Activator.CreateInstance(val.GetType());
 
 
                         var valueFromField = ((JsonElement)field.Value).Deserialize(fieldType);
 
                         navProValue = _mapper.Map(valueFromField, navProValue, fieldType, val.GetType());
-                        HashSet <IBaseIdEntity> p = ClearLists(navProValue, val, field.PropEquality);
+                        HashSet<IBaseIdEntity> p = ClearLists(navProValue, val, field.PropEquality);
                         //var pList = (IEnumerable)navProValue;
-                       
-                       //HashSet<IBaseIdEntity> p = new HashSet<IBaseIdEntity>();
+
+                        //HashSet<IBaseIdEntity> p = new HashSet<IBaseIdEntity>();
                         foreach (var det in p)
                         {
                             if (string.IsNullOrEmpty((string)det.GetType().GetProperty("Id").GetValue(det)))
@@ -1180,7 +1221,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                             }
                         }
                         navProp.SetValue(entity, navProValue, null);
-                        
+
                         _dbContext.ApplyChanges(p);
                     }
                 }
@@ -1190,7 +1231,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 }
 
             }
-           
+
             PopulateDataFromGraoPerson(entity).GetAwaiter().GetResult();
             _dbContext.ApplyChanges(entity);
         }
@@ -1204,7 +1245,7 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                 result.Add((IBaseIdEntity)entity);
             }
             var p = (IEnumerable)navProValue;
-            foreach(var newEntity in (IEnumerable)navProValue)
+            foreach (var newEntity in (IEnumerable)navProValue)
             {
                 bool isUnique = true;
                 foreach (var propName in properties)
@@ -1227,7 +1268,8 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
                         break;
                     }
                 }
-                if (isUnique) {
+                if (isUnique)
+                {
                     result.Add((IBaseIdEntity)newEntity);
                 }
             }
