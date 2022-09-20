@@ -8,8 +8,8 @@
         CertificateStatuTypeEnum.CertificateForDelivery ||
       this.model.statusCode == CertificateStatuTypeEnum.Delivered
     ">
-    <form autocomplete="off">
-      <div class="row" style="align-items: center">
+    <form autocomplete="off" style="height: 300px;">
+      <div class="row" style="align-items: center;">
         <div class="row">
           <div class="form-group col-md-6">
             <cais-autocomplete [label]="'Подписващ 1'" [inputFormControl]="fullForm.firstSignerId"
@@ -249,15 +249,15 @@
     </igx-grid>
 
     <form autocomplete="off" class="mt-2">
-      <div class="row" style="align-items: center">
+      <div class="row" style="align-items: center;">
         <div class="row">
           <div class="form-group col-md-6">
-            <cais-autocomplete [label]="'Подписващ1'" [inputFormControl]="fullForm.firstSignerId"
+            <cais-autocomplete [label]="'Подписващ 1'" [inputFormControl]="fullForm.firstSignerId"
               [parentGroup]="fullForm.group" [inputName]="'firstSignerId'" [items]="users">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-6">
-            <cais-autocomplete [label]="'Подписващ2'" [inputFormControl]="fullForm.secondSignerId"
+            <cais-autocomplete [label]="'Подписващ 2'" [inputFormControl]="fullForm.secondSignerId"
               [parentGroup]="fullForm.group" [inputName]="'secondSignerId'" [items]="users">
             </cais-autocomplete>
           </div>
