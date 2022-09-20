@@ -40,7 +40,7 @@ namespace AutomaticStepsExecutor
                         UserId = config.GetValue<string>("ContextUser:UserId"),
                         UserName = config.GetValue<string>("ContextUser:UserName")
                     }))
-
+                    .ConfigureServices(services => services.AddAutoMapper(typeof(RegixProfile).Assembly))
                     .ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
