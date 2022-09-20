@@ -10,7 +10,10 @@ import { InternalRequestService } from "./_data/internal-request.service";
 import { InternalRequestStatusCodeConstants } from "./_models/internal-request-status-code.constants";
 import { InternalRequestForm } from "./_models/internal-request.form";
 import { InternalRequestModel } from "./_models/internal-request.model";
-import { IgxDialogComponent, IgxGridComponent } from "@infragistics/igniteui-angular";
+import {
+  IgxDialogComponent,
+  IgxGridComponent,
+} from "@infragistics/igniteui-angular";
 import { PersonBulletinsGridModel } from "./_models/person-bulletin-grid-model";
 import { Guid } from "guid-typescript";
 import { InternalRequestTypeCodeConstants } from "./_models/internal-request-type-code.constants";
@@ -30,7 +33,7 @@ export class InternalRequestFormComponent
     InternalRequestService
   >
   implements OnInit
-{  
+{
   constructor(
     service: InternalRequestService,
     public injector: Injector,
@@ -94,7 +97,27 @@ export class InternalRequestFormComponent
       if (this.isForPreview) {
         this.title = "Преглед на заявка";
       }
+
+      if (
+        this.fullForm.nIntReqTypeId.value ==
+        InternalRequestTypeCodeConstants.Rehabilitation
+      ) {
+        this.fullForm.description.clearValidators();
+      }
       this.formFinishedLoading.emit();
+    }
+  }
+
+  public onReqTypeIsChanged() {
+    let isRehabilitation =
+      this.fullForm.nIntReqTypeId.value ==
+      InternalRequestTypeCodeConstants.Rehabilitation;
+    if (isRehabilitation) {
+      this.fullForm.description.clearValidators();
+      this.fullForm.description.updateValueAndValidity();
+    } else {
+      this.fullForm.description.addValidators(Validators.required);
+      this.fullForm.description.updateValueAndValidity();
     }
   }
 
@@ -306,15 +329,20 @@ export class InternalRequestFormComponent
     }
   }
 
-  showReport(){
-    this.appCertificateService.htmlReport(this.fullForm.pPidTypeCode.value, this.fullForm.pPersIdIdDisplay.value).subscribe( res => { 
-      this.report = res;
-      this.reportDialog.open();
-     });
+  showReport() {
+    this.appCertificateService
+      .htmlReport(
+        this.fullForm.pPidTypeCode.value,
+        this.fullForm.pPersIdIdDisplay.value
+      )
+      .subscribe((res) => {
+        this.report = res;
+        this.reportDialog.open();
+      });
   }
 
   onPrint() {
-    const popupWin = window.open('', '_blank');
+    const popupWin = window.open("", "_blank");
     popupWin.document.open();
     popupWin.document.write(`
       <html>
@@ -326,8 +354,7 @@ export class InternalRequestFormComponent
         <body onload="window.print();window.close()">
             <div>${this.report}</div>
         </body>
-      </html>`
-    );
+      </html>`);
     popupWin.document.close();
   }
 
