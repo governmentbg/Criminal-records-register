@@ -96,6 +96,18 @@ export class ApplicationCertificateResultComponent
           });
       }
       if (
+        this.model.secondSignerId == null &&
+        this.model.statusCode !=
+          CertificateStatuTypeEnum.CertificatePaperPrint &&
+        this.model.statusCode != CertificateStatuTypeEnum.Delivered &&
+        this.model.statusCode != CertificateStatuTypeEnum.CertificateContentReady 
+      ) {
+        this.model.secondSignerId = this.userInfoService.userId;
+        this.fullForm.secondSignerId.setValue(
+          this.userInfoService.userId
+        );
+      }
+      if (
         this.model.secondSignerId == null && this.model.firstSignerId == null &&
         this.model.statusCode ==
           CertificateStatuTypeEnum.CertificateContentReady 
@@ -392,6 +404,7 @@ export class ApplicationCertificateResultComponent
                   this.bulletinsCheckGrid.selectRows(response.map((x) => x.id));
                 });
             }
+            debugger
             if (
               this.model.secondSignerId == null &&
               this.model.statusCode !=
