@@ -2779,6 +2779,9 @@ namespace MJ_CAIS.DTO.ExternalServicesHost {
         
         /// <remarks/>
         SUID,
+
+        /// <remarks/>
+        SYSID,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.23297")]

@@ -129,6 +129,9 @@
   <data name="lblBirthPlace" xml:space="preserve">
     <value>Място на раждане</value>
   </data>
+  <data name="lblEgn" xml:space="preserve">
+    <value>ЕГН</value>
+  </data>
   <data name="lblFamilyname" xml:space="preserve">
     <value>Фамилия</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="lblLawReason" xml:space="preserve">
     <value>Правно основание</value>
+  </data>
+  <data name="lblLnch" xml:space="preserve">
+    <value>ЛНЧ</value>
   </data>
   <data name="lblRemark" xml:space="preserve">
     <value>Бележки</value>

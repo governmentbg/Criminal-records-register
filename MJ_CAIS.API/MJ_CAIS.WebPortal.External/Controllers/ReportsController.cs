@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DTO.ExternalServicesHost;
+using MJ_CAIS.DTO.Person;
 using MJ_CAIS.DTO.UserExternal;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.WebPortal.External.Models.Account;
@@ -24,12 +25,15 @@ namespace MJ_CAIS.WebPortal.External.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICriminalRecordsReportService _criminalRecordsReportService;
+        private readonly IPersonService _personService;
         public ReportsController(
             IMapper mapper,
-            ICriminalRecordsReportService criminalRecordsReportService)
+            ICriminalRecordsReportService criminalRecordsReportService,
+            IPersonService personService)
         {
             _mapper = mapper;
             _criminalRecordsReportService = criminalRecordsReportService;
+            _personService = personService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -46,6 +50,21 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> LoadSearchData([FromBody]PersonLoadDataModel model)
+        {
+            PersonSearchFormDTO result = null;
+            if (!string.IsNullOrEmpty(model.EGN))
+            {
+                result = await this._personService.GetPersonDataByPidAsync(model.EGN, "EGN");
+            }
+            else if (!string.IsNullOrEmpty(model.EGN))
+            {
+                result = await this._personService.GetPersonDataByPidAsync(model.LNCH, "LNCH");
+            }
+            return result != null ? Ok(result) : NotFound();
+        }
+
         [HttpGet]
         [GridDataSourceAction]
         public async Task<ActionResult> AjaxPersonSearch(PersonSearchModel model)
@@ -57,92 +76,36 @@ namespace MJ_CAIS.WebPortal.External.Controllers
             }
             else
             {
-                var arg = new DTO.ExternalServicesHost.PersonIdentifierSearchExtendedRequestType()
-                {
-                    CallContext = new DTO.ExternalServicesHost.CallContext()
+                var result = await this._personService.SearchPeopleAsync(
+                    new DTO.Person.PersonSearchParamsDTO()
                     {
-                        EmployeeIdentifier = CurrentUserEmail,
-                        AdministrationName = CurrentUserAdministrationName,
-                        EmployeeNames = CurrentUserName,
-                        EmployeePosition = CurrentUserPosition,
-                        LawReason = model.LawReason,
-                        Remark = model.Remark,
-                        ServiceType = model.ServiceType,
-                        ServiceURI = model.ServiceURI
-                        //AdministrationOId,
-                        //EmployeeAditionalIdentifier,
-                        //ResponsiblePersonIdentifier
-                    },
-                    PersonIdentifierSearchRequest = new DTO.ExternalServicesHost.PersonIdentifierSearchRequestType()
-                    {
-                        BirthCountry = model.BirthCountry,
-                        Birthdate = model.Birthdate.Value.ToUniversalTime(),
-                        BirthDatePrec = model.BirthDatePrec,
-                        Birthplace = model.Birthplace,
-                        Familyname = model.Familyname,
-                        Firstame = model.Firstame,
+                        Firstname = model.Firstame,
                         Surname = model.Surname,
-                        Fullname = model.Fullname
+                        Familyname = model.Familyname,
+                        Fullname = model.Fullname,
+                        BirthDate = model.Birthdate,
+                        Egn = model.EGN,
+                        Lnch = model.LNCH
+                    });
 
-                    }
-                };
-                var res = await _criminalRecordsReportService.PersonIdentifierSearchAsync(arg);
-                return View(res.ReportResult.Select(r => new CriminalRecordsPersonModel()
+                return View(result.Select(r => new CriminalRecordsPersonModel()
                 {
-                    FirstNameBg = r.NamesBg?.FirstName,
-                    SurNameBg = r.NamesBg?.SurName,
-                    FamilyNameBg = r.NamesBg?.FamilyName,
-                    FullNameBg = r.NamesBg?.FullName,
-                    FirstNameEn = r.NamesEn?.FirstName,
-                    SurNameEn = r.NamesEn?.SurName,
-                    FamilyNameEn = r.NamesEn?.FamilyName,
-                    FullNameEn = r.NamesEn?.FullName,
-                    MotherNames = r.MotherNames?.FirstName + " " + r.MotherNames?.SurName + " " + r.MotherNames?.FamilyName + " " + r.MotherNames?.FullName,
-                    FatherNames = r.FatherNames?.FirstName + " " + r.FatherNames?.SurName + " " + r.FatherNames?.FamilyName + " " + r.FatherNames?.FullName,
-                    CityName = r.BirthPlace?.City?.CityName,
-                    CountryName = r.BirthPlace?.Country?.CountryName,
-                    BirthPlaceDescr = r.BirthPlace?.Descr,
-                    BirthDate = r.BirthDate.Date,
-                    BirthDatePrecision = r.BirthDate.DatePrecision,
-                    EGN = r.IdentityNumber?.EGN,
-                    SUID = r.IdentityNumber?.SUID,
-                    LNCh = r.IdentityNumber?.LNCh,
-                    LN = r.IdentityNumber?.LN,
-                    ActionTemplate =
-                    !string.IsNullOrEmpty(r.IdentityNumber?.EGN) ?
+                    Id = r.Id,
+                    Pids = r.Pids,
+                    PersonNames = r.PersonNames,
+                    MotherNames = r.MotherNames,
+                    FatherNames = r.FatherNames,
+                    Sex = r.Sex,
+                    BirthDate = r.BirthDate.HasValue ? r.BirthDate.Value.Date.ToString("dd.MM.yyyy г.") : String.Empty,
+                    MatchText = r.MatchText,
+                    ActionTemplate = 
                          "<form method=\"post\" autocomplete=\"off\" action=\"/Reports\" novalidate=\"novalidate\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"IdentifierType\" name=\"IdentifierType\" value=\"EGN\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"PID\" name=\"PID\" value=\"" + r.IdentityNumber?.EGN + "\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"LawReason\" name=\"LawReason\" value=\""+ model.LawReason +"\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"Remark\" name=\"Remark\" value=\"" + model.Remark + "\">" +
-                        "<button class=\"btn btn-link\" type=\"submit\" title=\"ЕГН: " + r.IdentityNumber?.EGN + "\">ЕГН: " + r.IdentityNumber?.EGN + "</button>" +
-                        "</form>" :
-                    !string.IsNullOrEmpty(r.IdentityNumber?.SUID) ?
-                         "<form method=\"post\" autocomplete=\"off\" action=\"/Reports\" novalidate=\"novalidate\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"IdentifierType\" name=\"IdentifierType\" value=\"SUID\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"PID\" name=\"PID\" value=\"" + r.IdentityNumber?.SUID + "\">" +
+                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"IdentifierType\" name=\"IdentifierType\" value=\"SYSID\">" +
+                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"PID\" name=\"PID\" value=\"" + r.Id + "\">" +
                         "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"LawReason\" name=\"LawReason\" value=\"" + model.LawReason + "\">" +
                         "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"Remark\" name=\"Remark\" value=\"" + model.Remark + "\">" +
-                        "<button class=\"btn btn-link\" type=\"submit\" title=\"СисИд: " + r.IdentityNumber?.SUID + "\">СисИд: " + r.IdentityNumber?.SUID + "</button>" +
-                        "</form>" :
-                    !string.IsNullOrEmpty(r.IdentityNumber?.LN) ?
-                         "<form method=\"post\" autocomplete=\"off\" action=\"/Reports\" novalidate=\"novalidate\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"IdentifierType\" name=\"IdentifierType\" value=\"LN\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"PID\" name=\"PID\" value=\"" + r.IdentityNumber?.LN + "\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"LawReason\" name=\"LawReason\" value=\"" + model.LawReason + "\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"Remark\" name=\"Remark\" value=\"" + model.Remark + "\">" +
-                        "<button class=\"btn btn-link\" type=\"submit\" title=\"ЛН: " + r.IdentityNumber?.LN + "\">ЛН: " + r.IdentityNumber?.LN + "</button>" +
-                        "</form>" :
-                    !string.IsNullOrEmpty(r.IdentityNumber?.LNCh) ?
-                         "<form method=\"post\" autocomplete=\"off\" action=\"/Reports\" novalidate=\"novalidate\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"IdentifierType\" name=\"IdentifierType\" value=\"LNCH\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"PID\" name=\"PID\" value=\"" + r.IdentityNumber?.LNCh + "\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"LawReason\" name=\"LawReason\" value=\"" + model.LawReason + "\">" +
-                        "<input hidden=\"\" type=\"text\" data-val=\"true\" id=\"Remark\" name=\"Remark\" value=\"" + model.Remark + "\">" +
-                        "<button class=\"btn btn-link\" type=\"submit\" title=\"ЛНЧ: " + r.IdentityNumber?.LNCh + "\">ЛНЧ: " + r.IdentityNumber?.LNCh + "</button>" +
-                        "</form>" : "",
-                    Remark = model.Remark,
-                    LawReason = model.LawReason
+                        "<button class=\"btn btn-link\" type=\"submit\" title=\"Идентификатор: " + r.Id + "\">Справка</button>" +
+                        "</form>"
                 }).AsQueryable());
             }
         }

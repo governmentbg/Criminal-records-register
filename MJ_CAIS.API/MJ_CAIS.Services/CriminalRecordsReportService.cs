@@ -42,17 +42,29 @@ namespace MJ_CAIS.Services
 
         public async Task<CriminalRecordsReportType> GetCriminalRecordsReportAsync(CriminalRecordsExtendedRequestType value, bool addLog = true)
         {
-            var pidTypeCode = value.CriminalRecordsRequest.IdentifierType == IdentifierType.SUID ?
-                        "SYS" :
-                        value.CriminalRecordsRequest.IdentifierType.ToString();
-            var personDb =
-                await _bulletinRepository.GetPersonIdByPidAsync(
-                    value.CriminalRecordsRequest.PID,
-                    pidTypeCode
-                );
-            var person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
-            var pid = value.CriminalRecordsRequest.PID;
-            var pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == pid && x.PidType.Code == pidTypeCode)?.Id;
+            string pidId = String.Empty;
+            CriminalRecordsPersonDataType person = null;
+            if (value.CriminalRecordsRequest.IdentifierType == IdentifierType.SYSID)
+            {
+                pidId = value.CriminalRecordsRequest.PID;
+                var personDb =
+                    (await _personRepository.GetPersonByID(pidId)).FirstOrDefault();
+                person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
+            }
+            else
+            {
+                var pidTypeCode = value.CriminalRecordsRequest.IdentifierType == IdentifierType.SUID ?
+                            "SYS" :
+                            value.CriminalRecordsRequest.IdentifierType.ToString();
+                var personDb =
+                    await _bulletinRepository.GetPersonIdByPidAsync(
+                        value.CriminalRecordsRequest.PID,
+                        pidTypeCode
+                    );
+                person = _mapper.Map<CriminalRecordsPersonDataType>(personDb);
+                var pid = value.CriminalRecordsRequest.PID;
+                pidId = personDb.PPersonIds.FirstOrDefault(x => x.Pid == pid && x.PidType.Code == pidTypeCode)?.Id;
+            }
             var bulletins = await _bulletinRepository.GetBulletinsByPidIdAsync(pidId);
             var bulletinsList = await bulletins.ToListAsync();
 
@@ -76,7 +88,7 @@ namespace MJ_CAIS.Services
                     }
                 }
             };
-            
+
             //TODO: Should resultID and RegistrationNumber be populated?
             //RESULT_ID
             //REGISTRATION_NUMBER
