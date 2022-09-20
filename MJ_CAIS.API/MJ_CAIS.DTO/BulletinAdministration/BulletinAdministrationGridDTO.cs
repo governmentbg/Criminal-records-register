@@ -10,5 +10,6 @@ namespace MJ_CAIS.DTO.BulletinAdministration
         public string? BulletinAuthorityName { get; set; }
         public string? Identifier { get; set; }
         public DateTime? BirthDate { get; set; }
+        public string? CaseData { get; set; }
     }
 }

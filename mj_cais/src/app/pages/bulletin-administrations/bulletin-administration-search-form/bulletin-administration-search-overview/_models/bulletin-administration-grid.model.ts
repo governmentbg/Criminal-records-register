@@ -9,6 +9,7 @@ export class BulletinAdministrationGridModel extends BaseGridModel {
   public fullName: string;
   public identifier: Date;
   public birthDate: Date;
+  public caseData: string;
 
   constructor(init?: Partial<BulletinAdministrationGridModel>) {
     super(init);
@@ -20,5 +21,6 @@ export class BulletinAdministrationGridModel extends BaseGridModel {
     this.fullName = init?.fullName ?? null;
     this.identifier = init?.identifier ?? null;
     this.birthDate = init?.birthDate ?? null;
+    this.caseData = init?.caseData ?? null;
   }
 }

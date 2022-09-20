@@ -1,4 +1,4 @@
-<nb-card  [formGroup]="fullForm.group">
+<nb-card [formGroup]="fullForm.group">
   <nb-card-header class="">
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
@@ -17,7 +17,7 @@
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body >
+  <nb-card-body>
     <form autocomplete="off">
       <div class="font-weight-bold">Основна информация</div>
       <hr />
@@ -121,10 +121,12 @@
         </div>
       </div>
     </form>
-    <cais-bulletin-administration-search-overview
-      #searchBulletinGrid
-      [searchForm]="fullForm"
-    >
-    </cais-bulletin-administration-search-overview>
   </nb-card-body>
+</nb-card>
+<nb-card class="mt-2">
+  <cais-bulletin-administration-search-overview
+    #searchBulletinGrid
+    [searchForm]="fullForm"
+  >
+  </cais-bulletin-administration-search-overview>
 </nb-card>

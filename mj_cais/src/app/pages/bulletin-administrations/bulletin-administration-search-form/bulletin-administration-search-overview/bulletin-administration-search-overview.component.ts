@@ -21,8 +21,7 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
   constructor(
     service: BulletinAdministrationSearchGridService,
     injector: Injector,
-    public dateFormatService: DateFormatService,
-    public loaderService: LoaderService
+    public dateFormatService: DateFormatService
   ) {
     super("bulletins-administration-search", service, injector);
   }
@@ -32,6 +31,7 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
   public dialog: IgxDialogComponent;
   public ulockBulletinForm: UnlockBulletinForm;
   public statuses: BaseNomenclatureModel[] = [];
+  public isLoadingUnlock: boolean = false;
 
   ngOnInit() {
     this.ulockBulletinForm = new UnlockBulletinForm();
@@ -44,29 +44,24 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
       return;
     }
 
-    this.loaderService.showSpinner(this.service);
-
     let formObj = this.searchForm.group.getRawValue();
 
     let filterQuery = this.service.constructQueryParamsByFilters(formObj, "");
     this.service.updateUrl(`bulletins-administration?${filterQuery}`);
     super.ngOnInit();
-    this.loaderService.hideSpinner(this.service);
   };
 
   onOpenDialog(bulletinId: string, currentStatus: string, version: number) {
-    this.loaderService.show();
     this.service.getBulletinStatusHistory(bulletinId).subscribe({
       next: (data) => {
         this.statuses = data;
         this.ulockBulletinForm.status.patchValue(currentStatus);
         this.ulockBulletinForm.version.patchValue(version);
         this.ulockBulletinForm.bulletinId.patchValue(bulletinId);
-        this.loaderService.hide();
+
         this.dialog.open();
       },
       error: (errorResponse) => {
-        this.loaderService.hide();
         this.errorHandler(errorResponse);
       },
     });
@@ -78,21 +73,24 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
       return;
     }
 
-    this.loaderService.show();
     let bulletinId = this.ulockBulletinForm.bulletinId.value;
     let model = this.ulockBulletinForm.group.value;
 
+    this.isLoadingUnlock = true;
     this.service.unlockBulletin(bulletinId, model).subscribe({
       next: (data) => {
-        this.loaderService.hide();
-        this.toastr.showToast("success", "Успешно отключен бюлетин за редакция!");
+        this.isLoadingUnlock = false;
+        this.toastr.showToast(
+          "success",
+          "Успешно отключен бюлетин за редакция!"
+        );
         this.onCloseDilog();
         setTimeout(() => {
           this.grid.deleteRow(bulletinId);
         }, 500);
       },
       error: (errorResponse) => {
-        this.loaderService.hide();
+        this.isLoadingUnlock = false;
         this.errorHandler(errorResponse);
       },
     });
