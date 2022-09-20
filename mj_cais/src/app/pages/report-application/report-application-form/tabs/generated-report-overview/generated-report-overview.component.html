@@ -153,19 +153,19 @@
 <igx-dialog #generateReportDialog>
   <form autocomplete="off">
     <div class="dialogNewRecord" style="min-width: 500px;">
-      <nb-card size="large">
+      <nb-card>
         <nb-card-header>Генерирай справка</nb-card-header>
         <nb-card-body>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-autocomplete [label]="'Подписващ 1'" [inputFormControl]="signersformGroup.controls.firstSignerId"
+              <cais-autocomplete [appendTo]="'body'" [label]="'Подписващ 1'" [inputFormControl]="signersformGroup.controls.firstSignerId"
                 [parentGroup]="signersformGroup" [inputName]="'firstSignerId'" [items]="users">
               </cais-autocomplete>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-autocomplete [label]="'Подписващ 2'" [inputFormControl]="signersformGroup.controls.secondSignerId"
+              <cais-autocomplete [appendTo]="'body'" [label]="'Подписващ 2'" [inputFormControl]="signersformGroup.controls.secondSignerId"
                 [parentGroup]="signersformGroup" [inputName]="'secondSignerId'" [items]="users">
               </cais-autocomplete>
             </div>

@@ -31,6 +31,8 @@ export class AutocompleteComponent {
   @Input() allowCustomValues: boolean = false;
   @Input() customValueIsNumber: boolean = true;
 
+  @Input() appendTo: string;
+
   ngOnInit() {
     if (!this.inputFormControl.touched && this.firstOptionSelected) {
       if (this.items && this.items.length > 0) {
