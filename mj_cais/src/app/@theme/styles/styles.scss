@@ -278,7 +278,7 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 
 .ng-select.ng-select-disabled > .ng-select-container {
   color: nb-theme(text-basic-color);
-  background-color: nb-theme(input-basic-disabled-background-color);
+  background-color: nb-theme(input-basic-disabled-background-color) !important;
   font-weight: 600;
   border-color: nb-theme(border-basic-color-4);
 }
