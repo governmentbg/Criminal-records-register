@@ -142,9 +142,7 @@ $custom-palette: igx-palette(
   }
 }
 
-.ng-dropdown-panel {
-  z-index: 99999 !important;
-}
+
 
 #cais-logo {
   width: 70px;
@@ -251,9 +249,6 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   }
 }
 
-.cdk-overlay-container {
-  z-index: 10060 !important;
-}
 
 .igx-dialog__window-content {
   padding: 0px;
@@ -290,4 +285,16 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 
   line-height:nb-theme(input-medium-text-line-height);
 
+}
+
+.ng-dropdown-panel {
+  z-index: 1040 !important;
+}
+
+.layout-z-index {
+  z-index: 1050 !important ;
+}
+
+.cdk-overlay-container {
+  z-index: 10060 !important;
 }
