@@ -10,6 +10,9 @@ import { ReportApplicationStatusConstants } from "../../../report-application-ov
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
+import { PersonForm } from "../../../../../@core/components/forms/person-form/_models/person.form";
+import { PidTypeEnum } from "../../../../../@core/components/forms/person-form/_models/pid-type-enum";
+import { ApplicationCertificateService } from "../../../../application/application-form/tabs/application-certificate-result/_data/application-certificate.service";
 
 @Component({
   selector: "cais-generated-report-overview",
@@ -30,6 +33,10 @@ export class GeneratedReportOverviewComponent implements OnInit {
   public generateReportDialog: IgxDialogComponent;
 
   @Input() users: BaseNomenclatureModel[];
+  @Input() person: PersonForm;
+  @ViewChild("reportDialog", { read: IgxDialogComponent })
+  public reportDialog: IgxDialogComponent;
+  public report: string;
 
   constructor(
     public dateFormatService: DateFormatService,
@@ -38,7 +45,8 @@ export class GeneratedReportOverviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastr: CustomToastrService,
     private loader: NgxSpinnerService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private appCertificateService: ApplicationCertificateService
   ) {}
 
   ngOnInit(): void {
@@ -159,6 +167,53 @@ export class GeneratedReportOverviewComponent implements OnInit {
           );
         },
       });
+  }
+
+  showReport() {
+    let pid = "";
+    let pidType = "";
+
+    if (this.person.egn.value) {
+      pid = this.person.egn.value;
+      pidType = PidTypeEnum.Egn;
+    } else if (this.person.lnch.value) {
+      pid = this.person.lnch.value;
+      pidType = PidTypeEnum.Lnch;
+    } else if (this.person.ln.value) {
+      pid = this.person.ln.value;
+      pidType = PidTypeEnum.Ln;
+    } else if (this.person.idDocNumber.value) {
+      pid = this.person.idDocNumber.value;
+      pidType = PidTypeEnum.DocumentId;
+    } else if (this.person.afisNumber.value) {
+      pid = this.person.afisNumber.value;
+      pidType = PidTypeEnum.AfisNumber;
+    } else if (this.person.suid.value) {
+      pid = this.person.suid.value;
+      pidType = "SUID";
+    }
+
+    this.appCertificateService.htmlReport(pidType, pid).subscribe((res) => {
+      this.report = res;
+      this.reportDialog.open();
+    });
+  }
+
+  onPrint() {
+    const popupWin = window.open("", "_blank");
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+            <div>${this.report}</div>
+        </body>
+      </html>`);
+    popupWin.document.close();
   }
 
   private errorHandler(error, msg) {
