@@ -53,7 +53,13 @@ namespace MJ_CAIS.ExternalWebServices
                 //todo: resources and EH
                 throw new Exception($"Certificate with ID {certificateID} does not exist.");
             }
-            var signingCertificateName = (await _certificateRepository.SingleOrDefaultAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
+
+            var systemParameters = await (await _certificateRepository.FindAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
+                                                || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME
+                                                || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
+                                                || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME)).ToListAsync();
+
+            var signingCertificateName = (systemParameters.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
 
 
 
@@ -82,7 +88,27 @@ namespace MJ_CAIS.ExternalWebServices
             var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
             var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
             //todo:get patterns for mail if needed:
-            var content = await CreateCertificate(certificate, null, null, signingCertificateName, statusCertificateUserSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, await GetWebPortalAddress());
+
+
+
+
+            string mailSubjectPattern = null;
+            string mailBodyPattern = null;
+            if (certificate.Application.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebExternalCertificate ||
+
+                certificate.Application.ApplicationType.Code == ApplicationConstants.ApplicationTypes.WebCertificate)
+            {
+                try
+                {
+                    mailSubjectPattern = File.ReadAllText(systemParameters.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString, Encoding.Default);
+                    mailBodyPattern = File.ReadAllText(systemParameters.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString, Encoding.Default);
+                }
+                catch (Exception ex)
+                {
+                    //todo: log
+                }
+            }
+            var content = await CreateCertificate (certificate, mailSubjectPattern, mailBodyPattern, signingCertificateName, statusCertificateUserSign, statusForDelivery, statusCertificateDelivered, statusCertificatePaperprint, await GetWebPortalAddress());
 
             await _certificateRepository.SaveChangesAsync();
             return content;
@@ -279,8 +305,24 @@ namespace MJ_CAIS.ExternalWebServices
                 }
                 else
                 {
-                    await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
-                    await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Доставено");
+
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(mailSubjectPattern) && !string.IsNullOrEmpty(mailBodyPattern))
+                        {
+                            await DeliverCertificateAsync(certificate, mailBodyPattern, mailSubjectPattern, webportalUrl);
+                            await _certificateService.SetCertificateStatus(certificate, statusCertificateDelivered, "Доставено");
+                        }
+                        else
+                        {
+                            await _certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне");
+                        }
+                      
+                    }
+                    catch (Exception ex)
+                    {
+                        await _certificateService.SetCertificateStatus(certificate, statusCertificateForDelivery, "За доставяне");
+                    }
                 }
             }
             if (!certificate.ModifiedProperties.Contains(nameof(certificate.StatusCode)))
