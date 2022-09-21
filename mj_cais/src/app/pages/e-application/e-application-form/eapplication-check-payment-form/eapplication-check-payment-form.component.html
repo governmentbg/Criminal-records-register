@@ -1,4 +1,4 @@
-<nb-card >
+<nb-card>
   <nb-card-header class="">
     <cais-card-header
       [label]="displayTitle"
@@ -6,7 +6,7 @@
     >
     </cais-card-header>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body class="appendTo">
     <form autocomplete="off">
       <nb-tabset #nbtabset>
         <nb-tab tabTitle="Заявление">
@@ -70,6 +70,7 @@
                     [parentGroup]="fullForm.group"
                     [items]="dbData.purposeIds"
                     [inputName]="'purposeId'"
+                    [appendTo]="'.appendTo'"
                   >
                   </cais-autocomplete>
                 </div>
