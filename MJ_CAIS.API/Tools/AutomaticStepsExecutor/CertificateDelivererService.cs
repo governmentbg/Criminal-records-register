@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MJ_CAIS.Services.Contracts;
+using MJ_CAIS.ExternalWebServices;
 
 namespace AutomaticStepsExecutor
 {
@@ -78,14 +79,8 @@ namespace AutomaticStepsExecutor
                 var statusCertificateDelivered = statuses.First();
                 var webPortalUrl = await _certificateGenerationService.GetWebPortalAddress();
                 //todo: get mail data
-                var sysParamsForMail = await _dbContext.GSystemParameters.AsNoTracking().Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
-                || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ToListAsync();
-                if (sysParamsForMail.Count != 2 || sysParamsForMail.Any(x => string.IsNullOrEmpty(x.ValueString)))
-                {
-                    throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME} and {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME} are not set.");
-                }
-                string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
-                string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(sysParamsForMail.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
+                string mailSubjectTemplate = MailResources.DELIVERY_MAIL_SUBJECT;
+                string mailBodyTemplate = MailResources.DELIVERY_MAIL_BODY;
              
                 foreach (IBaseIdEntity entity in entities)
                 {

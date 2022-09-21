@@ -55,8 +55,6 @@ namespace MJ_CAIS.ExternalWebServices
             }
 
             var systemParameters = await (await _certificateRepository.FindAsync<GSystemParameter>(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
-                                                || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME
-                                                || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
                                                 || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME)).ToListAsync();
 
             var signingCertificateName = (systemParameters.FirstOrDefault(x => x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME))?.ValueString;
@@ -100,8 +98,8 @@ namespace MJ_CAIS.ExternalWebServices
             {
                 try
                 {
-                    mailSubjectPattern = File.ReadAllText(systemParameters.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString, Encoding.Default);
-                    mailBodyPattern = File.ReadAllText(systemParameters.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString, Encoding.Default);
+                    mailSubjectPattern = MailResources.DELIVERY_MAIL_SUBJECT; 
+                    mailBodyPattern = MailResources.DELIVERY_MAIL_BODY;
                 }
                 catch (Exception ex)
                 {

@@ -1,3 +1,0 @@
-﻿Вашето заявление [{application_registration_number}] беше обработено.
-<br/>
-Можете да свалите резултата <a href="[{certificate_download_url}]">тук</a>

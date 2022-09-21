@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.ExternalWebServices;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
 using System;
@@ -79,14 +80,10 @@ namespace AutomaticStepsExecutor
 
                 }
                 var systemParameters = await Task.FromResult(_dbContext.GSystemParameters.AsNoTracking().Where(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS
-                                                    || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME
-                                                    || x.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
                                                     || x.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToList());
-                if (systemParameters.Count != 4)
+                if (systemParameters.Count != 2)
                 {
-                    throw new Exception($"Parameters do not exist. Parameters: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}" +
-                        $"{SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME} , {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
-
+                    throw new Exception($"Parameters do not exist. Parameters: {SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS}, {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME}");
                 }
                 var certificateValidityMonths = systemParameters.First(x => x.Code == SystemParametersConstants.SystemParametersNames.CERTIFICATE_VALIDITY_PERIOD_MONTHS).ValueNumber;
                 if (certificateValidityMonths == null)
@@ -105,8 +102,8 @@ namespace AutomaticStepsExecutor
                 var statusForDelivery = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificateForDelivery);
                 var statusCertificatePaperprint = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint);
                 var statusCertificateDelivered = statuses.First(s => s.Code == ApplicationConstants.ApplicationStatuses.Delivered);
-                string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(systemParameters.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
-                string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(systemParameters.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
+                string mailSubjectTemplate = MailResources.DELIVERY_MAIL_SUBJECT;
+                string mailBodyTemplate = MailResources.DELIVERY_MAIL_BODY;
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
 
 

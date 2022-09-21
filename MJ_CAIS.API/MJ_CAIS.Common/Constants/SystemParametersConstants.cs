@@ -21,11 +21,7 @@ namespace MJ_CAIS.Common.Constants
             //колко дни се очаква плащане за заявления подадени през уеб портала
             public const string TERM_FOR_PAYMENT_WEB_DAYS = "TERM_FOR_PAYMENT_WEB_DAYS";
             //колко дни се очаква плащане за заявления подадени на гише
-            public const string TERM_FOR_PAYMENT_DESK_DAYS = "TERM_FOR_PAYMENT_DESK_DAYS";
-            //email body file name
-            public const string DELIVERY_MAIL_BODY_FILENAME = "DELIVERY_MAIL_BODY_FILENAME";
-            //email subject file name
-            public const string DELIVERY_MAIL_SUBJECT_FILENAME = "DELIVERY_MAIL_SUBJECT_FILENAME";
+            public const string TERM_FOR_PAYMENT_DESK_DAYS = "TERM_FOR_PAYMENT_DESK_DAYS";           
             // 'Максимален брой опити до успешно извикване на Regix',
             public const string REGIX_NUMBER_OF_ATTEMPTS = "REGIX_NUMBER_OF_ATTEMPTS";
             //Брой дни в които regix кеша да се пази
