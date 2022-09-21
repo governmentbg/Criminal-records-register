@@ -10,6 +10,7 @@ using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Common.Constants;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DataAccess.Entities;
+using MJ_CAIS.ExternalWebServices;
 
 namespace AutomaticStepsExecutor
 {
@@ -70,17 +71,13 @@ namespace AutomaticStepsExecutor
                 var webPortalUrl = await _certificateService.GetWebPortalAddress();
               
                 //todo: get mail data
-                var sysParams = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME
-                || s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME
-                || s.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToListAsync();
-                if (sysParams.Count != 3 || sysParams.Any(x=>string.IsNullOrEmpty(x.ValueString)))
+                var sysParams = await _dbContext.GSystemParameters.Where(s => s.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ToListAsync();
+                if (sysParams.Count != 1 || sysParams.Any(x=>string.IsNullOrEmpty(x.ValueString)))
                 {
-                    throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME}," +
-                        $" {SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME} " +
-                        $"and {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} are not set.");
+                    throw new Exception($"System parameters {SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME} are not set.");
                 }
-                string mailSubjectTemplate = AutomaticStepsHelper.GetTextFromFile(sysParams.First(s=>s.Code== SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_SUBJECT_FILENAME).ValueString);
-                string mailBodyTemplate = AutomaticStepsHelper.GetTextFromFile(sysParams.First(s => s.Code == SystemParametersConstants.SystemParametersNames.DELIVERY_MAIL_BODY_FILENAME).ValueString);
+                string mailSubjectTemplate = MailResources.DELIVERY_MAIL_SUBJECT;
+                string mailBodyTemplate = MailResources.DELIVERY_MAIL_BODY;
                 string signingCertificateName = sysParams.First(s => s.Code == SystemParametersConstants.SystemParametersNames.SYSTEM_SIGNING_CERTIFICATE_NAME).ValueString;
                 foreach (IBaseIdEntity entity in entities)
                 {
