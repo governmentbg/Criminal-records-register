@@ -73,6 +73,11 @@ namespace AutomaticStepsExecutor
 
                     IAutomaticStepService service = (IAutomaticStepService)host.Services.GetService(typeofExecutor);
 
+
+                    //IPrintDocumentService s = (IPrintDocumentService)host.Services.GetService<IPrintDocumentService>();
+                    //var fileArray = await s.PrintDailyCertificates(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1), "");
+                    //System.IO.File.WriteAllBytes("testDailyCertificatesDelivered.pdf", fileArray);
+
                     if (service != null)
                     {
                         var numberOfEntities = 0;
