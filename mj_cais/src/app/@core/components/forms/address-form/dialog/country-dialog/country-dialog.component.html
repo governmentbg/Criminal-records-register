@@ -1,11 +1,10 @@
 <nb-card class="cais-lookup">
   <nb-card-header>
-    <div class="row">
-      <div class="col-md-6">
-        <h4>Държави</h4>
-      </div>
-      <div class="col-md-6" style="text-align: end">
-        <button nbButton matRipple status="success" (click)="success()">
+    <div class="d-flex justify-content-between">
+      <h5 class="fw-bold">Държава</h5>
+
+      <div class="d-flex align-items-center gap-3">
+        <button nbButton matRipple status="primary" (click)="success()">
           Избери
         </button>
         <button nbButton matRipple (click)="dismiss()" class="ml-3">
@@ -15,83 +14,39 @@
     </div>
   </nb-card-header>
   <nb-card-body>
-    <tl-linear-progress
-      [visible]="this.remoteService?.isLoading"
-    ></tl-linear-progress>
-    <igx-grid
-      #grid
-      igxGridState
-      [data]="items$ | async"
-      [height]="null"
-      [filterStrategy]="noopFilterStrategy"
-      [sortStrategy]="noopSortStrategy"
-      [paging]="true"
-      [clipboardOptions]="{ copyHeaders: false }"
-      [displayDensity]="'cosy'"
-      (onSortingDone)="sortingDone($event)"
-      (onFilteringDone)="filteringDone($event)"
-      (onSelection)="cellSelection($event)"
-      [paginationTemplate]="pager"
-      [allowFiltering]="true"
-      [primaryKey]="'id'"
-      [cellSelection]="'none'"
-      [rowSelection]="selectionMode"
-      [selectedRows]="selectedRows"
-      [hideRowSelectors]="false"
-      (onRowSelectionChange)="handleRowSelection($event)"
-    >
-      <igx-column
-        field="id"
-        header="'Идентификатор'"
-        [sortable]="false"
-        [dataType]="'string'"
-        [hidden]="true"
-      >
+    <tl-linear-progress [visible]="this.remoteService?.isLoading"></tl-linear-progress>
+    <igx-grid #grid igxGridState [data]="items$ | async" [height]="null" [filterStrategy]="noopFilterStrategy"
+      [sortStrategy]="noopSortStrategy" [paging]="true" [clipboardOptions]="{ copyHeaders: false }"
+      [displayDensity]="'cosy'" (onSortingDone)="sortingDone($event)" (onFilteringDone)="filteringDone($event)"
+      (onSelection)="cellSelection($event)" [paginationTemplate]="pager" [allowFiltering]="true" [primaryKey]="'id'"
+      [cellSelection]="'none'" [rowSelection]="selectionMode" [selectedRows]="selectedRows" [hideRowSelectors]="false"
+      (onRowSelectionChange)="handleRowSelection($event)">
+      <igx-column field="id" header="'Идентификатор'" [sortable]="false" [dataType]="'string'" [hidden]="true">
         <ng-template igxCell let-cell="cell">
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="name"
-        header="Наименование"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="name" header="Наименование" [sortable]="true" [dataType]="'string'">
         <ng-template igxCell let-cell="cell">
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="iso31662Code"
-        header="ISO код"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="iso31662Code" header="ISO код" [sortable]="true" [dataType]="'string'">
         <ng-template igxCell let-cell="cell">
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="remark"
-        header="Описание"
-        [sortable]="true"
-        [dataType]="'string'"
-      >
+      <igx-column field="remark" header="Описание" [sortable]="true" [dataType]="'string'">
         <ng-template igxCell let-cell="cell">
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="validFrom"
-        [sortable]="true"
-        header="Валидноа от"
-        dataType="Date"
-        [formatter]="this.dateFormatService.formatDate"
-      >
+      <igx-column field="validFrom" [sortable]="true" header="Валидноа от" dataType="Date"
+        [formatter]="this.dateFormatService.formatDate">
         <ng-template igxCell let-cell="cell">
           <span [title]="this.dateFormatService.displayDate(cell.value)">
             {{ this.dateFormatService.displayDate(cell.value) }}
@@ -99,13 +54,8 @@
         </ng-template>
       </igx-column>
 
-      <igx-column
-        field="validTo"
-        [sortable]="true"
-        header="Валидна до"
-        dataType="Date"
-        [formatter]="this.dateFormatService.formatDate"
-      >
+      <igx-column field="validTo" [sortable]="true" header="Валидна до" dataType="Date"
+        [formatter]="this.dateFormatService.formatDate">
         <ng-template igxCell let-cell="cell">
           <span [title]="this.dateFormatService.displayDate(cell.value)">
             {{ this.dateFormatService.displayDate(cell.value) }}
@@ -115,12 +65,8 @@
 
       <ng-template #pager let-grid>
         <div class="tl-paginator">
-          <cais-grid-pager
-            [page]="remoteService.pagerParams.page"
-            [perPage]="remoteService.pagerParams.perPage"
-            [totalCount]="remoteService.pagerParams.totalCount"
-            (pagerChange)="pagerChange($event)"
-          ></cais-grid-pager>
+          <cais-grid-pager [page]="remoteService.pagerParams.page" [perPage]="remoteService.pagerParams.perPage"
+            [totalCount]="remoteService.pagerParams.totalCount" (pagerChange)="pagerChange($event)"></cais-grid-pager>
         </div>
       </ng-template>
     </igx-grid>
