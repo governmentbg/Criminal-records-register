@@ -1,4 +1,4 @@
-<div [formGroup]="parentForm.group">
+<div [formGroup]="parentForm.group" class="appendTo">
   <div class="row">
     <div class="form-group col-md-3">
       <cais-lookup
@@ -23,6 +23,7 @@
           [(items)]="districts"
           (selectionChanged)="onDistrictChanged($event)"
           [disabled]="!parentForm.isSetForNativeAddress"
+          [appendTo]="'.appendTo'"
         ></cais-autocomplete>
       </div>
 
@@ -39,6 +40,7 @@
           [(items)]="municipalities"
           (selectionChanged)="onMunicipalityChanged($event)"
           [disabled]="!parentForm.isSetForNativeAddress"
+          [appendTo]="'.appendTo'"
         ></cais-autocomplete>
       </div>
 
@@ -54,6 +56,7 @@
           [inputName]="'cityId'"
           [(items)]="cities"
           [disabled]="!parentForm.isSetForNativeAddress"
+          [appendTo]="'.appendTo'"
         ></cais-autocomplete>
       </div>
       <div
