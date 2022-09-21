@@ -1,3 +1,4 @@
+<tl-linear-progress [visible]="isLoading"></tl-linear-progress>
 <nb-card>
   <igx-grid
     #documentsGrid
@@ -17,6 +18,7 @@
             nbButton
             [status]="'primary'"
             (click)="onOpenDialog(); dialogAdd.open()"
+            [disabled]="isLoading"
           >
             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Добави
           </button>
@@ -88,6 +90,7 @@
               igxButton="icon"
               [title]="'Изтриване'"
               (click)="openDeleteConfirmationDialog(cell.rowData.id)"
+              [disabled]="isLoading"
             >
               <nb-icon pack="fa" icon="trash"></nb-icon>
             </button>

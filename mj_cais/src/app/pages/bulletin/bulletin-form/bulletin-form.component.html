@@ -1,3 +1,6 @@
+<tl-linear-progress
+  [visible]="disabledSubmit || disabledPrint"
+></tl-linear-progress>
 <nb-card [formGroup]="fullForm.group">
   <nb-card-header class="">
     <cais-card-header
@@ -5,6 +8,7 @@
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="setEditToBeForPreview"
+      [disabled]="disabledSubmit"
     >
       <button
         *ngIf="isEdit()"
@@ -13,6 +17,7 @@
         [status]="'primary'"
         (click)="print()"
         type="button"
+        [disabled]="disabledPrint"
       >
         <nb-icon class="pt-1" pack="fa" icon="print"></nb-icon> Печат
       </button>
@@ -34,6 +39,7 @@
         [status]="'primary'"
         (click)="openUpdateConfirmationDialog()"
         type="button"
+        [disabled]="disabledSubmit"
       >
         Актуализирай
       </button>

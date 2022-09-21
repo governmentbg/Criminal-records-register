@@ -8,10 +8,9 @@ import { NbDialogService } from "@nebular/theme";
 import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { FileItem } from "ng2-file-upload";
-import { NgxSpinnerService } from "ngx-spinner";
 import { Observable, ReplaySubject } from "rxjs";
 import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
-import { CommonConstants } from "../../../../../@core/constants/common.constants";
+import { CommonErrorHandlerService } from "../../../../../@core/services/common/common-error-handler.service";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { CustomFileUploader } from "../../../../../@core/utils/custom-file-uploader";
@@ -43,6 +42,7 @@ export class BulletinDocumentFormComponent {
   public uploader: CustomFileUploader;
   public hasDropZoneOver: boolean = false;
   public documents: BulletinDocumentModel[];
+  public isLoading = false;
 
   protected validationMessage = "Грешка при валидациите!";
 
@@ -51,8 +51,8 @@ export class BulletinDocumentFormComponent {
     public bulletinService: BulletinService,
     private dialogService: NbDialogService,
     public dateFormatService: DateFormatService,
-    private loaderService: NgxSpinnerService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private errorService: CommonErrorHandlerService
   ) {
     this.initializeUploader();
   }
@@ -65,11 +65,18 @@ export class BulletinDocumentFormComponent {
       this.documents = [];
       return;
     }
+
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
-    this.loaderService.show();
-    this.bulletinService.getDocuments(bulletinId).subscribe((res) => {
-      this.documents = res;
-      this.loaderService.hide();
+    this.isLoading = true;
+    this.bulletinService.getDocuments(bulletinId).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.documents = response;
+      },
+      error: (errorResponse) => {
+        this.isLoading = false;
+        this.errorService.errorHandler(errorResponse);
+      },
     });
   }
 
@@ -94,18 +101,19 @@ export class BulletinDocumentFormComponent {
     let model = this.bulletinDocumentForm.group.value;
     model.docTypeId = this.bulletinDocumentForm.docTypeId.value;
 
+    this.isLoading = true;
+    this.dialog.close();
     this.bulletinService
       .saveDocument(this.bulletinForm.id.value, model)
       .subscribe({
         next: (response) => {
+          this.isLoading = false;
           this.toastr.showToast("success", "Успешно добавен документ");
           this.onAddDocumentRow();
         },
         error: (errorResponse) => {
-          this.showErrorMessage(
-            errorResponse,
-            "Възникна грешка при запис на данните: "
-          );
+          this.isLoading = false;
+          this.errorService.errorHandler(errorResponse);
         },
       });
   }
@@ -141,52 +149,56 @@ export class BulletinDocumentFormComponent {
         },
         closeOnBackdropClick: false,
       })
-      .onClose.subscribe((result) => {
+      .onClose.subscribe((result) => {       
         if (result) {
+          this.isLoading = true;
           this.bulletinService
             .deleteDocument(this.bulletinForm.id.value, documentId)
-            .subscribe(
-              (res) => {
+            .subscribe({
+              next: (response) => {
+                this.isLoading = false;
                 this.toastr.showToast("success", "Успешно изтрит документ");
-
                 this.documentsGrid.deleteRow(documentId);
                 this.documentsGrid.data = this.documentsGrid.data.filter(
                   (d) => d.id != documentId
                 );
               },
-              (error) => {
-                this.showErrorMessage(
-                  error,
-                  "Възникна грешка по време на изтриване на файл"
-                );
-              }
-            );
+              error: (errorResponse) => {
+                this.isLoading = false;
+                this.errorService.errorHandler(errorResponse);
+              },
+            });
         }
       });
   }
 
   download(id: string) {
+    this.isLoading = true;
     this.bulletinService
       .downloadDocument(this.bulletinForm.id.value, id)
-      .subscribe((response: any) => {
-        let blob = new Blob([response.body]);
-        window.URL.createObjectURL(blob);
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          let blob = new Blob([response.body]);
+          window.URL.createObjectURL(blob);
 
-        let header = response.headers.get("Content-Disposition");
-        let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          let header = response.headers.get("Content-Disposition");
+          let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 
-        let fileName = "download";
+          let fileName = "download";
 
-        var matches = filenameRegex.exec(header);
-        if (matches != null && matches[1]) {
-          fileName = matches[1].replace(/['"]/g, "");
-        }
+          var matches = filenameRegex.exec(header);
+          if (matches != null && matches[1]) {
+            fileName = matches[1].replace(/['"]/g, "");
+          }
 
-        fileSaver.saveAs(blob, fileName);
-      }),
-      (error) => {
-        this.showErrorMessage(error, "Грешка при изтегляне на файла: ");
-      };
+          fileSaver.saveAs(blob, fileName);
+        },
+        error: (errorResponse) => {
+          this.isLoading = false;
+          this.errorService.errorHandler(errorResponse);
+        },
+      });
   }
 
   private initializeUploader() {
@@ -221,10 +233,5 @@ export class BulletinDocumentFormComponent {
     reader.onload = (event) =>
       result.next(btoa(event.target.result.toString()));
     return result;
-  }
-
-  private showErrorMessage(error, message: string) {
-    var errorText = error.status + " " + error.statusText;
-    this.toastr.showBodyToast("danger", message, errorText);
   }
 }

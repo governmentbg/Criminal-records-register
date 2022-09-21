@@ -8,8 +8,8 @@ import {
   TransactionType,
 } from "@infragistics/igniteui-angular";
 import { EActions } from "@tl/tl-common";
-import { NgxSpinnerService } from "ngx-spinner";
 import { BaseNomenclatureModel } from "../../../../../@core/models/nomenclature/base-nomenclature.model";
+import { CommonErrorHandlerService } from "../../../../../@core/services/common/common-error-handler.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { BulletinService } from "../../_data/bulletin.service";
 import { SanctionCategoryType } from "../../_models/sanction-category-type-constants";
@@ -57,7 +57,7 @@ export class BulletinSanctionsFormComponent implements OnInit {
   constructor(
     public dateFormatService: DateFormatService,
     private bulletinService: BulletinService,
-    private loaderService: NgxSpinnerService,
+    private errorService: CommonErrorHandlerService,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -75,10 +75,13 @@ export class BulletinSanctionsFormComponent implements OnInit {
     }
 
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
-    this.loaderService.show();
-    this.bulletinService.getSanctions(bulletinId).subscribe((res) => {
-      this.sanctions = res;
-      this.loaderService.hide();
+    this.bulletinService.getSanctions(bulletinId).subscribe({
+      next: (response) => {
+        this.sanctions = response;
+      },
+      error: (errorResponse) => {
+        this.errorService.errorHandler(errorResponse);
+      },
     });
   }
 

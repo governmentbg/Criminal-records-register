@@ -8,7 +8,7 @@ import {
   IPinningConfig,
 } from "@infragistics/igniteui-angular";
 import { EActions } from "@tl/tl-common";
-import { NgxSpinnerService } from "ngx-spinner";
+import { CommonErrorHandlerService } from "../../../../../@core/services/common/common-error-handler.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { BulletinService } from "../../_data/bulletin.service";
 import { BulletinDecisionForm } from "./_models/bulletin-decision.form";
@@ -40,8 +40,8 @@ export class BulletinDecisionFormComponent {
   constructor(
     public dateFormatService: DateFormatService,
     private bulletinService: BulletinService,
-    private loaderService: NgxSpinnerService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private errorService: CommonErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -54,10 +54,13 @@ export class BulletinDecisionFormComponent {
     }
 
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
-    this.loaderService.show();
-    this.bulletinService.getDecisions(bulletinId).subscribe((res) => {
-      this.decisions = res;
-      this.loaderService.hide();
+    this.bulletinService.getDecisions(bulletinId).subscribe({
+      next: (response) => {
+        this.decisions = response;
+      },
+      error: (errorResponse) => {
+        this.errorService.errorHandler(errorResponse);
+      },
     });
   }
 

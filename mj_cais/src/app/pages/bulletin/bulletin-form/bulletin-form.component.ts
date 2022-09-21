@@ -13,7 +13,6 @@ import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-st
 import { EActions } from "@tl/tl-common";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
-import { NgxSpinnerService } from "ngx-spinner";
 import { NbDialogService } from "@nebular/theme";
 import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { TranslateService } from "@ngx-translate/core";
@@ -32,7 +31,8 @@ export class BulletinFormComponent
     BulletinResolverData,
     BulletinService
   >
-  implements OnInit {
+  implements OnInit
+{
   private isFinalEdit: boolean = false;
   //#region Престъпления
 
@@ -76,8 +76,6 @@ export class BulletinFormComponent
 
   //#region Tabset
 
-  public offencesTabTitle = "Престъпления";
-  public sanctionsTabTitle = "Наказания";
   public decisionTabTitle = "Осъждане";
   public eventsTabTitle = "Уведомления";
   public documentsTabTitle = "Документи";
@@ -86,8 +84,6 @@ export class BulletinFormComponent
   public docEventTabTitle =
     "Уведомяване за променен съдебен статус на осъдено лице";
 
-  public showOffencesTab: boolean = false;
-  public showSanctionsTab: boolean = false;
   public showDecisionTab: boolean = false;
   public showEventsTab: boolean = false;
   public showDocumentsTab: boolean = false;
@@ -103,11 +99,12 @@ export class BulletinFormComponent
   public setEditToBeForPreview: boolean = false;
   public showEditBtn: boolean = false;
   public PersonContextEnum = PersonContextEnum;
+  public disabledSubmit = false;
+  public disabledPrint = false;
 
   constructor(
     service: BulletinService,
     public injector: Injector,
-    private loaderService: NgxSpinnerService,
     private dialogService: NbDialogService,
     private translate: TranslateService,
     private userAuthorityService: UserAuthorityService
@@ -142,13 +139,11 @@ export class BulletinFormComponent
     if (
       this.isEdit() &&
       this.userAuthorityService.csAuthorityId !=
-      (this.dbData.element as any).csAuthorityId
+        (this.dbData.element as any).csAuthorityId
     ) {
       this.isForPreview = true;
     }
     this.formFinishedLoading.emit();
-
-
   }
 
   buildFormImpl(): FormGroup {
@@ -168,7 +163,7 @@ export class BulletinFormComponent
   //override submit function
   //todo
   onSubmitSuccess(data: any) {
-    this.loaderService.hide();
+    this.disabledSubmit = false;
     if (this.isFinalEdit) {
       this.toastr.showToast(
         "success",
@@ -185,20 +180,22 @@ export class BulletinFormComponent
     let isValid = this.validateSanctionAndOffences(form);
 
     if (!form.group.valid || !isValid) {
-      this.loaderService.hide();
+      this.disabledSubmit = false;
+
       form.group.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");
 
       this.scrollToValidationError();
     } else {
-      this.loaderService.show();
+      this.disabledSubmit = true;
+
       this.formObject = form.group.getRawValue();
       this.saveAndNavigate();
     }
   }
 
   protected errorHandler(errorResponse): void {
-    this.loaderService.hide();
+    this.disabledSubmit = false;
     super.errorHandler(errorResponse);
   }
 
@@ -237,15 +234,15 @@ export class BulletinFormComponent
     if (!isPrevSuspSentCheck) {
       this.fullForm?.prevSuspSentDescr.setValue(null);
     }
-
   }
 
   public openUpdateConfirmationDialog() {
-    let dialogRef = this.dialogService.open(
-      ConfirmDialogComponent,
-      CommonConstants.defaultDialogConfig
-    );
-
+    let dialogRef = this.dialogService.open(ConfirmDialogComponent, {
+      context: {
+        color: "primary",
+      },
+      closeOnBackdropClick: false,
+    });
     dialogRef.componentRef.instance.confirmMessage = this.translate.instant(
       "BULLETIN.CONFIRM-MESSAGE-WHEN-UPDATE"
     );
@@ -253,7 +250,8 @@ export class BulletinFormComponent
 
     dialogRef.onClose.subscribe((result) => {
       if (result) {
-        this.loaderService.show();
+        this.disabledSubmit = true;
+
         this.isFinalEdit = true;
         this.applyTransactions();
         this.validateAndSave(this.fullForm);
@@ -267,14 +265,14 @@ export class BulletinFormComponent
   }
 
   public print() {
-    this.loaderService.show();
+    this.disabledPrint = true;
     this.service.print(this.objectId).subscribe({
       next: (response) => {
-        this.loaderService.hide();
+        this.disabledPrint = false;
         this.downloadFile(response);
       },
       error: (errorResponse) => {
-        this.loaderService.hide();
+        this.disabledPrint = false;
         this.errorHandler(errorResponse);
       },
     });
@@ -282,14 +280,6 @@ export class BulletinFormComponent
 
   public onChangeTab(event) {
     let tabTitle = event.tabTitle;
-
-    if (!this.showOffencesTab) {
-      this.showOffencesTab = tabTitle == this.offencesTabTitle;
-    }
-
-    if (!this.showSanctionsTab) {
-      this.showSanctionsTab = tabTitle == this.sanctionsTabTitle;
-    }
 
     if (!this.showDecisionTab) {
       this.showDecisionTab = tabTitle == this.decisionTabTitle;
@@ -435,7 +425,7 @@ export class BulletinFormComponent
     this.showForUpdate =
       (this.fullForm.statusIdDisplay.value == BulletinStatusTypeEnum.NewEISS ||
         this.fullForm.statusIdDisplay.value ==
-        BulletinStatusTypeEnum.NewOffice) &&
+          BulletinStatusTypeEnum.NewOffice) &&
       userHasDiffAuth == false;
 
     // redirect to edit
