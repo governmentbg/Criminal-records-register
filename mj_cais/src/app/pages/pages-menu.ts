@@ -5,8 +5,6 @@ import { RoleNameEnum } from "../@core/constants/role-name.enum";
 @Injectable()
 export class PagesMenu {
   constructor(iconsLibrary: NbIconLibraries) {
-
-
     iconsLibrary.registerFontPack("fa", {
       packClass: "fa",
       iconClassPrefix: "fa",
@@ -24,7 +22,7 @@ export class PagesMenu {
       iconClassPrefix: "fa",
     });
 
-    iconsLibrary.registerFontPack('material-icons', {
+    iconsLibrary.registerFontPack("material-icons", {
       packClass: "material-icons",
       ligature: true,
     });
@@ -35,11 +33,11 @@ export class PagesMenu {
   }
 
   hasRole(roles: string[], reqiredRoles: string[]): boolean {
-    reqiredRoles.forEach(role => {
+    reqiredRoles.forEach((role) => {
       if (roles.indexOf(role) !== 1) {
         return false;
       }
-    })
+    });
     return true;
   }
 
@@ -49,7 +47,7 @@ export class PagesMenu {
         title: "Табло",
         link: "/pages/home",
         home: true,
-        icon: { icon: "dashboard", pack: "material-icons" }
+        icon: { icon: "dashboard", pack: "material-icons" },
       },
       {
         title: "Лица",
@@ -174,7 +172,6 @@ export class PagesMenu {
         ],
       },
 
-
       {
         title: "За решение от съдия/юрист",
         icon: { icon: "balance", pack: "material-icons" },
@@ -191,7 +188,10 @@ export class PagesMenu {
           {
             title: "За подпис от юрист",
             link: "/pages/applications/for-signing-by-judge",
-            hidden: !this.hasRole(roles, [RoleNameEnum.Judge, RoleNameEnum.CentralAuth]),
+            hidden: !this.hasRole(roles, [
+              RoleNameEnum.Judge,
+              RoleNameEnum.CentralAuth,
+            ]),
           },
           {
             title: "За избор на бюлетини",
@@ -252,8 +252,6 @@ export class PagesMenu {
         hidden: this.hasNoRole(roles, RoleNameEnum.CentralAuth),
       },
 
-
-
       {
         title: "Справки",
         icon: { icon: "tasks", pack: "fas" },
@@ -302,11 +300,15 @@ export class PagesMenu {
         icon: { icon: "cog", pack: "fa" },
         hidden:
           this.hasNoRole(roles, RoleNameEnum.Admin) &&
-          this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
+          this.hasNoRole(roles, RoleNameEnum.GlobalAdmin) &&
+          this.hasNoRole(roles, RoleNameEnum.Supervisor),
         children: [
           {
             title: "Потребители",
             link: "/pages/users",
+            hidden:
+              this.hasNoRole(roles, RoleNameEnum.Admin) &&
+              this.hasNoRole(roles, RoleNameEnum.GlobalAdmin),
           },
           {
             title: "Външни потребители",

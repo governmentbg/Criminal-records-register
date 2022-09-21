@@ -17,6 +17,7 @@ namespace MJ_CAIS.WebPortal.External.Models.Reports
             IdentifierTypes.Add(new SelectListItem { Text = "ЛНЧ", Value = DTO.ExternalServicesHost.IdentifierType.LNCH.ToString() });
             IdentifierTypes.Add(new SelectListItem { Text = "ЛН", Value = DTO.ExternalServicesHost.IdentifierType.LN.ToString() });
             IdentifierTypes.Add(new SelectListItem { Text = "Системен идентификатор", Value = DTO.ExternalServicesHost.IdentifierType.SUID.ToString() });
+            IdentifierTypes.Add(new SelectListItem { Text = "Вътрешен идентификатор", Value = "SYSID".ToString() });
             IdentifierTypes.Insert(0, new SelectListItem() { Disabled = true, Text = CommonResources.lblChoose, Selected = true });
 
         }

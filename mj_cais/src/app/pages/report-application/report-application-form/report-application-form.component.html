@@ -1,4 +1,4 @@
-<nb-card >
+<nb-card>
   <nb-card-header class="">
     <cais-card-header
       [label]="displayTitle"
@@ -35,7 +35,7 @@
       </button>
     </cais-card-header>
   </nb-card-header>
-  <nb-card-body >
+  <nb-card-body>
     <form autocomplete="off">
       <nb-tabset #nbtabset (changeTab)="onChangeTab($event)">
         <nb-tab tabTitle="Искане">
@@ -229,7 +229,10 @@
           "
         >
           <ng-container *ngIf="showReportsTab">
-            <cais-generated-report-overview [users]="dbData.users">
+            <cais-generated-report-overview
+              [users]="dbData.users"
+              [person]="fullForm.person"
+            >
             </cais-generated-report-overview>
           </ng-container>
         </nb-tab>

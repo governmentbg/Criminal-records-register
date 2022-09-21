@@ -299,7 +299,7 @@ namespace MJ_CAIS.Services
         /// <returns></returns>
         protected abstract bool IsChildRecord(TPk aId, List<string> aParentsList);
 
-        protected virtual async Task<IQueryable<T>> ApplyOData<T>(IQueryable<T> query, ODataQueryOptions<T> aQueryOptions, int maxSize = MAX_PAGE_SIZE)
+        protected virtual async Task<IQueryable<T>> ApplyOData<T>(IQueryable<T> query, ODataQueryOptions<T> aQueryOptions, int maxSize = MAX_PAGE_SIZE, bool forExportToExcel = false)
         {
             var queryValidator = new CustomQueryValidator<T>();
             if (aQueryOptions.Filter != null)
@@ -313,11 +313,16 @@ namespace MJ_CAIS.Services
                maxSize = MAX_EXCEL_SIZE;
             }
 
-            ODataQuerySettings querySetting = new ODataQuerySettings { PageSize = maxSize };
-
-            // Ако в url, няма top option за странициране или заявения top е повече от разрешения се прилага default-ния paging
-            if (aQueryOptions.Top == null || aQueryOptions.Top.Value > maxSize)
+            if (forExportToExcel)
             {
+                ODataQuerySettings queryForExportToExcelSetting = new ODataQuerySettings { PageSize = MAX_EXCEL_SIZE };
+                resultQuery = aQueryOptions.ApplyTo(query, queryForExportToExcelSetting);
+
+            }
+            else if (aQueryOptions.Top == null || aQueryOptions.Top.Value > maxSize)
+            {                
+                // Ако в url, няма top option за странициране или заявения top е повече от разрешения се прилага default-ния paging
+                ODataQuerySettings querySetting = new ODataQuerySettings { PageSize = maxSize };
                 resultQuery = aQueryOptions.ApplyTo(query, querySetting);
             }
             else

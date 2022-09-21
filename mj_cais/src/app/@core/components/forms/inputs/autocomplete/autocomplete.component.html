@@ -18,6 +18,7 @@
     (clear)="onSelectionChange(undefined)"
     [class.disable-arrow]="inputFormControl.disabled"
     [class.disabled-background]="inputFormControl.disabled"
+    [appendTo]="appendTo"
   >
     <ng-option *ngFor="let item of items" [value]="item.id">{{
       item.name
@@ -34,6 +35,7 @@
     [class.disable-arrow]="inputFormControl.disabled"
     [class.disabled-background]="inputFormControl.disabled"
     [addTag]="addTagFn"
+    [appendTo]="appendTo"
   >
     <ng-option *ngFor="let item of items" [value]="item.id">{{
       item.name

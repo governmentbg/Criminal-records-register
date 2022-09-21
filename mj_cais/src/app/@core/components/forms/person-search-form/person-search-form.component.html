@@ -219,6 +219,17 @@
         </ng-template>
       </igx-column>
       <igx-column
+        [width]="'10%'"
+        [resizable]="true"
+        field="isConvicted"
+        header="Лицето има осъждания"
+        [dataType]="'string'"
+      >
+        <ng-template igxCell let-cell="cell">
+          <span [title]="cell.value">{{ cell.value }}</span>
+        </ng-template>
+      </igx-column>
+      <igx-column
         [width]="'40%'"
         [resizable]="true"
         field="matchText"

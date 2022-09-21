@@ -12,6 +12,15 @@
       >
       <igx-grid-toolbar-actions>
         <div class="d-flex gap-2">
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            [status]="'primary'"
+            (click)="showReport()"
+            type="button"
+          >
+            Е-Справка
+          </button>
           <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
         </div>
       </igx-grid-toolbar-actions>
@@ -263,6 +272,7 @@
           <div class="row">
             <div class="form-group col-md-12">
               <cais-autocomplete
+                [appendTo]="'body'"
                 [label]="'Подписващ 1'"
                 [inputFormControl]="signersformGroup.controls.firstSignerId"
                 [parentGroup]="signersformGroup"
@@ -275,6 +285,7 @@
           <div class="row">
             <div class="form-group col-md-12">
               <cais-autocomplete
+                [appendTo]="'body'"
                 [label]="'Подписващ 2'"
                 [inputFormControl]="signersformGroup.controls.secondSignerId"
                 [parentGroup]="signersformGroup"
@@ -292,10 +303,9 @@
                 nbButton
                 matRipple
                 fullWidth
-                status="danger"
-                (click)="generateReport()"
+                (click)="generateReportDialog.close()"
               >
-                Запис
+                Отказ
               </button>
             </div>
             <div class="col-6">
@@ -303,9 +313,10 @@
                 nbButton
                 matRipple
                 fullWidth
-                (click)="generateReportDialog.close()"
+                status="primary"
+                (click)="generateReport()"
               >
-                Отказ
+                <nb-icon class="pt-1" pack="fa" icon="save"></nb-icon> Запис
               </button>
             </div>
           </div>
@@ -313,4 +324,30 @@
       </nb-card>
     </div>
   </form>
+</igx-dialog>
+
+
+<igx-dialog #reportDialog>
+  <div  style="max-width:40rem">
+    <nb-card size="large">
+      <nb-card-header>
+        <div class="d-flex justify-content-between">
+          <h5 style="font-weight: bold">Справка</h5>
+          <div class="d-flex gap-3">
+            <button nbButton matRipple [status]="'primary'" (click)="onPrint()" type="button" class="ml-2">
+              <nb-icon pack="fa" icon="print"></nb-icon> Принтирай
+            </button>
+            <button nbButton matRipple (click)="reportDialog.close()" type="button" class="ml-2">
+              Затвори
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+
+      <nb-card-body class="overflow-scroll">
+        <cais-encapsulated-html [Html]="this.report"> </cais-encapsulated-html>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
 </igx-dialog>
