@@ -1,42 +1,20 @@
 <nb-card>
   <nb-card-header>Ново заявление за свидетелство</nb-card-header>
   <nb-card-body>
-    <button
-      nbButton
-      fullWidth
-      matRipple
-      [status]="'basic'"
-      (click)="searchByEGN()"
-      type="button"
-      class="mb-2"
-      style="min-width: 100px"
-    >
-      Ново заявление по ЕГН
-    </button>
-    <button
-      nbButton
-      fullWidth
-      matRipple
-      [status]="'basic'"
-      (click)="searchByLNCH()"
-      type="button"
-      class="mb-2"
-      style="min-width: 100px"
-    >
-      НОВО ЗАЯВЛЕНИЕ ПО ЛНЧ
-    </button>
+    <div class="d-flex justify-content-center">
+      <div class="d-grid gap-2 col-3">
+        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchByEGN()" type="button" class="mb-2">
+          Ново заявление по ЕГН
+        </button>
+        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchByLNCH()" type="button" class="mb-2">
+          НОВО ЗАЯВЛЕНИЕ ПО ЛНЧ
+        </button>
 
-    <button
-      nbButton
-      fullWidth
-      matRipple
-      [status]="'basic'"
-      (click)="searchForForeigner()"
-      type="button"
-      class="mb-2"
-      style="min-width: 100px"
-    >
-      Ново заявление за чужденец
-    </button>
+        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchForForeigner()" type="button"
+          class="mb-2">
+          Ново заявление за чужденец
+        </button>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>

@@ -82,7 +82,7 @@
             <button *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificateUserSign
-              " nbButton matRipple [status]="'success'" (click)="updateStatus()" type="button" class="ml-2"
+              " nbButton matRipple [status]="'primary'" (click)="updateStatus()" type="button" class="ml-2"
               style="min-width: 100px; float: right">
               Готово за връчване
             </button>
@@ -282,7 +282,7 @@
             <button *ngIf="
                 this.model.statusCode ==
                 CertificateStatuTypeEnum.CertificateUserSign
-              " nbButton [status]="'success'" (click)="updateStatus()" type="button"
+              " nbButton [status]="'primary'" (click)="updateStatus()" type="button"
               style="min-width: 100px; float: right">
               Готово за връчване
             </button>
