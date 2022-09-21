@@ -20,6 +20,10 @@ $theme-colors: (
   "danger": #b71919,
   "success": #278c17,
 );
+
+
+
+$card-border-color: nb-theme(border-basic-color-4);
 @import "~bootstrap/scss/bootstrap";
 
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
@@ -44,6 +48,7 @@ $custom-palette: igx-palette(
   $elevation: null
 );
 
+
 .nb-theme-dark {
   $custom-palette: igx-palette(
     $primary: #f0f2ff,
@@ -61,6 +66,7 @@ $custom-palette: igx-palette(
     $roundness: null,
     $elevation: null
   );
+
 }
 
 // File styles
@@ -189,7 +195,6 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   padding: 0px;
 }
 
-
 .cais-date-time-picker {
   input.igx-input-group__input {
     border-radius: 0.25rem;
@@ -273,11 +278,16 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 
 .ng-select.ng-select-disabled > .ng-select-container {
   color: nb-theme(text-basic-color);
-  background-color: nb-theme(input-basic-disabled-background-color);
+  background-color: nb-theme(input-basic-disabled-background-color) !important;
   font-weight: 600;
   border-color: nb-theme(border-basic-color-4);
 }
 
-.ng-select.ng-select-disabled .ng-arrow-wrapper {
-  display: none;
+.ng-select.ng-select > .ng-select-container {
+  background-color: nb-theme(input-basic-background-color);
+  border-color: nb-theme(input-basic-border-color);
+
+
+  line-height:nb-theme(input-medium-text-line-height);
+
 }
