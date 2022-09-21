@@ -1,38 +1,89 @@
 <hr />
 <nb-card>
-  <igx-grid #statusHistoryGrid [height]="null" [data]="reports" [primaryKey]="'id'">
+  <igx-grid
+    #statusHistoryGrid
+    [height]="null"
+    [data]="reports"
+    [primaryKey]="'id'"
+  >
     <igx-grid-toolbar>
       <igx-grid-toolbar-title>
-        <span class="fw-bold">Справки</span></igx-grid-toolbar-title>
+        <span class="fw-bold">Справки</span></igx-grid-toolbar-title
+      >
       <igx-grid-toolbar-actions>
         <div class="d-flex gap-2">
+          <button
+            *ngIf="!this.isForPreview"
+            nbButton
+            [status]="'primary'"
+            (click)="showReport()"
+            type="button"
+          >
+            Е-Справка
+          </button>
           <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
         </div>
       </igx-grid-toolbar-actions>
     </igx-grid-toolbar>
 
-    <igx-column field="id" header="Идентификатор" [sortable]="false" [dataType]="'string'" [hidden]="true">
+    <igx-column
+      field="id"
+      header="Идентификатор"
+      [sortable]="false"
+      [dataType]="'string'"
+      [hidden]="true"
+    >
     </igx-column>
-    <igx-column field="bulletinsCount" header="Брой бюлетини" [sortable]="false" [dataType]="'number'">
+    <igx-column
+      field="bulletinsCount"
+      header="Брой бюлетини"
+      [sortable]="false"
+      [dataType]="'number'"
+    >
     </igx-column>
-    <igx-column field="registrationNumber" header="Рег. номер" dataType="string" [sortable]="true">
+    <igx-column
+      field="registrationNumber"
+      header="Рег. номер"
+      dataType="string"
+      [sortable]="true"
+    >
     </igx-column>
-    <igx-column field="firstSigner" header="Подписващ 1" dataType="string" [sortable]="true">
+    <igx-column
+      field="firstSigner"
+      header="Подписващ 1"
+      dataType="string"
+      [sortable]="true"
+    >
     </igx-column>
 
-    <igx-column field="secondSigner" header="Подписващ 2" dataType="string" [sortable]="true">
+    <igx-column
+      field="secondSigner"
+      header="Подписващ 2"
+      dataType="string"
+      [sortable]="true"
+    >
     </igx-column>
 
-    <igx-column field="validFrom" [sortable]="true" header="Валидна от" dataType="date"
-      [formatter]="this.dateFormatService.formatDate">
+    <igx-column
+      field="validFrom"
+      [sortable]="true"
+      header="Валидна от"
+      dataType="date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
       <ng-template igxCell let-cell="cell">
         <span [title]="this.dateFormatService.displayDate(cell.value)">
           {{ this.dateFormatService.displayDate(cell.value) }}
         </span>
       </ng-template>
     </igx-column>
-    <igx-column field="validTo" [sortable]="true" header="Валидна до" dataType="date"
-      [formatter]="this.dateFormatService.formatDate">
+    <igx-column
+      field="validTo"
+      [sortable]="true"
+      header="Валидна до"
+      dataType="date"
+      [formatter]="this.dateFormatService.formatDate"
+    >
       <ng-template igxCell let-cell="cell">
         <span [title]="this.dateFormatService.displayDate(cell.value)">
           {{ this.dateFormatService.displayDate(cell.value) }}
@@ -40,56 +91,89 @@
       </ng-template>
     </igx-column>
 
-    <igx-column field="statusName" header="Статус" dataType="string" [sortable]="true">
+    <igx-column
+      field="statusName"
+      header="Статус"
+      dataType="string"
+      [sortable]="true"
+    >
     </igx-column>
-    <igx-column width="140px" header="Действия" [sortable]="false" [filterable]="false" [disableHiding]="true">
+    <igx-column
+      width="140px"
+      header="Действия"
+      [sortable]="false"
+      [filterable]="false"
+      [disableHiding]="true"
+    >
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <div class="d-flex gap-3">
             <ng-container *ngIf="cell.rowData.docId">
-              <button igxButton="icon" [title]="'Изтегляне'" (click)="printReport(cell.rowData.docId)">
+              <button
+                igxButton="icon"
+                [title]="'Изтегляне'"
+                (click)="printReport(cell.rowData.docId)"
+              >
                 <nb-icon pack="fa" icon="download"></nb-icon>
               </button>
             </ng-container>
-            <ng-container *ngIf="
+            <ng-container
+              *ngIf="
                 !isForPreview &&
                 cell.rowData.statusCode ==
                   ReportApplicationStatusConstants.DraftReport
-              ">
-              <button igxButton="icon" [title]="'Генерирай'" (click)="
+              "
+            >
+              <button
+                igxButton="icon"
+                [title]="'Генерирай'"
+                (click)="
                   onGenerateReportDialogOpen(
                     cell.rowData.id,
                     cell.rowData.firstSignerId,
                     cell.rowData.secondSignerId
                   )
-                ">
+                "
+              >
                 <nb-icon pack="fa" icon="cogs"></nb-icon>
               </button>
             </ng-container>
-            <ng-container *ngIf="
+            <ng-container
+              *ngIf="
                 !isForPreview &&
                 cell.rowData.statusCode ==
                   ReportApplicationStatusConstants.ReadyReport
-              ">
-              <button igxButton="icon" [title]="'Маркирай като доставено'" (click)="deliver(cell.rowData.id)">
+              "
+            >
+              <button
+                igxButton="icon"
+                [title]="'Маркирай като доставено'"
+                (click)="deliver(cell.rowData.id)"
+              >
                 <i class="fas fa-check"></i>
               </button>
             </ng-container>
 
-            <ng-container *ngIf="
+            <ng-container
+              *ngIf="
                 !isForPreview &&
                 cell.rowData.statusCode !=
                   ReportApplicationStatusConstants.CanceledReport &&
                 cell.rowData.statusCode !=
                   ReportApplicationStatusConstants.DeliveredReport
-              ">
-              <button igxButton="icon" [title]="'Анулиране'" (click)="
+              "
+            >
+              <button
+                igxButton="icon"
+                [title]="'Анулиране'"
+                (click)="
                   onOpenCancelReportDialog(
                     cell.rowData.id,
                     cell.rowData.firstSignerId,
                     cell.rowData.secondSignerId
                   )
-                ">
+                "
+              >
                 <nb-icon pack="fa" icon="times"></nb-icon>
               </button>
             </ng-container>
@@ -108,25 +192,43 @@
         <nb-card-body>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-input [type]="'text'" [label]="'Основание'"
-                [inputFormControl]="cancelReportFormGroup.controls.description" [parentGroup]="cancelReportFormGroup"
-                [inputName]="'remarks'" [rows]="'3'" [inputType]="'TextArea'">
+              <cais-input
+                [type]="'text'"
+                [label]="'Основание'"
+                [inputFormControl]="cancelReportFormGroup.controls.description"
+                [parentGroup]="cancelReportFormGroup"
+                [inputName]="'remarks'"
+                [rows]="'3'"
+                [inputType]="'TextArea'"
+              >
               </cais-input>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-autocomplete [label]="'Подписващ 1'" [inputFormControl]="
+              <cais-autocomplete
+                [label]="'Подписващ 1'"
+                [inputFormControl]="
                   cancelReportFormGroup.controls.firstSignerId
-                " [parentGroup]="cancelReportFormGroup" [inputName]="'firstSignerId'" [items]="users">
+                "
+                [parentGroup]="cancelReportFormGroup"
+                [inputName]="'firstSignerId'"
+                [items]="users"
+              >
               </cais-autocomplete>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-autocomplete [label]="'Подписващ 2'" [inputFormControl]="
+              <cais-autocomplete
+                [label]="'Подписващ 2'"
+                [inputFormControl]="
                   cancelReportFormGroup.controls.secondSignerId
-                " [parentGroup]="cancelReportFormGroup" [inputName]="'secondSignerId'" [items]="users">
+                "
+                [parentGroup]="cancelReportFormGroup"
+                [inputName]="'secondSignerId'"
+                [items]="users"
+              >
               </cais-autocomplete>
             </div>
           </div>
@@ -134,12 +236,23 @@
         <nb-card-footer>
           <div class="row">
             <div class="col-6">
-              <button nbButton matRipple fullWidth status="danger" (click)="cancelReport()">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                status="danger"
+                (click)="cancelReport()"
+              >
                 Запис
               </button>
             </div>
             <div class="col-6">
-              <button nbButton matRipple fullWidth (click)="cancelReportDialog.close()">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                (click)="cancelReportDialog.close()"
+              >
                 Отказ
               </button>
             </div>
@@ -152,35 +265,57 @@
 
 <igx-dialog #generateReportDialog>
   <form autocomplete="off">
-    <div class="dialogNewRecord" style="min-width: 500px;">
+    <div class="dialogNewRecord" style="min-width: 500px">
       <nb-card>
         <nb-card-header>Генерирай справка</nb-card-header>
         <nb-card-body>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-autocomplete [appendTo]="'body'" [label]="'Подписващ 1'" [inputFormControl]="signersformGroup.controls.firstSignerId"
-                [parentGroup]="signersformGroup" [inputName]="'firstSignerId'" [items]="users">
+              <cais-autocomplete
+                [appendTo]="'body'"
+                [label]="'Подписващ 1'"
+                [inputFormControl]="signersformGroup.controls.firstSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'firstSignerId'"
+                [items]="users"
+              >
               </cais-autocomplete>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-12">
-              <cais-autocomplete [appendTo]="'body'" [label]="'Подписващ 2'" [inputFormControl]="signersformGroup.controls.secondSignerId"
-                [parentGroup]="signersformGroup" [inputName]="'secondSignerId'" [items]="users">
+              <cais-autocomplete
+                [appendTo]="'body'"
+                [label]="'Подписващ 2'"
+                [inputFormControl]="signersformGroup.controls.secondSignerId"
+                [parentGroup]="signersformGroup"
+                [inputName]="'secondSignerId'"
+                [items]="users"
+              >
               </cais-autocomplete>
             </div>
           </div>
         </nb-card-body>
         <nb-card-footer>
           <div class="row">
-
             <div class="col-6">
-              <button nbButton matRipple fullWidth (click)="generateReportDialog.close()">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                (click)="generateReportDialog.close()"
+              >
                 Отказ
               </button>
             </div>
             <div class="col-6">
-              <button nbButton matRipple fullWidth status="primary" (click)="generateReport()">
+              <button
+                nbButton
+                matRipple
+                fullWidth
+                status="primary"
+                (click)="generateReport()"
+              >
                 <nb-icon class="pt-1" pack="fa" icon="save"></nb-icon> Запис
               </button>
             </div>
@@ -189,4 +324,30 @@
       </nb-card>
     </div>
   </form>
+</igx-dialog>
+
+
+<igx-dialog #reportDialog>
+  <div  style="max-width:40rem">
+    <nb-card size="large">
+      <nb-card-header>
+        <div class="d-flex justify-content-between">
+          <h5 style="font-weight: bold">Справка</h5>
+          <div class="d-flex gap-3">
+            <button nbButton matRipple [status]="'primary'" (click)="onPrint()" type="button" class="ml-2">
+              <nb-icon pack="fa" icon="print"></nb-icon> Принтирай
+            </button>
+            <button nbButton matRipple (click)="reportDialog.close()" type="button" class="ml-2">
+              Затвори
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+
+      <nb-card-body class="overflow-scroll">
+        <cais-encapsulated-html [Html]="this.report"> </cais-encapsulated-html>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
 </igx-dialog>
