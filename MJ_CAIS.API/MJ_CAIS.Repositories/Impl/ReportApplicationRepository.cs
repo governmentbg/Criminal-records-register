@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
@@ -128,6 +129,8 @@ namespace MJ_CAIS.Repositories.Impl
             var bulletinsByEgn = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                  join egn in _dbContext.PPersonIds.AsNoTracking() on bulletin.EgnId equals egn.Id
                                  where egn.PersonId == personId
+                                 &&
+                                 bulletin.StatusId != BulletinConstants.Status.Deleted
                                  select new ReportAppBulletinIdDTO
                                  {
                                      Id = bulletin.Id,
@@ -139,6 +142,8 @@ namespace MJ_CAIS.Repositories.Impl
             var bulletinsByLnch = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                   join lnch in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnchId equals lnch.Id
                                   where lnch.PersonId == personId
+                                         &&
+                                 bulletin.StatusId != BulletinConstants.Status.Deleted
                                   select new ReportAppBulletinIdDTO
                                   {
                                       Id = bulletin.Id,
@@ -150,6 +155,8 @@ namespace MJ_CAIS.Repositories.Impl
             var bulletinsByLn = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                 join ln in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnId equals ln.Id
                                 where ln.PersonId == personId
+                                       &&
+                                 bulletin.StatusId != BulletinConstants.Status.Deleted
                                 select new ReportAppBulletinIdDTO
                                 {
                                     Id = bulletin.Id,
@@ -161,6 +168,8 @@ namespace MJ_CAIS.Repositories.Impl
             var bulletinsBySuid = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                   join suid in _dbContext.PPersonIds.AsNoTracking() on bulletin.SuidId equals suid.Id
                                   where suid.PersonId == personId
+                                         &&
+                                 bulletin.StatusId != BulletinConstants.Status.Deleted
                                   select new ReportAppBulletinIdDTO
                                   {
                                       Id = bulletin.Id,
