@@ -84,7 +84,7 @@ label.required:after {
 .ui-iggrid .ui-widget-header,
 .ui-iggrid th.ui-state-default,
 .ui-iggrid-header .ui-widget-header {
-    background-color: #eceeef !important;
+    background-color: aliceblue !important;
 }
 
 .ui-iggrid .ui-iggrid-footer .ui-iggrid-paging-item.ui-state-default {

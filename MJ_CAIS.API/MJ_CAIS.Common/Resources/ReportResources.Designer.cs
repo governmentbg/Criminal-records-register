@@ -97,6 +97,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ЕГН.
+        /// </summary>
+        public static string lblEgn {
+            get {
+                return ResourceManager.GetString("lblEgn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фамилия.
         /// </summary>
         public static string lblFamilyname {
@@ -156,6 +165,15 @@ namespace MJ_CAIS.Common.Resources {
         public static string lblLawReason {
             get {
                 return ResourceManager.GetString("lblLawReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ЛНЧ.
+        /// </summary>
+        public static string lblLnch {
+            get {
+                return ResourceManager.GetString("lblLnch", resourceCulture);
             }
         }
         

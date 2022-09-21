@@ -708,6 +708,15 @@ namespace MJ_CAIS.Repositories.Impl
                  where personIds.Contains(p.Id)
                  select p).ToListAsync();
         }
+        public async Task<List<PPerson>> GetPersonByID(string personId)
+        {
+            return await
+                (from p in _dbContext.PPeople.Include(p => p.BirthCity).Include(p => p.BirthCountry).Include(p => p.PPersonIds).ThenInclude(pid => pid.PidType)
+                 where p.Id == personId
+                 select p).ToListAsync();
+        }
+
+
 
         public async Task<IQueryable<string>> GetPersonIDsByPersonData(string? firstname, string? surname, string? familyname, string? birthCountry, DateTime birthdate, string birthDatePrec, string? birthplace, string? fullname, DateTime birthdateFrom, DateTime birthdateTo, int birthdateYear)
         {

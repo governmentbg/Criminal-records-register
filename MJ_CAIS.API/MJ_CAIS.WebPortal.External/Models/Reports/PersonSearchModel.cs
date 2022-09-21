@@ -38,7 +38,6 @@ namespace MJ_CAIS.WebPortal.External.Models.Reports
         public string? Fullname { get; set; }
 
         [Display(ResourceType = typeof(ReportResources), Name = nameof(ReportResources.lblBirthdate))]
-        [Required(ErrorMessageResourceType = typeof(CommonResources), ErrorMessageResourceName = nameof(CommonResources.MsgRequired))]
         [DataType(DataType.Date)]
         public DateTime? Birthdate { get; set; }
 
@@ -62,6 +61,10 @@ namespace MJ_CAIS.WebPortal.External.Models.Reports
         public string? Remark { get; set; }
 
         public string? ServiceType { get; set; }
+        [Display(ResourceType = typeof(ReportResources), Name = nameof(ReportResources.lblEgn))]
+        public string? EGN { get; set; }
+        [Display(ResourceType = typeof(ReportResources), Name = nameof(ReportResources.lblLnch))]
+        public string? LNCH { get; set; }
 
         public string? ServiceURI { get; set; }
 

@@ -20,9 +20,12 @@
             <div class="card">
                 <div class="card-header h5 bg-primary text-white">@title</div>
                 <div class="card-body">
+                    <div class="alert pt-0 pb-0 alert-primary text-center" role="alert">
+                        Резултатът от търсенето е ограничен до 50 записа!
+                    </div>
                     <div class="row g-3">
                         <form id="form" method="post" autocomplete="off">
-                            <div class="row g-3">
+                            <div class="row g-1">
                                 <div class="col-md-3">
                                     <label asp-for="Firstame" class="form-label fw-bold"></label>
                                     <input asp-for="Firstame" class="form-control" />
@@ -44,36 +47,25 @@
                                     <span asp-validation-for="Fullname" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-3">
-                                    <label asp-for="BirthDatePrec" class="form-label fw-bold required"></label>
-                                    @Html.DropDownListFor(model => model.BirthDatePrec, Model.BirthDatePrecList,
-                                    new { @class = "form-select"})
-                                    <span asp-validation-for="BirthDatePrec" class="text-danger"></span>
+                                    <label asp-for="EGN" class="form-label fw-bold"></label>
+                                    <input asp-for="EGN" class="form-control" />
+                                    <span asp-validation-for="EGN" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label asp-for="LNCH" class="form-label fw-bold"></label>
+                                    <input asp-for="LNCH" class="form-control" />
+                                    <span asp-validation-for="LNCH" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3 align-self-end">
+                                    <button name="load" id="load" class="col-8 btn btn-primary" type="button">Зареди критерии</button>
+                                    <div id="loadSpinner" class="col-2 spinner-border text-primary" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label asp-for="Birthdate" class="form-label fw-bold"></label>
                                     <input asp-for="Birthdate" class="form-control" />
                                     <span asp-validation-for="Birthdate" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <label asp-for="BirthCountry" class="form-label fw-bold"></label>
-                                    <input asp-for="BirthCountry" class="form-control" />
-                                    <span asp-validation-for="BirthCountry" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-3">
-                                    <label asp-for="Birthplace" class="form-label fw-bold"></label>
-                                    <input asp-for="Birthplace" class="form-control" />
-                                    <span asp-validation-for="Birthplace" class="text-danger"></span>
-                                </div>
-                                <hr />
-                                <div class="col-md-6">
-                                    <label asp-for="LawReason" class="form-label fw-bold required"></label>
-                                    <textarea asp-for="LawReason" type="text" class="form-control" required rows="2"></textarea>
-                                    <span asp-validation-for="LawReason" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-6">
-                                    <label asp-for="Remark" class="form-label fw-bold"></label>
-                                    <textarea asp-for="Remark" type="text" class="form-control" rows="2"></textarea>
-                                    <span asp-validation-for="Remark" class="text-danger"></span>
                                 </div>
                                 <div class="col-12 d-flex justify-content-end gap-2">
                                     <button id="search2" class="btn btn-primary btn-lg" type="button">Търсене</button>
@@ -86,42 +78,18 @@
                         .ID("PersonsGridModel")
                         .Width("100%")
                         .AutoGenerateColumns(false)
-                        .AutoGenerateLayouts(false)
+                        .AutofitLastColumn(false)
                         .Columns(column =>
                         {
-                        column.For(x => x.FirstNameBg).Hidden(true);
-                        column.For(x => x.SurNameBg).Hidden(true);
-                        column.For(x => x.FamilyNameBg).Hidden(true);
-                        column.For(x => x.FullNameBg).Hidden(true);
-                        column.For(x => x.FirstNameEn).Hidden(true);
-                        column.For(x => x.SurNameEn).Hidden(true);
-                        column.For(x => x.FamilyNameEn).Hidden(true);
-                        column.For(x => x.FullNameEn).Hidden(true);
-                        column.For(x => x.MotherNames).Hidden(true);
-                        column.For(x => x.FatherNames).Hidden(true);
-                        column.For(x => x.BirthPlaceDescr).Hidden(true);
-                        column.For(x => x.CityName).Hidden(true);
-                        column.For(x => x.CountryName).Hidden(true);
-                        column.Unbound("Names").HeaderText("Имена").Template("<span title=\"${FirstNameBg} ${SurNameBg} ${FamilyNameBg} ${FullNameBg} ${FirstNameEn} ${SurNameEn} ${FamilyNameEn} ${FullNameEn}\">${FirstNameBg} ${SurNameBg} ${FamilyNameBg} ${FullNameBg}</br>${FirstNameEn} ${SurNameEn} ${FamilyNameEn} ${FullNameEn}</span>").Width("25%");
-                        column.Unbound("Parents").HeaderText("Родители").Template("<span title=\"${MotherNames} ${FatherNames}\">${MotherNames}</br>${FatherNames}</span>").Width("25%");
-                        column.Unbound("Birthplace").HeaderText("Място на раждане").Template("<span title=\"${CountryName} ${CityName} ${BirthPlaceDescr}\">${CountryName} ${CityName} ${BirthPlaceDescr}</span>").Width("15%");
-                       @* column.For(x => x.FirstNameBg).HeaderText("SurName").Width("16%");
-                        column.For(x => x.SurNameBg).HeaderText("SurName").Width("16%");
-                        column.For(x => x.FamilyNameBg).HeaderText("FamilyName").Width("14%");*@
-                       @* column.For(x => x.FirstNameEn).HeaderText("FirstNameЕn").Width("10%");
-                        column.For(x => x.SurNameEn).HeaderText("SurNameEn").Width("12%");
-                        column.For(x => x.FamilyNameEn).HeaderText("FamilyNameEn").Width("9%");*@
-                   @*     column.For(x => x.CountryName).HeaderText("CountryName").Width("18%");
-                        column.For(x => x.CityName).HeaderText("CityName").Width("18%");
-                        column.For(x => x.BirthPlaceDescr).HeaderText("BirthplaceDescr").Width("18%");*@
-                        column.For(x => x.BirthDate).HeaderText("Дата на раждане").Width("15%");
-                        column.For(x => x.EGN).Hidden(true);
-                        column.For(x => x.SUID).Hidden(true);
-                        column.For(x => x.LNCh).Hidden(true);
-                        column.For(x => x.LN).Hidden(true);
-                        column.For(x => x.LawReason).Hidden(true);
-                        column.For(x => x.Remark).Hidden(true);
-                        column.For(x => x.ActionTemplate).HeaderText("").Width("20%");
+                        column.For(x => x.Pids).RowIndex(0).ColSpan(2).ColumnIndex(0).HeaderText("Идентификатори").Width("25%");
+                        column.For(x => x.Sex).RowIndex(1).ColumnIndex(0).HeaderText("Пол").Width("10%");
+                        column.For(x => x.BirthDate).RowIndex(1).ColumnIndex(1).HeaderText("Дата на раждане");
+                        column.For(x => x.MatchText).RowIndex(2).ColumnIndex(0).ColSpan(4).HeaderText("Идентифицирано лице по");
+                        column.For(x => x.PersonNames).RowIndex(0).ColumnIndex(2).RowSpan(2).HeaderText("Имена");
+                        column.For(x => x.MotherNames).RowIndex(0).ColumnIndex(3).HeaderText("Майка");
+                        column.For(x => x.FatherNames).RowIndex(1).ColumnIndex(3).HeaderText("Баща");
+                        column.For(x => x.ActionTemplate).RowIndex(0).ColumnIndex(4).RowSpan(3).HeaderText("").Width("10%");
+
                         })
                         .Features(features =>
                         {
@@ -139,6 +107,47 @@
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function() {
+            $("#load").prop('disabled', true);
+            $("#loadSpinner").prop('hidden', true);
+            $("#EGN").keyup(function() {
+                if ($("#EGN").val().length != 0 || $("#LNCH").val().length != 0) {
+                    $("#load").prop('disabled', false);
+                } else {
+                    $("#load").prop('disabled', true);
+                }
+            });
+            $("#LNCH").keyup(function() {
+                if ($("#EGN").val().length != 0 || $("#LNCH").val().length != 0) {
+                    $("#load").prop('disabled', false);
+                } else {
+                    $("#load").prop('disabled', true);
+                }
+            });
+            $("#load").click(function() {
+                var loadData = {};
+                loadData.EGN = $("#EGN").val();
+                loadData.LNCH = $("#LNCH").val();
+                $("#loadSpinner").prop('hidden', false);
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("LoadSearchData")',
+                    data: JSON.stringify(loadData),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(data) {
+                        $("#Firstame").val(data.firstname);
+                        $("#Surname").val(data.surname);
+                        $("#Familyname").val(data.familyname);
+                        $("#Fullname").val(data.fullname);
+                        $("#LNCH").val(data.lnch);
+                        $("#EGN").val(data.egn);
+                        if (data.birthDate) {
+                            $("#Birthdate").val(data.birthDate.split('T')[0]);
+                        }
+                        $("#loadSpinner").prop('hidden', true);
+                    }
+                });
+            });
             $("#search2").click(function() {
                 var form = $("#form");
                 $.validator.unobtrusive.parse(form);
