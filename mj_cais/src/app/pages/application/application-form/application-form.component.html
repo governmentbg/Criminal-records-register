@@ -104,6 +104,32 @@
           </nb-card>
 
           <nb-card status="primary" class="mt-3">
+            <nb-card-header>Цел </nb-card-header>
+
+            <nb-card-body style="overflow: unset">
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <cais-autocomplete
+                    [inputFormControl]="fullForm.purposeId"
+                    [parentGroup]="fullForm.group"
+                    [items]="dbData.purposeIds"
+                    [inputName]="'purposeId'"
+                  >
+                  </cais-autocomplete>
+                </div>
+                <div class="form-group col-md-9">
+                  <cais-input
+                    [type]="'text'"
+                    [inputFormControl]="fullForm.purpose"
+                    [parentGroup]="fullForm.group"
+                  >
+                  </cais-input>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+
+          <nb-card status="primary" class="mt-3">
             <nb-card-header>Заявител</nb-card-header>
 
             <nb-card-body>
@@ -161,6 +187,7 @@
           </nb-card>
 
           <nb-card status="primary" class="mt-3">
+
             <nb-card-header class="d-flex justify-content-between">
               <span class="d-flex align-items-center gap-2">
                 Информация, събрана по служебен път
