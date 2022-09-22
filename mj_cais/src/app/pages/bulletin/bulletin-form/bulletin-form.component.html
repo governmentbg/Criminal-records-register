@@ -62,7 +62,7 @@
                 {{ fullForm?.registrationNumberDisplay?.value }}
               </ng-container>
             </nb-card-header>
-            <nb-card-body>
+            <nb-card-body style="overflow: unset">
               <div class="row">
                 <div class="form-group col-md-3">
                   <cais-autocomplete
@@ -98,7 +98,7 @@
 
           <nb-card status="primary" class="mt-2">
             <nb-card-header>Данни за лицето</nb-card-header>
-            <nb-card-body>
+            <nb-card-body style="overflow: unset">
               <cais-person-form
                 [personForm]="fullForm.person"
                 [isEditable]="isBulletinPersonAliasEditable"
@@ -117,7 +117,7 @@
               Данни за изготвяне, съставяне и проверка на
               бюлетин</nb-card-header
             >
-            <nb-card-body>
+            <nb-card-body style="overflow: unset">
               <div class="row">
                 <div class="form-group col-md-6">
                   <cais-autocomplete

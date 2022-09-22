@@ -335,7 +335,7 @@
   *ngIf="isBulletinContext || isPersonContext || isApplicationContext"
 >
   <div class="card bg-transparent mt-2">
-    <div class="card-body appendTo">
+    <div class="card-body" style="overflow: unset">
       <h6 class="card-title">Документ за самоличност</h6>
 
       <div class="row">
@@ -355,7 +355,6 @@
             [parentGroup]="personForm.group"
             [inputName]="'idDocCategoryId'"
             [items]="idDocumentCategoryTypes"
-            [appendTo]="'.appendTo'"
           >
           </cais-autocomplete>
         </div>

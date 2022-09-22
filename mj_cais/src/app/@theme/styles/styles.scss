@@ -105,8 +105,8 @@ $custom-palette: igx-palette(
 /*#endregion date time styles*/
 
 .cais-lookup {
-  width: calc(100vw - 10%);
-  height: 90vh;
+  width: calc(100vw - 40%);
+  height: 80vh;
 }
 
 .cais-display-form-group {
@@ -288,13 +288,14 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 }
 
 .ng-dropdown-panel {
-  z-index: 1040 !important;
-}
-
-.layout-z-index {
-  z-index: 1050 !important ;
+  z-index: 999999 !important;
+  position: relative;
 }
 
 .cdk-overlay-container {
-  z-index: 10060 !important;
+  z-index: 10050 !important;
+}
+
+.layout-z-index {
+  z-index: 1000000 !important ;
 }
