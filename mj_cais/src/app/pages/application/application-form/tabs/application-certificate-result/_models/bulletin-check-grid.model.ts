@@ -5,6 +5,7 @@ export class BulletinCheckGridModel extends BaseGridModel {
   public bulletinReceivedDate: string = null;
   public statusId: string = null;
   public statusName: string = null;
+  public caseNumber: string = null;
   public bulletinAuthorityId: string = null;
   public bulletinAuthorityName: Date = null;
 
@@ -18,6 +19,7 @@ export class BulletinCheckGridModel extends BaseGridModel {
     this.bulletinReceivedDate = init?.bulletinReceivedDate ?? null;
     this.statusId = init?.statusId ?? null;
     this.statusName = init?.statusName ?? null;
+    this.caseNumber = init?.caseNumber ?? null;
     this.bulletinAuthorityId = init?.bulletinAuthorityId ?? null;
     this.bulletinAuthorityName = init?.bulletinAuthorityName ?? null;
 
