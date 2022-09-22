@@ -1,3 +1,6 @@
+<tl-linear-progress
+  [visible]="disabledSubmit || disabledPrint"
+></tl-linear-progress>
 <nb-card [formGroup]="fullForm.group">
   <nb-card-header class="">
     <cais-card-header
@@ -5,6 +8,7 @@
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="globalCancelFunction"
       [setForPreview]="setEditToBeForPreview"
+      [disabled]="disabledSubmit"
     >
       <button
         *ngIf="isEdit()"
@@ -13,6 +17,7 @@
         [status]="'primary'"
         (click)="print()"
         type="button"
+        [disabled]="disabledPrint"
       >
         <nb-icon class="pt-1" pack="fa" icon="print"></nb-icon> Печат
       </button>
@@ -34,6 +39,7 @@
         [status]="'primary'"
         (click)="openUpdateConfirmationDialog()"
         type="button"
+        [disabled]="disabledSubmit"
       >
         Актуализирай
       </button>
@@ -56,7 +62,7 @@
                 {{ fullForm?.registrationNumberDisplay?.value }}
               </ng-container>
             </nb-card-header>
-            <nb-card-body>
+            <nb-card-body style="overflow: unset">
               <div class="row">
                 <div class="form-group col-md-3">
                   <cais-autocomplete
@@ -92,7 +98,7 @@
 
           <nb-card status="primary" class="mt-2">
             <nb-card-header>Данни за лицето</nb-card-header>
-            <nb-card-body>
+            <nb-card-body style="overflow: unset">
               <cais-person-form
                 [personForm]="fullForm.person"
                 [isEditable]="isBulletinPersonAliasEditable"
@@ -111,7 +117,7 @@
               Данни за изготвяне, съставяне и проверка на
               бюлетин</nb-card-header
             >
-            <nb-card-body>
+            <nb-card-body style="overflow: unset">
               <div class="row">
                 <div class="form-group col-md-6">
                   <cais-autocomplete

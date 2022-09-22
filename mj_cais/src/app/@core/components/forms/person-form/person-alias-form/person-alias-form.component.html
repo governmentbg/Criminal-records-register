@@ -60,7 +60,7 @@
       <nb-card-body>
         <div class="row mt-2">
           <div class="form-group col-md-12">
-            <cais-autocomplete [label]="'Тип'" [inputFormControl]="personAliasForm.typeId"
+            <cais-autocomplete [label]="'Тип'" [inputFormControl]="personAliasForm.typeId" [appendTo]="'.dialogNewRecord'"
               [parentGroup]="personAliasForm.group" [items]="personAliasTypes" [inputName]="'typeId'">
             </cais-autocomplete>
           </div>

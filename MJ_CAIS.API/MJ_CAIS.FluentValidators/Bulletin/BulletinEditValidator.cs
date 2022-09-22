@@ -51,11 +51,11 @@ namespace MJ_CAIS.FluentValidators.Bulletin
             //                        BulletinConstants.Status.Active,
             //                        BulletinConstants.Status.ForRehabilitation);
 
-            RuleFor(x => x.OffancesTransactions)
-                .MustBeEmptyWhenIsInStatus("Престъпления", BulletinConstants.Status.NewOffice);
+            //RuleFor(x => x.OffancesTransactions)
+            //    .MustBeEmptyWhenIsInStatus("Престъпления", BulletinConstants.Status.NewOffice);
 
-            RuleFor(x => x.SanctionsTransactions)
-              .MustBeEmptyWhenIsInStatus("Наказания", BulletinConstants.Status.NewOffice);
+            //RuleFor(x => x.SanctionsTransactions)
+            //  .MustBeEmptyWhenIsInStatus("Наказания", BulletinConstants.Status.NewOffice);
         }
     }
 }

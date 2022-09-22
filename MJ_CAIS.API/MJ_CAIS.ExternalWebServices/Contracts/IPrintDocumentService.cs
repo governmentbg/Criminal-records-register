@@ -18,5 +18,12 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
         Task<byte[]> PrintExternalElectronicCertificate(string certificateID, string checkUrl);
         Task<byte[]> PrintReport(string reportId);
         Task<byte[]> PrintBulletin(string bulletinID);
+
+        Task<byte[]> PrintDailyReports(DateTime fromDate, DateTime toDate, string status);
+        Task<byte[]> PrintDailyCertificates(DateTime fromDate, DateTime toDate, string status);
+        Task<byte[]> PrintDailyBulletins(DateTime fromDate, DateTime toDate, string status);
+        Task<byte[]> PrintDailyApplications(DateTime fromDate, DateTime toDate, string status);
+        Task<byte[]> PrintDailyReportApplications(DateTime fromDate, DateTime toDate, string status);
+
     }
 }

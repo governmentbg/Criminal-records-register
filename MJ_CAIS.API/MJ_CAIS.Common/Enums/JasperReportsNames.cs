@@ -15,7 +15,12 @@ namespace MJ_CAIS.Common.Enums
         Conviction_Report,
         Electronic_certificate,
         Electronic_external_certificate,
-        Bulletin
+        Bulletin,
+        Daily_Reports,
+        Daily_Certificates,
+        Daily_Bulletins,
+        Daily_Applications,
+        Daily_ReportApplications
         //Electronic_certificate_without_conviction,
         //Electronic_certificate_with_conviction,
         //Electronic_external_certificate_with_conviction,

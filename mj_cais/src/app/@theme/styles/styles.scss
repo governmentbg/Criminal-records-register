@@ -14,12 +14,16 @@
 @import "~@nebular/auth/styles/globals";
 
 $theme-colors: (
-  "primary": #014F86,
-  "info": #0187B7,
-  "warning": #C47A03,
-  "danger": #B71919,
-  "success": #278C17
+  "primary": #014f86,
+  "info": #0187b7,
+  "warning": #c47a03,
+  "danger": #b71919,
+  "success": #278c17,
 );
+
+
+
+$card-border-color: nb-theme(border-basic-color-4);
 @import "~bootstrap/scss/bootstrap";
 
 @import "~@infragistics/igniteui-angular/lib/core/styles/themes/index";
@@ -32,11 +36,9 @@ $theme-colors: (
   @include nb-auth-global();
 }
 
-
-
 $custom-palette: igx-palette(
-  $primary: #014F86,
-  $secondary: #014F86,
+  $primary: #014f86,
+  $secondary: #014f86,
 );
 
 @include igx-theme(
@@ -45,6 +47,7 @@ $custom-palette: igx-palette(
   $roundness: null,
   $elevation: null
 );
+
 
 .nb-theme-dark {
   $custom-palette: igx-palette(
@@ -63,6 +66,7 @@ $custom-palette: igx-palette(
     $roundness: null,
     $elevation: null
   );
+
 }
 
 // File styles
@@ -101,8 +105,8 @@ $custom-palette: igx-palette(
 /*#endregion date time styles*/
 
 .cais-lookup {
-  width: calc(100vw - 10%);
-  height: 90vh;
+  width: calc(100vw - 40%);
+  height: 80vh;
 }
 
 .cais-display-form-group {
@@ -132,17 +136,13 @@ $custom-palette: igx-palette(
   display: flex;
 }
 
-
-
 .home-panel-container {
   a {
     text-decoration: none !important;
   }
 }
 
-.ng-dropdown-panel {
-  z-index: 99999 !important;
-}
+
 
 #cais-logo {
   width: 70px;
@@ -186,22 +186,11 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 }
 
 .cell-center a:hover {
-  color:  var(--text-primary-hover-color);
+  color: var(--text-primary-hover-color);
 }
 
 .cell-center .btn-link {
   padding: 0px;
-}
-
-.ng-select {
-  .ng-select-container {
-    background-color: #f7f9fc !important;
-    border-color: #e4e9f2;
-  }
-}
-
-.nb-theme-default nb-card-body {
-  overflow: unset;
 }
 
 .cais-date-time-picker {
@@ -213,9 +202,6 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
     font-weight: 600;
     line-height: 1.5rem;
     padding: 0.4375rem 1rem;
-    background-color: #f7f9fc;
-    border-color: #e4e9f2;
-    color: #222b45;
     width: 100%;
     border-style: solid;
     border-width: 1px;
@@ -223,7 +209,18 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
     -webkit-appearance: none;
     appearance: none;
     height: 2.25rem;
+    background-color: nb-theme(input-basic-background-color);
+    border-color: #e4e9f2;
+    color: #222b45;
   }
+
+  input:disabled.igx-input-group__input {
+    background-color: nb-theme(input-basic-disabled-background-color);
+    border-color: nb-theme(border-basic-color-4);
+    color: nb-theme(text-basic-color);
+    font-weight: 600;
+  }
+
   .igx-input-group__bundle,
   .igx-input-group__bundle ng-star-inserted {
     padding-top: 0px;
@@ -231,55 +228,74 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
     border-radius: 0.25rem;
   }
   .igx-icon {
-    font-size: 20px;
-    align-items: center;
-    justify-content: space-around;
-    border-color: transparent;
-    color: rgb(143, 155, 179);
+    color: nb-theme(color-primary-500);
   }
-  .igx-icon:hover,
-  .igx-input-group igx-prefix:hover {
-    background-color: #edf1f7;
-  }
-  .igx-input-group igx-prefix {
-    position: absolute;
-    right: 0px;
-    z-index: 1;
-    padding: 0.2rem;
-    border-radius: 0px;
-  }
+
   .igx-input-group igx-suffix {
     position: absolute;
-    right: 30px;
+    right: 5px;
   }
-  .igx-input-group igx-suffix:hover {
-    background-color: #edf1f7;
+
+  .igx-input-group--disabled {
+    pointer-events: none;
+  }
+
+  .igx-input-group--disabled igx-suffix igx-icon {
+    display: none;
+  }
+
+  .igx-input-group--disabled igx-prefix igx-icon {
+    color: nb-theme(input-basic-disabled-background-color);
   }
 }
 
-
-.cdk-overlay-container {
-  z-index: 10060 !important;
-}
 
 .igx-dialog__window-content {
-  padding:0px;
+  padding: 0px;
 }
 
-
 .cais-small-dialog {
- 
   max-height: 90vh;
 }
 
 .pace .pace-progress {
-  background: nb-theme(color-primary-500); 
+  background: nb-theme(color-primary-500);
 }
 
 .pace .pace-progress-inner {
-  box-shadow: 0 0 10px nb-theme(color-primary-500), 0 0 5px nb-theme(color-primary-500);
+  box-shadow: 0 0 10px nb-theme(color-primary-500),
+    0 0 5px nb-theme(color-primary-500);
 }
 
 .pace .pace-activity {
   display: none;
+}
+
+.ng-select.ng-select-disabled > .ng-select-container {
+  color: nb-theme(text-basic-color);
+  background-color: nb-theme(input-basic-disabled-background-color) !important;
+  font-weight: 600;
+  border-color: nb-theme(border-basic-color-4);
+}
+
+.ng-select.ng-select > .ng-select-container {
+  background-color: nb-theme(input-basic-background-color);
+  border-color: nb-theme(input-basic-border-color);
+
+
+  line-height:nb-theme(input-medium-text-line-height);
+
+}
+
+.ng-dropdown-panel {
+  z-index: 999999 !important;
+  position: relative;
+}
+
+.cdk-overlay-container {
+  z-index: 10050 !important;
+}
+
+.layout-z-index {
+  z-index: 1000000 !important ;
 }

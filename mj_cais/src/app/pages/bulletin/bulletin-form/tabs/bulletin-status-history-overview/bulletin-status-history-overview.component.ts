@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import * as fileSaver from "file-saver";
-import { NgxSpinnerService } from "ngx-spinner";
+import { CommonErrorHandlerService } from "../../../../../@core/services/common/common-error-handler.service";
 import { CustomToastrService } from "../../../../../@core/services/common/custom-toastr.service";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { BulletinService } from "../../_data/bulletin.service";
@@ -18,24 +18,24 @@ export class BulletinStatusHistoryOverviewComponent implements OnInit {
   constructor(
     public dateFormatService: DateFormatService,
     private bulletinService: BulletinService,
-    private loaderService: NgxSpinnerService,
+    private errorService: CommonErrorHandlerService,
     private activatedRoute: ActivatedRoute,
     private toastr: CustomToastrService
   ) {}
 
   ngOnInit(): void {
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
-    this.loaderService.show();
-    this.bulletinService
-      .getBulletinStatusHistoryData(bulletinId)
-      .subscribe((res) => {
-        this.historyData = res;
-        this.loaderService.hide();
-      });
+    this.bulletinService.getBulletinStatusHistoryData(bulletinId).subscribe({
+      next: (response) => {
+        this.historyData = response;
+      },
+      error: (errorResponse) => {
+        this.errorService.errorHandler(errorResponse);
+      },
+    });
   }
 
   download(id: string) {
-    this.loaderService.show();
     this.bulletinService.downloadHistoryObject(id).subscribe(
       (response: any) => {
         let blob = new Blob([response.body]);
@@ -52,10 +52,8 @@ export class BulletinStatusHistoryOverviewComponent implements OnInit {
         }
 
         fileSaver.saveAs(blob, fileName);
-        this.loaderService.hide();
       },
       (error) => {
-        this.loaderService.hide();
         var errorText = error.status + " " + error.statusText;
         this.toastr.showBodyToast(
           "danger",

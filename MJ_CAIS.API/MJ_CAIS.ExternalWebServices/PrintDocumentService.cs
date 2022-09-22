@@ -1,5 +1,6 @@
 ﻿using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.DataAccess;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using TL.JasperReports.Integration.Enums;
 using TL.JasperReports.Integration.Interfaces;
@@ -9,10 +10,13 @@ namespace MJ_CAIS.ExternalWebServices
     public class PrintDocumentService : IPrintDocumentService
     {
         private readonly IJasperReportsClient _jasperReportsClient;
- 
-        public PrintDocumentService(IJasperReportsClient jasperClient)
+        private readonly IUserContext _userContext;
+
+
+        public PrintDocumentService(IJasperReportsClient jasperClient, IUserContext userContext)
         {          
             _jasperReportsClient = jasperClient;
+            _userContext = userContext;
         }
 
         public async Task<byte[]> PrintApplication(string applicationID)
@@ -62,7 +66,67 @@ namespace MJ_CAIS.ExternalWebServices
             return fileArray;
         }
 
-       
+        public async Task<byte[]> PrintDailyReports(DateTime fromDate, DateTime toDate, string status)
+        {
+            string csAuth = _userContext.CsAuthorityId;
+            var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
+                                                             { "to_date", toDate.ToString("yyyy-MM-dd") },
+                                                             { "status", status},
+                                                              { "authority", csAuth}
+                                                              };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Reports);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+        public async Task<byte[]> PrintDailyCertificates(DateTime fromDate, DateTime toDate, string status)
+        {
+            string csAuth =  _userContext.CsAuthorityId;
+            var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
+                                                             { "to_date", toDate.ToString("yyyy-MM-dd") },
+                                                             { "status", status},
+                                                              { "authority", csAuth}
+                                                              };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Certificates);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+        public async Task<byte[]> PrintDailyBulletins(DateTime fromDate, DateTime toDate, string status)
+        {
+
+            string csAuth = _userContext.CsAuthorityId;
+            var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
+                                                             { "to_date", toDate.ToString("yyyy-MM-dd") },
+                                                             { "status", status},
+                                                              { "authority", csAuth}
+                                                              };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Bulletins);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+        public async Task<byte[]> PrintDailyApplications(DateTime fromDate, DateTime toDate, string status)
+        {
+            string csAuth = _userContext.CsAuthorityId;
+            var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
+                                                             { "to_date", toDate.ToString("yyyy-MM-dd") },
+                                                             { "status", status},
+                                                              { "authority", csAuth}
+                                                              };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Applications);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
+        public async Task<byte[]> PrintDailyReportApplications(DateTime fromDate, DateTime toDate, string status)
+        {
+            string csAuth = _userContext.CsAuthorityId;
+            var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
+                                                             { "to_date", toDate.ToString("yyyy-MM-dd") },
+                                                             { "status", status},
+                                                              { "authority", csAuth}
+                                                              };
+            var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_ReportApplications);
+            var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
+            return fileArray;
+        }
 
         private string GetUrlOfCertificateReport(JasperReportsNames reportName)
         {

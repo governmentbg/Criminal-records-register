@@ -17,8 +17,8 @@ import { OffenceCategoryGridModel } from "../../../../../@core/components/dialog
 import { BulletinService } from "../../_data/bulletin.service";
 import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 import { BulletinOffenceModel } from "./_models/bulletin-offence.model";
-import { NgxSpinnerService } from "ngx-spinner";
 import { EActions } from "@tl/tl-common";
+import { CommonErrorHandlerService } from "../../../../../@core/services/common/common-error-handler.service";
 
 @Component({
   selector: "cais-bulletin-offences-form",
@@ -54,7 +54,7 @@ export class BulletinOffencesFormComponent implements OnInit {
     private nomenclatureService: NomenclatureService,
     private dialogService: NbDialogService,
     private bulletinService: BulletinService,
-    private loaderService: NgxSpinnerService,
+    private errorService: CommonErrorHandlerService,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -68,10 +68,13 @@ export class BulletinOffencesFormComponent implements OnInit {
     }
 
     let bulletinId = this.activatedRoute.snapshot.params["ID"];
-    this.loaderService.show();
-    this.bulletinService.getOffences(bulletinId).subscribe((res) => {
-      this.offences = res;
-      this.loaderService.hide();
+    this.bulletinService.getOffences(bulletinId).subscribe({
+      next: (response) => {
+        this.offences = response;
+      },
+      error: (errorResponse) => {
+        this.errorService.errorHandler(errorResponse);
+      },
     });
   }
 

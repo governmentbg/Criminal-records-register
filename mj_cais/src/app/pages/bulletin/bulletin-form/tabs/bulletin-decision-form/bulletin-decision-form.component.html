@@ -91,7 +91,7 @@
 
 <igx-dialog #dialogAdd>
   <div class="dialogNewRecord">
-    <nb-card>
+    <nb-card >
       <nb-card-header>
         <div class="d-flex  justify-content-between align-items-center gap-3">
           <h5 class="fw-bold">Допълнително сведение</h5>
@@ -114,7 +114,8 @@
           <div class="form-group col-md-8">
             <cais-autocomplete [label]="'Категория'" [inputFormControl]="bulletinDecisionForm.decisionChTypeId"
               [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decisionChTypes"
-              [inputName]="'decisionChTypeId'">
+              [inputName]="'decisionChTypeId'"
+              [appendTo]="'.dialogNewRecord'">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-4">
@@ -128,7 +129,8 @@
         <div class="row mt-2">
           <div class="form-group col-md-8">
             <cais-autocomplete [label]="'Вид'" [inputFormControl]="bulletinDecisionForm.decisionTypeId"
-              [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decisionTypes" [inputName]="'decisionTypeId'">
+              [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decisionTypes" [inputName]="'decisionTypeId'"
+              [appendTo]="'.dialogNewRecord'">
             </cais-autocomplete>
           </div>
         </div>
@@ -155,7 +157,8 @@
           <div class="form-group col-md-6">
             <cais-autocomplete [label]="'Съд, издал акта'" [inputFormControl]="bulletinDecisionForm.decisionAuthId"
               [parentGroup]="bulletinDecisionForm.group" [items]="dbData.decidingAuthorities"
-              [inputName]="'decisionAuthId'">
+              [inputName]="'decisionAuthId'"
+              [appendTo]="'.dialogNewRecord'">
             </cais-autocomplete>
           </div>
           <div class="form-group col-md-6">

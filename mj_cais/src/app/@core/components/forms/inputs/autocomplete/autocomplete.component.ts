@@ -31,9 +31,10 @@ export class AutocompleteComponent {
   @Input() allowCustomValues: boolean = false;
   @Input() customValueIsNumber: boolean = true;
 
-  @Input() appendTo: string;
+  @Input() appendTo: string | null = null;
 
   ngOnInit() {
+   console.log('Гражданство ', this.appendTo);
     if (!this.inputFormControl.touched && this.firstOptionSelected) {
       if (this.items && this.items.length > 0) {
         this.inputFormControl.setValue(this.items[0].id);

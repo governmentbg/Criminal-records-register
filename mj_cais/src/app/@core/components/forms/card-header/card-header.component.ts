@@ -10,6 +10,7 @@ export class CardHeaderComponent implements OnInit {
   @Input() label: string;
   @Input() setForPreview: boolean;
   @Input() setforDelete: boolean;
+  @Input() disabled: boolean;
 
   @Input() onSaveFunction: () => any;
   @Input() onCancelFunction: () => any;

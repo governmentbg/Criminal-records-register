@@ -5,7 +5,7 @@ import { Component } from "@angular/core";
   styleUrls: ["./one-column.layout.scss"],
   template: `
     <nb-layout>
-      <nb-layout-header fixed>
+      <nb-layout-header fixed class="layout-z-index">
         <ngx-header></ngx-header>
       </nb-layout-header>
 
