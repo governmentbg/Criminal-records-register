@@ -7998,6 +7998,13 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
 
+                entity.Property(e => e.Denied)
+                    .HasColumnType("NUMBER(1)")
+                    .HasColumnName("DENIED");
+
+                entity.Property(e => e.Remarks)
+                    .HasColumnName("REMARKS");
+
                 entity.HasOne(d => d.Administration)
                     .WithMany(p => p.GUsersExts)
                     .HasForeignKey(d => d.AdministrationId)

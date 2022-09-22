@@ -58,6 +58,8 @@ export class UsersExternalForm extends BaseForm {
   public regCertSubject: FormControl;
   public ou: FormControl;
   public uic: FormControl;
+  public denied: FormControl;
+  public remarks: FormControl;
 
   constructor() {
     super();
@@ -75,6 +77,8 @@ export class UsersExternalForm extends BaseForm {
     this.regCertSubject =new FormControl(null);
     this.ou =new FormControl(null);
     this.uic =new FormControl(null);
+    this.remarks =new FormControl(null);
+    this.denied =new FormControl(null);
 
     this.group = new FormGroup({
       id: this.id,
@@ -92,7 +96,9 @@ export class UsersExternalForm extends BaseForm {
       administrationId: this.administrationId,
       regCertSubject: this.regCertSubject,
       ou: this.ou,
-      uic: this.uic
+      uic: this.uic,
+      remarks: this.remarks,
+      denied: this.denied,
     }, userNameOrEGNValidator()
     );
   }

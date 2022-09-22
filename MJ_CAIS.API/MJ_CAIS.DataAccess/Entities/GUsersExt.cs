@@ -34,6 +34,8 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? SecurityStamp { get; set; }
         public string? ConcurrencyStamp { get; set; }
         public string? UserName { get; set; }
+        public string? Remarks { get; set; }
+        public bool? Denied { get; set; }
         public string? NormalizedUserName { get; set; }
         public string? NormalizedEmail { get; set; }
 

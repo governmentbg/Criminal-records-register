@@ -57,11 +57,22 @@
           <cais-input [type]="'password'" [label]="'Потвърждаване на парола'"
             [inputFormControl]="fullForm.confirmPassword" [parentGroup]="fullForm.group"></cais-input>
         </div>
+        <div class="form-group col-md-12">
+          <cais-input
+            type="text"
+            inputType="TextArea"
+            [label]="'Бележки'"
+            [inputFormControl]="fullForm.remarks"
+            [parentGroup]="fullForm.group"></cais-input>
+        </div>
         <div class="form-group col-md-12 mt-2">
           <nb-checkbox [formControl]="fullForm.active">Активен</nb-checkbox>
         </div>
         <div class="form-group col-md-12 mt-2">
           <nb-checkbox [formControl]="fullForm.isAdmin">Администратор</nb-checkbox>
+        </div>
+        <div class="form-group col-md-12 mt-2">
+          <nb-checkbox [formControl]="fullForm.denied">Отказан достъп</nb-checkbox>
         </div>
         <div class="form-group col-md-12" [hidden]="!fullForm.group.value.regCertSubject">
           <cais-input [type]="'text'" [label]="'Информация за регистрация'" [inputFormControl]="fullForm.regCertSubject"

@@ -18,5 +18,7 @@ namespace MJ_CAIS.DataAccess.ExtUsers
         public DateTime? UpdatedOn { get; set; }
         public decimal? Version { get; set; }
         public string? RegCertSubject { get; set; }
+        public string? Remarks { get; set; }
+        public bool? Denied { get; set; }
     }
 }

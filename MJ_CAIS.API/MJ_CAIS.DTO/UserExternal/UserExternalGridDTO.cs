@@ -12,6 +12,8 @@
         public bool HasRegRegCertSubject { get; set; }
         public string? UserName { get; set; }
         public bool HasUserName { get; set; }
+        public string? Remarks { get; set; }
+        public bool? Denied { get; set; }
         public DateTime? LockoutEndDateUtc { get; set; }
         public bool Locked
         {

@@ -18,5 +18,7 @@ namespace MJ_CAIS.DTO.UserExternal
         public string? Position { get; set; }
         public string? Password { get; set; }
         public string? RegCertSubject { get; set; }
+        public string? Remarks { get; set; }
+        public bool? Denied { get; set; }
     }
 }

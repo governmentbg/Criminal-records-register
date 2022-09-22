@@ -27,6 +27,62 @@
       >
       <igx-grid-toolbar-actions>
         <div class="d-flex gap-2">
+          <a
+          nbButton
+          matRipple
+          [status]="'primary'"
+          [overlaySettings]="overlaySettings"
+          [igxToggleAction]="dropdown"
+          [igxDropDownItemNavigation]="dropdown"
+        >
+        За Е-Справки
+        </a>
+        <igx-drop-down #dropdown>
+          <igx-drop-down-item
+          (click)="filterUsers(filterTypes.reportsAll)"
+          title="Всички"
+          >
+            Всички
+          </igx-drop-down-item>
+          <igx-drop-down-item
+          (click)="filterUsers(filterTypes.reportsForRegistration)"
+          title="За активация"
+          >
+            За активация
+          </igx-drop-down-item>
+        </igx-drop-down>
+
+        <a
+        nbButton
+        matRipple
+        [status]="'primary'"
+        [overlaySettings]="overlaySettings"
+        [igxToggleAction]="dropdownECert"
+        [igxDropDownItemNavigation]="dropdown"
+      >
+      За Е-Свидетелства
+      </a>
+      <igx-drop-down #dropdownECert>
+        <igx-drop-down-item
+        (click)="filterUsers(filterTypes.eCertificatesAll)"
+        title="Всички"
+        >
+          Всички
+        </igx-drop-down-item>
+        <igx-drop-down-item
+        (click)="filterUsers(filterTypes.eCertificatesForRegistration)"
+        title="За одобрение"
+        >
+          За одобрение
+        </igx-drop-down-item>
+        <igx-drop-down-item
+        (click)="filterUsers(filterTypes.eCertificatesDenied)"
+          title="Отказани"
+        >
+          Отказани
+        </igx-drop-down-item>
+      </igx-drop-down>
+
           <igx-grid-toolbar-hiding class="mt-1"></igx-grid-toolbar-hiding>
           <a
             nbButton
@@ -50,6 +106,20 @@
       <ng-template igxCell let-cell="cell">
         <span [title]="cell.value">{{ cell.value }}</span>
       </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="createdOn"
+      header="Дата на създаване"
+      [sortable]="true"
+      [dataType]="'date'"
+      [hidden]="false"
+    >
+    <ng-template igxCell let-cell="cell">
+      <span [title]="this.dateFormatService.displayDateTime(cell.value)">
+        {{ this.dateFormatService.displayDateTime(cell.value) }}
+      </span>
+    </ng-template>
     </igx-column>
 
     <igx-column
@@ -165,6 +235,32 @@
     >
       <ng-template igxCell let-cell="cell">
         <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="denied"
+      header="Отказан достъп"
+      width="90px"
+      [sortable]="false"
+      [dataType]="'boolean'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <nb-checkbox [checked]="cell.value" disabled></nb-checkbox>
+      </ng-template>
+    </igx-column>
+
+    <igx-column
+      field="remarks"
+      header="Бележки"
+      width="150px"
+      [sortable]="true"
+      [dataType]="'string'"
+      [hidden]="false"
+    >
+      <ng-template igxCell let-cell="cell">
+        <span [title]="cell.value">{{ cell.value }}</span>
       </ng-template>
     </igx-column>
 

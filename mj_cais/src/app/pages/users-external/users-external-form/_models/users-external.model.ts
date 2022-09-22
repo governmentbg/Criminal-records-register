@@ -14,6 +14,8 @@ export class UsersExternalModel extends BaseModel {
   public regCertSubject: string = null;
   public uic: string = null;
   public ou: string = null;
+  public denied: boolean = false;
+  public remarks: string = null;
 
   constructor(init?: Partial<UsersExternalModel>) {
     super(init);
@@ -28,6 +30,8 @@ export class UsersExternalModel extends BaseModel {
     this.confirmPassword = init?.confirmPassword ?? null;
     this.administrationId = init?.administrationId ?? null;
     this.regCertSubject = init?.regCertSubject ?? null;
+    this.remarks = init?.remarks;
+    this.denied = init?.denied;
     if (this.regCertSubject){
 
       const {groups: { ntrbg}} =  /(NTRBG-(?<ntrbg>[0-9]*))/.exec(this.regCertSubject);

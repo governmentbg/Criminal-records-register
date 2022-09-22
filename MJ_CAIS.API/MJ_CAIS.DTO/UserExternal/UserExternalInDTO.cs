@@ -20,5 +20,7 @@ namespace MJ_CAIS.DTO.UserExternal
         public string? Phone { get; set; }
         public string? Uic { get; set; }
         public string? Ou { get; set; }
+        public string?  Remarks { get; set; }
+        public bool? Denied { get; set; }
     }
 }
