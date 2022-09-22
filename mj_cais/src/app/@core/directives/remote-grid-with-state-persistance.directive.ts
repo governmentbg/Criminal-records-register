@@ -54,37 +54,37 @@ export class RemoteGridWithStatePersistance<
 
   public ngAfterViewInit() {
     super.ngAfterViewInit();
-    //this.restoreGridState();
+    this.restoreGridState();
   }
 
   public filteringDone(event: IFilteringExpressionsTree): void {
     super.filteringDone(event);
-    // let gridState: IGridState = this.getIgxGridState();
-    // gridState.paging.metadata.countPages = 0; // Reset page when filtering
-    // this.saveGridState();
+    let gridState: IGridState = this.getIgxGridState();
+    gridState.paging.metadata.countPages = 0; // Reset page when filtering
+    this.saveGridState();
   }
 
   public pagerChange(event: any) {
     super.pagerChange(event);
-    // let gridState: IGridState = this.getIgxGridState();
-    // gridState.paging.recordsPerPage = event.perPage;
-    // gridState.paging.metadata.countPages = event.page;
-    // this.saveGridState();
+    let gridState: IGridState = this.getIgxGridState();
+    gridState.paging.recordsPerPage = event.perPage;
+    gridState.paging.metadata.countPages = event.page;
+    this.saveGridState();
   }
 
   public sortingDone(event: any): void {
     super.sortingDone(event);
 
-    // let gridState: IGridState = this.getIgxGridState();
-    // const state = this.getSavedGridState();
-    // if (state) {
-    //   let stateObject: IGridState = JSON.parse(state);
-    //   // Sorting event resets the current page, so change it from saved
-    //   gridState.paging.metadata.countPages =
-    //     stateObject.paging.metadata.countPages;
-    // }
+    let gridState: IGridState = this.getIgxGridState();
+    const state = this.getSavedGridState();
+    if (state) {
+      let stateObject: IGridState = JSON.parse(state);
+      // Sorting event resets the current page, so change it from saved
+      gridState.paging.metadata.countPages =
+        stateObject.paging.metadata.countPages;
+    }
 
-    // this.saveGridState();
+    this.saveGridState();
   }
 
   public getSavedGridState(): string {
