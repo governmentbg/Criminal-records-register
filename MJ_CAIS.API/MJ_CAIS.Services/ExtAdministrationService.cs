@@ -28,7 +28,10 @@ namespace MJ_CAIS.Services
         {
             this.ValidateData(aInDto);
             GExtAdministration entity = mapper.MapToEntity<ExtAdministrationInDTO, GExtAdministration>(aInDto, isAdded: true);
-            await UpdateTransactionsAsync(aInDto, entity);
+            if (aInDto.ExtAdministrationUics != null)
+            {
+                await UpdateTransactionsAsync(aInDto, entity);
+            }
             this.TransformDataOnInsertAsync(entity);
             await this.SaveEntityAsync(entity);
             return entity.Id;

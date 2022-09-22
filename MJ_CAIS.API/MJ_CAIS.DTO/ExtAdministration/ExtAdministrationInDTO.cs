@@ -8,6 +8,6 @@ namespace MJ_CAIS.DTO.ExtAdministration
         public string? Descr { get; set; }
         public string? Role { get; set; }
 
-        public List<TransactionDTO<ExtAdministrationUicDTO>> ExtAdministrationUics { get; set; }
+        public List<TransactionDTO<ExtAdministrationUicDTO>>? ExtAdministrationUics { get; set; }
     }
 }
