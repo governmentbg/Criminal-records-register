@@ -142,5 +142,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = await _nomenclatureDetailService.GetEcrisRequestTypesAsync(ecrisMsgId);
             return Ok(result);
         }
+
+        [HttpGet("application-statuses")]
+        public IActionResult GetApplicationStatuses()
+        {
+            var result = _nomenclatureDetailService.GetApplicationStatuses();
+            return Ok(result);
+        }
     }
 }

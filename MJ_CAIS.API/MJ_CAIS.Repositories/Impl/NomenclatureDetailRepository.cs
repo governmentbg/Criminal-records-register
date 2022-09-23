@@ -124,5 +124,10 @@ namespace MJ_CAIS.Repositories.Impl
             var dbSet = property.GetValue(_dbContext) as IQueryable<IBaseNomenclature>;
             return dbSet;
         }
+
+        public IQueryable<AApplicationStatus> GetApplicationStatuses()
+        {
+            return _dbContext.AApplicationStatuses.AsNoTracking();
+        }
     }
 }
