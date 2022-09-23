@@ -158,18 +158,18 @@
     <div class="dialogNewRecord" style="min-width: 500px">
       <nb-card>
         <nb-card-header>Генерирай справка</nb-card-header>
-        <nb-card-body style="overflow: unset">
+        <nb-card-body>
           <div class="row">
             <div class="form-group col-md-12">
               <cais-autocomplete [label]="'Подписващ 1'" [inputFormControl]="signersformGroup.controls.firstSignerId"
-                [parentGroup]="signersformGroup" [inputName]="'firstSignerId'" [items]="users">
+                [parentGroup]="signersformGroup" [inputName]="'firstSignerId'" [items]="users" [appendTo]="'.igx-overlay__content--modal'">
               </cais-autocomplete>
             </div>
           </div>
           <div class="row">
             <div class="form-group col-md-12">
               <cais-autocomplete [label]="'Подписващ 2'" [inputFormControl]="signersformGroup.controls.secondSignerId"
-                [parentGroup]="signersformGroup" [inputName]="'secondSignerId'" [items]="users">
+                [parentGroup]="signersformGroup" [inputName]="'secondSignerId'" [items]="users" [appendTo]="'.igx-overlay__content--modal'">
               </cais-autocomplete>
             </div>
           </div>
