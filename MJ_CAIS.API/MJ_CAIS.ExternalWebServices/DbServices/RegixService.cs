@@ -782,22 +782,18 @@ namespace MJ_CAIS.ExternalWebServices.DbServices
 
 
             DateTime result;
-            if (DateTime.TryParse(responseObject.BirthDate, out result))
+            if (DateTime.TryParseExact(responseObject.BirthDate?.Trim(),
+                       "dd/MM/yyyy",
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None, out result)) 
             {
                 regixCache.BirthDate = result;
                 regixCache.ModifiedProperties.Add(nameof(regixCache.BirthDate));
             }
-            else
+            else if (DateTime.TryParse(responseObject.BirthDate, out result))
             {
-                if (DateTime.TryParseExact(responseObject.BirthDate?.Trim(),
-                       "dd/MM/yyyy",
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None, out result))
-                {
-                    regixCache.BirthDate = result;
-                    regixCache.ModifiedProperties.Add(nameof(regixCache.BirthDate));
-                }
-
+                regixCache.BirthDate = result;
+                regixCache.ModifiedProperties.Add(nameof(regixCache.BirthDate));
             }
 
             if (responseObject.BirthPlace != null)
