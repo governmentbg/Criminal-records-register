@@ -139,7 +139,6 @@ namespace MJ_CAIS.Repositories.Impl
                                       Egn = x.Egn,
                                       FullName = string.IsNullOrEmpty(x.Fullname) ? x.Firstname + " " + x.Surname + " " + x.Familyname : x.Fullname,
                                       Type = x.ApplicationTypeName,
-                                      ValidTo = x.ValidTo,
                                       CsAuthority = x.CsAuthorityName,
                                       CreatedOn = x.CreatedOn,
                                       ValidFrom = x.ValidFrom
@@ -156,7 +155,6 @@ namespace MJ_CAIS.Repositories.Impl
                                  Egn = x.Egn,
                                  FullName = string.IsNullOrEmpty(x.Fullname) ? x.Firstname + " " + x.Surname + " " + x.Familyname : x.Fullname,
                                  Type = x.ApplicationTypeName,
-                                 ValidTo = x.ValidTo,
                                  CsAuthority = x.CsAuthorityName,
                                  CreatedOn = x.CreatedOn,
                                  ValidFrom = x.ValidFrom
@@ -173,7 +171,6 @@ namespace MJ_CAIS.Repositories.Impl
                                  Egn = x.Egn,
                                  FullName = string.IsNullOrEmpty(x.Fullname) ? x.Firstname + " " + x.Surname + " " + x.Familyname : x.Fullname,
                                  Type = x.ApplicationTypeName,
-                                 ValidTo = x.ValidTo,
                                  CsAuthority = x.CsAuthorityName,
                                  CreatedOn = x.CreatedOn,
                                  ValidFrom = x.ValidFrom
