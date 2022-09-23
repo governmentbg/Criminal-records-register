@@ -18,6 +18,7 @@ namespace MJ_CAIS.Web.Controllers
         public StatisticsController(IStatisticsService service, IPrintDocumentService printDocumentService)
         {
             _service = service;
+            _printDocumentService = printDocumentService;
         }
 
         [HttpGet("bulletins")]
