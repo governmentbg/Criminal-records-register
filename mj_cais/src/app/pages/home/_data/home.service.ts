@@ -4,6 +4,7 @@ import { CaisCrudService } from "../../../@core/services/rest/cais-crud.service"
 import { ApplicationCountModel } from "../_models/application-count.model";
 import { BulletinCountModel } from "../_models/bulletin-count.model";
 import { CentralAuthCountModel } from "../_models/central-auth-count.model";
+import { InternalRequestCountModel } from "../_models/internal-request-count.model";
 
 @Injectable({
   providedIn: "root",
@@ -24,6 +25,12 @@ export class HomeService extends CaisCrudService<any, string> {
   public getApplicationsCount(): Observable<ApplicationCountModel> {
     return this.http.get<ApplicationCountModel>(
       `${this.url}/application-count`
+    );
+  }
+
+  public getInternalRequestCount(): Observable<InternalRequestCountModel> {
+    return this.http.get<InternalRequestCountModel>(
+      `${this.url}/internal-request-count`
     );
   }
 }
