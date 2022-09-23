@@ -35,7 +35,6 @@
       header="Тип"
       [sortable]="true"
       [dataType]="'string'"
-      [hidden]="true"
     >
     </igx-column>
 
@@ -54,7 +53,30 @@
       [dataType]="'string'"
     >
     </igx-column>
-
+    <igx-column
+    field="validFrom"
+    header="Дата на издаване"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+  </igx-column>
+    <igx-column
+    field="validTo"
+    header="Валидно до"
+    [sortable]="true"
+    [dataType]="'string'"
+  >
+  <ng-template igxCell let-cell="cell">
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
+        </span>
+      </ng-template>
+  </igx-column>
     <igx-column
       field="egn"
       header="ЕГН"
