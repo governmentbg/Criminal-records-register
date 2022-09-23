@@ -577,7 +577,7 @@
 																				</span>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:DecisionDate">
-																				<xsl:if test=". !=&apos;0001-01-01&apos;">
+																				<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																					<span>
 																						<xsl:text>/</xsl:text>
 																					</span>
@@ -604,7 +604,7 @@
 																				</xsl:for-each>
 																			</xsl:for-each>
 																			<xsl:for-each select="bul:DecisionFinalDate">
-																				<xsl:if test=". !=&apos;0001-01-01&apos;">
+																				<xsl:if test=". !=&apos;0001-01-01&apos;  and . !=&apos;1800-01-01&apos;">
 																					<span style="text-align:left; ">
 																						<xsl:text>, в сила от </xsl:text>
 																					</span>
@@ -721,7 +721,7 @@
 																							<xsl:text>на </xsl:text>
 																						</span>
 																						<xsl:for-each select="bul:Date">
-																							<xsl:if test=". !=&apos;0001-01-01&apos;">
+																							<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																								<span style="font-weight:bold; ">
 																									<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
 																									<xsl:text>.</xsl:text>
@@ -746,7 +746,7 @@
 																							<xsl:text>&#160;</xsl:text>
 																						</span>
 																						<xsl:for-each select="bul:Date">
-																							<xsl:if test=". !=&apos;0001-01-01&apos;">
+																							<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																								<span style="font-weight:bold; ">
 																									<xsl:value-of select="format-number(number(substring(string(string(.)), 9, 2)), '00', 'format1')"/>
 																									<xsl:text>.</xsl:text>
@@ -1178,7 +1178,7 @@
 																							</xsl:choose>
 																						</xsl:for-each>
 																						<xsl:for-each select="bul:ValidFrom">
-																							<xsl:if test=". !=&apos;0001-01-01&apos;">
+																							<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																								<span>
 																									<xsl:text>, валидно от </xsl:text>
 																								</span>
@@ -1195,7 +1195,7 @@
 																							</xsl:if>
 																						</xsl:for-each>
 																						<xsl:for-each select="bul:ReceiveDate">
-																							<xsl:if test=". !=&apos;0001-01-01&apos;">
+																							<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																								<span>
 																									<xsl:text>, дата на получаване на сведението: </xsl:text>
 																								</span>
@@ -1248,7 +1248,7 @@
 																								</span>
 																							</xsl:for-each>
 																							<xsl:for-each select="bul:DecisionDate">
-																								<xsl:if test=". !=&apos;0001-01-01&apos;">
+																								<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																									<span>
 																										<xsl:text>/</xsl:text>
 																									</span>
@@ -1278,7 +1278,7 @@
 																								</xsl:for-each>
 																							</xsl:for-each>
 																							<xsl:for-each select="bul:DecisionFinalDate">
-																								<xsl:if test=". !=&apos;0001-01-01&apos;">
+																								<xsl:if test=". !=&apos;0001-01-01&apos; and . !=&apos;1800-01-01&apos;">
 																									<span style="text-align:left; ">
 																										<xsl:text>, в сила от </xsl:text>
 																									</span>
@@ -1322,7 +1322,7 @@
 																			</xsl:for-each>
 																		</xsl:for-each>
 																		<xsl:for-each select="bul:BulletinCreateDate">
-																			<xsl:if test=". !=&apos;0001-01-01&apos; and . != &apos;0001-01-01T00:00:00&apos;">
+																			<xsl:if test=". !=&apos;0001-01-01&apos; and . != &apos;0001-01-01T00:00:00&apos; and . !=&apos;1800-01-01&apos; and . !=&apos;1800-01-01T00:00:00&apos;">
 																				<span>
 																					<xsl:text>, издаден на </xsl:text>
 																				</span>
@@ -1359,7 +1359,7 @@
 																			</span>
 																		</xsl:for-each>
 																		<xsl:for-each select="bul:BulletinReceivedDate">
-																			<xsl:if test=". !=&apos;0001-01-01&apos; or . != &apos;0001-01-01T00:00:00&apos;">
+																			<xsl:if test=". !=&apos;0001-01-01&apos; or . != &apos;0001-01-01T00:00:00&apos; and . !=&apos;1800-01-01&apos; and . !=&apos;1800-01-01T00:00:00&apos;">
 																				<span>
 																					<xsl:text>, с дата на регистрация </xsl:text>
 																				</span>
