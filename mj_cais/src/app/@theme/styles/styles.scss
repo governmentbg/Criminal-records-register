@@ -106,7 +106,7 @@ $custom-palette: igx-palette(
 
 .cais-lookup {
   width: calc(100vw - 40%);
-  height: 80vh;
+  height: 70vh;
 }
 
 .cais-display-form-group {
@@ -260,6 +260,7 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
 
 .pace .pace-progress {
   background: nb-theme(color-primary-500);
+  z-index: 1000001;
 }
 
 .pace .pace-progress-inner {
