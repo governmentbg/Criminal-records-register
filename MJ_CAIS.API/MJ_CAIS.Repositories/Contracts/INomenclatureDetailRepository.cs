@@ -39,5 +39,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<IBaseNomenclature> GetDbSet(string propertyName);
 
         IQueryable<EEcrisNomenclature> GetEcrisRequestTypes(bool isNotification);
+
+        IQueryable<AApplicationStatus> GetApplicationStatuses();
     }
 }
