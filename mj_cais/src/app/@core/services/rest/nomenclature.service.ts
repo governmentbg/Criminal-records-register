@@ -272,4 +272,9 @@ export class NomenclatureService extends CaisCrudService<
       `${this.url}/application-statuses`
     );
   }
+  public getReportStatues(): Observable<BaseNomenclatureModel[]> {
+    return this.http.get<BaseNomenclatureModel[]>(
+      `${this.url}/report-statuses`
+    );
+  }
 }

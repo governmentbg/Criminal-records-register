@@ -194,6 +194,13 @@ namespace MJ_CAIS.Services
                 .ProjectTo<NomenclatureTypeDTO>(mapperConfiguration);
         }
 
+        public IQueryable<NomenclatureTypeDTO> GetReportStatuses()
+        {
+            return _nomenclatureDetailRepository
+                .GetReportStatuses()
+                .ProjectTo<NomenclatureTypeDTO>(mapperConfiguration);
+        }
+
         protected override bool IsChildRecord(string aId, List<string> aParentsList)
         {
             return false;

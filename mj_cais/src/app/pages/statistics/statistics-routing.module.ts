@@ -7,6 +7,7 @@ import { ApplicationStatisticsFormComponent } from "./application-statistics-for
 import { BulletinStatisticsFormComponent } from "./bulletin-statistics-form/bulletin-statistics-form.component";
 import { StatisticsResolver } from "./_data/statistics.resolver";
 import { DailyStatisticsFormComponent } from "./daily-statistics-form/daily-statistics-form.component";
+import { DailyStatisticsResolver } from "./daily-statistics-form/_data/daily-statistics.resolver";
 
 const routes: Routes = [
   {
@@ -46,7 +47,7 @@ const routes: Routes = [
   {
     path: "daily-statistics",
     component: DailyStatisticsFormComponent,
-    resolve: { dbData: StatisticsResolver },
+    resolve: { dbData: DailyStatisticsResolver },
     canActivate: [NgxPermissionsGuard],
     data: {
       permissions: {

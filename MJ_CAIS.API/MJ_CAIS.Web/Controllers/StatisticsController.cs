@@ -34,7 +34,7 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("dayly-statistics")]
+        [HttpGet("daily-statistics")]
         public async Task<IActionResult> GetDailyStatistics([FromQuery] DailyStatisticsSearchDTO statSearch)
         {
             if (string.IsNullOrEmpty(statSearch.StatisticsType))

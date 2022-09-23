@@ -41,5 +41,7 @@ namespace MJ_CAIS.Repositories.Contracts
         IQueryable<EEcrisNomenclature> GetEcrisRequestTypes(bool isNotification);
 
         IQueryable<AApplicationStatus> GetApplicationStatuses();
+
+        IQueryable<AReportStatus> GetReportStatuses();
     }
 }
