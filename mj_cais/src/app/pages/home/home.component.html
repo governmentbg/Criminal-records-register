@@ -4,9 +4,16 @@
       <nb-card accent="primary" class="col-md-12">
         <nb-card-header>
           <h6 class="d-flex align-items-center gap-2">
-            <nb-icon pack="material-icons" icon="inventory_2"></nb-icon> Бюлетини
+            <nb-icon pack="material-icons" icon="inventory_2"></nb-icon>
+            Бюлетини
           </h6>
-          <a nbButton matRipple [status]="'primary'" [routerLink]="['/pages/bulletins/create']" type="button">
+          <a
+            nbButton
+            matRipple
+            [status]="'primary'"
+            [routerLink]="['/pages/bulletins/create']"
+            type="button"
+          >
             <nb-icon class="pt-1" pack="fa" icon="plus"></nb-icon> Нов бюлетин
           </a>
         </nb-card-header>
@@ -17,9 +24,11 @@
               <a [routerLink]="['/pages/bulletins/new-eiss']">
                 Нови бюлетини от ЕИСС
               </a>
-              <span *ngIf="bulletins?.newEISS > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.newEISS
-              }}</span>
+              <span
+                *ngIf="bulletins?.newEISS > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.newEISS }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -27,9 +36,11 @@
               <a [routerLink]="['/pages/isin/identified']">
                 Данни за изтърпени наказания
               </a>
-              <span *ngIf="bulletins?.isinIdentified > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.isinIdentified
-              }}</span>
+              <span
+                *ngIf="bulletins?.isinIdentified > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.isinIdentified }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -37,9 +48,11 @@
               <a [routerLink]="['/pages/bulletins/for-destruction']">
                 За унищожаване
               </a>
-              <span *ngIf="bulletins?.forDestruction > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.forDestruction
-              }}</span>
+              <span
+                *ngIf="bulletins?.forDestruction > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.forDestruction }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -47,9 +60,11 @@
               <a [routerLink]="['/pages/bulletins/for-rehabilitation']">
                 За реабилитация
               </a>
-              <span *ngIf="bulletins?.forRehabilitation > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.forRehabilitation
-              }}</span>
+              <span
+                *ngIf="bulletins?.forRehabilitation > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.forRehabilitation }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -57,9 +72,11 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 1
               </a>
-              <span *ngIf="bulletins?.article2211 > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.article2211
-              }}</span>
+              <span
+                *ngIf="bulletins?.article2211 > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.article2211 }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -67,9 +84,11 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по по чл.22, чл. 1, изр. 2
               </a>
-              <span *ngIf="bulletins?.article2212 > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.article2212
-              }}</span>
+              <span
+                *ngIf="bulletins?.article2212 > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.article2212 }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -77,9 +96,11 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Настъпили обстоятелства по чл.30
               </a>
-              <span *ngIf="bulletins?.article3000 > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.article3000
-              }}</span>
+              <span
+                *ngIf="bulletins?.article3000 > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.article3000 }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -87,9 +108,11 @@
               <a [routerLink]="['/pages/bulletins/events']">
                 Уведомяване за променен съдебен статус на осъдено лице
               </a>
-              <span *ngIf="bulletins?.newDocument > 0" class="badge rounded-pill bg-primary">{{
-                bulletins.newDocument
-              }}</span>
+              <span
+                *ngIf="bulletins?.newDocument > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ bulletins.newDocument }}</span
+              >
             </div>
           </nb-list-item>
         </nb-list>
@@ -98,7 +121,8 @@
         <nb-card accent="primary" class="col-md-12 mt-3">
           <nb-card-header>
             <h6 class="d-flex align-items-center gap-2">
-              <nb-icon pack="material-icons" icon="balance"></nb-icon> За решение от съдия/юрист
+              <nb-icon pack="material-icons" icon="balance"></nb-icon> За
+              решение от съдия/юрист
             </h6>
           </nb-card-header>
           <nb-list>
@@ -107,9 +131,11 @@
                 <a [routerLink]="['/pages/internal-requests']">
                   Нови заявки за реабилитация
                 </a>
-                <span *ngIf="applications?.internalRequests > 0" class="badge rounded-pill bg-primary">{{
-                  applications.internalRequests
-                }}</span>
+                <span
+                  *ngIf="applications?.internalRequests > 0"
+                  class="badge rounded-pill bg-primary"
+                  >{{ applications.internalRequests }}</span
+                >
               </div>
             </nb-list-item>
             <nb-list-item>
@@ -117,9 +143,11 @@
                 <a [routerLink]="['/pages/applications/tax-free']">
                   Oсвободени от плащане
                 </a>
-                <span *ngIf="applications?.taxFree > 0" class="badge rounded-pill bg-primary">{{
-                  applications.taxFree
-                }}</span>
+                <span
+                  *ngIf="applications?.taxFree > 0"
+                  class="badge rounded-pill bg-primary"
+                  >{{ applications.taxFree }}</span
+                >
               </div>
             </nb-list-item>
             <nb-list-item>
@@ -127,23 +155,34 @@
                 <a [routerLink]="['/pages/applications/bulletin-selection']">
                   За избор на бюлетини
                 </a>
-                <span *ngIf="applications?.bulletinSelection > 0" class="badge rounded-pill bg-primary">{{
-                  applications.bulletinSelection
-                }}</span>
+                <span
+                  *ngIf="applications?.bulletinSelection > 0"
+                  class="badge rounded-pill bg-primary"
+                  >{{ applications.bulletinSelection }}</span
+                >
               </div>
             </nb-list-item>
           </nb-list>
         </nb-card>
       </ng-template>
     </div>
-    <div class="col-md-6">
+  </ng-template>
+  <div class="col-md-6">
+    <ng-template
+      [ngxPermissionsOnly]="[RoleNameEnum.Normal]"
+    >
       <nb-card accent="primary" class="col-md-12">
         <nb-card-header>
           <h6 class="d-flex align-items-center gap-2">
             <nb-icon icon="file-text-outline" pack="eva"></nb-icon> Свидетелства
           </h6>
 
-          <a nbButton [status]="'primary'" [routerLink]="['/pages/applications/request']" type="button">
+          <a
+            nbButton
+            [status]="'primary'"
+            [routerLink]="['/pages/applications/request']"
+            type="button"
+          >
             <nb-icon class="pt-1" pack="fa" icon="plus"></nb-icon>Ново заявление
           </a>
         </nb-card-header>
@@ -151,9 +190,11 @@
           <nb-list-item>
             <div class="d-flex flex-fill justify-content-between">
               <a [routerLink]="['/pages/applications']">Нови заявления </a>
-              <span *ngIf="applications?.newId > 0" class="badge rounded-pill bg-primary">{{
-                applications.newId
-              }}</span>
+              <span
+                *ngIf="applications?.newId > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ applications.newId }}</span
+              >
             </div>
           </nb-list-item>
 
@@ -162,9 +203,11 @@
               <a [routerLink]="['/pages/applications/waiting-payment']">
                 Потвърждение за плащане
               </a>
-              <span *ngIf="applications?.checkPayment > 0" class="badge rounded-pill bg-primary">{{
-                applications.checkPayment
-              }}</span>
+              <span
+                *ngIf="applications?.checkPayment > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ applications.checkPayment }}</span
+              >
             </div>
           </nb-list-item>
           <nb-list-item>
@@ -172,80 +215,136 @@
               <a [routerLink]="['/pages/applications/for-check']">
                 За обработка
               </a>
-              <span *ngIf="applications?.bulletinsCheck > 0" class="badge rounded-pill bg-primary">{{
-                applications.bulletinsCheck
-              }}</span>
+              <span
+                *ngIf="applications?.bulletinsCheck > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ applications.bulletinsCheck }}</span
+              >
             </div>
           </nb-list-item>
         </nb-list>
       </nb-card>
-      <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
-        <nb-card accent="primary" class="col-md-12 mt-3">
-          <nb-card-header>
-            <h6 class="d-flex align-items-center gap-2">
-              <nb-icon pack="material-icons" icon="public"></nb-icon> Осъдени в чужбина
-            </h6>
-          </nb-card-header>
+      <nb-card accent="primary" class="col-md-12 mt-3">
+        <nb-card-header>
+          <h6 class="d-flex align-items-center gap-2">
+            <nb-icon icon="file-add-outline" pack="eva"></nb-icon>
+            Заявки
+          </h6>
+        </nb-card-header>
 
-          <nb-list>
-            <nb-list-item>
-              <div class="d-flex flex-fill justify-content-between">
-                <a [routerLink]="['/pages/fbbcs/for-destruction']">
-                  Подлежащи на заличаване
-                </a>
-                <span *ngIf="centralAuth?.forDestruction > 0" class="badge rounded-pill bg-primary">{{
-                  centralAuth.forDestruction
-                }}</span>
-              </div>
-            </nb-list-item>
-          </nb-list>
-        </nb-card>
-        <nb-card accent="primary" class="col-md-12 mt-3">
-          <nb-card-header>
-            <h6 class="d-flex align-items-center gap-2">
-              <nb-icon icon="file-add-outline" pack="eva"></nb-icon> Е-свидетелства
-            </h6>
-          </nb-card-header>
+        <nb-list-item>
+          <div class="d-flex flex-fill justify-content-between">
+            <a
+              [queryParams]="{ activeTab: 'inbox' }"
+              [routerLink]="['/pages/internal-requests']"
+            >
+              Получени
+            </a>
+            <span
+              *ngIf="internalRequests?.inboxCount > 0"
+              class="badge rounded-pill bg-primary"
+            >
+              {{ internalRequests.inboxCount }}</span
+            >
+          </div>
+        </nb-list-item>
 
+        <nb-list-item>
+          <div class="d-flex flex-fill justify-content-between">
+            <a
+              [queryParams]="{ activeTab: 'outbox' }"
+              [routerLink]="['/pages/internal-requests']"
+            >
+              Изпратени и обработени
+            </a>
+            <span
+              *ngIf="internalRequests?.outboxCount > 0"
+              class="badge rounded-pill bg-primary"
+            >
+              {{ internalRequests.outboxCount }}</span
+            >
+          </div>
+        </nb-list-item>
+      </nb-card>
+    </ng-template>
+    <ng-template [ngxPermissionsOnly]="[RoleNameEnum.CentralAuth]">
+      <nb-card accent="primary" class="col-md-12 mt-3">
+        <nb-card-header>
+          <h6 class="d-flex align-items-center gap-2">
+            <nb-icon pack="material-icons" icon="public"></nb-icon> Осъдени в
+            чужбина
+          </h6>
+        </nb-card-header>
+
+        <nb-list>
           <nb-list-item>
             <div class="d-flex flex-fill justify-content-between">
-              <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
-                Oсвободени от плащане
+              <a [routerLink]="['/pages/fbbcs/for-destruction']">
+                Подлежащи на заличаване
               </a>
-              <span *ngIf="centralAuth?.webCheckTaxFree > 0" class="badge rounded-pill bg-primary">
-                {{ centralAuth.webCheckTaxFree }}</span>
+              <span
+                *ngIf="centralAuth?.forDestruction > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ centralAuth.forDestruction }}</span
+              >
             </div>
           </nb-list-item>
-        </nb-card>
+        </nb-list>
+      </nb-card>
+      <nb-card accent="primary" class="col-md-12 mt-3">
+        <nb-card-header>
+          <h6 class="d-flex align-items-center gap-2">
+            <nb-icon icon="file-add-outline" pack="eva"></nb-icon>
+            Е-свидетелства
+          </h6>
+        </nb-card-header>
 
-        <nb-card accent="primary" class="col-md-12 mt-3">
-          <nb-card-header>
-            <h6 class="d-flex align-items-center gap-2">
-              <nb-icon pack="material-icons" icon="web"></nb-icon> ECRIS
-            </h6>
-          </nb-card-header>
-          <nb-list>
-            <nb-list-item>
-              <div class="d-flex flex-fill justify-content-between">
-                <a [routerLink]="['/pages/ecris/identification']">
-                  За идентификация
-                </a>
-                <span *ngIf="centralAuth?.forIdentification > 0" class="badge rounded-pill bg-primary">{{
-                  centralAuth.forIdentification
-                }}</span>
-              </div>
-            </nb-list-item>
-            <nb-list-item>
-              <div class="d-flex flex-fill justify-content-between">
-                <a [routerLink]="['/pages/ecris-tcn']"> ECRIS-TCN </a>
-                <span *ngIf="centralAuth?.tcn > 0" class="badge rounded-pill bg-primary">{{
-                  centralAuth.tcn
-                }}</span>
-              </div>
-            </nb-list-item>
-          </nb-list>
-        </nb-card>
-      </ng-template>
-    </div>
-  </ng-template>
+        <nb-list-item>
+          <div class="d-flex flex-fill justify-content-between">
+            <a [routerLink]="['/pages/e-applicaiton/check-tax-free']">
+              Oсвободени от плащане
+            </a>
+            <span
+              *ngIf="centralAuth?.webCheckTaxFree > 0"
+              class="badge rounded-pill bg-primary"
+            >
+              {{ centralAuth.webCheckTaxFree }}</span
+            >
+          </div>
+        </nb-list-item>
+      </nb-card>
+
+      <nb-card accent="primary" class="col-md-12 mt-3">
+        <nb-card-header>
+          <h6 class="d-flex align-items-center gap-2">
+            <nb-icon pack="material-icons" icon="web"></nb-icon> ECRIS
+          </h6>
+        </nb-card-header>
+        <nb-list>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
+              <a [routerLink]="['/pages/ecris/identification']">
+                За идентификация
+              </a>
+              <span
+                *ngIf="centralAuth?.forIdentification > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ centralAuth.forIdentification }}</span
+              >
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="d-flex flex-fill justify-content-between">
+              <a [routerLink]="['/pages/ecris-tcn']"> ECRIS-TCN </a>
+              <span
+                *ngIf="centralAuth?.tcn > 0"
+                class="badge rounded-pill bg-primary"
+                >{{ centralAuth.tcn }}</span
+              >
+            </div>
+          </nb-list-item>
+        </nb-list>
+      </nb-card>
+    </ng-template>
+  </div>
 </div>

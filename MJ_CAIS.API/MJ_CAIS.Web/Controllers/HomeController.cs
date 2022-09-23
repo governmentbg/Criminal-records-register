@@ -11,10 +11,12 @@ namespace MJ_CAIS.Web.Controllers
     public class HomeController : BaseApiController
     {
         private readonly IHomeService _service;
+        private readonly IInternalRequestService _internalRequestService;
 
-        public HomeController(IHomeService service)
+        public HomeController(IHomeService service, IInternalRequestService internalRequestService)
         {
             _service = service;
+            _internalRequestService = internalRequestService;
         }
 
         [HttpGet("bulletin-count")]
@@ -38,6 +40,14 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> ApplicationCounts()
         {
             var result = await this._service.GetApplicationCountByCurrentAuthorityAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("internal-request-count")]
+        [Authorize(Roles = $"{RoleConstants.Normal},{RoleConstants.Judge}")]
+        public async Task<IActionResult> InternalRequestCounts()
+        {
+            var result = await this._internalRequestService.GetInternalRequestsCount();
             return Ok(result);
         }
     }

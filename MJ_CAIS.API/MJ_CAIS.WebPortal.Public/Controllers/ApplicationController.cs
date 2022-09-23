@@ -164,6 +164,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.ServiceProviderBIC = _configuration.GetValue<string?>("EGovPayments:ServiceProviderBIC");
             viewModel.ServiceProviderIBAN = _configuration.GetValue<string?>("EGovPayments:ServiceProviderIBAN");
             viewModel.ServiceProviderName = _configuration.GetValue<string?>("EGovPayments:ServiceProviderName");
+            viewModel.Price = await _applicationWebService.GetPriceByApplicationType(WEB_APPLICATION_TYPE);
             viewModel.HasGeneratedCertificate = app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificatePaperPrint ||
                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 

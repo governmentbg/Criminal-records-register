@@ -11,6 +11,7 @@ import { BaseResolverData } from "../../../@core/models/common/base-resolver.dat
 import { ApplicationCountModel } from "../_models/application-count.model";
 import { BulletinCountModel } from "../_models/bulletin-count.model";
 import { CentralAuthCountModel } from "../_models/central-auth-count.model";
+import { InternalRequestCountModel } from "../_models/internal-request-count.model";
 import { HomeService } from "./home.service";
 
 @Injectable({
@@ -32,11 +33,8 @@ export class HomeResolver implements Resolve<any> {
       element: element,
       applications: of(null),
       bulletins: of(null),
-      bulletinEvents: of(null),
       centralAuth: of(null),
-      isin: of(null),
-      forJudge: of(null),
-      fbbc: of(null),
+      internalRequests: of(null),
     };
 
     this.permissionsService.permissions$.subscribe((perm) => {
@@ -47,6 +45,7 @@ export class HomeResolver implements Resolve<any> {
       ) {
         result.bulletins = this.service.getBulletinsCount();
         result.applications = this.service.getApplicationsCount();
+        result.internalRequests = this.service.getInternalRequestCount();
       }
 
       if (roles.indexOf(RoleNameEnum.CentralAuth) > -1) {
@@ -62,4 +61,5 @@ export class HomeResolverData extends BaseResolverData<any> {
   public applications: Observable<ApplicationCountModel>;
   public bulletins: Observable<BulletinCountModel>;
   public centralAuth: Observable<CentralAuthCountModel>;
+  public internalRequests: Observable<InternalRequestCountModel>;
 }
