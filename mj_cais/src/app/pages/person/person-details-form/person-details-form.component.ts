@@ -34,10 +34,10 @@ export class PersonDetailsFormComponent
   public applicationsTabTitle = "Свидетелства";
   public eApplicationsTabTitle = "Е-Свидетелства";
   public reportsTabTitle = "Справки";
-  public archiveTabTitle = "Архив Свидетелства/Справки";
-  public fbbcsTabTitle = "Сведения за осъждане в чужбина";
-  public pidsTabTitle = "Идентификатори на лице";
-  public historyTabTitle = "Исторя на промяна на лице";
+  public archiveTabTitle = "Архив";
+  public fbbcsTabTitle = "Осъждане в чужбина";
+  public pidsTabTitle = "Идентификатори";
+  public historyTabTitle = "Исторя";
   public showApplicationsTab: boolean = false;
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;

@@ -20,13 +20,11 @@ export class PersonGeneratedReportOverviewComponent extends RemoteGridWithStateP
     public service: PersonGeneratedReportGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
-    public loaderService: LoaderService
   ) {
     super("person-generated-report-search", service, injector);
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
     this.personId = personIdParams;
     this.service.setPersonId(personIdParams);
-    this.loaderService.showSpinner(this.service);
   }
 
   ngOnInit() {

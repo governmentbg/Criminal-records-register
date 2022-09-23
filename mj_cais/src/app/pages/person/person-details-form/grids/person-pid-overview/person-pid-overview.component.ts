@@ -23,6 +23,7 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
   public countries: BaseNomenclatureModel[];
   public genderTypes: BaseNomenclatureModel[];
   public personForm: RemovePidDialogFrom = new RemovePidDialogFrom();
+  public isLoading: boolean = false;
 
   @Input() personModel: PersonModel;
 
@@ -33,7 +34,6 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
     public service: PersonPidGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
-    public loaderService: LoaderService,
     public nomenclatureService: NomenclatureService
   ) {
     super("person-pids-search", service, injector);
@@ -43,7 +43,6 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
     this.personId = personIdParams;
     this.service.setPersonId(personIdParams);
-    this.loaderService.showSpinner(this.service);
     super.ngOnInit();
 
     this.nomenclatureService.getCountries().subscribe((resp) => {
@@ -72,17 +71,17 @@ export class PersonPidOverviewComponent extends RemoteGridWithStatePersistance<
       return;
     }
 
-    this.loaderService.showSpinner(this.service);
+    this.isLoading = true;
     let formObject = this.personForm.group.value;
     this.service.removePid(formObject).subscribe({
       next: (response) => {
-        this.loaderService.hide();
+        this.isLoading = false;
         this.dialog.close();
         this.toastr.showToast("success", "Успешно премахване на идентификатор");
         this.ngOnInit();
       },
       error: (errorResponse) => {
-        this.loaderService.hide();
+        this.isLoading = false;
         this.errorHandler(errorResponse);
       },
     });

@@ -21,7 +21,6 @@ export class PersonArchivOverviewComponent extends RemoteGridWithStatePersistanc
     public service: PersonArchiveGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
-    public loaderService: LoaderService
   ) {
     super("person-archive-search", service, injector);
   }
@@ -30,7 +29,6 @@ export class PersonArchivOverviewComponent extends RemoteGridWithStatePersistanc
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
     this.personId = personIdParams;
     this.service.setPersonId(personIdParams);
-    this.loaderService.showSpinner(this.service);
     super.ngOnInit();
   }
 
