@@ -6,6 +6,7 @@ import { NotFoundComponent } from "../miscellaneous/not-found/not-found.componen
 import { ApplicationStatisticsFormComponent } from "./application-statistics-form/application-statistics-form.component";
 import { BulletinStatisticsFormComponent } from "./bulletin-statistics-form/bulletin-statistics-form.component";
 import { StatisticsResolver } from "./_data/statistics.resolver";
+import { DailyStatisticsFormComponent } from "./daily-statistics-form/daily-statistics-form.component";
 
 const routes: Routes = [
   {
@@ -28,6 +29,23 @@ const routes: Routes = [
   {
     path: "applications",
     component: ApplicationStatisticsFormComponent,
+    resolve: { dbData: StatisticsResolver },
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [
+          RoleNameEnum.Judge,
+          RoleNameEnum.Normal,
+          RoleNameEnum.Admin,
+          RoleNameEnum.GlobalAdmin,
+          RoleNameEnum.CentralAuth,
+        ],
+      },
+    },
+  },
+  {
+    path: "daily-statistics",
+    component: DailyStatisticsFormComponent,
     resolve: { dbData: StatisticsResolver },
     canActivate: [NgxPermissionsGuard],
     data: {
