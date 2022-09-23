@@ -21,6 +21,7 @@ namespace BNBFileProcessor
      
         private  string regex2Str => _config.GetValue<string>("BNBPayments:regex1");
         private  string regex1Str => _config.GetValue<string>("BNBPayments:regex2");
+        private int sizeOfRegNumber => _config.GetValue<int>("BNBPayments:sizeOfRegNumber");
         public BNBFileProcessor(CaisDbContext dbContext, ILogger<BNBFileProcessor> logger, IConfiguration config)
         {
             _dbContext = dbContext;
@@ -127,14 +128,14 @@ namespace BNBFileProcessor
         {
             var regex1 = new Regex(regex1Str, RegexOptions.Compiled);
             var regex2 = new Regex(regex2Str, RegexOptions.Compiled);
-            if (string.IsNullOrWhiteSpace(paymentReason) || paymentReason.Length < 11)
+            if (string.IsNullOrWhiteSpace(paymentReason) || paymentReason.Length < sizeOfRegNumber)
                 return null;
 
             var num = string.Empty;
             if (regex1.IsMatch(paymentReason))
                 num = regex1.Match(paymentReason).Groups["code"].Value;
             else if (regex2.IsMatch(paymentReason))
-                num = regex2.Match(paymentReason).Groups["code"].Value.Substring(0, 11);
+                num = regex2.Match(paymentReason).Groups["code"].Value.Substring(0, sizeOfRegNumber);
             if (!string.IsNullOrWhiteSpace(num)) return num;
             //if (!string.IsNullOrWhiteSpace(num) && VerhoeffChecksum.ValidateVerhoeffDigit(num))
             //    return num;
