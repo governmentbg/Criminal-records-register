@@ -89,14 +89,14 @@
                             break;
                         }
                 }
-                @if ((string.IsNullOrEmpty(Model.PaymentStatus) || Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending) 
+                @if ( Model.StatusCode != "WebCanceled" && (string.IsNullOrEmpty(Model.PaymentStatus) || Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending) 
                      && Model.PaymentMethodCode == "Bank")
                 {
                     <div class="col-12">
                         <div class="alert alert-primary d-flex align-items-center my-0" role="alert">
                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
                             <div>
-                                Ако попълвате ръчно бюджетното платежно нареждане през Вашето електронно банкиране или на гише в някоя банка, моля, задължително в полетата „Основание за плащане“ и „Номер на документа, по който се плаща“ да посочите регистрационния номер на Вашето заявление: <b>@Model.RegistrationNumber</b>. След изтичане на 14-дневния срок за плащане, заявката става невалидна.
+                                Ако попълвате ръчно бюджетното платежно нареждане през Вашето електронно банкиране или на гише в някоя банка, моля, задължително в полетата „Основание за плащане“ и „Номер на документа, по който се плаща“ да посочите регистрационния номер на Вашето заявление: <b>@Model.RegistrationNumber</b>. За услугата се заплаща фиксирана такса на стойност <b>@Model.Price</b> лв. След изтичане на 14-дневния срок за плащане, заявката става невалидна. 
                             </div>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                 }
-                @if ((!string.IsNullOrEmpty(Model.PaymentStatus) && Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending) && Model.PaymentMethodCode == "PayEgovBgCode")
+                @if ( Model.StatusCode != "WebCanceled" && (!string.IsNullOrEmpty(Model.PaymentStatus) && Model.PaymentStatus == PaymentConstants.PaymentStatuses.Pending) && Model.PaymentMethodCode == "PayEgovBgCode")
                 {
                     <div class="col-12">
                         <div class="card text-dark bg-light">
