@@ -137,11 +137,12 @@ namespace MJ_CAIS.Repositories.Impl
                                       ApplicantName = x.ApplicantName,
                                       BithDate = x.BirthDate,
                                       Egn = x.Egn,
-                                      FullName = x.Fullname,
+                                      FullName = string.IsNullOrEmpty(x.Fullname) ? x.Firstname + " " + x.Surname + " " + x.Familyname : x.Fullname,
                                       Type = x.ApplicationTypeName,
-                                      CertifivateValidDate = x.ValidTo,
+                                      ValidTo = x.ValidTo,
                                       CsAuthority = x.CsAuthorityName,
                                       CreatedOn = x.CreatedOn,
+                                      ValidFrom = x.ValidFrom
                                   });
 
             var archiveByLnch = _dbContext.AArchives.AsNoTracking()
@@ -153,11 +154,12 @@ namespace MJ_CAIS.Repositories.Impl
                                  ApplicantName = x.ApplicantName,
                                  BithDate = x.BirthDate,
                                  Egn = x.Egn,
-                                 FullName = x.Fullname,
+                                 FullName = string.IsNullOrEmpty(x.Fullname) ? x.Firstname + " " + x.Surname + " " + x.Familyname : x.Fullname,
                                  Type = x.ApplicationTypeName,
-                                 CertifivateValidDate = x.ValidTo,
+                                 ValidTo = x.ValidTo,
                                  CsAuthority = x.CsAuthorityName,
                                  CreatedOn = x.CreatedOn,
+                                 ValidFrom = x.ValidFrom
                              });
 
             var archiveBySuids = _dbContext.AArchives.AsNoTracking()
@@ -169,11 +171,12 @@ namespace MJ_CAIS.Repositories.Impl
                                  ApplicantName = x.ApplicantName,
                                  BithDate = x.BirthDate,
                                  Egn = x.Egn,
-                                 FullName = x.Fullname,
+                                 FullName = string.IsNullOrEmpty(x.Fullname) ? x.Firstname + " " + x.Surname + " " + x.Familyname : x.Fullname,
                                  Type = x.ApplicationTypeName,
-                                 CertifivateValidDate = x.ValidTo,
+                                 ValidTo = x.ValidTo,
                                  CsAuthority = x.CsAuthorityName,
                                  CreatedOn = x.CreatedOn,
+                                 ValidFrom = x.ValidFrom
                              });
 
             var query = archiveByEgn

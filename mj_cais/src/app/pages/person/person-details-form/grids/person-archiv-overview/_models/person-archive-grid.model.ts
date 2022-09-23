@@ -2,7 +2,8 @@ import { BaseGridModel } from "../../../../../../@core/models/common/base-grid.m
 
 export class PersonArchiveGridModel extends BaseGridModel {
   public type: string = null;
-  public certificateStatus: string = null;
+  public validFrom: Date = null;
+  public validTo: Date = null;
   public csAuthority: string = null;
   public applicantName: string = null;
   public egn: string = null;
@@ -13,7 +14,8 @@ export class PersonArchiveGridModel extends BaseGridModel {
   constructor(init?: Partial<PersonArchiveGridModel>) {
     super(init);
     this.type = init?.type ?? null;
-    this.certificateStatus = init?.certificateStatus ?? null;  
+    this.validFrom = init?.validFrom ?? null;  
+    this.validTo = init?.validTo ?? null;  
     this.csAuthority = init?.csAuthority ?? null;
     this.applicantName = init?.applicantName ?? null;
     this.egn = init?.egn ?? null;
