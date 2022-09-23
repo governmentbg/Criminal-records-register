@@ -97,6 +97,7 @@
 
   <igx-dialog #removePidDialog>
     <div class="dialogNewRecord" style="max-width: 1000px">
+      <tl-linear-progress [visible]="isLoading"></tl-linear-progress>
       <nb-card>
         <nb-card-header>
           <div class="d-flex align-items-center gap-3">

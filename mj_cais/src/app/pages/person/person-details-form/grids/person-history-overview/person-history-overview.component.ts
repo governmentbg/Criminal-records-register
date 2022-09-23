@@ -20,13 +20,11 @@ export class PersonHistoryOverviewComponent extends RemoteGridWithStatePersistan
     public service: PersonHistoryGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
-    public loaderService: LoaderService
   ) {
     super("person-history-grid", service, injector);
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
     this.personId = personIdParams;
     this.service.setPersonId(personIdParams);
-    this.loaderService.showSpinner(this.service);
   }
 
   ngOnInit() {

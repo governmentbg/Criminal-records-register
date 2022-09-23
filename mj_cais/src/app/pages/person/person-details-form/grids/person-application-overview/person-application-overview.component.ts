@@ -20,7 +20,6 @@ export class PersonApplicationOverviewComponent extends RemoteGridWithStatePersi
     public service: PersonApplicationGridService,
     public injector: Injector,
     public dateFormatService: DateFormatService,
-    public loaderService: LoaderService,
   ) {
     super("person-application-search", service, injector);
   }
@@ -29,7 +28,6 @@ export class PersonApplicationOverviewComponent extends RemoteGridWithStatePersi
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
     this.personId = personIdParams;
     this.service.setPersonId(personIdParams);
-    this.loaderService.showSpinner(this.service);
     super.ngOnInit();
   }
 }
