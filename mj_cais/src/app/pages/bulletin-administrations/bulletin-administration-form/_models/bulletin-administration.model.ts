@@ -20,6 +20,8 @@ export class BulletinAdministrationModel extends BaseModel {
   public egn: string;
   public lnch: string;
   public ln: string;
+  public caseNumber: string;
+  public caseYear: number;
 
   constructor(init?: Partial<BulletinAdministrationModel>) {
     super(init);
@@ -42,5 +44,7 @@ export class BulletinAdministrationModel extends BaseModel {
     this.egn = init?.egn ?? null;
     this.lnch = init?.lnch ?? null;
     this.ln = init?.ln ?? null;
+    this.caseNumber = init?.caseNumber ?? null;
+    this.caseYear = init?.caseYear ?? null;
   }
 }
