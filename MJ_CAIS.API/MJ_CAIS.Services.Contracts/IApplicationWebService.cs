@@ -9,10 +9,14 @@ namespace MJ_CAIS.Services.Contracts
         Task<string> GetWebApplicationTypeId();
         Task<string> GetExternalWebApplicationTypeId();
 
+        Task CancelAsync(string id, string? userId, string? userName);
+
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
         Task<string> InsertPublicAsync(PublicApplicationDTO aInDto);
 
         IQueryable<ExternalApplicationGridDTO> SelectExternalApplications(string userId);
+
+        Task<string?> FindDuplicate(string egn, string purposeId, string applicantId);
         Task<string> InsertExternalAsync(ExternalApplicationDTO aInDto);
 
         public void SetWApplicationStatus(WApplication wapplication, WApplicationStatus newStatus, string description, bool addToContext = true);

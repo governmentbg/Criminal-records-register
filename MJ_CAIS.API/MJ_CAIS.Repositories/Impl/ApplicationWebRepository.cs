@@ -5,6 +5,7 @@ using MJ_CAIS.DTO.Application.External;
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.DTO.Application.Public;
 using static MJ_CAIS.Common.Constants.ApplicationConstants;
+using MJ_CAIS.Common.Constants;
 
 namespace MJ_CAIS.Repositories.Impl
 {
@@ -191,6 +192,31 @@ namespace MJ_CAIS.Repositories.Impl
              && w.ApplicationTypeId == applicationTypeId
              && w.StatusCode != ApplicationWebStatuses.WebCanceled && !w.WCertificates.Any());
             }
+        }
+
+        public async Task<string?> FindDuplicate(string egn, string purposeId, string applicantId)
+        {
+            var applicationTypeId = ApplicationConstants.ApplicationTypes.WebCertificate;
+            var canceledStatusCode = ApplicationWebStatuses.WebCanceled;
+
+            var res = await (from a in _dbContext.WApplications
+                       join c in _dbContext.WCertificates on a.Id equals c.WApplId into cLeft
+                       from c in cLeft.DefaultIfEmpty()
+                       where a.Egn == egn
+                         && a.PurposeId == purposeId
+                         && a.UserCitizenId == applicantId
+                         && a.ApplicationTypeId == applicationTypeId
+                         && a.StatusCode != canceledStatusCode
+                         && c == null
+                       select a.Id).FirstOrDefaultAsync();
+           
+            return res;
+        }
+
+        public Task<WApplicationStatus> GetWebCanceledStatus()
+        {
+            return _dbContext.WApplicationStatuses.AsNoTracking().Where(a =>
+                             a.Code == ApplicationConstants.ApplicationStatuses.WebCanceled).FirstAsync();
         }
     }
 }

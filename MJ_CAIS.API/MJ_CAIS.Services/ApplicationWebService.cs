@@ -54,6 +54,11 @@ namespace MJ_CAIS.Services
             return result.Id;
         }
 
+        public Task<string?> FindDuplicate(string egn, string purposeId, string applicantId)
+        {
+            return _applicationWebRepository.FindDuplicate(egn, purposeId, applicantId);
+        }
+
         public async Task<string> InsertPublicAsync(PublicApplicationDTO aInDto)
         {
             var userId = _applicationWebRepository.GetCurrentUserId();
@@ -183,6 +188,18 @@ namespace MJ_CAIS.Services
         public async Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id)
         {
             return await _applicationWebRepository.GetPublicForPreviewAsync(id);
+        }
+        public async Task CancelAsync(string id, string? userId, string? userName)
+        {
+            var application = await _applicationWebRepository.SelectAsync(id);
+            if (application.UserCitizenId != userId)
+            {
+                throw new ApplicationException("You can cancel only applications created by yourself!");
+            }
+            var webStatusCancel =  await _applicationWebRepository.GetWebCanceledStatus();
+            SetWApplicationStatus(application, webStatusCancel, "Анулирана от заявител");
+            _applicationWebRepository.ApplyChanges(application, new List<IBaseIdEntity>());
+            await _applicationWebRepository.SaveChangesAsync();
         }
 
         public async Task<DTO.Application.External.ApplicationPreviewDTO> GetExternalForPreviewAsync(string id)
