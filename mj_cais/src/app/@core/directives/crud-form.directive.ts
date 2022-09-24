@@ -26,7 +26,6 @@ import { FormGroup } from "@angular/forms";
 import { BaseResolverData } from "../models/common/base-resolver.data";
 import { InputTypeConstants } from "../constants/input-type.constants";
 import { NbTabComponent, NbTabsetComponent } from "@nebular/theme";
-import { RouterExtService } from "../services/common/router-ext.service";
 import * as fileSaver from "file-saver";
 
 @Directive()
@@ -100,14 +99,23 @@ export abstract class CrudForm<
   }
 
   public globalCancelFunction = () => {
-    let routerService = this.injector.get<RouterExtService>(RouterExtService);
-    let previousUrl = routerService.getPreviousUrl();
-    if (previousUrl && previousUrl != "/") {
-      // When coming from different view
-      this.redirectLocationBack();
+    let location = this.injector.get<Location>(Location);
+    let navigationState = location.getState() as any;
+    // if in history has only current url
+    if (navigationState?.navigationId < 2) {
+      this.router.navigateByUrl("/");
     } else {
-      this.router.navigateByUrl(this.backUrl);
+      location.back();
     }
+
+    // let routerService = this.injector.get<RouterExtService>(RouterExtService);
+    // let previousUrl = routerService.getPreviousUrl();
+    // if (previousUrl && previousUrl != "/") {
+    //   // When coming from different view
+    //   this.redirectLocationBack();
+    // } else {
+    //   this.router.navigateByUrl(this.backUrl);
+    // }
   };
 
   protected validateAndSave(form: any) {
@@ -265,6 +273,7 @@ export abstract class CrudForm<
   }
 
   protected errorHandler(errorResponse): void {
+    debugger;
     if (errorResponse.status == "401") {
       this.router.navigateByUrl("pages");
       return;
