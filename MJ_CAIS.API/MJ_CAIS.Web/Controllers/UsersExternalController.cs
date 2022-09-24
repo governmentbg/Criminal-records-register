@@ -88,9 +88,9 @@ namespace MJ_CAIS.Web.Controllers
                     var id = await this.baseService.InsertAsync(aInDto);
                     return Ok(new { id });
                 }
-                catch (ApplicationException)
+                catch (ApplicationException ex)
                 {
-                    return BadRequest(new { code = "UserAlreadyExists" });
+                    return BadRequest(new { code = ex.Message });
                 }
             }
             else
@@ -120,9 +120,9 @@ namespace MJ_CAIS.Web.Controllers
                 await this.baseService.UpdateAsync(aId, aInDto);
                 return Ok();
             }
-            catch (ApplicationException)
+            catch (ApplicationException ex)
             {
-                return BadRequest(new { code = "UserAlreadyExists" });
+                return BadRequest(new { code = ex.Message });
             }
         }
     }

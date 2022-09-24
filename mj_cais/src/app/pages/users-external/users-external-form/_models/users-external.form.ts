@@ -41,6 +41,38 @@ export function userNameOrEGNValidator(): ValidatorFn {
   };
 }
 
+export function administrationOrDeniedValidator(): ValidatorFn{
+  
+  return (formGroup: FormGroup): ValidationErrors | null => {
+    const [administrationId, denied] = [
+      formGroup.get('administrationId')!.value,
+      formGroup.get('denied')!.value
+    ];
+
+    if (!administrationId && !denied){
+      formGroup.get('administrationId').setErrors({ administrationOrDenied: true });
+      formGroup.get('denied').setErrors({ administrationOrDenied: true });
+    } else {
+      
+      var administrationIdControl = formGroup.controls['administrationId'] as FormControl;
+      if (administrationIdControl.invalid) {
+        administrationIdControl.clearValidators();
+        administrationIdControl.updateValueAndValidity();
+      }
+      var deniedControl = formGroup.controls['denied'] as FormControl;
+      if (deniedControl.invalid) {
+        deniedControl.clearValidators();
+        deniedControl.updateValueAndValidity();
+      }
+      return null;
+    }
+  
+    return !administrationId && !denied
+      ? { 'administrationOrDenied': { value: 'В случай, че не е избрана администрация - трябва да бъде избрана опцията "Отказан достъп"!' } }
+      : null;
+  };
+}
+
 export class UsersExternalForm extends BaseForm {
   public group: FormGroup;
 
@@ -73,7 +105,7 @@ export class UsersExternalForm extends BaseForm {
     this.phone = new FormControl(null);
     this.password = new FormControl(null);
     this.confirmPassword = new FormControl(null);
-    this.administrationId = new FormControl(null, [Validators.required]);
+    this.administrationId = new FormControl(null);
     this.regCertSubject =new FormControl(null);
     this.ou =new FormControl(null);
     this.uic =new FormControl(null);
@@ -99,7 +131,7 @@ export class UsersExternalForm extends BaseForm {
       uic: this.uic,
       remarks: this.remarks,
       denied: this.denied,
-    }, userNameOrEGNValidator()
+    }, [userNameOrEGNValidator(), administrationOrDeniedValidator()]
     );
   }
 }
