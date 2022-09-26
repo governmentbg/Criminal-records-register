@@ -121,6 +121,7 @@ namespace MJ_CAIS.Services
         public async Task<string> InsertAsync(BulletinAddDTO aInDto)
         {
             var bulletin = mapper.MapToEntity<BulletinAddDTO, BBulletin>(aInDto, true);
+            bulletin.Suid = aInDto.Person.Suid;
             // entry of a bulletin is possible only by an employee 
             bulletin.StatusId = Status.NewOffice;
             bulletin.Id = BaseEntity.GenerateNewId();
@@ -175,6 +176,8 @@ namespace MJ_CAIS.Services
 
             var oldBulletinStatus = bulletinDb.StatusId;
             var bulletinToUpdate = mapper.MapToEntity<BulletinEditDTO, BBulletin>(aInDto, false);
+            bulletinToUpdate.Suid = aInDto.Person.Suid;
+
             bulletinToUpdate.CsAuthorityId = bulletinDb.CsAuthorityId;
             if (isFinalEdit)
             {

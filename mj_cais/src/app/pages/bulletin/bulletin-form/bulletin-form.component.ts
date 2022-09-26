@@ -163,15 +163,14 @@ export class BulletinFormComponent
   //override submit function
   //todo
   onSubmitSuccess(data: any) {
-    this.disabledSubmit = false;
-    if (this.isFinalEdit) {
-      this.toastr.showToast(
-        "success",
-        this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
-      );
-      this.router.navigate(["pages/bulletins/active"]);
-      return;
-    }
+    // if (this.isFinalEdit) {
+    //   this.toastr.showToast(
+    //     "success",
+    //     this.translate.instant("BULLETIN.SUCCESS-UPDATE-STATUS")
+    //   );
+    //   this.router.navigate(["pages/bulletins/active"]);
+    //   return;
+    // }
     super.onSubmitSuccess(data);
   }
 

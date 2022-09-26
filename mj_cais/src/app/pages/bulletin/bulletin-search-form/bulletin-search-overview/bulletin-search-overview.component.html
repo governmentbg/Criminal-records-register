@@ -125,11 +125,7 @@
             >
               <nb-icon pack="fa" icon="eye"></nb-icon>
             </a>
-            <a
-              *ngIf="
-                this.searchForm.statusId.value == 'Active' ||
-                this.searchForm.statusId.value == 'Rehabilitated'
-              "
+            <a            
               [title]="'Редактиране'"
               [routerLink]="['/pages/bulletins/edit', cell.rowData.id]"
             >

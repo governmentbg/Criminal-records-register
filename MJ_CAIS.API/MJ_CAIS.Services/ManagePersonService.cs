@@ -247,7 +247,7 @@ namespace MJ_CAIS.Services
             if (string.IsNullOrEmpty(person.Egn) && string.IsNullOrEmpty(person.Lnch) &&
                 string.IsNullOrEmpty(person.Ln) && string.IsNullOrEmpty(person.AfisNumber))
             {
-                person.Suid = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Suid)?.Pid;
+                person.Suid = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Suid && x.Issuer == IssuerType.CRR)?.Pid;
             }
 
             return person;
@@ -352,7 +352,7 @@ namespace MJ_CAIS.Services
 
             // get suid of an existing persion
             // when create application or another object via person form
-            var getPidsFromExistingPerson = allPidsAreEmpty  &&  !string.IsNullOrEmpty(aInDto.Suid);
+            var getPidsFromExistingPerson = !string.IsNullOrEmpty(aInDto.Suid);
             if (getPidsFromExistingPerson)
             {
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Suid.ToUpper(), PidType.Suid, IssuerType.CRR));

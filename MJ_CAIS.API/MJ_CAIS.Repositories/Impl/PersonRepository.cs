@@ -496,51 +496,60 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task SavePersonAndUpdateSearchAttributesAsync(PPerson person, CancellationToken cancellationToken = default, bool clearTracker = false)
         {
-            IDbContextTransaction dbTransaction = null;
-            try
+            //todo: use transactions
+            // open one connection
+            await SaveChangesAsync(clearTracker);
+            // call precedures
+            foreach (var item in person.PPersonIds)
             {
-                dbTransaction = await this._dbContext.Database.BeginTransactionAsync(cancellationToken);
-
-                // save all person data
-                await SaveChangesWithoutTransactionAsync(clearTracker);
-
-
-                // call precedures
-                foreach (var item in person.PPersonIds)
-                {
-                    await CallRefreshSearchAttributeProcedureAsync(item);
-                }
-
-                await dbTransaction.CommitAsync(cancellationToken);
-
-                //туй го добавям, щото става голямо объркване със State И EntityState.
-                //След SaveChanges State=Unchanged, докато EntityState остава такъв, каквъто е бил преди SaveChanges().
-                //В някои случаи това е ГОЛЯМ проблем
-                //Трябва да се види, дали няма нужда и при Exception да се прави нещо с тези EntityState-ове
-                //todo: Надя , Може би this.ChangeTracker.Clear(); след извикването на SaveChanges ще свърши работа
-                foreach (var dbEntityEntry in this._dbContext.ChangeTracker.Entries())
-                {
-                    if ((dbEntityEntry.Entity is BaseEntity) && ((BaseEntity)dbEntityEntry.Entity).EntityState != Common.Enums.EntityStateEnum.Unchanged)
-                    {
-                        ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
-                    }
-                }
-
-                if (clearTracker)
-                {
-                    this._dbContext.ChangeTracker.Clear();
-                }
-
+                await CallRefreshSearchAttributeProcedureAsync(item);
             }
-            catch (Exception ex)
-            {
-                await dbTransaction.RollbackAsync(cancellationToken);
-                throw;
-            }
-            finally
-            {
-                await dbTransaction.DisposeAsync();
-            }
+
+            //IDbContextTransaction dbTransaction = null;
+            //try
+            //{
+            //    dbTransaction = await this._dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+            //    // save all person data
+            //    await SaveChangesWithoutTransactionAsync(clearTracker);
+
+            //    await dbTransaction.CommitAsync(cancellationToken);
+
+            //    // call precedures
+            //    foreach (var item in person.PPersonIds)
+            //    {
+            //        await CallRefreshSearchAttributeProcedureAsync(item);
+            //    }
+                
+
+            //    //туй го добавям, щото става голямо объркване със State И EntityState.
+            //    //След SaveChanges State=Unchanged, докато EntityState остава такъв, каквъто е бил преди SaveChanges().
+            //    //В някои случаи това е ГОЛЯМ проблем
+            //    //Трябва да се види, дали няма нужда и при Exception да се прави нещо с тези EntityState-ове
+            //    //todo: Надя , Може би this.ChangeTracker.Clear(); след извикването на SaveChanges ще свърши работа
+            //    foreach (var dbEntityEntry in this._dbContext.ChangeTracker.Entries())
+            //    {
+            //        if ((dbEntityEntry.Entity is BaseEntity) && ((BaseEntity)dbEntityEntry.Entity).EntityState != Common.Enums.EntityStateEnum.Unchanged)
+            //        {
+            //            ((BaseEntity)dbEntityEntry.Entity).EntityState = Common.Enums.EntityStateEnum.Unchanged;
+            //        }
+            //    }
+
+            //    if (clearTracker)
+            //    {
+            //        this._dbContext.ChangeTracker.Clear();
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    await dbTransaction.RollbackAsync(cancellationToken);
+            //    throw;
+            //}
+            //finally
+            //{
+            //    await dbTransaction.DisposeAsync();
+            //}
         }
 
         private async Task CallRefreshSearchAttributeProcedureAsync(PPersonId pid)
