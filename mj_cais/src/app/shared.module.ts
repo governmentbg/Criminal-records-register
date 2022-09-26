@@ -31,7 +31,6 @@ import { FileUploadModule } from "ng2-file-upload";
 import { HammerModule } from "@angular/platform-browser";
 import { ThemeModule } from "./@theme/theme.module";
 import { NgxPermissionsModule } from "ngx-permissions";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
 
 import { MatDatepickerModule } from "@angular/material/datepicker";
 

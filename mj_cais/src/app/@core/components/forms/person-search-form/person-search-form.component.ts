@@ -69,6 +69,7 @@ export class PersonSearchFormComponent
       horizontalDirection: HorizontalAlignment.Left,
       horizontalStartPoint: HorizontalAlignment.Right,
       verticalStartPoint: VerticalAlignment.Bottom,
+      verticalDirection: VerticalAlignment.Middle,
     }),
     scrollStrategy: new NoOpScrollStrategy(),
   };
