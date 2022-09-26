@@ -352,7 +352,7 @@ namespace MJ_CAIS.Services
 
             // get suid of an existing persion
             // when create application or another object via person form
-            var getPidsFromExistingPerson = allPidsAreEmpty  &&  !string.IsNullOrEmpty(aInDto.Suid);
+            var getPidsFromExistingPerson = !string.IsNullOrEmpty(aInDto.Suid);
             if (getPidsFromExistingPerson)
             {
                 pidsFromForm.Add(new PersonIdTypeDTO(aInDto.Suid.ToUpper(), PidType.Suid, IssuerType.CRR));
