@@ -31,8 +31,6 @@ import {
 } from './pipes';
 import {
   OneColumnLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
 } from './layouts';
 import { DEFAULT_THEME } from './styles/theme.default';
 import { DARK_THEME } from './styles/theme.dark';
@@ -58,8 +56,6 @@ const COMPONENTS = [
   SearchInputComponent,
   TinyMCEComponent,
   OneColumnLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
 ];
 const PIPES = [
   CapitalizePipe,
