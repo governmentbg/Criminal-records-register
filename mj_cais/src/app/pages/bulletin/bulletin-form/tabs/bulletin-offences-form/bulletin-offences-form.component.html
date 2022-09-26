@@ -180,6 +180,7 @@
                 [parentGroup]="bulletinOffenceForm.group"
                 [inputName]="'formOfGuiltId'"
                 [items]="dbData.formOfGuilts"
+                
               >
               </cais-autocomplete>
             </div>
@@ -248,10 +249,11 @@
           <div class="card bg-transparent mt-3">
             <div class="card-body">
               <h6 class="card-title">Място на извършване на престъплението</h6>
-              <cais-address-form
+              <cais-address-form 
                 #offPlace
                 [parentForm]="bulletinOffenceForm.offPlace"
                 [showDescWhenIsNativeAddress]="true"
+                [inDialog]="true"
               ></cais-address-form>
             </div>
           </div>
