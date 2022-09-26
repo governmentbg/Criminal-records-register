@@ -95,28 +95,38 @@ export class DailyStatisticsFormComponent extends CrudForm<
     return new DailyStatisticsSearchModel(object);
   }
 
+  //clear or set "default" dropdown selected value
+  clearComponent(value = null) {
+    this.fullForm.status.patchValue(value);
+  }
+
   onStatisticsTypesChanged() {
     let currentDropdownValue = this.fullForm.statisticsType.value;
 
     switch (currentDropdownValue) {
       case DailyStatisticsConstants.Bulletin.id: {
         this.currentStatuses = this.buletinStatuses;
+        this.clearComponent("Актуален");
         break;
       }
       case DailyStatisticsConstants.Application.id: {
         this.currentStatuses = this.aplicationStatuses;
+        this.clearComponent("Одобрено заявление");
         break;
       }
       case DailyStatisticsConstants.Certificate.id: {
         this.currentStatuses = this.certificateStatuses;
+        this.clearComponent();
         break;
       }
       case DailyStatisticsConstants.ReportApplication.id: {
         this.currentStatuses = this.reportAplicationStatuses;
+        this.clearComponent();
         break;
       }
       case DailyStatisticsConstants.Report.id: {
         this.currentStatuses = this.reportStatuses;
+        this.clearComponent();
         break;
       }
       default: {
