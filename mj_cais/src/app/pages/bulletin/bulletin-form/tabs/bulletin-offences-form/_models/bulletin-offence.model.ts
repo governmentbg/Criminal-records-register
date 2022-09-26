@@ -1,4 +1,5 @@
 import { AddressModel } from "../../../../../../@core/components/forms/address-form/_model/address.model";
+import { DatePrecisionModel } from "../../../../../../@core/components/forms/inputs/date-precision/_models/date-precision.model";
 import { LookupModel } from "../../../../../../@core/components/forms/inputs/lookup/models/lookup.model";
 import { BaseModel } from "../../../../../../@core/models/common/base.model";
 
@@ -9,8 +10,8 @@ export class BulletinOffenceModel extends BaseModel {
   public ecrisOffCatName: string = null;
   public offStartDate: Date = null;
   public offEndDate: Date = null;
-  public formOfGuiltId: string = null;
-  public formOfGuiltName: string = null;
+  public formOfGuiltId: DatePrecisionModel = null;
+  public formOfGuiltName: DatePrecisionModel = null;
   public offPlace: AddressModel = null;
   public legalProvisions: string = null;
 

@@ -1,4 +1,5 @@
 ﻿using MJ_CAIS.DTO.Common;
+using MJ_CAIS.DTO.Shared;
 
 namespace MJ_CAIS.DTO.Bulletin
 {
@@ -10,8 +11,8 @@ namespace MJ_CAIS.DTO.Bulletin
         public string? EcrisOffCatId { get; set; }
         public string? EcrisOffCatName { get; set; }
         public string? LegalProvisions { get; set; }
-        public DateTime? OffStartDate { get; set; }
-        public DateTime? OffEndDate { get; set; }
+        public DatePrecisionDTO OffStartDate { get; set; }
+        public DatePrecisionDTO OffEndDate { get; set; }
         public AddressDTO OffPlace { get; set; } = new AddressDTO();
     }
 }

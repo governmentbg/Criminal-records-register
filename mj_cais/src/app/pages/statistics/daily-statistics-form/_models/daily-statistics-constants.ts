@@ -13,7 +13,7 @@ export class DailyStatisticsConstants {
 
   static get Bulletin(): BaseNomenclatureModel {
     let result = new BaseNomenclatureModel();
-    result.code = "Buletin";
+    result.code = "Bulletin";
     result.id = result.code;
     result.name = "Бюлетин";
     return result;

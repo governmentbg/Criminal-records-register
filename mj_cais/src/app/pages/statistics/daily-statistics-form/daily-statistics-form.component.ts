@@ -95,34 +95,50 @@ export class DailyStatisticsFormComponent extends CrudForm<
     return new DailyStatisticsSearchModel(object);
   }
 
-  onStatisticsTypesChanged() {
-    let currentDropdownValue = this.fullForm.statisticsType.value;
-
-    switch (currentDropdownValue) {
-      case DailyStatisticsConstants.Bulletin.id: {
-        this.currentStatuses = this.buletinStatuses;
-        break;
-      }
-      case DailyStatisticsConstants.Application.id: {
-        this.currentStatuses = this.aplicationStatuses;
-        break;
-      }
-      case DailyStatisticsConstants.Certificate.id: {
-        this.currentStatuses = this.certificateStatuses;
-        break;
-      }
-      case DailyStatisticsConstants.ReportApplication.id: {
-        this.currentStatuses = this.reportAplicationStatuses;
-        break;
-      }
-      case DailyStatisticsConstants.Report.id: {
-        this.currentStatuses = this.reportStatuses;
-        break;
-      }
-      default: {
-        this.currentStatuses = [];
-        break;
-      }
-    }
+  //clear or set "default" dropdown selected value
+  clearComponent(value = null) {
+    this.fullForm.status.patchValue(value);
   }
+
+  // ---------------------------------
+  //   Logic for Status dropdown
+  // ---------------------------------
+  //(selectionChanged)="onStatisticsTypesChanged()"
+  //(selectionCleared)="onStatisticsTypesChanged()"
+  //
+  // onStatisticsTypesChanged() {
+  //   let currentDropdownValue = this.fullForm.statisticsType.value;
+  //   debugger;
+  //   switch (currentDropdownValue) {
+  //     case DailyStatisticsConstants.Bulletin.id: {
+  //       this.currentStatuses = this.buletinStatuses;
+  //       this.clearComponent("Active");
+  //       break;
+  //     }
+  //     case DailyStatisticsConstants.Application.id: {
+  //       this.currentStatuses = this.aplicationStatuses;
+  //       this.clearComponent("ApprovedApplication");
+  //       break;
+  //     }
+  //     case DailyStatisticsConstants.Certificate.id: {
+  //       this.currentStatuses = this.certificateStatuses;
+  //       this.clearComponent();
+  //       break;
+  //     }
+  //     case DailyStatisticsConstants.ReportApplication.id: {
+  //       this.currentStatuses = this.reportAplicationStatuses;
+  //       this.clearComponent();
+  //       break;
+  //     }
+  //     case DailyStatisticsConstants.Report.id: {
+  //       this.currentStatuses = this.reportStatuses;
+  //       this.clearComponent();
+  //       break;
+  //     }
+  //     default: {
+  //       this.currentStatuses = [];
+  //       break;
+  //     }
+  //   }
+  // }
 }
