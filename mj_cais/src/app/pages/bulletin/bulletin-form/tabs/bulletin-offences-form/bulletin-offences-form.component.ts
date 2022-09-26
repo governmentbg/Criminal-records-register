@@ -19,6 +19,8 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 import { BulletinOffenceModel } from "./_models/bulletin-offence.model";
 import { EActions } from "@tl/tl-common";
 import { CommonErrorHandlerService } from "../../../../../@core/services/common/common-error-handler.service";
+import { DatePrecisionComponent } from "../../../../../@core/components/forms/inputs/date-precision/date-precision.component";
+import { DatePrecisionConstants } from "../../../../../@core/components/forms/inputs/date-precision/_models/date-precision.constants";
 
 @Component({
   selector: "cais-bulletin-offences-form",
@@ -48,6 +50,16 @@ export class BulletinOffencesFormComponent implements OnInit {
   public offPlaceComponent: AddressFormComponent;
 
   public offences: BulletinOffenceModel[];
+
+  @ViewChild("offStartDate", {
+    read: DatePrecisionComponent,
+  })
+  public offStartDate: DatePrecisionComponent;
+
+  @ViewChild("offEndDate", {
+    read: DatePrecisionComponent,
+  })
+  public offEndDate: DatePrecisionComponent;
 
   constructor(
     public dateFormatService: DateFormatService,
@@ -80,12 +92,18 @@ export class BulletinOffencesFormComponent implements OnInit {
 
   public onOpenEditBulletinOffence(event: IgxGridRowComponent) {
     this.updateOffPlaceObj(event);
-    this.dateFormatService.parseDatesFromGridRow(event, [
-      "offStartDate",
-      "offEndDate",
-    ]);
+    if (event.rowData.offStartDate.date) {
+      event.rowData.offStartDate.date = new Date(
+        event.rowData.offStartDate.date
+      );
+    }
+
+    if (event.rowData.offEndDate.date) {
+      event.rowData.offEndDate.date = new Date(event.rowData.offEndDate.date);
+    }
+
     this.bulletinOffenceForm.group.patchValue(event.rowData);
-    this.dialog.open();
+    this.onDialogToAddOpen();
   }
 
   public onDeleteBulletinOffence(event: IgxGridRowComponent) {
@@ -152,6 +170,11 @@ export class BulletinOffencesFormComponent implements OnInit {
     }
   };
 
+  public onDialogToAddOpen() {
+    this.offStartDate.onDialogOpen();
+    this.offEndDate.onDialogOpen();
+    this.dialog.open();
+  }
   //#endregion
 
   private updateOffPlaceObj(event) {

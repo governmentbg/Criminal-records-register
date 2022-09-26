@@ -273,7 +273,6 @@ export abstract class CrudForm<
   }
 
   protected errorHandler(errorResponse): void {
-    debugger;
     if (errorResponse.status == "401") {
       this.router.navigateByUrl("pages");
       return;

@@ -142,11 +142,25 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.OffPlaceDescr, opt => opt.MapFrom(src => src.OffPlace.ForeignCountryAddress))
                 .ForMember(d => d.OffPlaceCountryId, opt => opt.MapFrom(src => src.OffPlace.Country.Id))
                 .ForMember(d => d.OffPlaceCityId, opt => opt.MapFrom(src => src.OffPlace.CityId))
+                .ForMember(d => d.OffStartDate, opt => opt.MapFrom(src => src.OffStartDate.Date))
+                .ForMember(d => d.OffStartDatePrec, opt => opt.MapFrom(src => src.OffStartDate.Precision))
+                .ForMember(d => d.OffEndDate, opt => opt.MapFrom(src => src.OffEndDate.Date))
+                .ForMember(d => d.OffEndDatePrec, opt => opt.MapFrom(src => src.OffEndDate.Precision))
                 .ForMember(d => d.OffPlaceCountry, opt => opt.Ignore());
 
             CreateMap<BOffence, OffenceDTO>()
                .ForMember(d => d.EcrisOffCatName, opt => opt.MapFrom(src => src.EcrisOffCat.Name))
                .ForMember(d => d.OffenceCategory, opt => opt.MapFrom(src => src.OffenceCat))
+               .ForMember(d => d.OffStartDate, opt => opt.MapFrom(src => new DatePrecisionDTO
+               {
+                   Date = src.OffStartDate,
+                   Precision = src.OffStartDatePrec
+               }))
+               .ForMember(d => d.OffEndDate, opt => opt.MapFrom(src => new DatePrecisionDTO
+               {
+                   Date = src.OffEndDate,
+                   Precision = src.OffEndDatePrec
+               }))
                .ForMember(d => d.OffPlace, opt => opt.MapFrom(src =>
                     new AddressDTO
                     {

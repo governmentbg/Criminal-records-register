@@ -7,6 +7,7 @@
         [parentGroup]="parentForm.country.group"
         [openFunction]="openCountryDialog"
         (onClearSelection)="onClearCountry()"
+
       ></cais-lookup>
     </div>
     <ng-container *ngIf="!isClearedContry">
@@ -23,6 +24,7 @@
           [(items)]="districts"
           (selectionChanged)="onDistrictChanged($event)"
           [disabled]="!parentForm.isSetForNativeAddress"
+          [appendTo]="inDialog ? '.igx-overlay__content--modal' : null"
         ></cais-autocomplete>
       </div>
 
@@ -39,6 +41,7 @@
           [(items)]="municipalities"
           (selectionChanged)="onMunicipalityChanged($event)"
           [disabled]="!parentForm.isSetForNativeAddress"
+          [appendTo]="inDialog ? '.igx-overlay__content--modal' : null"
         ></cais-autocomplete>
       </div>
 
@@ -54,6 +57,7 @@
           [inputName]="'cityId'"
           [(items)]="cities"
           [disabled]="!parentForm.isSetForNativeAddress"
+          [appendTo]="inDialog ? '.igx-overlay__content--modal' : null"
         ></cais-autocomplete>
       </div>
       <div

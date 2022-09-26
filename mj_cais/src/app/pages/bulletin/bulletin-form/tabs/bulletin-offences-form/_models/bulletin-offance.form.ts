@@ -14,8 +14,8 @@ export class BulletinOffenceForm extends BaseForm {
   public ecrisOffCatId: FormControl;
   public ecrisOffCatName: FormControl;
   public legalProvisions: FormControl;
-  public offStartDate: FormControl;
-  public offEndDate: FormControl;
+  public offStartDate: DatePrecisionModelForm;
+  public offEndDate: DatePrecisionModelForm;
   public offPlace: AddressForm;
 
   constructor() {
@@ -27,8 +27,8 @@ export class BulletinOffenceForm extends BaseForm {
     this.ecrisOffCatId = new FormControl(null, [Validators.maxLength(50)]);
     this.ecrisOffCatName = new FormControl(null);
     this.legalProvisions = new FormControl(null);
-    this.offStartDate = new FormControl(null);
-    this.offEndDate = new FormControl(null, [Validators.required]);
+    this.offStartDate = new DatePrecisionModelForm(null);
+    this.offEndDate = new DatePrecisionModelForm();
     this.offPlace = new AddressForm();
 
     this.group = new FormGroup({
@@ -40,9 +40,9 @@ export class BulletinOffenceForm extends BaseForm {
       remarks: this.remarks,
       ecrisOffCatId: this.ecrisOffCatId,
       ecrisOffCatName: this.ecrisOffCatName,
-      offStartDate: this.offStartDate,
+      offStartDate: this.offStartDate.group,
       legalProvisions: this.legalProvisions,
-      offEndDate: this.offEndDate,
+      offEndDate: this.offEndDate.group,
       offPlace: this.offPlace.group,
     });
   }

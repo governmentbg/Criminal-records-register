@@ -15,50 +15,53 @@
     </div>
     <div class="form-group col-md-6">
       <ng-container *ngIf="showFullDate">
-          <cais-input
-            [type]="'date'"
-            [label]="'Дата'"
-            [inputFormControl]="formModel.date"
-            [parentGroup]="formModel.group"
-            [inputName]="'date'"
-          ></cais-input>
+        <cais-input
+          [type]="dateType"
+          [label]="'Дата'"
+          [inputFormControl]="formModel.date"
+          [parentGroup]="formModel.group"
+          [inputName]="'date'"
+        ></cais-input>
       </ng-container>
       <ng-container *ngIf="showYearAndMonth">
         <div class="row">
           <div class="col-md-6">
-            <label class="label">Месец</label>
-            <input
-              pattern="^(0?[1-9]|1[012])$"
-              type="number"
-              nbInput
-              fullWidth
-              [ngClass]="validationCss(formModel.month)"
-              [formControl]="formModel.month"
-            />
+            <cais-input
+              [label]="'Месец'"
+              [type]="'number'"
+              [inputFormControl]="formModel.month"
+              [parentGroup]="formModel.group"
+              [inputName]="'month'"
+              (change)="onInputForDateChange()"
+              
+            >
+            </cais-input>
           </div>
           <div class="col-md-6">
-            <label class="label">Година</label>
-            <input
-              pattern="^\d{4}$"
-              type="number"
-              nbInput
-              fullWidth
-              [ngClass]="validationCss(formModel.year)"
-              [formControl]="formModel.year"
-            />
+            <cais-input
+              [label]="'Година'"
+              [type]="'number'"
+              [inputFormControl]="formModel.year"
+              [parentGroup]="formModel.group"
+              [inputName]="'year'"
+              (change)="onInputForDateChange()"
+             
+            >
+            </cais-input>
           </div>
         </div>
       </ng-container>
       <ng-container *ngIf="showYear">
-        <label class="label">Година</label>
-        <input
-          pattern="^\d{4}$"
-          type="number"
-          nbInput
-          fullWidth
-          [ngClass]="validationCss(formModel.year)"
-          [formControl]="formModel.year"
-        />
+        <cais-input
+          [label]="'Година'"
+          [type]="'number'"
+          [inputFormControl]="formModel.year"
+          [parentGroup]="formModel.group"
+          [inputName]="'year'"
+          (change)="onInputForDateChange()"
+          
+        >
+        </cais-input>
       </ng-container>
     </div>
   </div>
