@@ -37,7 +37,7 @@ export class PersonDetailsFormComponent
   public archiveTabTitle = "Архив";
   public fbbcsTabTitle = "Осъждане в чужбина";
   public pidsTabTitle = "Идентификатори";
-  public historyTabTitle = "Исторя";
+  public historyTabTitle = "История";
   public showApplicationsTab: boolean = false;
   public showFbbcsTab: boolean = false;
   public showEApplicationsTab: boolean = false;
