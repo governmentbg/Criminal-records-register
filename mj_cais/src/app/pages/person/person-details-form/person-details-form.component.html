@@ -9,209 +9,110 @@
   <nb-card-body>
     <div class="card bg-transparent mt-3">
       <div class="card-body">
-        <h6 class="card-title">Основна информация</h6>
-
-        <div class="row mb-3 mt-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Имена на кирилица: </span>
-              <span>
-                {{ model.firstname }} {{ model.surname }} {{ model.familyname }}  {{ model.fullname }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Имена на латиница: </span>
-              <span>
-                {{ model.firstnameLat }} {{ model.surnameLat }}
-                {{ model.familynameLat }} {{ model.fullnameLat }}
-              </span>
-            </div>
-          </div>
+        <h6>
+          <span
+            >{{ model.firstname }} {{ model.surname }} {{ model.familyname }}
+            {{ model.fullname }}</span
+          >
+          /
+          <span>
+            {{ model.firstnameLat }} {{ model.surnameLat }}
+            {{ model.familynameLat }} {{ model.fullnameLat }}
+          </span>
+        </h6>
+        <div>
+          Пол:
+          <ng-container *ngIf="model.sex == 1">
+            <span> Мъж </span>
+          </ng-container>
+          <ng-container *ngIf="model.sex == 2">
+            <span> Жена </span>
+          </ng-container>
+          <ng-container *ngIf="model.sex == 0">
+            <span> Неизвестен </span>
+          </ng-container>
         </div>
-
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Пол: </span>
-              <ng-container *ngIf="model.sex == 1">
-                <span> Мъж </span>
-              </ng-container>
-              <ng-container *ngIf="model.sex == 2">
-                <span> Жена </span>
-              </ng-container>
-              <ng-container *ngIf="model.sex == 0">
-                <span> Неизвестен </span>
-              </ng-container>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Дата на раждане: </span>
-              <span>
-                {{ model.birthDate | date }}
-              </span>
-            </div>
-          </div>
+        <div *ngIf="model.birthDate != null">
+          Дата на раждане: {{ model.birthDate | date }}
         </div>
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">ЕГН: </span>
-              <span>
-                {{ model.egn }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">ЛНЧ: </span>
-              <span>
-                {{ model.lnch }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">ЛН: </span>
-              <span>
-                {{ model.ln }}
-              </span>
-            </div>
-          </div>
+        <div>
+          <span *ngIf="model.egn != null"> ЕГН: {{ model.egn }} </span>
+          <span *ngIf="model.lnch != null"> ЛНЧ: {{ model.lnch }} </span>
+          <span *ngIf="model.ln != null"> ЛН: {{ model.ln }} </span>
         </div>
-      </div>
-    </div>
-
-    <div class="card bg-transparent mt-3">
-      <div class="card-body">
-        <h6 class="card-title">Място на раждане</h6>
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Държава: </span>
-              <span>
-                {{ model.birthPlace.country.displayName }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Област: </span>
-              <span>
-                {{ model.birthPlace.districtDisplayName }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Община: </span>
-              <span>
-                {{ model.birthPlace.municipalityDisplayName }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Населено място: </span>
-              <span>
-                {{ model.birthPlace.cityDisplayName }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Oписание в случай на друг адрес: </span>
-              <span>
-                {{ model.birthPlace.foreignCountryAddress }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card bg-transparent mt-3">
-      <div class="card-body">
-        <h6 class="card-title">Гражданство</h6>
-
-        <div class="col-md-4">
-          <div class="row col-md-12 cais-display-form-group">
-            <span *ngFor="let nationality of model.nationalitiesNames">
-              <span class="mt-2 mr-2">
-                {{ nationality }}
-              </span>
+        <div>
+          Място за раждане:
+          <span>
+            <span *ngIf="model.birthPlace.country.displayName != null"
+              >{{ model.birthPlace.country.displayName }},
             </span>
-          </div>
+            <span *ngIf="model.birthPlace.districtDisplayName != null"
+              >{{ model.birthPlace.districtDisplayName }},
+            </span>
+            <span *ngIf="model.birthPlace.municipalityDisplayName != null"
+              >{{ model.birthPlace.municipalityDisplayName }},
+            </span>
+            <span *ngIf="model.birthPlace.cityDisplayName != null">
+              {{ model.birthPlace.cityDisplayName }}
+            </span>
+          </span>
+          <span *ngIf="model.birthPlace.foreignCountryAddress != null" )>
+            В случай на друг адрес:
+            {{ model.birthPlace.foreignCountryAddress }}</span
+          >
         </div>
-      </div>
-    </div>
-
-    <div class="card bg-transparent mt-3">
-      <div class="card-body">
-        <h6 class="card-title">Родители</h6>
-        <div class="row mb-3">
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Майка: </span>
-              <span>
-                {{ model.motherFirstname }} {{ model.motherSurname }}
-                {{ model.motherFamilyname }} {{ model.motherFullname }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label">Баща: </span>
-              <span>
-                {{ model.fatherFirstname }} {{ model.fatherSurname }}
-                {{ model.fatherFamilyname }} {{ model.fatherFullname }}
-              </span>
-            </div>
-          </div>
+        <div *ngIf="model.nationalitiesNames != null">
+          Гражданство:
+          <span *ngFor="let nationality of model.nationalitiesNames">
+            <span class="mt-2 mr-2">
+              {{ nationality }}
+            </span>
+          </span>
         </div>
-      </div>
-    </div>
+        <div
+          *ngIf="
+            model.motherFirstname != null ||
+            model.motherSurname != null ||
+            model.motherFamilyname != null ||
+            model.motherFullname != null
+          "
+        >
+          <span>Майка: </span>
+          <span>
+            {{ model.motherFirstname }} {{ model.motherSurname }}
+            {{ model.motherFamilyname }} {{ model.motherFullname }}
+          </span>
+        </div>
+        <div
+          *ngIf="
+            model.fatherFirstname != null ||
+            model.fatherSurname != null ||
+            model.fatherFamilyname != null ||
+            model.fatherFullname != null
+          "
+        >
+          <span>Баща: </span>
+          <span>
+            {{ model.fatherFirstname }} {{ model.fatherSurname }}
+            {{ model.fatherFamilyname }} {{ model.fatherFullname }}
+          </span>
+        </div>
+        <div>Брой бюлетини:</div>
+        <div>
+          <span>{{ BulletinTypeConstants.bulletin78A.name }}: </span>
+          <span>
+            {{ model.bulletin78ACount }}
+          </span>
 
-    <div class="card bg-transparent mt-3">
-      <div class="card-body">
-        <h6 class="card-title">Брой бюлетини</h6>
+          <span>{{ BulletinTypeConstants.convictionBulletin.name }}: </span>
+          <span>
+            {{ model.convictionBulletinCount }}
+          </span>
 
-        <div class="row mb-3">
-          <div class="col-md-2">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label"
-                >{{ BulletinTypeConstants.bulletin78A.name }}:
-              </span>
-              <span>
-                {{ model.bulletin78ACount }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label"
-                >{{ BulletinTypeConstants.convictionBulletin.name }}:
-              </span>
-              <span>
-                {{ model.convictionBulletinCount }}
-              </span>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="row col-md-12 cais-display-form-group">
-              <span class="label"
-                >{{ BulletinTypeConstants.unspecified.name }}:
-              </span>
-              <span>
-                {{ model.bulletinUnspecifiedCount }}
-              </span>
-            </div>
-          </div>
+          <span>{{ BulletinTypeConstants.unspecified.name }}: </span>
+          <span>
+            {{ model.bulletinUnspecifiedCount }}
+          </span>
         </div>
       </div>
     </div>
