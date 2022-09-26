@@ -76,8 +76,22 @@ namespace MJ_CAIS.Web.Controllers
 
             if (result == null) return NotFound();
 
+            //output file current date
+            string fileDateFrom = ((DateTime)statSearch.FromDate).ToString("yyyy-MM-dd");
+            string fileDateTo = ((DateTime)statSearch.ToDate).ToString("yyyy-MM-dd");
+            string fileName;
+
+            if (statSearch.Status != null)
+            {
+                fileName = $"{statSearch.StatisticsType}_{statSearch.Status}_{fileDateFrom}_{fileDateTo}.pdf";
+            }
+            else
+            {
+                fileName = $"{statSearch.StatisticsType}_{fileDateFrom}_{fileDateTo}.pdf";
+            }
+            
+
             var content = result;
-            var fileName = "certificate.pdf";
             var mimeType = "application/octet-stream";
 
             Response.Headers.Add("File-Name", fileName);
