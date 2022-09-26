@@ -138,6 +138,9 @@
   <data name="msgHistoryObjDoesNotExist" xml:space="preserve">
     <value>История на статус с идентификатор {0} не съществува</value>
   </data>
+  <data name="nameNewOffice" xml:space="preserve">
+    <value>Нов въведен от служител на БС</value>
+  </data>
   <data name="titleBulletinsForStatistics" xml:space="preserve">
     <value>Въведени бюлетини</value>
   </data>

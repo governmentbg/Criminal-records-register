@@ -2,6 +2,7 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.BulletinAdministration;
 using MJ_CAIS.Services.Contracts;
@@ -21,7 +22,7 @@ namespace MJ_CAIS.Web.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> SearchBulletins(ODataQueryOptions<BulletinAdministrationGridDTO> aQueryOptions, [FromQuery]BulletinAdministrationSearchParamDTO searchParams)
+        public async Task<IActionResult> SearchBulletins(ODataQueryOptions<BulletinAdministrationGridDTO> aQueryOptions, [FromQuery] BulletinAdministrationSearchParamDTO searchParams)
         {
             var result = await this._bulletinAdministrationService.SelectAllWithPaginationAsync(aQueryOptions, searchParams);
             return Ok(result);
@@ -43,7 +44,18 @@ namespace MJ_CAIS.Web.Controllers
         [HttpGet("{aId}/bulletin-statuses-history")]
         public IActionResult GetBulletinStatusByHistory(string aId)
         {
-            var result = _bulletinAdministrationService.GetBulletinStatusesByHistory(aId);
+            var result = _bulletinAdministrationService.GetBulletinStatusesByHistory(aId).ToList();
+            if (!result.Any(x => x.Id == BulletinConstants.Status.NewOffice))
+            {
+                if (result == null) result = new List<DTO.Nomenclature.BaseNomenclatureDTO>();
+                result.Add(new DTO.Nomenclature.BaseNomenclatureDTO
+                {
+                    Id = BulletinConstants.Status.NewOffice,
+                    Code = BulletinConstants.Status.NewOffice,
+                    Name = BulletinResources.nameNewOffice
+                });
+            }
+
             return Ok(result);
         }
     }

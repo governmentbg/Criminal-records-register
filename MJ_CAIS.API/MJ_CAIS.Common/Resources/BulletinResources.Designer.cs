@@ -124,6 +124,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Нов въведен от служител на БС.
+        /// </summary>
+        public static string nameNewOffice {
+            get {
+                return ResourceManager.GetString("nameNewOffice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Въведени бюлетини.
         /// </summary>
         public static string titleBulletinsForStatistics {
