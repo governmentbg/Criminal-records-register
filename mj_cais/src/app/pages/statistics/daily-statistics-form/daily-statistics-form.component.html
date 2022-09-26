@@ -22,8 +22,6 @@
       <div class="row">
         <div class="form-group col-md-4">
           <cais-autocomplete
-            (selectionChanged)="onStatisticsTypesChanged()"
-            (selectionCleared)="onStatisticsTypesChanged()"
             [label]="'Вид справка'"
             [inputFormControl]="fullForm.statisticsType"
             [parentGroup]="fullForm.group"
@@ -31,7 +29,7 @@
             [items]="dbData.statisticsTypes"
           ></cais-autocomplete>
         </div>
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
           <cais-autocomplete
             [label]="'Статус'"
             [inputFormControl]="fullForm.status"
@@ -39,7 +37,7 @@
             [inputName]="'status'"
             [items]="currentStatuses"
           ></cais-autocomplete>
-        </div>
+        </div> -->
         <div class="form-group col-md-2">
           <!-- todo starting date is yesterday -->
           <cais-input

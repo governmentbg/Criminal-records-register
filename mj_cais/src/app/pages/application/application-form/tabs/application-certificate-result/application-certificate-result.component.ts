@@ -73,10 +73,12 @@ export class ApplicationCertificateResultComponent
       new ApplicationCertificateResultModel(this.model)
     );
     if (this.model) {
+      debugger;
       if (
         this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
-        this.model.statusCode == CertificateStatuTypeEnum.Delivered
+        this.model.statusCode == CertificateStatuTypeEnum.Delivered ||
+        this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady 
       ) {
         this.fullForm.group.disable();
       }
@@ -101,6 +103,7 @@ export class ApplicationCertificateResultComponent
           CertificateStatuTypeEnum.CertificatePaperPrint &&
         this.model.statusCode != CertificateStatuTypeEnum.Delivered &&
         this.model.statusCode != CertificateStatuTypeEnum.CertificateContentReady 
+        && this.model.statusCode != CertificateStatuTypeEnum.CertificateUserSign 
       ) {
         this.model.secondSignerId = this.userInfoService.userId;
         this.fullForm.secondSignerId.setValue(

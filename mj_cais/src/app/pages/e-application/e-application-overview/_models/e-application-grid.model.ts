@@ -24,7 +24,7 @@ export class EApplicationGridModel extends BaseGridModel {
     this.statusName = init?.statusName ?? null;
     this.firstname = init?.firstname ?? null;
     this.surname = init?.surname ?? null;
-    this.familyname = init?.surname ?? null;
+    this.familyname = init?.familyname ?? null;
     this.fullname = init?.fullname ?? null;
   }
 }

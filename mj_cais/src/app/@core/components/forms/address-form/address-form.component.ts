@@ -51,6 +51,7 @@ export class AddressFormComponent implements OnInit {
   @Input() parentForm: AddressForm;
   @Input() showDescWhenIsNativeAddress: boolean = false;
   @Input() hideDesc: boolean = false;
+  @Input() inDialog: boolean = false;
 
   private bgCountryId = CommonConstants.bgCountryId;
   private bgCountryName = CommonConstants.bgCountryName;
