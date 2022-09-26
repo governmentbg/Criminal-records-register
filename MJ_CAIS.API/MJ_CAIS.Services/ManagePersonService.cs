@@ -247,7 +247,7 @@ namespace MJ_CAIS.Services
             if (string.IsNullOrEmpty(person.Egn) && string.IsNullOrEmpty(person.Lnch) &&
                 string.IsNullOrEmpty(person.Ln) && string.IsNullOrEmpty(person.AfisNumber))
             {
-                person.Suid = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Suid)?.Pid;
+                person.Suid = personIds.FirstOrDefault(x => x.PidTypeId == PidType.Suid && x.Issuer == IssuerType.CRR)?.Pid;
             }
 
             return person;
