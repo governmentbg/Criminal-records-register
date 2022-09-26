@@ -404,7 +404,6 @@ export class ApplicationCertificateResultComponent
                   this.bulletinsCheckGrid.selectRows(response.map((x) => x.id));
                 });
             }
-            debugger
             if (
               this.model.secondSignerId == null &&
               this.model.statusCode !=

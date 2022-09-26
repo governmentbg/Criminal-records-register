@@ -19,7 +19,7 @@
               nbButton
               matRipple
               [status]="'primary'"
-              (click)="dialogAdd.open()"
+              (click)="onDialogToAddOpen()"
             >
               <nb-icon class="pt-1" [icon]="'plus'" pack="fa"></nb-icon>
               Добави
@@ -90,12 +90,16 @@
         [sortable]="true"
         header="Начална дата на извършване на деянието"
         dataType="'date'"
-        [formatter]="this.dateFormatService.formatDate"
+        [formatter]="this.dateFormatService.displayDateTimeWithPrecision"
       >
         <ng-template igxCell let-cell="cell">
-          <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-            {{ this.dateFormatService.displayDateTime(cell.value) }}
-          </span>
+          {{
+            this.dateFormatService.displayDateTimeWithPrecision(
+              cell.value.date,
+              cell.value.precision,
+              true
+            )
+          }}
         </ng-template>
       </igx-column>
       <igx-column
@@ -103,12 +107,16 @@
         [sortable]="true"
         header="Крайна дата на извършване на деянието"
         dataType="date"
-        [formatter]="this.dateFormatService.formatDate"
+        [formatter]="this.dateFormatService.displayDateTimeWithPrecision"
       >
         <ng-template igxCell let-cell="cell">
-          <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-            {{ this.dateFormatService.displayDateTime(cell.value) }}
-          </span>
+          {{
+            this.dateFormatService.displayDateTimeWithPrecision(
+              cell.value.date,
+              cell.value.precision,
+              true
+            )
+          }}
         </ng-template>
       </igx-column>
 
@@ -225,23 +233,28 @@
             </div>
           </div>
           <div class="row mt-2">
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'datetime'"
+            <div class="form-group col-md-12">
+              <cais-date-precision
+                #offStartDate
                 [label]="'Начална дата на извършване на деянието'"
-                [inputFormControl]="bulletinOffenceForm.offStartDate"
+                [formModel]="bulletinOffenceForm.offStartDate"
                 [parentGroup]="bulletinOffenceForm.group"
-                [inputName]="'offStartDate'"
-              ></cais-input>
+                [hasTime]="true"
+              >
+              </cais-date-precision>
             </div>
-            <div class="form-group col-md-6">
-              <cais-input
-                [type]="'datetime'"
+          </div>
+          <div class="row mt-2">
+            <div class="form-group col-md-12">
+              <cais-date-precision
+                #offEndDate
                 [label]="'Крайна дата на извършване на деянието'"
-                [inputFormControl]="bulletinOffenceForm.offEndDate"
+                [formModel]="bulletinOffenceForm.offEndDate"
                 [parentGroup]="bulletinOffenceForm.group"
-                [inputName]="'offEndDate'"
-              ></cais-input>
+                [hasTime]="true"
+                [isRequired]="true"
+              >
+              </cais-date-precision>
             </div>
           </div>
 

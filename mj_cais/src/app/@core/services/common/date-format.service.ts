@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IgxGridRowComponent } from "@infragistics/igniteui-angular";
+import { DatePrecisionConstants } from "../../components/forms/inputs/date-precision/_models/date-precision.constants";
 import { CommonConstants } from "../../constants/common.constants";
 
 @Injectable({
@@ -54,6 +55,39 @@ export class DateFormatService {
     return result;
   }
 
+  public displayDateTimeWithPrecision(val: string, precision: string): string {
+    return this.getDisplayDateWithPrecision(val, precision, true);
+  }
+
+  public displayDateWithPrecision(val: string, precision: string): string {
+    return this.getDisplayDateWithPrecision(val, precision, false);
+  }
+
+  private getDisplayDateWithPrecision(
+    val: string,
+    precision: string,
+    withTime: boolean
+  ): string {
+    if (!val) {
+      return "";
+    }
+
+    let date = new Date(val);
+    if (precision == DatePrecisionConstants.year.id) {
+      return date.getFullYear().toString();
+    }
+
+    if (precision == DatePrecisionConstants.yearAndMonth.id) {
+      return date.getMonth() + "." + date.getFullYear();
+    }
+
+    if (withTime) {
+      return date.toLocaleString(CommonConstants.bgLocale);
+    }
+
+    return date.toLocaleDateString(CommonConstants.bgLocale);
+  }
+
   public parseDatesFromGridRow(
     event: IgxGridRowComponent,
     datePropNames: string[]
@@ -62,7 +96,7 @@ export class DateFormatService {
 
     for (let prop of datePropNames) {
       if (rowData[prop] && typeof rowData[prop] !== "object") {
-        let localDate =  new Date(rowData[prop]);
+        let localDate = new Date(rowData[prop]);
         event.rowData[prop] = localDate;
       }
     }

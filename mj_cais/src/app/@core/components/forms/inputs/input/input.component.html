@@ -84,7 +84,6 @@
             [labelVisibility]="false"
             format="dd.MM.yyyy г."
             [disabled]="isReadOnly"
-            
           >
           </igx-date-picker>
         </div>
@@ -152,7 +151,10 @@
       inputFormControl?.errors?.emailValidation && inputHasBeenInteracted()
     "
   ></cais-validation-message>
-  <p class="caption status-danger"  *ngFor="let serverError of inputFormControl?.errors?.serverErrors">
-    {{ serverError }}</p> 
-
+  <p
+    class="caption status-danger"
+    *ngFor="let serverError of inputFormControl?.errors?.serverErrors"
+  >
+    {{ serverError }}
+  </p>
 </div>

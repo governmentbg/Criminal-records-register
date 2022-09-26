@@ -8,20 +8,16 @@ export class DatePrecisionModelForm {
   public month: FormControl;
   public precision: FormControl;
 
-  constructor(isRequired?: boolean, disabled?: boolean) {
-    let validators = isRequired && !disabled ? [Validators.required] : [];
-    this.precision = new FormControl(
-      DatePrecisionConstants.fullDate.id,
-      validators
-    );
-    this.date = new FormControl(null, validators);
+  constructor(disabled?: boolean) {
+    this.precision = new FormControl(DatePrecisionConstants.fullDate.id);
+    this.date = new FormControl(null);
     this.year = new FormControl(null, [
       Validators.maxLength(4),
       Validators.minLength(4),
     ]);
     this.month = new FormControl(null, [
-      Validators.maxLength(1),
-      Validators.minLength(2),
+      Validators.maxLength(2),
+      Validators.minLength(1),
     ]);
 
     this.group = new FormGroup({

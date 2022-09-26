@@ -198,7 +198,6 @@ export class BulletinSanctionsFormComponent implements OnInit {
   //#region Probations actions
 
   private updateProbationsTransactionData() {
-    debugger;
     // data used only for vizualization in grid
     let allSavedProbationsData =
       this.bulletinSanctionForm.probations.value ?? [];
