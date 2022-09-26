@@ -102,16 +102,16 @@ export class DailyStatisticsFormComponent extends CrudForm<
 
   onStatisticsTypesChanged() {
     let currentDropdownValue = this.fullForm.statisticsType.value;
-
+    debugger;
     switch (currentDropdownValue) {
       case DailyStatisticsConstants.Bulletin.id: {
         this.currentStatuses = this.buletinStatuses;
-        this.clearComponent("Актуален");
+        this.clearComponent("Active");
         break;
       }
       case DailyStatisticsConstants.Application.id: {
         this.currentStatuses = this.aplicationStatuses;
-        this.clearComponent("Одобрено заявление");
+        this.clearComponent("ApprovedApplication");
         break;
       }
       case DailyStatisticsConstants.Certificate.id: {
