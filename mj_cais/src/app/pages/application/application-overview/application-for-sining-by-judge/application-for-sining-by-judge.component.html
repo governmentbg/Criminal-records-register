@@ -118,8 +118,8 @@
       [dataType]="'date'"
     >
       <ng-template igxCell let-cell="cell">
-        <span [title]="this.dateFormatService.displayDateTime(cell.value)">
-          {{ this.dateFormatService.displayDateTime(cell.value) }}
+        <span [title]="this.dateFormatService.displayDate(cell.value)">
+          {{ this.dateFormatService.displayDate(cell.value) }}
         </span>
       </ng-template>
     </igx-column>
@@ -164,7 +164,6 @@
               <nb-icon pack="fa" icon="eye"></nb-icon>
             </a>
             <a
-              *ngIf="hideStatus"
               [title]="'Редактиране'"
               [routerLink]="['/pages/applications/edit', cell.rowData.id]"
             >

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.DTO.Statistics;
 using MJ_CAIS.ExternalWebServices.Contracts;
 using MJ_CAIS.Services.Contracts;
@@ -17,6 +18,7 @@ namespace MJ_CAIS.Web.Controllers
         public StatisticsController(IStatisticsService service, IPrintDocumentService printDocumentService)
         {
             _service = service;
+            _printDocumentService = printDocumentService;
         }
 
         [HttpGet("bulletins")]
@@ -33,9 +35,21 @@ namespace MJ_CAIS.Web.Controllers
             return Ok(result);
         }
 
-        [HttpGet("dayly-statistics")]
+        [HttpGet("daily-statistics")]
         public async Task<IActionResult> GetDailyStatistics([FromQuery] DailyStatisticsSearchDTO statSearch)
         {
+            if (string.IsNullOrEmpty(statSearch.StatisticsType))
+            {
+                throw new BusinessLogicException("Не е избран вид на справката.");
+            }
+            if (!statSearch.FromDate.HasValue)
+            {
+                throw new BusinessLogicException("Не е избрана начална дата.");
+            }
+            if (!statSearch.ToDate.HasValue)
+            {
+                throw new BusinessLogicException("Не е избрана крайна дата.");
+            }
             //нагласяме датите, за да е по-лесна заявката в оракъл
 
             DateTime dateTo=statSearch.ToDate.Value.Date.AddDays(1);

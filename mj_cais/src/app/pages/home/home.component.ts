@@ -7,6 +7,7 @@ import { HomeService } from "./_data/home.service";
 import { ApplicationCountModel } from "./_models/application-count.model";
 import { BulletinCountModel } from "./_models/bulletin-count.model";
 import { CentralAuthCountModel } from "./_models/central-auth-count.model";
+import { InternalRequestCountModel } from "./_models/internal-request-count.model";
 
 @Component({
   selector: "cais-home",
@@ -20,6 +21,7 @@ export class HomeComponent
   public applications: ApplicationCountModel;
   public bulletins: BulletinCountModel;
   public centralAuth: CentralAuthCountModel;
+  public internalRequests: InternalRequestCountModel;
 
   public RoleNameEnum = RoleNameEnum;
   constructor(service: HomeService, public injector: Injector) {
@@ -30,6 +32,7 @@ export class HomeComponent
     this.applications = this.dbData.applications as any;
     this.bulletins = this.dbData.bulletins as any;
     this.centralAuth = this.dbData.centralAuth as any;
+    this.internalRequests = this.dbData.internalRequests as any;
   }
 
   buildFormImpl(): FormGroup {

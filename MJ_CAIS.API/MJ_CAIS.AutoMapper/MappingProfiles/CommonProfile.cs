@@ -64,6 +64,11 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
               .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code))
               .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name))
               .ForMember(d => d.Type, opt => opt.MapFrom(src => src.StatusType));
+
+            CreateMap<AReportStatus, NomenclatureTypeDTO>()
+              .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Code))
+              .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name))
+              .ForMember(d => d.Type, opt => opt.MapFrom(src => src.StatusType));
         }
     }
 }

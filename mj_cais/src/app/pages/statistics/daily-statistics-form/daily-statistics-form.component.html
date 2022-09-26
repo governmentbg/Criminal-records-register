@@ -1,0 +1,66 @@
+<nb-card accent="primary" [formGroup]="fullForm.group">
+  <nb-card-header class="">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex align-items-center">
+        <h2 class="h4">Дневна статистика</h2>
+      </div>
+      <div class="d-flex">
+        <button (click)="onSearch()" nbButton status="primary" type="button">
+          <nb-icon
+            class="pt-1"
+            [icon]="'search'"
+            pack="fa"
+            title="Търсене"
+          ></nb-icon>
+          Търсене
+        </button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body style="overflow: unset">
+    <form autocomplete="off">
+      <div class="row">
+        <div class="form-group col-md-4">
+          <cais-autocomplete
+            (selectionChanged)="onStatisticsTypesChanged()"
+            (selectionCleared)="onStatisticsTypesChanged()"
+            [label]="'Вид справка'"
+            [inputFormControl]="fullForm.statisticsType"
+            [parentGroup]="fullForm.group"
+            [inputName]="'statisticsType'"
+            [items]="dbData.statisticsTypes"
+          ></cais-autocomplete>
+        </div>
+        <div class="form-group col-md-4">
+          <cais-autocomplete
+            [label]="'Статус'"
+            [inputFormControl]="fullForm.status"
+            [parentGroup]="fullForm.group"
+            [inputName]="'status'"
+            [items]="currentStatuses"
+          ></cais-autocomplete>
+        </div>
+        <div class="form-group col-md-2">
+          <!-- todo starting date is yesterday -->
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата от'"
+            [inputFormControl]="fullForm.fromDate"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+        <div class="form-group col-md-2">
+          <!-- todo starting date is today -->
+          <cais-input
+            [type]="'date'"
+            [label]="'Дата до(вкл.)'"
+            [inputFormControl]="fullForm.toDate"
+            [parentGroup]="fullForm.group"
+          >
+          </cais-input>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+</nb-card>

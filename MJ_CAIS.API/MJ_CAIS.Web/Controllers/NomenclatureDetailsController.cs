@@ -149,5 +149,12 @@ namespace MJ_CAIS.Web.Controllers
             var result = _nomenclatureDetailService.GetApplicationStatuses();
             return Ok(result);
         }
+
+        [HttpGet("report-statuses")]
+        public IActionResult GetReportStatuses()
+        {
+            var result = _nomenclatureDetailService.GetReportStatuses();
+            return Ok(result);
+        }
     }
 }

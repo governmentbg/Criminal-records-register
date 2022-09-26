@@ -3,6 +3,7 @@ import { StatisticsRoutingModule } from "./statistics-routing.module";
 import { BulletinStatisticsFormComponent } from "./bulletin-statistics-form/bulletin-statistics-form.component";
 import { ApplicationStatisticsFormComponent } from "./application-statistics-form/application-statistics-form.component";
 import { StatisticsFormComponent } from "./statistics-form/statistics-form.component";
+import { DailyStatisticsFormComponent } from "./daily-statistics-form/daily-statistics-form.component";
 // import {
 //   IgxDoughnutChartModule,
 //   IgxItemLegendModule,
@@ -15,6 +16,7 @@ import { CoreComponentModule } from "../../@core/components/core-component.modul
     BulletinStatisticsFormComponent,
     ApplicationStatisticsFormComponent,
     StatisticsFormComponent,
+    DailyStatisticsFormComponent,
   ],
   imports: [
     CoreComponentModule,

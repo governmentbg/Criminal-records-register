@@ -278,6 +278,10 @@ export class PagesMenu {
             title: "Свидетелства",
             link: "/pages/statistics/applications",
           },
+          {
+            title: "Дневна статистика",
+            link: "/pages/statistics/daily-statistics",
+          },
         ],
       },
       {

@@ -99,6 +99,11 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
             viewModel.ClientIp = _requestUtils.GetClientIpAddress(HttpContext);
 
             var itemToUpdate = _mapper.Map<PublicApplicationDTO>(viewModel);
+            var existingRequest = await _applicationWebService.FindDuplicate(viewModel.Egn, viewModel.PurposeId, CurrentUserID);
+            if (!string.IsNullOrEmpty(existingRequest))
+            {
+                return View("ExistingRequest", existingRequest);
+            }
             var id = await _applicationWebService.InsertPublicAsync(itemToUpdate);
 
             //var result = _regixService.SyncCallPersonDataSearch(viewModel.Egn, wApplicationId: id, isAsync: true);
@@ -169,6 +174,13 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.CertificateForDelivery || app.CertificateStatusCode == ApplicationConstants.ApplicationStatuses.Delivered;
 
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Cancel(string id)
+        {
+            await _applicationWebService.CancelAsync(id, CurrentUserID, CurrentUserName);
+            return RedirectToAction(nameof(Preview), "Application", new { id = id });
         }
 
         private async Task<PaymentReceipt> CreatePaymentRequest(EGovPaymentRequestModel paymentRequest)

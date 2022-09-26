@@ -23,7 +23,7 @@ namespace MJ_CAIS.Repositories.Impl
             if (!string.IsNullOrEmpty(existingAdministrationId)) {
                 if (existingAdministrationId != administrationId)
                 {
-                    throw new ApplicationException("UIC already added to another administration");
+                    throw new ApplicationException("UICAlreadyExistsInOtherAdministrations");
                 }
                 else
                 {

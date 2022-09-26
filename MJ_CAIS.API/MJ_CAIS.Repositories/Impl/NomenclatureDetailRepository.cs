@@ -129,5 +129,10 @@ namespace MJ_CAIS.Repositories.Impl
         {
             return _dbContext.AApplicationStatuses.AsNoTracking();
         }
+
+        public IQueryable<AReportStatus> GetReportStatuses()
+        {
+            return _dbContext.AReportStatuses.AsNoTracking();
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<DTO.Application.Public.ApplicationPreviewDTO> GetPublicForPreviewAsync(string id);
         IQueryable<PublicApplicationGridDTO> SelectPublicApplications(string userId);
         Task<bool> HasDublicates(string egn, string purposeId, string applicationTypeId, string applicantId);
+        Task<string?> FindDuplicate(string egn, string purposeId, string applicantId);
+        Task<WApplicationStatus> GetWebCanceledStatus();
     }
 }

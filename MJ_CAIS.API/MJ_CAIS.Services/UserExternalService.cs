@@ -44,14 +44,16 @@ namespace MJ_CAIS.Services
                 var res = await _userExternalRepository.GetUser(aId, aInDto.Egn, aInDto.AdministrationId);
                 if (!string.IsNullOrEmpty(res))
                 {
-                    throw new ApplicationException("User already exists");
+                    throw new ApplicationException("UserAlreadyExists");
                 }
             }
 
             this.ValidateData(aInDto);
 
             GUsersExt entity = mapper.MapToEntity<UserExternalInDTO, GUsersExt>(aInDto, isAdded: false);
-            if (!string.IsNullOrEmpty(aInDto.Uic))
+            if ((!aInDto.Denied.HasValue || !aInDto.Denied.Value)
+                && !string.IsNullOrEmpty(aInDto.AdministrationId)
+                && !string.IsNullOrEmpty(aInDto.Uic))
             {
                 await _extAdministrationRepository.AddUicAsync(aInDto.AdministrationId, aInDto.Uic, aInDto.Ou);
                 entity.RegCertSubject = null;
@@ -73,7 +75,7 @@ namespace MJ_CAIS.Services
                 var res = await _userExternalRepository.GetUser(aInDto.Egn, aInDto.AdministrationId);
                 if (!string.IsNullOrEmpty(res))
                 {
-                    throw new ApplicationException("User already exists");
+                    throw new ApplicationException("UserAlreadyExists");
                 }
             }
             return await base.InsertAsync(aInDto);

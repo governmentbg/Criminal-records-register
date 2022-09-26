@@ -44,6 +44,12 @@ implements OnInit
     this.validateAndSave(this.fullForm);
   };
 
+  deniedChanged(checked: any){
+    if (checked){
+      this.fullForm.group.patchValue({active: false, isAdmin: false});
+    }
+  }
+
   protected override errorHandler(errorResponse): void {
     if (errorResponse.status == "401") {
       this.router.navigateByUrl("pages");
@@ -56,6 +62,10 @@ implements OnInit
     if (errorResponse.error && errorResponse.error.code && errorResponse.error.code === 'UserAlreadyExists') {
       title = "Грешка";
       errorText = "Потребител с подаденото ЕГН вече съществува в избраната администрация";
+    } 
+    if (errorResponse.error && errorResponse.error.code && errorResponse.error.code === 'UICAlreadyExistsInOtherAdministrations') {
+      title = "Грешка";
+      errorText = "ЕИК-то е вече добавено към друга администрация!";
     } 
 
     this.toastr.showBodyToast("danger", title, errorText);
