@@ -40,7 +40,7 @@
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@tinymce/tinymce-angular": "^4.2.4",
-    "@tl/tl-common": "^9.1.185",
+    "@tl/tl-common": "^9.1.187",
     "angular-auth-oidc-client": "^11.6.11",
     "angular-material": "^1.2.5",
     "angular2-toaster": "^11.0.1",

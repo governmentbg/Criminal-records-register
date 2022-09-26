@@ -16,6 +16,7 @@ import {
   RemoteComponentWithForm,
 } from "@tl/tl-common";
 import { map } from "rxjs/operators";
+import { CustomGridRemoteFilteringService } from "../services/common/custom-grid-filtering.service";
 import { CustomToastrService } from "../services/common/custom-toastr.service";
 
 @Directive()
@@ -132,7 +133,7 @@ export class RemoteGridWithStatePersistance<
   }
 
   protected createRemoteService() {
-    this.remoteService = new GridRemoteFilteringService(
+    this.remoteService = new CustomGridRemoteFilteringService(
       {},
       this.service,
       this.grid,
