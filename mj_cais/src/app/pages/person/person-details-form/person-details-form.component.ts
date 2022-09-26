@@ -22,8 +22,7 @@ export class PersonDetailsFormComponent
     PersonDetailsResolverData,
     PersonDetailsService
   >
-  implements OnInit
-{
+  implements OnInit {
   public personId: string;
   public model: PersonModel;
   public PersonContextEnum = PersonContextEnum;
@@ -67,6 +66,10 @@ export class PersonDetailsFormComponent
 
   createInputObject(object: PersonModel) {
     return null;
+  }
+
+  get fullname() {
+    return `Данни за ${this.model?.firstname??''} ${this.model?.surname??''} ${this.model!.familyname??''} ${this.model!.fullname??''} /  ${this.model?.firstnameLat??''}  ${this.model?.surnameLat??''}  ${this.model?.familynameLat??''}  ${this.model?.fullnameLat??''} `;
   }
 
   onChangeTab(event) {

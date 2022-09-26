@@ -1,118 +1,103 @@
 <nb-card>
   <nb-card-header class="">
-    <cais-card-header
-      [label]="'Данни за лице'"
-      [onCancelFunction]="globalCancelFunction"
-      [setForPreview]="true"
-    ></cais-card-header>
+    <cais-card-header [label]="fullname" [onCancelFunction]="globalCancelFunction" [setForPreview]="true">
+    </cais-card-header>
   </nb-card-header>
   <nb-card-body>
     <div class="card bg-transparent mt-3">
       <div class="card-body">
-        <h6>
-          <span
-            >{{ model.firstname }} {{ model.surname }} {{ model.familyname }}
-            {{ model.fullname }}</span
-          >
-          /
-          <span>
-            {{ model.firstnameLat }} {{ model.surnameLat }}
-            {{ model.familynameLat }} {{ model.fullnameLat }}
-          </span>
-        </h6>
-        <div>
-          Пол:
-          <ng-container *ngIf="model.sex == 1">
-            <span> Мъж </span>
-          </ng-container>
-          <ng-container *ngIf="model.sex == 2">
-            <span> Жена </span>
-          </ng-container>
-          <ng-container *ngIf="model.sex == 0">
-            <span> Неизвестен </span>
-          </ng-container>
-        </div>
-        <div *ngIf="model.birthDate != null">
-          Дата на раждане: {{ model.birthDate | date }}
-        </div>
-        <div>
-          <span *ngIf="model.egn != null"> ЕГН: {{ model.egn }} </span>
-          <span *ngIf="model.lnch != null"> ЛНЧ: {{ model.lnch }} </span>
-          <span *ngIf="model.ln != null"> ЛН: {{ model.ln }} </span>
-        </div>
-        <div>
-          Място за раждане:
-          <span>
-            <span *ngIf="model.birthPlace.country.displayName != null"
-              >{{ model.birthPlace.country.displayName }},
+        <div class="d-flex flex-column gap-1">
+          <div *ngIf="model.birthDate != null">
+            Дата на раждане: <span class="fw-bold">{{ model.birthDate | date }}</span>
+          </div>
+          <div>
+            <ng-container *ngIf="model.egn != null">ЕГН: <span class="fw-bold">{{ model.egn }}</span> </ng-container>
+            <ng-container *ngIf="model.lnch != null"> ЛНЧ: <span class="fw-bold">{{ model.lnch }}</span> </ng-container>
+            <ng-container *ngIf="model.ln != null"> ЛН: <span class="fw-bold">{{ model.ln }}</span> </ng-container>
+          </div>
+          <div>
+            Пол:
+            <ng-container *ngIf="model.sex == 1">
+              <span class="fw-bold"> Мъж </span>
+            </ng-container>
+            <ng-container *ngIf="model.sex == 2">
+              <span class="fw-bold"> Жена </span>
+            </ng-container>
+            <ng-container *ngIf="model.sex == 0">
+              <span> Неизвестен </span>
+            </ng-container>
+          </div>
+          <div>
+            Място за раждане:
+            <span>
+              <span *ngIf="model.birthPlace.country.displayName != null"
+                class="fw-bold">{{ model.birthPlace.country.displayName }},
+              </span>
+              <span *ngIf="model.birthPlace.districtDisplayName != null"
+                class="fw-bold">{{ model.birthPlace.districtDisplayName }},
+              </span>
+              <span *ngIf="model.birthPlace.municipalityDisplayName != null"
+                class="fw-bold">{{ model.birthPlace.municipalityDisplayName }},
+              </span>
+              <span *ngIf="model.birthPlace.cityDisplayName != null" class="fw-bold">
+                {{ model.birthPlace.cityDisplayName }}
+              </span>
             </span>
-            <span *ngIf="model.birthPlace.districtDisplayName != null"
-              >{{ model.birthPlace.districtDisplayName }},
-            </span>
-            <span *ngIf="model.birthPlace.municipalityDisplayName != null"
-              >{{ model.birthPlace.municipalityDisplayName }},
-            </span>
-            <span *ngIf="model.birthPlace.cityDisplayName != null">
-              {{ model.birthPlace.cityDisplayName }}
-            </span>
-          </span>
-          <span *ngIf="model.birthPlace.foreignCountryAddress != null" )>
+
+          </div>
+          <div *ngIf="model.birthPlace.foreignCountryAddress != null">
             В случай на друг адрес:
-            {{ model.birthPlace.foreignCountryAddress }}</span
-          >
-        </div>
-        <div *ngIf="model.nationalitiesNames != null">
-          Гражданство:
-          <span *ngFor="let nationality of model.nationalitiesNames">
-            <span class="mt-2 mr-2">
-              {{ nationality }}
+            <span class="fw-bold">{{ model.birthPlace.foreignCountryAddress }}</span></div>
+          <div *ngIf="model.nationalitiesNames != null">
+            Гражданство:
+            <span *ngFor="let nationality of model.nationalitiesNames">
+              <span class="mt-2 mr-2" class="fw-bold">
+                {{ nationality }}
+              </span>
             </span>
-          </span>
-        </div>
-        <div
-          *ngIf="
+          </div>
+          <div *ngIf="
             model.motherFirstname != null ||
             model.motherSurname != null ||
             model.motherFamilyname != null ||
             model.motherFullname != null
-          "
-        >
-          <span>Майка: </span>
-          <span>
-            {{ model.motherFirstname }} {{ model.motherSurname }}
-            {{ model.motherFamilyname }} {{ model.motherFullname }}
-          </span>
-        </div>
-        <div
-          *ngIf="
+          ">
+            <span>Майка: </span>
+            <span class="fw-bold">
+              {{ model.motherFirstname }} {{ model.motherSurname }}
+              {{ model.motherFamilyname }} {{ model.motherFullname }}
+            </span>
+          </div>
+          <div *ngIf="
             model.fatherFirstname != null ||
             model.fatherSurname != null ||
             model.fatherFamilyname != null ||
             model.fatherFullname != null
-          "
-        >
-          <span>Баща: </span>
-          <span>
-            {{ model.fatherFirstname }} {{ model.fatherSurname }}
-            {{ model.fatherFamilyname }} {{ model.fatherFullname }}
-          </span>
-        </div>
-        <div>Брой бюлетини:</div>
-        <div>
-          <span>{{ BulletinTypeConstants.bulletin78A.name }}: </span>
-          <span>
-            {{ model.bulletin78ACount }}
-          </span>
+          ">
+            <span>Баща: </span>
+            <span class="fw-bold">
+              {{ model.fatherFirstname }} {{ model.fatherSurname }}
+              {{ model.fatherFamilyname }} {{ model.fatherFullname }}
+            </span>
+          </div>
 
-          <span>{{ BulletinTypeConstants.convictionBulletin.name }}: </span>
-          <span>
-            {{ model.convictionBulletinCount }}
-          </span>
+          <div>
+            Брой бюлетини:
+            <span class="fw-bold">{{ BulletinTypeConstants.bulletin78A.name }}: </span> <span
+              class="badge text-bg-primary mx-1">{{ model.bulletin78ACount }}</span>
 
-          <span>{{ BulletinTypeConstants.unspecified.name }}: </span>
-          <span>
-            {{ model.bulletinUnspecifiedCount }}
-          </span>
+
+
+            <span class="fw-bold"> {{ BulletinTypeConstants.convictionBulletin.name }}:</span>
+            <span class="badge text-bg-primary mx-1">
+              {{ model.convictionBulletinCount }}
+            </span>
+
+            <span class="fw-bold"> {{ BulletinTypeConstants.unspecified.name }}:</span>
+            <span class="badge text-bg-primary mx-1">
+              {{ model.bulletinUnspecifiedCount }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -148,16 +133,12 @@
       </nb-tab>
       <nb-tab [tabTitle]="pidsTabTitle">
         <ng-container *ngIf="showPidsTab">
-          <cais-person-pid-overview
-            [personModel]="this.dbData.element"
-          ></cais-person-pid-overview>
+          <cais-person-pid-overview [personModel]="this.dbData.element"></cais-person-pid-overview>
         </ng-container>
       </nb-tab>
       <nb-tab [tabTitle]="historyTabTitle">
         <ng-container *ngIf="showHistoryTab">
-          <cais-person-history-overview
-            [personModel]="this.dbData.element"
-          ></cais-person-history-overview>
+          <cais-person-history-overview [personModel]="this.dbData.element"></cais-person-history-overview>
         </ng-container>
       </nb-tab>
     </nb-tabset>
