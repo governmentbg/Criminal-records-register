@@ -9,4 +9,5 @@ export enum CertificateStatuTypeEnum {
   CertificateForDelivery = "CertificateForDelivery",
   NewId = "NewId",//TODO: create app-enum
   ApprovedApplication = "ApprovedApplication",//TODO: create app-enum
+  Canceled = "Canceled",//TODO: create app-enum
 }

@@ -42,6 +42,7 @@ export class ApplicationCertificateResultComponent
   @Input() users: BaseNomenclatureModel[];
   @Input() person: PersonForm;
   @Input() applicationCode: string;
+  @Input() applicationStatus: string;
   @Input() decisionTypes: BaseNomenclatureModel[];
 
   @ViewChild("bulletinsCheckGrid", {
