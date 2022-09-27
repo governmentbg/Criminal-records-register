@@ -77,8 +77,8 @@ export class ApplicationCertificateResultComponent
       if (
         this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
-        this.model.statusCode == CertificateStatuTypeEnum.Delivered ||
-        this.model.statusCode == CertificateStatuTypeEnum.CertificateContentReady 
+        this.model.statusCode == CertificateStatuTypeEnum.Delivered 
+        || this.model.statusCode == CertificateStatuTypeEnum.CertificateUserSign 
       ) {
         this.fullForm.group.disable();
       }

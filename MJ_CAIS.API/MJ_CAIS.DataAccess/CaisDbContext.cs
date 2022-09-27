@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -117,6 +117,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<NInternalRequest> NInternalRequests { get; set; } = null!;
         public virtual DbSet<NIntternalReqType> NIntternalReqTypes { get; set; } = null!;
         public virtual DbSet<NReqStatus> NReqStatuses { get; set; } = null!;
+       
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
         public virtual DbSet<PPersonAlias> PPersonAliases { get; set; } = null!;
         public virtual DbSet<PPersonCitizenship> PPersonCitizenships { get; set; } = null!;
@@ -156,8 +157,18 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ZUserRole> ZUserRoles { get; set; } = null!;
         public virtual DbSet<ZZService> ZZServices { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseOracle("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=172.31.12.87)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=MJCAISD)));User ID=MJ_CAIS;Password=G9mrMwGRSeCpvPs7eo4y;");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("MJ_CAIS");
 
             modelBuilder.Entity<AAppBulletin>(entity =>
             {
@@ -7914,6 +7925,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
+                entity.Property(e => e.Denied)
+                    .HasPrecision(1)
+                    .HasColumnName("DENIED");
+
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
@@ -7972,6 +7987,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("REG_CERT_SUBJECT");
 
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(2000)
+                    .IsUnicode(false)
+                    .HasColumnName("REMARKS");
+
                 entity.Property(e => e.SecurityStamp)
                     .HasMaxLength(256)
                     .IsUnicode(false)
@@ -7997,13 +8017,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
-
-                entity.Property(e => e.Denied)
-                    .HasColumnType("NUMBER(1)")
-                    .HasColumnName("DENIED");
-
-                entity.Property(e => e.Remarks)
-                    .HasColumnName("REMARKS");
 
                 entity.HasOne(d => d.Administration)
                     .WithMany(p => p.GUsersExts)
@@ -8202,6 +8215,15 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("P_PERS_ID_ID");
 
+                entity.Property(e => e.ProcessedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PROCESSED_BY");
+
+                entity.Property(e => e.ProcessedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("PROCESSED_ON");
+
                 entity.Property(e => e.RegNumber)
                     .HasMaxLength(100)
                     .HasColumnName("REG_NUMBER");
@@ -8216,6 +8238,15 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("REQUEST_DATE");
 
                 entity.Property(e => e.ResponseDescr).HasColumnName("RESPONSE_DESCR");
+
+                entity.Property(e => e.SentBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SENT_BY");
+
+                entity.Property(e => e.SentOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SENT_ON");
 
                 entity.Property(e => e.ToAuthorityId)
                     .HasMaxLength(50)
@@ -8250,10 +8281,20 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.PPersIdId)
                     .HasConstraintName("FK_N_INTERNAL_REQUESTS_P_PERSO");
 
+                entity.HasOne(d => d.ProcessedByNavigation)
+                    .WithMany(p => p.NInternalRequestProcessedByNavigations)
+                    .HasForeignKey(d => d.ProcessedBy)
+                    .HasConstraintName("FK_INT_REQ_PROCESSEDBY");
+
                 entity.HasOne(d => d.ReqStatusCodeNavigation)
                     .WithMany(p => p.NInternalRequests)
                     .HasForeignKey(d => d.ReqStatusCode)
                     .HasConstraintName("FK_N_INTERNAL_REQUESTS_B_REQ_S");
+
+                entity.HasOne(d => d.SentByNavigation)
+                    .WithMany(p => p.NInternalRequestSentByNavigations)
+                    .HasForeignKey(d => d.SentBy)
+                    .HasConstraintName("FK_INT_REQ_SENTBY");
 
                 entity.HasOne(d => d.ToAuthority)
                     .WithMany(p => p.NInternalRequestToAuthorities)
@@ -8315,6 +8356,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("NAME");
             });
 
+           
             modelBuilder.Entity<PPerson>(entity =>
             {
                 entity.ToTable("P_PERSON");
