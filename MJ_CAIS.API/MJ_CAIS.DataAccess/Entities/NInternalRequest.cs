@@ -20,7 +20,6 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public decimal? Version { get; set; }
         public string? PPersIdId { get; set; }
         public string? FromAuthorityId { get; set; }
         public string? ToAuthorityId { get; set; }
@@ -38,6 +37,5 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual GUser? SentByNavigation { get; set; }
         public virtual GCsAuthority? ToAuthority { get; set; }
         public virtual ICollection<NInternalReqBulletin> NInternalReqBulletins { get; set; }
-
     }
 }

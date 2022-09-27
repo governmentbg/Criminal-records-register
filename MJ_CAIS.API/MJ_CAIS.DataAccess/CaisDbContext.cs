@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -33,6 +33,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ARepBulletin> ARepBulletins { get; set; } = null!;
         public virtual DbSet<ARepCitizenship> ARepCitizenships { get; set; } = null!;
         public virtual DbSet<ARepPer> ARepPers { get; set; } = null!;
+        public virtual DbSet<ARepPurpose> ARepPurposes { get; set; } = null!;
         public virtual DbSet<AReport> AReports { get; set; } = null!;
         public virtual DbSet<AReportApplication> AReportApplications { get; set; } = null!;
         public virtual DbSet<AReportStatus> AReportStatuses { get; set; } = null!;
@@ -117,7 +118,6 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<NInternalRequest> NInternalRequests { get; set; } = null!;
         public virtual DbSet<NIntternalReqType> NIntternalReqTypes { get; set; } = null!;
         public virtual DbSet<NReqStatus> NReqStatuses { get; set; } = null!;
-       
         public virtual DbSet<PPerson> PPeople { get; set; } = null!;
         public virtual DbSet<PPersonAlias> PPersonAliases { get; set; } = null!;
         public virtual DbSet<PPersonCitizenship> PPersonCitizenships { get; set; } = null!;
@@ -157,18 +157,8 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ZUserRole> ZUserRoles { get; set; } = null!;
         public virtual DbSet<ZZService> ZZServices { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseOracle("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=172.31.12.87)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=MJCAISD)));User ID=MJ_CAIS;Password=G9mrMwGRSeCpvPs7eo4y;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("MJ_CAIS");
 
             modelBuilder.Entity<AAppBulletin>(entity =>
             {
@@ -1682,6 +1672,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.OrderNumber)
+                    .HasPrecision(3)
+                    .HasColumnName("ORDER_NUMBER");
+
                 entity.Property(e => e.RequestInfo)
                     .HasPrecision(1)
                     .HasColumnName("REQUEST_INFO");
@@ -1869,6 +1863,63 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.ARepPers)
                     .HasForeignKey(d => d.ReportId)
                     .HasConstraintName("FK_A_REP_PERS_A_REPORT_SEARCH_");
+            });
+
+            modelBuilder.Entity<ARepPurpose>(entity =>
+            {
+                entity.ToTable("A_REP_PURPOSES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.ForSecondSignature)
+                    .HasPrecision(1)
+                    .HasColumnName("FOR_SECOND_SIGNATURE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.OrderNumber)
+                    .HasPrecision(3)
+                    .HasColumnName("ORDER_NUMBER");
+
+                entity.Property(e => e.RequestInfo)
+                    .HasPrecision(1)
+                    .HasColumnName("REQUEST_INFO");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<AReport>(entity =>
@@ -8356,7 +8407,7 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("NAME");
             });
 
-           
+
             modelBuilder.Entity<PPerson>(entity =>
             {
                 entity.ToTable("P_PERSON");
