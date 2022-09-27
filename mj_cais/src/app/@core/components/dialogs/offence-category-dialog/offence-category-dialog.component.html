@@ -3,19 +3,18 @@
 ></tl-linear-progress>
 <nb-card class="cais-lookup">
   <nb-card-header>
-    <div class="row">
-      <div class="col-md-6">
-        <h4>Код-националното право</h4>
-      </div>
-      <div class="col-md-6" style="text-align: end">
+    <div class="d-flex justify-content-between">
+      <h5 class="fw-bold">Код-националното право</h5>
+      <div class="d-flex align-items-center gap-3">
         <button nbButton matRipple status="primary" (click)="success()">
           Избери
         </button>
-        <button nbButton matRipple (click)="dismiss()" class="ml-3">
+        <button nbButton matRipple (click)="dismiss()">
           Затвори
         </button>
       </div>
     </div>
+
   </nb-card-header>
   <nb-card-body>
     <tl-linear-progress
@@ -67,16 +66,6 @@
           <span [title]="cell.value">{{ cell.value }}</span>
         </ng-template>
       </igx-column>
-
-      <!-- <igx-column
-        field="code"
-        header="Системен идентификатор от Стандарти на ЕИСПП - Квалификация на престъпленията"
-        [dataType]="'string'"
-      >
-        <ng-template igxCell let-cell="cell">
-          <span [title]="cell.value">{{ cell.value }}</span>
-        </ng-template>
-      </igx-column> -->
 
       <ng-template #pager let-grid>
         <div class="tl-paginator">
