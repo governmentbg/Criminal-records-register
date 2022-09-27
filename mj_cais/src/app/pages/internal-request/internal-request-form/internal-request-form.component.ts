@@ -19,6 +19,7 @@ import { Guid } from "guid-typescript";
 import { InternalRequestTypeCodeConstants } from "./_models/internal-request-type-code.constants";
 import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
 import { ApplicationCertificateService } from "../../application/application-form/tabs/application-certificate-result/_data/application-certificate.service";
+import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 
 @Component({
   selector: "cais-internal-request-form",
@@ -38,7 +39,6 @@ export class InternalRequestFormComponent
     service: InternalRequestService,
     public injector: Injector,
     private dialogService: NbDialogService,
-    private loaderService: NgxSpinnerService,
     private appCertificateService: ApplicationCertificateService
   ) {
     super(service, injector);
@@ -63,6 +63,8 @@ export class InternalRequestFormComponent
   @ViewChild("reportDialog", { read: IgxDialogComponent })
   public reportDialog: IgxDialogComponent;
   public report: string;
+
+  public isLoading: boolean = false;
 
   ngOnInit(): void {
     this.fullForm = new InternalRequestForm();
@@ -108,19 +110,6 @@ export class InternalRequestFormComponent
     }
   }
 
-  public onReqTypeIsChanged() {
-    let isRehabilitation =
-      this.fullForm.nIntReqTypeId.value ==
-      InternalRequestTypeCodeConstants.Rehabilitation;
-    if (isRehabilitation) {
-      this.fullForm.description.clearValidators();
-      this.fullForm.description.updateValueAndValidity();
-    } else {
-      this.fullForm.description.addValidators(Validators.required);
-      this.fullForm.description.updateValueAndValidity();
-    }
-  }
-
   buildFormImpl(): FormGroup {
     return this.fullForm.group;
   }
@@ -130,6 +119,7 @@ export class InternalRequestFormComponent
   }
 
   submitFunction = () => {
+    this.isLoading = true;
     if (this.personBulletinsGrid) {
       let selectedBulletinsTransaction =
         this.personBulletinsGrid.transactions.getAggregatedChanges(true);
@@ -151,41 +141,138 @@ export class InternalRequestFormComponent
       return;
     }
 
-    let replayObj = {
-      accepted: accepted,
-      responseDescr: this.fullForm.responseDescr.value,
-    };
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "success",
+          showHeder: false,
+          confirmMessage: "Изпращане на отговор",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.isLoading = true;
+          let replayObj = {
+            accepted: accepted,
+            responseDescr: this.fullForm.responseDescr.value,
+          };
 
-    this.service.replay(this.fullForm.id.value, replayObj).subscribe(
-      (res) => {
-        this.loaderService.hide();
-        this.toastr.showToast("success", "Успешно изпратена заявка");
-        let activeTab = this.activatedRoute.snapshot.queryParams["activeTab"];
-        // is opened by judge
-        if (activeTab) {
-          if (activeTab == "for-judge") {
-            this.router.navigateByUrl("pages/internal-requests/for-judge");
-            return;
-          }
+          this.service.replay(this.fullForm.id.value, replayObj).subscribe({
+            next: (response) => {
+              this.toastr.showToast("success", "Успешно изпратена заявка");
+              let activeTab =
+                this.activatedRoute.snapshot.queryParams["activeTab"];
+              // is opened by judge
+              if (activeTab) {
+                if (activeTab == "for-judge") {
+                  this.router.navigateByUrl(
+                    "pages/internal-requests/for-judge"
+                  );
+                  return;
+                }
+              }
+
+              // is normal employee
+              this.router.navigate(["pages/internal-requests"], {
+                queryParams: { activeTab: "inbox" },
+              });
+            },
+            error: (errorResponse) => {
+              this.isLoading = false;
+              this.errorHandler(errorResponse);
+            },
+          });
         }
-
-        // is normal employee
-        this.router.navigate(["pages/internal-requests"], {
-          queryParams: { activeTab: "inbox" },
-        });
-      },
-      (error) => {
-        this.errorHandler(error);
-      }
-    );
+      });
   }
 
-  public send() {
-    this.isSend = true;
-    this.fullForm.reqStatusCode.patchValue(
-      InternalRequestStatusCodeConstants.Sent
-    );
-    this.submitFunction();
+  showReport() {
+    this.appCertificateService
+      .htmlReport(
+        this.fullForm.pPidTypeCode.value,
+        this.fullForm.pPersIdIdDisplay.value
+      )
+      .subscribe((res) => {
+        this.report = res;
+        this.reportDialog.open();
+      });
+  }
+
+  onPrint() {
+    const popupWin = window.open("", "_blank");
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title></title>
+          <style>
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+            <div>${this.report}</div>
+        </body>
+      </html>`);
+    popupWin.document.close();
+  }
+
+  public send(id) {
+    if (!this.fullForm.group.valid) {
+      this.isLoading = false;
+      this.fullForm.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+      this.scrollToValidationError();
+      return;
+    }
+
+    this.dialogService
+      .open(ConfirmDialogComponent, {
+        context: {
+          color: "success",
+          showHeder: false,
+          confirmMessage: "Изпращане на заявка",
+        },
+        closeOnBackdropClick: false,
+      })
+      .onClose.subscribe((result) => {
+        if (result) {
+          this.isSend = true;
+          this.fullForm.reqStatusCode.patchValue(
+            InternalRequestStatusCodeConstants.Sent
+          );
+          this.submitFunction();
+        }
+      });
+  }
+
+  public onReqTypeIsChanged() {
+    let isRehabilitation =
+      this.fullForm.nIntReqTypeId.value ==
+      InternalRequestTypeCodeConstants.Rehabilitation;
+    if (isRehabilitation) {
+      this.fullForm.description.clearValidators();
+      this.fullForm.description.updateValueAndValidity();
+    } else {
+      this.fullForm.description.addValidators(Validators.required);
+      this.fullForm.description.updateValueAndValidity();
+    }
+  }
+
+  //override
+  protected validateAndSave(form: any) {
+    if (!form.group.valid) {
+      this.isLoading = false;
+
+      form.group.markAllAsTouched();
+      this.toastr.showToast("danger", "Грешка при валидациите!");
+
+      this.scrollToValidationError();
+    } else {
+      this.isLoading = true;
+
+      this.formObject = form.group.getRawValue();
+      this.saveAndNavigate();
+    }
   }
 
   protected onSubmitSuccess(data: any) {
@@ -193,7 +280,6 @@ export class InternalRequestFormComponent
       this.router.navigateByUrl("pages/internal-requests?activeTab=draft");
       return;
     }
-
     let currentUrl = this.router.url.toLocaleLowerCase();
     let index = currentUrl.indexOf(this.CREATE_ACTION);
     let editUrl = currentUrl.substr(0, index) + this.EDIT_ACTION;
@@ -221,51 +307,6 @@ export class InternalRequestFormComponent
     this.router.navigateByUrl(url);
   };
 
-  // public openPidDialog = () => {
-  //   this.dialogService
-  //     .open(SelectPidDialogComponent, CommonConstants.defaultDialogConfig)
-  //     .onClose.subscribe(this.onSelectPid);
-  // };
-
-  // public onSelectPid = (item) => {
-  //   if (item) {
-  //     this.loaderService.show();
-  //     let oldSelectedPid = this.fullForm.pPersIdId.id.value;
-  //     this.fullForm.pPersIdId.setValue(item.id, item.pid);
-  //     // call service for bulletins
-  //     this.service.getBulletinForPerson(item.id).subscribe((response) => {
-  //       // if select new person, delete old bulletins
-  //       if (oldSelectedPid != item.id) {
-  //         this.deleteOldBulletins();
-  //       }
-
-  //       // add or update person bulletins
-  //       this.addOrUpdateBulletins(response);
-  //       this.loaderService.hide();
-  //     });
-  //   }
-  // };
-
-  private initDataForSend() {
-    this.fullForm.group.disable();
-    this.fullForm.responseDescr.enable();
-    this.fullForm.responseDescr.setValidators(Validators.required);
-
-    if (this.isEdit()) {
-      this.showReplayBtn = true;
-      this.title = "Отговор на заявка";
-    }
-
-    // check before change prop
-    if (this.isForPreview) {
-      this.showReplayBtn = false;
-      this.title = "Преглед на заявка";
-    }
-
-    this.formFinishedLoading.emit();
-    this.isForPreview = true;
-  }
-
   public onBulletinDeleted(rowContext) {
     let pk = rowContext.data.id;
     this.personBulletins = this.personBulletinsGrid.data.filter(
@@ -287,6 +328,26 @@ export class InternalRequestFormComponent
       newBulletin.id = guid;
       this.personBulletinsGrid.addRow(newBulletin);
     });
+  }
+
+  private initDataForSend() {
+    this.fullForm.group.disable();
+    this.fullForm.responseDescr.enable();
+    this.fullForm.responseDescr.setValidators(Validators.required);
+
+    if (this.isEdit()) {
+      this.showReplayBtn = true;
+      this.title = "Отговор на заявка";
+    }
+
+    // check before change prop
+    if (this.isForPreview) {
+      this.showReplayBtn = false;
+      this.title = "Преглед на заявка";
+    }
+
+    this.formFinishedLoading.emit();
+    this.isForPreview = true;
   }
 
   private setPidData(pids) {
@@ -328,67 +389,4 @@ export class InternalRequestFormComponent
       return;
     }
   }
-
-  showReport() {
-    this.appCertificateService
-      .htmlReport(
-        this.fullForm.pPidTypeCode.value,
-        this.fullForm.pPersIdIdDisplay.value
-      )
-      .subscribe((res) => {
-        this.report = res;
-        this.reportDialog.open();
-      });
-  }
-
-  onPrint() {
-    const popupWin = window.open("", "_blank");
-    popupWin.document.open();
-    popupWin.document.write(`
-      <html>
-        <head>
-          <title></title>
-          <style>
-          </style>
-        </head>
-        <body onload="window.print();window.close()">
-            <div>${this.report}</div>
-        </body>
-      </html>`);
-    popupWin.document.close();
-  }
-
-  // private deleteRow(pk) {
-  //   this.personBulletinsGrid.deleteRow(pk);
-  //   this.personBulletinsGrid.data = this.personBulletinsGrid.data.filter(
-  //     (d) => d.id != pk
-  //   );
-  // }
-
-  // private deleteOldBulletins() {
-  //   this.personBulletinsGrid.groupingFlatResult.forEach((currentBulletins) => {
-  //     let currentRow = this.personBulletinsGrid.getRowByKey(
-  //       currentBulletins.id
-  //     );
-
-  //     if (currentRow) {
-  //       let pk = currentBulletins.id;
-  //       this.deleteRow(pk);
-  //     }
-  //   });
-  // }
-
-  // private addOrUpdateBulletins(response) {
-  //   response.forEach((bulletin) => {
-  //     let currentRow = this.personBulletinsGrid.getRowByKey(bulletin.id);
-
-  //     if (currentRow) {
-  //       currentRow.update(bulletin);
-  //     } else {
-  //       var guid = Guid.create().toString();
-  //       bulletin.id = guid;
-  //       this.personBulletinsGrid.addRow(bulletin);
-  //     }
-  //   });
-  // }
 }

@@ -1,6 +1,6 @@
 <nb-card>
   <tl-linear-progress
-    [visible]="this.remoteService?.isLoading"
+    [visible]="this.remoteService?.isLoading || this.isLoading"
   ></tl-linear-progress>
   <igx-grid
     #grid
@@ -39,6 +39,7 @@
             (click)="markAsRead()"
             type="button"
             class="mr-3"
+            [disabled]="isLoading"
           >
             Маркирай като прочетени
           </button>
