@@ -73,7 +73,6 @@ export class ApplicationCertificateResultComponent
       new ApplicationCertificateResultModel(this.model)
     );
     if (this.model) {
-      debugger;
       if (
         this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
