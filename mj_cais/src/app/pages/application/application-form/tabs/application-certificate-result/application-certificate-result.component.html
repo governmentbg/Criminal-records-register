@@ -6,7 +6,7 @@
       this.model.statusCode == CertificateStatuTypeEnum.CertificateUserSign ||
       this.model.statusCode ==
         CertificateStatuTypeEnum.CertificateForDelivery ||
-      this.model.statusCode == CertificateStatuTypeEnum.Delivered) && applicationCode != '6'">
+      this.model.statusCode == CertificateStatuTypeEnum.Delivered) ">
     <form class="test" autocomplete="off">
       <div class="row " style="align-items: center;">
         <div class="row">
@@ -177,7 +177,7 @@
     </igx-grid>
   </ng-container>
 
-  <ng-container *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection  && applicationCode != '6'">
+  <ng-container *ngIf="this.model.statusCode == CertificateStatuTypeEnum.BulletinsSelection ">
     <igx-grid #bulletinsCheckGrid [height]="null" [data]="bulletinsCheckData" [primaryKey]="'id'"
       [allowFiltering]="true" [rowSelectable]="true" [rowSelection]="isForPreview ? 'none' : 'multiple'"
       [hideRowSelectors]="false">
