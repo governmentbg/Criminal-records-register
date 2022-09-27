@@ -316,23 +316,7 @@ namespace MJ_CAIS.Services
                 _logger.LogTrace($"{application.Id}: Before _applicationRepository.SelectBulletinIdsAsync.");
                 var bulletins = await (await _applicationRepository.SelectBulletinIdsAsync(personId)).ToListAsync();//.ToListAsync();
                 _logger.LogTrace($"{application.Id}: After _applicationRepository.SelectBulletinIdsAsync.");
-                //var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                //               (pids.Contains(b.EgnId) ||
-                //               pids.Contains(b.LnchId) ||
-                //               pids.Contains(b.LnId) ||
-                //               pids.Contains(b.IdDocNumberId) ||
-                //               pids.Contains(b.SuidId)))).ToListAsync();
-                //var bulletins = await dbContext.BBulletins
-                //    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                //                //&& b.PBulletinIds.Any(bulID =>
-                //                //    pids.Contains(bulID.Person.PersonId
-                //                (pids.Contains(b.EgnId) ||
-                //                 pids.Contains(b.LnchId) ||
-                //                 pids.Contains(b.LnId) ||
-                //                 pids.Contains(b.IdDocNumberId) ||
-                //                 pids.Contains(b.SuidId)))
-                //    .ToListAsync();
-                bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
+                
                 if (bulletins.Count() > 0)
                 {
                     _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithBulletinsAsync.");
@@ -513,15 +497,14 @@ namespace MJ_CAIS.Services
             return cert;
         }
 
-        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
+        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> orderedBulletins,
             AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
                 application.CsAuthorityId, application.ApplicationType.Code);
             var orderNumber = 0;
-            cert.AAppBulletins = bulletins
-                .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                .ThenBy(b => b.DecisionDate).Select(b =>
+            cert.AAppBulletins = orderedBulletins
+                .Select(b =>
                 {
                     orderNumber++;
                     return new AAppBulletin
@@ -529,7 +512,7 @@ namespace MJ_CAIS.Services
                         Id = BaseEntity.GenerateNewId(),
                         BulletinId = b.Id,
                         CertificateId = cert.Id,
-                        ConvictionText = b.ConvRemarks,
+                        //ConvictionText = b.ConvRemarks, това е Null, не се пълни в заявката
                         OrderNumber = orderNumber,
                         EntityState = EntityStateEnum.Added
                     };

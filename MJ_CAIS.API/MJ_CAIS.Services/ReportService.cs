@@ -221,7 +221,7 @@ namespace MJ_CAIS.Services
 
                 if (bulletins.Count() > 0)
                 {
-                    rep.ARepBulletins = bulletins.OrderByDescending(b => b.DecisionDate).Select(b =>
+                    rep.ARepBulletins = bulletins.Select(b =>
                     {
 
                         return new ARepBulletin()

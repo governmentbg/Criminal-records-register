@@ -433,7 +433,7 @@ namespace MJ_CAIS.Services
                 //                 pids.Contains(b.IdDocNumberId) ||
                 //                 pids.Contains(b.SuidId)))
                 //    .ToListAsync();
-                bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
+                //bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
                 if (bulletins.Count() > 0)
                 {
                     _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithBulletinsAsync.");
@@ -473,15 +473,13 @@ namespace MJ_CAIS.Services
             //dbContext.AApplications.Update(application);
         }
 
-        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
+        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> orderedBulletins,
            AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
                 application.CsAuthorityId, application.ApplicationType.Code);
             var orderNumber = 0;
-            cert.AAppBulletins = bulletins
-                .OrderByDescending(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                .ThenByDescending(b => b.DecisionDate).Select(b =>
+            cert.AAppBulletins = orderedBulletins.Select(b =>
                 {
                     orderNumber++;
                     return new AAppBulletin
@@ -489,7 +487,7 @@ namespace MJ_CAIS.Services
                         Id = BaseEntity.GenerateNewId(),
                         BulletinId = b.Id,
                         CertificateId = cert.Id,
-                        ConvictionText = b.ConvRemarks,
+                        //ConvictionText = b.ConvRemarks,
                         OrderNumber = orderNumber,
                         EntityState = EntityStateEnum.Added
                     };

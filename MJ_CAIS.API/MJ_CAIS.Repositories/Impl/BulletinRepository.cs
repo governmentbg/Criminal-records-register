@@ -296,7 +296,11 @@ namespace MJ_CAIS.Repositories.Impl
                     .Include(x => x.BPersNationalities)
                         .ThenInclude(x => x.Country)
                     .Where(x => bulletinsList.Where(b => b.StatusId != BulletinConstants.Status.Deleted).Select(b => b.Id).Contains(x.Id))
-                    .OrderBy(x => x.CreatedOn);
+                    //order_bulletins
+                    .OrderBy(b => b.DecisionFinalDate)
+                    .OrderBy(b => b.DecisionDate)
+                    .OrderBy(b => b.CaseYear)
+                    .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now);
 
             return await Task.FromResult(result);
         }
