@@ -124,44 +124,51 @@ namespace MJ_CAIS.Repositories.Impl
             return query;
         }
 
-        public IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId)
+        public async Task<List<ReportAppBulletinIdDTO>> GetBulletinsByPersonIdAsync(string personId)
         {
             var bulletinsByEgn = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                  join egn in _dbContext.PPersonIds.AsNoTracking() on bulletin.EgnId equals egn.Id
                                  where egn.PersonId == personId
                                  &&
-                                 bulletin.StatusId != BulletinConstants.Status.Deleted
-                                 select new ReportAppBulletinIdDTO
+                                 bulletin.StatusId != BulletinConstants.Status.Deleted                      
+                                 select new BBulletin
                                  {
                                      Id = bulletin.Id,
                                      CreatedOn = bulletin.CreatedOn,
-                                     DecisionDate = bulletin.DecisionDate
+                                     DecisionDate = bulletin.DecisionDate,
+                                     DecisionFinalDate = bulletin.DecisionFinalDate,
+                                     CaseYear = bulletin.CaseYear,
+                                     UpdatedOn = bulletin.UpdatedOn
                                  };
-
 
             var bulletinsByLnch = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                   join lnch in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnchId equals lnch.Id
                                   where lnch.PersonId == personId
                                          &&
                                  bulletin.StatusId != BulletinConstants.Status.Deleted
-                                  select new ReportAppBulletinIdDTO
+                                  select new BBulletin
                                   {
                                       Id = bulletin.Id,
                                       CreatedOn = bulletin.CreatedOn,
-                                      DecisionDate = bulletin.DecisionDate
+                                      DecisionDate = bulletin.DecisionDate,
+                                      DecisionFinalDate = bulletin.DecisionFinalDate,
+                                      CaseYear = bulletin.CaseYear,
+                                      UpdatedOn = bulletin.UpdatedOn
                                   };
-
 
             var bulletinsByLn = from bulletin in _dbContext.BBulletins.AsNoTracking()
                                 join ln in _dbContext.PPersonIds.AsNoTracking() on bulletin.LnId equals ln.Id
                                 where ln.PersonId == personId
                                        &&
                                  bulletin.StatusId != BulletinConstants.Status.Deleted
-                                select new ReportAppBulletinIdDTO
+                                select new BBulletin
                                 {
                                     Id = bulletin.Id,
                                     CreatedOn = bulletin.CreatedOn,
-                                    DecisionDate = bulletin.DecisionDate
+                                    DecisionDate = bulletin.DecisionDate,
+                                    DecisionFinalDate = bulletin.DecisionFinalDate,
+                                    CaseYear = bulletin.CaseYear,
+                                    UpdatedOn = bulletin.UpdatedOn
                                 };
 
 
@@ -170,18 +177,30 @@ namespace MJ_CAIS.Repositories.Impl
                                   where suid.PersonId == personId
                                          &&
                                  bulletin.StatusId != BulletinConstants.Status.Deleted
-                                  select new ReportAppBulletinIdDTO
+                                  select new BBulletin
                                   {
                                       Id = bulletin.Id,
                                       CreatedOn = bulletin.CreatedOn,
-                                      DecisionDate = bulletin.DecisionDate
+                                      DecisionDate = bulletin.DecisionDate,
+                                      DecisionFinalDate = bulletin.DecisionFinalDate,
+                                      CaseYear = bulletin.CaseYear,
+                                      UpdatedOn = bulletin.UpdatedOn
                                   };
 
             var bulletins = bulletinsByEgn
                                 .Union(bulletinsByLnch)
                                 .Union(bulletinsByLn)
                                 .Union(bulletinsBySuid);
-            return bulletins;
+
+            var allBulletins = await  bulletins.OrderBulletins().ToListAsync();
+            var result = allBulletins.Select(x => new ReportAppBulletinIdDTO
+            {
+                Id = x.Id,
+                CreatedOn = x.CreatedOn,
+                DecisionDate = x.DecisionDate
+            }).ToList();
+
+            return result;
         }
 
         public async Task<byte[]> GetReportAppContentByIdAsync(string aId)
