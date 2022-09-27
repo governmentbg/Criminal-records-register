@@ -72,13 +72,13 @@
 
             <nb-card-body style="overflow: unset">
               <div class="row">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-12">
                   <cais-autocomplete [inputFormControl]="fullForm.purposeId" [parentGroup]="fullForm.group"
                     [items]="dbData.purposeIds" [inputName]="'purposeId'">
                   </cais-autocomplete>
                 </div>
-                <div class="form-group col-md-9">
-                  <cais-input [type]="'text'" [inputFormControl]="fullForm.purpose" [parentGroup]="fullForm.group">
+                <div class="form-group col-md-12 mt-3">
+                  <cais-input [type]="'text'" [inputFormControl]="fullForm.purpose" [parentGroup]="fullForm.group"   [rows]="'3'" [inputType]="'TextArea'">
                   </cais-input>
                 </div>
               </div>
