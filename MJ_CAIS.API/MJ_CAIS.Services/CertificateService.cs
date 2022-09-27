@@ -270,6 +270,15 @@ namespace MJ_CAIS.Services
 
         public async Task SetStatusToCanceled(string appId)
         {
+            ACertificate certificate = await CancelCertificate(appId);
+
+            await GenerateCertificateFromApplication(appId);
+
+            await _certificateRepository.SaveEntityAsync(certificate, false, true);
+        }
+
+        public async Task<ACertificate> CancelCertificate(string appId)
+        {
             var certificate = await _certificateRepository.GetByApplicationIdAsync(appId);
             if (certificate == null)
             {
@@ -280,10 +289,7 @@ namespace MJ_CAIS.Services
                 x.Code == ApplicationConstants.ApplicationCertificateStatuses.CanceledCertificate);
             SetCertificateStatus(certificate, aapplicationStatus,
                 "�������!");
-
-            await GenerateCertificateFromApplication(appId);
-
-            await _certificateRepository.SaveEntityAsync(certificate, false, true);
+            return certificate;
         }
 
         public async Task<string> GenerateCertificateFromApplication(string id)

@@ -63,10 +63,10 @@ namespace AutomaticStepsExecutor
 
                 }
 
-                entities.ForEach(x =>
-                  {
+                entities.ForEach(async(x) =>
+                   {
                       var application = (AApplication)x;
-                    _applicationService.SetApplicationStatus(application, statuses.First(), "Автоматично анулиране - неплатено.");
+                   await _applicationService.SetApplicationStatus(application, statuses.First(), "Автоматично анулиране - неплатено.");
 
                   });
 
