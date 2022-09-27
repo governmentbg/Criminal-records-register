@@ -45,7 +45,25 @@ namespace MJ_CAIS.Repositories.Impl
                                                                  pids.Contains(b.IdDocNumberId) ||
                                                                  pids.Contains(b.SuidId)))
                 //&& b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId)))
-                .Select(b => new BulletindecisionDateDTO { Id = b.Id, DecisionDate = b.DecisionDate }).Distinct().ToListAsync();
+                .Select(b => new BBulletin
+                { 
+                    Id = b.Id,
+                    DecisionFinalDate= b.DecisionFinalDate,
+                    DecisionDate = b.DecisionDate,
+                    CaseYear = b.CaseYear,
+                    CreatedOn = b.CreatedOn
+                }).Distinct()
+                //order_bulletins
+                .OrderBy(b => b.DecisionFinalDate)
+                .OrderBy(b => b.DecisionDate)
+                .OrderBy(b => b.CaseYear)
+                .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
+                .Select(b => new BulletindecisionDateDTO
+                {
+                    Id = b.Id,
+                    DecisionDate = b.DecisionDate
+                })
+                .ToListAsync();
             return bulletins;
         }
 

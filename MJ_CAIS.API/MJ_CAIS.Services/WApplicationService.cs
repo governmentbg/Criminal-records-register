@@ -236,7 +236,7 @@ namespace MJ_CAIS.Services
                 CountryId = w.CountryId,
 
             }).ToList();
-            _applicationService.SetApplicationStatus(appl, applicationStatus, ApplicationResources.descApplicationFromWeb);
+            await _applicationService.SetApplicationStatus(appl, applicationStatus, ApplicationResources.descApplicationFromWeb);
 
 
             PersonDTO personDto = new PersonDTO();

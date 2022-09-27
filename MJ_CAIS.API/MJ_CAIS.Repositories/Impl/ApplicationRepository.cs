@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.AStatusH;
@@ -43,22 +44,29 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<IQueryable<BBulletin>> SelectBulletinIdsAsync(string personId)
         {
-            var result = this._dbContext.BBulletins.Where(b =>
+            var result = (this._dbContext.BBulletins.Where(b =>
                         //(b.StatusId != BulletinConstants.Status.Deleted)
-                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId })
+                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId , DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear})
                         .Union(this._dbContext.BBulletins.Where(b =>
                         // (b.StatusId != BulletinConstants.Status.Deleted)
-                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId }))
+                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear }))
                         .Union(this._dbContext.BBulletins.Where(b =>
                         // (b.StatusId != BulletinConstants.Status.Deleted)
-                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId }))
+                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear }))
                         .Union(this._dbContext.BBulletins.Where(b =>
                          //  (b.StatusId != BulletinConstants.Status.Deleted)
-                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId })).AsNoTracking();
+                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear }))
+                        )
+                        .Where(b => b.StatusId != BulletinConstants.Status.Deleted)
+                        //order_bulletins
+                        .OrderBy(b => b.DecisionFinalDate)
+                        .OrderBy(b => b.DecisionDate)
+                        .OrderBy(b => b.CaseYear)
+                        .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
+                        .AsNoTracking();
 
             return await Task.FromResult(result);
         }
-
 
         public override async Task<AApplication> SelectAsync(string id)
         {

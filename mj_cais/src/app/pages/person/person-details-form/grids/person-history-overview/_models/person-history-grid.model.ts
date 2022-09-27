@@ -13,6 +13,7 @@ export class PersonHistoryGridModel extends BaseGridModel {
   public pids: string[];
   public citizenShips: string[];
   public tablename: string;
+  public tablenameDesc: string;
   public tableId: string;
   public descr: string;
 
@@ -32,6 +33,7 @@ export class PersonHistoryGridModel extends BaseGridModel {
       this.pids = init.pids ?? null;
       this.citizenShips = init.citizenShips ?? null;
       this.tablename = init.tablename ?? null;
+      this.tablenameDesc = init.tablenameDesc ?? null;
       this.tableId = init.tableId ?? null;
       this.descr = init.descr ?? null;
     }

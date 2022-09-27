@@ -1,6 +1,6 @@
 <nb-card>
   <tl-linear-progress
-    [visible]="this.remoteService?.isLoading"
+    [visible]="this.remoteService?.isLoading || isLoading"
   ></tl-linear-progress>
   <igx-grid
     #grid
@@ -82,7 +82,9 @@
       <ng-template igxCell let-cell="cell">
         <div class="cell-center">
           <div class="d-flex gap-3">
-            <a
+            <button
+              class="btn btn-link"
+              [disabled]="isLoading"
               [title]="'Преглед'"
               [queryParams]="{ activeTab: 'draft' }"
               [routerLink]="[
@@ -91,25 +93,29 @@
               ]"
             >
               <nb-icon pack="fa" icon="eye"></nb-icon>
-            </a>
+            </button>
             <button
               class="btn btn-link"
               [title]="'Изпращане'"
               (click)="onSend(cell.rowData.id)"
+              [disabled]="isLoading"
             >
               <nb-icon pack="fa" icon="paper-plane"></nb-icon>
             </button>
-            <a
+            <button
+              class="btn btn-link"
+              [disabled]="isLoading"
               [title]="'Редактиране'"
               [queryParams]="{ activeTab: 'draft' }"
               [routerLink]="['/pages/internal-requests/edit', cell.rowData.id]"
             >
               <nb-icon pack="fa" icon="pen"></nb-icon>
-            </a>
+            </button>
             <button
               class="btn btn-link"
               [title]="'Изтриване'"
               (click)="onDelete(cell.rowData.id)"
+              [disabled]="isLoading"
             >
               <nb-icon pack="fa" icon="trash"></nb-icon>
             </button>

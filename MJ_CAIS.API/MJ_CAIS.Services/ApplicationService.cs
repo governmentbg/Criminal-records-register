@@ -125,10 +125,10 @@ namespace MJ_CAIS.Services
             // await dbContext.AApplications
             //   .FirstOrDefaultAsync(x => x.Id == aId);
             var statusCanceledApplication = await baseAsyncRepository.SingleOrDefaultAsync<AApplicationStatus>(a =>
-                    a.Code == ApplicationConstants.ApplicationStatuses.Canceled);
+                    a.Code == ApplicationConstants.ApplicationStatuses.Canceled );
             // await dbContext.AApplicationStatuses.FirstOrDefaultAsync(a =>
             //   a.Code == ApplicationConstants.ApplicationStatuses.Canceled);
-            SetApplicationStatus(repoObj, statusCanceledApplication, aInDto.Description);
+            await SetApplicationStatus(repoObj, statusCanceledApplication, aInDto.Description);
             await _applicationRepository.SaveChangesAsync();
             // await dbContext.SaveChangesAsync();
         }
@@ -141,7 +141,7 @@ namespace MJ_CAIS.Services
             //await dbContext.SaveChangesAsync();
             var statusCheckPayment = await baseAsyncRepository.SingleOrDefaultAsync<AApplicationStatus>(a =>
                   a.Code == ApplicationConstants.ApplicationStatuses.CheckPayment);
-            SetApplicationStatus(repoObj, statusCheckPayment, description);
+           await  SetApplicationStatus(repoObj, statusCheckPayment, description);
             await _applicationRepository.SaveChangesAsync();
 
         }
@@ -316,23 +316,7 @@ namespace MJ_CAIS.Services
                 _logger.LogTrace($"{application.Id}: Before _applicationRepository.SelectBulletinIdsAsync.");
                 var bulletins = await (await _applicationRepository.SelectBulletinIdsAsync(personId)).ToListAsync();//.ToListAsync();
                 _logger.LogTrace($"{application.Id}: After _applicationRepository.SelectBulletinIdsAsync.");
-                //var bulletins = await (await baseAsyncRepository.FindAsync<BBulletin>(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                //               (pids.Contains(b.EgnId) ||
-                //               pids.Contains(b.LnchId) ||
-                //               pids.Contains(b.LnId) ||
-                //               pids.Contains(b.IdDocNumberId) ||
-                //               pids.Contains(b.SuidId)))).ToListAsync();
-                //var bulletins = await dbContext.BBulletins
-                //    .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
-                //                //&& b.PBulletinIds.Any(bulID =>
-                //                //    pids.Contains(bulID.Person.PersonId
-                //                (pids.Contains(b.EgnId) ||
-                //                 pids.Contains(b.LnchId) ||
-                //                 pids.Contains(b.LnId) ||
-                //                 pids.Contains(b.IdDocNumberId) ||
-                //                 pids.Contains(b.SuidId)))
-                //    .ToListAsync();
-                bulletins = bulletins.Where(b => b.StatusId != BulletinConstants.Status.Deleted).ToList();
+                
                 if (bulletins.Count() > 0)
                 {
                     _logger.LogTrace($"{application.Id}: Before ProcessApplicationWithBulletinsAsync.");
@@ -347,9 +331,15 @@ namespace MJ_CAIS.Services
         }
 
 
-        public void SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description,
+        public async Task  SetApplicationStatus(AApplication application, AApplicationStatus newStatus, string description,
             bool includeInDbContext = true)
         {
+            var oldValue = application.StatusCode;  
+            if(oldValue == ApplicationConstants.ApplicationStatuses.DeliveredApplication )
+            {
+                throw new BusinessLogicException("Заявлението е доставено");
+                
+            }
             application.StatusCode = newStatus.Code;
             if (application.EntityState != EntityStateEnum.Added)
             {
@@ -377,6 +367,10 @@ namespace MJ_CAIS.Services
 
             aStatusH.ApplicationId = application.Id;
             aStatusH.Application = application;
+            if (oldValue == ApplicationConstants.ApplicationStatuses.ApprovedApplication && newStatus.Code == ApplicationConstants.ApplicationStatuses.Canceled)
+            {
+                await _certificateService.CancelCertificate(application.Id);
+            }
             baseAsyncRepository.ApplyChanges(aStatusH, new List<IBaseIdEntity>());
 
             // application.AStatusHes.Add(aStatusH);
@@ -386,6 +380,16 @@ namespace MJ_CAIS.Services
             //    dbContext.AApplications.Update(application);
             //}
         }
+
+        //private async Task CancelAllCertificates(AApplication application,string descr)
+        //{
+        //    var aStatus = await baseAsyncRepository.SingleOrDefaultAsync<AApplicationStatus>(x => x.Code == ApplicationConstants.ApplicationCertificateStatuses.CanceledCertificate);
+        //    var certs = await baseAsyncRepository.FindAsync<ACertificate>(x => x.ApplicationId == application.Id && x.StatusCode != ApplicationConstants.ApplicationCertificateStatuses.CanceledCertificate);
+        //    foreach (var cert in certs)
+        //    {
+        //        await _certificateService.SetCertificateStatus(cert, aStatus, descr);
+        //    }
+        //}
 
         public async Task<IQueryable<EWebRequestGridDTO>> SelectAllEWebRequestsByApplicationIdAsync(string aId)
         {
@@ -461,7 +465,7 @@ namespace MJ_CAIS.Services
             //todo: add resources
             if (application.StatusCode != aStatus.Code)
             {
-                SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+                await SetApplicationStatus(application, aStatus, "Създаване на сертификат");
             }
 
             application.ACertificates.Add(cert);
@@ -513,15 +517,14 @@ namespace MJ_CAIS.Services
             return cert;
         }
 
-        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> bulletins,
+        private async Task<ACertificate> ProcessApplicationWithBulletinsAsync(AApplication application, List<BBulletin> orderedBulletins,
             AApplicationStatus certificateStatus, int certificateValidityMonths, AApplicationStatus aStatus)
         {
             var cert = await CreateCertificateAsync(application.Id, certificateStatus, certificateValidityMonths,
                 application.CsAuthorityId, application.ApplicationType.Code);
             var orderNumber = 0;
-            cert.AAppBulletins = bulletins
-                .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                .ThenBy(b => b.DecisionDate).Select(b =>
+            cert.AAppBulletins = orderedBulletins
+                .Select(b =>
                 {
                     orderNumber++;
                     return new AAppBulletin
@@ -529,7 +532,7 @@ namespace MJ_CAIS.Services
                         Id = BaseEntity.GenerateNewId(),
                         BulletinId = b.Id,
                         CertificateId = cert.Id,
-                        ConvictionText = b.ConvRemarks,
+                        //ConvictionText = b.ConvRemarks, това е Null, не се пълни в заявката
                         OrderNumber = orderNumber,
                         EntityState = EntityStateEnum.Added
                     };
@@ -537,7 +540,7 @@ namespace MJ_CAIS.Services
             //todo: add resources
             if (application.StatusCode != aStatus.Code)
             {
-                SetApplicationStatus(application, aStatus, "Създаване на сертификат");
+                await SetApplicationStatus(application, aStatus, "Създаване на сертификат");
             }
 
             application.ACertificates.Add(cert);

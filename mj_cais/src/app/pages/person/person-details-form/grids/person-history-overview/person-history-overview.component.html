@@ -20,6 +20,16 @@
   [pinning]="pinningConfig"
   [cellSelection]="'none'"
 >
+  <igx-grid-toolbar>
+    <igx-grid-toolbar-title>
+      <span class="fw-bold"
+        >История на промените на лице</span
+      ></igx-grid-toolbar-title
+    >
+    <igx-grid-toolbar-actions>
+      <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
+    </igx-grid-toolbar-actions>
+  </igx-grid-toolbar>
   <igx-column
     field="id"
     header="Идентификатор"
@@ -29,16 +39,17 @@
   >
   </igx-column>
   <igx-column
-    field="tablename"
-    header="Източник"
+    field="tableId"
+    header="Идентификатор на източник"
     [sortable]="true"
     [dataType]="'string'"
     [resizable]="true"
+    [hidden]="true"
   >
   </igx-column>
   <igx-column
-    field="tableId"
-    header="Идентификатор на източник"
+    field="tablenameDesc"
+    header="Източник"
     [sortable]="true"
     [dataType]="'string'"
     [resizable]="true"
@@ -151,6 +162,29 @@
     [width]="'20%'"
     [resizable]="true"
   >
+  </igx-column>
+  <igx-column
+    width="50px"
+    header="Действия"
+    [sortable]="false"
+    [filterable]="false"
+    [pinned]="true"
+    [disableHiding]="true"
+  >
+    <ng-template igxCell let-cell="cell">
+      <div class="cell-center">
+        <div class="d-flex gap-3">
+          <button
+            class="btn btn-link"
+            [title]="'Преглед'"
+            [disabled]="!(cell.rowData.tablename && cell.rowData.tableId)"
+            (click)="onPreview(cell.rowData.tablename, cell.rowData.tableId)"
+          >
+            <nb-icon pack="fa" icon="eye"></nb-icon>
+          </button>
+        </div>
+      </div>
+    </ng-template>
   </igx-column>
   <ng-template #pager let-grid>
     <div class="tl-paginator">

@@ -1,10 +1,12 @@
-<nb-card  [formGroup]="fullForm.group">
+<tl-linear-progress [visible]="this.isLoading"></tl-linear-progress>
+<nb-card [formGroup]="fullForm.group">
   <nb-card-header class="">
     <cais-card-header
       [label]="this.title"
       [onSaveFunction]="submitFunction"
       [onCancelFunction]="onCancelFunction"
       [setForPreview]="isForPreview"
+      [disabled]="isLoading"
     >
       <button
         *ngIf="
@@ -16,6 +18,7 @@
         [status]="'primary'"
         (click)="send()"
         type="button"
+        [disabled]="isLoading"
       >
         <nb-icon class="pt-1" pack="fa" icon="paper-plane"></nb-icon> Изпрати
       </button>
@@ -37,6 +40,7 @@
           [status]="'primary'"
           (click)="replay(true)"
           type="button"
+          [disabled]="isLoading"
         >
           Обработена заявка
         </button>
@@ -46,13 +50,14 @@
           [status]="'danger'"
           (click)="replay(false)"
           type="button"
+          [disabled]="isLoading"
         >
           Отказана заявка
         </button>
       </ng-container>
     </cais-card-header>
   </nb-card-header>
-  <nb-card-body >
+  <nb-card-body>
     <form autocomplete="off">
       <div class="row mt-2">
         <div class="form-group col-md-6">

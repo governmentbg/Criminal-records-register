@@ -304,7 +304,8 @@ namespace MJ_CAIS.Repositories.Impl
                     Pids = x.PPersonIdsHes.Select(x => x.Pid),
                     CitizenShips = x.PPersonHCitizenships.Select(x => x.Country.Name),
                     TableId = x.TableId,
-                    Tablename = x.Tablename == ContextTable.Bulletins ? PersonResources.tableBulletins :
+                    Tablename = x.Tablename,
+                    TablenameDesc = x.Tablename == ContextTable.Bulletins ? PersonResources.tableBulletins :
                       x.Tablename == ContextTable.Application ? PersonResources.tableApplication :
                       x.Tablename == ContextTable.WApplication ? PersonResources.tableWApplication :
                       x.Tablename == ContextTable.Report ? PersonResources.tableReport :

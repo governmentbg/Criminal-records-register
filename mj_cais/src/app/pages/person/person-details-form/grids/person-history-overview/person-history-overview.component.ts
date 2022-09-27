@@ -3,6 +3,7 @@ import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { LoaderService } from "../../../../../@core/services/common/loader.service";
 import { PersonHistoryGridService } from "./_data/person-history-grid.service";
+import { ContextTableEnum } from "./_models/context-table.enum";
 import { PersonHistoryGridModel } from "./_models/person-history-grid.model";
 
 @Component({
@@ -19,7 +20,7 @@ export class PersonHistoryOverviewComponent extends RemoteGridWithStatePersistan
   constructor(
     public service: PersonHistoryGridService,
     public injector: Injector,
-    public dateFormatService: DateFormatService,
+    public dateFormatService: DateFormatService
   ) {
     super("person-history-grid", service, injector);
     let personIdParams = this.activatedRoute.snapshot.params["ID"];
@@ -29,5 +30,21 @@ export class PersonHistoryOverviewComponent extends RemoteGridWithStatePersistan
 
   ngOnInit() {
     super.ngOnInit();
+  }
+
+  onPreview(tableName, tableId) {
+    if (tableName && tableId) {
+      if (tableName == ContextTableEnum.Bulletins) {
+        this.router.navigateByUrl(`/pages/bulletins/preview/${tableId}`);
+      } else if (tableName == ContextTableEnum.Application) {
+        this.router.navigateByUrl(`/pages/applications/preview/${tableId}`);
+      } else if (tableName == ContextTableEnum.Fbbc) {
+        this.router.navigateByUrl(`/pages/fbbcs/preview/${tableId}`);
+      } else if (tableName == ContextTableEnum.Report) {
+        this.router.navigateByUrl(`/pages/report-applications/preview/${tableId}`);
+      } else if (tableName == ContextTableEnum.WApplication) {
+        this.router.navigateByUrl(`/pages/applications/preview/${tableId}`);
+      }
+    }
   }
 }
