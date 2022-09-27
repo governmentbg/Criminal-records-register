@@ -1,6 +1,4 @@
 import { Component, Injector, Input } from "@angular/core";
-
-import { NgxSpinnerService } from "ngx-spinner";
 import { RemoteGridWithStatePersistance } from "../../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { InternalRequestService } from "../../../internal-request-form/_data/internal-request.service";
@@ -27,14 +25,14 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
     public internalRequestFormService: InternalRequestService,
     injector: Injector,
     public dateFormatService: DateFormatService,
-    private dialogService: NbDialogService,
-    private loaderService: NgxSpinnerService
+    private dialogService: NbDialogService
   ) {
     super("bulletins-search", service, injector);
     this.service.updateUrlStatus(InternalRequestStatusType.Draft, true);
   }
 
   public hideStatus: boolean = true;
+  public isLoading: boolean = false;
 
   ngOnInit() {
     super.ngOnInit();
@@ -45,12 +43,14 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
       .open(ConfirmDialogComponent, {
         context: {
           color: "success",
+          showHeder: false,
+          confirmMessage: "Изпращане на заявка"
         },
         closeOnBackdropClick: false,
       })
       .onClose.subscribe((result) => {
         if (result) {
-          this.loaderService.show();
+          this.isLoading = true;
           this.changeStatus(id, InternalRequestStatusCodeConstants.Sent);
         }
       });
@@ -66,43 +66,32 @@ export class InternalRequestDraftOvverviewComponent extends RemoteGridWithStateP
       })
       .onClose.subscribe((result) => {
         if (result) {
-          this.loaderService.show();
-          this.internalRequestFormService.delete(id).subscribe(
-            (res) => {
-              this.loaderService.hide();
-
+          this.isLoading = true;
+          this.internalRequestFormService.delete(id).subscribe({
+            next: (response) => {
+              this.isLoading = false;
               this.toastr.showToast("success", "Успешно изтрита заявка");
               this.ngOnInit();
             },
-            (error) => {
-              var errorText = error.status + " " + error.statusText;
-              this.toastr.showBodyToast(
-                "danger",
-                "Грешка при изпращане на заявка:",
-                errorText
-              );
-            }
-          );
+            error: (errorResponse) => {
+              this.errorHandler(errorResponse);
+            },
+          });
         }
       });
   }
 
   private changeStatus(id: string, status: string) {
-    this.internalRequestFormService.changeStatus(id, status).subscribe(
-      (res) => {
-        this.loaderService.hide();
-
+    this.isLoading = true;
+    this.internalRequestFormService.changeStatus(id, status).subscribe({
+      next: (response) => {
+        this.isLoading = false;
         this.toastr.showToast("success", "Успешно изпратена заявка");
         this.ngOnInit();
       },
-      (error) => {
-        var errorText = error.status + " " + error.statusText;
-        this.toastr.showBodyToast(
-          "danger",
-          "Грешка при изпращане на заявка:",
-          errorText
-        );
-      }
-    );
+      error: (errorResponse) => {
+        this.errorHandler(errorResponse);
+      },
+    });
   }
 }
