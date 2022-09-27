@@ -42,6 +42,7 @@ export class ApplicationCertificateResultComponent
   @Input() users: BaseNomenclatureModel[];
   @Input() person: PersonForm;
   @Input() applicationCode: string;
+  @Input() applicationStatus: string;
   @Input() decisionTypes: BaseNomenclatureModel[];
 
   @ViewChild("bulletinsCheckGrid", {
@@ -73,7 +74,6 @@ export class ApplicationCertificateResultComponent
       new ApplicationCertificateResultModel(this.model)
     );
     if (this.model) {
-      debugger;
       if (
         this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
