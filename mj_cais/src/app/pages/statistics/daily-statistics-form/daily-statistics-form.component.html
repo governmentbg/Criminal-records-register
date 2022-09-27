@@ -47,6 +47,16 @@
             [parentGroup]="fullForm.group"
           >
           </cais-input>
+          <span
+            class="caption status-danger ng-star-inserted"
+            *ngIf="
+              fullForm.fromDate?.errors?.timeSpan &&
+              (fullForm.fromDate.touched || fullForm.fromDate.dirty)
+            "
+          >
+            {{ fullForm.fromDate.errors.timeSpan.value }}
+            Дата не може да бъде с повече от месец назад!
+          </span>
         </div>
         <div class="form-group col-md-2">
           <!-- todo starting date is today -->

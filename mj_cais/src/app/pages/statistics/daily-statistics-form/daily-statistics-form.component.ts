@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
 
 import { DailyStatisticsSearchForm } from "./_models/daily-statistics-search.form";
@@ -7,8 +7,6 @@ import { DailyStatisticsService } from "./_data/daily-statistics.service";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
 import { FormGroup } from "@angular/forms";
 import { DailyStatisticsSearchModel } from "./_models/daily-statistics-search.model";
-import { DailyStatisticsConstants } from "./_models/daily-statistics-constants";
-import { filter } from "rxjs";
 
 @Component({
   selector: "cais-daily-statistics-form",
