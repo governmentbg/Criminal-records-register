@@ -13,8 +13,8 @@ export class DailyStatisticsSearchForm extends BaseForm {
     //todo add second dropdown values
     let dateDayBefore = new Date();
     dateDayBefore.setDate(dateDayBefore.getDate() - 1);
-    this.fromDate = new FormControl(dateDayBefore);
-    this.toDate = new FormControl(new Date());
+    this.fromDate = new FormControl(dateDayBefore, Validators.required);
+    this.toDate = new FormControl(new Date(), Validators.required);
     this.statisticsType = new FormControl(null, Validators.required);
     this.status = new FormControl();
 
