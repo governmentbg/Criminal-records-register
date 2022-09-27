@@ -64,6 +64,7 @@ export abstract class CrudForm<
   public fullForm: TForm;
   public dbData: TResolverData;
   public displayTitle: string;
+  public isLoadingForm: boolean = false;
 
   protected navigateTimeout = 500;
   protected successMessage = "Успешно запазени данни!";
@@ -140,15 +141,20 @@ export abstract class CrudForm<
       submitAction = this.service.save(model);
     }
 
-    submitAction.subscribe({
-      next: (data) => {
-        this.toastr.showToast("success", this.successMessage);
+    // prevent submit twice
+    if(this.isLoadingForm === true){
+      return;
+    }
 
+    submitAction.subscribe({
+      next: (data) => {       
+        this.toastr.showToast("success", this.successMessage);
         setTimeout(() => {
           this.onSubmitSuccess(data);
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
+        this.isLoadingForm = false;
         this.errorHandler(errorResponse);
       },
     });
@@ -277,7 +283,7 @@ export abstract class CrudForm<
       this.router.navigateByUrl("pages");
       return;
     }
-
+    
     let title = this.dangerMessage;
     let errorText = errorResponse.status + " " + errorResponse.statusText;
 
@@ -286,6 +292,7 @@ export abstract class CrudForm<
       errorText = "";
     }
 
+    this.isLoadingForm = false;
     this.toastr.showBodyToast("danger", title, errorText);
 
     // if has server side validation errors add them to the form control
