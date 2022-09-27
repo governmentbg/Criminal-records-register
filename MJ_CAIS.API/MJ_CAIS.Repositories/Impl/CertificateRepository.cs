@@ -54,6 +54,7 @@ namespace MJ_CAIS.Repositories.Impl
                 query = query.Where(x => x.Approved == true);
             }
 
+            query = query.OrderBy(x => x.OrderNumber);
             return await Task.FromResult(query);
         }
 

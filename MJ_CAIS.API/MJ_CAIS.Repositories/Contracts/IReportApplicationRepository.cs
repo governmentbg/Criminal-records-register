@@ -12,7 +12,7 @@ namespace MJ_CAIS.Repositories.Contracts
 
         IQueryable<GeneratedReportGridDTO> SelectAllGeneratedReports();
 
-        IQueryable<ReportAppBulletinIdDTO> GetBulletinsByPids(string personId);
+        Task<List<ReportAppBulletinIdDTO>> GetBulletinsByPersonIdAsync(string personId);
 
         IQueryable<GeneratedReportDTO> SelectAllGeneratedReportsByAppId(string appId);
 

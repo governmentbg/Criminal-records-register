@@ -46,25 +46,26 @@ namespace MJ_CAIS.Repositories.Impl
         {
             var result = (this._dbContext.BBulletins.Where(b =>
                         //(b.StatusId != BulletinConstants.Status.Deleted)
-                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId , DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear})
+                        b.EgnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear , UpdatedOn = b.UpdatedOn })
                         .Union(this._dbContext.BBulletins.Where(b =>
                         // (b.StatusId != BulletinConstants.Status.Deleted)
-                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear }))
+                         b.LnchNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear , UpdatedOn = b.UpdatedOn }))
                         .Union(this._dbContext.BBulletins.Where(b =>
                         // (b.StatusId != BulletinConstants.Status.Deleted)
-                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear }))
+                        b.LnNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear , UpdatedOn = b.UpdatedOn }))
                         .Union(this._dbContext.BBulletins.Where(b =>
                          //  (b.StatusId != BulletinConstants.Status.Deleted)
-                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear }))
+                         b.SuidNavigation.PersonId == personId).Select(b => new BBulletin { Id = b.Id, CreatedOn = b.CreatedOn, StatusId = b.StatusId, DecisionFinalDate = b.DecisionFinalDate, DecisionDate = b.DecisionDate, CaseYear = b.CaseYear, UpdatedOn = b.UpdatedOn }))
                         )
-                        .Where(b => b.StatusId != BulletinConstants.Status.Deleted)
-                        //order_bulletins
-                        .OrderBy(b => b.DecisionFinalDate)
-                        .OrderBy(b => b.DecisionDate)
-                        .OrderBy(b => b.CaseYear)
-                        .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                        .AsNoTracking();
+                        .Where(b => b.StatusId != BulletinConstants.Status.Deleted);
+            //order_bulletins
+            //.OrderBy(b => b.DecisionFinalDate)
+            //.OrderBy(b => b.DecisionDate)
+            //.OrderBy(b => b.CaseYear)
+            //.OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
+            //.AsNoTracking();
 
+            result = result.OrderBulletins();
             return await Task.FromResult(result);
         }
 
