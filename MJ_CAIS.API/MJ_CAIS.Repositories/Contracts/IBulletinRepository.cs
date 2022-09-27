@@ -61,5 +61,7 @@ namespace MJ_CAIS.Repositories.Contracts
         Task<List<BulletinForRehabilitationAndEventDTO>> GetBulletinsByPidsIdExcludeCurrentAsync(List<string> pidsId, string currentBullId);
 
         Task<BBulletin> GetBulletinsCollectionsDataAsync(string bulletinId);
+
+        Task DeleteBulletinByIdAsync(string id, string desc);
     }
 }

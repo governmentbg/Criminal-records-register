@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
+using MJ_CAIS.Common.Exceptions;
 using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
@@ -154,29 +155,29 @@ namespace MJ_CAIS.Repositories.Impl
 
         public IQueryable<BulletinStatusHistoryDTO> SelectAllStatusHistoryData()
         {
-            var query = from bulletinHis in _dbContext.BBulletinStatusHes.AsNoTracking()
-                        join newStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.NewStatusCode equals newStatus.Code
-                            into newStatusLeft
-                        from newStatus in newStatusLeft.DefaultIfEmpty()
-                        join oldStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.OldStatusCode equals oldStatus.Code
-                           into oldStatusLeft
-                        from oldStatus in oldStatusLeft.DefaultIfEmpty()
-                        join user in _dbContext.GUsers.AsNoTracking() on bulletinHis.CreatedBy equals user.Id
-                          into userLeft
-                        from user in userLeft.DefaultIfEmpty()
-                        select new BulletinStatusHistoryDTO
-                        {
-                            Id = bulletinHis.Id,
-                            CreatedBy = user.Firstname + " " + user.Surname + " " + user.Familyname,
-                            CreatedOn = bulletinHis.CreatedOn,
-                            Descr = bulletinHis.Descr,
-                            Locked = bulletinHis.Locked,
-                            NewStatus = newStatus.Name,
-                            OldStatus = oldStatus.Name,
-                            Version = bulletinHis.Version,
-                            BulletinId = bulletinHis.BulletinId,
-                            HasContent = bulletinHis.HasContent
-                        };
+            var query = (from bulletinHis in _dbContext.BBulletinStatusHes.AsNoTracking()
+                         join newStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.NewStatusCode equals newStatus.Code
+                             into newStatusLeft
+                         from newStatus in newStatusLeft.DefaultIfEmpty()
+                         join oldStatus in _dbContext.BBulletinStatuses.AsNoTracking() on bulletinHis.OldStatusCode equals oldStatus.Code
+                            into oldStatusLeft
+                         from oldStatus in oldStatusLeft.DefaultIfEmpty()
+                         join user in _dbContext.GUsers.AsNoTracking() on bulletinHis.CreatedBy equals user.Id
+                           into userLeft
+                         from user in userLeft.DefaultIfEmpty()
+                         select new BulletinStatusHistoryDTO
+                         {
+                             Id = bulletinHis.Id,
+                             CreatedBy = user.Firstname + " " + user.Surname + " " + user.Familyname,
+                             CreatedOn = bulletinHis.CreatedOn,
+                             Descr = bulletinHis.Descr,
+                             Locked = bulletinHis.Locked,
+                             NewStatus = newStatus.Name,
+                             OldStatus = oldStatus.Name,
+                             Version = bulletinHis.Version,
+                             BulletinId = bulletinHis.BulletinId,
+                             HasContent = bulletinHis.HasContent
+                         }).OrderByDescending(x => x.CreatedOn);
 
             return query;
         }
@@ -360,6 +361,50 @@ namespace MJ_CAIS.Repositories.Impl
         public async Task<List<StatisticsCountDTO>> GetStatisticsForApplicationsAsync(StatisticsSearchDTO searchParams)
         {
             return await GetStatisticsAsync(searchParams, STATISTICS_PROCEDURE_APPLICATION_NAME);
+        }
+
+        public async Task DeleteBulletinByIdAsync(string id, string desc)
+        {
+            var bulletin = await _dbContext.BBulletins.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (bulletin == null) throw new BusinessLogicException(string.Format(BusinessLogicExceptionResources.bulletinDoesNotExist, id));
+
+            var oldStatusCode = bulletin.StatusId;
+
+            bulletin.EgnId = null;
+            bulletin.LnchId = null;
+            bulletin.LnId = null;
+            bulletin.SuidId = null;
+            bulletin.IdDocNumberId = null;
+            bulletin.StatusId = BulletinConstants.Status.Deleted;
+            bulletin.EntityState = EntityStateEnum.Modified;
+            bulletin.ModifiedProperties = new List<string>
+            {
+                nameof(bulletin.Version),
+                nameof(bulletin.EgnId),
+                nameof(bulletin.LnchId),
+                nameof(bulletin.LnId),
+                nameof(bulletin.SuidId),
+                nameof(bulletin.IdDocNumberId),
+                nameof(bulletin.Status),
+            };
+
+            var bulletinStatusH = new BBulletinStatusH
+            {
+                Id = BaseEntity.GenerateNewId(),
+                BulletinId = bulletin.Id,
+                Locked = bulletin.Locked,
+                Descr = desc,
+                OldStatusCode = oldStatusCode,
+                NewStatusCode = bulletin.StatusId,
+                EntityState = EntityStateEnum.Added,
+            };
+
+            _dbContext.ApplyChanges(bulletinStatusH);
+            _dbContext.ApplyChanges(bulletin);
+
+            await _dbContext.SaveChangesAsync();
         }
 
         private async Task<List<StatisticsCountDTO>> GetStatisticsAsync(StatisticsSearchDTO searchParams, string procedureName)
@@ -589,7 +634,13 @@ namespace MJ_CAIS.Repositories.Impl
                 query = query.Where(x => x.BulletinType == searchParams.BulletinType);
 
             if (!string.IsNullOrEmpty(searchParams.StatusId))
+            {
                 query = query.Where(x => x.StatusId == searchParams.StatusId);
+            }
+            else
+            {   // do not show deleted bulletins
+                query = query.Where(x => x.StatusId != BulletinConstants.Status.Deleted);
+            }
 
             if (!string.IsNullOrEmpty(searchParams.CaseNumber))
                 query = query.Where(x => x.CaseNumber == searchParams.CaseNumber);

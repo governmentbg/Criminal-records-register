@@ -106,6 +106,15 @@ namespace MJ_CAIS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Унищожен по давност.
+        /// </summary>
+        public static string msgDeleteBulletin {
+            get {
+                return ResourceManager.GetString("msgDeleteBulletin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to История на статус с идентификатор {0} не съдържа документ за визуализация на предишна версия на бюлетин..
         /// </summary>
         public static string msgHistoryObjContentDoesNotExist {

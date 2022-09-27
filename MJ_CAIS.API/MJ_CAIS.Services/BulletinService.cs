@@ -1,7 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData.Query;
-using Microsoft.EntityFrameworkCore;
 using MJ_CAIS.AutoMapperContainer;
 using MJ_CAIS.Common.Constants;
 using MJ_CAIS.Common.Enums;
@@ -19,8 +18,6 @@ using MJ_CAIS.Repositories.Contracts;
 using MJ_CAIS.Services.Contracts;
 using MJ_CAIS.Services.Contracts.Utils;
 using System.Text;
-using System.Transactions;
-using System.Xml.Xsl;
 using static MJ_CAIS.Common.Constants.BulletinConstants;
 using static MJ_CAIS.Common.Constants.PersonConstants;
 
@@ -268,6 +265,7 @@ namespace MJ_CAIS.Services
                 nameof(bulletin.Locked),
             };
 
+            // todo: remove, this method is called only when user activate bulletin
             if (statusId == Status.Deleted)
             {
                 await _bulletinRepository.SaveEntityAsync(bulletin, true);
@@ -298,6 +296,9 @@ namespace MJ_CAIS.Services
                 await this._notificationService.CreateNotificationFromBulletin(bulletin.Id);
             }
         }
+
+        public async Task DeleteBulletinByIdAsync(string id, string desc)
+            => await _bulletinRepository.DeleteBulletinByIdAsync(id, desc);
 
         public async Task<IQueryable<OffenceDTO>> GetOffencesByBulletinIdAsync(string aId)
         {

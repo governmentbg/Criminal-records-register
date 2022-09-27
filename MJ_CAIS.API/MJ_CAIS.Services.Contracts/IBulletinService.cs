@@ -38,12 +38,14 @@ namespace MJ_CAIS.Services.Contracts
 
         Task<BulletinBaseDTO> SelectWithPersonDataAsync(string personId);
 
-
         bool AddBulletinStatusH(BBulletin itemToBeUpdated, string oldStatus, string newStatus);
 
         void UpdateDeleteDateData(BBulletin entity);
+
         void SetEcrisConvId(BBulletin bulletin);
 
         Task<IQueryable<BulletinConvictionDTO>> GetConvictionOnlyAsync(string aId);
+
+        Task DeleteBulletinByIdAsync(string id, string desc);
     }
 }

@@ -132,6 +132,9 @@
   <data name="msgChangeStatusIsNotAllowed" xml:space="preserve">
     <value>Нямате права да промените статуса на бюлетин на {0}.</value>
   </data>
+  <data name="msgDeleteBulletin" xml:space="preserve">
+    <value>Унищожен по давност</value>
+  </data>
   <data name="msgHistoryObjContentDoesNotExist" xml:space="preserve">
     <value>История на статус с идентификатор {0} не съдържа документ за визуализация на предишна версия на бюлетин.</value>
   </data>

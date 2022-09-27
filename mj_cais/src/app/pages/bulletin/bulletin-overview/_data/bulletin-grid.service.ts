@@ -16,9 +16,9 @@ export class BulletinGridService extends CaisCrudService<
   }
 
   public updateUrlStatus(statusId?: string) {
-    if(statusId){
+    if (statusId) {
       this.updateUrl(`${currentEndpoint}?statusId=${statusId}`);
-    }else{
+    } else {
       this.updateUrl(`${currentEndpoint}`);
     }
   }
@@ -28,5 +28,9 @@ export class BulletinGridService extends CaisCrudService<
       this.baseUrl + `/api/bulletins/${aId}/change-status/${statusId}`,
       {}
     );
-  }  
+  }
+
+  public deleteBulletin(aId: string): Observable<any> {
+    return this.http.put(this.baseUrl + `/api/bulletins/${aId}/delete`, {});
+  }
 }

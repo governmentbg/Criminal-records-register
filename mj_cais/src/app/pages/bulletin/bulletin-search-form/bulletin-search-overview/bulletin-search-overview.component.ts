@@ -4,8 +4,6 @@ import { map } from "rxjs";
 import { CommonConstants } from "../../../../@core/constants/common.constants";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
-import { LoaderService } from "../../../../@core/services/common/loader.service";
-import { BulletinStatusTypeEnum } from "../../bulletin-overview/_models/bulletin-status-type.enum";
 import { BulletinSearchForm } from "../_models/bulletin-search.form";
 import { BulletinSearchGridService } from "./_data/bulletin-search-grid.service";
 import { BulletinSearchGridModel } from "./_models/bulletin-search-grid.model";
@@ -22,8 +20,7 @@ export class BulletinSearchOverviewComponent extends RemoteGridWithStatePersista
   constructor(
     service: BulletinSearchGridService,
     injector: Injector,
-    public dateFormatService: DateFormatService,
-    public loaderService: LoaderService
+    public dateFormatService: DateFormatService
   ) {
     super("bulletins-search", service, injector);
   }
@@ -40,12 +37,8 @@ export class BulletinSearchOverviewComponent extends RemoteGridWithStatePersista
       this.toastr.showToast("danger", "Грешка при валидациите!");
       return;
     }
-
-    this.loaderService.showSpinner(this.service);
-
     this.service.updateUrl(`bulletins/search?${this.getFilterQuery()}`);
     super.ngOnInit();
-    this.loaderService.hideSpinner(this.service);
   };
 
   // Overriding default behaviour
@@ -56,13 +49,10 @@ export class BulletinSearchOverviewComponent extends RemoteGridWithStatePersista
       return;
     }
 
-    this.loaderService.showSpinner(this.service);
-
     this.service
       .excelExportBulletins(this.getFilterQuery())
       .pipe(
         map((items: []) => {
-          this.loaderService.hide();
           return items.map((item) => {
             return this.excelExportMapItem(item);
           });
