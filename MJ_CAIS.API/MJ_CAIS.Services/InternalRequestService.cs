@@ -159,9 +159,28 @@ namespace MJ_CAIS.Services
             if (status == Status.Sent && dbEntity.ReqStatusCode != Status.Draft)
                 throw new BusinessLogicException(BusinessLogicExceptionResources.msgRequestIsNotDraft);
 
-            dbEntity.ReqStatusCode = status;
+
             dbEntity.EntityState = EntityStateEnum.Modified;
             dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version) };
+
+            if (status==Status.Sent && dbEntity.ReqStatusCode != Status.Sent)
+            {
+                dbEntity.SentOn = DateTime.Now;
+                dbEntity.SentBy = _userContext.UserId;
+                dbEntity.ModifiedProperties.Add(nameof(dbEntity.SentOn));
+                dbEntity.ModifiedProperties.Add(nameof(dbEntity.SentBy));
+            }
+            if ((status == Status.Ready && dbEntity.ReqStatusCode != Status.Ready)
+                || (status == Status.Cancelled && dbEntity.ReqStatusCode != Status.Cancelled))
+            {
+                dbEntity.ProcessedOn = DateTime.Now;
+                dbEntity.ProcessedBy = _userContext.UserId;
+                dbEntity.ModifiedProperties.Add(nameof(dbEntity.ProcessedOn));
+                dbEntity.ModifiedProperties.Add(nameof(dbEntity.ProcessedBy));
+            }
+
+            dbEntity.ReqStatusCode = status;
+          
 
             await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
         }
@@ -187,10 +206,14 @@ namespace MJ_CAIS.Services
             if (dbEntity.ReqStatusCode == Status.Draft)
                 throw new BusinessLogicException(BusinessLogicExceptionResources.msgReplayNotAllowed);
 
-            dbEntity.ReqStatusCode = accepted ? Status.Ready : Status.Cancelled;
+            dbEntity.ReqStatusCode = accepted ? Status.Ready : Status.Cancelled;       
+            dbEntity.ProcessedOn = DateTime.Now;
+            dbEntity.ProcessedBy = _userContext.UserId;
+            
+        
             dbEntity.EntityState = EntityStateEnum.Modified;
             dbEntity.ResponseDescr = responseDesc;
-            dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version), nameof(dbEntity.ResponseDescr) };
+            dbEntity.ModifiedProperties = new List<string> { nameof(dbEntity.ReqStatusCode), nameof(dbEntity.Version), nameof(dbEntity.ResponseDescr) , nameof(dbEntity.ProcessedOn) , nameof(dbEntity.ProcessedBy) };
 
             await _internalRequestRepository.SaveEntityAsync(dbEntity, false);
         }
