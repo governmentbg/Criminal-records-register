@@ -23,6 +23,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { BulletionsPreviewComponent } from "./tabs/bulletions-preview/bulletions-preview.component";
 import { PersonForm } from "../../../../../@core/components/forms/person-form/_models/person.form";
 import { PidTypeEnum } from "../../../../../@core/components/forms/person-form/_models/pid-type-enum";
+import { CancelDialogComponent } from "../../cancel-dialog/cancel-dialog.component";
+import { ConfirmDialogComponent } from "../../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 
 @Component({
   selector: "cais-application-certificate-result",
@@ -77,8 +79,8 @@ export class ApplicationCertificateResultComponent
       if (
         this.model.statusCode ==
           CertificateStatuTypeEnum.CertificatePaperPrint ||
-        this.model.statusCode == CertificateStatuTypeEnum.Delivered 
-        || this.model.statusCode == CertificateStatuTypeEnum.CertificateUserSign 
+        this.model.statusCode == CertificateStatuTypeEnum.Delivered ||
+        this.model.statusCode == CertificateStatuTypeEnum.CertificateUserSign
       ) {
         this.fullForm.group.disable();
       }
@@ -102,18 +104,18 @@ export class ApplicationCertificateResultComponent
         this.model.statusCode !=
           CertificateStatuTypeEnum.CertificatePaperPrint &&
         this.model.statusCode != CertificateStatuTypeEnum.Delivered &&
-        this.model.statusCode != CertificateStatuTypeEnum.CertificateContentReady 
-        && this.model.statusCode != CertificateStatuTypeEnum.CertificateUserSign 
+        this.model.statusCode !=
+          CertificateStatuTypeEnum.CertificateContentReady &&
+        this.model.statusCode != CertificateStatuTypeEnum.CertificateUserSign
       ) {
         this.model.secondSignerId = this.userInfoService.userId;
-        this.fullForm.secondSignerId.setValue(
-          this.userInfoService.userId
-        );
+        this.fullForm.secondSignerId.setValue(this.userInfoService.userId);
       }
       if (
-        this.model.secondSignerId == null && this.model.firstSignerId == null &&
+        this.model.secondSignerId == null &&
+        this.model.firstSignerId == null &&
         this.model.statusCode ==
-          CertificateStatuTypeEnum.CertificateContentReady 
+          CertificateStatuTypeEnum.CertificateContentReady
       ) {
         this.model.firstSignerId = this.userInfoService.userId;
         this.fullForm.firstSignerId.setValue(this.userInfoService.userId);
@@ -349,10 +351,16 @@ export class ApplicationCertificateResultComponent
   }
 
   cancelCertificate() {
-    this.service
-      .setStatusToCanceled(this.model.applicationId)
-      .subscribe((x) => {
-        this.reloadCurrentRoute();
+    this.dialogService
+      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((x) => {
+        if (x) {
+          this.service
+            .setStatusToCanceled(this.model.applicationId)
+            .subscribe((x) => {
+              this.reloadCurrentRoute();
+            });
+        }
       });
   }
 
@@ -412,7 +420,8 @@ export class ApplicationCertificateResultComponent
               this.model.statusCode !=
                 CertificateStatuTypeEnum.CertificatePaperPrint &&
               this.model.statusCode != CertificateStatuTypeEnum.Delivered &&
-              this.model.statusCode != CertificateStatuTypeEnum.CertificateContentReady 
+              this.model.statusCode !=
+                CertificateStatuTypeEnum.CertificateContentReady
             ) {
               this.model.secondSignerId = this.userInfoService.userId;
               this.fullForm.secondSignerId.setValue(

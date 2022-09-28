@@ -4,6 +4,7 @@ import { NbDialogService } from "@nebular/theme";
 import { EActions } from "@tl/tl-common";
 import * as fileSaver from "file-saver";
 import { Observable } from "rxjs";
+import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { PersonSearchDialogComponent } from "../../../@core/components/dialogs/person-search-dialog/person-search-dialog.component";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CommonConstants } from "../../../@core/constants/common.constants";
@@ -193,8 +194,14 @@ export class ApplicationFormComponent
   }
 
   public finalEdit() {
-    this.isFinalEdit = true;
-    this.validateAndSave(this.fullForm);
+    this.dialogService
+      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((x) => {
+        if (x) {
+          this.isFinalEdit = true;
+          this.validateAndSave(this.fullForm);
+        }
+      });
   }
 
   public changeStatusToCheckPayment() {
