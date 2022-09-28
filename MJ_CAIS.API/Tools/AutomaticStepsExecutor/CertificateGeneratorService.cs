@@ -130,7 +130,7 @@ namespace AutomaticStepsExecutor
                         await _dbContext.SaveChangesAsync();
                         _logger.LogTrace($"{application.Id} : After SaveChanges.");
                         _dbContext.ChangeTracker.Clear();
-                        if(cert.StatusCode== ApplicationConstants.ApplicationStatuses.CertificateContentReady)
+                        if(cert.StatusCode== ApplicationConstants.ApplicationStatuses.CertificateContentReady && application.PurposeNavigation.ForSecondSignature.Value!= true)
                         {
                             //създаване на pdf и завършване на процеса
                             _logger.LogTrace($"{application.Id} : Before CreateCertificate.");
