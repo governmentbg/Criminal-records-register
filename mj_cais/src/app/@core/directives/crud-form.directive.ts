@@ -25,8 +25,13 @@ import { CustomToastrService } from "../services/common/custom-toastr.service";
 import { FormGroup } from "@angular/forms";
 import { BaseResolverData } from "../models/common/base-resolver.data";
 import { InputTypeConstants } from "../constants/input-type.constants";
-import { NbTabComponent, NbTabsetComponent } from "@nebular/theme";
+import {
+  NbDialogService,
+  NbTabComponent,
+  NbTabsetComponent,
+} from "@nebular/theme";
 import * as fileSaver from "file-saver";
+import { ErrorDialogComponent } from "../components/dialogs/error-dialog/error-dialog.component";
 
 @Directive()
 export abstract class CrudForm<
@@ -142,12 +147,12 @@ export abstract class CrudForm<
     }
 
     // prevent submit twice
-    if(this.isLoadingForm === true){
+    if (this.isLoadingForm === true) {
       return;
     }
 
     submitAction.subscribe({
-      next: (data) => {       
+      next: (data) => {
         this.toastr.showToast("success", this.successMessage);
         setTimeout(() => {
           this.onSubmitSuccess(data);
@@ -283,7 +288,7 @@ export abstract class CrudForm<
       this.router.navigateByUrl("pages");
       return;
     }
-    
+
     let title = this.dangerMessage;
     let errorText = errorResponse.status + " " + errorResponse.statusText;
 
@@ -294,6 +299,7 @@ export abstract class CrudForm<
 
     this.isLoadingForm = false;
     this.toastr.showBodyToast("danger", title, errorText);
+    let errorInFormUpdated = false;
 
     // if has server side validation errors add them to the form control
     if (errorResponse.error.errors) {
@@ -302,10 +308,42 @@ export abstract class CrudForm<
         const formControl = this.fullForm.group.get(propName);
         if (formControl) {
           // activate the error message
+          errorInFormUpdated = true;
           formControl.setErrors({
             serverErrors: errorResponse.error.errors[prop],
           });
         }
+      });
+    }
+
+    if (!errorInFormUpdated) {
+      let dialogService = this.injector.get<NbDialogService>(NbDialogService);
+      let message: string[] = [];
+
+      // if has server side validation errors nut is in transactions
+      if (errorResponse.error.errors) {
+        message.push(errorResponse.title);
+        (
+          Object.keys(
+            errorResponse.error.errors
+          ) as (keyof typeof errorResponse.error.errors)[]
+        ).forEach((key, index) => {
+          // 👇️ name Tom 0, country Chile 1
+          message.push(key.toString() + ":" + errorResponse.error.errors[key]);
+          //console.log(key, element[key], index);
+        });
+      }
+
+      if (errorResponse.error.error) {
+        message.push(errorResponse.error.error);
+      }
+
+      let dialogRef = dialogService.open(ErrorDialogComponent, {
+        context: {
+          header: errorResponse.message,
+          messages: message,
+        },
+        closeOnBackdropClick: false,
       });
     }
 
