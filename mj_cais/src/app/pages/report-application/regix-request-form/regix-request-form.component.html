@@ -3,14 +3,35 @@
   <nb-card-body>
     <div class="d-flex justify-content-center">
       <div class="d-grid gap-2 col-3">
-        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchByEGN()" type="button">
+        <button
+          nbButton
+          fullWidth
+          matRipple
+          [status]="'primary'"
+          (click)="searchByEGN()"
+          type="button"
+        >
           Ново искане по ЕГН
         </button>
-        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchByLNCH()" type="button">
+        <button
+          nbButton
+          fullWidth
+          matRipple
+          [status]="'primary'"
+          (click)="searchByLNCH()"
+          type="button"
+        >
           Ново искане по ЛНЧ
         </button>
 
-        <button nbButton fullWidth matRipple [status]="'primary'" (click)="searchForForeigner()" type="button">
+        <button
+          nbButton
+          fullWidth
+          matRipple
+          [status]="'primary'"
+          (click)="searchForForeigner()"
+          type="button"
+        >
           Ново искане за чужденец
         </button>
       </div>
@@ -20,12 +41,19 @@
 
 <igx-dialog #searchByIdentifierDialog>
   <div class="dialogNewRecord">
+    <tl-linear-progress [visible]="this.isLoading"></tl-linear-progress>
     <nb-card>
       <nb-card-body>
         <ng-container>
           <h2 class="mt-0">{{ titelSearchBy }}</h2>
           <form (submit)="onSubmit()">
-            <input type="text" name="searchValue" nbInput fullWidth [(ngModel)]="searchValue" />
+            <input
+              type="text"
+              name="searchValue"
+              nbInput
+              fullWidth
+              [(ngModel)]="searchValue"
+            />
           </form>
         </ng-container>
       </nb-card-body>
@@ -37,12 +65,26 @@
             </button>
           </div>
           <div class="col-6">
-            <button nbButton matRipple fullWidth status="primary" (click)="onSubmit()" [disabled]="
+            <button
+              nbButton
+              matRipple
+              fullWidth
+              status="primary"
+              (click)="onSubmit()"
+              [disabled]="
                 searchValue === null ||
                 searchValue === undefined ||
-                searchValue === ''
-              ">
-              <nb-icon class="pt-1" [icon]="'search'" pack="fa" title="Търсене"></nb-icon>Търси
+                searchValue === '' ||
+                this.isLoading
+              "
+            >
+              <nb-icon
+                class="pt-1"
+                [icon]="'search'"
+                pack="fa"
+                title="Търсене"
+              ></nb-icon
+              >Търси
             </button>
           </div>
         </div>
@@ -53,22 +95,40 @@
 
 <igx-dialog #searchByIdentifierErrorDialog>
   <div class="dialogNewRecord">
+    <tl-linear-progress [visible]="this.isLoading"></tl-linear-progress>
     <nb-card>
       <nb-card-body>
         <ng-container>
           <h2 class="mt-0">{{ errorTitle }}</h2>
-          <div style="
+          <div
+            style="
               display: flex;
               align-items: center;
               justify-content: space-between;
-            ">
-            <button nbButton matRipple [status]="'primary'" type="button" [title]="'Ръчно въвеждане'"
-              (click)="navigateToReportApplicationCreate()">
+            "
+          >
+            <button
+              nbButton
+              matRipple
+              [status]="'primary'"
+              type="button"
+              [title]="'Ръчно въвеждане'"
+              (click)="navigateToReportApplicationCreate()"
+              [disabled]="this.isLoading"
+            >
               Ръчно въвеждане
             </button>
-            <button nbButton matRipple [status]="'danger'" type="button" [title]="'Анулирай'"
-              (click)="changeStatusToCanceled()">
-              <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon> Анулирай
+            <button
+              nbButton
+              matRipple
+              [status]="'danger'"
+              type="button"
+              [title]="'Анулирай'"
+              (click)="changeStatusToCanceled()"
+              [disabled]="this.isLoading"
+            >
+              <nb-icon class="pt-1" [icon]="'xmark'" pack="fa"></nb-icon>
+              Анулирай
             </button>
           </div>
         </ng-container>
@@ -85,17 +145,31 @@
       <nb-card-body>
         <form (submit)="onSubmitCancelReportApplication()">
           <label for="description">Основание</label>
-          <input type="text" name="description" nbInput fullWidth [(ngModel)]="description" />
+          <input
+            type="text"
+            name="description"
+            nbInput
+            fullWidth
+            [(ngModel)]="description"
+          />
         </form>
       </nb-card-body>
       <nb-card-footer>
         <div class="row">
           <div class="col-6">
-            <button nbButton matRipple fullWidth status="danger" [disabled]="
+            <button
+              nbButton
+              matRipple
+              fullWidth
+              status="danger"
+              [disabled]="
                 description === null ||
                 description === undefined ||
-                description === ''
-              " (click)="onSubmitCancelReportApplication()">
+                description === '' ||
+                this.isLoading
+              "
+              (click)="onSubmitCancelReportApplication()"
+            >
               Продължи
             </button>
           </div>

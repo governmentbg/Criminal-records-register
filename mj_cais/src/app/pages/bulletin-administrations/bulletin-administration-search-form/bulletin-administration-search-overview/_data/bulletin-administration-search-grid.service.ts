@@ -25,6 +25,15 @@ export class BulletinAdministrationSearchGridService extends CaisCrudService<
     );
   }
 
+  deleteBulletin(id: string, model: any): Observable<any> {
+    return this.http.put<any>(
+      `${this.baseUrl}/api/${currentEndpoint}/${id}/delete`,
+      model,
+      {}
+    );
+  }
+
+
   public getBulletinStatusHistory(
     id: string
   ): Observable<BaseNomenclatureModel[]> {

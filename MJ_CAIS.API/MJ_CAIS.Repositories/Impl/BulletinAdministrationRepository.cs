@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using MJ_CAIS.Repositories.Contracts;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess;
 using MJ_CAIS.DataAccess.Entities;
-using MJ_CAIS.DTO.Nomenclature;
-using MJ_CAIS.Common.Constants;
 using MJ_CAIS.DTO.BulletinAdministration;
-using MJ_CAIS.Common.Resources;
+using MJ_CAIS.DTO.Nomenclature;
+using MJ_CAIS.Repositories.Contracts;
 
 namespace MJ_CAIS.Repositories.Impl
 {

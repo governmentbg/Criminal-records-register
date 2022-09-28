@@ -15,10 +15,14 @@ namespace MJ_CAIS.Web.Controllers
     public class BulletinsAdministrationController : BaseApiCrudController<BulletinAdministrationDTO, BulletinAdministrationDTO, BulletinAdministrationGridDTO, BBulletin, string>
     {
         private readonly IBulletinAdministrationService _bulletinAdministrationService;
+        private readonly IBulletinService _bulletinService;
 
-        public BulletinsAdministrationController(IBulletinAdministrationService bulletinAdministrationService) : base(bulletinAdministrationService)
+        public BulletinsAdministrationController(IBulletinAdministrationService bulletinAdministrationService,
+            IBulletinService bulletinService)
+            : base(bulletinAdministrationService)
         {
             _bulletinAdministrationService = bulletinAdministrationService;
+            _bulletinService = bulletinService;
         }
 
         [HttpGet("")]
@@ -38,6 +42,13 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> Put(string aId, [FromBody] UnlockBulletinModelDTO aInDto)
         {
             await this._bulletinAdministrationService.UnlockBulletinAsync(aInDto);
+            return Ok();
+        }
+
+        [HttpPut("{aId}/delete")]
+        public async Task<IActionResult> Delete(string aId, [FromBody] DeleteBulletinDTO aInDto)
+        {
+            await this._bulletinService.DeleteBulletinByIdAsync(aInDto.Id, aInDto.Description);
             return Ok();
         }
 

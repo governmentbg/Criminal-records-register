@@ -1,6 +1,6 @@
 ﻿namespace MJ_CAIS.DataAccess.Entities
 {
-    public partial class BBulletin : IPidsWithDocumentEntity
+    public partial class BBulletin : IPidsWithDocumentEntity, IBulletinOrder
     {
     }
 }

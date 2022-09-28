@@ -253,15 +253,13 @@ namespace MJ_CAIS.Services
 
             if (!string.IsNullOrEmpty(personId))
             {
-                var bulletins = _reportApplicationRepository.GetBulletinsByPids(personId);
-                var bulletinList = await bulletins.ToListAsync();
+                var bulletinList = await _reportApplicationRepository.GetBulletinsByPersonIdAsync(personId);
+
                 if (bulletinList.Any())
                 {
 
                     var orderNumber = 0;
-                    report.ARepBulletins = bulletinList
-                        .OrderByDescending(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                        //.ThenByDescending(b => b.DecisionDate)
+                    report.ARepBulletins = bulletinList                       
                         .Select(b =>
                         {
                             orderNumber++;

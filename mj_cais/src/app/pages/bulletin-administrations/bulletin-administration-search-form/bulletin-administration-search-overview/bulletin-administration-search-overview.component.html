@@ -135,6 +135,12 @@
             >
               <nb-icon pack="fa" icon="unlock"></nb-icon>
             </a>
+            <a
+              [title]="'Изтриване'"
+              (click)="onOpenDialogForDelete(cell.rowData.id)"
+            >
+              <nb-icon pack="fa" icon="trash"></nb-icon>
+            </a>
           </div>
         </div>
       </ng-template>
@@ -155,35 +161,36 @@
 
 <igx-dialog #dialogAdd>
   <div class="dialogNewRecord" style="min-width: 1000px">
-    <tl-linear-progress [visible]="isLoadingUnlock"></tl-linear-progress>
+    <tl-linear-progress [visible]="isLoading"></tl-linear-progress>
     <nb-card>
       <nb-card-header>
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center justify-content-between">
           <h5 class="fw-bold">Отключване на бюлетин за редакция</h5>
+          <div>
+            <button
+              nbButton
+              matRipple
+              [status]="'primary'"
+              (click)="onUnlockBulletin()"
+              type="button"
+              class="ml-2"
+              [disabled]="ulockBulletinForm.group.pristine || isLoading"
+            >
+              <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
+              Потвърди
+            </button>
 
-          <button
-            nbButton
-            matRipple
-            [status]="'primary'"
-            (click)="onUnlockBulletin()"
-            type="button"
-            class="ml-2"
-            [disabled]="ulockBulletinForm.group.pristine || isLoadingUnlock"
-          >
-            <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
-            Потвърди
-          </button>
-
-          <button
-            nbButton
-            matRipple
-            (click)="onCloseDilog()"
-            type="button"
-            class="ml-2"
-          >
-            <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
-            Откажи
-          </button>
+            <button
+              nbButton
+              matRipple
+              (click)="onCloseDilog()"
+              type="button"
+              class="ms-2"
+            >
+              <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
+              Откажи
+            </button>
+          </div>
         </div>
       </nb-card-header>
       <nb-card-body>
@@ -206,6 +213,58 @@
               [label]="'Мотиви'"
               [inputFormControl]="ulockBulletinForm.description"
               [parentGroup]="ulockBulletinForm.group"
+              [inputName]="'description'"
+              [rows]="'3'"
+              [inputType]="'TextArea'"
+            >
+            </cais-input>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</igx-dialog>
+<igx-dialog #deleteDialog>
+  <div class="dialogNewRecord" style="min-width: 1000px">
+    <tl-linear-progress [visible]="isLoading"></tl-linear-progress>
+    <nb-card>
+      <nb-card-header>
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="fw-bold">Изтриване на бюлетин</h5>
+          <div>
+            <button
+              nbButton
+              matRipple
+              [status]="'primary'"
+              (click)="onDeleteBulletin()"
+              type="button"
+              [disabled]="deleteBulletinForm.group.pristine || isLoading"
+            >
+              <nb-icon class="pt-1" pack="far" icon="circle-check"></nb-icon>
+              Потвърди
+            </button>
+
+            <button
+              nbButton
+              matRipple
+              (click)="onCloseDilogForDelete()"
+              type="button"
+              class="ms-2"
+            >
+              <nb-icon class="pt-1" pack="far" icon="circle-xmark"></nb-icon>
+              Откажи
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row mt-2">
+          <div class="form-group col-md-6">
+            <cais-input
+              [type]="'text'"
+              [label]="'Мотиви'"
+              [inputFormControl]="deleteBulletinForm.description"
+              [parentGroup]="deleteBulletinForm.group"
               [inputName]="'description'"
               [rows]="'3'"
               [inputType]="'TextArea'"

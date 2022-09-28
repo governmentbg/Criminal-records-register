@@ -3,10 +3,10 @@ import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { BaseNomenclatureModel } from "../../../../@core/models/nomenclature/base-nomenclature.model";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
-import { LoaderService } from "../../../../@core/services/common/loader.service";
 import { BulletinAdministrationSearchForm } from "../_models/bulletin-administration-search.form";
 import { BulletinAdministrationSearchGridService } from "./_data/bulletin-administration-search-grid.service";
 import { BulletinAdministrationGridModel } from "./_models/bulletin-administration-grid.model";
+import { DeleteBulletinForm } from "./_models/delete-bulletin-form";
 import { UnlockBulletinForm } from "./_models/unlock-bulletin.form";
 
 @Component({
@@ -29,12 +29,18 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
   @Input() searchForm: BulletinAdministrationSearchForm;
   @ViewChild("dialogAdd", { read: IgxDialogComponent })
   public dialog: IgxDialogComponent;
+
+  @ViewChild("deleteDialog", { read: IgxDialogComponent })
+  public deleteDialog: IgxDialogComponent;
+
   public ulockBulletinForm: UnlockBulletinForm;
+  public deleteBulletinForm: DeleteBulletinForm;
   public statuses: BaseNomenclatureModel[] = [];
-  public isLoadingUnlock: boolean = false;
+  public isLoading: boolean = false;
 
   ngOnInit() {
     this.ulockBulletinForm = new UnlockBulletinForm();
+    this.deleteBulletinForm = new DeleteBulletinForm();
   }
 
   public onSearch = () => {
@@ -67,6 +73,11 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
     });
   }
 
+  onOpenDialogForDelete(bulletinId: string) {
+    this.deleteBulletinForm.id.patchValue(bulletinId);
+    this.deleteDialog.open();
+  }
+
   onUnlockBulletin() {
     if (!this.ulockBulletinForm.group.valid) {
       this.ulockBulletinForm.group.markAllAsTouched();
@@ -76,10 +87,10 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
     let bulletinId = this.ulockBulletinForm.bulletinId.value;
     let model = this.ulockBulletinForm.group.value;
 
-    this.isLoadingUnlock = true;
+    this.isLoading = true;
     this.service.unlockBulletin(bulletinId, model).subscribe({
       next: (data) => {
-        this.isLoadingUnlock = false;
+        this.isLoading = false;
         this.toastr.showToast(
           "success",
           "Успешно отключен бюлетин за редакция!"
@@ -90,7 +101,31 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
         }, 500);
       },
       error: (errorResponse) => {
-        this.isLoadingUnlock = false;
+        this.isLoading = false;
+        this.errorHandler(errorResponse);
+      },
+    });
+  }
+
+  onDeleteBulletin() {
+    if (!this.deleteBulletinForm.group.valid) {
+      this.deleteBulletinForm.group.markAllAsTouched();
+      return;
+    }
+
+    let model = this.deleteBulletinForm.group.value;
+    this.isLoading = true;
+    this.service.deleteBulletin(model.id, model).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+        this.toastr.showToast("success", "Успешно изтрит бюлетин!");
+        this.onCloseDilogForDelete();
+        setTimeout(() => {
+          this.grid.deleteRow(model.id);
+        }, 500);
+      },
+      error: (errorResponse) => {
+        this.isLoading = false;
         this.errorHandler(errorResponse);
       },
     });
@@ -99,5 +134,10 @@ export class BulletinAdministrationSearchOverviewComponent extends RemoteGridWit
   onCloseDilog() {
     this.ulockBulletinForm = new UnlockBulletinForm();
     this.dialog.close();
+  }
+
+  onCloseDilogForDelete() {
+    this.deleteBulletinForm = new DeleteBulletinForm();
+    this.deleteDialog.close();
   }
 }

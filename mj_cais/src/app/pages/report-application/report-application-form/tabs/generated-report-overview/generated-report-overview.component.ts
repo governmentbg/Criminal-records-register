@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
+import { ActivatedRoute } from "@angular/router";
 import { DateFormatService } from "../../../../../@core/services/common/date-format.service";
 import { ReportApplicationService } from "../../_data/report-application.service";
 import { GeneratedReportModel } from "./_models/generated-report-grid.model";
@@ -37,14 +36,14 @@ export class GeneratedReportOverviewComponent implements OnInit {
   @ViewChild("reportDialog", { read: IgxDialogComponent })
   public reportDialog: IgxDialogComponent;
   public report: string;
+  public isLoading: boolean = false;
+  public eReportIsLsLoading: boolean = false;
 
   constructor(
     public dateFormatService: DateFormatService,
     private service: ReportApplicationService,
-    private loaderService: NgxSpinnerService,
     private activatedRoute: ActivatedRoute,
     private toastr: CustomToastrService,
-    private loader: NgxSpinnerService,
     private formBuilder: FormBuilder,
     private appCertificateService: ApplicationCertificateService
   ) {}
@@ -52,14 +51,14 @@ export class GeneratedReportOverviewComponent implements OnInit {
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.params["ID"];
     this.isForPreview = this.activatedRoute.snapshot.data["preview"];
-    this.loaderService.show();
+    this.isLoading = true;
     if (this.reports) {
-      this.loaderService.hide();
+      this.isLoading = false;
       return;
     }
     this.service.getReportsData(id).subscribe((res) => {
       this.reports = res;
-      this.loaderService.hide();
+      this.isLoading = false;
     });
 
     this.cancelReportFormGroup = this.formBuilder.group({
@@ -101,31 +100,43 @@ export class GeneratedReportOverviewComponent implements OnInit {
       return;
     }
 
-    this.loader.show();
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
     let reportFormValue = this.signersformGroup.getRawValue();
     this.service.generateReport(reportFormValue).subscribe({
       next: (data) => {
         this.reload();
         this.generateReportDialog.close();
-        this.loader.hide();
+        this.isLoading = false;
       },
       error: (errorResponse) => {
-        this.loader.hide();
         this.errorHandler(errorResponse, "Грешка при генериране на файла:");
       },
     });
   }
 
   deliver(id: string) {
-    this.service.deliver(id).subscribe((response: any) => {
-      this.toastr.showBodyToast("success", "Успешно доставена справка", "");
-      this.reload();
-    }),
-      (error) =>
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.service.deliver(id).subscribe({
+      next: (response) => {
+        this.toastr.showBodyToast("success", "Успешно доставена справка", "");
+        this.reload();
+        this.isLoading = false;
+      },
+      error: (errorResponse) => {
         this.errorHandler(
-          error,
+          errorResponse,
           "Грешка при промяна на статус на доставена справка:"
         );
+      },
+    });
   }
 
   onOpenCancelReportDialog(
@@ -147,20 +158,23 @@ export class GeneratedReportOverviewComponent implements OnInit {
       return;
     }
 
-    this.loader.show();
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
     this.service
       .cancelReport(this.cancelReportFormGroup.getRawValue())
       .subscribe({
         next: (data) => {
+          this.cancelReportDialog.close();
+          this.isLoading = false;
           let message = "Успешно анулирана справка";
           this.toastr.showToast("success", message);
-          this.cancelReportDialog.close();
-          this.loader.hide();
           this.reload();
         },
         error: (errorResponse) => {
           this.cancelReportDialog.close();
-          this.loader.hide();
           this.errorHandler(
             errorResponse,
             "Възникна грешки при анулиране на справка"
@@ -192,10 +206,20 @@ export class GeneratedReportOverviewComponent implements OnInit {
       pid = this.person.suid.value;
       pidType = "SUID";
     }
+    if (this.eReportIsLsLoading) {
+      return;
+    }
 
-    this.appCertificateService.htmlReport(pidType, pid).subscribe((res) => {
-      this.report = res;
-      this.reportDialog.open();
+    this.eReportIsLsLoading = true;
+    this.appCertificateService.htmlReport(pidType, pid).subscribe({
+      next: (response) => {
+        this.report = response;
+        this.reportDialog.open();
+        this.eReportIsLsLoading = false;
+      },
+      error: (errorResponse) => {
+        this.errorHandler(errorResponse, "Възникна грешка");
+      },
     });
   }
 
@@ -217,6 +241,7 @@ export class GeneratedReportOverviewComponent implements OnInit {
   }
 
   private errorHandler(error, msg) {
+    this.isLoading = false;
     var errorText = error.status + " " + error.statusText;
     this.toastr.showBodyToast("danger", msg, errorText);
   }

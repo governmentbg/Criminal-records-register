@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MJ_CAIS.AutoMapperContainer.Resolvers;
+using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Application;
 using MJ_CAIS.DTO.Certificate;
@@ -38,7 +40,10 @@ namespace MJ_CAIS.AutoMapperContainer.MappingProfiles
                 .ForMember(d => d.StatusId, opt => opt.MapFrom(src => src.Bulletin.StatusId))
                 .ForMember(d => d.StatusName, opt => opt.MapFrom(src => src.Bulletin.Status.Name))
                 .ForMember(d => d.CaseNumber, opt => opt.MapFrom(src => src.Bulletin.CaseNumber))
-                .ForMember(d => d.BulletinTypeName, opt => opt.MapFrom(src => src.Bulletin.BulletinType))
+                .ForMember(d => d.BulletinTypeName, opt => opt.MapFrom(src =>
+                           src.Bulletin.BulletinType == BulletinConstants.Type.Bulletin78A ? BulletinResources.Bulletin78A :
+                           src.Bulletin.BulletinType == BulletinConstants.Type.ConvictionBulletin ? BulletinResources.ConvictionBulletin :
+                           BulletinResources.Unspecified))
                 .ForMember(d => d.BulletinDecisionDate, opt => opt.MapFrom(src => src.Bulletin.DecisionDate))
                 .ForMember(d => d.BulletinDecisionNumber, opt => opt.MapFrom(src => src.Bulletin.DecisionNumber))
                 .ForMember(d => d.BulletinAuthorityId, opt => opt.MapFrom(src => src.Bulletin.CsAuthorityId))

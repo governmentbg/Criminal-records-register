@@ -221,9 +221,10 @@ namespace MJ_CAIS.Services
 
                 if (bulletins.Count() > 0)
                 {
+                    var orderNumber = 0;
                     rep.ARepBulletins = bulletins.Select(b =>
                     {
-
+                        orderNumber++;
                         return new ARepBulletin()
                         {
                             Id = BaseEntity.GenerateNewId(),
@@ -231,7 +232,8 @@ namespace MJ_CAIS.Services
                             //Bulletin = b,
                             ReportId = rep.Id,
                             Report = rep,
-                            EntityState = EntityStateEnum.Added
+                            EntityState = EntityStateEnum.Added,
+                            OrderNumber = orderNumber
 
                         };
                     }).ToList();

@@ -37,34 +37,38 @@ namespace MJ_CAIS.Repositories.Impl
 
         public async Task<List<BulletindecisionDateDTO>> GetBulletinesPerPerson(List<string> pids)
         {
-            var bulletins = await _dbContext.BBulletins
+            var bulletins = _dbContext.BBulletins
                 .Where(b => b.Status.Code != BulletinConstants.Status.Deleted &&
                                                                 (pids.Contains(b.EgnId) ||
                                                                  pids.Contains(b.LnchId) ||
                                                                  pids.Contains(b.LnId) ||
                                                                  pids.Contains(b.IdDocNumberId) ||
-                                                                 pids.Contains(b.SuidId)))
-                //&& b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId)))
-                .Select(b => new BBulletin
-                { 
-                    Id = b.Id,
-                    DecisionFinalDate= b.DecisionFinalDate,
-                    DecisionDate = b.DecisionDate,
-                    CaseYear = b.CaseYear,
-                    CreatedOn = b.CreatedOn
-                }).Distinct()
-                //order_bulletins
-                .OrderBy(b => b.DecisionFinalDate)
-                .OrderBy(b => b.DecisionDate)
-                .OrderBy(b => b.CaseYear)
-                .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
-                .Select(b => new BulletindecisionDateDTO
-                {
-                    Id = b.Id,
-                    DecisionDate = b.DecisionDate
-                })
-                .ToListAsync();
-            return bulletins;
+                                                                 pids.Contains(b.SuidId)));
+            bulletins = bulletins.OrderBulletins();
+
+            //&& b.PBulletinIds.Any(bulID => pids.Contains(bulID.Person.PersonId)))
+            var result =
+               //.Select(b => new BBulletin
+               //   { 
+               //       Id = b.Id,
+               //       DecisionFinalDate= b.DecisionFinalDate,
+               //       DecisionDate = b.DecisionDate,
+               //       CaseYear = b.CaseYear,
+               //       CreatedOn = b.CreatedOn
+               //   }).Distinct()
+               //   //order_bulletins
+               //   .OrderBy(b => b.DecisionFinalDate)
+               //   .OrderBy(b => b.DecisionDate)
+               //   .OrderBy(b => b.CaseYear)
+               //   .OrderBy(b => b.CreatedOn.HasValue ? b.CreatedOn.Value.Date : DateTime.Now)
+               await bulletins.Select(b => new BulletindecisionDateDTO
+               {
+                   Id = b.Id,
+                   DecisionDate = b.DecisionDate
+               })
+               .ToListAsync();
+
+            return result;
         }
 
         public async Task<AReport> GetReport(string reportID)

@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
+import { BaseNomenclatureModel } from "../../../@core/models/nomenclature/base-nomenclature.model";
 import { BulletinStatusTypeEnum } from "../bulletin-overview/_models/bulletin-status-type.enum";
 import { BulletinSearchOverviewComponent } from "./bulletin-search-overview/bulletin-search-overview.component";
 import { BulletinSearchResolverData } from "./_data/bulletin-search.resolver";
@@ -27,11 +28,13 @@ export class BulletinSearchFormComponent
 
   @ViewChild("searchBulletinGrid")
   searchBulletinGrid: BulletinSearchOverviewComponent;
+  public bulletinStatuses :BaseNomenclatureModel[];
 
   ngOnInit(): void {
     this.fullForm = new BulletinSearchForm();
     this.fullForm.statusId.patchValue(BulletinStatusTypeEnum.Active);
     this.fullForm.group.patchValue(this.dbData.element);
+    this.bulletinStatuses = (this.dbData.statuses as any).filter((x)=> x.id != BulletinStatusTypeEnum.Deleted);
     this.formFinishedLoading.emit();
   }
 

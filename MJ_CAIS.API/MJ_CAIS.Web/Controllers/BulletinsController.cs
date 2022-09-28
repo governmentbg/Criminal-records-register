@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using MJ_CAIS.Common.Constants;
+using MJ_CAIS.Common.Resources;
 using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DTO.Bulletin;
 using MJ_CAIS.ExternalWebServices.Contracts;
@@ -107,6 +108,13 @@ namespace MJ_CAIS.Web.Controllers
         public async Task<IActionResult> ChangeStatus(string aId, string statusId)
         {
             await this._bulletinService.ChangeStatusAsync(aId, statusId);
+            return Ok();
+        }
+
+        [HttpPut("{aId}/delete")]
+        public async Task<IActionResult> DeleteBulletin(string aId)
+        {
+            await this._bulletinService.DeleteBulletinByIdAsync(aId, BulletinResources.msgDeleteBulletin);
             return Ok();
         }
 

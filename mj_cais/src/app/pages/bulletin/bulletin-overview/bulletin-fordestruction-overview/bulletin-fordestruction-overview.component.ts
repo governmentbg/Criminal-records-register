@@ -1,7 +1,6 @@
 import { Component, Injector } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
 import { ConfirmDialogComponent } from "../../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
-import { CommonConstants } from "../../../../@core/constants/common.constants";
 import { RemoteGridWithStatePersistance } from "../../../../@core/directives/remote-grid-with-state-persistance.directive";
 import { DateFormatService } from "../../../../@core/services/common/date-format.service";
 import { BulletinGridService } from "../_data/bulletin-grid.service";
@@ -42,11 +41,15 @@ export class BulletinForDestructionOverviewComponent extends RemoteGridWithState
       .onClose.subscribe((result) => {
         if (result) {
           this.service
-            .changeStatus(bulletinId, BulletinStatusTypeEnum.Deleted)
-            .subscribe(
-              (res) => this.deleteRowHandler(bulletinId),
-              (error) => this.errorHandler(error)
-            );
+            .deleteBulletin(bulletinId)
+            .subscribe({
+              next: (response) => {
+                this.deleteRowHandler(bulletinId);
+              },
+              error: (errorResponse) => {
+                this.errorHandler(errorResponse);
+              },
+            });
         }
       });
   }

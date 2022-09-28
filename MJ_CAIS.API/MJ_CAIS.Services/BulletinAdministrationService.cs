@@ -70,6 +70,6 @@ namespace MJ_CAIS.Services
             _bulletinAdministrationRepository.ApplyChanges(statusHis, new List<IBaseIdEntity>());
             _bulletinAdministrationRepository.ApplyChanges(bulletin, new List<IBaseIdEntity>());
             await _bulletinAdministrationRepository.SaveChangesAsync();
-        }
+        }     
     }
 }

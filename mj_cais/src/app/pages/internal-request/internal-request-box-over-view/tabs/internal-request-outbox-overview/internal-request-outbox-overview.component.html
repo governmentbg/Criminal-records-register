@@ -1,6 +1,6 @@
 <nb-card>
   <tl-linear-progress
-    [visible]="this.remoteService?.isLoading"
+    [visible]="this.remoteService?.isLoading || this.isLoading"
   ></tl-linear-progress>
   <igx-grid
     #grid
@@ -27,24 +27,29 @@
     <igx-grid-toolbar>
       <igx-grid-toolbar-title *ngIf="caisTitle">
         <div class="d-flex gap-2">
-          <button
-            *ngIf="hideStatus"
-            (click)="markAsRead()"
-            class="btn btn-white btn-sm"
-            nbTooltip="Маркирай, като прочетени"
-          >
-            <i class="fa fa-eye"></i>
-          </button>
           <span class="fw-bold mt-2">{{ caisTitle }}</span>
         </div>
       </igx-grid-toolbar-title>
       <igx-grid-toolbar-actions>
-        <nb-toggle
-          (checkedChange)="onShowAllChange($event)"
-          status="info"
-          labelPosition="left"
-          >Всички</nb-toggle
-        >
+        <div class="d-flex gap-2">
+          <button
+            *ngIf="hideStatus"
+            nbButton
+            [status]="'primary'"
+            (click)="markAsRead()"
+            type="button"
+            class="mr-3"
+            [disabled]="isLoading"
+          >
+            Маркирай като прочетени
+          </button>
+          <nb-toggle
+            (checkedChange)="onShowAllChange($event)"
+            status="info"
+            labelPosition="left"
+            >Всички</nb-toggle
+          >
+        </div>
         <igx-grid-toolbar-hiding></igx-grid-toolbar-hiding>
       </igx-grid-toolbar-actions>
     </igx-grid-toolbar>
@@ -62,7 +67,7 @@
       header="Идентификатор на лицето"
       [sortable]="true"
       [dataType]="'string'"
-    >  
+    >
     </igx-column>
     <igx-column
       field="requestDate"
@@ -93,7 +98,7 @@
       header="До бюро съдимост"
       [sortable]="true"
       [dataType]="'string'"
-    >  
+    >
     </igx-column>
 
     <igx-column

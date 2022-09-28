@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { IgxDialogComponent } from "@infragistics/igniteui-angular";
 import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
+import { CommonErrorHandlerService } from "../../../@core/services/common/common-error-handler.service";
 import { CustomToastrService } from "../../../@core/services/common/custom-toastr.service";
 import { EgnUtils } from "../../../@core/utils/egn.utils";
 import { LnchUtils } from "../../../@core/utils/lnch.utils";
@@ -21,7 +22,7 @@ export class RegixRequestFormComponent implements OnInit {
     private router: Router,
     private toastr: CustomToastrService,
     private reportAppService: ReportApplicationService,
-    private loaderService: NgxSpinnerService
+    private errorService: CommonErrorHandlerService
   ) {}
 
   @ViewChild("searchByIdentifierDialog", { read: IgxDialogComponent })
@@ -42,7 +43,8 @@ export class RegixRequestFormComponent implements OnInit {
   public searchValue: string = null;
   public errorTitle;
   public errorMsg;
-
+  public isLoading: boolean = false;
+  
   ngOnInit(): void {}
 
   public searchByEGN() {
@@ -68,22 +70,26 @@ export class RegixRequestFormComponent implements OnInit {
   }
 
   onSubmit() {
-    var isValidEgn = this.isEgn
-      ? EgnUtils.isValid(this.searchValue)
-      : true//LnchUtils.isValid(this.searchValue);
+    // do not submit twice
+    if (this.isLoading) {
+      return;
+    }
+
+    var isValidEgn = this.isEgn ? EgnUtils.isValid(this.searchValue) : true; //LnchUtils.isValid(this.searchValue);
     if (!isValidEgn) {
       let title = this.isEgn ? "ЕГН" : "ЛНЧ";
       this.toastr.showToast("danger", `Невалидно ${title}!`);
       return;
     }
 
-    this.loaderService.show();
     let action = this.isEgn
       ? this.service.searchByEgn(this.searchValue)
       : this.service.searchByLnch(this.searchValue);
 
-    action.subscribe(
-      (result: any) => {
+    this.isLoading = true;
+    action.subscribe({
+      next: (result: any) => {
+        this.isLoading = false;
         if (result.id == null || result.id == undefined) {
           this.parseError(result.error);
           return;
@@ -91,7 +97,6 @@ export class RegixRequestFormComponent implements OnInit {
 
         if (result.errorMsg) {
           this.reportId = result.id;
-          this.loaderService.hide();
           this.errorTitle = "Възникна грешка";
           this.errorMsg = result.errorMsg;
           this.dialogError.open();
@@ -99,7 +104,6 @@ export class RegixRequestFormComponent implements OnInit {
         }
 
         this.dialog.close();
-        this.loaderService.hide();
         this.router.navigate([
           "pages",
           "report-applications",
@@ -107,10 +111,10 @@ export class RegixRequestFormComponent implements OnInit {
           result.id,
         ]);
       },
-      (error) => {
-        this.parseError(error);
-      }
-    );
+      error: (errorResponse) => {
+        this.parseError(errorResponse);
+      },
+    });
   }
 
   changeStatusToCanceled() {
@@ -121,15 +125,20 @@ export class RegixRequestFormComponent implements OnInit {
     if (this.description) {
       let descObj = {};
       descObj["description"] = this.description;
-      this.reportAppService
-        .cancel(this.reportId, descObj)
-        .subscribe((result) => {
+      this.isLoading = true;
+      this.reportAppService.cancel(this.reportId, descObj).subscribe({
+        next: (response) => {
           this.cancelAppReportDialog.close();
           this.dialogError.close();
           this.dialog.close();
+          this.isLoading = false;
           let message = "Успешно анулирано искане";
           this.toastr.showToast("success", message);
-        });
+        },
+        error: (errorResponse) => {
+          this.errorService.errorHandler(errorResponse);
+        },
+      });
     }
   }
 
@@ -148,7 +157,11 @@ export class RegixRequestFormComponent implements OnInit {
   }
 
   private parseError(error) {
-    this.loaderService.hide();
+    if (error.status == "401") {
+      window.location.reload();
+      return;
+    }
+    this.isLoading = false;
     var parser = new DOMParser();
     var htmlDoc = parser.parseFromString(error.error, "text/html");
     let errMsgElement = htmlDoc.getElementById("err-message");

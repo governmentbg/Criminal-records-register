@@ -28,6 +28,7 @@
       <igx-grid-toolbar-actions>
         <div class="ml-1 d-flex gap-3">
           <nb-toggle
+            [disabled]="this.remoteService?.isLoading"
             (checkedChange)="onShowAllReportApplicationsChange($event)"
             status="info"
             labelPosition="left"
@@ -64,6 +65,7 @@
     </igx-column>
 
     <igx-column
+      [width]="'15%'"
       field="registrationNumber"
       header="№ на искане"
       [sortable]="true"

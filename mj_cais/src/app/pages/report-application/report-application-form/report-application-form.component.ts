@@ -5,6 +5,7 @@ import { NbDialogService } from "@nebular/theme";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Observable } from "rxjs";
 import { CancelDialogComponent } from "../../../@core/components/dialogs/cancel-dialog/cancel-dialog.component";
+import { ConfirmDialogComponent } from "../../../@core/components/dialogs/confirm-dialog-component/confirm-dialog-component.component";
 import { PersonContextEnum } from "../../../@core/components/forms/person-form/_models/person-context-enum";
 import { CommonConstants } from "../../../@core/constants/common.constants";
 import { CrudForm } from "../../../@core/directives/crud-form.directive";
@@ -46,9 +47,7 @@ export class ReportApplicationFormComponent
     service: ReportApplicationService,
     public injector: Injector,
     private dialogService: NbDialogService,
-    public dateFormatService: DateFormatService,
-    private formBuilder: FormBuilder,
-    private loaderService: NgxSpinnerService
+    public dateFormatService: DateFormatService
   ) {
     super(service, injector);
     this.setDisplayTitle("искане за справка за съдимост");
@@ -74,7 +73,7 @@ export class ReportApplicationFormComponent
     }
 
     this.isForPreview =
-      this.isForPreview  ||
+      this.isForPreview ||
       this.reportApplicationStatus ==
         ReportApplicationStatusConstants.Approved ||
       this.reportApplicationStatus ==
@@ -99,8 +98,14 @@ export class ReportApplicationFormComponent
   };
 
   public finalEdit() {
-    this.isFinalEdit = true;
-    this.validateAndSave(this.fullForm);
+    this.dialogService
+      .open(ConfirmDialogComponent, CommonConstants.defaultDialogConfig)
+      .onClose.subscribe((x) => {
+        if (x) {
+          this.isFinalEdit = true;
+          this.validateAndSave(this.fullForm);
+        }
+      });
   }
 
   protected validateAndSave(form: any) {
@@ -108,7 +113,6 @@ export class ReportApplicationFormComponent
     if (!form.group.valid) {
       form.group.markAllAsTouched();
       this.toastr.showToast("danger", "Грешка при валидациите!");
-
       this.scrollToValidationError();
     } else {
       this.formObject = form.group.getRawValue();
@@ -117,7 +121,6 @@ export class ReportApplicationFormComponent
   }
 
   protected saveAndNavigate() {
-    this.loaderService.show();
     let model = this.formObject;
     let submitAction: Observable<ReportApplicationModel>;
     if (this.isFinalEdit) {
@@ -128,16 +131,20 @@ export class ReportApplicationFormComponent
       submitAction = this.service.save(model);
     }
 
+    if (this.isLoadingForm) {
+      return;
+    }
+    super.isLoadingForm = true;
+
     submitAction.subscribe({
       next: (data) => {
         this.toastr.showToast("success", this.successMessage);
         setTimeout(() => {
           this.onSubmitSuccess(data);
-          this.loaderService.hide();
+          this.isLoadingForm = false;
         }, this.navigateTimeout);
       },
       error: (errorResponse) => {
-        this.loaderService.hide();
         this.finalEditDialog.close();
         this.errorHandler(errorResponse);
         setTimeout(() => {
@@ -152,6 +159,7 @@ export class ReportApplicationFormComponent
       .open(CancelDialogComponent, CommonConstants.defaultDialogConfig)
       .onClose.subscribe((x) => {
         if (x) {
+          this.isLoadingForm = true;
           this.service.cancel(this.objectId, x).subscribe({
             next: (data) => {
               let message = "Успешно анулирано";

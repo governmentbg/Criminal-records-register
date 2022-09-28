@@ -24,11 +24,17 @@ namespace MJ_CAIS.DataAccess.Entities
         public string? FromAuthorityId { get; set; }
         public string? ToAuthorityId { get; set; }
         public string NIntReqTypeId { get; set; } = null!;
+        public DateTime? SentOn { get; set; }
+        public string? SentBy { get; set; }
+        public DateTime? ProcessedOn { get; set; }
+        public string? ProcessedBy { get; set; }
 
         public virtual GCsAuthority? FromAuthority { get; set; }
         public virtual NIntternalReqType NIntReqType { get; set; } = null!;
         public virtual PPersonId? PPersId { get; set; }
+        public virtual GUser? ProcessedByNavigation { get; set; }
         public virtual NReqStatus? ReqStatusCodeNavigation { get; set; }
+        public virtual GUser? SentByNavigation { get; set; }
         public virtual GCsAuthority? ToAuthority { get; set; }
         public virtual ICollection<NInternalReqBulletin> NInternalReqBulletins { get; set; }
     }

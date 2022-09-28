@@ -12,6 +12,8 @@ namespace MJ_CAIS.DataAccess.Entities
             AReportFirstSigners = new HashSet<AReport>();
             AReportSecondSigners = new HashSet<AReport>();
             GUserRoles = new HashSet<GUserRole>();
+            NInternalRequestProcessedByNavigations = new HashSet<NInternalRequest>();
+            NInternalRequestSentByNavigations = new HashSet<NInternalRequest>();
         }
 
         public string Id { get; set; } = null!;
@@ -34,5 +36,7 @@ namespace MJ_CAIS.DataAccess.Entities
         public virtual ICollection<AReport> AReportFirstSigners { get; set; }
         public virtual ICollection<AReport> AReportSecondSigners { get; set; }
         public virtual ICollection<GUserRole> GUserRoles { get; set; }
+        public virtual ICollection<NInternalRequest> NInternalRequestProcessedByNavigations { get; set; }
+        public virtual ICollection<NInternalRequest> NInternalRequestSentByNavigations { get; set; }
     }
 }

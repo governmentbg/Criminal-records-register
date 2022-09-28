@@ -33,6 +33,7 @@ namespace MJ_CAIS.DataAccess
         public virtual DbSet<ARepBulletin> ARepBulletins { get; set; } = null!;
         public virtual DbSet<ARepCitizenship> ARepCitizenships { get; set; } = null!;
         public virtual DbSet<ARepPer> ARepPers { get; set; } = null!;
+        public virtual DbSet<ARepPurpose> ARepPurposes { get; set; } = null!;
         public virtual DbSet<AReport> AReports { get; set; } = null!;
         public virtual DbSet<AReportApplication> AReportApplications { get; set; } = null!;
         public virtual DbSet<AReportStatus> AReportStatuses { get; set; } = null!;
@@ -1671,6 +1672,10 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
 
+                entity.Property(e => e.OrderNumber)
+                    .HasPrecision(3)
+                    .HasColumnName("ORDER_NUMBER");
+
                 entity.Property(e => e.RequestInfo)
                     .HasPrecision(1)
                     .HasColumnName("REQUEST_INFO");
@@ -1858,6 +1863,63 @@ namespace MJ_CAIS.DataAccess
                     .WithMany(p => p.ARepPers)
                     .HasForeignKey(d => d.ReportId)
                     .HasConstraintName("FK_A_REP_PERS_A_REPORT_SEARCH_");
+            });
+
+            modelBuilder.Entity<ARepPurpose>(entity =>
+            {
+                entity.ToTable("A_REP_PURPOSES");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("CODE");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_ON");
+
+                entity.Property(e => e.Description).HasColumnName("DESCRIPTION");
+
+                entity.Property(e => e.ForSecondSignature)
+                    .HasPrecision(1)
+                    .HasColumnName("FOR_SECOND_SIGNATURE");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .HasColumnName("NAME");
+
+                entity.Property(e => e.OrderNumber)
+                    .HasPrecision(3)
+                    .HasColumnName("ORDER_NUMBER");
+
+                entity.Property(e => e.RequestInfo)
+                    .HasPrecision(1)
+                    .HasColumnName("REQUEST_INFO");
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("UPDATED_ON");
+
+                entity.Property(e => e.ValidFrom)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_FROM");
+
+                entity.Property(e => e.ValidTo)
+                    .HasColumnType("DATE")
+                    .HasColumnName("VALID_TO");
+
+                entity.Property(e => e.Version)
+                    .HasColumnType("NUMBER(38)")
+                    .HasColumnName("VERSION");
             });
 
             modelBuilder.Entity<AReport>(entity =>
@@ -7914,6 +7976,10 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnType("DATE")
                     .HasColumnName("CREATED_ON");
 
+                entity.Property(e => e.Denied)
+                    .HasPrecision(1)
+                    .HasColumnName("DENIED");
+
                 entity.Property(e => e.Egn)
                     .HasMaxLength(100)
                     .HasColumnName("EGN");
@@ -7972,6 +8038,11 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("REG_CERT_SUBJECT");
 
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(2000)
+                    .IsUnicode(false)
+                    .HasColumnName("REMARKS");
+
                 entity.Property(e => e.SecurityStamp)
                     .HasMaxLength(256)
                     .IsUnicode(false)
@@ -7997,13 +8068,6 @@ namespace MJ_CAIS.DataAccess
                 entity.Property(e => e.Version)
                     .HasColumnType("NUMBER(38)")
                     .HasColumnName("VERSION");
-
-                entity.Property(e => e.Denied)
-                    .HasColumnType("NUMBER(1)")
-                    .HasColumnName("DENIED");
-
-                entity.Property(e => e.Remarks)
-                    .HasColumnName("REMARKS");
 
                 entity.HasOne(d => d.Administration)
                     .WithMany(p => p.GUsersExts)
@@ -8202,6 +8266,15 @@ namespace MJ_CAIS.DataAccess
                     .IsUnicode(false)
                     .HasColumnName("P_PERS_ID_ID");
 
+                entity.Property(e => e.ProcessedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PROCESSED_BY");
+
+                entity.Property(e => e.ProcessedOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("PROCESSED_ON");
+
                 entity.Property(e => e.RegNumber)
                     .HasMaxLength(100)
                     .HasColumnName("REG_NUMBER");
@@ -8216,6 +8289,15 @@ namespace MJ_CAIS.DataAccess
                     .HasColumnName("REQUEST_DATE");
 
                 entity.Property(e => e.ResponseDescr).HasColumnName("RESPONSE_DESCR");
+
+                entity.Property(e => e.SentBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SENT_BY");
+
+                entity.Property(e => e.SentOn)
+                    .HasColumnType("DATE")
+                    .HasColumnName("SENT_ON");
 
                 entity.Property(e => e.ToAuthorityId)
                     .HasMaxLength(50)
@@ -8250,10 +8332,20 @@ namespace MJ_CAIS.DataAccess
                     .HasForeignKey(d => d.PPersIdId)
                     .HasConstraintName("FK_N_INTERNAL_REQUESTS_P_PERSO");
 
+                entity.HasOne(d => d.ProcessedByNavigation)
+                    .WithMany(p => p.NInternalRequestProcessedByNavigations)
+                    .HasForeignKey(d => d.ProcessedBy)
+                    .HasConstraintName("FK_INT_REQ_PROCESSEDBY");
+
                 entity.HasOne(d => d.ReqStatusCodeNavigation)
                     .WithMany(p => p.NInternalRequests)
                     .HasForeignKey(d => d.ReqStatusCode)
                     .HasConstraintName("FK_N_INTERNAL_REQUESTS_B_REQ_S");
+
+                entity.HasOne(d => d.SentByNavigation)
+                    .WithMany(p => p.NInternalRequestSentByNavigations)
+                    .HasForeignKey(d => d.SentBy)
+                    .HasConstraintName("FK_INT_REQ_SENTBY");
 
                 entity.HasOne(d => d.ToAuthority)
                     .WithMany(p => p.NInternalRequestToAuthorities)
@@ -8314,6 +8406,7 @@ namespace MJ_CAIS.DataAccess
                     .HasMaxLength(200)
                     .HasColumnName("NAME");
             });
+
 
             modelBuilder.Entity<PPerson>(entity =>
             {

@@ -23,7 +23,7 @@
           !isForPreview &&
           isEdit() &&
           (applicationStatus == 'NewId' ||
-            applicationStatus == 'FillApplication')
+            applicationStatus == 'FillApplication' || applicationStatus == 'ApprovedApplication')
         "
         nbButton
         matRipple
@@ -313,6 +313,7 @@
             [users]="dbData.users"
             [person]="this.fullForm.person"
             [applicationCode]="this.fullForm.applicationCode.value"
+            [applicationStatus]="this.fullForm.statusCode.value"
           >
           </cais-application-certificate-result>
         </nb-tab>
