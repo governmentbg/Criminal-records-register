@@ -151,6 +151,7 @@ export abstract class CrudForm<
       return;
     }
 
+    this.isLoadingForm = true
     submitAction.subscribe({
       next: (data) => {
         this.toastr.showToast("success", this.successMessage);
@@ -285,7 +286,8 @@ export abstract class CrudForm<
 
   protected errorHandler(errorResponse): void {
     if (errorResponse.status == "401") {
-      this.router.navigateByUrl("pages");
+      //this.router.navigateByUrl("pages");
+      window.location.reload();
       return;
     }
 

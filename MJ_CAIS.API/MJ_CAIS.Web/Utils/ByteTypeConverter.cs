@@ -8,7 +8,7 @@ namespace MJ_CAIS.Web.Utils
         public override byte? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var byteString = reader.GetString();
-            // input nuber in transaction sent empty string not null
+            // if is empty string return null
             if (string.IsNullOrEmpty(byteString))
             {
                 return null;
