@@ -19,11 +19,11 @@ namespace MJ_CAIS.ExternalWebServices.Contracts
         Task<byte[]> PrintReport(string reportId);
         Task<byte[]> PrintBulletin(string bulletinID);
 
-        Task<byte[]> PrintDailyReports(DateTime fromDate, DateTime toDate, string status);
-        Task<byte[]> PrintDailyCertificates(DateTime fromDate, DateTime toDate, string status);
+        Task<byte[]> PrintDailyReports(DateTime fromDate, DateTime toDate);
+        Task<byte[]> PrintDailyCertificates(DateTime fromDate, DateTime toDate);
         Task<byte[]> PrintDailyBulletins(DateTime fromDate, DateTime toDate, string status);
-        Task<byte[]> PrintDailyApplications(DateTime fromDate, DateTime toDate, string status);
-        Task<byte[]> PrintDailyReportApplications(DateTime fromDate, DateTime toDate, string status);
+        Task<byte[]> PrintDailyApplications(DateTime fromDate, DateTime toDate);
+        Task<byte[]> PrintDailyReportApplications(DateTime fromDate, DateTime toDate);
 
     }
 }

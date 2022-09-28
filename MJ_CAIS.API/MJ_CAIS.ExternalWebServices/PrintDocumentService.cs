@@ -66,24 +66,24 @@ namespace MJ_CAIS.ExternalWebServices
             return fileArray;
         }
 
-        public async Task<byte[]> PrintDailyReports(DateTime fromDate, DateTime toDate, string status)
+        public async Task<byte[]> PrintDailyReports(DateTime fromDate, DateTime toDate)
         {
             string csAuth = _userContext.CsAuthorityId;
             var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
                                                              { "to_date", toDate.ToString("yyyy-MM-dd") },
-                                                             { "status", status},
+                                                          
                                                               { "authority", csAuth}
                                                               };
             var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Reports);
             var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
             return fileArray;
         }
-        public async Task<byte[]> PrintDailyCertificates(DateTime fromDate, DateTime toDate, string status)
+        public async Task<byte[]> PrintDailyCertificates(DateTime fromDate, DateTime toDate)
         {
             string csAuth =  _userContext.CsAuthorityId;
             var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
                                                              { "to_date", toDate.ToString("yyyy-MM-dd") },
-                                                             { "status", status},
+                                                          
                                                               { "authority", csAuth}
                                                               };
             var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Certificates);
@@ -103,24 +103,24 @@ namespace MJ_CAIS.ExternalWebServices
             var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
             return fileArray;
         }
-        public async Task<byte[]> PrintDailyApplications(DateTime fromDate, DateTime toDate, string status)
+        public async Task<byte[]> PrintDailyApplications(DateTime fromDate, DateTime toDate)
         {
             string csAuth = _userContext.CsAuthorityId;
             var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
                                                              { "to_date", toDate.ToString("yyyy-MM-dd") },
-                                                             { "status", status},
+                                                          
                                                               { "authority", csAuth}
                                                               };
             var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_Applications);
             var fileArray = await _jasperReportsClient.RunReportBuffered(pathToReport, OutputFormats.pdf, inputs);
             return fileArray;
         }
-        public async Task<byte[]> PrintDailyReportApplications(DateTime fromDate, DateTime toDate, string status)
+        public async Task<byte[]> PrintDailyReportApplications(DateTime fromDate, DateTime toDate)
         {
             string csAuth = _userContext.CsAuthorityId;
             var inputs = new Dictionary<string, string> { { "from_date", fromDate.ToString("yyyy-MM-dd") },
                                                              { "to_date", toDate.ToString("yyyy-MM-dd") },
-                                                             { "status", status},
+                                                        
                                                               { "authority", csAuth}
                                                               };
             var pathToReport = GetUrlOfCertificateReport(JasperReportsNames.Daily_ReportApplications);

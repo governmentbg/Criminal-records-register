@@ -58,19 +58,19 @@ namespace MJ_CAIS.Web.Controllers
             byte[] result = null;
             switch (statSearch.StatisticsType) {
                 case StatisticsConstants.DailyStatisticsTypes.ReportApplication:
-                        result = await _printDocumentService.PrintDailyReportApplications(dateFrom, dateTo, statSearch.Status);
+                        result = await _printDocumentService.PrintDailyReportApplications(dateFrom, dateTo);
                     break;
                 case StatisticsConstants.DailyStatisticsTypes.Application:
-                    result = await _printDocumentService.PrintDailyApplications(dateFrom, dateTo, statSearch.Status);
+                    result = await _printDocumentService.PrintDailyApplications(dateFrom, dateTo);
                     break;
                 case StatisticsConstants.DailyStatisticsTypes.Certificate:
-                    result = await _printDocumentService.PrintDailyCertificates(dateFrom, dateTo, statSearch.Status);
+                    result = await _printDocumentService.PrintDailyCertificates(dateFrom, dateTo);
                     break;
                 case StatisticsConstants.DailyStatisticsTypes.Bulletin:
                     result = await _printDocumentService.PrintDailyBulletins(dateFrom, dateTo, statSearch.Status);
                     break;
                 case StatisticsConstants.DailyStatisticsTypes.Report:
-                    result = await _printDocumentService.PrintDailyReports(dateFrom, dateTo, statSearch.Status);
+                    result = await _printDocumentService.PrintDailyReports(dateFrom, dateTo);
                     break;
             }
 
