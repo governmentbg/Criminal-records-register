@@ -17,15 +17,18 @@ namespace MJ_CAIS.Services
     {
         private readonly IUserExternalRepository _userExternalRepository;
         private readonly IExtAdministrationRepository _extAdministrationRepository;
+        private readonly IEEMailEventService _eEMailEventService;
         
         public UserExternalService(
             IMapper mapper,
             IUserExternalRepository userExternalRepository, 
-            IExtAdministrationRepository extAdministrationRepository)
+            IExtAdministrationRepository extAdministrationRepository,
+            IEEMailEventService eEMailEventService)
             : base(mapper, userExternalRepository)
         {
             _userExternalRepository = userExternalRepository;
             _extAdministrationRepository = extAdministrationRepository;
+            _eEMailEventService = eEMailEventService;
         }
 
         public async override Task UpdateAsync(string aId, UserExternalInDTO aInDto)
@@ -59,6 +62,46 @@ namespace MJ_CAIS.Services
                 entity.RegCertSubject = null;
                 entity.ModifiedProperties.Add(nameof(entity.RegCertSubject));
             }
+            if (
+                aInDto.Denied.HasValue && 
+                aInDto.Denied.Value && 
+                (!repoObj.Denied.HasValue || !repoObj.Denied.Value) &&
+                !string.IsNullOrEmpty(repoObj.Email))
+            {
+                await _eEMailEventService.AddEmailEventAsync(
+                    repoObj.Email,
+                    Resources.MailSubjectDeniedUser,
+                    Resources.MailBodyDeniedUser,
+                    false
+                    );
+
+            } else if (
+                aInDto.Active.HasValue && 
+                aInDto.Active.Value && 
+                (!repoObj.Active.HasValue || !repoObj.Active.Value) &&
+                !string.IsNullOrEmpty(repoObj.Email))
+            {
+                await _eEMailEventService.AddEmailEventAsync(
+                    repoObj.Email,
+                    Resources.MailSubjectActivatedUser,
+                    Resources.MailBodyActivatedUser,
+                    false
+                    );
+            } else if (
+                aInDto.Active.HasValue &&
+                !aInDto.Active.Value &&
+                repoObj.Active.HasValue &&
+                repoObj.Active.Value &&
+                !string.IsNullOrEmpty(repoObj.Email))
+            {
+                await _eEMailEventService.AddEmailEventAsync(
+                    repoObj.Email,
+                    Resources.MailSubjectDeactivatedUser,
+                    Resources.MailBodyDeactivatedUser,
+                    false
+                    );
+            }
+
             await this.SaveEntityAsync(entity);
         }
 

@@ -48,7 +48,7 @@ namespace MJ_CAIS.WebPortal.Public.Controllers
                 _logger.LogError("CRR_PUBLIC_FEEDBACK_SUBJECT system varaible not set!");
                 return View("Failure");
             }
-            await _emailEventService.AddEmailEvent(
+            await _emailEventService.AddEmailEventAsync(
                 to,
                 subject,
                 $"{FeedbackResources.lblName}: {name}({email})<br/>" +

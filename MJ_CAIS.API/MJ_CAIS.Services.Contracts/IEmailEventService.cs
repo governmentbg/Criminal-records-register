@@ -8,6 +8,6 @@ namespace MJ_CAIS.Services.Contracts
 {
     public interface IEEMailEventService
     {
-        Task AddEmailEvent(string to, string subject, string body);
+        Task AddEmailEventAsync(string to, string subject, string body, bool saveChanges = true);
     }
 }

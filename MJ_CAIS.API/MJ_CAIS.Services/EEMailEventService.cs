@@ -18,7 +18,7 @@ namespace MJ_CAIS.Services
             _dbContext = dbContext;
         }
 
-        public async Task AddEmailEvent(string to, string subject, string body)
+        public async Task AddEmailEventAsync(string to, string subject, string body, bool saveChanges = true)
         {
             EEmailEvent emailEvent = new EEmailEvent();
             emailEvent.Id = BaseEntity.GenerateNewId();
@@ -27,7 +27,10 @@ namespace MJ_CAIS.Services
             emailEvent.Body = body;
             emailEvent.EmailStatus = EmailStatusConstants.Pending;
             _dbContext.Set<EEmailEvent>().Add(emailEvent);
-            await _dbContext.SaveChangesAsync();
+            if (saveChanges)
+            {
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }
