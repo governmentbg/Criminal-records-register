@@ -25,7 +25,7 @@ export class AddressForm {
     this.municipalityId = new FormControl(null, validators);
     this.districtId = new FormControl(null, validators);
     this.cityId = new FormControl(null, validators);
-    this.foreignCountryAddress = new FormControl(null, validators);
+    this.foreignCountryAddress = new FormControl(null, [Validators.maxLength(2000)]);
 
     if (isDisabled) {
       this.country = new LookupForm(false, true);

@@ -23,10 +23,13 @@ export class BulletinOffenceForm extends BaseForm {
     this.offenceCategory = new LookupForm(true);
     this.formOfGuiltId = new FormControl(null);
     this.formOfGuiltName = new FormControl(null);
-    this.remarks = new FormControl(null, [Validators.required]);
+    this.remarks = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(2000),
+    ]);
     this.ecrisOffCatId = new FormControl(null, [Validators.maxLength(50)]);
     this.ecrisOffCatName = new FormControl(null);
-    this.legalProvisions = new FormControl(null);
+    this.legalProvisions = new FormControl(null,[Validators.maxLength(2000)]);
     this.offStartDate = new DatePrecisionModelForm(null);
     this.offEndDate = new DatePrecisionModelForm();
     this.offPlace = new AddressForm();
