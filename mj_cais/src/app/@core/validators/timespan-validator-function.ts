@@ -13,7 +13,6 @@ export function timeSpanValidator(
   validatorsArr: [any] = [Validators.required]
 ): ValidatorFn {
   return (group: FormGroup): ValidationErrors | null => {
-    debugger;
     const [fromDateValue, toDateValue] = [
       group.get(fromDateField)!.value != null
         ? new Date(group.get(fromDateField)!.value)
