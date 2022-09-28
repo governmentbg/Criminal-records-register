@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input } from "@angular/core";
+import { Component, ViewChild, Input, HostListener } from "@angular/core";
 import { ElementRef, EventEmitter, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { NgSelectComponent } from "@ng-select/ng-select";
@@ -11,12 +11,24 @@ import { BaseNomenclatureModel } from "../../../../models/nomenclature/base-nome
   styleUrls: ["./autocomplete.component.scss"],
 })
 export class AutocompleteComponent {
-  constructor(public formUtils: FormUtils) {}
+
+  @HostListener('window:scroll', ['$event'])
+  onscroll(event) {
+    this.close();
+  }
+
+
+  constructor(public formUtils: FormUtils) {
+
+   
+  }
 
   public inputHasBeenInteracted: boolean;
 
   @Output() selectionChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() selectionCleared: EventEmitter<void> = new EventEmitter<void>();
+
+  @Output() closeSelectEvent: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild("autoInput") input: ElementRef;
   @ViewChild("autoControl") autoControl: NgSelectComponent;
@@ -57,11 +69,15 @@ export class AutocompleteComponent {
       return newValue;
     }
   }
-  
+
   public validationCss(): string {
     return this.inputFormControl.invalid &&
       (this.inputFormControl.touched || this.inputFormControl.dirty)
       ? "status-danger"
       : "";
+  }
+
+  close() {
+    this.autoControl.close();
   }
 }
