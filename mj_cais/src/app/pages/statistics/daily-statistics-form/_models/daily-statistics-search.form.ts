@@ -1,61 +1,6 @@
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BaseForm } from "../../../../@core/models/common/base.form";
-
-export function timeSpanValidator(maxMonths: number = 1): ValidatorFn {
-  return (group: FormGroup): ValidationErrors | null => {
-    const [fromDate, toDate] = [
-      group.get("fromDate")!.value != null
-        ? new Date(group.get("fromDate")!.value)
-        : null,
-      group.get("toDate")!.value != null
-        ? new Date(group.get("toDate")!.value)
-        : null,
-    ];
-
-    if (fromDate == null || toDate == null) {
-      var fromDateControl = group.controls["fromDate"] as FormControl;
-      if (fromDateControl.invalid) {
-        fromDateControl.clearValidators();
-        fromDateControl.setValidators([Validators.required]);
-        fromDateControl.updateValueAndValidity();
-      }
-
-      return null;
-    }
-
-    var minMonth: Date = toDate;
-    //previousMonth.setHours(23, 59, 59);
-    minMonth.setMonth(toDate.getMonth() - maxMonths);
-
-    if (fromDate < minMonth && fromDate != null) {
-      group.get("fromDate").setErrors({ timeSpan: true });
-    } else {
-      var fromDateControl = group.controls["fromDate"] as FormControl;
-      if (fromDateControl.invalid) {
-        fromDateControl.clearValidators();
-        fromDateControl.setValidators([Validators.required]);
-        fromDateControl.updateValueAndValidity();
-      }
-
-      return null;
-    }
-
-    return fromDate < minMonth && fromDate != null
-      ? {
-          timeSpan: {
-            value: "Дата не може да бъде с повече от месец назад!",
-          },
-        }
-      : null;
-  };
-}
+import { timeSpanValidator } from "../../../../@core/validators/timespan-validator-function";
 
 export class DailyStatisticsSearchForm extends BaseForm {
   public group: FormGroup;
@@ -82,7 +27,7 @@ export class DailyStatisticsSearchForm extends BaseForm {
         statisticsType: this.statisticsType,
         status: this.status,
       },
-      [timeSpanValidator(2)]
+      [timeSpanValidator()]
     );
   }
 }

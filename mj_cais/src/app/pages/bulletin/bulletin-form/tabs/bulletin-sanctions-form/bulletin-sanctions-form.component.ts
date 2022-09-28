@@ -59,7 +59,9 @@ export class BulletinSanctionsFormComponent implements OnInit {
     private bulletinService: BulletinService,
     private errorService: CommonErrorHandlerService,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+  
+  }
 
   ngOnInit(): void {
     this.sanctionProbCategoriesOptions = this.dbData.sanctionProbCategories;

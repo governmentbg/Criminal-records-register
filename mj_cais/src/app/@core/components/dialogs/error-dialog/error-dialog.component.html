@@ -1,0 +1,20 @@
+<nb-card>
+  <nb-card-header>Възникна грешка</nb-card-header>
+  <nb-card-body class="cais-modal-dialog">
+    <ng-container *ngIf="header">
+      <h6 class="mt-0">{{ header }}</h6>
+    </ng-container>
+    <div *ngFor="let item of messages">
+      {{item}}
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="row">
+      <div class="col-6">
+        <button nbButton matRipple fullWidth (click)="dismiss()">
+          Затвори
+        </button>
+      </div>
+    </div>
+  </nb-card-footer>
+</nb-card>

@@ -27,6 +27,7 @@ import { EncapsulatedHtmlComponent } from './encapsulated-html/encapsulated-html
 import { PersonSearchDialogComponent } from './dialogs/person-search-dialog/person-search-dialog.component';
 import { PersonSearchFormComponent } from './forms/person-search-form/person-search-form.component';
 import { RouterModule } from "@angular/router";
+import { ErrorDialogComponent } from './dialogs/error-dialog/error-dialog.component';
 
 const COMPONENTS = [
   CardHeaderComponent,
@@ -51,7 +52,8 @@ const COMPONENTS = [
   EmptyComponent,
   EncapsulatedHtmlComponent,
   PersonSearchDialogComponent,
-  PersonSearchFormComponent
+  PersonSearchFormComponent,
+  ErrorDialogComponent
 ];
 
 @NgModule({

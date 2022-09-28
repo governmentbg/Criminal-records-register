@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
-using MJ_CAIS.DataAccess.Entities;
 using MJ_CAIS.DataAccess.ExtUsers;
 using MJ_CAIS.Services;
 using MJ_CAIS.Web.Utils;
@@ -32,6 +31,7 @@ namespace MJ_CAIS.Web
                 {
                     options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
                     options.JsonSerializerOptions.Converters.Add(new DateTimeConverter(intermediateServiceProvider.GetService<ILogger<DateTimeConverter>>()));
+                    options.JsonSerializerOptions.Converters.Add(new ByteTypeConverter(intermediateServiceProvider.GetService<ILogger<ByteTypeConverter>>()));
                 });
 
             // TODO: at some point in time move back to WebSetupConfig

@@ -1,5 +1,4 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Guid } from "guid-typescript";
 import { BaseForm } from "../../../../../../@core/models/common/base.form";
 
 export class BulletinSanctionForm extends BaseForm {
@@ -28,13 +27,13 @@ export class BulletinSanctionForm extends BaseForm {
     this.sanctCategoryName = new FormControl(null);
     this.ecrisSanctCategId = new FormControl(null);
     this.ecrisSanctCategName = new FormControl(null);
-    this.descr = new FormControl(null);
+    this.descr = new FormControl(null, [Validators.maxLength(2000)]);
     this.decisionDurationYears = new FormControl(null);
     this.decisionDurationMonths = new FormControl(null);
     this.decisionDurationDays = new FormControl(null);
     this.decisionDurationHours = new FormControl(null);
     this.fineAmount = new FormControl(null);
-    this.detenctionDescr = new FormControl(null);
+    this.detenctionDescr = new FormControl(null, [Validators.maxLength(2000)]);
     this.suspentionDurationYears = new FormControl(null);
     this.suspentionDurationMonths = new FormControl(null);
     this.suspentionDurationDays = new FormControl(null);

@@ -10,7 +10,7 @@ export class ConfirmDialogComponent implements OnInit {
   constructor(protected ref: NbDialogRef<ConfirmDialogComponent>) {}
 
   @Input()
-  color: "danger" | "success" | "primary";
+  color: "danger" | "success" | "primary" = "danger";
   public confirmMessage: string;
   public showHeder: boolean = true;
 
