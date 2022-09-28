@@ -59,7 +59,7 @@
     </app-grid-with-transactions>
 
     <igx-dialog #sanctionDialogAdd>
-      <div class="dialogNewRecord" style="max-width: 800px; min-width: 800px">
+      <div class="dialogNewRecord">
         <nb-card>
           <nb-card-header>
             <div class="d-flex justify-content-between">
@@ -82,18 +82,19 @@
 
           </nb-card-header>
 
-          <nb-card-body style="overflow: unset">
+          <nb-card-body class="cais-modal-dialog" id="sanction-dialog" style="max-width: 600px">
             <div class="row mt-2">
               <div class="form-group col-md-12">
                 <cais-autocomplete [label]="'Вид наказание'" [inputFormControl]="bulletinSanctionForm.sanctCategoryId"
                   [parentGroup]="bulletinSanctionForm.group" [items]="sanctionCategoriesOptions"
-                  [inputName]="'sanctCategoryId'" (selectionChanged)="onSanctionCategoryChange($event)">
+                  [inputName]="'sanctCategoryId'" (selectionChanged)="onSanctionCategoryChange($event)"
+                  [appendTo]="'#sanction-dialog'">
                 </cais-autocomplete>
               </div>
               <div class="form-group col-md-12">
                 <cais-autocomplete [label]="'Обща категория'"
                   [inputFormControl]="bulletinSanctionForm.ecrisSanctCategId" [parentGroup]="bulletinSanctionForm.group"
-                  [items]="dbData.ecrisSanctionCategories" [inputName]="'ecrisSanctCategId'">
+                  [items]="dbData.ecrisSanctionCategories" [inputName]="'ecrisSanctCategId'" [appendTo]="'#sanction-dialog'">
                 </cais-autocomplete>
               </div>
             </div>

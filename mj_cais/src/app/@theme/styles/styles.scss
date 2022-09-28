@@ -21,8 +21,6 @@ $theme-colors: (
   "success": #278c17,
 );
 
-
-
 $card-border-color: nb-theme(border-basic-color-4);
 @import "~bootstrap/scss/bootstrap";
 
@@ -48,7 +46,6 @@ $custom-palette: igx-palette(
   $elevation: null
 );
 
-
 .nb-theme-dark {
   $custom-palette: igx-palette(
     $primary: #f0f2ff,
@@ -66,7 +63,6 @@ $custom-palette: igx-palette(
     $roundness: null,
     $elevation: null
   );
-
 }
 
 // File styles
@@ -141,8 +137,6 @@ $custom-palette: igx-palette(
     text-decoration: none !important;
   }
 }
-
-
 
 #cais-logo {
   width: 70px;
@@ -249,7 +243,6 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   }
 }
 
-
 .igx-dialog__window-content {
   padding: 0px;
 }
@@ -283,20 +276,18 @@ nb-layout .layout .layout-container .content nb-layout-footer nav {
   background-color: nb-theme(input-basic-background-color);
   border-color: nb-theme(input-basic-border-color);
 
-
-  line-height:nb-theme(input-medium-text-line-height);
-
+  line-height: nb-theme(input-medium-text-line-height);
 }
 
-.ng-dropdown-panel {
-  z-index: 999999 !important;
-  position: relative;
-}
 
 .cdk-overlay-container {
   z-index: 10050 !important;
 }
 
-.layout-z-index {
-  z-index: 1000000 !important ;
+.cais-modal-dialog {
+  height: auto;
+  max-height: 70vh;
+  width: 80vw;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
