@@ -31,7 +31,7 @@ namespace MJ_CAIS.Web
                 {
                     options.JsonSerializerOptions.Converters.Add(new TrimStringJsonConverter());
                     options.JsonSerializerOptions.Converters.Add(new DateTimeConverter(intermediateServiceProvider.GetService<ILogger<DateTimeConverter>>()));
-                    options.JsonSerializerOptions.Converters.Add(new ByteTypeConverter());
+                    options.JsonSerializerOptions.Converters.Add(new ByteTypeConverter(intermediateServiceProvider.GetService<ILogger<ByteTypeConverter>>()));
                 });
 
             // TODO: at some point in time move back to WebSetupConfig
